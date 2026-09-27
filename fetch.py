@@ -170,13 +170,17 @@ def yahoo_chart(sym: str, rng="1mo", interval="1d"):
             ts = res.get("timestamp") or []
             series = [(datetime.fromtimestamp(t, tz=timezone.utc).date().isoformat(), c) for t, c in zip(ts, closes) if c is not None]
             price = meta.get("regularMarketPrice")
-            prev = meta.get("chartPreviousClose") or meta.get("previousClose")
+            prev = None
             if series:
-                # 更可靠的前收：最後兩個有效收盤
                 if price is None:
                     price = series[-1][1]
-                if len(series) >= 2 and abs(series[-1][1] - price) < 1e-9:
+                # 前收：若最新價就是最後一根收盤，前收是倒數第二根；否則最後一根就是前收
+                if len(series) >= 2 and abs(series[-1][1] - price) / max(abs(price), 1e-9) < 1e-4:
                     prev = series[-2][1]
+                else:
+                    prev = series[-1][1]
+            else:
+                prev = meta.get("previousClose")
             chg_pct = (price - prev) / prev * 100 if price is not None and prev else None
             out = {"price": price, "chg_pct": chg_pct, "ccy": meta.get("currency"), "series": series,
                    "asOf": series[-1][0] if series else None}
@@ -251,11 +255,37 @@ def p_fx():
             hist_put("fx", code, TODAY_TPE.isoformat(), (buy + sell) / 2 if sell else buy)
             items.append({"code": code, "name": want[code], "buy": buy, "sell": sell,
                           "spark": [v for _, v in HISTORY["fx"][code][-30:]]})
-    if not items:
-        raise RuntimeError("no fx rows; header=" + "|".join(header)[:200])
     order = ["USD", "EUR", "JPY", "CNY"]
-    items.sort(key=lambda x: order.index(x["code"]))
-    return {"label": "台銀即期", "items": items}
+    if items:
+        items.sort(key=lambda x: order.index(x["code"]))
+        return {"label": "台銀即期", "items": items}
+    raise RuntimeError("no fx rows; header=" + "|".join(header)[:120])
+
+
+def p_fx_yahoo():
+    pairs = [("USD", "美元", "TWD=X"), ("EUR", "歐元", "EURTWD=X"), ("JPY", "日圓", "JPYTWD=X"), ("CNY", "人民幣", "CNYTWD=X")]
+    items = []
+    for code, name, sym in pairs:
+        try:
+            q = yahoo_chart(sym)
+        except Exception as e:  # noqa: BLE001
+            log("fx yahoo", sym, e)
+            continue
+        for d, v in q["series"]:
+            hist_put("fx", code, d, v)
+        items.append({"code": code, "name": name, "buy": q["price"], "sell": None, "chg_pct": q["chg_pct"],
+                      "spark": [v for _, v in q["series"][-30:]]})
+    if not items:
+        raise RuntimeError("yahoo fx failed")
+    return {"label": "Yahoo 中價（台銀被擋時）", "items": items}
+
+
+def p_fx_any():
+    try:
+        return p_fx()
+    except Exception as e:  # noqa: BLE001
+        log("fx bot", e)
+        return p_fx_yahoo()
 
 
 SPORTY = re.compile(r"\b(vs\.?|@)\b|spread|o/u|over/under|\bnfl\b|\bnba\b|\bmlb\b|\bnhl\b|\bufc\b|premier league|la liga|serie a|bundesliga|ncaa|grand prix|\batp\b|\bwta\b|\bf1\b", re.I)
@@ -616,7 +646,7 @@ def p_macro():
 # ---------- run ----------
 run("taiex", p_taiex)
 run("tw_stocks", p_tw_stocks)
-run("fx", p_fx)
+run("fx", p_fx_any)
 run("poly", p_poly)
 run("tech", p_tech)
 run("trends", p_trends)
