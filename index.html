@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>dalta 情報站</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0E1014; --panel:#14171D; --panel2:#191D25; --line:#242935; --line2:#2F3542;
+  --text:#E6E8EE; --muted:#8B93A7; --dim:#5C637A;
+  --accent:#E35E37; --blue:#7C8FF2; --up:#F0524F; --down:#39B978; --warn:#E0A23A;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Noto Sans TC","Poppins",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+  --head:"Poppins","Noto Sans TC",system-ui,sans-serif;
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#F3F4F7; --panel:#FFFFFF; --panel2:#F7F8FB; --line:#E1E4EB; --line2:#CFD4DE;
+  --text:#171A21; --muted:#5D6578; --dim:#8E96A8;
+  --accent:#E35E37; --blue:#435BD8; --up:#D9433F; --down:#1E9A5E; --warn:#B7791F;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.45;padding:0 16px;padding-block:0 24px}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+/* masthead */
+.mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding-block:12px 10px;border-bottom:1px solid var(--line);margin:0 -16px 14px;padding-left:16px;padding-right:16px}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--head);font-weight:600;font-size:15px;letter-spacing:.01em}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.brand .zh{font-family:var(--sans);font-weight:500;color:var(--muted);font-size:13px}
+.clocks{display:flex;gap:16px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.clocks b{color:var(--text);font-weight:500}
+.status{margin-left:auto;display:flex;gap:14px;align-items:center;font-size:11.5px;color:var(--muted);flex-wrap:wrap}
+.status .k{display:inline-flex;align-items:center;gap:5px}
+.status .k::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--dim)}
+.status .k.live::before{background:var(--down)}
+.status .k.db::before{background:var(--blue)}
+.legend{font-size:11px;color:var(--dim)}
+.legend .u{color:var(--up)} .legend .d{color:var(--down)}
+
+/* movers */
+.movers{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.movers .mv{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-size:12px;min-width:0}
+.movers .mv .k{color:var(--muted);font-size:10.5px;letter-spacing:.04em}
+.movers .mv .v{font-family:var(--mono);font-weight:500}
+.movers .mv .t{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini{width:56px;height:16px;vertical-align:middle;margin-left:8px}
+.err-tag{color:var(--warn);font-size:10px;font-family:var(--mono);margin-left:6px}
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:10px}
+.panel{grid-column:span 4;background:var(--panel);border:1px solid var(--line);border-radius:4px;display:flex;flex-direction:column;min-width:0}
+.panel.w6{grid-column:span 6} .panel.w3{grid-column:span 3} .panel.w8{grid-column:span 8} .panel.w12{grid-column:span 12}
+@media (max-width:1100px){.panel,.panel.w3{grid-column:span 6}.panel.w8{grid-column:span 12}}
+@media (max-width:640px){.panel,.panel.w3,.panel.w6,.panel.w8{grid-column:span 12}.mast{gap:10px}.status{margin-left:0}}
+.ph{display:flex;align-items:baseline;gap:8px;padding:8px 10px 6px;border-bottom:1px solid var(--line)}
+.ph h2{margin:0;font-family:var(--head);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text)}
+.ph .zh{font-family:var(--sans);font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);font-size:11.5px}
+.ph .meta{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--dim);white-space:nowrap}
+.ph .meta.stale{color:var(--warn)}
+.pb{padding:6px 10px 8px;flex:1;min-width:0}
+.pf{padding:5px 10px 7px;border-top:1px solid var(--line);font-size:10.5px;color:var(--dim);display:flex;gap:10px;flex-wrap:wrap}
+.pf a{color:var(--dim)} .pf a:hover{color:var(--blue)}
+
+/* rows */
+table{width:100%;border-collapse:collapse}
+td,th{padding:3px 0;vertical-align:baseline;white-space:nowrap}
+th{font-size:10px;font-weight:500;color:var(--dim);text-align:left;letter-spacing:.04em;border-bottom:1px solid var(--line);padding-bottom:4px}
+td.r,th.r{text-align:right;padding-left:10px}
+td.name{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0;width:100%}
+td .sub{color:var(--dim);font-size:10.5px;margin-left:6px;font-family:var(--mono)}
+tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+.up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--muted)}
+.big{font-family:var(--mono);font-size:26px;font-weight:500;letter-spacing:-.01em;line-height:1.1}
+.kpi{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.kpi .lbl{font-size:10.5px;color:var(--dim);letter-spacing:.04em}
+.kpi .chg{font-family:var(--mono);font-size:13px}
+.spark{display:block;width:100%;height:44px}
+.list{list-style:none;margin:0;padding:0}
+.list li{padding:4px 0;display:flex;gap:8px;align-items:baseline}
+.list li+li{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+.list .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list .t a{color:var(--text)}
+.list .t a:hover{color:var(--blue)}
+.list .sub{color:var(--dim);font-size:10.5px;margin-left:6px;font-family:var(--mono)}
+.list .m{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.list .src{font-size:10px;color:var(--dim);font-family:var(--mono);min-width:38px}
+.bar{height:5px;border-radius:2px;background:var(--line2);position:relative;overflow:hidden;min-width:60px;width:60px}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--blue)}
+.empty{color:var(--dim);font-size:12px;padding:10px 0}
+.err{color:var(--warn);font-size:11px}
+.pill{display:inline-block;font-family:var(--mono);font-size:10px;padding:1px 6px;border:1px solid var(--line2);border-radius:3px;color:var(--muted);margin-left:6px}
+.macro{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.macro .c{background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:7px 9px}
+.macro .c .l{font-size:10.5px;color:var(--dim);letter-spacing:.03em}
+.macro .c .v{font-family:var(--mono);font-size:19px;font-weight:500;margin-top:2px}
+.macro .c .p{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:2px}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.twocol.tech3{grid-template-columns:1fr 1.15fr 1.3fr}
+@media (max-width:640px){.twocol,.twocol.tech3{grid-template-columns:1fr}}
+.rank{font-family:var(--mono);color:var(--dim);font-size:11px;min-width:16px}
+.mv{font-family:var(--mono);font-size:10.5px;min-width:26px}
+.foot{margin-top:16px;color:var(--dim);font-size:11px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+@media (prefers-reduced-motion:no-preference){.brand .dot{animation:pulse 3s ease-in-out infinite}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 8%,transparent)}}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="brand"><span class="dot" aria-hidden="true"></span>dalta <span class="zh">情報站</span></div>
+  <div class="clocks"><span>TPE <b id="clk-tpe">--:--</b></span><span>LA <b id="clk-la">--:--</b></span></div>
+  <div class="status">
+    <span class="k db">GitHub Actions 每 15 分鐘 · <span id="db-age">讀取中</span></span>
+    <span class="legend"><span class="u">■</span> 漲 <span class="d">■</span> 跌（台灣慣例）</span>
+  </div>
+</header>
+
+<section class="movers" id="movers" hidden></section>
+
+<main class="grid">
+
+  <section class="panel" id="p-taiex">
+    <div class="ph"><h2>TAIEX</h2><span class="zh">台股大盤</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://openapi.twse.com.tw/" target="_blank" rel="noopener">證交所 OpenAPI</a><span>盤後更新，本月逐日走勢</span></div>
+  </section>
+
+  <section class="panel" id="p-fx">
+    <div class="ph"><h2>FX</h2><span class="zh">匯率 · 台銀即期</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://rate.bot.com.tw/xrt?Lang=zh-TW" target="_blank" rel="noopener">臺灣銀行牌告</a></div>
+  </section>
+
+  <section class="panel" id="p-poly">
+    <div class="ph"><h2>Polymarket</h2><span class="zh">世界在賭什麼</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a><span>24h 成交量排序，已濾掉運彩</span></div>
+  </section>
+
+  <section class="panel" id="p-lux">
+    <div class="ph"><h2>Luxury</h2><span class="zh">精品與快時尚</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>巴黎／馬德里／東京／紐約收盤</span></div>
+  </section>
+
+  <section class="panel" id="p-tw-stocks">
+    <div class="ph"><h2>TW Supply</h2><span class="zh">台灣供應鏈與通路</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>紡織：儒鴻、聚陽、遠東新　通路：統一超、統一、寶雅</span></div>
+  </section>
+
+  <section class="panel" id="p-cmdty">
+    <div class="ph"><h2>Commodities</h2><span class="zh">原物料與運價</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>棉花、原油、銅、鋁 · Drewry WCI · FBX</span></div>
+  </section>
+
+  <section class="panel w8" id="p-macro">
+    <div class="ph"><h2>TW Macro</h2><span class="zh">台灣總經</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.stat.gov.tw/" target="_blank" rel="noopener">主計總處</a><a href="http://rcted.ncu.edu.tw/cci.asp" target="_blank" rel="noopener">台經中心 CCI</a><span>CPI／PPI 每月 5–7 日 · 失業率每月 22 日 · CCI 每月 27 日</span></div>
+  </section>
+
+  <section class="panel" id="p-revenue">
+    <div class="ph"><h2>Retail Rev.</h2><span class="zh">通路月營收</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>公開資訊觀測站 · 每月 10 日前後</span></div>
+  </section>
+
+  <section class="panel" id="p-trends">
+    <div class="ph"><h2>Trends TW</h2><span class="zh">台灣搜尋熱度</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://trends.google.com/trending?geo=TW&hl=zh-TW" target="_blank" rel="noopener">Google Trends</a></div>
+  </section>
+
+  <section class="panel" id="p-media">
+    <div class="ph"><h2>Fashion Press</h2><span class="zh">時尚媒體標題</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>WWD · BoF（經 Google News）</span></div>
+  </section>
+
+  <section class="panel" id="p-reddit">
+    <div class="ph"><h2>Reddit</h2><span class="zh">討論區熱門</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>r/taiwan · r/fashion · r/malefashionadvice · r/marketing · r/design</span></div>
+  </section>
+
+  <section class="panel w6" id="p-tech">
+    <div class="ph"><h2>Tech</h2><span class="zh">GitHub · Hugging Face · Hacker News</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>GitHub：近 7 天新 repo 星數　HF：趨勢分數　HN：首頁</span></div>
+  </section>
+
+  <section class="panel w6" id="p-lyst">
+    <div class="ph"><h2>Lyst Index</h2><span class="zh">全球最熱品牌與單品</span><span class="meta">排程 · 季更</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.lyst.com/data/the-lyst-index/" target="_blank" rel="noopener">Lyst</a></div>
+  </section>
+
+</main>
+
+<div class="foot">
+  <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 Actions 抓取並 commit，每次 commit 都是一個歷史點</span>
+  <span>第二期待接：氣象署、TDX 交通與觀光、TGOS、Google Maps、Reddit API、FRED</span>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const n=(v)=>{if(v==null||v==="")return NaN;return typeof v==="number"?v:parseFloat(String(v).replace(/,/g,""));};
+const fmt=(v,d=2)=>isFinite(v)?v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d}):"—";
+const cls=v=>!isFinite(v)||Math.abs(v)<1e-9?"flat":v>0?"up":"down";
+const sgn=(v,d=2,suf="")=>!isFinite(v)?"—":(v>0?"+":"")+fmt(v,d)+suf;
+const rocToIso=s=>{const m=String(s).match(/^(\d{3})(\d{2})(\d{2})$/);return m?`${+m[1]+1911}-${m[2]}-${m[3]}`:String(s);};
+const compact=v=>{if(!isFinite(v))return"—";if(v>=1e9)return(v/1e9).toFixed(2)+"B";if(v>=1e6)return(v/1e6).toFixed(1)+"M";if(v>=1e3)return(v/1e3).toFixed(0)+"K";return String(v);};
+const body=id=>$(`#${id} .pb`);
+const meta=id=>$(`#${id} .ph .meta`);
+const setErr=(id,msg)=>{body(id).innerHTML=`<div class="empty">${esc(msg)}</div>`;};
+const ago=iso=>{const t=new Date(iso).getTime();if(!isFinite(t))return"";const m=Math.round((Date.now()-t)/60000);if(m<1)return"剛剛";if(m<60)return m+" 分前";const h=Math.round(m/60);if(h<48)return h+" 小時前";return Math.round(h/24)+" 天前";};
+const staleAfter=(iso,hours)=>{const t=new Date(iso).getTime();return !isFinite(t)||Date.now()-t>hours*3600e3;};
+
+/* clocks */
+function tick(){const o={hour:"2-digit",minute:"2-digit",hour12:false};const d=new Date();
+  $("#clk-tpe").textContent=d.toLocaleTimeString("en-GB",{...o,timeZone:"Asia/Taipei"});
+  $("#clk-la").textContent=d.toLocaleTimeString("en-GB",{...o,timeZone:"America/Los_Angeles"});}
+tick();setInterval(tick,15000);
+
+/* sparkline */
+function spark(vals,w=300,h=44){const v=vals.filter(isFinite);if(v.length<2)return"";const mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
+  const pts=v.map((y,i)=>[i/(v.length-1)*(w-4)+2,h-3-((y-mn)/rg)*(h-8)]);
+  const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+  const last=pts[pts.length-1];const col=v[v.length-1]>=v[0]?"var(--up)":"var(--down)";
+  return`<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d} L${last[0].toFixed(1)},${h} L2,${h} Z" fill="${col}" opacity=".12"/><path d="${d}" fill="none" stroke="${col}" stroke-width="1.5"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.5" fill="${col}"/></svg>`;}
+
+function mini(vals){const v=(vals||[]).filter(isFinite);if(v.length<2)return"";const w=56,h=16,mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
+  const pts=v.map((y,i)=>[i/(v.length-1)*(w-2)+1,h-2-((y-mn)/rg)*(h-4)]);const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+  const col=v[v.length-1]>=v[0]?"var(--up)":"var(--down)";return`<svg class="mini" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" fill="none" stroke="${col}" stroke-width="1.2"/></svg>`;}
+/* ---------- shared: revenue merge ---------- */
+const REV_ORDER=["2912","1216","2903","5904","5903","8454","8044"];
+let revenueDocs={};
+function renderRevenue(){
+  const byCode=new Map();
+  ["otc_revenue","revenue"].forEach(k=>(revenueDocs[k]&&revenueDocs[k].items||[]).forEach(it=>byCode.set(it.code,it)));
+  const items=[...byCode.values()];
+  if(!items.length){setErr("p-revenue","尚無營收資料");return;}
+  items.sort((a,b)=>REV_ORDER.indexOf(a.code)-REV_ORDER.indexOf(b.code));
+  const tr=items.map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num">${compact(n(it.rev)*1000)}</td><td class="r num ${cls(n(it.yoy))}">${sgn(n(it.yoy),1,"%")}</td><td class="r num ${cls(n(it.mom))}">${sgn(n(it.mom),1,"%")}</td></tr>`).join("");
+  body("p-revenue").innerHTML=`<table><tr><th>公司</th><th class="r">當月營收 TWD</th><th class="r">YoY</th><th class="r">MoM</th></tr>${tr}</table>`;
+  const d=revenueDocs.revenue||revenueDocs.otc_revenue;setMeta("p-revenue",{...d,label:items[0].period?"資料月 "+items[0].period:""},24*40);
+}
+
+/* ---------- DB panels (written by the hourly job) ---------- */
+function setMeta(id,doc,hours){const iso=doc.updatedAt;const m=meta(id);m.textContent=(doc.label?doc.label+" · ":"")+(iso?ago(iso):"");m.classList.toggle("stale",staleAfter(iso,hours)||!!doc.error);if(doc.error){m.textContent+=" · 上次抓取失敗，顯示舊值";m.title=doc.error;}}
+const renderers={
+  taiex(d){const idx=n(d.index),chg=n(d.change);const pct=chg/(idx-chg)*100;const series=(d.history&&d.history.length>5?d.history.map(x=>x[1]):(d.series||[])).map(n);
+    body("p-taiex").innerHTML=`<div class="kpi"><div><div class="lbl">加權指數 ${esc(d.date||"")}${d.history&&d.history.length>5?" · 近 "+d.history.length+" 日":" · 本月"}</div><div class="big ${cls(chg)}">${fmt(idx)}</div></div><div class="chg ${cls(chg)}">${sgn(chg)}　${sgn(pct,2,"%")}</div></div>${spark(series)}<table><tr><td class="name">成交金額</td><td class="r num">${compact(n(d.value))}</td><td class="name" style="padding-left:12px">成交筆數</td><td class="r num">${compact(n(d.transactions))}</td></tr></table>`;
+    setMeta("p-taiex",{...d,label:"盤後"},30);},
+  tw_stocks(d){const tr=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg),pct=ch/(px-ch)*100;return`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)} ${esc(it.group||"")}</span>${mini(it.spark)}</td><td class="r num">${fmt(px)}</td><td class="r num ${cls(ch)}">${sgn(ch)}</td><td class="r num ${cls(ch)}">${sgn(pct,1,"%")}</td></tr>`;}).join("");
+    body("p-tw-stocks").innerHTML=`<table><tr><th>個股</th><th class="r">收盤</th><th class="r">漲跌</th><th class="r">%</th></tr>${tr}</table>`;setMeta("p-tw-stocks",{...d,label:"盤後 "+(d.date||"")},30);},
+  poly(d){const li=(d.items||[]).map(m=>{const p=n(m.yes),dd=n(m.d1);return`<li><span class="t"><a href="https://polymarket.com/event/${esc(m.slug||"")}" target="_blank" rel="noopener">${esc(m.question)}</a></span><span class="bar" aria-hidden="true"><i style="width:${isFinite(p)?Math.max(0,Math.min(100,p)):0}%"></i></span><span class="m">${isFinite(p)?p.toFixed(0)+"%":"—"}</span><span class="m ${cls(dd)}" style="min-width:44px;text-align:right">${isFinite(dd)?sgn(dd,1,""):""}</span></li>`;}).join("");
+    body("p-poly").innerHTML=`<ul class="list">${li||'<li class="empty">目前沒有非運彩的熱門市場</li>'}</ul>`;setMeta("p-poly",{...d,label:"Yes 機率 / 24h 變動"},3);},
+  tech(d){const col=(title,html)=>`<div><div class="ph" style="padding:0 0 4px;border-bottom:1px solid var(--line);margin-bottom:4px"><h2 style="font-size:10px">${title}</h2></div>${html||'<div class="err">這輪沒抓到</div>'}</div>`;
+    const gh=(d.github||[]).map(r=>`<li><span class="t"><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a></span><span class="m">★${compact(n(r.stars))}</span></li>`).join("");
+    const hf=(d.hf||[]).map(m=>`<li><span class="t"><a href="https://huggingface.co/${esc(m.id)}" target="_blank" rel="noopener">${esc(m.id)}</a></span><span class="m">↓${compact(n(m.downloads))}</span></li>`).join("");
+    const hn=(d.hn||[]).map(s=>`<li><span class="t"><a href="${esc(s.url||"#")}" target="_blank" rel="noopener">${esc(s.title)}</a></span><span class="m">${esc(s.score)}</span></li>`).join("");
+    body("p-tech").innerHTML=`<div class="twocol tech3">${col("GitHub",gh&&`<ul class="list">${gh}</ul>`)}${col("Hugging Face",hf&&`<ul class="list">${hf}</ul>`)}${col("Hacker News",hn&&`<ul class="list">${hn}</ul>`)}</div>`;setMeta("p-tech",d,3);},
+  revenue(d){revenueDocs.revenue=d;renderRevenue();},
+  fx(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num">${fmt(n(it.buy),it.code==="JPY"?4:3)}</td><td class="r num">${fmt(n(it.sell),it.code==="JPY"?4:3)}</td><td class="r num ${cls(n(it.chg))}">${isFinite(n(it.chg))?sgn(n(it.chg),3):""}</td></tr>`).join("");
+    body("p-fx").innerHTML=`<table><tr><th>幣別</th><th class="r">即期買入</th><th class="r">即期賣出</th><th class="r">日變動</th></tr>${tr}</table>`;setMeta("p-fx",d,3);},
+  luxury(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.sym)}</span>${mini(it.spark)}</td><td class="r num">${fmt(n(it.price))}<span class="sub">${esc(it.ccy||"")}</span></td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
+    body("p-lux").innerHTML=`<table><tr><th>公司</th><th class="r">收盤</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-lux",d,30);},
+  commodities(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.unit||"")}</span>${mini(it.spark)}</td><td class="r num">${fmt(n(it.price),n(it.price)<10?3:2)}</td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
+    const sh=(d.shipping||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.date||"")}</span></td><td class="r num">${fmt(n(it.value),0)}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),1,"%"):esc(it.note||"")}</td></tr>`).join("");
+    body("p-cmdty").innerHTML=`<table><tr><th>品項</th><th class="r">價格</th><th class="r">日%</th></tr>${tr}${sh?`<tr><th colspan="3" style="padding-top:8px">海運 USD/40ft</th></tr>${sh}`:""}</table>`;setMeta("p-cmdty",d,30);},
+  macro(d){const cards=(d.items||[]).map(it=>`<div class="c"><div class="l">${esc(it.label)}</div><div class="v ${it.tone==="up"?"up":it.tone==="down"?"down":""}">${esc(it.value)}</div><div class="p">${esc(it.period||"")}${it.prev?` · 前值 ${esc(it.prev)}`:""}</div></div>`).join("");
+    body("p-macro").innerHTML=`<div class="macro">${cards}</div>${d.note?`<div class="empty" style="padding:8px 0 0">${esc(d.note)}</div>`:""}`;setMeta("p-macro",d,24*35);},
+  otc_revenue(d){revenueDocs.otc_revenue=d;renderRevenue();},
+  trends(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="https://trends.google.com/trends/explore?geo=TW&q=${encodeURIComponent(it.title)}" target="_blank" rel="noopener">${esc(it.title)}</a>${it.news?`<span class="sub">${esc(it.news)}</span>`:""}</span><span class="m">${esc(it.traffic||"")}</span></li>`).join("");
+    body("p-trends").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-trends",d,4);},
+  media(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.source)}</span><span class="t"><a href="${esc(it.url||"#")}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${esc(it.date||"")}</span></li>`).join("");
+    body("p-media").innerHTML=`<ul class="list">${li}</ul>${d.note?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.note)}</div>`:""}`;setMeta("p-media",d,26);},
+  reddit(d){const li=(d.items||[]).map(it=>`<li><span class="src">r/${esc(it.sub)}</span><span class="t"><a href="${esc(it.url||"#")}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">▲${compact(n(it.score))} · ${compact(n(it.comments))}</span></li>`).join("");
+    body("p-reddit").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"尚無資料")}</div>`;setMeta("p-reddit",d,4);},
+  lyst(d){const mv=v=>{const x=n(v);return!isFinite(x)||x===0?`<span class="mv flat">–</span>`:`<span class="mv ${x>0?"up":"down"}">${x>0?"▲":"▼"}${Math.abs(x)}</span>`;};
+    const list=(arr,key)=>`<ul class="list">${(arr||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t">${esc(it[key]||it.name)}${it.brand&&key!=="brand"?`<span class="sub">${esc(it.brand)}</span>`:""}</span>${mv(it.move)}</li>`).join("")}</ul>`;
+    body("p-lyst").innerHTML=`<div class="twocol"><div><div class="lbl" style="font-size:10.5px;color:var(--dim);margin-bottom:4px">最熱品牌</div>${list(d.brands,"brand")}</div><div><div class="lbl" style="font-size:10.5px;color:var(--dim);margin-bottom:4px">最熱單品</div>${list(d.products,"name")}</div></div>`;
+    setMeta("p-lyst",{...d,label:d.quarter||""},24*120);},
+};
+async function loadAll(){
+  try{
+    const r=await fetch("./data/all.json",{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
+    const all=await r.json();const P=all.panels||{};
+    Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});
+    $("#db-age").textContent="最近抓取 "+ago(all.generatedAt);
+    movers(P);
+  }catch(e){$("#db-age").textContent="讀不到 data/all.json（"+e.message+"）";}
+}
+function movers(P){
+  const list=[];
+  const push=(k,t,v,unit="%")=>{if(isFinite(v))list.push({k,t,v,unit});};
+  (P.tw_stocks?.items||[]).forEach(it=>{const px=n(it.price),ch=n(it.chg);push("台股",it.name,ch/(px-ch)*100);});
+  (P.luxury?.items||[]).forEach(it=>push("精品",it.name,n(it.chg_pct)));
+  (P.commodities?.items||[]).forEach(it=>push("原物料",it.name,n(it.chg_pct)));
+  (P.commodities?.shipping||[]).forEach(it=>push("運價",it.name,n(it.chg_pct)));
+  (P.poly?.items||[]).forEach(it=>push("Polymarket",it.question,n(it.d1),"pt"));
+  if(P.taiex){const idx=n(P.taiex.index),ch=n(P.taiex.change);push("大盤","TAIEX",ch/(idx-ch)*100);}
+  list.sort((a,b)=>Math.abs(b.v)-Math.abs(a.v));
+  const top=list.slice(0,6);const el=$("#movers");
+  if(!top.length){el.hidden=true;return;}
+  el.innerHTML=top.map(x=>`<div class="mv"><span class="k">${esc(x.k)}</span><span class="t">${esc(x.t)}</span><span class="v ${cls(x.v)}">${sgn(x.v,x.unit==="pt"?1:2,x.unit==="pt"?" pt":"%")}</span></div>`).join("");
+  el.hidden=false;
+}
+/* boot */
+loadAll();setInterval(loadAll,5*60e3);
+})();
+</script>
+</body>
+</html>
