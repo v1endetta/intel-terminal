@@ -1045,20 +1045,25 @@ def p_tw_market():
                      params={"dataset": "TaiwanFuturesDaily", "data_id": "TX", "start_date": start}, headers=headers).get("data", [])
         rows = [r for r in rows if r.get("volume", 0) > 0 and re.match(r"^\d{6}$", str(r.get("contract_date", "")))]
         if rows:
-            last_date = max(r["date"] for r in rows)
-            near = min(r["contract_date"] for r in rows if r["date"] == last_date)
-            day = next((r for r in rows if r["date"] == last_date and r["contract_date"] == near and r["trading_session"] == "position"), None)
-            night = next((r for r in rows if r["date"] == last_date and r["contract_date"] == near and r["trading_session"] == "after_market"), None)
-            out["tx"] = {"date": last_date, "contract": near,
-                         "day": {"close": day["close"], "pct": day["spread_per"]} if day else None,
-                         "night": {"close": night["close"], "pct": night["spread_per"], "vs_day": (night["close"] - day["close"]) if (night and day) else None} if night else None}
+            def latest(session):
+                cand = [r for r in rows if r["trading_session"] == session]
+                if not cand:
+                    return None
+                d = max(r["date"] for r in cand)
+                near = min(r["contract_date"] for r in cand if r["date"] == d)
+                return next(r for r in cand if r["date"] == d and r["contract_date"] == near)
+            day, night = latest("position"), latest("after_market")
+            out["tx"] = {"contract": (night or day)["contract_date"],
+                         "day": {"date": day["date"], "close": day["close"], "pct": day["spread_per"]} if day else None,
+                         "night": {"date": night["date"], "close": night["close"], "pct": night["spread_per"],
+                                   "vs_day": round(night["close"] - day["close"], 0) if (day and day["contract_date"] == night["contract_date"]) else None} if night else None}
     except Exception as e:  # noqa: BLE001
         log("tx futures", e)
     # 櫃買（TPEx openapi 擋一般 UA，用 curl_cffi）
     try:
         j = _cffi_json("https://www.tpex.org.tw/openapi/v1/tpex_mainborad_highlight")
         row = j[0] if isinstance(j, list) and j else j
-        picked = {k: v for k, v in (row or {}).items() if any(t in k for t in ("指數", "漲跌", "上漲", "下跌", "成交金額", "日期", "Date"))}
+        picked = dict(row or {})
         out["tpex"] = {"raw": picked}
         idx = next((num(v) for k, v in picked.items() if "指數" in k and "漲跌" not in k and "報酬" not in k), None)
         chg = next((num(v) for k, v in picked.items() if "漲跌" in k and "%" not in k and "家" not in k and "百分" not in k), None)
@@ -1073,7 +1078,18 @@ def p_tw_market():
         j = _rwd("https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN", selectType="MS")
         tbls = j.get("tables") or [{"fields": j.get("fields"), "data": j.get("data"), "title": j.get("title")}]
         t0 = tbls[0]
-        out["margin"] = {"title": t0.get("title"), "fields": t0.get("fields"), "rows": (t0.get("data") or [])[:4]}
+        rows = {r[0]: r for r in (t0.get("data") or [])}
+        def pick(key, i):
+            r = rows.get(key)
+            return num(r[i]) if r else None
+        amt_today, amt_prev = pick("融資金額(仟元)", 5), pick("融資金額(仟元)", 4)
+        out["margin"] = {"date": (t0.get("title") or "")[:11],
+                         "margin_amt": round(amt_today / 1e5, 1) if amt_today else None,  # 仟元 → 億
+                         "margin_amt_chg": round((amt_today - amt_prev) / 1e5, 1) if amt_today and amt_prev else None,
+                         "margin_units": pick("融資(交易單位)", 5), "margin_units_chg": (pick("融資(交易單位)", 5) or 0) - (pick("融資(交易單位)", 4) or 0),
+                         "short_units": pick("融券(交易單位)", 5), "short_units_chg": (pick("融券(交易單位)", 5) or 0) - (pick("融券(交易單位)", 4) or 0)}
+        if amt_today:
+            hist_put("margin", "amt", TODAY_TPE.isoformat(), round(amt_today / 1e5, 1))
     except Exception as e:  # noqa: BLE001
         log("margin", e)
     if not out:
