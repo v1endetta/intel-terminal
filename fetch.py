@@ -965,9 +965,125 @@ def p_tiktok():
         raise RuntimeError("tiktok: no hashtags captured")
     return {"label": "近 7 天 · TW", "items": items[:15]}
 
+
+# ---------- 台股大盤加值：法人、漲跌家數、類股、台積電、台指期夜盤、櫃買、融資融券 ----------
+SECTORS = [("電子工業類指數", "電子"), ("半導體類指數", "半導體"), ("金融保險類指數", "金融"), ("未含電子指數", "非電子"),
+           ("航運類指數", "航運"), ("生技醫療類指數", "生技"), ("鋼鐵類指數", "鋼鐵"), ("紡織纖維類指數", "紡織"),
+           ("觀光餐旅類指數", "觀光餐旅"), ("貿易百貨類指數", "百貨")]
+
+
+def _rwd(url, **params):
+    return gjson(url, params={"response": "json", **params}, headers={"Referer": "https://www.twse.com.tw/"})
+
+
+def _cffi_json(url, **params):
+    from curl_cffi import requests as cffi
+    r = cffi.get(url, params=params, impersonate="chrome", timeout=25)
+    r.raise_for_status()
+    return r.json()
+
+
+def p_tw_market():
+    out = {}
+    # 三大法人（元 → 億）
+    try:
+        j = _rwd("https://www.twse.com.tw/rwd/zh/fund/BFI82U")
+        rows = {r[0]: num(r[3]) for r in j.get("data", [])}
+        foreign = (rows.get("外資及陸資(不含外資自營商)") or 0) + (rows.get("外資自營商") or 0)
+        dealer = (rows.get("自營商(自行買賣)") or 0) + (rows.get("自營商(避險)") or 0)
+        out["institutions"] = {"date": j.get("date"), "items": [
+            {"name": "外資", "net": round(foreign / 1e8, 1)}, {"name": "投信", "net": round((rows.get("投信") or 0) / 1e8, 1)},
+            {"name": "自營商", "net": round(dealer / 1e8, 1)}, {"name": "合計", "net": round((rows.get("合計") or 0) / 1e8, 1)}]}
+        for it in out["institutions"]["items"]:
+            hist_put("institutions", it["name"], roc_to_iso(j.get("date", "")), it["net"])
+    except Exception as e:  # noqa: BLE001
+        log("BFI82U", e)
+    # 漲跌家數（股票欄）
+    try:
+        j = _rwd("https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX", type="MS")
+        tbl = next(t for t in j.get("tables", []) if "漲跌證券數" in (t.get("title") or ""))
+        cnt = {}
+        for r in tbl.get("data", []):
+            m = re.match(r"^([\d,]+)(?:\((\d+)\))?", str(r[2]))
+            if m:
+                cnt[r[0].split("(")[0]] = {"n": int(m.group(1).replace(",", "")), "limit": int(m.group(2) or 0)}
+        out["breadth"] = {"up": cnt.get("上漲", {}).get("n"), "up_limit": cnt.get("上漲", {}).get("limit"),
+                          "down": cnt.get("下跌", {}).get("n"), "down_limit": cnt.get("下跌", {}).get("limit"),
+                          "flat": cnt.get("持平", {}).get("n")}
+    except Exception as e:  # noqa: BLE001
+        log("breadth", e)
+    # 類股
+    try:
+        rows = {r["指數"]: r for r in gjson("https://openapi.twse.com.tw/v1/exchangeReport/MI_INDEX")}
+        secs = []
+        for key, label in SECTORS:
+            r = rows.get(key)
+            if not r:
+                continue
+            pct = num(r.get("漲跌百分比"))
+            if pct is not None and r.get("漲跌") == "-":
+                pct = -abs(pct)
+            secs.append({"name": label, "close": num(r.get("收盤指數")), "pct": pct})
+            hist_put("sectors", label, roc_to_iso(r.get("日期", "")), num(r.get("收盤指數")))
+        out["sectors"] = sorted(secs, key=lambda x: -(x["pct"] or 0))
+    except Exception as e:  # noqa: BLE001
+        log("sectors", e)
+    # 台積電
+    try:
+        r = next(x for x in gjson("https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL") if x.get("Code") == "2330")
+        px, ch = num(r["ClosingPrice"]), num(r["Change"])
+        hist_put("tw_stocks", "2330", roc_to_iso(r["Date"]), px)
+        out["tsmc"] = {"price": px, "chg": ch, "pct": ch / (px - ch) * 100 if px and ch is not None else None,
+                       "date": roc_to_iso(r["Date"]), "spark": hist_get("tw_stocks", "2330")}
+    except Exception as e:  # noqa: BLE001
+        log("tsmc", e)
+    # 台指期（FinMind）：日盤與夜盤
+    try:
+        start = (TODAY_TPE - timedelta(days=10)).isoformat()
+        headers = {"Authorization": f"Bearer {FINMIND_TOKEN}"} if FINMIND_TOKEN else {}
+        rows = gjson("https://api.finmindtrade.com/api/v4/data",
+                     params={"dataset": "TaiwanFuturesDaily", "data_id": "TX", "start_date": start}, headers=headers).get("data", [])
+        rows = [r for r in rows if r.get("volume", 0) > 0 and re.match(r"^\d{6}$", str(r.get("contract_date", "")))]
+        if rows:
+            last_date = max(r["date"] for r in rows)
+            near = min(r["contract_date"] for r in rows if r["date"] == last_date)
+            day = next((r for r in rows if r["date"] == last_date and r["contract_date"] == near and r["trading_session"] == "position"), None)
+            night = next((r for r in rows if r["date"] == last_date and r["contract_date"] == near and r["trading_session"] == "after_market"), None)
+            out["tx"] = {"date": last_date, "contract": near,
+                         "day": {"close": day["close"], "pct": day["spread_per"]} if day else None,
+                         "night": {"close": night["close"], "pct": night["spread_per"], "vs_day": (night["close"] - day["close"]) if (night and day) else None} if night else None}
+    except Exception as e:  # noqa: BLE001
+        log("tx futures", e)
+    # 櫃買（TPEx openapi 擋一般 UA，用 curl_cffi）
+    try:
+        j = _cffi_json("https://www.tpex.org.tw/openapi/v1/tpex_mainborad_highlight")
+        row = j[0] if isinstance(j, list) and j else j
+        picked = {k: v for k, v in (row or {}).items() if any(t in k for t in ("指數", "漲跌", "上漲", "下跌", "成交金額", "日期", "Date"))}
+        out["tpex"] = {"raw": picked}
+        idx = next((num(v) for k, v in picked.items() if "指數" in k and "漲跌" not in k and "報酬" not in k), None)
+        chg = next((num(v) for k, v in picked.items() if "漲跌" in k and "%" not in k and "家" not in k and "百分" not in k), None)
+        pct = next((num(v) for k, v in picked.items() if "漲跌" in k and ("%" in k or "百分" in k)), None)
+        out["tpex"].update({"index": idx, "chg": chg, "pct": pct})
+        if idx:
+            hist_put("tpex", "OTC", TODAY_TPE.isoformat(), idx)
+    except Exception as e:  # noqa: BLE001
+        log("tpex", e)
+    # 融資融券市場合計
+    try:
+        j = _rwd("https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN", selectType="MS")
+        tbls = j.get("tables") or [{"fields": j.get("fields"), "data": j.get("data"), "title": j.get("title")}]
+        t0 = tbls[0]
+        out["margin"] = {"title": t0.get("title"), "fields": t0.get("fields"), "rows": (t0.get("data") or [])[:4]}
+    except Exception as e:  # noqa: BLE001
+        log("margin", e)
+    if not out:
+        raise RuntimeError("tw_market: nothing")
+    return out
+
 # ---------- run ----------
 run("pulse", p_pulse)
 run("taiex", p_taiex)
+run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
 run("tw_stocks", p_tw_stocks)
 run("fx", p_fx_any)
 run("poly", p_poly)
