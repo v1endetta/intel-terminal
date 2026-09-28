@@ -214,23 +214,18 @@ def yahoo_chart(sym: str, rng="1mo", interval="1d"):
     ts = res.get("timestamp") or []
     off = meta.get("gmtoffset") or 0
     series = [(datetime.fromtimestamp(t + off, tz=timezone.utc).date().isoformat(), c) for t, c in zip(ts, closes) if c is not None]
-    price = meta.get("regularMarketPrice")
-    if price is None and series:
-        price = series[-1][1]
-    # 前收：以「行情時間的日期」為界，該日之前最後一根收盤才是前收
+    # 一律以 K 棒序列為準：最新價＝最後一根收盤（盤中為當日未完成棒），前收＝前一根。
+    # 不用 regularMarketPrice／previousClose：期貨換月時那兩個值常來自不同合約，會出現 +60% 這種假漲跌。
     mkt_ts = meta.get("regularMarketTime")
-    mkt_day = datetime.fromtimestamp(mkt_ts + off, tz=timezone.utc).date().isoformat() if mkt_ts else (series[-1][0] if series else None)
-    older = [(d, c) for d, c in series if mkt_day and d < mkt_day]
+    mkt_day = series[-1][0] if series else (datetime.fromtimestamp(mkt_ts + off, tz=timezone.utc).date().isoformat() if mkt_ts else None)
+    price = series[-1][1] if series else meta.get("regularMarketPrice")
     prev, thin = None, False
-    if older:
-        d_prev, c_prev = older[-1]
-        gap = (datetime.fromisoformat(mkt_day) - datetime.fromisoformat(d_prev)).days if mkt_day else 0
-        # 冷門合約 K 棒稀疏：前一根超過 7 天前就不算日漲跌（Yahoo 的 previousClose 對期貨常是換月前的值，不用）
+    if len(series) >= 2:
+        d_prev, c_prev = series[-2]
+        gap = (datetime.fromisoformat(mkt_day) - datetime.fromisoformat(d_prev)).days
         if gap <= 7:
             prev = c_prev
         thin = gap > 3
-    if prev is None and not older:
-        prev = meta.get("previousClose")
     chg_pct = (price - prev) / prev * 100 if price is not None and prev else None
     out = {"price": price, "chg_pct": chg_pct, "ccy": meta.get("currency"), "series": series, "asOf": mkt_day, "thin": thin}
     _yahoo_cache[sym] = out
