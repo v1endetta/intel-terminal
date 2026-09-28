@@ -44,6 +44,32 @@ a:hover{text-decoration:underline}
 .legend{font-size:11px;color:var(--dim)}
 .legend .u{color:var(--up)} .legend .d{color:var(--down)}
 
+
+/* ticker tape */
+.tape{position:relative;overflow:hidden;border-bottom:1px solid var(--line);margin:0 -16px 12px;background:var(--panel);height:30px;white-space:nowrap}
+.tape .track{display:inline-flex;gap:0;animation:tape 90s linear infinite;will-change:transform;padding-left:16px}
+.tape:hover .track{animation-play-state:paused}
+.tape .it{display:inline-flex;align-items:baseline;gap:7px;padding:0 18px;height:30px;line-height:30px;font-family:var(--mono);font-size:11.5px;border-right:1px solid var(--line)}
+.tape .it .n{color:var(--muted)} .tape .it .p{color:var(--text)}
+@keyframes tape{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.tape .track{animation:none}}
+/* pulse strip */
+.pulse{grid-column:span 12;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+@media (max-width:1100px){.pulse{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.pulse{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pulse .c{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:8px 10px 6px;min-width:0}
+.pulse .c .l{font-size:10.5px;color:var(--dim);letter-spacing:.03em;display:flex;justify-content:space-between}
+.pulse .sub{margin-left:5px;color:var(--dim);font-size:10px;font-family:var(--mono)}
+.pulse .c .l .st{font-family:var(--mono);font-size:9.5px}
+.pulse .c .v{font-family:var(--mono);font-size:18px;font-weight:500;margin-top:2px;display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.pulse .c .v .ch{font-size:11.5px}
+.pulse .c svg{display:block;width:100%;height:28px;margin-top:4px}
+/* change flash */
+@keyframes flashUp{0%{background:color-mix(in srgb,var(--up) 45%,transparent)}100%{background:transparent}}
+@keyframes flashDown{0%{background:color-mix(in srgb,var(--down) 45%,transparent)}100%{background:transparent}}
+.flash-up{animation:flashUp 1.6s ease-out}
+.flash-down{animation:flashDown 1.6s ease-out}
+.status .cd{font-family:var(--mono)}
 /* movers */
 .movers{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .movers .mv{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-size:12px;min-width:0}
@@ -115,14 +141,17 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   <div class="brand"><span class="dot" aria-hidden="true"></span>dalta <span class="zh">情報站</span></div>
   <div class="clocks"><span>TPE <b id="clk-tpe">--:--</b></span><span>LA <b id="clk-la">--:--</b></span></div>
   <div class="status">
-    <span class="k db">GitHub Actions 每 15 分鐘 · <span id="db-age">讀取中</span></span>
+    <span class="k db"><span id="db-age">讀取中</span> · 下次 <span class="cd" id="cd">--:--</span></span>
     <span class="legend"><span class="u">■</span> 漲 <span class="d">■</span> 跌（台灣慣例）</span>
   </div>
 </header>
 
+<div class="tape" id="tape" aria-hidden="true"></div>
 <section class="movers" id="movers" hidden></section>
 
 <main class="grid">
+
+  <section class="pulse" id="p-pulse"></section>
 
   <section class="panel" id="p-taiex">
     <div class="ph"><h2>TAIEX</h2><span class="zh">台股大盤</span><span class="meta">排程</span></div>
@@ -227,10 +256,10 @@ const ago=iso=>{const t=new Date(iso).getTime();if(!isFinite(t))return"";const m
 const staleAfter=(iso,hours)=>{const t=new Date(iso).getTime();return !isFinite(t)||Date.now()-t>hours*3600e3;};
 
 /* clocks */
-function tick(){const o={hour:"2-digit",minute:"2-digit",hour12:false};const d=new Date();
+function tick(){const o={hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false};const d=new Date();
   $("#clk-tpe").textContent=d.toLocaleTimeString("en-GB",{...o,timeZone:"Asia/Taipei"});
   $("#clk-la").textContent=d.toLocaleTimeString("en-GB",{...o,timeZone:"America/Los_Angeles"});}
-tick();setInterval(tick,15000);
+tick();setInterval(tick,1000);
 
 /* sparkline */
 function spark(vals,w=300,h=44){const v=vals.filter(isFinite);if(v.length<2)return"";const mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
@@ -260,11 +289,11 @@ function renderRevenue(){
 function setMeta(id,doc,hours){const iso=doc.updatedAt;const m=meta(id);m.textContent=(doc.label?doc.label+" · ":"")+(iso?ago(iso):"");m.classList.toggle("stale",staleAfter(iso,hours)||!!doc.error);if(doc.error){m.textContent+=" · 上次抓取失敗，顯示舊值";m.title=doc.error;}}
 const renderers={
   taiex(d){const idx=n(d.index),chg=n(d.change);const pct=chg/(idx-chg)*100;const series=(d.history&&d.history.length>5?d.history.map(x=>x[1]):(d.series||[])).map(n);
-    body("p-taiex").innerHTML=`<div class="kpi"><div><div class="lbl">加權指數 ${esc(d.date||"")}${d.history&&d.history.length>5?" · 近 "+d.history.length+" 日":" · 本月"}</div><div class="big ${cls(chg)}">${fmt(idx)}</div></div><div class="chg ${cls(chg)}">${sgn(chg)}　${sgn(pct,2,"%")}</div></div>${spark(series)}<table><tr><td class="name">成交金額</td><td class="r num">${compact(n(d.value))}</td><td class="name" style="padding-left:12px">成交筆數</td><td class="r num">${compact(n(d.transactions))}</td></tr></table>`;
+    body("p-taiex").innerHTML=`<div class="kpi"><div><div class="lbl">加權指數 ${esc(d.date||"")}${d.history&&d.history.length>5?" · 近 "+d.history.length+" 日":" · 本月"}</div><div class="big ${cls(chg)}${K("taiex",idx)}">${fmt(idx)}</div></div><div class="chg ${cls(chg)}">${sgn(chg)}　${sgn(pct,2,"%")}</div></div>${spark(series)}<table><tr><td class="name">成交金額</td><td class="r num">${compact(n(d.value))}</td><td class="name" style="padding-left:12px">成交筆數</td><td class="r num">${compact(n(d.transactions))}</td></tr></table>`;
     setMeta("p-taiex",{...d,label:"盤後"},30);},
-  tw_stocks(d){const tr=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg),pct=ch/(px-ch)*100;return`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)} ${esc(it.group||"")}</span>${mini(it.spark)}</td><td class="r num">${fmt(px)}</td><td class="r num ${cls(ch)}">${sgn(ch)}</td><td class="r num ${cls(ch)}">${sgn(pct,1,"%")}</td></tr>`;}).join("");
+  tw_stocks(d){const tr=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg),pct=ch/(px-ch)*100;return`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)} ${esc(it.group||"")}</span>${mini(it.spark)}</td><td class="r num${K("tw:"+it.code,px)}">${fmt(px)}</td><td class="r num ${cls(ch)}">${sgn(ch)}</td><td class="r num ${cls(ch)}">${sgn(pct,1,"%")}</td></tr>`;}).join("");
     body("p-tw-stocks").innerHTML=`<table><tr><th>個股</th><th class="r">收盤</th><th class="r">漲跌</th><th class="r">%</th></tr>${tr}</table>`;setMeta("p-tw-stocks",{...d,label:"盤後 "+(d.date||"")},30);},
-  poly(d){const li=(d.items||[]).map(m=>{const p=n(m.yes),dd=n(m.d1);return`<li><span class="t"><a href="https://polymarket.com/event/${esc(m.slug||"")}" target="_blank" rel="noopener">${esc(m.question)}</a></span><span class="bar" aria-hidden="true"><i style="width:${isFinite(p)?Math.max(0,Math.min(100,p)):0}%"></i></span><span class="m">${isFinite(p)?p.toFixed(0)+"%":"—"}</span><span class="m ${cls(dd)}" style="min-width:44px;text-align:right">${isFinite(dd)?sgn(dd,1,""):""}</span></li>`;}).join("");
+  poly(d){const li=(d.items||[]).map(m=>{const p=n(m.yes),dd=n(m.d1);return`<li><span class="t"><a href="https://polymarket.com/event/${esc(m.slug||"")}" target="_blank" rel="noopener">${esc(m.question)}</a></span><span class="bar" aria-hidden="true"><i style="width:${isFinite(p)?Math.max(0,Math.min(100,p)):0}%"></i></span><span class="m${K("poly:"+(m.slug||m.question),p)}">${isFinite(p)?p.toFixed(0)+"%":"—"}</span><span class="m ${cls(dd)}" style="min-width:44px;text-align:right">${isFinite(dd)?sgn(dd,1,""):""}</span></li>`;}).join("");
     body("p-poly").innerHTML=`<ul class="list">${li||'<li class="empty">目前沒有非運彩的熱門市場</li>'}</ul>`;setMeta("p-poly",{...d,label:"Yes 機率 / 24h 變動"},3);},
   tech(d){const col=(title,html)=>`<div><div class="ph" style="padding:0 0 4px;border-bottom:1px solid var(--line);margin-bottom:4px"><h2 style="font-size:10px">${title}</h2></div>${html||'<div class="err">這輪沒抓到</div>'}</div>`;
     const gh=(d.github||[]).map(r=>`<li><span class="t"><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a></span><span class="m">★${compact(n(r.stars))}</span></li>`).join("");
@@ -272,11 +301,11 @@ const renderers={
     const hn=(d.hn||[]).map(s=>`<li><span class="t"><a href="${esc(s.url||"#")}" target="_blank" rel="noopener">${esc(s.title)}</a></span><span class="m">${esc(s.score)}</span></li>`).join("");
     body("p-tech").innerHTML=`<div class="twocol tech3">${col("GitHub",gh&&`<ul class="list">${gh}</ul>`)}${col("Hugging Face",hf&&`<ul class="list">${hf}</ul>`)}${col("Hacker News",hn&&`<ul class="list">${hn}</ul>`)}</div>`;setMeta("p-tech",d,3);},
   revenue(d){revenueDocs.revenue=d;renderRevenue();},
-  fx(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num">${fmt(n(it.buy),it.code==="JPY"?4:3)}</td><td class="r num">${it.sell!=null?fmt(n(it.sell),it.code==="JPY"?4:3):"—"}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td></tr>`).join("");
+  fx(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num${K("fx:"+it.code,n(it.buy))}">${fmt(n(it.buy),it.code==="JPY"?4:3)}</td><td class="r num">${it.sell!=null?fmt(n(it.sell),it.code==="JPY"?4:3):"—"}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td></tr>`).join("");
     body("p-fx").innerHTML=`<table><tr><th>幣別</th><th class="r">即期買入</th><th class="r">即期賣出</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-fx",d,3);},
-  luxury(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.sym)}</span>${mini(it.spark)}</td><td class="r num">${fmt(n(it.price))}<span class="sub">${esc(it.ccy||"")}</span></td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
+  luxury(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.sym)}</span>${mini(it.spark)}</td><td class="r num${K("lux:"+it.sym,n(it.price))}">${fmt(n(it.price))}<span class="sub">${esc(it.ccy||"")}</span></td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
     body("p-lux").innerHTML=`<table><tr><th>公司</th><th class="r">收盤</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-lux",d,30);},
-  commodities(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.unit||"")}</span>${mini(it.spark)}</td><td class="r num">${fmt(n(it.price),n(it.price)<10?3:2)}</td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
+  commodities(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.unit||"")}</span>${mini(it.spark)}</td><td class="r num${K("cmd:"+it.sym,n(it.price))}">${fmt(n(it.price),n(it.price)<10?3:2)}</td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
     const sh=(d.shipping||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.date||"")}</span></td><td class="r num">${fmt(n(it.value),0)}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),1,"%"):esc(it.note||"")}</td></tr>`).join("");
     body("p-cmdty").innerHTML=`<table><tr><th>品項</th><th class="r">價格</th><th class="r">日%</th></tr>${tr}${sh?`<tr><th colspan="3" style="padding-top:8px">海運 USD/40ft</th></tr>${sh}`:""}</table>`;setMeta("p-cmdty",d,30);},
   macro(d){const cards=(d.items||[]).map(it=>`<div class="c"><div class="l">${esc(it.label)}</div><div class="v ${it.tone==="up"?"up":it.tone==="down"?"down":""}">${esc(it.value)}</div><div class="p">${esc(it.period||"")}${it.prev?` · 前值 ${esc(it.prev)}`:""}</div></div>`).join("");
@@ -293,13 +322,47 @@ const renderers={
     body("p-lyst").innerHTML=`<div class="twocol"><div><div class="lbl" style="font-size:10.5px;color:var(--dim);margin-bottom:4px">最熱品牌</div>${list(d.brands,"brand")}</div><div><div class="lbl" style="font-size:10.5px;color:var(--dim);margin-bottom:4px">最熱單品</div>${list(d.products,"name")}</div></div>`;
     setMeta("p-lyst",{...d,label:d.quarter||""},24*120);},
 };
+
+/* ---------- pulse / tape / flash / countdown ---------- */
+let lastGen=null,prevVals={};
+try{prevVals=JSON.parse(localStorage.getItem("intel:prev")||"{}");}catch(_){prevVals={};}
+const curVals={};
+const K=(k,v)=>{if(isFinite(v))curVals[k]=v;return isFinite(v)&&isFinite(prevVals[k])&&Math.abs(prevVals[k]-v)>1e-9?(v>prevVals[k]?" flash-up":" flash-down"):"";};
+function pulseSpark(vals){const v=(vals||[]).filter(isFinite);if(v.length<2)return"";const w=200,h=28,mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
+  const pts=v.map((y,i)=>[i/(v.length-1)*(w-2)+1,h-2-((y-mn)/rg)*(h-5)]);const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+  const last=pts[pts.length-1];const col=v[v.length-1]>=v[0]?"var(--up)":"var(--down)";
+  return`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d} L${last[0].toFixed(1)},${h} L1,${h} Z" fill="${col}" opacity=".12"/><path d="${d}" fill="none" stroke="${col}" stroke-width="1.3"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2" fill="${col}"/></svg>`;}
+renderers.pulse=function(d){const st={REGULAR:"盤中",PRE:"盤前",POST:"盤後",CLOSED:"休市",PREPRE:"盤前",POSTPOST:"盤後"};
+  $("#p-pulse").innerHTML=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg_pct);const dec=px>=1000?0:px>=100?1:2;
+    return`<div class="c"><div class="l"><span>${esc(it.name)}<span class="sub">${esc(it.ccy||"")}</span></span><span class="st ${it.state==="REGULAR"?"up":""}">${esc(st[it.state]||it.state||"")}</span></div>
+    <div class="v"><span class="${cls(ch)}${K("pulse:"+it.sym,px)}">${fmt(px,dec)}</span><span class="ch ${cls(ch)}">${sgn(ch,2,"%")}</span></div>${pulseSpark(it.spark)}</div>`;}).join("");};
+function tape(P){const items=[];
+  (P.pulse?.items||[]).forEach(it=>items.push([it.name,fmt(n(it.price),n(it.price)>=1000?0:2),n(it.chg_pct)]));
+  if(P.taiex){const idx=n(P.taiex.index),ch=n(P.taiex.change);items.push(["TAIEX 收盤",fmt(idx),ch/(idx-ch)*100]);}
+  (P.fx?.items||[]).forEach(it=>items.push([it.name+"/TWD",fmt(n(it.buy),it.code==="JPY"?4:3),n(it.chg_pct)]));
+  (P.tw_stocks?.items||[]).forEach(it=>{const px=n(it.price),ch=n(it.chg);items.push([it.name,fmt(px),ch/(px-ch)*100]);});
+  (P.luxury?.items||[]).forEach(it=>items.push([it.name,fmt(n(it.price)),n(it.chg_pct)]));
+  (P.commodities?.items||[]).forEach(it=>items.push([it.name,fmt(n(it.price)),n(it.chg_pct)]));
+  (P.commodities?.shipping||[]).forEach(it=>items.push([it.name,fmt(n(it.value),0),n(it.chg_pct)]));
+  const html=items.map(([nm,px,ch])=>`<span class="it"><span class="n">${esc(nm)}</span><span class="p">${px}</span><span class="${cls(ch)}">${isFinite(ch)?sgn(ch,2,"%"):""}</span></span>`).join("");
+  const el=$("#tape");el.innerHTML=`<div class="track">${html}${html}</div>`;
+  const secs=Math.max(40,Math.min(240,items.length*4));el.querySelector(".track").style.animationDuration=secs+"s";}
+let nextAt=0;
+function countdown(){const el=$("#cd");if(!nextAt){el.textContent="--:--";return;}let s=Math.round((nextAt-Date.now())/1000);if(s<=0){el.textContent="更新中";return;}el.textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
+setInterval(countdown,1000);
+function inSession(){const h=new Date().getUTCHours(),d=new Date().getUTCDay();if(d===0||d===6)return false;return (h>=1&&h<6)||(h>=13&&h<21);}
 async function loadAll(){
   try{
-    const r=await fetch("./data/all.json",{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
+    const r=await fetch("./data/all.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
     const all=await r.json();const P=all.panels||{};
+    if(all.generatedAt===lastGen){nextAt=Date.now()+60e3;return;}
+    lastGen=all.generatedAt;
     Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});
     $("#db-age").textContent="最近抓取 "+ago(all.generatedAt);
-    movers(P);
+    movers(P);tape(P);
+    try{localStorage.setItem("intel:prev",JSON.stringify(curVals));}catch(_){}
+    prevVals={...prevVals,...curVals};
+    const period=(inSession()?5:15)*60e3;nextAt=new Date(all.generatedAt).getTime()+period+90e3;if(nextAt<Date.now()+30e3)nextAt=Date.now()+60e3;
   }catch(e){$("#db-age").textContent="讀不到 data/all.json（"+e.message+"）";}
 }
 function movers(P){
@@ -318,7 +381,7 @@ function movers(P){
   el.hidden=false;
 }
 /* boot */
-loadAll();setInterval(loadAll,5*60e3);
+loadAll();setInterval(()=>{if(Date.now()>=nextAt)loadAll();},15e3);
 })();
 </script>
 </body>

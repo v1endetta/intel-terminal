@@ -643,7 +643,49 @@ def p_macro():
     return {"items": list(items.values()), "note": prev.get("note", "")}
 
 
+
+# ---------- pulse: 24 小時會動的東西（盤中 5 分鐘線） ----------
+PULSE = [("^TWII", "台股加權", "TWD"), ("BTC-USD", "Bitcoin", "USD"), ("ETH-USD", "Ethereum", "USD"),
+         ("ES=F", "S&P 500 期貨", "USD"), ("NQ=F", "Nasdaq 期貨", "USD"), ("DX-Y.NYB", "美元指數", "")]
+
+
+def yahoo_intraday(sym):
+    last_err = None
+    for host in ("query2.finance.yahoo.com", "query1.finance.yahoo.com"):
+        try:
+            j = gjson(f"https://{host}/v8/finance/chart/{sym}", params={"range": "1d", "interval": "5m", "includePrePost": "false"})
+            res = j["chart"]["result"][0]
+            meta = res["meta"]
+            closes = res["indicators"]["quote"][0].get("close") or []
+            ts = res.get("timestamp") or []
+            series = [(t, c) for t, c in zip(ts, closes) if c is not None]
+            price = meta.get("regularMarketPrice") or (series[-1][1] if series else None)
+            prev = meta.get("chartPreviousClose") or meta.get("previousClose")
+            return {"price": price, "prev": prev, "chg_pct": (price - prev) / prev * 100 if price and prev else None,
+                    "series": [c for _, c in series][-80:], "asOf": series[-1][0] if series else meta.get("regularMarketTime"),
+                    "state": meta.get("marketState")}
+        except Exception as e:  # noqa: BLE001
+            last_err = e
+            time.sleep(1)
+    raise RuntimeError(f"yahoo intraday {sym}: {last_err}")
+
+
+def p_pulse():
+    items = []
+    for sym, name, ccy in PULSE:
+        try:
+            q = yahoo_intraday(sym)
+        except Exception as e:  # noqa: BLE001
+            log("pulse", sym, e)
+            continue
+        items.append({"sym": sym, "name": name, "ccy": ccy, "price": q["price"], "chg_pct": q["chg_pct"],
+                      "spark": q["series"], "asOf": q["asOf"], "state": q["state"]})
+    if not items:
+        raise RuntimeError("no pulse quotes")
+    return {"label": "5 分鐘線", "items": items}
+
 # ---------- run ----------
+run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_stocks", p_tw_stocks)
 run("fx", p_fx_any)
