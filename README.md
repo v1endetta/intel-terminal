@@ -5,12 +5,15 @@
 ## 結構
 
 ```
-fetch.py                 抓取腳本；每個來源獨立失敗、失敗保留舊值
-index.html               終端機頁面，只讀 data/all.json
-data/all.json            所有面板最新值
-data/history.json        各指標日序列（走勢圖），最多 400 點
-data/panels/<id>.json    各面板單檔；macro.json 為手動維護
-.github/workflows/fetch.yml
+main 分支（程式碼，改動才觸發 Pages 部署）
+  fetch.py               抓取腳本；每個來源獨立失敗、失敗保留舊值
+  index.html             終端機頁面，從 data 分支的 raw 網址讀 all.json
+  .github/workflows/fetch.yml   長跑迴圈：每 5／15 分鐘抓一次並 commit 到 data 分支
+
+data 分支（資料，每次抓取一個 commit；超過 2000 個 commit 自動壓平重來）
+  data/all.json          所有面板最新值
+  data/history.json      各指標日序列（走勢圖），最多 400 點
+  data/panels/<id>.json  各面板單檔；macro.json 為手動維護（在 data 分支上改）
 ```
 
 ## 面板與來源

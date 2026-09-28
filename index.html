@@ -234,7 +234,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 </main>
 
 <div class="foot">
-  <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 Actions 抓取並 commit，每次 commit 都是一個歷史點</span>
+  <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 Actions 抓取並 commit 到 data 分支，每次 commit 都是一個歷史點</span>
   <span>第二期待接：氣象署、TDX 交通與觀光、TGOS、Google Maps、Reddit API、FRED</span>
 </div>
 
@@ -353,7 +353,7 @@ setInterval(countdown,1000);
 function inSession(){const h=new Date().getUTCHours(),d=new Date().getUTCDay();if(d===0||d===6)return false;return (h>=1&&h<6)||(h>=13&&h<21);}
 async function loadAll(){
   try{
-    const r=await fetch("./data/all.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
+    const r=await fetch("https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/all.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
     const all=await r.json();const P=all.panels||{};
     if(all.generatedAt===lastGen){nextAt=Date.now()+60e3;return;}
     lastGen=all.generatedAt;
@@ -363,7 +363,7 @@ async function loadAll(){
     try{localStorage.setItem("intel:prev",JSON.stringify(curVals));}catch(_){}
     prevVals={...prevVals,...curVals};
     const period=(inSession()?5:15)*60e3;nextAt=new Date(all.generatedAt).getTime()+period+90e3;if(nextAt<Date.now()+30e3)nextAt=Date.now()+60e3;
-  }catch(e){$("#db-age").textContent="讀不到 data/all.json（"+e.message+"）";}
+  }catch(e){$("#db-age").textContent="讀不到資料（"+e.message+"）";}
 }
 function movers(P){
   const list=[];

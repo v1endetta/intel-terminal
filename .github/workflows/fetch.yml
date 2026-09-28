@@ -1,8 +1,8 @@
 name: fetch
 
-# GitHub 的排程觸發實測會延遲到每 3 小時才跑一次，所以改成「長跑迴圈」：
-# 一次 job 內每 5 分鐘（盤中）或 15 分鐘（盤外）抓一次並 commit，跑滿約 5.5 小時後
-# 自己再觸發下一輪。schedule 只當看門狗：若沒有迴圈在跑就補啟動。
+# 程式碼在 main，資料 commit 到 data 分支：main 不動就不會觸發 Pages 重建，
+# 避開 Pages 每小時 10 次部署的限制；data 分支太長時自動壓平。
+# GitHub 的 schedule 實測會延遲到每 3 小時才觸發，所以用長跑迴圈，schedule 只當看門狗。
 
 on:
   schedule:
@@ -27,6 +27,12 @@ jobs:
           if [ "$n" -gt 0 ]; then echo "SKIP=1" >> "$GITHUB_ENV"; fi
       - uses: actions/checkout@v4
         if: env.SKIP != '1'
+      - uses: actions/checkout@v4
+        if: env.SKIP != '1'
+        with:
+          ref: data
+          path: out
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         if: env.SKIP != '1'
         with:
@@ -37,21 +43,31 @@ jobs:
       - name: Fetch loop
         if: env.SKIP != '1'
         env:
+          INTEL_DATA_DIR: ${{ github.workspace }}/out/data
+          GITHUB_TOKEN: ${{ github.token }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
           REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
         run: |
+          cd out
           git config user.name "intel-bot"
           git config user.email "intel-bot@users.noreply.github.com"
+          # 壓平：data 分支超過 2000 個 commit 就用目前內容重新開一條
+          if [ "$(git rev-list --count HEAD)" -gt 2000 ]; then
+            git checkout -q --orphan squashed
+            git add -A && git commit -qm "data: squash $(date -u +'%Y-%m-%d')"
+            git branch -M data
+            git push -q -f origin data
+          fi
           end=$(( $(date +%s) + 330*60 ))
           while [ "$(date +%s)" -lt "$end" ]; do
-            python fetch.py || true
+            (cd .. && python fetch.py) || true
             git add data
             if ! git diff --cached --quiet; then
               git commit -qm "data: $(date -u +'%Y-%m-%d %H:%M') UTC"
-              git pull -q --rebase --autostash origin main || true
-              git push -q || (git pull -q --rebase origin main && git push -q) || true
+              git pull -q --rebase origin data || true
+              git push -q origin data || (git pull -q --rebase origin data && git push -q origin data) || true
             fi
             h=$(date -u +%H); d=$(date -u +%u)
             if [ "$d" -le 5 ] && { [ "$h" -ge 1 -a "$h" -lt 6 ] || [ "$h" -ge 13 -a "$h" -lt 21 ]; }; then s=300; else s=900; fi

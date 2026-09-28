@@ -23,7 +23,7 @@ from pathlib import Path
 import requests
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / "data"
+DATA = Path(os.environ.get("INTEL_DATA_DIR") or (ROOT / "data"))
 PANELS = DATA / "panels"
 PANELS.mkdir(parents=True, exist_ok=True)
 
@@ -320,7 +320,7 @@ def p_tech():
     try:
         gh = gjson("https://api.github.com/search/repositories",
                    params={"q": f"created:>{since}", "sort": "stars", "order": "desc", "per_page": 8},
-                   headers={"Accept": "application/vnd.github+json"})
+                   headers={"Accept": "application/vnd.github+json", **({"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"]} if os.environ.get("GITHUB_TOKEN") else {})})
         out["github"] = [{"name": r["full_name"], "url": r["html_url"], "stars": r["stargazers_count"],
                           "lang": r.get("language"), "desc": (r.get("description") or "")[:90]} for r in gh["items"]]
     except Exception as e:  # noqa: BLE001
