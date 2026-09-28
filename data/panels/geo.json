@@ -3,22 +3,19 @@
  "counts": {
   "Taipei": {
    "parking": 316,
-   "bikes": 1781,
-   "speed": 0,
-   "freeway": 0
+   "bikes": 0,
+   "speed": 447,
+   "freeway": 83
   },
   "Taichung": {
-   "parking": 0,
-   "bikes": 0,
+   "parking": 799,
+   "bikes": 1814,
    "speed": 0,
-   "freeway": 0
+   "freeway": 55
   }
  },
  "errs": [
-  "geo parking Taichung: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/api/basic/v1/Parking/OffStreet/ParkingAvailability/City",
-  "geo bikes Taichung: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/api/basic/v2/Bike/Availability/City/Taichung?%24format=",
-  "geo vd live: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/api/basic/v2/Road/Traffic/Live/VD/City/Taipei?%24format",
-  "geo etag live: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/api/basic/v2/Road/Traffic/Live/ETag/Freeway?%24format=J"
+  "geo bikes Taipei: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/api/basic/v2/Bike/Availability/City/Taipei?%24format=JS"
  ],
- "updatedAt": "2026-09-28T15:58:42Z"
+ "updatedAt": "2026-09-28T16:04:21Z"
 }
