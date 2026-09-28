@@ -1063,14 +1063,14 @@ def p_tw_market():
     try:
         j = _cffi_json("https://www.tpex.org.tw/openapi/v1/tpex_mainborad_highlight")
         row = j[0] if isinstance(j, list) and j else j
-        picked = dict(row or {})
-        out["tpex"] = {"raw": picked}
-        idx = next((num(v) for k, v in picked.items() if "指數" in k and "漲跌" not in k and "報酬" not in k), None)
-        chg = next((num(v) for k, v in picked.items() if "漲跌" in k and "%" not in k and "家" not in k and "百分" not in k), None)
-        pct = next((num(v) for k, v in picked.items() if "漲跌" in k and ("%" in k or "百分" in k)), None)
-        out["tpex"].update({"index": idx, "chg": chg, "pct": pct})
+        idx, chg = num(row.get("CloseIndex")), num(row.get("IndexChange"))
+        d = roc_to_iso(row.get("Date", ""))
+        out["tpex"] = {"date": d, "index": idx, "chg": chg, "pct": chg / (idx - chg) * 100 if idx and chg is not None else None,
+                       "up": num(row.get("PriceRiseCompanyNumbers")), "down": num(row.get("PriceDeclineCompanyNumbers")),
+                       "flat": num(row.get("PriceFlatCompanyNumbers")), "value": num(row.get("DailyTradingValue"))}
         if idx:
-            hist_put("tpex", "OTC", TODAY_TPE.isoformat(), idx)
+            hist_put("tpex", "OTC", d, idx)
+        out["tpex"]["spark"] = hist_get("tpex", "OTC")
     except Exception as e:  # noqa: BLE001
         log("tpex", e)
     # 融資融券市場合計

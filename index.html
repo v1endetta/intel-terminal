@@ -84,6 +84,16 @@ a:hover{text-decoration:underline}
 .tp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:640px){.tp{grid-template-columns:1fr}}
 .tp h3{margin:0 0 4px;font-size:10px;font-weight:500;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;font-family:var(--head)}
+.tx2{display:grid;grid-template-columns:1.1fr 1fr;gap:14px}
+@media (max-width:900px){.tx2{grid-template-columns:1fr}}
+.tx2 h3{margin:8px 0 3px;font-size:10px;font-weight:500;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;font-family:var(--head)}
+.tx2 h3:first-child{margin-top:0}
+.kv{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px}
+.kv span b{font-weight:500;margin-left:4px}
+.breadth{display:flex;height:6px;border-radius:2px;overflow:hidden;margin:4px 0 2px;background:var(--line2)}
+.breadth i{display:block;height:100%}
+.secs{display:flex;flex-wrap:wrap;gap:4px 8px;font-family:var(--mono);font-size:11px}
+.secs span{padding:1px 6px;border:1px solid var(--line);border-radius:3px}
 /* movers */
 .movers{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .movers .mv{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-size:12px;min-width:0}
@@ -179,10 +189,10 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">中央氣象署</a><span>觀測每 10 分鐘 · 36 小時預報 · 特報</span></div>
   </section>
 
-  <section class="panel" id="p-taiex">
+  <section class="panel w8" id="p-taiex">
     <div class="ph"><h2>TAIEX</h2><span class="zh">台股大盤</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://openapi.twse.com.tw/" target="_blank" rel="noopener">證交所 OpenAPI</a><span>盤後更新，本月逐日走勢</span></div>
+    <div class="pf"><a href="https://openapi.twse.com.tw/" target="_blank" rel="noopener">證交所</a><a href="https://www.tpex.org.tw/" target="_blank" rel="noopener">櫃買</a><a href="https://finmindtrade.com/" target="_blank" rel="noopener">FinMind</a><span>盤後更新 · 法人單位億元 · 夜盤 15:00–05:00</span></div>
   </section>
 
   <section class="panel" id="p-fx">
@@ -304,6 +314,24 @@ function spark(vals,w=300,h=44){const v=vals.filter(isFinite);if(v.length<2)retu
 function mini(vals){const v=(vals||[]).filter(isFinite);if(v.length<2)return"";const w=56,h=16,mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
   const pts=v.map((y,i)=>[i/(v.length-1)*(w-2)+1,h-2-((y-mn)/rg)*(h-4)]);const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
   const col=v[v.length-1]>=v[0]?"var(--up)":"var(--down)";return`<svg class="mini" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" fill="none" stroke="${col}" stroke-width="1.2"/></svg>`;}
+/* ---------- taiex + market internals ---------- */
+const twm={};
+function renderTaiex(){
+  const d=twm.taiex;if(!d)return;const m=twm.market||{};
+  const idx=n(d.index),chg=n(d.change);const pct=chg/(idx-chg)*100;const series=(d.history&&d.history.length>5?d.history.map(x=>x[1]):(d.series||[])).map(n);
+  const left=`<div class="kpi"><div><div class="lbl">加權指數 ${esc(d.date||"")}${d.history&&d.history.length>5?" · 近 "+d.history.length+" 日":" · 本月"}</div><div class="big ${cls(chg)}${K("taiex",idx)}">${fmt(idx)}</div></div><div class="chg ${cls(chg)}">${sgn(chg)}　${sgn(pct,2,"%")}</div></div>${spark(series)}
+    <div class="kv"><span>成交金額<b>${compact(n(d.value))}</b></span><span>成交筆數<b>${compact(n(d.transactions))}</b></span>${m.tpex?`<span>櫃買<b class="${cls(n(m.tpex.chg))}">${fmt(n(m.tpex.index))} ${sgn(n(m.tpex.pct),2,"%")}</b></span>`:""}</div>
+    ${m.tsmc?`<h3 style="margin:8px 0 3px;font-size:10px;font-weight:500;color:var(--dim);letter-spacing:.06em;font-family:var(--head)">台積電 2330</h3><div class="kv"><span><b class="${cls(n(m.tsmc.chg))}${K("tsmc",n(m.tsmc.price))}">${fmt(n(m.tsmc.price))}</b></span><span class="${cls(n(m.tsmc.chg))}">${sgn(n(m.tsmc.chg))} · ${sgn(n(m.tsmc.pct),2,"%")}</span>${mini(m.tsmc.spark)}</div>`:""}
+    ${m.tx?`<h3 style="margin:8px 0 3px;font-size:10px;font-weight:500;color:var(--dim);letter-spacing:.06em;font-family:var(--head)">台指期 ${esc(m.tx.contract||"")}</h3><div class="kv">${m.tx.day?`<span>日盤<b class="${cls(n(m.tx.day.pct))}">${fmt(n(m.tx.day.close),0)} ${sgn(n(m.tx.day.pct),2,"%")}</b></span>`:""}${m.tx.night?`<span>夜盤<b class="${cls(n(m.tx.night.pct))}${K("txn",n(m.tx.night.close))}">${fmt(n(m.tx.night.close),0)} ${sgn(n(m.tx.night.pct),2,"%")}</b></span>${isFinite(n(m.tx.night.vs_day))?`<span class="${cls(n(m.tx.night.vs_day))}">較日盤 ${sgn(n(m.tx.night.vs_day),0)}</span>`:""}`:""}</div>`:""}`;
+  const b=m.breadth;const inst=m.institutions;const mg=m.margin;
+  const total=b?(b.up+b.down+b.flat):0;
+  const right=`${inst?`<h3>三大法人買賣超 <span class="sub">${esc((inst.date||"").replace(/(\d{4})(\d{2})(\d{2})/,"$2/$3"))}</span></h3><table>${inst.items.map(i=>`<tr><td class="name">${esc(i.name)}</td><td class="r num ${cls(n(i.net))}${K("inst:"+i.name,n(i.net))}">${sgn(n(i.net),1)} 億</td></tr>`).join("")}</table>`:""}
+    ${b?`<h3>漲跌家數</h3><div class="breadth"><i style="width:${total?b.up/total*100:0}%;background:var(--up)"></i><i style="width:${total?b.flat/total*100:0}%;background:var(--line2)"></i><i style="width:${total?b.down/total*100:0}%;background:var(--down)"></i></div><div class="kv"><span class="up">漲 ${b.up}<b>${b.up_limit?"("+b.up_limit+" 漲停)":""}</b></span><span>平 ${b.flat}</span><span class="down">跌 ${b.down}<b>${b.down_limit?"("+b.down_limit+" 跌停)":""}</b></span></div>`:""}
+    ${m.sectors?`<h3>類股</h3><div class="secs">${m.sectors.map(sct=>`<span class="${cls(n(sct.pct))}">${esc(sct.name)} ${sgn(n(sct.pct),2,"%")}</span>`).join("")}</div>`:""}
+    ${mg?`<h3>融資融券</h3><div class="kv"><span>融資餘額<b>${fmt(n(mg.margin_amt),0)} 億</b><span class="${cls(n(mg.margin_amt_chg))}"> ${sgn(n(mg.margin_amt_chg),1)}</span></span><span>融券<b>${compact(n(mg.short_units))} 張</b><span class="${cls(-n(mg.short_units_chg))}"> ${sgn(n(mg.short_units_chg),0)}</span></span></div>`:""}`;
+  body("p-taiex").innerHTML=`<div class="tx2"><div>${left}</div><div>${right}</div></div>`;
+  setMeta("p-taiex",{...d,label:"盤後",error:d.error||m.error},30);
+}
 /* ---------- shared: revenue merge ---------- */
 const REV_ORDER=["2912","1216","2903","5904","5903","8454","8044"];
 let revenueDocs={};
@@ -321,7 +349,9 @@ function renderRevenue(){
 /* ---------- DB panels (written by the hourly job) ---------- */
 function setMeta(id,doc,hours){metaDocs[id]=[doc,hours];const iso=doc.updatedAt;const m=meta(id);m.textContent=(doc.label?doc.label+" · ":"")+(iso?ago(iso):"");m.classList.toggle("stale",staleAfter(iso,hours)||!!doc.error);if(doc.error){m.textContent+=doc.updatedAt?" · 上次抓取失敗，顯示舊值":" · 抓取失敗";m.title=doc.error;}}
 const renderers={
-  taiex(d){const idx=n(d.index),chg=n(d.change);const pct=chg/(idx-chg)*100;const series=(d.history&&d.history.length>5?d.history.map(x=>x[1]):(d.series||[])).map(n);
+  taiex(d){twm.taiex=d;renderTaiex();},
+  tw_market(d){twm.market=d;renderTaiex();},
+  _taiex_old(d){const idx=n(d.index),chg=n(d.change);const pct=chg/(idx-chg)*100;const series=(d.history&&d.history.length>5?d.history.map(x=>x[1]):(d.series||[])).map(n);
     body("p-taiex").innerHTML=`<div class="kpi"><div><div class="lbl">加權指數 ${esc(d.date||"")}${d.history&&d.history.length>5?" · 近 "+d.history.length+" 日":" · 本月"}</div><div class="big ${cls(chg)}${K("taiex",idx)}">${fmt(idx)}</div></div><div class="chg ${cls(chg)}">${sgn(chg)}　${sgn(pct,2,"%")}</div></div>${spark(series)}<table><tr><td class="name">成交金額</td><td class="r num">${compact(n(d.value))}</td><td class="name" style="padding-left:12px">成交筆數</td><td class="r num">${compact(n(d.transactions))}</td></tr></table>`;
     setMeta("p-taiex",{...d,label:"盤後"},30);},
   tw_stocks(d){const tr=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg),pct=ch/(px-ch)*100;return`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)} ${esc(it.group||"")}</span>${mini(it.spark)}</td><td class="r num${K("tw:"+it.code,px)}">${fmt(px)}</td><td class="r num ${cls(ch)}">${sgn(ch)}</td><td class="r num ${cls(ch)}">${sgn(pct,1,"%")}</td></tr>`;}).join("");
