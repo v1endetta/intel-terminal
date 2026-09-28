@@ -1203,19 +1203,19 @@ def _geo_static():
             out["carparks"][city] = {c["CarParkID"]: [round(c["CarParkPosition"]["PositionLon"], 5), round(c["CarParkPosition"]["PositionLat"], 5),
                                                       (c.get("CarParkName") or {}).get("Zh_tw", "")] for c in cps if c.get("CarParkPosition", {}).get("PositionLat")}
         except Exception as e:  # noqa: BLE001
-            log("geo carpark static", city, e)
+            log("geo carpark static", city, e); GEO_ERRS.append(f"geo carpark static {city}: " + safe_err(e))
         try:
             sts = tdx(f"Bike/Station/City/{city}")
             out["bikes"][city] = {b["StationUID"]: [round(b["StationPosition"]["PositionLon"], 5), round(b["StationPosition"]["PositionLat"], 5),
                                                     (b.get("StationName") or {}).get("Zh_tw", "").replace("YouBike2.0_", ""), b.get("BikesCapacity") or 0]
                                   for b in sts if b.get("StationPosition", {}).get("PositionLat")}
         except Exception as e:  # noqa: BLE001
-            log("geo bike static", city, e)
+            log("geo bike static", city, e); GEO_ERRS.append(f"geo bike static {city}: " + safe_err(e))
     try:
         vds = tdx("Road/Traffic/VD/City/Taipei").get("VDs", [])
         out["vd"]["Taipei"] = {v["VDID"]: [round(v["PositionLon"], 5), round(v["PositionLat"], 5), v.get("RoadName", "")] for v in vds if v.get("PositionLat")}
     except Exception as e:  # noqa: BLE001
-        log("geo vd static", e)
+        log("geo vd static", e); GEO_ERRS.append("geo vd static: " + safe_err(e))
     try:
         for ep in tdx("Road/Traffic/ETagPair/Freeway").get("ETagPairs", []):
             g = ep.get("Geometry") or ""
@@ -1223,13 +1223,17 @@ def _geo_static():
             if pts:
                 out["etag"].append([ep["ETagPairID"], ep.get("Description", ""), [[round(float(a), 4), round(float(b), 4)] for a, b in pts[::max(1, len(pts) // 12)]]])
     except Exception as e:  # noqa: BLE001
-        log("geo etag static", e)
+        log("geo etag static", e); GEO_ERRS.append("geo etag static: " + safe_err(e))
     if out["carparks"] and out["bikes"]:
         write_json(GEO_STATIC_PATH, out, separators=(",", ":"))
     return out
 
 
+GEO_ERRS = []
+
+
 def p_geo():
+    GEO_ERRS.clear()
     st = _geo_static()
     geo = {"generatedAt": NOW_ISO, "cities": {}}
     # 停車場
@@ -1248,14 +1252,14 @@ def p_geo():
                     continue
                 c["parking"].append([pos[0], pos[1], int(avail), int(total), pos[2][:18]])
         except Exception as e:  # noqa: BLE001
-            log("geo parking", city, e)
+            log("geo parking", city, e); GEO_ERRS.append(f"geo parking {city}: " + safe_err(e))
         try:
             for r in tdx(f"Bike/Availability/City/{city}"):
                 pos = st["bikes"].get(city, {}).get(r.get("StationUID"))
                 if pos and r.get("ServiceStatus", 1) == 1:
                     c["bikes"].append([pos[0], pos[1], int(r.get("AvailableRentBikes") or 0), int(pos[3] or 0), pos[2][:14]])
         except Exception as e:  # noqa: BLE001
-            log("geo bikes", city, e)
+            log("geo bikes", city, e); GEO_ERRS.append(f"geo bikes {city}: " + safe_err(e))
         geo["cities"][city] = c
     # 台北市區 VD 車速
     try:
@@ -1267,7 +1271,7 @@ def p_geo():
             if sp:
                 geo["cities"]["Taipei"]["speed"].append([pos[0], pos[1], round(sum(sp) / len(sp)), pos[2][:10]])
     except Exception as e:  # noqa: BLE001
-        log("geo vd live", e)
+        log("geo vd live", e); GEO_ERRS.append("geo vd live: " + safe_err(e))
     # 國道 ETag 路段車速（畫線）
     try:
         live = {pr["ETagPairID"]: next((f["SpaceMeanSpeed"] for f in pr.get("Flows", []) if f.get("VehicleType") == 31 and (f.get("SpaceMeanSpeed") or 0) > 0), None)
@@ -1280,12 +1284,12 @@ def p_geo():
                 if any(_in_bbox(x, y, meta["bbox"]) for x, y in pts):
                     geo["cities"][city]["freeway"].append([pts, round(spd), desc[:16]])
     except Exception as e:  # noqa: BLE001
-        log("geo etag live", e)
+        log("geo etag live", e); GEO_ERRS.append("geo etag live: " + safe_err(e))
     write_json(GEO_PATH, geo, separators=(",", ":"))
     summary = {city: {k: len(v) for k, v in c.items()} for city, c in geo["cities"].items()}
     if not any(sum(v.values()) for v in summary.values()):
-        raise RuntimeError(f"geo: nothing (static: carparks={ {k: len(v) for k, v in st.get('carparks', {}).items()} } bikes={ {k: len(v) for k, v in st.get('bikes', {}).items()} } vd={len(st.get('vd', {}).get('Taipei', {}))} etag={len(st.get('etag', []))})")
-    return {"label": "TDX", "counts": summary}
+        raise RuntimeError(f"geo: nothing errs={GEO_ERRS[:6]} (static: carparks={ {k: len(v) for k, v in st.get('carparks', {}).items()} } bikes={ {k: len(v) for k, v in st.get('bikes', {}).items()} } vd={len(st.get('vd', {}).get('Taipei', {}))} etag={len(st.get('etag', []))})")
+    return {"label": "TDX", "counts": summary, "errs": GEO_ERRS[:12]}
 
 # ---------- run ----------
 run("pulse", p_pulse)
