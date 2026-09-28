@@ -729,7 +729,11 @@ def p_macro():
             obj = re.search(r'"area"\s*:\s*"台灣"[^}]*}', raw, re.S)
             if obj:
                 idx = re.search(r'"20\d\d/Q[1-4]"\s*:\s*([\d]{2,3}\.\d{1,2})', obj.group(0)) or re.search(r"\b(1\d\d\.\d{2})\b", obj.group(0))
-                errs.append("sinyi obj: " + obj.group(0)[:300].replace("\n", " "))
+            if not idx:
+                for mm_ in list(re.finditer(r"台灣", raw))[:6]:
+                    ctx = raw[mm_.start():mm_.start() + 160].replace("\n", " ")
+                    errs.append("sinyi ctx: " + re.sub(r"\s+", " ", ctx))
+                idx = re.search(r"台灣[^\d]{0,120}?(1\d\d\.\d{2})", raw, re.S)
         if chg and idx:
             q, y = float(chg.group(1)), float(chg.group(2))
             auto["house"] = {"label": "信義房價指數（全台）", "value": idx.group(1), "period": period,
