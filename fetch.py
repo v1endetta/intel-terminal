@@ -914,7 +914,8 @@ def tdx(path, **params):
             r.raise_for_status()
             _tdx_token = r.json()["access_token"]
         headers["Authorization"] = "Bearer " + _tdx_token
-    return gjson(TDX + path, params={"$format": "JSON", **params}, headers=headers)
+    base = TDX.replace("/v2/", "/v1/") if path.startswith("v1:") else TDX
+    return gjson(base + path.replace("v1:", ""), params={"$format": "JSON", **params}, headers=headers)
 
 
 def p_tw_pulse():
@@ -1198,7 +1199,7 @@ def _geo_static():
     out = {"fetchedAt": NOW_ISO, "carparks": {}, "bikes": {}, "vd": {}, "etag": []}
     for city in GEO_CITIES:
         try:
-            cps = tdx(f"Parking/OffStreet/CarPark/City/{city}").get("CarParks", [])
+            cps = tdx(f"v1:Parking/OffStreet/CarPark/City/{city}").get("CarParks", [])
             out["carparks"][city] = {c["CarParkID"]: [round(c["CarParkPosition"]["PositionLon"], 5), round(c["CarParkPosition"]["PositionLat"], 5),
                                                       (c.get("CarParkName") or {}).get("Zh_tw", "")] for c in cps if c.get("CarParkPosition", {}).get("PositionLat")}
         except Exception as e:  # noqa: BLE001
@@ -1235,7 +1236,7 @@ def p_geo():
     for city, meta in GEO_CITIES.items():
         c = {"parking": [], "bikes": [], "speed": [], "freeway": []}
         try:
-            for r in tdx(f"Parking/OffStreet/ParkingAvailability/City/{city}").get("ParkingAvailabilities", []):
+            for r in tdx(f"v1:Parking/OffStreet/ParkingAvailability/City/{city}").get("ParkingAvailabilities", []):
                 pos = st["carparks"].get(city, {}).get(r.get("CarParkID"))
                 if not pos:
                     continue
@@ -1283,7 +1284,7 @@ def p_geo():
     write_json(GEO_PATH, geo, separators=(",", ":"))
     summary = {city: {k: len(v) for k, v in c.items()} for city, c in geo["cities"].items()}
     if not any(sum(v.values()) for v in summary.values()):
-        raise RuntimeError("geo: nothing")
+        raise RuntimeError(f"geo: nothing (static: carparks={ {k: len(v) for k, v in st.get('carparks', {}).items()} } bikes={ {k: len(v) for k, v in st.get('bikes', {}).items()} } vd={len(st.get('vd', {}).get('Taipei', {}))} etag={len(st.get('etag', []))})")
     return {"label": "TDX", "counts": summary}
 
 # ---------- run ----------
