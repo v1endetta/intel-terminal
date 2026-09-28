@@ -41,6 +41,9 @@ FRED_KEY = os.environ.get("FRED_API_KEY", "").strip()
 FINMIND_TOKEN = os.environ.get("FINMIND_TOKEN", "").strip()
 REDDIT_ID = os.environ.get("REDDIT_CLIENT_ID", "").strip()
 REDDIT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "").strip()
+CWA_KEY = os.environ.get("CWA_API_KEY", "").strip()
+TDX_ID = os.environ.get("TDX_CLIENT_ID", "").strip()
+TDX_SECRET = os.environ.get("TDX_CLIENT_SECRET", "").strip()
 
 
 # ---------- helpers ----------
@@ -752,6 +755,211 @@ def p_pulse():
         raise RuntimeError("no pulse quotes")
     return {"label": "5 分鐘線", "items": items}
 
+
+# ---------- 第二階段：氣象（CWA） ----------
+CWA = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/"
+
+
+def cwa(dataset, **params):
+    if not CWA_KEY:
+        raise RuntimeError("no CWA_API_KEY")
+    j = gjson(CWA + dataset, params={"Authorization": CWA_KEY, "format": "JSON", **params})
+    if str(j.get("success")).lower() != "true":
+        raise RuntimeError(f"cwa {dataset}: {str(j)[:100]}")
+    return j["records"]
+
+
+def _cwa_num(v):
+    x = num(v)
+    return None if x is None or x <= -90 else x
+
+
+def p_weather():
+    cities = [("臺北", "臺北市", "台北"), ("臺中", "臺中市", "台中")]
+    out = []
+    now_obs = {st["StationName"]: st for st in cwa("O-A0003-001", StationName="臺北,臺中").get("Station", [])}
+    rain = {st["StationName"]: st for st in cwa("O-A0002-001", StationName="臺北,臺中").get("Station", [])}
+    fc = {loc["locationName"]: loc for loc in cwa("F-C0032-001", locationName="臺北市,臺中市").get("location", [])}
+    for st_name, county, label in cities:
+        o = now_obs.get(st_name, {})
+        we = o.get("WeatherElement", {})
+        r = rain.get(st_name, {}).get("RainfallElement", {})
+        f = fc.get(county, {})
+        els = {e["elementName"]: e["time"] for e in f.get("weatherElement", [])}
+        def fparam(name, i=0):
+            try:
+                return els[name][i]["parameter"]["parameterName"]
+            except Exception:
+                return None
+        out.append({
+            "city": label,
+            "temp": _cwa_num(we.get("AirTemperature")), "rh": _cwa_num(we.get("RelativeHumidity")),
+            "weather": we.get("Weather"), "wind": _cwa_num(we.get("WindSpeed")),
+            "rain10": _cwa_num((r.get("Past10Min") or {}).get("Precipitation")),
+            "rain1h": _cwa_num((r.get("Past1hr") or {}).get("Precipitation")),
+            "rain24h": _cwa_num((r.get("Past24hr") or {}).get("Precipitation")),
+            "obsTime": (o.get("ObsTime") or {}).get("DateTime"),
+            "forecast": [{"start": els.get("Wx", [{}])[i].get("startTime", "")[5:16] if els.get("Wx") and len(els["Wx"]) > i else "",
+                          "wx": fparam("Wx", i), "pop": fparam("PoP", i), "minT": fparam("MinT", i), "maxT": fparam("MaxT", i)}
+                         for i in range(3)],
+        })
+        if out[-1]["temp"] is not None:
+            hist_put("weather", label + "_temp", NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M"), out[-1]["temp"])
+    warns = []
+    try:
+        for loc in cwa("W-C0033-001").get("location", []):
+            hz = (loc.get("hazardConditions") or {}).get("hazards") or []
+            for h in hz:
+                info = h.get("info") or {}
+                if info.get("phenomena"):
+                    warns.append({"where": loc.get("locationName"), "what": info.get("phenomena"), "level": info.get("significance")})
+    except Exception as e:  # noqa: BLE001
+        log("cwa warn", e)
+    return {"label": "氣象署", "items": out, "warnings": warns[:12]}
+
+
+# ---------- 第二階段：台灣脈搏（TDX：YouBike＋國道） ----------
+TDX = "https://tdx.transportdata.tw/api/basic/v2/"
+_tdx_token = None
+
+
+def tdx(path, **params):
+    global _tdx_token
+    headers = {}
+    if TDX_ID and TDX_SECRET:
+        if not _tdx_token:
+            r = S.post("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+                       data={"grant_type": "client_credentials", "client_id": TDX_ID, "client_secret": TDX_SECRET}, timeout=TIMEOUT)
+            r.raise_for_status()
+            _tdx_token = r.json()["access_token"]
+        headers["Authorization"] = "Bearer " + _tdx_token
+    return gjson(TDX + path, params={"$format": "JSON", **params}, headers=headers)
+
+
+def p_tw_pulse():
+    bikes = []
+    for city, label in (("Taipei", "台北"), ("Taichung", "台中")):
+        rows = tdx(f"Bike/Availability/City/{city}")
+        rows = [r for r in rows if r.get("ServiceStatus", 1) == 1]
+        rent = sum(r.get("AvailableRentBikes") or 0 for r in rows)
+        empty = sum(1 for r in rows if (r.get("AvailableRentBikes") or 0) == 0)
+        full = sum(1 for r in rows if (r.get("AvailableReturnBikes") or 0) == 0)
+        key = NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M")
+        hist_put("youbike", label, key, rent)
+        bikes.append({"city": label, "stations": len(rows), "rent": rent, "empty": empty, "full": full,
+                      "spark": hist_get("youbike", label, 48)})
+    # 國道：各國道南北向小客車平均區間速率
+    live = tdx("Road/Traffic/Live/ETag/Freeway")
+    agg = {}
+    for pr in live.get("ETagPairLives", []):
+        pid = pr.get("ETagPairID", "")
+        m = re.match(r"^(\d{2})F\d{4}([NSEW])", pid)
+        if not m:
+            continue
+        for fl in pr.get("Flows", []):
+            if fl.get("VehicleType") == 31 and (fl.get("SpaceMeanSpeed") or 0) > 0 and (fl.get("VehicleCount") or 0) > 0:
+                k = (m.group(1), m.group(2))
+                a = agg.setdefault(k, [0.0, 0])
+                a[0] += fl["SpaceMeanSpeed"] * fl["VehicleCount"]
+                a[1] += fl["VehicleCount"]
+    dirn = {"N": "北", "S": "南", "E": "東", "W": "西"}
+    roads = []
+    for (no, d), (w, c) in sorted(agg.items()):
+        if no in ("01", "03", "05") and c > 0:
+            spd = w / c
+            hist_put("freeway", f"{no}{d}", NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M"), round(spd, 1))
+            roads.append({"road": f"國道{int(no)}", "dir": dirn.get(d, d), "speed": round(spd, 1), "count": c,
+                          "spark": hist_get("freeway", f"{no}{d}", 48)})
+    # 最塞的三個區間
+    worst = []
+    for pr in live.get("ETagPairLives", []):
+        for fl in pr.get("Flows", []):
+            if fl.get("VehicleType") == 31 and 0 < (fl.get("SpaceMeanSpeed") or 0) < 40 and (fl.get("VehicleCount") or 0) >= 30:
+                worst.append((fl["SpaceMeanSpeed"], pr.get("ETagPairID")))
+    worst.sort()
+    names = {}
+    if worst:
+        try:
+            for ep in tdx("Road/Traffic/ETagPair/Freeway").get("ETagPairs", []):
+                names[ep.get("ETagPairID")] = ep.get("Description")
+        except Exception as e:  # noqa: BLE001
+            log("etagpair names", e)
+    jams = [{"section": names.get(pid, pid), "speed": round(spd, 0)} for spd, pid in worst[:5]]
+    return {"label": "TDX", "bikes": bikes, "roads": roads, "jams": jams, "roadTime": live.get("UpdateTime")}
+
+
+# ---------- 第二階段：PTT（curl_cffi 模擬瀏覽器） ----------
+PTT_BOARDS = ["Gossiping", "Lifeismoney", "e-shopping", "MakeUp", "BeautySalon", "Tech_Job", "home-sale", "movie"]
+
+
+def p_ptt():
+    try:
+        from curl_cffi import requests as cffi
+    except ImportError:
+        raise RuntimeError("curl_cffi not installed")
+    sess = cffi.Session(impersonate="chrome")
+    sess.cookies.set("over18", "1", domain="www.ptt.cc")
+    items = []
+    for board in PTT_BOARDS:
+        try:
+            html = sess.get(f"https://www.ptt.cc/bbs/{board}/index.html", timeout=20).text
+            if "r-ent" not in html:
+                raise RuntimeError("blocked or empty")
+            for ent in re.findall(r'<div class="r-ent">(.*?)</div>\s*</div>', html, re.S):
+                nrec = re.search(r'<div class="nrec">(?:<span class="hl f\d">)?([^<]*)', ent)
+                t = re.search(r'<div class="title">\s*<a href="([^"]+)">([^<]+)</a>', ent)
+                if not t:
+                    continue
+                push_raw = (nrec.group(1) if nrec else "").strip()
+                push = 100 if push_raw == "爆" else (num(push_raw) or 0) if not push_raw.startswith("X") else 0
+                title = t.group(2).strip()
+                if push >= 30 and not title.startswith("[公告]"):
+                    items.append({"board": board, "title": title, "push": int(push), "url": "https://www.ptt.cc" + t.group(1)})
+            time.sleep(0.6)
+        except Exception as e:  # noqa: BLE001
+            log("ptt", board, e)
+    if not items:
+        raise RuntimeError("ptt: nothing fetched (blocked?)")
+    items.sort(key=lambda x: -x["push"])
+    return {"label": "推文 ≥30", "items": items[:20]}
+
+
+# ---------- 第二階段：TikTok TW 熱門 hashtag（Playwright 渲染，每日一次，可能失敗） ----------
+def p_tiktok():
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        raise RuntimeError("playwright not installed")
+    url = "https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/zh-TW?region=TW&period=7"
+    items = []
+    with sync_playwright() as pw:
+        b = pw.chromium.launch()
+        pg = b.new_page(user_agent=UA, locale="zh-TW")
+        captured = []
+        pg.on("response", lambda r: captured.append(r) if "popular_trend/hashtag/list" in r.url else None)
+        pg.goto(url, wait_until="networkidle", timeout=60000)
+        pg.wait_for_timeout(3000)
+        for r in captured:
+            try:
+                j = r.json()
+                for h in (j.get("data") or {}).get("list") or []:
+                    items.append({"tag": h.get("hashtag_name"), "posts": h.get("publish_cnt"), "views": h.get("video_views"),
+                                  "rank": h.get("rank"), "trend": h.get("rank_diff")})
+            except Exception:
+                pass
+        if not items:  # 退而求其次：讀 DOM 文字
+            txt = pg.inner_text("body")
+            for m in re.finditer(r"#\s?([\w\u4e00-\u9fff]{2,30})", txt):
+                tag = m.group(1)
+                if tag not in [i["tag"] for i in items]:
+                    items.append({"tag": tag})
+                if len(items) >= 15:
+                    break
+        b.close()
+    if not items:
+        raise RuntimeError("tiktok: no hashtags captured")
+    return {"label": "近 7 天 · TW", "items": items[:15]}
+
 # ---------- run ----------
 run("pulse", p_pulse)
 run("taiex", p_taiex)
@@ -764,9 +972,13 @@ run("luxury", p_luxury, keep_if_fresh_hours=3)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("revenue", p_revenue, keep_if_fresh_hours=20)
 run("media", p_media, keep_if_fresh_hours=6)
-run("reddit", p_reddit, keep_if_fresh_hours=1)
+# run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
 run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=20)
+run("weather", p_weather)
+run("tw_pulse", p_tw_pulse)
+run("ptt", p_ptt, keep_if_fresh_hours=0.5)
+run("tiktok", p_tiktok, keep_if_fresh_hours=20)
 
 DATA.mkdir(exist_ok=True)
 FINISHED_ISO = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")

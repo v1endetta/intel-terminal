@@ -71,6 +71,19 @@ a:hover{text-decoration:underline}
 .flash-up{animation:flashUp 1.6s ease-out}
 .flash-down{animation:flashDown 1.6s ease-out}
 .status .cd{font-family:var(--mono)}
+.wx{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:640px){.wx{grid-template-columns:1fr}}
+.wx .c{background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:8px 10px}
+.wx .c .city{font-family:var(--head);font-weight:600;font-size:12px;display:flex;justify-content:space-between}
+.wx .c .t{font-family:var(--mono);font-size:24px;font-weight:500;line-height:1.1;margin:2px 0}
+.wx .c .t small{font-size:11px;color:var(--muted);margin-left:6px;font-family:var(--sans)}
+.wx .c .row{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+.wx .fc{margin-top:6px;border-top:1px solid var(--line);padding-top:5px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-size:10.5px;color:var(--muted)}
+.wx .fc b{display:block;color:var(--text);font-family:var(--mono);font-weight:500}
+.warn{margin-top:8px;padding:6px 8px;border:1px solid color-mix(in srgb,var(--warn) 50%,transparent);border-radius:3px;font-size:11px;color:var(--warn)}
+.tp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.tp{grid-template-columns:1fr}}
+.tp h3{margin:0 0 4px;font-size:10px;font-weight:500;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;font-family:var(--head)}
 /* movers */
 .movers{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .movers .mv{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-size:12px;min-width:0}
@@ -154,6 +167,18 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 
   <section class="pulse" id="p-pulse"></section>
 
+  <section class="panel w6" id="p-twpulse">
+    <div class="ph"><h2>Taiwan Pulse</h2><span class="zh">台灣脈搏 · YouBike 與國道</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待 TDX 金鑰</div></div>
+    <div class="pf"><a href="https://tdx.transportdata.tw/" target="_blank" rel="noopener">TDX</a><span>YouBike 可借車數每 5 分鐘 · 國道 ETag 區間小客車平均速率</span></div>
+  </section>
+
+  <section class="panel w6" id="p-weather">
+    <div class="ph"><h2>Weather</h2><span class="zh">台北 · 台中</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待氣象署金鑰</div></div>
+    <div class="pf"><a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">中央氣象署</a><span>觀測每 10 分鐘 · 36 小時預報 · 特報</span></div>
+  </section>
+
   <section class="panel" id="p-taiex">
     <div class="ph"><h2>TAIEX</h2><span class="zh">台股大盤</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -208,16 +233,22 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><a href="https://trends.google.com/trending?geo=TW&hl=zh-TW" target="_blank" rel="noopener">Google Trends</a></div>
   </section>
 
+  <section class="panel" id="p-tiktok">
+    <div class="ph"><h2>TikTok TW</h2><span class="zh">熱門 hashtag</span><span class="meta">排程 · 日更</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Creative Center 近 7 天 · 需瀏覽器渲染，可能抓不到</span></div>
+  </section>
+
   <section class="panel" id="p-media">
     <div class="ph"><h2>Fashion Press</h2><span class="zh">時尚媒體標題</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>WWD RSS · BoF 與台灣時尚媒體（經 Bing News）</span></div>
   </section>
 
-  <section class="panel" id="p-reddit">
-    <div class="ph"><h2>Reddit</h2><span class="zh">討論區熱門</span><span class="meta">排程</span></div>
+  <section class="panel" id="p-ptt">
+    <div class="ph"><h2>PTT</h2><span class="zh">台灣社群熱文</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>r/taiwan · r/fashion · r/malefashionadvice · r/marketing · r/design</span></div>
+    <div class="pf"><span>八卦 · 省錢 · 網購 · 美妝 · 美容 · 科技業 · 房產 · 電影</span></div>
   </section>
 
   <section class="panel w6" id="p-tech">
@@ -303,6 +334,21 @@ const renderers={
     const hn=(d.hn||[]).map(s=>`<li><span class="t"><a href="${esc(safe(s.url))}" target="_blank" rel="noopener">${esc(s.title)}</a></span><span class="m">${esc(s.score)}</span></li>`).join("");
     body("p-tech").innerHTML=`<div class="twocol tech3">${col("GitHub",gh&&`<ul class="list">${gh}</ul>`)}${col("Hugging Face",hf&&`<ul class="list">${hf}</ul>`)}${col("Hacker News",hn&&`<ul class="list">${hn}</ul>`)}</div>`;setMeta("p-tech",d,3);},
   revenue(d){revenueDocs.revenue=d;renderRevenue();},
+  weather(d){const cards=(d.items||[]).map(c=>`<div class="c"><div class="city"><span>${esc(c.city)}</span><span class="sub">${esc((c.obsTime||"").slice(11,16))}</span></div>
+      <div class="t">${isFinite(n(c.temp))?fmt(n(c.temp),1)+"°":"—"}<small>${esc(c.weather||"")}</small></div>
+      <div class="row"><span>濕度 ${isFinite(n(c.rh))?fmt(n(c.rh),0)+"%":"—"}</span><span>風 ${isFinite(n(c.wind))?fmt(n(c.wind),1)+" m/s":"—"}</span><span class="${n(c.rain1h)>0?"up":""}">雨 1h ${isFinite(n(c.rain1h))?fmt(n(c.rain1h),1)+"mm":"—"}</span><span>24h ${isFinite(n(c.rain24h))?fmt(n(c.rain24h),1)+"mm":"—"}</span></div>
+      <div class="fc">${(c.forecast||[]).map(f=>`<div>${esc(f.start||"")}<b>${esc(f.wx||"")}</b>${esc(f.minT||"")}–${esc(f.maxT||"")}° · 降雨 ${esc(f.pop||"")}%</div>`).join("")}</div></div>`).join("");
+    const w=(d.warnings||[]).length?`<div class="warn">特報：${d.warnings.map(x=>esc(x.where+" "+x.what+(x.level?"("+x.level+")":""))).join("、")}</div>`:"";
+    body("p-weather").innerHTML=`<div class="wx">${cards}</div>${w}`;setMeta("p-weather",d,1);},
+  tw_pulse(d){const bikes=(d.bikes||[]).map(b=>`<tr><td class="name">${esc(b.city)}<span class="sub">${b.stations} 站</span>${mini(b.spark)}</td><td class="r num${K("yb:"+b.city,n(b.rent))}">${fmt(n(b.rent),0)}</td><td class="r num ${b.empty>b.stations*0.15?"up":""}">${b.empty}</td><td class="r num">${b.full}</td></tr>`).join("");
+    const roads=(d.roads||[]).map(r=>`<tr><td class="name">${esc(r.road)} ${esc(r.dir)}向${mini(r.spark)}</td><td class="r num ${n(r.speed)<60?"up":n(r.speed)>=80?"down":""}${K("fw:"+r.road+r.dir,n(r.speed))}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td></tr>`).join("");
+    const jams=(d.jams||[]).map(j=>`<li><span class="t">${esc(j.section)}</span><span class="m up">${fmt(n(j.speed),0)} km/h</span></li>`).join("");
+    body("p-twpulse").innerHTML=`<div class="tp"><div><h3>YouBike 可借</h3><table><tr><th>城市</th><th class="r">可借車</th><th class="r">空站</th><th class="r">滿站</th></tr>${bikes}</table></div>
+      <div><h3>國道小客車均速</h3><table>${roads}</table>${jams?`<h3 style="margin-top:8px">最塞區間</h3><ul class="list">${jams}</ul>`:""}</div></div>`;setMeta("p-twpulse",d,1);},
+  ptt(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.board.slice(0,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"up":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
+    body("p-ptt").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"這輪沒抓到")}</div>`;setMeta("p-ptt",d,2);},
+  tiktok(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${it.rank||i+1}</span><span class="t">#${esc(it.tag)}</span><span class="m">${it.views?compact(n(it.views))+" 次":""}${it.trend?` <span class="${n(it.trend)>0?"up":"down"}">${sgn(n(it.trend),0)}</span>`:""}</span></li>`).join("");
+    body("p-tiktok").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">抓不到</div>`;setMeta("p-tiktok",d,30);},
   fx(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num${K("fx:"+it.code,n(it.buy??it.mid))}">${fmt(n(it.buy??it.mid),it.code==="JPY"?4:3)}</td><td class="r num">${it.sell!=null?fmt(n(it.sell),it.code==="JPY"?4:3):""}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td></tr>`).join("");
     const yh=d.source==="yahoo";body("p-fx").innerHTML=`<table><tr><th>幣別</th><th class="r">${yh?"中價":"即期買入"}</th><th class="r">${yh?"":"即期賣出"}</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-fx",d,3);},
   luxury(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.sym)}</span>${mini(it.spark)}</td><td class="r num${K("lux:"+it.sym,n(it.price))}">${fmt(n(it.price))}<span class="sub">${esc(it.ccy||"")}</span></td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
@@ -317,8 +363,6 @@ const renderers={
     body("p-trends").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-trends",d,4);},
   media(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.source)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${esc(it.date||"")}</span></li>`).join("");
     body("p-media").innerHTML=`<ul class="list">${li}</ul>${d.note?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.note)}</div>`:""}`;setMeta("p-media",d,26);},
-  reddit(d){const li=(d.items||[]).map(it=>`<li><span class="src">r/${esc(it.sub)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">▲${compact(n(it.score))} · ${compact(n(it.comments))}</span></li>`).join("");
-    body("p-reddit").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"尚無資料")}</div>`;setMeta("p-reddit",d,4);},
   lyst(d){const mv=v=>{const x=n(v);return!isFinite(x)||x===0?`<span class="mv flat">–</span>`:`<span class="mv ${x>0?"up":"down"}">${x>0?"▲":"▼"}${Math.abs(x)}</span>`;};
     const list=(arr,key)=>`<ul class="list">${(arr||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t">${esc(it[key]||it.name)}${it.brand&&key!=="brand"?`<span class="sub">${esc(it.brand)}</span>`:""}</span>${mv(it.move)}</li>`).join("")}</ul>`;
     body("p-lyst").innerHTML=`<div class="twocol"><div><div class="lbl" style="font-size:10.5px;color:var(--dim);margin-bottom:4px">最熱品牌</div>${list(d.brands,"brand")}</div><div><div class="lbl" style="font-size:10.5px;color:var(--dim);margin-bottom:4px">最熱單品</div>${list(d.products,"name")}</div></div>`;
