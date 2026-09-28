@@ -692,7 +692,8 @@ def p_macro():
         j = gjson("https://cpx.cbc.gov.tw/API/DataAPI/Get?FileName=EG2AM01")
         labels = j["data"]["structure"]["Table1"]
         row = j["data"]["dataSets"][-1]
-        i = labels.index("重貼現率")
+        errs.append("EG2AM01 labels: " + json.dumps(labels, ensure_ascii=False)[:300] + " row:" + json.dumps(row)[:120])
+        i = next(k for k, l in enumerate(labels) if "重貼現" in str(l))
         auto["rate"] = {"label": "重貼現率", "value": f"{float(row[i + 1]):.3f}%", "period": row[0].replace("M", "-"), "auto": True}
     except Exception as e:  # noqa: BLE001
         log("cbc rate", e); errs.append("cbc rate: " + safe_err(e))
@@ -702,6 +703,7 @@ def p_macro():
         labels = j["data"]["structure"]["Table1"]
         rows = [r for r in j["data"]["dataSets"] if r and r[0]]
         row, prow = rows[-1], rows[-2]
+        errs.append("EF15M01 labels: " + json.dumps(labels, ensure_ascii=False)[:600] + " row:" + json.dumps(row)[:200])
         def col(name_part):
             idx = [k for k, l in enumerate(labels) if name_part in l and "年增" in l]
             return idx[0] + 1 if idx else None
@@ -720,6 +722,8 @@ def p_macro():
         html = re.sub(r"\s*\|\s*", "|", html)
         period = re.search(r"\|(20\d\d/Q[1-4])\|", html)
         m = re.search(r"\|台灣\|([\d.]+)\|[\d.]+\|(-?[\d.]+)%\|[\d.]+\|(-?[\d.]+)%", html)
+        k = html.find("台灣")
+        errs.append("sinyi snippet: " + html[max(0, k - 60):k + 120].replace("\n", " ") + f" period={bool(period)} m={bool(m)}")
         if m and period:
             auto["house"] = {"label": "信義房價指數（全台）", "value": m.group(1), "period": period.group(1),
                              "sub": f"季 {'+' if not m.group(2).startswith('-') else ''}{m.group(2)}% · 年 {'+' if not m.group(3).startswith('-') else ''}{m.group(3)}%",
