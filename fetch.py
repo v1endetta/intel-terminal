@@ -932,9 +932,11 @@ def tdx(path, **params):
             _tdx_cache[ck] = out
             return out
         except requests.HTTPError as e:
-            if e.response is not None and e.response.status_code == 429 and attempt < 3:
-                time.sleep(6 * (attempt + 1))
-                continue
+            if e.response is not None and e.response.status_code == 429:
+                if attempt < 3:
+                    time.sleep(6 * (attempt + 1))
+                    continue
+                raise RuntimeError(f"429 on {path} body={e.response.text[:160]!r}")
             raise
 
 
