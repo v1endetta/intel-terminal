@@ -902,6 +902,7 @@ def p_weather():
 # ---------- 第二階段：台灣脈搏（TDX：YouBike＋國道） ----------
 TDX = "https://tdx.transportdata.tw/api/basic/v2/"
 _tdx_token = None
+_tdx_last = 0.0
 
 
 def tdx(path, **params):
@@ -915,7 +916,20 @@ def tdx(path, **params):
             _tdx_token = r.json()["access_token"]
         headers["Authorization"] = "Bearer " + _tdx_token
     base = TDX.replace("/v2/", "/v1/") if path.startswith("v1:") else TDX
-    return gjson(base + path.replace("v1:", ""), params={"$format": "JSON", **params}, headers=headers)
+    # TDX 對連續呼叫會回 429：每次間隔 1.2 秒，429 時退避重試
+    global _tdx_last
+    for attempt in range(4):
+        wait = max(0.0, 1.2 - (time.time() - _tdx_last))
+        if wait:
+            time.sleep(wait)
+        _tdx_last = time.time()
+        try:
+            return gjson(base + path.replace("v1:", ""), params={"$format": "JSON", **params}, headers=headers)
+        except requests.HTTPError as e:
+            if e.response is not None and e.response.status_code == 429 and attempt < 3:
+                time.sleep(4 * (attempt + 1))
+                continue
+            raise
 
 
 def p_tw_pulse():
