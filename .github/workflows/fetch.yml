@@ -42,6 +42,9 @@ jobs:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
           REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          CWA_API_KEY: ${{ secrets.CWA_API_KEY }}
+          TDX_CLIENT_ID: ${{ secrets.TDX_CLIENT_ID }}
+          TDX_CLIENT_SECRET: ${{ secrets.TDX_CLIENT_SECRET }}
         run: |
           cd out
           git config user.name "intel-bot"
@@ -59,7 +62,13 @@ jobs:
             git rebase --abort 2>/dev/null || true
             git fetch -q origin data && git reset -q --hard origin/data
             if (cd .. && timeout 600 python fetch.py); then
-              git add data
+              # 金鑰防線：任何 secret 的實際值若出現在要 commit 的資料裡，整輪丟棄
+              leak=0
+              for v in "$FRED_API_KEY" "$FINMIND_TOKEN" "$REDDIT_CLIENT_ID" "$REDDIT_CLIENT_SECRET" "$CWA_API_KEY" "$TDX_CLIENT_ID" "$TDX_CLIENT_SECRET"; do
+                [ -n "$v" ] && grep -rqF -- "$v" data && leak=1
+              done
+              if [ "$leak" = 1 ]; then echo "::error::secret value found in data output; round discarded"; git checkout -q -- data; git clean -fdq data
+              else git add data; fi
             else
               echo "fetch.py failed or timed out; discarding this round"
               git checkout -q -- data; git clean -fdq data
