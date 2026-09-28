@@ -220,8 +220,15 @@ def yahoo_chart(sym: str, rng="1mo", interval="1d"):
     # 前收：以「行情時間的日期」為界，該日之前最後一根收盤才是前收
     mkt_ts = meta.get("regularMarketTime")
     mkt_day = datetime.fromtimestamp(mkt_ts + off, tz=timezone.utc).date().isoformat() if mkt_ts else (series[-1][0] if series else None)
-    older = [c for d, c in series if mkt_day and d < mkt_day]
-    prev = older[-1] if older else meta.get("previousClose") or meta.get("chartPreviousClose")
+    older = [(d, c) for d, c in series if mkt_day and d < mkt_day]
+    prev = meta.get("previousClose")
+    if not prev and older:
+        d_prev, c_prev = older[-1]
+        # 冷門合約 K 棒稀疏：前一根若超過 7 天前，不算日漲跌
+        gap = (datetime.fromisoformat(mkt_day) - datetime.fromisoformat(d_prev)).days if mkt_day else 0
+        prev = c_prev if gap <= 7 else None
+    if not prev and not older:
+        prev = meta.get("chartPreviousClose")
     chg_pct = (price - prev) / prev * 100 if price is not None and prev else None
     out = {"price": price, "chg_pct": chg_pct, "ccy": meta.get("currency"), "series": series, "asOf": mkt_day}
     _yahoo_cache[sym] = out
