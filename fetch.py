@@ -1172,6 +1172,120 @@ def p_tw_market():
         raise RuntimeError("tw_market: nothing")
     return out
 
+
+# ---------- 地圖：停車場剩餘、YouBike、車速（台北／台中） ----------
+GEO_CITIES = {"Taipei": {"label": "台北", "bbox": [121.40, 24.95, 121.70, 25.22]},
+              "Taichung": {"label": "台中", "bbox": [120.50, 24.05, 120.80, 24.32]}}
+GEO_STATIC_PATH = DATA / "geo_static.json"
+GEO_PATH = DATA / "geo.json"
+
+
+def _in_bbox(lon, lat, b):
+    return lon is not None and lat is not None and b[0] <= lon <= b[2] and b[1] <= lat <= b[3]
+
+
+def _geo_static():
+    """靜態表（停車場座標、YouBike 站點、國道 ETag 路段幾何、台北 VD 位置）每天更新一次。"""
+    st = {}
+    if GEO_STATIC_PATH.exists():
+        try:
+            st = json.loads(GEO_STATIC_PATH.read_text(encoding="utf-8"))
+            t = datetime.fromisoformat(st.get("fetchedAt", "2000-01-01T00:00:00+00:00").replace("Z", "+00:00"))
+            if NOW - t < timedelta(hours=24) and st.get("carparks") and st.get("bikes"):
+                return st
+        except Exception:
+            st = {}
+    out = {"fetchedAt": NOW_ISO, "carparks": {}, "bikes": {}, "vd": {}, "etag": []}
+    for city in GEO_CITIES:
+        try:
+            cps = tdx(f"Parking/OffStreet/CarPark/City/{city}").get("CarParks", [])
+            out["carparks"][city] = {c["CarParkID"]: [round(c["CarParkPosition"]["PositionLon"], 5), round(c["CarParkPosition"]["PositionLat"], 5),
+                                                      (c.get("CarParkName") or {}).get("Zh_tw", "")] for c in cps if c.get("CarParkPosition", {}).get("PositionLat")}
+        except Exception as e:  # noqa: BLE001
+            log("geo carpark static", city, e)
+        try:
+            sts = tdx(f"Bike/Station/City/{city}")
+            out["bikes"][city] = {b["StationUID"]: [round(b["StationPosition"]["PositionLon"], 5), round(b["StationPosition"]["PositionLat"], 5),
+                                                    (b.get("StationName") or {}).get("Zh_tw", "").replace("YouBike2.0_", ""), b.get("BikesCapacity") or 0]
+                                  for b in sts if b.get("StationPosition", {}).get("PositionLat")}
+        except Exception as e:  # noqa: BLE001
+            log("geo bike static", city, e)
+    try:
+        vds = tdx("Road/Traffic/VD/City/Taipei").get("VDs", [])
+        out["vd"]["Taipei"] = {v["VDID"]: [round(v["PositionLon"], 5), round(v["PositionLat"], 5), v.get("RoadName", "")] for v in vds if v.get("PositionLat")}
+    except Exception as e:  # noqa: BLE001
+        log("geo vd static", e)
+    try:
+        for ep in tdx("Road/Traffic/ETagPair/Freeway").get("ETagPairs", []):
+            g = ep.get("Geometry") or ""
+            pts = re.findall(r"(-?\d+\.\d+)\s+(-?\d+\.\d+)", g)
+            if pts:
+                out["etag"].append([ep["ETagPairID"], ep.get("Description", ""), [[round(float(a), 4), round(float(b), 4)] for a, b in pts[::max(1, len(pts) // 12)]]])
+    except Exception as e:  # noqa: BLE001
+        log("geo etag static", e)
+    if out["carparks"] and out["bikes"]:
+        write_json(GEO_STATIC_PATH, out, separators=(",", ":"))
+    return out
+
+
+def p_geo():
+    st = _geo_static()
+    geo = {"generatedAt": NOW_ISO, "cities": {}}
+    # 停車場
+    for city, meta in GEO_CITIES.items():
+        c = {"parking": [], "bikes": [], "speed": [], "freeway": []}
+        try:
+            for r in tdx(f"Parking/OffStreet/ParkingAvailability/City/{city}").get("ParkingAvailabilities", []):
+                pos = st["carparks"].get(city, {}).get(r.get("CarParkID"))
+                if not pos:
+                    continue
+                total, avail = r.get("TotalSpaces"), r.get("AvailableSpaces")
+                car = next((a for a in r.get("Availabilities") or [] if a.get("SpaceType") == 1), None)
+                if car and car.get("NumberOfSpaces"):
+                    total, avail = car["NumberOfSpaces"], car.get("AvailableSpaces")
+                if not total or avail is None or avail < 0 or total < 20:
+                    continue
+                c["parking"].append([pos[0], pos[1], int(avail), int(total), pos[2][:18]])
+        except Exception as e:  # noqa: BLE001
+            log("geo parking", city, e)
+        try:
+            for r in tdx(f"Bike/Availability/City/{city}"):
+                pos = st["bikes"].get(city, {}).get(r.get("StationUID"))
+                if pos and r.get("ServiceStatus", 1) == 1:
+                    c["bikes"].append([pos[0], pos[1], int(r.get("AvailableRentBikes") or 0), int(pos[3] or 0), pos[2][:14]])
+        except Exception as e:  # noqa: BLE001
+            log("geo bikes", city, e)
+        geo["cities"][city] = c
+    # 台北市區 VD 車速
+    try:
+        for v in tdx("Road/Traffic/Live/VD/City/Taipei").get("VDLives", []):
+            pos = st["vd"].get("Taipei", {}).get(v.get("VDID"))
+            if not pos:
+                continue
+            sp = [ln.get("Speed") for lf in v.get("LinkFlows") or [] for ln in lf.get("Lanes") or [] if (ln.get("Speed") or 0) > 0]
+            if sp:
+                geo["cities"]["Taipei"]["speed"].append([pos[0], pos[1], round(sum(sp) / len(sp)), pos[2][:10]])
+    except Exception as e:  # noqa: BLE001
+        log("geo vd live", e)
+    # 國道 ETag 路段車速（畫線）
+    try:
+        live = {pr["ETagPairID"]: next((f["SpaceMeanSpeed"] for f in pr.get("Flows", []) if f.get("VehicleType") == 31 and (f.get("SpaceMeanSpeed") or 0) > 0), None)
+                for pr in tdx("Road/Traffic/Live/ETag/Freeway").get("ETagPairLives", [])}
+        for pid, desc, pts in st.get("etag", []):
+            spd = live.get(pid)
+            if spd is None:
+                continue
+            for city, meta in GEO_CITIES.items():
+                if any(_in_bbox(x, y, meta["bbox"]) for x, y in pts):
+                    geo["cities"][city]["freeway"].append([pts, round(spd), desc[:16]])
+    except Exception as e:  # noqa: BLE001
+        log("geo etag live", e)
+    write_json(GEO_PATH, geo, separators=(",", ":"))
+    summary = {city: {k: len(v) for k, v in c.items()} for city, c in geo["cities"].items()}
+    if not any(sum(v.values()) for v in summary.values()):
+        raise RuntimeError("geo: nothing")
+    return {"label": "TDX", "counts": summary}
+
 # ---------- run ----------
 run("pulse", p_pulse)
 run("taiex", p_taiex)
@@ -1190,6 +1304,7 @@ run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=6)
 run("weather", p_weather)
 run("tw_pulse", p_tw_pulse)
+run("geo", p_geo)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("tiktok", p_tiktok, keep_if_fresh_hours=20)
 
