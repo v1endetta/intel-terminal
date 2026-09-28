@@ -724,6 +724,12 @@ def p_macro():
         period = f"{pm.group(1)}/Q{qmap[pm.group(2)]}" if pm else ""
         chg = re.search(r'"area"\s*:\s*"台灣"[^}]*?"增減率\(qoq\)"\s*:\s*(-?[\d.]+)[^}]*?"增減率\(yoy\)"\s*:\s*(-?[\d.]+)', raw, re.S)
         idx = re.search(r"台灣\s*</t[dh]>\s*<td[^>]*>\s*([\d.]+)", raw)
+        if not idx:
+            # 表格由 JS 產生：從嵌入的 JSON 物件裡找第一個三位數含兩位小數的指數值
+            obj = re.search(r'"area"\s*:\s*"台灣"[^}]*}', raw, re.S)
+            if obj:
+                idx = re.search(r'"20\d\d/Q[1-4]"\s*:\s*([\d]{2,3}\.\d{1,2})', obj.group(0)) or re.search(r"\b(1\d\d\.\d{2})\b", obj.group(0))
+                errs.append("sinyi obj: " + obj.group(0)[:300].replace("\n", " "))
         if chg and idx:
             q, y = float(chg.group(1)), float(chg.group(2))
             auto["house"] = {"label": "信義房價指數（全台）", "value": idx.group(1), "period": period,
