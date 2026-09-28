@@ -690,9 +690,8 @@ def p_macro():
     # 央行利率
     try:
         j = gjson("https://cpx.cbc.gov.tw/API/DataAPI/Get?FileName=EG2AM01")
-        labels = j["data"]["structure"]["Table1"]
+        labels = [l.get("data", l) if isinstance(l, dict) else l for l in j["data"]["structure"]["Table1"]]
         row = j["data"]["dataSets"][-1]
-        errs.append("EG2AM01 labels: " + json.dumps(labels, ensure_ascii=False)[:300] + " row:" + json.dumps(row)[:120])
         i = next(k for k, l in enumerate(labels) if "重貼現" in str(l))
         auto["rate"] = {"label": "重貼現率", "value": f"{float(row[i + 1]):.3f}%", "period": row[0].replace("M", "-"), "auto": True}
     except Exception as e:  # noqa: BLE001
@@ -700,13 +699,14 @@ def p_macro():
     # M1B / M2 年增率
     try:
         j = gjson("https://cpx.cbc.gov.tw/API/DataAPI/Get?FileName=EF15M01")
-        labels = j["data"]["structure"]["Table1"]
+        labels = [l.get("data", l) if isinstance(l, dict) else l for l in j["data"]["structure"]["Table1"]]
         rows = [r for r in j["data"]["dataSets"] if r and r[0]]
         row, prow = rows[-1], rows[-2]
-        errs.append("EF15M01 labels: " + json.dumps(labels, ensure_ascii=False)[:600] + " row:" + json.dumps(row)[:200])
+        # 每個標籤佔兩欄：金額、年增率；標籤用全形 Ｍ１Ｂ／Ｍ２
         def col(name_part):
-            idx = [k for k, l in enumerate(labels) if name_part in l and "年增" in l]
-            return idx[0] + 1 if idx else None
+            fw = name_part.replace("M", "Ｍ").replace("1", "１").replace("2", "２").replace("B", "Ｂ")
+            idx = [k for k, l in enumerate(labels) if l.endswith(fw) or l.endswith(name_part)]
+            return 2 + 2 * idx[0] if idx else None
         for key, name in (("M1B", "M1B 年增"), ("M2", "M2 年增")):
             c = col(key)
             if c and row[c] not in ("-", ""):
@@ -718,17 +718,20 @@ def p_macro():
         log("cbc money", e); errs.append("cbc money: " + safe_err(e))
     # 信義房價季指數（全台）
     try:
-        html = re.sub(r"<[^>]+>", "|", get("https://www.sinyinews.com.tw/quarterly").text)
-        html = re.sub(r"\s*\|\s*", "|", html)
-        period = re.search(r"\|(20\d\d/Q[1-4])\|", html)
-        m = re.search(r"\|台灣\|([\d.]+)\|[\d.]+\|(-?[\d.]+)%\|[\d.]+\|(-?[\d.]+)%", html)
-        k = html.find("台灣")
-        errs.append("sinyi snippet: " + html[max(0, k - 60):k + 120].replace("\n", " ") + f" period={bool(period)} m={bool(m)}")
-        if m and period:
-            auto["house"] = {"label": "信義房價指數（全台）", "value": m.group(1), "period": period.group(1),
-                             "sub": f"季 {'+' if not m.group(2).startswith('-') else ''}{m.group(2)}% · 年 {'+' if not m.group(3).startswith('-') else ''}{m.group(3)}%",
-                             "tone": "up" if float(m.group(3)) > 0 else "down", "auto": True}
-            hist_put("macro", "house", period.group(1), float(m.group(1)))
+        raw = get("https://www.sinyinews.com.tw/quarterly").text
+        qmap = {"一": 1, "二": 2, "三": 3, "四": 4}
+        pm = re.search(r"(20\d\d)年第([一二三四])季", raw)
+        period = f"{pm.group(1)}/Q{qmap[pm.group(2)]}" if pm else ""
+        chg = re.search(r'"area"\s*:\s*"台灣"[^}]*?"增減率\(qoq\)"\s*:\s*(-?[\d.]+)[^}]*?"增減率\(yoy\)"\s*:\s*(-?[\d.]+)', raw, re.S)
+        idx = re.search(r"台灣\s*</t[dh]>\s*<td[^>]*>\s*([\d.]+)", raw)
+        if chg and idx:
+            q, y = float(chg.group(1)), float(chg.group(2))
+            auto["house"] = {"label": "信義房價指數（全台）", "value": idx.group(1), "period": period,
+                             "sub": f"季 {q:+.2f}% · 年 {y:+.2f}%", "tone": "up" if y > 0 else "down", "auto": True}
+            if period:
+                hist_put("macro", "house", period, float(idx.group(1)))
+        else:
+            errs.append(f"sinyi parse: chg={bool(chg)} idx={bool(idx)}")
     except Exception as e:  # noqa: BLE001
         log("sinyi", e); errs.append("sinyi: " + safe_err(e))
     # 景氣燈號（國發會 SPA，用 Playwright 渲染）
