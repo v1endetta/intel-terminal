@@ -683,15 +683,78 @@ def p_lyst():
 
 
 def p_macro():
-    """主計總處 SDMX；失敗就保留手動維護的 data/panels/macro.json。"""
+    """手動維護的 items（CPI 等）＋ 自動抓的央行、房價、景氣燈號、主計 SDMX。"""
     prev = load_prev("macro") or {"items": []}
-    items = {it["label"]: it for it in prev.get("items", [])}
+    items = {it["label"]: it for it in prev.get("items", []) if not it.get("auto")}
+    auto = {}
+    # 央行利率
     try:
-        # CPI 總指數年增率（A030101015：消費者物價基本分類指數）
+        j = gjson("https://cpx.cbc.gov.tw/API/DataAPI/Get?FileName=EG2AM01")
+        labels = j["data"]["structure"]["Table1"]
+        row = j["data"]["dataSets"][-1]
+        i = labels.index("重貼現率")
+        auto["rate"] = {"label": "重貼現率", "value": f"{float(row[i + 1]):.3f}%", "period": row[0].replace("M", "-"), "auto": True}
+    except Exception as e:  # noqa: BLE001
+        log("cbc rate", e)
+    # M1B / M2 年增率
+    try:
+        j = gjson("https://cpx.cbc.gov.tw/API/DataAPI/Get?FileName=EF15M01")
+        labels = j["data"]["structure"]["Table1"]
+        rows = [r for r in j["data"]["dataSets"] if r and r[0]]
+        row, prow = rows[-1], rows[-2]
+        def col(name_part):
+            idx = [k for k, l in enumerate(labels) if name_part in l and "年增" in l]
+            return idx[0] + 1 if idx else None
+        for key, name in (("M1B", "M1B 年增"), ("M2", "M2 年增")):
+            c = col(key)
+            if c and row[c] not in ("-", ""):
+                auto[key] = {"label": name, "value": f"{float(row[c]):.2f}%", "period": row[0].replace("M", "-"),
+                             "prev": f"{float(prow[c]):.2f}%" if prow[c] not in ("-", "") else None,
+                             "tone": "up" if prow[c] not in ("-", "") and float(row[c]) > float(prow[c]) else "down" if prow[c] not in ("-", "") and float(row[c]) < float(prow[c]) else "", "auto": True}
+                hist_put("macro", key, row[0].replace("M", "-"), float(row[c]))
+    except Exception as e:  # noqa: BLE001
+        log("cbc money", e)
+    # 信義房價季指數（全台）
+    try:
+        html = re.sub(r"<[^>]+>", "|", get("https://www.sinyinews.com.tw/quarterly").text)
+        html = re.sub(r"\s*\|\s*", "|", html)
+        period = re.search(r"\|(20\d\d/Q[1-4])\|", html)
+        m = re.search(r"\|台灣\|([\d.]+)\|[\d.]+\|(-?[\d.]+)%\|[\d.]+\|(-?[\d.]+)%", html)
+        if m and period:
+            auto["house"] = {"label": "信義房價指數（全台）", "value": m.group(1), "period": period.group(1),
+                             "sub": f"季 {'+' if not m.group(2).startswith('-') else ''}{m.group(2)}% · 年 {'+' if not m.group(3).startswith('-') else ''}{m.group(3)}%",
+                             "tone": "up" if float(m.group(3)) > 0 else "down", "auto": True}
+            hist_put("macro", "house", period.group(1), float(m.group(1)))
+    except Exception as e:  # noqa: BLE001
+        log("sinyi", e)
+    # 景氣燈號（國發會 SPA，用 Playwright 渲染）
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as pw:
+            b = pw.chromium.launch()
+            pg = b.new_page(user_agent=UA, locale="zh-TW")
+            pg.goto("https://index.ndc.gov.tw/n/zh_tw/lightscore", wait_until="networkidle", timeout=60000)
+            pg.wait_for_timeout(2500)
+            txt = pg.inner_text("body")
+            b.close()
+        mm = re.search(r"(1\d\d|20\d\d)\s*年\s*(\d{1,2})\s*月", txt)
+        score = re.search(r"綜合判斷分數[^\d]{0,20}(\d{1,2})\s*分", txt) or re.search(r"(\d{1,2})\s*分", txt)
+        light = re.search(r"(紅燈|黃紅燈|綠燈|黃藍燈|藍燈)", txt)
+        if score and light:
+            y = int(mm.group(1)) if mm else None
+            if y and y < 1911:
+                y += 1911
+            period = f"{y}-{int(mm.group(2)):02d}" if mm else ""
+            auto["light"] = {"label": "景氣燈號", "value": light.group(1), "score": int(score.group(1)), "period": period, "auto": True}
+            if period:
+                hist_put("macro", "light_score", period, int(score.group(1)))
+    except Exception as e:  # noqa: BLE001
+        log("ndc light", e)
+    # 主計總處 SDMX：CPI 年增（成功才覆蓋手動值）
+    try:
         url = ("https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sdmx/A030101015/1.1.M"
                f"&startTime={TODAY_TPE.year - 2}-M01&endTime={TODAY_TPE.year}-M12")
         j = gjson(url, headers={"Accept": "application/json"})
-        # 結構依主計總處 SDMX-JSON；解析失敗即拋出，保留舊值
         ds = j["data"]["dataSets"][0]["series"]
         first = next(iter(ds.values()))["observations"]
         vals = [float(v[0]) for _, v in sorted(first.items(), key=lambda kv: int(kv[0]))]
@@ -700,15 +763,20 @@ def p_macro():
             cur, last, prevv, prevlast = vals[-1], vals[-13], vals[-2], vals[-14]
             yoy, yoy_prev = (cur - last) / last * 100, (prevv - prevlast) / prevlast * 100
             period = periods[-1].replace("-M", "-")
-            old = items.get("CPI 年增", {})
-            if old.get("period") != period:
+            if items.get("CPI 年增", {}).get("period") != period:
                 items["CPI 年增"] = {"label": "CPI 年增", "value": f"{yoy:.2f}%", "period": period, "prev": f"{yoy_prev:.2f}%",
                                    "tone": "up" if yoy > yoy_prev else "down" if yoy < yoy_prev else ""}
     except Exception as e:  # noqa: BLE001
         log("dgbas sdmx", e)
-    if not items:
+    # 自動項目：這輪沒抓到就沿用上一版
+    old_auto = {it["label"]: it for it in prev.get("items", []) if it.get("auto")}
+    order = ["light", "rate", "M1B", "M2", "house"]
+    auto_items = [auto[k] for k in order if k in auto]
+    got = {a["label"] for a in auto_items}
+    auto_items += [v for k, v in old_auto.items() if k not in got]
+    if not items and not auto_items:
         raise RuntimeError("no macro items; edit data/panels/macro.json by hand")
-    return {"items": list(items.values()), "note": prev.get("note", "")}
+    return {"items": list(items.values()) + auto_items, "note": prev.get("note", "")}
 
 
 
@@ -1111,7 +1179,7 @@ run("revenue", p_revenue, keep_if_fresh_hours=20)
 run("media", p_media, keep_if_fresh_hours=6)
 # run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
 run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
-run("macro", p_macro, keep_if_fresh_hours=20)
+run("macro", p_macro, keep_if_fresh_hours=6)
 run("weather", p_weather)
 run("tw_pulse", p_tw_pulse)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)

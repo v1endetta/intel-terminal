@@ -228,7 +228,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   <section class="panel w8" id="p-macro">
     <div class="ph"><h2>TW Macro</h2><span class="zh">台灣總經</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://www.stat.gov.tw/" target="_blank" rel="noopener">主計總處</a><a href="http://rcted.ncu.edu.tw/cci.asp" target="_blank" rel="noopener">台經中心 CCI</a><span>CPI／PPI 每月 5–7 日 · 失業率每月 22 日 · CCI 每月 27 日</span></div>
+    <div class="pf"><a href="https://www.stat.gov.tw/" target="_blank" rel="noopener">主計總處</a><a href="http://rcted.ncu.edu.tw/cci.asp" target="_blank" rel="noopener">台經中心 CCI</a><span>CPI／PPI 每月 5–7 日 · 失業率 22 日 · CCI 與燈號 27 日 · 央行 M1B／M2 月底 · 房價季更</span></div>
   </section>
 
   <section class="panel" id="p-revenue">
@@ -386,7 +386,9 @@ const renderers={
   commodities(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.unit||"")}</span>${mini(it.spark)}</td><td class="r num${K("cmd:"+it.sym,n(it.price))}">${fmt(n(it.price),n(it.price)<10?3:2)}</td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
     const sh=(d.shipping||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.date||"")}</span></td><td class="r num">${fmt(n(it.value),0)}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),1,"% 週"):esc(it.note||"")}</td></tr>`).join("");
     body("p-cmdty").innerHTML=`<table><tr><th>品項</th><th class="r">價格</th><th class="r">日%</th></tr>${tr}${sh?`<tr><th colspan="3" style="padding-top:8px">海運 USD/40ft</th></tr>${sh}`:""}</table>`;setMeta("p-cmdty",d,30);},
-  macro(d){const cards=(d.items||[]).map(it=>`<div class="c"><div class="l">${esc(it.label)}</div><div class="v ${it.tone==="up"?"up":it.tone==="down"?"down":""}">${esc(it.value)}</div><div class="p">${esc(it.period||"")}${it.prev?` · 前值 ${esc(it.prev)}`:""}</div></div>`).join("");
+  macro(d){const LC={"紅燈":"#E0453F","黃紅燈":"#E28A2B","綠燈":"#39B978","黃藍燈":"#3E8ED0","藍燈":"#2B5BD7"};
+    const cards=(d.items||[]).map(it=>it.label==="景氣燈號"?`<div class="c"><div class="l">${esc(it.label)}</div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:14px;height:14px;border-radius:50%;background:${LC[it.value]||"var(--dim)"};box-shadow:0 0 0 3px color-mix(in srgb,${LC[it.value]||"var(--dim)"} 25%,transparent)"></span>${esc(it.value)}<span class="sub" style="font-size:12px">${it.score||""} 分</span></div><div class="p">${esc(it.period||"")}</div></div>`
+      :`<div class="c"><div class="l">${esc(it.label)}</div><div class="v ${it.tone==="up"?"up":it.tone==="down"?"down":""}">${esc(it.value)}</div><div class="p">${esc(it.period||"")}${it.prev?` · 前值 ${esc(it.prev)}`:""}${it.sub?` · ${esc(it.sub)}`:""}</div></div>`).join("");
     body("p-macro").innerHTML=`<div class="macro">${cards}</div>${d.note?`<div class="empty" style="padding:8px 0 0">${esc(d.note)}</div>`:""}`;setMeta("p-macro",d,24*35);},
   otc_revenue(d){revenueDocs.otc_revenue=d;renderRevenue();},
   trends(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="https://trends.google.com/trends/explore?geo=TW&q=${encodeURIComponent(it.title)}" target="_blank" rel="noopener">${esc(it.title)}</a>${it.news?`<span class="sub">${esc(it.news)}</span>`:""}</span><span class="m">${esc(it.traffic||"")}</span></li>`).join("");
