@@ -51,5 +51,9 @@
   }
  ],
  "note": "此面板為手動維護：CPI／PPI 每月 5–7 日、失業率每月 22 日、CCI 每月 27 日、GDP 每季末更新 data/panels/macro.json",
- "updatedAt": "2026-09-20T00:00:00Z"
+ "auto_errors": [
+  "cbc rate: ValueError: '重貼現率' is not in list",
+  "dgbas sdmx: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+ ],
+ "updatedAt": "2026-09-28T14:58:09Z"
 }
