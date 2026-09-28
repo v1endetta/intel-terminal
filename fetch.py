@@ -686,7 +686,7 @@ def p_macro():
     """手動維護的 items（CPI 等）＋ 自動抓的央行、房價、景氣燈號、主計 SDMX。"""
     prev = load_prev("macro") or {"items": []}
     items = {it["label"]: it for it in prev.get("items", []) if not it.get("auto")}
-    auto = {}
+    auto, errs = {}, []
     # 央行利率
     try:
         j = gjson("https://cpx.cbc.gov.tw/API/DataAPI/Get?FileName=EG2AM01")
@@ -695,7 +695,7 @@ def p_macro():
         i = labels.index("重貼現率")
         auto["rate"] = {"label": "重貼現率", "value": f"{float(row[i + 1]):.3f}%", "period": row[0].replace("M", "-"), "auto": True}
     except Exception as e:  # noqa: BLE001
-        log("cbc rate", e)
+        log("cbc rate", e); errs.append("cbc rate: " + safe_err(e))
     # M1B / M2 年增率
     try:
         j = gjson("https://cpx.cbc.gov.tw/API/DataAPI/Get?FileName=EF15M01")
@@ -713,7 +713,7 @@ def p_macro():
                              "tone": "up" if prow[c] not in ("-", "") and float(row[c]) > float(prow[c]) else "down" if prow[c] not in ("-", "") and float(row[c]) < float(prow[c]) else "", "auto": True}
                 hist_put("macro", key, row[0].replace("M", "-"), float(row[c]))
     except Exception as e:  # noqa: BLE001
-        log("cbc money", e)
+        log("cbc money", e); errs.append("cbc money: " + safe_err(e))
     # 信義房價季指數（全台）
     try:
         html = re.sub(r"<[^>]+>", "|", get("https://www.sinyinews.com.tw/quarterly").text)
@@ -726,7 +726,7 @@ def p_macro():
                              "tone": "up" if float(m.group(3)) > 0 else "down", "auto": True}
             hist_put("macro", "house", period.group(1), float(m.group(1)))
     except Exception as e:  # noqa: BLE001
-        log("sinyi", e)
+        log("sinyi", e); errs.append("sinyi: " + safe_err(e))
     # 景氣燈號（國發會 SPA，用 Playwright 渲染）
     try:
         from playwright.sync_api import sync_playwright
@@ -749,7 +749,7 @@ def p_macro():
             if period:
                 hist_put("macro", "light_score", period, int(score.group(1)))
     except Exception as e:  # noqa: BLE001
-        log("ndc light", e)
+        log("ndc light", e); errs.append("ndc light: " + safe_err(e))
     # 主計總處 SDMX：CPI 年增（成功才覆蓋手動值）
     try:
         url = ("https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sdmx/A030101015/1.1.M"
@@ -767,7 +767,7 @@ def p_macro():
                 items["CPI 年增"] = {"label": "CPI 年增", "value": f"{yoy:.2f}%", "period": period, "prev": f"{yoy_prev:.2f}%",
                                    "tone": "up" if yoy > yoy_prev else "down" if yoy < yoy_prev else ""}
     except Exception as e:  # noqa: BLE001
-        log("dgbas sdmx", e)
+        log("dgbas sdmx", e); errs.append("dgbas sdmx: " + safe_err(e))
     # 自動項目：這輪沒抓到就沿用上一版
     old_auto = {it["label"]: it for it in prev.get("items", []) if it.get("auto")}
     order = ["light", "rate", "M1B", "M2", "house"]
@@ -776,7 +776,7 @@ def p_macro():
     auto_items += [v for k, v in old_auto.items() if k not in got]
     if not items and not auto_items:
         raise RuntimeError("no macro items; edit data/panels/macro.json by hand")
-    return {"items": list(items.values()) + auto_items, "note": prev.get("note", "")}
+    return {"items": list(items.values()) + auto_items, "note": prev.get("note", ""), "auto_errors": errs}
 
 
 
