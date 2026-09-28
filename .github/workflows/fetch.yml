@@ -58,8 +58,12 @@ jobs:
             # 每輪先同步到遠端最新（含你手改的 macro.json），任何殘留的 rebase 一律放棄
             git rebase --abort 2>/dev/null || true
             git fetch -q origin data && git reset -q --hard origin/data
-            (cd .. && timeout 600 python fetch.py) || echo "fetch.py failed or timed out"
-            git add data
+            if (cd .. && timeout 600 python fetch.py); then
+              git add data
+            else
+              echo "fetch.py failed or timed out; discarding this round"
+              git checkout -q -- data; git clean -fdq data
+            fi
             if ! git diff --cached --quiet; then
               git commit -qm "data: $(date -u +'%Y-%m-%d %H:%M') UTC"
               git push -q origin data || { echo "push rejected, dropping this round"; git reset -q --hard origin/data; }
@@ -74,4 +78,9 @@ jobs:
         if: ${{ !cancelled() }}
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run fetch.yml --repo "$GITHUB_REPOSITORY" --ref main
+        run: |
+          for i in 1 2 3 4 5; do
+            gh workflow run fetch.yml --repo "$GITHUB_REPOSITORY" --ref main && exit 0
+            sleep 30
+          done
+          echo "could not dispatch next loop; hourly cron will pick it up"

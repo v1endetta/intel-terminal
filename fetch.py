@@ -89,6 +89,13 @@ def roc_ym(s):
     return f"{int(m.group(1)) + 1911}/{m.group(2)}" if m else str(s)
 
 
+def write_json(path: Path, obj, **kw):
+    """Atomic write: tmp file + os.replace, so a killed process never leaves a half file."""
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(obj, ensure_ascii=False, allow_nan=False, **kw), encoding="utf-8")
+    os.replace(tmp, path)
+
+
 def load_prev(pid):
     p = PANELS / f"{pid}.json"
     if p.exists():
@@ -139,7 +146,17 @@ def run(pid: str, fn, keep_if_fresh_hours: float = 0):
     """Run one panel fetcher. keep_if_fresh_hours>0 skips re-fetch when the
     previous file is newer than that (for daily/weekly sources)."""
     prev = load_prev(pid)
-    if keep_if_fresh_hours and prev and prev.get("updatedAt") and not prev.get("error"):
+    if prev and prev.get("error"):
+        # 失敗退避：上次失敗距今不到 1 小時（或該面板的更新週期，取小者）就不重試
+        try:
+            err_ts = datetime.fromisoformat(prev["error"].split(" ")[0].replace("Z", "+00:00"))
+            if NOW - err_ts < timedelta(hours=min(keep_if_fresh_hours or 1, 1)):
+                RESULTS[pid] = prev
+                log(f"[{pid}] backoff after error, skip")
+                return
+        except Exception:
+            pass
+    elif keep_if_fresh_hours and prev and prev.get("updatedAt"):
         try:
             t = datetime.fromisoformat(prev["updatedAt"].replace("Z", "+00:00"))
             if NOW - t < timedelta(hours=keep_if_fresh_hours):
@@ -154,14 +171,14 @@ def run(pid: str, fn, keep_if_fresh_hours: float = 0):
         doc["updatedAt"] = NOW_ISO
         doc.pop("error", None)
         RESULTS[pid] = doc
-        (PANELS / f"{pid}.json").write_text(json.dumps(doc, ensure_ascii=False, indent=1), encoding="utf-8")
+        write_json(PANELS / f"{pid}.json", doc, indent=1)
         log(f"[{pid}] ok {time.time() - t0:.1f}s")
     except Exception as e:  # noqa: BLE001
         log(f"[{pid}] FAIL {type(e).__name__}: {e}")
         if prev:
             prev["error"] = f"{NOW_ISO} {safe_err(e)}"
             RESULTS[pid] = prev
-            (PANELS / f"{pid}.json").write_text(json.dumps(prev, ensure_ascii=False, indent=1), encoding="utf-8")
+            write_json(PANELS / f"{pid}.json", prev, indent=1)
         else:
             RESULTS[pid] = {"updatedAt": None, "error": f"{NOW_ISO} {safe_err(e)}", "items": []}
 
@@ -192,13 +209,14 @@ def yahoo_chart(sym: str, rng="1mo", interval="1d"):
     meta = res["meta"]
     closes = res["indicators"]["quote"][0].get("close") or []
     ts = res.get("timestamp") or []
-    series = [(datetime.fromtimestamp(t, tz=timezone.utc).date().isoformat(), c) for t, c in zip(ts, closes) if c is not None]
+    off = meta.get("gmtoffset") or 0
+    series = [(datetime.fromtimestamp(t + off, tz=timezone.utc).date().isoformat(), c) for t, c in zip(ts, closes) if c is not None]
     price = meta.get("regularMarketPrice")
     if price is None and series:
         price = series[-1][1]
     # 前收：以「行情時間的日期」為界，該日之前最後一根收盤才是前收
     mkt_ts = meta.get("regularMarketTime")
-    mkt_day = datetime.fromtimestamp(mkt_ts, tz=timezone.utc).date().isoformat() if mkt_ts else (series[-1][0] if series else None)
+    mkt_day = datetime.fromtimestamp(mkt_ts + off, tz=timezone.utc).date().isoformat() if mkt_ts else (series[-1][0] if series else None)
     older = [c for d, c in series if mkt_day and d < mkt_day]
     prev = older[-1] if older else meta.get("previousClose") or meta.get("chartPreviousClose")
     chg_pct = (price - prev) / prev * 100 if price is not None and prev else None
@@ -211,6 +229,10 @@ def yahoo_chart(sym: str, rng="1mo", interval="1d"):
 def p_taiex():
     rows = gjson("https://openapi.twse.com.tw/v1/exchangeReport/FMTQIK")
     if not rows:
+        prev = load_prev("taiex")
+        if prev:  # 月初尚無交易日：沿用上月最後值，不算錯誤
+            prev.pop("error", None)
+            return prev
         raise RuntimeError("empty")
     last = rows[-1]
     series = [(roc_to_iso(r["Date"]), num(r["TAIEX"])) for r in rows]
@@ -433,14 +455,14 @@ def p_commodities():
                 try:
                     obs = fred(FRED_SERIES[sym])
                     q = {"price": obs[-1][1], "chg_pct": (obs[-1][1] - obs[-2][1]) / obs[-2][1] * 100 if len(obs) > 1 else None,
-                         "ccy": "USD", "series": obs, "asOf": obs[-1][0]}
+                         "ccy": "USD", "series": obs, "asOf": obs[-1][0], "fred": True}
                 except Exception as e2:  # noqa: BLE001
                     log("cmdty fred", sym, e2)
         if not q:
             continue
         as_of = max(as_of or "", q["asOf"] or "")
         for d, v in q["series"]:
-            hist_put("commodities", sym, d, v)
+            hist_put("commodities", sym + ("_fred" if q.get("fred") else ""), d, v)
         items.append({"sym": sym, "name": name, "unit": unit, "price": q["price"], "chg_pct": q["chg_pct"],
                       "spark": [v for _, v in q["series"][-30:]]})
     shipping = []
@@ -458,10 +480,12 @@ def p_commodities():
                 chg = num(pct.group(2)) * (-1 if pct.group(1).lower() in ("decreased", "fell", "down") else 1)
             key_date = TODAY_TPE.isoformat()
             if dt:
-                try:
-                    key_date = datetime.strptime(dt.group(1), "%d %B %Y").date().isoformat()
-                except ValueError:
-                    pass
+                for fmt_ in ("%d %b %Y", "%d %B %Y"):
+                    try:
+                        key_date = datetime.strptime(dt.group(1), fmt_).date().isoformat()
+                        break
+                    except ValueError:
+                        continue
             hist_put("shipping", "WCI", key_date, val)
             shipping.append({"name": "Drewry WCI", "value": val, "unit": "USD/40ft", "date": dt.group(1) if dt else "",
                              "chg_pct": chg, "chg_label": "週%", "spark": hist_get("shipping", "WCI", 20)})
@@ -657,7 +681,7 @@ def p_macro():
     try:
         # CPI 總指數年增率（A030101015：消費者物價基本分類指數）
         url = ("https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sdmx/A030101015/1.1.M"
-               f"&startTime={TODAY_TPE.year - 1}-M01&endTime={TODAY_TPE.year}-M12")
+               f"&startTime={TODAY_TPE.year - 2}-M01&endTime={TODAY_TPE.year}-M12")
         j = gjson(url, headers={"Accept": "application/json"})
         # 結構依主計總處 SDMX-JSON；解析失敗即拋出，保留舊值
         ds = j["data"]["dataSets"][0]["series"]
@@ -686,24 +710,32 @@ PULSE = [("^TWII", "台股加權", "TWD"), ("BTC-USD", "Bitcoin", "USD"), ("ETH-
 
 
 def yahoo_intraday(sym):
-    last_err = None
-    for _ in range(1):
-        try:
-            j = _yahoo_get(sym, {"range": "1d", "interval": "5m", "includePrePost": "false"})
-            res = j["chart"]["result"][0]
-            meta = res["meta"]
-            closes = res["indicators"]["quote"][0].get("close") or []
-            ts = res.get("timestamp") or []
-            series = [(t, c) for t, c in zip(ts, closes) if c is not None]
-            price = meta.get("regularMarketPrice") or (series[-1][1] if series else None)
-            prev = meta.get("chartPreviousClose") or meta.get("previousClose")
-            return {"price": price, "prev": prev, "chg_pct": (price - prev) / prev * 100 if price and prev else None,
-                    "series": [c for _, c in series][-80:], "asOf": series[-1][0] if series else meta.get("regularMarketTime"),
-                    "state": meta.get("marketState")}
-        except Exception as e:  # noqa: BLE001
-            last_err = e
-            time.sleep(1)
-    raise RuntimeError(f"yahoo intraday {sym}: {last_err}")
+    j = _yahoo_get(sym, {"range": "1d", "interval": "5m", "includePrePost": "false"})
+    res = j["chart"]["result"][0]
+    meta = res["meta"]
+    closes = res["indicators"]["quote"][0].get("close") or []
+    ts = res.get("timestamp") or []
+    series = [(t, c) for t, c in zip(ts, closes) if c is not None]
+    price = meta.get("regularMarketPrice") or (series[-1][1] if series else None)
+    prev = meta.get("chartPreviousClose") or meta.get("previousClose")
+    # 盤中／休市：chart API 不給 marketState，用當日正常交易時段判斷
+    state = "CLOSED"
+    try:
+        reg = meta["currentTradingPeriod"]["regular"]
+        now_ts = int(NOW.timestamp())
+        if reg["start"] <= now_ts < reg["end"]:
+            state = "REGULAR"
+        elif now_ts < reg["start"]:
+            state = "PRE"
+        else:
+            state = "POST"
+    except Exception:
+        pass
+    if sym.endswith("-USD"):
+        state = "REGULAR"  # 加密貨幣 24 小時
+    return {"price": price, "prev": prev, "chg_pct": (price - prev) / prev * 100 if price and prev else None,
+            "series": [c for _, c in series][-80:], "asOf": series[-1][0] if series else meta.get("regularMarketTime"),
+            "state": state}
 
 
 def p_pulse():
@@ -737,13 +769,13 @@ run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=20)
 
 DATA.mkdir(exist_ok=True)
-HIST_PATH.write_text(json.dumps(HISTORY, ensure_ascii=False, separators=(",", ":"), allow_nan=False), encoding="utf-8")
+FINISHED_ISO = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 try:
-    payload = json.dumps({"generatedAt": NOW_ISO, "panels": RESULTS}, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
+    write_json(HIST_PATH, HISTORY, separators=(",", ":"))
+    write_json(DATA / "all.json", {"generatedAt": NOW_ISO, "finishedAt": FINISHED_ISO, "panels": RESULTS}, separators=(",", ":"))
 except ValueError as e:
-    log("all.json has NaN, not writing:", e)
+    log("NaN in output, not writing:", e)
     sys.exit(1)
-(DATA / "all.json").write_text(payload, encoding="utf-8")
 ok = [k for k, v in RESULTS.items() if not v.get("error")]
 bad = [k for k, v in RESULTS.items() if v.get("error")]
 log(f"done ok={ok} failed={bad}")

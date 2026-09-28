@@ -288,7 +288,7 @@ function renderRevenue(){
 }
 
 /* ---------- DB panels (written by the hourly job) ---------- */
-function setMeta(id,doc,hours){metaDocs[id]=[doc,hours];const iso=doc.updatedAt;const m=meta(id);m.textContent=(doc.label?doc.label+" · ":"")+(iso?ago(iso):"");m.classList.toggle("stale",staleAfter(iso,hours)||!!doc.error);if(doc.error){m.textContent+=" · 上次抓取失敗，顯示舊值";m.title=doc.error;}}
+function setMeta(id,doc,hours){metaDocs[id]=[doc,hours];const iso=doc.updatedAt;const m=meta(id);m.textContent=(doc.label?doc.label+" · ":"")+(iso?ago(iso):"");m.classList.toggle("stale",staleAfter(iso,hours)||!!doc.error);if(doc.error){m.textContent+=doc.updatedAt?" · 上次抓取失敗，顯示舊值":" · 抓取失敗";m.title=doc.error;}}
 const renderers={
   taiex(d){const idx=n(d.index),chg=n(d.change);const pct=chg/(idx-chg)*100;const series=(d.history&&d.history.length>5?d.history.map(x=>x[1]):(d.series||[])).map(n);
     body("p-taiex").innerHTML=`<div class="kpi"><div><div class="lbl">加權指數 ${esc(d.date||"")}${d.history&&d.history.length>5?" · 近 "+d.history.length+" 日":" · 本月"}</div><div class="big ${cls(chg)}${K("taiex",idx)}">${fmt(idx)}</div></div><div class="chg ${cls(chg)}">${sgn(chg)}　${sgn(pct,2,"%")}</div></div>${spark(series)}<table><tr><td class="name">成交金額</td><td class="r num">${compact(n(d.value))}</td><td class="name" style="padding-left:12px">成交筆數</td><td class="r num">${compact(n(d.transactions))}</td></tr></table>`;
@@ -334,9 +334,9 @@ function pulseSpark(vals){const v=(vals||[]).filter(isFinite);if(v.length<2)retu
   const pts=v.map((y,i)=>[i/(v.length-1)*(w-2)+1,h-2-((y-mn)/rg)*(h-5)]);const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
   const last=pts[pts.length-1];const col=v[v.length-1]>=v[0]?"var(--up)":"var(--down)";
   return`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d} L${last[0].toFixed(1)},${h} L1,${h} Z" fill="${col}" opacity=".12"/><path d="${d}" fill="none" stroke="${col}" stroke-width="1.3"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2" fill="${col}"/></svg>`;}
-renderers.pulse=function(d){const st={REGULAR:"盤中",PRE:"盤前",POST:"盤後",CLOSED:"休市",PREPRE:"盤前",POSTPOST:"盤後"};const stale=!!d.error||staleAfter(d.updatedAt,0.75);
+renderers.pulse=function(d){metaDocs["p-pulse"]=[d,0];const st={REGULAR:"盤中",PRE:"盤前",POST:"盤後",CLOSED:"休市"};const stale=!!d.error||staleAfter(d.updatedAt,0.75);
   $("#p-pulse").innerHTML=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg_pct);const dec=px>=1000?0:px>=100?1:2;
-    return`<div class="c"><div class="l"><span>${esc(it.name)}<span class="sub">${esc(it.ccy||"")}</span></span><span class="st ${stale?"flat":it.state==="REGULAR"?"up":""}" title="${esc(d.error||"")}">${stale?"舊值 · "+ago(d.updatedAt):esc(st[it.state]||it.state||"")}</span></div>
+    return`<div class="c"><div class="l"><span>${esc(it.name)}<span class="sub">${esc(it.ccy||"")}</span></span><span class="st ${stale?"flat":it.state==="REGULAR"?"up":""}" title="${esc(d.error||"")}">${stale?"舊值 · "+ago(d.updatedAt):(it.state==="REGULAR"?"盤中":esc(st[it.state]||"")+(it.asOf?" · "+ago(new Date(it.asOf*1000).toISOString()):""))}</span></div>
     <div class="v"><span class="${cls(ch)}${K("pulse:"+it.sym,px)}">${fmt(px,dec)}</span><span class="ch ${cls(ch)}">${sgn(ch,2,"%")}</span></div>${pulseSpark(it.spark)}</div>`;}).join("");};
 function tape(P){const items=[];
   (P.pulse?.items||[]).forEach(it=>items.push([it.name,fmt(n(it.price),n(it.price)>=1000?0:2),n(it.chg_pct)]));
@@ -350,11 +350,11 @@ function tape(P){const items=[];
   const el=$("#tape");el.innerHTML=`<div class="track">${html}${html}</div>`;
   const secs=Math.max(40,Math.min(240,items.length*4));el.querySelector(".track").style.animationDuration=secs+"s";}
 let nextAt=0,genTime=0;const metaDocs={};
-function countdown(){const el=$("#cd");const stalled=genTime&&Date.now()-genTime>((inSession()?5:15)*60e3)*2.5;
+function countdown(){const el=$("#cd");const per=(inSession()?5:15)*60e3;const stalled=genTime&&Date.now()-genTime>per*2.5+8*60e3;
   if(stalled){el.textContent="排程停擺";$("#db-age").textContent="最近抓取 "+ago(new Date(genTime).toISOString());$(".k.db").classList.add("stale");return;}
   if(!nextAt){el.textContent="--:--";return;}let s=Math.round((nextAt-Date.now())/1000);if(s<=0){el.textContent="更新中";return;}el.textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
 setInterval(countdown,1000);
-setInterval(()=>{if(genTime)$("#db-age").textContent="最近抓取 "+ago(new Date(genTime).toISOString());Object.entries(metaDocs).forEach(([id,[doc,h]])=>setMeta(id,doc,h));},60e3);
+setInterval(()=>{if(genTime)$("#db-age").textContent="最近抓取 "+ago(new Date(genTime).toISOString());Object.entries(metaDocs).forEach(([id,[doc,h]])=>{if(id==="p-pulse")renderers.pulse(doc);else setMeta(id,doc,h);});},60e3);
 function inSession(){const h=new Date().getUTCHours(),d=new Date().getUTCDay();if(d===0||d===6)return false;return (h>=1&&h<6)||(h>=13&&h<21);}
 async function loadAll(){
   try{
@@ -368,8 +368,8 @@ async function loadAll(){
     movers(P);tape(P);
     try{localStorage.setItem("intel:prev",JSON.stringify({gen:all.generatedAt,vals:curVals}));}catch(_){}
     prevVals={...prevVals,...curVals};firstRender=false;
-    const period=(inSession()?5:15)*60e3;nextAt=new Date(all.generatedAt).getTime()+period+90e3;if(nextAt<Date.now()+30e3)nextAt=Date.now()+60e3;
-  }catch(e){$("#db-age").textContent="讀不到資料（"+e.message+"）";}
+    const period=(inSession()?5:15)*60e3;nextAt=new Date(all.finishedAt||all.generatedAt).getTime()+period+(all.finishedAt?60e3:200e3);if(nextAt<Date.now()+30e3)nextAt=Date.now()+60e3;
+  }catch(e){$("#db-age").textContent="讀不到資料（"+e.message+"）";nextAt=Date.now()+90e3;}
 }
 function movers(P){
   const list=[];
