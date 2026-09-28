@@ -490,7 +490,7 @@ function movers(P){
 /* ---------- map ---------- */
 const GEO_URL="https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/geo.json";
 const CITY_VIEW={Taipei:{center:[121.54,25.05],zoom:11.3},Taichung:{center:[120.66,24.16],zoom:11.3}};
-let map=null,geoData=null,curCity="Taipei",layersOn={parking:true,bikes:true,speed:true},lastGeoGen=null;
+let map=null,mapReady=false,geoData=null,curCity="Taipei",layersOn={parking:true,bikes:true,speed:true},lastGeoGen=null;
 const spdColor=v=>v<40?"#F0524F":v<60?"#E0A23A":"#39B978";
 const parkColor=r=>r<0.1?"#F0524F":r<0.3?"#E0A23A":"#39B978";
 function initMap(){
@@ -508,11 +508,11 @@ function initMap(){
     map.addLayer({id:"speed",type:"circle",source:"speed",paint:{"circle-radius":3.5,"circle-color":["get","color"],"circle-opacity":.9}});
     const pop=new maplibregl.Popup({closeButton:false,closeOnClick:false});
     ["parking","bikes","speed","freeway"].forEach(id=>{map.on("mouseenter",id,e=>{map.getCanvas().style.cursor="pointer";const f=e.features[0];const c=id==="freeway"?e.lngLat:f.geometry.coordinates;pop.setLngLat(c).setHTML(f.properties.label).addTo(map);});map.on("mouseleave",id,()=>{map.getCanvas().style.cursor="";pop.remove();});});
-    applyGeo();
+    mapReady=true;applyGeo();
   });
 }
 function applyGeo(){
-  if(!map||!map.isStyleLoaded()||!geoData)return;
+  if(!map||!mapReady||!geoData)return;
   const c=(geoData.cities||{})[curCity]||{};
   map.getSource("parking").setData({type:"FeatureCollection",features:(c.parking||[]).map(p=>({type:"Feature",geometry:{type:"Point",coordinates:[p[0],p[1]]},properties:{total:p[3],color:parkColor(p[2]/p[3]),label:`${esc(p[4])}<br>剩 ${p[2]} / ${p[3]} 位`}}))});
   map.getSource("bikes").setData({type:"FeatureCollection",features:(c.bikes||[]).map(b=>({type:"Feature",geometry:{type:"Point",coordinates:[b[0],b[1]]},properties:{rent:b[2],label:`${esc(b[4])}<br>可借 ${b[2]} / ${b[3]}`}}))});
