@@ -903,6 +903,7 @@ def p_weather():
 TDX = "https://tdx.transportdata.tw/api/basic/v2/"
 _tdx_token = None
 _tdx_last = 0.0
+_tdx_cache: dict = {}
 
 
 def tdx(path, **params):
@@ -916,18 +917,23 @@ def tdx(path, **params):
             _tdx_token = r.json()["access_token"]
         headers["Authorization"] = "Bearer " + _tdx_token
     base = TDX.replace("/v2/", "/v1/") if path.startswith("v1:") else TDX
-    # TDX 對連續呼叫會回 429：每次間隔 1.2 秒，429 時退避重試
+    ck = path + json.dumps(params, sort_keys=True)
+    if ck in _tdx_cache:  # 同一輪內同一端點只打一次（YouBike 可借數兩個面板共用）
+        return _tdx_cache[ck]
+    # TDX 對連續呼叫會回 429：每次間隔 2 秒，429 時退避重試
     global _tdx_last
     for attempt in range(4):
-        wait = max(0.0, 1.2 - (time.time() - _tdx_last))
+        wait = max(0.0, 2.0 - (time.time() - _tdx_last))
         if wait:
             time.sleep(wait)
         _tdx_last = time.time()
         try:
-            return gjson(base + path.replace("v1:", ""), params={"$format": "JSON", **params}, headers=headers)
+            out = gjson(base + path.replace("v1:", ""), params={"$format": "JSON", **params}, headers=headers)
+            _tdx_cache[ck] = out
+            return out
         except requests.HTTPError as e:
             if e.response is not None and e.response.status_code == 429 and attempt < 3:
-                time.sleep(4 * (attempt + 1))
+                time.sleep(6 * (attempt + 1))
                 continue
             raise
 
