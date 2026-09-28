@@ -110,16 +110,29 @@ if HIST_PATH.exists():
 
 
 def hist_put(group: str, key: str, date: str, value):
-    """Append (date, value) to a series; replace if same date; cap 400."""
-    if value is None or date is None:
+    """Upsert (date, value) into a date-keyed series; keeps it sorted; cap 400."""
+    if value is None or date is None or not isinstance(value, (int, float)) or value != value:
         return
     series = HISTORY.setdefault(group, {}).setdefault(key, [])
-    if series and series[-1][0] == date:
-        series[-1][1] = value
-    else:
-        series.append([date, value])
-        if len(series) > 400:
-            del series[: len(series) - 400]
+    for row in reversed(series):
+        if row[0] == date:
+            row[1] = value
+            return
+        if row[0] < date:
+            break
+    series.append([date, value])
+    series.sort(key=lambda r: r[0])
+    if len(series) > 400:
+        del series[: len(series) - 400]
+
+
+def hist_get(group: str, key: str, n: int = 30):
+    return [v for _, v in HISTORY.get(group, {}).get(key, [])[-n:]]
+
+
+def safe_err(e) -> str:
+    msg = f"{type(e).__name__}: {str(e)[:160]}"
+    return re.sub(r"(api_key|token|secret|authorization)=[^&\s]+", r"\1=***", msg, flags=re.I)[:140]
 
 
 def run(pid: str, fn, keep_if_fresh_hours: float = 0):
@@ -146,50 +159,52 @@ def run(pid: str, fn, keep_if_fresh_hours: float = 0):
     except Exception as e:  # noqa: BLE001
         log(f"[{pid}] FAIL {type(e).__name__}: {e}")
         if prev:
-            prev["error"] = f"{NOW_ISO} {type(e).__name__}: {str(e)[:120]}"
+            prev["error"] = f"{NOW_ISO} {safe_err(e)}"
             RESULTS[pid] = prev
             (PANELS / f"{pid}.json").write_text(json.dumps(prev, ensure_ascii=False, indent=1), encoding="utf-8")
         else:
-            RESULTS[pid] = {"updatedAt": None, "error": f"{NOW_ISO} {type(e).__name__}: {str(e)[:120]}", "items": []}
+            RESULTS[pid] = {"updatedAt": None, "error": f"{NOW_ISO} {safe_err(e)}", "items": []}
 
 
 # ---------- Yahoo Finance (batch quotes + 1 month series) ----------
 _yahoo_cache: dict[str, dict] = {}
+YAHOO_DOWN = False  # 收到 429 後本輪不再打 Yahoo，讓各面板保留舊值
+
+
+def _yahoo_get(sym, params):
+    global YAHOO_DOWN
+    if YAHOO_DOWN:
+        raise RuntimeError("yahoo rate-limited this run")
+    try:
+        return gjson(f"https://query2.finance.yahoo.com/v8/finance/chart/{sym}", params=params)
+    except requests.HTTPError as e:
+        if e.response is not None and e.response.status_code == 429:
+            YAHOO_DOWN = True
+            raise RuntimeError("yahoo 429") from None
+        raise
 
 
 def yahoo_chart(sym: str, rng="1mo", interval="1d"):
     if sym in _yahoo_cache:
         return _yahoo_cache[sym]
-    last_err = None
-    for host in ("query2.finance.yahoo.com", "query1.finance.yahoo.com"):
-        try:
-            j = gjson(f"https://{host}/v8/finance/chart/{sym}", params={"range": rng, "interval": interval, "includePrePost": "false"})
-            res = j["chart"]["result"][0]
-            meta = res["meta"]
-            closes = res["indicators"]["quote"][0].get("close") or []
-            ts = res.get("timestamp") or []
-            series = [(datetime.fromtimestamp(t, tz=timezone.utc).date().isoformat(), c) for t, c in zip(ts, closes) if c is not None]
-            price = meta.get("regularMarketPrice")
-            prev = None
-            if series:
-                if price is None:
-                    price = series[-1][1]
-                # 前收：若最新價就是最後一根收盤，前收是倒數第二根；否則最後一根就是前收
-                if len(series) >= 2 and abs(series[-1][1] - price) / max(abs(price), 1e-9) < 1e-4:
-                    prev = series[-2][1]
-                else:
-                    prev = series[-1][1]
-            else:
-                prev = meta.get("previousClose")
-            chg_pct = (price - prev) / prev * 100 if price is not None and prev else None
-            out = {"price": price, "chg_pct": chg_pct, "ccy": meta.get("currency"), "series": series,
-                   "asOf": series[-1][0] if series else None}
-            _yahoo_cache[sym] = out
-            return out
-        except Exception as e:  # noqa: BLE001
-            last_err = e
-            time.sleep(1)
-    raise RuntimeError(f"yahoo {sym}: {last_err}")
+    j = _yahoo_get(sym, {"range": rng, "interval": interval, "includePrePost": "false"})
+    res = j["chart"]["result"][0]
+    meta = res["meta"]
+    closes = res["indicators"]["quote"][0].get("close") or []
+    ts = res.get("timestamp") or []
+    series = [(datetime.fromtimestamp(t, tz=timezone.utc).date().isoformat(), c) for t, c in zip(ts, closes) if c is not None]
+    price = meta.get("regularMarketPrice")
+    if price is None and series:
+        price = series[-1][1]
+    # 前收：以「行情時間的日期」為界，該日之前最後一根收盤才是前收
+    mkt_ts = meta.get("regularMarketTime")
+    mkt_day = datetime.fromtimestamp(mkt_ts, tz=timezone.utc).date().isoformat() if mkt_ts else (series[-1][0] if series else None)
+    older = [c for d, c in series if mkt_day and d < mkt_day]
+    prev = older[-1] if older else meta.get("previousClose") or meta.get("chartPreviousClose")
+    chg_pct = (price - prev) / prev * 100 if price is not None and prev else None
+    out = {"price": price, "chg_pct": chg_pct, "ccy": meta.get("currency"), "series": series, "asOf": mkt_day}
+    _yahoo_cache[sym] = out
+    return out
 
 
 # ---------- panels ----------
@@ -208,7 +223,7 @@ def p_taiex():
         "value": num(last["TradeValue"]),
         "transactions": num(last["Transaction"]),
         "series": [v for _, v in series],
-        "history": HISTORY["taiex"]["TAIEX"][-60:],
+        "history": HISTORY.get("taiex", {}).get("TAIEX", [])[-60:],
     }
 
 
@@ -228,7 +243,7 @@ def p_tw_stocks():
         px, ch = num(r["ClosingPrice"]), num(r["Change"])
         hist_put("tw_stocks", code, roc_to_iso(r["Date"]), px)
         items.append({"code": code, "name": name, "group": group, "price": px, "chg": ch,
-                      "spark": [v for _, v in HISTORY["tw_stocks"][code][-30:]]})
+                      "spark": hist_get("tw_stocks", code)})
     if not items:
         raise RuntimeError("no watch rows")
     return {"date": date, "items": items}
@@ -254,11 +269,11 @@ def p_fx():
                 continue
             hist_put("fx", code, TODAY_TPE.isoformat(), (buy + sell) / 2 if sell else buy)
             items.append({"code": code, "name": want[code], "buy": buy, "sell": sell,
-                          "spark": [v for _, v in HISTORY["fx"][code][-30:]]})
+                          "spark": hist_get("fx", code)})
     order = ["USD", "EUR", "JPY", "CNY"]
     if items:
         items.sort(key=lambda x: order.index(x["code"]))
-        return {"label": "台銀即期", "items": items}
+        return {"label": "台銀即期", "source": "bot", "items": items}
     raise RuntimeError("no fx rows; header=" + "|".join(header)[:120])
 
 
@@ -272,12 +287,12 @@ def p_fx_yahoo():
             log("fx yahoo", sym, e)
             continue
         for d, v in q["series"]:
-            hist_put("fx", code, d, v)
-        items.append({"code": code, "name": name, "buy": q["price"], "sell": None, "chg_pct": q["chg_pct"],
+            hist_put("fx_yahoo", code, d, v)
+        items.append({"code": code, "name": name, "mid": q["price"], "chg_pct": q["chg_pct"],
                       "spark": [v for _, v in q["series"][-30:]]})
     if not items:
         raise RuntimeError("yahoo fx failed")
-    return {"label": "Yahoo 中價（台銀被擋時）", "items": items}
+    return {"label": "Yahoo 中價", "source": "yahoo", "items": items}
 
 
 def p_fx_any():
@@ -430,18 +445,26 @@ def p_commodities():
                       "spark": [v for _, v in q["series"][-30:]]})
     shipping = []
     try:
-        html = get("https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry").text
-        m = re.search(r"\$([\d,]{4,6})\s*per\s*40ft", html)
-        pct = re.search(r"(decreased|increased|fell|rose|down|up)\s+(?:by\s+)?(\d+(?:\.\d+)?)%", html, re.I)
-        dt = re.search(r"(\d{1,2}\s+\w+\s+20\d\d)", html)
+        html = re.sub(r"<[^>]+>", " ", get("https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry").text)
+        # 只看含 "per 40ft" 的那一句，避免抓到頁面其他數字
+        sent = next((x for x in re.split(r"(?<=[.!?])\s+", html) if re.search(r"per\s*40ft", x, re.I) and re.search(r"\$[\d,]{4,6}", x)), "")
+        m = re.search(r"\$([\d,]{4,6})\s*per\s*40ft", sent)
+        pct = re.search(r"(decreased|increased|fell|rose|down|up)\s+(?:by\s+)?(\d+(?:\.\d+)?)%", sent, re.I)
+        dt = re.search(r"(\d{1,2}\s+[A-Z][a-z]+\s+20\d\d)", sent) or re.search(r"(\d{1,2}\s+[A-Z][a-z]+\s+20\d\d)", html)
         if m:
             val = num(m.group(1))
             chg = None
             if pct:
                 chg = num(pct.group(2)) * (-1 if pct.group(1).lower() in ("decreased", "fell", "down") else 1)
-            hist_put("shipping", "WCI", TODAY_TPE.isoformat(), val)
+            key_date = TODAY_TPE.isoformat()
+            if dt:
+                try:
+                    key_date = datetime.strptime(dt.group(1), "%d %B %Y").date().isoformat()
+                except ValueError:
+                    pass
+            hist_put("shipping", "WCI", key_date, val)
             shipping.append({"name": "Drewry WCI", "value": val, "unit": "USD/40ft", "date": dt.group(1) if dt else "",
-                             "chg_pct": chg, "spark": [v for _, v in HISTORY["shipping"]["WCI"][-20:]]})
+                             "chg_pct": chg, "chg_label": "週%", "spark": hist_get("shipping", "WCI", 20)})
     except Exception as e:  # noqa: BLE001
         log("drewry", e)
     prev = load_prev("commodities") or {}
@@ -462,20 +485,23 @@ def p_revenue():
         start = (TODAY_TPE - timedelta(days=430)).isoformat()
         headers = {"Authorization": f"Bearer {FINMIND_TOKEN}"} if FINMIND_TOKEN else {}
         for code, name in REV_WATCH.items():
-            j = gjson("https://api.finmindtrade.com/api/v4/data",
-                      params={"dataset": "TaiwanStockMonthRevenue", "data_id": code, "start_date": start}, headers=headers)
-            rows = j.get("data") or []
-            if len(rows) < 2:
-                continue
-            rows.sort(key=lambda r: (r["revenue_year"], r["revenue_month"]))
-            last, prevm = rows[-1], rows[-2]
-            yoy = next((r for r in rows if r["revenue_year"] == last["revenue_year"] - 1 and r["revenue_month"] == last["revenue_month"]), None)
-            rev = last["revenue"] / 1000  # 元 → 千元
-            items[code] = {"code": code, "name": name, "rev": rev,
-                           "mom": (last["revenue"] - prevm["revenue"]) / prevm["revenue"] * 100,
-                           "yoy": (last["revenue"] - yoy["revenue"]) / yoy["revenue"] * 100 if yoy else None,
-                           "period": f"{last['revenue_year']}/{last['revenue_month']:02d}",
-                           "spark": [r["revenue"] / 1000 for r in rows[-13:]]}
+            try:
+                j = gjson("https://api.finmindtrade.com/api/v4/data",
+                          params={"dataset": "TaiwanStockMonthRevenue", "data_id": code, "start_date": start}, headers=headers)
+                rows = j.get("data") or []
+                if len(rows) < 2:
+                    continue
+                rows.sort(key=lambda r: (r["revenue_year"], r["revenue_month"]))
+                last, prevm = rows[-1], rows[-2]
+                yoy = next((r for r in rows if r["revenue_year"] == last["revenue_year"] - 1 and r["revenue_month"] == last["revenue_month"]), None)
+                rev = last["revenue"] / 1000  # 元 → 千元
+                items[code] = {"code": code, "name": name, "rev": rev,
+                               "mom": (last["revenue"] - prevm["revenue"]) / prevm["revenue"] * 100 if prevm["revenue"] else None,
+                               "yoy": (last["revenue"] - yoy["revenue"]) / yoy["revenue"] * 100 if yoy and yoy["revenue"] else None,
+                               "period": f"{last['revenue_year']}/{last['revenue_month']:02d}",
+                               "spark": [r["revenue"] / 1000 for r in rows[-13:]]}
+            except Exception as e:  # noqa: BLE001
+                log("finmind", code, e)
             time.sleep(0.4)
     except Exception as e:  # noqa: BLE001
         log("finmind revenue", e)
@@ -609,14 +635,19 @@ def p_lyst():
     if not brands:
         raise RuntimeError("could not parse brands")
     prev = load_prev("lyst") or {}
-    prev_brands = [b.get("brand") for b in prev.get("brands", [])] if prev.get("quarter") != quarter else None
+    if prev.get("quarter") == quarter:
+        # 同一季：沿用上一季名單算 move，並保留手動補的欄位（例如 products.brand）
+        prev_brands = prev.get("prevQuarterBrands") or []
+        old_products = {p.get("name"): p for p in prev.get("products", [])}
+    else:
+        prev_brands = [b.get("brand") for b in prev.get("brands", [])]
+        old_products = {}
     out_b = []
     for i, b in enumerate(brands):
-        move = 0
-        if prev_brands and b in prev_brands:
-            move = prev_brands.index(b) - i
+        move = (prev_brands.index(b) - i) if b in prev_brands else 0
         out_b.append({"brand": b, "move": move})
-    return {"quarter": quarter, "brands": out_b, "products": [{"name": p, "move": 0} for p in products]}
+    out_p = [{**old_products.get(p, {}), "name": p, "move": old_products.get(p, {}).get("move", 0)} for p in products]
+    return {"quarter": quarter, "brands": out_b, "products": out_p, "prevQuarterBrands": prev_brands}
 
 
 def p_macro():
@@ -629,13 +660,18 @@ def p_macro():
                f"&startTime={TODAY_TPE.year - 1}-M01&endTime={TODAY_TPE.year}-M12")
         j = gjson(url, headers={"Accept": "application/json"})
         # 結構依主計總處 SDMX-JSON；解析失敗即拋出，保留舊值
-        obs = j["data"]["dataSets"][0]["series"]
-        first = next(iter(obs.values()))["observations"]
-        vals = [v[0] for _, v in sorted(first.items(), key=lambda kv: int(kv[0]))]
-        if len(vals) >= 13:
-            cur, last = vals[-1], vals[-13]
-            yoy = (cur - last) / last * 100
-            items["CPI 年增"] = {"label": "CPI 年增", "value": f"{yoy:.2f}%", "period": "最新月", "prev": items.get("CPI 年增", {}).get("value"), "tone": ""}
+        ds = j["data"]["dataSets"][0]["series"]
+        first = next(iter(ds.values()))["observations"]
+        vals = [float(v[0]) for _, v in sorted(first.items(), key=lambda kv: int(kv[0]))]
+        periods = [x["id"] for x in j["data"]["structure"]["dimensions"]["observation"][0]["values"]]
+        if len(vals) >= 14 and len(periods) == len(vals):
+            cur, last, prevv, prevlast = vals[-1], vals[-13], vals[-2], vals[-14]
+            yoy, yoy_prev = (cur - last) / last * 100, (prevv - prevlast) / prevlast * 100
+            period = periods[-1].replace("-M", "-")
+            old = items.get("CPI 年增", {})
+            if old.get("period") != period:
+                items["CPI 年增"] = {"label": "CPI 年增", "value": f"{yoy:.2f}%", "period": period, "prev": f"{yoy_prev:.2f}%",
+                                   "tone": "up" if yoy > yoy_prev else "down" if yoy < yoy_prev else ""}
     except Exception as e:  # noqa: BLE001
         log("dgbas sdmx", e)
     if not items:
@@ -651,9 +687,9 @@ PULSE = [("^TWII", "台股加權", "TWD"), ("BTC-USD", "Bitcoin", "USD"), ("ETH-
 
 def yahoo_intraday(sym):
     last_err = None
-    for host in ("query2.finance.yahoo.com", "query1.finance.yahoo.com"):
+    for _ in range(1):
         try:
-            j = gjson(f"https://{host}/v8/finance/chart/{sym}", params={"range": "1d", "interval": "5m", "includePrePost": "false"})
+            j = _yahoo_get(sym, {"range": "1d", "interval": "5m", "includePrePost": "false"})
             res = j["chart"]["result"][0]
             meta = res["meta"]
             closes = res["indicators"]["quote"][0].get("close") or []
@@ -701,8 +737,13 @@ run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=20)
 
 DATA.mkdir(exist_ok=True)
-HIST_PATH.write_text(json.dumps(HISTORY, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-(DATA / "all.json").write_text(json.dumps({"generatedAt": NOW_ISO, "panels": RESULTS}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+HIST_PATH.write_text(json.dumps(HISTORY, ensure_ascii=False, separators=(",", ":"), allow_nan=False), encoding="utf-8")
+try:
+    payload = json.dumps({"generatedAt": NOW_ISO, "panels": RESULTS}, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
+except ValueError as e:
+    log("all.json has NaN, not writing:", e)
+    sys.exit(1)
+(DATA / "all.json").write_text(payload, encoding="utf-8")
 ok = [k for k, v in RESULTS.items() if not v.get("error")]
 bad = [k for k, v in RESULTS.items() if v.get("error")]
 log(f"done ok={ok} failed={bad}")

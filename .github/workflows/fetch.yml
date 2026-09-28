@@ -1,8 +1,8 @@
 name: fetch
 
-# 程式碼在 main，資料 commit 到 data 分支：main 不動就不會觸發 Pages 重建，
-# 避開 Pages 每小時 10 次部署的限制；data 分支太長時自動壓平。
-# GitHub 的 schedule 實測會延遲到每 3 小時才觸發，所以用長跑迴圈，schedule 只當看門狗。
+# 程式碼在 main，資料 commit 到 data 分支；main 不動就不會觸發 Pages 重建。
+# GitHub schedule 實測會延遲到每 3 小時，所以用長跑迴圈，schedule 只當看門狗。
+# 同一時間只允許一條迴圈：用原生 concurrency 排隊，新 run 等舊 run 結束才開始。
 
 on:
   schedule:
@@ -13,35 +13,28 @@ permissions:
   contents: write
   actions: write
 
+concurrency:
+  group: fetch-loop
+  cancel-in-progress: false
+
 jobs:
   loop:
     runs-on: ubuntu-latest
-    timeout-minutes: 355
+    timeout-minutes: 350
     steps:
-      - name: Skip if another loop is already running
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          n=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow fetch.yml --status in_progress --json databaseId --jq 'map(select(.databaseId != '"$GITHUB_RUN_ID"')) | length')
-          echo "other running loops: $n"
-          if [ "$n" -gt 0 ]; then echo "SKIP=1" >> "$GITHUB_ENV"; fi
       - uses: actions/checkout@v4
-        if: env.SKIP != '1'
       - uses: actions/checkout@v4
-        if: env.SKIP != '1'
         with:
           ref: data
           path: out
           fetch-depth: 0
+          filter: blob:none
       - uses: actions/setup-python@v5
-        if: env.SKIP != '1'
         with:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-        if: env.SKIP != '1'
       - name: Fetch loop
-        if: env.SKIP != '1'
         env:
           INTEL_DATA_DIR: ${{ github.workspace }}/out/data
           GITHUB_TOKEN: ${{ github.token }}
@@ -60,22 +53,25 @@ jobs:
             git branch -M data
             git push -q -f origin data
           fi
-          end=$(( $(date +%s) + 330*60 ))
-          while [ "$(date +%s)" -lt "$end" ]; do
-            (cd .. && python fetch.py) || true
+          start=$(date +%s); budget=$((300*60))   # 迴圈預算 5 小時，留 50 分給最後一輪與收尾
+          while :; do
+            # 每輪先同步到遠端最新（含你手改的 macro.json），任何殘留的 rebase 一律放棄
+            git rebase --abort 2>/dev/null || true
+            git fetch -q origin data && git reset -q --hard origin/data
+            (cd .. && timeout 600 python fetch.py) || echo "fetch.py failed or timed out"
             git add data
             if ! git diff --cached --quiet; then
               git commit -qm "data: $(date -u +'%Y-%m-%d %H:%M') UTC"
-              git pull -q --rebase origin data || true
-              git push -q origin data || (git pull -q --rebase origin data && git push -q origin data) || true
+              git push -q origin data || { echo "push rejected, dropping this round"; git reset -q --hard origin/data; }
             fi
             h=$(date -u +%H); d=$(date -u +%u)
             if [ "$d" -le 5 ] && { [ "$h" -ge 1 -a "$h" -lt 6 ] || [ "$h" -ge 13 -a "$h" -lt 21 ]; }; then s=300; else s=900; fi
+            [ $(( $(date +%s) + s - start )) -lt "$budget" ] || break
             echo "next fetch in ${s}s"
             sleep "$s"
           done
       - name: Start next loop
-        if: env.SKIP != '1'
+        if: ${{ !cancelled() }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run fetch.yml --repo "$GITHUB_REPOSITORY" --ref main

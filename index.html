@@ -41,6 +41,7 @@ a:hover{text-decoration:underline}
 .status .k::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--dim)}
 .status .k.live::before{background:var(--down)}
 .status .k.db::before{background:var(--blue)}
+.status .k.stale::before{background:var(--warn)}
 .legend{font-size:11px;color:var(--dim)}
 .legend .u{color:var(--up)} .legend .d{color:var(--down)}
 
@@ -52,7 +53,7 @@ a:hover{text-decoration:underline}
 .tape .it{display:inline-flex;align-items:baseline;gap:7px;padding:0 18px;height:30px;line-height:30px;font-family:var(--mono);font-size:11.5px;border-right:1px solid var(--line)}
 .tape .it .n{color:var(--muted)} .tape .it .p{color:var(--text)}
 @keyframes tape{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){.tape .track{animation:none}}
+@media (prefers-reduced-motion:reduce){.tape{overflow-x:auto}.tape .track{animation:none}.flash-up,.flash-down{animation:none}}
 /* pulse strip */
 .pulse{grid-column:span 12;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
 @media (max-width:1100px){.pulse{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -180,13 +181,13 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   <section class="panel" id="p-tw-stocks">
     <div class="ph"><h2>TW Supply</h2><span class="zh">台灣供應鏈與通路</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>紡織：儒鴻、聚陽、遠東新　通路：統一超、統一、寶雅</span></div>
+    <div class="pf"><span>紡織：儒鴻、聚陽、遠東新　通路：統一超、統一、遠百</span></div>
   </section>
 
   <section class="panel" id="p-cmdty">
     <div class="ph"><h2>Commodities</h2><span class="zh">原物料與運價</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>棉花、原油、銅、鋁 · Drewry WCI · FBX</span></div>
+    <div class="pf"><span>棉花、原油、銅、鋁、黃金 · Drewry WCI 週更</span></div>
   </section>
 
   <section class="panel w8" id="p-macro">
@@ -210,7 +211,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   <section class="panel" id="p-media">
     <div class="ph"><h2>Fashion Press</h2><span class="zh">時尚媒體標題</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>WWD · BoF（經 Google News）</span></div>
+    <div class="pf"><span>WWD RSS · BoF 與台灣時尚媒體（經 Bing News）</span></div>
   </section>
 
   <section class="panel" id="p-reddit">
@@ -234,7 +235,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 </main>
 
 <div class="foot">
-  <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 Actions 抓取並 commit 到 data 分支，每次 commit 都是一個歷史點</span>
+  <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 Actions 抓取並 commit 到 data 分支，每次抓取一個 commit；走勢存在 history.json，最多 400 點</span>
   <span>第二期待接：氣象署、TDX 交通與觀光、TGOS、Google Maps、Reddit API、FRED</span>
 </div>
 
@@ -242,6 +243,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 (function(){
 "use strict";
 const $=(s,r=document)=>r.querySelector(s);
+const safe=u=>/^https?:\/\//i.test(String(u||""))?u:"#";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const n=(v)=>{if(v==null||v==="")return NaN;return typeof v==="number"?v:parseFloat(String(v).replace(/,/g,""));};
 const fmt=(v,d=2)=>isFinite(v)?v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d}):"—";
@@ -286,7 +288,7 @@ function renderRevenue(){
 }
 
 /* ---------- DB panels (written by the hourly job) ---------- */
-function setMeta(id,doc,hours){const iso=doc.updatedAt;const m=meta(id);m.textContent=(doc.label?doc.label+" · ":"")+(iso?ago(iso):"");m.classList.toggle("stale",staleAfter(iso,hours)||!!doc.error);if(doc.error){m.textContent+=" · 上次抓取失敗，顯示舊值";m.title=doc.error;}}
+function setMeta(id,doc,hours){metaDocs[id]=[doc,hours];const iso=doc.updatedAt;const m=meta(id);m.textContent=(doc.label?doc.label+" · ":"")+(iso?ago(iso):"");m.classList.toggle("stale",staleAfter(iso,hours)||!!doc.error);if(doc.error){m.textContent+=" · 上次抓取失敗，顯示舊值";m.title=doc.error;}}
 const renderers={
   taiex(d){const idx=n(d.index),chg=n(d.change);const pct=chg/(idx-chg)*100;const series=(d.history&&d.history.length>5?d.history.map(x=>x[1]):(d.series||[])).map(n);
     body("p-taiex").innerHTML=`<div class="kpi"><div><div class="lbl">加權指數 ${esc(d.date||"")}${d.history&&d.history.length>5?" · 近 "+d.history.length+" 日":" · 本月"}</div><div class="big ${cls(chg)}${K("taiex",idx)}">${fmt(idx)}</div></div><div class="chg ${cls(chg)}">${sgn(chg)}　${sgn(pct,2,"%")}</div></div>${spark(series)}<table><tr><td class="name">成交金額</td><td class="r num">${compact(n(d.value))}</td><td class="name" style="padding-left:12px">成交筆數</td><td class="r num">${compact(n(d.transactions))}</td></tr></table>`;
@@ -296,26 +298,26 @@ const renderers={
   poly(d){const li=(d.items||[]).map(m=>{const p=n(m.yes),dd=n(m.d1);return`<li><span class="t"><a href="https://polymarket.com/event/${esc(m.slug||"")}" target="_blank" rel="noopener">${esc(m.question)}</a></span><span class="bar" aria-hidden="true"><i style="width:${isFinite(p)?Math.max(0,Math.min(100,p)):0}%"></i></span><span class="m${K("poly:"+(m.slug||m.question),p)}">${isFinite(p)?p.toFixed(0)+"%":"—"}</span><span class="m ${cls(dd)}" style="min-width:44px;text-align:right">${isFinite(dd)?sgn(dd,1,""):""}</span></li>`;}).join("");
     body("p-poly").innerHTML=`<ul class="list">${li||'<li class="empty">目前沒有非運彩的熱門市場</li>'}</ul>`;setMeta("p-poly",{...d,label:"Yes 機率 / 24h 變動"},3);},
   tech(d){const col=(title,html)=>`<div><div class="ph" style="padding:0 0 4px;border-bottom:1px solid var(--line);margin-bottom:4px"><h2 style="font-size:10px">${title}</h2></div>${html||'<div class="err">這輪沒抓到</div>'}</div>`;
-    const gh=(d.github||[]).map(r=>`<li><span class="t"><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a></span><span class="m">★${compact(n(r.stars))}</span></li>`).join("");
+    const gh=(d.github||[]).map(r=>`<li><span class="t"><a href="${esc(safe(r.url))}" target="_blank" rel="noopener">${esc(r.name)}</a></span><span class="m">★${compact(n(r.stars))}</span></li>`).join("");
     const hf=(d.hf||[]).map(m=>`<li><span class="t"><a href="https://huggingface.co/${esc(m.id)}" target="_blank" rel="noopener">${esc(m.id)}</a></span><span class="m">↓${compact(n(m.downloads))}</span></li>`).join("");
-    const hn=(d.hn||[]).map(s=>`<li><span class="t"><a href="${esc(s.url||"#")}" target="_blank" rel="noopener">${esc(s.title)}</a></span><span class="m">${esc(s.score)}</span></li>`).join("");
+    const hn=(d.hn||[]).map(s=>`<li><span class="t"><a href="${esc(safe(s.url))}" target="_blank" rel="noopener">${esc(s.title)}</a></span><span class="m">${esc(s.score)}</span></li>`).join("");
     body("p-tech").innerHTML=`<div class="twocol tech3">${col("GitHub",gh&&`<ul class="list">${gh}</ul>`)}${col("Hugging Face",hf&&`<ul class="list">${hf}</ul>`)}${col("Hacker News",hn&&`<ul class="list">${hn}</ul>`)}</div>`;setMeta("p-tech",d,3);},
   revenue(d){revenueDocs.revenue=d;renderRevenue();},
-  fx(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num${K("fx:"+it.code,n(it.buy))}">${fmt(n(it.buy),it.code==="JPY"?4:3)}</td><td class="r num">${it.sell!=null?fmt(n(it.sell),it.code==="JPY"?4:3):"—"}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td></tr>`).join("");
-    body("p-fx").innerHTML=`<table><tr><th>幣別</th><th class="r">即期買入</th><th class="r">即期賣出</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-fx",d,3);},
+  fx(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num${K("fx:"+it.code,n(it.buy??it.mid))}">${fmt(n(it.buy??it.mid),it.code==="JPY"?4:3)}</td><td class="r num">${it.sell!=null?fmt(n(it.sell),it.code==="JPY"?4:3):""}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td></tr>`).join("");
+    const yh=d.source==="yahoo";body("p-fx").innerHTML=`<table><tr><th>幣別</th><th class="r">${yh?"中價":"即期買入"}</th><th class="r">${yh?"":"即期賣出"}</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-fx",d,3);},
   luxury(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.sym)}</span>${mini(it.spark)}</td><td class="r num${K("lux:"+it.sym,n(it.price))}">${fmt(n(it.price))}<span class="sub">${esc(it.ccy||"")}</span></td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
     body("p-lux").innerHTML=`<table><tr><th>公司</th><th class="r">收盤</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-lux",d,30);},
   commodities(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.unit||"")}</span>${mini(it.spark)}</td><td class="r num${K("cmd:"+it.sym,n(it.price))}">${fmt(n(it.price),n(it.price)<10?3:2)}</td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
-    const sh=(d.shipping||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.date||"")}</span></td><td class="r num">${fmt(n(it.value),0)}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),1,"%"):esc(it.note||"")}</td></tr>`).join("");
+    const sh=(d.shipping||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.date||"")}</span></td><td class="r num">${fmt(n(it.value),0)}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),1,"% 週"):esc(it.note||"")}</td></tr>`).join("");
     body("p-cmdty").innerHTML=`<table><tr><th>品項</th><th class="r">價格</th><th class="r">日%</th></tr>${tr}${sh?`<tr><th colspan="3" style="padding-top:8px">海運 USD/40ft</th></tr>${sh}`:""}</table>`;setMeta("p-cmdty",d,30);},
   macro(d){const cards=(d.items||[]).map(it=>`<div class="c"><div class="l">${esc(it.label)}</div><div class="v ${it.tone==="up"?"up":it.tone==="down"?"down":""}">${esc(it.value)}</div><div class="p">${esc(it.period||"")}${it.prev?` · 前值 ${esc(it.prev)}`:""}</div></div>`).join("");
     body("p-macro").innerHTML=`<div class="macro">${cards}</div>${d.note?`<div class="empty" style="padding:8px 0 0">${esc(d.note)}</div>`:""}`;setMeta("p-macro",d,24*35);},
   otc_revenue(d){revenueDocs.otc_revenue=d;renderRevenue();},
   trends(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="https://trends.google.com/trends/explore?geo=TW&q=${encodeURIComponent(it.title)}" target="_blank" rel="noopener">${esc(it.title)}</a>${it.news?`<span class="sub">${esc(it.news)}</span>`:""}</span><span class="m">${esc(it.traffic||"")}</span></li>`).join("");
     body("p-trends").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-trends",d,4);},
-  media(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.source)}</span><span class="t"><a href="${esc(it.url||"#")}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${esc(it.date||"")}</span></li>`).join("");
+  media(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.source)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${esc(it.date||"")}</span></li>`).join("");
     body("p-media").innerHTML=`<ul class="list">${li}</ul>${d.note?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.note)}</div>`:""}`;setMeta("p-media",d,26);},
-  reddit(d){const li=(d.items||[]).map(it=>`<li><span class="src">r/${esc(it.sub)}</span><span class="t"><a href="${esc(it.url||"#")}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">▲${compact(n(it.score))} · ${compact(n(it.comments))}</span></li>`).join("");
+  reddit(d){const li=(d.items||[]).map(it=>`<li><span class="src">r/${esc(it.sub)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">▲${compact(n(it.score))} · ${compact(n(it.comments))}</span></li>`).join("");
     body("p-reddit").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"尚無資料")}</div>`;setMeta("p-reddit",d,4);},
   lyst(d){const mv=v=>{const x=n(v);return!isFinite(x)||x===0?`<span class="mv flat">–</span>`:`<span class="mv ${x>0?"up":"down"}">${x>0?"▲":"▼"}${Math.abs(x)}</span>`;};
     const list=(arr,key)=>`<ul class="list">${(arr||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t">${esc(it[key]||it.name)}${it.brand&&key!=="brand"?`<span class="sub">${esc(it.brand)}</span>`:""}</span>${mv(it.move)}</li>`).join("")}</ul>`;
@@ -324,22 +326,22 @@ const renderers={
 };
 
 /* ---------- pulse / tape / flash / countdown ---------- */
-let lastGen=null,prevVals={};
-try{prevVals=JSON.parse(localStorage.getItem("intel:prev")||"{}");}catch(_){prevVals={};}
+let lastGen=null,prevVals={},firstRender=true;
+try{const st=JSON.parse(localStorage.getItem("intel:prev")||"{}");prevVals=st.vals||{};lastGen=st.gen||null;}catch(_){prevVals={};}
 const curVals={};
-const K=(k,v)=>{if(isFinite(v))curVals[k]=v;return isFinite(v)&&isFinite(prevVals[k])&&Math.abs(prevVals[k]-v)>1e-9?(v>prevVals[k]?" flash-up":" flash-down"):"";};
+const K=(k,v)=>{if(isFinite(v))curVals[k]=v;if(firstRender)return"";return isFinite(v)&&isFinite(prevVals[k])&&Math.abs(prevVals[k]-v)>1e-9?(v>prevVals[k]?" flash-up":" flash-down"):"";};
 function pulseSpark(vals){const v=(vals||[]).filter(isFinite);if(v.length<2)return"";const w=200,h=28,mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
   const pts=v.map((y,i)=>[i/(v.length-1)*(w-2)+1,h-2-((y-mn)/rg)*(h-5)]);const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
   const last=pts[pts.length-1];const col=v[v.length-1]>=v[0]?"var(--up)":"var(--down)";
   return`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d} L${last[0].toFixed(1)},${h} L1,${h} Z" fill="${col}" opacity=".12"/><path d="${d}" fill="none" stroke="${col}" stroke-width="1.3"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2" fill="${col}"/></svg>`;}
-renderers.pulse=function(d){const st={REGULAR:"盤中",PRE:"盤前",POST:"盤後",CLOSED:"休市",PREPRE:"盤前",POSTPOST:"盤後"};
+renderers.pulse=function(d){const st={REGULAR:"盤中",PRE:"盤前",POST:"盤後",CLOSED:"休市",PREPRE:"盤前",POSTPOST:"盤後"};const stale=!!d.error||staleAfter(d.updatedAt,0.75);
   $("#p-pulse").innerHTML=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg_pct);const dec=px>=1000?0:px>=100?1:2;
-    return`<div class="c"><div class="l"><span>${esc(it.name)}<span class="sub">${esc(it.ccy||"")}</span></span><span class="st ${it.state==="REGULAR"?"up":""}">${esc(st[it.state]||it.state||"")}</span></div>
+    return`<div class="c"><div class="l"><span>${esc(it.name)}<span class="sub">${esc(it.ccy||"")}</span></span><span class="st ${stale?"flat":it.state==="REGULAR"?"up":""}" title="${esc(d.error||"")}">${stale?"舊值 · "+ago(d.updatedAt):esc(st[it.state]||it.state||"")}</span></div>
     <div class="v"><span class="${cls(ch)}${K("pulse:"+it.sym,px)}">${fmt(px,dec)}</span><span class="ch ${cls(ch)}">${sgn(ch,2,"%")}</span></div>${pulseSpark(it.spark)}</div>`;}).join("");};
 function tape(P){const items=[];
   (P.pulse?.items||[]).forEach(it=>items.push([it.name,fmt(n(it.price),n(it.price)>=1000?0:2),n(it.chg_pct)]));
   if(P.taiex){const idx=n(P.taiex.index),ch=n(P.taiex.change);items.push(["TAIEX 收盤",fmt(idx),ch/(idx-ch)*100]);}
-  (P.fx?.items||[]).forEach(it=>items.push([it.name+"/TWD",fmt(n(it.buy),it.code==="JPY"?4:3),n(it.chg_pct)]));
+  (P.fx?.items||[]).forEach(it=>items.push([it.name+"/TWD",fmt(n(it.buy??it.mid),it.code==="JPY"?4:3),n(it.chg_pct)]));
   (P.tw_stocks?.items||[]).forEach(it=>{const px=n(it.price),ch=n(it.chg);items.push([it.name,fmt(px),ch/(px-ch)*100]);});
   (P.luxury?.items||[]).forEach(it=>items.push([it.name,fmt(n(it.price)),n(it.chg_pct)]));
   (P.commodities?.items||[]).forEach(it=>items.push([it.name,fmt(n(it.price)),n(it.chg_pct)]));
@@ -347,21 +349,25 @@ function tape(P){const items=[];
   const html=items.map(([nm,px,ch])=>`<span class="it"><span class="n">${esc(nm)}</span><span class="p">${px}</span><span class="${cls(ch)}">${isFinite(ch)?sgn(ch,2,"%"):""}</span></span>`).join("");
   const el=$("#tape");el.innerHTML=`<div class="track">${html}${html}</div>`;
   const secs=Math.max(40,Math.min(240,items.length*4));el.querySelector(".track").style.animationDuration=secs+"s";}
-let nextAt=0;
-function countdown(){const el=$("#cd");if(!nextAt){el.textContent="--:--";return;}let s=Math.round((nextAt-Date.now())/1000);if(s<=0){el.textContent="更新中";return;}el.textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
+let nextAt=0,genTime=0;const metaDocs={};
+function countdown(){const el=$("#cd");const stalled=genTime&&Date.now()-genTime>((inSession()?5:15)*60e3)*2.5;
+  if(stalled){el.textContent="排程停擺";$("#db-age").textContent="最近抓取 "+ago(new Date(genTime).toISOString());$(".k.db").classList.add("stale");return;}
+  if(!nextAt){el.textContent="--:--";return;}let s=Math.round((nextAt-Date.now())/1000);if(s<=0){el.textContent="更新中";return;}el.textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");}
 setInterval(countdown,1000);
+setInterval(()=>{if(genTime)$("#db-age").textContent="最近抓取 "+ago(new Date(genTime).toISOString());Object.entries(metaDocs).forEach(([id,[doc,h]])=>setMeta(id,doc,h));},60e3);
 function inSession(){const h=new Date().getUTCHours(),d=new Date().getUTCDay();if(d===0||d===6)return false;return (h>=1&&h<6)||(h>=13&&h<21);}
 async function loadAll(){
   try{
     const r=await fetch("https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/all.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
     const all=await r.json();const P=all.panels||{};
-    if(all.generatedAt===lastGen){nextAt=Date.now()+60e3;return;}
+    if(all.generatedAt===lastGen&&!firstRender){nextAt=Date.now()+60e3;return;}
+    if(lastGen&&all.generatedAt!==lastGen)firstRender=false;
     lastGen=all.generatedAt;
     Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});
-    $("#db-age").textContent="最近抓取 "+ago(all.generatedAt);
+    genTime=new Date(all.generatedAt).getTime();$("#db-age").textContent="最近抓取 "+ago(all.generatedAt);$(".k.db").classList.remove("stale");
     movers(P);tape(P);
-    try{localStorage.setItem("intel:prev",JSON.stringify(curVals));}catch(_){}
-    prevVals={...prevVals,...curVals};
+    try{localStorage.setItem("intel:prev",JSON.stringify({gen:all.generatedAt,vals:curVals}));}catch(_){}
+    prevVals={...prevVals,...curVals};firstRender=false;
     const period=(inSession()?5:15)*60e3;nextAt=new Date(all.generatedAt).getTime()+period+90e3;if(nextAt<Date.now()+30e3)nextAt=Date.now()+60e3;
   }catch(e){$("#db-age").textContent="讀不到資料（"+e.message+"）";}
 }
@@ -371,8 +377,7 @@ function movers(P){
   (P.tw_stocks?.items||[]).forEach(it=>{const px=n(it.price),ch=n(it.chg);push("台股",it.name,ch/(px-ch)*100);});
   (P.luxury?.items||[]).forEach(it=>push("精品",it.name,n(it.chg_pct)));
   (P.commodities?.items||[]).forEach(it=>push("原物料",it.name,n(it.chg_pct)));
-  (P.commodities?.shipping||[]).forEach(it=>push("運價",it.name,n(it.chg_pct)));
-  (P.poly?.items||[]).forEach(it=>push("Polymarket",it.question,n(it.d1),"pt"));
+    (P.poly?.items||[]).forEach(it=>push("Polymarket",it.question,n(it.d1),"pt"));
   if(P.taiex){const idx=n(P.taiex.index),ch=n(P.taiex.change);push("大盤","TAIEX",ch/(idx-ch)*100);}
   list.sort((a,b)=>Math.abs(b.v)-Math.abs(a.v));
   const top=list.slice(0,6);const el=$("#movers");
