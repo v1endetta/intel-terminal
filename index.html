@@ -10,7 +10,7 @@
   color-scheme:dark;
   --bg:#0E1014; --panel:#14171D; --panel2:#191D25; --line:#242935; --line2:#2F3542;
   --text:#E6E8EE; --muted:#8B93A7; --dim:#5C637A;
-  --accent:#E35E37; --blue:#7C8FF2; --up:#F0524F; --down:#39B978; --warn:#E0A23A;
+  --accent:#E35E37; --blue:#7C8FF2; --up:#39B978; --down:#F0524F; --warn:#E0A23A;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --sans:"Noto Sans TC","Poppins",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
   --head:"Poppins","Noto Sans TC",system-ui,sans-serif;
@@ -19,7 +19,7 @@
   color-scheme:light;
   --bg:#F3F4F7; --panel:#FFFFFF; --panel2:#F7F8FB; --line:#E1E4EB; --line2:#CFD4DE;
   --text:#171A21; --muted:#5D6578; --dim:#8E96A8;
-  --accent:#E35E37; --blue:#435BD8; --up:#D9433F; --down:#1E9A5E; --warn:#B7791F;
+  --accent:#E35E37; --blue:#435BD8; --up:#1E9A5E; --down:#D9433F; --warn:#B7791F;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -115,7 +115,7 @@ td.r,th.r{text-align:right;padding-left:10px}
 td.name{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0;width:100%}
 td .sub{color:var(--dim);font-size:10.5px;margin-left:6px;font-family:var(--mono)}
 tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
-.up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--muted)}
+.up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--muted)} .bad{color:var(--down)}
 .big{font-family:var(--mono);font-size:26px;font-weight:500;letter-spacing:-.01em;line-height:1.1}
 .kpi{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:6px}
 .kpi .lbl{font-size:10.5px;color:var(--dim);letter-spacing:.04em}
@@ -156,7 +156,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   <div class="clocks"><span>TPE <b id="clk-tpe">--:--</b></span><span>LA <b id="clk-la">--:--</b></span></div>
   <div class="status">
     <span class="k db"><span id="db-age">讀取中</span> · 下次 <span class="cd" id="cd">--:--</span></span>
-    <span class="legend"><span class="u">■</span> 漲 <span class="d">■</span> 跌（台灣慣例）</span>
+    <span class="legend"><span class="u">■</span> 漲 <span class="d">■</span> 跌</span>
   </div>
 </header>
 
@@ -336,16 +336,16 @@ const renderers={
   revenue(d){revenueDocs.revenue=d;renderRevenue();},
   weather(d){const cards=(d.items||[]).map(c=>`<div class="c"><div class="city"><span>${esc(c.city)}</span><span class="sub">${esc((c.obsTime||"").slice(11,16))}</span></div>
       <div class="t">${isFinite(n(c.temp))?fmt(n(c.temp),1)+"°":"—"}<small>${esc(c.weather||"")}</small></div>
-      <div class="row"><span>濕度 ${isFinite(n(c.rh))?fmt(n(c.rh),0)+"%":"—"}</span><span>風 ${isFinite(n(c.wind))?fmt(n(c.wind),1)+" m/s":"—"}</span><span class="${n(c.rain1h)>0?"up":""}">雨 1h ${isFinite(n(c.rain1h))?fmt(n(c.rain1h),1)+"mm":"—"}</span><span>24h ${isFinite(n(c.rain24h))?fmt(n(c.rain24h),1)+"mm":"—"}</span></div>
+      <div class="row"><span>濕度 ${isFinite(n(c.rh))?fmt(n(c.rh),0)+"%":"—"}</span><span>風 ${isFinite(n(c.wind))?fmt(n(c.wind),1)+" m/s":"—"}</span><span class="${n(c.rain1h)>0?"bad":""}">雨 1h ${isFinite(n(c.rain1h))?fmt(n(c.rain1h),1)+"mm":"—"}</span><span>24h ${isFinite(n(c.rain24h))?fmt(n(c.rain24h),1)+"mm":"—"}</span></div>
       <div class="fc">${(c.forecast||[]).map(f=>`<div>${esc(f.start||"")}<b>${esc(f.wx||"")}</b>${esc(f.minT||"")}–${esc(f.maxT||"")}° · 降雨 ${esc(f.pop||"")}%</div>`).join("")}</div></div>`).join("");
     const w=(d.warnings||[]).length?`<div class="warn">特報：${d.warnings.map(x=>esc(x.where+" "+x.what+(x.level?"("+x.level+")":""))).join("、")}</div>`:"";
     body("p-weather").innerHTML=`<div class="wx">${cards}</div>${w}`;setMeta("p-weather",d,1);},
-  tw_pulse(d){const bikes=(d.bikes||[]).map(b=>`<tr><td class="name">${esc(b.city)}<span class="sub">${b.stations} 站</span>${mini(b.spark)}</td><td class="r num${K("yb:"+b.city,n(b.rent))}">${fmt(n(b.rent),0)}</td><td class="r num ${b.empty>b.stations*0.15?"up":""}">${b.empty}</td><td class="r num">${b.full}</td></tr>`).join("");
-    const roads=(d.roads||[]).map(r=>`<tr><td class="name">${esc(r.road)} ${esc(r.dir)}向${mini(r.spark)}</td><td class="r num ${n(r.speed)<60?"up":n(r.speed)>=80?"down":""}${K("fw:"+r.road+r.dir,n(r.speed))}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td></tr>`).join("");
-    const jams=(d.jams||[]).map(j=>`<li><span class="t">${esc(j.section)}</span><span class="m up">${fmt(n(j.speed),0)} km/h</span></li>`).join("");
+  tw_pulse(d){const bikes=(d.bikes||[]).map(b=>`<tr><td class="name">${esc(b.city)}<span class="sub">${b.stations} 站</span>${mini(b.spark)}</td><td class="r num${K("yb:"+b.city,n(b.rent))}">${fmt(n(b.rent),0)}</td><td class="r num ${b.empty>b.stations*0.15?"bad":""}">${b.empty}</td><td class="r num">${b.full}</td></tr>`).join("");
+    const roads=(d.roads||[]).map(r=>`<tr><td class="name">${esc(r.road)} ${esc(r.dir)}向${mini(r.spark)}</td><td class="r num ${n(r.speed)<60?"bad":n(r.speed)>=80?"up":""}${K("fw:"+r.road+r.dir,n(r.speed))}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td></tr>`).join("");
+    const jams=(d.jams||[]).map(j=>`<li><span class="t">${esc(j.section)}</span><span class="m bad">${fmt(n(j.speed),0)} km/h</span></li>`).join("");
     body("p-twpulse").innerHTML=`<div class="tp"><div><h3>YouBike 可借</h3><table><tr><th>城市</th><th class="r">可借車</th><th class="r">空站</th><th class="r">滿站</th></tr>${bikes}</table></div>
       <div><h3>國道小客車均速</h3><table>${roads}</table>${jams?`<h3 style="margin-top:8px">最塞區間</h3><ul class="list">${jams}</ul>`:""}</div></div>`;setMeta("p-twpulse",d,1);},
-  ptt(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.board.slice(0,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"up":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
+  ptt(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.board.slice(0,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"bad":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
     body("p-ptt").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"這輪沒抓到")}</div>`;setMeta("p-ptt",d,2);},
   tiktok(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${it.rank||i+1}</span><span class="t">#${esc(it.tag)}</span><span class="m">${it.views?compact(n(it.views))+" 次":""}${it.trend?` <span class="${n(it.trend)>0?"up":"down"}">${sgn(n(it.trend),0)}</span>`:""}</span></li>`).join("");
     body("p-tiktok").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">抓不到</div>`;setMeta("p-tiktok",d,30);},
