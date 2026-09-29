@@ -2468,7 +2468,7 @@ def p_supply():
                 out["retail"].append({"name": name[:10], "period": p_last, "yoy": round((v_last / v_prev - 1) * 100, 1),
                                       "spark": [v for _, v in ser[-13:]]})
         if not out["retail"]:
-            errs.append(f"零售: hdr={hdr[:6]} 行業={list(series)[:8]} n={ {k: len(v) for k, v in list(series.items())[:3]} }")
+            errs.append(f"零售: 行業={list(series)[:6]} sample={rows[1][:6] if len(rows) > 1 else None} last={rows[-1][:6]} nrows={len(rows)}")
     except Exception as e:  # noqa: BLE001
         log("retail csv", e); errs.append("零售指數: " + safe_err(e))
     if not out["pmi"] and not out["nmi"] and not out["retail"]:
