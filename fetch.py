@@ -1528,7 +1528,7 @@ def p_tenders():
                     found[key]["kw"].append(kw); continue
                 found[key] = {"key": key, "title": (b.get("title") or "")[:60], "unit": (r.get("unit_name") or "")[:18],
                               "date": str(r.get("date") or ""), "type": typ[:6], "kw": [kw],
-                              "url": r.get("url") or f'https://pcc.g0v.ronny.tw/tender/{r.get("unit_id")}/{r.get("job_number")}'}
+                              "url": ("https://pcc.g0v.ronny.tw" + r["url"]) if str(r.get("url", "")).startswith("/") else (r.get("url") or f'https://pcc.g0v.ronny.tw/tender/{r.get("unit_id")}/{r.get("job_number")}')}
         except Exception as e:  # noqa: BLE001
             log("pcc", kw, e); errs.append(f"{kw}: {safe_err(e)}")
         time.sleep(1)
@@ -1617,41 +1617,21 @@ def p_quake():
 
 
 def p_power():
-    """台電今日尖峰負載與備轉容量率。"""
-    js, last = None, None
-    for url in ("https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.json",
-                "https://data.taipower.com.tw/opendata/apply/file/d006001/001.json",
-                "https://service.taipower.com.tw/data/opendata/apply/file/d006001/001.json"):
-        try:
-            js = _cffi_json(url); break
-        except Exception as e:  # noqa: BLE001
-            last = e; log("taipower", url, e)
-    if js is None:
-        raise last
-    rec = js.get("records") if isinstance(js, dict) else js
-    rec = (rec or [js])[0] if isinstance(rec, list) else (rec or js)
-    def pick(*names):
-        for n_ in names:
-            for k, v in rec.items():
-                if n_ in k:
-                    return num(v)
-        return None
-    peak = pick("尖峰負載"); reserve = pick("備轉容量率"); reserve_mw = pick("備轉容量(")
-    if reserve is None and peak is None and isinstance(js, dict) and "aaData" in js:
-        # loadGraph 另一種格式：aaData = [[時間, 尖峰負載, 備轉容量, 備轉率, ...], ...]，取最後一列
-        rows = [r for r in js.get("aaData") or [] if isinstance(r, list) and len(r) >= 4]
-        if rows:
-            last_row = rows[-1]
-            nums = [num(str(x).replace("%", "")) for x in last_row]
-            peak = next((x for x in nums[1:] if x and x > 10000), None)
-            reserve = next((x for x in nums[1:] if x is not None and 0 <= x < 100), None)
-            rec = {"時間": str(js.get("DateTime") or last_row[0])}
-    if reserve is None and peak is None:
-        raise RuntimeError(f"taipower fields: {list(rec)[:8]} sample={str(js)[:300]}")
-    level = "綠" if (reserve or 0) >= 10 else "黃" if (reserve or 0) >= 6 else "橘" if (reserve or 0) >= 3 else "紅"
+    """台電今日電力資訊（d006020）：目前用電、預估尖峰負載與備轉容量率。單位萬瓩→MW。"""
+    js = _cffi_json("https://service.taipower.com.tw/data/opendata/apply/file/d006020/001.json")
+    rec = {}
+    for r in js.get("records") or []:
+        rec.update(r)
+    mw = lambda k: (num(rec.get(k)) or 0) * 10 or None  # noqa: E731
+    reserve = num(rec.get("fore_peak_resv_rate"))
+    if reserve is None and rec.get("curr_load") is None:
+        raise RuntimeError(f"taipower fields: {list(rec)[:8]}")
+    ind = {"G": "綠", "Y": "黃", "O": "橘", "R": "紅"}.get(str(rec.get("fore_peak_resv_indicator") or "").upper(), "")
+    level = ind or ("綠" if (reserve or 0) >= 10 else "黃" if (reserve or 0) >= 6 else "橘" if (reserve or 0) >= 3 else "紅")
     hist_put("power", "reserve", TODAY_TPE.isoformat(), reserve)
-    return {"peak_mw": peak, "reserve_pct": reserve, "reserve_mw": reserve_mw, "level": level,
-            "spark": hist_get("power", "reserve", 30), "asof": str(rec.get("日期") or rec.get("時間") or "")[:16]}
+    return {"curr_mw": mw("curr_load"), "util_pct": num(rec.get("curr_util_rate")), "peak_mw": mw("fore_peak_dema_load"),
+            "reserve_pct": reserve, "reserve_mw": mw("fore_peak_resv_capacity"), "level": level, "peak_hours": rec.get("fore_peak_hour_range", ""),
+            "yday_reserve_pct": num(rec.get("yday_peak_resv_rate")), "spark": hist_get("power", "reserve", 30), "asof": str(rec.get("publish_time") or "")[:20]}
 
 
 def p_airport():
