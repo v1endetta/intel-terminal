@@ -2137,6 +2137,7 @@ GMACRO = [  # (group, label, series, kind) kind: yoy=指數換年增, level=直�
     ("美國", "CPI 年增", "CPIAUCSL", "yoy"), ("美國", "核心 PCE 年增", "PCEPILFE", "yoy"), ("美國", "失業率", "UNRATE", "pct"),
     ("美國", "聯邦資金利率", "DFF", "pct"), ("美國", "10 年公債", "DGS10", "pct"), ("美國", "2 年公債", "DGS2", "pct"),
     ("美國", "GDP 季增年率", "A191RL1Q225SBEA", "pct"), ("美國", "初領失業金", "ICSA", "k"), ("美國", "密大消費信心", "UMCSENT", "level"),
+    ("美國", "費城聯準會製造業", "GACDISA", "level"), ("美國", "紐約聯準會製造業", "GACDFSA", "level"), ("美國", "CFNAI 全國活動", "CFNAI", "level2"),
     ("歐元區", "HICP 年增", "CP0000EZ19M086NEST", "yoy"), ("歐元區", "ECB 存款利率", "ECBDFR", "pct"),
     ("日本", "政策利率", "IRSTCI01JPM156N|IRSTCB01JPM156N", "pct|pct"),
     # 日本／中國 CPI：FRED 的 OECD 系列 2025 起停更，免費且免金鑰的官方 API 目前沒有，先不放
@@ -2172,13 +2173,31 @@ def p_gmacro():
                 txt, ptxt = f"{v / 1000:.0f}k", f"{pv / 1000:.0f}k" if pv is not None else ""
             elif kind == "level":
                 txt, ptxt = f"{v:.1f}", f"{pv:.1f}" if pv is not None else ""
+            elif kind == "level2":
+                txt, ptxt = f"{v:+.2f}", f"{pv:+.2f}" if pv is not None else ""
             else:
                 txt, ptxt = f"{v:.2f}%", f"{pv:.2f}%" if pv is not None else ""
             items.append({"group": group, "label": label, "value": txt, "raw": round(v, 3), "prev": ptxt, "period": d[:7] if kind != "pct" or "DGS" not in sid and sid != "DFF" else d,
-                          "delta": round(v - pv, 3) if pv is not None else None, "spark": [round(x, 3) for _, x in vals[-18:]]})
+                          "delta": round(v - pv, 3) if pv is not None else None, "spark": [round(x, 3) for _, x in vals[-18:]],
+                          "dot": ("up" if v > 0 else "down") if sid in ("GACDISA", "GACDFSA", "CFNAI") else None})
         except Exception as e:  # noqa: BLE001
             log("gmacro", sid, e); errs.append(f"{group}{label}: {safe_err(e)}")
         time.sleep(0.3)
+    # ISM PMI：官網新聞稿（擋爬蟲機率高，抓到才顯示）
+    for name, path in (("ISM 製造業 PMI", "pmi"), ("ISM 服務業 PMI", "services")):
+        try:
+            from curl_cffi import requests as cffi
+            r = cffi.get(f"https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/{path}/", impersonate="chrome", timeout=25)
+            r.raise_for_status()
+            txt = re.sub(r"<[^>]+>", " ", r.text)
+            m = re.search(r"(?:PMI|Services PMI)[^\d]{0,40}(\d{2}\.\d)\s*percent", txt, re.I) or re.search(r"registered\s+(\d{2}\.\d)\s*percent", txt, re.I)
+            mo = re.search(r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d\d)", txt)
+            if m:
+                v = float(m.group(1))
+                items.insert(0, {"group": "美國", "label": name, "value": f"{v:.1f}", "raw": v, "prev": "", "period": f"{mo.group(2)}-{mo.group(1)[:3]}" if mo else "",
+                                 "delta": None, "spark": [], "dot": "up" if v >= 50 else "down"})
+        except Exception as e:  # noqa: BLE001
+            log("ism", path, e); errs.append(f"{name}: 官網擋爬，改看聯準會區域指數")
     # 英國 CPI：FRED 的 OECD 系列停更，改用 ONS 官方 API（免金鑰）
     try:
         js = gjson("https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23/data", headers={"Accept": "application/json"})
