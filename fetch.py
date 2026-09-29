@@ -1503,6 +1503,7 @@ def p_news():
 
 # ---------- 第三批（免新金鑰）：標案 / 設計廣告媒體 / 地震 / 台電 / 桃機 ----------
 PCC_KW = ["行銷", "品牌", "影片", "廣告", "視覺設計"]
+PCC_EXCLUDE = ("拆除", "租賃", "印刷", "看板", "招牌", "廣告物", "廣告牌", "設備", "工程")
 PCC_CACHE = DATA / "pcc_cache.json"
 
 
@@ -1522,6 +1523,8 @@ def p_tenders():
                 b = r.get("brief") or {}
                 typ = b.get("type") or ""
                 if "招標" not in typ or "無法決標" in typ or "決標" in typ:
+                    continue
+                if any(x in (b.get("title") or "") for x in PCC_EXCLUDE):
                     continue
                 key = f'{r.get("unit_id")}/{r.get("job_number")}'
                 if key in found:
