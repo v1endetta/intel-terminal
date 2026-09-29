@@ -2,20 +2,18 @@
  "label": "TDX",
  "counts": {
   "Taipei": {
-   "parking": 316,
+   "parking": 317,
    "bikes": 1781,
-   "speed": 553,
-   "freeway": 86
+   "speed": 554,
+   "freeway": 84
   },
   "Taichung": {
-   "parking": 0,
+   "parking": 799,
    "bikes": 1814,
    "speed": 0,
    "freeway": 56
   }
  },
- "errs": [
-  "geo parking Taichung: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Taichung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
- ],
- "updatedAt": "2026-09-29T01:06:03Z"
+ "errs": [],
+ "updatedAt": "2026-09-29T01:13:04Z"
 }
