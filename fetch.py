@@ -215,7 +215,20 @@ def _yahoo_get(sym, params):
 def yahoo_chart(sym: str, rng="1mo", interval="1d"):
     if sym in _yahoo_cache:
         return _yahoo_cache[sym]
-    j = _yahoo_get(sym, {"range": rng, "interval": interval, "includePrePost": "false"})
+    try:
+        j = _yahoo_get(sym, {"range": rng, "interval": interval, "includePrePost": "false"})
+    except Exception as e:  # noqa: BLE001
+        if sym not in STOOQ or interval != "1d":
+            raise
+        log("yahoo_chart→stooq", sym, e)
+        rows = stooq_daily(STOOQ[sym])
+        series = [(d, c) for d, c, _ in rows]
+        price = series[-1][1] if series else None
+        prev = series[-2][1] if len(series) >= 2 else None
+        out = {"price": price, "chg_pct": (price - prev) / prev * 100 if price and prev else None, "ccy": None, "series": series,
+               "asOf": series[-1][0] if series else None, "thin": False, "source": "stooq"}
+        _yahoo_cache[sym] = out
+        return out
     res = j["chart"]["result"][0]
     meta = res["meta"]
     closes = res["indicators"]["quote"][0].get("close") or []
@@ -832,14 +845,78 @@ def yahoo_intraday(sym):
             "state": state}
 
 
+
+INTRADAY_PATH = DATA / "intraday.json"
+
+
+def _intraday_series(key: str, ts: int, price: float, day: str):
+    """把即時價累積成當日 5 分鐘序列（官方端點只給現價，走勢自己累積）。"""
+    db = {}
+    if INTRADAY_PATH.exists():
+        try:
+            db = json.loads(INTRADAY_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            db = {}
+    rec = db.get(key) or {}
+    if rec.get("day") != day:
+        rec = {"day": day, "pts": []}
+    if not rec["pts"] or ts - rec["pts"][-1][0] >= 240:
+        rec["pts"].append([ts, price])
+    rec["pts"] = rec["pts"][-80:]
+    db[key] = rec
+    write_json(INTRADAY_PATH, db, separators=(",", ":"))
+    return [p for _, p in rec["pts"]]
+
+
+def coingecko(coin: str):
+    j = gjson(f"https://api.coingecko.com/api/v3/coins/{coin}/market_chart", params={"vs_currency": "usd", "days": 1},
+              headers={"Accept": "application/json"})
+    pts = [(int(t / 1000), p) for t, p in j.get("prices", []) if p]
+    if not pts:
+        raise RuntimeError("coingecko empty")
+    price, prev = pts[-1][1], pts[0][1]
+    return {"price": price, "prev": prev, "chg_pct": (price - prev) / prev * 100, "series": [p for _, p in pts][-80:],
+            "asOf": pts[-1][0], "state": "REGULAR"}
+
+
+def twse_mis():
+    """證交所官方即時：加權指數現值、昨收、時間。"""
+    r = S.get("https://mis.twse.com.tw/stock/api/getStockInfo.jsp", params={"ex_ch": "tse_t00.tw", "json": "1", "delay": "0", "_": int(time.time() * 1000)},
+              headers={"Referer": "https://mis.twse.com.tw/stock/index.jsp", "Accept": "application/json"}, timeout=TIMEOUT)
+    r.raise_for_status()
+    m = (r.json().get("msgArray") or [{}])[0]
+    price, prev = num(m.get("z")) or num(m.get("y")), num(m.get("y"))
+    if not price:
+        raise RuntimeError("mis: no price")
+    tlong = int(m.get("tlong") or 0) // 1000
+    day = m.get("d") or NOW.astimezone(TPE).strftime("%Y%m%d")
+    now_t = NOW.astimezone(TPE)
+    state = "REGULAR" if now_t.weekday() < 5 and (9, 0) <= (now_t.hour, now_t.minute) < (13, 35) else "CLOSED"
+    series = _intraday_series("TWII", tlong or int(NOW.timestamp()), price, day) if state == "REGULAR" else None
+    if series is None:
+        db = json.loads(INTRADAY_PATH.read_text(encoding="utf-8")) if INTRADAY_PATH.exists() else {}
+        series = [p for _, p in (db.get("TWII") or {}).get("pts", [])]
+    return {"price": price, "prev": prev, "chg_pct": (price - prev) / prev * 100 if prev else None,
+            "series": series, "asOf": tlong or int(NOW.timestamp()), "state": state}
+
+
 def p_pulse():
     items = []
     for sym, name, ccy in PULSE:
-        try:
-            q = yahoo_intraday(sym)
+        q = None
+        try:  # 官方／專用來源優先，Yahoo 備援
+            if sym == "^TWII":
+                q = twse_mis()
+            elif sym in ("BTC-USD", "ETH-USD"):
+                q = coingecko("bitcoin" if sym.startswith("BTC") else "ethereum")
         except Exception as e:  # noqa: BLE001
-            log("pulse", sym, e)
-            continue
+            log("pulse primary", sym, e)
+        if q is None:
+            try:
+                q = yahoo_intraday(sym)
+            except Exception as e:  # noqa: BLE001
+                log("pulse", sym, e)
+                continue
         items.append({"sym": sym, "name": name, "ccy": ccy, "price": q["price"], "chg_pct": q["chg_pct"],
                       "spark": q["series"], "asOf": q["asOf"], "state": q["state"]})
     if not items:
@@ -1797,26 +1874,62 @@ def p_airport():
 
 
 # ---------- 全球大盤 / 美股板塊輪動 / 恐慌結構 ----------
+
+# Stooq（免金鑰日線 CSV）：Yahoo 掛掉時的備援。鍵＝Yahoo 代碼，值＝Stooq 代碼
+STOOQ = {"^GSPC": "^spx", "^IXIC": "^ndq", "^DJI": "^dji", "^N225": "^nkx", "^HSI": "^hsi", "000001.SS": "^shc",
+         "^KS11": "^kospi", "^NSEI": "^nifty50", "^GDAXI": "^dax", "^STOXX50E": "^stoxx50e", "^VIX": "^vix",
+         "SPY": "spy.us", "XLK": "xlk.us", "XLC": "xlc.us", "XLY": "xly.us", "XLF": "xlf.us", "XLV": "xlv.us", "XLI": "xli.us",
+         "XLP": "xlp.us", "XLE": "xle.us", "XLU": "xlu.us", "XLRE": "xlre.us", "XLB": "xlb.us",
+         "MC.PA": "mc.fr", "KER.PA": "ker.fr", "RMS.PA": "rms.fr", "ITX.MC": "itx.es", "9983.T": "9983.jp", "NKE": "nke.us",
+         "1913.HK": "1913.hk", "BRBY.L": "brby.uk"}
+_stooq_cache: dict = {}
+
+
+def stooq_daily(code: str):
+    """回 [(date, close, volume)]，最近 ~70 個交易日。"""
+    if code in _stooq_cache:
+        return _stooq_cache[code]
+    r = get("https://stooq.com/q/d/l/", params={"s": code, "i": "d"}, headers={"Referer": "https://stooq.com/"})
+    rows = []
+    for line in r.text.strip().splitlines()[1:]:
+        parts = line.split(",")
+        if len(parts) >= 5 and num(parts[4]) is not None:
+            rows.append((parts[0], num(parts[4]), num(parts[5]) if len(parts) > 5 else None))
+    rows = rows[-70:]
+    _stooq_cache[code] = rows
+    time.sleep(0.5)
+    return rows
+
+
 def yahoo_daily(sym: str, rng="3mo"):
     """日線收盤＋成交量＋是否盤中（chart API 一次拿完）。"""
     key = "daily:" + sym
     if key in _yahoo_cache:
         return _yahoo_cache[key]
-    j = _yahoo_get(sym, {"range": rng, "interval": "1d", "includePrePost": "false"})
-    res = j["chart"]["result"][0]; meta = res["meta"]
-    q = res["indicators"]["quote"][0]
-    closes, vols, ts = q.get("close") or [], q.get("volume") or [], res.get("timestamp") or []
-    off = meta.get("gmtoffset") or 0
-    rows = [(datetime.fromtimestamp(t + off, tz=timezone.utc).date().isoformat(), c, v) for t, c, v in zip(ts, closes, vols) if c is not None]
-    reg = (meta.get("currentTradingPeriod") or {}).get("regular") or {}
-    now_ts = int(NOW.timestamp())
-    is_open = bool(reg) and reg.get("start", 0) <= now_ts < reg.get("end", 0)
+    source, meta, is_open = "yahoo", {}, False
+    try:
+        j = _yahoo_get(sym, {"range": rng, "interval": "1d", "includePrePost": "false"})
+        res = j["chart"]["result"][0]; meta = res["meta"]
+        q = res["indicators"]["quote"][0]
+        closes, vols, ts = q.get("close") or [], q.get("volume") or [], res.get("timestamp") or []
+        off = meta.get("gmtoffset") or 0
+        rows = [(datetime.fromtimestamp(t + off, tz=timezone.utc).date().isoformat(), c, v) for t, c, v in zip(ts, closes, vols) if c is not None]
+        reg = (meta.get("currentTradingPeriod") or {}).get("regular") or {}
+        now_ts = int(NOW.timestamp())
+        is_open = bool(reg) and reg.get("start", 0) <= now_ts < reg.get("end", 0)
+    except Exception as e:  # noqa: BLE001
+        if sym not in STOOQ:
+            raise
+        log("yahoo→stooq", sym, e)
+        rows = stooq_daily(STOOQ[sym]); source = "stooq"
+        if not rows:
+            raise
     price = rows[-1][1] if rows else None
     prev = rows[-2][1] if len(rows) >= 2 else None
     def pct(a, b):
         return (a - b) / b * 100 if a is not None and b else None
     out = {"price": price, "chg_pct": pct(price, prev), "chg5_pct": pct(price, rows[-6][1]) if len(rows) >= 6 else None,
-           "asOf": rows[-1][0] if rows else None, "open": is_open, "ccy": meta.get("currency"),
+           "asOf": rows[-1][0] if rows else None, "open": is_open, "ccy": meta.get("currency"), "source": source,
            "closes": [c for _, c, _ in rows], "vols": [v for _, _, v in rows], "dates": [d for d, _, _ in rows]}
     _yahoo_cache[key] = out
     return out
@@ -1835,10 +1948,10 @@ def p_world():
         except Exception as e:  # noqa: BLE001
             log("world", sym, e); errs.append(f"{name}: {safe_err(e)}"); continue
         items.append({"sym": sym, "name": name, "flag": flag, "price": q["price"], "chg_pct": q["chg_pct"], "chg5_pct": q["chg5_pct"],
-                      "open": q["open"], "asOf": q["asOf"], "spark": q["closes"][-30:]})
+                      "open": q["open"], "asOf": q["asOf"], "spark": q["closes"][-30:], "src": q["source"]})
     if not items:
         raise RuntimeError(f"world: nothing {errs[:2]}")
-    return {"items": items, "errs": errs[:3]}
+    return {"items": items, "errs": errs[:3], "label": "Stooq 備援" if any(i["src"] == "stooq" for i in items) else ""}
 
 
 SECTORS = [("XLK", "科技"), ("XLC", "通訊"), ("XLY", "非必需"), ("XLF", "金融"), ("XLV", "醫療"), ("XLI", "工業"),
@@ -1873,40 +1986,135 @@ def p_sectors():
     except Exception as e:  # noqa: BLE001
         log("risk ratio", e)
     return {"spy_chg_pct": spy["chg_pct"], "spy_chg5_pct": spy["chg5_pct"], "open": spy["open"], "asOf": spy["asOf"],
-            "items": items, "risk_ratio": ratio, "errs": errs[:3]}
+            "items": items, "risk_ratio": ratio, "errs": errs[:3], "label": "Stooq 備援" if spy["source"] == "stooq" else ""}
 
 
 FEAR = [("^VIX", "VIX", "波動", (15, 25)), ("^VVIX", "VVIX", "波動的波動", (100, 120)),
         ("^SKEW", "SKEW", "尾部厚度", (130, 145))]
 
 
+CBOE = "https://cdn.cboe.com/api/global/us_indices/daily_prices/"
+
+
+def cboe_hist(name: str, n=60):
+    """CBOE 官方每日收盤 CSV → [(date, close)]。VIX/VIX3M 是 OHLC，VVIX/SKEW 是兩欄。"""
+    r = get(CBOE + f"{name}_History.csv", headers={"Referer": "https://www.cboe.com/"})
+    rows = []
+    for line in r.text.strip().splitlines()[1:]:
+        parts = [x.strip() for x in line.split(",")]
+        if len(parts) >= 2:
+            d = parts[0]
+            try:
+                d = datetime.strptime(d, "%m/%d/%Y").date().isoformat()
+            except Exception:
+                pass
+            v = num(parts[-1])
+            if v is not None:
+                rows.append((d, v))
+    return rows[-n:]
+
+
 def p_fear():
-    items, errs = [], []
+    items, errs, src = [], [], "CBOE"
+    yahoo_live = {}
     for sym, name, sub, (lo, hi) in FEAR:
+        hist = []
         try:
-            q = yahoo_daily(sym)
+            hist = cboe_hist(name)
         except Exception as e:  # noqa: BLE001
-            log("fear", sym, e); errs.append(f"{name}: {safe_err(e)}"); continue
-        v = q["price"]
-        level = "green" if v is not None and v < lo else "yellow" if v is not None and v < hi else "red"
-        for d, c in zip(q["dates"], q["closes"]):
+            log("cboe", name, e); errs.append(f"CBOE {name}: " + safe_err(e))
+        live = None
+        try:  # 盤中值：Yahoo 比 CBOE 日檔新的話才用
+            q = yahoo_daily(sym, "1mo")
+            if q["asOf"] and (not hist or q["asOf"] > hist[-1][0]):
+                live = (q["asOf"], q["price"])
+            if not hist:
+                hist = list(zip(q["dates"], q["closes"])); src = "Yahoo"
+        except Exception as e:  # noqa: BLE001
+            log("fear yahoo", sym, e)
+        if not hist:
+            errs.append(f"{name}: 無資料"); continue
+        series = hist + ([live] if live else [])
+        v, prev = series[-1][1], series[-2][1] if len(series) >= 2 else None
+        for d, c in hist:
             hist_put("fear", name, d, c)
-        items.append({"sym": sym, "name": name, "sub": sub, "value": v, "chg_pct": q["chg_pct"], "level": level, "lo": lo, "hi": hi,
-                      "spark": q["closes"][-30:], "asOf": q["asOf"]})
+        items.append({"sym": sym, "name": name, "sub": sub, "value": v, "chg_pct": (v - prev) / prev * 100 if prev else None,
+                      "level": "green" if v < lo else "yellow" if v < hi else "red", "lo": lo, "hi": hi,
+                      "spark": [c for _, c in series[-30:]], "asOf": series[-1][0], "live": bool(live)})
+        yahoo_live[name] = series
     # 期限結構：VIX / VIX3M，>1 = backwardation（近月比遠月貴，恐慌當下而非預期）
     try:
-        vix, v3 = yahoo_daily("^VIX"), yahoo_daily("^VIX3M")
-        n = min(len(vix["closes"]), len(v3["closes"]))
-        series = [round(a / b, 3) for a, b in zip(vix["closes"][-n:], v3["closes"][-n:])]
+        v3 = cboe_hist("VIX3M")
+        vix = yahoo_live.get("VIX") or []
+        dv = dict(vix); d3 = dict(v3)
+        common = [d for d in dv if d in d3]
+        series = [round(dv[d] / d3[d], 3) for d in common]
+        if vix and v3 and vix[-1][0] > v3[-1][0]:  # VIX 有盤中值但 VIX3M 只有昨收 → 用 Yahoo 的 VIX3M 補
+            try:
+                q3 = yahoo_daily("^VIX3M", "1mo")
+                if q3["price"]:
+                    series.append(round(vix[-1][1] / q3["price"], 3)); common.append(vix[-1][0])
+            except Exception:
+                pass
         r = series[-1] if series else None
         items.append({"sym": "^VIX/^VIX3M", "name": "VIX/VIX3M", "sub": "期限結構", "value": r, "chg_pct": None,
                       "level": "green" if r is not None and r < 0.9 else "yellow" if r is not None and r < 1.0 else "red",
-                      "lo": 0.9, "hi": 1.0, "spark": series[-30:], "asOf": vix["asOf"]})
+                      "lo": 0.9, "hi": 1.0, "spark": series[-30:], "asOf": common[-1] if common else None})
     except Exception as e:  # noqa: BLE001
         log("fear term", e); errs.append("VIX3M: " + safe_err(e))
     if not items:
         raise RuntimeError(f"fear: nothing {errs[:2]}")
-    return {"items": items, "errs": errs[:3]}
+    return {"items": items, "errs": errs[:3], "label": src}
+
+
+# ---------- 全球總經（FRED） ----------
+GMACRO = [  # (group, label, series, kind) kind: yoy=指數換年增, level=直接值, pct=已是百分比
+    ("美國", "CPI 年增", "CPIAUCSL", "yoy"), ("美國", "核心 PCE 年增", "PCEPILFE", "yoy"), ("美國", "失業率", "UNRATE", "pct"),
+    ("美國", "聯邦資金利率", "DFF", "pct"), ("美國", "10 年公債", "DGS10", "pct"), ("美國", "2 年公債", "DGS2", "pct"),
+    ("美國", "GDP 季增年率", "A191RL1Q225SBEA", "pct"), ("美國", "初領失業金", "ICSA", "k"), ("美國", "密大消費信心", "UMCSENT", "level"),
+    ("歐元區", "HICP 年增", "CP0000EZ19M086NEST", "yoy"), ("歐元區", "ECB 存款利率", "ECBDFR", "pct"),
+    ("日本", "CPI 年增", "JPNCPIALLMINMEI", "yoy"), ("日本", "政策利率", "IRSTCB01JPM156N", "pct"),
+    ("中國", "CPI 年增", "CHNCPIALLMINMEI", "yoy"), ("英國", "CPI 年增", "GBRCPIALLMINMEI", "yoy"),
+]
+
+
+def p_gmacro():
+    if not FRED_KEY:
+        raise RuntimeError("no FRED_API_KEY")
+    items, errs = [], []
+    for group, label, sid, kind in GMACRO:
+        try:
+            obs = fred(sid, 30)
+            if not obs:
+                raise RuntimeError("empty")
+            if kind == "yoy":
+                # 月資料：與 12 期前比
+                vals = [(d, (v / obs[i - 12][1] - 1) * 100) for i, (d, v) in enumerate(obs) if i >= 12 and obs[i - 12][1]]
+            else:
+                vals = obs
+            if not vals:
+                raise RuntimeError("too short")
+            d, v = vals[-1]; pv = vals[-2][1] if len(vals) >= 2 else None
+            if kind == "k":
+                txt, ptxt = f"{v / 1000:.0f}k", f"{pv / 1000:.0f}k" if pv is not None else ""
+            elif kind == "level":
+                txt, ptxt = f"{v:.1f}", f"{pv:.1f}" if pv is not None else ""
+            else:
+                txt, ptxt = f"{v:.2f}%", f"{pv:.2f}%" if pv is not None else ""
+            items.append({"group": group, "label": label, "value": txt, "raw": round(v, 3), "prev": ptxt, "period": d[:7] if kind != "pct" or "DGS" not in sid and sid != "DFF" else d,
+                          "delta": round(v - pv, 3) if pv is not None else None, "spark": [round(x, 3) for _, x in vals[-18:]]})
+        except Exception as e:  # noqa: BLE001
+            log("gmacro", sid, e); errs.append(f"{label}: {safe_err(e)}")
+        time.sleep(0.3)
+    # 利差：10Y − 2Y
+    d10 = next((i for i in items if i["label"] == "10 年公債"), None); d2 = next((i for i in items if i["label"] == "2 年公債"), None)
+    if d10 and d2:
+        sp = round(d10["raw"] - d2["raw"], 2)
+        items.insert(items.index(d2) + 1, {"group": "美國", "label": "10Y−2Y 利差", "value": f"{sp:+.2f}%", "raw": sp, "prev": "", "period": d10["period"],
+                                           "delta": None, "spark": [round(a - b, 3) for a, b in zip(d10["spark"], d2["spark"])], "tone": "down" if sp < 0 else ""})
+    if not items:
+        raise RuntimeError(f"gmacro: nothing {errs[:2]}")
+    return {"items": items, "errs": errs[:4]}
 
 # ---------- run ----------
 run("pulse", p_pulse)
@@ -1927,6 +2135,7 @@ run("media", p_media, keep_if_fresh_hours=6)
 # run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
 run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=6)
+run("gmacro", p_gmacro, keep_if_fresh_hours=6)
 run("weather", p_weather)
 run("tw_pulse", p_tw_pulse)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)

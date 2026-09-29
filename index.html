@@ -280,9 +280,9 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   </section>
 
   <section class="panel w6" id="p-fear">
-    <div class="ph"><h2>Fear Structure</h2><span class="zh">恐慌三層 ＋ 期限結構</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>Fear Structure</h2><span class="zh">恐慌三層 ＋ 期限結構 · CBOE 官方</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>VIX 波動 · VVIX 波動的波動 · SKEW 尾部 · VIX/VIX3M &gt;1＝近月貴（恐慌當下）· 燈號閾值見色點</span></div>
+    <div class="pf"><span>CBOE 每日收盤為主、Yahoo 盤中補值 · VIX 波動 · VVIX 波動的波動 · SKEW 尾部 · VIX/VIX3M &gt;1＝近月貴（恐慌當下）</span></div>
   </section>
 
   <section class="panel w6" id="p-sectors">
@@ -325,6 +325,12 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="ph"><h2>TW Macro</h2><span class="zh">台灣總經</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.stat.gov.tw/" target="_blank" rel="noopener">主計總處</a><a href="http://rcted.ncu.edu.tw/cci.asp" target="_blank" rel="noopener">台經中心 CCI</a><span>燈號、央行、房價自動抓 · CPI／PPI（5–7 日）、失業率（22 日）、CCI（27 日）、GDP（季）手動</span></div>
+  </section>
+
+  <section class="panel w8" id="p-gmacro">
+    <div class="ph"><h2>Global Macro</h2><span class="zh">全球總經 · 美 歐 日 中 英</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED</a><span>年增由指數自算 · 利率日更、物價月更、GDP 季更 · 括號為前值</span></div>
   </section>
 
   <section class="panel" id="p-revenue">
@@ -373,7 +379,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 
 <div class="foot">
   <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 GitHub Actions 常駐迴圈抓取，盤中每 5 分鐘、其餘 15 分鐘一輪，寫進 data 分支；走勢存 history.json，最多 400 點</span>
-  <span>來源：證交所 · 櫃買 · FinMind · 央行 · 主計總處（手動）· 國發會 · 信義房價 · Yahoo Finance · FRED · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · GDELT · Wikipedia · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · 政府採購網（g0v）· 台電 · 氣象署 · TDX · OpenFreeMap · PTT</span>
+  <span>來源：證交所 · 櫃買 · FinMind · 央行 · 主計總處（手動）· 國發會 · 信義房價 · Yahoo Finance · FRED · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · WWD · Lyst · CBOE · Stooq（備援）· CoinGecko · 證交所 MIS · 中央社 · 公視 · BBC · Guardian · GDELT · Wikipedia · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · 政府採購網（g0v）· 台電 · 氣象署 · TDX · OpenFreeMap · PTT</span>
   <span>未接：TikTok（Creative Center 擋資料中心 IP）· 國防部軍事動態（robots.txt 禁抓）· Threads / X / LinkedIn（無開放 API）· TGOS（用不到）</span>
 </div>
 
@@ -498,8 +504,11 @@ const renderers={
     const rr=d.risk_ratio||[];const last=rr[rr.length-1],first=rr[0];
     body("p-sectors").innerHTML=`<table><tr><th>板塊</th><th class="r">日%</th><th>相對 SPY 5 日</th><th class="r">相對量</th></tr>${tr}</table><div class="p" style="display:flex;gap:10px;align-items:center;margin-top:8px;font-size:11px;color:var(--muted)"><span>SPY 日 <span class="num ${cls(n(d.spy_chg_pct))}">${isFinite(n(d.spy_chg_pct))?sgn(n(d.spy_chg_pct),2,"%"):""}</span> · 5 日 <span class="num ${cls(n(d.spy_chg5_pct))}">${isFinite(n(d.spy_chg5_pct))?sgn(n(d.spy_chg5_pct),1,"%"):""}</span></span><span>風險偏好 XLY/XLP ${last?fmt(n(last),3):""} <span class="${cls(n(last)-n(first))}">${last&&first?sgn((last/first-1)*100,1,"% /30d"):""}</span>${mini(rr)}</span></div>`;setMeta("p-sectors",d,26);},
   fear(d){const LC={green:"#39B978",yellow:"#E0A23A",red:"#F0524F"};
-    const cards=(d.items||[]).map(it=>{const c=LC[it.level]||"var(--dim)";return`<div class="c"><div class="l">${esc(it.name)} <span class="sub">${esc(it.sub)}</span></div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:${c};box-shadow:0 0 0 3px color-mix(in srgb,${c} 25%,transparent)"></span><span class="${K("fear:"+it.sym,n(it.value))}">${fmt(n(it.value),it.value<5?3:2)}</span>${it.chg_pct!=null?`<span class="sub ${cls(n(it.chg_pct))}" style="font-size:11px">${sgn(n(it.chg_pct),1,"%")}</span>`:""}</div><div class="p">${it.lo}／${it.hi}${mini(it.spark)}</div></div>`;}).join("");
+    const cards=(d.items||[]).map(it=>{const c=LC[it.level]||"var(--dim)";return`<div class="c"><div class="l">${esc(it.name)} <span class="sub">${esc(it.sub)}</span></div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:${c};box-shadow:0 0 0 3px color-mix(in srgb,${c} 25%,transparent)"></span><span class="${K("fear:"+it.sym,n(it.value))}">${fmt(n(it.value),it.value<5?3:2)}</span>${it.chg_pct!=null?`<span class="sub ${cls(n(it.chg_pct))}" style="font-size:11px">${sgn(n(it.chg_pct),1,"%")}</span>`:""}${it.live?`<span class="sub" style="font-size:10px;color:var(--up)">盤中</span>`:""}</div><div class="p">${it.lo}／${it.hi}${mini(it.spark)}</div></div>`;}).join("");
     body("p-fear").innerHTML=`<div class="macro fear">${cards}</div>`;setMeta("p-fear",d,26);},
+  gmacro(d){const groups={};(d.items||[]).forEach(it=>{(groups[it.group]=groups[it.group]||[]).push(it);});
+    const card=it=>{const dl=n(it.delta);const tone=it.tone||"";return`<div class="c"><div class="l">${esc(it.label)}</div><div class="v ${tone}"><span class="${K("gm:"+it.label,n(it.raw))}">${esc(it.value)}</span>${isFinite(dl)&&Math.abs(dl)>1e-9?`<span class="sub ${dl>0?"up":"down"}" style="font-size:11px;margin-left:6px">${dl>0?"▲":"▼"}${Math.abs(dl).toFixed(2)}</span>`:""}</div><div class="p">${esc(it.period||"")}${it.prev?` · 前 ${esc(it.prev)}`:""}${mini(it.spark)}</div></div>`;};
+    body("p-gmacro").innerHTML=Object.entries(groups).map(([g,arr])=>`<h3 style="font-size:10.5px;letter-spacing:.08em;color:var(--dim);margin:6px 0 4px;text-transform:uppercase">${esc(g)}</h3><div class="macro">${arr.map(card).join("")}</div>`).join("")+(d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,160))}</div>`:"");setMeta("p-gmacro",d,24*40);},
   ptt(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.board.slice(0,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"bad":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
     body("p-ptt").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"這輪沒抓到")}</div>`;setMeta("p-ptt",d,2);},
   tiktok(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${it.rank||i+1}</span><span class="t">#${esc(it.tag)}</span><span class="m">${it.views?compact(n(it.views))+" 次":""}${it.trend?` <span class="${n(it.trend)>0?"up":"down"}">${sgn(n(it.trend),0)}</span>`:""}</span></li>`).join("");
