@@ -2388,7 +2388,7 @@ def p_awards():
 
 RETAIL_CSV = ("https://service.moea.gov.tw/EE520/opendata/%E7%B6%93%E6%BF%9F%E9%83%A8%E7%B5%B1%E8%A8%88%E8%99%95_%E6%89%B9%E7%99%BC%E3%80%81"
               "%E9%9B%B6%E5%94%AE%E5%8F%8A%E9%A4%90%E9%A3%B2%E6%A5%AD%E7%87%9F%E6%A5%AD%E9%A1%8D%E6%8C%87%E6%95%B8.csv")
-RETAIL_WATCH = ["零售業", "超級市場", "便利商店", "百貨公司", "電子購物", "藥品及化粧品", "家具", "布疋及服飾", "餐飲業"]
+RETAIL_WATCH = ["零售業", "超級市場", "便利商店", "百貨公司", "電子購物", "化粧品", "家庭器具", "布疋及服飾品零售", "餐飲業"]
 
 
 def _ndc_pmi(page):
