@@ -2,9 +2,9 @@
  "label": "TDX",
  "counts": {
   "Taipei": {
-   "parking": 318,
+   "parking": 320,
    "bikes": 1781,
-   "speed": 568,
+   "speed": 0,
    "freeway": 84
   },
   "Taichung": {
@@ -14,6 +14,8 @@
    "freeway": 55
   }
  },
- "errs": [],
- "updatedAt": "2026-09-29T03:01:12Z"
+ "errs": [
+  "geo vd live: RuntimeError: 429 on Road/Traffic/Live/VD/City/Taipei body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
+ ],
+ "updatedAt": "2026-09-29T03:11:51Z"
 }
