@@ -785,7 +785,9 @@ def p_macro():
     auto_items += [v for k, v in old_auto.items() if k not in got]
     if not items and not auto_items:
         raise RuntimeError("no macro items; edit data/panels/macro.json by hand")
-    return {"items": list(items.values()) + auto_items, "note": prev.get("note", ""), "auto_errors": errs}
+    note = ("自動：景氣燈號（國發會）· 重貼現率、M1B、M2（央行）· 房價指數（信義）。"
+            "手動：CPI、核心 CPI、PPI、失業率、GDP、CCI（主計總處 SDMX 擋 GitHub IP，公布日跟我說一聲就更新）")
+    return {"items": list(items.values()) + auto_items, "note": note, "auto_errors": errs}
 
 
 
