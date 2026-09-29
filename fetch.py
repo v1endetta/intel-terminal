@@ -917,6 +917,11 @@ def p_pulse():
             except Exception as e:  # noqa: BLE001
                 log("pulse", sym, e)
                 continue
+        elif sym == "^TWII" and not q.get("series"):
+            try:  # 官方端點沒有整日走勢：收盤後用 Yahoo 的 5 分鐘序列補圖
+                q["series"] = yahoo_intraday(sym)["series"]
+            except Exception as e:  # noqa: BLE001
+                log("pulse twii spark", e)
         items.append({"sym": sym, "name": name, "ccy": ccy, "price": q["price"], "chg_pct": q["chg_pct"],
                       "spark": q["series"], "asOf": q["asOf"], "state": q["state"]})
     if not items:
@@ -2073,20 +2078,28 @@ GMACRO = [  # (group, label, series, kind) kind: yoy=指數換年增, level=直�
     ("美國", "聯邦資金利率", "DFF", "pct"), ("美國", "10 年公債", "DGS10", "pct"), ("美國", "2 年公債", "DGS2", "pct"),
     ("美國", "GDP 季增年率", "A191RL1Q225SBEA", "pct"), ("美國", "初領失業金", "ICSA", "k"), ("美國", "密大消費信心", "UMCSENT", "level"),
     ("歐元區", "HICP 年增", "CP0000EZ19M086NEST", "yoy"), ("歐元區", "ECB 存款利率", "ECBDFR", "pct"),
-    ("日本", "CPI 年增", "JPNCPIALLMINMEI", "yoy"), ("日本", "政策利率", "IRSTCB01JPM156N", "pct"),
-    ("中國", "CPI 年增", "CHNCPIALLMINMEI", "yoy"), ("英國", "CPI 年增", "GBRCPIALLMINMEI", "yoy"),
+    ("日本", "CPI 年增", "CPALTT01JPM659N|JPNCPIALLMINMEI", "pct|yoy"), ("日本", "政策利率", "IRSTCI01JPM156N|IRSTCB01JPM156N", "pct|pct"),
+    ("中國", "CPI 年增", "CPALTT01CNM659N|CHNCPIALLMINMEI", "pct|yoy"), ("英國", "CPI 年增", "CPALTT01GBM659N|GBRCPIALLMINMEI", "pct|yoy"),
 ]
+GMACRO_MAX_AGE_DAYS = 200  # FRED 上 OECD 系列常停更；太舊就不顯示，免得誤導
 
 
 def p_gmacro():
     if not FRED_KEY:
         raise RuntimeError("no FRED_API_KEY")
     items, errs = [], []
-    for group, label, sid, kind in GMACRO:
+    for group, label, sids, kinds in GMACRO:
         try:
-            obs = fred(sid, 30)
+            obs, sid, kind = [], None, None
+            for sid, kind in zip(sids.split("|"), kinds.split("|")):  # 依序試候選系列，取最新且沒停更的
+                try:
+                    cand = fred(sid, 30)
+                except Exception as e:  # noqa: BLE001
+                    log("gmacro cand", sid, e); continue
+                if cand and (NOW.date() - datetime.fromisoformat(cand[-1][0]).date()).days <= GMACRO_MAX_AGE_DAYS:
+                    obs = cand; break
             if not obs:
-                raise RuntimeError("empty")
+                raise RuntimeError("停更或無資料")
             if kind == "yoy":
                 # 月資料：與 12 期前比
                 vals = [(d, (v / obs[i - 12][1] - 1) * 100) for i, (d, v) in enumerate(obs) if i >= 12 and obs[i - 12][1]]
