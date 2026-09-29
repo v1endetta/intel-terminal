@@ -57,6 +57,19 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "OpenAI scraps rollout of new model over safety concerns",
+   "url": "https://www.bbc.co.uk/news/articles/cm5y5nynl75ko?at_medium=RSS&at_campaign=rss",
+   "at": "2026-09-29T01:18:24Z"
+  },
+  {
+   "source": "Guardian",
+   "title": "Vietnamese government accused of abducting Melbourne human rights activist ",
+   "url": "https://www.theguardian.com/australia-news/2026/sep/29/melbourne-human-rights-activist-tran-hiep-missing-cambodia-ntwnfb",
+   "at": "2026-09-29T01:16:28Z",
+   "sec": "World news"
+  },
+  {
    "source": "Guardian",
    "title": "‘Children are dying’: Fiji hopes declaring an HIV emergency will help it tackle crisis",
    "url": "https://www.theguardian.com/world/2026/sep/29/children-fiji-hiv-emergency-testing-drug-raid",
@@ -100,19 +113,6 @@
    "url": "https://www.theguardian.com/world/2026/sep/28/french-election-2026-far-right-senate-elections",
    "at": "2026-09-28T17:24:32Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Iran court upholds lashes sentence for singer who performed without hijab",
-   "url": "https://www.bbc.co.uk/news/articles/crn45ed1kqqgo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-09-28T17:15:00Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "Avanti West Coast to be renationalised in March as ministers float public ownership of new",
-   "url": "https://www.theguardian.com/business/2026/sep/28/avanti-west-coast-to-be-renationalised-in-march",
-   "at": "2026-09-28T16:22:29Z",
-   "sec": "Business"
   }
  ],
  "kw": [
@@ -124,7 +124,7 @@
    "kw": "AI 行銷"
   },
   {
-   "source": "BigGo 財經",
+   "source": "finance.bigg",
    "title": "Daou Technology旗下SABANGNET於韓國電商展公開AI賣家自動化「SABANGNET 2.0」",
    "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE9sVmhqekhWc2JXUXUteFRJbk10M1k2U3hVNVl1Z0UtWWhXVGlkYTU0Q09qTU9QT0h5b3plb2lhMmhRM3hKZFhFTTBJOEt6aEFSWnpQUzlRNFJYTWNXR3F3OGlfanQ5QkpxMXZZdTRlckkwVjFsSUxFSWVR?oc=5",
    "at": "2026-09-28T07:05:00Z",
@@ -209,12 +209,14 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.744,
-   "vol_ratio": 1.24,
+   "vol": 1.693,
+   "vol_ratio": 1.14,
+   "tone": 0.48,
+   "tone_at": "2026-09-29T01:36:08Z",
    "spark": [
-    1.744
+    1.693
    ],
-   "at": "2026-09-29T00:59:32Z"
+   "at": "2026-09-29T01:36:08Z"
   },
   "wiki": {
    "zh": [
@@ -273,8 +275,6 @@
    ]
   }
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3"
- ],
- "updatedAt": "2026-09-29T01:20:16Z"
+ "errs": [],
+ "updatedAt": "2026-09-29T01:36:08Z"
 }
