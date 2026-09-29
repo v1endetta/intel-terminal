@@ -44,6 +44,7 @@ REDDIT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "").strip()
 CWA_KEY = os.environ.get("CWA_API_KEY", "").strip()
 TDX_ID = os.environ.get("TDX_CLIENT_ID", "").strip()
 TDX_SECRET = os.environ.get("TDX_CLIENT_SECRET", "").strip()
+GUARDIAN_KEY = os.environ.get("GUARDIAN_API_KEY", "").strip()
 
 
 # ---------- helpers ----------
@@ -1313,6 +1314,141 @@ def p_geo():
         raise RuntimeError(f"geo: nothing errs={GEO_ERRS[:6]} (static: carparks={ {k: len(v) for k, v in st.get('carparks', {}).items()} } bikes={ {k: len(v) for k, v in st.get('bikes', {}).items()} } vd={len(st.get('vd', {}).get('Taipei', {}))} etag={len(st.get('etag', []))})")
     return {"label": "TDX", "counts": summary, "errs": GEO_ERRS[:12]}
 
+
+# ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
+NEWS_KEYWORDS = ["創意 代理商", "AI 行銷", "設計 展 台北", "家具 品牌 台灣"]  # Vin 自訂關鍵字，改這裡
+NEWS_ERRS: list = []
+
+
+def _rss_date(d: str) -> str:
+    d = (d or "").strip()
+    for fmt in ("%a, %d %b %Y %H:%M:%S %z", "%a, %d %b %Y %H:%M:%S %Z", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%d %H:%M:%S"):
+        try:
+            dt = datetime.strptime(d.replace("GMT", "+0000") if fmt.endswith("%z") else d, fmt)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=TPE if "T" not in fmt else timezone.utc)
+            return dt.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        except Exception:
+            continue
+    return ""
+
+
+def _rss(url, source, limit=8, strip_source=False, **params):
+    root = ET.fromstring(get(url, params=params or None).content)
+    out = []
+    for it in root.iter("item"):
+        title = (it.findtext("title") or "").strip()
+        src = source
+        if strip_source and " - " in title:  # Google News：標題 - 來源
+            title, src = title.rsplit(" - ", 1)
+        if not title:
+            continue
+        out.append({"source": src[:12], "title": title[:90], "url": (it.findtext("link") or "").strip(), "at": _rss_date(it.findtext("pubDate") or "")})
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _gnews(q, source="", limit=6):
+    return _rss("https://news.google.com/rss/search", source, limit, strip_source=not source,
+                q=q, hl="zh-TW", gl="TW", ceid="TW:zh-Hant")
+
+
+def _try(name, fn, *a, **kw):
+    try:
+        return fn(*a, **kw)
+    except Exception as e:  # noqa: BLE001
+        log("news", name, e); NEWS_ERRS.append(f"{name}: {safe_err(e)}"); return []
+
+
+def _dedupe_sort(items, limit):
+    seen, out = set(), []
+    for it in sorted(items, key=lambda x: x.get("at") or "", reverse=True):
+        k = re.sub(r"\W+", "", it["title"])[:30]
+        if k in seen:
+            continue
+        seen.add(k); out.append(it)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _gdelt_signal():
+    """全球英文新聞提到 Taiwan 的量（近 24h vs 前 48h）與平均語調。"""
+    sig = {}
+    vol = gjson("https://api.gdeltproject.org/api/v2/doc/doc", params={"query": "Taiwan", "mode": "timelinevol", "timespan": "3d", "format": "json"})
+    pts = [(p["date"], float(p["value"])) for p in vol["timeline"][0]["data"] if p.get("value") is not None]
+    cut = (NOW - timedelta(hours=24)).strftime("%Y%m%dT%H%M%SZ")
+    recent = [v for d, v in pts if d >= cut]; before = [v for d, v in pts if d < cut]
+    if recent and before:
+        sig["vol"] = round(sum(recent) / len(recent), 3)
+        sig["vol_ratio"] = round((sum(recent) / len(recent)) / max(1e-6, sum(before) / len(before)), 2)
+    time.sleep(6)  # GDELT 對連續呼叫敏感
+    tone = gjson("https://api.gdeltproject.org/api/v2/doc/doc", params={"query": "Taiwan", "mode": "timelinetone", "timespan": "24h", "format": "json"})
+    tp = [float(p["value"]) for p in tone["timeline"][0]["data"] if p.get("value") is not None]
+    if tp:
+        sig["tone"] = round(sum(tp) / len(tp), 2)
+    if not sig:
+        raise RuntimeError("gdelt empty")
+    return sig
+
+
+def _wiki_top(lang, limit=5):
+    d = (NOW - timedelta(days=1)).strftime("%Y/%m/%d")
+    js = gjson(f"https://wikimedia.org/api/rest_v1/metrics/pageviews/top/{lang}.wikipedia/all-access/{d}",
+               headers={"User-Agent": "dalta-intel/1.0 (personal dashboard)"})
+    skip = re.compile(r"^(Main_Page|Wikipedia:|Special:|特殊:|File:|Portal:|Help:|Talk:|Category:|Wikipedia：|首页|首頁|-)")
+    out = []
+    for a in js["items"][0]["articles"]:
+        t = a["article"]
+        if skip.search(t) or ":" in t:
+            continue
+        out.append({"title": t.replace("_", " ")[:24], "views": a["views"], "url": f"https://{lang}.wikipedia.org/wiki/{t}"})
+        if len(out) >= limit:
+            break
+    return out
+
+
+def p_news():
+    NEWS_ERRS.clear()
+    tw = []
+    for feed in ("politics", "finance", "technology"):
+        tw += _try("cna " + feed, _rss, f"https://feeds.feedburner.com/rsscna/{feed}", "中央社", 6)
+    if not tw:
+        tw += _try("cna gnews", _gnews, "site:cna.com.tw", "中央社", 8)
+    pts = _try("pts", _rss, "https://news.pts.org.tw/xml/newsfeed.xml", "公視", 6) or _try("pts gnews", _gnews, "site:news.pts.org.tw", "公視", 5)
+    tw = _dedupe_sort(tw + pts, 9)
+
+    intl = _try("bbc", _rss, "https://feeds.bbci.co.uk/news/world/rss.xml", "BBC", 8)
+    if GUARDIAN_KEY:
+        def _guardian():
+            js = gjson("https://content.guardianapis.com/search", params={"section": "world|business", "order-by": "newest", "page-size": 12, "api-key": GUARDIAN_KEY})
+            return [{"source": "Guardian", "title": r["webTitle"][:90], "url": r["webUrl"], "at": r["webPublicationDate"], "sec": r.get("sectionName", "")} for r in js["response"]["results"]]
+        intl += _try("guardian", _guardian)
+    else:
+        NEWS_ERRS.append("guardian: 未設定 GUARDIAN_API_KEY")
+    intl = _dedupe_sort(intl, 9)
+
+    kw = []
+    for q in NEWS_KEYWORDS:
+        for it in _try("kw " + q, _gnews, q, "", 3):
+            it["kw"] = q; kw.append(it)
+        time.sleep(1)
+    kw = _dedupe_sort(kw, 12)
+
+    signals = {}
+    g = _try("gdelt", _gdelt_signal)
+    if g:
+        signals["gdelt"] = g
+        hist_put("news", "gdelt_vol", TODAY_TPE.isoformat(), g.get("vol"))
+        signals["gdelt"]["spark"] = hist_get("news", "gdelt_vol", 14)
+    wz = _try("wiki zh", _wiki_top, "zh"); we = _try("wiki en", _wiki_top, "en")
+    if wz or we:
+        signals["wiki"] = {"zh": wz, "en": we}
+    if not (tw or intl or kw):
+        raise RuntimeError(f"news: nothing errs={NEWS_ERRS[:5]}")
+    return {"tw": tw, "intl": intl, "kw": kw, "keywords": NEWS_KEYWORDS, "signals": signals, "errs": NEWS_ERRS[:8]}
+
 # ---------- run ----------
 run("pulse", p_pulse)
 run("taiex", p_taiex)
@@ -1333,6 +1469,7 @@ run("weather", p_weather)
 run("tw_pulse", p_tw_pulse)
 run("geo", p_geo)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
+run("news", p_news, keep_if_fresh_hours=0.25)
 run("tiktok", p_tiktok, keep_if_fresh_hours=20)
 
 DATA.mkdir(exist_ok=True)
