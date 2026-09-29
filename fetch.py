@@ -1492,6 +1492,168 @@ def p_news():
         raise RuntimeError(f"news: nothing errs={NEWS_ERRS[:5]}")
     return {"tw": tw, "intl": intl, "kw": kw, "keywords": NEWS_KEYWORDS, "signals": signals, "errs": NEWS_ERRS[:8]}
 
+
+# ---------- 第三批（免新金鑰）：標案 / 設計廣告媒體 / 地震 / 台電 / 桃機 ----------
+PCC_KW = ["行銷", "品牌", "影片", "廣告", "視覺設計"]
+PCC_CACHE = DATA / "pcc_cache.json"
+
+
+def p_tenders():
+    """政府採購網（g0v 鏡像）：關鍵字命中的最新招標公告，補預算金額。"""
+    cache = {}
+    if PCC_CACHE.exists():
+        try:
+            cache = json.loads(PCC_CACHE.read_text(encoding="utf-8"))
+        except Exception:
+            cache = {}
+    found, errs = {}, []
+    for kw in PCC_KW:
+        try:
+            js = gjson("https://pcc.g0v.ronny.tw/api/searchbytitle", params={"query": kw, "page": 1})
+            for r in js.get("records", []):
+                b = r.get("brief") or {}
+                typ = b.get("type") or ""
+                if "招標" not in typ or "無法決標" in typ or "決標" in typ:
+                    continue
+                key = f'{r.get("unit_id")}/{r.get("job_number")}'
+                if key in found:
+                    found[key]["kw"].append(kw); continue
+                found[key] = {"key": key, "title": (b.get("title") or "")[:60], "unit": (r.get("unit_name") or "")[:18],
+                              "date": str(r.get("date") or ""), "type": typ[:6], "kw": [kw],
+                              "url": f'https://pcc.g0v.ronny.tw/tender/{r.get("unit_id")}/{r.get("job_number")}'}
+        except Exception as e:  # noqa: BLE001
+            log("pcc", kw, e); errs.append(f"{kw}: {safe_err(e)}")
+        time.sleep(1)
+    items = sorted(found.values(), key=lambda x: x["date"], reverse=True)[:14]
+    # 預算：每輪最多補 6 筆新的，其餘用快取
+    filled = 0
+    for it in items:
+        c = cache.get(it["key"])
+        if c is not None:
+            it["budget"] = c; continue
+        if filled >= 6:
+            continue
+        try:
+            time.sleep(1)
+            uid, job = it["key"].split("/", 1)
+            d = gjson("https://pcc.g0v.ronny.tw/api/tender", params={"unit_id": uid, "job_number": job})
+            det = ((d.get("records") or [{}])[0].get("detail") or {})
+            raw = det.get("採購資料:預算金額") or det.get("已公開閱覽資料:預算金額") or det.get("招標資料:預算金額") or ""
+            m = re.search(r"[\d,]+", str(raw).replace("元", ""))
+            it["budget"] = int(m.group(0).replace(",", "")) if m else None
+            cache[it["key"]] = it["budget"]; filled += 1
+        except Exception as e:  # noqa: BLE001
+            log("pcc detail", it["key"], e); it["budget"] = None
+    if len(cache) > 600:
+        cache = dict(list(cache.items())[-400:])
+    write_json(PCC_CACHE, cache)
+    if not items:
+        raise RuntimeError(f"pcc: nothing errs={errs[:3]}")
+    return {"items": items, "keywords": PCC_KW, "errs": errs[:4]}
+
+
+DESIGN_FEEDS = [("https://www.dezeen.com/feed/", "Dezeen", "site:dezeen.com"),
+                ("https://www.itsnicethat.com/feed", "INT", "site:itsnicethat.com"),
+                ("https://campaignbriefasia.com/feed/", "CB Asia", "site:campaignbriefasia.com"),
+                ("https://www.creativereview.co.uk/feed/", "CR", "site:creativereview.co.uk")]
+
+
+def p_design():
+    items, errs = [], []
+    for url, src, q in DESIGN_FEEDS:
+        got = []
+        try:
+            got = _rss(url, src, 5)
+        except Exception as e:  # noqa: BLE001
+            log("design rss", src, e); errs.append(f"{src}: {safe_err(e)}")
+            try:
+                got = _rss("https://news.google.com/rss/search", src, 4, q=q, hl="en-US", gl="US", ceid="US:en")
+            except Exception as e2:  # noqa: BLE001
+                log("design gnews", src, e2)
+        items += got
+    items = _dedupe_sort(items, 14)
+    if not items:
+        raise RuntimeError(f"design: nothing errs={errs[:3]}")
+    return {"items": items, "errs": errs[:4]}
+
+
+def p_quake():
+    """氣象署顯著有感地震報告（近 5 筆）。"""
+    rec = cwa("E-A0015-001", limit=6)
+    out = []
+    for q in rec.get("Earthquake", []):
+        info = q.get("EarthquakeInfo") or {}
+        mag = ((info.get("EarthquakeMagnitude") or {}).get("MagnitudeValue"))
+        epi = info.get("Epicenter") or {}
+        t = (info.get("OriginTime") or "").replace("/", "-")
+        try:
+            at = datetime.strptime(t, "%Y-%m-%d %H:%M:%S").replace(tzinfo=TPE).astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        except Exception:
+            at = ""
+        # 最大震度：Intensity.ShakingArea[].AreaIntensity
+        mx = ""
+        for a in ((q.get("Intensity") or {}).get("ShakingArea") or []):
+            v = a.get("AreaIntensity") or ""
+            if v and (not mx or v > mx):
+                mx = v
+        out.append({"at": at, "mag": num(mag), "loc": (epi.get("Location") or "")[:40], "depth": num(info.get("FocalDepth")),
+                    "intensity": mx[:4], "url": q.get("Web") or "https://scweb.cwa.gov.tw/", "no": q.get("EarthquakeNo")})
+    out.sort(key=lambda x: x["at"], reverse=True)
+    if not out:
+        raise RuntimeError("no quake records")
+    return {"items": out[:5]}
+
+
+def p_power():
+    """台電今日尖峰負載與備轉容量率。"""
+    js = gjson("https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.json", headers={"Referer": "https://www.taipower.com.tw/"})
+    rec = (js.get("records") or [js])[0]
+    def pick(*names):
+        for n_ in names:
+            for k, v in rec.items():
+                if n_ in k:
+                    return num(v)
+        return None
+    peak = pick("尖峰負載"); reserve = pick("備轉容量率"); reserve_mw = pick("備轉容量(")
+    if reserve is None and peak is None:
+        raise RuntimeError(f"taipower fields: {list(rec)[:8]}")
+    level = "綠" if (reserve or 0) >= 10 else "黃" if (reserve or 0) >= 6 else "橘" if (reserve or 0) >= 3 else "紅"
+    hist_put("power", "reserve", TODAY_TPE.isoformat(), reserve)
+    return {"peak_mw": peak, "reserve_pct": reserve, "reserve_mw": reserve_mw, "level": level,
+            "spark": hist_get("power", "reserve", 30), "asof": str(rec.get("日期") or rec.get("時間") or "")[:16]}
+
+
+def p_airport():
+    """桃機今日出發／抵達：班次、延誤、取消，與接下來 8 班出發。"""
+    out = {}
+    for kind, path in (("dep", "Air/FIDS/Airport/Departure/TPE"), ("arr", "Air/FIDS/Airport/Arrival/TPE")):
+        rows = tdx(path)
+        if isinstance(rows, dict):
+            rows = rows.get("FIDS") or rows.get("Departures") or rows.get("Arrivals") or []
+        tot = len(rows); delayed = cancelled = 0; upcoming = []
+        now_tpe = NOW.astimezone(TPE)
+        for r in rows:
+            rk = (r.get("DepartureRemark") if kind == "dep" else r.get("ArrivalRemark")) or ""
+            if "取消" in rk:
+                cancelled += 1
+            elif "延" in rk:
+                delayed += 1
+            sched = r.get("ScheduleDepartureTime") if kind == "dep" else r.get("ScheduleArrivalTime")
+            est = r.get("EstimatedDepartureTime") if kind == "dep" else r.get("EstimatedArrivalTime")
+            try:
+                st = datetime.fromisoformat(sched)
+                st = st if st.tzinfo else st.replace(tzinfo=TPE)
+            except Exception:
+                continue
+            if kind == "dep" and st >= now_tpe - timedelta(minutes=5) and len(upcoming) < 8 and "取消" not in rk and "出發" not in rk:
+                upcoming.append({"flight": f'{r.get("AirlineID","")}{r.get("FlightNumber","")}', "to": r.get("ArrivalAirportID", ""),
+                                 "sched": st.strftime("%H:%M"), "est": (est or "")[11:16], "remark": rk[:4], "gate": (r.get("Gate") or "")[:4]})
+        upcoming.sort(key=lambda x: x["sched"])
+        out[kind] = {"total": tot, "delayed": delayed, "cancelled": cancelled, "upcoming": upcoming}
+    if not out["dep"]["total"] and not out["arr"]["total"]:
+        raise RuntimeError("airport: empty")
+    return out
+
 # ---------- run ----------
 run("pulse", p_pulse)
 run("taiex", p_taiex)
@@ -1513,6 +1675,11 @@ run("tw_pulse", p_tw_pulse)
 run("geo", p_geo)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("news", p_news, keep_if_fresh_hours=0.25)
+run("tenders", p_tenders, keep_if_fresh_hours=1)
+run("design", p_design, keep_if_fresh_hours=1)
+run("quake", p_quake)
+run("power", p_power, keep_if_fresh_hours=0.25)
+run("airport", p_airport, keep_if_fresh_hours=0.25)
 run("tiktok", p_tiktok, keep_if_fresh_hours=20)
 
 DATA.mkdir(exist_ok=True)
