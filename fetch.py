@@ -2137,7 +2137,7 @@ GMACRO = [  # (group, label, series, kind) kind: yoy=指數換年增, level=直�
     ("美國", "CPI 年增", "CPIAUCSL", "yoy"), ("美國", "核心 PCE 年增", "PCEPILFE", "yoy"), ("美國", "失業率", "UNRATE", "pct"),
     ("美國", "聯邦資金利率", "DFF", "pct"), ("美國", "10 年公債", "DGS10", "pct"), ("美國", "2 年公債", "DGS2", "pct"),
     ("美國", "GDP 季增年率", "A191RL1Q225SBEA", "pct"), ("美國", "初領失業金", "ICSA", "k"), ("美國", "密大消費信心", "UMCSENT", "level"),
-    ("美國", "費城聯準會製造業", "GACDISA", "level"), ("美國", "紐約聯準會製造業", "GACDFSA", "level"), ("美國", "CFNAI 全國活動", "CFNAI", "level2"),
+    ("美國", "費城聯準會製造業", "GACDFSA066MSFRBPHI", "level"), ("美國", "紐約聯準會製造業", "GACDISA066MSFRBNY", "level"), ("美國", "CFNAI 全國活動", "CFNAI", "level2"),
     ("歐元區", "HICP 年增", "CP0000EZ19M086NEST", "yoy"), ("歐元區", "ECB 存款利率", "ECBDFR", "pct"),
     ("日本", "政策利率", "IRSTCI01JPM156N|IRSTCB01JPM156N", "pct|pct"),
     # 日本／中國 CPI：FRED 的 OECD 系列 2025 起停更，免費且免金鑰的官方 API 目前沒有，先不放
@@ -2179,7 +2179,7 @@ def p_gmacro():
                 txt, ptxt = f"{v:.2f}%", f"{pv:.2f}%" if pv is not None else ""
             items.append({"group": group, "label": label, "value": txt, "raw": round(v, 3), "prev": ptxt, "period": d[:7] if kind != "pct" or "DGS" not in sid and sid != "DFF" else d,
                           "delta": round(v - pv, 3) if pv is not None else None, "spark": [round(x, 3) for _, x in vals[-18:]],
-                          "dot": ("up" if v > 0 else "down") if sid in ("GACDISA", "GACDFSA", "CFNAI") else None})
+                          "dot": ("up" if v > 0 else "down") if sid in ("GACDFSA066MSFRBPHI", "GACDISA066MSFRBNY", "CFNAI") else None})
         except Exception as e:  # noqa: BLE001
             log("gmacro", sid, e); errs.append(f"{group}{label}: {safe_err(e)}")
         time.sleep(0.3)
