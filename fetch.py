@@ -1318,7 +1318,16 @@ def p_geo():
 
 
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
-NEWS_KEYWORDS = ["創意 代理商", "AI 行銷", "設計 展 台北", "家具 品牌 台灣"]  # Vin 自訂關鍵字，改這裡
+# Vin 的關注領域（Google News 繁中）：每組顯示最新 3 則。帶引號＝精準比對。改這裡。
+NEWS_GROUPS = [
+    ("廣告與代理商", ['"廣告代理商"', "比稿 OR 廣告 得標", "廣告 裁罰 OR 廣告 開罰", "廣告量 OR 行銷預算"]),
+    ("品牌與設計", ['"品牌重塑" OR "品牌升級"', "台灣設計展 OR 文博會 OR 金點設計獎", '"視覺識別" OR "包裝設計"', "家具展 OR 室內設計 OR 建材"]),
+    ("AI 與製作工具", ["Sora OR Runway OR Kling 影片", "生成式AI 廣告 OR 生成式AI 版權", "Figma OR Canva 新功能", "開源模型 OR Ollama OR 本地部署"]),
+    ("市場與投資", ["槓桿ETF OR 00631L OR 00675L", "聯準會 利率 OR FOMC", "台積電 法說 OR 台積電 ADR"]),
+    ("地緣與科技政策", ["台海 OR 共機 OR 軍演", "關稅 台灣 OR 232條款", "半導體 出口管制 OR 晶片法案"]),
+    ("時尚與奢華", ["LVMH OR Kering OR Hermès OR 愛馬仕", '"quiet luxury" OR 老錢風 OR 靜奢', "時裝週 OR 創意總監 上任", "精品 台灣 OR 精品 業績"]),
+    ("文化與生活", ["廟宇 OR 媽祖 OR 民間信仰", "紀念幣 OR 錢幣 拍賣", "獨立書店 OR 誠品", "灣區 OR 舊金山 OR 加州 台灣人", "潭子 OR 台中 北屯"]),
+]
 NEWS_ERRS: list = []
 
 
@@ -1463,7 +1472,7 @@ def p_news():
     if not tw:
         tw += _try("cna gnews", _gnews, "site:cna.com.tw", "中央社", 8)
     pts = _try("pts", _rss, "https://news.pts.org.tw/xml/newsfeed.xml", "公視", 6) or _try("pts gnews", _gnews, "site:news.pts.org.tw", "公視", 5)
-    tw = _dedupe_sort(_dedupe_sort(tw, 6) + _dedupe_sort(pts, 3), 9)  # 保證兩家都出現，不讓中央社洗版
+    tw = _dedupe_sort(_dedupe_sort(tw, 8) + _dedupe_sort(pts, 4), 12)  # 保證兩家都出現，不讓中央社洗版
 
     intl = _try("bbc", _rss, "https://feeds.bbci.co.uk/news/world/rss.xml", "BBC", 8)
     if GUARDIAN_KEY:
@@ -1473,14 +1482,16 @@ def p_news():
         intl += _try("guardian", _guardian)
     else:
         NEWS_ERRS.append("guardian: 未設定 GUARDIAN_API_KEY")
-    intl = _dedupe_sort(intl, 9)
+    intl = _dedupe_sort(intl, 12)
 
-    kw = []
-    for q in NEWS_KEYWORDS:
-        for it in _try("kw " + q, _gnews, q, "", 3):
-            it["kw"] = q; kw.append(it)
-        time.sleep(1)
-    kw = _dedupe_sort(kw, 12)
+    groups = []
+    for name, qs in NEWS_GROUPS:
+        got = []
+        for q in qs:
+            for it in _try("kw " + q, _gnews, q, "", 3):
+                it["kw"] = q; got.append(it)
+            time.sleep(0.8)
+        groups.append({"name": name, "items": _dedupe_sort(got, 3)})
 
     signals = {}
     g = _try("gdelt", _gdelt_signal)
@@ -1496,9 +1507,9 @@ def p_news():
     wz = _try("wiki zh", _wiki_top, "zh"); we = _try("wiki en", _wiki_top, "en")
     if wz or we:
         signals["wiki"] = {"zh": wz, "en": we}
-    if not (tw or intl or kw):
+    if not (tw or intl or any(g["items"] for g in groups)):
         raise RuntimeError(f"news: nothing errs={NEWS_ERRS[:5]}")
-    return {"tw": tw, "intl": intl, "kw": kw, "keywords": NEWS_KEYWORDS, "signals": signals, "errs": NEWS_ERRS[:8]}
+    return {"tw": tw, "intl": intl, "groups": groups, "signals": signals, "errs": NEWS_ERRS[:8]}
 
 
 # ---------- 第三批（免新金鑰）：標案 / 設計廣告媒體 / 地震 / 台電 / 桃機 ----------
