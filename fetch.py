@@ -1691,6 +1691,8 @@ def p_news():
                 it["kw"] = q; got.append(it)
             time.sleep(0.8)
         # 每組 3 則：關鍵字輪流各出一則（避免單一話題洗版），標題前 14 字相同視為同一則
+        fresh_cut = (NOW - timedelta(days=21)).isoformat()
+        got = [g for g in got if (g.get("at") or "") >= fresh_cut]  # 三週以上的舊聞不進 Watchlist
         by_kw = {q: _dedupe_sort([g for g in got if g["kw"] == q], 3) for q in qs}
         picked, seen = [], set()
         for rnd in range(3):
@@ -1803,7 +1805,8 @@ def p_design():
             except Exception as e2:  # noqa: BLE001
                 log("design gnews", src, e2)
         items += got
-    items = _dedupe_sort(items, 14)
+    fresh_cut = (NOW - timedelta(days=30)).isoformat()
+    items = _dedupe_sort([i for i in items if (i.get("at") or "") >= fresh_cut], 14)
     if not items:
         raise RuntimeError(f"design: nothing errs={errs[:3]}")
     return {"items": items, "errs": errs[:4]}

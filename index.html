@@ -91,6 +91,35 @@ a:hover{text-decoration:underline}
 .sig .w a{color:inherit;text-decoration:none;margin-right:8px}.sig .w a:hover{text-decoration:underline}
 .rb{display:flex;align-items:center;gap:6px}.rb .trk{flex:1;height:6px;background:var(--line2);border-radius:2px;position:relative;overflow:hidden}.rb .trk i{position:absolute;top:0;bottom:0}
 .fear{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+
+/* ---- readability pass ---- */
+body{overflow-x:hidden}
+main.grid{overflow-x:clip}.grid>*{min-width:0}.tp>*,.nw>*,.macro .c{min-width:0}
+.num,td.r,th.r,.v,.pulse .c .v,.tape .it{font-variant-numeric:tabular-nums}
+td.r,th.r{white-space:nowrap}
+.bad{color:var(--warn)}
+/* 今日判讀 */
+.brief{grid-column:span 12;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:2px}
+@media (max-width:1100px){.brief{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.brief{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.brief .b{background:var(--panel2);border:1px solid var(--line2);border-radius:4px;padding:8px 10px;min-width:0;display:flex;flex-direction:column;gap:2px}
+.brief .b .l{font-size:10.5px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;font-family:var(--mono)}
+.brief .b .h{font-size:15px;font-weight:600;line-height:1.25;display:flex;align-items:center;gap:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brief .b .h i{width:9px;height:9px;border-radius:50%;flex:none}
+.brief .b .s{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 面板層級 */
+.panel.hero{background:var(--panel2);border-color:var(--line2)}
+.panel.hero .ph h2{font-size:13px;letter-spacing:.1em}.panel.hero .ph .zh{font-size:12px;color:var(--text)}
+.panel.sig .ph{padding:6px 10px 4px}.panel.sig .ph h2{font-size:10.5px;color:var(--muted)}
+/* 列表面板：桌面固定高度內捲，手機收合可展開 */
+.panel.cap .pb{position:relative}
+@media (min-width:641px){.panel.cap .pb{max-height:440px;overflow:auto;scrollbar-width:thin}.panel.cap.tall .pb{max-height:560px}}
+@media (max-width:640px){.panel.cap:not(.open) .pb{max-height:300px;overflow:hidden}.panel.cap:not(.open) .pb::after{content:"";position:absolute;left:0;right:0;bottom:0;height:56px;background:linear-gradient(transparent,var(--panel))}
+  .panel.cap .more{display:block;width:100%;background:none;border:0;border-top:1px solid var(--line);color:var(--blue);font:11.5px var(--mono);padding:7px;cursor:pointer}}
+.panel.cap .more{display:none}
+/* 頁尾說明：桌面淡化、滑過才亮 */
+@media (min-width:641px){.pf{opacity:.45;transition:opacity .15s}.panel:hover .pf{opacity:1}}
+/* movers：單列橫向滑 */
 .tp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:640px){.tp{grid-template-columns:1fr}}
 .tp h3{margin:0 0 4px;font-size:10px;font-weight:500;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;font-family:var(--head)}
@@ -121,6 +150,7 @@ a:hover{text-decoration:underline}
 @media (max-width:640px){.mapwrap{height:380px}}
 /* movers */
 .movers{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+@media (max-width:640px){.movers{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}.movers::-webkit-scrollbar{display:none}.movers .mv{flex:none;max-width:80vw;white-space:nowrap}}
 .movers .mv{display:flex;align-items:baseline;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-size:12px;min-width:0}
 .movers .mv .k{color:var(--muted);font-size:10.5px;letter-spacing:.04em}
 .movers .mv .v{font-family:var(--mono);font-weight:500}
@@ -202,10 +232,11 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 <main class="grid">
 
   <section class="pulse" id="p-pulse"></section>
+  <section class="brief" id="brief" hidden></section>
 
   <div class="sec">市場 Markets</div>
 
-  <section class="panel w8" id="p-taiex">
+  <section class="panel w8 hero" id="p-taiex">
     <div class="ph"><h2>TAIEX</h2><span class="zh">台股大盤</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://openapi.twse.com.tw/" target="_blank" rel="noopener">證交所</a><a href="https://www.tpex.org.tw/" target="_blank" rel="noopener">櫃買</a><a href="https://finmindtrade.com/" target="_blank" rel="noopener">FinMind</a><span>盤後更新 · 法人單位億元 · 夜盤 15:00–05:00</span></div>
@@ -217,19 +248,19 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><a href="https://rate.bot.com.tw/xrt?Lang=zh-TW" target="_blank" rel="noopener">臺灣銀行牌告</a></div>
   </section>
 
-  <section class="panel w6" id="p-world">
+  <section class="panel w6 cap" id="p-world">
     <div class="ph"><h2>Global Indices</h2><span class="zh">主要經濟體大盤</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Yahoo 日線 · 盤中為未完成棒 · 5 日％＝近 5 個交易日</span></div>
   </section>
 
-  <section class="panel w6" id="p-fear">
+  <section class="panel w6 hero" id="p-fear">
     <div class="ph"><h2>Fear Structure</h2><span class="zh">恐慌三層 ＋ 期限結構 · CBOE 官方</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>CBOE 每日收盤為主、Yahoo 盤中補值 · 狀態判定：恐慌當下（VIX/VIX3M&gt;1）→ 恐慌區（VIX&gt;25）→ 波動放大（VIX、VVIX 五日同升）→ 暴風雨前的平靜（VIX 低、VVIX 或 SKEW 紅）→ 風平浪靜（全綠）</span></div>
   </section>
 
-  <section class="panel w6" id="p-sectors">
+  <section class="panel w6 cap" id="p-sectors">
     <div class="ph"><h2>US Sectors</h2><span class="zh">美股板塊輪動（代理指標）</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>SPDR 11 檔板塊 ETF · 相對強弱＝5 日％－SPY · 相對量＝最近完整日量 ÷ 20 日均 · 不是真正資金流向</span></div>
@@ -247,13 +278,13 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><span>巴黎／馬德里／東京／紐約收盤</span></div>
   </section>
 
-  <section class="panel w6" id="p-tw-stocks">
+  <section class="panel w6 cap" id="p-tw-stocks">
     <div class="ph"><h2>TW Supply</h2><span class="zh">台灣供應鏈與通路</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>紡織：儒鴻、聚陽、遠東新　通路：統一超、統一、遠百</span></div>
   </section>
 
-  <section class="panel w6" id="p-revenue">
+  <section class="panel w6 cap" id="p-revenue">
     <div class="ph"><h2>Revenue</h2><span class="zh">通路與供應鏈 · 月營收</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>公開資訊觀測站 · 每月 10 日前後</span></div>
@@ -261,13 +292,13 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 
   <div class="sec">總經 Macro</div>
 
-  <section class="panel w6" id="p-calendar">
+  <section class="panel w6 cap" id="p-calendar">
     <div class="ph"><h2>Calendar</h2><span class="zh">接下來三週 · 數據發布與央行</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>美：FRED 官方發布時程、FOMC · 台：主計總處／央行／國發會固定時程（「約」＝依慣例推估）· 台股休市：證交所</span></div>
   </section>
 
-  <section class="panel w6" id="p-supply">
+  <section class="panel w6 cap" id="p-supply">
     <div class="ph"><h2>Supply & Retail</h2><span class="zh">PMI／NMI · 零售分業年增</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>中經院 PMI／NMI（國發會頁面）· 經濟部零售業營業額指數（分業）· 50 以上＝擴張</span></div>
@@ -279,7 +310,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><a href="https://www.stat.gov.tw/" target="_blank" rel="noopener">主計總處</a><a href="http://rcted.ncu.edu.tw/cci.asp" target="_blank" rel="noopener">台經中心 CCI</a><span>燈號、央行、房價自動抓 · CPI／PPI（5–7 日）、失業率（22 日）、CCI（27 日）、GDP（季）手動</span></div>
   </section>
 
-  <section class="panel w6" id="p-gmacro">
+  <section class="panel w6 cap" id="p-gmacro">
     <div class="ph"><h2>Global Macro</h2><span class="zh">全球總經 · 美 歐 日 中 英</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED</a><span>美國、歐元區、日本利率來自 FRED；英國 CPI 來自 ONS · 年增由指數自算 · 日本與中國 CPI 沒有免金鑰的官方 API，暫缺</span></div>
@@ -287,73 +318,73 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 
   <div class="sec">情報 Intel</div>
 
-  <section class="panel w12" id="p-news">
+  <section class="panel w12 hero cap tall" id="p-news">
     <div class="ph"><h2>News</h2><span class="zh">時事 · 台灣 / 國際 / 關鍵字</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>中央社 · 公視 · BBC · Guardian · GDELT（全球提到 Taiwan 的量與語調）· Wikipedia 昨日熱門條目</span></div>
   </section>
 
-  <section class="panel w12" id="p-watch">
+  <section class="panel w12 cap tall" id="p-watch">
     <div class="ph"><h2>Watchlist</h2><span class="zh">關注領域 · 七組關鍵字</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Google News 繁中 · 廣告與代理商 · 品牌與設計 · AI 與製作工具 · 市場與投資 · 地緣與科技政策 · 時尚與奢華 · 文化與生活 · 關鍵字在 fetch.py 的 NEWS_GROUPS</span></div>
   </section>
 
-  <section class="panel w6" id="p-tenders">
+  <section class="panel w6 cap" id="p-tenders">
     <div class="ph"><h2>Tenders</h2><span class="zh">政府標案 · 行銷／品牌／影片／廣告／視覺設計</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>政府電子採購網（g0v 鏡像）· 只列招標公告 · 預算補抓，可能晚一輪</span></div>
   </section>
 
-  <section class="panel w6" id="p-design">
+  <section class="panel w6 cap" id="p-design">
     <div class="ph"><h2>Design & Ad Press</h2><span class="zh">設計與廣告媒體</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Dezeen · It's Nice That · Campaign Brief Asia · Creative Review</span></div>
   </section>
 
-  <section class="panel w6" id="p-awards">
+  <section class="panel w6 cap" id="p-awards">
     <div class="ph"><h2>Awards</h2><span class="zh">決標公告 · 誰得標、多少錢</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>政府電子採購網（g0v 鏡像）· 同一組關鍵字 · 決標金額補抓，可能晚一輪</span></div>
   </section>
 
-  <section class="panel w6" id="p-poly">
+  <section class="panel w6 cap" id="p-poly">
     <div class="ph"><h2>Polymarket</h2><span class="zh">世界在賭什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a><span>24h 成交量排序，已濾掉運彩</span></div>
   </section>
 
-  <section class="panel w6" id="p-tech">
+  <section class="panel w6 cap" id="p-tech">
     <div class="ph"><h2>Tech</h2><span class="zh">GitHub · Hugging Face · Hacker News</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>GitHub：近 7 天新 repo 星數　HF：趨勢分數　HN：首頁</span></div>
   </section>
 
-  <section class="panel w6" id="p-lyst">
+  <section class="panel w6 cap" id="p-lyst">
     <div class="ph"><h2>Lyst Index</h2><span class="zh">全球最熱品牌與單品</span><span class="meta">排程 · 季更</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.lyst.com/data/the-lyst-index/" target="_blank" rel="noopener">Lyst</a></div>
   </section>
 
-  <section class="panel w6" id="p-youtube">
+  <section class="panel w6 cap" id="p-youtube">
     <div class="ph"><h2>YouTube</h2><span class="zh">台灣發燒榜 · 美國對照</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>YouTube Data API · 每 30 分鐘 · 分類：全部／音樂／娛樂／新聞</span></div>
   </section>
 
-  <section class="panel w6" id="p-trends">
+  <section class="panel w6 cap" id="p-trends">
     <div class="ph"><h2>Trends TW</h2><span class="zh">台灣搜尋熱度</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://trends.google.com/trending?geo=TW&hl=zh-TW" target="_blank" rel="noopener">Google Trends</a></div>
   </section>
 
-  <section class="panel w6" id="p-media">
+  <section class="panel w6 cap" id="p-media">
     <div class="ph"><h2>Fashion Press</h2><span class="zh">時尚媒體標題</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>WWD RSS · BoF 與台灣時尚媒體（經 Bing News）</span></div>
   </section>
 
-  <section class="panel w6" id="p-ptt">
+  <section class="panel w6 cap" id="p-ptt">
     <div class="ph"><h2>PTT</h2><span class="zh">台灣社群熱文</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>八卦 · 省錢 · 網購 · 美妝 · 美容 · 科技業 · 房產 · 電影</span></div>
@@ -361,7 +392,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 
   <div class="sec">台灣現場 Taiwan Live</div>
 
-  <section class="panel w12" id="p-geo">
+  <section class="panel w12 hero" id="p-geo">
     <div class="ph"><h2>Map</h2><span class="zh">全台 · 停車場剩餘、YouBike、車速</span><span class="meta">排程</span></div>
     <div class="pb" style="padding:6px">
       <div class="mapwrap"><div id="map"></div>
@@ -372,31 +403,31 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><a href="https://tdx.transportdata.tw/" target="_blank" rel="noopener">TDX</a><span>全台縣市 · 路外停車場汽車位 · YouBike · 市區 VD 車速（有佈設的縣市）· 國道 ETag 區間速率 · 每 10 分鐘 · 底圖 OpenFreeMap</span></div>
   </section>
 
-  <section class="panel w6" id="p-twpulse">
+  <section class="panel w6 cap" id="p-twpulse">
     <div class="ph"><h2>Taiwan Pulse</h2><span class="zh">全台脈搏 · YouBike、停車場、國道</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://tdx.transportdata.tw/" target="_blank" rel="noopener">TDX</a><span>YouBike 可借車數每 5 分鐘 · 國道 ETag 區間小客車平均速率</span></div>
   </section>
 
-  <section class="panel w6" id="p-weather">
+  <section class="panel w6 sig" id="p-weather">
     <div class="ph"><h2>Weather</h2><span class="zh">台北 · 台中</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待氣象署金鑰</div></div>
     <div class="pf"><a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">中央氣象署</a><span>觀測每 10 分鐘 · 36 小時預報 · 特報</span></div>
   </section>
 
-  <section class="panel w3" id="p-quake">
+  <section class="panel w3 sig" id="p-quake">
     <div class="ph"><h2>Quake</h2><span class="zh">顯著有感地震</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>氣象署地震報告 · 近 5 筆</span></div>
   </section>
 
-  <section class="panel w3" id="p-power">
+  <section class="panel w3 sig" id="p-power">
     <div class="ph"><h2>Power</h2><span class="zh">台電備轉容量</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>台電開放資料 · 燈號：綠 ≥10% 黃 6–10% 橘 3–6% 紅 &lt;3%</span></div>
   </section>
 
-  <section class="panel w6" id="p-airport">
+  <section class="panel w6 sig" id="p-airport">
     <div class="ph"><h2>TPE Airport</h2><span class="zh">桃機今日航班</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>TDX 航班顯示（FIDS）· 接下來 8 班出發</span></div>
@@ -563,7 +594,7 @@ const renderers={
     body("p-cmdty").innerHTML=`<table><tr><th>品項</th><th class="r">價格</th><th class="r">日%</th></tr>${tr}${sh?`<tr><th colspan="3" style="padding-top:8px">海運 USD/40ft</th></tr>${sh}`:""}</table>`;setMeta("p-cmdty",d,30);},
   macro(d){const LC={"紅燈":"#E0453F","黃紅燈":"#E28A2B","綠燈":"#39B978","黃藍燈":"#3E8ED0","藍燈":"#2B5BD7"};
     const cards=(d.items||[]).map(it=>it.label==="景氣燈號"?`<div class="c"><div class="l">${esc(it.label)}</div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:14px;height:14px;border-radius:50%;background:${LC[it.value]||"var(--dim)"};box-shadow:0 0 0 3px color-mix(in srgb,${LC[it.value]||"var(--dim)"} 25%,transparent)"></span>${esc(it.value)}<span class="sub" style="font-size:12px">${it.score||""} 分</span></div><div class="p">${esc(it.period||"")}</div></div>`
-      :`<div class="c"><div class="l">${esc(it.label)}</div><div class="v ${it.tone==="up"?"up":it.tone==="down"?"down":""}">${esc(it.value)}</div><div class="p">${esc(it.period||"")}${it.prev?` · 前值 ${esc(it.prev)}`:""}${it.sub?` · ${esc(it.sub)}`:""}</div></div>`).join("");
+      :(()=>{const cur=parseFloat(String(it.value).replace(/[^\d.-]/g,"")),pv=parseFloat(String(it.prev||"").replace(/[^\d.-]/g,""));const dl=isFinite(cur)&&isFinite(pv)?cur-pv:null;return`<div class="c"><div class="l">${esc(it.label)}</div><div class="v"><span class="${K("twm:"+it.label,cur)}">${esc(it.value)}</span>${dl!=null&&Math.abs(dl)>1e-9?`<span class="sub ${dl>0?"up":"down"}" style="font-size:11px;margin-left:6px">${dl>0?"▲":"▼"}${Math.abs(dl).toFixed(2)}</span>`:""}</div><div class="p">${esc(it.period||"")}${it.prev?` · 前 ${esc(it.prev)}`:""}${it.sub?` · ${esc(it.sub)}`:""}</div></div>`;})()).join("");
     body("p-macro").innerHTML=`<div class="macro">${cards}</div>${d.note?`<div class="empty" style="padding:8px 0 0">${esc(d.note)}</div>`:""}`;setMeta("p-macro",d,24*35);},
   otc_revenue(d){revenueDocs.otc_revenue=d;renderRevenue();},
   trends(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="https://trends.google.com/trends/explore?geo=TW&q=${encodeURIComponent(it.title)}" target="_blank" rel="noopener">${esc(it.title)}</a>${it.news?`<span class="sub">${esc(it.news)}</span>`:""}</span><span class="m">${esc(it.traffic||"")}</span></li>`).join("");
@@ -616,11 +647,25 @@ async function loadAll(){
     lastGen=all.generatedAt;
     Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});
     genTime=new Date(all.generatedAt).getTime();$("#db-age").textContent="最近抓取 "+ago(all.generatedAt);$(".k.db").classList.remove("stale");
-    movers(P);tape(P);
+    movers(P);tape(P);try{brief(P);}catch(e){console.warn("brief",e);}
     try{localStorage.setItem("intel:prev",JSON.stringify({gen:all.generatedAt,vals:curVals}));}catch(_){}
     prevVals={...prevVals,...curVals};firstRender=false;
     const period=(inSession()?5:15)*60e3;nextAt=new Date(all.finishedAt||all.generatedAt).getTime()+period+(all.finishedAt?60e3:200e3);if(nextAt<Date.now()+30e3)nextAt=Date.now()+60e3;
   }catch(e){$("#db-age").textContent="讀不到資料（"+e.message+"）";nextAt=Date.now()+90e3;}
+}
+function brief(P){
+  const el=$("#brief");const items=[];
+  const f=P.fear||{};if(f.regime){const LC={green:"var(--up)",yellow:"var(--warn)",red:"var(--down)",flat:"var(--dim)"};items.push({l:"恐慌狀態",h:f.regime,c:LC[f.tone]||"var(--dim)",s:(f.items||[]).slice(0,3).map(i=>`${i.name} ${fmt(n(i.value),i.name==="VIX"?1:0)}`).join(" · ")});}
+  const g=(P.news||{}).signals?.gdelt;if(g&&isFinite(n(g.vol_ratio))){const r=n(g.vol_ratio);items.push({l:"全球提到 Taiwan",h:"×"+r.toFixed(2),c:r>=1.3?"var(--warn)":r<=0.7?"var(--up)":"var(--dim)",s:r>=1.3?"比前兩日多，看國際欄":"音量正常"+(g.tone!=null?` · 語調 ${sgn(n(g.tone),1)}`:"")});}
+  const tm=P.tw_market||{};const inst=(tm.institutions||tm.inst||[]);const fo=inst.find?inst.find(i=>/外資/.test(i.name||i.label||"")):null;
+  if(fo){const v=n(fo.net??fo.value);items.push({l:"台股法人",h:`外資 ${v>=0?"買超":"賣超"} ${fmt(Math.abs(v),0)} 億`,c:v>=0?"var(--up)":"var(--down)",s:(tm.breadth?`漲 ${tm.breadth.up} 跌 ${tm.breadth.down}`:"")});}
+  else if(P.taiex){const idx=n(P.taiex.index),ch=n(P.taiex.change);items.push({l:"台股大盤",h:`${fmt(idx,0)}`,c:ch>=0?"var(--up)":"var(--down)",s:sgn(ch/(idx-ch)*100,2,"%")});}
+  const pw=P.power||{};if(pw.reserve_pct!=null){const LC={"綠":"var(--up)","黃":"var(--warn)","橘":"#E28A2B","紅":"var(--down)"};items.push({l:"台電備轉",h:`${fmt(n(pw.reserve_pct),1)}% ${pw.level||""}燈`,c:LC[pw.level]||"var(--dim)",s:`用電 ${fmt(n(pw.curr_mw)/1000,1)} GW · 尖峰 ${esc(pw.peak_hours||"")}`});}
+  const q=((P.quake||{}).items||[])[0];if(q){const h=(Date.now()-new Date(q.at).getTime())/36e5;items.push({l:"地震",h:h<24?`M${fmt(n(q.mag),1)} ${ago(q.at)}`:"24h 內無",c:h<24?(n(q.mag)>=5?"var(--down)":"var(--warn)"):"var(--up)",s:h<24?q.loc.replace(/\s+/g," ").slice(0,22):`上次 M${fmt(n(q.mag),1)} ${ago(q.at)}`});}
+  const cal=(P.calendar||{});const today=cal.from;const ev=(cal.items||[]).filter(i=>i.date===today);const nx=(cal.items||[]).find(i=>i.date>today);
+  if(cal.items){items.push({l:"今日事件",h:ev.length?ev.map(i=>i.label).join("、"):"今天沒有",c:ev.some(i=>i.kind==="cb")?"var(--warn)":ev.length?"var(--blue)":"var(--dim)",s:nx?`下一個 ${nx.date.slice(5)} ${nx.label}`:""});}
+  if(!items.length){el.hidden=true;return;}
+  el.innerHTML=items.slice(0,6).map(b=>`<div class="b"><div class="l">${esc(b.l)}</div><div class="h" title="${esc(b.h)}"><i style="background:${b.c};box-shadow:0 0 0 3px color-mix(in srgb,${b.c} 22%,transparent)"></i><span>${esc(b.h)}</span></div><div class="s">${esc(b.s||"")}</div></div>`).join("");el.hidden=false;
 }
 function movers(P){
   const list=[];
@@ -631,7 +676,7 @@ function movers(P){
     (P.poly?.items||[]).forEach(it=>push("Polymarket",it.question,n(it.d1),"pt"));
   if(P.taiex){const idx=n(P.taiex.index),ch=n(P.taiex.change);push("大盤","TAIEX",ch/(idx-ch)*100);}
   list.sort((a,b)=>Math.abs(b.v)-Math.abs(a.v));
-  const top=list.slice(0,6);const el=$("#movers");
+  const seen=new Set();const top=list.filter(x=>{const k=x.k+x.t.slice(0,24);if(seen.has(k))return false;seen.add(k);return true;}).slice(0,8);const el=$("#movers");
   if(!top.length){el.hidden=true;return;}
   el.innerHTML=top.map(x=>`<div class="mv"><span class="k">${esc(x.k)}</span><span class="t">${esc(x.t)}</span><span class="v ${cls(x.v)}">${sgn(x.v,x.unit==="pt"?1:2,x.unit==="pt"?" pt":"%")}</span></div>`).join("");
   el.hidden=false;
@@ -687,6 +732,7 @@ $("#geo-city").addEventListener("change",e=>{curCity=e.target.value;try{localSto
 document.querySelectorAll(".mapctl .layer").forEach(b=>b.addEventListener("click",()=>{layersOn[b.dataset.layer]=!layersOn[b.dataset.layer];b.classList.toggle("on",layersOn[b.dataset.layer]);applyGeo();}));
 const mapScript=document.createElement("script");mapScript.src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js";mapScript.onload=()=>{initMap();loadGeo();};document.head.appendChild(mapScript);
 setInterval(loadGeo,5*60e3);
+document.querySelectorAll(".panel.cap").forEach(p=>{const b=document.createElement("button");b.className="more";b.textContent="展開";b.addEventListener("click",()=>{p.classList.toggle("open");b.textContent=p.classList.contains("open")?"收合":"展開";});p.insertBefore(b,p.querySelector(".pf"));});
 /* boot */
 loadAll();setInterval(()=>{if(Date.now()>=nextAt)loadAll();},15e3);
 })();
