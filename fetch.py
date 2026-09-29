@@ -1200,47 +1200,95 @@ def p_tw_market():
 
 
 # ---------- 地圖：停車場剩餘、YouBike、車速（台北／台中） ----------
-GEO_CITIES = {"Taipei": {"label": "台北", "bbox": [121.40, 24.95, 121.70, 25.22]},
-              "Taichung": {"label": "台中", "bbox": [120.50, 24.05, 120.80, 24.32]}}
+# 全台縣市（TDX 代碼）：label、bbox、center、zoom。圖層有無由 TDX 回應決定（404 記在靜態快取，一天重試一次）
+GEO_CITIES = {
+    "Taipei": {"label": "台北市", "bbox": [121.45, 24.95, 121.67, 25.22], "center": [121.54, 25.05], "zoom": 11.3},
+    "NewTaipei": {"label": "新北市", "bbox": [121.28, 24.67, 122.01, 25.30], "center": [121.50, 25.02], "zoom": 10.2},
+    "Keelung": {"label": "基隆市", "bbox": [121.62, 25.05, 121.82, 25.20], "center": [121.74, 25.13], "zoom": 12},
+    "Taoyuan": {"label": "桃園市", "bbox": [121.00, 24.60, 121.45, 25.12], "center": [121.25, 24.95], "zoom": 10.8},
+    "Hsinchu": {"label": "新竹市", "bbox": [120.88, 24.72, 121.05, 24.86], "center": [120.97, 24.80], "zoom": 12},
+    "HsinchuCounty": {"label": "新竹縣", "bbox": [120.90, 24.40, 121.40, 24.95], "center": [121.10, 24.75], "zoom": 10.5},
+    "MiaoliCounty": {"label": "苗栗縣", "bbox": [120.60, 24.25, 121.30, 24.75], "center": [120.90, 24.50], "zoom": 10.3},
+    "Taichung": {"label": "台中市", "bbox": [120.45, 23.95, 121.35, 24.45], "center": [120.68, 24.16], "zoom": 11},
+    "ChanghuaCounty": {"label": "彰化縣", "bbox": [120.25, 23.80, 120.75, 24.20], "center": [120.50, 24.00], "zoom": 10.8},
+    "NantouCounty": {"label": "南投縣", "bbox": [120.60, 23.40, 121.35, 24.20], "center": [120.90, 23.85], "zoom": 9.8},
+    "YunlinCounty": {"label": "雲林縣", "bbox": [120.10, 23.50, 120.75, 23.85], "center": [120.40, 23.70], "zoom": 10.8},
+    "Chiayi": {"label": "嘉義市", "bbox": [120.38, 23.43, 120.52, 23.53], "center": [120.45, 23.48], "zoom": 12.5},
+    "ChiayiCounty": {"label": "嘉義縣", "bbox": [120.10, 23.20, 120.95, 23.65], "center": [120.40, 23.45], "zoom": 10.3},
+    "Tainan": {"label": "台南市", "bbox": [120.00, 22.88, 120.70, 23.45], "center": [120.20, 23.00], "zoom": 11},
+    "Kaohsiung": {"label": "高雄市", "bbox": [120.15, 22.45, 121.05, 23.50], "center": [120.32, 22.63], "zoom": 11},
+    "PingtungCounty": {"label": "屏東縣", "bbox": [120.35, 21.85, 120.95, 22.90], "center": [120.50, 22.55], "zoom": 10.3},
+    "YilanCounty": {"label": "宜蘭縣", "bbox": [121.30, 24.30, 122.00, 24.95], "center": [121.70, 24.70], "zoom": 10.3},
+    "HualienCounty": {"label": "花蓮縣", "bbox": [120.90, 23.10, 121.80, 24.40], "center": [121.55, 23.90], "zoom": 9.5},
+    "TaitungCounty": {"label": "台東縣", "bbox": [120.70, 21.90, 121.65, 23.45], "center": [121.10, 22.75], "zoom": 9.5},
+    "PenghuCounty": {"label": "澎湖縣", "bbox": [119.30, 23.20, 119.75, 23.80], "center": [119.58, 23.57], "zoom": 11},
+    "KinmenCounty": {"label": "金門縣", "bbox": [118.15, 24.35, 118.55, 24.55], "center": [118.35, 24.45], "zoom": 11.5},
+    "LienchiangCounty": {"label": "連江縣", "bbox": [119.85, 25.90, 120.55, 26.40], "center": [119.95, 26.15], "zoom": 10.5},
+}
 GEO_STATIC_PATH = DATA / "geo_static.json"
 GEO_PATH = DATA / "geo.json"
+GEO_ERRS: list = []
 
 
 def _in_bbox(lon, lat, b):
     return lon is not None and lat is not None and b[0] <= lon <= b[2] and b[1] <= lat <= b[3]
 
 
+def _tdx_opt(path, **params):
+    """TDX 呼叫；404／空表示該縣市沒有這個資料集 → 回 None，不當錯誤。"""
+    try:
+        out = tdx(path, **params)
+    except requests.HTTPError as e:
+        if e.response is not None and e.response.status_code in (404, 400):
+            return None
+        raise
+    if isinstance(out, dict):
+        for k in ("CarParks", "VDs", "ParkingAvailabilities", "VDLives", "ETagPairs", "ETagPairLives"):
+            if k in out:
+                return out[k] or None
+        return out or None
+    return out or None
+
+
 def _geo_static():
-    """靜態表（停車場座標、YouBike 站點、國道 ETag 路段幾何、台北 VD 位置）每天更新一次。"""
+    """靜態表（停車場座標、YouBike 站點、各縣市 VD 位置、國道 ETag 路段幾何）每天更新一次；沒有的圖層記 avail=False。"""
     st = {}
     if GEO_STATIC_PATH.exists():
         try:
             st = json.loads(GEO_STATIC_PATH.read_text(encoding="utf-8"))
             t = datetime.fromisoformat(st.get("fetchedAt", "2000-01-01T00:00:00+00:00").replace("Z", "+00:00"))
-            if NOW - t < timedelta(hours=24) and st.get("carparks") and st.get("bikes"):
+            if NOW - t < timedelta(hours=24) and st.get("bikes") and st.get("avail"):
                 return st
         except Exception:
             st = {}
-    out = {"fetchedAt": NOW_ISO, "carparks": {}, "bikes": {}, "vd": {}, "etag": []}
+    out = {"fetchedAt": NOW_ISO, "carparks": {}, "bikes": {}, "vd": {}, "etag": [], "avail": {}}
     for city in GEO_CITIES:
+        av = {"parking": False, "bikes": False, "vd": False}
         try:
-            cps = tdx(f"v1:Parking/OffStreet/CarPark/City/{city}").get("CarParks", [])
-            out["carparks"][city] = {c["CarParkID"]: [round(c["CarParkPosition"]["PositionLon"], 5), round(c["CarParkPosition"]["PositionLat"], 5),
-                                                      (c.get("CarParkName") or {}).get("Zh_tw", "")] for c in cps if c.get("CarParkPosition", {}).get("PositionLat")}
+            cps = _tdx_opt(f"v1:Parking/OffStreet/CarPark/City/{city}")
+            if cps:
+                out["carparks"][city] = {c["CarParkID"]: [round(c["CarParkPosition"]["PositionLon"], 5), round(c["CarParkPosition"]["PositionLat"], 5),
+                                                          (c.get("CarParkName") or {}).get("Zh_tw", "")] for c in cps if (c.get("CarParkPosition") or {}).get("PositionLat")}
+                av["parking"] = bool(out["carparks"][city])
         except Exception as e:  # noqa: BLE001
-            log("geo carpark static", city, e); GEO_ERRS.append(f"geo carpark static {city}: " + safe_err(e))
+            log("geo carpark static", city, e); GEO_ERRS.append(f"carpark static {city}: " + safe_err(e))
         try:
-            sts = tdx(f"Bike/Station/City/{city}")
-            out["bikes"][city] = {b["StationUID"]: [round(b["StationPosition"]["PositionLon"], 5), round(b["StationPosition"]["PositionLat"], 5),
-                                                    (b.get("StationName") or {}).get("Zh_tw", "").replace("YouBike2.0_", ""), b.get("BikesCapacity") or 0]
-                                  for b in sts if b.get("StationPosition", {}).get("PositionLat")}
+            sts = _tdx_opt(f"Bike/Station/City/{city}")
+            if sts:
+                out["bikes"][city] = {b["StationUID"]: [round(b["StationPosition"]["PositionLon"], 5), round(b["StationPosition"]["PositionLat"], 5),
+                                                        (b.get("StationName") or {}).get("Zh_tw", "").replace("YouBike2.0_", ""), b.get("BikesCapacity") or 0]
+                                      for b in sts if (b.get("StationPosition") or {}).get("PositionLat")}
+                av["bikes"] = bool(out["bikes"][city])
         except Exception as e:  # noqa: BLE001
-            log("geo bike static", city, e); GEO_ERRS.append(f"geo bike static {city}: " + safe_err(e))
-    try:
-        vds = tdx("Road/Traffic/VD/City/Taipei").get("VDs", [])
-        out["vd"]["Taipei"] = {v["VDID"]: [round(v["PositionLon"], 5), round(v["PositionLat"], 5), v.get("RoadName", "")] for v in vds if v.get("PositionLat")}
-    except Exception as e:  # noqa: BLE001
-        log("geo vd static", e); GEO_ERRS.append("geo vd static: " + safe_err(e))
+            log("geo bike static", city, e); GEO_ERRS.append(f"bike static {city}: " + safe_err(e))
+        try:
+            vds = _tdx_opt(f"Road/Traffic/VD/City/{city}")
+            if vds:
+                out["vd"][city] = {v["VDID"]: [round(v["PositionLon"], 5), round(v["PositionLat"], 5), v.get("RoadName", "")] for v in vds if v.get("PositionLat")}
+                av["vd"] = bool(out["vd"][city])
+        except Exception as e:  # noqa: BLE001
+            log("geo vd static", city, e); GEO_ERRS.append(f"vd static {city}: " + safe_err(e))
+        out["avail"][city] = av
     try:
         for ep in tdx("Road/Traffic/ETagPair/Freeway").get("ETagPairs", []):
             g = ep.get("Geometry") or ""
@@ -1248,73 +1296,73 @@ def _geo_static():
             if pts:
                 out["etag"].append([ep["ETagPairID"], ep.get("Description", ""), [[round(float(a), 4), round(float(b), 4)] for a, b in pts[::max(1, len(pts) // 12)]]])
     except Exception as e:  # noqa: BLE001
-        log("geo etag static", e); GEO_ERRS.append("geo etag static: " + safe_err(e))
-    if out["carparks"] and out["bikes"]:
+        log("geo etag static", e); GEO_ERRS.append("etag static: " + safe_err(e))
+    if out["bikes"]:
         write_json(GEO_STATIC_PATH, out, separators=(",", ":"))
     return out
-
-
-GEO_ERRS = []
 
 
 def p_geo():
     GEO_ERRS.clear()
     st = _geo_static()
-    geo = {"generatedAt": NOW_ISO, "cities": {}}
-    # 停車場
-    for city, meta in GEO_CITIES.items():
-        c = {"parking": [], "bikes": [], "speed": [], "freeway": []}
-        try:
-            for r in tdx(f"v1:Parking/OffStreet/ParkingAvailability/City/{city}").get("ParkingAvailabilities", []):
-                pos = st["carparks"].get(city, {}).get(r.get("CarParkID"))
-                if not pos:
-                    continue
-                total, avail = r.get("TotalSpaces"), r.get("AvailableSpaces")
-                car = next((a for a in r.get("Availabilities") or [] if a.get("SpaceType") == 1), None)
-                if car and car.get("NumberOfSpaces"):
-                    total, avail = car["NumberOfSpaces"], car.get("AvailableSpaces")
-                if not total or avail is None or avail < 0 or total < 20:
-                    continue
-                c["parking"].append([pos[0], pos[1], int(avail), int(total), pos[2][:18]])
-        except Exception as e:  # noqa: BLE001
-            log("geo parking", city, e); GEO_ERRS.append(f"geo parking {city}: " + safe_err(e))
-        try:
-            for r in tdx(f"Bike/Availability/City/{city}"):
-                pos = st["bikes"].get(city, {}).get(r.get("StationUID"))
-                if pos and r.get("ServiceStatus", 1) == 1:
-                    c["bikes"].append([pos[0], pos[1], int(r.get("AvailableRentBikes") or 0), int(pos[3] or 0), pos[2][:14]])
-        except Exception as e:  # noqa: BLE001
-            log("geo bikes", city, e); GEO_ERRS.append(f"geo bikes {city}: " + safe_err(e))
+    avail = st.get("avail", {})
+    geo = {"generatedAt": NOW_ISO, "labels": {k: v["label"] for k, v in GEO_CITIES.items()},
+           "views": {k: [v["center"], v["zoom"]] for k, v in GEO_CITIES.items()}, "avail": avail, "cities": {}, "freeway": []}
+    for city in GEO_CITIES:
+        c = {"parking": [], "bikes": [], "speed": []}
+        av = avail.get(city, {})
+        if av.get("parking"):
+            try:
+                for r in _tdx_opt(f"v1:Parking/OffStreet/ParkingAvailability/City/{city}") or []:
+                    pos = st["carparks"].get(city, {}).get(r.get("CarParkID"))
+                    if not pos:
+                        continue
+                    total, avail_n = r.get("TotalSpaces"), r.get("AvailableSpaces")
+                    car = next((a for a in r.get("Availabilities") or [] if a.get("SpaceType") == 1), None)
+                    if car and car.get("NumberOfSpaces"):
+                        total, avail_n = car["NumberOfSpaces"], car.get("AvailableSpaces")
+                    if not total or avail_n is None or avail_n < 0 or total < 20:
+                        continue
+                    c["parking"].append([pos[0], pos[1], int(avail_n), int(total), pos[2][:18]])
+            except Exception as e:  # noqa: BLE001
+                log("geo parking", city, e); GEO_ERRS.append(f"parking {city}: " + safe_err(e))
+        if av.get("bikes"):
+            try:
+                for r in _tdx_opt(f"Bike/Availability/City/{city}") or []:
+                    pos = st["bikes"].get(city, {}).get(r.get("StationUID"))
+                    if pos and r.get("ServiceStatus", 1) == 1:
+                        c["bikes"].append([pos[0], pos[1], int(r.get("AvailableRentBikes") or 0), int(pos[3] or 0), pos[2][:14]])
+            except Exception as e:  # noqa: BLE001
+                log("geo bikes", city, e); GEO_ERRS.append(f"bikes {city}: " + safe_err(e))
+        if av.get("vd"):
+            try:
+                for v in _tdx_opt(f"Road/Traffic/Live/VD/City/{city}") or []:
+                    pos = st["vd"].get(city, {}).get(v.get("VDID"))
+                    if not pos:
+                        continue
+                    sp = [ln.get("Speed") for lf in v.get("LinkFlows") or [] for ln in lf.get("Lanes") or [] if (ln.get("Speed") or 0) > 0]
+                    if sp:
+                        c["speed"].append([pos[0], pos[1], round(sum(sp) / len(sp)), pos[2][:10]])
+            except Exception as e:  # noqa: BLE001
+                log("geo vd live", city, e); GEO_ERRS.append(f"vd {city}: " + safe_err(e))
         geo["cities"][city] = c
-    # 台北市區 VD 車速
-    try:
-        for v in tdx("Road/Traffic/Live/VD/City/Taipei").get("VDLives", []):
-            pos = st["vd"].get("Taipei", {}).get(v.get("VDID"))
-            if not pos:
-                continue
-            sp = [ln.get("Speed") for lf in v.get("LinkFlows") or [] for ln in lf.get("Lanes") or [] if (ln.get("Speed") or 0) > 0]
-            if sp:
-                geo["cities"]["Taipei"]["speed"].append([pos[0], pos[1], round(sum(sp) / len(sp)), pos[2][:10]])
-    except Exception as e:  # noqa: BLE001
-        log("geo vd live", e); GEO_ERRS.append("geo vd live: " + safe_err(e))
-    # 國道 ETag 路段車速（畫線）
+    # 國道 ETag 路段車速（全台，畫線）
     try:
         live = {pr["ETagPairID"]: next((f["SpaceMeanSpeed"] for f in pr.get("Flows", []) if f.get("VehicleType") == 31 and (f.get("SpaceMeanSpeed") or 0) > 0), None)
                 for pr in tdx("Road/Traffic/Live/ETag/Freeway").get("ETagPairLives", [])}
         for pid, desc, pts in st.get("etag", []):
             spd = live.get(pid)
-            if spd is None:
-                continue
-            for city, meta in GEO_CITIES.items():
-                if any(_in_bbox(x, y, meta["bbox"]) for x, y in pts):
-                    geo["cities"][city]["freeway"].append([pts, round(spd), desc[:16]])
+            if spd is not None:
+                geo["freeway"].append([pts, round(spd), desc[:16]])
     except Exception as e:  # noqa: BLE001
-        log("geo etag live", e); GEO_ERRS.append("geo etag live: " + safe_err(e))
+        log("geo etag live", e); GEO_ERRS.append("etag live: " + safe_err(e))
     write_json(GEO_PATH, geo, separators=(",", ":"))
-    summary = {city: {k: len(v) for k, v in c.items()} for city, c in geo["cities"].items()}
-    if not any(sum(v.values()) for v in summary.values()):
-        raise RuntimeError(f"geo: nothing errs={GEO_ERRS[:6]} (static: carparks={ {k: len(v) for k, v in st.get('carparks', {}).items()} } bikes={ {k: len(v) for k, v in st.get('bikes', {}).items()} } vd={len(st.get('vd', {}).get('Taipei', {}))} etag={len(st.get('etag', []))})")
-    return {"label": "TDX", "counts": summary, "errs": GEO_ERRS[:12]}
+    summary = {city: {k: len(v) for k, v in c.items() if v} for city, c in geo["cities"].items()}
+    summary = {k: v for k, v in summary.items() if v}
+    if not summary and not geo["freeway"]:
+        raise RuntimeError(f"geo: nothing errs={GEO_ERRS[:6]}")
+    return {"label": "TDX", "cities_with_data": len(summary), "freeway": len(geo["freeway"]),
+            "totals": {k: sum(c.get(k, 0) for c in summary.values()) for k in ("parking", "bikes", "speed")}, "errs": GEO_ERRS[:12]}
 
 
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
@@ -1717,7 +1765,7 @@ run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=6)
 run("weather", p_weather)
 run("tw_pulse", p_tw_pulse)
-run("geo", p_geo)
+run("geo", p_geo, keep_if_fresh_hours=0.15)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)

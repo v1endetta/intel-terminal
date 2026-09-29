@@ -108,7 +108,8 @@ a:hover{text-decoration:underline}
 .mapctl{position:absolute;top:8px;left:8px;z-index:2;display:flex;gap:6px;flex-wrap:wrap}
 .mapctl button{background:color-mix(in srgb,var(--panel) 85%,transparent);color:var(--text);border:1px solid var(--line2);border-radius:3px;padding:4px 9px;font:11.5px var(--mono);cursor:pointer;backdrop-filter:blur(4px)}
 .mapctl button.on{border-color:var(--blue);color:var(--blue)}
-.mapctl button.city.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.mapctl select{background:color-mix(in srgb,var(--panel) 85%,transparent);color:var(--text);border:1px solid var(--blue);border-radius:3px;padding:4px 8px;font:11.5px var(--mono);backdrop-filter:blur(4px)}
+.mapctl .avail{font:10.5px var(--mono);color:var(--dim);align-self:center}
 .maplegend{position:absolute;bottom:8px;left:8px;z-index:2;background:color-mix(in srgb,var(--panel) 85%,transparent);border:1px solid var(--line);border-radius:3px;padding:6px 9px;font:10.5px var(--mono);color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;backdrop-filter:blur(4px)}
 .maplegend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:-1px}
 .maplibregl-ctrl-attrib{font-size:9px!important;background:rgba(0,0,0,.4)!important;color:#888!important}
@@ -212,14 +213,14 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   </section>
 
   <section class="panel w12" id="p-geo">
-    <div class="ph"><h2>Map</h2><span class="zh">現在人在哪 · 停車場剩餘、YouBike、車速</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>Map</h2><span class="zh">全台 · 停車場剩餘、YouBike、車速</span><span class="meta">排程</span></div>
     <div class="pb" style="padding:6px">
       <div class="mapwrap"><div id="map"></div>
-        <div class="mapctl"><button class="city on" data-city="Taipei">台北</button><button class="city" data-city="Taichung">台中</button><span style="width:6px"></span><button class="layer on" data-layer="parking">停車場</button><button class="layer on" data-layer="bikes">YouBike</button><button class="layer on" data-layer="speed">車速</button></div>
+        <div class="mapctl"><select id="geo-city"><option value="all">全台（國道）</option></select><span id="geo-avail" class="avail"></span><span style="width:6px"></span><button class="layer on" data-layer="parking">停車場</button><button class="layer on" data-layer="bikes">YouBike</button><button class="layer on" data-layer="speed">車速</button></div>
         <div class="maplegend"><span><i style="background:#F0524F"></i>停車場快滿／車速慢</span><span><i style="background:#E0A23A"></i>中</span><span><i style="background:#39B978"></i>有位／順暢</span><span>圓越大＝停車場越大 · YouBike 空心＝沒車</span><span id="geo-age"></span></div>
       </div>
     </div>
-    <div class="pf"><a href="https://tdx.transportdata.tw/" target="_blank" rel="noopener">TDX</a><span>路外停車場汽車位每 5 分鐘 · YouBike 每 5 分鐘 · 台北市區 VD 與國道 ETag 區間速率 · 底圖 OpenFreeMap</span></div>
+    <div class="pf"><a href="https://tdx.transportdata.tw/" target="_blank" rel="noopener">TDX</a><span>全台縣市 · 路外停車場汽車位 · YouBike · 市區 VD 車速（有佈設的縣市）· 國道 ETag 區間速率 · 每 10 分鐘 · 底圖 OpenFreeMap</span></div>
   </section>
 
   <section class="panel w6" id="p-tenders">
@@ -558,13 +559,13 @@ function movers(P){
 }
 /* ---------- map ---------- */
 const GEO_URL="https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/geo.json";
-const CITY_VIEW={Taipei:{center:[121.54,25.05],zoom:11.3},Taichung:{center:[120.66,24.16],zoom:11.3}};
-let map=null,mapReady=false,geoData=null,curCity="Taipei",layersOn={parking:true,bikes:true,speed:true},lastGeoGen=null;
+const TW_VIEW={center:[120.95,23.75],zoom:6.9};
+let map=null,mapReady=false,geoData=null,curCity=(()=>{try{return localStorage.getItem("geo-city")||"all";}catch(e){return"all";}})(),layersOn={parking:true,bikes:true,speed:true},lastGeoGen=null;
 const spdColor=v=>v<40?"#F0524F":v<60?"#E0A23A":"#39B978";
 const parkColor=r=>r<0.1?"#F0524F":r<0.3?"#E0A23A":"#39B978";
 function initMap(){
   if(!window.maplibregl||map)return;
-  map=new maplibregl.Map({container:"map",style:"https://tiles.openfreemap.org/styles/dark",center:CITY_VIEW.Taipei.center,zoom:CITY_VIEW.Taipei.zoom,attributionControl:{compact:true}});
+  map=new maplibregl.Map({container:"map",style:"https://tiles.openfreemap.org/styles/dark",center:TW_VIEW.center,zoom:TW_VIEW.zoom,attributionControl:{compact:true}});
   map.addControl(new maplibregl.NavigationControl({showCompass:false}),"top-right");
   map.on("load",()=>{
     map.addSource("freeway",{type:"geojson",data:{type:"FeatureCollection",features:[]}});
@@ -577,25 +578,33 @@ function initMap(){
     map.addLayer({id:"speed",type:"circle",source:"speed",paint:{"circle-radius":3.5,"circle-color":["get","color"],"circle-opacity":.9}});
     const pop=new maplibregl.Popup({closeButton:false,closeOnClick:false});
     ["parking","bikes","speed","freeway"].forEach(id=>{map.on("mouseenter",id,e=>{map.getCanvas().style.cursor="pointer";const f=e.features[0];const c=id==="freeway"?e.lngLat:f.geometry.coordinates;pop.setLngLat(c).setHTML(f.properties.label).addTo(map);});map.on("mouseleave",id,()=>{map.getCanvas().style.cursor="";pop.remove();});});
-    mapReady=true;applyGeo();
+    mapReady=true;applyGeo();if(geoData&&curCity!=="all")map.jumpTo(cityView(curCity));
   });
 }
+function cityView(c){const v=(geoData&&geoData.views||{})[c];return v?{center:v[0],zoom:v[1]}:TW_VIEW;}
+function fillCitySelect(){const sel=$("#geo-city");if(!geoData||sel.dataset.filled)return;const labels=geoData.labels||{};const av=geoData.avail||{};
+  Object.keys(labels).forEach(k=>{const o=document.createElement("option");o.value=k;const a=av[k]||{};const n=["parking","bikes","vd"].filter(x=>a[x]).length;o.textContent=labels[k]+(n?"":"（僅國道）");sel.appendChild(o);});
+  sel.dataset.filled="1";if(labels[curCity]||curCity==="all")sel.value=curCity;else{curCity="all";sel.value="all";}}
 function applyGeo(){
   if(!map||!mapReady||!geoData)return;
+  fillCitySelect();
   const c=(geoData.cities||{})[curCity]||{};
   map.getSource("parking").setData({type:"FeatureCollection",features:(c.parking||[]).map(p=>({type:"Feature",geometry:{type:"Point",coordinates:[p[0],p[1]]},properties:{total:p[3],color:parkColor(p[2]/p[3]),label:`${esc(p[4])}<br>剩 ${p[2]} / ${p[3]} 位`}}))});
   map.getSource("bikes").setData({type:"FeatureCollection",features:(c.bikes||[]).map(b=>({type:"Feature",geometry:{type:"Point",coordinates:[b[0],b[1]]},properties:{rent:b[2],label:`${esc(b[4])}<br>可借 ${b[2]} / ${b[3]}`}}))});
   map.getSource("speed").setData({type:"FeatureCollection",features:(c.speed||[]).map(v=>({type:"Feature",geometry:{type:"Point",coordinates:[v[0],v[1]]},properties:{color:spdColor(v[2]),label:`${esc(v[3])}<br>${v[2]} km/h`}}))});
-  map.getSource("freeway").setData({type:"FeatureCollection",features:(c.freeway||[]).map(f=>({type:"Feature",geometry:{type:"LineString",coordinates:f[0]},properties:{color:spdColor(f[1]),label:`${esc(f[2])}<br>${f[1]} km/h`}}))});
+  map.getSource("freeway").setData({type:"FeatureCollection",features:(geoData.freeway||[]).map(f=>({type:"Feature",geometry:{type:"LineString",coordinates:f[0]},properties:{color:spdColor(f[1]),label:`${esc(f[2])}<br>${f[1]} km/h`}}))});
   Object.entries(layersOn).forEach(([k,on])=>{map.setLayoutProperty(k,"visibility",on?"visible":"none");if(k==="speed")map.setLayoutProperty("freeway","visibility",on?"visible":"none");});
+  const a=(geoData.avail||{})[curCity]||{};const have=[a.parking?"停車場":null,a.bikes?"YouBike":null,a.vd?"車速":null].filter(Boolean);
+  $("#geo-avail").textContent=curCity==="all"?"國道車速":(have.length?"有："+have.join("、"):"此縣市只有國道");
   $("#geo-age").textContent=geoData.generatedAt?"資料 "+ago(geoData.generatedAt):"";
-  const n=(c.parking||[]).length+(c.bikes||[]).length;setMeta("p-geo",{updatedAt:geoData.generatedAt,label:`${curCity==="Taipei"?"台北":"台中"} · ${n} 點`},0.5);
+  const n=(c.parking||[]).length+(c.bikes||[]).length+(c.speed||[]).length;const lab=curCity==="all"?"全台":((geoData.labels||{})[curCity]||curCity);
+  setMeta("p-geo",{updatedAt:geoData.generatedAt,label:`${lab} · ${curCity==="all"?(geoData.freeway||[]).length+" 段國道":n+" 點"}`},0.5);
 }
 async function loadGeo(){
-  try{const r=await fetch(GEO_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const g=await r.json();if(g.generatedAt===lastGeoGen)return;lastGeoGen=g.generatedAt;geoData=g;applyGeo();}
+  try{const r=await fetch(GEO_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const g=await r.json();if(g.generatedAt===lastGeoGen)return;const first=!geoData;lastGeoGen=g.generatedAt;geoData=g;applyGeo();if(first&&mapReady&&curCity!=="all")map.jumpTo(cityView(curCity));}
   catch(e){$("#geo-age").textContent="地圖資料抓不到";}
 }
-document.querySelectorAll(".mapctl .city").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".mapctl .city").forEach(x=>x.classList.toggle("on",x===b));curCity=b.dataset.city;map&&map.flyTo({...CITY_VIEW[curCity],duration:900});applyGeo();}));
+$("#geo-city").addEventListener("change",e=>{curCity=e.target.value;try{localStorage.setItem("geo-city",curCity);}catch(x){}map&&map.flyTo({...cityView(curCity),duration:900});applyGeo();});
 document.querySelectorAll(".mapctl .layer").forEach(b=>b.addEventListener("click",()=>{layersOn[b.dataset.layer]=!layersOn[b.dataset.layer];b.classList.toggle("on",layersOn[b.dataset.layer]);applyGeo();}));
 const mapScript=document.createElement("script");mapScript.src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js";mapScript.onload=()=>{initMap();loadGeo();};document.head.appendChild(mapScript);
 setInterval(loadGeo,5*60e3);

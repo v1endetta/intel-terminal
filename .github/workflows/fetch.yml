@@ -63,7 +63,7 @@ jobs:
             # 每輪先同步到遠端最新（含你手改的 macro.json），任何殘留的 rebase 一律放棄
             git rebase --abort 2>/dev/null || true
             git fetch -q origin data && git reset -q --hard origin/data
-            if (cd .. && timeout 600 python fetch.py); then
+            if (cd .. && timeout 900 python fetch.py); then
               # 金鑰防線：任何 secret 的實際值若出現在要 commit 的資料裡，整輪丟棄
               leak=0
               for v in "$FRED_API_KEY" "$FINMIND_TOKEN" "$REDDIT_CLIENT_ID" "$REDDIT_CLIENT_SECRET" "$CWA_API_KEY" "$TDX_CLIENT_ID" "$TDX_CLIENT_SECRET" "$GUARDIAN_API_KEY"; do
