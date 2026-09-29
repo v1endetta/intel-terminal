@@ -256,8 +256,8 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   </section>
 
   <section class="panel w6" id="p-twpulse">
-    <div class="ph"><h2>Taiwan Pulse</h2><span class="zh">台灣脈搏 · YouBike 與國道</span><span class="meta">排程</span></div>
-    <div class="pb"><div class="empty">等待 TDX 金鑰</div></div>
+    <div class="ph"><h2>Taiwan Pulse</h2><span class="zh">全台脈搏 · YouBike、停車場、國道</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://tdx.transportdata.tw/" target="_blank" rel="noopener">TDX</a><span>YouBike 可借車數每 5 分鐘 · 國道 ETag 區間小客車平均速率</span></div>
   </section>
 
@@ -473,10 +473,10 @@ const renderers={
       <div class="fc">${(c.forecast||[]).map(f=>`<div>${esc(f.start||"")}<b>${esc(f.wx||"")}</b>${esc(f.minT||"")}–${esc(f.maxT||"")}° · 降雨 ${esc(f.pop||"")}%</div>`).join("")}</div></div>`).join("");
     const w=(d.warnings||[]).length?`<div class="warn">特報：${d.warnings.map(x=>esc(x.where+" "+x.what+(x.level?"("+x.level+")":""))).join("、")}</div>`:"";
     body("p-weather").innerHTML=`<div class="wx">${cards}</div>${w}`;setMeta("p-weather",d,1);},
-  tw_pulse(d){const bikes=(d.bikes||[]).map(b=>`<tr><td class="name">${esc(b.city)}<span class="sub">${b.stations} 站</span>${mini(b.spark)}</td><td class="r num${K("yb:"+b.city,n(b.rent))}">${fmt(n(b.rent),0)}</td><td class="r num ${b.empty>b.stations*0.15?"bad":""}">${b.empty}</td><td class="r num">${b.full}</td></tr>`).join("");
+  tw_pulse(d){const bikes=(d.bikes||[]).map(b=>`<tr><td class="name">${esc(b.city)}<span class="sub">${b.stations} 站</span>${mini(b.spark)}</td><td class="r num${K("yb:"+b.city,n(b.rent))}">${fmt(n(b.rent),0)}</td><td class="r num ${b.empty>b.stations*0.15?"bad":""}">${b.empty}</td><td class="r num">${b.full}</td><td class="r num ${b.park_pct!=null?(n(b.park_pct)<10?"bad":n(b.park_pct)>=30?"up":""):""}">${b.park_pct!=null?fmt(n(b.park_pct),0)+"%":"—"}</td></tr>`).join("");
     const roads=(d.roads||[]).map(r=>`<tr><td class="name">${esc(r.road)} ${esc(r.dir)}向${mini(r.spark)}</td><td class="r num ${n(r.speed)<60?"bad":n(r.speed)>=80?"up":""}${K("fw:"+r.road+r.dir,n(r.speed))}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td></tr>`).join("");
     const jams=(d.jams||[]).map(j=>`<li><span class="t">${esc(j.section)}</span><span class="m bad">${fmt(n(j.speed),0)} km/h</span></li>`).join("");
-    body("p-twpulse").innerHTML=`<div class="tp"><div><h3>YouBike 可借</h3><table><tr><th>城市</th><th class="r">可借車</th><th class="r">空站</th><th class="r">滿站</th></tr>${bikes}</table></div>
+    body("p-twpulse").innerHTML=`<div class="tp"><div><h3>YouBike 可借</h3><table><tr><th>縣市</th><th class="r">可借車</th><th class="r">空站</th><th class="r">滿站</th><th class="r">停車剩</th></tr>${bikes}</table></div>
       <div><h3>國道小客車均速</h3><table>${roads}</table>${jams?`<h3 style="margin-top:8px">最塞區間</h3><ul class="list">${jams}</ul>`:""}</div></div>`;setMeta("p-twpulse",d,1);},
   news(d){const li=(arr,kw)=>arr.map(it=>`<li>${kw?`<span class="kw">${esc((it.kw||"").split(" ")[0].slice(0,5))}</span>`:`<span class="src">${esc(it.source)}</span>`}<span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`).join("");
     const g=(d.signals||{}).gdelt,w=(d.signals||{}).wiki;let sig="";

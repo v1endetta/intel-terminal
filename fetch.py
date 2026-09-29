@@ -1033,17 +1033,49 @@ def tdx(path, **params):
 
 
 def p_tw_pulse():
+    """全台脈搏：沿用地圖那一輪的 TDX 快取（不多打 API）。YouBike／停車場依縣市，國道依路線方向。"""
+    st = {}
+    if GEO_STATIC_PATH.exists():
+        try:
+            st = json.loads(GEO_STATIC_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            st = {}
+    avail = st.get("avail", {})
+    key = NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M")
     bikes = []
-    for city, label in (("Taipei", "台北"), ("Taichung", "台中")):
-        rows = tdx(f"Bike/Availability/City/{city}")
+    for city, meta in GEO_CITIES.items():
+        if not avail.get(city, {}).get("bikes"):
+            continue
+        try:
+            rows = _tdx_opt(f"Bike/Availability/City/{city}") or []
+        except Exception as e:  # noqa: BLE001
+            log("tw_pulse bikes", city, e); continue
         rows = [r for r in rows if r.get("ServiceStatus", 1) == 1]
+        if not rows:
+            continue
         rent = sum(r.get("AvailableRentBikes") or 0 for r in rows)
         empty = sum(1 for r in rows if (r.get("AvailableRentBikes") or 0) == 0)
         full = sum(1 for r in rows if (r.get("AvailableReturnBikes") or 0) == 0)
-        key = NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M")
+        label = meta["label"].replace("市", "").replace("縣", "")
         hist_put("youbike", label, key, rent)
-        bikes.append({"city": label, "stations": len(rows), "rent": rent, "empty": empty, "full": full,
+        park = None
+        if avail.get(city, {}).get("parking"):
+            try:
+                tot = av_ = 0
+                for r in _tdx_opt(f"v1:Parking/OffStreet/ParkingAvailability/City/{city}") or []:
+                    t_, a_ = r.get("TotalSpaces"), r.get("AvailableSpaces")
+                    car = next((a for a in r.get("Availabilities") or [] if a.get("SpaceType") == 1), None)
+                    if car and car.get("NumberOfSpaces"):
+                        t_, a_ = car["NumberOfSpaces"], car.get("AvailableSpaces")
+                    if t_ and a_ is not None and a_ >= 0 and t_ >= 20:
+                        tot += t_; av_ += a_
+                if tot:
+                    park = round(av_ / tot * 100, 1)
+            except Exception as e:  # noqa: BLE001
+                log("tw_pulse parking", city, e)
+        bikes.append({"city": label, "stations": len(rows), "rent": rent, "empty": empty, "full": full, "park_pct": park,
                       "spark": hist_get("youbike", label, 48)})
+    bikes.sort(key=lambda b: -b["stations"])
     # 國道：各國道南北向小客車平均區間速率
     live = tdx("Road/Traffic/Live/ETag/Freeway")
     agg = {}
@@ -1063,24 +1095,20 @@ def p_tw_pulse():
     for (no, d), (w, c) in sorted(agg.items()):
         if no in ("01", "03", "05") and c > 0:
             spd = w / c
-            hist_put("freeway", f"{no}{d}", NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M"), round(spd, 1))
+            hist_put("freeway", f"{no}{d}", key, round(spd, 1))
             roads.append({"road": f"國道{int(no)}", "dir": dirn.get(d, d), "speed": round(spd, 1), "count": c,
                           "spark": hist_get("freeway", f"{no}{d}", 48)})
-    # 最塞的三個區間
+    # 最塞的區間（名稱來自地圖的靜態表）
+    names = {pid: desc for pid, desc, _ in st.get("etag", [])}
     worst = []
     for pr in live.get("ETagPairLives", []):
         for fl in pr.get("Flows", []):
             if fl.get("VehicleType") == 31 and 0 < (fl.get("SpaceMeanSpeed") or 0) < 40 and (fl.get("VehicleCount") or 0) >= 30:
                 worst.append((fl["SpaceMeanSpeed"], pr.get("ETagPairID")))
     worst.sort()
-    names = {}
-    if worst:
-        try:
-            for ep in tdx("Road/Traffic/ETagPair/Freeway").get("ETagPairs", []):
-                names[ep.get("ETagPairID")] = ep.get("Description")
-        except Exception as e:  # noqa: BLE001
-            log("etagpair names", e)
-    jams = [{"section": names.get(pid, pid), "speed": round(spd, 0)} for spd, pid in worst[:5]]
+    jams = [{"section": names.get(pid, pid), "speed": round(spd, 0)} for spd, pid in worst[:6]]
+    if not bikes and not roads:
+        raise RuntimeError("tw_pulse: nothing")
     return {"label": "TDX", "bikes": bikes, "roads": roads, "jams": jams, "roadTime": live.get("UpdateTime")}
 
 
@@ -2160,7 +2188,6 @@ run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=6)
 run("gmacro", p_gmacro, keep_if_fresh_hours=6)
 run("weather", p_weather)
-run("tw_pulse", p_tw_pulse)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
@@ -2172,6 +2199,7 @@ run("tiktok", p_tiktok, keep_if_fresh_hours=20)
 
 DATA.mkdir(exist_ok=True)
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
+run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 FINISHED_ISO = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 try:
     write_json(HIST_PATH, HISTORY, separators=(",", ":"))
