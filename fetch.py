@@ -1775,6 +1775,119 @@ def p_airport():
         raise RuntimeError("airport: empty")
     return out
 
+
+# ---------- 全球大盤 / 美股板塊輪動 / 恐慌結構 ----------
+def yahoo_daily(sym: str, rng="3mo"):
+    """日線收盤＋成交量＋是否盤中（chart API 一次拿完）。"""
+    key = "daily:" + sym
+    if key in _yahoo_cache:
+        return _yahoo_cache[key]
+    j = _yahoo_get(sym, {"range": rng, "interval": "1d", "includePrePost": "false"})
+    res = j["chart"]["result"][0]; meta = res["meta"]
+    q = res["indicators"]["quote"][0]
+    closes, vols, ts = q.get("close") or [], q.get("volume") or [], res.get("timestamp") or []
+    off = meta.get("gmtoffset") or 0
+    rows = [(datetime.fromtimestamp(t + off, tz=timezone.utc).date().isoformat(), c, v) for t, c, v in zip(ts, closes, vols) if c is not None]
+    reg = (meta.get("currentTradingPeriod") or {}).get("regular") or {}
+    now_ts = int(NOW.timestamp())
+    is_open = bool(reg) and reg.get("start", 0) <= now_ts < reg.get("end", 0)
+    price = rows[-1][1] if rows else None
+    prev = rows[-2][1] if len(rows) >= 2 else None
+    def pct(a, b):
+        return (a - b) / b * 100 if a is not None and b else None
+    out = {"price": price, "chg_pct": pct(price, prev), "chg5_pct": pct(price, rows[-6][1]) if len(rows) >= 6 else None,
+           "asOf": rows[-1][0] if rows else None, "open": is_open, "ccy": meta.get("currency"),
+           "closes": [c for _, c, _ in rows], "vols": [v for _, _, v in rows], "dates": [d for d, _, _ in rows]}
+    _yahoo_cache[key] = out
+    return out
+
+
+WORLD = [("^GSPC", "S&P 500", "美"), ("^IXIC", "Nasdaq", "美"), ("^DJI", "道瓊", "美"), ("^N225", "日經 225", "日"),
+         ("^HSI", "恆生", "港"), ("000001.SS", "上證", "中"), ("^KS11", "KOSPI", "韓"), ("^NSEI", "Nifty 50", "印"),
+         ("^GDAXI", "DAX", "德"), ("^STOXX50E", "STOXX 50", "歐")]
+
+
+def p_world():
+    items, errs = [], []
+    for sym, name, flag in WORLD:
+        try:
+            q = yahoo_daily(sym, "2mo")
+        except Exception as e:  # noqa: BLE001
+            log("world", sym, e); errs.append(f"{name}: {safe_err(e)}"); continue
+        items.append({"sym": sym, "name": name, "flag": flag, "price": q["price"], "chg_pct": q["chg_pct"], "chg5_pct": q["chg5_pct"],
+                      "open": q["open"], "asOf": q["asOf"], "spark": q["closes"][-30:]})
+    if not items:
+        raise RuntimeError(f"world: nothing {errs[:2]}")
+    return {"items": items, "errs": errs[:3]}
+
+
+SECTORS = [("XLK", "科技"), ("XLC", "通訊"), ("XLY", "非必需"), ("XLF", "金融"), ("XLV", "醫療"), ("XLI", "工業"),
+           ("XLP", "必需"), ("XLE", "能源"), ("XLU", "公用"), ("XLRE", "地產"), ("XLB", "原物料")]
+
+
+def p_sectors():
+    spy = yahoo_daily("SPY")
+    items, errs = [], []
+    for sym, name in SECTORS:
+        try:
+            q = yahoo_daily(sym)
+        except Exception as e:  # noqa: BLE001
+            log("sector", sym, e); errs.append(f"{sym}: {safe_err(e)}"); continue
+        vols = [v for v in q["vols"] if v]
+        # 相對成交量：今天（或最近一根完整日）÷ 前 20 日均量；盤中那根量不完整，用前一根
+        idx = -2 if q["open"] and len(vols) >= 22 else -1
+        base = vols[idx - 20:idx] if len(vols) >= 21 else []
+        rvol = (vols[idx] / (sum(base) / len(base))) if base and vols[idx] else None
+        items.append({"sym": sym, "name": name, "chg_pct": q["chg_pct"], "chg5_pct": q["chg5_pct"],
+                      "rel5_pct": (q["chg5_pct"] - spy["chg5_pct"]) if q["chg5_pct"] is not None and spy["chg5_pct"] is not None else None,
+                      "rvol": round(rvol, 2) if rvol else None})
+    if not items:
+        raise RuntimeError(f"sectors: nothing {errs[:2]}")
+    items.sort(key=lambda x: (x["rel5_pct"] if x["rel5_pct"] is not None else -999), reverse=True)
+    # 風險偏好：XLY/XLP 比值 30 天
+    ratio = []
+    try:
+        y, p_ = yahoo_daily("XLY"), yahoo_daily("XLP")
+        n = min(len(y["closes"]), len(p_["closes"]))
+        ratio = [round(a / b, 4) for a, b in zip(y["closes"][-n:], p_["closes"][-n:])][-30:]
+    except Exception as e:  # noqa: BLE001
+        log("risk ratio", e)
+    return {"spy_chg_pct": spy["chg_pct"], "spy_chg5_pct": spy["chg5_pct"], "open": spy["open"], "asOf": spy["asOf"],
+            "items": items, "risk_ratio": ratio, "errs": errs[:3]}
+
+
+FEAR = [("^VIX", "VIX", "波動", (15, 25)), ("^VVIX", "VVIX", "波動的波動", (100, 120)),
+        ("^SKEW", "SKEW", "尾部厚度", (130, 145))]
+
+
+def p_fear():
+    items, errs = [], []
+    for sym, name, sub, (lo, hi) in FEAR:
+        try:
+            q = yahoo_daily(sym)
+        except Exception as e:  # noqa: BLE001
+            log("fear", sym, e); errs.append(f"{name}: {safe_err(e)}"); continue
+        v = q["price"]
+        level = "green" if v is not None and v < lo else "yellow" if v is not None and v < hi else "red"
+        for d, c in zip(q["dates"], q["closes"]):
+            hist_put("fear", name, d, c)
+        items.append({"sym": sym, "name": name, "sub": sub, "value": v, "chg_pct": q["chg_pct"], "level": level, "lo": lo, "hi": hi,
+                      "spark": q["closes"][-30:], "asOf": q["asOf"]})
+    # 期限結構：VIX / VIX3M，>1 = backwardation（近月比遠月貴，恐慌當下而非預期）
+    try:
+        vix, v3 = yahoo_daily("^VIX"), yahoo_daily("^VIX3M")
+        n = min(len(vix["closes"]), len(v3["closes"]))
+        series = [round(a / b, 3) for a, b in zip(vix["closes"][-n:], v3["closes"][-n:])]
+        r = series[-1] if series else None
+        items.append({"sym": "^VIX/^VIX3M", "name": "VIX/VIX3M", "sub": "期限結構", "value": r, "chg_pct": None,
+                      "level": "green" if r is not None and r < 0.9 else "yellow" if r is not None and r < 1.0 else "red",
+                      "lo": 0.9, "hi": 1.0, "spark": series[-30:], "asOf": vix["asOf"]})
+    except Exception as e:  # noqa: BLE001
+        log("fear term", e); errs.append("VIX3M: " + safe_err(e))
+    if not items:
+        raise RuntimeError(f"fear: nothing {errs[:2]}")
+    return {"items": items, "errs": errs[:3]}
+
 # ---------- run ----------
 run("pulse", p_pulse)
 run("taiex", p_taiex)
@@ -1785,6 +1898,9 @@ run("poly", p_poly)
 run("tech", p_tech)
 run("trends", p_trends)
 run("luxury", p_luxury, keep_if_fresh_hours=3)
+run("world", p_world, keep_if_fresh_hours=0.25)
+run("sectors", p_sectors, keep_if_fresh_hours=0.5)
+run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("revenue", p_revenue, keep_if_fresh_hours=20)
 run("media", p_media, keep_if_fresh_hours=6)

@@ -89,6 +89,8 @@ a:hover{text-decoration:underline}
 .sig{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;padding:0 0 10px;margin-bottom:10px;border-bottom:1px solid var(--line);font-size:12px}
 .sig .l{font-size:10.5px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-right:6px}.sig .v{font-family:var(--mono);font-weight:500}
 .sig .w a{color:inherit;text-decoration:none;margin-right:8px}.sig .w a:hover{text-decoration:underline}
+.rb{display:flex;align-items:center;gap:6px}.rb .trk{flex:1;height:6px;background:var(--line2);border-radius:2px;position:relative;overflow:hidden}.rb .trk i{position:absolute;top:0;bottom:0}
+.fear{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
 .tp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:640px){.tp{grid-template-columns:1fr}}
 .tp h3{margin:0 0 4px;font-size:10px;font-weight:500;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;font-family:var(--head)}
@@ -269,6 +271,24 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="ph"><h2>TAIEX</h2><span class="zh">台股大盤</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://openapi.twse.com.tw/" target="_blank" rel="noopener">證交所</a><a href="https://www.tpex.org.tw/" target="_blank" rel="noopener">櫃買</a><a href="https://finmindtrade.com/" target="_blank" rel="noopener">FinMind</a><span>盤後更新 · 法人單位億元 · 夜盤 15:00–05:00</span></div>
+  </section>
+
+  <section class="panel w6" id="p-world">
+    <div class="ph"><h2>Global Indices</h2><span class="zh">主要經濟體大盤</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Yahoo 日線 · 盤中為未完成棒 · 5 日％＝近 5 個交易日</span></div>
+  </section>
+
+  <section class="panel w6" id="p-fear">
+    <div class="ph"><h2>Fear Structure</h2><span class="zh">恐慌三層 ＋ 期限結構</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>VIX 波動 · VVIX 波動的波動 · SKEW 尾部 · VIX/VIX3M &gt;1＝近月貴（恐慌當下）· 燈號閾值見色點</span></div>
+  </section>
+
+  <section class="panel w6" id="p-sectors">
+    <div class="ph"><h2>US Sectors</h2><span class="zh">美股板塊輪動（代理指標）</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>SPDR 11 檔板塊 ETF · 相對強弱＝5 日％－SPY · 相對量＝最近完整日量 ÷ 20 日均 · 不是真正資金流向</span></div>
   </section>
 
   <section class="panel" id="p-fx">
@@ -471,6 +491,15 @@ const renderers={
   airport(d){const s=k=>{const x=d[k]||{};return`<div class="c"><div class="l">${k==="dep"?"出發":"抵達"}</div><div class="v">${x.total??"—"}<span class="sub" style="font-size:12px"> 班</span></div><div class="p"><span class="${x.delayed>0?"bad":""}">延誤 ${x.delayed??0}</span> · <span class="${x.cancelled>0?"bad":""}">取消 ${x.cancelled??0}</span></div></div>`;};
     const up=((d.dep||{}).upcoming||[]).map(u=>`<tr><td class="name">${esc(u.flight)}<span class="sub">→ ${esc(u.to)}${u.gate?" · "+esc(u.gate):""}</span></td><td class="r num">${esc(u.sched)}</td><td class="r num ${/延/.test(u.remark)?"bad":""}">${esc(u.est||"")}<span class="sub">${esc(u.remark||"")}</span></td></tr>`).join("");
     body("p-airport").innerHTML=`<div class="tp"><div class="macro">${s("dep")}${s("arr")}</div><div><table><tr><th>接下來出發</th><th class="r">表定</th><th class="r">預計</th></tr>${up||'<tr><td colspan="3" class="empty">今天沒有後續班次</td></tr>'}</table></div></div>`;setMeta("p-airport",d,1);},
+  world(d){const tr=(d.items||[]).map(it=>`<tr><td class="name"><span class="src" style="min-width:14px">${esc(it.flag)}</span>${esc(it.name)}${it.open?`<span class="sub" style="color:var(--up)">盤中</span>`:""}${mini(it.spark)}</td><td class="r num${K("w:"+it.sym,n(it.price))}">${fmt(n(it.price),it.price<100?2:0)}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td><td class="r num ${cls(n(it.chg5_pct))}">${isFinite(n(it.chg5_pct))?sgn(n(it.chg5_pct),1,"%"):""}</td></tr>`).join("");
+    body("p-world").innerHTML=`<table><tr><th>指數</th><th class="r">價位</th><th class="r">日%</th><th class="r">5日%</th></tr>${tr}</table>`;setMeta("p-world",d,26);},
+  sectors(d){const mx=Math.max(1,...(d.items||[]).map(it=>Math.abs(n(it.rel5_pct)||0)));
+    const tr=(d.items||[]).map(it=>{const r=n(it.rel5_pct)||0,w=Math.abs(r)/mx*50;return`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.sym)}</span></td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td><td><div class="rb"><div class="trk"><i style="left:${r>=0?50:50-w}%;width:${w}%;background:${r>=0?"var(--up)":"var(--down)"}"></i></div><span class="num ${cls(r)}" style="min-width:52px;text-align:right">${sgn(r,1,"%")}</span></div></td><td class="r num ${n(it.rvol)>=1.5?"bad":""}">${it.rvol!=null?fmt(n(it.rvol),2)+"×":""}</td></tr>`;}).join("");
+    const rr=d.risk_ratio||[];const last=rr[rr.length-1],first=rr[0];
+    body("p-sectors").innerHTML=`<table><tr><th>板塊</th><th class="r">日%</th><th>相對 SPY 5 日</th><th class="r">相對量</th></tr>${tr}</table><div class="p" style="display:flex;gap:10px;align-items:center;margin-top:8px;font-size:11px;color:var(--muted)"><span>SPY 日 <span class="num ${cls(n(d.spy_chg_pct))}">${isFinite(n(d.spy_chg_pct))?sgn(n(d.spy_chg_pct),2,"%"):""}</span> · 5 日 <span class="num ${cls(n(d.spy_chg5_pct))}">${isFinite(n(d.spy_chg5_pct))?sgn(n(d.spy_chg5_pct),1,"%"):""}</span></span><span>風險偏好 XLY/XLP ${last?fmt(n(last),3):""} <span class="${cls(n(last)-n(first))}">${last&&first?sgn((last/first-1)*100,1,"% /30d"):""}</span>${mini(rr)}</span></div>`;setMeta("p-sectors",d,26);},
+  fear(d){const LC={green:"#39B978",yellow:"#E0A23A",red:"#F0524F"};
+    const cards=(d.items||[]).map(it=>{const c=LC[it.level]||"var(--dim)";return`<div class="c"><div class="l">${esc(it.name)} <span class="sub">${esc(it.sub)}</span></div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:${c};box-shadow:0 0 0 3px color-mix(in srgb,${c} 25%,transparent)"></span><span class="${K("fear:"+it.sym,n(it.value))}">${fmt(n(it.value),it.value<5?3:2)}</span>${it.chg_pct!=null?`<span class="sub ${cls(n(it.chg_pct))}" style="font-size:11px">${sgn(n(it.chg_pct),1,"%")}</span>`:""}</div><div class="p">${it.lo}／${it.hi}${mini(it.spark)}</div></div>`;}).join("");
+    body("p-fear").innerHTML=`<div class="macro fear">${cards}</div>`;setMeta("p-fear",d,26);},
   ptt(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.board.slice(0,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"bad":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
     body("p-ptt").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"這輪沒抓到")}</div>`;setMeta("p-ptt",d,2);},
   tiktok(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${it.rank||i+1}</span><span class="t">#${esc(it.tag)}</span><span class="m">${it.views?compact(n(it.views))+" 次":""}${it.trend?` <span class="${n(it.trend)>0?"up":"down"}">${sgn(n(it.trend),0)}</span>`:""}</span></li>`).join("");
