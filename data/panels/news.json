@@ -2,6 +2,18 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "國際油價回落　歐股收盤走勢不一",
+   "url": "https://www.cna.com.tw/news/afe/202609300003.aspx",
+   "at": "2026-09-29T17:03:22Z"
+  },
+  {
+   "source": "中央社",
+   "title": "伊朗貨幣兌美元貶至歷史新低250萬里亞爾　凸顯經濟困境",
+   "url": "https://www.cna.com.tw/news/aopl/202609290353.aspx",
+   "at": "2026-09-29T15:40:12Z"
+  },
+  {
+   "source": "中央社",
    "title": "美加貿易戰升級　加拿大酒類等商品輸美禁令生效",
    "url": "https://www.cna.com.tw/news/aopl/202609290347.aspx",
    "at": "2026-09-29T14:27:56Z"
@@ -23,18 +35,6 @@
    "title": "「造山者」紀錄片吉隆坡放映　深化產業與人才交流",
    "url": "https://www.cna.com.tw/news/afe/202609290342.aspx",
    "at": "2026-09-29T14:06:45Z"
-  },
-  {
-   "source": "中央社",
-   "title": "油價回落、科技股樂觀情緒提振　標普和那指開高",
-   "url": "https://www.cna.com.tw/news/afe/202609290339.aspx",
-   "at": "2026-09-29T13:53:39Z"
-  },
-  {
-   "source": "中央社",
-   "title": "4大通路開出9張統一發票千萬獎　花10元買飲品抱走大獎",
-   "url": "https://www.cna.com.tw/news/ahel/202609290338.aspx",
-   "at": "2026-09-29T13:50:37Z"
   },
   {
    "source": "公視",
@@ -74,6 +74,13 @@
   }
  ],
  "intl": [
+  {
+   "source": "Guardian",
+   "title": "Barclays softens return-to-office plans for UK staff after backlash",
+   "url": "https://www.theguardian.com/business/2026/sep/29/barclays-softens-return-to-office-plans-for-uk-staff-after-backlash",
+   "at": "2026-09-29T17:12:45Z",
+   "sec": "Business"
+  },
   {
    "source": "BBC",
    "title": "Eiffel Tower chief to quit after female staff replaced by men during religious visit",
@@ -144,13 +151,6 @@
    "title": "Spain announces plan to ease housing crisis amid outcry over eviction of 87-year-old",
    "url": "https://www.theguardian.com/world/2026/sep/29/spanish-government-approves-measures-ease-housing-crisis-outcry-eviction",
    "at": "2026-09-29T14:27:03Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Estonia blames Russia for arson attack on drone maker supplying Ukraine ",
-   "url": "https://www.theguardian.com/world/2026/sep/29/estonia-blames-russia-arson-attack-drone-maker-ukraine",
-   "at": "2026-09-29T14:20:39Z",
    "sec": "World news"
   }
  ],
@@ -340,15 +340,15 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.821,
-   "vol_ratio": 1.02,
-   "tone": 0.36,
-   "tone_at": "2026-09-29T14:33:16Z",
+   "vol": 1.878,
+   "vol_ratio": 1.08,
+   "tone": 0.35,
+   "tone_at": "2026-09-29T17:26:54Z",
    "spark": [
     1.854,
-    1.821
+    1.878
    ],
-   "at": "2026-09-29T16:26:50Z"
+   "at": "2026-09-29T17:26:54Z"
   },
   "wiki": {
    "zh": [
@@ -407,8 +407,6 @@
    ]
   }
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3"
- ],
- "updatedAt": "2026-09-29T17:09:18Z"
+ "errs": [],
+ "updatedAt": "2026-09-29T17:26:54Z"
 }
