@@ -1404,6 +1404,13 @@ def _gdelt_signal():
     return sig
 
 
+try:
+    from opencc import OpenCC
+    _cc = OpenCC("s2twp")  # 維基標題常是簡體，轉台灣用語
+except Exception:  # noqa: BLE001
+    _cc = None
+
+
 def _wiki_top(lang, limit=5):
     js = None
     for back in (1, 2):  # 昨日統計通常 UTC 上午才出，沒有就退一天
@@ -1422,7 +1429,10 @@ def _wiki_top(lang, limit=5):
         t = a["article"]
         if skip.search(t) or ":" in t:
             continue
-        out.append({"title": t.replace("_", " ")[:24], "views": a["views"], "url": f"https://{lang}.wikipedia.org/wiki/{t}"})
+        title = t.replace("_", " ")
+        if lang == "zh" and _cc:
+            title = _cc.convert(title)
+        out.append({"title": title[:30], "views": a["views"], "url": f"https://{lang}.wikipedia.org/wiki/{t}"})
         if len(out) >= limit:
             break
     return out
@@ -1436,7 +1446,7 @@ def p_news():
     if not tw:
         tw += _try("cna gnews", _gnews, "site:cna.com.tw", "中央社", 8)
     pts = _try("pts", _rss, "https://news.pts.org.tw/xml/newsfeed.xml", "公視", 6) or _try("pts gnews", _gnews, "site:news.pts.org.tw", "公視", 5)
-    tw = _dedupe_sort(tw + pts, 9)
+    tw = _dedupe_sort(_dedupe_sort(tw, 6) + _dedupe_sort(pts, 3), 9)  # 保證兩家都出現，不讓中央社洗版
 
     intl = _try("bbc", _rss, "https://feeds.bbci.co.uk/news/world/rss.xml", "BBC", 8)
     if GUARDIAN_KEY:
