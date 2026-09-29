@@ -2078,8 +2078,8 @@ GMACRO = [  # (group, label, series, kind) kind: yoy=指數換年增, level=直�
     ("美國", "聯邦資金利率", "DFF", "pct"), ("美國", "10 年公債", "DGS10", "pct"), ("美國", "2 年公債", "DGS2", "pct"),
     ("美國", "GDP 季增年率", "A191RL1Q225SBEA", "pct"), ("美國", "初領失業金", "ICSA", "k"), ("美國", "密大消費信心", "UMCSENT", "level"),
     ("歐元區", "HICP 年增", "CP0000EZ19M086NEST", "yoy"), ("歐元區", "ECB 存款利率", "ECBDFR", "pct"),
-    ("日本", "CPI 年增", "CPALTT01JPM659N|JPNCPIALLMINMEI", "pct|yoy"), ("日本", "政策利率", "IRSTCI01JPM156N|IRSTCB01JPM156N", "pct|pct"),
-    ("中國", "CPI 年增", "CPALTT01CNM659N|CHNCPIALLMINMEI", "pct|yoy"),
+    ("日本", "政策利率", "IRSTCI01JPM156N|IRSTCB01JPM156N", "pct|pct"),
+    # 日本／中國 CPI：FRED 的 OECD 系列 2025 起停更，免費且免金鑰的官方 API 目前沒有，先不放
 ]
 GMACRO_MAX_AGE_DAYS = 200  # FRED 上 OECD 系列常停更；太舊就不顯示，免得誤導
 
