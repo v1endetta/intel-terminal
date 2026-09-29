@@ -1383,20 +1383,31 @@ def _gdelt_signal():
     if recent and before:
         sig["vol"] = round(sum(recent) / len(recent), 3)
         sig["vol_ratio"] = round((sum(recent) / len(recent)) / max(1e-6, sum(before) / len(before)), 2)
-    time.sleep(6)  # GDELT 對連續呼叫敏感
-    tone = gjson("https://api.gdeltproject.org/api/v2/doc/doc", params={"query": "Taiwan", "mode": "timelinetone", "timespan": "24h", "format": "json"})
-    tp = [float(p["value"]) for p in tone["timeline"][0]["data"] if p.get("value") is not None]
-    if tp:
-        sig["tone"] = round(sum(tp) / len(tp), 2)
+    time.sleep(15)  # GDELT 對連續呼叫敏感（實測 6 秒仍 429）
+    try:
+        tone = gjson("https://api.gdeltproject.org/api/v2/doc/doc", params={"query": "Taiwan", "mode": "timelinetone", "timespan": "24h", "format": "json"})
+        tp = [float(p["value"]) for p in tone["timeline"][0]["data"] if p.get("value") is not None]
+        if tp:
+            sig["tone"] = round(sum(tp) / len(tp), 2)
+    except Exception as e:  # noqa: BLE001
+        log("gdelt tone", e); NEWS_ERRS.append("gdelt tone: " + safe_err(e))
     if not sig:
         raise RuntimeError("gdelt empty")
     return sig
 
 
 def _wiki_top(lang, limit=5):
-    d = (NOW - timedelta(days=1)).strftime("%Y/%m/%d")
-    js = gjson(f"https://wikimedia.org/api/rest_v1/metrics/pageviews/top/{lang}.wikipedia/all-access/{d}",
-               headers={"User-Agent": "dalta-intel/1.0 (personal dashboard)"})
+    js = None
+    for back in (1, 2):  # 昨日統計通常 UTC 上午才出，沒有就退一天
+        d = (NOW - timedelta(days=back)).strftime("%Y/%m/%d")
+        try:
+            js = gjson(f"https://wikimedia.org/api/rest_v1/metrics/pageviews/top/{lang}.wikipedia/all-access/{d}",
+                       headers={"User-Agent": "dalta-intel/1.0 (personal dashboard)"})
+            break
+        except requests.HTTPError as e:
+            if e.response is not None and e.response.status_code == 404 and back == 1:
+                continue
+            raise
     skip = re.compile(r"^(Main_Page|Wikipedia:|Special:|特殊:|File:|Portal:|Help:|Talk:|Category:|Wikipedia：|首页|首頁|-)")
     out = []
     for a in js["items"][0]["articles"]:
