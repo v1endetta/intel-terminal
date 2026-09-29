@@ -1706,7 +1706,20 @@ def p_quake():
 
 def p_power():
     """台電今日電力資訊（d006020）：目前用電、預估尖峰負載與備轉容量率。單位萬瓩→MW。"""
-    js = _cffi_json("https://service.taipower.com.tw/data/opendata/apply/file/d006020/001.json")
+    js, last = None, None
+    for attempt in range(3):  # 台電這台主機偶爾很慢：40 秒逾時、重試兩次
+        try:
+            from curl_cffi import requests as cffi
+            r = cffi.get("https://service.taipower.com.tw/data/opendata/apply/file/d006020/001.json", impersonate="chrome", timeout=40)
+            r.raise_for_status(); js = r.json(); break
+        except Exception as e:  # noqa: BLE001
+            last = e; time.sleep(3)
+    if js is None:
+        prev = load_prev("power") or {}
+        if prev.get("reserve_pct") is not None and prev.get("updatedAt"):
+            log("taipower carry-over", last)
+            return {k: v for k, v in prev.items() if k not in ("error", "updatedAt")}  # 沿用上一輪，不標失敗
+        raise last
     rec = {}
     for r in js.get("records") or []:
         rec.update(r)
