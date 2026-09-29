@@ -1376,7 +1376,15 @@ def _dedupe_sort(items, limit):
 def _gdelt_signal():
     """全球英文新聞提到 Taiwan 的量（近 24h vs 前 48h）與平均語調。"""
     sig = {}
-    vol = gjson("https://api.gdeltproject.org/api/v2/doc/doc", params={"query": "Taiwan", "mode": "timelinevol", "timespan": "3d", "format": "json"})
+    vol = None
+    for attempt in range(3):  # GDELT 對 GitHub 共用 IP 很常 429，退避重試
+        try:
+            vol = gjson("https://api.gdeltproject.org/api/v2/doc/doc", params={"query": "Taiwan", "mode": "timelinevol", "timespan": "3d", "format": "json"})
+            break
+        except requests.HTTPError as e:
+            if e.response is not None and e.response.status_code == 429 and attempt < 2:
+                time.sleep(20 * (attempt + 1)); continue
+            raise
     pts = [(p["date"], float(p["value"])) for p in vol["timeline"][0]["data"] if p.get("value") is not None]
     cut = (NOW - timedelta(hours=24)).strftime("%Y%m%dT%H%M%SZ")
     recent = [v for d, v in pts if d >= cut]; before = [v for d, v in pts if d < cut]
@@ -1453,6 +1461,11 @@ def p_news():
         signals["gdelt"] = g
         hist_put("news", "gdelt_vol", TODAY_TPE.isoformat(), g.get("vol"))
         signals["gdelt"]["spark"] = hist_get("news", "gdelt_vol", 14)
+        signals["gdelt"]["at"] = NOW_ISO
+    else:  # 抓不到就沿用上一輪（最多 6 小時）
+        prev = (load_prev("news") or {}).get("signals", {}).get("gdelt")
+        if prev and prev.get("at") and (NOW - datetime.fromisoformat(prev["at"].replace("Z", "+00:00"))) < timedelta(hours=6):
+            signals["gdelt"] = prev
     wz = _try("wiki zh", _wiki_top, "zh"); we = _try("wiki en", _wiki_top, "en")
     if wz or we:
         signals["wiki"] = {"zh": wz, "en": we}
