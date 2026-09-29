@@ -1517,7 +1517,7 @@ def p_tenders():
     found, errs = {}, []
     for kw in PCC_KW:
         try:
-            js = _cffi_json("https://pcc.g0v.ronny.tw/api/searchbytitle", query=kw, page=1)
+            js = _cffi_json("https://pcc-api.openfun.app/api/searchbytitle", query=kw, page=1)
             for r in js.get("records", []):
                 b = r.get("brief") or {}
                 typ = b.get("type") or ""
@@ -1528,7 +1528,7 @@ def p_tenders():
                     found[key]["kw"].append(kw); continue
                 found[key] = {"key": key, "title": (b.get("title") or "")[:60], "unit": (r.get("unit_name") or "")[:18],
                               "date": str(r.get("date") or ""), "type": typ[:6], "kw": [kw],
-                              "url": f'https://pcc.g0v.ronny.tw/tender/{r.get("unit_id")}/{r.get("job_number")}'}
+                              "url": r.get("url") or f'https://pcc.g0v.ronny.tw/tender/{r.get("unit_id")}/{r.get("job_number")}'}
         except Exception as e:  # noqa: BLE001
             log("pcc", kw, e); errs.append(f"{kw}: {safe_err(e)}")
         time.sleep(1)
@@ -1544,7 +1544,7 @@ def p_tenders():
         try:
             time.sleep(1)
             uid, job = it["key"].split("/", 1)
-            d = _cffi_json("https://pcc.g0v.ronny.tw/api/tender", unit_id=uid, job_number=job)
+            d = _cffi_json("https://pcc-api.openfun.app/api/tender", unit_id=uid, job_number=job)
             det = ((d.get("records") or [{}])[0].get("detail") or {})
             raw = det.get("採購資料:預算金額") or det.get("已公開閱覽資料:預算金額") or det.get("招標資料:預算金額") or ""
             m = re.search(r"[\d,]+", str(raw).replace("元", ""))
@@ -1637,8 +1637,17 @@ def p_power():
                     return num(v)
         return None
     peak = pick("尖峰負載"); reserve = pick("備轉容量率"); reserve_mw = pick("備轉容量(")
+    if reserve is None and peak is None and isinstance(js, dict) and "aaData" in js:
+        # loadGraph 另一種格式：aaData = [[時間, 尖峰負載, 備轉容量, 備轉率, ...], ...]，取最後一列
+        rows = [r for r in js.get("aaData") or [] if isinstance(r, list) and len(r) >= 4]
+        if rows:
+            last_row = rows[-1]
+            nums = [num(str(x).replace("%", "")) for x in last_row]
+            peak = next((x for x in nums[1:] if x and x > 10000), None)
+            reserve = next((x for x in nums[1:] if x is not None and 0 <= x < 100), None)
+            rec = {"時間": str(js.get("DateTime") or last_row[0])}
     if reserve is None and peak is None:
-        raise RuntimeError(f"taipower fields: {list(rec)[:8]}")
+        raise RuntimeError(f"taipower fields: {list(rec)[:8]} sample={str(js)[:300]}")
     level = "綠" if (reserve or 0) >= 10 else "黃" if (reserve or 0) >= 6 else "橘" if (reserve or 0) >= 3 else "紅"
     hist_put("power", "reserve", TODAY_TPE.isoformat(), reserve)
     return {"peak_mw": peak, "reserve_pct": reserve, "reserve_mw": reserve_mw, "level": level,
