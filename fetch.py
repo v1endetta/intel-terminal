@@ -1391,14 +1391,21 @@ def _gdelt_signal():
     if recent and before:
         sig["vol"] = round(sum(recent) / len(recent), 3)
         sig["vol_ratio"] = round((sum(recent) / len(recent)) / max(1e-6, sum(before) / len(before)), 2)
-    time.sleep(15)  # GDELT 對連續呼叫敏感（實測 6 秒仍 429）
-    try:
-        tone = gjson("https://api.gdeltproject.org/api/v2/doc/doc", params={"query": "Taiwan", "mode": "timelinetone", "timespan": "24h", "format": "json"})
-        tp = [float(p["value"]) for p in tone["timeline"][0]["data"] if p.get("value") is not None]
-        if tp:
-            sig["tone"] = round(sum(tp) / len(tp), 2)
-    except Exception as e:  # noqa: BLE001
-        log("gdelt tone", e); NEWS_ERRS.append("gdelt tone: " + safe_err(e))
+    for attempt in range(2):  # 語調：GDELT 大約一分鐘只肯給一次，拿不到就沿用上一輪
+        time.sleep(30)
+        try:
+            tone = gjson("https://api.gdeltproject.org/api/v2/doc/doc", params={"query": "Taiwan", "mode": "timelinetone", "timespan": "24h", "format": "json"})
+            tp = [float(p["value"]) for p in tone["timeline"][0]["data"] if p.get("value") is not None]
+            if tp:
+                sig["tone"] = round(sum(tp) / len(tp), 2); sig["tone_at"] = NOW_ISO
+            break
+        except Exception as e:  # noqa: BLE001
+            if attempt == 1:
+                log("gdelt tone", e)
+    if "tone" not in sig:
+        prev = (load_prev("news") or {}).get("signals", {}).get("gdelt") or {}
+        if prev.get("tone") is not None and prev.get("tone_at") and (NOW - datetime.fromisoformat(prev["tone_at"].replace("Z", "+00:00"))) < timedelta(hours=6):
+            sig["tone"], sig["tone_at"] = prev["tone"], prev["tone_at"]
     if not sig:
         raise RuntimeError("gdelt empty")
     return sig
