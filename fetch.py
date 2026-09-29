@@ -1320,8 +1320,8 @@ def p_geo():
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
 # Vin 的關注領域（Google News 繁中）：每組顯示最新 3 則。帶引號＝精準比對。改這裡。
 NEWS_GROUPS = [
-    ("廣告與代理商", ['"廣告代理商"', "比稿 OR 廣告 得標", "廣告 裁罰 OR 廣告 開罰", "廣告量 OR 行銷預算"]),
-    ("品牌與設計", ['"品牌重塑" OR "品牌升級"', "台灣設計展 OR 文博會 OR 金點設計獎", '"視覺識別" OR "包裝設計"', "家具展 OR 室內設計 OR 建材"]),
+    ("廣告與代理商", ['"廣告代理商"', "比稿 OR 廣告 得標", "廣告不實 OR 誇大不實 開罰", "廣告量 OR 行銷預算"]),
+    ("品牌與設計", ['"品牌重塑" OR "品牌升級"', "台灣設計展 OR 文博會 OR 金點設計獎", '"視覺識別" OR "包裝設計"', "家具展 OR 室內設計 OR 設計師品牌"]),
     ("AI 與製作工具", ["Sora OR Runway OR Kling 影片", "生成式AI 廣告 OR 生成式AI 版權", "Figma OR Canva 新功能", "開源模型 OR Ollama OR 本地部署"]),
     ("市場與投資", ["槓桿ETF OR 00631L OR 00675L", "聯準會 利率 OR FOMC", "台積電 法說 OR 台積電 ADR"]),
     ("地緣與科技政策", ["台海 OR 共機 OR 軍演", "關稅 台灣 OR 232條款", "半導體 出口管制 OR 晶片法案"]),
@@ -1491,7 +1491,18 @@ def p_news():
             for it in _try("kw " + q, _gnews, q, "", 3):
                 it["kw"] = q; got.append(it)
             time.sleep(0.8)
-        groups.append({"name": name, "items": _dedupe_sort(got, 3)})
+        # 每組 3 則：關鍵字輪流各出一則（避免單一話題洗版），標題前 14 字相同視為同一則
+        by_kw = {q: _dedupe_sort([g for g in got if g["kw"] == q], 3) for q in qs}
+        picked, seen = [], set()
+        for rnd in range(3):
+            for q in qs:
+                if len(picked) >= 3:
+                    break
+                for it in by_kw[q][rnd:rnd + 1]:
+                    k = re.sub(r"\W+", "", it["title"])[:14]
+                    if k not in seen:
+                        seen.add(k); picked.append(it)
+        groups.append({"name": name, "items": picked})
 
     signals = {}
     g = _try("gdelt", _gdelt_signal)
