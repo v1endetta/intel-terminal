@@ -111,6 +111,8 @@ def load_prev(pid):
 
 
 RESULTS: dict[str, dict] = {}
+START_TS = time.time()
+SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
 if HIST_PATH.exists():
@@ -150,6 +152,11 @@ def run(pid: str, fn, keep_if_fresh_hours: float = 0):
     """Run one panel fetcher. keep_if_fresh_hours>0 skips re-fetch when the
     previous file is newer than that (for daily/weekly sources)."""
     prev = load_prev(pid)
+    if time.time() > SOFT_DEADLINE:  # 本輪時間快用完：後面的面板沿用上一輪，保證有 commit
+        if prev:
+            RESULTS[pid] = prev
+        log(f"[{pid}] over soft deadline, keep previous")
+        return
     if prev and prev.get("error"):
         # 失敗退避：上次失敗距今不到 1 小時（或該面板的更新週期，取小者）就不重試
         try:
@@ -937,7 +944,7 @@ def tdx(path, **params):
         except requests.HTTPError as e:
             if e.response is not None and e.response.status_code == 429:
                 if attempt < 3:
-                    time.sleep(10 * (2 ** attempt))  # 10 / 20 / 40 秒；TDX 是每個來源 IP 每秒 50 次，GitHub runner 共用 IP
+                    time.sleep(5 * (2 ** attempt))  # 5 / 10 / 20 秒；TDX 是每個來源 IP 每秒 50 次，GitHub runner 共用 IP
                     continue
                 raise RuntimeError(f"429 on {path} body={e.response.text[:160]!r}")
             raise
@@ -1271,6 +1278,8 @@ def _geo_static():
         return st
     todo = [c for c in GEO_CITIES if c not in st["done"]]
     for city in todo[:5]:
+        if time.time() > SOFT_DEADLINE - 240:
+            break
         av = dict(st["avail"].get(city) or {"parking": False, "bikes": False, "vd": False})
         ok = True
         for key, path, parse in (
@@ -1295,9 +1304,12 @@ def _geo_static():
             except Exception as e:  # noqa: BLE001
                 ok = False
                 log("geo static", key, city, e); GEO_ERRS.append(f"static {key} {city}: " + safe_err(e))
+                break
         st["avail"][city] = av
         if ok:
             st["done"].append(city)
+        else:
+            break  # 這輪 TDX 不順，剩下的縣市下一輪再建
     if not st["etag"] or not fresh:
         try:
             et = []
@@ -1323,9 +1335,17 @@ def p_geo():
     avail = st.get("avail", {})
     geo = {"generatedAt": NOW_ISO, "labels": {k: v["label"] for k, v in GEO_CITIES.items()},
            "views": {k: [v["center"], v["zoom"]] for k, v in GEO_CITIES.items()}, "avail": avail, "cities": {}, "freeway": []}
+    prev_geo = {}
+    if GEO_PATH.exists():
+        try:
+            prev_geo = json.loads(GEO_PATH.read_text(encoding="utf-8")).get("cities", {})
+        except Exception:
+            prev_geo = {}
     for city in GEO_CITIES:
         c = {"parking": [], "bikes": [], "speed": []}
         av = avail.get(city, {})
+        if time.time() > SOFT_DEADLINE - 120:  # 時間不夠：這個縣市沿用上一輪
+            geo["cities"][city] = prev_geo.get(city, c); continue
         if av.get("parking"):
             try:
                 for r in _tdx_opt(f"v1:Parking/OffStreet/ParkingAvailability/City/{city}") or []:
@@ -1909,7 +1929,6 @@ run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=6)
 run("weather", p_weather)
 run("tw_pulse", p_tw_pulse)
-run("geo", p_geo, keep_if_fresh_hours=0.15)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
@@ -1920,6 +1939,7 @@ run("airport", p_airport, keep_if_fresh_hours=0.25)
 run("tiktok", p_tiktok, keep_if_fresh_hours=20)
 
 DATA.mkdir(exist_ok=True)
+run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 FINISHED_ISO = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 try:
     write_json(HIST_PATH, HISTORY, separators=(",", ":"))
