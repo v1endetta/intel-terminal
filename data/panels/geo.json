@@ -4,18 +4,16 @@
   "Taipei": {
    "parking": 320,
    "bikes": 1781,
-   "speed": 559,
-   "freeway": 85
+   "speed": 564,
+   "freeway": 84
   },
   "Taichung": {
-   "parking": 0,
+   "parking": 799,
    "bikes": 1814,
    "speed": 0,
    "freeway": 55
   }
  },
- "errs": [
-  "geo parking Taichung: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Taichung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
- ],
- "updatedAt": "2026-09-29T03:43:52Z"
+ "errs": [],
+ "updatedAt": "2026-09-29T03:51:33Z"
 }
