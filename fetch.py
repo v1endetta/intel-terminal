@@ -2025,8 +2025,9 @@ def p_sectors():
             "items": items, "risk_ratio": ratio, "errs": errs[:3], "label": "Stooq 備援" if spy["source"] == "stooq" else ""}
 
 
-FEAR = [("^VIX", "VIX", "波動", (15, 25)), ("^VVIX", "VVIX", "波動的波動", (100, 120)),
+FEAR = [("^VIX", "VIX", "波動", (15, 25)), ("^VVIX", "VVIX", "波動的波動", (110, 135)),
         ("^SKEW", "SKEW", "尾部厚度", (130, 145))]
+FEAR_MEAN = {"VIX": 19, "VVIX": 86, "SKEW": 100, "VIX/VIX3M": 0.9}  # 長期參照：VIX 均值、VVIX 均值、SKEW=100 為常態分布
 
 
 CBOE = "https://cdn.cboe.com/api/global/us_indices/daily_prices/"
@@ -2074,7 +2075,9 @@ def p_fear():
         v, prev = series[-1][1], series[-2][1] if len(series) >= 2 else None
         for d, c in hist:
             hist_put("fear", name, d, c)
+        v5 = series[-6][1] if len(series) >= 6 else None
         items.append({"sym": sym, "name": name, "sub": sub, "value": v, "chg_pct": (v - prev) / prev * 100 if prev else None,
+                      "chg5": round(v - v5, 2) if v5 is not None else None, "mean": FEAR_MEAN.get(name),
                       "level": "green" if v < lo else "yellow" if v < hi else "red", "lo": lo, "hi": hi,
                       "spark": [c for _, c in series[-30:]], "asOf": series[-1][0], "live": bool(live)})
         yahoo_live[name] = series
@@ -2093,14 +2096,34 @@ def p_fear():
             except Exception:
                 pass
         r = series[-1] if series else None
-        items.append({"sym": "^VIX/^VIX3M", "name": "VIX/VIX3M", "sub": "期限結構", "value": r, "chg_pct": None,
+        items.append({"sym": "^VIX/^VIX3M", "name": "VIX/VIX3M", "sub": "期限結構", "value": r, "chg_pct": None, "mean": 0.9,
                       "level": "green" if r is not None and r < 0.9 else "yellow" if r is not None and r < 1.0 else "red",
                       "lo": 0.9, "hi": 1.0, "spark": series[-30:], "asOf": common[-1] if common else None})
     except Exception as e:  # noqa: BLE001
         log("fear term", e); errs.append("VIX3M: " + safe_err(e))
     if not items:
         raise RuntimeError(f"fear: nothing {errs[:2]}")
-    return {"items": items, "errs": errs[:3], "label": src}
+    # 組合判讀（優先序由上而下）
+    by = {i["name"]: i for i in items}
+    vix, vvix, skew, term = by.get("VIX"), by.get("VVIX"), by.get("SKEW"), by.get("VIX/VIX3M")
+    lv = lambda i: i["level"] if i else None  # noqa: E731
+    regime, why, tone = "中性", "指標互相抵銷，沒有一致方向", "flat"
+    if term and term["level"] == "red":
+        regime, why, tone = "恐慌當下", f"VIX/VIX3M {term['value']} > 1：近月比遠月貴，避險需求集中在現在，不是預期", "red"
+    elif lv(vix) == "red":
+        regime, why, tone = "恐慌區", f"VIX {vix['value']:.1f} 已過 25", "red"
+    elif vix and vvix and (vix.get("chg5") or 0) > 0 and (vvix.get("chg5") or 0) > 0 and lv(vvix) != "green":
+        regime, why, tone = "波動放大中", f"VIX 與 VVIX 近 5 日同步上升（+{vix['chg5']}、+{vvix['chg5']}），VVIX {vvix['value']:.0f} 過門檻，通常不是一日行情", "yellow"
+    elif lv(vix) in ("green", "yellow") and (lv(vvix) == "red" or lv(skew) == "red"):
+        parts = []
+        if lv(vvix) == "red":
+            parts.append(f"VVIX {vvix['value']:.0f}")
+        if lv(skew) == "red":
+            parts.append(f"SKEW {skew['value']:.0f}（常態 100）")
+        regime, why, tone = "暴風雨前的平靜", f"VIX {vix['value']:.1f} 不高，但 {'、'.join(parts)} 顯示有人在買尾部保護", "yellow"
+    elif all(lv(i) == "green" for i in (vix, vvix, skew) if i):
+        regime, why, tone = "風平浪靜", "三個指標都在低檔，市場沒在防守", "green"
+    return {"items": items, "errs": errs[:3], "label": src, "regime": regime, "why": why, "tone": tone}
 
 
 # ---------- 全球總經（FRED） ----------
