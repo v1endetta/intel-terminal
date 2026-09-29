@@ -299,15 +299,15 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   </section>
 
   <section class="panel w6 cap" id="p-supply">
-    <div class="ph"><h2>Supply & Retail</h2><span class="zh">PMI／NMI · 零售分業年增</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>Retail</h2><span class="zh">零售分業 · 營業額年增</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>中經院 PMI／NMI（國發會頁面）· 經濟部零售業營業額指數（分業）· 50 以上＝擴張</span></div>
+    <div class="pf"><span>經濟部零售業營業額指數（分業）· 年增由指數自算 · 月更</span></div>
   </section>
 
   <section class="panel w6" id="p-macro">
-    <div class="ph"><h2>TW Macro</h2><span class="zh">台灣總經</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>TW Macro</h2><span class="zh">台灣總經 · 含 PMI／NMI</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://www.stat.gov.tw/" target="_blank" rel="noopener">主計總處</a><a href="http://rcted.ncu.edu.tw/cci.asp" target="_blank" rel="noopener">台經中心 CCI</a><span>燈號、央行、房價自動抓 · CPI／PPI（5–7 日）、失業率（22 日）、CCI（27 日）、GDP（季）手動</span></div>
+    <div class="pf"><a href="https://www.stat.gov.tw/" target="_blank" rel="noopener">主計總處</a><a href="http://rcted.ncu.edu.tw/cci.asp" target="_blank" rel="noopener">台經中心 CCI</a><span>PMI／NMI（中經院）、燈號、央行、房價自動抓 · CPI／PPI（5–7 日）、失業率（22 日）、CCI（27 日）、GDP（季）手動</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-gmacro">
@@ -578,9 +578,8 @@ const renderers={
     body("p-calendar").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">三週內沒有事件</div>`;setMeta("p-calendar",d,26);},
   awards(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.date.slice(4,6))}/${esc(it.date.slice(6,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a><span class="sub">${esc(it.unit)}${it.winner?" → "+esc(it.winner):""}</span></span><span class="m ${it.amount>=3e6?"up":""}">${it.amount?compact(n(it.amount)):"—"}</span></li>`).join("");
     body("p-awards").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">沒有命中</div>`;setMeta("p-awards",d,6);},
-  supply(d){const card=(k,label,x)=>{if(!x)return"";const c=n(x.value)>=50?"#39B978":"#F0524F";return`<div class="c"><div class="l">${label}</div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:${c};box-shadow:0 0 0 3px color-mix(in srgb,${c} 25%,transparent)"></span><span class="${K("sup:"+k,n(x.value))}">${fmt(n(x.value),1)}</span>${x.chg!=null?`<span class="sub ${x.chg>0?"up":x.chg<0?"down":""}" style="font-size:11px">${sgn(n(x.chg),1)}</span>`:""}</div><div class="p">${esc(x.period||"")}${x.orders!=null?` · 新訂單 ${fmt(n(x.orders),1)}`:""}${x.next?` · 下次 ${esc(x.next.slice(5))}`:""}${mini(x.spark)}</div></div>`;};
-    const tr=(d.retail||[]).map(r=>`<tr><td class="name">${esc(r.name)}${mini(r.spark)}</td><td class="r num ${cls(n(r.yoy))}">${sgn(n(r.yoy),1,"%")}</td></tr>`).join("");
-    body("p-supply").innerHTML=`<div class="macro">${card("pmi","製造業 PMI",d.pmi)}${card("nmi","非製造業 NMI",d.nmi)}</div>${tr?`<table style="margin-top:8px"><tr><th>零售業營業額指數（${esc((d.retail[0]||{}).period||"")}）</th><th class="r">年增</th></tr>${tr}</table>`:""}${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,160))}</div>`:""}`;setMeta("p-supply",d,24*35);},
+  supply(d){const tr=(d.retail||[]).map(r=>`<tr><td class="name">${esc(r.name)}${mini(r.spark)}</td><td class="r num ${cls(n(r.yoy))}">${sgn(n(r.yoy),1,"%")}</td></tr>`).join("");
+    body("p-supply").innerHTML=tr?`<table><tr><th>零售業營業額指數（${esc((d.retail[0]||{}).period||"")}）</th><th class="r">年增</th></tr>${tr}</table>`:`<div class="empty">零售指數抓不到</div>`;setMeta("p-supply",d,24*35);},
   ptt(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.board.slice(0,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"bad":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
     body("p-ptt").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"這輪沒抓到")}</div>`;setMeta("p-ptt",d,2);},
   tiktok(d){if(!document.getElementById("p-tiktok"))return;const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${it.rank||i+1}</span><span class="t">#${esc(it.tag)}</span><span class="m">${it.views?compact(n(it.views))+" 次":""}${it.trend?` <span class="${n(it.trend)>0?"up":"down"}">${sgn(n(it.trend),0)}</span>`:""}</span></li>`).join("");
@@ -595,7 +594,8 @@ const renderers={
   macro(d){const LC={"紅燈":"#E0453F","黃紅燈":"#E28A2B","綠燈":"#39B978","黃藍燈":"#3E8ED0","藍燈":"#2B5BD7"};
     const cards=(d.items||[]).map(it=>it.label==="景氣燈號"?`<div class="c"><div class="l">${esc(it.label)}</div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:14px;height:14px;border-radius:50%;background:${LC[it.value]||"var(--dim)"};box-shadow:0 0 0 3px color-mix(in srgb,${LC[it.value]||"var(--dim)"} 25%,transparent)"></span>${esc(it.value)}<span class="sub" style="font-size:12px">${it.score||""} 分</span></div><div class="p">${esc(it.period||"")}</div></div>`
       :(()=>{const cur=parseFloat(String(it.value).replace(/[^\d.-]/g,"")),pv=parseFloat(String(it.prev||"").replace(/[^\d.-]/g,""));const dl=isFinite(cur)&&isFinite(pv)?cur-pv:null;return`<div class="c"><div class="l">${esc(it.label)}</div><div class="v"><span class="${K("twm:"+it.label,cur)}">${esc(it.value)}</span>${dl!=null&&Math.abs(dl)>1e-9?`<span class="sub ${dl>0?"up":"down"}" style="font-size:11px;margin-left:6px">${dl>0?"▲":"▼"}${Math.abs(dl).toFixed(2)}</span>`:""}</div><div class="p">${esc(it.period||"")}${it.prev?` · 前 ${esc(it.prev)}`:""}${it.sub?` · ${esc(it.sub)}`:""}</div></div>`;})()).join("");
-    body("p-macro").innerHTML=`<div class="macro">${cards}</div>${d.note?`<div class="empty" style="padding:8px 0 0">${esc(d.note)}</div>`:""}`;setMeta("p-macro",d,24*35);},
+    const sp=(window.LASTP||{}).supply||{};const pm=(k,label,x)=>{if(!x)return"";const c=n(x.value)>=50?"#39B978":"#F0524F";return`<div class="c"><div class="l">${label}</div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:${c};box-shadow:0 0 0 3px color-mix(in srgb,${c} 25%,transparent)"></span><span class="${K("sup:"+k,n(x.value))}">${fmt(n(x.value),1)}</span>${x.chg!=null?`<span class="sub ${x.chg>0?"up":x.chg<0?"down":""}" style="font-size:11px">${sgn(n(x.chg),1)}</span>`:""}</div><div class="p">${esc(x.period||"")}${x.orders!=null?` · 新訂單 ${fmt(n(x.orders),1)}`:""}${mini(x.spark)}</div></div>`;};
+    body("p-macro").innerHTML=`<div class="macro">${pm("pmi","製造業 PMI",sp.pmi)}${pm("nmi","非製造業 NMI",sp.nmi)}${cards}</div>${d.note?`<div class="empty" style="padding:8px 0 0">${esc(d.note)}</div>`:""}`;setMeta("p-macro",d,24*35);},
   otc_revenue(d){revenueDocs.otc_revenue=d;renderRevenue();},
   trends(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="https://trends.google.com/trends/explore?geo=TW&q=${encodeURIComponent(it.title)}" target="_blank" rel="noopener">${esc(it.title)}</a>${it.news?`<span class="sub">${esc(it.news)}</span>`:""}</span><span class="m">${esc(it.traffic||"")}</span></li>`).join("");
     body("p-trends").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-trends",d,4);},
@@ -645,7 +645,7 @@ async function loadAll(){
     if(all.generatedAt===lastGen&&!firstRender){nextAt=Date.now()+60e3;return;}
     if(lastGen&&all.generatedAt!==lastGen)firstRender=false;
     lastGen=all.generatedAt;
-    Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});
+    window.LASTP=P;    Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});
     genTime=new Date(all.generatedAt).getTime();$("#db-age").textContent="最近抓取 "+ago(all.generatedAt);$(".k.db").classList.remove("stale");
     movers(P);tape(P);try{brief(P);}catch(e){console.warn("brief",e);}
     try{localStorage.setItem("intel:prev",JSON.stringify({gen:all.generatedAt,vals:curVals}));}catch(_){}
