@@ -1056,7 +1056,7 @@ def p_tw_pulse():
         rent = sum(r.get("AvailableRentBikes") or 0 for r in rows)
         empty = sum(1 for r in rows if (r.get("AvailableRentBikes") or 0) == 0)
         full = sum(1 for r in rows if (r.get("AvailableReturnBikes") or 0) == 0)
-        label = meta["label"].replace("市", "").replace("縣", "")
+        label = meta["label"]
         hist_put("youbike", label, key, rent)
         park = None
         if avail.get(city, {}).get("parking"):
@@ -1471,6 +1471,7 @@ def p_geo():
                     c["parking"].append([pos[0], pos[1], int(avail_n), int(total), pos[2][:18]])
             except Exception as e:  # noqa: BLE001
                 log("geo parking", city, e); GEO_ERRS.append(f"parking {city}: " + safe_err(e))
+                c["parking"] = (prev_geo.get(city) or {}).get("parking", [])  # 429 等：沿用上一輪
         if av.get("bikes"):
             try:
                 for r in _tdx_opt(f"Bike/Availability/City/{city}") or []:
@@ -1479,6 +1480,7 @@ def p_geo():
                         c["bikes"].append([pos[0], pos[1], int(r.get("AvailableRentBikes") or 0), int(pos[3] or 0), pos[2][:14]])
             except Exception as e:  # noqa: BLE001
                 log("geo bikes", city, e); GEO_ERRS.append(f"bikes {city}: " + safe_err(e))
+                c["bikes"] = (prev_geo.get(city) or {}).get("bikes", [])  # 429 等：沿用上一輪
         if av.get("vd"):
             try:
                 for v in _tdx_opt(f"Road/Traffic/Live/VD/City/{city}") or []:
@@ -1490,6 +1492,7 @@ def p_geo():
                         c["speed"].append([pos[0], pos[1], round(sum(sp) / len(sp)), pos[2][:10]])
             except Exception as e:  # noqa: BLE001
                 log("geo vd live", city, e); GEO_ERRS.append(f"vd {city}: " + safe_err(e))
+                c["speed"] = (prev_geo.get(city) or {}).get("speed", [])  # 429 等：沿用上一輪
         geo["cities"][city] = c
     # 國道 ETag 路段車速（全台，畫線）
     try:
