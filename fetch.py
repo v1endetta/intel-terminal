@@ -529,7 +529,9 @@ def p_commodities():
     return {"label": "期貨近月", "asOf": as_of, "items": items, "shipping": shipping}
 
 
-REV_WATCH = {"2912": "統一超", "1216": "統一", "2903": "遠百", "5904": "寶雅", "5903": "全家", "8454": "momo", "8044": "PChome"}
+REV_WATCH = {"2912": "統一超", "5903": "全家", "5904": "寶雅", "2903": "遠百", "8454": "momo", "8044": "PChome", "1216": "統一",
+             "2330": "台積電", "2317": "鴻海", "2382": "廣達"}
+REV_GROUP = {"2330": "供應鏈", "2317": "供應鏈", "2382": "供應鏈"}  # 其餘＝通路
 
 
 def p_revenue():
@@ -549,7 +551,7 @@ def p_revenue():
                 last, prevm = rows[-1], rows[-2]
                 yoy = next((r for r in rows if r["revenue_year"] == last["revenue_year"] - 1 and r["revenue_month"] == last["revenue_month"]), None)
                 rev = last["revenue"] / 1000  # 元 → 千元
-                items[code] = {"code": code, "name": name, "rev": rev,
+                items[code] = {"code": code, "name": name, "rev": rev, "group": REV_GROUP.get(code, "通路"),
                                "mom": (last["revenue"] - prevm["revenue"]) / prevm["revenue"] * 100 if prevm["revenue"] else None,
                                "yoy": (last["revenue"] - yoy["revenue"]) / yoy["revenue"] * 100 if yoy and yoy["revenue"] else None,
                                "period": f"{last['revenue_year']}/{last['revenue_month']:02d}",
@@ -566,7 +568,7 @@ def p_revenue():
                 for r in gjson(url):
                     code = r.get("公司代號")
                     if code in REV_WATCH and code not in items:
-                        items[code] = {"code": code, "name": REV_WATCH[code],
+                        items[code] = {"code": code, "name": REV_WATCH[code], "group": REV_GROUP.get(code, "通路"),
                                        "rev": num(r.get("營業收入-當月營收")),
                                        "mom": num(r.get("營業收入-上月比較增減(%)")),
                                        "yoy": num(r.get("營業收入-去年同月增減(%)")),
@@ -2231,6 +2233,246 @@ def p_youtube():
         raise RuntimeError(f"youtube: nothing {errs[:2]}")
     return {"tw": tw, "us": us, "cats": [(k, l) for k, l, _ in YT_CATS], "errs": errs[:3]}
 
+
+# ---------- 事件行事曆 / 決標公告 / 供應鏈與通路 ----------
+FOMC_2026 = ["2026-01-28", "2026-03-18", "2026-04-29", "2026-06-17", "2026-07-29", "2026-09-16", "2026-10-28", "2026-12-09"]  # 決議日（Fed 公布時程）
+FRED_RELEASES = {"Consumer Price Index": "美國 CPI", "Employment Situation": "美國非農就業", "Gross Domestic Product": "美國 GDP",
+                 "Personal Income and Outlays": "美國 PCE", "Producer Price Index": "美國 PPI", "Advance Monthly Sales for Retail": "美國零售銷售",
+                 "Surveys of Consumers": "密大消費信心", "Job Openings and Labor Turnover": "美國 JOLTS"}
+
+
+def _third_thursday(y, m):
+    from calendar import monthrange
+    d1 = datetime(y, m, 1).weekday()  # Mon=0
+    first_thu = 1 + (3 - d1) % 7
+    return datetime(y, m, first_thu + 14).date()
+
+
+def p_calendar():
+    today = TODAY_TPE
+    horizon = today + timedelta(days=21)
+    ev = []
+    def add(d, label, region, approx=False, kind=""):
+        if isinstance(d, str):
+            d = datetime.fromisoformat(d).date()
+        if today <= d <= horizon:
+            ev.append({"date": d.isoformat(), "label": label, "region": region, "approx": approx, "kind": kind})
+    # 美國：FRED 發布時程（官方）
+    errs = []
+    if FRED_KEY:
+        try:
+            j = gjson("https://api.stlouisfed.org/fred/releases/dates", params={"api_key": FRED_KEY, "file_type": "json", "realtime_start": today.isoformat(),
+                      "realtime_end": horizon.isoformat(), "include_release_dates_with_no_data": "true", "limit": 1000, "sort_order": "asc"})
+            for r in j.get("release_dates", []):
+                name = r.get("release_name", "")
+                for k, lab in FRED_RELEASES.items():
+                    if k in name:
+                        add(r["date"], lab, "美", kind="data")
+        except Exception as e:  # noqa: BLE001
+            log("fred releases", e); errs.append("FRED: " + safe_err(e))
+    for d in FOMC_2026:
+        add(d, "FOMC 利率決議", "美", kind="cb")
+    # 台灣：固定時程（主計總處／央行／國發會／中經院），標「約」
+    for mo in (today.month, (today.month % 12) + 1):
+        y = today.year + (1 if mo < today.month else 0)
+        from calendar import monthrange
+        last = monthrange(y, mo)[1]
+        add(datetime(y, mo, 1).date(), "台灣 PMI／NMI（中經院）", "台", kind="data")
+        add(datetime(y, mo, 6).date(), "台灣 CPI／PPI（主計總處）", "台", approx=True, kind="data")
+        add(datetime(y, mo, 20).date(), "外銷訂單（經濟部）", "台", approx=True, kind="data")
+        add(datetime(y, mo, 22).date(), "失業率（主計總處）", "台", approx=True, kind="data")
+        add(datetime(y, mo, 27).date(), "景氣燈號（國發會）", "台", approx=True, kind="data")
+        if mo in (1, 4, 7, 10):
+            add(datetime(y, mo, last).date(), "GDP 概估（主計總處）", "台", approx=True, kind="data")
+        if mo in (3, 6, 9, 12):
+            add(_third_thursday(y, mo), "央行理監事會", "台", approx=True, kind="cb")
+    # 台股休市（證交所 openapi）
+    try:
+        for r in gjson("https://openapi.twse.com.tw/v1/holidaySchedule/holidaySchedule"):
+            raw = str(r.get("Date") or r.get("日期") or "")
+            d = roc_to_iso(raw) if raw and not raw.startswith("20") else raw[:10]
+            if d:
+                add(d, f"台股休市：{(r.get('Name') or r.get('名稱') or '')[:12]}", "台", kind="holiday")
+    except Exception as e:  # noqa: BLE001
+        log("twse holidays", e); errs.append("休市: " + safe_err(e))
+    # 去重、排序
+    seen, out = set(), []
+    for e in sorted(ev, key=lambda x: (x["date"], x["region"])):
+        k = (e["date"], e["label"])
+        if k not in seen:
+            seen.add(k); out.append(e)
+    if not out:
+        raise RuntimeError(f"calendar: nothing {errs[:2]}")
+    return {"items": out, "from": today.isoformat(), "to": horizon.isoformat(), "errs": errs[:3]}
+
+
+AWARD_CACHE = DATA / "award_cache.json"
+
+
+def p_awards():
+    """決標公告：行銷／品牌／影片／廣告類標案誰得標、決標金額。"""
+    cache = {}
+    if AWARD_CACHE.exists():
+        try:
+            cache = json.loads(AWARD_CACHE.read_text(encoding="utf-8"))
+        except Exception:
+            cache = {}
+    found, errs = {}, []
+    for kw in PCC_KW:
+        try:
+            js = _cffi_json("https://pcc-api.openfun.app/api/searchbytitle", query=kw, page=1)
+            for r in js.get("records", []):
+                b = r.get("brief") or {}
+                typ = b.get("type") or ""
+                if "決標公告" not in typ or "無法決標" in typ:
+                    continue
+                title = b.get("title") or ""
+                if any(x in title for x in PCC_EXCLUDE):
+                    continue
+                key = f'{r.get("unit_id")}/{r.get("job_number")}'
+                if key in found:
+                    continue
+                comp = b.get("companies") or r.get("companies") or {}
+                names = []
+                if isinstance(comp, dict):
+                    names = comp.get("names") or comp.get("name") or []
+                    if isinstance(names, dict):
+                        names = list(names.values())
+                elif isinstance(comp, list):
+                    names = [c.get("name") if isinstance(c, dict) else str(c) for c in comp]
+                found[key] = {"key": key, "title": title[:60], "unit": (r.get("unit_name") or "")[:18], "date": str(r.get("date") or ""),
+                              "winner": "、".join(str(n_)[:16] for n_ in names[:2]) if names else "",
+                              "url": f'https://openfunltd.github.io/pcc-viewer/tender.html?unit_id={r.get("unit_id")}&job_number={r.get("job_number")}'}
+        except Exception as e:  # noqa: BLE001
+            log("awards", kw, e); errs.append(f"{kw}: {safe_err(e)}")
+        time.sleep(1)
+    items = sorted(found.values(), key=lambda x: x["date"], reverse=True)[:14]
+    filled = 0
+    for it in items:
+        c = cache.get(it["key"])
+        if c is not None:
+            it["amount"], it["winner"] = c.get("amount"), it["winner"] or c.get("winner", ""); continue
+        if filled >= 6:
+            continue
+        try:
+            time.sleep(1)
+            uid, job = it["key"].split("/", 1)
+            d = _cffi_json("https://pcc-api.openfun.app/api/tender", unit_id=uid, job_number=job)
+            recs = d.get("records") or []
+            det = {}
+            for rec in recs:  # 取最新的決標公告那份 detail
+                if "決標" in ((rec.get("brief") or {}).get("type") or ""):
+                    det = rec.get("detail") or {}
+            det = det or (recs[-1].get("detail") if recs else {}) or {}
+            amt = None
+            for k, v in det.items():
+                if "決標金額" in k or "總決標金額" in k:
+                    m = re.search(r"[\d,]+", str(v).replace("元", ""))
+                    if m:
+                        amt = int(m.group(0).replace(",", "")); break
+            if not it["winner"]:
+                for k, v in det.items():
+                    if "得標廠商" in k and "名稱" in k and v:
+                        it["winner"] = str(v)[:16]; break
+            it["amount"] = amt
+            cache[it["key"]] = {"amount": amt, "winner": it["winner"]}; filled += 1
+        except Exception as e:  # noqa: BLE001
+            log("award detail", it["key"], e); it["amount"] = None
+    if len(cache) > 600:
+        cache = dict(list(cache.items())[-400:])
+    write_json(AWARD_CACHE, cache)
+    if not items:
+        raise RuntimeError(f"awards: nothing errs={errs[:3]}")
+    return {"items": items, "errs": errs[:3]}
+
+
+RETAIL_CSV = ("https://service.moea.gov.tw/EE520/opendata/%E7%B6%93%E6%BF%9F%E9%83%A8%E7%B5%B1%E8%A8%88%E8%99%95_%E6%89%B9%E7%99%BC%E3%80%81"
+              "%E9%9B%B6%E5%94%AE%E5%8F%8A%E9%A4%90%E9%A3%B2%E6%A5%AD%E7%87%9F%E6%A5%AD%E9%A1%8D%E6%8C%87%E6%95%B8.csv")
+RETAIL_WATCH = ["零售業", "超級市場", "便利商店", "百貨公司", "電子購物", "藥品及化粧品", "家具", "布疋及服飾", "餐飲業"]
+
+
+def _ndc_pmi(page):
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as pw:
+        b = pw.chromium.launch()
+        pg = b.new_page(user_agent=UA, locale="zh-TW")
+        pg.goto(f"https://index.ndc.gov.tw/n/zh_tw/{page}", wait_until="networkidle", timeout=60000)
+        pg.wait_for_timeout(2500)
+        txt = pg.inner_text("body")
+        b.close()
+    head = re.search(r"擴張（Expansion）\s*(?:\d+\s*){7}(\d+\.?\d*)\s*%", txt)
+    orders = re.search(r"新增訂單[^\n]*\n(?:\d+\n){4}(\d+\.?\d*)%", txt)
+    ym = re.search(r"(20\d\d)\n(\d{1,2})月", txt)
+    chg = re.search(r"較上月變化\n([+-]?\d+\.\d+) 百分點", txt)
+    nxt = re.search(r"下次發布日期\s*:\s*(\d{4}-\d{2}-\d{2})", txt)
+    if not head:
+        raise RuntimeError(f"ndc {page} parse")
+    return {"value": float(head.group(1)), "orders": float(orders.group(1)) if orders else None,
+            "period": f"{ym.group(1)}-{int(ym.group(2)):02d}" if ym else "", "chg": float(chg.group(1)) if chg else None,
+            "next": nxt.group(1) if nxt else ""}
+
+
+def p_supply():
+    out, errs = {"pmi": None, "nmi": None, "retail": []}, []
+    for key, page in (("pmi", "PMI"), ("nmi", "NMI")):
+        try:
+            out[key] = _ndc_pmi(page)
+            if out[key]["period"]:
+                hist_put("supply", key, out[key]["period"], out[key]["value"])
+            out[key]["spark"] = hist_get("supply", key, 24)
+        except Exception as e:  # noqa: BLE001
+            log("ndc", page, e); errs.append(f"{page}: {safe_err(e)}")
+    # 經濟部零售業營業額指數（分業別）→ 年增率
+    try:
+        r = get(RETAIL_CSV, headers={"Referer": "https://data.gov.tw/"})
+        raw = r.content
+        try:
+            txt = raw.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            txt = raw.decode("big5", errors="ignore")
+        import csv as _csv
+        rows = list(_csv.reader(txt.splitlines()))
+        hdr = rows[0]
+        ci = {h: i for i, h in enumerate(hdr)}
+        def col(*names):
+            for n_ in names:
+                for h, i in ci.items():
+                    if n_ in h:
+                        return i
+            return None
+        c_ind, c_per, c_val = col("行業別"), col("資料期"), col("統計值")
+        series = {}
+        for row in rows[1:]:
+            if len(row) <= max(c_ind, c_per, c_val):
+                continue
+            ind, per, val = row[c_ind].strip(), row[c_per].strip(), num(row[c_val])
+            m = re.match(r"(\d{2,3})\D+(\d{1,2})", per)
+            if not m or val is None:
+                continue
+            y = int(m.group(1)); y = y + 1911 if y < 1911 else y
+            series.setdefault(ind, {})[f"{y}-{int(m.group(2)):02d}"] = val
+        for w in RETAIL_WATCH:
+            name = next((k for k in series if k.startswith(w) or w in k), None)
+            if not name:
+                continue
+            ser = sorted(series[name].items())
+            if len(ser) < 13:
+                continue
+            (p_last, v_last) = ser[-1]
+            y, m_ = p_last.split("-")
+            prev_year = f"{int(y) - 1}-{m_}"
+            v_prev = series[name].get(prev_year)
+            if (TODAY_TPE - datetime.fromisoformat(p_last + "-01").date()).days > 150:
+                errs.append(f"零售指數停在 {p_last}"); break
+            if v_prev:
+                out["retail"].append({"name": name[:10], "period": p_last, "yoy": round((v_last / v_prev - 1) * 100, 1),
+                                      "spark": [v for _, v in ser[-13:]]})
+    except Exception as e:  # noqa: BLE001
+        log("retail csv", e); errs.append("零售指數: " + safe_err(e))
+    if not out["pmi"] and not out["nmi"] and not out["retail"]:
+        raise RuntimeError(f"supply: nothing {errs[:3]}")
+    return {**out, "errs": errs[:4]}
+
 # ---------- run ----------
 run("pulse", p_pulse)
 run("taiex", p_taiex)
@@ -2252,6 +2494,9 @@ run("media", p_media, keep_if_fresh_hours=6)
 run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=6)
 run("gmacro", p_gmacro, keep_if_fresh_hours=6)
+run("calendar", p_calendar, keep_if_fresh_hours=6)
+run("awards", p_awards, keep_if_fresh_hours=1)
+run("supply", p_supply, keep_if_fresh_hours=6)
 run("weather", p_weather)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("news", p_news, keep_if_fresh_hours=0.25)

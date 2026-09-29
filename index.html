@@ -247,25 +247,31 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><span>巴黎／馬德里／東京／紐約收盤</span></div>
   </section>
 
-  <section class="panel" id="p-tw-stocks">
+  <section class="panel w6" id="p-tw-stocks">
     <div class="ph"><h2>TW Supply</h2><span class="zh">台灣供應鏈與通路</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>紡織：儒鴻、聚陽、遠東新　通路：統一超、統一、遠百</span></div>
   </section>
 
-  <section class="panel" id="p-revenue">
-    <div class="ph"><h2>Retail Rev.</h2><span class="zh">通路月營收</span><span class="meta">排程</span></div>
+  <section class="panel w6" id="p-revenue">
+    <div class="ph"><h2>Revenue</h2><span class="zh">通路與供應鏈 · 月營收</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>公開資訊觀測站 · 每月 10 日前後</span></div>
   </section>
 
-  <section class="panel" id="p-poly">
-    <div class="ph"><h2>Polymarket</h2><span class="zh">世界在賭什麼</span><span class="meta">排程</span></div>
+  <div class="sec">總經 Macro</div>
+
+  <section class="panel w6" id="p-calendar">
+    <div class="ph"><h2>Calendar</h2><span class="zh">接下來三週 · 數據發布與央行</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a><span>24h 成交量排序，已濾掉運彩</span></div>
+    <div class="pf"><span>美：FRED 官方發布時程、FOMC · 台：主計總處／央行／國發會固定時程（「約」＝依慣例推估）· 台股休市：證交所</span></div>
   </section>
 
-  <div class="sec">總經 Macro</div>
+  <section class="panel w6" id="p-supply">
+    <div class="ph"><h2>Supply & Retail</h2><span class="zh">PMI／NMI · 零售分業年增</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>中經院 PMI／NMI（國發會頁面）· 經濟部零售業營業額指數（分業）· 50 以上＝擴張</span></div>
+  </section>
 
   <section class="panel w6" id="p-macro">
     <div class="ph"><h2>TW Macro</h2><span class="zh">台灣總經</span><span class="meta">排程</span></div>
@@ -303,6 +309,18 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="ph"><h2>Design & Ad Press</h2><span class="zh">設計與廣告媒體</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Dezeen · It's Nice That · Campaign Brief Asia · Creative Review</span></div>
+  </section>
+
+  <section class="panel w6" id="p-awards">
+    <div class="ph"><h2>Awards</h2><span class="zh">決標公告 · 誰得標、多少錢</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>政府電子採購網（g0v 鏡像）· 同一組關鍵字 · 決標金額補抓，可能晚一輪</span></div>
+  </section>
+
+  <section class="panel w6" id="p-poly">
+    <div class="ph"><h2>Polymarket</h2><span class="zh">世界在賭什麼</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a><span>24h 成交量排序，已濾掉運彩</span></div>
   </section>
 
   <section class="panel w6" id="p-tech">
@@ -445,7 +463,7 @@ function renderTaiex(){
   setMeta("p-taiex",{...d,label:"盤後",error:d.error||m.error},30);
 }
 /* ---------- shared: revenue merge ---------- */
-const REV_ORDER=["2912","1216","2903","5904","5903","8454","8044"];
+const REV_ORDER=["2912","5903","5904","2903","8454","8044","1216","2330","2317","2382"];
 let revenueDocs={};
 function renderRevenue(){
   const byCode=new Map();
@@ -453,8 +471,9 @@ function renderRevenue(){
   const items=[...byCode.values()];
   if(!items.length){setErr("p-revenue","尚無營收資料");return;}
   items.sort((a,b)=>REV_ORDER.indexOf(a.code)-REV_ORDER.indexOf(b.code));
-  const tr=items.map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num">${compact(n(it.rev)*1000)}</td><td class="r num ${cls(n(it.yoy))}">${sgn(n(it.yoy),1,"%")}</td><td class="r num ${cls(n(it.mom))}">${sgn(n(it.mom),1,"%")}</td></tr>`).join("");
-  body("p-revenue").innerHTML=`<table><tr><th>公司</th><th class="r">當月營收 TWD</th><th class="r">YoY</th><th class="r">MoM</th></tr>${tr}</table>`;
+  const row=it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num">${compact(n(it.rev)*1000)}</td><td class="r num ${cls(n(it.yoy))}">${sgn(n(it.yoy),1,"%")}</td><td class="r num ${cls(n(it.mom))}">${sgn(n(it.mom),1,"%")}</td></tr>`;
+  const ch=items.filter(it=>(it.group||"通路")==="通路").map(row).join(""),sc=items.filter(it=>it.group==="供應鏈").map(row).join("");
+  body("p-revenue").innerHTML=`<table><tr><th>通路</th><th class="r">當月營收 TWD</th><th class="r">YoY</th><th class="r">MoM</th></tr>${ch}${sc?`<tr><th colspan="4" style="padding-top:8px">供應鏈</th></tr>${sc}`:""}</table>`;
   const d=revenueDocs.revenue||revenueDocs.otc_revenue;setMeta("p-revenue",{...d,label:items[0].period?"資料月 "+items[0].period:""},24*40);
 }
 
@@ -524,6 +543,13 @@ const renderers={
     const tabs=cats.map(([k,l])=>`<button class="ytc${k===cur?" on":""}" data-cat="${esc(k)}">${esc(l)}</button>`).join("");
     body("p-youtube").innerHTML=`<div class="tp"><div><div class="mapctl" style="position:static;margin-bottom:6px">${tabs}</div><ul class="list">${li((d.tw||{})[cur],true)||'<li class="empty">沒有資料</li>'}</ul></div><div><h3 style="font-size:10.5px;letter-spacing:.08em;color:var(--dim);margin:0 0 6px;text-transform:uppercase">美國 對照</h3><ul class="list">${li(d.us,true)}</ul></div></div>`;
     body("p-youtube").querySelectorAll(".ytc").forEach(b=>b.addEventListener("click",()=>{try{localStorage.setItem("yt-cat",b.dataset.cat);}catch(e){}renderers.youtube(d);}));setMeta("p-youtube",d,2);},
+  calendar(d){const today=(d.from||"");const li=(d.items||[]).map(it=>{const dt=new Date(it.date+"T00:00:00");const dd=Math.round((dt-new Date(today+"T00:00:00"))/864e5);const wd="日一二三四五六"[dt.getDay()];return`<li><span class="src" style="min-width:64px">${esc(it.date.slice(5))} ${wd}</span><span class="t">${esc(it.label)}${it.approx?`<span class="sub">約</span>`:""}</span><span class="m ${it.kind==="cb"?"bad":""}">${it.region}${dd===0?" · 今天":dd===1?" · 明天":""}</span></li>`;}).join("");
+    body("p-calendar").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">三週內沒有事件</div>`;setMeta("p-calendar",d,26);},
+  awards(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.date.slice(4,6))}/${esc(it.date.slice(6,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a><span class="sub">${esc(it.unit)}${it.winner?" → "+esc(it.winner):""}</span></span><span class="m ${it.amount>=3e6?"up":""}">${it.amount?compact(n(it.amount)):"—"}</span></li>`).join("");
+    body("p-awards").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">沒有命中</div>`;setMeta("p-awards",d,6);},
+  supply(d){const card=(k,label,x)=>{if(!x)return"";const c=n(x.value)>=50?"#39B978":"#F0524F";return`<div class="c"><div class="l">${label}</div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:${c};box-shadow:0 0 0 3px color-mix(in srgb,${c} 25%,transparent)"></span><span class="${K("sup:"+k,n(x.value))}">${fmt(n(x.value),1)}</span>${x.chg!=null?`<span class="sub ${x.chg>0?"up":x.chg<0?"down":""}" style="font-size:11px">${sgn(n(x.chg),1)}</span>`:""}</div><div class="p">${esc(x.period||"")}${x.orders!=null?` · 新訂單 ${fmt(n(x.orders),1)}`:""}${x.next?` · 下次 ${esc(x.next.slice(5))}`:""}${mini(x.spark)}</div></div>`;};
+    const tr=(d.retail||[]).map(r=>`<tr><td class="name">${esc(r.name)}${mini(r.spark)}</td><td class="r num ${cls(n(r.yoy))}">${sgn(n(r.yoy),1,"%")}</td></tr>`).join("");
+    body("p-supply").innerHTML=`<div class="macro">${card("pmi","製造業 PMI",d.pmi)}${card("nmi","非製造業 NMI",d.nmi)}</div>${tr?`<table style="margin-top:8px"><tr><th>零售業營業額指數（${esc((d.retail[0]||{}).period||"")}）</th><th class="r">年增</th></tr>${tr}</table>`:""}${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,160))}</div>`:""}`;setMeta("p-supply",d,24*35);},
   ptt(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.board.slice(0,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"bad":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
     body("p-ptt").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"這輪沒抓到")}</div>`;setMeta("p-ptt",d,2);},
   tiktok(d){if(!document.getElementById("p-tiktok"))return;const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${it.rank||i+1}</span><span class="t">#${esc(it.tag)}</span><span class="m">${it.views?compact(n(it.views))+" 次":""}${it.trend?` <span class="${n(it.trend)>0?"up":"down"}">${sgn(n(it.trend),0)}</span>`:""}</span></li>`).join("");
