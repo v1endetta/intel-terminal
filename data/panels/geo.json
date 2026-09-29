@@ -1,13 +1,15 @@
 {
  "label": "TDX",
  "cities_with_data": 14,
- "freeway": 424,
- "static": "15/22",
+ "freeway": 421,
+ "static": "17/22",
  "totals": {
-  "parking": 1919,
+  "parking": 1920,
   "bikes": 9632,
-  "speed": 917
+  "speed": 918
  },
- "errs": [],
- "updatedAt": "2026-09-29T05:22:43Z"
+ "errs": [
+  "parking HsinchuCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/HsinchuCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
+ ],
+ "updatedAt": "2026-09-29T06:33:07Z"
 }
