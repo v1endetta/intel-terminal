@@ -45,6 +45,7 @@ CWA_KEY = os.environ.get("CWA_API_KEY", "").strip()
 TDX_ID = os.environ.get("TDX_CLIENT_ID", "").strip()
 TDX_SECRET = os.environ.get("TDX_CLIENT_SECRET", "").strip()
 GUARDIAN_KEY = os.environ.get("GUARDIAN_API_KEY", "").strip()
+YOUTUBE_KEY = os.environ.get("YOUTUBE_API_KEY", "").strip()
 
 
 # ---------- helpers ----------
@@ -2193,6 +2194,43 @@ def p_gmacro():
         raise RuntimeError(f"gmacro: nothing {errs[:2]}")
     return {"items": items, "errs": errs[:4]}
 
+
+# ---------- YouTube 發燒榜（Data API v3，每次 1 單位） ----------
+YT_CATS = [("all", "全部", None), ("music", "音樂", "10"), ("ent", "娛樂", "24"), ("news", "新聞", "25")]
+
+
+def _yt_popular(region, category=None, n=10):
+    params = {"part": "snippet,statistics", "chart": "mostPopular", "regionCode": region, "maxResults": n, "key": YOUTUBE_KEY}
+    if category:
+        params["videoCategoryId"] = category
+    js = gjson("https://www.googleapis.com/youtube/v3/videos", params=params)
+    out = []
+    for v in js.get("items", []):
+        sn, st = v.get("snippet") or {}, v.get("statistics") or {}
+        out.append({"id": v.get("id"), "title": (sn.get("title") or "")[:70], "channel": (sn.get("channelTitle") or "")[:20],
+                    "views": num(st.get("viewCount")), "likes": num(st.get("likeCount")), "at": sn.get("publishedAt"),
+                    "url": f"https://www.youtube.com/watch?v={v.get('id')}"})
+    return out
+
+
+def p_youtube():
+    if not YOUTUBE_KEY:
+        raise RuntimeError("no YOUTUBE_API_KEY")
+    tw, errs = {}, []
+    for key, label, cat in YT_CATS:
+        try:
+            tw[key] = _yt_popular("TW", cat, 10)
+        except Exception as e:  # noqa: BLE001
+            log("yt", key, e); errs.append(f"TW {label}: {safe_err(e)}")
+    us = []
+    try:
+        us = _yt_popular("US", None, 5)
+    except Exception as e:  # noqa: BLE001
+        log("yt us", e); errs.append("US: " + safe_err(e))
+    if not tw.get("all") and not us:
+        raise RuntimeError(f"youtube: nothing {errs[:2]}")
+    return {"tw": tw, "us": us, "cats": [(k, l) for k, l, _ in YT_CATS], "errs": errs[:3]}
+
 # ---------- run ----------
 run("pulse", p_pulse)
 run("taiex", p_taiex)
@@ -2202,6 +2240,7 @@ run("fx", p_fx_any)
 run("poly", p_poly)
 run("tech", p_tech)
 run("trends", p_trends)
+run("youtube", p_youtube, keep_if_fresh_hours=0.5)
 run("luxury", p_luxury, keep_if_fresh_hours=3)
 run("world", p_world, keep_if_fresh_hours=0.25)
 run("sectors", p_sectors, keep_if_fresh_hours=0.5)
