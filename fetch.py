@@ -1528,7 +1528,7 @@ def p_tenders():
                     found[key]["kw"].append(kw); continue
                 found[key] = {"key": key, "title": (b.get("title") or "")[:60], "unit": (r.get("unit_name") or "")[:18],
                               "date": str(r.get("date") or ""), "type": typ[:6], "kw": [kw],
-                              "url": ("https://pcc.g0v.ronny.tw" + r["url"]) if str(r.get("url", "")).startswith("/") else (r.get("url") or f'https://pcc.g0v.ronny.tw/tender/{r.get("unit_id")}/{r.get("job_number")}')}
+                              "url": f'https://openfunltd.github.io/pcc-viewer/tender.html?unit_id={r.get("unit_id")}&job_number={r.get("job_number")}'}
         except Exception as e:  # noqa: BLE001
             log("pcc", kw, e); errs.append(f"{kw}: {safe_err(e)}")
         time.sleep(1)
@@ -1695,7 +1695,7 @@ run("tw_pulse", p_tw_pulse)
 run("geo", p_geo)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("news", p_news, keep_if_fresh_hours=0.25)
-run("tenders", p_tenders, keep_if_fresh_hours=1)
+run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
 run("power", p_power, keep_if_fresh_hours=0.25)
