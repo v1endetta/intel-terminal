@@ -2401,9 +2401,9 @@ def _ndc_pmi(page):
         txt = pg.inner_text("body")
         b.close()
     head = re.search(r"擴張（Expansion）\s*(?:\d+\s*){7}(\d+\.?\d*)\s*%", txt)
-    orders = re.search(r"新增訂單[^\n]*\n(?:\d+\n){4}(\d+\.?\d*)%", txt)
+    orders = re.search(r"新增訂單[^\n]*\n(?:\s*\d+\s*\n){4}\s*(\d+\.?\d*)\s*%", txt)
     ym = re.search(r"(20\d\d)\n(\d{1,2})月", txt)
-    chg = re.search(r"較上月變化\n([+-]?\d+\.\d+) 百分點", txt)
+    chg = re.search(r"較上月變化\s*([+-]?\d+(?:\.\d+)?)\s*百分點", txt)
     nxt = re.search(r"下次發布日期\s*:\s*(\d{4}-\d{2}-\d{2})", txt)
     if not head:
         raise RuntimeError(f"ndc {page} parse")
@@ -2467,6 +2467,8 @@ def p_supply():
             if v_prev:
                 out["retail"].append({"name": name[:10], "period": p_last, "yoy": round((v_last / v_prev - 1) * 100, 1),
                                       "spark": [v for _, v in ser[-13:]]})
+        if not out["retail"]:
+            errs.append(f"零售: hdr={hdr[:6]} 行業={list(series)[:8]} n={ {k: len(v) for k, v in list(series.items())[:3]} }")
     except Exception as e:  # noqa: BLE001
         log("retail csv", e); errs.append("零售指數: " + safe_err(e))
     if not out["pmi"] and not out["nmi"] and not out["retail"]:
