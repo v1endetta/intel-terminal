@@ -1336,7 +1336,15 @@ def _rss_date(d: str) -> str:
 
 
 def _rss(url, source, limit=8, strip_source=False, **params):
-    root = ET.fromstring(get(url, params=params or None).content)
+    try:
+        raw = get(url, params=params or None).content
+    except requests.HTTPError as e:
+        if e.response is not None and e.response.status_code in (403, 429):
+            from curl_cffi import requests as cffi
+            r = cffi.get(url, params=params or None, impersonate="chrome", timeout=25); r.raise_for_status(); raw = r.content
+        else:
+            raise
+    root = ET.fromstring(raw.lstrip(b"\xef\xbb\xbf \r\n\t"))
     out = []
     for it in root.iter("item"):
         title = (it.findtext("title") or "").strip()
@@ -1509,7 +1517,7 @@ def p_tenders():
     found, errs = {}, []
     for kw in PCC_KW:
         try:
-            js = gjson("https://pcc.g0v.ronny.tw/api/searchbytitle", params={"query": kw, "page": 1})
+            js = _cffi_json("https://pcc.g0v.ronny.tw/api/searchbytitle", query=kw, page=1)
             for r in js.get("records", []):
                 b = r.get("brief") or {}
                 typ = b.get("type") or ""
@@ -1536,7 +1544,7 @@ def p_tenders():
         try:
             time.sleep(1)
             uid, job = it["key"].split("/", 1)
-            d = gjson("https://pcc.g0v.ronny.tw/api/tender", params={"unit_id": uid, "job_number": job})
+            d = _cffi_json("https://pcc.g0v.ronny.tw/api/tender", unit_id=uid, job_number=job)
             det = ((d.get("records") or [{}])[0].get("detail") or {})
             raw = det.get("採購資料:預算金額") or det.get("已公開閱覽資料:預算金額") or det.get("招標資料:預算金額") or ""
             m = re.search(r"[\d,]+", str(raw).replace("元", ""))
@@ -1553,7 +1561,7 @@ def p_tenders():
 
 
 DESIGN_FEEDS = [("https://www.dezeen.com/feed/", "Dezeen", "site:dezeen.com"),
-                ("https://www.itsnicethat.com/feed", "INT", "site:itsnicethat.com"),
+                ("https://www.itsnicethat.com/feed.rss", "INT", "site:itsnicethat.com"),
                 ("https://campaignbriefasia.com/feed/", "CB Asia", "site:campaignbriefasia.com"),
                 ("https://www.creativereview.co.uk/feed/", "CR", "site:creativereview.co.uk")]
 
@@ -1586,10 +1594,14 @@ def p_quake():
         mag = ((info.get("EarthquakeMagnitude") or {}).get("MagnitudeValue"))
         epi = info.get("Epicenter") or {}
         t = (info.get("OriginTime") or "").replace("/", "-")
-        try:
-            at = datetime.strptime(t, "%Y-%m-%d %H:%M:%S").replace(tzinfo=TPE).astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-        except Exception:
-            at = ""
+        at = ""
+        for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M:%S"):
+            try:
+                dt = datetime.strptime(t[:25], fmt)
+                dt = dt if dt.tzinfo else dt.replace(tzinfo=TPE)
+                at = dt.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"); break
+            except Exception:
+                continue
         # 最大震度：Intensity.ShakingArea[].AreaIntensity
         mx = ""
         for a in ((q.get("Intensity") or {}).get("ShakingArea") or []):
@@ -1606,8 +1618,18 @@ def p_quake():
 
 def p_power():
     """台電今日尖峰負載與備轉容量率。"""
-    js = gjson("https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.json", headers={"Referer": "https://www.taipower.com.tw/"})
-    rec = (js.get("records") or [js])[0]
+    js, last = None, None
+    for url in ("https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.json",
+                "https://data.taipower.com.tw/opendata/apply/file/d006001/001.json",
+                "https://service.taipower.com.tw/data/opendata/apply/file/d006001/001.json"):
+        try:
+            js = _cffi_json(url); break
+        except Exception as e:  # noqa: BLE001
+            last = e; log("taipower", url, e)
+    if js is None:
+        raise last
+    rec = js.get("records") if isinstance(js, dict) else js
+    rec = (rec or [js])[0] if isinstance(rec, list) else (rec or js)
     def pick(*names):
         for n_ in names:
             for k, v in rec.items():
@@ -1630,10 +1652,19 @@ def p_airport():
         rows = tdx(path)
         if isinstance(rows, dict):
             rows = rows.get("FIDS") or rows.get("Departures") or rows.get("Arrivals") or []
+        # 共掛班號（JL802／AA8424／CI9902 同一架）只算一次：以表定時間＋對方機場＋登機門去重
+        seen, uniq = set(), []
+        for r in rows:
+            k = (r.get("ScheduleDepartureTime") if kind == "dep" else r.get("ScheduleArrivalTime"),
+                 r.get("ArrivalAirportID") if kind == "dep" else r.get("DepartureAirportID"), r.get("Gate") or r.get("Terminal"))
+            if k in seen:
+                continue
+            seen.add(k); uniq.append(r)
+        rows = uniq
         tot = len(rows); delayed = cancelled = 0; upcoming = []
         now_tpe = NOW.astimezone(TPE)
         for r in rows:
-            rk = (r.get("DepartureRemark") if kind == "dep" else r.get("ArrivalRemark")) or ""
+            rk = re.sub(r"[A-Za-z ]+", "", (r.get("DepartureRemark") if kind == "dep" else r.get("ArrivalRemark")) or "")
             if "取消" in rk:
                 cancelled += 1
             elif "延" in rk:
