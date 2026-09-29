@@ -76,9 +76,16 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "UK government pays highest interest rate on 10-year debt since 1999 at bond auction – busi",
+   "title": "‘We will not be intimidated,’ says Estonian PM after attributing recent arson attack to Ru",
+   "url": "https://www.theguardian.com/world/live/2026/sep/29/ukraine-russia-war-odesa-overnight-lithuania-mark-rutte-europe-latest-news-updates",
+   "at": "2026-09-29T14:49:34Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
+   "title": "UK government pays highest interest rate on 10-year debt since 1999 at bond auction – as i",
    "url": "https://www.theguardian.com/business/live/2026/sep/29/anthropic-ipo-warning-existential-risks-to-humanity-from-ai-astrazeneca-2bn-cancer-drug-tie-up-diesel-stock-market-live-news-updates",
-   "at": "2026-09-29T14:29:38Z",
+   "at": "2026-09-29T14:37:38Z",
    "sec": "Business"
   },
   {
@@ -99,13 +106,6 @@
    "title": "Estonia blames Russia for arson attack on drone maker supplying Ukraine ",
    "url": "https://www.theguardian.com/world/2026/sep/29/estonia-blames-russia-arson-attack-drone-maker-ukraine",
    "at": "2026-09-29T14:20:39Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "‘We will not be intimidated,’ says Estonian PM after attributing recent arson attack to Ru",
-   "url": "https://www.theguardian.com/world/live/2026/sep/29/ukraine-russia-war-odesa-overnight-lithuania-mark-rutte-europe-latest-news-updates",
-   "at": "2026-09-29T14:17:44Z",
    "sec": "World news"
   },
   {
@@ -405,6 +405,8 @@
    ]
   }
  },
- "errs": [],
- "updatedAt": "2026-09-29T14:33:16Z"
+ "errs": [
+  "gdelt: ReadTimeout: HTTPSConnectionPool(host='api.gdeltproject.org', port=443): Read timed out. (read timeout=25)"
+ ],
+ "updatedAt": "2026-09-29T14:49:05Z"
 }
