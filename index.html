@@ -129,7 +129,7 @@ a:hover{text-decoration:underline}
 .err-tag{color:var(--warn);font-size:10px;font-family:var(--mono);margin-left:6px}
 /* grid */
 .grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:10px}
-.sec{grid-column:span 12;font:600 11px var(--mono);letter-spacing:.16em;color:var(--dim);text-transform:uppercase;padding:14px 2px 0;border-top:1px solid var(--line);margin-top:2px}.sec:first-child{border-top:0;padding-top:4px}
+.sec{grid-column:span 12;font:600 11px var(--mono);letter-spacing:.16em;color:var(--dim);text-transform:uppercase;padding:14px 2px 0;border-top:1px solid var(--line);margin-top:2px}.pulse + .sec{border-top:0;padding-top:4px}
 .panel{grid-column:span 4;background:var(--panel);border:1px solid var(--line);border-radius:4px;display:flex;flex-direction:column;min-width:0}
 .panel.w6{grid-column:span 6} .panel.w3{grid-column:span 3} .panel.w8{grid-column:span 8} .panel.w12{grid-column:span 12}
 @media (max-width:1100px){.panel,.panel.w3{grid-column:span 6}.panel.w8{grid-column:span 12}}
@@ -200,6 +200,9 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 <section class="movers" id="movers" hidden></section>
 
 <main class="grid">
+
+  <section class="pulse" id="p-pulse"></section>
+
   <div class="sec">市場 Markets</div>
 
   <section class="panel w8" id="p-taiex">
