@@ -2079,7 +2079,7 @@ GMACRO = [  # (group, label, series, kind) kind: yoy=指數換年增, level=直�
     ("美國", "GDP 季增年率", "A191RL1Q225SBEA", "pct"), ("美國", "初領失業金", "ICSA", "k"), ("美國", "密大消費信心", "UMCSENT", "level"),
     ("歐元區", "HICP 年增", "CP0000EZ19M086NEST", "yoy"), ("歐元區", "ECB 存款利率", "ECBDFR", "pct"),
     ("日本", "CPI 年增", "CPALTT01JPM659N|JPNCPIALLMINMEI", "pct|yoy"), ("日本", "政策利率", "IRSTCI01JPM156N|IRSTCB01JPM156N", "pct|pct"),
-    ("中國", "CPI 年增", "CPALTT01CNM659N|CHNCPIALLMINMEI", "pct|yoy"), ("英國", "CPI 年增", "CPALTT01GBM659N|GBRCPIALLMINMEI", "pct|yoy"),
+    ("中國", "CPI 年增", "CPALTT01CNM659N|CHNCPIALLMINMEI", "pct|yoy"),
 ]
 GMACRO_MAX_AGE_DAYS = 200  # FRED 上 OECD 系列常停更；太舊就不顯示，免得誤導
 
@@ -2117,8 +2117,18 @@ def p_gmacro():
             items.append({"group": group, "label": label, "value": txt, "raw": round(v, 3), "prev": ptxt, "period": d[:7] if kind != "pct" or "DGS" not in sid and sid != "DFF" else d,
                           "delta": round(v - pv, 3) if pv is not None else None, "spark": [round(x, 3) for _, x in vals[-18:]]})
         except Exception as e:  # noqa: BLE001
-            log("gmacro", sid, e); errs.append(f"{label}: {safe_err(e)}")
+            log("gmacro", sid, e); errs.append(f"{group}{label}: {safe_err(e)}")
         time.sleep(0.3)
+    # 英國 CPI：FRED 的 OECD 系列停更，改用 ONS 官方 API（免金鑰）
+    try:
+        js = gjson("https://api.ons.gov.uk/timeseries/d7g7/dataset/mm23/data", headers={"Accept": "application/json"})
+        ms = [(m["date"], num(m["value"])) for m in js.get("months", []) if num(m.get("value")) is not None]
+        if ms:
+            v, pv = ms[-1][1], ms[-2][1] if len(ms) >= 2 else None
+            items.append({"group": "英國", "label": "CPI 年增", "value": f"{v:.2f}%", "raw": v, "prev": f"{pv:.2f}%" if pv is not None else "",
+                          "period": ms[-1][0], "delta": round(v - pv, 3) if pv is not None else None, "spark": [x for _, x in ms[-18:]]})
+    except Exception as e:  # noqa: BLE001
+        log("ons cpi", e); errs.append("英國 CPI: " + safe_err(e))
     # 利差：10Y − 2Y
     d10 = next((i for i in items if i["label"] == "10 年公債"), None); d2 = next((i for i in items if i["label"] == "2 年公債"), None)
     if d10 and d2:
