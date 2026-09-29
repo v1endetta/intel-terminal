@@ -2446,7 +2446,7 @@ def p_supply():
             if len(row) <= max(c_ind, c_per, c_val):
                 continue
             ind, per, val = row[c_ind].strip(), row[c_per].strip(), num(row[c_val])
-            m = re.match(r"(\d{2,3})\D+(\d{1,2})", per)
+            m = re.match(r"^(\d{2,3})(\d{2})$", per) or re.match(r"(\d{2,3})\D+(\d{1,2})", per)  # 11508＝民國 115 年 8 月
             if not m or val is None:
                 continue
             y = int(m.group(1)); y = y + 1911 if y < 1911 else y
