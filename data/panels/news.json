@@ -2,6 +2,12 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "OpenAI推出新中階AI模型　價格僅旗艦產品1/5",
+   "url": "https://www.cna.com.tw/news/aopl/202609300005.aspx",
+   "at": "2026-09-29T20:50:30Z"
+  },
+  {
+   "source": "中央社",
    "title": "國際油價回落　歐股收盤走勢不一",
    "url": "https://www.cna.com.tw/news/afe/202609300003.aspx",
    "at": "2026-09-29T17:03:22Z"
@@ -29,12 +35,6 @@
    "title": "大樂透頭獎連6槓　下期獎金上看2.3億元",
    "url": "https://www.cna.com.tw/news/ahel/202609290343.aspx",
    "at": "2026-09-29T14:07:47Z"
-  },
-  {
-   "source": "中央社",
-   "title": "「造山者」紀錄片吉隆坡放映　深化產業與人才交流",
-   "url": "https://www.cna.com.tw/news/afe/202609290342.aspx",
-   "at": "2026-09-29T14:06:45Z"
   },
   {
    "source": "公視",
@@ -340,15 +340,15 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 2.089,
-   "vol_ratio": 1.27,
+   "vol": 2.184,
+   "vol_ratio": 1.35,
    "tone": 0.36,
    "tone_at": "2026-09-29T17:59:55Z",
    "spark": [
     1.854,
-    2.089
+    2.184
    ],
-   "at": "2026-09-29T20:32:19Z"
+   "at": "2026-09-29T21:30:13Z"
   },
   "wiki": {
    "zh": [
@@ -407,8 +407,6 @@
    ]
   }
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3"
- ],
- "updatedAt": "2026-09-29T21:04:17Z"
+ "errs": [],
+ "updatedAt": "2026-09-29T21:30:13Z"
 }
