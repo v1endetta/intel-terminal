@@ -2121,7 +2121,7 @@ def p_gmacro():
         time.sleep(0.3)
     # 英國 CPI：FRED 的 OECD 系列停更，改用 ONS 官方 API（免金鑰）
     try:
-        js = gjson("https://api.ons.gov.uk/timeseries/d7g7/dataset/mm23/data", headers={"Accept": "application/json"})
+        js = gjson("https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23/data", headers={"Accept": "application/json"})
         ms = [(m["date"], num(m["value"])) for m in js.get("months", []) if num(m.get("value")) is not None]
         if ms:
             v, pv = ms[-1][1], ms[-2][1] if len(ms) >= 2 else None
