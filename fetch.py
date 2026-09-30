@@ -1012,26 +1012,41 @@ def _cwa_num(v):
     return None if x is None or x <= -90 else x
 
 
+WX_CITIES = [  # (顯示名, 預報縣市名, 觀測站候選：有人站優先、自動站備援)
+    ("基隆", "基隆市", ["基隆"]), ("台北", "臺北市", ["臺北"]), ("新北", "新北市", ["板橋", "新北"]), ("桃園", "桃園市", ["桃園", "新屋", "中壢"]),
+    ("新竹", "新竹市", ["新竹", "新竹市東區"]), ("台中", "臺中市", ["臺中"]), ("彰化", "彰化縣", ["彰化", "田中", "彰師大"]), ("嘉義", "嘉義市", ["嘉義"]),
+    ("台南", "臺南市", ["臺南"]), ("高雄", "高雄市", ["高雄"]), ("屏東", "屏東縣", ["屏東", "恆春"]), ("宜蘭", "宜蘭縣", ["宜蘭"]),
+    ("花蓮", "花蓮縣", ["花蓮"]), ("台東", "臺東縣", ["臺東"]),
+]
+
+
 def p_weather():
-    cities = [("臺北", "臺北市", "台北"), ("臺中", "臺中市", "台中")]
     out = []
-    now_obs = {st["StationName"]: st for st in cwa("O-A0003-001", StationName="臺北,臺中").get("Station", [])}
-    rain = {st["StationName"]: st for st in cwa("O-A0002-001", StationName="臺北,臺中").get("Station", [])}
-    fc = {loc["locationName"]: loc for loc in cwa("F-C0032-001", locationName="臺北市,臺中市").get("location", [])}
-    for st_name, county, label in cities:
-        o = now_obs.get(st_name, {})
+    manned = {st["StationName"]: st for st in cwa("O-A0003-001").get("Station", [])}
+    auto = {}
+    try:
+        auto = {st["StationName"]: st for st in cwa("O-A0001-001").get("Station", [])}
+    except Exception as e:  # noqa: BLE001
+        log("cwa auto", e)
+    rain = {st["StationName"]: st for st in cwa("O-A0002-001").get("Station", [])}
+    fc = {loc["locationName"]: loc for loc in cwa("F-C0032-001").get("location", [])}
+    for label, county, cands in WX_CITIES:
+        o = next((manned[c] for c in cands if c in manned), None) or next((auto[c] for c in cands if c in auto), {})
+        st_name = o.get("StationName", cands[0])
         we = o.get("WeatherElement", {})
-        r = rain.get(st_name, {}).get("RainfallElement", {})
+        r = next((rain[c] for c in cands if c in rain), {}).get("RainfallElement", {})
         f = fc.get(county, {})
         els = {e["elementName"]: e["time"] for e in f.get("weatherElement", [])}
+
         def fparam(name, i=0):
             try:
                 return els[name][i]["parameter"]["parameterName"]
-            except Exception:
+            except Exception:  # noqa: BLE001
                 return None
+        temp = _cwa_num(we.get("AirTemperature"))
         out.append({
-            "city": label,
-            "temp": _cwa_num(we.get("AirTemperature")), "rh": _cwa_num(we.get("RelativeHumidity")),
+            "city": label, "station": st_name,
+            "temp": temp, "rh": _cwa_num(we.get("RelativeHumidity")),
             "weather": we.get("Weather"), "wind": _cwa_num(we.get("WindSpeed")),
             "rain10": _cwa_num((r.get("Past10Min") or {}).get("Precipitation")),
             "rain1h": _cwa_num((r.get("Past1hr") or {}).get("Precipitation")),
@@ -1041,8 +1056,8 @@ def p_weather():
                           "wx": fparam("Wx", i), "pop": fparam("PoP", i), "minT": fparam("MinT", i), "maxT": fparam("MaxT", i)}
                          for i in range(3)],
         })
-        if out[-1]["temp"] is not None:
-            hist_put("weather", label + "_temp", NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M"), out[-1]["temp"])
+        if temp is not None and temp > -50:
+            hist_put("weather", label + "_temp", NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M"), temp)
     warns = []
     try:
         for loc in cwa("W-C0033-001").get("location", []):
@@ -1053,6 +1068,8 @@ def p_weather():
                     warns.append({"where": loc.get("locationName"), "what": info.get("phenomena"), "level": info.get("significance")})
     except Exception as e:  # noqa: BLE001
         log("cwa warn", e)
+    if not any(c["temp"] is not None for c in out):
+        raise RuntimeError("cwa: no observations")
     return {"label": "氣象署", "items": out, "warnings": warns[:12]}
 
 
