@@ -2581,9 +2581,15 @@ def _gemini_json(prompt, schema_hint=None, tools=None):
                 raise RuntimeError(f"gemini {r.status_code} {r.text[:120]}")
             js = r.json()
             cand = js["candidates"][0]
-            txt = "".join(p_.get("text", "") for p_ in cand["content"]["parts"])
-            m = re.search(r"\{.*\}|\[.*\]", txt, re.S)
-            data = json.loads(m.group(0) if m else txt)
+            txt = "".join(p_.get("text", "") for p_ in cand["content"]["parts"] if not p_.get("thought"))  # 略過思考段
+            txt = re.sub(r"^```(?:json)?\s*|\s*```$", "", txt.strip())
+            try:
+                data = json.loads(txt)
+            except json.JSONDecodeError:
+                m = re.search(r"\{.*\}", txt, re.S)
+                if not m:
+                    raise
+                data = json.loads(m.group(0))
             if isinstance(data, dict):
                 data["_grounding"] = (cand.get("groundingMetadata") or {}).get("groundingChunks") or []
             return data, model
@@ -2607,14 +2613,14 @@ def p_mood():
     if sum(len(v) for v in blocks.values()) < 10:
         raise RuntimeError("mood: 素材不足")
     material = "\n\n".join(f"## {k}\n" + "\n".join(f"- {x}" for x in v) for k, v in blocks.items() if v)
-    prompt = f"""你是台灣的輿情分析師。下面是今天從四個來源抓到的原文（PTT 熱文標題、LINE 群組正在轉傳並被拿去查證的訊息、Threads 貼文、Bluesky 英文貼文）。
+    prompt = f"""你是台灣的輿情分析師。下面是今天從三個來源抓到的原文（PTT 熱文標題、LINE 群組正在轉傳並被拿去查證的訊息、Bluesky 英文貼文）。
 請只根據這些文字判斷「大眾情緒」，不要加入你自己的時事知識。用繁體中文、台灣用語，不要用「不是…而是…」句型，不要空泛。
 
 輸出 JSON，格式：
 {{
   "taiwan": {{"score": -1到1的小數（-1 極負面、0 中性、1 極正面）, "label": "兩到四個字的情緒標籤，例如 焦慮、亢奮、無感、憤怒", "themes": ["最多三個正在燒的主題，各 2-6 字"], "line": "一句 40 字內的判讀：台灣人今天在意什麼、語氣如何"}},
   "overseas": {{"score": 同上, "label": 同上, "themes": [...], "line": "一句 40 字內的判讀（英文貼文的情緒）"}},
-  "sources": {{"PTT": {{"score": 小數, "note": "15 字內"}}, "LINE": {{"score": 小數, "note": "15 字內"}}, "Threads": {{"score": 小數, "note": "15 字內"}}}},
+  "sources": {{"PTT": {{"score": 小數, "note": "15 字內"}}, "LINE": {{"score": 小數, "note": "15 字內"}}}},
   "watch": "一句 30 字內：如果只能盯一件事，盯什麼"
 }}
 來源沒有資料就把該來源 score 設為 null。
@@ -3531,7 +3537,7 @@ run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("social", p_social, keep_if_fresh_hours=0.5)
 run("cofacts", p_cofacts, keep_if_fresh_hours=0.5)
-run("threads_g", p_threads_g, keep_if_fresh_hours=3)
+# run("threads_g", p_threads_g, keep_if_fresh_hours=3)  # Custom Search JSON API 不收新客戶、Gemini grounding 免費層無額度（429）；Threads 暫無免費路徑
 run("mood", p_mood, keep_if_fresh_hours=1)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("design", p_design, keep_if_fresh_hours=1)

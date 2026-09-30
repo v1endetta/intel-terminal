@@ -411,7 +411,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   </section>
 
   <section class="panel w6" id="p-mood">
-    <div class="ph"><h2>Mood</h2><span class="zh">台灣情緒 · PTT ＋ LINE ＋ Threads，國外情緒 · Bluesky</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>Mood</h2><span class="zh">台灣情緒 · PTT ＋ LINE（Cofacts），國外情緒 · Bluesky</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Gemini 讀當輪原文判分（-1～1），只看文字不看時事知識 · 每小時一次 · 三天走勢</span></div>
   </section>
@@ -420,12 +420,6 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="ph"><h2>Cofacts</h2><span class="zh">真的假的 · LINE 群組正在轉傳什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Cofacts 開放資料 · 近三天被查詢最多的訊息 · 「被查 N 次」= 有多少人把它丟進查核機器人</span></div>
-  </section>
-
-  <section class="panel w6 cap" id="p-threads">
-    <div class="ph"><h2>Threads</h2><span class="zh">台灣情緒詞 · Google 索引到的公開貼文</span><span class="meta">排程</span></div>
-    <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>Gemini 的 Google 搜尋 grounding（site:threads.com，近一天）· 搜尋樣本不是全量 · 每天 90 次上限</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-ptt">
@@ -481,8 +475,8 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 
 <div class="foot">
   <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 GitHub Actions 常駐迴圈抓取，盤中每 5 分鐘、其餘 15 分鐘一輪，寫進 data 分支；走勢存 history.json，最多 400 點</span>
-  <span>來源：證交所（含 MIS 即時、休市）· 櫃買 · FinMind · 央行 · 主計總處（部分手動）· 國發會（燈號、PMI／NMI）· 經濟部（零售指數）· 信義房價 · 政府電子採購網（g0v）· CBOE · Yahoo Finance · Stooq（備援）· CoinGecko · FRED（含發布時程）· ONS · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · YouTube · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · Google News（含英文）· OpenAI／Anthropic／Google AI／DeepSeek／xAI 官方頁面與 changelog · OpenAI／Google AI 開發者論壇 · The Verge AI · TechCrunch AI · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · GDELT · Wikipedia · PTT · Bluesky · Cofacts 真的假的 · Gemini（Threads 搜尋 grounding、情緒判讀）· 氣象署（天氣、地震）· 台電 · TDX（YouBike、停車場、VD、國道、桃機）· OpenFreeMap</span>
-  <span>未接：Threads 官方搜尋（需 App Review，改走 Google 索引）· Dcard（Cloudflare 擋資料中心 IP）· TikTok（擋資料中心 IP）· 國防部軍事動態（robots.txt 禁抓）· 日本與中國 CPI（無免金鑰官方 API）· X／LinkedIn（無開放 API）· 真實資金流向（付費資料，板塊面板為代理指標）</span>
+  <span>來源：證交所（含 MIS 即時、休市）· 櫃買 · FinMind · 央行 · 主計總處（部分手動）· 國發會（燈號、PMI／NMI）· 經濟部（零售指數）· 信義房價 · 政府電子採購網（g0v）· CBOE · Yahoo Finance · Stooq（備援）· CoinGecko · FRED（含發布時程）· ONS · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · YouTube · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · Google News（含英文）· OpenAI／Anthropic／Google AI／DeepSeek／xAI 官方頁面與 changelog · OpenAI／Google AI 開發者論壇 · The Verge AI · TechCrunch AI · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · GDELT · Wikipedia · PTT · Bluesky · Cofacts 真的假的 · Gemini（情緒判讀）· 氣象署（天氣、地震）· 台電 · TDX（YouBike、停車場、VD、國道、桃機）· OpenFreeMap</span>
+  <span>未接：Threads（官方搜尋需 App Review；Google Custom Search 已不收新客戶；Gemini 搜尋 grounding 免費層無額度）· Dcard（Cloudflare 擋資料中心 IP）· TikTok（擋資料中心 IP）· 國防部軍事動態（robots.txt 禁抓）· 日本與中國 CPI（無免金鑰官方 API）· X／LinkedIn（無開放 API）· 真實資金流向（付費資料，板塊面板為代理指標）</span>
 </div>
 
 <script>
@@ -644,7 +638,7 @@ const renderers={
     body("p-liq").innerHTML=`${net}<div class="macro">${rates}${card("ON RRP 逆回購",d.rrp,"停在聯準會的閒錢")}${card("銀行準備金",d.reserves,"")}${card("財政部 TGA",d.tga,"")}${card("聯準會總資產",d.walcl,"")}${srf}</div>${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,160))}</div>`:""}`;setMeta("p-liq",d,30);},
   mood(d){const tw=d.taiwan||{},os=d.overseas||{},sc=d.sources||{};const col=v=>v==null?"var(--dim)":v<=-0.3?"var(--down)":v>=0.3?"var(--up)":"var(--warn)";
     const card=(t,m,sp)=>`<div class="c"><div class="l">${esc(t)}</div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:${col(m.score)};box-shadow:0 0 0 3px color-mix(in srgb,${col(m.score)} 25%,transparent)"></span><span>${m.score==null?"—":sgn(n(m.score),2)}</span><span class="sub" style="font-size:12px">${esc(m.label||"")}</span>${mini(sp)}</div><div class="p">${esc((m.themes||[]).join(" · "))}</div><div class="p" style="margin-top:4px;color:var(--text);font-family:var(--head);font-size:12px;line-height:1.4">${esc(m.line||"")}</div></div>`;
-    const srcs=["PTT","LINE","Threads"].filter(k=>sc[k]&&sc[k].score!=null).map(k=>`<span>${k}<b class="${n(sc[k].score)<=-0.3?"down":n(sc[k].score)>=0.3?"up":""}">${sgn(n(sc[k].score),2)}</b><span class="sub"> ${esc(sc[k].note||"")}</span></span>`).join("");
+    const srcs=["PTT","LINE"].filter(k=>sc[k]&&sc[k].score!=null).map(k=>`<span>${k}<b class="${n(sc[k].score)<=-0.3?"down":n(sc[k].score)>=0.3?"up":""}">${sgn(n(sc[k].score),2)}</b><span class="sub"> ${esc(sc[k].note||"")}</span></span>`).join("");
     body("p-mood").innerHTML=`<div class="macro" style="grid-template-columns:1fr 1fr">${card("台灣",tw,d.spark_tw)}${card("國外",os,d.spark_os)}</div>${srcs?`<div class="kv" style="margin-top:8px">${srcs}</div>`:""}${d.watch?`<div class="kv" style="margin-top:6px"><span>盯一件事<b>${esc(d.watch)}</b></span></div>`:""}`;setMeta("p-mood",d,2);},
   cofacts(d){const st=d.stats||{};const li=(d.hot||[]).slice(0,10).map(h=>`<li><span class="src ${h.verdict==="含錯誤訊息"?"bad":""}" style="min-width:64px">${esc(h.verdict.slice(0,5))}</span><span class="t"><a href="${esc(safe(h.url))}" target="_blank" rel="noopener">${esc(h.text.slice(0,72))}</a></span><span class="m ${h.requests>=20?"bad":""}">${h.requests} 查</span></li>`).join("");
     body("p-cofacts").innerHTML=`<div class="kv"><span>熱門<b>${st.hot_n||0}</b></span><span>未查核<b class="${st.unchecked>=10?"bad":""}">${st.unchecked||0}</b></span><span>錯誤訊息<b class="${st.rumor?"bad":""}">${st.rumor||0}</b></span><span>查詢總數<b>${fmt(n(st.requests_total),0)}</b>${mini(st.spark)}</span></div>${li?`<ul class="list">${li}</ul>`:'<div class="empty">沒抓到</div>'}`;setMeta("p-cofacts",d,2);},
