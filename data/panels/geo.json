@@ -1,15 +1,18 @@
 {
  "label": "TDX",
  "cities_with_data": 19,
- "freeway": 409,
+ "freeway": 408,
  "static": "完成",
  "totals": {
   "parking": 1986,
-  "bikes": 9941,
-  "speed": 884
+  "bikes": 9940,
+  "speed": 857
  },
  "errs": [
-  "parking Hsinchu: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Hsinchu body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
+  "parking Hsinchu: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Hsinchu body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "bikes MiaoliCounty: RuntimeError: 429 on Bike/Availability/City/MiaoliCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "parking NantouCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/NantouCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "bikes Chiayi: RuntimeError: 429 on Bike/Availability/City/Chiayi body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
  ],
- "updatedAt": "2026-09-30T14:10:40Z"
+ "updatedAt": "2026-09-30T14:29:02Z"
 }
