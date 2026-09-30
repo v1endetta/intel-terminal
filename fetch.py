@@ -2281,7 +2281,7 @@ def _bsky_search(q, limit=25):
     is_zh = bool(re.search(r"[\u4e00-\u9fff]", q))
     for host in ("https://public.api.bsky.app", "https://api.bsky.app"):
         try:
-            r = requests.get(f"{host}/xrpc/app.bsky.feed.searchPosts", params={"q": q, "sort": "latest", "limit": limit, **({"lang": "zh"} if is_zh else {})},
+            r = requests.get(f"{host}/xrpc/app.bsky.feed.searchPosts", params={"q": q, "sort": "latest", "limit": limit, "lang": "zh" if is_zh else "en"},
                              headers={"Accept": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0 Safari/537.36"}, timeout=TIMEOUT)
             if r.status_code >= 400:
                 last = RuntimeError(f"bsky {r.status_code} {r.text[:100]!r}")
