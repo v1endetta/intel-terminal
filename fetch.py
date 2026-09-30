@@ -46,7 +46,6 @@ CWA_KEY = os.environ.get("CWA_API_KEY", "").strip()
 TDX_ID = os.environ.get("TDX_CLIENT_ID", "").strip()
 TDX_SECRET = os.environ.get("TDX_CLIENT_SECRET", "").strip()
 GUARDIAN_KEY = os.environ.get("GUARDIAN_API_KEY", "").strip()
-THREADS_TOKEN = os.environ.get("THREADS_TOKEN", "").strip()
 YOUTUBE_KEY = os.environ.get("YOUTUBE_API_KEY", "").strip()
 
 
@@ -115,7 +114,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "threads": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -2215,201 +2214,96 @@ def _hot_terms(news):
 
 
 
-# ---------- Threads：固定詞 ＋ 熱詞引擎動態種子，看「台灣人正在怎麼講」 ----------
-THREADS_FIXED = ["台股", "關稅", "地震"]
-THREADS_API = "https://graph.threads.net/v1.0"
-THREADS_META = DATA / "threads_meta.json"  # 只存 token 指紋與首次看到的日期，不存 token
+
+# ---------- 社群脈搏：Dcard ＋ Bluesky（Threads 搜尋需登入／App Review，改用這兩個補「台灣人正在怎麼講」） ----------
+SOCIAL_FIXED = ["台股", "關稅", "地震"]
 
 
-def _threads_get(path, **params):
-    params["access_token"] = THREADS_TOKEN
-    r = S.get(f"{THREADS_API}/{path.lstrip('/')}", params=params, timeout=TIMEOUT)
-    if r.status_code >= 400:
-        try:
-            msg = r.json().get("error", {})
-            raise RuntimeError(f"threads {r.status_code} code={msg.get('code')} {str(msg.get('message'))[:120]}")
-        except ValueError:
-            raise RuntimeError(f"threads {r.status_code}")
-    return r.json()
-
-
-def _threads_public(q, recent=False, limit=25):
-    """threads.com 公開搜尋頁：用連結預覽爬蟲的 UA 拿伺服器端內嵌 JSON（非官方；Meta 改版就會斷）。"""
-    url = "https://www.threads.com/search"
-    params = {"q": q, "serp_type": "recent" if recent else "default"}
-    hdr = {"User-Agent": "facebookexternalhit/1.1", "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.8"}
-    r = requests.get(url, params=params, headers=hdr, timeout=TIMEOUT)
-    if r.status_code in (403, 429):
-        from curl_cffi import requests as cffi
-        r = cffi.get(url, params=params, headers=hdr, impersonate="chrome", timeout=25)
-    if r.status_code >= 400:
-        raise RuntimeError(f"threads public {r.status_code}")
-    html = r.text
-    posts, seen = [], set()
-
-    def walk(o):
-        if isinstance(o, dict):
-            cap = o.get("caption")
-            if isinstance(o.get("code"), str) and isinstance(cap, dict) and cap.get("text"):
-                if o["code"] not in seen:
-                    seen.add(o["code"])
-                    user = (o.get("user") or {}).get("username") or ""
-                    posts.append({"text": re.sub(r"\s+", " ", cap["text"])[:140], "user": user, "url": f"https://www.threads.com/@{user}/post/{o['code']}",
-                                  "at": datetime.fromtimestamp(int(o["taken_at"]), timezone.utc).isoformat().replace("+00:00", "Z") if o.get("taken_at") else "",
-                                  "likes": o.get("like_count"), "replies": o.get("direct_reply_count"), "reposts": o.get("repost_count")})
-            for v in o.values():
-                walk(v)
-        elif isinstance(o, list):
-            for v in o:
-                walk(v)
-
-    for m in re.finditer(r'<script type="application/json"[^>]*>(.*?)</script>', html, re.S):
-        try:
-            walk(json.loads(m.group(1)))
-        except Exception:  # noqa: BLE001
-            continue
-    if not posts:
-        blocks = re.findall(r'<script type="application/json"[^>]*>', html)
-        hints = [f"{k}={html.count(k)}" for k in ("thread_items", "searchResults", '"caption":{', '"caption\\":{', '"taken_at"', '"code":"', "post_id", "challenge") if k in html]
-        raise RuntimeError(f"threads public: 0 posts len={len(html)} json_blocks={len(blocks)} hints={hints} title={re.search(r'<title>(.*?)</title>', html, re.S).group(1)[:40] if re.search(r'<title>', html) else ''}")
-    posts.sort(key=lambda x: x.get("at") or "", reverse=True)
-    return posts[:limit]
-
-
-def _threads_walk(o, posts, seen):
-    if isinstance(o, dict):
-        cap = o.get("caption")
-        if isinstance(o.get("code"), str) and isinstance(cap, dict) and cap.get("text"):
-            if o["code"] not in seen:
-                seen.add(o["code"])
-                user = (o.get("user") or {}).get("username") or ""
-                posts.append({"text": re.sub(r"\s+", " ", cap["text"])[:140], "user": user, "url": f"https://www.threads.com/@{user}/post/{o['code']}",
-                              "at": datetime.fromtimestamp(int(o["taken_at"]), timezone.utc).isoformat().replace("+00:00", "Z") if o.get("taken_at") else "",
-                              "likes": o.get("like_count"), "replies": o.get("direct_reply_count"), "reposts": o.get("repost_count")})
-        for v in o.values():
-            _threads_walk(v, posts, seen)
-    elif isinstance(o, list):
-        for v in o:
-            _threads_walk(v, posts, seen)
-
-
-def _threads_public_pw(keywords, errs):
-    """伺服器端不再內嵌搜尋結果：用 Playwright 開公開搜尋頁，攔截前端打的 GraphQL 回應取貼文。回 {kw: posts}。"""
-    from playwright.sync_api import sync_playwright
-    out = {}
-    with sync_playwright() as pw:
-        b = pw.chromium.launch()
-        ctx = b.new_context(user_agent=UA, locale="zh-TW", viewport={"width": 1280, "height": 900})
-        pg = ctx.new_page()
-        bodies = []
-
-        def on_resp(resp):
-            try:
-                if "graphql" in resp.url and resp.status == 200:
-                    t = resp.text()
-                    if "caption" in t and "taken_at" in t:
-                        bodies.append(t)
-            except Exception:  # noqa: BLE001
-                pass
-        pg.on("response", on_resp)
-        for kw in keywords:
-            bodies.clear()
-            posts, seen = [], set()
-            try:
-                pg.goto(f"https://www.threads.com/search?q={requests.utils.quote(kw)}&serp_type=recent", wait_until="domcontentloaded", timeout=30000)
-                pg.wait_for_timeout(4500)
-                for t in bodies:
-                    try:
-                        _threads_walk(json.loads(t), posts, seen)
-                    except Exception:  # noqa: BLE001
-                        continue
-                if not posts:
-                    title = pg.title()
-                    url = pg.url
-                    errs.append(f"{kw}: pw 0 posts graphql={len(bodies)} title={title[:30]} url={url[:60]}")
-            except Exception as e:  # noqa: BLE001
-                errs.append(f"{kw}: pw {safe_err(e)[:80]}")
-            posts.sort(key=lambda x: x.get("at") or "", reverse=True)
-            out[kw] = posts
-        b.close()
-    return out
-
-
-def _threads_seeds():
+def _social_seeds():
     hot = ((load_prev("news") or {}).get("signals") or {}).get("hot") or []
     seeds = []
     for h in sorted(hot, key=lambda x: (-x.get("src", 0), -x.get("n", 0))):
         t = h.get("term") or ""
-        if t in THREADS_FIXED or len(t) < 2 or t.lower() in HOT_STOP_EN or t in HOT_STOP_ZH:
+        if t in SOCIAL_FIXED or len(t) < 2 or t.lower() in HOT_STOP_EN or t in HOT_STOP_ZH:
             continue
         seeds.append({"kw": t, "kind": "hot", "src": h.get("src")})
         if len(seeds) >= 5:
             break
-    return [{"kw": k, "kind": "fixed"} for k in THREADS_FIXED] + seeds
+    return [{"kw": k, "kind": "fixed"} for k in SOCIAL_FIXED] + seeds
 
 
-def p_threads():
-    if not THREADS_TOKEN:
-        raise RuntimeError("未設定 THREADS_TOKEN")
-    import hashlib
-    errs, out = [], {"me": None, "insights": {}, "keywords": []}
-    # token 指紋 → 首次看到日期 → 60 天到期提醒
-    fp = hashlib.sha256(THREADS_TOKEN.encode()).hexdigest()[:10]
-    meta = {}
-    if THREADS_META.exists():
-        try:
-            meta = json.loads(THREADS_META.read_text(encoding="utf-8"))
-        except Exception:  # noqa: BLE001
-            meta = {}
-    if meta.get("fp") != fp:
-        meta = {"fp": fp, "first_seen": TODAY_TPE.isoformat()}
-        write_json(THREADS_META, meta)
-    first = datetime.fromisoformat(meta["first_seen"]).date()
-    out["token"] = {"first_seen": first.isoformat(), "expires": (first + timedelta(days=60)).isoformat(), "days_left": (first + timedelta(days=60) - TODAY_TPE).days}
+def _dcard_get(path, **params):
+    url = "https://www.dcard.tw/service/api/v2/" + path
+    hdr = {"Accept": "application/json", "Referer": "https://www.dcard.tw/"}
     try:
-        out["me"] = _threads_get("me", fields="id,username,threads_profile_picture_url")
-    except Exception as e:  # noqa: BLE001
-        errs.append("me: " + safe_err(e))
-    try:
-        j = _threads_get("me/threads_insights", metric="followers_count")
-        for d in j.get("data", []):
-            out["insights"]["followers"] = (d.get("total_value") or {}).get("value")
-    except Exception as e:  # noqa: BLE001
-        errs.append("followers: " + safe_err(e))
-    try:
-        since = int((NOW - timedelta(days=7)).timestamp()); until = int(NOW.timestamp())
-        j = _threads_get("me/threads_insights", metric="views", period="day", since=since, until=until)
-        vals = [v.get("value") or 0 for d in j.get("data", []) for v in d.get("values", [])]
-        out["insights"]["views_7d"] = sum(vals); out["insights"]["views_spark"] = vals[-7:]
-    except Exception as e:  # noqa: BLE001
-        errs.append("views: " + safe_err(e))
+        r = S.get(url, params=params, headers=hdr, timeout=TIMEOUT)
+        if r.status_code in (403, 429):
+            raise requests.HTTPError(response=r)
+        r.raise_for_status()
+        return r.json()
+    except requests.HTTPError:
+        from curl_cffi import requests as cffi
+        r = cffi.get(url, params=params, headers=hdr, impersonate="chrome", timeout=25)
+        if r.status_code >= 400:
+            raise RuntimeError(f"dcard {r.status_code}")
+        return r.json()
+
+
+def _dcard_posts(rows):
+    out = []
+    for d in rows or []:
+        if not isinstance(d, dict) or not d.get("id"):
+            continue
+        out.append({"src": "Dcard", "text": re.sub(r"\s+", " ", (d.get("title") or "") + (("：" + d["excerpt"]) if d.get("excerpt") else ""))[:140],
+                    "user": d.get("forumName") or d.get("forumAlias") or "", "url": f"https://www.dcard.tw/f/{d.get('forumAlias')}/p/{d['id']}",
+                    "at": (d.get("createdAt") or "")[:19] + ("Z" if d.get("createdAt") else ""), "likes": d.get("likeCount"), "replies": d.get("commentCount")})
+    return out
+
+
+def _bsky_search(q, limit=25):
+    j = gjson("https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts", params={"q": q, "sort": "latest", "limit": limit}, headers={"Accept": "application/json"})
+    out = []
+    for p_ in j.get("posts") or []:
+        rec = p_.get("record") or {}
+        handle = (p_.get("author") or {}).get("handle") or ""
+        rkey = (p_.get("uri") or "").rsplit("/", 1)[-1]
+        out.append({"src": "Bluesky", "text": re.sub(r"\s+", " ", rec.get("text") or "")[:140], "user": handle,
+                    "url": f"https://bsky.app/profile/{handle}/post/{rkey}", "at": (rec.get("createdAt") or "")[:19] + ("Z" if rec.get("createdAt") else ""),
+                    "likes": p_.get("likeCount"), "replies": p_.get("replyCount"), "reposts": p_.get("repostCount")})
+    return out
+
+
+def p_social():
+    errs, out = [], {"keywords": [], "dcard_popular": [], "sources": {"dcard": False, "bsky": False}}
     cut24 = (NOW - timedelta(hours=24)).isoformat().replace("+00:00", "Z")
-    seeds = _threads_seeds()
-    got = {}
-    try:  # 先試輕量版（連結預覽 UA 抓內嵌 JSON），全空再用 Playwright 攔 GraphQL
-        first = _threads_public(seeds[0]["kw"], recent=True)
-        if first:
-            got[seeds[0]["kw"]] = first
-            for sd in seeds[1:]:
-                try:
-                    got[sd["kw"]] = _threads_public(sd["kw"], recent=True)
-                except Exception as e:  # noqa: BLE001
-                    errs.append(f"{sd['kw']}: {safe_err(e)[:80]}")
-                time.sleep(1.2)
+    try:
+        out["dcard_popular"] = _dcard_posts(_dcard_get("posts", popular="true", limit=30))[:10]
+        out["sources"]["dcard"] = bool(out["dcard_popular"])
     except Exception as e:  # noqa: BLE001
-        errs.append("lite: " + safe_err(e)[:100])
-    if not any(got.values()) and os.environ.get("THREADS_PW") == "1":  # Playwright 路線目前也被登入牆擋住，先關，避免每輪白耗 60 秒
+        errs.append("dcard 熱門: " + safe_err(e)[:80])
+    dcard_ok = out["sources"]["dcard"]
+    for sd in _social_seeds():
+        posts = []
+        if dcard_ok:
+            try:
+                posts += _dcard_posts(_dcard_get("posts/search", query=sd["kw"], limit=20))
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"dcard {sd['kw']}: {safe_err(e)[:60]}")
+            time.sleep(0.8)
         try:
-            got = _threads_public_pw([sd["kw"] for sd in seeds], errs)
+            b = _bsky_search(sd["kw"])
+            posts += b
+            if b:
+                out["sources"]["bsky"] = True
         except Exception as e:  # noqa: BLE001
-            errs.append("pw: " + safe_err(e)[:100])
-    for sd in seeds:
-        posts = got.get(sd["kw"]) or []
-        out["keywords"].append({**sd, "top": sorted(posts, key=lambda x: -(x.get("likes") or 0))[:3], "recent": posts[:3], "n_recent": len(posts),
-                                "n_recent_24h": sum(1 for p_ in posts if p_["at"] and p_["at"] >= cut24)})
-    out["public_ok"] = any(k["top"] or k["recent"] for k in out["keywords"])
-    if out["me"] is None and not out["public_ok"]:
-        raise RuntimeError(f"threads: nothing {errs[:3]}")
+            errs.append(f"bsky {sd['kw']}: {safe_err(e)[:60]}")
+        posts.sort(key=lambda x: x.get("at") or "", reverse=True)
+        rec = {**sd, "n_24h": sum(1 for x in posts if x["at"] and x["at"] >= cut24),
+               "n_dcard": sum(1 for x in posts if x["src"] == "Dcard"), "n_bsky": sum(1 for x in posts if x["src"] == "Bluesky"),
+               "top": sorted(posts, key=lambda x: -(x.get("likes") or 0))[:3], "recent": posts[:3]}
+        out["keywords"].append(rec)
+    if not out["dcard_popular"] and not any(k["top"] for k in out["keywords"]):
+        raise RuntimeError(f"social: nothing {errs[:3]}")
     return {**out, "errs": errs[:8]}
 
 
@@ -3039,14 +2933,6 @@ def p_calendar():
             seen.add(k); out.append(e)
     if not out:
         raise RuntimeError(f"calendar: nothing {errs[:2]}")
-    try:  # Threads 長效 token 60 天到期：進日曆提醒（重新產生並更新 repo secret）
-        th = load_prev("threads") or {}
-        exp = (th.get("token") or {}).get("expires")
-        if exp:
-            add(exp, "Threads token 到期：重新產生並更新 secret", "系統", kind="sys")
-            out = sorted(out + [e for e in ev if e["kind"] == "sys"], key=lambda e: e["date"])
-    except Exception as e:  # noqa: BLE001
-        log("calendar threads", e)
     return {"items": out, "from": today.isoformat(), "to": horizon.isoformat(), "errs": errs[:3]}
 
 
@@ -3322,7 +3208,7 @@ run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
-run("threads", p_threads, keep_if_fresh_hours=2)
+run("social", p_social, keep_if_fresh_hours=0.5)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
