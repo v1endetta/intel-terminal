@@ -1,0 +1,48 @@
+{
+ "taiwan": {
+  "score": -0.1,
+  "label": "務實焦慮",
+  "themes": [
+   "省錢優惠",
+   "車安疑慮",
+   "名人假訊"
+  ],
+  "line": "台灣人熱衷搶小確幸優惠，同時對車安與LINE功能停用、食安等生活細節感到焦慮。"
+ },
+ "overseas": {
+  "score": -0.4,
+  "label": "悲觀憂慮",
+  "themes": [
+   "關稅政策",
+   "媒體裁員",
+   "AI爭議"
+  ],
+  "line": "海外社群瀰漫對川普關稅、媒體裁員潮及AI取代藝術的悲觀與不滿情緒。"
+ },
+ "sources": {
+  "PTT": {
+   "score": 0.1,
+   "note": "熱衷省錢與股市，車安討論熱烈"
+  },
+  "LINE": {
+   "score": -0.3,
+   "note": "充斥名人假信、食安與政治質疑"
+  }
+ },
+ "watch": "盯緊LINE上流傳的張忠謀告別信與花枝丸食安謠言",
+ "_grounding": [],
+ "model": "gemini-3.5-flash",
+ "spark_tw": [
+  -0.1
+ ],
+ "spark_os": [
+  -0.4
+ ],
+ "n_inputs": {
+  "PTT": 24,
+  "LINE（Cofacts）": 15,
+  "Threads": 0,
+  "Bluesky（國外）": 14
+ },
+ "updatedAt": "2026-09-30T14:10:40Z"
+}
