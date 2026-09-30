@@ -1854,6 +1854,8 @@ def p_aiwire():
         except Exception as e:  # noqa: BLE001
             errs.append(f"{name}: {safe_err(e)}")
         got = [_clean_link_title(i) for i in got]
+        for i in got:
+            i["official"] = True
         if len(got) < 2:
             errs.append(f"{name}: 官方頁只抓到 {len(got)} 則，改用 Google News 補")
             got += _try(name + " gnews", _gnews, gq, "", 4, "en")
@@ -1874,7 +1876,8 @@ def p_aiwire():
         except Exception as e:  # noqa: BLE001
             errs.append(f"hf {org}: {safe_err(e)}")
     cut = (NOW - timedelta(days=7)).isoformat().replace("+00:00", "Z")
-    items = [i for i in items if not i.get("at") or i["at"] >= cut]
+    cut_official = (NOW - timedelta(days=21)).isoformat().replace("+00:00", "Z")  # 官方頁貼文少，放寬到三週才不會整家消失
+    items = [i for i in items if not i.get("at") or i["at"] >= (cut_official if i.get("official") else cut)]
     for i in items:
         i["launch"] = bool(i.get("detect")) or bool(AI_LAUNCH.search(i["title"]))
     items = _dedupe_sort(items, 80)
