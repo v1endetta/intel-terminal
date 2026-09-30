@@ -1547,6 +1547,7 @@ NEWS_GROUPS = [
     ("文化與生活", ["廟宇 OR 媽祖 OR 民間信仰", "紀念幣 OR 錢幣 拍賣", "獨立書店 OR 誠品", "灣區 OR 舊金山 OR 加州 台灣人", "潭子 OR 台中 北屯"]),
 ]
 NEWS_ERRS: list = []
+HOT_POOL: list = []
 
 
 def _rss_date(d: str) -> str:
@@ -1686,7 +1687,7 @@ def _wiki_top(lang, limit=5):
 
 
 def p_news():
-    NEWS_ERRS.clear()
+    NEWS_ERRS.clear(); HOT_POOL.clear()
     tw = []
     for feed in ("politics", "finance", "technology"):
         tw += _try("cna " + feed, _rss, f"https://feeds.feedburner.com/rsscna/{feed}", "中央社", 6)
@@ -1716,6 +1717,7 @@ def p_news():
         # 每組 3 則：關鍵字輪流各出一則（避免單一話題洗版），標題前 14 字相同視為同一則
         fresh_cut = (NOW - timedelta(days=21)).isoformat()
         got = [g for g in got if (g.get("at") or "") >= fresh_cut]  # 三週以上的舊聞不進 Watchlist
+        HOT_POOL.extend(got)  # 熱詞引擎看全部命中，不只面板挑出的 3 則
         by_kw = {q: _dedupe_sort([g for g in got if g["kw"] == q], 3) for q in qs}
         picked, seen = [], set()
         for rnd in range(3):
@@ -1772,7 +1774,7 @@ def p_aiwire():
         except Exception as e:  # noqa: BLE001
             errs.append(f"{src}: {safe_err(e)}")
             if src == "Anthropic":  # 官方沒有 RSS 時用英文 Google News 補
-                items += _try("anthropic gnews", _gnews, "Anthropic", "Anthropic", 4, "en")
+                items += _try("anthropic gnews", _gnews, "Anthropic", "", 4, "en")
     cut = (NOW - timedelta(days=7)).isoformat()
     items = [i for i in items if not i.get("at") or i["at"] >= cut]
     for i in items:
@@ -1794,7 +1796,7 @@ def p_aiwire():
 
 # ---------- 熱詞引擎：同一實體詞在 12 小時內出現在 ≥3 個不同來源就算「在燒」 ----------
 HOT_STOP_EN = set("the a an and or of to in on for with from by at as is are was were be been this that these those new how why what when who which will can its it into over after before about more than not no yes up down out all one two three first last year years day days week today says said say show shows video live news report reports update ai us uk eu china taiwan taipei japan korea india world government president people man woman men women police court city state county".split())
-HOT_STOP_ZH = set("台灣 台北 台中 高雄 新北 桃園 台南 中國 美國 日本 韓國 香港 全球 國際 國內 總統 政府 國會 立法院 立委 民眾 網友 記者 新聞 報導 影片 直播 專家 分析 表示 指出 認為 今天 今日 明天 昨天 上午 下午 晚間 凌晨 目前 最新 快訊 獨家 焦點 專題 系列 問題 情況 市場 公司 企業 產業 業者 消費者 用戶 台股 股市 大盤 個股 早盤 盤中 收盤 開盤 新台幣 美元 億元 萬元 億 萬 人 年 月 日 時 分 點 元 台 家 名 位 次 種 項 條 件 個 ETF 基金 投資人 股價 新功能 功能 模型 工具 服務 平台 系統 技術 應用 發展 影響 未來 時代 世界 生活 文化 設計 品牌 廣告 行銷 網路 社群 粉絲 議題 話題 討論 聲明 回應 消息 傳出 曝光 揭露 現場 畫面 一次 全部 這樣 這個 那個 什麼 怎麼 為何 為什麼 竟然 卻 竟 恐 將 再 也 都 又 就 才 最 更 很 太 還 已 已經 沒有 不是 就是 可以 可能 需要 應該 因為 所以 如果 但是 然而 以及 或者 之後 之前 之間 以上 以下 對於 關於 根據 透過 針對 包括 除了 另外 其中 其他 此外".split())
+HOT_STOP_ZH = set("安全 大安 中正 信義 台灣 台北 台中 高雄 新北 桃園 台南 中國 美國 日本 韓國 香港 全球 國際 國內 總統 政府 國會 立法院 立委 民眾 網友 記者 新聞 報導 影片 直播 專家 分析 表示 指出 認為 今天 今日 明天 昨天 上午 下午 晚間 凌晨 目前 最新 快訊 獨家 焦點 專題 系列 問題 情況 市場 公司 企業 產業 業者 消費者 用戶 台股 股市 大盤 個股 早盤 盤中 收盤 開盤 新台幣 美元 億元 萬元 億 萬 人 年 月 日 時 分 點 元 台 家 名 位 次 種 項 條 件 個 ETF 基金 投資人 股價 新功能 功能 模型 工具 服務 平台 系統 技術 應用 發展 影響 未來 時代 世界 生活 文化 設計 品牌 廣告 行銷 網路 社群 粉絲 議題 話題 討論 聲明 回應 消息 傳出 曝光 揭露 現場 畫面 一次 全部 這樣 這個 那個 什麼 怎麼 為何 為什麼 竟然 卻 竟 恐 將 再 也 都 又 就 才 最 更 很 太 還 已 已經 沒有 不是 就是 可以 可能 需要 應該 因為 所以 如果 但是 然而 以及 或者 之後 之前 之間 以上 以下 對於 關於 根據 透過 針對 包括 除了 另外 其中 其他 此外".split())
 HOT_LAT = re.compile(r"(?<![A-Za-z0-9])(?:[A-Z][A-Za-z0-9]{2,}(?:[ -][A-Z][A-Za-z0-9]+)?|[A-Z]{2,}[A-Za-z]*-?\d[\w.]*|GPT-?[\w.]*|iPhone\s?\d+)(?![A-Za-z0-9])")
 
 
@@ -1847,9 +1849,7 @@ def _hot_terms_from(items):
 
 
 def _hot_terms(news):
-    pool = list(news.get("tw") or []) + list(news.get("intl") or [])
-    for g in news.get("groups") or []:
-        pool += g.get("items") or []
+    pool = list(news.get("tw") or []) + list(news.get("intl") or []) + list(HOT_POOL)
     for pid in ("aiwire", "design"):
         pool += (load_prev(pid) or {}).get("items") or []
     for h in (load_prev("tech") or {}).get("hn") or []:
