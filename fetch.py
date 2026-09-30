@@ -2641,7 +2641,7 @@ run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
 run("power", p_power, keep_if_fresh_hours=0.25)
 run("airport", p_airport, keep_if_fresh_hours=0.25)
-run("tiktok", p_tiktok, keep_if_fresh_hours=20)
+# run("tiktok", p_tiktok, keep_if_fresh_hours=20)  # Creative Center 擋資料中心 IP，每輪白耗 60 秒，先停
 
 DATA.mkdir(exist_ok=True)
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
