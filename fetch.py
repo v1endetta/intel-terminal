@@ -2250,7 +2250,7 @@ def _threads_public(q, recent=False, limit=25):
     def walk(o):
         if isinstance(o, dict):
             cap = o.get("caption")
-            if isinstance(o.get("code"), str) and isinstance(cap, dict) and cap.get("text") and o.get("pk") and (o.get("taken_at") or o.get("like_count") is not None):
+            if isinstance(o.get("code"), str) and isinstance(cap, dict) and cap.get("text"):
                 if o["code"] not in seen:
                     seen.add(o["code"])
                     user = (o.get("user") or {}).get("username") or ""
@@ -2270,7 +2270,7 @@ def _threads_public(q, recent=False, limit=25):
             continue
     if not posts:
         blocks = re.findall(r'<script type="application/json"[^>]*>', html)
-        hints = [k for k in ("thread_items", "searchResults", "caption", "taken_at", "login", "Log in", "challenge") if k in html]
+        hints = [f"{k}={html.count(k)}" for k in ("thread_items", "searchResults", '"caption":{', '"caption\\":{', '"taken_at"', '"code":"', "post_id", "challenge") if k in html]
         raise RuntimeError(f"threads public: 0 posts len={len(html)} json_blocks={len(blocks)} hints={hints} title={re.search(r'<title>(.*?)</title>', html, re.S).group(1)[:40] if re.search(r'<title>', html) else ''}")
     posts.sort(key=lambda x: x.get("at") or "", reverse=True)
     return posts[:limit]
