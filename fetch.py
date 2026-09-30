@@ -113,7 +113,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"geo": 420, "news": 240, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 90, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -390,6 +390,9 @@ def p_poly():
     return {"items": items}
 
 
+HN_KW = re.compile(r"OpenAI|Anthropic|Claude|GPT|Gemini|DeepMind|Google|Meta\b|Llama|Mistral|DeepSeek|Qwen|agent|LLM|model|Nvidia|Apple|Figma|Adobe|design", re.I)
+
+
 def p_tech():
     since = (NOW - timedelta(days=7)).date().isoformat()
     out = {}
@@ -408,14 +411,18 @@ def p_tech():
     except Exception as e:  # noqa: BLE001
         log("hf", e)
     try:
-        ids = gjson("https://hacker-news.firebaseio.com/v0/topstories.json")[:8]
+        # 前 60 則裡先挑 AI／大廠相關，再依分數補滿 8 則（原本直接取前 8 則會被遊戲、雜聞埋掉發布新聞）
+        ids = gjson("https://hacker-news.firebaseio.com/v0/topstories.json")[:60]
         hn = []
         for i in ids:
             s = gjson(f"https://hacker-news.firebaseio.com/v0/item/{i}.json")
-            if s:
-                hn.append({"title": s.get("title"), "url": s.get("url") or f"https://news.ycombinator.com/item?id={i}",
-                           "score": s.get("score"), "comments": s.get("descendants")})
-        out["hn"] = hn
+            if s and s.get("title"):
+                t = s["title"]
+                hot = bool(HN_KW.search(t))
+                hn.append({"title": t, "url": s.get("url") or f"https://news.ycombinator.com/item?id={i}",
+                           "score": s.get("score"), "comments": s.get("descendants"), "hot": hot})
+        hn.sort(key=lambda x: (not x["hot"], -(x["score"] or 0)))
+        out["hn"] = hn[:8]
     except Exception as e:  # noqa: BLE001
         log("hn", e)
     if not out:
@@ -1531,6 +1538,8 @@ def p_geo():
 NEWS_GROUPS = [
     ("廣告與代理商", ['"廣告代理商"', "比稿 OR 廣告 得標", "廣告不實 OR 誇大不實 開罰", "廣告量 OR 行銷預算"]),
     ("品牌與設計", ['"品牌重塑" OR "品牌升級"', "台灣設計展 OR 文博會 OR 金點設計獎", '"視覺識別" OR "包裝設計"', "家具展 OR 室內設計 OR 設計師品牌"]),
+    ("AI 大廠與模型", ["OpenAI OR Anthropic OR DeepMind 發布 OR 推出", "ChatGPT OR Claude OR Gemini 新功能 OR 新模型", "AI agent OR AI 代理人 OR 智慧代理",
+                  "en:OpenAI OR Anthropic OR \"Google DeepMind\" launches OR announces OR releases", "en:\"AI agent\" OR agentic launch"]),
     ("AI 與製作工具", ["Sora OR Runway OR Kling 影片", "生成式AI 廣告 OR 生成式AI 版權", "Figma OR Canva 新功能", "開源模型 OR Ollama OR 本地部署"]),
     ("市場與投資", ["槓桿ETF OR 00631L OR 00675L", "聯準會 利率 OR FOMC", "台積電 法說 OR 台積電 ADR"]),
     ("地緣與科技政策", ["台海 OR 共機 OR 軍演", "關稅 台灣 OR 232條款", "半導體 出口管制 OR 晶片法案"]),
@@ -1578,9 +1587,9 @@ def _rss(url, source, limit=8, strip_source=False, **params):
     return out
 
 
-def _gnews(q, source="", limit=6):
-    return _rss("https://news.google.com/rss/search", source, limit, strip_source=True,
-                q=q, hl="zh-TW", gl="TW", ceid="TW:zh-Hant")
+def _gnews(q, source="", limit=6, lang="zh"):
+    loc = {"hl": "en-US", "gl": "US", "ceid": "US:en"} if lang == "en" else {"hl": "zh-TW", "gl": "TW", "ceid": "TW:zh-Hant"}
+    return _rss("https://news.google.com/rss/search", source, limit, strip_source=True, q=q, **loc)
 
 
 def _try(name, fn, *a, **kw):
@@ -1700,7 +1709,8 @@ def p_news():
     for name, qs in NEWS_GROUPS:
         got = []
         for q in qs:
-            for it in _try("kw " + q, _gnews, q, "", 3):
+            lang = "en" if q.startswith("en:") else "zh"
+            for it in _try("kw " + q, _gnews, q[3:] if lang == "en" else q, "", 3, lang):
                 it["kw"] = q; got.append(it)
             time.sleep(0.8)
         # 每組 3 則：關鍵字輪流各出一則（避免單一話題洗版），標題前 14 字相同視為同一則
@@ -1734,7 +1744,119 @@ def p_news():
         signals["wiki"] = {"zh": wz, "en": we}
     if not (tw or intl or any(g["items"] for g in groups)):
         raise RuntimeError(f"news: nothing errs={NEWS_ERRS[:5]}")
-    return {"tw": tw, "intl": intl, "groups": groups, "signals": signals, "errs": NEWS_ERRS[:8]}
+    out = {"tw": tw, "intl": intl, "groups": groups, "signals": signals, "errs": NEWS_ERRS[:8]}
+    try:
+        signals["hot"] = _hot_terms(out)
+    except Exception as e:  # noqa: BLE001
+        log("hot", e); NEWS_ERRS.append("hot: " + safe_err(e))
+    return out
+
+
+
+# ---------- AI 快線（官方部落格 + 科技媒體 AI 版；比新聞轉譯早 1–6 小時） ----------
+AI_FEEDS = [
+    ("https://openai.com/news/rss.xml", "OpenAI"),
+    ("https://blog.google/technology/ai/rss/", "Google"),
+    ("https://www.theverge.com/rss/ai-artificial-intelligence/index.xml", "The Verge"),
+    ("https://techcrunch.com/category/artificial-intelligence/feed/", "TechCrunch"),
+    ("https://www.anthropic.com/rss.xml", "Anthropic"),
+]
+AI_LAUNCH = re.compile(r"introduc|launch|announc|releas|available|now in|new model|preview|推出|發布|上線|開放", re.I)
+
+
+def p_aiwire():
+    errs, items = [], []
+    for url, src in AI_FEEDS:
+        try:
+            items += _rss(url, src, 8)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{src}: {safe_err(e)}")
+            if src == "Anthropic":  # 官方沒有 RSS 時用英文 Google News 補
+                items += _try("anthropic gnews", _gnews, "Anthropic", "Anthropic", 4, "en")
+    cut = (NOW - timedelta(days=7)).isoformat()
+    items = [i for i in items if not i.get("at") or i["at"] >= cut]
+    for i in items:
+        i["launch"] = bool(AI_LAUNCH.search(i["title"]))
+    items = _dedupe_sort(items, 40)
+    # 發布類優先，其餘依時間；每個來源最多 4 則，避免 TechCrunch 洗版
+    per, out = {}, []
+    for i in sorted(items, key=lambda x: (x["launch"], x.get("at") or ""), reverse=True):
+        if per.get(i["source"], 0) >= 4:
+            continue
+        per[i["source"]] = per.get(i["source"], 0) + 1
+        out.append(i)
+        if len(out) >= 14:
+            break
+    if not out:
+        raise RuntimeError(f"aiwire: nothing {errs[:3]}")
+    return {"items": out, "errs": errs[:5]}
+
+
+# ---------- 熱詞引擎：同一實體詞在 12 小時內出現在 ≥3 個不同來源就算「在燒」 ----------
+HOT_STOP_EN = set("the a an and or of to in on for with from by at as is are was were be been this that these those new how why what when who which will can its it into over after before about more than not no yes up down out all one two three first last year years day days week today says said say show shows video live news report reports update ai us uk eu china taiwan taipei japan korea india world government president people man woman men women police court city state county".split())
+HOT_STOP_ZH = set("台灣 台北 台中 高雄 新北 桃園 台南 中國 美國 日本 韓國 香港 全球 國際 國內 總統 政府 國會 立法院 立委 民眾 網友 記者 新聞 報導 影片 直播 專家 分析 表示 指出 認為 今天 今日 明天 昨天 上午 下午 晚間 凌晨 目前 最新 快訊 獨家 焦點 專題 系列 問題 情況 市場 公司 企業 產業 業者 消費者 用戶 台股 股市 大盤 個股 早盤 盤中 收盤 開盤 新台幣 美元 億元 萬元 億 萬 人 年 月 日 時 分 點 元 台 家 名 位 次 種 項 條 件 個 ETF 基金 投資人 股價 新功能 功能 模型 工具 服務 平台 系統 技術 應用 發展 影響 未來 時代 世界 生活 文化 設計 品牌 廣告 行銷 網路 社群 粉絲 議題 話題 討論 聲明 回應 消息 傳出 曝光 揭露 現場 畫面 一次 全部 這樣 這個 那個 什麼 怎麼 為何 為什麼 竟然 卻 竟 恐 將 再 也 都 又 就 才 最 更 很 太 還 已 已經 沒有 不是 就是 可以 可能 需要 應該 因為 所以 如果 但是 然而 以及 或者 之後 之前 之間 以上 以下 對於 關於 根據 透過 針對 包括 除了 另外 其中 其他 此外".split())
+HOT_LAT = re.compile(r"(?<![A-Za-z0-9])(?:[A-Z][A-Za-z0-9]{2,}(?:[ -][A-Z][A-Za-z0-9]+)?|[A-Z]{2,}[A-Za-z]*-?\d[\w.]*|GPT-?[\w.]*|iPhone\s?\d+)(?![A-Za-z0-9])")
+
+
+HOT_EDGE = set("的了在是與和及等將被對為把讓向從以就也都又再才卻更最很太還已沒不無非但而或者之其此該這那些個們者著過來去上下中內外前後間裡時年月日點元億萬千百十人次件家場位名種項條")
+HOT_FUNC = set("的了在是與和及等將被對為把讓向從以就也都又再才卻更最很太還已沒不無非但而或者之其此該這那些個們者著過來去")
+
+
+def _hot_terms_from(items):
+    """items: [{title, source, at}] → 依「不同來源數」排序的熱詞。
+    中文用 2–4 字 n-gram 跨來源計數（不靠斷詞字典，台積電、賴清德這類實體自然浮出），
+    只留「最長」的一段：若某段的來源集合和更長的段一樣就丟掉（避免 台積／台積電 同時出現）。"""
+    cut = (NOW - timedelta(hours=12)).isoformat().replace("+00:00", "Z")
+    hits: dict = {}
+
+    def add(w, src, it):
+        k = w.lower()
+        h = hits.setdefault(k, {"term": w, "n": 0, "sources": set(), "sample": {"title": (it.get("title") or "")[:60], "url": it.get("url")}})
+        h["n"] += 1; h["sources"].add(src)
+
+    for it in items:
+        t = it.get("title") or ""
+        if not t or (it.get("at") and it["at"] < cut):
+            continue
+        src = (it.get("source") or "?").strip()
+        terms = set()
+        for m in HOT_LAT.findall(t):
+            w = m.strip()
+            for part in {w, re.split(r"[ -]", w)[0]}:  # 「OpenAI Agent」同時算 OpenAI
+                if part.lower() not in HOT_STOP_EN and len(part) >= 3:
+                    terms.add(part)
+        for seg in re.findall(r"[\u4e00-\u9fff]{2,}", t):
+            for n in (2, 3, 4):
+                for i in range(len(seg) - n + 1):
+                    g = seg[i:i + n]
+                    if g[0] in HOT_EDGE or g[-1] in HOT_EDGE or any(c in HOT_FUNC for c in g) or g in HOT_STOP_ZH:
+                        continue
+                    terms.add(g)
+        for w in terms:
+            add(w, src, it)
+    cands = [h for h in hits.values() if len(h["sources"]) >= 2]
+    # 最長匹配：短段若被某個更長的段涵蓋且來源集合相同 → 丟
+    keep = []
+    for h in cands:
+        dominated = any(o is not h and h["term"] in o["term"] and len(o["term"]) > len(h["term"]) and o["sources"] >= h["sources"] for o in cands)
+        if not dominated:
+            keep.append(h)
+    out = [{"term": h["term"], "n": h["n"], "src": len(h["sources"]), "sources": sorted(h["sources"])[:6], "sample": h["sample"], "hot": len(h["sources"]) >= 3} for h in keep]
+    out.sort(key=lambda x: (-x["src"], -x["n"], -len(x["term"])))
+    return out[:10]
+
+
+def _hot_terms(news):
+    pool = list(news.get("tw") or []) + list(news.get("intl") or [])
+    for g in news.get("groups") or []:
+        pool += g.get("items") or []
+    for pid in ("aiwire", "design"):
+        pool += (load_prev(pid) or {}).get("items") or []
+    for h in (load_prev("tech") or {}).get("hn") or []:
+        pool.append({"title": h.get("title"), "source": "HN", "url": h.get("url"), "at": NOW_ISO})
+    for w in ((news.get("signals") or {}).get("wiki") or {}).get("zh") or []:
+        pool.append({"title": w.get("title"), "source": "Wiki", "url": w.get("url"), "at": NOW_ISO})
+    return _hot_terms_from(pool)
 
 
 # ---------- 第三批（免新金鑰）：標案 / 設計廣告媒體 / 地震 / 台電 / 桃機 ----------
@@ -2635,6 +2757,7 @@ run("awards", p_awards, keep_if_fresh_hours=1)
 run("supply", p_supply, keep_if_fresh_hours=6)
 run("weather", p_weather)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
+run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("design", p_design, keep_if_fresh_hours=1)

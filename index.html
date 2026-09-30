@@ -354,6 +354,12 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><span>Dezeen · It's Nice That · Campaign Brief Asia · Creative Review</span></div>
   </section>
 
+  <section class="panel w6 cap" id="p-aiwire">
+    <div class="ph"><h2>AI Wire</h2><span class="zh">AI 快線 · 官方部落格與科技媒體第一手</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>OpenAI · Anthropic · Google AI · The Verge AI · TechCrunch AI · 標「發布」= 標題含 launch／introduce／推出</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-awards">
     <div class="ph"><h2>Awards</h2><span class="zh">決標公告 · 誰得標、多少錢</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -443,7 +449,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 
 <div class="foot">
   <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 GitHub Actions 常駐迴圈抓取，盤中每 5 分鐘、其餘 15 分鐘一輪，寫進 data 分支；走勢存 history.json，最多 400 點</span>
-  <span>來源：證交所（含 MIS 即時、休市）· 櫃買 · FinMind · 央行 · 主計總處（部分手動）· 國發會（燈號、PMI／NMI）· 經濟部（零售指數）· 信義房價 · 政府電子採購網（g0v）· CBOE · Yahoo Finance · Stooq（備援）· CoinGecko · FRED（含發布時程）· ONS · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · YouTube · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · Google News · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · GDELT · Wikipedia · PTT · 氣象署（天氣、地震）· 台電 · TDX（YouBike、停車場、VD、國道、桃機）· OpenFreeMap</span>
+  <span>來源：證交所（含 MIS 即時、休市）· 櫃買 · FinMind · 央行 · 主計總處（部分手動）· 國發會（燈號、PMI／NMI）· 經濟部（零售指數）· 信義房價 · 政府電子採購網（g0v）· CBOE · Yahoo Finance · Stooq（備援）· CoinGecko · FRED（含發布時程）· ONS · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · YouTube · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · Google News（含英文）· OpenAI／Anthropic／Google AI 官方部落格 · The Verge AI · TechCrunch AI · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · GDELT · Wikipedia · PTT · 氣象署（天氣、地震）· 台電 · TDX（YouBike、停車場、VD、國道、桃機）· OpenFreeMap</span>
   <span>未接：TikTok（擋資料中心 IP）· 國防部軍事動態（robots.txt 禁抓）· 日本與中國 CPI（無免金鑰官方 API）· Threads／X／LinkedIn（無開放 API）· 真實資金流向（付費資料，板塊面板為代理指標）</span>
 </div>
 
@@ -543,10 +549,11 @@ const renderers={
     const jams=(d.jams||[]).map(j=>`<li><span class="t">${esc(j.section)}</span><span class="m bad">${fmt(n(j.speed),0)} km/h</span></li>`).join("");
     body("p-twpulse").innerHTML=`<div class="tp"><div><h3>YouBike 可借</h3><table><tr><th>縣市</th><th class="r">可借車</th><th class="r">空站</th><th class="r">滿站</th><th class="r">停車剩</th></tr>${bikes}</table></div>
       <div><h3>國道小客車均速</h3><table>${roads}</table>${jams?`<h3 style="margin-top:8px">最塞區間</h3><ul class="list">${jams}</ul>`:""}</div></div>`;setMeta("p-twpulse",d,1);},
-  news(d){const li=(arr,kw)=>arr.map(it=>`<li>${kw?`<span class="kw">${esc((it.kw||"").split(" ")[0].slice(0,5))}</span>`:`<span class="src">${esc(it.source)}</span>`}<span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`).join("");
+  news(d){const li=(arr,kw)=>arr.map(it=>`<li>${kw?`<span class="kw">${esc((it.kw||"").replace(/^en:/,"").replace(/^"/,"").split(" ")[0].slice(0,6))}</span>`:`<span class="src">${esc(it.source)}</span>`}<span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`).join("");
     const g=(d.signals||{}).gdelt,w=(d.signals||{}).wiki;let sig="";
     if(g){const r=n(g.vol_ratio);sig+=`<span><span class="l">全球提到 Taiwan</span><span class="v ${r>=1.3?"bad":r<=0.7?"up":""}${K("gdelt:vol",n(g.vol))}">${isFinite(r)?(r>=1?"×"+r.toFixed(2):"×"+r.toFixed(2)):""}</span><span class="sub"> vs 前兩日</span>${mini(g.spark)}</span>`;
       if(g.tone!=null)sig+=`<span><span class="l">語調</span><span class="v ${n(g.tone)<-3?"bad":n(g.tone)>0?"up":""}">${sgn(n(g.tone),1)}</span></span>`;}
+    const hot=(d.signals||{}).hot;if(hot&&hot.length){sig+=`<span class="w"><span class="l">🔥 多源同提</span>${hot.slice(0,8).map(h=>`<a href="${esc(safe(h.sample&&h.sample.url))}" target="_blank" rel="noopener" title="${esc((h.sources||[]).join("、"))}" style="${h.hot?"color:var(--warn);font-weight:600":""}">${esc(h.term)}<span class="sub"> ${h.src}</span></a>`).join("")}</span>`;}
     if(w){const wl=(a,l)=>a&&a.length?`<span class="w"><span class="l">維基 ${l}</span>${a.map(x=>`<a href="${esc(safe(x.url))}" target="_blank" rel="noopener" title="${compact(n(x.views))} 次">${esc(x.title)}</a>`).join("")}</span>`:"";sig+=wl(w.zh,"中文")+wl(w.en,"英文");}
     body("p-news").innerHTML=`${sig?`<div class="sig">${sig}</div>`:""}<div class="nw nw2"><div><h3>台灣</h3><ul class="list">${li(d.tw||[])}</ul></div><div><h3>國際</h3><ul class="list">${li(d.intl||[])}</ul></div></div>${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,200))}</div>`:""}`;setMeta("p-news",d,2);
     const gs=(d.groups||[]).map(g=>`<div class="wg"><h3>${esc(g.name)}</h3><ul class="list">${li(g.items||[])||'<li class="empty">沒有結果</li>'}</ul></div>`).join("");
@@ -555,6 +562,8 @@ const renderers={
     body("p-tenders").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">沒有命中</div>`;setMeta("p-tenders",d,6);},
   design(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.source)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`).join("");
     body("p-design").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-design",d,6);},
+  aiwire(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.source)}</span><span class="t">${it.launch?'<span class="kw" style="margin-right:4px">發布</span>':''}<a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`).join("");
+    body("p-aiwire").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">沒有結果</div>`;setMeta("p-aiwire",d,3);},
   quake(d){const li=(d.items||[]).map(it=>`<li><span class="m ${n(it.mag)>=5?"bad":""}" style="min-width:36px;font-size:13px">M${fmt(n(it.mag),1)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.loc)}</a><span class="sub">深 ${fmt(n(it.depth),0)} km${it.intensity?` · 最大 ${esc(it.intensity)} 級`:""}</span></span><span class="m">${it.at?ago(it.at):""}</span></li>`).join("");
     body("p-quake").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-quake",d,48);},
   power(d){const LC={"綠":"#39B978","黃":"#E0A23A","橘":"#E28A2B","紅":"#F0524F"};const c=LC[d.level]||"var(--dim)";
@@ -670,6 +679,7 @@ function brief(P){
   const el=$("#brief");const items=[];
   const f=P.fear||{};if(f.regime){const LC={green:"var(--up)",yellow:"var(--warn)",red:"var(--down)",flat:"var(--dim)"};items.push({l:"恐慌狀態",h:f.regime,c:LC[f.tone]||"var(--dim)",s:(f.items||[]).slice(0,3).map(i=>`${i.name} ${fmt(n(i.value),i.name==="VIX"?1:0)}`).join(" · ")});}
   const g=(P.news||{}).signals?.gdelt;if(g&&isFinite(n(g.vol_ratio))){const r=n(g.vol_ratio);items.push({l:"全球提到 Taiwan",h:"×"+r.toFixed(2),c:r>=1.3?"var(--warn)":r<=0.7?"var(--up)":"var(--dim)",s:r>=1.3?"比前兩日多，看國際欄":"音量正常"+(g.tone!=null?` · 語調 ${sgn(n(g.tone),1)}`:"")});}
+  const hot=((P.news||{}).signals||{}).hot||[];const h0=hot.find(h=>h.hot);if(h0){items.unshift({l:"🔥 多源同時提及",h:h0.term,c:"var(--warn)",s:`${h0.src} 個來源 · ${(h0.sample&&h0.sample.title||"").slice(0,26)}`});}
   const tm=P.tw_market||{};const inst=((tm.institutions&&tm.institutions.items)||tm.inst||[]);const fo=inst.find?inst.find(i=>/外資/.test(i.name||i.label||"")):null;
   if(fo){const v=n(fo.net??fo.value);items.push({l:"台股法人",h:`外資 ${v>=0?"買超":"賣超"} ${fmt(Math.abs(v),0)} 億`,c:v>=0?"var(--up)":"var(--down)",s:(tm.breadth?`漲 ${tm.breadth.up} 跌 ${tm.breadth.down}`:"")});}
   else if(P.taiex){const idx=n(P.taiex.index),ch=n(P.taiex.change);items.push({l:"台股大盤",h:`${fmt(idx,0)}`,c:ch>=0?"var(--up)":"var(--down)",s:sgn(ch/(idx-ch)*100,2,"%")});}
