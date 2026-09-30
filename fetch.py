@@ -2472,9 +2472,27 @@ def _cse(q, num=10, date_restrict="d1"):
     return out, int((js.get("searchInformation") or {}).get("totalResults") or 0)
 
 
+def _threads_grounded(kw):
+    """Custom Search JSON API 已不收新客戶（403）；改用 Gemini 的 Google 搜尋 grounding 找 threads.com 貼文。"""
+    prompt = f"""用 Google 搜尋找出 threads.com 上「最近一天」提到「{kw}」的公開貼文（搜尋時加上 site:threads.com）。
+只回傳 JSON 物件，格式 {{"posts":[{{"user":"帳號","text":"貼文原文摘錄 60 字內（保留原本語氣，不要改寫成新聞腔）","url":"貼文網址"}}], "n_hint": 你判斷有多少則相關貼文的整數估計}}。
+最多 6 則，找不到就回 {{"posts":[],"n_hint":0}}。不要加任何 JSON 以外的文字。"""
+    data, model = _gemini_json(prompt, tools=[{"google_search": {}}])
+    posts = []
+    chunks = {(c.get("web") or {}).get("title", ""): (c.get("web") or {}).get("uri", "") for c in data.get("_grounding") or []}
+    for p_ in data.get("posts") or []:
+        url = p_.get("url") or ""
+        if "threads" not in url and chunks:  # 模型給的網址不可靠時改用 grounding 的來源連結
+            for t, u in chunks.items():
+                if p_.get("user") and p_["user"].lstrip("@") in t:
+                    url = u; break
+        posts.append({"src": "Threads", "user": (p_.get("user") or "").lstrip("@")[:30], "text": re.sub(r"\s+", " ", p_.get("text") or "")[:140], "url": url, "title": ""})
+    return posts, int(data.get("n_hint") or len(posts)), model
+
+
 def p_threads_g():
-    if not (CSE_KEY and CSE_CX):
-        raise RuntimeError("未設定 GOOGLE_CSE_KEY／GOOGLE_CSE_CX")
+    if not (CSE_KEY and CSE_CX) and not GEMINI_KEY:
+        raise RuntimeError("未設定 GOOGLE_CSE_KEY／GOOGLE_CSE_CX 或 GEMINI_API_KEY")
     quota = _cse_quota()
     errs, out = [], {"keywords": [], "quota": None}
     hot = ((load_prev("news") or {}).get("signals") or {}).get("hot") or []
@@ -2493,12 +2511,23 @@ def p_threads_g():
                 out["keywords"].append(prev[sd["kw"]])
             continue
         try:
+            if quota.get("cse_dead"):
+                raise RuntimeError("cse closed")
             posts, total = _cse(sd["kw"])
             quota["used"] += 1
-            out["keywords"].append({**sd, "n_24h": total, "posts": posts[:4]})
+            out["keywords"].append({**sd, "n_24h": total, "posts": posts[:4], "via": "cse"})
         except Exception as e:  # noqa: BLE001
-            quota["used"] += 1
-            errs.append(f"{sd['kw']}: {safe_err(e)[:80]}")
+            if "cse 403" in str(e) or "cse closed" in str(e):
+                quota["cse_dead"] = True  # 這個專案沒有 Custom Search 權限（新客戶已關閉），這天別再打
+            else:
+                errs.append(f"{sd['kw']}: {safe_err(e)[:80]}")
+            if GEMINI_KEY:
+                try:
+                    posts, total, model = _threads_grounded(sd["kw"])
+                    quota["used"] += 1  # grounding 也算一次，同樣鎖 90 次／天
+                    out["keywords"].append({**sd, "n_24h": total, "posts": posts[:4], "via": "gemini:" + model})
+                except Exception as e2:  # noqa: BLE001
+                    errs.append(f"{sd['kw']} grounding: {safe_err(e2)[:80]}")
         time.sleep(0.5)
     write_json(CSE_QUOTA_PATH, quota)
     out["quota"] = {"used": quota["used"], "cap": CSE_DAILY_CAP, "date": quota["date"]}
@@ -2524,22 +2553,35 @@ def _gemini_models():
         log("gemini models", e); return []
 
 
-def _gemini_json(prompt, schema_hint):
+def _gemini_call(prompt, model, json_mode=True, tools=None, max_tokens=1200):
+    body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.2, "maxOutputTokens": max_tokens}}
+    if json_mode and not tools:  # 開了搜尋工具就不能強制 JSON，改由 prompt 要求
+        body["generationConfig"]["responseMimeType"] = "application/json"
+    if tools:
+        body["tools"] = tools
+    r = S.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", params={"key": GEMINI_KEY}, json=body, timeout=90)
+    return r
+
+
+def _gemini_json(prompt, schema_hint=None, tools=None):
     last = None
     for model in (_gemini_models() or GEMINI_MODELS):
         try:
-            r = S.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", params={"key": GEMINI_KEY},
-                       json={"contents": [{"parts": [{"text": prompt}]}],
-                             "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json", "maxOutputTokens": 1200}},
-                       timeout=60)
-            if r.status_code == 404:
-                last = RuntimeError(f"{model} 404"); continue
+            r = _gemini_call(prompt, model, tools=tools)
+            if r.status_code in (404, 429, 503):  # 沒這個模型／額度滿／過載 → 換下一個
+                last = RuntimeError(f"{model} {r.status_code}"); time.sleep(2); continue
             if r.status_code >= 400:
                 raise RuntimeError(f"gemini {r.status_code} {r.text[:120]}")
-            txt = r.json()["candidates"][0]["content"]["parts"][0]["text"]
-            return json.loads(txt), model
-        except (KeyError, IndexError, json.JSONDecodeError) as e:
-            last = RuntimeError(f"{model} parse: {e}")
+            js = r.json()
+            cand = js["candidates"][0]
+            txt = "".join(p_.get("text", "") for p_ in cand["content"]["parts"])
+            m = re.search(r"\{.*\}|\[.*\]", txt, re.S)
+            data = json.loads(m.group(0) if m else txt)
+            if isinstance(data, dict):
+                data["_grounding"] = (cand.get("groundingMetadata") or {}).get("groundingChunks") or []
+            return data, model
+        except (KeyError, IndexError, json.JSONDecodeError, ValueError) as e:
+            last = RuntimeError(f"{model} parse: {str(e)[:60]}")
     raise last or RuntimeError("gemini: no model")
 
 
