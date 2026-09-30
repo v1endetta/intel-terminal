@@ -110,13 +110,13 @@ td.r,th.r{white-space:nowrap}
 /* 面板層級 */
 .panel.hero{background:var(--panel2);border-color:var(--line2)}
 .panel.hero .ph h2{font-size:13px;letter-spacing:.1em}.panel.hero .ph .zh{font-size:12px;color:var(--text)}
-.panel.sig .ph{padding:6px 10px 4px}.panel.sig .ph h2{font-size:10.5px;color:var(--muted)}
+.panel.lite .ph{padding:6px 10px 4px}.panel.lite .ph h2{font-size:10.5px;color:var(--muted)}
 /* 列表面板：桌面固定高度內捲，手機收合可展開 */
+.panel.cap .more{display:none}
 .panel.cap .pb{position:relative}
 @media (min-width:641px){.panel.cap .pb{max-height:440px;overflow:auto;scrollbar-width:thin}.panel.cap.tall .pb{max-height:560px}}
 @media (max-width:640px){.panel.cap:not(.open) .pb{max-height:300px;overflow:hidden}.panel.cap:not(.open) .pb::after{content:"";position:absolute;left:0;right:0;bottom:0;height:56px;background:linear-gradient(transparent,var(--panel))}
   .panel.cap .more{display:block;width:100%;background:none;border:0;border-top:1px solid var(--line);color:var(--blue);font:11.5px var(--mono);padding:7px;cursor:pointer}}
-.panel.cap .more{display:none}
 /* 頁尾說明：桌面淡化、滑過才亮 */
 @media (min-width:641px){.pf{opacity:.45;transition:opacity .15s}.panel:hover .pf{opacity:1}}
 /* movers：單列橫向滑 */
@@ -415,25 +415,25 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><a href="https://tdx.transportdata.tw/" target="_blank" rel="noopener">TDX</a><span>YouBike 可借車數每 5 分鐘 · 國道 ETag 區間小客車平均速率</span></div>
   </section>
 
-  <section class="panel w6 sig" id="p-weather">
+  <section class="panel w6 lite" id="p-weather">
     <div class="ph"><h2>Weather</h2><span class="zh">台北 · 台中</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待氣象署金鑰</div></div>
     <div class="pf"><a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">中央氣象署</a><span>觀測每 10 分鐘 · 36 小時預報 · 特報</span></div>
   </section>
 
-  <section class="panel w3 sig" id="p-quake">
+  <section class="panel w3 lite" id="p-quake">
     <div class="ph"><h2>Quake</h2><span class="zh">顯著有感地震</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>氣象署地震報告 · 近 5 筆</span></div>
   </section>
 
-  <section class="panel w3 sig" id="p-power">
+  <section class="panel w3 lite" id="p-power">
     <div class="ph"><h2>Power</h2><span class="zh">台電備轉容量</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>台電開放資料 · 燈號：綠 ≥10% 黃 6–10% 橘 3–6% 紅 &lt;3%</span></div>
   </section>
 
-  <section class="panel w6 sig" id="p-airport">
+  <section class="panel w6 lite" id="p-airport">
     <div class="ph"><h2>TPE Airport</h2><span class="zh">桃機今日航班</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>TDX 航班顯示（FIDS）· 接下來 8 班出發</span></div>
@@ -580,13 +580,13 @@ const renderers={
     const tabs=cats.map(([k,l])=>`<button class="ytc${k===cur?" on":""}" data-cat="${esc(k)}">${esc(l)}</button>`).join("");
     body("p-youtube").innerHTML=`<div class="tp"><div><div class="mapctl" style="position:static;margin-bottom:6px">${tabs}</div><ul class="list">${li((d.tw||{})[cur],true)||'<li class="empty">沒有資料</li>'}</ul></div><div><h3 style="font-size:10.5px;letter-spacing:.08em;color:var(--dim);margin:0 0 6px;text-transform:uppercase">美國 對照</h3><ul class="list">${li(d.us,true)}</ul></div></div>`;
     body("p-youtube").querySelectorAll(".ytc").forEach(b=>b.addEventListener("click",()=>{try{localStorage.setItem("yt-cat",b.dataset.cat);}catch(e){}renderers.youtube(d);}));setMeta("p-youtube",d,2);},
-  calendar(d){const today=(d.from||"");const li=(d.items||[]).map(it=>{const dt=new Date(it.date+"T00:00:00");const dd=Math.round((dt-new Date(today+"T00:00:00"))/864e5);const wd="日一二三四五六"[dt.getDay()];return`<li><span class="src" style="min-width:64px">${esc(it.date.slice(5))} ${wd}</span><span class="t">${esc(it.label)}${it.approx?`<span class="sub">約</span>`:""}</span><span class="m ${it.kind==="cb"?"bad":""}">${it.region}${dd===0?" · 今天":dd===1?" · 明天":""}</span></li>`;}).join("");
+  calendar(d){const today=new Date().toLocaleDateString("sv-SE",{timeZone:"Asia/Taipei"});const li=(d.items||[]).map(it=>{const dt=new Date(it.date+"T00:00:00");const dd=Math.round((dt-new Date(today+"T00:00:00"))/864e5);const wd="日一二三四五六"[dt.getDay()];return`<li><span class="src" style="min-width:64px">${esc(it.date.slice(5))} ${wd}</span><span class="t">${esc(it.label)}${it.approx?`<span class="sub">約</span>`:""}</span><span class="m ${it.kind==="cb"?"bad":""}">${it.region}${dd===0?" · 今天":dd===1?" · 明天":""}</span></li>`;}).join("");
     body("p-calendar").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">三週內沒有事件</div>`;setMeta("p-calendar",d,26);},
   awards(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.date.slice(4,6))}/${esc(it.date.slice(6,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a><span class="sub">${esc(it.unit)}${it.winner?" → "+esc(it.winner):""}</span></span><span class="m ${it.amount>=3e6?"up":""}">${it.amount?compact(n(it.amount)):"—"}</span></li>`).join("");
     body("p-awards").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">沒有命中</div>`;setMeta("p-awards",d,6);},
   supply(d){const tr=(d.retail||[]).map(r=>`<tr><td class="name">${esc(r.name)}${mini(r.spark)}</td><td class="r num ${cls(n(r.yoy))}">${sgn(n(r.yoy),1,"%")}</td></tr>`).join("");
     body("p-supply").innerHTML=tr?`<table><tr><th>零售業營業額指數（${esc((d.retail[0]||{}).period||"")}）</th><th class="r">年增</th></tr>${tr}</table>`:`<div class="empty">零售指數抓不到</div>`;setMeta("p-supply",d,24*35);},
-  liquidity(d){const b=v=>isFinite(n(v))?(Math.abs(n(v))>=1000?(n(v)/1000).toFixed(2)+" 兆":fmt(n(v),0)+" 億"):"—";const r=d.rates||{};const sp=n(d.sofr_iorb);const spc=sp>0?"#F0524F":sp>-0.05?"#E0A23A":"#39B978";
+  liquidity(d){const b=v=>isFinite(n(v))?(Math.abs(n(v))>=1000?(n(v)/1000).toFixed(2)+" 兆":fmt(n(v)*10,0)+" 億"):"—";const r=d.rates||{};const sp=n(d.sofr_iorb);const spc=sp>0?"#F0524F":sp>-0.05?"#E0A23A":"#39B978";
     const net=d.net?`<div style="display:flex;gap:14px;align-items:baseline;padding:0 0 10px;margin-bottom:10px;border-bottom:1px solid var(--line)"><span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--dim)">淨流動性</span><span class="num" style="font-size:22px;font-weight:600"><span class="${K("liq:net",n(d.net.value))}">${b(d.net.value)}</span><span class="sub" style="font-size:11px"> USD</span></span>${d.net.chg4w!=null?`<span class="num ${cls(n(d.net.chg4w))}" style="font-size:12px">${n(d.net.chg4w)>0?"+":""}${b(d.net.chg4w)} /4週</span>`:""}<span class="sub">${esc(d.net.date||"")}</span>${mini(d.net.spark)}</div>`:"";
     const card=(l,x,sub,extra)=>x?`<div class="c"><div class="l">${l}</div><div class="v">${extra||""}<span class="${K("liq:"+l,n(x.value))}">${b(x.value)}</span></div><div class="p">${esc(x.date||"")}${sub?` · ${sub}`:""}${mini(x.spark)}</div></div>`:"";
     const dot=`<span style="display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:middle;background:${spc};box-shadow:0 0 0 3px color-mix(in srgb,${spc} 25%,transparent)"></span>`;
@@ -670,12 +670,12 @@ function brief(P){
   const el=$("#brief");const items=[];
   const f=P.fear||{};if(f.regime){const LC={green:"var(--up)",yellow:"var(--warn)",red:"var(--down)",flat:"var(--dim)"};items.push({l:"恐慌狀態",h:f.regime,c:LC[f.tone]||"var(--dim)",s:(f.items||[]).slice(0,3).map(i=>`${i.name} ${fmt(n(i.value),i.name==="VIX"?1:0)}`).join(" · ")});}
   const g=(P.news||{}).signals?.gdelt;if(g&&isFinite(n(g.vol_ratio))){const r=n(g.vol_ratio);items.push({l:"全球提到 Taiwan",h:"×"+r.toFixed(2),c:r>=1.3?"var(--warn)":r<=0.7?"var(--up)":"var(--dim)",s:r>=1.3?"比前兩日多，看國際欄":"音量正常"+(g.tone!=null?` · 語調 ${sgn(n(g.tone),1)}`:"")});}
-  const tm=P.tw_market||{};const inst=(tm.institutions||tm.inst||[]);const fo=inst.find?inst.find(i=>/外資/.test(i.name||i.label||"")):null;
+  const tm=P.tw_market||{};const inst=((tm.institutions&&tm.institutions.items)||tm.inst||[]);const fo=inst.find?inst.find(i=>/外資/.test(i.name||i.label||"")):null;
   if(fo){const v=n(fo.net??fo.value);items.push({l:"台股法人",h:`外資 ${v>=0?"買超":"賣超"} ${fmt(Math.abs(v),0)} 億`,c:v>=0?"var(--up)":"var(--down)",s:(tm.breadth?`漲 ${tm.breadth.up} 跌 ${tm.breadth.down}`:"")});}
   else if(P.taiex){const idx=n(P.taiex.index),ch=n(P.taiex.change);items.push({l:"台股大盤",h:`${fmt(idx,0)}`,c:ch>=0?"var(--up)":"var(--down)",s:sgn(ch/(idx-ch)*100,2,"%")});}
   const pw=P.power||{};if(pw.reserve_pct!=null){const LC={"綠":"var(--up)","黃":"var(--warn)","橘":"#E28A2B","紅":"var(--down)"};items.push({l:"台電備轉",h:`${fmt(n(pw.reserve_pct),1)}% ${pw.level||""}燈`,c:LC[pw.level]||"var(--dim)",s:`用電 ${fmt(n(pw.curr_mw)/1000,1)} GW · 尖峰 ${esc(pw.peak_hours||"")}`});}
   const q=((P.quake||{}).items||[])[0];if(q){const h=(Date.now()-new Date(q.at).getTime())/36e5;items.push({l:"地震",h:h<24?`M${fmt(n(q.mag),1)} ${ago(q.at)}`:"24h 內無",c:h<24?(n(q.mag)>=5?"var(--down)":"var(--warn)"):"var(--up)",s:h<24?q.loc.replace(/\s+/g," ").slice(0,22):`上次 M${fmt(n(q.mag),1)} ${ago(q.at)}`});}
-  const cal=(P.calendar||{});const today=cal.from;const ev=(cal.items||[]).filter(i=>i.date===today);const nx=(cal.items||[]).find(i=>i.date>today);
+  const cal=(P.calendar||{});const today=new Date().toLocaleDateString("sv-SE",{timeZone:"Asia/Taipei"});const ev=(cal.items||[]).filter(i=>i.date===today);const nx=(cal.items||[]).find(i=>i.date>today);
   if(cal.items){items.push({l:"今日事件",h:ev.length?ev.map(i=>i.label).join("、"):"今天沒有",c:ev.some(i=>i.kind==="cb")?"var(--warn)":ev.length?"var(--blue)":"var(--dim)",s:nx?`下一個 ${nx.date.slice(5)} ${nx.label}`:""});}
   if(!items.length){el.hidden=true;return;}
   el.innerHTML=items.slice(0,6).map(b=>`<div class="b"><div class="l">${esc(b.l)}</div><div class="h" title="${esc(b.h)}"><i style="background:${b.c};box-shadow:0 0 0 3px color-mix(in srgb,${b.c} 22%,transparent)"></i><span>${esc(b.h)}</span></div><div class="s">${esc(b.s||"")}</div></div>`).join("");el.hidden=false;

@@ -113,6 +113,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
+PANEL_CAP = {"geo": 420, "news": 240, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -145,8 +146,8 @@ def hist_get(group: str, key: str, n: int = 30):
 
 
 def safe_err(e) -> str:
-    msg = f"{type(e).__name__}: {str(e)[:160]}"
-    return re.sub(r"(api_key|token|secret|authorization)=[^&\s]+", r"\1=***", msg, flags=re.I)[:140]
+    msg = re.sub(r"(api[_-]?key|key|token|secret|authorization)=[^&\s]+", r"\1=***", str(e), flags=re.I)  # 先遮再截
+    return f"{type(e).__name__}: {msg[:160]}"[:180]
 
 
 def run(pid: str, fn, keep_if_fresh_hours: float = 0):
@@ -162,7 +163,7 @@ def run(pid: str, fn, keep_if_fresh_hours: float = 0):
         # 失敗退避：上次失敗距今不到 1 小時（或該面板的更新週期，取小者）就不重試
         try:
             err_ts = datetime.fromisoformat(prev["error"].split(" ")[0].replace("Z", "+00:00"))
-            if NOW - err_ts < timedelta(hours=min(keep_if_fresh_hours or 1, 1)):
+            if NOW - err_ts < timedelta(hours=min(keep_if_fresh_hours or 0.2, 1)):  # 即時面板失敗 12 分鐘後就重試
                 RESULTS[pid] = prev
                 log(f"[{pid}] backoff after error, skip")
                 return
@@ -178,14 +179,23 @@ def run(pid: str, fn, keep_if_fresh_hours: float = 0):
         except Exception:
             pass
     t0 = time.time()
+    import signal
+    def _alarm(signum, frame):
+        raise TimeoutError(f"panel cap {PANEL_CAP.get(pid, 240)}s")
+    signal.signal(signal.SIGALRM, _alarm)
+    signal.alarm(PANEL_CAP.get(pid, 240))  # 單一面板上限，超過當一般失敗，不拖垮整輪
     try:
         doc = fn()
+        signal.alarm(0)
         doc["updatedAt"] = NOW_ISO
         doc.pop("error", None)
         RESULTS[pid] = doc
         write_json(PANELS / f"{pid}.json", doc, indent=1)
         log(f"[{pid}] ok {time.time() - t0:.1f}s")
-    except Exception as e:  # noqa: BLE001
+    except BaseException as e:  # noqa: BLE001
+        signal.alarm(0)
+        if isinstance(e, (KeyboardInterrupt, SystemExit)):
+            raise
         log(f"[{pid}] FAIL {type(e).__name__}: {e}")
         if prev:
             prev["error"] = f"{NOW_ISO} {safe_err(e)}"
@@ -1558,7 +1568,8 @@ def _rss(url, source, limit=8, strip_source=False, **params):
         title = (it.findtext("title") or "").strip()
         src = source
         if strip_source and " - " in title:  # Google News：標題 - 來源
-            title, src = title.rsplit(" - ", 1)
+            title, tail = title.rsplit(" - ", 1)
+            src = source or tail
         if not title:
             continue
         out.append({"source": src[:12], "title": title[:90], "url": (it.findtext("link") or "").strip(), "at": _rss_date(it.findtext("pubDate") or "")})
@@ -1568,7 +1579,7 @@ def _rss(url, source, limit=8, strip_source=False, **params):
 
 
 def _gnews(q, source="", limit=6):
-    return _rss("https://news.google.com/rss/search", source, limit, strip_source=not source,
+    return _rss("https://news.google.com/rss/search", source, limit, strip_source=True,
                 q=q, hl="zh-TW", gl="TW", ceid="TW:zh-Hant")
 
 
@@ -1609,8 +1620,10 @@ def _gdelt_signal():
     if recent and before:
         sig["vol"] = round(sum(recent) / len(recent), 3)
         sig["vol_ratio"] = round((sum(recent) / len(recent)) / max(1e-6, sum(before) / len(before)), 2)
-    for attempt in range(2):  # 語調：GDELT 大約一分鐘只肯給一次，拿不到就沿用上一輪
-        time.sleep(30)
+    prev_g = (load_prev("news") or {}).get("signals", {}).get("gdelt") or {}
+    tone_fresh = prev_g.get("tone_at") and (NOW - datetime.fromisoformat(prev_g["tone_at"].replace("Z", "+00:00"))) < timedelta(hours=1)
+    for attempt in range(0 if tone_fresh else 2):  # 語調一小時內有值就不重抓；GDELT 大約一分鐘只肯給一次
+        time.sleep(20 if attempt == 0 else 40)
         try:
             tone = gjson("https://api.gdeltproject.org/api/v2/doc/doc", params={"query": "Taiwan", "mode": "timelinetone", "timespan": "24h", "format": "json"})
             tp = [float(p["value"]) for p in tone["timeline"][0]["data"] if p.get("value") is not None]
@@ -1728,6 +1741,14 @@ def p_news():
 PCC_KW = ["行銷", "品牌", "影片", "廣告", "視覺設計"]
 PCC_EXCLUDE = ("拆除", "租賃", "印刷", "看板", "招牌", "廣告物", "廣告牌", "設備", "工程")
 PCC_CACHE = DATA / "pcc_cache.json"
+_pcc_search_cache: dict = {}
+
+
+def _pcc_search(kw):
+    if kw not in _pcc_search_cache:
+        _pcc_search_cache[kw] = _cffi_json("https://pcc-api.openfun.app/api/searchbytitle", query=kw, page=1)
+        time.sleep(1)
+    return _pcc_search_cache[kw]
 
 
 def p_tenders():
@@ -1741,11 +1762,11 @@ def p_tenders():
     found, errs = {}, []
     for kw in PCC_KW:
         try:
-            js = _cffi_json("https://pcc-api.openfun.app/api/searchbytitle", query=kw, page=1)
+            js = _pcc_search(kw)
             for r in js.get("records", []):
                 b = r.get("brief") or {}
                 typ = b.get("type") or ""
-                if "招標" not in typ or "無法決標" in typ or "決標" in typ:
+                if "決標" in typ or not any(k in typ for k in ("招標公告", "公開取得", "限制性招標", "公開評選", "公開徵求")):
                     continue
                 if any(x in (b.get("title") or "") for x in PCC_EXCLUDE):
                     continue
@@ -1762,9 +1783,8 @@ def p_tenders():
     # 預算：每輪最多補 6 筆新的，其餘用快取
     filled = 0
     for it in items:
-        c = cache.get(it["key"])
-        if c is not None:
-            it["budget"] = c; continue
+        if it["key"] in cache:  # 值可能是 None（抓不到預算），也算查過
+            it["budget"] = cache[it["key"]]; continue
         if filled >= 6:
             continue
         try:
@@ -1996,14 +2016,14 @@ def p_world():
     return {"items": items, "errs": errs[:3], "label": "Stooq 備援" if any(i["src"] == "stooq" for i in items) else ""}
 
 
-SECTORS = [("XLK", "科技"), ("XLC", "通訊"), ("XLY", "非必需"), ("XLF", "金融"), ("XLV", "醫療"), ("XLI", "工業"),
+US_SECTORS = [("XLK", "科技"), ("XLC", "通訊"), ("XLY", "非必需"), ("XLF", "金融"), ("XLV", "醫療"), ("XLI", "工業"),
            ("XLP", "必需"), ("XLE", "能源"), ("XLU", "公用"), ("XLRE", "地產"), ("XLB", "原物料")]
 
 
 def p_sectors():
     spy = yahoo_daily("SPY")
     items, errs = [], []
-    for sym, name in SECTORS:
+    for sym, name in US_SECTORS:
         try:
             q = yahoo_daily(sym)
         except Exception as e:  # noqa: BLE001
@@ -2039,8 +2059,21 @@ FEAR_MEAN = {"VIX": 19, "VVIX": 86, "SKEW": 100, "VIX/VIX3M": 0.9}  # 長期參�
 CBOE = "https://cdn.cboe.com/api/global/us_indices/daily_prices/"
 
 
+CBOE_CACHE = DATA / "cboe_cache.json"
+
+
 def cboe_hist(name: str, n=60):
-    """CBOE 官方每日收盤 CSV → [(date, close)]。VIX/VIX3M 是 OHLC，VVIX/SKEW 是兩欄。"""
+    """CBOE 官方每日收盤 CSV → [(date, close)]。VIX/VIX3M 是 OHLC，VVIX/SKEW 是兩欄。
+    整檔從 1990 起數百 KB，一天只抓一次（快取 6 小時），盤中由 Yahoo 補最後一點。"""
+    cache = {}
+    if CBOE_CACHE.exists():
+        try:
+            cache = json.loads(CBOE_CACHE.read_text(encoding="utf-8"))
+        except Exception:
+            cache = {}
+    c = cache.get(name)
+    if c and (NOW - datetime.fromisoformat(c["at"].replace("Z", "+00:00"))) < timedelta(hours=6):
+        return [tuple(x) for x in c["rows"]][-n:]
     r = get(CBOE + f"{name}_History.csv", headers={"Referer": "https://www.cboe.com/"})
     rows = []
     for line in r.text.strip().splitlines()[1:]:
@@ -2054,6 +2087,11 @@ def cboe_hist(name: str, n=60):
             v = num(parts[-1])
             if v is not None:
                 rows.append((d, v))
+    cache[name] = {"at": NOW_ISO, "rows": rows[-120:]}
+    try:
+        write_json(CBOE_CACHE, cache, separators=(",", ":"))
+    except Exception as e:  # noqa: BLE001
+        log("cboe cache", e)
     return rows[-n:]
 
 
@@ -2259,8 +2297,8 @@ def p_youtube():
 # ---------- 事件行事曆 / 決標公告 / 供應鏈與通路 ----------
 FOMC_2026 = ["2026-01-28", "2026-03-18", "2026-04-29", "2026-06-17", "2026-07-29", "2026-09-16", "2026-10-28", "2026-12-09"]  # 決議日（Fed 公布時程）
 FRED_RELEASES = {"Consumer Price Index": "美國 CPI", "Employment Situation": "美國非農就業", "Gross Domestic Product": "美國 GDP",
-                 "Personal Income and Outlays": "美國 PCE", "Producer Price Index": "美國 PPI", "Advance Monthly Sales for Retail": "美國零售銷售",
-                 "Surveys of Consumers": "密大消費信心", "Job Openings and Labor Turnover": "美國 JOLTS"}
+                 "Personal Income and Outlays": "美國 PCE", "Producer Price Index": "美國 PPI", "Advance Monthly Sales for Retail and Food Services": "美國零售銷售",
+                 "Surveys of Consumers": "密大消費信心", "Job Openings and Labor Turnover Survey": "美國 JOLTS"}
 
 
 def _third_thursday(y, m):
@@ -2286,10 +2324,10 @@ def p_calendar():
             j = gjson("https://api.stlouisfed.org/fred/releases/dates", params={"api_key": FRED_KEY, "file_type": "json", "realtime_start": today.isoformat(),
                       "realtime_end": horizon.isoformat(), "include_release_dates_with_no_data": "true", "limit": 1000, "sort_order": "asc"})
             for r in j.get("release_dates", []):
-                name = r.get("release_name", "")
-                for k, lab in FRED_RELEASES.items():
-                    if k in name:
-                        add(r["date"], lab, "美", kind="data")
+                name = (r.get("release_name") or "").strip()
+                lab = FRED_RELEASES.get(name)
+                if lab:
+                    add(r["date"], lab, "美", kind="data")
         except Exception as e:  # noqa: BLE001
             log("fred releases", e); errs.append("FRED: " + safe_err(e))
     for d in FOMC_2026:
@@ -2342,7 +2380,7 @@ def p_awards():
     found, errs = {}, []
     for kw in PCC_KW:
         try:
-            js = _cffi_json("https://pcc-api.openfun.app/api/searchbytitle", query=kw, page=1)
+            js = _pcc_search(kw)
             for r in js.get("records", []):
                 b = r.get("brief") or {}
                 typ = b.get("type") or ""
@@ -2371,8 +2409,8 @@ def p_awards():
     items = sorted(found.values(), key=lambda x: x["date"], reverse=True)[:14]
     filled = 0
     for it in items:
-        c = cache.get(it["key"])
-        if c is not None:
+        if it["key"] in cache:
+            c = cache[it["key"]] or {}
             it["amount"], it["winner"] = c.get("amount"), it["winner"] or c.get("winner", ""); continue
         if filled >= 6:
             continue
