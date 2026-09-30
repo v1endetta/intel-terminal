@@ -1797,7 +1797,7 @@ def _html_links(url, pat, base, source, limit=6):
 
 
 TITLE_DATE = re.compile(r"((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s+20\d\d)", re.I)
-TITLE_CAT = re.compile(r"^(?:Announcements?|Product|Research|Policy|Company|News|Engineering|Blog|Safety|Featured)\s+", re.I)
+TITLE_CAT = re.compile(r"^(?:Announcements?|Product|Research|Policy|Company|News|Engineering|Blog|Safety|Featured|Science|Interpretability|Alignment|Education|Economics?|Societal Impacts?|Case Study)\s+", re.I)
 
 
 def _parse_date(txt):
@@ -1846,7 +1846,7 @@ def p_aiwire():
     for name, fn, args, gq, vendor in (
         ("anthropic", _html_links, ("https://www.anthropic.com/news", r"/news/[a-z0-9-]+", "https://www.anthropic.com", "Anthropic"), "Anthropic Claude", "anthropic"),
         ("xai", _html_links, ("https://x.ai/news", r"(?:https://x\.ai)?/news/[a-z0-9-]+", "https://x.ai", "xAI"), "xAI Grok", "xai"),
-        ("deepseek", _html_links, ("https://api-docs.deepseek.com/news/", r"/news/news[a-z0-9-]+", "https://api-docs.deepseek.com", "DeepSeek"), "DeepSeek", "deepseek"),
+        ("deepseek", _html_links, ("https://api-docs.deepseek.com/news/", r"/news/news[a-z0-9-]+/?", "https://api-docs.deepseek.com", "DeepSeek"), "DeepSeek", "deepseek"),
     ):
         got = []
         try:
