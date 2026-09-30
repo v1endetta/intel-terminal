@@ -1,12 +1,12 @@
 {
  "label": "TDX",
  "cities_with_data": 19,
- "freeway": 422,
+ "freeway": 421,
  "static": "完成",
  "totals": {
-  "parking": 1988,
+  "parking": 1989,
   "bikes": 9924,
-  "speed": 947
+  "speed": 950
  },
  "errs": [
   "parking Taoyuan: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Taoyuan body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
@@ -15,5 +15,5 @@
   "bikes YunlinCounty: RuntimeError: 429 on Bike/Availability/City/YunlinCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
   "vd ChiayiCounty: RuntimeError: 429 on Road/Traffic/Live/VD/City/ChiayiCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
  ],
- "updatedAt": "2026-09-30T02:11:07Z"
+ "updatedAt": "2026-09-30T02:26:49Z"
 }
