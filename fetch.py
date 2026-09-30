@@ -14,6 +14,7 @@ import io
 import json
 import os
 import re
+import html as html_mod
 import sys
 import time
 import xml.etree.ElementTree as ET
@@ -113,7 +114,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 90, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -1755,43 +1756,208 @@ def p_news():
 
 
 
-# ---------- AI 快線（官方部落格 + 科技媒體 AI 版；比新聞轉譯早 1–6 小時） ----------
-AI_FEEDS = [
-    ("https://openai.com/news/rss.xml", "OpenAI"),
-    ("https://blog.google/technology/ai/rss/", "Google"),
-    ("https://www.theverge.com/rss/ai-artificial-intelligence/index.xml", "The Verge"),
-    ("https://techcrunch.com/category/artificial-intelligence/feed/", "TechCrunch"),
-    ("https://www.anthropic.com/rss.xml", "Anthropic"),
+# ---------- AI 快線：五家（OpenAI / Anthropic / Google / DeepSeek / xAI）部落格＋發布偵測 ----------
+AI_FEEDS = [  # (url, source, vendor)
+    ("https://openai.com/news/rss.xml", "OpenAI", "openai"),
+    ("https://blog.google/technology/ai/rss/", "Google AI", "google"),
+    ("https://blog.google/products/gemini/rss/", "Gemini", "google"),
+    ("https://www.theverge.com/rss/ai-artificial-intelligence/index.xml", "The Verge", ""),
+    ("https://techcrunch.com/category/artificial-intelligence/feed/", "TechCrunch", ""),
 ]
-AI_LAUNCH = re.compile(r"introduc|launch|announc|releas|available|now in|new model|preview|推出|發布|上線|開放", re.I)
+AI_VENDOR_RE = [("openai", re.compile(r"OpenAI|ChatGPT|GPT-?\d|Sora|DevDay", re.I)), ("anthropic", re.compile(r"Anthropic|Claude", re.I)),
+                ("google", re.compile(r"Gemini|DeepMind|Google", re.I)), ("deepseek", re.compile(r"DeepSeek", re.I)), ("xai", re.compile(r"\bxAI\b|Grok", re.I))]
+AI_LAUNCH = re.compile(r"introduc|launch|announc|releas|available|now in|new model|preview|rolling out|推出|發布|上線|開放", re.I)
+
+
+def _html_get(url):
+    """一般 GET；403/429 改用瀏覽器指紋。回傳 HTML 文字。"""
+    try:
+        return get(url).text
+    except requests.HTTPError as e:
+        if e.response is not None and e.response.status_code in (403, 429):
+            from curl_cffi import requests as cffi
+            r = cffi.get(url, impersonate="chrome", timeout=25); r.raise_for_status(); return r.text
+        raise
+
+
+def _html_links(url, pat, base, source, limit=6):
+    """從 HTML 抓 <a href=pat>標題</a>：Anthropic news、x.ai/news、DeepSeek news 這類沒有 RSS 的頁面。"""
+    html = _html_get(url)
+    out, seen = [], set()
+    for m in re.finditer(r'<a[^>]+href="(' + pat + r')"[^>]*>(.*?)</a>', html, re.S | re.I):
+        href, inner = m.group(1), re.sub(r"<[^>]+>", " ", m.group(2))
+        title = re.sub(r"\s+", " ", html_mod.unescape(inner)).strip()
+        if len(title) < 8 or href in seen:
+            continue
+        seen.add(href)
+        out.append({"source": source, "title": title[:90], "url": href if href.startswith("http") else base + href, "at": ""})
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _vendor(title, default=""):
+    for v, rx in AI_VENDOR_RE:
+        if rx.search(title):
+            return v
+    return default
 
 
 def p_aiwire():
     errs, items = [], []
-    for url, src in AI_FEEDS:
+    for url, src, vendor in AI_FEEDS:
         try:
-            items += _rss(url, src, 8)
+            for i in _rss(url, src, 8):
+                i["vendor"] = vendor or _vendor(i["title"]); items.append(i)
         except Exception as e:  # noqa: BLE001
             errs.append(f"{src}: {safe_err(e)}")
-            if src == "Anthropic":  # 官方沒有 RSS 時用英文 Google News 補
-                items += _try("anthropic gnews", _gnews, "Anthropic", "", 4, "en")
-    cut = (NOW - timedelta(days=7)).isoformat()
+    # 沒有 RSS 的三家：抓官方頁面的連結，失敗就用英文 Google News 補
+    for name, fn, args, gq, vendor in (
+        ("anthropic", _html_links, ("https://www.anthropic.com/news", r"/news/[a-z0-9-]+", "https://www.anthropic.com", "Anthropic"), "Anthropic Claude", "anthropic"),
+        ("xai", _html_links, ("https://x.ai/news", r"(?:https://x\.ai)?/news/[a-z0-9-]+", "https://x.ai", "xAI"), "xAI Grok", "xai"),
+        ("deepseek", _html_links, ("https://api-docs.deepseek.com/news/", r"/news/news[a-z0-9-]+", "https://api-docs.deepseek.com", "DeepSeek"), "DeepSeek", "deepseek"),
+    ):
+        got = []
+        try:
+            got = fn(*args)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{name}: {safe_err(e)}")
+        if len(got) < 2:
+            got += _try(name + " gnews", _gnews, gq, "", 4, "en")
+        for i in got:
+            i["vendor"] = vendor; items.append(i)
+    # 發布偵測：DeepSeek / xAI 的新 GitHub repo 與 Hugging Face 新模型（權重通常比新聞早半天到一天）
+    gh_hdr = {"Accept": "application/vnd.github+json", **({"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"]} if os.environ.get("GITHUB_TOKEN") else {})}
+    for org, vendor in (("deepseek-ai", "deepseek"), ("xai-org", "xai")):
+        try:
+            for r in gjson(f"https://api.github.com/orgs/{org}/repos", params={"sort": "created", "per_page": 3}, headers=gh_hdr):
+                items.append({"source": "GitHub", "title": f"新 repo {r['full_name']}：{(r.get('description') or '')[:60]}", "url": r["html_url"], "at": r.get("created_at") or "", "vendor": vendor, "detect": True})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"gh {org}: {safe_err(e)}")
+        try:
+            for m in gjson("https://huggingface.co/api/models", params={"author": org, "sort": "lastModified", "direction": -1, "limit": 3}):
+                mid = m.get("modelId") or m.get("id")
+                items.append({"source": "HF", "title": f"模型更新 {mid}", "url": f"https://huggingface.co/{mid}", "at": (m.get("lastModified") or "")[:19] + ("Z" if m.get("lastModified") else ""), "vendor": vendor, "detect": True})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"hf {org}: {safe_err(e)}")
+    cut = (NOW - timedelta(days=7)).isoformat().replace("+00:00", "Z")
     items = [i for i in items if not i.get("at") or i["at"] >= cut]
     for i in items:
-        i["launch"] = bool(AI_LAUNCH.search(i["title"]))
-    items = _dedupe_sort(items, 40)
-    # 發布類優先，其餘依時間；每個來源最多 4 則，避免 TechCrunch 洗版
+        i["launch"] = bool(i.get("detect")) or bool(AI_LAUNCH.search(i["title"]))
+    items = _dedupe_sort(items, 80)
+    # 發布優先、再依時間；每個來源最多 4 則，避免單一媒體洗版
     per, out = {}, []
     for i in sorted(items, key=lambda x: (x["launch"], x.get("at") or ""), reverse=True):
         if per.get(i["source"], 0) >= 4:
             continue
         per[i["source"]] = per.get(i["source"], 0) + 1
         out.append(i)
-        if len(out) >= 14:
+        if len(out) >= 18:
             break
     if not out:
         raise RuntimeError(f"aiwire: nothing {errs[:3]}")
-    return {"items": out, "errs": errs[:5]}
+    return {"items": out, "errs": errs[:6]}
+
+
+# ---------- Dev Pulse：兩個官方論壇當日熱串 ＋ 五家 changelog（不發部落格的悄悄改動） ----------
+DEV_FORUMS = [("https://community.openai.com", "OpenAI 論壇", "openai"), ("https://discuss.ai.google.dev", "Google AI 論壇", "google")]
+DEV_CHANGELOGS = [  # (url, source, vendor) — 頁面文字裡找「日期 + 下一行標題」
+    ("https://platform.openai.com/docs/changelog", "OpenAI changelog", "openai"),
+    ("https://docs.claude.com/en/release-notes/overview", "Claude release notes", "anthropic"),
+    ("https://ai.google.dev/gemini-api/docs/changelog", "Gemini changelog", "google"),
+    ("https://api-docs.deepseek.com/updates", "DeepSeek updates", "deepseek"),
+    ("https://docs.x.ai/docs/changelog", "xAI changelog", "xai"),
+]
+DATE_LINE = re.compile(r"^(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s+20\d\d|\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+20\d\d|20\d\d[-/.]\d{1,2}[-/.]\d{1,2})$", re.I)
+
+
+def _discourse_top(base, source, vendor, limit=5):
+    try:
+        js = gjson(base + "/top.json", params={"period": "daily"})
+    except requests.HTTPError as e:
+        if e.response is not None and e.response.status_code in (403, 429):
+            from curl_cffi import requests as cffi
+            js = cffi.get(base + "/top.json?period=daily", impersonate="chrome", timeout=25).json()
+        else:
+            raise
+    out = []
+    for t in (js.get("topic_list") or {}).get("topics") or []:
+        if t.get("pinned"):
+            continue
+        out.append({"source": source, "vendor": vendor, "title": (t.get("title") or "")[:90], "url": f"{base}/t/{t.get('slug')}/{t.get('id')}",
+                    "replies": max((t.get("posts_count") or 1) - 1, 0), "likes": t.get("like_count") or 0, "views": t.get("views") or 0, "at": (t.get("created_at") or "")[:19] + "Z"})
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _page_text(url):
+    """先用 requests 拆 HTML 成文字；文字太短（SPA）就用 Playwright 渲染。"""
+    html = ""
+    try:
+        html = _html_get(url)
+    except Exception:  # noqa: BLE001
+        pass
+    txt = ""
+    if html:
+        body = re.sub(r"<(script|style|nav|header|footer)[^>]*>.*?</\1>", " ", html, flags=re.S | re.I)
+        txt = html_mod.unescape(re.sub(r"<[^>]+>", "\n", body))
+    if len(re.sub(r"\s", "", txt)) < 800:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as pw:
+            b = pw.chromium.launch()
+            pg = b.new_page(user_agent=UA)
+            pg.goto(url, wait_until="networkidle", timeout=45000)
+            pg.wait_for_timeout(1500)
+            txt = pg.inner_text("body")
+            b.close()
+    return txt
+
+
+def _changelog(url, source, vendor, limit=4):
+    lines = [re.sub(r"\s+", " ", l).strip() for l in _page_text(url).splitlines()]
+    lines = [l for l in lines if l]
+    out = []
+    for i, l in enumerate(lines):
+        if DATE_LINE.match(l):
+            # 標題：日期前一行或後一行，取較像標題（非日期、8～120 字）的那個
+            cands = [lines[j] for j in (i + 1, i - 1) if 0 <= j < len(lines) and not DATE_LINE.match(lines[j]) and 8 <= len(lines[j]) <= 140]
+            if not cands:
+                continue
+            title = cands[0]
+            if any(o["title"] == title for o in out):
+                continue
+            out.append({"source": source, "vendor": vendor, "date": l, "title": title[:120], "url": url, "at": ""})
+            if len(out) >= limit:
+                break
+    return out
+
+
+def p_devpulse():
+    errs, forums, logs = [], [], []
+    for base, src, vendor in DEV_FORUMS:
+        try:
+            forums += _discourse_top(base, src, vendor)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{src}: {safe_err(e)}")
+    for url, src, vendor in DEV_CHANGELOGS:
+        try:
+            got = _changelog(url, src, vendor)
+            if not got:
+                errs.append(f"{src}: 沒抓到日期段落")
+            logs += got
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{src}: {safe_err(e)}")
+    # Anthropic 沒有論壇：用 claude-code 的 GitHub Releases 當「工程端動態」
+    try:
+        gh_hdr = {"Accept": "application/vnd.github+json", **({"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"]} if os.environ.get("GITHUB_TOKEN") else {})}
+        for r in gjson("https://api.github.com/repos/anthropics/claude-code/releases", params={"per_page": 3}, headers=gh_hdr):
+            logs.append({"source": "claude-code release", "vendor": "anthropic", "date": (r.get("published_at") or "")[:10], "title": (r.get("name") or r.get("tag_name") or "")[:120], "url": r.get("html_url"), "at": r.get("published_at") or ""})
+    except Exception as e:  # noqa: BLE001
+        errs.append("claude-code: " + safe_err(e))
+    if not forums and not logs:
+        raise RuntimeError(f"devpulse: nothing {errs[:3]}")
+    return {"forums": forums, "changelogs": logs, "errs": errs[:8]}
 
 
 # ---------- 熱詞引擎：同一實體詞在 12 小時內出現在 ≥3 個不同來源就算「在燒」 ----------
@@ -1852,6 +2018,9 @@ def _hot_terms(news):
     pool = list(news.get("tw") or []) + list(news.get("intl") or []) + list(HOT_POOL)
     for pid in ("aiwire", "design"):
         pool += (load_prev(pid) or {}).get("items") or []
+    dp = load_prev("devpulse") or {}
+    for f in (dp.get("forums") or []) + (dp.get("changelogs") or []):
+        pool.append({"title": f.get("title"), "source": f.get("source"), "url": f.get("url"), "at": f.get("at") or NOW_ISO})
     for h in (load_prev("tech") or {}).get("hn") or []:
         pool.append({"title": h.get("title"), "source": "HN", "url": h.get("url"), "at": NOW_ISO})
     for w in ((news.get("signals") or {}).get("wiki") or {}).get("zh") or []:
@@ -2758,6 +2927,7 @@ run("supply", p_supply, keep_if_fresh_hours=6)
 run("weather", p_weather)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
+run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("design", p_design, keep_if_fresh_hours=1)
