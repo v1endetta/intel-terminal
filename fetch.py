@@ -2216,7 +2216,9 @@ def _hot_terms(news):
 
 
 # ---------- 社群脈搏：Dcard ＋ Bluesky（Threads 搜尋需登入／App Review，改用這兩個補「台灣人正在怎麼講」） ----------
-SOCIAL_FIXED = ["台股", "關稅", "地震"]
+# 固定詞：看「大眾情緒」而不是事件。台灣三個看生活壓力與對政府的怨氣，國外三個看經濟焦慮（跟總經面板對照）。
+# 刻意不放政治人物：Bluesky 上那是同溫層表態，不是情緒。
+SOCIAL_FIXED = [("物價", "台"), ("房價", "台"), ("政府", "台"), ("tariffs", "外"), ("inflation", "外"), ("layoffs", "外")]
 
 
 def _social_seeds():
@@ -2224,12 +2226,12 @@ def _social_seeds():
     seeds = []
     for h in sorted(hot, key=lambda x: (-x.get("src", 0), -x.get("n", 0))):
         t = h.get("term") or ""
-        if t in SOCIAL_FIXED or len(t) < 2 or t.lower() in HOT_STOP_EN or t in HOT_STOP_ZH:
+        if t in [k for k, _ in SOCIAL_FIXED] or len(t) < 2 or t.lower() in HOT_STOP_EN or t in HOT_STOP_ZH:
             continue
-        seeds.append({"kw": t, "kind": "hot", "src": h.get("src")})
-        if len(seeds) >= 5:
+        seeds.append({"kw": t, "kind": "hot", "src": h.get("src"), "region": "台" if re.search(r"[\u4e00-\u9fff]", t) else "外"})
+        if len(seeds) >= 4:
             break
-    return [{"kw": k, "kind": "fixed"} for k in SOCIAL_FIXED] + seeds
+    return [{"kw": k, "kind": "fixed", "region": r} for k, r in SOCIAL_FIXED] + seeds
 
 
 def _dcard_get(path, **params):
