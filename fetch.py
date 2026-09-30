@@ -1796,6 +1796,37 @@ def _html_links(url, pat, base, source, limit=6):
     return out
 
 
+TITLE_DATE = re.compile(r"((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s+20\d\d)", re.I)
+TITLE_CAT = re.compile(r"^(?:Announcements?|Product|Research|Policy|Company|News|Engineering|Blog|Safety|Featured)\s+", re.I)
+
+
+def _parse_date(txt):
+    for fmt in ("%b %d, %Y", "%b %d %Y", "%B %d, %Y", "%B %d %Y", "%d %b %Y", "%d %B %Y", "%Y-%m-%d", "%Y/%m/%d", "%Y.%m.%d"):
+        try:
+            return datetime.strptime(txt.replace("Sept", "Sep").replace(".", "").strip() if "%b" in fmt else txt.strip(), fmt).replace(tzinfo=timezone.utc)
+        except Exception:  # noqa: BLE001
+            continue
+    return None
+
+
+def _clean_link_title(it):
+    """官方頁面連結文字常是「Sep 18, 2026 Announcements 標題」或「Grok 4.7 Sep 21, 2026 Introducing …」：抽日期、去分類字。"""
+    t = it["title"]
+    m = TITLE_DATE.search(t)
+    if m:
+        d = _parse_date(m.group(1))
+        if d and not it.get("at"):
+            it["at"] = d.isoformat().replace("+00:00", "Z")
+        after = t[m.end():].strip()
+        if len(after) >= 8:
+            t = after
+        else:
+            t = t[:m.start()].strip()
+    t = TITLE_CAT.sub("", t).strip(" -·|:")
+    it["title"] = t[:90]
+    return it
+
+
 def _vendor(title, default=""):
     for v, rx in AI_VENDOR_RE:
         if rx.search(title):
@@ -1822,6 +1853,7 @@ def p_aiwire():
             got = fn(*args)
         except Exception as e:  # noqa: BLE001
             errs.append(f"{name}: {safe_err(e)}")
+        got = [_clean_link_title(i) for i in got]
         if len(got) < 2:
             got += _try(name + " gnews", _gnews, gq, "", 4, "en")
         for i in got:
@@ -1871,6 +1903,9 @@ DEV_CHANGELOGS = [  # (url, source, vendor) — 頁面文字裡找「日期 + �
 DATE_LINE = re.compile(r"^(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s+20\d\d|\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+20\d\d|20\d\d[-/.]\d{1,2}[-/.]\d{1,2})$", re.I)
 
 
+DATE_START = re.compile(r"^((?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s+20\d\d)|(?:\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+20\d\d)|(?:20\d\d[-/.]\d{1,2}[-/.]\d{1,2}))\b(.*)$", re.I)
+
+
 def _discourse_top(base, source, vendor, limit=5):
     try:
         js = gjson(base + "/top.json", params={"period": "daily"})
@@ -1918,19 +1953,31 @@ def _changelog(url, source, vendor, limit=4):
     lines = [re.sub(r"\s+", " ", l).strip() for l in _page_text(url).splitlines()]
     lines = [l for l in lines if l]
     out = []
+
+    def heading_like(x):
+        return (12 <= len(x) <= 140 and not DATE_LINE.match(x) and not x.endswith((".", ",", ";", ":")) and not re.match(r"^[a-z,;.)]", x)
+                and not re.match(r"^(?:https?://|www\.)", x))
+
     for i, l in enumerate(lines):
+        ms = DATE_START.match(l)
+        if ms and not DATE_LINE.match(l):  # 「2026-09-29 – DeepSeek V4 released」同一行就有標題
+            rest = ms.group(2).strip(" -–—:|·")
+            if len(rest) >= 12 and not any(o["title"] == rest for o in out):
+                d = _parse_date(ms.group(1))
+                out.append({"source": source, "vendor": vendor, "date": ms.group(1), "title": rest[:120], "url": url, "at": d.isoformat().replace("+00:00", "Z") if d else ""})
+            continue
         if DATE_LINE.match(l):
-            # 標題：日期前一行或後一行，取較像標題（非日期、8～120 字）的那個
-            cands = [lines[j] for j in (i + 1, i - 1) if 0 <= j < len(lines) and not DATE_LINE.match(lines[j]) and 8 <= len(lines[j]) <= 140]
+            # 標題：日期後 4 行內第一個像標題的（不是句尾殘段、不以小寫開頭），否則前一行
+            cands = [lines[j] for j in list(range(i + 1, min(i + 5, len(lines)))) + [i - 1] if 0 <= j < len(lines) and heading_like(lines[j])]
             if not cands:
                 continue
             title = cands[0]
             if any(o["title"] == title for o in out):
                 continue
-            out.append({"source": source, "vendor": vendor, "date": l, "title": title[:120], "url": url, "at": ""})
-            if len(out) >= limit:
-                break
-    return out
+            d = _parse_date(l)
+            out.append({"source": source, "vendor": vendor, "date": l, "title": title[:120], "url": url, "at": d.isoformat().replace("+00:00", "Z") if d else ""})
+    out.sort(key=lambda o: o.get("at") or "", reverse=True)  # 頁面可能先列棄用表，一律依日期新到舊
+    return out[:limit]
 
 
 def p_devpulse():
@@ -1961,8 +2008,8 @@ def p_devpulse():
 
 
 # ---------- 熱詞引擎：同一實體詞在 12 小時內出現在 ≥3 個不同來源就算「在燒」 ----------
-HOT_STOP_EN = set("the a an and or of to in on for with from by at as is are was were be been this that these those new how why what when who which will can its it into over after before about more than not no yes up down out all one two three first last year years day days week today says said say show shows video live news report reports update ai us uk eu china taiwan taipei japan korea india world government president people man woman men women police court city state county".split())
-HOT_STOP_ZH = set("安全 大安 中正 信義 台灣 台北 台中 高雄 新北 桃園 台南 中國 美國 日本 韓國 香港 全球 國際 國內 總統 政府 國會 立法院 立委 民眾 網友 記者 新聞 報導 影片 直播 專家 分析 表示 指出 認為 今天 今日 明天 昨天 上午 下午 晚間 凌晨 目前 最新 快訊 獨家 焦點 專題 系列 問題 情況 市場 公司 企業 產業 業者 消費者 用戶 台股 股市 大盤 個股 早盤 盤中 收盤 開盤 新台幣 美元 億元 萬元 億 萬 人 年 月 日 時 分 點 元 台 家 名 位 次 種 項 條 件 個 ETF 基金 投資人 股價 新功能 功能 模型 工具 服務 平台 系統 技術 應用 發展 影響 未來 時代 世界 生活 文化 設計 品牌 廣告 行銷 網路 社群 粉絲 議題 話題 討論 聲明 回應 消息 傳出 曝光 揭露 現場 畫面 一次 全部 這樣 這個 那個 什麼 怎麼 為何 為什麼 竟然 卻 竟 恐 將 再 也 都 又 就 才 最 更 很 太 還 已 已經 沒有 不是 就是 可以 可能 需要 應該 因為 所以 如果 但是 然而 以及 或者 之後 之前 之間 以上 以下 對於 關於 根據 透過 針對 包括 除了 另外 其中 其他 此外".split())
+HOT_STOP_EN = set("introducing introduces announcing announces announcements launch launches launched release releases released update updates updated model models api apps app agent agents jan feb mar apr may jun jul aug sep sept oct nov dec monday tuesday wednesday thursday friday saturday sunday the a an and or of to in on for with from by at as is are was were be been this that these those new how why what when who which will can its it into over after before about more than not no yes up down out all one two three first last year years day days week today says said say show shows video live news report reports update ai us uk eu china taiwan taipei japan korea india world government president people man woman men women police court city state county".split())
+HOT_STOP_ZH = set("推出 發布 上線 代理 宣布 公布 曝光 揭曉 亮相 登場 開賣 開放 更新 升級 首度 首次 正式 全新 最新 安全 大安 中正 信義 台灣 台北 台中 高雄 新北 桃園 台南 中國 美國 日本 韓國 香港 全球 國際 國內 總統 政府 國會 立法院 立委 民眾 網友 記者 新聞 報導 影片 直播 專家 分析 表示 指出 認為 今天 今日 明天 昨天 上午 下午 晚間 凌晨 目前 最新 快訊 獨家 焦點 專題 系列 問題 情況 市場 公司 企業 產業 業者 消費者 用戶 台股 股市 大盤 個股 早盤 盤中 收盤 開盤 新台幣 美元 億元 萬元 億 萬 人 年 月 日 時 分 點 元 台 家 名 位 次 種 項 條 件 個 ETF 基金 投資人 股價 新功能 功能 模型 工具 服務 平台 系統 技術 應用 發展 影響 未來 時代 世界 生活 文化 設計 品牌 廣告 行銷 網路 社群 粉絲 議題 話題 討論 聲明 回應 消息 傳出 曝光 揭露 現場 畫面 一次 全部 這樣 這個 那個 什麼 怎麼 為何 為什麼 竟然 卻 竟 恐 將 再 也 都 又 就 才 最 更 很 太 還 已 已經 沒有 不是 就是 可以 可能 需要 應該 因為 所以 如果 但是 然而 以及 或者 之後 之前 之間 以上 以下 對於 關於 根據 透過 針對 包括 除了 另外 其中 其他 此外".split())
 HOT_LAT = re.compile(r"(?<![A-Za-z0-9])(?:[A-Z][A-Za-z0-9]{2,}(?:[ -][A-Z][A-Za-z0-9]+)?|[A-Z]{2,}[A-Za-z]*-?\d[\w.]*|GPT-?[\w.]*|iPhone\s?\d+)(?![A-Za-z0-9])")
 
 
