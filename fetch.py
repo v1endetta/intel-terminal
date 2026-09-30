@@ -278,7 +278,7 @@ def p_taiex():
     series = [(roc_to_iso(r["Date"]), num(r["TAIEX"])) for r in rows]
     for d, v in series:
         hist_put("taiex", "TAIEX", d, v)
-    return {
+    out = {
         "date": roc_to_iso(last["Date"]),
         "index": num(last["TAIEX"]),
         "change": num(last["Change"]),
@@ -287,6 +287,15 @@ def p_taiex():
         "series": [v for _, v in series],
         "history": HISTORY.get("taiex", {}).get("TAIEX", [])[-60:],
     }
+    try:  # 日檔（FMTQIK）收盤後才更新：盤中與傍晚用 MIS 即時值
+        q = twse_mis()
+        day = NOW.astimezone(TPE).strftime("%Y-%m-%d")
+        if q.get("price") and q.get("prev") and day > out["date"] and q.get("asOf") and (NOW.timestamp() - q["asOf"]) < 12 * 3600:
+            out.update({"index": q["price"], "change": round(q["price"] - q["prev"], 2), "date": day,
+                        "live": datetime.fromtimestamp(q["asOf"], TPE).strftime("%H:%M"), "value": None, "transactions": None})
+    except Exception as e:  # noqa: BLE001
+        log("taiex mis", e)
+    return out
 
 
 TW_WATCH = [("1476", "儒鴻", "紡織"), ("1477", "聚陽", "紡織"), ("1402", "遠東新", "紡織"),
@@ -308,6 +317,13 @@ def p_tw_stocks():
                       "spark": hist_get("tw_stocks", code)})
     if not items:
         raise RuntimeError("no watch rows")
+    try:
+        qs = twse_mis_quotes([c for c, _, _ in TW_WATCH])
+        live = [it for it in items if _mis_override(it, qs.get(it["code"]), date)]
+        if live:
+            date = max(it["date"] for it in live)
+    except Exception as e:  # noqa: BLE001
+        log("tw_stocks mis", e)
     return {"date": date, "items": items}
 
 
@@ -921,6 +937,31 @@ def twse_mis():
             "series": series, "asOf": tlong or int(NOW.timestamp()), "state": state}
 
 
+def twse_mis_quotes(codes):
+    """證交所官方即時（個股批次）：回 {code: {price, prev, chg, pct, day, time}}；未成交（z='-'）就略過該檔。"""
+    ex = "|".join(f"tse_{c}.tw" for c in codes)
+    r = S.get("https://mis.twse.com.tw/stock/api/getStockInfo.jsp", params={"ex_ch": ex, "json": "1", "delay": "0", "_": int(time.time() * 1000)},
+              headers={"Referer": "https://mis.twse.com.tw/stock/index.jsp", "Accept": "application/json"}, timeout=TIMEOUT)
+    r.raise_for_status()
+    out = {}
+    for m in r.json().get("msgArray") or []:
+        c = m.get("c"); z = num(m.get("z")); y = num(m.get("y"))
+        if not c or not z or not y:
+            continue
+        d = m.get("d") or ""
+        out[c] = {"price": z, "prev": y, "chg": round(z - y, 2), "pct": (z - y) / y * 100, "day": f"{d[:4]}-{d[4:6]}-{d[6:8]}" if len(d) == 8 else "",
+                  "time": (m.get("t") or "")[:5]}
+    return out
+
+
+def _mis_override(item, q, daily_date):
+    """MIS 的日期比 OpenAPI 日資料新（盤中或收盤後尚未出日檔）就用即時值蓋掉。"""
+    if not q or not q.get("day") or (daily_date and q["day"] <= daily_date):
+        return False
+    item.update({"price": q["price"], "chg": q["chg"], "pct": q["pct"], "date": q["day"], "live": q["time"]})
+    return True
+
+
 def p_pulse():
     items = []
     for sym, name, ccy in PULSE:
@@ -1277,6 +1318,14 @@ def p_tw_market():
                        "date": roc_to_iso(r["Date"]), "spark": hist_get("tw_stocks", "2330")}
     except Exception as e:  # noqa: BLE001
         log("tsmc", e)
+    try:  # 盤中／收盤後日檔還沒出：用 MIS 即時蓋掉（日檔通常 16:00 後才更新）
+        q = twse_mis_quotes(["2330"]).get("2330")
+        if out.get("tsmc") is None and q:
+            out["tsmc"] = {"spark": hist_get("tw_stocks", "2330")}
+        if out.get("tsmc") is not None:
+            _mis_override(out["tsmc"], q, out["tsmc"].get("date"))
+    except Exception as e:  # noqa: BLE001
+        log("tsmc mis", e)
     # 台指期（FinMind）：日盤與夜盤
     try:
         start = (TODAY_TPE - timedelta(days=10)).isoformat()
