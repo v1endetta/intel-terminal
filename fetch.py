@@ -1231,7 +1231,11 @@ def p_ptt():
             time.sleep(0.5)
         except Exception as e:  # noqa: BLE001
             log("ptt", board, e); continue
-        rows = [r for r in rows if not r["title"].startswith(("[公告]", "Fw: [公告]"))]
+        seen_u, uniq = set(), []
+        for r in rows:  # 置底文會在每頁重複出現
+            if r["url"] not in seen_u and not r["title"].startswith(("[公告]", "Fw: [公告]")):
+                seen_u.add(r["url"]); uniq.append(r)
+        rows = uniq
         if not rows:
             continue
         pushes = [r["push"] for r in rows]
