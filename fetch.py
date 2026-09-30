@@ -2497,6 +2497,79 @@ def p_supply():
         raise RuntimeError(f"supply: nothing {errs[:3]}")
     return {**out, "errs": errs[:4]}
 
+
+# ---------- 美元流動性（NY Fed API ＋ FRED） ----------
+def p_liquidity():
+    if not FRED_KEY:
+        raise RuntimeError("no FRED_API_KEY")
+    errs, out = [], {}
+    # 利率：NY Fed 官方 API（免金鑰），失敗退 FRED
+    rates = {}
+    try:
+        js = gjson("https://markets.newyorkfed.org/api/rates/all/latest.json", headers={"Accept": "application/json"})
+        for r in js.get("refRates", []) + js.get("unsecuredRates", []) + js.get("securedRates", []):
+            t = (r.get("type") or "").upper()
+            if t in ("SOFR", "EFFR") and num(r.get("percentRate")) is not None:
+                rates[t] = {"value": num(r.get("percentRate")), "date": r.get("effectiveDate")}
+    except Exception as e:  # noqa: BLE001
+        log("nyfed rates", e); errs.append("NY Fed rates: " + safe_err(e))
+    for t in ("SOFR", "EFFR"):
+        if t not in rates:
+            try:
+                obs = fred(t, 5); rates[t] = {"value": obs[-1][1], "date": obs[-1][0]}
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{t}: {safe_err(e)}")
+    try:
+        obs = fred("IORB", 5); rates["IORB"] = {"value": obs[-1][1], "date": obs[-1][0]}
+    except Exception as e:  # noqa: BLE001
+        errs.append("IORB: " + safe_err(e))
+    out["rates"] = rates
+    if "SOFR" in rates and "IORB" in rates:
+        out["sofr_iorb"] = round(rates["SOFR"]["value"] - rates["IORB"]["value"], 3)
+    # 數量：FRED（十億美元）
+    def ser(sid, n=60, scale=1.0):
+        obs = fred(sid, n)
+        return [(d, v * scale) for d, v in obs]
+    try:
+        rrp = ser("RRPONTSYD", 80)            # ON RRP，十億，日
+        out["rrp"] = {"value": rrp[-1][1], "date": rrp[-1][0], "spark": [v for _, v in rrp[-40:]]}
+        hist_put("liq", "rrp", rrp[-1][0], rrp[-1][1])
+    except Exception as e:  # noqa: BLE001
+        errs.append("RRP: " + safe_err(e)); rrp = []
+    try:
+        srf = ser("RPONTSYD", 20)
+        out["srf"] = {"value": srf[-1][1], "date": srf[-1][0]}
+    except Exception as e:  # noqa: BLE001
+        log("srf", e)
+    try:
+        walcl = ser("WALCL", 40, 0.001)        # 百萬→十億，週三
+        tga = ser("WTREGEN", 40)               # 十億，週三
+        res = ser("WRESBAL", 40)               # 十億，週三
+        out["walcl"] = {"value": walcl[-1][1], "date": walcl[-1][0], "spark": [v for _, v in walcl[-30:]]}
+        out["tga"] = {"value": tga[-1][1], "date": tga[-1][0], "spark": [v for _, v in tga[-30:]]}
+        out["reserves"] = {"value": res[-1][1], "date": res[-1][0], "spark": [v for _, v in res[-30:]]}
+        # 淨流動性 = 資產 − TGA − RRP，按 WALCL 的週三對齊（RRP 取該日或之前最近一筆）
+        tga_d = dict(tga); rrp_sorted = rrp
+        def rrp_at(d):
+            best = None
+            for dd, v in rrp_sorted:
+                if dd <= d:
+                    best = v
+            return best
+        net = []
+        for d, a in walcl[-30:]:
+            t_, r_ = tga_d.get(d), rrp_at(d)
+            if t_ is not None and r_ is not None:
+                net.append((d, round(a - t_ - r_, 1)))
+        if net:
+            out["net"] = {"value": net[-1][1], "date": net[-1][0], "spark": [v for _, v in net],
+                          "chg4w": round(net[-1][1] - net[-5][1], 1) if len(net) >= 5 else None}
+    except Exception as e:  # noqa: BLE001
+        errs.append("FRED weekly: " + safe_err(e))
+    if not out.get("rrp") and not out.get("net"):
+        raise RuntimeError(f"liquidity: nothing {errs[:2]}")
+    return {**out, "errs": errs[:4]}
+
 # ---------- run ----------
 run("pulse", p_pulse)
 run("taiex", p_taiex)
@@ -2518,6 +2591,7 @@ run("media", p_media, keep_if_fresh_hours=6)
 run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=6)
 run("gmacro", p_gmacro, keep_if_fresh_hours=6)
+run("liquidity", p_liquidity, keep_if_fresh_hours=3)
 run("calendar", p_calendar, keep_if_fresh_hours=6)
 run("awards", p_awards, keep_if_fresh_hours=1)
 run("supply", p_supply, keep_if_fresh_hours=6)

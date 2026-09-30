@@ -284,10 +284,22 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><span>紡織：儒鴻、聚陽、遠東新　通路：統一超、統一、遠百</span></div>
   </section>
 
+  <section class="panel w6 cap" id="p-poly">
+    <div class="ph"><h2>Polymarket</h2><span class="zh">世界在賭什麼</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a><span>24h 成交量排序，已濾掉運彩</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-revenue">
     <div class="ph"><h2>Revenue</h2><span class="zh">通路與供應鏈 · 月營收</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>公開資訊觀測站 · 每月 10 日前後</span></div>
+  </section>
+
+  <section class="panel w6 cap" id="p-supply">
+    <div class="ph"><h2>Retail</h2><span class="zh">零售分業 · 營業額年增</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>經濟部零售業營業額指數（分業）· 年增由指數自算 · 月更</span></div>
   </section>
 
   <div class="sec">總經 Macro</div>
@@ -298,10 +310,10 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><span>美：FRED 官方發布時程、FOMC · 台：主計總處／央行／國發會固定時程（「約」＝依慣例推估）· 台股休市：證交所</span></div>
   </section>
 
-  <section class="panel w6 cap" id="p-supply">
-    <div class="ph"><h2>Retail</h2><span class="zh">零售分業 · 營業額年增</span><span class="meta">排程</span></div>
+  <section class="panel w6 cap" id="p-liq">
+    <div class="ph"><h2>USD Liquidity</h2><span class="zh">美元流動性 · NY Fed ＋ 聯準會週報</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>經濟部零售業營業額指數（分業）· 年增由指數自算 · 月更</span></div>
+    <div class="pf"><span>淨流動性＝聯準會資產 − 財政部 TGA − ON RRP（週三）· SOFR−IORB &gt;0＝資金緊 · SRF 平常為零 · 單位十億美元</span></div>
   </section>
 
   <section class="panel w6" id="p-macro">
@@ -348,12 +360,6 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><span>政府電子採購網（g0v 鏡像）· 同一組關鍵字 · 決標金額補抓，可能晚一輪</span></div>
   </section>
 
-  <section class="panel w6 cap" id="p-poly">
-    <div class="ph"><h2>Polymarket</h2><span class="zh">世界在賭什麼</span><span class="meta">排程</span></div>
-    <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a><span>24h 成交量排序，已濾掉運彩</span></div>
-  </section>
-
   <section class="panel w6 cap" id="p-tech">
     <div class="ph"><h2>Tech</h2><span class="zh">GitHub · Hugging Face · Hacker News</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -372,19 +378,19 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><span>YouTube Data API · 每 30 分鐘 · 分類：全部／音樂／娛樂／新聞</span></div>
   </section>
 
-  <section class="panel w6 cap" id="p-trends">
+  <section class="panel cap" id="p-trends">
     <div class="ph"><h2>Trends TW</h2><span class="zh">台灣搜尋熱度</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://trends.google.com/trending?geo=TW&hl=zh-TW" target="_blank" rel="noopener">Google Trends</a></div>
   </section>
 
-  <section class="panel w6 cap" id="p-media">
+  <section class="panel cap" id="p-media">
     <div class="ph"><h2>Fashion Press</h2><span class="zh">時尚媒體標題</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>WWD RSS · BoF 與台灣時尚媒體（經 Bing News）</span></div>
   </section>
 
-  <section class="panel w6 cap" id="p-ptt">
+  <section class="panel cap" id="p-ptt">
     <div class="ph"><h2>PTT</h2><span class="zh">台灣社群熱文</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>八卦 · 省錢 · 網購 · 美妝 · 美容 · 科技業 · 房產 · 電影</span></div>
@@ -580,6 +586,13 @@ const renderers={
     body("p-awards").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">沒有命中</div>`;setMeta("p-awards",d,6);},
   supply(d){const tr=(d.retail||[]).map(r=>`<tr><td class="name">${esc(r.name)}${mini(r.spark)}</td><td class="r num ${cls(n(r.yoy))}">${sgn(n(r.yoy),1,"%")}</td></tr>`).join("");
     body("p-supply").innerHTML=tr?`<table><tr><th>零售業營業額指數（${esc((d.retail[0]||{}).period||"")}）</th><th class="r">年增</th></tr>${tr}</table>`:`<div class="empty">零售指數抓不到</div>`;setMeta("p-supply",d,24*35);},
+  liquidity(d){const b=v=>isFinite(n(v))?(Math.abs(n(v))>=1000?(n(v)/1000).toFixed(2)+" 兆":fmt(n(v),0)+" 億"):"—";const r=d.rates||{};const sp=n(d.sofr_iorb);const spc=sp>0?"#F0524F":sp>-0.05?"#E0A23A":"#39B978";
+    const net=d.net?`<div style="display:flex;gap:14px;align-items:baseline;padding:0 0 10px;margin-bottom:10px;border-bottom:1px solid var(--line)"><span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--dim)">淨流動性</span><span class="num" style="font-size:22px;font-weight:600"><span class="${K("liq:net",n(d.net.value))}">${b(d.net.value)}</span><span class="sub" style="font-size:11px"> USD</span></span>${d.net.chg4w!=null?`<span class="num ${cls(n(d.net.chg4w))}" style="font-size:12px">${n(d.net.chg4w)>0?"+":""}${b(d.net.chg4w)} /4週</span>`:""}<span class="sub">${esc(d.net.date||"")}</span>${mini(d.net.spark)}</div>`:"";
+    const card=(l,x,sub,extra)=>x?`<div class="c"><div class="l">${l}</div><div class="v">${extra||""}<span class="${K("liq:"+l,n(x.value))}">${b(x.value)}</span></div><div class="p">${esc(x.date||"")}${sub?` · ${sub}`:""}${mini(x.spark)}</div></div>`:"";
+    const dot=`<span style="display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:middle;background:${spc};box-shadow:0 0 0 3px color-mix(in srgb,${spc} 25%,transparent)"></span>`;
+    const rates=`<div class="c"><div class="l">SOFR − IORB</div><div class="v">${dot}<span class="${K("liq:spread",sp)}">${isFinite(sp)?(sp>0?"+":"")+sp.toFixed(2)+"%":"—"}</span></div><div class="p">SOFR ${r.SOFR?fmt(n(r.SOFR.value),2)+"%":"—"} · EFFR ${r.EFFR?fmt(n(r.EFFR.value),2)+"%":"—"} · IORB ${r.IORB?fmt(n(r.IORB.value),2)+"%":"—"}</div></div>`;
+    const srf=d.srf&&n(d.srf.value)>0?`<div class="c"><div class="l">SRF 常備回購用量</div><div class="v bad">${b(d.srf.value)}</div><div class="p">${esc(d.srf.date||"")} · 有人在借＝有人缺錢</div></div>`:"";
+    body("p-liq").innerHTML=`${net}<div class="macro">${rates}${card("ON RRP 逆回購",d.rrp,"停在聯準會的閒錢")}${card("銀行準備金",d.reserves,"")}${card("財政部 TGA",d.tga,"")}${card("聯準會總資產",d.walcl,"")}${srf}</div>${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,160))}</div>`:""}`;setMeta("p-liq",d,30);},
   ptt(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.board.slice(0,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"bad":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
     body("p-ptt").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"這輪沒抓到")}</div>`;setMeta("p-ptt",d,2);},
   tiktok(d){if(!document.getElementById("p-tiktok"))return;const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${it.rank||i+1}</span><span class="t">#${esc(it.tag)}</span><span class="m">${it.views?compact(n(it.views))+" 次":""}${it.trend?` <span class="${n(it.trend)>0?"up":"down"}">${sgn(n(it.trend),0)}</span>`:""}</span></li>`).join("");
