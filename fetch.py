@@ -1879,14 +1879,20 @@ def p_aiwire():
         i["launch"] = bool(i.get("detect")) or bool(AI_LAUNCH.search(i["title"]))
     items = _dedupe_sort(items, 80)
     # 發布優先、再依時間；每個來源最多 4 則，避免單一媒體洗版
-    per, out = {}, []
-    for i in sorted(items, key=lambda x: (x["launch"], x.get("at") or ""), reverse=True):
-        if per.get(i["source"], 0) >= 4:
+    ranked = sorted(items, key=lambda x: (x["launch"], x.get("at") or ""), reverse=True)
+    # 先保證五家各至少 3 則（Anthropic／xAI 官方頁沒有時間戳，純依時間排會被媒體洗掉），再依排序補滿
+    per_src, out, seen = {}, [], set()
+    for vendor in ("openai", "anthropic", "google", "deepseek", "xai"):
+        for i in [x for x in ranked if x.get("vendor") == vendor][:3]:
+            out.append(i); seen.add(id(i)); per_src[i["source"]] = per_src.get(i["source"], 0) + 1
+    for i in ranked:
+        if id(i) in seen or per_src.get(i["source"], 0) >= 4:
             continue
-        per[i["source"]] = per.get(i["source"], 0) + 1
-        out.append(i)
-        if len(out) >= 18:
+        per_src[i["source"]] = per_src.get(i["source"], 0) + 1
+        out.append(i); seen.add(id(i))
+        if len(out) >= 20:
             break
+    out.sort(key=lambda x: (x["launch"], x.get("at") or ""), reverse=True)
     if not out:
         raise RuntimeError(f"aiwire: nothing {errs[:3]}")
     return {"items": out, "errs": errs[:6]}
