@@ -410,6 +410,24 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><span>WWD RSS · BoF 與台灣時尚媒體（經 Bing News）</span></div>
   </section>
 
+  <section class="panel w6" id="p-mood">
+    <div class="ph"><h2>Mood</h2><span class="zh">台灣情緒 · PTT ＋ LINE ＋ Threads，國外情緒 · Bluesky</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Gemini 讀當輪原文判分（-1～1），只看文字不看時事知識 · 每小時一次 · 三天走勢</span></div>
+  </section>
+
+  <section class="panel w6 cap" id="p-cofacts">
+    <div class="ph"><h2>Cofacts</h2><span class="zh">真的假的 · LINE 群組正在轉傳什麼</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Cofacts 開放資料 · 近三天被查詢最多的訊息 · 「被查 N 次」= 有多少人把它丟進查核機器人</span></div>
+  </section>
+
+  <section class="panel w6 cap" id="p-threads">
+    <div class="ph"><h2>Threads</h2><span class="zh">台灣情緒詞 · Google 索引到的公開貼文</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Google Programmable Search 限 threads.com · 近一天 · 是索引樣本不是全量 · 每天 90 次查詢上限</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-ptt">
     <div class="ph"><h2>PTT</h2><span class="zh">台灣大眾情緒 · 看板熱度與推噓</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -463,8 +481,8 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 
 <div class="foot">
   <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 GitHub Actions 常駐迴圈抓取，盤中每 5 分鐘、其餘 15 分鐘一輪，寫進 data 分支；走勢存 history.json，最多 400 點</span>
-  <span>來源：證交所（含 MIS 即時、休市）· 櫃買 · FinMind · 央行 · 主計總處（部分手動）· 國發會（燈號、PMI／NMI）· 經濟部（零售指數）· 信義房價 · 政府電子採購網（g0v）· CBOE · Yahoo Finance · Stooq（備援）· CoinGecko · FRED（含發布時程）· ONS · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · YouTube · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · Google News（含英文）· OpenAI／Anthropic／Google AI／DeepSeek／xAI 官方頁面與 changelog · OpenAI／Google AI 開發者論壇 · The Verge AI · TechCrunch AI · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · GDELT · Wikipedia · PTT · Bluesky · 氣象署（天氣、地震）· 台電 · TDX（YouBike、停車場、VD、國道、桃機）· OpenFreeMap</span>
-  <span>未接：Threads（搜尋需登入、官方 API 需 App Review）· Dcard（Cloudflare 擋資料中心 IP）· TikTok（擋資料中心 IP）· 國防部軍事動態（robots.txt 禁抓）· 日本與中國 CPI（無免金鑰官方 API）· X／LinkedIn（無開放 API）· 真實資金流向（付費資料，板塊面板為代理指標）</span>
+  <span>來源：證交所（含 MIS 即時、休市）· 櫃買 · FinMind · 央行 · 主計總處（部分手動）· 國發會（燈號、PMI／NMI）· 經濟部（零售指數）· 信義房價 · 政府電子採購網（g0v）· CBOE · Yahoo Finance · Stooq（備援）· CoinGecko · FRED（含發布時程）· ONS · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · YouTube · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · Google News（含英文）· OpenAI／Anthropic／Google AI／DeepSeek／xAI 官方頁面與 changelog · OpenAI／Google AI 開發者論壇 · The Verge AI · TechCrunch AI · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · GDELT · Wikipedia · PTT · Bluesky · Cofacts 真的假的 · Google Programmable Search（Threads 索引）· Gemini（情緒判讀）· 氣象署（天氣、地震）· 台電 · TDX（YouBike、停車場、VD、國道、桃機）· OpenFreeMap</span>
+  <span>未接：Threads 官方搜尋（需 App Review，改走 Google 索引）· Dcard（Cloudflare 擋資料中心 IP）· TikTok（擋資料中心 IP）· 國防部軍事動態（robots.txt 禁抓）· 日本與中國 CPI（無免金鑰官方 API）· X／LinkedIn（無開放 API）· 真實資金流向（付費資料，板塊面板為代理指標）</span>
 </div>
 
 <script>
@@ -624,6 +642,14 @@ const renderers={
     const rates=`<div class="c"><div class="l">SOFR − IORB</div><div class="v">${dot}<span class="${K("liq:spread",sp)}">${isFinite(sp)?(sp>0?"+":"")+sp.toFixed(2)+"%":"—"}</span></div><div class="p">SOFR ${r.SOFR?fmt(n(r.SOFR.value),2)+"%":"—"} · EFFR ${r.EFFR?fmt(n(r.EFFR.value),2)+"%":"—"} · IORB ${r.IORB?fmt(n(r.IORB.value),2)+"%":"—"}</div></div>`;
     const srf=d.srf&&n(d.srf.value)>0?`<div class="c"><div class="l">SRF 常備回購用量</div><div class="v bad">${b(d.srf.value)}</div><div class="p">${esc(d.srf.date||"")} · 有人在借＝有人缺錢</div></div>`:"";
     body("p-liq").innerHTML=`${net}<div class="macro">${rates}${card("ON RRP 逆回購",d.rrp,"停在聯準會的閒錢")}${card("銀行準備金",d.reserves,"")}${card("財政部 TGA",d.tga,"")}${card("聯準會總資產",d.walcl,"")}${srf}</div>${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,160))}</div>`:""}`;setMeta("p-liq",d,30);},
+  mood(d){const tw=d.taiwan||{},os=d.overseas||{},sc=d.sources||{};const col=v=>v==null?"var(--dim)":v<=-0.3?"var(--down)":v>=0.3?"var(--up)":"var(--warn)";
+    const card=(t,m,sp)=>`<div class="c"><div class="l">${esc(t)}</div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:${col(m.score)};box-shadow:0 0 0 3px color-mix(in srgb,${col(m.score)} 25%,transparent)"></span><span>${m.score==null?"—":sgn(n(m.score),2)}</span><span class="sub" style="font-size:12px">${esc(m.label||"")}</span>${mini(sp)}</div><div class="p">${esc((m.themes||[]).join(" · "))}</div><div class="p" style="margin-top:4px;color:var(--text);font-family:var(--head);font-size:12px;line-height:1.4">${esc(m.line||"")}</div></div>`;
+    const srcs=["PTT","LINE","Threads"].filter(k=>sc[k]&&sc[k].score!=null).map(k=>`<span>${k}<b class="${n(sc[k].score)<=-0.3?"down":n(sc[k].score)>=0.3?"up":""}">${sgn(n(sc[k].score),2)}</b><span class="sub"> ${esc(sc[k].note||"")}</span></span>`).join("");
+    body("p-mood").innerHTML=`<div class="macro" style="grid-template-columns:1fr 1fr">${card("台灣",tw,d.spark_tw)}${card("國外",os,d.spark_os)}</div>${srcs?`<div class="kv" style="margin-top:8px">${srcs}</div>`:""}${d.watch?`<div class="kv" style="margin-top:6px"><span>盯一件事<b>${esc(d.watch)}</b></span></div>`:""}`;setMeta("p-mood",d,2);},
+  cofacts(d){const st=d.stats||{};const li=(d.hot||[]).slice(0,10).map(h=>`<li><span class="src ${h.verdict==="含錯誤訊息"?"bad":""}" style="min-width:64px">${esc(h.verdict.slice(0,5))}</span><span class="t"><a href="${esc(safe(h.url))}" target="_blank" rel="noopener">${esc(h.text.slice(0,72))}</a></span><span class="m ${h.requests>=20?"bad":""}">${h.requests} 查</span></li>`).join("");
+    body("p-cofacts").innerHTML=`<div class="kv"><span>熱門<b>${st.hot_n||0}</b></span><span>未查核<b class="${st.unchecked>=10?"bad":""}">${st.unchecked||0}</b></span><span>錯誤訊息<b class="${st.rumor?"bad":""}">${st.rumor||0}</b></span><span>查詢總數<b>${fmt(n(st.requests_total),0)}</b>${mini(st.spark)}</span></div>${li?`<ul class="list">${li}</ul>`:'<div class="empty">沒抓到</div>'}`;setMeta("p-cofacts",d,2);},
+  threads_g(d){const q=d.quota||{};const kws=(d.keywords||[]).map(k=>`<div class="wg"><h3><span class="kw" style="margin-right:6px;${k.kind==="hot"?"color:var(--warn)":""}">${k.kind==="hot"?"🔥":"固定"}</span>${esc(k.kw)}<span class="sub" style="margin-left:8px">索引約 ${compact(n(k.n_24h))} 則</span></h3>${(k.posts||[]).length?`<ul class="list">${k.posts.slice(0,3).map(p=>`<li><span class="src">@${esc((p.user||"").slice(0,10))}</span><span class="t"><a href="${esc(safe(p.url))}" target="_blank" rel="noopener">${esc(p.text.slice(0,72))}</a></span></li>`).join("")}</ul>`:'<div class="empty" style="padding:2px 0 6px">沒有結果</div>'}</div>`).join("");
+    body("p-threads").innerHTML=`${kws||'<div class="empty">沒有結果</div>'}<div class="empty" style="padding:6px 0 0;font-size:10.5px">今日查詢 ${q.used||0}／${q.cap||90}${d.errs&&d.errs.length?" · "+esc(d.errs.join(" · ").slice(0,160)):""}</div>`;setMeta("p-threads",d,4);},
   ptt(d){const BN={};(d.boards||[]).forEach(b=>BN[b.board]=b.zh);
     const li=(d.items||[]).map(it=>`<li><span class="src">${esc(BN[it.board]||it.board.slice(0,6))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"bad":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
     const bd=(d.boards||[]).map(b=>`<tr><td class="name">${esc(b.zh)}<span class="sub">${esc(b.facet)} · 今日 ${b.today} 篇</span>${mini(b.spark)}</td><td class="r num">${fmt(n(b.heat),0)}</td><td class="r num ${b.boom?"bad":""}">${b.boom||"—"}</td><td class="r num ${b.boo>=3?"bad":""}">${b.boo||"—"}</td><td class="r num ${n(b.mood)>=0.5?"up":n(b.mood)<0.2?"bad":""}">${fmt(n(b.mood),2)}</td></tr>`).join("");
@@ -704,6 +730,7 @@ function brief(P){
   const el=$("#brief");const items=[];
   const f=P.fear||{};if(f.regime){const LC={green:"var(--up)",yellow:"var(--warn)",red:"var(--down)",flat:"var(--dim)"};items.push({l:"恐慌狀態",h:f.regime,c:LC[f.tone]||"var(--dim)",s:(f.items||[]).slice(0,3).map(i=>`${i.name} ${fmt(n(i.value),i.name==="VIX"?1:0)}`).join(" · ")});}
   const g=(P.news||{}).signals?.gdelt;if(g&&isFinite(n(g.vol_ratio))){const r=n(g.vol_ratio);items.push({l:"全球提到 Taiwan",h:"×"+r.toFixed(2),c:r>=1.3?"var(--warn)":r<=0.7?"var(--up)":"var(--dim)",s:r>=1.3?"比前兩日多，看國際欄":"音量正常"+(g.tone!=null?` · 語調 ${sgn(n(g.tone),1)}`:"")});}
+  const md=P.mood||{};if(md.taiwan&&md.taiwan.score!=null){const v=n(md.taiwan.score);items.push({l:"台灣情緒",h:`${md.taiwan.label||""} ${sgn(v,2)}`,c:v<=-0.3?"var(--down)":v>=0.3?"var(--up)":"var(--warn)",s:(md.taiwan.line||"").slice(0,30)});}
   const hot=((P.news||{}).signals||{}).hot||[];const h0=hot.find(h=>h.hot);if(h0){items.unshift({l:"🔥 多源同時提及",h:h0.term,c:"var(--warn)",s:`${h0.src} 個來源 · ${(h0.sample&&h0.sample.title||"").slice(0,26)}`});}
   const tm=P.tw_market||{};const inst=((tm.institutions&&tm.institutions.items)||tm.inst||[]);const fo=inst.find?inst.find(i=>/外資/.test(i.name||i.label||"")):null;
   if(fo){const v=n(fo.net??fo.value);items.push({l:"台股法人",h:`外資 ${v>=0?"買超":"賣超"} ${fmt(Math.abs(v),0)} 億`,c:v>=0?"var(--up)":"var(--down)",s:(tm.breadth?`漲 ${tm.breadth.up} 跌 ${tm.breadth.down}`:"")});}

@@ -47,6 +47,9 @@ TDX_ID = os.environ.get("TDX_CLIENT_ID", "").strip()
 TDX_SECRET = os.environ.get("TDX_CLIENT_SECRET", "").strip()
 GUARDIAN_KEY = os.environ.get("GUARDIAN_API_KEY", "").strip()
 YOUTUBE_KEY = os.environ.get("YOUTUBE_API_KEY", "").strip()
+CSE_KEY = os.environ.get("GOOGLE_CSE_KEY", "").strip()
+CSE_CX = os.environ.get("GOOGLE_CSE_CX", "").strip()
+GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
 
 
 # ---------- helpers ----------
@@ -114,7 +117,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "cofacts": 90, "threads_g": 120, "mood": 120, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -2387,6 +2390,175 @@ def p_social():
     return {**out, "errs": errs[:8]}
 
 
+
+# ---------- Cofacts 真的假的：LINE 群組正在轉傳、被拿去查證的訊息（開放資料，免金鑰） ----------
+COFACTS_TYPE = {"RUMOR": "含錯誤訊息", "NOT_RUMOR": "含正確訊息", "OPINIONATED": "個人意見", "NOT_ARTICLE": "不在查證範圍"}
+
+
+def p_cofacts():
+    since = (NOW - timedelta(days=3)).isoformat()
+    q = """query($since: String!) {
+      hot: ListArticles(filter: {lastRequestedAt: {GTE: $since}}, orderBy: [{replyRequestCount: DESC}], first: 25) {
+        edges { node { id text replyRequestCount createdAt lastRequestedAt
+          articleReplies(status: NORMAL) { reply { type } } } } }
+      fresh: ListArticles(orderBy: [{createdAt: DESC}], first: 15) {
+        edges { node { id text replyRequestCount createdAt lastRequestedAt
+          articleReplies(status: NORMAL) { reply { type } } } } }
+    }"""
+    r = S.post("https://api.cofacts.tw/graphql", json={"query": q, "variables": {"since": since}}, headers={"Accept": "application/json"}, timeout=TIMEOUT)
+    r.raise_for_status()
+    js = r.json()
+    if js.get("errors"):
+        raise RuntimeError("cofacts: " + str(js["errors"][0].get("message"))[:120])
+
+    def rows(key):
+        out = []
+        for e in ((js.get("data") or {}).get(key) or {}).get("edges") or []:
+            n = e.get("node") or {}
+            types = [ (ar.get("reply") or {}).get("type") for ar in n.get("articleReplies") or [] ]
+            verdict = next((COFACTS_TYPE[t] for t in ("RUMOR", "NOT_RUMOR", "OPINIONATED", "NOT_ARTICLE") if t in types), "尚未查核")
+            out.append({"id": n["id"], "text": re.sub(r"\s+", " ", n.get("text") or "")[:120], "requests": n.get("replyRequestCount") or 0,
+                        "verdict": verdict, "checked": bool(types), "at": (n.get("lastRequestedAt") or n.get("createdAt") or "")[:19] + "Z",
+                        "created": (n.get("createdAt") or "")[:10], "url": f"https://cofacts.tw/article/{n['id']}"})
+        return out
+    hot, fresh = rows("hot"), rows("fresh")
+    if not hot and not fresh:
+        raise RuntimeError("cofacts: empty")
+    unchecked = sum(1 for h in hot if not h["checked"])
+    rumor = sum(1 for h in hot if h["verdict"] == "含錯誤訊息")
+    hist_put("cofacts", "requests", NOW_ISO[:13], sum(h["requests"] for h in hot))
+    return {"hot": hot, "fresh": fresh[:8], "stats": {"hot_n": len(hot), "unchecked": unchecked, "rumor": rumor,
+            "requests_total": sum(h["requests"] for h in hot), "spark": hist_get("cofacts", "requests", 48)}}
+
+
+# ---------- Threads（走 Google Programmable Search 索引）：每天 100 次免費，程式端鎖 90 次 ----------
+THREADS_G_FIXED = ["物價", "房價", "政府"]
+CSE_QUOTA_PATH = DATA / "cse_quota.json"
+CSE_DAILY_CAP = 90
+
+
+def _cse_quota():
+    q = {}
+    if CSE_QUOTA_PATH.exists():
+        try:
+            q = json.loads(CSE_QUOTA_PATH.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            q = {}
+    today = NOW.astimezone(TPE).strftime("%Y-%m-%d")  # Google 配額以太平洋時間重置，這裡用台北日期偏保守
+    if q.get("date") != today:
+        q = {"date": today, "used": 0}
+    return q
+
+
+def _cse(q, num=10, date_restrict="d1"):
+    js = gjson("https://www.googleapis.com/customsearch/v1", params={"key": CSE_KEY, "cx": CSE_CX, "q": q, "num": num, "dateRestrict": date_restrict, "sort": "date"})
+    out = []
+    for it in js.get("items") or []:
+        link = it.get("link") or ""
+        m = re.search(r"threads\.(?:com|net)/@([^/]+)/post/", link)
+        user = m.group(1) if m else ""
+        snippet = re.sub(r"\s+", " ", it.get("snippet") or "")
+        title = re.sub(r"\s+", " ", it.get("title") or "")
+        text = snippet if len(snippet) > 20 else title
+        text = re.sub(r"^\d+\s*(?:天|小時|分鐘|days?|hours?|minutes?)\s*(?:前|ago)\s*[·—-]*\s*", "", text)
+        out.append({"src": "Threads", "user": user, "text": text[:140], "url": link, "title": title[:80]})
+    return out, int((js.get("searchInformation") or {}).get("totalResults") or 0)
+
+
+def p_threads_g():
+    if not (CSE_KEY and CSE_CX):
+        raise RuntimeError("未設定 GOOGLE_CSE_KEY／GOOGLE_CSE_CX")
+    quota = _cse_quota()
+    errs, out = [], {"keywords": [], "quota": None}
+    hot = ((load_prev("news") or {}).get("signals") or {}).get("hot") or []
+    seeds = [{"kw": k, "kind": "fixed"} for k in THREADS_G_FIXED]
+    for h in sorted(hot, key=lambda x: (-x.get("src", 0), -x.get("n", 0))):
+        t = h.get("term") or ""
+        if re.search(r"[一-鿿]", t) and t not in THREADS_G_FIXED and t not in HOT_STOP_ZH and len(t) >= 2:
+            seeds.append({"kw": t, "kind": "hot", "src": h.get("src")})
+        if len(seeds) >= 6:
+            break
+    for sd in seeds:
+        if quota["used"] >= CSE_DAILY_CAP:
+            errs.append(f"今日配額用完（{quota['used']}/{CSE_DAILY_CAP}），其餘關鍵字沿用上一輪")
+            prev = {k["kw"]: k for k in (load_prev("threads_g") or {}).get("keywords") or []}
+            if sd["kw"] in prev:
+                out["keywords"].append(prev[sd["kw"]])
+            continue
+        try:
+            posts, total = _cse(sd["kw"])
+            quota["used"] += 1
+            out["keywords"].append({**sd, "n_24h": total, "posts": posts[:4]})
+        except Exception as e:  # noqa: BLE001
+            quota["used"] += 1
+            errs.append(f"{sd['kw']}: {safe_err(e)[:80]}")
+        time.sleep(0.5)
+    write_json(CSE_QUOTA_PATH, quota)
+    out["quota"] = {"used": quota["used"], "cap": CSE_DAILY_CAP, "date": quota["date"]}
+    if not any(k.get("posts") for k in out["keywords"]):
+        raise RuntimeError(f"threads_g: nothing {errs[:3]}")
+    return {**out, "errs": errs[:6]}
+
+
+# ---------- 台灣情緒（Gemini）：把 PTT／Cofacts／Threads／Bluesky 的文字丟給模型，出情緒分數與一句判讀 ----------
+GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"]
+
+
+def _gemini_json(prompt, schema_hint):
+    last = None
+    for model in GEMINI_MODELS:
+        try:
+            r = S.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", params={"key": GEMINI_KEY},
+                       json={"contents": [{"parts": [{"text": prompt}]}],
+                             "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json", "maxOutputTokens": 1200}},
+                       timeout=60)
+            if r.status_code == 404:
+                last = RuntimeError(f"{model} 404"); continue
+            if r.status_code >= 400:
+                raise RuntimeError(f"gemini {r.status_code} {r.text[:120]}")
+            txt = r.json()["candidates"][0]["content"]["parts"][0]["text"]
+            return json.loads(txt), model
+        except (KeyError, IndexError, json.JSONDecodeError) as e:
+            last = RuntimeError(f"{model} parse: {e}")
+    raise last or RuntimeError("gemini: no model")
+
+
+def p_mood():
+    if not GEMINI_KEY:
+        raise RuntimeError("未設定 GEMINI_API_KEY")
+    ptt = load_prev("ptt") or {}
+    cof = load_prev("cofacts") or {}
+    thg = load_prev("threads_g") or {}
+    soc = load_prev("social") or {}
+    blocks = {}
+    blocks["PTT"] = [f"[{r['board']}] {r['title']}" for r in (ptt.get("items") or [])[:40]]
+    blocks["LINE（Cofacts）"] = [f"（被查 {h['requests']} 次）{h['text'][:80]}" for h in (cof.get("hot") or [])[:15]]
+    blocks["Threads"] = [f"[{k['kw']}] {p_['text'][:90]}" for k in (thg.get("keywords") or []) for p_ in (k.get("posts") or [])[:3]]
+    blocks["Bluesky（國外）"] = [f"[{k['kw']}] {p_['text'][:90]}" for k in (soc.get("keywords") or []) for p_ in (k.get("top") or [])[:2]]
+    if sum(len(v) for v in blocks.values()) < 10:
+        raise RuntimeError("mood: 素材不足")
+    material = "\n\n".join(f"## {k}\n" + "\n".join(f"- {x}" for x in v) for k, v in blocks.items() if v)
+    prompt = f"""你是台灣的輿情分析師。下面是今天從四個來源抓到的原文（PTT 熱文標題、LINE 群組正在轉傳並被拿去查證的訊息、Threads 貼文、Bluesky 英文貼文）。
+請只根據這些文字判斷「大眾情緒」，不要加入你自己的時事知識。用繁體中文、台灣用語，不要用「不是…而是…」句型，不要空泛。
+
+輸出 JSON，格式：
+{{
+  "taiwan": {{"score": -1到1的小數（-1 極負面、0 中性、1 極正面）, "label": "兩到四個字的情緒標籤，例如 焦慮、亢奮、無感、憤怒", "themes": ["最多三個正在燒的主題，各 2-6 字"], "line": "一句 40 字內的判讀：台灣人今天在意什麼、語氣如何"}},
+  "overseas": {{"score": 同上, "label": 同上, "themes": [...], "line": "一句 40 字內的判讀（英文貼文的情緒）"}},
+  "sources": {{"PTT": {{"score": 小數, "note": "15 字內"}}, "LINE": {{"score": 小數, "note": "15 字內"}}, "Threads": {{"score": 小數, "note": "15 字內"}}}},
+  "watch": "一句 30 字內：如果只能盯一件事，盯什麼"
+}}
+來源沒有資料就把該來源 score 設為 null。
+
+{material}"""
+    js, model = _gemini_json(prompt, None)
+    tw = js.get("taiwan") or {}
+    hist_put("mood", "taiwan", NOW_ISO[:13], tw.get("score"))
+    hist_put("mood", "overseas", NOW_ISO[:13], (js.get("overseas") or {}).get("score"))
+    return {**js, "model": model, "spark_tw": hist_get("mood", "taiwan", 72), "spark_os": hist_get("mood", "overseas", 72),
+            "n_inputs": {k: len(v) for k, v in blocks.items()}}
+
+
 # ---------- 第三批（免新金鑰）：標案 / 設計廣告媒體 / 地震 / 台電 / 桃機 ----------
 PCC_KW = ["行銷", "品牌", "影片", "廣告", "視覺設計"]
 PCC_EXCLUDE = ("拆除", "租賃", "印刷", "看板", "招牌", "廣告物", "廣告牌", "設備", "工程")
@@ -3289,6 +3461,9 @@ run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("social", p_social, keep_if_fresh_hours=0.5)
+run("cofacts", p_cofacts, keep_if_fresh_hours=0.5)
+run("threads_g", p_threads_g, keep_if_fresh_hours=2)
+run("mood", p_mood, keep_if_fresh_hours=1)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
