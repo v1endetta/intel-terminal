@@ -362,6 +362,12 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
     <div class="pf"><span>OpenAI · Anthropic · Google AI／Gemini · DeepSeek · xAI 官方頁面 · The Verge AI · TechCrunch AI · 「發布」= 官方標題含 launch／introduce，或 GitHub／HF 偵測到新 repo／新模型</span></div>
   </section>
 
+  <section class="panel w6 cap" id="p-threads">
+    <div class="ph"><h2>Threads</h2><span class="zh">台灣人正在怎麼講 · 固定詞＋今日熱詞</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Threads API keyword_search（TOP／RECENT）· 熱詞來自多源同提引擎 · 個人帳號 insights · token 60 天到期會進日曆</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-devpulse">
     <div class="ph"><h2>Dev Pulse</h2><span class="zh">開發者論壇熱串 · 五家 changelog（不發部落格的改動）</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -457,8 +463,8 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 
 <div class="foot">
   <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 GitHub Actions 常駐迴圈抓取，盤中每 5 分鐘、其餘 15 分鐘一輪，寫進 data 分支；走勢存 history.json，最多 400 點</span>
-  <span>來源：證交所（含 MIS 即時、休市）· 櫃買 · FinMind · 央行 · 主計總處（部分手動）· 國發會（燈號、PMI／NMI）· 經濟部（零售指數）· 信義房價 · 政府電子採購網（g0v）· CBOE · Yahoo Finance · Stooq（備援）· CoinGecko · FRED（含發布時程）· ONS · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · YouTube · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · Google News（含英文）· OpenAI／Anthropic／Google AI／DeepSeek／xAI 官方頁面與 changelog · OpenAI／Google AI 開發者論壇 · The Verge AI · TechCrunch AI · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · GDELT · Wikipedia · PTT · 氣象署（天氣、地震）· 台電 · TDX（YouBike、停車場、VD、國道、桃機）· OpenFreeMap</span>
-  <span>未接：TikTok（擋資料中心 IP）· 國防部軍事動態（robots.txt 禁抓）· 日本與中國 CPI（無免金鑰官方 API）· Threads／X／LinkedIn（無開放 API）· 真實資金流向（付費資料，板塊面板為代理指標）</span>
+  <span>來源：證交所（含 MIS 即時、休市）· 櫃買 · FinMind · 央行 · 主計總處（部分手動）· 國發會（燈號、PMI／NMI）· 經濟部（零售指數）· 信義房價 · 政府電子採購網（g0v）· CBOE · Yahoo Finance · Stooq（備援）· CoinGecko · FRED（含發布時程）· ONS · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · YouTube · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · Google News（含英文）· OpenAI／Anthropic／Google AI／DeepSeek／xAI 官方頁面與 changelog · OpenAI／Google AI 開發者論壇 · The Verge AI · TechCrunch AI · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · GDELT · Wikipedia · PTT · Threads API · 氣象署（天氣、地震）· 台電 · TDX（YouBike、停車場、VD、國道、桃機）· OpenFreeMap</span>
+  <span>未接：TikTok（擋資料中心 IP）· 國防部軍事動態（robots.txt 禁抓）· 日本與中國 CPI（無免金鑰官方 API）· X／LinkedIn（無開放 API）· 真實資金流向（付費資料，板塊面板為代理指標）</span>
 </div>
 
 <script>
@@ -572,6 +578,11 @@ const renderers={
     body("p-design").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-design",d,6);},
   aiwire(d){const VN={openai:"OpenAI",anthropic:"Claude",google:"Gemini",deepseek:"DeepSeek",xai:"Grok"};const li=(d.items||[]).map(it=>`<li><span class="vd vd-${esc(it.vendor||"")}" title="${esc(it.source)}">${esc(VN[it.vendor]||it.source.slice(0,6))}</span><span class="t">${it.launch?'<span class="kw" style="margin-right:4px">發布</span>':''}<a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a>${it.vendor&&VN[it.vendor]&&it.source!==VN[it.vendor]?`<span class="sub"> ${esc(it.source)}</span>`:""}</span><span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`).join("");
     body("p-aiwire").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">沒有結果</div>`;setMeta("p-aiwire",d,3);},
+  threads(d){const me=d.me||{},ins=d.insights||{},tk=d.token||{};
+    const head=`<div class="kv">${me.username?`<span>@${esc(me.username)}</span>`:""}${ins.followers!=null?`<span>追蹤<b>${fmt(n(ins.followers),0)}</b></span>`:""}${ins.views_7d!=null?`<span>7 日瀏覽<b>${compact(n(ins.views_7d))}</b>${mini(ins.views_spark)}</span>`:""}${tk.days_left!=null?`<span class="${tk.days_left<=7?"bad":""}">token 剩 ${tk.days_left} 天</span>`:""}</div>`;
+    const kws=(d.keywords||[]).map(k=>{const posts=(k.top||[]).slice(0,2).map(p=>`<li><span class="src">@${esc((p.user||"").slice(0,10))}</span><span class="t"><a href="${esc(safe(p.url))}" target="_blank" rel="noopener">${esc(p.text.slice(0,70))}</a></span><span class="m">${p.at?ago(p.at).replace(" 前",""):""}</span></li>`).join("");
+      return`<div class="wg"><h3><span class="kw" style="margin-right:6px;${k.kind==="hot"?"color:var(--warn)":""}">${k.kind==="hot"?"🔥":"固定"}</span>${esc(k.kw)}<span class="sub" style="margin-left:8px">24h 內 ${k.n_recent_24h||0} 則${k.src?` · ${k.src} 源`:""}</span></h3>${posts?`<ul class="list">${posts}</ul>`:'<div class="empty" style="padding:2px 0 6px">沒有結果</div>'}</div>`;}).join("");
+    body("p-threads").innerHTML=`${head}${kws||'<div class="empty">沒有關鍵字結果</div>'}${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,220))}</div>`:""}`;setMeta("p-threads",d,2);},
   devpulse(d){const VN={openai:"OpenAI",anthropic:"Claude",google:"Gemini",deepseek:"DeepSeek",xai:"Grok"};
     const fo=(d.forums||[]).map(f=>`<li><span class="vd vd-${esc(f.vendor||"")}">${esc(VN[f.vendor]||"")}</span><span class="t"><a href="${esc(safe(f.url))}" target="_blank" rel="noopener">${esc(f.title)}</a></span><span class="m ${n(f.replies)>=30?"bad":""}">${fmt(n(f.replies),0)} 回</span></li>`).join("");
     const cl=(d.changelogs||[]).map(c=>`<li><span class="vd vd-${esc(c.vendor||"")}">${esc(VN[c.vendor]||"")}</span><span class="t">${c.kind?`<span class="kw" style="margin-right:4px">${esc(c.kind)}</span>`:""}<a href="${esc(safe(c.url))}" target="_blank" rel="noopener">${esc(c.title)}</a><span class="sub"> ${esc(c.source)}</span></span><span class="m">${c.at?(c.at.slice(0,4)===String(new Date().getFullYear())?c.at.slice(5,10):c.at.slice(0,10)):esc(c.date||"")}</span></li>`).join("");

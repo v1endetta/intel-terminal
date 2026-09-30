@@ -46,6 +46,7 @@ CWA_KEY = os.environ.get("CWA_API_KEY", "").strip()
 TDX_ID = os.environ.get("TDX_CLIENT_ID", "").strip()
 TDX_SECRET = os.environ.get("TDX_CLIENT_SECRET", "").strip()
 GUARDIAN_KEY = os.environ.get("GUARDIAN_API_KEY", "").strip()
+THREADS_TOKEN = os.environ.get("THREADS_TOKEN", "").strip()
 YOUTUBE_KEY = os.environ.get("YOUTUBE_API_KEY", "").strip()
 
 
@@ -114,7 +115,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "threads": 120, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -2213,6 +2214,98 @@ def _hot_terms(news):
     return _hot_terms_from(pool)
 
 
+
+# ---------- Threads：固定詞 ＋ 熱詞引擎動態種子，看「台灣人正在怎麼講」 ----------
+THREADS_FIXED = ["台股", "關稅", "地震"]
+THREADS_API = "https://graph.threads.net/v1.0"
+THREADS_META = DATA / "threads_meta.json"  # 只存 token 指紋與首次看到的日期，不存 token
+
+
+def _threads_get(path, **params):
+    params["access_token"] = THREADS_TOKEN
+    r = S.get(f"{THREADS_API}/{path.lstrip('/')}", params=params, timeout=TIMEOUT)
+    if r.status_code >= 400:
+        try:
+            msg = r.json().get("error", {})
+            raise RuntimeError(f"threads {r.status_code} code={msg.get('code')} {str(msg.get('message'))[:120]}")
+        except ValueError:
+            raise RuntimeError(f"threads {r.status_code}")
+    return r.json()
+
+
+def _threads_seeds():
+    hot = ((load_prev("news") or {}).get("signals") or {}).get("hot") or []
+    seeds = []
+    for h in sorted(hot, key=lambda x: (-x.get("src", 0), -x.get("n", 0))):
+        t = h.get("term") or ""
+        if t in THREADS_FIXED or len(t) < 2 or t.lower() in HOT_STOP_EN or t in HOT_STOP_ZH:
+            continue
+        seeds.append({"kw": t, "kind": "hot", "src": h.get("src")})
+        if len(seeds) >= 5:
+            break
+    return [{"kw": k, "kind": "fixed"} for k in THREADS_FIXED] + seeds
+
+
+def p_threads():
+    if not THREADS_TOKEN:
+        raise RuntimeError("未設定 THREADS_TOKEN")
+    import hashlib
+    errs, out = [], {"me": None, "insights": {}, "keywords": []}
+    # token 指紋 → 首次看到日期 → 60 天到期提醒
+    fp = hashlib.sha256(THREADS_TOKEN.encode()).hexdigest()[:10]
+    meta = {}
+    if THREADS_META.exists():
+        try:
+            meta = json.loads(THREADS_META.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            meta = {}
+    if meta.get("fp") != fp:
+        meta = {"fp": fp, "first_seen": TODAY_TPE.isoformat()}
+        write_json(THREADS_META, meta)
+    first = datetime.fromisoformat(meta["first_seen"]).date()
+    out["token"] = {"first_seen": first.isoformat(), "expires": (first + timedelta(days=60)).isoformat(), "days_left": (first + timedelta(days=60) - TODAY_TPE).days}
+    try:
+        out["me"] = _threads_get("me", fields="id,username,threads_profile_picture_url")
+    except Exception as e:  # noqa: BLE001
+        errs.append("me: " + safe_err(e))
+    try:
+        j = _threads_get("me/threads_insights", metric="followers_count")
+        for d in j.get("data", []):
+            out["insights"]["followers"] = (d.get("total_value") or {}).get("value")
+    except Exception as e:  # noqa: BLE001
+        errs.append("followers: " + safe_err(e))
+    try:
+        since = int((NOW - timedelta(days=7)).timestamp()); until = int(NOW.timestamp())
+        j = _threads_get("me/threads_insights", metric="views", period="day", since=since, until=until)
+        vals = [v.get("value") or 0 for d in j.get("data", []) for v in d.get("values", [])]
+        out["insights"]["views_7d"] = sum(vals); out["insights"]["views_spark"] = vals[-7:]
+    except Exception as e:  # noqa: BLE001
+        errs.append("views: " + safe_err(e))
+    cut24 = (NOW - timedelta(hours=24)).timestamp()
+    for seed in _threads_seeds():
+        rec = {**seed, "top": [], "recent": [], "n_recent_24h": 0}
+        for st in ("TOP", "RECENT"):
+            try:
+                j = _threads_get("keyword_search", q=seed["kw"], search_type=st, fields="id,text,username,permalink,timestamp")
+                posts = []
+                for d in j.get("data", []):
+                    ts = d.get("timestamp") or ""
+                    posts.append({"text": re.sub(r"\s+", " ", d.get("text") or "")[:140], "user": d.get("username"), "url": d.get("permalink"), "at": ts})
+                if st == "TOP":
+                    rec["top"] = posts[:3]
+                else:
+                    rec["recent"] = posts[:3]
+                    rec["n_recent_24h"] = sum(1 for p_ in posts if p_["at"] and datetime.fromisoformat(p_["at"].replace("+0000", "+00:00")).timestamp() >= cut24)
+                    rec["n_recent"] = len(posts)
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{seed['kw']}/{st}: {safe_err(e)}")
+            time.sleep(0.4)
+        out["keywords"].append(rec)
+    if out["me"] is None and not any(k["top"] or k["recent"] for k in out["keywords"]):
+        raise RuntimeError(f"threads: nothing {errs[:3]}")
+    return {**out, "errs": errs[:8]}
+
+
 # ---------- 第三批（免新金鑰）：標案 / 設計廣告媒體 / 地震 / 台電 / 桃機 ----------
 PCC_KW = ["行銷", "品牌", "影片", "廣告", "視覺設計"]
 PCC_EXCLUDE = ("拆除", "租賃", "印刷", "看板", "招牌", "廣告物", "廣告牌", "設備", "工程")
@@ -2839,6 +2932,14 @@ def p_calendar():
             seen.add(k); out.append(e)
     if not out:
         raise RuntimeError(f"calendar: nothing {errs[:2]}")
+    try:  # Threads 長效 token 60 天到期：進日曆提醒（重新產生並更新 repo secret）
+        th = load_prev("threads") or {}
+        exp = (th.get("token") or {}).get("expires")
+        if exp:
+            add(exp, "Threads token 到期：重新產生並更新 secret", "系統", kind="sys")
+            out = sorted(out + [e for e in ev if e["kind"] == "sys"], key=lambda e: e["date"])
+    except Exception as e:  # noqa: BLE001
+        log("calendar threads", e)
     return {"items": out, "from": today.isoformat(), "to": horizon.isoformat(), "errs": errs[:3]}
 
 
@@ -3114,6 +3215,7 @@ run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
+run("threads", p_threads, keep_if_fresh_hours=0.5)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
