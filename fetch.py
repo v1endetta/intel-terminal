@@ -2594,7 +2594,12 @@ def _gemini_json(prompt, schema_hint=None, tools=None):
                 data["_grounding"] = (cand.get("groundingMetadata") or {}).get("groundingChunks") or []
             return data, model
         except (KeyError, IndexError, json.JSONDecodeError, ValueError) as e:
-            last = RuntimeError(f"{model} parse: {str(e)[:60]}")
+            raw = ""
+            try:
+                raw = json.dumps(r.json(), ensure_ascii=False)[:260]
+            except Exception:  # noqa: BLE001
+                raw = r.text[:260]
+            last = RuntimeError(f"{model} parse: {str(e)[:60]} raw={raw!r}")
     raise last or RuntimeError("gemini: no model")
 
 
