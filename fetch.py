@@ -1893,17 +1893,143 @@ def p_aiwire():
 
 # ---------- Dev Pulse：兩個官方論壇當日熱串 ＋ 五家 changelog（不發部落格的悄悄改動） ----------
 DEV_FORUMS = [("https://community.openai.com", "OpenAI 論壇", "openai"), ("https://discuss.ai.google.dev", "Google AI 論壇", "google")]
-DEV_CHANGELOGS = [  # (url, source, vendor) — 頁面文字裡找「日期 + 下一行標題」
-    ("https://platform.openai.com/docs/changelog", "OpenAI changelog", "openai"),
-    ("https://docs.claude.com/en/release-notes/overview", "Claude release notes", "anthropic"),
+DEV_CHANGELOGS = [  # (url, source, vendor) — 先試 .md（OpenAI／Claude／xAI 文件站都有 markdown 版），再退回 HTML 文字
+    ("https://developers.openai.com/api/docs/changelog.md", "OpenAI changelog", "openai"),
+    ("https://platform.claude.com/docs/en/release-notes/overview.md", "Claude release notes", "anthropic"),
     ("https://ai.google.dev/gemini-api/docs/changelog?hl=en", "Gemini changelog", "google"),
-    ("https://api-docs.deepseek.com/updates", "DeepSeek updates", "deepseek"),
-    ("https://docs.x.ai/docs/changelog", "xAI changelog", "xai"),
+    ("https://api-docs.deepseek.com/updates/", "DeepSeek updates", "deepseek"),
+    ("https://docs.x.ai/developers/release-notes", "xAI release notes", "xai"),
 ]
-DATE_LINE = re.compile(r"^(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s+20\d\d|\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+20\d\d|20\d\d[-/.]\d{1,2}[-/.]\d{1,2})$", re.I)
+MONTHS = r"(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?"
+DATE_CORE = rf"(?:{MONTHS}\s+\d{{1,2}}(?:,?\s+20\d\d)?|\d{{1,2}}\s+{MONTHS}(?:\s+20\d\d)?|20\d\d[-/.]\d{{1,2}}[-/.]\d{{1,2}})"
+DATE_LINE = re.compile(rf"^(?:Date|Updated|Released|Posted)?[:：]?\s*({DATE_CORE})\s*$", re.I)
+DATE_START = re.compile(rf"^(?:Date|Updated|Released|Posted)?[:：]?\s*({DATE_CORE})\b(.*)$", re.I)
+DATE_HEAD_MD = re.compile(rf"^#{{1,4}}\s+({DATE_CORE})\s*$", re.I)
+KIND_LINE = re.compile(r"^(Feature|Fix|Deprecation|Deprecated|Update|Breaking|Improvement|New|Change|Removed|Announcement)s?\b", re.I)
 
 
-DATE_START = re.compile(r"^((?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s+20\d\d)|(?:\d{1,2}\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+20\d\d)|(?:20\d\d[-/.]\d{1,2}[-/.]\d{1,2}))\b(.*)$", re.I)
+def _parse_date_any(txt):
+    """接受沒有年份的「September 25」：年份用今年，若月份在未來就算去年。"""
+    t = txt.strip()
+    d = _parse_date(t)
+    if d:
+        return d
+    m = re.match(rf"^({MONTHS})\s+(\d{{1,2}})$", t, re.I) or re.match(rf"^(\d{{1,2}})\s+({MONTHS})$", t, re.I)
+    if not m:
+        return None
+    mon, day = (m.group(1), m.group(2)) if re.match(r"[A-Za-z]", m.group(1)) else (m.group(2), m.group(1))
+    for y in (NOW.year, NOW.year - 1):
+        d = _parse_date(f"{mon[:3]} {day}, {y}")
+        if d and d <= NOW + timedelta(days=2):
+            return d
+    return None
+
+
+def _md_clean(t):
+    t = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", t)  # [text](url) → text
+    t = re.sub(r"[*_`>#]+", "", t)
+    return re.sub(r"\s+", " ", t).strip(" -•·")
+
+
+def _changelog_md(text, source, vendor, url, limit):
+    """markdown 版：### 日期 標題段落；同一日期可有多條。"""
+    out, cur, buf = [], None, []
+
+    def flush():
+        if cur and buf:
+            kind = None
+            body = []
+            for l in buf:
+                if KIND_LINE.match(l) and "·" in l or KIND_LINE.fullmatch(l.strip()):
+                    kind = l.split("·")[0].strip(); continue
+                if l.startswith("<") or l.startswith("---"):
+                    continue
+                body.append(_md_clean(l))
+            body = [b for b in body if len(b) >= 12]
+            if body:
+                title = re.split(r"(?<=[.!?])\s+(?=[A-Z])", body[0])[0][:140]
+                d = _parse_date_any(cur)
+                out.append({"source": source, "vendor": vendor, "date": cur, "kind": kind, "title": title, "url": url.replace(".md", ""), "at": d.isoformat().replace("+00:00", "Z") if d else ""})
+
+    for raw in text.splitlines():
+        l = raw.rstrip()
+        m = DATE_HEAD_MD.match(l.strip())
+        if m:
+            flush(); cur, buf = m.group(1), []
+            continue
+        if re.match(r"^#{1,4}\s", l) and cur:  # 非日期標題 → 這段結束
+            flush(); cur, buf = None, []
+            continue
+        if cur and l.strip():
+            buf.append(l.strip())
+    flush()
+    out.sort(key=lambda o: o.get("at") or "", reverse=True)
+    return out[:limit]
+
+
+def _page_text(url):
+    """先用 requests 拆 HTML 成文字；文字太短（SPA）就用 Playwright 渲染。"""
+    html = ""
+    try:
+        html = _html_get(url)
+    except Exception:  # noqa: BLE001
+        pass
+    txt = ""
+    if html:
+        body = re.sub(r"<(script|style|nav|header|footer)[^>]*>.*?</\1>", " ", html, flags=re.S | re.I)
+        body = re.sub(r"</?(a|code|strong|em|b|i|span|small|kbd|abbr|sup|sub)\b[^>]*>", "", body, flags=re.I)  # 行內標籤不換行，避免句子碎掉
+        txt = html_mod.unescape(re.sub(r"<[^>]+>", "\n", body))
+    if len(re.sub(r"\s", "", txt)) < 800:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as pw:
+            b = pw.chromium.launch()
+            pg = b.new_page(user_agent=UA)
+            pg.goto(url, wait_until="networkidle", timeout=45000)
+            pg.wait_for_timeout(1500)
+            txt = pg.inner_text("body")
+            b.close()
+    return txt
+
+
+def _changelog(url, source, vendor, limit=4):
+    # 1) markdown（.md 直接抓；非 .md 也先試加 .md）
+    for u in ([url] if url.endswith(".md") else [url.split("?")[0].rstrip("/") + ".md"]):
+        try:
+            txt = _html_get(u)
+            if "<html" not in txt[:300].lower():
+                got = _changelog_md(txt, source, vendor, u, limit)
+                if len(got) >= 2:
+                    return got
+        except Exception:  # noqa: BLE001
+            pass
+    # 2) HTML 文字
+    lines = [re.sub(r"\s+", " ", l).strip() for l in _page_text(url).splitlines()]
+    lines = [l for l in lines if l]
+    out = []
+
+    def heading_like(x):
+        return (12 <= len(x) <= 140 and not DATE_LINE.match(x) and not x.endswith((",", ";", ":")) and not re.match(r"^[a-z,;.)]", x)
+                and not re.match(r"^(?:https?://|www\.)", x))
+
+    for i, l in enumerate(lines):
+        ms = DATE_START.match(l)
+        if ms and not DATE_LINE.match(l):  # 「2026-09-29 – DeepSeek V4 released」同一行就有標題
+            rest = ms.group(2).strip(" -–—:|·")
+            if len(rest) >= 12 and not any(o["title"] == rest for o in out):
+                d = _parse_date_any(ms.group(1))
+                out.append({"source": source, "vendor": vendor, "date": ms.group(1), "title": rest[:140], "url": url, "at": d.isoformat().replace("+00:00", "Z") if d else ""})
+            continue
+        if DATE_LINE.match(l):
+            cands = [lines[j] for j in list(range(i + 1, min(i + 5, len(lines)))) + [i - 1] if 0 <= j < len(lines) and heading_like(lines[j])]
+            if not cands:
+                continue
+            title = re.split(r"(?<=[.!?])\s+(?=[A-Z])", cands[0])[0]
+            if any(o["title"] == title for o in out):
+                continue
+            d = _parse_date_any(DATE_LINE.match(l).group(1))
+            out.append({"source": source, "vendor": vendor, "date": l, "title": title[:140], "url": url, "at": d.isoformat().replace("+00:00", "Z") if d else ""})
+    out.sort(key=lambda o: o.get("at") or "", reverse=True)  # 頁面可能先列棄用表，一律依日期新到舊
+    return out[:limit]
 
 
 def _discourse_top(base, source, vendor, limit=5):
