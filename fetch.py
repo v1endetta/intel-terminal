@@ -2245,7 +2245,7 @@ def _dcard_get(path, **params):
         from curl_cffi import requests as cffi
         r = cffi.get(url, params=params, headers=hdr, impersonate="chrome", timeout=25)
         if r.status_code >= 400:
-            raise RuntimeError(f"dcard {r.status_code}")
+            raise RuntimeError(f"dcard {r.status_code} {r.text[:80]!r}")
         return r.json()
 
 
@@ -2261,7 +2261,19 @@ def _dcard_posts(rows):
 
 
 def _bsky_search(q, limit=25):
-    j = gjson("https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts", params={"q": q, "sort": "latest", "limit": limit}, headers={"Accept": "application/json"})
+    j, last = None, None
+    for host in ("https://public.api.bsky.app", "https://api.bsky.app"):
+        try:
+            r = requests.get(f"{host}/xrpc/app.bsky.feed.searchPosts", params={"q": q, "sort": "latest", "limit": limit},
+                             headers={"Accept": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0 Safari/537.36"}, timeout=TIMEOUT)
+            if r.status_code >= 400:
+                last = RuntimeError(f"bsky {r.status_code} {r.text[:100]!r}")
+                continue
+            j = r.json(); break
+        except Exception as e:  # noqa: BLE001
+            last = e
+    if j is None:
+        raise last or RuntimeError("bsky: no response")
     out = []
     for p_ in j.get("posts") or []:
         rec = p_.get("record") or {}
