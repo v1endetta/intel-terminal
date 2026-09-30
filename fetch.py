@@ -1855,6 +1855,7 @@ def p_aiwire():
             errs.append(f"{name}: {safe_err(e)}")
         got = [_clean_link_title(i) for i in got]
         if len(got) < 2:
+            errs.append(f"{name}: 官方頁只抓到 {len(got)} 則，改用 Google News 補")
             got += _try(name + " gnews", _gnews, gq, "", 4, "en")
         for i in got:
             i["vendor"] = vendor; items.append(i)
@@ -2000,10 +2001,13 @@ def _changelog(url, source, vendor, limit=4):
                 got = _changelog_md(txt, source, vendor, u, limit)
                 if len(got) >= 2:
                     return got
-        except Exception:  # noqa: BLE001
-            pass
-    # 2) HTML 文字
-    lines = [re.sub(r"\s+", " ", l).strip() for l in _page_text(url).splitlines()]
+                CL_DIAG.append(f"{source} md: {len(txt)}b {len(got)} entries head={txt[:60]!r}")
+            else:
+                CL_DIAG.append(f"{source} md: got html {len(txt)}b")
+        except Exception as e:  # noqa: BLE001
+            CL_DIAG.append(f"{source} md: {safe_err(e)[:80]}")
+    # 2) HTML 文字（若其實是 markdown，去掉行首 # 再比對日期）
+    lines = [re.sub(r"^#{1,6}\s+", "", re.sub(r"\s+", " ", l).strip()) for l in _page_text(url).splitlines()]
     lines = [l for l in lines if l]
     out = []
 
@@ -2106,8 +2110,12 @@ def _changelog(url, source, vendor, limit=4):
     return out[:limit]
 
 
+CL_DIAG: list = []
+
+
 def p_devpulse():
     errs, forums, logs = [], [], []
+    CL_DIAG.clear()
     for base, src, vendor in DEV_FORUMS:
         try:
             forums += _discourse_top(base, src, vendor)
@@ -2130,7 +2138,7 @@ def p_devpulse():
         errs.append("claude-code: " + safe_err(e))
     if not forums and not logs:
         raise RuntimeError(f"devpulse: nothing {errs[:3]}")
-    return {"forums": forums, "changelogs": logs, "errs": errs[:8]}
+    return {"forums": forums, "changelogs": logs, "errs": errs[:8], "diag": CL_DIAG[:8]}
 
 
 # ---------- 熱詞引擎：同一實體詞在 12 小時內出現在 ≥3 個不同來源就算「在燒」 ----------
