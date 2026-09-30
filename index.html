@@ -73,7 +73,8 @@ a:hover{text-decoration:underline}
 .flash-down{animation:flashDown 1.6s ease-out}
 .status .cd{font-family:var(--mono)}
 .wx{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.wxt tr.hero td{background:color-mix(in srgb,var(--panel2) 70%,var(--blue) 8%)}.wxt td,.wxt th{white-space:nowrap}.wxt .sub{white-space:normal}
+.wx.wx3{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}@media (max-width:1100px){.wx.wx3{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:640px){.wx.wx3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.wx .c.hero{border-color:color-mix(in srgb,var(--blue) 45%,var(--line))}.wx .c .fc1{margin-top:5px;border-top:1px solid var(--line);padding-top:4px;font-size:10.5px;color:var(--muted)}.wx .c .fc1.bad{color:var(--down)}.wx3 .c .t{font-size:20px}
 @media (max-width:640px){.wx{grid-template-columns:1fr}}
 .wx .c{background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:8px 10px}
 .wx .c .city{font-family:var(--head);font-weight:600;font-size:12px;display:flex;justify-content:space-between}
@@ -565,10 +566,13 @@ const renderers={
     const hn=(d.hn||[]).map(s=>`<li><span class="t"><a href="${esc(safe(s.url))}" target="_blank" rel="noopener">${esc(s.title)}</a></span><span class="m">${esc(s.score)}</span></li>`).join("");
     body("p-tech").innerHTML=`<div class="twocol tech3">${col("GitHub",gh&&`<ul class="list">${gh}</ul>`)}${col("Hugging Face",hf&&`<ul class="list">${hf}</ul>`)}${col("Hacker News",hn&&`<ul class="list">${hn}</ul>`)}</div>`;setMeta("p-tech",d,3);},
   revenue(d){revenueDocs.revenue=d;renderRevenue();},
-  weather(d){const hero=new Set(["台北","台中"]);const rows=(d.items||[]).map(c=>{const f=(c.forecast||[])[0]||{},f2=(c.forecast||[])[1]||{};const t=n(c.temp);const bad=n(c.rain1h)>0||n(f.pop)>=60;
-      return`<tr class="${hero.has(c.city)?"hero":""}"><td class="name">${esc(c.city)}<span class="sub">${esc((c.obsTime||"").slice(11,16))}${c.station&&c.station!==c.city?" · "+esc(c.station):""}</span></td><td class="r num" style="font-size:14px">${isFinite(t)?fmt(t,1)+"°":"—"}</td><td>${esc(c.weather||"")}</td><td class="r num">${isFinite(n(c.rh))?fmt(n(c.rh),0)+"%":"—"}</td><td class="r num ${n(c.rain1h)>0?"bad":""}">${isFinite(n(c.rain1h))?fmt(n(c.rain1h),1):"—"}</td><td class="r num ${n(c.rain24h)>=30?"bad":""}">${isFinite(n(c.rain24h))?fmt(n(c.rain24h),0):"—"}</td><td><span class="${bad?"bad":""}">${esc(f.wx||"")}</span><span class="sub"> ${esc(f.minT||"")}–${esc(f.maxT||"")}° · ${esc(f.pop||"")}%${f2.pop?" → "+esc(f2.pop)+"%":""}</span></td></tr>`;}).join("");
+  weather(d){const hero=new Set(["台北","台中"]);const cards=(d.items||[]).map(c=>{const f=(c.forecast||[])[0]||{},f2=(c.forecast||[])[1]||{};const t=n(c.temp);const wet=n(c.rain1h)>0||n(f.pop)>=60;
+      return`<div class="c ${hero.has(c.city)?"hero":""}"><div class="city"><span>${esc(c.city)}${c.station&&c.station!==c.city&&!/^臺/.test(c.station)?`<span class="sub" style="font-weight:400"> ${esc(c.station)}</span>`:""}</span><span class="sub">${esc((c.obsTime||"").slice(11,16))}</span></div>
+      <div class="t">${isFinite(t)?fmt(t,1)+"°":"—"}<small>${esc(c.weather||"")}</small></div>
+      <div class="row"><span>濕 ${isFinite(n(c.rh))?fmt(n(c.rh),0)+"%":"—"}</span><span class="${n(c.rain1h)>0?"bad":""}">雨 ${isFinite(n(c.rain1h))?fmt(n(c.rain1h),1):"—"}</span><span class="${n(c.rain24h)>=30?"bad":""}">24h ${isFinite(n(c.rain24h))?fmt(n(c.rain24h),0):"—"}</span></div>
+      <div class="fc1 ${wet?"bad":""}">${esc(f.wx||"")} ${esc(f.minT||"")}–${esc(f.maxT||"")}° · 降雨 ${esc(f.pop||"")}%${f2.pop!=null?" → "+esc(f2.pop)+"%":""}</div></div>`;}).join("");
     const w=(d.warnings||[]).length?`<div class="warn">特報：${d.warnings.map(x=>esc(x.where+" "+x.what+(x.level?"("+x.level+")":""))).join("、")}</div>`:"";
-    body("p-weather").innerHTML=`${w}<table class="wxt"><tr><th>縣市</th><th class="r">氣溫</th><th>天氣</th><th class="r">濕度</th><th class="r">雨 1h</th><th class="r">24h</th><th>預報 · 降雨</th></tr>${rows}</table>`;setMeta("p-weather",d,1);},
+    body("p-weather").innerHTML=`${w}<div class="wx wx3">${cards}</div>`;setMeta("p-weather",d,1);},
   tw_pulse(d){const bikes=(d.bikes||[]).map(b=>`<tr><td class="name">${esc(b.city)}<span class="sub">${b.stations} 站</span>${mini(b.spark)}</td><td class="r num${K("yb:"+b.city,n(b.rent))}">${fmt(n(b.rent),0)}</td><td class="r num ${b.empty>b.stations*0.15?"bad":""}">${b.empty}</td><td class="r num">${b.full}</td><td class="r num ${b.park_pct!=null?(n(b.park_pct)<10?"bad":n(b.park_pct)>=30?"up":""):""}">${b.park_pct!=null?fmt(n(b.park_pct),0)+"%":"—"}</td></tr>`).join("");
     const roads=(d.roads||[]).map(r=>`<tr><td class="name">${esc(r.road)} ${esc(r.dir)}向${mini(r.spark)}</td><td class="r num ${n(r.speed)<60?"bad":n(r.speed)>=80?"up":""}${K("fw:"+r.road+r.dir,n(r.speed))}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td></tr>`).join("");
     const jams=(d.jams||[]).map(j=>`<li><span class="t">${esc(j.section)}</span><span class="m bad">${fmt(n(j.speed),0)} km/h</span></li>`).join("");
