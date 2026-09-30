@@ -6,16 +6,12 @@
  "totals": {
   "parking": 1992,
   "bikes": 9922,
-  "speed": 947
+  "speed": 937
  },
  "errs": [
-  "parking HsinchuCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/HsinchuCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "bikes Taichung: RuntimeError: 429 on Bike/Availability/City/Taichung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking YunlinCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/YunlinCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "bikes ChiayiCounty: RuntimeError: 429 on Bike/Availability/City/ChiayiCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "bikes Kaohsiung: RuntimeError: 429 on Bike/Availability/City/Kaohsiung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking HualienCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/HualienCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking KinmenCounty: ReadTimeout: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Read timed out. (read timeout=25)"
+  "bikes NewTaipei: RuntimeError: 429 on Bike/Availability/City/NewTaipei body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "bikes Hsinchu: RuntimeError: 429 on Bike/Availability/City/Hsinchu body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "parking Taichung: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Taichung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
  ],
- "updatedAt": "2026-09-30T05:37:34Z"
+ "updatedAt": "2026-09-30T05:48:41Z"
 }
