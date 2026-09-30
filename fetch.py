@@ -115,7 +115,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "threads": 120, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "threads": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -2276,6 +2276,65 @@ def _threads_public(q, recent=False, limit=25):
     return posts[:limit]
 
 
+def _threads_walk(o, posts, seen):
+    if isinstance(o, dict):
+        cap = o.get("caption")
+        if isinstance(o.get("code"), str) and isinstance(cap, dict) and cap.get("text"):
+            if o["code"] not in seen:
+                seen.add(o["code"])
+                user = (o.get("user") or {}).get("username") or ""
+                posts.append({"text": re.sub(r"\s+", " ", cap["text"])[:140], "user": user, "url": f"https://www.threads.com/@{user}/post/{o['code']}",
+                              "at": datetime.fromtimestamp(int(o["taken_at"]), timezone.utc).isoformat().replace("+00:00", "Z") if o.get("taken_at") else "",
+                              "likes": o.get("like_count"), "replies": o.get("direct_reply_count"), "reposts": o.get("repost_count")})
+        for v in o.values():
+            _threads_walk(v, posts, seen)
+    elif isinstance(o, list):
+        for v in o:
+            _threads_walk(v, posts, seen)
+
+
+def _threads_public_pw(keywords, errs):
+    """伺服器端不再內嵌搜尋結果：用 Playwright 開公開搜尋頁，攔截前端打的 GraphQL 回應取貼文。回 {kw: posts}。"""
+    from playwright.sync_api import sync_playwright
+    out = {}
+    with sync_playwright() as pw:
+        b = pw.chromium.launch()
+        ctx = b.new_context(user_agent=UA, locale="zh-TW", viewport={"width": 1280, "height": 900})
+        pg = ctx.new_page()
+        bodies = []
+
+        def on_resp(resp):
+            try:
+                if "graphql" in resp.url and resp.status == 200:
+                    t = resp.text()
+                    if "caption" in t and "taken_at" in t:
+                        bodies.append(t)
+            except Exception:  # noqa: BLE001
+                pass
+        pg.on("response", on_resp)
+        for kw in keywords:
+            bodies.clear()
+            posts, seen = [], set()
+            try:
+                pg.goto(f"https://www.threads.com/search?q={requests.utils.quote(kw)}&serp_type=recent", wait_until="domcontentloaded", timeout=30000)
+                pg.wait_for_timeout(4500)
+                for t in bodies:
+                    try:
+                        _threads_walk(json.loads(t), posts, seen)
+                    except Exception:  # noqa: BLE001
+                        continue
+                if not posts:
+                    title = pg.title()
+                    url = pg.url
+                    errs.append(f"{kw}: pw 0 posts graphql={len(bodies)} title={title[:30]} url={url[:60]}")
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{kw}: pw {safe_err(e)[:80]}")
+            posts.sort(key=lambda x: x.get("at") or "", reverse=True)
+            out[kw] = posts
+        b.close()
+    return out
+
+
 def _threads_seeds():
     hot = ((load_prev("news") or {}).get("signals") or {}).get("hot") or []
     seeds = []
@@ -2325,25 +2384,29 @@ def p_threads():
     except Exception as e:  # noqa: BLE001
         errs.append("views: " + safe_err(e))
     cut24 = (NOW - timedelta(hours=24)).isoformat().replace("+00:00", "Z")
-    blocked = 0
-    for seed in _threads_seeds():
-        rec = {**seed, "top": [], "recent": [], "n_recent_24h": 0, "n_recent": 0}
-        for st in ("top", "recent"):
-            if blocked >= 3:  # 連續被擋就別再打，避免整個 IP 被列黑
-                break
-            try:
-                posts = _threads_public(seed["kw"], recent=(st == "recent"))
-                if st == "top":
-                    rec["top"] = sorted(posts, key=lambda x: -(x.get("likes") or 0))[:3]
-                else:
-                    rec["recent"] = posts[:3]; rec["n_recent"] = len(posts)
-                    rec["n_recent_24h"] = sum(1 for p_ in posts if p_["at"] and p_["at"] >= cut24)
-                blocked = 0
-            except Exception as e:  # noqa: BLE001
-                blocked += 1
-                errs.append(f"{seed['kw']}/{st}: {safe_err(e)}")
-            time.sleep(1.2)
-        out["keywords"].append(rec)
+    seeds = _threads_seeds()
+    got = {}
+    try:  # 先試輕量版（連結預覽 UA 抓內嵌 JSON），全空再用 Playwright 攔 GraphQL
+        first = _threads_public(seeds[0]["kw"], recent=True)
+        if first:
+            got[seeds[0]["kw"]] = first
+            for sd in seeds[1:]:
+                try:
+                    got[sd["kw"]] = _threads_public(sd["kw"], recent=True)
+                except Exception as e:  # noqa: BLE001
+                    errs.append(f"{sd['kw']}: {safe_err(e)[:80]}")
+                time.sleep(1.2)
+    except Exception as e:  # noqa: BLE001
+        errs.append("lite: " + safe_err(e)[:100])
+    if not any(got.values()):
+        try:
+            got = _threads_public_pw([sd["kw"] for sd in seeds], errs)
+        except Exception as e:  # noqa: BLE001
+            errs.append("pw: " + safe_err(e)[:100])
+    for sd in seeds:
+        posts = got.get(sd["kw"]) or []
+        out["keywords"].append({**sd, "top": sorted(posts, key=lambda x: -(x.get("likes") or 0))[:3], "recent": posts[:3], "n_recent": len(posts),
+                                "n_recent_24h": sum(1 for p_ in posts if p_["at"] and p_["at"] >= cut24)})
     out["public_ok"] = any(k["top"] or k["recent"] for k in out["keywords"])
     if out["me"] is None and not out["public_ok"]:
         raise RuntimeError(f"threads: nothing {errs[:3]}")
