@@ -117,7 +117,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "cofacts": 90, "threads_g": 120, "mood": 120, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -2501,7 +2501,7 @@ def p_threads_g():
         t = h.get("term") or ""
         if re.search(r"[一-鿿]", t) and t not in THREADS_G_FIXED and t not in HOT_STOP_ZH and len(t) >= 2:
             seeds.append({"kw": t, "kind": "hot", "src": h.get("src")})
-        if len(seeds) >= 6:
+        if len(seeds) >= 4:  # grounding 每次要打 Gemini，關鍵字壓到 4 個省額度
             break
     for sd in seeds:
         if quota["used"] >= CSE_DAILY_CAP:
@@ -2528,7 +2528,7 @@ def p_threads_g():
                     out["keywords"].append({**sd, "n_24h": total, "posts": posts[:4], "via": "gemini:" + model})
                 except Exception as e2:  # noqa: BLE001
                     errs.append(f"{sd['kw']} grounding: {safe_err(e2)[:80]}")
-        time.sleep(0.5)
+        time.sleep(8)  # 免費層每分鐘請求數很低，慢慢打
     write_json(CSE_QUOTA_PATH, quota)
     out["quota"] = {"used": quota["used"], "cap": CSE_DAILY_CAP, "date": quota["date"]}
     if not any(k.get("posts") for k in out["keywords"]):
@@ -2568,8 +2568,15 @@ def _gemini_json(prompt, schema_hint=None, tools=None):
     for model in (_gemini_models() or GEMINI_MODELS):
         try:
             r = _gemini_call(prompt, model, tools=tools)
-            if r.status_code in (404, 429, 503):  # 沒這個模型／額度滿／過載 → 換下一個
-                last = RuntimeError(f"{model} {r.status_code}"); time.sleep(2); continue
+            if r.status_code in (429, 503):  # 每分鐘額度或過載：等 20 秒再試同一個模型一次
+                time.sleep(20)
+                r = _gemini_call(prompt, model, tools=tools)
+            if r.status_code in (404, 429, 503):  # 還是不行 → 換下一個模型
+                try:
+                    msg = (r.json().get("error") or {}).get("message", "")[:90]
+                except ValueError:
+                    msg = ""
+                last = RuntimeError(f"{model} {r.status_code} {msg}"); continue
             if r.status_code >= 400:
                 raise RuntimeError(f"gemini {r.status_code} {r.text[:120]}")
             js = r.json()
@@ -3524,7 +3531,7 @@ run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("social", p_social, keep_if_fresh_hours=0.5)
 run("cofacts", p_cofacts, keep_if_fresh_hours=0.5)
-run("threads_g", p_threads_g, keep_if_fresh_hours=2)
+run("threads_g", p_threads_g, keep_if_fresh_hours=3)
 run("mood", p_mood, keep_if_fresh_hours=1)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("design", p_design, keep_if_fresh_hours=1)
