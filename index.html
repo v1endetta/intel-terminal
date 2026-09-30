@@ -411,9 +411,9 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
   </section>
 
   <section class="panel cap" id="p-ptt">
-    <div class="ph"><h2>PTT</h2><span class="zh">台灣社群熱文</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>PTT</h2><span class="zh">台灣大眾情緒 · 看板熱度與推噓</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>八卦 · 省錢 · 網購 · 美妝 · 美容 · 科技業 · 房產 · 電影</span></div>
+    <div class="pf"><span>12 板各最新兩頁 · 熱度＝推文加總 · 情緒＝正推文占比減噓文占比（-1～1）· 爆卦＝八卦板最早的突發訊號 · 標題進熱詞引擎</span></div>
   </section>
 
   <div class="sec">台灣現場 Taiwan Live</div>
@@ -624,8 +624,11 @@ const renderers={
     const rates=`<div class="c"><div class="l">SOFR − IORB</div><div class="v">${dot}<span class="${K("liq:spread",sp)}">${isFinite(sp)?(sp>0?"+":"")+sp.toFixed(2)+"%":"—"}</span></div><div class="p">SOFR ${r.SOFR?fmt(n(r.SOFR.value),2)+"%":"—"} · EFFR ${r.EFFR?fmt(n(r.EFFR.value),2)+"%":"—"} · IORB ${r.IORB?fmt(n(r.IORB.value),2)+"%":"—"}</div></div>`;
     const srf=d.srf&&n(d.srf.value)>0?`<div class="c"><div class="l">SRF 常備回購用量</div><div class="v bad">${b(d.srf.value)}</div><div class="p">${esc(d.srf.date||"")} · 有人在借＝有人缺錢</div></div>`:"";
     body("p-liq").innerHTML=`${net}<div class="macro">${rates}${card("ON RRP 逆回購",d.rrp,"停在聯準會的閒錢")}${card("銀行準備金",d.reserves,"")}${card("財政部 TGA",d.tga,"")}${card("聯準會總資產",d.walcl,"")}${srf}</div>${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,160))}</div>`:""}`;setMeta("p-liq",d,30);},
-  ptt(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.board.slice(0,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"bad":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
-    body("p-ptt").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"這輪沒抓到")}</div>`;setMeta("p-ptt",d,2);},
+  ptt(d){const BN={};(d.boards||[]).forEach(b=>BN[b.board]=b.zh);
+    const li=(d.items||[]).map(it=>`<li><span class="src">${esc(BN[it.board]||it.board.slice(0,6))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m ${it.push>=100?"bad":""}">${it.push>=100?"爆":it.push}</span></li>`).join("");
+    const bd=(d.boards||[]).map(b=>`<tr><td class="name">${esc(b.zh)}<span class="sub">${esc(b.facet)} · 今日 ${b.today} 篇</span>${mini(b.spark)}</td><td class="r num">${fmt(n(b.heat),0)}</td><td class="r num ${b.boom?"bad":""}">${b.boom||"—"}</td><td class="r num ${b.boo>=3?"bad":""}">${b.boo||"—"}</td><td class="r num ${n(b.mood)>=0.5?"up":n(b.mood)<0.2?"bad":""}">${fmt(n(b.mood),2)}</td></tr>`).join("");
+    const brk=(d.breaking||[]).map(it=>`<li><span class="src" style="color:var(--warn)">爆卦</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title.replace(/^\[爆卦\]\s*/,""))}</a></span><span class="m bad">${it.push>=100?"爆":it.push}</span></li>`).join("");
+    body("p-ptt").innerHTML=`${bd?`<table><tr><th>看板</th><th class="r">熱度</th><th class="r">爆</th><th class="r">噓</th><th class="r">情緒</th></tr>${bd}</table>`:""}${brk?`<h3 style="margin-top:8px">爆卦</h3><ul class="list">${brk}</ul>`:""}<h3 style="margin-top:8px">熱文 ${esc(d.label||"")}</h3>${li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"這輪沒抓到")}</div>`}`;setMeta("p-ptt",d,2);},
   tiktok(d){if(!document.getElementById("p-tiktok"))return;const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${it.rank||i+1}</span><span class="t">#${esc(it.tag)}</span><span class="m">${it.views?compact(n(it.views))+" 次":""}${it.trend?` <span class="${n(it.trend)>0?"up":"down"}">${sgn(n(it.trend),0)}</span>`:""}</span></li>`).join("");
     body("p-tiktok").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">抓不到</div>`;setMeta("p-tiktok",d,30);},
   fx(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num${K("fx:"+it.code,n(it.buy??it.mid))}">${fmt(n(it.buy??it.mid),it.code==="JPY"?4:3)}</td><td class="r num">${it.sell!=null?fmt(n(it.sell),it.code==="JPY"?4:3):""}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td></tr>`).join("");

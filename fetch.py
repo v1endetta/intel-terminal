@@ -1175,7 +1175,37 @@ def p_tw_pulse():
 
 
 # ---------- 第二階段：PTT（curl_cffi 模擬瀏覽器） ----------
-PTT_BOARDS = ["Gossiping", "Lifeismoney", "e-shopping", "MakeUp", "BeautySalon", "Tech_Job", "home-sale", "movie"]
+PTT_BOARDS = [  # (板, 中文, 情緒面向)
+    ("Gossiping", "八卦", "大眾"), ("HatePolitics", "政黑", "政治"), ("Stock", "股板", "市場"), ("WomenTalk", "女板", "生活"),
+    ("Lifeismoney", "省錢", "消費"), ("home-sale", "房產", "消費"), ("car", "汽車", "消費"), ("e-shopping", "網購", "消費"),
+    ("Tech_Job", "科技業", "職場"), ("MakeUp", "美妝", "消費"), ("BeautySalon", "美容", "消費"), ("movie", "電影", "文化"),
+]
+PTT_PAGES = 2  # 每板抓最新兩頁（約 40 篇），才有足夠樣本算情緒
+
+
+def _ptt_page(sess, board, idx=None):
+    url = f"https://www.ptt.cc/bbs/{board}/index{'' if idx is None else idx}.html"
+    html = sess.get(url, timeout=20).text
+    if "r-ent" not in html:
+        raise RuntimeError("blocked or empty")
+    prev = re.search(r'href="/bbs/' + re.escape(board) + r'/index(\d+)\.html">&lsaquo; 上頁', html)
+    rows = []
+    for ent in html.split('<div class="r-ent">')[1:]:  # 用切割而不是 regex 配對，meta 裡的巢狀 div 才不會截斷日期
+        ent = ent.split('<div class="r-list-sep">')[0]
+        nrec = re.search(r'<div class="nrec">(?:<span class="hl f\d">)?([^<]*)', ent)
+        t = re.search(r'<div class="title">\s*<a href="([^"]+)">([^<]+)</a>', ent)
+        d = re.search(r'<div class="date">\s*([^<]+)</div>', ent)
+        if not t:
+            continue
+        push_raw = (nrec.group(1) if nrec else "").strip()
+        if push_raw == "爆":
+            push = 100
+        elif push_raw.startswith("X"):
+            push = -10 if push_raw == "XX" else -int(num(push_raw[1:]) or 1)
+        else:
+            push = int(num(push_raw) or 0)
+        rows.append({"board": board, "title": t.group(2).strip(), "push": push, "url": "https://www.ptt.cc" + t.group(1), "date": (d.group(1) if d else "").strip()})
+    return rows, (int(prev.group(1)) if prev else None)
 
 
 def p_ptt():
@@ -1185,29 +1215,42 @@ def p_ptt():
         raise RuntimeError("curl_cffi not installed")
     sess = cffi.Session(impersonate="chrome")
     sess.cookies.set("over18", "1", domain="www.ptt.cc")
-    items = []
-    for board in PTT_BOARDS:
+    items, boards = [], []
+    today_md = NOW.astimezone(TPE).strftime("%m/%d").lstrip("0").replace("/0", "/")
+    for board, zh, facet in PTT_BOARDS:
+        rows = []
         try:
-            html = sess.get(f"https://www.ptt.cc/bbs/{board}/index.html", timeout=20).text
-            if "r-ent" not in html:
-                raise RuntimeError("blocked or empty")
-            for ent in re.findall(r'<div class="r-ent">(.*?)</div>\s*</div>', html, re.S):
-                nrec = re.search(r'<div class="nrec">(?:<span class="hl f\d">)?([^<]*)', ent)
-                t = re.search(r'<div class="title">\s*<a href="([^"]+)">([^<]+)</a>', ent)
-                if not t:
-                    continue
-                push_raw = (nrec.group(1) if nrec else "").strip()
-                push = 100 if push_raw == "爆" else (num(push_raw) or 0) if not push_raw.startswith("X") else 0
-                title = t.group(2).strip()
-                if push >= 30 and not title.startswith("[公告]"):
-                    items.append({"board": board, "title": title, "push": int(push), "url": "https://www.ptt.cc" + t.group(1)})
-            time.sleep(0.6)
+            page, prev_idx = _ptt_page(sess, board)
+            rows += page
+            for _ in range(PTT_PAGES - 1):
+                if prev_idx is None:
+                    break
+                time.sleep(0.5)
+                page, prev_idx = _ptt_page(sess, board, prev_idx)
+                rows += page
+            time.sleep(0.5)
         except Exception as e:  # noqa: BLE001
-            log("ptt", board, e)
-    if not items:
+            log("ptt", board, e); continue
+        rows = [r for r in rows if not r["title"].startswith(("[公告]", "Fw: [公告]"))]
+        if not rows:
+            continue
+        pushes = [r["push"] for r in rows]
+        hot = [r for r in rows if r["push"] >= 30]
+        boom = sum(1 for r in rows if r["push"] >= 100); boo = sum(1 for r in rows if r["push"] < 0)
+        heat = sum(max(x, 0) for x in pushes)
+        today = sum(1 for r in rows if r["date"].strip() == today_md)
+        # 情緒：正推比例（>0 的文章占比）減噓文占比 → -1..1；每輪存歷史畫小圖
+        mood = round((sum(1 for x in pushes if x > 0) - boo) / len(pushes), 2)
+        hist_put("ptt", board, NOW_ISO[:13], heat)  # 每小時一點
+        boards.append({"board": board, "zh": zh, "facet": facet, "n": len(rows), "today": today, "heat": heat, "boom": boom, "boo": boo, "mood": mood,
+                       "spark": hist_get("ptt", board, 48), "top": sorted(hot, key=lambda r: -r["push"])[:3]})
+        items += hot
+    if not items and not boards:
         raise RuntimeError("ptt: nothing fetched (blocked?)")
     items.sort(key=lambda x: -x["push"])
-    return {"label": "推文 ≥30", "items": items[:20]}
+    # 爆卦／新聞標籤：八卦板的 [爆卦] 是最早的突發訊號
+    breaking = [r for r in items if r["title"].startswith("[爆卦]")][:5]
+    return {"label": "推文 ≥30", "items": items[:24], "boards": boards, "breaking": breaking}
 
 
 # ---------- 第二階段：TikTok TW 熱門 hashtag（Playwright 渲染，每日一次，可能失敗） ----------
@@ -2203,6 +2246,8 @@ def _hot_terms(news):
     pool = list(news.get("tw") or []) + list(news.get("intl") or []) + list(HOT_POOL)
     for pid in ("aiwire", "design"):
         pool += (load_prev(pid) or {}).get("items") or []
+    for r in ((load_prev("ptt") or {}).get("items") or [])[:40]:
+        pool.append({"title": r.get("title"), "source": "PTT", "url": r.get("url"), "at": NOW_ISO})
     dp = load_prev("devpulse") or {}
     for f in (dp.get("forums") or []) + (dp.get("changelogs") or []):
         pool.append({"title": f.get("title"), "source": f.get("source"), "url": f.get("url"), "at": f.get("at") or NOW_ISO})
