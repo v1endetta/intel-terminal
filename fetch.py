@@ -1896,7 +1896,7 @@ DEV_FORUMS = [("https://community.openai.com", "OpenAI 論壇", "openai"), ("htt
 DEV_CHANGELOGS = [  # (url, source, vendor) — 頁面文字裡找「日期 + 下一行標題」
     ("https://platform.openai.com/docs/changelog", "OpenAI changelog", "openai"),
     ("https://docs.claude.com/en/release-notes/overview", "Claude release notes", "anthropic"),
-    ("https://ai.google.dev/gemini-api/docs/changelog", "Gemini changelog", "google"),
+    ("https://ai.google.dev/gemini-api/docs/changelog?hl=en", "Gemini changelog", "google"),
     ("https://api-docs.deepseek.com/updates", "DeepSeek updates", "deepseek"),
     ("https://docs.x.ai/docs/changelog", "xAI changelog", "xai"),
 ]
