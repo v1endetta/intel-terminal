@@ -2396,14 +2396,14 @@ COFACTS_TYPE = {"RUMOR": "含錯誤訊息", "NOT_RUMOR": "含正確訊息", "OPI
 
 
 def p_cofacts():
-    since = (NOW - timedelta(days=3)).isoformat()
+    since = (NOW - timedelta(days=7)).isoformat()
     q = """query($since: String!) {
-      hot: ListArticles(filter: {lastRequestedAt: {GTE: $since}}, orderBy: [{replyRequestCount: DESC}], first: 25) {
+      hot: ListArticles(filter: {createdAt: {GTE: $since}}, orderBy: [{replyRequestCount: DESC}], first: 25) {
         edges { node { id text replyRequestCount createdAt lastRequestedAt
-          articleReplies(status: NORMAL) { reply { type } } } } }
-      fresh: ListArticles(orderBy: [{createdAt: DESC}], first: 15) {
+          articleReplies(statuses: [NORMAL]) { reply { type } } } } }
+      fresh: ListArticles(orderBy: [{lastRequestedAt: DESC}], first: 15) {
         edges { node { id text replyRequestCount createdAt lastRequestedAt
-          articleReplies(status: NORMAL) { reply { type } } } } }
+          articleReplies(statuses: [NORMAL]) { reply { type } } } } }
     }"""
     r = S.post("https://api.cofacts.tw/graphql", json={"query": q, "variables": {"since": since}}, headers={"Accept": "application/json"}, timeout=TIMEOUT)
     r.raise_for_status()
@@ -2451,7 +2451,14 @@ def _cse_quota():
 
 
 def _cse(q, num=10, date_restrict="d1"):
-    js = gjson("https://www.googleapis.com/customsearch/v1", params={"key": CSE_KEY, "cx": CSE_CX, "q": q, "num": num, "dateRestrict": date_restrict, "sort": "date"})
+    r = S.get("https://www.googleapis.com/customsearch/v1", params={"key": CSE_KEY, "cx": CSE_CX, "q": q, "num": num, "dateRestrict": date_restrict, "sort": "date"}, timeout=TIMEOUT)
+    if r.status_code >= 400:
+        try:
+            msg = (r.json().get("error") or {}).get("message", "")
+        except ValueError:
+            msg = r.text[:100]
+        raise RuntimeError(f"cse {r.status_code}: {msg[:140]}")
+    js = r.json()
     out = []
     for it in js.get("items") or []:
         link = it.get("link") or ""
@@ -2504,9 +2511,22 @@ def p_threads_g():
 GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"]
 
 
+def _gemini_models():
+    """列出帳號可用的模型，挑 flash 系列最新版（模型名稱會隨時間退役，不寫死）。"""
+    try:
+        js = gjson("https://generativelanguage.googleapis.com/v1beta/models", params={"key": GEMINI_KEY, "pageSize": 100})
+        names = [m["name"].split("/", 1)[1] for m in js.get("models") or [] if "generateContent" in (m.get("supportedGenerationMethods") or [])]
+        flash = [n for n in names if "flash" in n and "image" not in n and "tts" not in n and "live" not in n and "audio" not in n and "exp" not in n]
+        # 版本號大的優先；lite 放後面
+        flash.sort(key=lambda n: (("lite" in n), -float(re.search(r"(\d+(?:\.\d+)?)", n).group(1)) if re.search(r"\d", n) else 0, n))
+        return flash[:4] or names[:3]
+    except Exception as e:  # noqa: BLE001
+        log("gemini models", e); return []
+
+
 def _gemini_json(prompt, schema_hint):
     last = None
-    for model in GEMINI_MODELS:
+    for model in (_gemini_models() or GEMINI_MODELS):
         try:
             r = S.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", params={"key": GEMINI_KEY},
                        json={"contents": [{"parts": [{"text": prompt}]}],
