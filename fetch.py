@@ -2056,60 +2056,6 @@ def _discourse_top(base, source, vendor, limit=5):
     return out
 
 
-def _page_text(url):
-    """先用 requests 拆 HTML 成文字；文字太短（SPA）就用 Playwright 渲染。"""
-    html = ""
-    try:
-        html = _html_get(url)
-    except Exception:  # noqa: BLE001
-        pass
-    txt = ""
-    if html:
-        body = re.sub(r"<(script|style|nav|header|footer)[^>]*>.*?</\1>", " ", html, flags=re.S | re.I)
-        txt = html_mod.unescape(re.sub(r"<[^>]+>", "\n", body))
-    if len(re.sub(r"\s", "", txt)) < 800:
-        from playwright.sync_api import sync_playwright
-        with sync_playwright() as pw:
-            b = pw.chromium.launch()
-            pg = b.new_page(user_agent=UA)
-            pg.goto(url, wait_until="networkidle", timeout=45000)
-            pg.wait_for_timeout(1500)
-            txt = pg.inner_text("body")
-            b.close()
-    return txt
-
-
-def _changelog(url, source, vendor, limit=4):
-    lines = [re.sub(r"\s+", " ", l).strip() for l in _page_text(url).splitlines()]
-    lines = [l for l in lines if l]
-    out = []
-
-    def heading_like(x):
-        return (12 <= len(x) <= 140 and not DATE_LINE.match(x) and not x.endswith((".", ",", ";", ":")) and not re.match(r"^[a-z,;.)]", x)
-                and not re.match(r"^(?:https?://|www\.)", x))
-
-    for i, l in enumerate(lines):
-        ms = DATE_START.match(l)
-        if ms and not DATE_LINE.match(l):  # 「2026-09-29 – DeepSeek V4 released」同一行就有標題
-            rest = ms.group(2).strip(" -–—:|·")
-            if len(rest) >= 12 and not any(o["title"] == rest for o in out):
-                d = _parse_date(ms.group(1))
-                out.append({"source": source, "vendor": vendor, "date": ms.group(1), "title": rest[:120], "url": url, "at": d.isoformat().replace("+00:00", "Z") if d else ""})
-            continue
-        if DATE_LINE.match(l):
-            # 標題：日期後 4 行內第一個像標題的（不是句尾殘段、不以小寫開頭），否則前一行
-            cands = [lines[j] for j in list(range(i + 1, min(i + 5, len(lines)))) + [i - 1] if 0 <= j < len(lines) and heading_like(lines[j])]
-            if not cands:
-                continue
-            title = cands[0]
-            if any(o["title"] == title for o in out):
-                continue
-            d = _parse_date(l)
-            out.append({"source": source, "vendor": vendor, "date": l, "title": title[:120], "url": url, "at": d.isoformat().replace("+00:00", "Z") if d else ""})
-    out.sort(key=lambda o: o.get("at") or "", reverse=True)  # 頁面可能先列棄用表，一律依日期新到舊
-    return out[:limit]
-
-
 CL_DIAG: list = []
 
 
