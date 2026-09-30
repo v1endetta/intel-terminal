@@ -2233,6 +2233,47 @@ def _threads_get(path, **params):
     return r.json()
 
 
+def _threads_public(q, recent=False, limit=25):
+    """threads.com 公開搜尋頁：用連結預覽爬蟲的 UA 拿伺服器端內嵌 JSON（非官方；Meta 改版就會斷）。"""
+    url = "https://www.threads.com/search"
+    params = {"q": q, "serp_type": "recent" if recent else "default"}
+    hdr = {"User-Agent": "facebookexternalhit/1.1", "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.8"}
+    r = requests.get(url, params=params, headers=hdr, timeout=TIMEOUT)
+    if r.status_code in (403, 429):
+        from curl_cffi import requests as cffi
+        r = cffi.get(url, params=params, headers=hdr, impersonate="chrome", timeout=25)
+    if r.status_code >= 400:
+        raise RuntimeError(f"threads public {r.status_code}")
+    html = r.text
+    posts, seen = [], set()
+
+    def walk(o):
+        if isinstance(o, dict):
+            cap = o.get("caption")
+            if isinstance(o.get("code"), str) and isinstance(cap, dict) and cap.get("text") and o.get("pk") and (o.get("taken_at") or o.get("like_count") is not None):
+                if o["code"] not in seen:
+                    seen.add(o["code"])
+                    user = (o.get("user") or {}).get("username") or ""
+                    posts.append({"text": re.sub(r"\s+", " ", cap["text"])[:140], "user": user, "url": f"https://www.threads.com/@{user}/post/{o['code']}",
+                                  "at": datetime.fromtimestamp(int(o["taken_at"]), timezone.utc).isoformat().replace("+00:00", "Z") if o.get("taken_at") else "",
+                                  "likes": o.get("like_count"), "replies": o.get("direct_reply_count"), "reposts": o.get("repost_count")})
+            for v in o.values():
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+
+    for m in re.finditer(r'<script type="application/json"[^>]*>(.*?)</script>', html, re.S):
+        try:
+            walk(json.loads(m.group(1)))
+        except Exception:  # noqa: BLE001
+            continue
+    if not posts and "login" in html[:3000].lower() and len(html) < 20000:
+        raise RuntimeError("threads public: 被導到登入頁（IP 可能被擋）")
+    posts.sort(key=lambda x: x.get("at") or "", reverse=True)
+    return posts[:limit]
+
+
 def _threads_seeds():
     hot = ((load_prev("news") or {}).get("signals") or {}).get("hot") or []
     seeds = []
@@ -2281,27 +2322,28 @@ def p_threads():
         out["insights"]["views_7d"] = sum(vals); out["insights"]["views_spark"] = vals[-7:]
     except Exception as e:  # noqa: BLE001
         errs.append("views: " + safe_err(e))
-    cut24 = (NOW - timedelta(hours=24)).timestamp()
+    cut24 = (NOW - timedelta(hours=24)).isoformat().replace("+00:00", "Z")
+    blocked = 0
     for seed in _threads_seeds():
-        rec = {**seed, "top": [], "recent": [], "n_recent_24h": 0}
-        for st in ("TOP", "RECENT"):
+        rec = {**seed, "top": [], "recent": [], "n_recent_24h": 0, "n_recent": 0}
+        for st in ("top", "recent"):
+            if blocked >= 3:  # 連續被擋就別再打，避免整個 IP 被列黑
+                break
             try:
-                j = _threads_get("keyword_search", q=seed["kw"], search_type=st, fields="id,text,username,permalink,timestamp")
-                posts = []
-                for d in j.get("data", []):
-                    ts = d.get("timestamp") or ""
-                    posts.append({"text": re.sub(r"\s+", " ", d.get("text") or "")[:140], "user": d.get("username"), "url": d.get("permalink"), "at": ts})
-                if st == "TOP":
-                    rec["top"] = posts[:3]
+                posts = _threads_public(seed["kw"], recent=(st == "recent"))
+                if st == "top":
+                    rec["top"] = sorted(posts, key=lambda x: -(x.get("likes") or 0))[:3]
                 else:
-                    rec["recent"] = posts[:3]
-                    rec["n_recent_24h"] = sum(1 for p_ in posts if p_["at"] and datetime.fromisoformat(p_["at"].replace("+0000", "+00:00")).timestamp() >= cut24)
-                    rec["n_recent"] = len(posts)
+                    rec["recent"] = posts[:3]; rec["n_recent"] = len(posts)
+                    rec["n_recent_24h"] = sum(1 for p_ in posts if p_["at"] and p_["at"] >= cut24)
+                blocked = 0
             except Exception as e:  # noqa: BLE001
+                blocked += 1
                 errs.append(f"{seed['kw']}/{st}: {safe_err(e)}")
-            time.sleep(0.4)
+            time.sleep(1.2)
         out["keywords"].append(rec)
-    if out["me"] is None and not any(k["top"] or k["recent"] for k in out["keywords"]):
+    out["public_ok"] = any(k["top"] or k["recent"] for k in out["keywords"])
+    if out["me"] is None and not out["public_ok"]:
         raise RuntimeError(f"threads: nothing {errs[:3]}")
     return {**out, "errs": errs[:8]}
 
