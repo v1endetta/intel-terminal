@@ -2260,11 +2260,28 @@ def _dcard_posts(rows):
     return out
 
 
+def _is_traditional(t):
+    """粗判繁體：轉成簡體後改變的字數比例；簡體或日文假名多的就不是台灣語境。"""
+    zh = re.findall(r"[\u4e00-\u9fff]", t)
+    if not zh:
+        return True
+    if re.search(r"[\u3040-\u30ff]", t):  # 平假名／片假名
+        return False
+    try:
+        from opencc import OpenCC
+        conv = OpenCC("t2s").convert(t)
+        changed = sum(1 for a, b in zip(t, conv) if a != b)
+        return changed / max(len(zh), 1) >= 0.05 or len(zh) < 6  # 繁→簡會變很多字；完全不變的多半是簡體原文
+    except Exception:  # noqa: BLE001
+        return True
+
+
 def _bsky_search(q, limit=25):
     j, last = None, None
+    is_zh = bool(re.search(r"[\u4e00-\u9fff]", q))
     for host in ("https://public.api.bsky.app", "https://api.bsky.app"):
         try:
-            r = requests.get(f"{host}/xrpc/app.bsky.feed.searchPosts", params={"q": q, "sort": "latest", "limit": limit},
+            r = requests.get(f"{host}/xrpc/app.bsky.feed.searchPosts", params={"q": q, "sort": "latest", "limit": limit, **({"lang": "zh"} if is_zh else {})},
                              headers={"Accept": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0 Safari/537.36"}, timeout=TIMEOUT)
             if r.status_code >= 400:
                 last = RuntimeError(f"bsky {r.status_code} {r.text[:100]!r}")
@@ -2279,7 +2296,10 @@ def _bsky_search(q, limit=25):
         rec = p_.get("record") or {}
         handle = (p_.get("author") or {}).get("handle") or ""
         rkey = (p_.get("uri") or "").rsplit("/", 1)[-1]
-        out.append({"src": "Bluesky", "text": re.sub(r"\s+", " ", rec.get("text") or "")[:140], "user": handle,
+        text = re.sub(r"\s+", " ", rec.get("text") or "")
+        if is_zh and not _is_traditional(text):
+            continue
+        out.append({"src": "Bluesky", "text": text[:140], "user": handle,
                     "url": f"https://bsky.app/profile/{handle}/post/{rkey}", "at": (rec.get("createdAt") or "")[:19] + ("Z" if rec.get("createdAt") else ""),
                     "likes": p_.get("likeCount"), "replies": p_.get("replyCount"), "reposts": p_.get("repostCount")})
     return out
@@ -2288,12 +2308,7 @@ def _bsky_search(q, limit=25):
 def p_social():
     errs, out = [], {"keywords": [], "dcard_popular": [], "sources": {"dcard": False, "bsky": False}}
     cut24 = (NOW - timedelta(hours=24)).isoformat().replace("+00:00", "Z")
-    try:
-        out["dcard_popular"] = _dcard_posts(_dcard_get("posts", popular="true", limit=30))[:10]
-        out["sources"]["dcard"] = bool(out["dcard_popular"])
-    except Exception as e:  # noqa: BLE001
-        errs.append("dcard 熱門: " + safe_err(e)[:80])
-    dcard_ok = out["sources"]["dcard"]
+    dcard_ok = False  # Dcard 走 Cloudflare 驗證，GitHub IP 被擋（403 challenge），先不抓
     for sd in _social_seeds():
         posts = []
         if dcard_ok:
