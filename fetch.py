@@ -2398,7 +2398,7 @@ def p_threads():
                 time.sleep(1.2)
     except Exception as e:  # noqa: BLE001
         errs.append("lite: " + safe_err(e)[:100])
-    if not any(got.values()):
+    if not any(got.values()) and os.environ.get("THREADS_PW") == "1":  # Playwright 路線目前也被登入牆擋住，先關，避免每輪白耗 60 秒
         try:
             got = _threads_public_pw([sd["kw"] for sd in seeds], errs)
         except Exception as e:  # noqa: BLE001
@@ -3322,7 +3322,7 @@ run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
-run("threads", p_threads, keep_if_fresh_hours=0.5)
+run("threads", p_threads, keep_if_fresh_hours=2)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
