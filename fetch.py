@@ -2543,8 +2543,8 @@ def p_liquidity():
         log("srf", e)
     try:
         walcl = ser("WALCL", 40, 0.001)        # 百萬→十億，週三
-        tga = ser("WTREGEN", 40)               # 十億，週三
-        res = ser("WRESBAL", 40)               # 十億，週三
+        tga = ser("WTREGEN", 40, 0.001)        # 百萬→十億，週三
+        res = ser("WRESBAL", 40, 0.001)        # 百萬→十億，週三
         out["walcl"] = {"value": walcl[-1][1], "date": walcl[-1][0], "spark": [v for _, v in walcl[-30:]]}
         out["tga"] = {"value": tga[-1][1], "date": tga[-1][0], "spark": [v for _, v in tga[-30:]]}
         out["reserves"] = {"value": res[-1][1], "date": res[-1][0], "spark": [v for _, v in res[-30:]]}
