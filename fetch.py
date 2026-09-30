@@ -2553,13 +2553,22 @@ def _gemini_models():
         log("gemini models", e); return []
 
 
-def _gemini_call(prompt, model, json_mode=True, tools=None, max_tokens=1200):
-    body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.2, "maxOutputTokens": max_tokens}}
+def _gemini_call(prompt, model, json_mode=True, tools=None, max_tokens=6000):
+    # maxOutputTokens 含「思考」token：預設思考會把輸出吃光而截斷 JSON，所以關掉思考、放大上限
+    body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.2, "maxOutputTokens": max_tokens, "thinkingConfig": {"thinkingBudget": 0}}}
     if json_mode and not tools:  # 開了搜尋工具就不能強制 JSON，改由 prompt 要求
         body["generationConfig"]["responseMimeType"] = "application/json"
     if tools:
         body["tools"] = tools
-    r = S.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent", params={"key": GEMINI_KEY}, json=body, timeout=90)
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+    r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=90)
+    if r.status_code == 400 and "thinking" in r.text.lower():  # 這個模型不接受 thinkingBudget（例如只支援 thinkingLevel）
+        body["generationConfig"].pop("thinkingConfig", None)
+        body["generationConfig"]["thinkingConfig"] = {"thinkingLevel": "LOW"}
+        r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=90)
+        if r.status_code == 400:
+            body["generationConfig"].pop("thinkingConfig", None)
+            r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=90)
     return r
 
 
