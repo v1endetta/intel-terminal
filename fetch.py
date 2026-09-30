@@ -2268,8 +2268,10 @@ def _threads_public(q, recent=False, limit=25):
             walk(json.loads(m.group(1)))
         except Exception:  # noqa: BLE001
             continue
-    if not posts and "login" in html[:3000].lower() and len(html) < 20000:
-        raise RuntimeError("threads public: 被導到登入頁（IP 可能被擋）")
+    if not posts:
+        blocks = re.findall(r'<script type="application/json"[^>]*>', html)
+        hints = [k for k in ("thread_items", "searchResults", "caption", "taken_at", "login", "Log in", "challenge") if k in html]
+        raise RuntimeError(f"threads public: 0 posts len={len(html)} json_blocks={len(blocks)} hints={hints} title={re.search(r'<title>(.*?)</title>', html, re.S).group(1)[:40] if re.search(r'<title>', html) else ''}")
     posts.sort(key=lambda x: x.get("at") or "", reverse=True)
     return posts[:limit]
 
