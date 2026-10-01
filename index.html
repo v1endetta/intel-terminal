@@ -399,6 +399,33 @@ svg.o-gauge{width:100%;max-width:200px;height:auto;display:block;margin:0 auto}
 .o-pm .fl{height:100%;width:100%;background:var(--blue);transform-origin:left;transform:scaleX(0);transition:transform .9s ease}
 canvas.o-fx{display:block;width:100%}
 
+
+/* 原面板專屬動態 */
+.o-flipv{animation:o-flipv .55s cubic-bezier(.3,1.3,.5,1) both;transform-origin:50% 60%}
+@keyframes o-flipv{0%{transform:rotateX(90deg);opacity:.2}100%{transform:none;opacity:1}}
+.o-ping{animation:o-ping 1.4s ease-out}
+@keyframes o-ping{0%{box-shadow:0 0 0 0 currentColor,0 0 0 3px rgba(255,255,255,.25)}100%{box-shadow:0 0 0 14px transparent}}
+.o-rk{display:inline-block;font:500 10px var(--mono);margin-right:6px;padding:0 3px;border-radius:2px;vertical-align:1px}
+.o-rk.up{color:var(--up)}.o-rk.dn{color:var(--down)}.o-rk.nw{color:var(--accent);border:1px solid var(--accent)}
+.list .o-new{font-family:var(--mono);font-size:9.5px;padding:0 4px;border:1px solid var(--accent);color:var(--accent);border-radius:2px;margin-right:5px}
+#p-cofacts .list li.o-in .src{display:inline-block;animation:o-stamp .5s cubic-bezier(.2,1.6,.4,1) both;animation-delay:.25s}
+#p-aiwire .list li.o-in .vd,#p-devpulse .list li.o-in .vd{animation:o-vdglow 1.8s ease-out}
+@keyframes o-vdglow{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}100%{box-shadow:0 0 0 8px transparent}}
+#p-radar td.name .kw{animation:o-breathe 2.6s ease-in-out infinite}
+@keyframes o-breathe{50%{opacity:.45}}
+.o-calfuse{display:grid;gap:5px;padding:2px 0 8px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.o-calfuse .r{display:flex;justify-content:space-between;gap:10px;font-size:12px}
+.o-calfuse .lb{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+#pm-wave{margin-bottom:6px}
+.list li.o-boom{background:linear-gradient(90deg,color-mix(in srgb,var(--warn) 10%,transparent),transparent 60%)}
+.o-ripple{position:relative;display:inline-block;width:8px;height:8px;margin-right:6px;vertical-align:0;border-radius:50%;background:var(--warn)}
+.o-ripple::before,.o-ripple::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid var(--warn);animation:o-rip 2.4s ease-out infinite}
+.o-ripple::after{animation-delay:1.2s}
+@keyframes o-rip{0%{transform:scale(1);opacity:.8}100%{transform:scale(3.4);opacity:0}}
+.o-tdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:0}
+.wx .c.o-rain{position:relative;overflow:hidden}
+.wx .c.o-rain::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(105deg,transparent 0 10px,rgba(124,143,242,.16) 10px 11px,transparent 11px 22px);background-size:200% 200%;animation:o-rainmove 1.2s linear infinite}
+@keyframes o-rainmove{from{background-position:0 0}to{background-position:-22px 44px}}
 /* motion off：手動關閉或系統偏好減少動態 */
 .still *,.still *::before,.still *::after{animation:none!important;transition:none!important}
 .still .tape{overflow-x:auto}
@@ -1039,7 +1066,7 @@ function go(k,scroll){cur=k;document.body.dataset.tab=k;
   if(moving()){const els=Object.entries(TAB_OF).filter(([,t])=>t===k).map(([id])=>document.getElementById(id)).filter(Boolean);
     const kids=k==="overview"?[...(($("#ov")||{}).children||[])]:els;kids.forEach((c,i)=>{c.classList.remove("o-enter");void c.offsetWidth;c.style.animationDelay=Math.min(i,12)*35+"ms";c.classList.add("o-enter");});}
   if(k==="live"&&typeof map!=="undefined"&&map)setTimeout(()=>map.resize(),30);
-  if(k==="overview"&&lastP){startLoops();}else stopLoops();
+  if((k==="overview"||k==="social")&&lastP){startLoops();}else stopLoops();
   if(scroll)scrollTo({top:Math.min(scrollY,$(".mast").offsetTop),behavior:moving()?"smooth":"auto"});}
 tabsEl.addEventListener("click",e=>{const t=e.target.closest(".tab");if(t)go(t.dataset.k,true);});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-go]");if(a){e.preventDefault();go(a.dataset.go,true);}});
@@ -1169,7 +1196,7 @@ function macro(){const R=[...S.rates];if(S.sofr)R.splice(2,0,["SOFR",n(S.sofr.va
   E("ov-cal").innerHTML=S.cal.filter(c=>evtTime(c)>now-6*3600e3).slice(0,5).map(c=>{const t=evtTime(c),d=new Date(t+8*3600e3),isN=nx&&t===nx.t;
     return`<div class="r ${isN?"now":""}"><span class="wn">${d.getUTCMonth()+1}/${d.getUTCDate()}${EVT[c.label]?" "+EVT[c.label]:""}</span><span class="lb"><span class="o-rg">${esc(c.region||"")}</span>${esc(c.label.replace("（主計總處）",""))}</span><span class="num ${isN?"o-w":"flat"}" ${isN?'id="ov-cdn"':""}>${isN?nx.cd:c.kind==="holiday"?"休市":Math.max(0,Math.ceil((t-now)/864e5))+" 天"}</span>${isN?`<div class="o-fuse"><i id="ov-fuse"></i></div>`:""}</div>`;}).join("")||'<div class="o-sub">近期沒有排定的數據</div>';
   updFuse();}
-function updFuse(){if(!S||cur!=="overview")return;const nx=nextEvt();if(!nx)return;const f=E("ov-fuse");if(f)f.style.transform=`scaleX(${Math.min(1,nx.s/86400)})`;const c=E("ov-cdn");if(c)c.textContent=nx.cd;}
+function updFuse(){if(!S)return;const nx=nextEvt();if(!nx)return;{const f=E("pc-fuse");if(f)f.style.transform=`scaleX(${Math.min(1,nx.s/86400)})`;const c=E("pc-cdn");if(c)c.textContent=nx.cd;}if(cur!=="overview")return;const f=E("ov-fuse");if(f)f.style.transform=`scaleX(${Math.min(1,nx.s/86400)})`;const c=E("ov-cdn");if(c)c.textContent=nx.cd;}
 function risk(){const vx=S.fear.find(i=>i.sym==="^VIX");if(vx){const v=n(vx.value),nd=E("ov-needle"),a=(Math.min(Math.max(v,10),40)-10)/30*180-90;
     if(prev.needle==null&&moving()){nd.style.transition="none";nd.style.transform="rotate(-90deg)";void nd.getBoundingClientRect();nd.style.transition="";}
     requestAnimationFrame(()=>requestAnimationFrame(()=>nd.style.transform=`rotate(${a}deg)`));prev.needle=a;E("ov-vixv").textContent=v.toFixed(1);}
@@ -1221,10 +1248,10 @@ let raf=null,last=0,CV=new WeakMap();
 function size(c){const dpr=Math.min(devicePixelRatio||1,2),w=Math.round(c.clientWidth),h=+(c.dataset.h||(c.dataset.h=c.getAttribute("height")));if(!w)return;c.style.height=h+"px";const PW=Math.round(w*dpr),PH=Math.round(h*dpr);if(c.width!==PW)c.width=PW;if(c.height!==PH)c.height=PH;const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);CV.set(c,{x,w,h});}
 const ro=new ResizeObserver(es=>{let ch=false;es.forEach(e=>{const s=CV.get(e.target);if(!s||Math.round(e.target.clientWidth)!==s.w){size(e.target);ch=true;}});if(ch&&!raf&&cur==="overview"&&S)drawAll(0);});
 function fit(c){let s=CV.get(c);if(!s){size(c);ro.observe(c);s=CV.get(c);if(!s)return[null,0,0];}s.x.clearRect(0,0,s.w,s.h);return[s.x,s.w,s.h];}
-function drawAll(t){try{drawWave(t);drawRadar(t);drawMap(t);}catch(e){console.warn("ov canvas",e);}}
+function drawAll(t){try{if(cur==="overview"){drawWave(t,"ov-wave");drawRadar(t);drawMap(t);}if(cur==="social")drawWave(t,"pm-wave");}catch(e){console.warn("ov canvas",e);}}
 function startLoops(){stopLoops();if(!S)return;drawAll(performance.now());if(!moving())return;const step=t=>{raf=requestAnimationFrame(step);if(document.hidden||t-last<30)return;last=t;drawAll(t);};raf=requestAnimationFrame(step);}
 function stopLoops(){if(raf)cancelAnimationFrame(raf);raf=null;}
-function drawWave(t){const c=E("ov-wave");if(!c)return;const[x,w,h]=fit(c);if(!w)return;const m=S.mood;
+function drawWave(t,id="ov-wave"){const c=E(id);if(!c)return;const[x,w,h]=fit(c);if(!w)return;const m=S.mood;
   [[m.taiwan,"#E0A23A",h*.33,"台灣"],[m.overseas,"#F0524F",h*.72,"國外"]].forEach(([o,col,y0,lab],j)=>{if(!o||o.score==null)return;const s=n(o.score);
     x.strokeStyle="#242935";x.lineWidth=1;x.beginPath();x.moveTo(0,y0);x.lineTo(w,y0);x.stroke();
     const amp=5+Math.abs(s)*30,ch=Math.abs(s)*2.2;x.beginPath();x.lineWidth=1.5;x.strokeStyle=col;
@@ -1320,33 +1347,103 @@ setInterval(()=>{if(!document.hidden)drawSky();},10000);
 addEventListener("resize",skyMaybe);
 function ring(){const per=(inSession()?5:15)*60e3;const f=nextAt?Math.max(0,Math.min(1,(nextAt-Date.now())/per)):0;$("#ringfg").setAttribute("stroke-dashoffset",(69.1*(1-f)).toFixed(1));}
 
+/* ---------- 原面板的專屬動態 ---------- */
+const FX=(()=>{
+  let rows={},bars={},cards={},prevEqP={};
+  const pbText=p=>{const pb=p.querySelector(".pb");if(!pb)return"";let s="";pb.childNodes.forEach(nd=>{if(!(nd.classList&&nd.classList.contains("o-ins")))s+=nd.textContent;});return s;};
+  const rowKey=r=>{const el=r.querySelector(".t a")||r.querySelector("td.name")||r.querySelector(".t");if(!el)return null;return((el.childNodes[0]&&el.childNodes[0].textContent)||el.textContent).trim().slice(0,48)||null;};
+  const visible=p=>!p.hasAttribute("data-tab-hide");
+  function capture(){rows={};bars={};cards={};
+    document.querySelectorAll("main .panel").forEach(p=>{const pid=p.id,R={};
+      [...p.querySelectorAll(".pb .list li, .pb tr")].slice(0,80).forEach((r,i)=>{const k=rowKey(r);if(k&&!(k in R))R[k]={i,top:visible(p)?r.getBoundingClientRect().top:null};});rows[pid]=R;
+      const B={};p.querySelectorAll(".pb .bar i, .pb .breadth i, .pb .rb .trk i").forEach((b,i)=>{const r=b.closest("li,tr");B[(r&&rowKey(r)||"")+"#"+i]=b.style.width;});bars[pid]=B;
+      const C={};p.querySelectorAll(".pb .macro .c, .pb .fear .c").forEach(c=>{const l=c.querySelector(".l");if(!l)return;const v=c.querySelector(".v");const dot=v&&v.querySelector('span[style*="border-radius:50%"]');C[l.textContent.trim()]={v:v?v.textContent.trim():"",dot:dot?dot.style.background:""};});cards[pid]=C;});}
+  // 名次升降：Google 趨勢、YouTube
+  function ranks(p,R){if(!["p-trends","p-youtube"].includes(p.id)||!R||!Object.keys(R).length)return;
+    [...p.querySelectorAll(".pb .list li, .pb tr")].forEach((r,i)=>{const k=rowKey(r);if(!k)return;const o=R[k];let tag;
+      if(!o)tag='<span class="o-rk nw">NEW</span>';else if(o.i!==i)tag=`<span class="o-rk ${o.i>i?"up":"dn"}">${o.i>i?"▲":"▼"}${Math.abs(o.i-i)}</span>`;
+      if(tag){const t=r.querySelector(".t")||r.querySelector("td.name");if(t&&!t.querySelector(".o-rk"))t.insertAdjacentHTML("afterbegin",tag);}});}
+  // 位置滑動：同一列換了位置就從舊位置滑過來
+  function flip(p,R){if(!moving()||!visible(p)||!R)return;
+    [...p.querySelectorAll(".pb .list li, .pb tr")].slice(0,80).forEach(r=>{const k=rowKey(r),o=k&&R[k];if(!o||o.top==null)return;const dy=o.top-r.getBoundingClientRect().top;if(Math.abs(dy)>2&&Math.abs(dy)<600)r.animate([{transform:`translateY(${dy}px)`},{transform:"none"}],{duration:650,easing:"cubic-bezier(.3,1.1,.4,1)"});});}
+  // 長條從舊長度長到新長度
+  function tweenBars(p,B,fromZero){if(!moving()||!visible(p))return;
+    p.querySelectorAll(".pb .bar i, .pb .breadth i, .pb .rb .trk i").forEach((b,i)=>{const r=b.closest("li,tr");const k=(r&&rowKey(r)||"")+"#"+i;const to=b.style.width;const from=fromZero?"0%":(B||{})[k];if(from==null||from===to||!to)return;
+      b.style.transition="none";b.style.width=from;void b.offsetWidth;b.style.transition="width .9s cubic-bezier(.3,1.1,.4,1)";b.style.width=to;});}
+  // 數字翻牌、燈號換色
+  function cardsFx(p,C,all){if(!moving()||!visible(p))return;
+    p.querySelectorAll(".pb .macro .c, .pb .fear .c").forEach((c,i)=>{const l=c.querySelector(".l"),v=c.querySelector(".v");if(!l||!v)return;const o=(C||{})[l.textContent.trim()];
+      if(all||(o&&o.v!==v.textContent.trim())){v.classList.remove("o-flipv");void v.offsetWidth;v.style.animationDelay=(i*60)+"ms";v.classList.add("o-flipv");}
+      const dot=v.querySelector('span[style*="border-radius:50%"]');if(dot&&(all||(o&&o.dot&&o.dot!==dot.style.background))){dot.classList.remove("o-ping");void dot.offsetWidth;dot.classList.add("o-ping");}});}
+  // 新項目加 NEW
+  function newTags(p){p.querySelectorAll(".pb .list li.o-in .t").forEach(t=>{if(!t.querySelector(".o-new"))t.insertAdjacentHTML("afterbegin",'<span class="o-new">NEW</span>');});}
+  // 固定插件：重畫後再插回去
+  function inserts(P,anim){
+    // 行事曆：最近一筆的倒數引信
+    const cal=E("p-calendar"),cpb=cal&&cal.querySelector(".pb");
+    if(cpb&&S&&!cpb.querySelector(".o-calfuse")){const nx=nextEvt();const ev=nx&&S.cal.find(c=>evtTime(c)===nx.t);
+      if(ev)cpb.insertAdjacentHTML("afterbegin",`<div class="o-ins o-calfuse"><div class="r"><span class="lb">下一個數據 · ${esc(ev.label.replace("（主計總處）",""))}${EVT[ev.label]?` · ${EVT[ev.label]}`:""}</span><span class="num o-w" id="pc-cdn">${nx.cd}</span></div><div class="o-fuse"><i id="pc-fuse" style="transform:scaleX(${Math.min(1,nx.s/86400)})"></i></div></div>`);}
+    // 情緒：雙波形
+    const md=E("p-mood"),mpb=md&&md.querySelector(".pb");if(mpb&&!mpb.querySelector("#pm-wave"))mpb.insertAdjacentHTML("afterbegin",'<canvas class="o-ins o-fx" id="pm-wave" height="64"></canvas>');
+    // PTT：看板熱度等化器
+    const pt=E("p-ptt"),ppb=pt&&pt.querySelector(".pb"),B=((P.ptt||{}).boards)||[];
+    if(ppb&&B.length&&!ppb.querySelector("#pp-eq")){const mx=Math.max(...B.map(b=>n(b.heat)||0),1);
+      ppb.insertAdjacentHTML("afterbegin",`<div class="o-ins o-eq" id="pp-eq" style="margin-bottom:8px">${B.map(b=>`<div title="${esc(b.zh)} 熱度 ${b.heat}"><b class="${n(b.heat)>=mx*.6?"hi":""}" style="transform:scaleY(${anim&&moving()?(prevEqP[b.board]||.04):Math.max(.04,n(b.heat)/mx)})"></b><span>${esc(b.zh)}</span></div>`).join("")}</div>`);
+      if(anim&&moving())requestAnimationFrame(()=>requestAnimationFrame(()=>E("pp-eq")&&E("pp-eq").querySelectorAll("b").forEach((x,i)=>x.style.transform=`scaleY(${Math.max(.04,n(B[i].heat)/mx)})`)));
+      prevEqP=Object.fromEntries(B.map(b=>[b.board,Math.max(.04,n(b.heat)/mx)]));
+      // 100 推的列發光
+      ppb.querySelectorAll(".list li").forEach(li=>{if(/\b100\b|爆/.test((li.querySelector(".m")||{}).textContent||""))li.classList.add("o-boom");});}
+    // 台電：電池格
+    const pw=E("p-power"),wpb=pw&&pw.querySelector(".pb"),pd=P.power||{};
+    if(wpb&&pd.reserve_pct!=null&&!wpb.querySelector(".o-batt")){const p0=n(pd.reserve_pct),on=Math.max(0,Math.min(20,Math.round(p0/1.5))),col=p0<6?"var(--down)":p0<10?"var(--warn)":"var(--up)";
+      wpb.insertAdjacentHTML("afterbegin",`<div class="o-ins o-batt ${anim&&moving()?"fill":""}" style="margin-bottom:8px">${Array.from({length:20},(_,i)=>`<i class="${i<on?"on":""}" style="--k:${i};--c:${col}"></i>`).join("")}</div>`);}
+    // 地震：24 小時內的最新一筆加漣漪
+    const qk=E("p-quake"),q0=((P.quake||{}).items||[])[0];
+    if(qk&&q0&&Date.now()-new Date(q0.at)<24*3600e3){const m=qk.querySelector(".pb .list li .m");if(m&&!m.querySelector(".o-ripple"))m.insertAdjacentHTML("afterbegin",'<span class="o-ripple" aria-hidden="true"></span>');}
+    // 天氣：溫度色點、正在下雨的城市
+    const wx=E("p-weather"),its=((P.weather||{}).items)||[];
+    if(wx){wx.querySelectorAll(".pb .wx .c").forEach((c,i)=>{const it=its[i];if(!it)return;const city=c.querySelector(".city");const t=n(it.temp);
+      if(city&&isFinite(t)&&!city.querySelector(".o-tdot"))city.insertAdjacentHTML("afterbegin",`<i class="o-tdot" style="background:${tcol(t)}"></i>`);
+      if(n(it.rain1h)>0)c.classList.add("o-rain");});}
+  }
+  function apply(P,isNew,replay){
+    inserts(P,isNew||replay);
+    document.querySelectorAll("main .panel").forEach(p=>{const pid=p.id;
+      if(isNew){ranks(p,rows[pid]);flip(p,rows[pid]);tweenBars(p,bars[pid],false);cardsFx(p,cards[pid],false);newTags(p);}
+      if(replay&&visible(p)){tweenBars(p,null,true);cardsFx(p,null,true);}});
+    if(cur==="social"||cur==="overview")startLoops();}
+  return{capture,apply,pbText};
+})();
+
 /* ---------- 新一輪：先記下各面板內容，渲染後比對 ---------- */
 let snapText={},snapItems={},gen=null;
 const hash=s=>{s=s.replace(/\d+\s*(?:分|小時|天)前|剛剛|\d+[mhd]\b/g,"");let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h;};
-function before(){document.querySelectorAll("main .panel").forEach(p=>{snapText[p.id]=hash(p.querySelector(".pb")?.textContent||"");snapItems[p.id]=new Set([...p.querySelectorAll(".list li .t")].map(t=>t.textContent.trim()));});}
+function before(){try{FX.capture();}catch(e){console.warn("fx",e);}document.querySelectorAll("main .panel").forEach(p=>{snapText[p.id]=hash(FX.pbText(p));snapItems[p.id]=new Set([...p.querySelectorAll(".list li .t")].map(t=>t.textContent.trim()));});}
 function scan(){if(!moving())return;const s=$("#o-scan");s.classList.remove("go");void s.offsetWidth;s.classList.add("go");}
 function toast(msg){const t=$("#o-toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("show"),3200);}
 function after(P,all){
   const isNew=gen!==null&&all.generatedAt!==gen;gen=all.generatedAt;lastP=P;S=snap(P);
   if(!$("#ov").children.length)layout();
-  if(!isNew){fill(false);if(cur==="overview")startLoops();return;}
+  if(!isNew){fill(false);try{FX.apply(P,false,false);}catch(e){console.warn("fx",e);}if(cur==="overview")startLoops();return;}
   // 新一輪進來
   scan();
-  const changed=[];document.querySelectorAll("main .panel").forEach(p=>{const h=hash(p.querySelector(".pb")?.textContent||"");if(snapText[p.id]!=null&&h!==snapText[p.id])changed.push(p);});
+  const changed=[];document.querySelectorAll("main .panel").forEach(p=>{const h=hash(FX.pbText(p));if(snapText[p.id]!=null&&h!==snapText[p.id])changed.push(p);});
   const tabsHit=new Set();
   changed.forEach((p,i)=>{const t=TAB_OF[p.id];if(t)tabsHit.add(t);
     if(t===cur&&moving()){setTimeout(()=>bump(p),i*90);p.querySelectorAll("svg").forEach(s=>s.querySelectorAll('path[fill="none"]').forEach(pa=>pa.setAttribute("pathLength","1")));p.classList.remove("o-redraw");void p.offsetWidth;p.classList.add("o-redraw");}
     const old=snapItems[p.id]||new Set();if(old.size)p.querySelectorAll(".list li").forEach(li=>{const t2=li.querySelector(".t");if(t2&&!old.has(t2.textContent.trim()))li.classList.add("o-in");});});
   tabsHit.forEach(t=>{if(t!==cur)$(`#tab-${t}`).classList.add("lit");});
+  try{FX.apply(P,true,false);}catch(e){console.warn("fx",e);}
   setTimeout(()=>{fill(true);if(cur==="overview"){["ov-c-tw","ov-c-risk","ov-c-news","ov-c-hot","ov-c-ptt","ov-c-cof","ov-c-sec"].forEach((id,i)=>setTimeout(()=>bump(E(id)),i*110));}},moving()?350:0);
   const nm=[...tabsHit].filter(t=>t!=="overview").map(t=>TABS.find(x=>x[0]===t)[1]);
   toast(`新一輪資料進來 · ${changed.length} 個面板有變動${nm.length?" · "+nm.join("、"):""}`);
 }
 function replay(){if(!lastP)return;scan();prev={};seen={};const keep=E("ov-odo");if(keep)keep.dataset.s="";if(cur==="overview"){layout();setTimeout(()=>{fill(true);startLoops();},moving()?350:0);}
-  else document.querySelectorAll(`main .panel:not([data-tab-hide])`).forEach((p,i)=>{p.querySelectorAll('svg path[fill="none"]').forEach(pa=>pa.setAttribute("pathLength","1"));p.classList.remove("o-redraw");void p.offsetWidth;p.classList.add("o-redraw");setTimeout(()=>bump(p),i*90);});}
+  else{document.querySelectorAll(`main .panel:not([data-tab-hide])`).forEach((p,i)=>{p.querySelectorAll('svg path[fill="none"]').forEach(pa=>pa.setAttribute("pathLength","1"));p.classList.remove("o-redraw");void p.offsetWidth;p.classList.add("o-redraw");setTimeout(()=>bump(p),i*90);});
+    document.querySelectorAll("main .o-ins").forEach(x=>x.remove());try{FX.apply(lastP,false,true);}catch(e){console.warn("fx",e);}}}
 $("#btn-replay").addEventListener("click",replay);
-mbtn.addEventListener("click",()=>{motion=!motion;try{localStorage.setItem("intel:motion",motion?"on":"off");}catch(_){}root.classList.toggle("still",!motion);syncBtn();if(cur==="overview")startLoops();});
-document.addEventListener("visibilitychange",()=>{if(!document.hidden&&cur==="overview"&&S&&!raf)startLoops();});
+mbtn.addEventListener("click",()=>{motion=!motion;try{localStorage.setItem("intel:motion",motion?"on":"off");}catch(_){}root.classList.toggle("still",!motion);syncBtn();if(cur==="overview"||cur==="social")startLoops();});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&(cur==="overview"||cur==="social")&&S&&!raf)startLoops();});
 
 let saved="overview";try{saved=localStorage.getItem("intel:tab")||"overview";}catch(_){}
 go(TABS.some(t=>t[0]===saved)?saved:"overview");
