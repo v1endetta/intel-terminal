@@ -31,12 +31,6 @@
    "at": "2026-10-01T12:52:56Z"
   },
   {
-   "source": "公視",
-   "title": "20261001 8點新世界完整版（無網路版權內容除外）｜杜拜航空駕駛艙喋血，副機長刺傷機長、意圖使班機墜毀；乘客聯手緝凶",
-   "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5oTUloSm8yV29KUmpaZ0NNY0FVNURwbWlXblZQQ0pDTERxOUREMnFyenJwUHBBWFd1QXJ3NUc5ZUFQeHRNN0VNLUFtOA?oc=5",
-   "at": "2026-10-01T12:52:55Z"
-  },
-  {
    "source": "中央社",
    "title": "政院47項優先法案與預算出爐　盼穩定民生物價電價",
    "url": "https://www.cna.com.tw/news/aipl/202610010360.aspx",
@@ -62,6 +56,12 @@
   },
   {
    "source": "公視",
+   "title": "巴西「搶劫手機」成治安難題 一年逾80萬件通報",
+   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9TREM2eEJGME9EbWNtVG82akVZVjNrSlM3Rjg1c0ROdE9ZQzl1YlR6OVdrM3Q5STJydGliWDY2aFpJTUh5YzJSVnF0aVZKYVU?oc=5",
+   "at": "2026-09-30T12:49:44Z"
+  },
+  {
+   "source": "公視",
    "title": "杜拜航空機師起衝突 發出緊急訊號轉降沙國",
    "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBsdjF1ZWpGRXJiR3JqbF9wM29HWDFLdzNDd1NIbjQteGl5M1hEZXAtM2VBc0VmNkNId1hwNWRZb1hTV19TVHFleXVROExaTk0?oc=5",
    "at": "2026-09-30T12:45:21Z"
@@ -76,23 +76,30 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "Bond sell-off: US government borrowing costs hit highest since 2002, as UK 30-year bond yi",
-   "url": "https://www.theguardian.com/business/live/2026/oct/01/uk-house-prices-september-mortgage-rates-bonds-stock-markets-manufacturing-latest-news-updates",
-   "at": "2026-10-01T14:31:00Z",
+   "title": "Global bond sell-off intensifies, as UK long-term borrowing costs pass 6%",
+   "url": "https://www.theguardian.com/business/2026/oct/01/global-bond-sell-off-uk-long-term-borrowing-costs-us-bond-yield",
+   "at": "2026-10-01T14:37:22Z",
    "sec": "Business"
   },
   {
    "source": "Guardian",
-   "title": "Finnish prime minister says suspected break-ins at MPs’ homes could be work of foreign pow",
-   "url": "https://www.theguardian.com/world/2026/oct/01/finland-suspected-break-ins-mp-homes-foreign-power",
-   "at": "2026-10-01T14:29:26Z",
+   "title": "French high school protests escalate with violence reported – Europe live",
+   "url": "https://www.theguardian.com/world/live/2026/oct/01/europe-latest-news-updates-russia-strikes-ukraine-nato",
+   "at": "2026-10-01T14:32:27Z",
    "sec": "World news"
   },
   {
    "source": "Guardian",
-   "title": "Poland would welcome UK back into EU ‘with open arms’, foreign minister says – Europe live",
-   "url": "https://www.theguardian.com/world/live/2026/oct/01/europe-latest-news-updates-russia-strikes-ukraine-nato",
-   "at": "2026-10-01T14:20:56Z",
+   "title": "Bond sell-off: US government borrowing costs hit highest since 2002, as UK 30-year bond yi",
+   "url": "https://www.theguardian.com/business/live/2026/oct/01/uk-house-prices-september-mortgage-rates-bonds-stock-markets-manufacturing-latest-news-updates",
+   "at": "2026-10-01T14:31:27Z",
+   "sec": "Business"
+  },
+  {
+   "source": "Guardian",
+   "title": "Finnish PM says suspected break-ins at MPs’ homes could be work of foreign power",
+   "url": "https://www.theguardian.com/world/2026/oct/01/finland-suspected-break-ins-mp-homes-foreign-power",
+   "at": "2026-10-01T14:29:26Z",
    "sec": "World news"
   },
   {
@@ -146,12 +153,6 @@
    "title": "Trump's AI rebrand causes 'unprecedented' demand for Slovenian website names",
    "url": "https://www.bbc.co.uk/news/articles/cqx2z23xj555o?at_medium=RSS&at_campaign=rss",
    "at": "2026-10-01T11:37:46Z"
-  },
-  {
-   "source": "BBC",
-   "title": "Too early to say if Iran involved in Dubai-Tel Aviv flight attack, Israeli PM says",
-   "url": "https://www.bbc.co.uk/news/articles/cqgmrm7xd8wyo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-01T11:26:46Z"
   }
  ],
  "groups": [
@@ -539,6 +540,20 @@
     "hot": false
    },
    {
+    "term": "Global",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "Guardian",
+     "The Global L"
+    ],
+    "sample": {
+     "title": "Global bond sell-off intensifies, as UK long-term borrowing ",
+     "url": "https://www.theguardian.com/business/2026/oct/01/global-bond-sell-off-uk-long-term-borrowing-costs-us-bond-yield"
+    },
+    "hot": false
+   },
+   {
     "term": "Design",
     "n": 2,
     "src": 2,
@@ -565,25 +580,11 @@
      "url": "https://www.theguardian.com/world/2026/oct/01/ukraine-russian-oil-refinery-strikes-defying-trump-fuel-price-warnings"
     },
     "hot": false
-   },
-   {
-    "term": "Argon",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "HN",
-     "MoneyDJ理財網"
-    ],
-    "sample": {
-     "title": "Google推新模型Gemini 4 Argon 重返AI前沿競賽- 新聞",
-     "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOV1o2MjhKMmRwckx0MVlmUVlBUUY5ZUtJZ2h2RDlpeDBaQk4yWkRXSzEyVmtnUnpXLV81TWx2TlVUVXFmaUFBZ29JV2g1VUdnbFVlbWhIbFhXU3NocVFsY1plUWRHM3E3WW13RkNWVUZ3UUhXNjA5WDBERFJxVFJIUlhkOG8wQWwxRjhtaVM1bVdZUQ?oc=5"
-    },
-    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-01T14:30:07Z"
+ "updatedAt": "2026-10-01T14:45:12Z"
 }
