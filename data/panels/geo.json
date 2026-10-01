@@ -1,18 +1,23 @@
 {
  "label": "TDX",
  "cities_with_data": 19,
- "freeway": 419,
+ "freeway": 421,
  "static": "完成",
  "totals": {
-  "parking": 1986,
+  "parking": 1987,
   "bikes": 9940,
-  "speed": 939
+  "speed": 961
  },
  "errs": [
-  "parking Hsinchu: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Hsinchu body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "bikes MiaoliCounty: RuntimeError: 429 on Bike/Availability/City/MiaoliCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking NantouCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/NantouCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "bikes Chiayi: RuntimeError: 429 on Bike/Availability/City/Chiayi body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
+  "parking Taoyuan: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Taoyuan body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "bikes HsinchuCounty: RuntimeError: 429 on Bike/Availability/City/HsinchuCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "vd Taichung: RuntimeError: 429 on Road/Traffic/Live/VD/City/Taichung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "bikes YunlinCounty: RuntimeError: 429 on Bike/Availability/City/YunlinCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "vd ChiayiCounty: RuntimeError: 429 on Road/Traffic/Live/VD/City/ChiayiCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "vd Kaohsiung: RuntimeError: 429 on Road/Traffic/Live/VD/City/Kaohsiung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "vd HualienCounty: RuntimeError: 429 on Road/Traffic/Live/VD/City/HualienCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "parking TaitungCounty: TimeoutError: panel cap 420s",
+  "parking LienchiangCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/LienchiangCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
  ],
- "updatedAt": "2026-10-01T01:14:09Z"
+ "updatedAt": "2026-10-01T01:25:49Z"
 }
