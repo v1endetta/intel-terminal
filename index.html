@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>dalta 情報站</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=Doto:wght@900&display=swap">
 <style>
 :root{
   color-scheme:dark;
@@ -218,15 +218,208 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .foot{margin-top:16px;color:var(--dim);font-size:11px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
 @media (prefers-reduced-motion:no-preference){.brand .dot{animation:pulse 3s ease-in-out infinite}}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 8%,transparent)}}
+/* ================= v2：天空頂欄 · 分頁 · 總覽 · 動態 ================= */
+:root{--dot:"Doto","IBM Plex Mono",ui-monospace,monospace}
+.sec{display:none}
+/* sky */
+.sky{position:relative;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--panel);margin:12px 0 0}
+.sky canvas{display:block;width:100%;height:150px}
+.sky .over{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:flex-start;padding:10px 14px;pointer-events:none;gap:12px}
+.sky-brand{display:grid;gap:2px}
+.sky-brand b{font-family:var(--head);font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
+.sky-brand b .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.sky-brand span{font-size:11px;color:var(--muted)}
+.sky-clock{text-align:right;display:grid;gap:2px;justify-items:end}
+.sky-clock .t{font-family:var(--dot);font-weight:900;font-size:32px;line-height:1;letter-spacing:.03em}
+.sky-clock .s{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.sessions{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;color:var(--muted);padding:6px 14px;border-top:1px solid var(--line)}
+.sessions i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--dim)}
+.sessions .open i{background:var(--up)}
+.sessions .open{color:var(--text)}
+/* sticky bar with tabs */
+.mast{gap:12px;padding-block:0;margin-bottom:12px;align-items:stretch}
+.tabs{position:relative;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;min-width:0;flex:1 1 auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:transparent;border:0;padding:11px 13px 10px;color:var(--muted);font:500 13px var(--sans);position:relative;white-space:nowrap;cursor:pointer}
+.tab:hover{color:var(--text)}
+.tab[aria-selected="true"]{color:var(--text)}
+.tab .bd{position:absolute;top:8px;right:4px;width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:0;transform:scale(.4)}
+.tab.lit .bd{opacity:1;transform:scale(1);transition:transform .2s,opacity .2s}
+.tabs .tbar{position:absolute;bottom:-1px;height:2px;background:var(--accent);transition:left .24s ease,width .24s ease}
+.mast .status{padding-block:6px}
+.ring{display:inline-flex;align-items:center;gap:6px}
+.ring svg{width:18px;height:18px;transform:rotate(-90deg)}
+.mbtn{background:none;border:1px solid var(--line2);border-radius:3px;color:var(--muted);font:11px var(--mono);padding:3px 8px;cursor:pointer}
+.mbtn:hover{color:var(--text);border-color:var(--muted)}
+@media (max-width:640px){.mast{flex-direction:column;gap:0}.mast .status{margin-left:0;padding-top:0;gap:10px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.mast .legend{display:none}.mast .status>*{flex:none}}
+body[data-tab="overview"] .tape{display:none}
+body:not([data-tab="market"]) .movers{display:none!important}
+[data-tab-hide]{display:none!important}
+/* generic motion on existing panels */
+.o-enter{animation:o-enter .3s ease-out both}
+@keyframes o-enter{from{opacity:0;transform:translateY(6px)}}
+.o-changed{animation:o-changed 1.8s ease-out}
+@keyframes o-changed{0%{box-shadow:inset 0 0 0 1px var(--accent)}100%{box-shadow:inset 0 0 0 1px transparent}}
+.o-redraw path[fill="none"]{stroke-dasharray:1;animation:o-draw .9s ease-out both}
+@keyframes o-draw{from{stroke-dashoffset:1}}
+.list li.o-in{animation:o-slidein .7s ease-out both}
+@keyframes o-slidein{0%{opacity:0;transform:translateY(-6px);background:color-mix(in srgb,var(--accent) 18%,transparent)}40%{opacity:1;transform:none}100%{background:transparent}}
+.o-scan{position:fixed;left:0;right:0;top:0;height:2px;background:var(--accent);box-shadow:0 0 18px 2px color-mix(in srgb,var(--accent) 55%,transparent);opacity:0;pointer-events:none;z-index:20}
+.o-scan.go{animation:o-scan 1.3s cubic-bezier(.4,0,.2,1)}
+@keyframes o-scan{0%{opacity:1;transform:translateY(0)}90%{opacity:.8}100%{opacity:0;transform:translateY(100vh)}}
+.o-toast{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--panel2);border:1px solid var(--accent);border-radius:3px;padding:8px 12px;font-size:12.5px;transform:translateY(130%);opacity:0;transition:transform .25s,opacity .25s;z-index:21;max-width:calc(100vw - 32px)}
+.o-toast.show{transform:none;opacity:1}
+
+/* ---------- overview ---------- */
+.ov{grid-column:span 12;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:10px}
+.ov .w12{grid-column:span 12}.ov .w8{grid-column:span 8}.ov .w5{grid-column:span 5}.ov .w4{grid-column:span 4}.ov .w3{grid-column:span 3}
+@media (max-width:1100px){.ov .w8,.ov .w5{grid-column:span 12}.ov .w4,.ov .w3{grid-column:span 6}}
+@media (max-width:640px){.ov .w4,.ov .w3{grid-column:span 12}}
+.o-card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:9px 11px;display:grid;gap:7px;align-content:start;min-width:0;position:relative;overflow:hidden}
+.o-card h3{margin:0;display:flex;align-items:baseline;gap:8px;font:600 10.5px var(--head);letter-spacing:.12em;text-transform:uppercase}
+.o-card h3 span{font-family:var(--sans);letter-spacing:0;text-transform:none;font-size:11.5px;color:var(--muted);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.o-card h3 a{margin-left:auto;font-family:var(--sans);letter-spacing:0;text-transform:none;font-size:11px;color:var(--dim);cursor:pointer;white-space:nowrap}
+.o-card h3 a:hover{color:var(--text);text-decoration:none}
+.o-hr{border-top:1px solid var(--line)}
+.o-sub{font-size:11px;color:var(--muted)}
+.o-w{color:var(--warn)}
+.o-colh{font:500 10px var(--mono);color:var(--dim);letter-spacing:.1em;margin-bottom:2px}
+/* tickers */
+.o-tks{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+@media (max-width:1100px){.o-tks{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:640px){.o-tks{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.o-tk{background:var(--panel);padding:7px 10px 4px;display:grid;grid-template-columns:1fr auto;gap:0 8px;min-width:0}
+.o-tk .n1{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.o-tk .c1{font-family:var(--mono);font-size:11px;text-align:right}
+.o-tk .v1{font-family:var(--mono);font-size:15px;font-weight:600;grid-column:1/-1;font-variant-numeric:tabular-nums}
+.o-tk svg{grid-column:1/-1;width:100%;height:24px;display:block}
+.o-tk path{fill:none;stroke-width:1.4;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:0}
+.o-tk.draw path,.o-tw-spark .ln{stroke-dasharray:1;animation:o-draw .9s ease-out both}
+.o-tk.fu{animation:o-fu 1.4s ease-out}.o-tk.fd{animation:o-fd 1.4s ease-out}
+@keyframes o-fu{0%{background:color-mix(in srgb,var(--up) 22%,var(--panel))}100%{background:var(--panel)}}
+@keyframes o-fd{0%{background:color-mix(in srgb,var(--down) 22%,var(--panel))}100%{background:var(--panel)}}
+/* odometer */
+.o-odo{display:inline-flex;font-family:var(--dot);font-weight:900;font-size:36px;line-height:1}
+.o-odo .d{display:inline-block;height:1em;overflow:hidden}
+.o-odo .col{display:flex;flex-direction:column;transition:transform .5s cubic-bezier(.3,1.3,.5,1)}
+.o-odo .col span{height:1em}
+/* diverging */
+.o-dv{display:grid;gap:4px}
+.o-dv .r{display:grid;grid-template-columns:56px minmax(0,1fr) 66px;gap:8px;align-items:center;font-size:11.5px}
+.o-dv .r .v2{text-align:right;font-family:var(--mono)}
+.o-dv .tr{position:relative;height:8px;background:var(--panel2);border-radius:1px}
+.o-dv .tr::before{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--dim)}
+.o-dv .tr i{position:absolute;top:0;bottom:0;width:50%;transition:transform .8s cubic-bezier(.3,1.2,.5,1)}
+.o-dv .tr i.p{left:50%;transform-origin:left;background:var(--up)}
+.o-dv .tr i.m{right:50%;transform-origin:right;background:var(--down)}
+.o-bt{position:relative;height:10px;background:var(--panel2);overflow:hidden;border-radius:1px}
+.o-bt i{position:absolute;inset:0;transition:transform .8s ease}
+.o-bt .u{background:var(--up);transform-origin:left}.o-bt .f{background:var(--dim);transform-origin:left}.o-bt .d{background:var(--down);transform-origin:right}
+/* kv + countdown */
+.o-kv{display:grid;gap:3px}
+.o-kv .r{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:baseline;font-size:12px}
+.o-kv .r .pv{font-size:10.5px;color:var(--dim);font-family:var(--mono)}
+.o-kv .r .nv{font-family:var(--mono)}
+.o-cd{display:grid;gap:4px}
+.o-cd .r{display:grid;grid-template-columns:82px minmax(0,1fr) auto;gap:8px;align-items:baseline;font-size:12px}
+.o-cd .r .wn{font-family:var(--mono);font-size:10.5px;color:var(--dim)}
+.o-cd .r.now .wn{color:var(--accent)}
+.o-cd .r .lb{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.o-fuse{height:2px;background:var(--panel2);overflow:hidden;grid-column:1/-1}
+.o-fuse i{display:block;height:100%;background:var(--accent);transform-origin:left;transition:transform 1s linear}
+/* gauge, chips, battery */
+svg.o-gauge{width:100%;max-width:200px;height:auto;display:block;margin:0 auto}
+#ov-needle{transition:transform 1.1s cubic-bezier(.3,1.6,.4,1);transform-origin:120px 120px}
+.o-chips{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11.5px}
+.o-chips span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.o-chips i{width:7px;height:7px;border-radius:50%}
+.o-chips b{font-family:var(--mono);font-weight:500}
+.o-batt{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:3px;height:22px}
+.o-batt i{border-radius:1px;background:var(--panel2)}
+.o-batt i.on{background:var(--c,var(--up))}
+.o-batt.fill i.on{animation:o-cell .45s ease-out both;animation-delay:calc(var(--k) * 30ms)}
+@keyframes o-cell{from{opacity:.12}}
+/* lists */
+.o-cols2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:760px){.o-cols2{grid-template-columns:minmax(0,1fr)}}
+.o-ls{list-style:none;margin:0;padding:0;display:grid}
+.o-ls li{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;padding:4px 0;border-top:1px solid var(--line);font-size:12.5px;align-items:baseline}
+.o-ls li:first-child{border-top:0}
+.o-ls .ag{font-family:var(--mono);font-size:10.5px;color:var(--dim)}
+.o-ls .tt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.o-ls .tt a{color:var(--text)}
+.o-ls .tt a:hover{color:var(--blue)}
+.o-ls .sc{font-size:10.5px;color:var(--muted);margin-right:6px}
+.o-ls li.in{animation:o-slidein .7s ease-out both}
+.o-ls.rk li{grid-template-columns:18px minmax(0,1fr) auto}
+.o-new{font-family:var(--mono);font-size:9.5px;padding:0 4px;border:1px solid var(--accent);color:var(--accent);border-radius:2px;margin-right:5px}
+.o-vd{display:inline-block;width:7px;height:7px;border-radius:1px;margin-right:6px;vertical-align:1px}
+/* words */
+.o-words{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.o-words span{white-space:nowrap}
+.o-words span.h{color:var(--warn)}
+.o-words span.nw{animation:o-pop 1.2s ease-out}
+.o-words sub{font-size:9px;margin-left:2px;color:var(--muted)}
+@keyframes o-pop{0%{opacity:0;transform:translateY(6px)}30%{opacity:1;color:var(--accent)}100%{transform:none}}
+/* equalizer */
+.o-eq{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;height:64px}
+.o-eq div{display:grid;gap:3px;justify-items:center;height:100%;grid-template-rows:1fr auto;min-width:0}
+.o-eq b{display:block;width:100%;height:100%;background:var(--blue);transform-origin:bottom;transition:transform .9s cubic-bezier(.3,1.3,.5,1);border-radius:1px 1px 0 0}
+.o-eq b.hi{background:var(--warn)}
+.o-eq span{font-size:9.5px;color:var(--muted);white-space:nowrap}
+.o-push{font-family:var(--mono);font-size:10.5px;min-width:24px;text-align:center;border-radius:2px;padding:0 3px}
+.o-push.boom{background:color-mix(in srgb,var(--warn) 25%,transparent);color:var(--warn)}
+/* stamp */
+.o-stamp{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 6px;border:1.5px solid currentColor;border-radius:3px;transform:rotate(-4deg);white-space:nowrap}
+.o-stamp.bad{color:var(--down)}.o-stamp.ok{color:var(--up)}.o-stamp.wait{color:var(--muted)}
+.o-stamp.go{animation:o-stamp .5s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes o-stamp{0%{opacity:0;transform:scale(1.9) rotate(-14deg)}100%{opacity:1;transform:scale(1) rotate(-4deg)}}
+.o-ls.cof li{grid-template-columns:minmax(0,1fr) auto auto}
+/* heat */
+.o-heat{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:3px}
+.o-heat div{padding:5px 6px;border-radius:2px;font-size:11.5px;display:grid;min-width:0}
+.o-heat div b{font-family:var(--mono);font-size:11px;font-weight:600}
+/* flaps */
+.o-flaps{display:flex;gap:10px;flex-wrap:wrap}
+.o-flap{display:grid;gap:2px;justify-items:start}
+.o-flap .dg{display:flex;gap:2px}
+.o-flap .dg b{font-family:var(--mono);font-size:18px;font-weight:600;width:.9em;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:2px;line-height:1.35;position:relative}
+.o-flap .dg b::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--bg)}
+.o-flap .dg b.flip{animation:o-flip .3s ease-in-out}
+@keyframes o-flip{50%{transform:scaleY(.1)}}
+/* poly */
+.o-pm{display:grid;gap:6px}
+.o-pm .r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;font-size:12px}
+.o-pm .q{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.o-pm .trk{grid-column:1/-1;height:4px;background:var(--panel2);border-radius:2px;overflow:hidden}
+.o-pm .fl{height:100%;width:100%;background:var(--blue);transform-origin:left;transform:scaleX(0);transition:transform .9s ease}
+canvas.o-fx{display:block;width:100%}
+
+/* motion off：手動關閉或系統偏好減少動態 */
+.still *,.still *::before,.still *::after{animation:none!important;transition:none!important}
+.still .tape{overflow-x:auto}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+<div class="o-scan" id="o-scan"></div>
+<div class="o-toast" id="o-toast" role="status" aria-live="polite"></div>
+<section class="sky" aria-label="時間與市場時段">
+  <div style="position:relative"><canvas id="sky"></canvas>
+  <div class="over">
+    <div class="sky-brand"><b><span class="dot" aria-hidden="true"></span>dalta 情報站</b><span id="sunline">台北</span><span id="caline"></span></div>
+    <div class="sky-clock"><div class="t" id="tclock">--:--</div><div class="s" id="tdate"></div></div>
+  </div></div>
+  <div class="sessions" id="sessions"></div>
+</section>
 <header class="mast">
-  <div class="brand"><span class="dot" aria-hidden="true"></span>dalta <span class="zh">情報站</span></div>
-  <div class="clocks"><span>TPE <b id="clk-tpe">--:--</b></span><span>LA <b id="clk-la">--:--</b></span></div>
+  <nav class="tabs" role="tablist" id="tabs" aria-label="分頁"></nav>
   <div class="status">
-    <span class="k db"><span id="db-age">讀取中</span> · 下次 <span class="cd" id="cd">--:--</span></span>
+    <span class="k db"><span id="db-age">讀取中</span></span>
+    <span class="ring" title="距離下一輪資料"><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11" fill="none" stroke="var(--line2)" stroke-width="4"/><circle id="ringfg" cx="14" cy="14" r="11" fill="none" stroke="var(--accent)" stroke-width="4" stroke-dasharray="69.1" stroke-dashoffset="0"/></svg>下次 <span class="cd" id="cd">--:--</span></span>
     <span class="legend"><span class="u">■</span> 漲 <span class="d">■</span> 跌</span>
+    <button class="mbtn" id="btn-replay" type="button" title="用目前資料重播一次新一輪的動態">重播</button>
+    <button class="mbtn" id="btn-motion" type="button" aria-pressed="true">動畫：開</button>
   </div>
 </header>
 
@@ -237,6 +430,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 
   <section class="pulse" id="p-pulse"></section>
   <section class="brief" id="brief" hidden></section>
+  <section class="ov" id="ov" aria-label="總覽"></section>
 
   <div class="sec">市場 Markets</div>
 
@@ -505,11 +699,7 @@ const setErr=(id,msg)=>{body(id).innerHTML=`<div class="empty">${esc(msg)}</div>
 const ago=iso=>{const t=new Date(iso).getTime();if(!isFinite(t))return"";const m=Math.round((Date.now()-t)/60000);if(m<1)return"剛剛";if(m<60)return m+" 分前";const h=Math.round(m/60);if(h<48)return h+" 小時前";return Math.round(h/24)+" 天前";};
 const staleAfter=(iso,hours)=>{const t=new Date(iso).getTime();return !isFinite(t)||Date.now()-t>hours*3600e3;};
 
-/* clocks */
-function tick(){const o={hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false};const d=new Date();
-  $("#clk-tpe").textContent=d.toLocaleTimeString("en-GB",{...o,timeZone:"Asia/Taipei"});
-  $("#clk-la").textContent=d.toLocaleTimeString("en-GB",{...o,timeZone:"America/Los_Angeles"});}
-tick();setInterval(tick,1000);
+
 
 /* sparkline */
 function spark(vals,w=300,h=44){const v=vals.filter(isFinite);if(v.length<2)return"";const mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
@@ -727,9 +917,9 @@ async function loadAll(){
     if(all.generatedAt===lastGen&&!firstRender){nextAt=Date.now()+60e3;return;}
     if(lastGen&&all.generatedAt!==lastGen)firstRender=false;
     lastGen=all.generatedAt;
-    window.LASTP=P;    Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});
+    window.LASTP=P;try{V2.before();}catch(e){console.warn("v2",e);}    Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});
     genTime=new Date(all.generatedAt).getTime();$("#db-age").textContent="最近抓取 "+ago(all.generatedAt);$(".k.db").classList.remove("stale");
-    movers(P);tape(P);try{brief(P);}catch(e){console.warn("brief",e);}
+    movers(P);tape(P);try{brief(P);}catch(e){console.warn("brief",e);}try{V2.after(P,all);}catch(e){console.warn("v2",e);}
     try{localStorage.setItem("intel:prev",JSON.stringify({gen:all.generatedAt,vals:curVals}));}catch(_){}
     prevVals={...prevVals,...curVals};firstRender=false;
     const period=(inSession()?5:15)*60e3;nextAt=new Date(all.finishedAt||all.generatedAt).getTime()+period+(all.finishedAt?60e3:200e3);if(nextAt<Date.now()+30e3)nextAt=Date.now()+60e3;
@@ -818,6 +1008,333 @@ document.querySelectorAll(".mapctl .layer").forEach(b=>b.addEventListener("click
 const mapScript=document.createElement("script");mapScript.src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js";mapScript.onload=()=>{initMap();loadGeo();};document.head.appendChild(mapScript);
 setInterval(loadGeo,5*60e3);
 document.querySelectorAll(".panel.cap").forEach(p=>{const b=document.createElement("button");b.className="more";b.textContent="展開";b.addEventListener("click",()=>{p.classList.toggle("open");b.textContent=p.classList.contains("open")?"收合":"展開";});p.insertBefore(b,p.querySelector(".pf"));});
+/* ================= v2：分頁、天空頂欄、總覽、新一輪動態 ================= */
+const V2=(()=>{
+const root=document.documentElement,rm=matchMedia("(prefers-reduced-motion: reduce)");
+let motion=true;try{motion=localStorage.getItem("intel:motion")!=="off";}catch(_){}
+const moving=()=>motion&&!rm.matches;
+root.classList.toggle("still",!motion);
+const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",String(motion));mbtn.textContent=motion?"動畫：開":"動畫：關";};syncBtn();
+
+/* ---------- tabs ---------- */
+const TABS=[["overview","總覽"],["market","市場"],["macro","總經"],["intel","情報"],["social","輿情"],["live","台灣現場"]];
+const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"market","p-revenue":"market",
+  "p-calendar":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro",
+  "p-news":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
+  "p-mood":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
+  "p-geo":"live","p-twpulse":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
+  "brief":"overview","ov":"overview"};
+const tabsEl=$("#tabs");
+tabsEl.innerHTML=TABS.map(([k,nm])=>`<button class="tab" role="tab" id="tab-${k}" data-k="${k}" aria-selected="false" type="button">${nm}<i class="bd" aria-hidden="true"></i></button>`).join("")+'<span class="tbar" id="tbar"></span>';
+let cur="overview";
+function moveBar(){const b=$(`#tab-${cur}`),bar=$("#tbar");if(!b)return;bar.style.left=b.offsetLeft+"px";bar.style.width=b.offsetWidth+"px";}
+function go(k,scroll){cur=k;document.body.dataset.tab=k;
+  document.querySelectorAll(".tab").forEach(t=>{t.setAttribute("aria-selected",String(t.dataset.k===k));if(t.dataset.k===k)t.classList.remove("lit");});
+  Object.entries(TAB_OF).forEach(([id,t])=>{const el=document.getElementById(id);if(el){if(t===k)el.removeAttribute("data-tab-hide");else el.setAttribute("data-tab-hide","");}});
+  moveBar();try{localStorage.setItem("intel:tab",k);}catch(_){}
+  if(moving()){const els=Object.entries(TAB_OF).filter(([,t])=>t===k).map(([id])=>document.getElementById(id)).filter(Boolean);
+    const kids=k==="overview"?[...(($("#ov")||{}).children||[])]:els;kids.forEach((c,i)=>{c.classList.remove("o-enter");void c.offsetWidth;c.style.animationDelay=Math.min(i,12)*35+"ms";c.classList.add("o-enter");});}
+  if(k==="live"&&typeof map!=="undefined"&&map)setTimeout(()=>map.resize(),30);
+  if(k==="overview"&&lastP){startLoops();}else stopLoops();
+  if(scroll)scrollTo({top:Math.min(scrollY,$(".mast").offsetTop),behavior:moving()?"smooth":"auto"});}
+tabsEl.addEventListener("click",e=>{const t=e.target.closest(".tab");if(t)go(t.dataset.k,true);});
+document.addEventListener("click",e=>{const a=e.target.closest("[data-go]");if(a){e.preventDefault();go(a.dataset.go,true);}});
+addEventListener("resize",moveBar);
+
+/* ---------- helpers（總覽專用） ---------- */
+const F=(v,f=2)=>isFinite(v)?Number(v).toLocaleString("en-US",{minimumFractionDigits:f,maximumFractionDigits:f}):"—";
+const SG=(c,f=2)=>!isFinite(c)?"—":(c>0?"+":c<0?"−":"")+Math.abs(c).toFixed(f);
+const CL=c=>!isFinite(c)||Math.abs(c)<1e-9?"flat":c>0?"up":"down";
+const AG=iso=>{const t=new Date(iso).getTime();if(!isFinite(t))return"";const m=Math.max(0,(Date.now()-t)/6e4);return m<60?Math.round(m)+"m":m<1440?Math.round(m/60)+"h":Math.round(m/1440)+"d";};
+const idx=(a,k)=>Object.fromEntries((a||[]).map(x=>[x[k],x]));
+const nums=a=>(a||[]).map(Number).filter(isFinite);
+function sparkPath(a){a=nums(a);if(a.length<2)return"";const lo=Math.min(...a),hi=Math.max(...a),r=hi-lo||1;return a.map((v,i)=>`${i?"L":"M"}${(i/(a.length-1)*100).toFixed(2)} ${(26-(v-lo)/r*22).toFixed(2)}`).join("");}
+function bump(el){if(!el||!moving())return;el.classList.remove("o-changed");void el.offsetWidth;el.classList.add("o-changed");}
+const VDC={openai:"#3fd0a0",anthropic:"#e0946b",google:"#6da3ff",deepseek:"#8f9dff",xai:"#b9bec8","":"#5C637A"};
+const POLYZH={"Will there be no change in Fed interest rates after the October 2026 meeting?":"10 月 FOMC 不動利率","Will the Fed increase interest rates by 25 bps after the October 2026 meeting?":"10 月 FOMC 升息 1 碼","Will the U.S. invade Iran before 2027?":"2027 前美國進攻伊朗","2026 Balance of Power: R Senate, R House":"期中選舉 共和黨拿下參眾兩院"};
+const EVT={"美國非農就業":"20:30","美國 CPI":"20:30","美國零售銷售":"20:30","美國 PPI":"20:30","美國 PCE":"20:30","美國 GDP":"20:30","台灣 CPI／PPI（主計總處）":"16:00","外銷訂單（經濟部）":"16:00"};
+const CITY={基隆:[121.74,25.13,6,-6],台北:[121.52,25.04,-50,-10],新北:[121.46,25.01,8,14],桃園:[121.30,24.99,-50,4],新竹:[120.97,24.80,-50,6],苗栗:[120.82,24.56,-50,4],台中:[120.68,24.15,-50,-2],彰化:[120.54,24.08,-50,12],南投:[120.69,23.91,8,4],雲林:[120.43,23.71,-50,4],嘉義:[120.45,23.48,-50,4],台南:[120.20,22.99,-50,4],高雄:[120.31,22.63,-50,6],屏東:[120.49,22.67,6,10],宜蘭:[121.75,24.75,6,4],花蓮:[121.60,23.98,6,4],台東:[121.15,22.76,6,4]};
+const H=(t,s,g)=>`<h3>${t}<span>${s}</span>${g?`<a data-go="${g}" href="#">${TABS.find(x=>x[0]===g)[1]} →</a>`:""}</h3>`;
+
+/* ---------- 從 all.json 取總覽要用的數字 ---------- */
+let S=null,lastP=null;
+function snap(P){
+  const pu=idx(P.pulse&&P.pulse.items,"sym"),wo=idx(P.world&&P.world.items,"sym"),co=idx(P.commodities&&P.commodities.items,"sym"),fe=idx(P.fear&&P.fear.items,"sym"),tm=P.tw_market||{};
+  const T=[];const tk=(nm,v,c,s,f)=>{if(isFinite(n(v)))T.push({n:nm,v:n(v),c:n(c),s:nums(s).slice(-24),f});};
+  if(pu["^TWII"])tk("台股加權",pu["^TWII"].price,pu["^TWII"].chg_pct,pu["^TWII"].spark,2);
+  else if(P.taiex){const i=n(P.taiex.index),c=n(P.taiex.change);tk("台股加權",i,c/(i-c)*100,P.taiex.series,2);}
+  if(tm.tsmc)tk("台積電",tm.tsmc.price,tm.tsmc.pct,tm.tsmc.spark,0);
+  if(tm.tpex)tk("櫃買",tm.tpex.index,tm.tpex.pct,tm.tpex.spark,2);
+  [["^GSPC","S&P 500",2],["^IXIC","Nasdaq",2],["^N225","日經",0]].forEach(([k,nm,f])=>{const w=wo[k];if(w)tk(nm,w.price,w.chg_pct,w.spark,f);});
+  const usd=((P.fx&&P.fx.items)||[]).find(i=>i.code==="USD");if(usd)tk("美元/台幣",usd.mid!=null?usd.mid:usd.buy,usd.chg_pct,usd.spark,3);
+  if(pu["DX-Y.NYB"])tk("美元指數",pu["DX-Y.NYB"].price,pu["DX-Y.NYB"].chg_pct,pu["DX-Y.NYB"].spark,2);
+  if(co["CL=F"])tk("WTI 原油",co["CL=F"].price,co["CL=F"].chg_pct,co["CL=F"].spark,2);
+  if(co["GC=F"])tk("黃金",co["GC=F"].price,co["GC=F"].chg_pct,co["GC=F"].spark,0);
+  if(pu["BTC-USD"])tk("Bitcoin",pu["BTC-USD"].price,pu["BTC-USD"].chg_pct,pu["BTC-USD"].spark,0);
+  if(fe["^VIX"])tk("VIX",fe["^VIX"].value,fe["^VIX"].chg_pct,fe["^VIX"].spark,2);
+  const gm=(P.gmacro&&P.gmacro.items)||[],gUS=l=>gm.find(i=>i.group==="美國"&&i.label===l);
+  const tmac=(P.macro&&P.macro.items)||[],tw=l=>tmac.find(i=>i.label===l);
+  const news=(P.news||{});
+  return{tick:T,tm,fear:(P.fear&&P.fear.items)||[],
+    rates:[["美 10 年債",gUS("10 年公債")],["聯邦資金利率",gUS("聯邦資金利率")],["美國 CPI",gUS("CPI 年增")],["美國核心 PCE",gUS("核心 PCE 年增")],["台灣 CPI",tw("CPI 年增")],["台灣失業率",tw("失業率")]].filter(r=>r[1]).map(([k,x])=>[k,x.value,x.prev||""]),
+    sofr:((P.liquidity||{}).rates||{}).SOFR,
+    cal:((P.calendar||{}).items)||[],
+    news:[...(news.tw||[]).slice(0,6).map(x=>({...x,reg:"台"})),...(news.intl||[]).slice(0,3).map(x=>({...x,reg:"外"}))],
+    ai:[...((P.aiwire||{}).items||[]).slice(0,5),...(((P.devpulse||{}).changelogs)||[]).slice(0,3).map(c=>({...c,cl:true}))],
+    hot:((news.signals||{}).hot||[]).slice(0,10),trends:((P.trends||{}).items||[]).slice(0,5),
+    mood:P.mood||{},boards:(P.ptt||{}).boards||[],ptt:((P.ptt||{}).items||[]).slice(0,4),
+    cof:((P.cofacts||{}).hot||[]).slice(0,4),cofs:(P.cofacts||{}).stats||{},
+    radar:((P.radar||{}).watch)||[],fund:(((P.radar||{}).funding)||[]).slice(0,3),
+    air:P.airport||{},poly:((P.poly||{}).items||[]).slice(0,4),power:P.power||{},quake:((P.quake||{}).items||[])[0],
+    wx:((P.weather||{}).items)||[],ussec:((P.sectors||{}).items||[]).map(s=>[s.name,n(s.chg_pct)]),twsec:(tm.sectors||[]).map(s=>[s.name,n(s.pct)]),
+    gov:[...(((P.tenders||{}).items)||[]).slice(0,3).map(t=>["招標",t.title,t.unit,t.budget,t.url]),...(((P.awards||{}).items)||[]).slice(0,2).map(a=>["決標",a.title,a.winner,a.amount,a.url])]};
+}
+
+/* ---------- 版面 ---------- */
+function layout(){
+  $("#ov").innerHTML=`
+  <section class="w12 o-tks" id="ov-tks" aria-label="主要行情"></section>
+  <section class="o-card w4" id="ov-c-tw">${H("TAIEX","加權 · 法人 · 家數","market")}
+    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><div class="o-odo" id="ov-odo"></div><span class="num" id="ov-twchg"></span></div>
+    <svg class="o-tw-spark" id="ov-twspark" viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%;height:46px;display:block" aria-hidden="true"></svg>
+    <div class="o-sub" id="ov-txline"></div>
+    <div class="o-dv" id="ov-inst"></div>
+    <div><div class="o-bt" id="ov-bt"><i class="u"></i><i class="f"></i><i class="d"></i></div><div class="o-sub" id="ov-btx" style="margin-top:3px"></div></div>
+  </section>
+  <section class="o-card w4" id="ov-c-macro">${H("Macro","利率 · 通膨 · 下個數據","macro")}
+    <div class="o-kv" id="ov-rates"></div><div class="o-hr"></div><div class="o-cd" id="ov-cal"></div></section>
+  <section class="o-card w4" id="ov-c-risk">${H("Risk","恐慌指針 · 結構 · 電網","market")}
+    <svg class="o-gauge" viewBox="0 0 240 150" aria-hidden="true">
+      <path d="M20 120 A100 100 0 0 1 220 120" fill="none" stroke="var(--line2)" stroke-width="10"/>
+      <path d="M20 120 A100 100 0 0 1 100 22.4" fill="none" stroke="#39B978" stroke-width="10"/>
+      <path d="M100 22.4 A100 100 0 0 1 170.7 33.4" fill="none" stroke="#E0A23A" stroke-width="10"/>
+      <path d="M170.7 33.4 A100 100 0 0 1 220 120" fill="none" stroke="#F0524F" stroke-width="10"/>
+      <g fill="#8B93A7" font-family="IBM Plex Mono, monospace" font-size="9"><text x="14" y="131">10</text><text x="112" y="14">25</text><text x="210" y="131">40</text></g>
+      <g id="ov-needle"><line x1="120" y1="120" x2="120" y2="34" stroke="#E6E8EE" stroke-width="2"/><circle cx="120" cy="120" r="5" fill="#E6E8EE"/></g>
+      <text id="ov-vixv" x="120" y="146" text-anchor="middle" fill="#E6E8EE" font-family="IBM Plex Mono, monospace" font-size="16" font-weight="600"></text>
+    </svg>
+    <div class="o-chips" id="ov-fear"></div><div class="o-hr"></div>
+    <div class="o-batt" id="ov-batt"></div><div class="o-sub" id="ov-pwx"></div></section>
+  <section class="o-card w8" id="ov-c-news">${H("Wire","最新頭條 · AI 與開發者","intel")}
+    <div class="o-cols2"><div><div class="o-colh">新聞</div><ul class="o-ls" id="ov-news"></ul></div><div><div class="o-colh">AI 大廠 · 開發者</div><ul class="o-ls" id="ov-ai"></ul></div></div></section>
+  <section class="o-card w4" id="ov-c-hot">${H("Hot","多源同提 · 字越大來源越多","intel")}
+    <div class="o-words" id="ov-words"></div><div class="o-hr"></div><div class="o-colh">GOOGLE 趨勢</div><ul class="o-ls rk" id="ov-trends"></ul></section>
+  <section class="o-card w4" id="ov-c-mood">${H("Mood","情緒波形 · 越亂越負面","social")}
+    <canvas class="o-fx" id="ov-wave" height="84"></canvas><div class="o-dv" id="ov-moodsrc"></div><div class="o-sub" id="ov-themes"></div></section>
+  <section class="o-card w4" id="ov-c-ptt">${H("PTT","看板熱度 · 100 推發光","social")}<div class="o-eq" id="ov-eq"></div><ul class="o-ls" id="ov-ptt"></ul></section>
+  <section class="o-card w4" id="ov-c-cof">${H("Cofacts","LINE 轉傳查核","social")}<div class="o-sub" id="ov-cofs"></div><ul class="o-ls cof" id="ov-cof"></ul></section>
+  <section class="o-card w5" id="ov-c-map">${H("Taiwan","縣市氣溫 · 地震漣漪","live")}<canvas class="o-fx" id="ov-map" height="330"></canvas></section>
+  <section class="o-card w3" id="ov-c-radar">${H("Radar","公司雷達","intel")}<canvas class="o-fx" id="ov-radar" height="150"></canvas><div class="o-hr"></div><div class="o-colh">本週募資</div><ul class="o-ls" id="ov-fund"></ul></section>
+  <section class="o-card w4" id="ov-c-live">${H("TPE","桃機翻牌","live")}<div class="o-flaps" id="ov-flaps"></div><div class="o-hr"></div><div class="o-colh">POLYMARKET</div><div class="o-pm" id="ov-pm"></div></section>
+  <section class="o-card w8" id="ov-c-sec">${H("Sectors","板塊熱力 · 依漲跌排序","market")}
+    <div class="o-cols2"><div><div class="o-colh">美股 11 板塊</div><div class="o-heat" id="ov-ussec"></div></div><div><div class="o-colh">台股類股</div><div class="o-heat" id="ov-twsec"></div></div></div></section>
+  <section class="o-card w4" id="ov-c-gov">${H("Gov","行銷標案 · 決標","intel")}<ul class="o-ls" id="ov-gov"></ul></section>`;
+}
+
+/* ---------- 各區塊 ---------- */
+let prev={},seen={};
+const E=id=>document.getElementById(id);
+function tickers(anim){const el=E("ov-tks");const pm=prev.tick||{};
+  el.innerHTML=S.tick.map((t,i)=>{const p=pm[t.n];const dir=anim&&isFinite(p)&&p!==t.v?(t.v>p?"fu":"fd"):"";
+    return`<div class="o-tk ${anim?"draw":""} ${dir}"><div class="n1">${esc(t.n)}</div><div class="c1 ${CL(t.c)}">${SG(t.c)}%</div><div class="v1">${F(t.v,t.f)}</div><svg viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="${sparkPath(t.s)}" stroke="${(t.c||0)>=0?"var(--up)":"var(--down)"}" style="animation-delay:${i*40}ms"/></svg></div>`;}).join("");
+  prev.tick=Object.fromEntries(S.tick.map(t=>[t.n,t.v]));}
+function odo(v){const el=E("ov-odo");const s=F(v,2);
+  if(el.dataset.s?.length!==s.length)el.innerHTML=[...s].map(c=>/\d/.test(c)?`<span class="d"><span class="col">${[...Array(10).keys()].map(x=>`<span>${x}</span>`).join("")}</span></span>`:`<span>${c}</span>`).join("");
+  let k=0;el.querySelectorAll(".col").forEach(col=>{while(!/\d/.test(s[k]))k++;col.style.transform=`translateY(-${+s[k]}em)`;k++;});el.dataset.s=s;}
+function dvRows(el,rows,max,f,suf,key){const pv=prev[key]||{};
+  el.innerHTML=rows.map(([nm,v])=>`<div class="r"><span>${esc(nm)}</span><div class="tr"><i class="${v>=0?"p":"m"}" style="transform:scaleX(${moving()&&pv[nm]==null?0:Math.min(1,Math.abs(pv[nm]??v)/max)})"></i></div><span class="v2 ${CL(v)}">${SG(v,f)}${suf}</span></div>`).join("");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.querySelectorAll(".tr i").forEach((b,i)=>b.style.transform=`scaleX(${Math.min(1,Math.abs(rows[i][1])/max)})`)));
+  prev[key]=Object.fromEntries(rows);}
+function tw(){const t=S.tick.find(x=>x.n==="台股加權");const tm=S.tm;
+  if(t){odo(t.v);E("ov-twchg").className="num "+CL(t.c);E("ov-twchg").textContent=`${SG(t.c)}%`;
+    const a=t.s;if(a.length>1){const lo=Math.min(...a),hi=Math.max(...a),r=hi-lo||1,pts=a.map((v,i)=>`${(i/(a.length-1)*100).toFixed(2)} ${(38-(v-lo)/r*34).toFixed(2)}`),col=(t.c||0)>=0?"var(--up)":"var(--down)";
+      E("ov-twspark").innerHTML=`<path d="M${pts.join("L")}L100 40L0 40Z" fill="${col}" opacity=".12"/><path pathLength="1" d="M${pts.join("L")}" fill="none" stroke="${col}" stroke-width="1.5" vector-effect="non-scaling-stroke" class="ln"/>`;}}
+  const nt=tm.tx&&tm.tx.night,mg=tm.margin;
+  E("ov-txline").innerHTML=[nt?`台指期夜盤 <span class="num">${F(n(nt.close),0)}</span> <span class="num ${CL(n(nt.pct))}">${SG(n(nt.pct))}%</span>`:"",mg?`融資 <span class="num">${F(n(mg.margin_amt),1)}</span> 億 <span class="num ${CL(n(mg.margin_amt_chg))}">${SG(n(mg.margin_amt_chg),1)}</span>`:""].filter(Boolean).join(" · ");
+  const inst=((tm.institutions||{}).items||[]).filter(i=>i.name!=="合計").map(i=>[i.name,n(i.net)]);
+  if(inst.length)dvRows(E("ov-inst"),inst,Math.max(...inst.map(x=>Math.abs(x[1])),1)*1.15,1," 億","inst");
+  const b=tm.breadth;if(b){const tot=b.up+b.flat+b.down||1,u=b.up/tot,f=b.flat/tot,d=b.down/tot,bt=E("ov-bt");
+    bt.querySelector(".u").style.transform=`scaleX(${u})`;bt.querySelector(".f").style.transform=`translateX(${u*100}%) scaleX(${f})`;bt.querySelector(".d").style.transform=`scaleX(${d})`;
+    E("ov-btx").innerHTML=`<span class="up">漲 ${b.up}</span>（停 ${b.up_limit}）· 平 ${b.flat} · <span class="down">跌 ${b.down}</span>（停 ${b.down_limit}）`;}}
+function evtTime(e){const [y,m,d]=e.date.split("-").map(Number);const hm=EVT[e.label];const [hh,mm]=hm?hm.split(":").map(Number):[9,0];return Date.UTC(y,m-1,d,hh-8,mm);}
+function nextEvt(){const now=Date.now();const e=S.cal.filter(c=>c.kind!=="holiday").map(c=>({c,t:evtTime(c)})).find(x=>x.t>now);if(!e)return null;const s=Math.floor((e.t-now)/1000);
+  return{t:e.t,s,cd:s<86400?`${String(Math.floor(s/3600)).padStart(2,"0")}:${String(Math.floor(s%3600/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`:`${Math.ceil(s/86400)} 天後`};}
+function macro(){const R=[...S.rates];if(S.sofr)R.splice(2,0,["SOFR",n(S.sofr.value).toFixed(2)+"%",""]);
+  E("ov-rates").innerHTML=R.map(([k,v,p])=>{const a=parseFloat(v),b=parseFloat(p);const arr=isFinite(a)&&isFinite(b)?(a>b?'<span class="o-w">↑</span>':a<b?'<span class="up">↓</span>':"→"):"";return`<div class="r"><span>${k}</span><span class="pv">${p?"前 "+esc(p):""}</span><span class="nv">${esc(v)} ${arr}</span></div>`;}).join("");
+  const now=Date.now(),nx=nextEvt();
+  E("ov-cal").innerHTML=S.cal.filter(c=>evtTime(c)>now-6*3600e3).slice(0,5).map(c=>{const t=evtTime(c),d=new Date(t+8*3600e3),isN=nx&&t===nx.t;
+    return`<div class="r ${isN?"now":""}"><span class="wn">${d.getUTCMonth()+1}/${d.getUTCDate()}${EVT[c.label]?" "+EVT[c.label]:""}</span><span class="lb">${c.region==="台"?"🇹🇼":c.region==="美"?"🇺🇸":"🌐"} ${esc(c.label.replace("（主計總處）",""))}</span><span class="num ${isN?"o-w":"flat"}" ${isN?'id="ov-cdn"':""}>${isN?nx.cd:c.kind==="holiday"?"休市":Math.max(0,Math.ceil((t-now)/864e5))+" 天"}</span>${isN?`<div class="o-fuse"><i id="ov-fuse"></i></div>`:""}</div>`;}).join("")||'<div class="o-sub">近期沒有排定的數據</div>';
+  updFuse();}
+function updFuse(){if(!S||cur!=="overview")return;const nx=nextEvt();if(!nx)return;const f=E("ov-fuse");if(f)f.style.transform=`scaleX(${Math.min(1,nx.s/86400)})`;const c=E("ov-cdn");if(c)c.textContent=nx.cd;}
+function risk(){const vx=S.fear.find(i=>i.sym==="^VIX");if(vx){const v=n(vx.value),nd=E("ov-needle"),a=(Math.min(Math.max(v,10),40)-10)/30*180-90;
+    if(prev.needle==null&&moving()){nd.style.transition="none";nd.style.transform="rotate(-90deg)";void nd.getBoundingClientRect();nd.style.transition="";}
+    requestAnimationFrame(()=>requestAnimationFrame(()=>nd.style.transform=`rotate(${a}deg)`));prev.needle=a;E("ov-vixv").textContent=v.toFixed(1);}
+  const LV={green:"var(--up)",yellow:"var(--warn)",red:"var(--down)"};
+  E("ov-fear").innerHTML=S.fear.filter(i=>i.sym!=="^VIX").map(i=>`<span><i style="background:${LV[i.level]||"var(--dim)"}"></i>${esc(i.name)} <b>${F(n(i.value),n(i.value)<5?2:1)}</b></span>`).join("");
+  const pw=S.power;if(pw.reserve_pct!=null){const p=n(pw.reserve_pct),el=E("ov-batt"),on=Math.max(0,Math.min(20,Math.round(p/1.5))),col=p<6?"var(--down)":p<10?"var(--warn)":"var(--up)",po=+(el.dataset.on||-1);
+    el.innerHTML=Array.from({length:20},(_,i)=>`<i class="${i<on?"on":""}" style="--k:${i};--c:${col}"></i>`).join("");el.dataset.on=on;if(po!==on){el.classList.remove("fill");void el.offsetWidth;el.classList.add("fill");}
+    E("ov-pwx").innerHTML=`台電備轉 <b class="num" style="color:${col}">${p.toFixed(1)}%</b> ${esc(pw.level||"")}燈 · 用電 <span class="num">${F(n(pw.curr_mw)/1000,1)}</span> GW${pw.yday_reserve_pct!=null?` · 昨日 <span class="num">${F(n(pw.yday_reserve_pct),1)}%</span>`:""}`;}}
+function lists(anim){const sn=seen.news||new Set(),sa=seen.ai||new Set();
+  E("ov-news").innerHTML=S.news.slice(0,8).map(x=>{const nw=anim&&!sn.has(x.title);return`<li class="${nw?"in":""}"><span class="ag">${AG(x.at)}</span><span class="tt">${nw?'<span class="o-new">NEW</span>':""}<span class="sc">${x.reg==="外"?"🌐 ":""}${esc(x.source)}</span><a href="${safe(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a></span></li>`;}).join("");
+  E("ov-ai").innerHTML=S.ai.slice(0,8).map(x=>{const nw=anim&&!sa.has(x.title);return`<li class="${nw?"in":""}"><span class="ag">${x.at&&!x.cl?AG(x.at):esc(x.date||AG(x.at))}</span><span class="tt">${nw?'<span class="o-new">NEW</span>':""}<i class="o-vd" style="background:${VDC[x.vendor||""]||VDC[""]}"></i><span class="sc">${esc(x.source)}</span><a href="${safe(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a></span></li>`;}).join("");
+  seen.news=new Set(S.news.map(x=>x.title));seen.ai=new Set(S.ai.map(x=>x.title));}
+function hot(anim){const sh=seen.hot||new Set();
+  E("ov-words").innerHTML=S.hot.map(h=>{const c=n(h.src)||n(h.n)||1;return`<span class="${c>=3?"h":""} ${anim&&!sh.has(h.term)?"nw":""}" style="font-size:${10+Math.min(c,6)*3}px;font-weight:${c>=3?600:400}">${esc(h.term)}<sub>${c}</sub></span>`;}).join("")||'<span class="o-sub">這一輪沒有多源同提的詞</span>';
+  seen.hot=new Set(S.hot.map(h=>h.term));
+  E("ov-trends").innerHTML=S.trends.map((t,i)=>`<li><span class="ag">${i+1}</span><span class="tt">${t.url?`<a href="${safe(t.url)}" target="_blank" rel="noopener">${esc(t.title)}</a>`:esc(t.title)}</span><span class="ag">${esc(t.traffic||"")}</span></li>`).join("");}
+function mood(){const m=S.mood,src=m.sources||{};const rows=[["台灣",m.taiwan&&m.taiwan.score],["國外",m.overseas&&m.overseas.score],["PTT",src.PTT&&src.PTT.score],["LINE",src.LINE&&src.LINE.score]].filter(r=>r[1]!=null).map(r=>[r[0],n(r[1])]);
+  dvRows(E("ov-moodsrc"),rows,1,2,"","mood");
+  E("ov-themes").innerHTML=[m.taiwan&&m.taiwan.themes?`台灣：${esc(m.taiwan.themes.join("、"))}`:"",m.overseas&&m.overseas.themes?`國外：${esc(m.overseas.themes.join("、"))}`:""].filter(Boolean).join("<br>");}
+function ptt(){const B=S.boards;if(!B.length)return;const mx=Math.max(...B.map(b=>n(b.heat)||0),1),pv=prev.eq||{};
+  E("ov-eq").innerHTML=B.map(b=>`<div title="${esc(b.zh)} 熱度 ${b.heat}"><b class="${n(b.heat)>=mx*.6?"hi":""}" style="transform:scaleY(${moving()?(pv[b.board]||0):Math.max(.04,n(b.heat)/mx)})"></b><span>${esc(b.zh)}</span></div>`).join("");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>E("ov-eq").querySelectorAll("b").forEach((x,i)=>x.style.transform=`scaleY(${Math.max(.04,n(B[i].heat)/mx)})`)));
+  prev.eq=Object.fromEntries(B.map(b=>[b.board,Math.max(.04,n(b.heat)/mx)]));
+  E("ov-ptt").innerHTML=S.ptt.map(p=>`<li><span class="o-push ${p.push>=100?"boom":""}">${p.push>=100?"爆":p.push}</span><span class="tt"><span class="sc">${esc(p.board)}</span><a href="${safe(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a></span></li>`).join("");}
+function cof(anim){const s=S.cofs,sc=seen.cof||new Set();
+  E("ov-cofs").innerHTML=s.hot_n!=null?`熱門 <b class="num">${s.hot_n}</b> · 尚未查核 <b class="num o-w">${s.unchecked}</b> · 含錯誤 <b class="num down">${s.rumor}</b> · 回報 <b class="num">${s.requests_total}</b>`:"";
+  E("ov-cof").innerHTML=S.cof.map((c,i)=>{const bad=/錯誤|謠言|詐騙/.test(c.verdict||""),ok=/正確|事實/.test(c.verdict||"");const nw=anim&&!sc.has(c.id);const txt=/^https?:/.test(c.text||"")?"（轉傳連結）"+c.text.replace(/^https?:\/\/(www\.)?/,"").slice(0,24)+"…":c.text;
+    return`<li class="${nw?"in":""}"><span class="tt"><a href="${safe(c.url)}" target="_blank" rel="noopener">${esc(txt)}</a></span><span class="ag">${c.requests} 次</span><span class="o-stamp ${bad?"bad":ok?"ok":"wait"} ${nw||prev.cof==null?"go":""}" style="animation-delay:${i*90}ms">${esc(c.verdict||"")}</span></li>`;}).join("");
+  prev.cof=1;seen.cof=new Set(S.cof.map(c=>c.id));}
+function fund(){E("ov-fund").innerHTML=S.fund.map(f=>`<li><span class="ag">$${f.amount}M</span><span class="tt"><span class="sc">${esc(f.cat||"")}</span><a href="${safe(f.url)}" target="_blank" rel="noopener">${esc(f.company)}</a> ${esc(f.stage||"")}</span></li>`).join("")||'<li><span></span><span class="o-sub">本週沒有符合條件的募資</span></li>';}
+function flaps(){const a=S.air,F2=[["出境",a.dep&&a.dep.total],["入境",a.arr&&a.arr.total],["延誤",a.dep&&a.dep.delayed],["取消",a.dep&&a.dep.cancelled]].filter(x=>x[1]!=null);const pf=prev.flap||{};
+  E("ov-flaps").innerHTML=F2.map(([l,v])=>{const s=String(v).padStart(4," "),p=pf[l]||s;return`<div class="o-flap"><div class="dg">${[...s].map((c,i)=>`<b class="${p[i]!==c?"flip":""}" style="animation-delay:${i*60}ms">${c.trim()||"&nbsp;"}</b>`).join("")}</div><span class="o-sub">${l}</span></div>`;}).join("");
+  prev.flap=Object.fromEntries(F2.map(([l,v])=>[l,String(v).padStart(4," ")]));}
+function poly(){const el=E("ov-pm"),pv=prev.pm||{};
+  el.innerHTML=S.poly.map(m=>{const v=n(m.yes),d=n(m.d1);return`<div class="r"><span class="q"><a href="https://polymarket.com/event/${esc(m.slug||"")}" target="_blank" rel="noopener" style="color:var(--text)">${esc(POLYZH[m.question]||m.question)}</a></span><span class="num">${F(v,1)}%${isFinite(d)&&d?` <span class="${CL(d)}" style="font-size:10px">${d>0?"▲":"▼"}${Math.abs(d).toFixed(0)}</span>`:""}</span><div class="trk"><div class="fl" style="transform:scaleX(${moving()?(pv[m.question]||0)/100:v/100})"></div></div></div>`;}).join("");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.querySelectorAll(".fl").forEach((f,i)=>f.style.transform=`scaleX(${n(S.poly[i].yes)/100})`)));
+  prev.pm=Object.fromEntries(S.poly.map(m=>[m.question,n(m.yes)]));}
+function heatCol(c){const a=Math.min(1,Math.abs(c)/2.2);return`color-mix(in srgb,var(${c>=0?"--up":"--down"}) ${12+a*48}%,var(--panel2))`;}
+function heat(id,rows){const el=E(id),before={};el.querySelectorAll("[data-k]").forEach(d=>before[d.dataset.k]=d.getBoundingClientRect());
+  el.innerHTML=[...rows].filter(r=>isFinite(r[1])).sort((a,b)=>b[1]-a[1]).map(([nm,c])=>`<div data-k="${esc(nm)}" style="background:${heatCol(c)}"><span>${esc(nm)}</span><b>${SG(c)}%</b></div>`).join("");
+  if(moving())el.querySelectorAll("[data-k]").forEach(d=>{const b=before[d.dataset.k];if(!b)return;const a=d.getBoundingClientRect(),dx=b.left-a.left,dy=b.top-a.top;if(dx||dy)d.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:"none"}],{duration:700,easing:"cubic-bezier(.3,1.1,.4,1)"});});}
+function gov(){E("ov-gov").innerHTML=S.gov.map(r=>`<li><span class="ag" style="color:${r[0]==="招標"?"var(--accent)":"var(--muted)"}">${r[0]}</span><span class="tt"><a href="${safe(r[4])}" target="_blank" rel="noopener">${esc(r[1])}</a><br><span class="sc">${esc((r[2]||"").slice(0,24))} · ${r[3]?F(n(r[3])/1e4,0)+" 萬":"金額待補"}</span></span></li>`).join("")||'<li><span></span><span class="o-sub">今天沒有新標案</span></li>';}
+
+function fill(anim){const parts=[["tk",()=>tickers(anim)],["tw",tw],["macro",macro],["risk",risk],["lists",()=>lists(anim)],["hot",()=>hot(anim)],["mood",mood],["ptt",ptt],["cof",()=>cof(anim)],["fund",fund],["flaps",flaps],["poly",poly],["us",()=>heat("ov-ussec",S.ussec)],["tw2",()=>heat("ov-twsec",S.twsec)],["gov",gov]];
+  parts.forEach(([k,f])=>{try{f();}catch(e){console.warn("ov",k,e);}});}
+
+/* ---------- 三個持續動態的畫布：只在掛載或寬度改變時調尺寸 ---------- */
+let raf=null,last=0,CV=new WeakMap();
+function size(c){const dpr=Math.min(devicePixelRatio||1,2),w=Math.round(c.clientWidth),h=+c.getAttribute("height");if(!w)return;c.style.height=h+"px";const PW=Math.round(w*dpr),PH=Math.round(h*dpr);if(c.width!==PW)c.width=PW;if(c.height!==PH)c.height=PH;const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);CV.set(c,{x,w,h});}
+const ro=new ResizeObserver(es=>{let ch=false;es.forEach(e=>{const s=CV.get(e.target);if(!s||Math.round(e.target.clientWidth)!==s.w){size(e.target);ch=true;}});if(ch&&!raf&&cur==="overview"&&S)drawAll(0);});
+function fit(c){let s=CV.get(c);if(!s){size(c);ro.observe(c);s=CV.get(c);if(!s)return[null,0,0];}s.x.clearRect(0,0,s.w,s.h);return[s.x,s.w,s.h];}
+function drawAll(t){try{drawWave(t);drawRadar(t);drawMap(t);}catch(e){console.warn("ov canvas",e);}}
+function startLoops(){stopLoops();if(!S)return;if(!moving()){drawAll(0);return;}const step=t=>{raf=requestAnimationFrame(step);if(document.hidden||t-last<30)return;last=t;drawAll(t);};raf=requestAnimationFrame(step);}
+function stopLoops(){if(raf)cancelAnimationFrame(raf);raf=null;}
+function drawWave(t){const c=E("ov-wave");if(!c)return;const[x,w,h]=fit(c);if(!w)return;const m=S.mood;
+  [[m.taiwan,"#E0A23A",h*.33,"台灣"],[m.overseas,"#F0524F",h*.72,"國外"]].forEach(([o,col,y0,lab],j)=>{if(!o||o.score==null)return;const s=n(o.score);
+    x.strokeStyle="#242935";x.lineWidth=1;x.beginPath();x.moveTo(0,y0);x.lineTo(w,y0);x.stroke();
+    const amp=5+Math.abs(s)*30,ch=Math.abs(s)*2.2;x.beginPath();x.lineWidth=1.5;x.strokeStyle=col;
+    for(let i=0;i<=w;i+=3){const p=i/w,y=y0+Math.sin(p*9+t/700+j)*amp*.5+Math.sin(p*23-t/430)*amp*.25*ch+Math.sin(p*41+t/260)*amp*.12*ch;i?x.lineTo(i,y):x.moveTo(i,y);}x.stroke();
+    x.fillStyle="#8B93A7";x.font="10px IBM Plex Mono, monospace";x.fillText(lab,4,y0-amp*.6-3);});}
+function drawRadar(t){const c=E("ov-radar");if(!c)return;const[x,w,h]=fit(c);if(!w)return;const cx=w/2,cy=h/2,R=Math.min(w/2,h/2)-6;
+  x.strokeStyle="#242935";x.lineWidth=1;[1,.66,.33].forEach(k=>{x.beginPath();x.arc(cx,cy,R*k,0,Math.PI*2);x.stroke();});
+  const ang=(t/2600)%1*Math.PI*2;
+  if(x.createConicGradient){const g=x.createConicGradient(ang-0.9,cx,cy);g.addColorStop(0,"rgba(227,94,55,0)");g.addColorStop(.14,"rgba(227,94,55,.22)");g.addColorStop(.15,"rgba(227,94,55,0)");x.fillStyle=g;x.beginPath();x.arc(cx,cy,R,0,Math.PI*2);x.fill();}
+  x.strokeStyle="rgba(227,94,55,.8)";x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(ang)*R,cy+Math.sin(ang)*R);x.stroke();
+  S.radar.forEach((w2,i)=>{const sc=n(w2.score)||0,r=R*(1-Math.min(sc,24)/28),th=i/S.radar.length*Math.PI*2+.4,px=cx+Math.cos(th)*r,py=cy+Math.sin(th)*r;
+    const d=((ang-th)%(Math.PI*2)+Math.PI*2)%(Math.PI*2),gl=Math.max(0,1-d/1.2);
+    x.fillStyle=w2.spike?"#E0A23A":sc>0?`rgba(230,232,238,${.35+gl*.65})`:"rgba(139,147,167,.35)";x.beginPath();x.arc(px,py,sc>8?4.5:3,0,Math.PI*2);x.fill();
+    x.fillStyle=`rgba(230,232,238,${.45+gl*.5})`;x.font="10px Noto Sans TC, sans-serif";const lab=w2.name+(sc?` ${sc}`:"");const tw2=x.measureText(lab).width;x.fillText(lab,px+7+tw2>w?px-7-tw2:px+7,py+3);});}
+const TWP=[[121.54,25.30],[121.75,25.13],[122.00,25.01],[121.87,24.60],[121.86,24.43],[121.62,23.98],[121.42,23.10],[121.15,22.75],[120.90,22.35],[120.85,21.90],[120.73,21.93],[120.58,22.37],[120.27,22.62],[120.10,23.00],[120.10,23.20],[120.15,23.38],[120.20,23.70],[120.40,24.05],[120.50,24.25],[120.60,24.40],[120.85,24.68],[120.90,24.80],[121.10,25.05],[121.30,25.13],[121.40,25.18]];
+function tcol(v){const k=Math.max(0,Math.min(1,(v-18)/14));return`rgb(${Math.round(124+k*103)},${Math.round(143-k*49)},${Math.round(242-k*187)})`;}
+function drawMap(t){const c=E("ov-map");if(!c)return;const[x,w,h]=fit(c);if(!w)return;const lon0=119.5,lon1=123.4,lat0=21.8,lat1=25.4,sc=Math.min(w/(lon1-lon0),h/(lat1-lat0)),ox=(w-(lon1-lon0)*sc)/2;
+  const P2=(lo,la)=>[ox+(lo-lon0)*sc,h-(la-lat0)*sc];
+  x.beginPath();TWP.forEach(([lo,la],i)=>{const[px,py]=P2(lo,la);i?x.lineTo(px,py):x.moveTo(px,py);});x.closePath();x.fillStyle="#191D25";x.fill();x.strokeStyle="#2F3542";x.lineWidth=1;x.stroke();
+  const q=S.quake;if(q&&isFinite(n(q.lat))&&isFinite(n(q.lon))&&Date.now()-new Date(q.at)<7*864e5){const[qx,qy]=P2(n(q.lon),n(q.lat));
+    for(let k=0;k<3;k++){const ph=((t/2200)+k/3)%1;x.beginPath();x.arc(qx,qy,6+ph*40,0,Math.PI*2);x.strokeStyle=`rgba(224,162,58,${(1-ph)*.55})`;x.lineWidth=1.4;x.stroke();}
+    x.fillStyle="#E0A23A";x.beginPath();x.arc(qx,qy,3.5,0,Math.PI*2);x.fill();x.font="10px IBM Plex Mono, monospace";x.fillText(`M${q.mag} · ${AG(q.at)}`,qx-14,qy-10);}
+  S.wx.forEach(wx=>{const g=CITY[wx.city];if(!g||!isFinite(n(wx.temp)))return;const[px,py]=P2(g[0],g[1]);x.fillStyle=tcol(n(wx.temp));x.beginPath();x.arc(px,py,3.2,0,Math.PI*2);x.fill();
+    if(!/晴/.test(wx.weather||"")){x.strokeStyle="#8B93A7";x.lineWidth=1;x.beginPath();x.arc(px,py,6,0,Math.PI*2);x.stroke();}
+    if(n(wx.rain1h)>0){for(let k=0;k<3;k++){const ph=((t/900)+k/3)%1;x.strokeStyle=`rgba(124,143,242,${1-ph})`;x.beginPath();x.moveTo(px-4+k*4,py-14+ph*10);x.lineTo(px-5+k*4,py-10+ph*10);x.stroke();}}
+    x.fillStyle="#C9CDD6";x.font="10.5px Noto Sans TC, sans-serif";x.fillText(`${wx.city} ${n(wx.temp).toFixed(0)}°`,px+g[2],py+g[3]);});
+  x.fillStyle="#5C637A";x.font="9.5px IBM Plex Mono, monospace";x.fillText("點色＝氣溫　圈＝非晴　藍線＝正在下雨",6,h-6);}
+
+/* ---------- 天空：日月弧線、24 小時市場時段 ---------- */
+const LAT=25.04,LON=121.56,TZ=8;
+function sunTimes(date,lat,lon,tz){const rad=Math.PI/180,day=Math.floor((Date.UTC(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate())-Date.UTC(date.getUTCFullYear(),0,0))/864e5);
+  const g=2*Math.PI/365*(day-1);const eq=229.18*(0.000075+0.001868*Math.cos(g)-0.032077*Math.sin(g)-0.014615*Math.cos(2*g)-0.040849*Math.sin(2*g));
+  const dec=0.006918-0.399912*Math.cos(g)+0.070257*Math.sin(g)-0.006758*Math.cos(2*g)+0.000907*Math.sin(2*g)-0.002697*Math.cos(3*g)+0.00148*Math.sin(3*g);
+  const ha=Math.acos(Math.cos(90.833*rad)/(Math.cos(lat*rad)*Math.cos(dec))-Math.tan(lat*rad)*Math.tan(dec))/rad;
+  const noon=720-4*lon-eq+tz*60;return{rise:noon-4*ha,set:noon+4*ha};}
+function moonPhase(d){const syn=29.530588853,ref=Date.UTC(2000,0,6,18,14);return(((d-ref)/864e5)%syn+syn)%syn/syn;}
+function tpeMinutes(d){return((d.getUTCHours()+TZ)%24)*60+d.getUTCMinutes()+d.getUTCSeconds()/60;}
+const MKT=[["台股",9*60,13*60+30],["歐股",15*60,23*60+30],["美股",21*60+30,4*60]];
+function inSess(m,[_,a,b]){return a<b?m>=a&&m<b:m>=a||m<b;}
+function drawSky(){const c=$("#sky");const dpr=Math.min(devicePixelRatio||1,2),H=150,W=Math.round(c.clientWidth);if(!W)return;const PW=Math.round(W*dpr),PH=H*dpr;if(c.width!==PW)c.width=PW;if(c.height!==PH)c.height=PH;const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+  const now=new Date(),m=tpeMinutes(now),st=sunTimes(now,LAT,LON,TZ);const day=m>=st.rise&&m<st.set;
+  // horizon tint
+  const tw=Math.max(0,1-Math.min(Math.abs(m-st.rise),Math.abs(m-st.set))/50);
+  const grd=x.createLinearGradient(0,0,0,H);grd.addColorStop(0,day?"rgba(124,143,242,.10)":"rgba(14,15,18,0)");grd.addColorStop(1,`rgba(227,94,55,${.06+tw*.18})`);x.fillStyle=grd;x.fillRect(0,0,W,H);
+  // arc
+  const pad=24,base=H-42,cx=W/2,rx=Math.min(W/2-pad,W<700?W/2-pad:340),ry=Math.min(base-30,110);
+  x.strokeStyle="#3A3F49";x.lineWidth=1;x.setLineDash([3,5]);x.beginPath();x.ellipse(cx,base,rx,ry,0,Math.PI,2*Math.PI);x.stroke();x.setLineDash([]);
+  x.strokeStyle="#3A3F49";x.beginPath();x.moveTo(cx-rx-14,base);x.lineTo(cx+rx+14,base);x.stroke();
+  // body position
+  let p,isSun=day;if(day)p=(m-st.rise)/(st.set-st.rise);else{const len=1440-(st.set-st.rise);const since=m>=st.set?m-st.set:m+1440-st.set;p=since/len;}
+  const ang=Math.PI+p*Math.PI,bx=cx+Math.cos(ang)*rx,by=base+Math.sin(ang)*ry;
+  if(isSun){const g2=x.createRadialGradient(bx,by,0,bx,by,28);g2.addColorStop(0,"rgba(227,94,55,.45)");g2.addColorStop(1,"rgba(227,94,55,0)");x.fillStyle=g2;x.beginPath();x.arc(bx,by,28,0,Math.PI*2);x.fill();x.fillStyle="#E35E37";x.beginPath();x.arc(bx,by,8,0,Math.PI*2);x.fill();}
+  else{const ph=moonPhase(now);const g3=x.createRadialGradient(bx,by,0,bx,by,30);g3.addColorStop(0,"rgba(217,220,230,.22)");g3.addColorStop(1,"rgba(217,220,230,0)");x.fillStyle=g3;x.beginPath();x.arc(bx,by,30,0,Math.PI*2);x.fill();x.fillStyle="#D9DCE6";x.beginPath();x.arc(bx,by,8,0,Math.PI*2);x.fill();
+    // shadow for phase
+    x.fillStyle="#15171C";x.beginPath();const k=Math.cos(ph*2*Math.PI);x.arc(bx,by,8.2,-Math.PI/2,Math.PI/2,ph<.5);x.ellipse(bx,by,Math.abs(k)*8.2,8.2,0,Math.PI/2,-Math.PI/2,(ph<.5)!==(k<0));x.fill();
+    for(let i=0;i<26;i++){const sx=(Math.sin(i*91.7)*.5+.5)*W,sy=(Math.sin(i*37.3)*.5+.5)*(base-20);x.fillStyle=`rgba(231,233,238,${.15+.25*Math.abs(Math.sin(i*2.3))})`;x.fillRect(sx,sy,1.2,1.2);}}
+  // sunrise / sunset ticks
+  x.fillStyle="#5A606C";x.font="10px Martian Mono, monospace";const hm=v=>`${String(Math.floor(v/60)).padStart(2,"0")}:${String(Math.round(v%60)).padStart(2,"0")}`;
+  x.fillText("日出 "+hm(st.rise),cx-rx-14,base+13);const sTxt="日落 "+hm(st.set);x.fillText(sTxt,cx+rx+14-x.measureText(sTxt).width,base+13);
+  // 24h market track
+  const ty=H-9,tx0=14,tx1=W-14,X=v=>tx0+(v/1440)*(tx1-tx0);
+  x.fillStyle="#5A606C";x.font="9px Martian Mono, monospace";[0,6,12,18].forEach(hh=>x.fillText(String(hh).padStart(2,"0"),X(hh*60)+2,ty-6));
+  x.fillStyle="#1B1E24";x.fillRect(tx0,ty-3,tx1-tx0,4);
+  MKT.forEach(([n,a,b],i)=>{const col=inSess(m,MKT[i])?"#39B978":"#3A3F49";x.fillStyle=col;if(a<b)x.fillRect(X(a),ty-3,X(b)-X(a),4);else{x.fillRect(X(a),ty-3,X(1440)-X(a),4);x.fillRect(X(0),ty-3,X(b)-X(0),4);}});
+  x.fillStyle="#E7E9EE";x.fillRect(X(m)-1,ty-7,2,12);
+  // overlays
+  $("#sunline").textContent=`台北　${isSun?"白天":"夜晚"} · 日落 ${hm(st.set)} · 月相 ${["新月","眉月","上弦","盈凸","滿月","虧凸","下弦","殘月"][Math.round(moonPhase(now)*8)%8]}`;
+  const ca=new Date(now.getTime());const caStr=ca.toLocaleTimeString("zh-TW",{timeZone:"America/Los_Angeles",hour:"2-digit",minute:"2-digit",hour12:false});
+  const caH=+caStr.slice(0,2);$("#caline").textContent=`加州　${caStr}　${caH>=7&&caH<19?"白天":"夜晚"}`;
+  $("#sessions").innerHTML=MKT.map(s=>`<span class="${inSess(m,s)?"open":""}"><i></i>${s[0]} ${inSess(m,s)?"交易中":"收盤"}</span>`).join("");
+}
+
+function skyTick(){const now=new Date();$("#tclock").textContent=now.toLocaleTimeString("zh-TW",{timeZone:"Asia/Taipei",hour:"2-digit",minute:"2-digit",hour12:false});
+  $("#tdate").textContent=now.toLocaleDateString("zh-TW",{timeZone:"Asia/Taipei",month:"long",day:"numeric",weekday:"short"});}
+let skyW=0;function skyMaybe(){const w=Math.round($("#sky").clientWidth);if(w!==skyW){skyW=w;drawSky();}}
+skyTick();drawSky();
+setInterval(()=>{if(document.hidden)return;skyTick();updFuse();ring();},1000);
+setInterval(()=>{if(!document.hidden)drawSky();},20000);
+addEventListener("resize",skyMaybe);
+function ring(){const per=(inSession()?5:15)*60e3;const f=nextAt?Math.max(0,Math.min(1,(nextAt-Date.now())/per)):0;$("#ringfg").setAttribute("stroke-dashoffset",(69.1*(1-f)).toFixed(1));}
+
+/* ---------- 新一輪：先記下各面板內容，渲染後比對 ---------- */
+let snapText={},snapItems={},gen=null;
+const hash=s=>{s=s.replace(/\d+\s*(?:分|小時|天)前|剛剛|\d+[mhd]\b/g,"");let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h;};
+function before(){document.querySelectorAll("main .panel").forEach(p=>{snapText[p.id]=hash(p.querySelector(".pb")?.textContent||"");snapItems[p.id]=new Set([...p.querySelectorAll(".list li .t")].map(t=>t.textContent.trim()));});}
+function scan(){if(!moving())return;const s=$("#o-scan");s.classList.remove("go");void s.offsetWidth;s.classList.add("go");}
+function toast(msg){const t=$("#o-toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("show"),3200);}
+function after(P,all){
+  const isNew=gen!==null&&all.generatedAt!==gen;gen=all.generatedAt;lastP=P;S=snap(P);
+  if(!$("#ov").children.length)layout();
+  if(!isNew){fill(false);if(cur==="overview")startLoops();return;}
+  // 新一輪進來
+  scan();
+  const changed=[];document.querySelectorAll("main .panel").forEach(p=>{const h=hash(p.querySelector(".pb")?.textContent||"");if(snapText[p.id]!=null&&h!==snapText[p.id])changed.push(p);});
+  const tabsHit=new Set();
+  changed.forEach((p,i)=>{const t=TAB_OF[p.id];if(t)tabsHit.add(t);
+    if(t===cur&&moving()){setTimeout(()=>bump(p),i*90);p.querySelectorAll("svg").forEach(s=>s.querySelectorAll('path[fill="none"]').forEach(pa=>pa.setAttribute("pathLength","1")));p.classList.remove("o-redraw");void p.offsetWidth;p.classList.add("o-redraw");}
+    const old=snapItems[p.id]||new Set();if(old.size)p.querySelectorAll(".list li").forEach(li=>{const t2=li.querySelector(".t");if(t2&&!old.has(t2.textContent.trim()))li.classList.add("o-in");});});
+  tabsHit.forEach(t=>{if(t!==cur)$(`#tab-${t}`).classList.add("lit");});
+  setTimeout(()=>{fill(true);if(cur==="overview"){["ov-c-tw","ov-c-risk","ov-c-news","ov-c-hot","ov-c-ptt","ov-c-cof","ov-c-sec"].forEach((id,i)=>setTimeout(()=>bump(E(id)),i*110));}},moving()?350:0);
+  const nm=[...tabsHit].filter(t=>t!=="overview").map(t=>TABS.find(x=>x[0]===t)[1]);
+  toast(`新一輪資料進來 · ${changed.length} 個面板有變動${nm.length?" · "+nm.join("、"):""}`);
+}
+function replay(){if(!lastP)return;scan();prev={};seen={};const keep=E("ov-odo");if(keep)keep.dataset.s="";if(cur==="overview"){layout();setTimeout(()=>{fill(true);startLoops();},moving()?350:0);}
+  else document.querySelectorAll(`main .panel:not([data-tab-hide])`).forEach((p,i)=>{p.querySelectorAll('svg path[fill="none"]').forEach(pa=>pa.setAttribute("pathLength","1"));p.classList.remove("o-redraw");void p.offsetWidth;p.classList.add("o-redraw");setTimeout(()=>bump(p),i*90);});}
+$("#btn-replay").addEventListener("click",replay);
+mbtn.addEventListener("click",()=>{motion=!motion;try{localStorage.setItem("intel:motion",motion?"on":"off");}catch(_){}root.classList.toggle("still",!motion);syncBtn();if(cur==="overview")startLoops();});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&cur==="overview"&&S&&!raf)startLoops();});
+
+let saved="overview";try{saved=localStorage.getItem("intel:tab")||"overview";}catch(_){}
+go(TABS.some(t=>t[0]===saved)?saved:"overview");
+return{before,after};
+})();
+
 /* boot */
 loadAll();setInterval(()=>{if(Date.now()>=nextAt)loadAll();},15e3);
 })();

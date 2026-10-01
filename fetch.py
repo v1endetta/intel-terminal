@@ -1823,6 +1823,10 @@ def _wiki_top(lang, limit=5):
     return out
 
 
+# 開獎、樂透這類每天固定發的稿件不是新聞訊號，會擠掉真的頭條
+NEWS_NOISE = re.compile(r"今彩\s*539|威力彩|大樂透|雙贏彩|3星彩|4星彩|賓果賓果|樂透|統一發票.*(?:中獎號碼|開獎)|頭獎.*(?:槓龜|中獎)")
+
+
 def p_news():
     NEWS_ERRS.clear(); HOT_POOL.clear()
     tw = []
@@ -1831,6 +1835,8 @@ def p_news():
     if not tw:
         tw += _try("cna gnews", _gnews, "site:cna.com.tw", "中央社", 8)
     pts = _try("pts", _rss, "https://news.pts.org.tw/xml/newsfeed.xml", "公視", 6) or _try("pts gnews", _gnews, "site:news.pts.org.tw", "公視", 5)
+    tw = [n for n in tw + pts if not NEWS_NOISE.search(n.get("title") or "")]
+    pts = [n for n in tw if n.get("source") == "公視"]; tw = [n for n in tw if n.get("source") != "公視"]
     tw = _dedupe_sort(_dedupe_sort(tw, 8) + _dedupe_sort(pts, 4), 12)  # 保證兩家都出現，不讓中央社洗版
 
     intl = _try("bbc", _rss, "https://feeds.bbci.co.uk/news/world/rss.xml", "BBC", 8)
@@ -2001,7 +2007,10 @@ def p_aiwire():
     gh_hdr = {"Accept": "application/vnd.github+json", **({"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"]} if os.environ.get("GITHUB_TOKEN") else {})}
     for org, vendor in (("deepseek-ai", "deepseek"), ("xai-org", "xai")):
         try:
-            for r in gjson(f"https://api.github.com/orgs/{org}/repos", params={"sort": "created", "per_page": 3}, headers=gh_hdr):
+            for r in gjson(f"https://api.github.com/orgs/{org}/repos", params={"sort": "created", "per_page": 8}, headers=gh_hdr):
+                # 內部元件、fork、封存的 repo 不是發布訊號（例如 DeepSeek Harness 的 dsh-* 元件）
+                if r.get("fork") or r.get("archived") or re.search(r"internal|component used by|test|demo|template|mirror", r.get("description") or "", re.I):
+                    continue
                 items.append({"source": "GitHub", "title": f"新 repo {r['full_name']}：{(r.get('description') or '')[:60]}", "url": r["html_url"], "at": r.get("created_at") or "", "vendor": vendor, "detect": True})
         except Exception as e:  # noqa: BLE001
             errs.append(f"gh {org}: {safe_err(e)}")
@@ -2949,6 +2958,7 @@ def p_quake():
             if v and (not mx or v > mx):
                 mx = v
         out.append({"at": at, "mag": num(mag), "loc": (epi.get("Location") or "")[:40], "depth": num(info.get("FocalDepth")),
+                    "lat": num(epi.get("EpicenterLatitude")), "lon": num(epi.get("EpicenterLongitude")),
                     "intensity": mx[:4], "url": q.get("Web") or "https://scweb.cwa.gov.tw/", "no": q.get("EarthquakeNo")})
     out.sort(key=lambda x: x["at"], reverse=True)
     if not out:
