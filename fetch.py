@@ -2708,6 +2708,7 @@ RADAR_WATCH = [  # (名稱, 一句定位, Google News 英文查詢, HN 查詢, B
 RADAR_TOPIC = re.compile(r"\b(design|designer|video|film|image|photo|creative|brand|branding|marketing|advert|ads?\b|voice|audio|music|presentation|slides?|deck|content|avatar|animation|3D|motion|font|typograph|assistant|agent|ugc|influencer|commerce|fashion|retail)", re.I)
 RADAR_RAISE = re.compile(r"^(?P<co>[A-Z][\w.&'’\- ]{1,40}?)(?:,.{0,60}?,)?\s+(?:raises|lands|secures|closes|nabs|bags|gets|snags|picks up|announces)\s+(?:a\s+)?\$?(?P<amt>[\d.]+)\s*(?P<unit>[MB]|million|billion)", re.I)
 RADAR_HIST = "radar"
+RADAR_SKIP = re.compile(r"secur|cyber|fintech|bank|payment|compliance|legal|insur|health|medic|clinic|biotech|pharma|drug|defense|crypto|blockchain|logistics|supply chain|devops|database|infra", re.I)
 
 
 def _hn_search(q, days=7, tags="story", min_points=0, by_date=True, hits=20):
@@ -2764,7 +2765,7 @@ def p_radar():
         for n_ in _try("radar funding", _gnews, q, "", 20, "en"):
             t = n_.get("title") or ""
             m = RADAR_RAISE.search(t)
-            if not m or (n_.get("at") or "") < cut7 or not RADAR_TOPIC.search(t):
+            if not m or (n_.get("at") or "") < cut7 or not RADAR_TOPIC.search(t) or RADAR_SKIP.search(t):
                 continue
             co = m.group("co").strip(" ,")
             amt = _radar_amount(m)
@@ -2778,7 +2779,7 @@ def p_radar():
     # 雷達層 2：Show HN（兩天內、≥20 分、主題相關）
     try:
         for h in _hn_search("", 2, tags="show_hn", min_points=20, hits=60):
-            if RADAR_TOPIC.search(h["title"]):
+            if RADAR_TOPIC.search(h["title"]) and not RADAR_SKIP.search(h["title"]):
                 showhn.append(h)
         showhn.sort(key=lambda h: -h["points"])
     except Exception as e:  # noqa: BLE001
