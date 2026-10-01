@@ -2708,7 +2708,17 @@ RADAR_WATCH = [  # (名稱, 一句定位, Google News 英文查詢, HN 查詢, B
 RADAR_TOPIC = re.compile(r"\b(design|designer|video|film|image|photo|creative|brand|branding|marketing|advert|ads?\b|voice|audio|music|presentation|slides?|deck|content|avatar|animation|3D|motion|font|typograph|assistant|agent|ugc|influencer|commerce|fashion|retail)", re.I)
 RADAR_RAISE = re.compile(r"^(?P<co>[A-Z][\w.&'’\- ]{1,40}?)(?:,.{0,60}?,)?\s+(?:raises|lands|secures|closes|nabs|bags|gets|snags|picks up|announces)\s+(?:a\s+)?\$?(?P<amt>[\d.]+)\s*(?P<unit>[MB]|million|billion)", re.I)
 RADAR_HIST = "radar"
-RADAR_SKIP = re.compile(r"secur|cyber|fintech|bank|payment|compliance|legal|insur|health|medic|clinic|biotech|pharma|drug|defense|crypto|blockchain|logistics|supply chain|devops|database|infra", re.I)
+RADAR_SKIP = re.compile(r"fintech|bank|payment|compliance|legal|insur|crypto|blockchain|logistics|supply chain|devops|database|infra", re.I)
+RADAR_CATS = [  # 標籤 → 判斷規則（依序比對，第一個命中的為準）
+    ("資安", re.compile(r"secur|cyber|threat|identity|zero.trust|fraud|breach|vulnerab|pentest|soc\b", re.I)),
+    ("生技", re.compile(r"biotech|bio\b|pharma|drug|therapeut|gene|genom|protein|antibod|cell\b|molecul|clinical|diagnos|life science", re.I)),
+    ("創意", re.compile(r"design|video|film|image|photo|creative|brand|marketing|advert|voice|audio|music|presentation|slides?|deck|content|avatar|animation|3D|motion|font|ugc|influencer|fashion|retail|commerce", re.I)),
+    ("AI 助理", re.compile(r"assistant|agent|copilot", re.I)),
+]
+
+
+def _radar_cat(t):
+    return next((c for c, rx in RADAR_CATS if rx.search(t)), None)
 
 
 def _hn_search(q, days=7, tags="story", min_points=0, by_date=True, hits=20):
@@ -2761,11 +2771,14 @@ def p_radar():
     # 雷達層 1：新募資（英文新聞，只留小額、主題相關）
     seen = set()
     for q in ('AI ("raises" OR "lands" OR "secures") ("seed" OR "Series A") (design OR video OR creative OR marketing OR brand)',
-              'startup raises seed round AI (video OR image OR voice OR assistant OR agent OR presentations)'):
+              'startup raises seed round AI (video OR image OR voice OR assistant OR agent OR presentations)',
+              '("raises" OR "secures") ("seed" OR "Series A") (cybersecurity OR "security startup" OR "AI security")',
+              '("raises" OR "secures") ("seed" OR "Series A") (biotech OR "drug discovery" OR "AI biology" OR therapeutics)'):
         for n_ in _try("radar funding", _gnews, q, "", 20, "en"):
             t = n_.get("title") or ""
             m = RADAR_RAISE.search(t)
-            if not m or (n_.get("at") or "") < cut7 or not RADAR_TOPIC.search(t) or RADAR_SKIP.search(t):
+            cat = _radar_cat(t)
+            if not m or (n_.get("at") or "") < cut7 or not cat or RADAR_SKIP.search(t):
                 continue
             co = m.group("co").strip(" ,")
             amt = _radar_amount(m)
@@ -2773,27 +2786,34 @@ def p_radar():
                 continue
             seen.add(co.lower())
             stage = "種子" if re.search(r"seed|pre-seed", t, re.I) else "A 輪" if re.search(r"series a\b", t, re.I) else "B 輪" if re.search(r"series b\b", t, re.I) else ""
-            funding.append({"company": co, "amount": amt, "stage": stage, "title": t[:110], "url": n_.get("url"), "at": n_.get("at"), "source": n_.get("source")})
+            funding.append({"company": co, "amount": amt, "stage": stage, "cat": cat, "title": t[:110], "url": n_.get("url"), "at": n_.get("at"), "source": n_.get("source")})
         time.sleep(0.8)
     funding.sort(key=lambda x: x.get("at") or "", reverse=True)
     # 雷達層 2：Show HN（兩天內、≥20 分、主題相關）
     try:
         for h in _hn_search("", 2, tags="show_hn", min_points=20, hits=60):
-            if RADAR_TOPIC.search(h["title"]) and not RADAR_SKIP.search(h["title"]):
-                showhn.append(h)
+            cat = _radar_cat(h["title"])
+            if cat and not RADAR_SKIP.search(h["title"]):
+                showhn.append({**h, "cat": cat})
         showhn.sort(key=lambda h: -h["points"])
     except Exception as e:  # noqa: BLE001
         errs.append("show hn: " + safe_err(e)[:80])
     # 雷達層 3：Product Hunt 精選（RSS，抓不到就略過）
     try:
         for it in _rss("https://www.producthunt.com/feed", "Product Hunt", 40):
-            if RADAR_TOPIC.search(it["title"]):
-                ph.append(it)
+            cat = _radar_cat(it["title"])
+            if cat:
+                ph.append({**it, "cat": cat})
     except Exception as e:  # noqa: BLE001
         errs.append("product hunt: " + safe_err(e)[:60])
     if not watch and not funding and not showhn:
         raise RuntimeError(f"radar: nothing {errs[:3]}")
-    return {"watch": watch, "funding": funding[:10], "showhn": showhn[:8], "ph": ph[:8], "errs": errs[:6]}
+    # 每類最多 4 筆，避免單一類洗版
+    per, fsel = {}, []
+    for f in funding:
+        if per.get(f["cat"], 0) < 4:
+            per[f["cat"]] = per.get(f["cat"], 0) + 1; fsel.append(f)
+    return {"watch": watch, "funding": fsel[:14], "showhn": showhn[:8], "ph": ph[:8], "errs": errs[:6]}
 
 
 # ---------- 第三批（免新金鑰）：標案 / 設計廣告媒體 / 地震 / 台電 / 桃機 ----------
