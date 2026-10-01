@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>dalta 情報站</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=Doto:wght@900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500;600&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=Doto:wght@900&display=swap">
 <style>
 :root{
   color-scheme:dark;
@@ -223,16 +223,18 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .sec{display:none}
 /* sky */
 .sky{position:relative;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--panel);margin:12px 0 0}
-.sky canvas{display:block;width:100%;height:280px}
-@media (max-width:639px){.sky canvas{height:360px}}
+.sky canvas{display:block;width:100%;height:200px}
+@media (max-width:639px){.sky canvas{height:260px}}
 .sky .over{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:flex-start;padding:10px 14px;pointer-events:none;gap:12px}
 .sky-brand{display:grid;gap:2px}
 .sky-brand b{font-family:var(--head);font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
 .sky-brand b .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
 .sky-brand span{font-size:11px;color:var(--muted)}
 .sky-clock{text-align:right;display:grid;gap:2px;justify-items:end}
-.sky-clock .t{font-family:var(--dot);font-weight:900;font-size:32px;line-height:1;letter-spacing:.03em}
-.sky-clock .s{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.sky-clock .t{font-family:"Poppins",var(--sans);font-weight:200;font-size:52px;line-height:1;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+@media (max-width:639px){.sky-clock .t{font-size:38px}}
+.sky-clock .s{font-family:var(--sans);font-size:11.5px;color:var(--muted)}
+.sky .over{text-shadow:0 1px 10px rgba(0,0,0,.4)}
 .sessions{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;color:var(--muted);padding:6px 14px;border-top:1px solid var(--line)}
 .sessions i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--dim)}
 .sessions .open i{background:var(--up)}
@@ -410,7 +412,7 @@ canvas.o-fx{display:block;width:100%}
   <div style="position:relative"><canvas id="sky"></canvas>
   <div class="over">
     <div class="sky-brand"><b><span class="dot" aria-hidden="true"></span>dalta 情報站</b><span id="sunline">台北</span><span id="caline"></span></div>
-    <div class="sky-clock"><div class="t" id="tclock">--:--</div><div class="s" id="tdate"></div></div>
+    <div class="sky-clock"><div class="t" id="tclock">--:--</div><div class="s" id="salt"></div><div class="s" id="tdate"></div></div>
   </div></div>
   <div class="sessions" id="sessions"></div>
 </section>
@@ -1260,63 +1262,54 @@ function sunTimes(date,lat,lon,tz){const rad=Math.PI/180,day=Math.floor((Date.UT
   const noon=720-4*lon-eq+tz*60;return{rise:noon-4*ha,set:noon+4*ha};}
 function moonPhase(d){const syn=29.530588853,ref=Date.UTC(2000,0,6,18,14);return(((d-ref)/864e5)%syn+syn)%syn/syn;}
 function tpeMinutes(d){return((d.getUTCHours()+TZ)%24)*60+d.getUTCMinutes()+d.getUTCSeconds()/60;}
-const MKT=[["台股",9*60,13*60+30],["歐股",15*60,23*60+30],["美股",21*60+30,4*60]];const MKC=["#3fd0a0","#6da3ff","#b48cff"];
+const MKT=[["台股",9*60,13*60+30],["歐股",15*60,23*60+30],["美股",21*60+30,4*60]];
 function inSess(m,[_,a,b]){return a<b?m>=a&&m<b:m>=a||m<b;}
-function drawSky(intro){const c=$("#sky");const W=Math.round(c.clientWidth);if(!W)return;const mob=W<640,H=mob?360:280,dpr=Math.min(devicePixelRatio||1,2);
+/* 天空頂欄（方向 C）：今天的太陽高度曲線，參考 Apple Watch Solar Graph */
+function solarFull(d){const rad=Math.PI/180,day=Math.floor((Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate())-Date.UTC(d.getUTCFullYear(),0,0))/864e5);
+  const g=2*Math.PI/365*(day-1);const eq=229.18*(0.000075+0.001868*Math.cos(g)-0.032077*Math.sin(g)-0.014615*Math.cos(2*g)-0.040849*Math.sin(2*g));
+  const dec=0.006918-0.399912*Math.cos(g)+0.070257*Math.sin(g)-0.006758*Math.cos(2*g)+0.000907*Math.sin(2*g)-0.002697*Math.cos(3*g)+0.00148*Math.sin(3*g);
+  const ha=Math.acos(Math.cos(90.833*rad)/(Math.cos(LAT*rad)*Math.cos(dec))-Math.tan(LAT*rad)*Math.tan(dec))/rad,noon=720-4*LON-eq+TZ*60;
+  return{dec,noon,rise:noon-4*ha,set:noon+4*ha};}
+function altAt(m,S,lag=0,dec=S.dec){const rad=Math.PI/180,H=((m-S.noon)/4-lag)*rad;return Math.asin(Math.sin(LAT*rad)*Math.sin(dec)+Math.cos(LAT*rad)*Math.cos(dec)*Math.cos(H))/rad;}
+function skyGlow(x,cx,cy,r,col,a){const g=x.createRadialGradient(cx,cy,0,cx,cy,r);g.addColorStop(0,`rgba(${col},${a})`);g.addColorStop(1,`rgba(${col},0)`);x.fillStyle=g;x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.fill();}
+function skyMoon(x,ox,oy,r,p){x.fillStyle="rgba(255,255,255,.12)";x.beginPath();x.arc(ox,oy,r,0,Math.PI*2);x.fill();
+  const k=Math.cos(p*2*Math.PI),wax=p<.5,bR=(wax&&k>0)||(!wax&&k<0);if(p<=.02||p>=.98)return;
+  x.fillStyle="#EEF0F5";x.beginPath();x.moveTo(ox,oy-r);x.arc(ox,oy,r,-Math.PI/2,Math.PI/2,!wax);
+  if(bR)x.ellipse(ox,oy,Math.abs(k)*r,r,0,Math.PI/2,-Math.PI/2,true);else x.ellipse(ox,oy,Math.abs(k)*r,r,0,Math.PI/2,Math.PI*1.5,false);x.fill();}
+function drawSky(intro){const c=$("#sky");const W=Math.round(c.clientWidth);if(!W)return;const mob=W<640,H=mob?260:200,dpr=Math.min(devicePixelRatio||1,2);
   c.style.height=H+"px";const PW=Math.round(W*dpr),PH=H*dpr;if(c.width!==PW)c.width=PW;if(c.height!==PH)c.height=PH;const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
-  const now=new Date(),m0=tpeMinutes(now),st=sunTimes(now,LAT,LON,TZ),ph=moonPhase(now);
-  const e=intro==null?1:intro,m=((m0-(1-e)*720)%1440+1440)%1440;   // 開場：從 12 小時前掃到現在
-  const cx=W/2,cy=mob?205:H/2,R=mob?Math.min(W/2-34,105):Math.min(110,H/2-30),K=R/60;
-  const A=min=>min/1440*Math.PI*2+Math.PI/2;                        // 午夜在下、正午在上、日出在左、日落在右
-  const P=(min,r)=>[cx+Math.cos(A(min))*r,cy+Math.sin(A(min))*r];
-  const [rx,ry]=P(st.rise,R),[sx,sy]=P(st.set,R),[tx,ty]=P(720,R);
-  const side=(qx,qy)=>(sx-rx)*(qy-ry)-(sy-ry)*(qx-rx);const upSign=Math.sign(side(tx,ty));const above=(qx,qy)=>Math.sign(side(qx,qy))===upSign;
-  const sunUp=m0>=st.rise&&m0<st.set;
-  // 地平線外的微光：日出日落前後一小時
-  const tw=Math.max(0,1-Math.min(Math.abs(m0-st.rise),Math.abs(m0-st.set))/60);
-  if(tw>0){const g=x.createRadialGradient(cx,cy,R*.4,cx,cy,R*2.2);g.addColorStop(0,`rgba(227,94,55,${.12*tw})`);g.addColorStop(1,"rgba(227,94,55,0)");x.fillStyle=g;x.fillRect(0,0,W,H);}
-  // 圓盤：天空（地平線以上）與地面
-  x.save();x.beginPath();x.arc(cx,cy,R,0,Math.PI*2);x.clip();
-  x.fillStyle="#0F1218";x.fillRect(cx-R,cy-R,R*2,R*2);
-  const sky=x.createLinearGradient(0,cy-R,0,cy+R);sky.addColorStop(0,sunUp?"rgba(124,143,242,.32)":"rgba(52,62,104,.30)");sky.addColorStop(1,sunUp?"rgba(124,143,242,.08)":"rgba(52,62,104,.06)");
-  x.beginPath();const d=R*3,ux=(sx-rx),uy=(sy-ry),L=Math.hypot(ux,uy)||1,nx=-uy/L,ny=ux/L,sgn=Math.sign(nx*(tx-rx)+ny*(ty-ry))||-1;
-  x.moveTo(rx-ux/L*d,ry-uy/L*d);x.lineTo(sx+ux/L*d,sy+uy/L*d);x.lineTo(sx+ux/L*d+nx*sgn*d,sy+uy/L*d+ny*sgn*d);x.lineTo(rx-ux/L*d+nx*sgn*d,ry-uy/L*d+ny*sgn*d);x.closePath();x.fillStyle=sky;x.fill();
-  if(!sunUp)for(let i=0;i<40;i++){const qx=cx+(Math.sin(i*91.7))*R*.9,qy=cy+(Math.sin(i*37.3))*R*.9;if(above(qx,qy)&&Math.hypot(qx-cx,qy-cy)<R-3){x.fillStyle=`rgba(231,233,238,${.2+.35*Math.abs(Math.sin(i*2.3))})`;x.fillRect(qx,qy,1.6,1.6);}}
-  x.restore();
-  // 刻度與外框
-  x.strokeStyle="#2F3542";x.lineWidth=1;x.beginPath();x.arc(cx,cy,R,0,Math.PI*2);x.stroke();
-  for(let h=0;h<24;h++){const a=A(h*60),r1=h%6?R-4*K:R-8*K;x.strokeStyle=h%6?"#2F3542":"#5C637A";x.beginPath();x.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);x.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);x.stroke();}
-  x.fillStyle="#5C637A";x.font=`${Math.round(8+K*2)}px IBM Plex Mono, monospace`;x.textAlign="center";x.textBaseline="middle";
-  [[0,"00"],[360,"06"],[720,"12"],[1080,"18"]].forEach(([mm,t])=>{const[px,py]=P(mm,R-16*K);x.fillText(t,px,py);});
-  // 市場時段：外圈三條弧，開盤中亮綠
-  MKT.forEach((s,i)=>{const r=R+7+i*6.5,open=inSess(m0,s);x.strokeStyle=MKC[i];x.globalAlpha=open?1:.28;x.lineWidth=4;x.lineCap="butt";x.beginPath();x.arc(cx,cy,r,A(s[1]),A(s[2]),false);x.stroke();x.globalAlpha=1;});
-  // 地平線：穿過今天的日出與日落
-  const ext=mob?14:30;x.strokeStyle="rgba(227,94,55,.55)";x.lineWidth=1;x.setLineDash([3,3]);x.beginPath();x.moveTo(rx-ux/L*ext,ry-uy/L*ext);x.lineTo(sx+ux/L*ext,sy+uy/L*ext);x.stroke();x.setLineDash([]);
+  const now=new Date(),m=tpeMinutes(now),S=solarFull(now),p=moonPhase(now),pr=intro==null?1:intro;
+  const L=20,R=W-20,top=mob?112:22,bot=H-50,hz=(top+bot)/2,X=v=>L+(v/1440)*(R-L),Y=a=>hz-(a/70)*(bot-top)/2,maxM=1440*pr;
+  // 地平線與時間軸
+  x.fillStyle="rgba(255,255,255,.12)";x.fillRect(L,hz,R-L,1);
+  x.font="400 10px 'IBM Plex Mono', monospace";x.fillStyle="rgba(230,232,238,.35)";x.textAlign="center";x.textBaseline="alphabetic";
+  [0,6,12,18,24].forEach(h=>x.fillText(String(h).padStart(2,"0"),X(h*60),H-28));
+  // 地平線以上的部分微微發亮
+  x.save();x.beginPath();x.rect(L,0,Math.max(0,X(maxM)-L),hz);x.clip();
+  x.beginPath();for(let v=0;v<=1440;v+=6){const a=altAt(v,S);v?x.lineTo(X(v),Y(a)):x.moveTo(X(v),Y(a));}x.lineTo(X(1440),hz);x.lineTo(X(0),hz);x.closePath();
+  const g=x.createLinearGradient(0,Y(60),0,hz);g.addColorStop(0,"rgba(255,214,170,.22)");g.addColorStop(1,"rgba(255,214,170,.02)");x.fillStyle=g;x.fill();x.restore();
+  // 太陽曲線（實線）與月亮曲線（虛線）
+  x.lineWidth=1.6;x.strokeStyle="rgba(255,236,214,.9)";x.beginPath();for(let v=0;v<=maxM;v+=4){const a=altAt(v,S);v?x.lineTo(X(v),Y(a)):x.moveTo(X(v),Y(a));}x.stroke();
+  x.setLineDash([2,4]);x.lineWidth=1.2;x.strokeStyle="rgba(210,218,240,.45)";x.beginPath();for(let v=0;v<=maxM;v+=6){const a=altAt(v,S,p*360,0);v?x.lineTo(X(v),Y(a)):x.moveTo(X(v),Y(a));}x.stroke();x.setLineDash([]);
+  // 日出、日落
   const hm=v=>`${String(Math.floor(v/60)).padStart(2,"0")}:${String(Math.round(v%60)).padStart(2,"0")}`;
-  x.font="10.5px IBM Plex Mono, monospace";x.fillStyle="#C9CDD6";if(mob){x.textBaseline="top";x.textAlign="left";x.fillText("日出 "+hm(st.rise),rx+22,ry+8);x.textAlign="right";x.fillText("日落 "+hm(st.set),sx-22,sy+8);}
-  else{x.textBaseline="middle";x.textAlign="right";x.fillText("日出 "+hm(st.rise),cx-R-34,ry);x.textAlign="left";x.fillText("日落 "+hm(st.set),cx+R+34,sy);}x.textBaseline="middle";
-  // 指針：現在時間
-  const[hx,hy]=P(m,R);x.strokeStyle="rgba(230,232,238,.4)";x.lineWidth=1.4;x.beginPath();x.moveTo(cx,cy);x.lineTo(hx,hy);x.stroke();x.fillStyle="#E6E8EE";x.beginPath();x.arc(hx,hy,3.2,0,Math.PI*2);x.fill();x.beginPath();x.arc(cx,cy,2.4,0,Math.PI*2);x.fill();
-  // 太陽
-  const br=R*.68;const[bx,by]=P(m,br);const sOn=above(bx,by);
-  x.globalAlpha=sOn?1:.38;if(sOn){const g2=x.createRadialGradient(bx,by,0,bx,by,34*K/1.6);g2.addColorStop(0,"rgba(227,94,55,.55)");g2.addColorStop(1,"rgba(227,94,55,0)");x.fillStyle=g2;x.beginPath();x.arc(bx,by,34*K/1.6,0,Math.PI*2);x.fill();}
-  x.fillStyle="#E35E37";x.beginPath();x.arc(bx,by,6.5*K*.8,0,Math.PI*2);x.fill();x.globalAlpha=1;
-  // 月亮：比太陽晚「月相 × 24 小時」過中天
-  const mm=((m-ph*1440)%1440+1440)%1440;const[ox,oy]=P(mm,br);const mOn=above(ox,oy),r=6.5*K*.8;
-  x.globalAlpha=mOn?1:.38;if(mOn){const g3=x.createRadialGradient(ox,oy,0,ox,oy,r*2.8);g3.addColorStop(0,"rgba(217,220,230,.25)");g3.addColorStop(1,"rgba(217,220,230,0)");x.fillStyle=g3;x.beginPath();x.arc(ox,oy,r*2.8,0,Math.PI*2);x.fill();}
-  x.fillStyle="#2A2F3A";x.beginPath();x.arc(ox,oy,r,0,Math.PI*2);x.fill();
-  const k=Math.cos(ph*2*Math.PI),wax=ph<.5,bulgeR=(wax&&k>0)||(!wax&&k<0);
-  if(ph>.02&&ph<.98){x.fillStyle="#D9DCE6";x.beginPath();x.moveTo(ox,oy-r);x.arc(ox,oy,r,-Math.PI/2,Math.PI/2,!wax);
-    if(bulgeR)x.ellipse(ox,oy,Math.abs(k)*r,r,0,Math.PI/2,-Math.PI/2,true);else x.ellipse(ox,oy,Math.abs(k)*r,r,0,Math.PI/2,Math.PI*1.5,false);x.fill();}
-  x.globalAlpha=1;x.textAlign="left";x.textBaseline="alphabetic";
+  x.font="400 10.5px 'IBM Plex Mono', monospace";[[S.rise,"日出"],[S.set,"日落"]].forEach(([v,t])=>{if(v>maxM)return;x.fillStyle="rgba(255,214,170,.8)";x.fillRect(X(v)-.5,hz-5,1,10);x.fillStyle="rgba(255,214,170,.75)";x.fillText(`${t} ${hm(v)}`,X(v),hz+18);});
+  // 交易時段：時間軸下三條細線，開盤中亮綠
+  MKT.forEach(([n0,a,b],i)=>{const y=H-18+i*5,open=inSess(m,MKT[i]);x.fillStyle=open?"rgba(57,185,120,.95)":"rgba(255,255,255,.12)";const seg=(u,v)=>{const u2=Math.min(u,maxM),v2=Math.min(v,maxM);if(v2>u2)x.fillRect(X(u2),y,X(v2)-X(u2),2);};a<b?seg(a,b):(seg(a,1440),seg(0,b));});
+  // 現在：細直線＋光點（曲線畫完才出現）
+  const alt=altAt(m,S);
+  if(pr>=1){const sx=X(m),sy=Y(alt);x.fillStyle="rgba(255,255,255,.22)";x.fillRect(sx-.5,top-8,1,bot-top+14);
+    skyGlow(x,sx,sy,22,"255,200,140",alt>0?.6:.3);x.fillStyle=alt>0?"#FFF6E6":"rgba(255,246,230,.6)";x.beginPath();x.arc(sx,sy,5,0,Math.PI*2);x.fill();
+    const ma=altAt(m,S,p*360,0);if(ma>0)skyGlow(x,sx,Y(ma),14,"220,226,245",.25);skyMoon(x,sx,Y(ma),4.5,p);}
   // 文字
-  const PHN=["新月","眉月","上弦月","盈凸月","滿月","虧凸月","下弦月","殘月"][Math.round(ph*8)%8];
-  $("#sunline").textContent=`台北　${sunUp?"白天":"夜晚"} · 日出 ${hm(st.rise)} · 日落 ${hm(st.set)} · ${PHN}`;
+  const PHN=["新月","眉月","上弦月","盈凸月","滿月","虧凸月","下弦月","殘月"][Math.round(p*8)%8];
+  $("#sunline").textContent=`台北 · 日出 ${hm(S.rise)} · 日落 ${hm(S.set)} · ${PHN}`;
+  $("#salt").textContent=mob?`太陽高度 ${alt.toFixed(1)}°`:`太陽高度 ${alt.toFixed(1)}° · ${alt>0?"地平線以上":"地平線以下"}`;
   const caStr=now.toLocaleTimeString("zh-TW",{timeZone:"America/Los_Angeles",hour:"2-digit",minute:"2-digit",hour12:false});
   const caH=+caStr.slice(0,2);$("#caline").textContent=`加州　${caStr}　${caH>=7&&caH<19?"白天":"夜晚"}`;
-  $("#sessions").innerHTML=MKT.map((s,i)=>`<span class="${inSess(m0,s)?"open":""}"><i style="background:${MKC[i]};opacity:${inSess(m0,s)?1:.35}"></i>${s[0]} ${inSess(m0,s)?"交易中":"收盤"}</span>`).join("")+`<span>外圈三色弧＝交易時段 · 虛線＝今天的地平線</span>`;
+  $("#sessions").innerHTML=MKT.map(s=>`<span class="${inSess(m,s)?"open":""}"><i></i>${s[0]} ${inSess(m,s)?"交易中":"收盤"}</span>`).join("")+`<span>實線＝太陽高度 · 虛線＝月亮 · 下方細線＝交易時段</span>`;
 }
-function skyIntro(){if(!moving()){drawSky();return;}const t0=performance.now(),D=1600;const f=t=>{const p=Math.min(1,(t-t0)/D),e=1-Math.pow(1-p,3);drawSky(e);if(p<1)requestAnimationFrame(f);};requestAnimationFrame(f);}
+function skyIntro(){if(!moving()){drawSky();return;}const t0=performance.now(),D=1300;const f=t=>{const p=Math.min(1,(t-t0)/D),e=1-Math.pow(1-p,3);drawSky(e);if(p<1)requestAnimationFrame(f);};requestAnimationFrame(f);setTimeout(()=>drawSky(),D+200);}
 
 function skyTick(){const now=new Date();$("#tclock").textContent=now.toLocaleTimeString("zh-TW",{timeZone:"Asia/Taipei",hour:"2-digit",minute:"2-digit",hour12:false});
   $("#tdate").textContent=now.toLocaleDateString("zh-TW",{timeZone:"Asia/Taipei",month:"long",day:"numeric",weekday:"short"});}
