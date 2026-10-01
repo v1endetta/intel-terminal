@@ -135,7 +135,7 @@
   },
   {
    "source": "Guardian",
-   "title": "Global bond sell-off intensifies, as UK long-term borrowing costs pass 6%",
+   "title": "Global bond sell-off intensifies as UK long-term borrowing costs pass 6%",
    "url": "https://www.theguardian.com/business/2026/oct/01/global-bond-sell-off-uk-long-term-borrowing-costs-us-bond-yield",
    "at": "2026-10-01T15:55:50Z",
    "sec": "Business"
@@ -159,7 +159,7 @@
    "name": "廣告與代理商",
    "items": [
     {
-     "source": "三立新聞",
+     "source": "setn.com",
      "title": "小商人出手「得標千萬工程」開酸！林于玲氣炸提告…司機交保車被扣",
      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFBUeDViNzRfa1VEZ0FaUzRwdnRJdnpJcXBjaklJeEZkT0R4dUdPVWZ2VG1DX3lHLThrbmxGUG1SOUlvR3ZTdVNyX9IBTEFVX3lxTE9HT2QzaGJrOENuZ1BXNE9rNzdYM1hVc1g5S1ZVVTY5ZHMyMnZBSTZmamo2ZWY0bnRkVnZySjU5aXYtSm1yUXZvRE1RZXk?oc=5",
      "at": "2026-09-27T05:49:00Z",
@@ -277,7 +277,7 @@
      "kw": "聯準會 利率 OR FOMC"
     },
     {
-     "source": "UDN",
+     "source": "udn.com",
      "title": "美股早盤／四大指數齊揚！AI股帶動10月開局走高台積電ADR微漲| 全球財經| 全球",
      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1DU3Z4eDdlNS1yX3hBZWlvTjlpSjcwU3dvVmplc09xV1YzTXFtWmstb2hGYVdBVTVDV3VfVWNLWnVoX1RtQ3dEQlI2ZDZoamxN?oc=5",
      "at": "2026-10-01T13:53:43Z",
@@ -296,7 +296,7 @@
      "kw": "台海 OR 共機 OR 軍演"
     },
     {
-     "source": "三立新聞",
+     "source": "setn.com",
      "title": "矮化台灣沒甜頭可拿！「這國」牛肉被中國狠課67%關稅",
      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE5XTTdacEtxTlJwVElzcWdJMFFjM2ZwZzlmbDVyRHFfd200alVWcVlEX0gyMW1QTi05Z0tkWUVzOWVPMG5odzlQbdIBTEFVX3lxTE84TktCd1RONU1xS0dlWUV2YWpsN1BZV0cwRFNvRExSWmZVcUVIdTB6TWh3NkZXY3E2NFJYZWZ0MVk2YlBSOW94QURfeF8?oc=5",
      "at": "2026-10-01T10:41:00Z",
@@ -366,7 +366,7 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.472,
+   "vol": 1.482,
    "vol_ratio": 0.89,
    "tone": 0.75,
    "tone_at": "2026-10-01T16:55:13Z",
@@ -374,9 +374,9 @@
     1.854,
     1.462,
     1.46,
-    1.472
+    1.482
    ],
-   "at": "2026-10-01T16:55:13Z"
+   "at": "2026-10-01T17:26:53Z"
   },
   "wiki": {
    "zh": [
@@ -440,8 +440,8 @@
     "n": 3,
     "src": 3,
     "sources": [
-     "UDN",
      "news.cnyes.c",
+     "udn.com",
      "寰宇新聞網"
     ],
     "sample": {
@@ -455,8 +455,8 @@
     "n": 3,
     "src": 3,
     "sources": [
-     "TVBS新聞網",
-     "UDN",
+     "news.tvbs.co",
+     "udn.com",
      "中央社 CNA"
     ],
     "sample": {
@@ -470,8 +470,8 @@
     "n": 3,
     "src": 2,
     "sources": [
-     "UDN",
-     "Yahoo股市"
+     "Yahoo股市",
+     "udn.com"
     ],
     "sample": {
      "title": "先進製程+封裝全拿！台積電「晶圓代工 2.0」全球市占飆至42%穩坐龍頭 三星僅4%慘遭輾壓",
@@ -579,8 +579,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-10-01T17:10:53Z"
+ "errs": [],
+ "updatedAt": "2026-10-01T17:26:53Z"
 }
