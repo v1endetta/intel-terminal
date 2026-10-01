@@ -271,9 +271,9 @@
     },
     {
      "source": "news.cnyes.c",
-     "title": "卡什卡利「放鷹」：通膨已蔓延至服務業 仍需壓制 預計今年再升息一次",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBkRGctc3lPbklmdE9mRXEwTnlxZHlWSXY4VElsNE9ESVVCR3JCSVJzd2g3cHdFYmFqZUVsLW56UDFXRlBSRFZKTU03a2VjR2M?oc=5",
-     "at": "2026-09-30T23:58:47Z",
+     "title": "高盛延後Fed升息預測 由10月改為12月",
+     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBMc0NzZVdTVVJsUDQ5UFE2d1dxNDRhbTBkdXlaRjF2djlSQTU2VjBTQ2YxOUNDVi1HY0MzM1N6Ni12NFhMZmNRRThoZlFHbUE?oc=5",
+     "at": "2026-09-30T22:40:55Z",
      "kw": "聯準會 利率 OR FOMC"
     },
     {
@@ -315,7 +315,7 @@
    "name": "時尚與奢華",
    "items": [
     {
-     "source": "Bella.tw儂儂",
+     "source": "bella.tw",
      "title": "2027春夏時裝週｜Aigle全新系列5亮點：LVMH Prize得主操刀",
      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQUHd4ZGZHblBhVkx2eUF6Q2xVVGdIMzQxVV9UN1dnbURDeS0wNVJPamg3X0FFM01GRGNjYTA3bUhwZ1BweHlLZG1ya21PbHlyVER6YUVGVVg2Mm5rRWtyNW5lR0c0OFhfVmx2QklaaS1BM1JsajBpQ3NReXR2cHZQdg?oc=5",
      "at": "2026-10-01T02:30:00Z",
@@ -366,14 +366,14 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.405,
-   "vol_ratio": 0.8,
+   "vol": 1.455,
+   "vol_ratio": 0.83,
    "spark": [
     1.854,
     1.462,
-    1.405
+    1.455
    ],
-   "at": "2026-10-01T04:40:14Z"
+   "at": "2026-10-01T05:12:57Z"
   },
   "wiki": {
    "zh": [
@@ -490,7 +490,7 @@
     "sources": [
      "OpenAI changelog",
      "TechCrunch",
-     "washingtonpo",
+     "The Washingt",
      "中央社"
     ],
     "sample": {
@@ -500,7 +500,7 @@
     "hot": true
    },
    {
-    "term": "台灣設計",
+    "term": "灣設計展",
     "n": 3,
     "src": 3,
     "sources": [
@@ -545,21 +545,6 @@
     "hot": true
    },
    {
-    "term": "通膨",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "news.cnyes.c",
-     "經濟日報",
-     "自由財經"
-    ],
-    "sample": {
-     "title": "卡什卡利「放鷹」：通膨已蔓延至服務業 仍需壓制 預計今年再升息一次",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBkRGctc3lPbklmdE9mRXEwTnlxZHlWSXY4VElsNE9ESVVCR3JCSVJzd2g3cHdFYmFqZUVsLW56UDFXRlBSRFZKTU03a2VjR2M?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "媽祖",
     "n": 3,
     "src": 3,
@@ -575,7 +560,7 @@
     "hot": true
    },
    {
-    "term": "軍嚴密監",
+    "term": "密監控應",
     "n": 3,
     "src": 2,
     "sources": [
@@ -588,11 +573,24 @@
      "url": "https://www.cna.com.tw/news/aipl/202610010051.aspx"
     },
     "hot": false
+   },
+   {
+    "term": "台海",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "中央社",
+     "中央社 CNA",
+     "經濟日報"
+    ],
+    "sample": {
+     "title": "中共37機艦船台海周邊活動　國軍嚴密監控應處",
+     "url": "https://www.cna.com.tw/news/aipl/202610010051.aspx"
+    },
+    "hot": false
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-10-01T04:57:03Z"
+ "errs": [],
+ "updatedAt": "2026-10-01T05:12:57Z"
 }
