@@ -3503,8 +3503,8 @@ def p_supply():
             expect_p = (expect.replace(day=1) - timedelta(days=1)).strftime("%Y-%m")  # 經濟部約每月 23 日公布「上上個月」
             if last < expect_p:
                 out["retail_lag"] = {"have": last, "expect": expect_p}
-                news = _try("retail news", _gnews, "經濟部 零售業營業額 年增", "", 3)
-                news = [n_ for n_ in news if (n_.get("at") or "") >= (NOW - timedelta(days=20)).isoformat()]
+                news = _try("retail news", _gnews, "零售業營業額 年增 經濟部統計處", "", 6)
+                news = [n_ for n_ in news if (n_.get("at") or "") >= (NOW - timedelta(days=20)).isoformat() and re.search(r"零售|營業額", n_.get("title") or "")]
                 if news:
                     out["retail_news"] = news[0]
         if not out["retail"]:
