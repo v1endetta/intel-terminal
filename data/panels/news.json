@@ -2,6 +2,12 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "美歐債券殖利率觸新高　歐股收黑",
+   "url": "https://www.cna.com.tw/news/afe/202610020002.aspx",
+   "at": "2026-10-01T16:52:05Z"
+  },
+  {
+   "source": "中央社",
    "title": "川普接受TIME專訪　宣稱台灣晶片公司投資5000億美元",
    "url": "https://www.cna.com.tw/news/aopl/202610010384.aspx",
    "at": "2026-10-01T15:21:53Z"
@@ -43,12 +49,6 @@
    "at": "2026-10-01T13:03:05Z"
   },
   {
-   "source": "中央社",
-   "title": "威力彩第115079期開獎",
-   "url": "https://www.cna.com.tw/news/ahel/202610010361.aspx",
-   "at": "2026-10-01T12:52:56Z"
-  },
-  {
    "source": "公視",
    "title": "日超商業者甜點新發想 交由AI主導口味搭配",
    "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1wMVQ5dDE3M2p0Yk1QcVcxTldWRUdfZy1LaGVUZkVZUEVvWFd1OXRQd3B4MjNsWXU1WVh1RGxjalNrS21Vei01VVF3ampadlU?oc=5",
@@ -74,6 +74,12 @@
   }
  ],
  "intl": [
+  {
+   "source": "BBC",
+   "title": "Putin warns West that Russia is ready to use every weapon to protect Kaliningrad",
+   "url": "https://www.bbc.co.uk/news/articles/cqg7k7v499jjo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-01T18:09:03Z"
+  },
   {
    "source": "Guardian",
    "title": "US borrowing costs hit 24-year high as global bond sell-off intensifies",
@@ -126,12 +132,6 @@
    "url": "https://www.theguardian.com/world/live/2026/oct/01/europe-latest-news-updates-russia-strikes-ukraine-nato",
    "at": "2026-10-01T16:38:32Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Fires break out at French schools as students protest nationwide",
-   "url": "https://www.bbc.co.uk/news/articles/c6d080d1e3l4o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-01T16:34:22Z"
   },
   {
    "source": "Guardian",
@@ -330,10 +330,10 @@
      "kw": "\"quiet luxury\" OR 老錢風 OR 靜奢"
     },
     {
-     "source": "經濟日報",
+     "source": "UDN",
      "title": "中秋連假買氣旺！微風信義區三館業績增8% 精品、餐飲最夯",
-     "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTFB1cUtRRWVsaU1TU0dSZjFhRGVhaXZwYlJCSm5zamV0MUlweklWVVFVQWZ2TzVkYUhTdHFMRjZKQkRVNGtFT2VpZGpGNDFSTTdXbER5MGp3QW1zdV85SFBBN191azN6UmJNSnBaekt1TXBQbk1RdWVnTHpkZVrSAV9BVV95cUxNaWpOblE3ZFE2Sm5zZENwQzY5a1lWNVhNUkMzM0dJaGxhWFEzMFY1R2VQQW9QQUZvVWx3a1dYM3h0SFU4SXRweHJxTnVHZzRBcGUxY1pqdnFEeDJVSDJtZw?oc=5",
-     "at": "2026-09-29T02:49:43Z",
+     "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBFZDdFNVRvbWVHRDN5OTBDRThQYkQ3MmNmZi1kR1VfUXQtYVlSY3duQXJaVy1qeEV6Q3pWZUdoS1kyd3pJQ2xRTEFGcm5kVnZj0gFWQVVfeXFMTThtR044Ymc2bW5zVEpJWmpvVnBtaFpXSWI4TlNlQXBhT3VZLVh6bnNSODR3NUI4eEU4MjhFdVlEdEdXMkRLdmhiaVRyektiTUFWbGIzelE?oc=5",
+     "at": "2026-09-29T02:49:41Z",
      "kw": "精品 台灣 OR 精品 業績"
     }
    ]
@@ -437,6 +437,37 @@
   },
   "hot": [
    {
+    "term": "利率",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "UDN",
+     "news.cnyes.c",
+     "中央社",
+     "寰宇新聞網"
+    ],
+    "sample": {
+     "title": "美歐債券殖利率觸新高　歐股收黑",
+     "url": "https://www.cna.com.tw/news/afe/202610020002.aspx"
+    },
+    "hot": true
+   },
+   {
+    "term": "OpenAI",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "HN",
+     "TechCrunch",
+     "The American"
+    ],
+    "sample": {
+     "title": "OpenAI’s new AI agent has a ‘slow morning’ as it stumbles in",
+     "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQS2JzX0J1UV84ejBCd1c2V3B4dlNEV05JS1lpZWtHZ1JHaFlZX2dkU0trbHk1V1FPdUw3QkoxZUpPSFVzdG5wNGh3RnpPRlFLSXRITlFVMmsxYUJYdlh0SG5UQWNjMjlIXzJhRkdMZTdqRmpoeHJsWTU3dC1EWERHa3l4cjgzNTFBV3puRmxYQ2NqdVdrQ0E?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "Gemini",
     "n": 3,
     "src": 3,
@@ -452,17 +483,17 @@
     "hot": true
    },
    {
-    "term": "利率",
+    "term": "殖利率",
     "n": 3,
     "src": 3,
     "sources": [
      "UDN",
      "news.cnyes.c",
-     "寰宇新聞網"
+     "中央社"
     ],
     "sample": {
-     "title": "別被高殖利率騙了！策略師示警美債可能還沒跌夠",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1ZdzhkNnVnaDZFRk1vZmJOblU1Y05RekhvYkpVeWxMSUkzOGNxdEFpczByaXBGVXYwZ0p3Wk4zOUwyRlpUNkN5Mzk5T28wam8?oc=5"
+     "title": "美歐債券殖利率觸新高　歐股收黑",
+     "url": "https://www.cna.com.tw/news/afe/202610020002.aspx"
     },
     "hot": true
    },
@@ -496,16 +527,16 @@
     "hot": false
    },
    {
-    "term": "OpenAI",
+    "term": "Russia",
     "n": 2,
     "src": 2,
     "sources": [
-     "HN",
-     "The American"
+     "BBC",
+     "Guardian"
     ],
     "sample": {
-     "title": "OpenAI’s new AI agent has a ‘slow morning’ as it stumbles in",
-     "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQS2JzX0J1UV84ejBCd1c2V3B4dlNEV05JS1lpZWtHZ1JHaFlZX2dkU0trbHk1V1FPdUw3QkoxZUpPSFVzdG5wNGh3RnpPRlFLSXRITlFVMmsxYUJYdlh0SG5UQWNjMjlIXzJhRkdMZTdqRmpoeHJsWTU3dC1EWERHa3l4cjgzNTFBV3puRmxYQ2NqdVdrQ0E?oc=5"
+     "title": "Putin warns West that Russia is ready to use every weapon to",
+     "url": "https://www.bbc.co.uk/news/articles/cqg7k7v499jjo?at_medium=RSS&at_campaign=rss"
     },
     "hot": false
    },
@@ -524,6 +555,20 @@
     "hot": false
    },
    {
+    "term": "Putin",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "BBC",
+     "Guardian"
+    ],
+    "sample": {
+     "title": "Putin warns West that Russia is ready to use every weapon to",
+     "url": "https://www.bbc.co.uk/news/articles/cqg7k7v499jjo?at_medium=RSS&at_campaign=rss"
+    },
+    "hot": false
+   },
+   {
     "term": "灣設計展",
     "n": 2,
     "src": 2,
@@ -536,53 +581,11 @@
      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE54ZkZnTFBnekJMbVBxZ1J4OFNRSTFvV1luYnA0Rjkxbm5JZm1MUjZZRmFES3FVdkhCYUtIYUh1RTVOY25mZTAtd2lYNzBfWkRLUklhUlJCUFJ2ZG95U1VvQ0dVNTPSAWpBVV95cUxQaDZudG52aGNPOUlySnEwWElKMmtjSzdKdFNUZThQeXliVU9PeGtoZm10emZIMjFSbUpuc1o2NTFSYUtxY3VoemtIVXM0cThzWVpsdVRuZkZzbE5xR2JVN1RWamhuR0Z0SGNn?oc=5"
     },
     "hot": false
-   },
-   {
-    "term": "國家檔案",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "n.yam.com",
-     "自由時報"
-    ],
-    "sample": {
-     "title": "國家檔案館勇奪2026金點設計獎3標章 建築與展示齊放異彩",
-     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5KblFLaVp1SzlOMXBZcTZjVm9reGZGQ2tkdVhQTTBwandWWmdZSjJEeFFXSDlYQWFsN045dm9lZWpEUjZ2RnlPLVJ3LTEtZG02SWc?oc=5"
-    },
-    "hot": false
-   },
-   {
-    "term": "矮化台灣",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "三立新聞",
-     "自由財經"
-    ],
-    "sample": {
-     "title": "矮化台灣沒撈到好處！中國下狠手 這國牛肉遭課67％關稅太慘了",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE92UExPNmF2YWxZcmFqeE5xVDZiSDdlcTlLaVVuN3h0NjVHN08wSE9QTE9BN0JqTGt2UDNoMzVNVTlOUkJPSEZ1cS1JdkhlZTE5cjNSSVp1NTFtNVdNM2xz0gFkQVVfeXFMUHBwNHZSdjZQeHVRRWwwNzNlaEU0NW1pcWtvWG1meEJXX0VjVUE2YlRnaVk3cjg5NjRJaGRpZHB1amJ2UDNWSjkxVjdndWlTNDFCU2FQZmUweW9JVGhNYUZqa2dSTA?oc=5"
-    },
-    "hot": false
-   },
-   {
-    "term": "殖利率",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "UDN",
-     "news.cnyes.c"
-    ],
-    "sample": {
-     "title": "別被高殖利率騙了！策略師示警美債可能還沒跌夠",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1ZdzhkNnVnaDZFRk1vZmJOblU1Y05RekhvYkpVeWxMSUkzOGNxdEFpczByaXBGVXYwZ0p3Wk4zOUwyRlpUNkN5Mzk5T28wam8?oc=5"
-    },
-    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-01T18:00:06Z"
+ "updatedAt": "2026-10-01T18:15:52Z"
 }
