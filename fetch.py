@@ -2711,8 +2711,8 @@ RADAR_HIST = "radar"
 RADAR_SKIP = re.compile(r"fintech|bank|payment|compliance|legal|insur|crypto|blockchain|logistics|supply chain|devops|database|infra", re.I)
 RADAR_CATS = [  # 標籤 → 判斷規則（依序比對，第一個命中的為準）
     ("資安", re.compile(r"secur|cyber|threat|identity|zero.trust|fraud|breach|vulnerab|pentest|soc\b", re.I)),
-    ("生技", re.compile(r"biotech|bio\b|pharma|drug|therapeut|gene|genom|protein|antibod|cell\b|molecul|clinical|diagnos|life science", re.I)),
-    ("創意", re.compile(r"design|video|film|image|photo|creative|brand|marketing|advert|voice|audio|music|presentation|slides?|deck|content|avatar|animation|3D|motion|font|ugc|influencer|fashion|retail|commerce", re.I)),
+    ("生技", re.compile(r"biotech|\bbio\b|pharma|\bdrugs?\b|therapeut|\bgenes?\b|genetic|genom|protein|antibod|\bcells?\b|molecul|clinical|diagnos|life science", re.I)),
+    ("創意", re.compile(r"design|video|\bfilm|image|photo|creative|\bbrand(?:s|ing|ed)?\b|marketing|advert|voice|audio|music|presentation|slides?|deck|content|avatar|animation|3D|motion|font|ugc|influencer|fashion|retail|commerce", re.I)),
     ("AI 助理", re.compile(r"assistant|agent|copilot", re.I)),
 ]
 
@@ -2781,6 +2781,11 @@ def p_radar():
             if not m or (n_.get("at") or "") < cut7 or not cat or RADAR_SKIP.search(t):
                 continue
             co = m.group("co").strip(" ,")
+            mm = re.search(r"rebrands as ([A-Z][\w.\-]+)", t)
+            if mm:
+                co = mm.group(1)
+            co = re.sub(r"^.*?-based\s+(?:[a-z][\w\-]*\s+)*", "", co)  # Milan-based biotech Aptadir → Aptadir
+            co = re.sub(r"^(?:AI|startup|biotech|cybersecurity|security)\s+(?:startup\s+)?", "", co, flags=re.I).strip()
             amt = _radar_amount(m)
             if amt > 150 or co.lower() in seen:  # 1.5 億美元以上就不是「小」了
                 continue
