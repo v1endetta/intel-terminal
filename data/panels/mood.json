@@ -1,37 +1,37 @@
 {
  "taiwan": {
-  "score": -0.3,
-  "label": "焦慮疑慮",
+  "score": -0.2,
+  "label": "疑慮",
   "themes": [
-   "汽車安全星級",
-   "股市與科技產業",
-   "假訊息與詐騙"
+   "車安零星評價",
+   "名人假信流傳",
+   "軍營外包爭議"
   ],
-  "line": "國人關注新車撞測安全與產業動態，群組則充斥健康假消息與政治謠言。"
+  "line": "台灣人關注車安撞測與名人假訊息，對政策與食安抱持懷疑態度。"
  },
  "overseas": {
-  "score": -0.4,
-  "label": "憂心不滿",
+  "score": -0.1,
+  "label": "焦慮",
   "themes": [
    "關稅與通膨",
    "科技業裁員",
-   "AI模型發布"
+   "AI模型競爭"
   ],
-  "line": "海外輿論焦慮川普關稅政策與通膨壓力，同時關注科技業裁員與新AI發展。"
+  "line": "國外社群擔憂通膨與裁員，同時高度關注 Google 新 AI 模型的表現。"
  },
  "sources": {
   "PTT": {
-   "score": -0.2,
-   "note": "熱議新車安全與產業財報資訊"
+   "score": -0.1,
+   "note": "熱議車安零星與股市配息"
   },
   "LINE": {
-   "score": -0.4,
-   "note": "多為名人傳言、飲食安全與投票詐騙"
+   "score": -0.3,
+   "note": "瘋傳張忠謀假信與政策質疑"
   }
  },
- "watch": "盯緊新車撞測安全議題與傳播廣泛的健康食品假訊息",
+ "watch": "盯緊 TNCAP 撞測零星風波與 LINE 假訊息傳播",
  "_grounding": [],
- "model": "gemini-3.6-flash",
+ "model": "gemini-3.5-flash",
  "spark_tw": [
   -0.1,
   -0.15,
@@ -46,7 +46,8 @@
   -0.1,
   -0.25,
   -0.2,
-  -0.3
+  -0.3,
+  -0.2
  ],
  "spark_os": [
   -0.4,
@@ -62,7 +63,8 @@
   -0.4,
   -0.35,
   -0.3,
-  -0.4
+  -0.4,
+  -0.1
  ],
  "n_inputs": {
   "PTT": 24,
@@ -70,6 +72,5 @@
   "Threads": 0,
   "Bluesky（國外）": 14
  },
- "updatedAt": "2026-10-01T05:29:44Z",
- "error": "2026-10-01T06:55:44Z RuntimeError: gemini-3.5-flash 503 This model is currently experiencing high demand. Spikes in demand are usually temporary. "
+ "updatedAt": "2026-10-01T08:13:54Z"
 }
