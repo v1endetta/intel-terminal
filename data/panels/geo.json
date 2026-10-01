@@ -1,20 +1,17 @@
 {
  "label": "TDX",
  "cities_with_data": 19,
- "freeway": 409,
- "static": "20/22",
+ "freeway": 411,
+ "static": "完成",
  "totals": {
   "parking": 1984,
   "bikes": 9944,
-  "speed": 959
+  "speed": 954
  },
  "errs": [
-  "static vd KinmenCounty: RuntimeError: 429 on Road/Traffic/VD/City/KinmenCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "vd Keelung: RuntimeError: 429 on Road/Traffic/Live/VD/City/Keelung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking HsinchuCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/HsinchuCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "bikes Taichung: RuntimeError: 429 on Bike/Availability/City/Taichung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking YunlinCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/YunlinCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "bikes ChiayiCounty: RuntimeError: 429 on Bike/Availability/City/ChiayiCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
+  "bikes Taipei: RuntimeError: 429 on Bike/Availability/City/Taipei body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "vd Taoyuan: RuntimeError: 429 on Road/Traffic/Live/VD/City/Taoyuan body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "parking MiaoliCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/MiaoliCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
  ],
- "updatedAt": "2026-10-01T13:45:17Z"
+ "updatedAt": "2026-10-01T14:02:05Z"
 }
