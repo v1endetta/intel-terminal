@@ -76,6 +76,12 @@
  "intl": [
   {
    "source": "BBC",
+   "title": "Netanyahu says Flydubai attacker had 'Islamist radical indoctrination'",
+   "url": "https://www.bbc.co.uk/news/articles/crje8edqyej9o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-01T18:19:14Z"
+  },
+  {
+   "source": "BBC",
    "title": "Putin warns West that Russia is ready to use every weapon to protect Kaliningrad",
    "url": "https://www.bbc.co.uk/news/articles/cqg7k7v499jjo?at_medium=RSS&at_campaign=rss",
    "at": "2026-10-01T18:09:03Z"
@@ -146,13 +152,6 @@
    "url": "https://www.theguardian.com/world/2026/oct/01/netanyahu-flydubai-halts-all-flights-to-israel",
    "at": "2026-10-01T16:04:48Z",
    "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Crude oil exports from strait of Hormuz largely return to pre-war levels",
-   "url": "https://www.theguardian.com/business/2026/oct/01/crude-oil-exports-strait-of-hormuz-transport-gulf-region-diesel",
-   "at": "2026-10-01T15:52:14Z",
-   "sec": "Business"
   }
  ],
  "groups": [
@@ -316,10 +315,10 @@
    "name": "時尚與奢華",
    "items": [
     {
-     "source": "ELLE",
-     "title": "廚電界的愛馬仕「Gaggenau」！德國頂奢工藝進駐臺北，打造一座臺灣風格宅邸",
-     "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOelk5N0I3ck9iLWxEVXZmdlVidm9DWThaekJjMGhvZ1ZSZFZXYm00TzQ5MWlzUkJUdThkZjhDTGVENDZLTzFYN243eGc1NEdEbFdhTDNFVjUxSGh4dzJTckhpYUw5TVhWN1lhU2NnZ2RpV1FaZzkwTXY0c2xLWmxKSlVidnE5X0RpUEpUblNreXFEWFBpQ3c?oc=5",
-     "at": "2026-10-01T08:39:47Z",
+     "source": "worldjournal",
+     "title": "35元果凍包魅力 愛馬仕柏金包迷也擋不住",
+     "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9KbDBfblR5RlJfRkx6bl92Y2JfdmM5Y3ZaTGNwdTY4ME5EWnNXQUVDVm9wcjdFTzdGa1I3elBuTGNGYTdxak03TEhIeF81REo4TTV0SHRTNXJMOVI1S0V5T29n0gFnQVVfeXFMUExFUGl1ZEZpNTVYZDg0RmROeS1UMEJKR01MNGZhUEFQNjctNVJFZjdFQW45U2FvNlpkVmh5TFZjdDU5VklldVcyTnozTXdvNzF1dGowekN3WEliNlczNnRrZ2RKTmt0dw?oc=5",
+     "at": "2026-10-01T17:39:28Z",
      "kw": "LVMH OR Kering OR Hermès OR 愛馬仕"
     },
     {
@@ -498,6 +497,21 @@
     "hot": true
    },
    {
+    "term": "愛馬仕",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "ELLE",
+     "ELLE HK",
+     "worldjournal"
+    ],
+    "sample": {
+     "title": "廚電界的愛馬仕「Gaggenau」！德國頂奢工藝進駐臺北，打造一座臺灣風格宅邸",
+     "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOelk5N0I3ck9iLWxEVXZmdlVidm9DWThaekJjMGhvZ1ZSZFZXYm00TzQ5MWlzUkJUdThkZjhDTGVENDZLTzFYN243eGc1NEdEbFdhTDNFVjUxSGh4dzJTckhpYUw5TVhWN1lhU2NnZ2RpV1FaZzkwTXY0c2xLWmxKSlVidnE5X0RpUEpUblNreXFEWFBpQ3c?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "台海",
     "n": 3,
     "src": 3,
@@ -511,6 +525,20 @@
      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFB6Zl9Pc1ZNSjVIelVpbjBsSml5V3gtWTBIMk1JcXppMmJxZG5JLXo3MmJMNktHN3BSLU9JUXNWZnpqZUx2RkpQQTAwcVEzcFRsU2REZ1RUYW1yZUdhVi13?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "Netanyahu",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "BBC",
+     "Guardian"
+    ],
+    "sample": {
+     "title": "Netanyahu says Flydubai attacker had 'Islamist radical indoc",
+     "url": "https://www.bbc.co.uk/news/articles/crje8edqyej9o?at_medium=RSS&at_campaign=rss"
+    },
+    "hot": false
    },
    {
     "term": "Anthropic",
@@ -553,39 +581,11 @@
      "url": "https://www.dezeen.com/2026/10/01/carmody-groarke-design-museum-gent/"
     },
     "hot": false
-   },
-   {
-    "term": "Putin",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "BBC",
-     "Guardian"
-    ],
-    "sample": {
-     "title": "Putin warns West that Russia is ready to use every weapon to",
-     "url": "https://www.bbc.co.uk/news/articles/cqg7k7v499jjo?at_medium=RSS&at_campaign=rss"
-    },
-    "hot": false
-   },
-   {
-    "term": "灣設計展",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "台灣好新聞",
-     "自由時報"
-    ],
-    "sample": {
-     "title": "台灣設計展中壢展區亮點一次看 品桃園、逛市集、買設計三重滿足",
-     "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE54ZkZnTFBnekJMbVBxZ1J4OFNRSTFvV1luYnA0Rjkxbm5JZm1MUjZZRmFES3FVdkhCYUtIYUh1RTVOY25mZTAtd2lYNzBfWkRLUklhUlJCUFJ2ZG95U1VvQ0dVNTPSAWpBVV95cUxQaDZudG52aGNPOUlySnEwWElKMmtjSzdKdFNUZThQeXliVU9PeGtoZm10emZIMjFSbUpuc1o2NTFSYUtxY3VoemtIVXM0cThzWVpsdVRuZkZzbE5xR2JVN1RWamhuR0Z0SGNn?oc=5"
-    },
-    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-01T18:15:52Z"
+ "updatedAt": "2026-10-01T18:31:48Z"
 }
