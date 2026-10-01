@@ -426,6 +426,12 @@ canvas.o-fx{display:block;width:100%}
 .wx .c.o-rain{position:relative;overflow:hidden}
 .wx .c.o-rain::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(105deg,transparent 0 10px,rgba(124,143,242,.16) 10px 11px,transparent 11px 22px);background-size:200% 200%;animation:o-rainmove 1.2s linear infinite}
 @keyframes o-rainmove{from{background-position:0 0}to{background-position:-22px 44px}}
+
+/* 市場分頁：依時段切換面板順序（台股盤中先看台灣，其他時間先看全球） */
+.o-grp th{padding-top:9px!important;font-size:10px;color:var(--dim);letter-spacing:.06em;border-bottom:1px solid var(--line)}
+.list li.o-grp{display:block;font:500 10px var(--mono);color:var(--dim);letter-spacing:.06em;padding:9px 0 3px;border-top:0}
+body[data-mkt="gl"] #p-pulse{order:1}body[data-mkt="gl"] #p-fear{order:2}body[data-mkt="gl"] #p-poly{order:3}body[data-mkt="gl"] #p-world{order:4}body[data-mkt="gl"] #p-sectors{order:5}body[data-mkt="gl"] #p-taiex{order:6}body[data-mkt="gl"] #p-fx{order:7}body[data-mkt="gl"] #p-tw-stocks{order:8}body[data-mkt="gl"] #p-revenue{order:9}body[data-mkt="gl"] #p-cmdty{order:10}body[data-mkt="gl"] #p-lux{order:11}
+body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[data-mkt="tw"] #p-fx{order:3}body[data-mkt="tw"] #p-tw-stocks{order:4}body[data-mkt="tw"] #p-revenue{order:5}body[data-mkt="tw"] #p-fear{order:6}body[data-mkt="tw"] #p-poly{order:7}body[data-mkt="tw"] #p-world{order:8}body[data-mkt="tw"] #p-sectors{order:9}body[data-mkt="tw"] #p-cmdty{order:10}body[data-mkt="tw"] #p-lux{order:11}
 /* motion off：手動關閉或系統偏好減少動態 */
 .still *,.still *::before,.still *::after{animation:none!important;transition:none!important}
 .still .tape{overflow-x:auto}
@@ -495,13 +501,13 @@ canvas.o-fx{display:block;width:100%}
     <div class="pf"><span>SPDR 11 檔板塊 ETF · 相對強弱＝5 日％－SPY · 相對量＝最近完整日量 ÷ 20 日均 · 不是真正資金流向</span></div>
   </section>
 
-  <section class="panel w3" id="p-cmdty">
+  <section class="panel w6" id="p-cmdty">
     <div class="ph"><h2>Commodities</h2><span class="zh">原物料與運價</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>棉花、原油、銅、鋁、黃金、白銀、鐵礦砂、熱軋鋼 · Drewry WCI 週更</span></div>
   </section>
 
-  <section class="panel w3" id="p-lux">
+  <section class="panel w6" id="p-lux">
     <div class="ph"><h2>Luxury</h2><span class="zh">精品與快時尚</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>巴黎／馬德里／東京／紐約收盤</span></div>
@@ -742,6 +748,32 @@ function spark(vals,w=300,h=44){const v=vals.filter(isFinite);if(v.length<2)retu
 function mini(vals){const v=(vals||[]).filter(isFinite);if(v.length<2)return"";const w=56,h=16,mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
   const pts=v.map((y,i)=>[i/(v.length-1)*(w-2)+1,h-2-((y-mn)/rg)*(h-4)]);const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
   const col=v[v.length-1]>=v[0]?"var(--up)":"var(--down)";return`<svg class="mini" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" fill="none" stroke="${col}" stroke-width="1.2"/></svg>`;}
+/* ---------- 市場分頁的排序邏輯 ---------- */
+const ORD={
+  world:[["亞洲",["^N225","^KS11","^TWII","^HSI","000001.SS","^NSEI"]],["歐洲",["^GDAXI","^STOXX50E","^FTSE","^FCHI"]],["美洲",["^GSPC","^IXIC","^DJI"]]],
+  cmd:[["能源",["CL=F","BZ=F","NG=F"]],["貴金屬",["GC=F","SI=F"]],["工業金屬",["HG=F","ALI=F","TIO=F","HRC=F"]],["農產",["CT=F"]]],
+  lux:[["頂級精品",["RMS.PA","MC.PA","KER.PA","1913.HK","BRBY.L","CFR.SW"]],["運動與快時尚",["ITX.MC","9983.T","NKE","HM-B.ST"]]],
+  pulse:["^TWII","ES=F","NQ=F","DX-Y.NYB","BTC-USD","ETH-USD"]};
+function grouped(items,spec,key){const out=[],used=new Set();
+  spec.forEach(([g,syms])=>syms.forEach(s=>(items||[]).filter(i=>key(i)===s).forEach(i=>{used.add(i);out.push({g,it:i});})));
+  (items||[]).filter(i=>!used.has(i)).forEach(i=>out.push({g:"其他",it:i}));return out;}
+function withHeads(rows,cols,rowFn){let last=null;return rows.map(({g,it})=>{const h=g!==last?`<tr class="o-grp"><th colspan="${cols}">${esc(g)}</th></tr>`:"";last=g;return h+rowFn(it);}).join("");}
+const POLY_TOPIC=[["加密貨幣",/bitcoin|\bbtc\b|ethereum|\beth\b|crypto|solana/i],["Fed 利率",/\bfed\b|fomc|interest rate|rate cut|rate hike|powell|\bbps\b/i],
+  ["地緣",/iran|israel|hormuz|russia|ukraine|china|taiwan|invade|\bwar\b|ceasefire|blockade|strait|gaza|north korea|missile|nato|venezuela/i],
+  ["政治",/senate|\bhouse\b|election|president|trump|governor|balance of power|democrat|republican|parliament|prime minister/i],
+  ["科技",/anthropic|openai|\bai\b|\bipo\b|apple|nvidia|google|tesla|spacex|microsoft|\bmeta\b/i]];
+const MONTHS="January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec";
+const polyNorm=q=>String(q||"").replace(new RegExp(`\\s+(by|before|on|in|after)\\s+(the end of\\s+)?(${MONTHS})\\.?(\\s+\\d{1,2})?(,?\\s*\\d{4})?\\s*\\??$`,"i"),"").replace(/\s+(by|before|in)\s+\d{4}\s*\??$/i,"").replace(/\?$/,"").trim().toLowerCase();
+function polyArrange(items){const by=new Map();
+  (items||[]).forEach(m=>{const k=polyNorm(m.question);const o=by.get(k);if(!o)by.set(k,{...m,_n:1});else{o._n++;if((n(m.vol24h)||0)>(n(o.vol24h)||0))by.set(k,{...m,_n:o._n});}});
+  const all=[...by.values()].map(m=>({...m,_t:(POLY_TOPIC.find(([,re])=>re.test(m.question))||["其他"])[0]}));
+  const hot=all.filter(m=>Math.abs(n(m.d1))>=10).sort((a,b)=>Math.abs(n(b.d1))-Math.abs(n(a.d1)));
+  const rest=all.filter(m=>!hot.includes(m));const tmax={};rest.forEach(m=>tmax[m._t]=Math.max(tmax[m._t]||0,n(m.vol24h)||0));
+  rest.sort((a,b)=>(tmax[b._t]-tmax[a._t])||(a._t<b._t?-1:a._t>b._t?1:0)||((n(b.vol24h)||0)-(n(a.vol24h)||0)));
+  return[...hot.map(m=>({g:"⚡ 24 小時大變動",it:m})),...rest.map(m=>({g:m._t,it:m}))];}
+function setMkt(){const d=new Date(Date.now()+8*3600e3),m=d.getUTCHours()*60+d.getUTCMinutes(),wd=d.getUTCDay();document.body.dataset.mkt=(wd>=1&&wd<=5&&m>=540&&m<810)?"tw":"gl";}
+setMkt();setInterval(setMkt,60e3);
+
 /* ---------- taiex + market internals ---------- */
 const twm={};
 function renderTaiex(){
@@ -768,10 +800,10 @@ function renderRevenue(){
   ["otc_revenue","revenue"].forEach(k=>(revenueDocs[k]&&revenueDocs[k].items||[]).forEach(it=>byCode.set(it.code,it)));
   const items=[...byCode.values()];
   if(!items.length){setErr("p-revenue","尚無營收資料");return;}
-  items.sort((a,b)=>REV_ORDER.indexOf(a.code)-REV_ORDER.indexOf(b.code));
+  items.sort((a,b)=>(n(b.yoy)||-1e9)-(n(a.yoy)||-1e9));
   const row=it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num">${compact(n(it.rev)*1000)}</td><td class="r num ${cls(n(it.yoy))}">${sgn(n(it.yoy),1,"%")}</td><td class="r num ${cls(n(it.mom))}">${sgn(n(it.mom),1,"%")}</td></tr>`;
   const ch=items.filter(it=>(it.group||"通路")==="通路").map(row).join(""),sc=items.filter(it=>it.group==="供應鏈").map(row).join("");
-  body("p-revenue").innerHTML=`<table><tr><th>通路</th><th class="r">當月營收 TWD</th><th class="r">YoY</th><th class="r">MoM</th></tr>${ch}${sc?`<tr><th colspan="4" style="padding-top:8px">供應鏈</th></tr>${sc}`:""}</table>`;
+  body("p-revenue").innerHTML=`<table><tr><th>通路 · 依年增排序</th><th class="r">當月營收 TWD</th><th class="r">YoY</th><th class="r">MoM</th></tr>${ch}${sc?`<tr><th colspan="4" style="padding-top:8px">科技供應鏈 · 依年增排序</th></tr>${sc}`:""}</table>`;
   const d=revenueDocs.revenue||revenueDocs.otc_revenue;setMeta("p-revenue",{...d,label:items[0].period?"資料月 "+items[0].period:""},24*40);
 }
 
@@ -785,7 +817,7 @@ const renderers={
     setMeta("p-taiex",{...d,label:"盤後"},30);},
   tw_stocks(d){const tr=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg),pct=ch/(px-ch)*100;return`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)} ${esc(it.group||"")}${it.live?` · <span style="color:var(--up)">即時 ${esc(it.live)}</span>`:""}</span>${mini(it.spark)}</td><td class="r num${K("tw:"+it.code,px)}">${fmt(px)}</td><td class="r num ${cls(ch)}">${sgn(ch)}</td><td class="r num ${cls(ch)}">${sgn(pct,1,"%")}</td></tr>`;}).join("");
     body("p-tw-stocks").innerHTML=`<table><tr><th>個股</th><th class="r">收盤</th><th class="r">漲跌</th><th class="r">%</th></tr>${tr}</table>`;setMeta("p-tw-stocks",{...d,label:"盤後 "+(d.date||"")},30);},
-  poly(d){const li=(d.items||[]).map(m=>{const p=n(m.yes),dd=n(m.d1);return`<li><span class="t"><a href="https://polymarket.com/event/${esc(m.slug||"")}" target="_blank" rel="noopener">${esc(m.question)}</a></span><span class="bar" aria-hidden="true"><i style="width:${isFinite(p)?Math.max(0,Math.min(100,p)):0}%"></i></span><span class="m${K("poly:"+(m.slug||m.question),p)}">${isFinite(p)?p.toFixed(0)+"%":"—"}</span><span class="m ${cls(dd)}" style="min-width:44px;text-align:right">${isFinite(dd)?sgn(dd,1,""):""}</span></li>`;}).join("");
+  poly(d){let lastG=null;const li=polyArrange(d.items).map(({g,it:m})=>{const p=n(m.yes),dd=n(m.d1);const head=g!==lastG?`<li class="o-grp">${esc(g)}</li>`:"";lastG=g;return head+`<li><span class="t"><a href="https://polymarket.com/event/${esc(m.slug||"")}" target="_blank" rel="noopener">${esc(m.question)}</a>${m._n>1?`<span class="sub">另 ${m._n-1} 個日期</span>`:""}</span><span class="bar" aria-hidden="true"><i style="width:${isFinite(p)?Math.max(0,Math.min(100,p)):0}%"></i></span><span class="m${K("poly:"+(m.slug||m.question),p)}">${isFinite(p)?p.toFixed(0)+"%":"—"}</span><span class="m ${cls(dd)}" style="min-width:44px;text-align:right">${isFinite(dd)?sgn(dd,1,""):""}</span></li>`;}).join("");
     body("p-poly").innerHTML=`<ul class="list">${li||'<li class="empty">目前沒有非運彩的熱門市場</li>'}</ul>`;setMeta("p-poly",{...d,label:"Yes 機率 / 24h 變動"},3);},
   tech(d){const col=(title,html)=>`<div><div class="ph" style="padding:0 0 4px;border-bottom:1px solid var(--line);margin-bottom:4px"><h2 style="font-size:10px">${title}</h2></div>${html||'<div class="err">這輪沒抓到</div>'}</div>`;
     const gh=(d.github||[]).map(r=>`<li><span class="t"><a href="${esc(safe(r.url))}" target="_blank" rel="noopener">${esc(r.name)}</a></span><span class="m">★${compact(n(r.stars))}</span></li>`).join("");
@@ -840,7 +872,9 @@ const renderers={
   airport(d){const s=k=>{const x=d[k]||{};return`<div class="c"><div class="l">${k==="dep"?"出發":"抵達"}</div><div class="v">${x.total??"—"}<span class="sub" style="font-size:12px"> 班</span></div><div class="p"><span class="${x.delayed>0?"bad":""}">延誤 ${x.delayed??0}</span> · <span class="${x.cancelled>0?"bad":""}">取消 ${x.cancelled??0}</span></div></div>`;};
     const up=((d.dep||{}).upcoming||[]).map(u=>`<tr><td class="name">${esc(u.flight)}<span class="sub">→ ${esc(u.to)}${u.gate?" · "+esc(u.gate):""}</span></td><td class="r num">${esc(u.sched)}</td><td class="r num ${/延/.test(u.remark)?"bad":""}">${esc(u.est||"")}<span class="sub">${esc(u.remark||"")}</span></td></tr>`).join("");
     body("p-airport").innerHTML=`<div class="tp"><div class="macro">${s("dep")}${s("arr")}</div><div><table><tr><th>接下來出發</th><th class="r">表定</th><th class="r">預計</th></tr>${up||'<tr><td colspan="3" class="empty">今天沒有後續班次</td></tr>'}</table></div></div>`;setMeta("p-airport",d,1);},
-  world(d){const tr=(d.items||[]).map(it=>`<tr><td class="name"><span class="src" style="min-width:14px">${esc(it.flag)}</span>${esc(it.name)}${it.open?`<span class="sub" style="color:var(--up)">盤中</span>`:""}${mini(it.spark)}</td><td class="r num${K("w:"+it.sym,n(it.price))}">${fmt(n(it.price),it.price<100?2:0)}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td><td class="r num ${cls(n(it.chg5_pct))}">${isFinite(n(it.chg5_pct))?sgn(n(it.chg5_pct),1,"%"):""}</td></tr>`).join("");
+  world(d){const reg=grouped(d.items,ORD.world,i=>i.sym);const openG=new Set(reg.filter(r=>r.it.open).map(r=>r.g));const gi=g=>ORD.world.findIndex(x=>x[0]===g);
+    reg.sort((a,b)=>((openG.has(a.g)?0:1)-(openG.has(b.g)?0:1))||(gi(a.g)-gi(b.g)));reg.forEach(r=>{if(openG.has(r.g))r.g=r.g+" · 開盤中";});
+    const tr=withHeads(reg,4,it=>`<tr><td class="name"><span class="src" style="min-width:14px">${esc(it.flag)}</span>${esc(it.name)}${it.open?`<span class="sub" style="color:var(--up)">盤中</span>`:""}${mini(it.spark)}</td><td class="r num${K("w:"+it.sym,n(it.price))}">${fmt(n(it.price),it.price<100?2:0)}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td><td class="r num ${cls(n(it.chg5_pct))}">${isFinite(n(it.chg5_pct))?sgn(n(it.chg5_pct),1,"%"):""}</td></tr>`);
     body("p-world").innerHTML=`<table><tr><th>指數</th><th class="r">價位</th><th class="r">日%</th><th class="r">5日%</th></tr>${tr}</table>`;setMeta("p-world",d,26);},
   sectors(d){const mx=Math.max(1,...(d.items||[]).map(it=>Math.abs(n(it.rel5_pct)||0)));
     const tr=(d.items||[]).map(it=>{const r=n(it.rel5_pct)||0,w=Math.abs(r)/mx*50;return`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.sym)}</span></td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td><td><div class="rb"><div class="trk"><i style="left:${r>=0?50:50-w}%;width:${w}%;background:${r>=0?"var(--up)":"var(--down)"}"></i></div><span class="num ${cls(r)}" style="min-width:52px;text-align:right">${sgn(r,1,"%")}</span></div></td><td class="r num ${n(it.rvol)>=1.5?"bad":""}">${it.rvol!=null?fmt(n(it.rvol),2)+"×":""}</td></tr>`;}).join("");
@@ -889,9 +923,9 @@ const renderers={
     body("p-tiktok").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">抓不到</div>`;setMeta("p-tiktok",d,30);},
   fx(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num${K("fx:"+it.code,n(it.buy??it.mid))}">${fmt(n(it.buy??it.mid),it.code==="JPY"?4:3)}</td><td class="r num">${it.sell!=null?fmt(n(it.sell),it.code==="JPY"?4:3):""}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td></tr>`).join("");
     const yh=d.source==="yahoo";body("p-fx").innerHTML=`<table><tr><th>幣別</th><th class="r">${yh?"中價":"即期買入"}</th><th class="r">${yh?"":"即期賣出"}</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-fx",d,3);},
-  luxury(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.sym)}</span>${mini(it.spark)}</td><td class="r num${K("lux:"+it.sym,n(it.price))}">${fmt(n(it.price))}<span class="sub">${esc(it.ccy||"")}</span></td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
+  luxury(d){const tr=withHeads(grouped(d.items,ORD.lux,i=>i.sym),3,it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.sym)}</span>${mini(it.spark)}</td><td class="r num${K("lux:"+it.sym,n(it.price))}">${fmt(n(it.price))}<span class="sub">${esc(it.ccy||"")}</span></td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`);
     body("p-lux").innerHTML=`<table><tr><th>公司</th><th class="r">收盤</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-lux",d,30);},
-  commodities(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.unit||"")}</span>${mini(it.spark)}</td><td class="r num${K("cmd:"+it.sym,n(it.price))}">${fmt(n(it.price),n(it.price)<10?3:2)}</td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`).join("");
+  commodities(d){const tr=withHeads(grouped(d.items,ORD.cmd,i=>i.sym),3,it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.unit||"")}</span>${mini(it.spark)}</td><td class="r num${K("cmd:"+it.sym,n(it.price))}">${fmt(n(it.price),n(it.price)<10?3:2)}</td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`);
     const sh=(d.shipping||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.date||"")}</span></td><td class="r num">${fmt(n(it.value),0)}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),1,"% 週"):esc(it.note||"")}</td></tr>`).join("");
     body("p-cmdty").innerHTML=`<table><tr><th>品項</th><th class="r">價格</th><th class="r">日%</th></tr>${tr}${sh?`<tr><th colspan="3" style="padding-top:8px">海運 USD/40ft</th></tr>${sh}`:""}</table>`;setMeta("p-cmdty",d,30);},
   macro(d){const LC={"紅燈":"#E0453F","黃紅燈":"#E28A2B","綠燈":"#39B978","黃藍燈":"#3E8ED0","藍燈":"#2B5BD7"};
@@ -919,7 +953,7 @@ function pulseSpark(vals){const v=(vals||[]).filter(isFinite);if(v.length<2)retu
   const pts=v.map((y,i)=>[i/(v.length-1)*(w-2)+1,h-2-((y-mn)/rg)*(h-5)]);const d=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
   const last=pts[pts.length-1];const col=v[v.length-1]>=v[0]?"var(--up)":"var(--down)";
   return`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d} L${last[0].toFixed(1)},${h} L1,${h} Z" fill="${col}" opacity=".12"/><path d="${d}" fill="none" stroke="${col}" stroke-width="1.3"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2" fill="${col}"/></svg>`;}
-renderers.pulse=function(d){metaDocs["p-pulse"]=[d,0];const st={REGULAR:"盤中",PRE:"盤前",POST:"盤後",CLOSED:"休市"};const stale=!!d.error||staleAfter(d.updatedAt,0.75);
+renderers.pulse=function(d){metaDocs["p-pulse"]=[d,0];d={...d,items:[...(d.items||[])].sort((x,y)=>{const i=ORD.pulse.indexOf(x.sym),j=ORD.pulse.indexOf(y.sym);return(i<0?99:i)-(j<0?99:j);})};const st={REGULAR:"盤中",PRE:"盤前",POST:"盤後",CLOSED:"休市"};const stale=!!d.error||staleAfter(d.updatedAt,0.75);
   $("#p-pulse").innerHTML=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg_pct);const dec=px>=1000?0:px>=100?1:2;
     return`<div class="c"><div class="l"><span>${esc(it.name)}<span class="sub">${esc(it.ccy||"")}</span></span><span class="st ${stale?"flat":it.state==="REGULAR"?"up":""}" title="${esc(d.error||"")}">${stale?"舊值 · "+ago(d.updatedAt):(it.state==="REGULAR"?"盤中":esc(st[it.state]||"")+(it.asOf?" · "+ago(new Date(it.asOf*1000).toISOString()):""))}</span></div>
     <div class="v"><span class="${cls(ch)}${K("pulse:"+it.sym,px)}">${fmt(px,dec)}</span><span class="ch ${cls(ch)}">${sgn(ch,2,"%")}</span></div>${pulseSpark(it.spark)}</div>`;}).join("");};
