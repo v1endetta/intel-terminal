@@ -1219,7 +1219,7 @@ function size(c){const dpr=Math.min(devicePixelRatio||1,2),w=Math.round(c.client
 const ro=new ResizeObserver(es=>{let ch=false;es.forEach(e=>{const s=CV.get(e.target);if(!s||Math.round(e.target.clientWidth)!==s.w){size(e.target);ch=true;}});if(ch&&!raf&&cur==="overview"&&S)drawAll(0);});
 function fit(c){let s=CV.get(c);if(!s){size(c);ro.observe(c);s=CV.get(c);if(!s)return[null,0,0];}s.x.clearRect(0,0,s.w,s.h);return[s.x,s.w,s.h];}
 function drawAll(t){try{drawWave(t);drawRadar(t);drawMap(t);}catch(e){console.warn("ov canvas",e);}}
-function startLoops(){stopLoops();if(!S)return;if(!moving()){drawAll(0);return;}const step=t=>{raf=requestAnimationFrame(step);if(document.hidden||t-last<30)return;last=t;drawAll(t);};raf=requestAnimationFrame(step);}
+function startLoops(){stopLoops();if(!S)return;drawAll(performance.now());if(!moving())return;const step=t=>{raf=requestAnimationFrame(step);if(document.hidden||t-last<30)return;last=t;drawAll(t);};raf=requestAnimationFrame(step);}
 function stopLoops(){if(raf)cancelAnimationFrame(raf);raf=null;}
 function drawWave(t){const c=E("ov-wave");if(!c)return;const[x,w,h]=fit(c);if(!w)return;const m=S.mood;
   [[m.taiwan,"#E0A23A",h*.33,"台灣"],[m.overseas,"#F0524F",h*.72,"國外"]].forEach(([o,col,y0,lab],j)=>{if(!o||o.score==null)return;const s=n(o.score);
