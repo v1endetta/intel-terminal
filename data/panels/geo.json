@@ -1,20 +1,20 @@
 {
  "label": "TDX",
  "cities_with_data": 19,
- "freeway": 368,
+ "freeway": 371,
  "static": "完成",
  "totals": {
-  "parking": 1976,
+  "parking": 1975,
   "bikes": 9946,
-  "speed": 626
+  "speed": 623
  },
  "errs": [
-  "bikes Taoyuan: RuntimeError: 429 on Bike/Availability/City/Taoyuan body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "vd HsinchuCounty: RuntimeError: 429 on Road/Traffic/Live/VD/City/HsinchuCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking ChanghuaCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/ChanghuaCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "vd YunlinCounty: RuntimeError: 429 on Road/Traffic/Live/VD/City/YunlinCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking Tainan: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Tainan body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking PingtungCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/PingtungCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
+  "parking Taichung: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Taichung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "vd NantouCounty: RuntimeError: 429 on Road/Traffic/Live/VD/City/NantouCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "parking ChiayiCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/ChiayiCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "parking Kaohsiung: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Kaohsiung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "parking YilanCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/YilanCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
+  "parking PenghuCounty: TimeoutError: panel cap 420s"
  ],
- "updatedAt": "2026-10-01T19:03:52Z"
+ "updatedAt": "2026-10-01T19:17:42Z"
 }
