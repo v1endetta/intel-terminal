@@ -223,7 +223,8 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .sec{display:none}
 /* sky */
 .sky{position:relative;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--panel);margin:12px 0 0}
-.sky canvas{display:block;width:100%;height:150px}
+.sky canvas{display:block;width:100%;height:170px}
+@media (max-width:639px){.sky canvas{height:220px}}
 .sky .over{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:flex-start;padding:10px 14px;pointer-events:none;gap:12px}
 .sky-brand{display:grid;gap:2px}
 .sky-brand b{font-family:var(--head);font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
@@ -1259,47 +1260,69 @@ function sunTimes(date,lat,lon,tz){const rad=Math.PI/180,day=Math.floor((Date.UT
   const noon=720-4*lon-eq+tz*60;return{rise:noon-4*ha,set:noon+4*ha};}
 function moonPhase(d){const syn=29.530588853,ref=Date.UTC(2000,0,6,18,14);return(((d-ref)/864e5)%syn+syn)%syn/syn;}
 function tpeMinutes(d){return((d.getUTCHours()+TZ)%24)*60+d.getUTCMinutes()+d.getUTCSeconds()/60;}
-const MKT=[["台股",9*60,13*60+30],["歐股",15*60,23*60+30],["美股",21*60+30,4*60]];
+const MKT=[["台股",9*60,13*60+30],["歐股",15*60,23*60+30],["美股",21*60+30,4*60]];const MKC=["#3fd0a0","#6da3ff","#b48cff"];
 function inSess(m,[_,a,b]){return a<b?m>=a&&m<b:m>=a||m<b;}
-function drawSky(){const c=$("#sky");const dpr=Math.min(devicePixelRatio||1,2),H=150,W=Math.round(c.clientWidth);if(!W)return;const PW=Math.round(W*dpr),PH=H*dpr;if(c.width!==PW)c.width=PW;if(c.height!==PH)c.height=PH;const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
-  const now=new Date(),m=tpeMinutes(now),st=sunTimes(now,LAT,LON,TZ);const day=m>=st.rise&&m<st.set;
-  // horizon tint
-  const tw=Math.max(0,1-Math.min(Math.abs(m-st.rise),Math.abs(m-st.set))/50);
-  const grd=x.createLinearGradient(0,0,0,H);grd.addColorStop(0,day?"rgba(124,143,242,.10)":"rgba(14,15,18,0)");grd.addColorStop(1,`rgba(227,94,55,${.06+tw*.18})`);x.fillStyle=grd;x.fillRect(0,0,W,H);
-  // arc
-  const pad=24,base=H-42,cx=W/2,rx=Math.min(W/2-pad,W<700?W/2-pad:340),ry=Math.min(base-30,110);
-  x.strokeStyle="#3A3F49";x.lineWidth=1;x.setLineDash([3,5]);x.beginPath();x.ellipse(cx,base,rx,ry,0,Math.PI,2*Math.PI);x.stroke();x.setLineDash([]);
-  x.strokeStyle="#3A3F49";x.beginPath();x.moveTo(cx-rx-14,base);x.lineTo(cx+rx+14,base);x.stroke();
-  // body position
-  let p,isSun=day;if(day)p=(m-st.rise)/(st.set-st.rise);else{const len=1440-(st.set-st.rise);const since=m>=st.set?m-st.set:m+1440-st.set;p=since/len;}
-  const ang=Math.PI+p*Math.PI,bx=cx+Math.cos(ang)*rx,by=base+Math.sin(ang)*ry;
-  if(isSun){const g2=x.createRadialGradient(bx,by,0,bx,by,28);g2.addColorStop(0,"rgba(227,94,55,.45)");g2.addColorStop(1,"rgba(227,94,55,0)");x.fillStyle=g2;x.beginPath();x.arc(bx,by,28,0,Math.PI*2);x.fill();x.fillStyle="#E35E37";x.beginPath();x.arc(bx,by,8,0,Math.PI*2);x.fill();}
-  else{const ph=moonPhase(now);const g3=x.createRadialGradient(bx,by,0,bx,by,30);g3.addColorStop(0,"rgba(217,220,230,.22)");g3.addColorStop(1,"rgba(217,220,230,0)");x.fillStyle=g3;x.beginPath();x.arc(bx,by,30,0,Math.PI*2);x.fill();x.fillStyle="#D9DCE6";x.beginPath();x.arc(bx,by,8,0,Math.PI*2);x.fill();
-    // shadow for phase
-    x.fillStyle="#15171C";x.beginPath();const k=Math.cos(ph*2*Math.PI);x.arc(bx,by,8.2,-Math.PI/2,Math.PI/2,ph<.5);x.ellipse(bx,by,Math.abs(k)*8.2,8.2,0,Math.PI/2,-Math.PI/2,(ph<.5)!==(k<0));x.fill();
-    for(let i=0;i<26;i++){const sx=(Math.sin(i*91.7)*.5+.5)*W,sy=(Math.sin(i*37.3)*.5+.5)*(base-20);x.fillStyle=`rgba(231,233,238,${.15+.25*Math.abs(Math.sin(i*2.3))})`;x.fillRect(sx,sy,1.2,1.2);}}
-  // sunrise / sunset ticks
-  x.fillStyle="#5A606C";x.font="10px Martian Mono, monospace";const hm=v=>`${String(Math.floor(v/60)).padStart(2,"0")}:${String(Math.round(v%60)).padStart(2,"0")}`;
-  x.fillText("日出 "+hm(st.rise),cx-rx-14,base+13);const sTxt="日落 "+hm(st.set);x.fillText(sTxt,cx+rx+14-x.measureText(sTxt).width,base+13);
-  // 24h market track
-  const ty=H-9,tx0=14,tx1=W-14,X=v=>tx0+(v/1440)*(tx1-tx0);
-  x.fillStyle="#5A606C";x.font="9px Martian Mono, monospace";[0,6,12,18].forEach(hh=>x.fillText(String(hh).padStart(2,"0"),X(hh*60)+2,ty-6));
-  x.fillStyle="#1B1E24";x.fillRect(tx0,ty-3,tx1-tx0,4);
-  MKT.forEach(([n,a,b],i)=>{const col=inSess(m,MKT[i])?"#39B978":"#3A3F49";x.fillStyle=col;if(a<b)x.fillRect(X(a),ty-3,X(b)-X(a),4);else{x.fillRect(X(a),ty-3,X(1440)-X(a),4);x.fillRect(X(0),ty-3,X(b)-X(0),4);}});
-  x.fillStyle="#E7E9EE";x.fillRect(X(m)-1,ty-7,2,12);
-  // overlays
-  $("#sunline").textContent=`台北　${isSun?"白天":"夜晚"} · 日落 ${hm(st.set)} · 月相 ${["新月","眉月","上弦","盈凸","滿月","虧凸","下弦","殘月"][Math.round(moonPhase(now)*8)%8]}`;
-  const ca=new Date(now.getTime());const caStr=ca.toLocaleTimeString("zh-TW",{timeZone:"America/Los_Angeles",hour:"2-digit",minute:"2-digit",hour12:false});
+function drawSky(intro){const c=$("#sky");const W=Math.round(c.clientWidth);if(!W)return;const mob=W<640,H=mob?220:170,dpr=Math.min(devicePixelRatio||1,2);
+  c.style.height=H+"px";const PW=Math.round(W*dpr),PH=H*dpr;if(c.width!==PW)c.width=PW;if(c.height!==PH)c.height=PH;const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+  const now=new Date(),m0=tpeMinutes(now),st=sunTimes(now,LAT,LON,TZ),ph=moonPhase(now);
+  const e=intro==null?1:intro,m=((m0-(1-e)*720)%1440+1440)%1440;   // 開場：從 12 小時前掃到現在
+  const cx=W/2,cy=mob?H-80:H/2+2,R=mob?56:Math.min(60,H/2-24);
+  const A=min=>min/1440*Math.PI*2+Math.PI/2;                        // 午夜在下、正午在上、日出在左、日落在右
+  const P=(min,r)=>[cx+Math.cos(A(min))*r,cy+Math.sin(A(min))*r];
+  const [rx,ry]=P(st.rise,R),[sx,sy]=P(st.set,R),[tx,ty]=P(720,R);
+  const side=(qx,qy)=>(sx-rx)*(qy-ry)-(sy-ry)*(qx-rx);const upSign=Math.sign(side(tx,ty));const above=(qx,qy)=>Math.sign(side(qx,qy))===upSign;
+  const sunUp=m0>=st.rise&&m0<st.set;
+  // 地平線外的微光：日出日落前後一小時
+  const tw=Math.max(0,1-Math.min(Math.abs(m0-st.rise),Math.abs(m0-st.set))/60);
+  if(tw>0){const g=x.createRadialGradient(cx,cy,R*.4,cx,cy,R*2.6);g.addColorStop(0,`rgba(227,94,55,${.12*tw})`);g.addColorStop(1,"rgba(227,94,55,0)");x.fillStyle=g;x.fillRect(0,0,W,H);}
+  // 圓盤：天空（地平線以上）與地面
+  x.save();x.beginPath();x.arc(cx,cy,R,0,Math.PI*2);x.clip();
+  x.fillStyle="#0F1218";x.fillRect(cx-R,cy-R,R*2,R*2);
+  const sky=x.createLinearGradient(0,cy-R,0,cy+R);sky.addColorStop(0,sunUp?"rgba(124,143,242,.32)":"rgba(52,62,104,.30)");sky.addColorStop(1,sunUp?"rgba(124,143,242,.08)":"rgba(52,62,104,.06)");
+  x.beginPath();const d=R*3,ux=(sx-rx),uy=(sy-ry),L=Math.hypot(ux,uy)||1,nx=-uy/L,ny=ux/L,sgn=Math.sign(nx*(tx-rx)+ny*(ty-ry))||-1;
+  x.moveTo(rx-ux/L*d,ry-uy/L*d);x.lineTo(sx+ux/L*d,sy+uy/L*d);x.lineTo(sx+ux/L*d+nx*sgn*d,sy+uy/L*d+ny*sgn*d);x.lineTo(rx-ux/L*d+nx*sgn*d,ry-uy/L*d+ny*sgn*d);x.closePath();x.fillStyle=sky;x.fill();
+  if(!sunUp)for(let i=0;i<22;i++){const qx=cx+(Math.sin(i*91.7))*R*.9,qy=cy+(Math.sin(i*37.3))*R*.9;if(above(qx,qy)&&Math.hypot(qx-cx,qy-cy)<R-3){x.fillStyle=`rgba(231,233,238,${.2+.35*Math.abs(Math.sin(i*2.3))})`;x.fillRect(qx,qy,1.3,1.3);}}
+  x.restore();
+  // 刻度與外框
+  x.strokeStyle="#2F3542";x.lineWidth=1;x.beginPath();x.arc(cx,cy,R,0,Math.PI*2);x.stroke();
+  for(let h=0;h<24;h++){const a=A(h*60),r1=h%6?R-3:R-6;x.strokeStyle=h%6?"#2F3542":"#5C637A";x.beginPath();x.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);x.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);x.stroke();}
+  x.fillStyle="#5C637A";x.font="9px IBM Plex Mono, monospace";x.textAlign="center";x.textBaseline="middle";
+  [[0,"00"],[360,"06"],[720,"12"],[1080,"18"]].forEach(([mm,t])=>{const[px,py]=P(mm,R-14);x.fillText(t,px,py);});
+  // 市場時段：外圈三條弧，開盤中亮綠
+  MKT.forEach((s,i)=>{const r=R+6+i*5,open=inSess(m0,s);x.strokeStyle=MKC[i];x.globalAlpha=open?1:.28;x.lineWidth=3;x.lineCap="butt";x.beginPath();x.arc(cx,cy,r,A(s[1]),A(s[2]),false);x.stroke();x.globalAlpha=1;});
+  // 地平線：穿過今天的日出與日落
+  const ext=14;x.strokeStyle="rgba(227,94,55,.55)";x.lineWidth=1;x.setLineDash([3,3]);x.beginPath();x.moveTo(rx-ux/L*ext,ry-uy/L*ext);x.lineTo(sx+ux/L*ext,sy+uy/L*ext);x.stroke();x.setLineDash([]);
+  const hm=v=>`${String(Math.floor(v/60)).padStart(2,"0")}:${String(Math.round(v%60)).padStart(2,"0")}`;
+  x.font="9.5px IBM Plex Mono, monospace";x.fillStyle="#8B93A7";x.textAlign="right";x.fillText("日出 "+hm(st.rise),rx-ux/L*ext-36,ry-uy/L*ext);x.textAlign="left";x.fillText("日落 "+hm(st.set),sx+ux/L*ext+36,sy+uy/L*ext);
+  // 指針：現在時間
+  const[hx,hy]=P(m,R);x.strokeStyle="rgba(230,232,238,.35)";x.lineWidth=1;x.beginPath();x.moveTo(cx,cy);x.lineTo(hx,hy);x.stroke();x.fillStyle="#E6E8EE";x.beginPath();x.arc(hx,hy,2.4,0,Math.PI*2);x.fill();x.beginPath();x.arc(cx,cy,1.8,0,Math.PI*2);x.fill();
+  // 太陽
+  const br=R*.68;const[bx,by]=P(m,br);const sOn=above(bx,by);
+  x.globalAlpha=sOn?1:.38;if(sOn){const g2=x.createRadialGradient(bx,by,0,bx,by,20);g2.addColorStop(0,"rgba(227,94,55,.55)");g2.addColorStop(1,"rgba(227,94,55,0)");x.fillStyle=g2;x.beginPath();x.arc(bx,by,20,0,Math.PI*2);x.fill();}
+  x.fillStyle="#E35E37";x.beginPath();x.arc(bx,by,6.5,0,Math.PI*2);x.fill();x.globalAlpha=1;
+  // 月亮：比太陽晚「月相 × 24 小時」過中天
+  const mm=((m-ph*1440)%1440+1440)%1440;const[ox,oy]=P(mm,br);const mOn=above(ox,oy),r=6.5;
+  x.globalAlpha=mOn?1:.38;if(mOn){const g3=x.createRadialGradient(ox,oy,0,ox,oy,18);g3.addColorStop(0,"rgba(217,220,230,.25)");g3.addColorStop(1,"rgba(217,220,230,0)");x.fillStyle=g3;x.beginPath();x.arc(ox,oy,18,0,Math.PI*2);x.fill();}
+  x.fillStyle="#2A2F3A";x.beginPath();x.arc(ox,oy,r,0,Math.PI*2);x.fill();
+  const k=Math.cos(ph*2*Math.PI),wax=ph<.5,bulgeR=(wax&&k>0)||(!wax&&k<0);
+  if(ph>.02&&ph<.98){x.fillStyle="#D9DCE6";x.beginPath();x.moveTo(ox,oy-r);x.arc(ox,oy,r,-Math.PI/2,Math.PI/2,!wax);
+    if(bulgeR)x.ellipse(ox,oy,Math.abs(k)*r,r,0,Math.PI/2,-Math.PI/2,true);else x.ellipse(ox,oy,Math.abs(k)*r,r,0,Math.PI/2,Math.PI*1.5,false);x.fill();}
+  x.globalAlpha=1;x.textAlign="left";x.textBaseline="alphabetic";
+  // 文字
+  const PHN=["新月","眉月","上弦月","盈凸月","滿月","虧凸月","下弦月","殘月"][Math.round(ph*8)%8];
+  $("#sunline").textContent=`台北　${sunUp?"白天":"夜晚"} · 日出 ${hm(st.rise)} · 日落 ${hm(st.set)} · ${PHN}`;
+  const caStr=now.toLocaleTimeString("zh-TW",{timeZone:"America/Los_Angeles",hour:"2-digit",minute:"2-digit",hour12:false});
   const caH=+caStr.slice(0,2);$("#caline").textContent=`加州　${caStr}　${caH>=7&&caH<19?"白天":"夜晚"}`;
-  $("#sessions").innerHTML=MKT.map(s=>`<span class="${inSess(m,s)?"open":""}"><i></i>${s[0]} ${inSess(m,s)?"交易中":"收盤"}</span>`).join("");
+  $("#sessions").innerHTML=MKT.map((s,i)=>`<span class="${inSess(m0,s)?"open":""}"><i style="background:${MKC[i]};opacity:${inSess(m0,s)?1:.35}"></i>${s[0]} ${inSess(m0,s)?"交易中":"收盤"}</span>`).join("")+`<span>外圈三色弧＝交易時段 · 虛線＝今天的地平線</span>`;
 }
+function skyIntro(){if(!moving()){drawSky();return;}const t0=performance.now(),D=1600;const f=t=>{const p=Math.min(1,(t-t0)/D),e=1-Math.pow(1-p,3);drawSky(e);if(p<1)requestAnimationFrame(f);};requestAnimationFrame(f);}
 
 function skyTick(){const now=new Date();$("#tclock").textContent=now.toLocaleTimeString("zh-TW",{timeZone:"Asia/Taipei",hour:"2-digit",minute:"2-digit",hour12:false});
   $("#tdate").textContent=now.toLocaleDateString("zh-TW",{timeZone:"Asia/Taipei",month:"long",day:"numeric",weekday:"short"});}
 let skyW=0;function skyMaybe(){const w=Math.round($("#sky").clientWidth);if(w!==skyW){skyW=w;drawSky();}}
-skyTick();drawSky();
+skyTick();drawSky(0);skyIntro();
 setInterval(()=>{if(document.hidden)return;skyTick();updFuse();ring();},1000);
-setInterval(()=>{if(!document.hidden)drawSky();},20000);
+setInterval(()=>{if(!document.hidden)drawSky();},10000);
 addEventListener("resize",skyMaybe);
 function ring(){const per=(inSession()?5:15)*60e3;const f=nextAt?Math.max(0,Math.min(1,(nextAt-Date.now())/per)):0;$("#ringfg").setAttribute("stroke-dashoffset",(69.1*(1-f)).toFixed(1));}
 
