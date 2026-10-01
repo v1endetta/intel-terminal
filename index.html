@@ -1216,7 +1216,7 @@ function fill(anim){const parts=[["tk",()=>tickers(anim)],["tw",tw],["macro",mac
 
 /* ---------- 三個持續動態的畫布：只在掛載或寬度改變時調尺寸 ---------- */
 let raf=null,last=0,CV=new WeakMap();
-function size(c){const dpr=Math.min(devicePixelRatio||1,2),w=Math.round(c.clientWidth),h=+c.getAttribute("height");if(!w)return;c.style.height=h+"px";const PW=Math.round(w*dpr),PH=Math.round(h*dpr);if(c.width!==PW)c.width=PW;if(c.height!==PH)c.height=PH;const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);CV.set(c,{x,w,h});}
+function size(c){const dpr=Math.min(devicePixelRatio||1,2),w=Math.round(c.clientWidth),h=+(c.dataset.h||(c.dataset.h=c.getAttribute("height")));if(!w)return;c.style.height=h+"px";const PW=Math.round(w*dpr),PH=Math.round(h*dpr);if(c.width!==PW)c.width=PW;if(c.height!==PH)c.height=PH;const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);CV.set(c,{x,w,h});}
 const ro=new ResizeObserver(es=>{let ch=false;es.forEach(e=>{const s=CV.get(e.target);if(!s||Math.round(e.target.clientWidth)!==s.w){size(e.target);ch=true;}});if(ch&&!raf&&cur==="overview"&&S)drawAll(0);});
 function fit(c){let s=CV.get(c);if(!s){size(c);ro.observe(c);s=CV.get(c);if(!s)return[null,0,0];}s.x.clearRect(0,0,s.w,s.h);return[s.x,s.w,s.h];}
 function drawAll(t){try{drawWave(t);drawRadar(t);drawMap(t);}catch(e){console.warn("ov canvas",e);}}
