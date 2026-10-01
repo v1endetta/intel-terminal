@@ -1677,6 +1677,10 @@ NEWS_GROUPS = [
     ("市場與投資", ["槓桿ETF OR 00631L OR 00675L", "聯準會 利率 OR FOMC", "台積電 法說 OR 台積電 ADR"]),
     ("地緣與科技政策", ["台海 OR 共機 OR 軍演", "關稅 台灣 OR 232條款", "半導體 出口管制 OR 晶片法案"]),
     ("時尚與奢華", ["LVMH OR Kering OR Hermès OR 愛馬仕", '"quiet luxury" OR 老錢風 OR 靜奢', "時裝週 OR 創意總監 上任", "精品 台灣 OR 精品 業績"]),
+    ("資訊安全", ["資安 OR 駭客 OR 勒索軟體 OR 個資外洩", "資安署 OR 數位發展部 資安 OR 資安法", "資安 新創 OR 資安 募資 OR 資安 併購",
+              "en:cybersecurity breach OR ransomware OR \"zero-day\"", "en:\"AI security\" OR \"agent security\" startup"]),
+    ("生物科技", ["生技 新藥 OR 生技 募資 OR 生技股", "細胞治療 OR 基因治療 OR 再生醫療 OR 外泌體", "FDA 核准 OR 食藥署 核准 新藥",
+              "en:biotech raises OR \"drug discovery\" AI", "en:\"AI biology\" OR \"protein design\" OR \"gene editing\""]),
     ("文化與生活", ["廟宇 OR 媽祖 OR 民間信仰", "紀念幣 OR 錢幣 拍賣", "獨立書店 OR 誠品", "灣區 OR 舊金山 OR 加州 台灣人", "潭子 OR 台中 北屯"]),
 ]
 NEWS_ERRS: list = []
