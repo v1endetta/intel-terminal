@@ -117,7 +117,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -2300,6 +2300,9 @@ def _hot_terms(news):
         pool += (load_prev(pid) or {}).get("items") or []
     for r in ((load_prev("ptt") or {}).get("items") or [])[:40]:
         pool.append({"title": r.get("title"), "source": "PTT", "url": r.get("url"), "at": NOW_ISO})
+    rd = load_prev("radar") or {}
+    for f in (rd.get("funding") or []):
+        pool.append({"title": f.get("title"), "source": f.get("source") or "funding", "url": f.get("url"), "at": f.get("at") or NOW_ISO})
     dp = load_prev("devpulse") or {}
     for f in (dp.get("forums") or []) + (dp.get("changelogs") or []):
         pool.append({"title": f.get("title"), "source": f.get("source"), "url": f.get("url"), "at": f.get("at") or NOW_ISO})
@@ -2691,6 +2694,105 @@ def p_mood():
     hist_put("mood", "overseas", NOW_ISO[:13], (js.get("overseas") or {}).get("score"))
     return {**js, "model": model, "spark_tw": hist_get("mood", "taiwan", 72), "spark_os": hist_get("mood", "overseas", 72),
             "n_inputs": {k: len(v) for k, v in blocks.items()}}
+
+
+
+# ---------- 公司雷達：盯梢層（固定 5 家）＋ 雷達層（自動發現新募資、Show HN、Product Hunt） ----------
+RADAR_WATCH = [  # (名稱, 一句定位, Google News 英文查詢, HN 查詢, Bluesky 查詢)
+    ("Instinct", "傳簡訊辦事的 AI 助理", '"Instinct" ("Noah Shinn" OR "AI assistant")', "Instinct Shinn", '"Instinct AI"'),
+    ("Moda", "品牌簡報設計代理", '"Moda" AI ("design agent" OR presentations OR "brand")', "Moda design agent", '"Moda" AI design'),
+    ("Flora", "節點式創意畫布", '"Flora" AI (canvas OR creative OR Redpoint)', "Flora creative canvas", '"Flora" AI canvas'),
+    ("Flick", "AI 拍片工作台", '"Flick" AI (filmmaking OR film OR video)', "Flick AI filmmaking", '"Flick" AI film'),
+    ("Fish Audio", "聲音複製與配音", '"Fish Audio"', '"Fish Audio"', '"Fish Audio"'),
+]
+RADAR_TOPIC = re.compile(r"\b(design|designer|video|film|image|photo|creative|brand|branding|marketing|advert|ads?\b|voice|audio|music|presentation|slides?|deck|content|avatar|animation|3D|motion|font|typograph|assistant|agent|ugc|influencer|commerce|fashion|retail)", re.I)
+RADAR_RAISE = re.compile(r"^(?P<co>[A-Z][\w.&'’\- ]{1,40}?)(?:,.{0,60}?,)?\s+(?:raises|lands|secures|closes|nabs|bags|gets|snags|picks up|announces)\s+(?:a\s+)?\$?(?P<amt>[\d.]+)\s*(?P<unit>[MB]|million|billion)", re.I)
+RADAR_HIST = "radar"
+
+
+def _hn_search(q, days=7, tags="story", min_points=0, by_date=True, hits=20):
+    since = int((NOW - timedelta(days=days)).timestamp())
+    js = gjson("https://hn.algolia.com/api/v1/" + ("search_by_date" if by_date else "search"),
+               params={"query": q, "tags": tags, "numericFilters": f"created_at_i>{since},points>={min_points}", "hitsPerPage": hits})
+    out = []
+    for h in js.get("hits") or []:
+        out.append({"title": h.get("title") or "", "points": h.get("points") or 0, "comments": h.get("num_comments") or 0,
+                    "url": h.get("url") or f"https://news.ycombinator.com/item?id={h.get('objectID')}",
+                    "hn": f"https://news.ycombinator.com/item?id={h.get('objectID')}", "at": (h.get("created_at") or "")[:19] + "Z"})
+    return out
+
+
+def _radar_amount(m):
+    v = float(m.group("amt")); u = m.group("unit").lower()
+    return v * 1000 if u in ("b", "billion") else v
+
+
+def p_radar():
+    errs, watch, funding, showhn, ph = [], [], [], [], []
+    cut7 = (NOW - timedelta(days=7)).isoformat().replace("+00:00", "Z")
+    cut1 = (NOW - timedelta(days=1)).isoformat().replace("+00:00", "Z")
+    # 盯梢層
+    for name, desc, gq, hq, bq in RADAR_WATCH:
+        rec = {"name": name, "desc": desc, "news": [], "n_news7": 0, "n_hn7": 0, "n_bsky1": 0, "hn_top": None}
+        news = _try("radar news " + name, _gnews, gq, "", 10, "en")
+        news = [n_ for n_ in news if (n_.get("at") or "") >= cut7 and name.split()[0].lower() in (n_.get("title") or "").lower()]
+        rec["news"] = news[:3]; rec["n_news7"] = len(news)
+        try:
+            hn = [h for h in _hn_search(hq, 7) if name.split()[0].lower() in h["title"].lower()]
+            rec["n_hn7"] = len(hn)
+            if hn:
+                rec["hn_top"] = max(hn, key=lambda h: h["points"])
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"hn {name}: {safe_err(e)[:60]}")
+        try:
+            b = _bsky_search(bq, 25)
+            rec["n_bsky1"] = sum(1 for x in b if (x.get("at") or "") >= cut1)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"bsky {name}: {safe_err(e)[:60]}")
+        score = rec["n_news7"] * 3 + rec["n_hn7"] * 2 + rec["n_bsky1"]
+        hist_put(RADAR_HIST, name, TODAY_TPE.isoformat(), score)
+        hs = hist_get(RADAR_HIST, name, 30)
+        base = sorted(hs[:-1])[len(hs[:-1]) // 2] if len(hs) > 3 else None  # 過去中位數
+        rec["score"] = score; rec["spark"] = hs
+        rec["spike"] = bool(base is not None and score >= max(6, base * 2))
+        watch.append(rec)
+        time.sleep(0.6)
+    # 雷達層 1：新募資（英文新聞，只留小額、主題相關）
+    seen = set()
+    for q in ('AI ("raises" OR "lands" OR "secures") ("seed" OR "Series A") (design OR video OR creative OR marketing OR brand)',
+              'startup raises seed round AI (video OR image OR voice OR assistant OR agent OR presentations)'):
+        for n_ in _try("radar funding", _gnews, q, "", 20, "en"):
+            t = n_.get("title") or ""
+            m = RADAR_RAISE.search(t)
+            if not m or (n_.get("at") or "") < cut7 or not RADAR_TOPIC.search(t):
+                continue
+            co = m.group("co").strip(" ,")
+            amt = _radar_amount(m)
+            if amt > 150 or co.lower() in seen:  # 1.5 億美元以上就不是「小」了
+                continue
+            seen.add(co.lower())
+            stage = "種子" if re.search(r"seed|pre-seed", t, re.I) else "A 輪" if re.search(r"series a\b", t, re.I) else "B 輪" if re.search(r"series b\b", t, re.I) else ""
+            funding.append({"company": co, "amount": amt, "stage": stage, "title": t[:110], "url": n_.get("url"), "at": n_.get("at"), "source": n_.get("source")})
+        time.sleep(0.8)
+    funding.sort(key=lambda x: x.get("at") or "", reverse=True)
+    # 雷達層 2：Show HN（兩天內、≥20 分、主題相關）
+    try:
+        for h in _hn_search("", 2, tags="show_hn", min_points=20, hits=60):
+            if RADAR_TOPIC.search(h["title"]):
+                showhn.append(h)
+        showhn.sort(key=lambda h: -h["points"])
+    except Exception as e:  # noqa: BLE001
+        errs.append("show hn: " + safe_err(e)[:80])
+    # 雷達層 3：Product Hunt 精選（RSS，抓不到就略過）
+    try:
+        for it in _rss("https://www.producthunt.com/feed", "Product Hunt", 40):
+            if RADAR_TOPIC.search(it["title"]):
+                ph.append(it)
+    except Exception as e:  # noqa: BLE001
+        errs.append("product hunt: " + safe_err(e)[:60])
+    if not watch and not funding and not showhn:
+        raise RuntimeError(f"radar: nothing {errs[:3]}")
+    return {"watch": watch, "funding": funding[:10], "showhn": showhn[:8], "ph": ph[:8], "errs": errs[:6]}
 
 
 # ---------- 第三批（免新金鑰）：標案 / 設計廣告媒體 / 地震 / 台電 / 桃機 ----------
@@ -3621,6 +3723,7 @@ run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("social", p_social, keep_if_fresh_hours=0.5)
+run("radar", p_radar, keep_if_fresh_hours=2)
 run("cofacts", p_cofacts, keep_if_fresh_hours=0.5)
 # run("threads_g", p_threads_g, keep_if_fresh_hours=3)  # Custom Search JSON API 不收新客戶、Gemini grounding 免費層無額度（429）；Threads 暫無免費路徑
 run("mood", p_mood, keep_if_fresh_hours=1)
