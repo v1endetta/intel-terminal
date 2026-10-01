@@ -320,14 +320,15 @@ def p_tw_stocks():
                       "spark": hist_get("tw_stocks", code)})
     if not items:
         raise RuntimeError("no watch rows")
+    MIS_DIAG.clear()
     try:
         qs = twse_mis_quotes([c for c, _, _ in TW_WATCH])
         live = [it for it in items if _mis_override(it, qs.get(it["code"]), date)]
         if live:
             date = max(it["date"] for it in live)
     except Exception as e:  # noqa: BLE001
-        log("tw_stocks mis", e)
-    return {"date": date, "items": items}
+        log("tw_stocks mis", e); MIS_DIAG.append("err " + safe_err(e)[:80])
+    return {"date": date, "items": items, "mis": MIS_DIAG[:6]}
 
 
 def p_fx():
@@ -394,15 +395,20 @@ def p_poly():
     for m in rows:
         if m.get("sportsMarketType") or m.get("gameStartTime") or SPORTY.search(m.get("question") or ""):
             continue
+        end = (m.get("endDate") or m.get("endDateIso") or "")[:19]
+        if end and end.replace("Z", "") < NOW.strftime("%Y-%m-%dT%H:%M:%S"):
+            continue  # 已過結束日、只是還沒結算（例如「九月內」的市場）
         try:
             yes = float(json.loads(m.get("outcomePrices") or "[]")[0]) * 100
         except Exception:
             yes = None
+        if yes is not None and (yes < 0.5 or yes > 99.5):
+            continue  # 實質已定案，沒有資訊量
         d1 = m.get("oneDayPriceChange")
         ev = (m.get("events") or [{}])[0]
         items.append({"question": m.get("question"), "slug": ev.get("slug") or m.get("slug"),
                       "yes": yes, "d1": d1 * 100 if isinstance(d1, (int, float)) else None,
-                      "vol24h": m.get("volume24hr")})
+                      "vol24h": m.get("volume24hr"), "end": end[:10]})
         if len(items) >= 10:
             break
     if not items:
@@ -940,6 +946,9 @@ def twse_mis():
             "series": series, "asOf": tlong or int(NOW.timestamp()), "state": state}
 
 
+MIS_DIAG: list = []
+
+
 def twse_mis_quotes(codes):
     """證交所官方即時（個股批次）：回 {code: {price, prev, chg, pct, day, time}}；未成交（z='-'）就略過該檔。"""
     ex = "|".join(f"tse_{c}.tw" for c in codes)
@@ -947,9 +956,15 @@ def twse_mis_quotes(codes):
               headers={"Referer": "https://mis.twse.com.tw/stock/index.jsp", "Accept": "application/json"}, timeout=TIMEOUT)
     r.raise_for_status()
     out = {}
-    for m in r.json().get("msgArray") or []:
+    arr = r.json().get("msgArray") or []
+    MIS_DIAG.append(f"msgArray={len(arr)}")
+    for m in arr:
         c = m.get("c"); z = num(m.get("z")); y = num(m.get("y"))
+        if not z:  # 兩次撮合之間沒有成交價：用最佳一檔買賣價中間值，再不行用開盤價
+            bid = num((m.get("b") or "").split("_")[0]); ask = num((m.get("a") or "").split("_")[0])
+            z = (bid + ask) / 2 if bid and ask else (bid or ask or num(m.get("o")))
         if not c or not z or not y:
+            MIS_DIAG.append(f"{c}: z={m.get('z')} b={str(m.get('b'))[:12]} y={m.get('y')}")
             continue
         d = m.get("d") or ""
         out[c] = {"price": z, "prev": y, "chg": round(z - y, 2), "pct": (z - y) / y * 100, "day": f"{d[:4]}-{d[4:6]}-{d[6:8]}" if len(d) == 8 else "",
@@ -1236,7 +1251,8 @@ def p_ptt():
     sess = cffi.Session(impersonate="chrome")
     sess.cookies.set("over18", "1", domain="www.ptt.cc")
     items, boards = [], []
-    today_md = NOW.astimezone(TPE).strftime("%m/%d").lstrip("0").replace("/0", "/")
+    _t = NOW.astimezone(TPE)
+    today_md = f"{_t.month}/{_t.day:02d}"  # PTT 列表日期：月不補零、日補零（9/05、10/01）
     for board, zh, facet in PTT_BOARDS:
         rows = []
         try:
@@ -1962,7 +1978,7 @@ def p_aiwire():
     for name, fn, args, gq, vendor in (
         ("anthropic", _html_links, ("https://www.anthropic.com/news", r"/news/[a-z0-9-]+", "https://www.anthropic.com", "Anthropic"), "Anthropic Claude", "anthropic"),
         ("xai", _html_links, ("https://x.ai/news", r"(?:https://x\.ai)?/news/[a-z0-9-]+", "https://x.ai", "xAI"), "xAI Grok", "xai"),
-        ("deepseek", _html_links, ("https://api-docs.deepseek.com/news/", r"/news/news[a-z0-9-]+/?", "https://api-docs.deepseek.com", "DeepSeek"), "DeepSeek", "deepseek"),
+        ("deepseek", lambda: [{**c, "source": "DeepSeek"} for c in _changelog("https://api-docs.deepseek.com/updates/", "DeepSeek", "deepseek", 4)], (), "DeepSeek", "deepseek"),
     ):
         got = []
         try:
@@ -2231,8 +2247,9 @@ def _hot_terms_from(items):
 
     def add(w, src, it):
         k = w.lower()
-        h = hits.setdefault(k, {"term": w, "n": 0, "sources": set(), "sample": {"title": (it.get("title") or "")[:60], "url": it.get("url")}})
+        h = hits.setdefault(k, {"term": w, "n": 0, "sources": set(), "titles": set(), "sample": {"title": (it.get("title") or "")[:60], "url": it.get("url")}})
         h["n"] += 1; h["sources"].add(src)
+        h["titles"].add(re.sub(r"\W+", "", it.get("title") or "")[:18])  # 同一篇稿被多家轉載只算一次
 
     for it in items:
         t = it.get("title") or ""
@@ -2254,14 +2271,25 @@ def _hot_terms_from(items):
                     terms.add(g)
         for w in terms:
             add(w, src, it)
-    cands = [h for h in hits.values() if len(h["sources"]) >= 2]
+    for h in hits.values():
+        h["eff"] = min(len(h["sources"]), len(h["titles"]))  # 有效來源數：不同來源且不同標題
+    cands = [h for h in hits.values() if h["eff"] >= 2]
+    # 同一組標題裡的中文碎片（國軍嚴密／嚴密監控／密監控應）只留最長的一個
+    by_titles: dict = {}
+    for h in cands:
+        if re.search(r"[\u4e00-\u9fff]", h["term"]):
+            key = frozenset(h["titles"])
+            if key not in by_titles or len(h["term"]) > len(by_titles[key]["term"]):
+                by_titles[key] = h
+    cjk_keep = {id(h) for h in by_titles.values()}
+    cands = [h for h in cands if not re.search(r"[\u4e00-\u9fff]", h["term"]) or id(h) in cjk_keep]
     # 最長匹配：短段若被某個更長的段涵蓋且來源集合相同 → 丟
     keep = []
     for h in cands:
         dominated = any(o is not h and h["term"] in o["term"] and len(o["term"]) > len(h["term"]) and o["sources"] >= h["sources"] for o in cands)
         if not dominated:
             keep.append(h)
-    out = [{"term": h["term"], "n": h["n"], "src": len(h["sources"]), "sources": sorted(h["sources"])[:6], "sample": h["sample"], "hot": len(h["sources"]) >= 3} for h in keep]
+    out = [{"term": h["term"], "n": h["n"], "src": h["eff"], "sources": sorted(h["sources"])[:6], "sample": h["sample"], "hot": h["eff"] >= 3} for h in keep]
     out.sort(key=lambda x: (-x["src"], -x["n"], -len(x["term"])))
     return out[:10]
 
@@ -2735,7 +2763,7 @@ def p_tenders():
 
 
 DESIGN_FEEDS = [("https://www.dezeen.com/feed/", "Dezeen", "site:dezeen.com"),
-                ("https://www.itsnicethat.com/feed.rss", "INT", "site:itsnicethat.com"),
+                (("https://www.itsnicethat.com/rss", "https://www.itsnicethat.com/feed", "https://www.itsnicethat.com/articles.rss"), "INT", "site:itsnicethat.com"),
                 ("https://campaignbriefasia.com/feed/", "CB Asia", "site:campaignbriefasia.com"),
                 ("https://www.creativereview.co.uk/feed/", "CR", "site:creativereview.co.uk")]
 
@@ -2743,11 +2771,16 @@ DESIGN_FEEDS = [("https://www.dezeen.com/feed/", "Dezeen", "site:dezeen.com"),
 def p_design():
     items, errs = [], []
     for url, src, q in DESIGN_FEEDS:
-        got = []
-        try:
-            got = _rss(url, src, 5)
-        except Exception as e:  # noqa: BLE001
-            log("design rss", src, e); errs.append(f"{src}: {safe_err(e)}")
+        got, last_e = [], None
+        for u in (url if isinstance(url, tuple) else (url,)):
+            try:
+                got = _rss(u, src, 5)
+                if got:
+                    break
+            except Exception as e:  # noqa: BLE001
+                last_e = e
+        if not got:
+            log("design rss", src, last_e); errs.append(f"{src}: 官方 RSS 抓不到，改用 Google News")
             try:
                 got = _rss("https://news.google.com/rss/search", src, 4, q=q, hl="en-US", gl="US", ceid="US:en")
             except Exception as e2:  # noqa: BLE001
@@ -3143,7 +3176,13 @@ def p_gmacro():
                 txt, ptxt = f"{v:+.2f}", f"{pv:+.2f}" if pv is not None else ""
             else:
                 txt, ptxt = f"{v:.2f}%", f"{pv:.2f}%" if pv is not None else ""
-            items.append({"group": group, "label": label, "value": txt, "raw": round(v, 3), "prev": ptxt, "period": d[:7] if kind != "pct" or "DGS" not in sid and sid != "DFF" else d,
+            if sid == "A191RL1Q225SBEA" or sid.endswith("Q"):
+                per = f"{d[:4]}Q{(int(d[5:7]) - 1) // 3 + 1}"
+            elif sid in ("ICSA", "DFF") or "DGS" in sid or sid.startswith("T10Y"):
+                per = d[:10]
+            else:
+                per = d[:7]
+            items.append({"group": group, "label": label, "value": txt, "raw": round(v, 3), "prev": ptxt, "period": per,
                           "delta": round(v - pv, 3) if pv is not None else None, "spark": [round(x, 3) for _, x in vals[-18:]],
                           "dot": ("up" if v > 0 else "down") if sid in ("GACDFSA066MSFRBPHI", "GACDISA066MSFRBNY", "CFNAI") else None})
         except Exception as e:  # noqa: BLE001
@@ -3280,7 +3319,8 @@ def p_calendar():
             raw = str(r.get("Date") or r.get("日期") or "")
             d = roc_to_iso(raw) if raw and not raw.startswith("20") else raw[:10]
             if d:
-                add(d, f"台股休市：{(r.get('Name') or r.get('名稱') or '')[:12]}", "台", kind="holiday")
+                if datetime.fromisoformat(d).weekday() < 5:  # 週末本來就不開盤，不列
+                    add(d, f"台股休市：{(r.get('Name') or r.get('名稱') or '')[:12]}", "台", kind="holiday")
     except Exception as e:  # noqa: BLE001
         log("twse holidays", e); errs.append("休市: " + safe_err(e))
     # 去重、排序
@@ -3455,6 +3495,18 @@ def p_supply():
             if v_prev:
                 out["retail"].append({"name": name[:10], "period": p_last, "yoy": round((v_last / v_prev - 1) * 100, 1),
                                       "spark": [v for _, v in ser[-13:]]})
+        if out["retail"]:
+            last = max(r_["period"] for r_ in out["retail"])
+            expect = (TODAY_TPE.replace(day=1) - timedelta(days=1)).replace(day=1)  # 上個月
+            if TODAY_TPE.day >= 25:
+                expect = TODAY_TPE.replace(day=1)
+            expect_p = (expect.replace(day=1) - timedelta(days=1)).strftime("%Y-%m")  # 經濟部約每月 23 日公布「上上個月」
+            if last < expect_p:
+                out["retail_lag"] = {"have": last, "expect": expect_p}
+                news = _try("retail news", _gnews, "經濟部 零售業營業額 年增", "", 3)
+                news = [n_ for n_ in news if (n_.get("at") or "") >= (NOW - timedelta(days=20)).isoformat()]
+                if news:
+                    out["retail_news"] = news[0]
         if not out["retail"]:
             errs.append(f"零售: 行業={list(series)[:6]} sample={rows[1][:6] if len(rows) > 1 else None} last={rows[-1][:6]} nrows={len(rows)}")
     except Exception as e:  # noqa: BLE001
@@ -3560,7 +3612,9 @@ run("gmacro", p_gmacro, keep_if_fresh_hours=6)
 run("liquidity", p_liquidity, keep_if_fresh_hours=3)
 run("calendar", p_calendar, keep_if_fresh_hours=6)
 run("awards", p_awards, keep_if_fresh_hours=1)
-run("supply", p_supply, keep_if_fresh_hours=6)
+_sp = load_prev("supply") or {}
+_sp_next = min([x.get("next") for x in (_sp.get("pmi") or {}, _sp.get("nmi") or {}) if x.get("next")] or ["9999"])
+run("supply", p_supply, keep_if_fresh_hours=1 if TODAY_TPE.isoformat() >= _sp_next else 6)  # 發布日起每小時重抓，抓到新月份 next 會往後推
 run("weather", p_weather)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
