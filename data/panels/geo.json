@@ -1,20 +1,26 @@
 {
  "label": "TDX",
  "cities_with_data": 19,
- "freeway": 0,
+ "freeway": 406,
  "static": "完成",
  "totals": {
-  "parking": 1986,
+  "parking": 1953,
   "bikes": 9947,
-  "speed": 919
+  "speed": 879
  },
  "errs": [
   "bikes NewTaipei: RuntimeError: 429 on Bike/Availability/City/NewTaipei body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
   "bikes Hsinchu: RuntimeError: 429 on Bike/Availability/City/Hsinchu body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking Taichung: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Taichung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "vd NantouCounty: RuntimeError: 429 on Road/Traffic/Live/VD/City/NantouCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking ChiayiCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/ChiayiCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "etag live: RuntimeError: 429 on Road/Traffic/Live/ETag/Freeway body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
+  "parking Taichung: ReadTimeout: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Read timed out. (read timeout=25)",
+  "bikes Taichung: ConnectTimeout: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Max retries exceeded with url: /api/basic/v2/Bike/Availability/City/Taichung?%24format=JSON (Caused ",
+  "vd Taichung: ConnectionError: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Max retries exceeded with url: /api/basic/v2/Road/Traffic/Live/VD/City/Taichung?%24format=JSON (Caus",
+  "parking ChanghuaCounty: ConnectionError: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Max retries exceeded with url: /api/basic/v1/Parking/OffStreet/ParkingAvailability/City/ChanghuaCoun",
+  "bikes ChanghuaCounty: ConnectionError: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Max retries exceeded with url: /api/basic/v2/Bike/Availability/City/ChanghuaCounty?%24format=JSON (C",
+  "parking NantouCounty: ConnectionError: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Max retries exceeded with url: /api/basic/v1/Parking/OffStreet/ParkingAvailability/City/NantouCounty",
+  "vd NantouCounty: ConnectionError: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Max retries exceeded with url: /api/basic/v2/Road/Traffic/Live/VD/City/NantouCounty?%24format=JSON (",
+  "parking YunlinCounty: ConnectionError: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Max retries exceeded with url: /api/basic/v1/Parking/OffStreet/ParkingAvailability/City/YunlinCounty",
+  "bikes YunlinCounty: ConnectionError: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Max retries exceeded with url: /api/basic/v2/Bike/Availability/City/YunlinCounty?%24format=JSON (Cau",
+  "vd YunlinCounty: ConnectionError: HTTPSConnectionPool(host='tdx.transportdata.tw', port=443): Max retries exceeded with url: /api/basic/v2/Road/Traffic/Live/VD/City/YunlinCounty?%24format=JSON ("
  ],
- "updatedAt": "2026-10-01T14:45:12Z"
+ "updatedAt": "2026-10-01T15:01:15Z"
 }
