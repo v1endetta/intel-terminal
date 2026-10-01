@@ -1,37 +1,37 @@
 {
  "taiwan": {
-  "score": -0.1,
-  "label": "焦慮",
+  "score": -0.15,
+  "label": "疑慮關注",
   "themes": [
-   "車安零星",
-   "名人假信",
+   "車安評測",
+   "假名人信",
    "食安疑慮"
   ],
-  "line": "台灣人關注車安撞測與假訊息，對經濟現況與食安感到不安與焦慮。"
+  "line": "民眾熱議新車撞測與花枝丸食安，長輩群組瘋傳張忠謀偽造告別信。"
  },
  "overseas": {
   "score": -0.4,
-  "label": "擔憂",
+  "label": "焦慮悲觀",
   "themes": [
-   "關稅戰爭",
-   "AI出錯",
-   "通膨裁員"
+   "通膨物價",
+   "AI威脅",
+   "關稅爭端"
   ],
-  "line": "海外社群擔憂川普關稅政策、通膨與裁員，並對AI技術出錯感到無奈。"
+  "line": "聚焦中東戰事引發的物價通膨，並對AI末日風險與科技業裁員深感不安。"
  },
  "sources": {
   "PTT": {
-   "score": 0.1,
-   "note": "關注配息與車安，情緒中性偏憂"
+   "score": -0.05,
+   "note": "熱議車測與投資，情緒平穩微酸"
   },
   "LINE": {
-   "score": -0.3,
-   "note": "充斥名人假信與食安謠言，偏焦慮"
+   "score": -0.25,
+   "note": "瘋傳假養生與名人信，焦慮偏高"
   }
  },
- "watch": "盯緊MG ZS零星評價與花枝丸食安謠言的後續發酵",
+ "watch": "MG車款零星撞測後的車主反彈，與花枝丸食安假訊息擴散度。",
  "_grounding": [],
- "model": "gemini-3.5-flash",
+ "model": "gemini-3.8-flash",
  "spark_tw": [
   -0.1,
   -0.15,
@@ -51,7 +51,8 @@
   -0.1,
   -0.1,
   0.1,
-  -0.1
+  -0.1,
+  -0.15
  ],
  "spark_os": [
   -0.4,
@@ -72,6 +73,7 @@
   -0.4,
   -0.3,
   -0.3,
+  -0.4,
   -0.4
  ],
  "n_inputs": {
@@ -80,6 +82,5 @@
   "Threads": 0,
   "Bluesky（國外）": 14
  },
- "updatedAt": "2026-10-01T13:10:45Z",
- "error": "2026-10-01T15:18:15Z RuntimeError: gemini-3.5-flash 503 This model is currently experiencing high demand. Spikes in demand are usually temporary. "
+ "updatedAt": "2026-10-01T16:22:16Z"
 }
