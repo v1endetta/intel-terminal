@@ -1669,20 +1669,35 @@ def p_geo():
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
 # Vin 的關注領域（Google News 繁中）：每組顯示最新 3 則。帶引號＝精準比對。改這裡。
 NEWS_GROUPS = [
-    ("廣告與代理商", ['"廣告代理商"', "比稿 OR 廣告 得標", "廣告不實 OR 誇大不實 開罰", "廣告量 OR 行銷預算"]),
+    ("廣告與代理商", ['"廣告代理商"', '"比稿" 廣告 OR 行銷 OR 品牌', "廣告不實 OR 誇大不實 開罰", '"數位廣告" OR "廣告量" 台灣', "坎城創意節 OR 時報廣告金像獎 OR 4A創意獎 OR 龍璽"]),
     ("品牌與設計", ['"品牌重塑" OR "品牌升級"', "台灣設計展 OR 文博會 OR 金點設計獎", '"視覺識別" OR "包裝設計"', "家具展 OR 室內設計 OR 設計師品牌"]),
     ("AI 大廠與模型", ["OpenAI OR Anthropic OR DeepMind 發布 OR 推出", "ChatGPT OR Claude OR Gemini 新功能 OR 新模型", "AI agent OR AI 代理人 OR 智慧代理",
                   "en:OpenAI OR Anthropic OR \"Google DeepMind\" launches OR announces OR releases", "en:\"AI agent\" OR agentic launch"]),
     ("AI 與製作工具", ["Sora OR Runway OR Kling 影片", "生成式AI 廣告 OR 生成式AI 版權", "Figma OR Canva 新功能", "開源模型 OR Ollama OR 本地部署"]),
     ("市場與投資", ["槓桿ETF OR 00631L OR 00675L", "聯準會 利率 OR FOMC", "台積電 法說 OR 台積電 ADR"]),
     ("地緣與科技政策", ["台海 OR 共機 OR 軍演", "關稅 台灣 OR 232條款", "半導體 出口管制 OR 晶片法案"]),
-    ("時尚與奢華", ["LVMH OR Kering OR Hermès OR 愛馬仕", '"quiet luxury" OR 老錢風 OR 靜奢', "時裝週 OR 創意總監 上任", "精品 台灣 OR 精品 業績"]),
+    ("時尚與奢華", ["LVMH OR Kering OR Hermès OR 愛馬仕", '"quiet luxury" OR 老錢風 穿搭', "時裝週 OR 創意總監 上任", "精品 台灣 OR 精品 業績"]),
     ("資訊安全", ["資安 OR 駭客 OR 勒索軟體 OR 個資外洩", "資安署 OR 數位發展部 資安 OR 資安法", "資安 新創 OR 資安 募資 OR 資安 併購",
               "en:cybersecurity breach OR ransomware OR \"zero-day\"", "en:\"AI security\" OR \"agent security\" startup"]),
-    ("生物科技", ["生技 新藥 OR 生技 募資 OR 生技股", "細胞治療 OR 基因治療 OR 再生醫療 OR 外泌體", "FDA 核准 OR 食藥署 核准 新藥",
+    ("生物科技", ["生技 新藥 OR 生技 募資 OR 生技 授權", "細胞治療 OR 基因治療 OR 再生醫療 OR 外泌體", "FDA 核准 OR 食藥署 核准 新藥",
               "en:biotech raises OR \"drug discovery\" AI", "en:\"AI biology\" OR \"protein design\" OR \"gene editing\""]),
     ("文化與生活", ["廟宇 OR 媽祖 OR 民間信仰", "紀念幣 OR 錢幣 拍賣", "獨立書店 OR 誠品", "灣區 OR 舊金山 OR 加州 台灣人", "潭子 OR 台中 北屯"]),
 ]
+# Google News 是全文比對，標題常跟關鍵字無關；以下查詢要求標題本身要命中這些字才收
+WATCH_MUST = {
+    '"比稿" 廣告 OR 行銷 OR 品牌': r"比稿|提案|標案|代理",
+    "廣告不實 OR 誇大不實 開罰": r"廣告|誇大|不實",
+    '"數位廣告" OR "廣告量" 台灣': r"廣告|行銷|媒體",
+    "坎城創意節 OR 時報廣告金像獎 OR 4A創意獎 OR 龍璽": r"坎城|金像|4A|龍璽|創意獎|廣告獎",
+    '"品牌重塑" OR "品牌升級"': r"品牌",
+    "生成式AI 廣告 OR 生成式AI 版權": r"廣告|版權|著作|行銷|品牌|創作",
+    '"quiet luxury" OR 老錢風 穿搭': r"老錢|quiet luxury|靜奢|穿搭|時尚",
+    "生技 新藥 OR 生技 募資 OR 生技 授權": r"新藥|募資|臨床|授權|併購|FDA|核准|試驗",
+    "家具展 OR 室內設計 OR 設計師品牌": r"家具|室內|設計",
+}
+# 中港官媒、轉載站與明顯不相干的標題
+WATCH_SRC_BLOCK = re.compile(r"大公|文匯|新華|人民網|中新|環球網|央視|觀察者|新浪|搜狐|網易|鳳凰|IndexBox")
+WATCH_NOISE = re.compile(r"抓去關|處置股|試駕|開箱|星座|運勢|今彩|威力彩|大樂透|發票中獎")
 NEWS_ERRS: list = []
 HOT_POOL: list = []
 
@@ -1854,18 +1869,23 @@ def p_news():
         got = []
         for q in qs:
             lang = "en" if q.startswith("en:") else "zh"
-            for it in _try("kw " + q, _gnews, q[3:] if lang == "en" else q, "", 3, lang):
+            must = WATCH_MUST.get(q)
+            for it in _try("kw " + q, _gnews, q[3:] if lang == "en" else q, "", 8 if must else 4, lang):
+                if WATCH_SRC_BLOCK.search(it.get("source") or "") or WATCH_NOISE.search(it.get("title") or ""):
+                    continue
+                if must and not re.search(must, it.get("title") or "", re.I):
+                    continue
                 it["kw"] = q; got.append(it)
             time.sleep(0.8)
-        # 每組 3 則：關鍵字輪流各出一則（避免單一話題洗版），標題前 14 字相同視為同一則
+        # 每組 4 則：關鍵字輪流各出一則（避免單一話題洗版），標題前 14 字相同視為同一則
         fresh_cut = (NOW - timedelta(days=21)).isoformat()
         got = [g for g in got if (g.get("at") or "") >= fresh_cut]  # 三週以上的舊聞不進 Watchlist
         HOT_POOL.extend(got)  # 熱詞引擎看全部命中，不只面板挑出的 3 則
-        by_kw = {q: _dedupe_sort([g for g in got if g["kw"] == q], 3) for q in qs}
+        by_kw = {q: _dedupe_sort([g for g in got if g["kw"] == q], 4) for q in qs}
         picked, seen = [], set()
-        for rnd in range(3):
+        for rnd in range(4):
             for q in qs:
-                if len(picked) >= 3:
+                if len(picked) >= 4:
                     break
                 for it in by_kw[q][rnd:rnd + 1]:
                     k = re.sub(r"\W+", "", it["title"])[:14]
@@ -3734,28 +3754,36 @@ def p_liquidity():
 
 # ---------- 新品牌雷達：每月新設立公司／商業登記、同業新設、得標排行 ----------
 BRAND_CATS = [
-    ("設計創意", r"設計|創意|影像|影音|影視|品牌|行銷|廣告|文創|傳播|媒體|製作|攝影|藝術|視覺|動畫|內容|策展|整合行銷"),
-    ("餐飲", r"餐飲|咖啡|茶|食品|烘焙|料理|小吃|飲|麵|甜點|酒|餐|食堂|廚房"),
-    ("美容美妝", r"美容|美學|美甲|美睫|化粧|化妝|保養|醫美|髮|美妝|紋繡|SPA"),
-    ("生技健康", r"生技|生醫|醫療|健康|藥|保健|醫學|診所|長照|照護"),
-    ("科技 AI", r"科技|資訊|智能|智慧|數位|軟體|網路|雲端|資安|電子|AI|人工智慧|機器人|半導體|系統"),
-    ("能源綠色", r"能源|綠能|太陽能|光電|儲能|電力|環保|回收|碳|永續"),
-    ("不動產營建", r"建設|營造|不動產|開發|地產|室內裝修|裝潢|工程|建築"),
-    ("時尚服飾", r"服飾|時尚|成衣|鞋|皮件|珠寶|精品|衣|織品"),
-    ("旅宿休閒", r"旅行|旅遊|民宿|旅館|酒店|觀光|露營|運動|健身|瑜珈|休閒"),
-    ("寵物", r"寵物|毛孩"),
+    ("外商在台", r"^(香港商|新加坡商|美商|日商|英商|德商|法商|韓商|澳商|英屬|開曼|薩摩亞|塞席爾|馬來西亞商|越南商|荷蘭商|瑞士商)"),
+    ("設計創意", r"設計|創意|影像|影音|影視|品牌|行銷|廣告|文創|傳播|傳媒|媒體|製作|攝影|藝術|視覺|動畫|內容|策展|整合行銷|創藝|彩藝|花藝|手作"),
+    ("科技 AI", r"科技|資訊|智能|智慧|數位|軟體|網路|雲端|資安|電子|AI|人工智慧|機器人|半導體|系統|算力|通訊"),
+    ("生技健康", r"生技|生醫|醫療|健康|藥|保健|醫學|診所|長照|照護|婦幼"),
+    ("美容養生", r"美容|美學|美甲|美睫|化粧|化妝|保養|醫美|髮|美妝|紋繡|SPA|養生|推拿|整復|按摩|足體|美研"),
+    ("餐飲", r"餐飲|咖啡|茶|烘焙|料理|小吃|飲|麵|甜點|酒|餐|食堂|廚房|便當|酥雞|滷味|肉飯|鍋物|火鍋|牛排|蔬食|冰品|豆花|餃子|炸雞|雞排|美食|食坊|小館|飯館|河粉|湯包|魚焿|蛋糕|食品|膳"),
+    ("農漁食材", r"農產|水產|蔬果|果園|農場|漁業|水果|果行|鮮魚|苗園|草本|茶園"),
+    ("零售選物", r"選物|選品|嚴選|生活館|小舖|本舖|販賣|專賣|百貨|用品|禮品|玩具|娃娃|商店|雜貨|貿易|進出口|商貿|電商|網購|物流"),
+    ("時尚服飾", r"服飾|時尚|成衣|鞋|皮件|珠寶|精品|服裝|織|衣"),
+    ("不動產營建", r"建設|營造|不動產|開發|地產|室內裝修|裝潢|工程|建築|物業|租賃住宅|包租|代管|租管|建材|五金|住宅|家居|冷氣|軟裝|水電|消防|機電|空調|耐火"),
+    ("工業製造", r"工業|精密|機械|金屬|材料|鋼鐵|電機|自動化|動力|製造|製所|包裝|供應鏈|塑膠|化工|模具"),
+    ("汽車交通", r"車業|汽車|車體|車修|車行|輪胎|通運|停車|機車|運輸|貨運|交通"),
+    ("能源綠色", r"能源|綠能|太陽能|光電|儲能|電力|環保|回收|碳|永續|水務"),
+    ("教育文化", r"教育|文教|補習|才藝|藝文|文化|音樂|歌唱|書院|學苑|語言"),
+    ("休閒旅宿", r"旅行|旅遊|民宿|旅館|酒店|觀光|露營|渡假|運動|健身|瑜珈|休閒|娛樂|遊戲|高爾夫|匹克|體能|體育|育樂"),
+    ("生活服務", r"人力|派遣|保全|清潔|禮儀|生命|病媒|洗衣|搬家|寵物|毛孩|照相|維修"),
+    ("顧問服務", r"顧問|諮詢|管理|財務|會計|法律|專利|策略"),
     ("投資控股", r"投資|資產|控股|創投|資本"),
-    ("貿易電商", r"貿易|進出口|國際|電商|網購|商行|物流"),
 ]
 
 
 def _brand_cat(name):
     if re.search(r"消防|機電|水電|空調|冷凍|結構|土木|測量|環境工程", name or ""):
         return "不動產營建"
+    if re.search(r"生命禮儀|禮儀", name or ""):
+        return "生活服務"
     for c, pat in BRAND_CATS:
         if re.search(pat, name or ""):
             return c
-    return "其他"
+    return "名稱看不出產業"
 
 
 def _roc_date(s):
@@ -3824,7 +3852,7 @@ def p_brands():
         return c
     cc, pc = cnt(cur), cnt(prv)
     cats = []
-    for c, _ in BRAND_CATS + [("其他", "")]:
+    for c, _ in BRAND_CATS + [("名稱看不出產業", "")]:
         n_, p_ = cc.get(c, 0), pc.get(c, 0)
         hist_put("brands", c, cur_k, n_)
         if prv_k:
