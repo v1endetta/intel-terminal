@@ -1669,20 +1669,35 @@ def p_geo():
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
 # Vin 的關注領域（Google News 繁中）：每組顯示最新 3 則。帶引號＝精準比對。改這裡。
 NEWS_GROUPS = [
-    ("廣告與代理商", ['"廣告代理商"', "比稿 OR 廣告 得標", "廣告不實 OR 誇大不實 開罰", "廣告量 OR 行銷預算"]),
+    ("廣告與代理商", ['"廣告代理商"', '"比稿" 廣告 OR 行銷 OR 品牌', "廣告不實 OR 誇大不實 開罰", '"數位廣告" OR "廣告量" 台灣', "坎城創意節 OR 時報廣告金像獎 OR 4A創意獎 OR 龍璽"]),
     ("品牌與設計", ['"品牌重塑" OR "品牌升級"', "台灣設計展 OR 文博會 OR 金點設計獎", '"視覺識別" OR "包裝設計"', "家具展 OR 室內設計 OR 設計師品牌"]),
     ("AI 大廠與模型", ["OpenAI OR Anthropic OR DeepMind 發布 OR 推出", "ChatGPT OR Claude OR Gemini 新功能 OR 新模型", "AI agent OR AI 代理人 OR 智慧代理",
                   "en:OpenAI OR Anthropic OR \"Google DeepMind\" launches OR announces OR releases", "en:\"AI agent\" OR agentic launch"]),
     ("AI 與製作工具", ["Sora OR Runway OR Kling 影片", "生成式AI 廣告 OR 生成式AI 版權", "Figma OR Canva 新功能", "開源模型 OR Ollama OR 本地部署"]),
     ("市場與投資", ["槓桿ETF OR 00631L OR 00675L", "聯準會 利率 OR FOMC", "台積電 法說 OR 台積電 ADR"]),
     ("地緣與科技政策", ["台海 OR 共機 OR 軍演", "關稅 台灣 OR 232條款", "半導體 出口管制 OR 晶片法案"]),
-    ("時尚與奢華", ["LVMH OR Kering OR Hermès OR 愛馬仕", '"quiet luxury" OR 老錢風 OR 靜奢', "時裝週 OR 創意總監 上任", "精品 台灣 OR 精品 業績"]),
+    ("時尚與奢華", ["LVMH OR Kering OR Hermès OR 愛馬仕", '"quiet luxury" OR 老錢風 穿搭', "時裝週 OR 創意總監 上任", "精品 台灣 OR 精品 業績"]),
     ("資訊安全", ["資安 OR 駭客 OR 勒索軟體 OR 個資外洩", "資安署 OR 數位發展部 資安 OR 資安法", "資安 新創 OR 資安 募資 OR 資安 併購",
               "en:cybersecurity breach OR ransomware OR \"zero-day\"", "en:\"AI security\" OR \"agent security\" startup"]),
-    ("生物科技", ["生技 新藥 OR 生技 募資 OR 生技股", "細胞治療 OR 基因治療 OR 再生醫療 OR 外泌體", "FDA 核准 OR 食藥署 核准 新藥",
+    ("生物科技", ["生技 新藥 OR 生技 募資 OR 生技 授權", "細胞治療 OR 基因治療 OR 再生醫療 OR 外泌體", "FDA 核准 OR 食藥署 核准 新藥",
               "en:biotech raises OR \"drug discovery\" AI", "en:\"AI biology\" OR \"protein design\" OR \"gene editing\""]),
     ("文化與生活", ["廟宇 OR 媽祖 OR 民間信仰", "紀念幣 OR 錢幣 拍賣", "獨立書店 OR 誠品", "灣區 OR 舊金山 OR 加州 台灣人", "潭子 OR 台中 北屯"]),
 ]
+# Google News 是全文比對，標題常跟關鍵字無關；以下查詢要求標題本身要命中這些字才收
+WATCH_MUST = {
+    '"比稿" 廣告 OR 行銷 OR 品牌': r"比稿|提案|標案|代理",
+    "廣告不實 OR 誇大不實 開罰": r"廣告|誇大|不實",
+    '"數位廣告" OR "廣告量" 台灣': r"廣告|行銷|媒體",
+    "坎城創意節 OR 時報廣告金像獎 OR 4A創意獎 OR 龍璽": r"坎城|金像|4A|龍璽|創意獎|廣告獎",
+    '"品牌重塑" OR "品牌升級"': r"品牌",
+    "生成式AI 廣告 OR 生成式AI 版權": r"廣告|版權|著作|行銷|品牌|創作",
+    '"quiet luxury" OR 老錢風 穿搭': r"老錢|quiet luxury|靜奢|穿搭|時尚",
+    "生技 新藥 OR 生技 募資 OR 生技 授權": r"新藥|募資|臨床|授權|併購|FDA|核准|試驗",
+    "家具展 OR 室內設計 OR 設計師品牌": r"家具|室內|設計",
+}
+# 中港官媒、轉載站與明顯不相干的標題
+WATCH_SRC_BLOCK = re.compile(r"大公|文匯|新華|人民網|中新|環球網|央視|觀察者|新浪|搜狐|網易|鳳凰|IndexBox")
+WATCH_NOISE = re.compile(r"抓去關|處置股|試駕|開箱|星座|運勢|今彩|威力彩|大樂透|發票中獎")
 NEWS_ERRS: list = []
 HOT_POOL: list = []
 
@@ -1854,18 +1869,23 @@ def p_news():
         got = []
         for q in qs:
             lang = "en" if q.startswith("en:") else "zh"
-            for it in _try("kw " + q, _gnews, q[3:] if lang == "en" else q, "", 3, lang):
+            must = WATCH_MUST.get(q)
+            for it in _try("kw " + q, _gnews, q[3:] if lang == "en" else q, "", 8 if must else 4, lang):
+                if WATCH_SRC_BLOCK.search(it.get("source") or "") or WATCH_NOISE.search(it.get("title") or ""):
+                    continue
+                if must and not re.search(must, it.get("title") or "", re.I):
+                    continue
                 it["kw"] = q; got.append(it)
             time.sleep(0.8)
-        # 每組 3 則：關鍵字輪流各出一則（避免單一話題洗版），標題前 14 字相同視為同一則
+        # 每組 4 則：關鍵字輪流各出一則（避免單一話題洗版），標題前 14 字相同視為同一則
         fresh_cut = (NOW - timedelta(days=21)).isoformat()
         got = [g for g in got if (g.get("at") or "") >= fresh_cut]  # 三週以上的舊聞不進 Watchlist
         HOT_POOL.extend(got)  # 熱詞引擎看全部命中，不只面板挑出的 3 則
-        by_kw = {q: _dedupe_sort([g for g in got if g["kw"] == q], 3) for q in qs}
+        by_kw = {q: _dedupe_sort([g for g in got if g["kw"] == q], 4) for q in qs}
         picked, seen = [], set()
-        for rnd in range(3):
+        for rnd in range(4):
             for q in qs:
-                if len(picked) >= 3:
+                if len(picked) >= 4:
                     break
                 for it in by_kw[q][rnd:rnd + 1]:
                     k = re.sub(r"\W+", "", it["title"])[:14]
@@ -3745,10 +3765,13 @@ BRAND_CATS = [
     ("旅宿休閒", r"旅行|旅遊|民宿|旅館|酒店|觀光|露營|運動|健身|瑜珈|休閒"),
     ("寵物", r"寵物|毛孩"),
     ("投資控股", r"投資|資產|控股|創投|資本"),
+    ("貿易電商", r"貿易|進出口|國際|電商|網購|商行|物流"),
 ]
 
 
 def _brand_cat(name):
+    if re.search(r"消防|機電|水電|空調|冷凍|結構|土木|測量|環境工程", name or ""):
+        return "不動產營建"
     for c, pat in BRAND_CATS:
         if re.search(pat, name or ""):
             return c
@@ -3890,7 +3913,11 @@ def p_attention():
     except Exception as e:  # noqa: BLE001
         errs.append(f"票房: {safe_err(e)}")
     try:
-        j = gjson("https://rss.marketingtools.apple.com/api/v2/tw/apps/top-free/25/apps.json", timeout=30)
+        try:
+            j = gjson("https://rss.marketingtools.apple.com/api/v2/tw/apps/top-free/25/apps.json", timeout=45)
+        except Exception:  # 這個端點偶爾逾時或 502，等一下再試一次
+            time.sleep(3)
+            j = gjson("https://rss.marketingtools.apple.com/api/v2/tw/apps/top-free/25/apps.json", timeout=45)
         prev = {a["id"]: a["rank"] for a in ((load_prev("attention") or {}).get("apps") or {}).get("items", [])}
         apps = []
         for i, a in enumerate(j["feed"]["results"], 1):
@@ -3947,7 +3974,7 @@ def p_consume():
     focus = [item(k) for k in CONSUME_FOCUS if k in agg]
     allind = sorted([item(k) for k in agg], key=lambda x: -(x["yoy"] if x["yoy"] is not None else -999))
     # 製造、批發、工程等 B2B 行業的發票受大單影響大，年增常是幾倍，不適合當消費訊號
-    movers = [x for x in allind if x["yoy"] is not None and (x["amt"] or 0) > 1e9 and not re.search(r"製造|批發|工程|礦|金融|證券|保險|電力|燃氣|用水|廢棄物|污染|公共行政", x["name"])]
+    movers = [x for x in allind if x["yoy"] is not None and (x["amt"] or 0) > 1e9 and not re.search(r"製造|批發|工程|礦|金融|證券|保險|電力|燃氣|用水|廢棄物|污染|公共行政|機械|維修及安裝|企業總管理|倉儲|未分類", x["name"])]
     retail = []
     try:
         rr = _csv_rows("https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/3886F055-EB77-4DF9-98E2-F3F49A7D3434/1/6E5DA78C-2586-4CBE-B73D-65B80F67AE2A/0/?fileType=csv", timeout=120)

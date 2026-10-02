@@ -12,8 +12,8 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
       - run: pip install -r requirements.txt
-      - run: python probe.py 2> out3_log.txt || true
-      - run: mkdir -p out3 && cp out3_log.txt out3/ && tail -c 20000 out3/out3_log.txt > out3/tail.txt
+      - run: python probe.py 2> out4_log.txt || true
+      - run: mkdir -p out4 && cp out4_log.txt out4/ && tail -c 20000 out4/out4_log.txt > out4/tail.txt
       - run: |
           git config user.name intel-bot; git config user.email intel-bot@users.noreply.github.com
-          git add out3; git commit -qm "probe results"; git push -q origin HEAD:probe
+          git add out4; git commit -qm "probe results"; git push -q origin HEAD:probe
