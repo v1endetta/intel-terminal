@@ -1,12 +1,12 @@
 {
  "label": "TDX",
- "cities_with_data": 10,
+ "cities_with_data": 6,
  "freeway": 0,
  "static": "完成",
  "totals": {
-  "parking": 745,
-  "bikes": 3220,
-  "speed": 126
+  "parking": 687,
+  "bikes": 3101,
+  "speed": 101
  },
  "errs": [
   "parking NantouCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
@@ -22,5 +22,5 @@
   "parking Tainan: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
   "bikes Tainan: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
  ],
- "updatedAt": "2026-10-02T19:57:09Z"
+ "updatedAt": "2026-10-02T20:12:26Z"
 }
