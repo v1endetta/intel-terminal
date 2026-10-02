@@ -1696,7 +1696,7 @@ WATCH_MUST = {
     "家具展 OR 室內設計 OR 設計師品牌": r"家具|室內|設計",
 }
 # 中港官媒、轉載站與明顯不相干的標題
-WATCH_SRC_BLOCK = re.compile(r"大公|文匯|新華|人民網|中新|環球網|央視|觀察者|新浪|搜狐|網易|鳳凰|IndexBox")
+WATCH_SRC_BLOCK = re.compile(r"大公|文匯|新華|人民網|中新|環球網|央視|觀察者|新浪|搜狐|網易|鳳凰|IndexBox|tkww|takungpao|wenweipo|chinanews|xinhua|people\.com|cctv|huanqiu|guancha|sina|sohu|163\.com|ifeng", re.I)
 WATCH_NOISE = re.compile(r"抓去關|處置股|試駕|開箱|星座|運勢|今彩|威力彩|大樂透|發票中獎")
 NEWS_ERRS: list = []
 HOT_POOL: list = []
