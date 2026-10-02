@@ -4,9 +4,9 @@
  "freeway": 424,
  "static": "完成",
  "totals": {
-  "parking": 1987,
-  "bikes": 9944,
-  "speed": 986
+  "parking": 1988,
+  "bikes": 9943,
+  "speed": 987
  },
  "errs": [
   "parking Hsinchu: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/Hsinchu body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
@@ -15,5 +15,5 @@
   "bikes Chiayi: RuntimeError: 429 on Bike/Availability/City/Chiayi body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
   "vd Tainan: RuntimeError: 429 on Road/Traffic/Live/VD/City/Tainan body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
  ],
- "updatedAt": "2026-10-02T06:02:55Z"
+ "updatedAt": "2026-10-02T06:28:17Z"
 }
