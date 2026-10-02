@@ -1,20 +1,26 @@
 {
  "label": "TDX",
- "cities_with_data": 19,
- "freeway": 391,
+ "cities_with_data": 11,
+ "freeway": 0,
  "static": "完成",
  "totals": {
-  "parking": 1985,
-  "bikes": 9948,
-  "speed": 485
+  "parking": 745,
+  "bikes": 3430,
+  "speed": 126
  },
  "errs": [
-  "vd Keelung: RuntimeError: 429 on Road/Traffic/Live/VD/City/Keelung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking HsinchuCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/HsinchuCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "bikes Taichung: RuntimeError: 429 on Bike/Availability/City/Taichung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "parking YunlinCounty: RuntimeError: 429 on v1:Parking/OffStreet/ParkingAvailability/City/YunlinCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "bikes ChiayiCounty: RuntimeError: 429 on Bike/Availability/City/ChiayiCounty body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'",
-  "bikes Kaohsiung: RuntimeError: 429 on Bike/Availability/City/Kaohsiung body='{\\n  \"message\":\"API rate limit exceeded\"\\n}'"
+  "bikes ChanghuaCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "parking NantouCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "vd NantouCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "parking YunlinCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "bikes YunlinCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "vd YunlinCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "parking Chiayi: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "bikes Chiayi: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "parking ChiayiCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "bikes ChiayiCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "vd ChiayiCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+  "parking Tainan: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
  ],
- "updatedAt": "2026-10-02T17:56:38Z"
+ "updatedAt": "2026-10-02T18:12:18Z"
 }
