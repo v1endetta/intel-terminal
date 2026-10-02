@@ -1,0 +1,804 @@
+{
+ "help": "",
+ "success": true,
+ "result": {
+  "categoryService": "600",
+  "categoryDataset": "A",
+  "datasetId": 6047,
+  "identifier": "313000000G-A00036",
+  "title": "公司設立登記清冊(月份)",
+  "description": "每月產制公司設立登記資料清冊，資料內容包含序號、統一編號、公司名稱、公司所在地、代表人、資本額、核准設立日期\r\n更新日為每月14日 ",
+  "type": "api",
+  "license": "1",
+  "cost": "free",
+  "dataProvider": "Yuyunchung",
+  "publisherOID": "2.16.886.101.20003.20007.20132",
+  "publisherContactName": "黃 先生",
+  "publisherContactPhone": "02-27841000#2561",
+  "publisherContactEmail": "clyen@moea.gov.tw,opendata.gcis@gmail.com",
+  "updateFrequency": {
+   "regularupdate": "2"
+  },
+  "dataQuality": "G",
+  "coverageStartedDate": "",
+  "coverageEndedDate": "",
+  "publishedDate": "2016-01-01",
+  "modifiedDate": "2026-09-17 12:33:07",
+  "spatialCoverage": "",
+  "language": "zh",
+  "relatedUrl": "",
+  "notes": "資本額以新台幣元為單位。",
+  "apiDocUrl": "",
+  "distribution": [
+   {
+    "resourceDescription": "2026年07月",
+    "resourceField": [
+     {
+      "name": "序號",
+      "description": ""
+     },
+     {
+      "name": "統一編號",
+      "description": "",
+      "uri": "api/Commonality/Commonality/CommonData/BusinessAdministrationNumberTaxCodeNumberoftheProfitseekingEnterprisesandWithholdingAgencies"
+     },
+     {
+      "name": "公司名稱",
+      "description": ""
+     },
+     {
+      "name": "公司所在地",
+      "description": ""
+     },
+     {
+      "name": "代表人",
+      "description": ""
+     },
+     {
+      "name": "資本額",
+      "description": ""
+     },
+     {
+      "name": "核准設立日期",
+      "description": "",
+      "uri": "api/CurrencyandFinancial/CommonData/NormalCommonData/YYYMMDDROC"
+     }
+    ],
+    "qcLevel": "",
+    "resourceFormat": "CSV",
+    "resourceCharacterEncoding": "UTF-8",
+    "resourceQualityCheckTime": "2026-09-18 08:31:28",
+    "resourceDownloadUrl": "https://data.gcis.nat.gov.tw/od/file?oid=E00E4A41-4530-474C-9E0D-BE5F03F63701",
+    "resourceAmount": 3730,
+    "resourceNotes": "",
+    "resourceRequestMethod": "",
+    "resourceOasUrl": "",
+    "resourceRequestParameters": [],
+    "resourcePathParameters": []
+   },
+   {
+    "resourceDescription": "2026年08月",
+    "resourceField": [
+     {
+      "name": "序號",
+      "description": ""
+     },
+     {
+      "name": "統一編號",
+      "description": "",
+      "uri": "api/Commonality/Commonality/CommonData/BusinessAdministrationNumberTaxCodeNumberoftheProfitseekingEnterprisesandWithholdingAgencies"
+     },
+     {
+      "name": "公司名稱",
+      "description": ""
+     },
+     {
+      "name": "公司所在地",
+      "description": ""
+     },
+     {
+      "name": "代表人",
+      "description": ""
+     },
+     {
+      "name": "資本額",
+      "description": ""
+     },
+     {
+      "name": "核准設立日期",
+      "description": "",
+      "uri": "api/CurrencyandFinancial/CommonData/NormalCommonData/YYYMMDDROC"
+     }
+    ],
+    "qcLevel": "",
+    "resourceFormat": "CSV",
+    "resourceCharacterEncoding": "UTF-8",
+    "resourceQualityCheckTime": "2026-09-18 08:31:30",
+    "resourceDownloadUrl": "https://data.gcis.nat.gov.tw/od/file?oid=CE7F370E-9CBF-4A5B-AFD9-5C11ED9BB574",
+    "resourceAmount": 3730,
+    "resourceNotes": "",
+    "resourceRequestMethod": "",
+    "resourceOasUrl": "",
+    "resourceRequestParameters": [],
+    "resourcePathParameters": []
+   }
+  ],
+  "keyword": [
+   "AI-Ready Data 詮釋資料框架指標",
+   "公司登記"
+  ],
+  "en": {
+   "title": "Company registration checklist (month)",
+   "description": "Monthly company registration list",
+   "publisherContactName": "張 先生",
+   "publisherContactPhone": "02-27841000#2510",
+   "publisherContactEmail": [
+    "clyen@moea.gov.tw",
+    "data.gcis@gmail.com"
+   ],
+   "updateFrequency": "Irregular updates",
+   "cost": "free",
+   "notes": "The capital is denominated in New Taiwan dollars.",
+   "keyword": [
+    "Company registration"
+   ],
+   "resources": [
+    {
+     "description": "February 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2013",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "January 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "February 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2014",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "January 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "February 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2015",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "January 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "February 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2016",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "January 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "February 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2017",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "January 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "February 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2018",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "January 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "February 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2019",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "January 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "February 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2020",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "January 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "February 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2021",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "January 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "February 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2022",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "January 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "February 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "March 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "April 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "May 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "June 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "July 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "August 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "September 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "October 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "November 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    },
+    {
+     "description": "December 2023",
+     "fieldDesc": "Serial number、Unified Business Number、Company name、Company location、Representative、Capital amount、Date of Incorporation",
+     "note": ""
+    }
+   ]
+  }
+ }
+}

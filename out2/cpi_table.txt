@@ -1,0 +1,78 @@
+<table id="CCMS_jGridView">
+                    <thead>
+                        <tr>
+                            <th id="CCMS_jGridView_TH_1"><span>指標</span></th>
+                            <th id="CCMS_jGridView_TH_2"><span>數值</span></th>
+                            <th id="CCMS_jGridView_TH_3"><span>(備註)</span></th>
+                            <th v-if="items[0].SiteLanguageSN==1" id="CCMS_jGridView_TH_4" width="20%"><span>相關圖表請至統計資料庫</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in items" :key="item.sid"> 
+                            <td class="CCMS_jGridView_td_Class_0 " headers="CCMS_jGridView_TH_1"><span><a :id="'a_'+index" class="aspx" :title="item.Title" v-on:click="ChangeChart(index)" href="#"> {{ item.Title }}</a></span></td>
+                            <td class="CCMS_jGridView_td_Class_1 " headers="CCMS_jGridView_TH_2"><span>{{ item.Value }}</span></td>
+                            <td class="CCMS_jGridView_td_Class_2 " headers="CCMS_jGridView_TH_3"><span>[ {{ item.Remark }} ]</span></td>
+                            <td v-if="items[0].SiteLanguageSN==1" class="CCMS_jGridView_td_Class_3 " headers="CCMS_jGridView_TH_4"><span><a v-if="item.Href!=null" target="_blank" class="download" :title="'[另開新視窗]'+item.Title+'_相關連結'" :href="item.Href">相關連結</a></span></td>
+                        </tr>    
+                    </tbody>
+                </table>
+                <input type="hidden" name="ctl00$ContentPlaceHolder1$hidData" id="ContentPlaceHolder1_hidData" value="[{&quot;Title&quot;:&quot;消費者物價指數(民國110年=100)&quot;,&quot;sid&quot;:null,&quot;Value&quot;:&quot;112.32&quot;,&quot;Remark&quot;:&quot;115年8月&quot;,&quot;Href&quot;:&quot;https://nstatdb.dgbas.gov.tw/dgbasall/webMain.aspx?sys=210&amp;funid=A030101015&quot;,&quot;SiteLanguageSN&quot;:1},{&quot;Title&quot;:&quot;生產者物價指數(民國110年=100)&quot;,&quot;sid&quot;:null,&quot;Value&quot;:&quot;125.38&quot;,&quot;Remark&quot;:&quot;115年8月&quot;,&quot;Href&quot;:&quot;https://nstatdb.dgbas.gov.tw/dgbasall/webMain.aspx?sys=210&amp;funid=A030701015&quot;,&quot;SiteLanguageSN&quot;:1},{&quot;Title&quot;:&quot;消費者物價指數年增率(%)&quot;,&quot;sid&quot;:null,&quot;Value&quot;:&quot;2.04&quot;,&quot;Remark&quot;:&quot;115年8月&quot;,&quot;Href&quot;:&quot;https://nstatdb.dgbas.gov.tw/dgbasall/webMain.aspx?sys=210&amp;funid=A030101015&quot;,&quot;SiteLanguageSN&quot;:1},{&quot;Title&quot;:&quot;核心CPI年增率(%)&quot;,&quot;sid&quot;:null,&quot;Value&quot;:&quot;2.30&quot;,&quot;Remark&quot;:&quot;115年8月&quot;,&quot;Href&quot;:&quot;https://nstatdb.dgbas.gov.tw/dgbasall/webMain.aspx?sys=210&amp;funid=A030103015&quot;,&quot;SiteLanguageSN&quot;:1},{&quot;Title&quot;:&quot;消費者物價指數季調後月增率(%)&quot;,&quot;sid&quot;:null,&quot;Value&quot;:&quot;0.13&quot;,&quot;Remark&quot;:&quot;115年8月&quot;,&quot;Href&quot;:&quot;https://nstatdb.dgbas.gov.tw/dgbasall/webMain.aspx?sys=210&amp;funid=A030601015&quot;,&quot;SiteLanguageSN&quot;:1},{&quot;Title&quot;:&quot;消費者物價指數年增率(%)&quot;,&quot;sid&quot;:null,&quot;Value&quot;:&quot;2.07&quot;,&quot;Remark&quot;:&quot;115年預測&quot;,&quot;Href&quot;:null,&quot;SiteLanguageSN&quot;:1},{&quot;Title&quot;:&quot;生產者物價指數年增率(%)&quot;,&quot;sid&quot;:null,&quot;Value&quot;:&quot;16.75&quot;,&quot;Remark&quot;:&quot;115年8月&quot;,&quot;Href&quot;:&quot;https://nstatdb.dgbas.gov.tw/dgbasall/webMain.aspx?sys=210&amp;funid=A030701015&quot;,&quot;SiteLanguageSN&quot;:1}]" />
+                <script>
+                    var VueData = JSON.parse('{"items":' + $('#ContentPlaceHolder1_hidData').val() + '}');
+                    var example1 = new Vue({
+                        el: '#CCMS_jGridView',
+                        data: VueData,
+                        methods: {
+                            ChangeChart: function (index, event) {
+                                GetChart(data[index]);
+                                if (event) {
+                                    //alert(event.target.tagName)
+                                }
+                            }
+                        }
+                    })
+                </script>
+            </div>
+            <div class="group-list content" data-child="5" data-setlen="1" data-type="4">
+                <div class="in">
+                    <div class="ct">
+                        <div class="in">
+                            <ul data-child="5" data-index="1">
+                                <li data-index="1">
+                                    <div class="list-text content-list" data-index="1" data-type="0">
+                                        <div class="in">
+                                            <div class="hd">
+                                                <div class="in">
+                                                    <div data-index="0">
+                                                        <span>
+                                                            <a class="aspx" href="News.aspx?n=2668&sms=11023" title="詳細資料">詳細資料</a>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </li>
+                                <li data-index="2">
+                                    <div class="list-text content-list" data-index="1" data-type="0">
+                                        <div class="in">
+                                            <div class="hd">
+                                                <div class="in">
+                                                    <div data-index="0">
+                                                        <span>
+                                                            
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="data">
+                <div id="chartdiv"></div>
+                <input type="hidden" name="ctl00$ContentPlaceHolder1$hidChartData" id="ContentPlaceHolder1_hidChartData" value="[{&quot;Title&quot;:&quot;消費者物價指數&quot;,&quot;Type&quot;:2,&quot;Unit&quot;:&quot;(民國110年=100)&quot;,&quot;data&quot;:[{&quot;Date&quot;:&quot;2026/8/1&quot;,&quot;Value&quot;:&quot;112.32&quot;,&quot;Title&quot;:&quot;115年8月&quot;,&quot;Title_2&quot;:&quot;115年8月&quot;},{&quot;Date&quot;:&quot;2026/7/1&quot;,&quot;Value&quot;:&quot;112.33&quot;,&quot;Title&quot;:&quot;115年7月&quot;,&quot;Title_2&quot;:&quot;115年7月&quot;},{&quot;Date&quot;:&quot;2026/6/1&quot;,&quot;Value&quot;:&quot;111.96&quot;,&quot;Title&quot;:&quot;115年6月&quot;,&quot;Title_2&quot;:&quot;115年6月&quot;},{&quot;Date&quot;:&quot;2026/5/1&quot;,&quot;Value&quot;:&quot;111.42&quot;,&quot;Title&quot;:&quot;115年5月&quot;,&quot;Title_2&quot;:&quot;115年5月&quot;},{&quot;Date&quot;:&quot;2026/4/1&quot;,&quot;Value&quot;:&quot;111.21&quot;,&quot;Title&quot;:&quot;115年4月&quot;,&quot;Title_2&quot;:&quot;115年4月&quot;},{&quot;Date&quot;:&quot;2026/3/1&quot;,&quot;Value&quot;:&quot;110.36&quot;,&quot;Title&quot;:&quot;115年3月&quot;,&quot;Title_2&quot;:&quot;115年3月&quot;},{&quot;Date&quot;:&quot;2026/2/1&quot;,&quot;Value&quot;:&quot;110.91&quot;,&quot;Title&quot;:&quot;115年2月&quot;,&quot;Title_2&quot;:&quot;115年2月&quot;},{&quot;Date&quot;:&quot;
