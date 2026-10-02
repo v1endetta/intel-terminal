@@ -3,22 +3,32 @@
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
+   "title": "Codex IDE plugin silently eats messages",
+   "url": "https://community.openai.com/t/codex-ide-plugin-silently-eats-messages/1402586",
+   "replies": 5,
+   "likes": 6,
+   "views": 351,
+   "at": "2026-10-01T14:47:45Z"
+  },
+  {
+   "source": "OpenAI 論壇",
+   "vendor": "openai",
    "title": "Unable to enable dots despite being on Business Premium plan",
    "url": "https://community.openai.com/t/unable-to-enable-dots-despite-being-on-business-premium-plan/1402580",
    "replies": 3,
    "likes": 6,
-   "views": 122,
+   "views": 129,
    "at": "2026-10-01T14:29:03Z"
   },
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "Codex IDE plugin silently eats messages",
-   "url": "https://community.openai.com/t/codex-ide-plugin-silently-eats-messages/1402586",
+   "title": "TTS shutdown email (tts-1, gpt-4o-mini-tts, Jan 6 2027) isn't on the deprecations page",
+   "url": "https://community.openai.com/t/tts-shutdown-email-tts-1-gpt-4o-mini-tts-jan-6-2027-isnt-on-the-deprecations-page/1402731",
    "replies": 5,
-   "likes": 6,
-   "views": 321,
-   "at": "2026-10-01T14:47:45Z"
+   "likes": 2,
+   "views": 177,
+   "at": "2026-10-01T23:45:32Z"
   },
   {
    "source": "OpenAI 論壇",
@@ -27,28 +37,18 @@
    "url": "https://community.openai.com/t/feature-request-consistent-adult-mode-for-verified-adult-users/1402579",
    "replies": 0,
    "likes": 2,
-   "views": 36,
+   "views": 37,
    "at": "2026-10-01T14:21:09Z"
   },
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "Feature Request: Make ChatGPT a Native Voice Assistant on Android and Android Auto",
-   "url": "https://community.openai.com/t/feature-request-make-chatgpt-a-native-voice-assistant-on-android-and-android-auto/1402532",
-   "replies": 0,
+   "title": "ChatGPT scrolling badly broken after recent changes to thread loading",
+   "url": "https://community.openai.com/t/chatgpt-scrolling-badly-broken-after-recent-changes-to-thread-loading/1402561",
+   "replies": 1,
    "likes": 2,
-   "views": 27,
-   "at": "2026-10-01T11:54:01Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Invite dots into ongoing conversations with an @mention",
-   "url": "https://community.openai.com/t/invite-dots-into-ongoing-conversations-with-an-mention/1402699",
-   "replies": 0,
-   "likes": 2,
-   "views": 25,
-   "at": "2026-10-01T21:16:30Z"
+   "views": 124,
+   "at": "2026-10-01T13:23:55Z"
   },
   {
    "source": "Google AI 論壇",
@@ -57,7 +57,7 @@
    "url": "https://discuss.ai.google.dev/t/i-think-google-used-my-work-with-gemini-for-fake-promo-by-a-twitter-burner/186333",
    "replies": 6,
    "likes": 0,
-   "views": 52,
+   "views": 55,
    "at": "2026-10-01T15:01:13Z"
   },
   {
@@ -67,18 +67,8 @@
    "url": "https://discuss.ai.google.dev/t/voice-replication-returns-404-requested-entity-was-not-found-since-oct-1-2026-ui-and-api/186326",
    "replies": 6,
    "likes": 1,
-   "views": 52,
+   "views": 57,
    "at": "2026-10-01T14:17:04Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Flash models fail with a ~400k-token conversation despite 1M context window",
-   "url": "https://discuss.ai.google.dev/t/flash-models-fail-with-a-400k-token-conversation-despite-1m-context-window/186352",
-   "replies": 0,
-   "likes": 1,
-   "views": 20,
-   "at": "2026-10-01T19:23:17Z"
   },
   {
    "source": "Google AI 論壇",
@@ -87,8 +77,18 @@
    "url": "https://discuss.ai.google.dev/t/the-2-million-token-illusion-silent-throttling-ttft-queues-and-the-pro-tier-bait-and-switch/186344",
    "replies": 0,
    "likes": 1,
-   "views": 19,
+   "views": 21,
    "at": "2026-10-01T17:31:26Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "Flash models fail with a ~400k-token conversation despite 1M context window",
+   "url": "https://discuss.ai.google.dev/t/flash-models-fail-with-a-400k-token-conversation-despite-1m-context-window/186352",
+   "replies": 0,
+   "likes": 1,
+   "views": 21,
+   "at": "2026-10-01T19:23:17Z"
   },
   {
    "source": "Google AI 論壇",
@@ -97,7 +97,7 @@
    "url": "https://discuss.ai.google.dev/t/repitiendose-no-soluciona-repite-o-crea-errores-para-generar-alto-consumo-de-tokens/186353",
    "replies": 2,
    "likes": 0,
-   "views": 29,
+   "views": 32,
    "at": "2026-10-01T20:03:01Z"
   }
  ],
@@ -297,9 +297,9 @@
  ],
  "errs": [],
  "diag": [
-  "Gemini changelog md: got html 156488b",
+  "Gemini changelog md: got html 156492b",
   "DeepSeek updates md: got html 48088b",
   "xAI release notes md: 18162b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## September\\n\\n### safet'"
  ],
- "updatedAt": "2026-10-02T11:28:42Z"
+ "updatedAt": "2026-10-02T12:44:50Z"
 }

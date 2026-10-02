@@ -76,16 +76,23 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "Diesel hits £2 a litre for first time; eurozone inflation rate surges to 3.8% – business l",
+   "title": "US added just 29,000 jobs in September in sharp drop from last month’s gains",
+   "url": "https://www.theguardian.com/business/2026/oct/02/september-jobs-report",
+   "at": "2026-10-02T12:44:07Z",
+   "sec": "Business"
+  },
+  {
+   "source": "Guardian",
+   "title": "US bonds rally after weaker-than-expected jobs report shows hiring slowdown – business liv",
    "url": "https://www.theguardian.com/business/live/2026/oct/02/french-bond-sell-off-euro-crisis-cuts-tax-rises-eurozone-inflation-us-jobs-report-latest-news-updates",
-   "at": "2026-10-02T12:11:08Z",
+   "at": "2026-10-02T12:43:32Z",
    "sec": "Business"
   },
   {
    "source": "Guardian",
    "title": "Over 560 schools disrupted in France on Friday as protests escalate into ‘urban violence’ ",
    "url": "https://www.theguardian.com/world/live/2026/oct/02/france-schools-protests-violence-ukraine-kallas-rome-pope-latest-news-updates",
-   "at": "2026-10-02T11:52:15Z",
+   "at": "2026-10-02T12:39:08Z",
    "sec": "World news"
   },
   {
@@ -143,13 +150,6 @@
    "title": "Friday briefing: How we covered the flydubai incident as it unfolded ",
    "url": "https://www.theguardian.com/world/2026/oct/02/friday-briefing-how-we-covered-the-flydubai-incident-as-it-unfolded",
    "at": "2026-10-02T05:45:23Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "‘No one disrespects Our Lady’: fears for Brazil’s patron saint grip country ahead of elect",
-   "url": "https://www.theguardian.com/world/2026/oct/02/brazil-election-lady-of-aparecida-lula-bolsonaro-row",
-   "at": "2026-10-02T04:00:10Z",
    "sec": "World news"
   }
  ],
@@ -288,10 +288,10 @@
    "name": "地緣與科技政策",
    "items": [
     {
-     "source": "UDN",
-     "title": "2027台海風險受關注 調查局邀張五岳解析美中博弈與兩岸情勢",
-     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1sME5lcWJCXzE5ZFhiM0I1ejNraVNwNWpQWmZEMHZPbEpEX24wUlVLSmZSTnRWQlhmc3E2WGtmVWZKcVUtQ1JQWDZNMUUzZXpXWEHSAVdBVV95cUxQUGVxWGhsNGFmakIxNGY1RkhsQkNzYVlzeUtkTDRzdmZ5M3pkYkRkYXRuVGJXc1ZrcWduS0pINUNmNmE2ckJBaHZkQTRVQlNBSUJXV1N6Wjg?oc=5",
-     "at": "2026-10-02T10:23:37Z",
+     "source": "中央社 CNA",
+     "title": "布達佩斯論壇登場賴怡忠：歐洲應更關注台海安全| 國際",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5hdExBMFNOajg3aFFQZFBqVEFGVlBSVDZKX3p1em9vVUZ5bUNOTEZCZFBLLUhXcUJTakkwMU41WWlDQmh4dG9IOGQyUF9uTEZrSnRUS1VlMUlxRzlMOThN?oc=5",
+     "at": "2026-10-02T12:21:00Z",
      "kw": "台海 OR 共機 OR 軍演"
     },
     {
@@ -417,17 +417,17 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.448,
-   "vol_ratio": 1.0,
-   "tone": 0.66,
-   "tone_at": "2026-10-02T08:49:53Z",
+   "vol": 1.478,
+   "vol_ratio": 1.02,
+   "tone": 0.65,
+   "tone_at": "2026-10-02T12:44:50Z",
    "spark": [
     1.854,
     1.462,
     1.46,
-    1.448
+    1.478
    ],
-   "at": "2026-10-02T11:28:42Z"
+   "at": "2026-10-02T12:44:50Z"
   },
   "wiki": {
    "zh": [
@@ -503,7 +503,23 @@
     "hot": true
    },
    {
-    "term": "灣設計展",
+    "term": "設計展",
+    "n": 5,
+    "src": 4,
+    "sources": [
+     "中華新聞雲",
+     "台灣好新聞",
+     "桃園電子報",
+     "自由時報"
+    ],
+    "sample": {
+     "title": "鈦美獎吸引國內外524作品參賽 串聯台灣設計展點亮城市美學",
+     "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBNRlA0MGo5RGVfRFBGNE1pVkFwbUE1eXd5UEUzLU9jYURlUDZDQ1hLOHBSaS1abXNJUzEzWElLYURzUm9xenozcmFTc2Q?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "台灣設計",
     "n": 4,
     "src": 4,
     "sources": [
@@ -534,7 +550,7 @@
     "hot": true
    },
    {
-    "term": "重大漏洞",
+    "term": "資安署籲",
     "n": 5,
     "src": 3,
     "sources": [
@@ -564,21 +580,6 @@
     "hot": true
    },
    {
-    "term": "OpenAI",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "BBC",
-     "iThome",
-     "news.cnyes.c"
-    ],
-    "sample": {
-     "title": "OpenAI fires workers for 'mishandling sensitive information'",
-     "url": "https://www.bbc.co.uk/news/articles/c6y9z9r4ejzwo?at_medium=RSS&at_campaign=rss"
-    },
-    "hot": true
-   },
-   {
     "term": "鈦美獎",
     "n": 3,
     "src": 3,
@@ -590,6 +591,21 @@
     "sample": {
      "title": "鈦美獎吸引國內外524作品參賽 串聯台灣設計展點亮城市美學",
      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBNRlA0MGo5RGVfRFBGNE1pVkFwbUE1eXd5UEUzLU9jYURlUDZDQ1hLOHBSaS1abXNJUzEzWElLYURzUm9xenozcmFTc2Q?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "關注",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "UDN",
+     "中央社",
+     "中央社 CNA"
+    ],
+    "sample": {
+     "title": "日圓走貶引關注　日財長：政府將統一貨幣政策口徑",
+     "url": "https://www.cna.com.tw/news/afe/202610020270.aspx"
     },
     "hot": true
    },
@@ -613,24 +629,9 @@
     "n": 3,
     "src": 3,
     "sources": [
-     "TNL The News",
      "UDN",
-     "梅花新聞網"
-    ],
-    "sample": {
-     "title": "2027台海風險受關注 調查局邀張五岳解析美中博弈與兩岸情勢",
-     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1sME5lcWJCXzE5ZFhiM0I1ejNraVNwNWpQWmZEMHZPbEpEX24wUlVLSmZSTnRWQlhmc3E2WGtmVWZKcVUtQ1JQWDZNMUUzZXpXWEHSAVdBVV95cUxQUGVxWGhsNGFmakIxNGY1RkhsQkNzYVlzeUtkTDRzdmZ5M3pkYkRkYXRuVGJXc1ZrcWduS0pINUNmNmE2ckJBaHZkQTRVQlNBSUJXV1N6Wjg?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "風險",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "TNL The News",
-     "UDN",
-     "iThome"
+     "thenewslens.",
+     "中央社 CNA"
     ],
     "sample": {
      "title": "2027台海風險受關注 調查局邀張五岳解析美中博弈與兩岸情勢",
@@ -640,8 +641,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-10-02T12:19:09Z"
+ "errs": [],
+ "updatedAt": "2026-10-02T12:44:50Z"
 }
