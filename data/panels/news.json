@@ -50,6 +50,12 @@
   },
   {
    "source": "公視",
+   "title": "NASA、SpaceX合作太空船發射 與國際太空站對接創最快紀錄｜20261002 8點新世界",
+   "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5ySUJBcFoxS3BfT1hCdHlUeHVhTmMwWHo1SUk5SFQ5Q0c1SEVoSngyYlVfaUYwVnFqMHlEVkxwT09XaGxkajk2dEpLNA?oc=5",
+   "at": "2026-10-02T12:58:26Z"
+  },
+  {
+   "source": "公視",
    "title": "田納西州女囚遭判死行刑 注射毒劑仍未死過程曲折",
    "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5GbzNjdU1jNlVCQjNTVFpMRTFLLXQtdWNZck9MYktIaEdqSTJDRnVfcVN1a1FHNXpjcEtxM19VSmhvOUpoeHFBR25rRXZwd00?oc=5",
    "at": "2026-10-01T13:03:45Z"
@@ -65,12 +71,6 @@
    "title": "川普宣布韓投資阿拉斯加天然氣 中油去年已爭取盼成投資方",
    "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9SX1c4M1YtRG0tWmRnbE9ZV1A0YTlZUlpOdlhtZUhmZFBQOUdCNXZLRGFMam1SUThiN3QyX25vVW5BQk9SVU1iOWxqNVZKbG8?oc=5",
    "at": "2026-10-01T12:13:15Z"
-  },
-  {
-   "source": "公視",
-   "title": "林郁婷5比0完勝烏茲別克 挺進亞運拳擊女子60公斤級金牌戰",
-   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBYTUpjcE5fWElRMzB5RUJwREd2S1JpTXBSX29HM3RWdGF5NEpZaEYyQjBIem5uX1ozakMyUlQ0bnNvYXJkSXJnMUROMkY0bUU?oc=5",
-   "at": "2026-09-30T05:06:18Z"
   }
  ],
  "intl": [
@@ -552,15 +552,15 @@
   },
   "hot": [
    {
-    "term": "灣設計展",
+    "term": "台灣設計",
     "n": 5,
     "src": 5,
     "sources": [
      "ETtoday新聞雲",
      "LINE TODAY",
+     "tyenews.com",
      "台灣好新聞",
-     "城市學",
-     "桃園電子報"
+     "城市學"
     ],
     "sample": {
      "title": "台灣設計展桃園登場掀熱潮 日韓頂尖設計機構接力造訪交流",
@@ -702,6 +702,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-10-02T19:37:18Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-10-02T19:57:09Z"
 }
