@@ -3731,6 +3731,255 @@ def p_liquidity():
     return {**out, "errs": errs[:4]}
 
 # ---------- run ----------
+
+# ---------- 新品牌雷達：每月新設立公司／商業登記、同業新設、得標排行 ----------
+BRAND_CATS = [
+    ("設計創意", r"設計|創意|影像|影音|影視|品牌|行銷|廣告|文創|傳播|媒體|製作|攝影|藝術|視覺|動畫|內容|策展|整合行銷"),
+    ("餐飲", r"餐飲|咖啡|茶|食品|烘焙|料理|小吃|飲|麵|甜點|酒|餐|食堂|廚房"),
+    ("美容美妝", r"美容|美學|美甲|美睫|化粧|化妝|保養|醫美|髮|美妝|紋繡|SPA"),
+    ("生技健康", r"生技|生醫|醫療|健康|藥|保健|醫學|診所|長照|照護"),
+    ("科技 AI", r"科技|資訊|智能|智慧|數位|軟體|網路|雲端|資安|電子|AI|人工智慧|機器人|半導體|系統"),
+    ("能源綠色", r"能源|綠能|太陽能|光電|儲能|電力|環保|回收|碳|永續"),
+    ("不動產營建", r"建設|營造|不動產|開發|地產|室內裝修|裝潢|工程|建築"),
+    ("時尚服飾", r"服飾|時尚|成衣|鞋|皮件|珠寶|精品|衣|織品"),
+    ("旅宿休閒", r"旅行|旅遊|民宿|旅館|酒店|觀光|露營|運動|健身|瑜珈|休閒"),
+    ("寵物", r"寵物|毛孩"),
+    ("投資控股", r"投資|資產|控股|創投|資本"),
+    ("貿易電商", r"貿易|進出口|國際|電商|網購|商行|物流"),
+]
+
+
+def _brand_cat(name):
+    if re.search(r"消防|機電|水電|空調|冷凍|結構|土木|測量|環境工程", name or ""):
+        return "不動產營建"
+    for c, pat in BRAND_CATS:
+        if re.search(pat, name or ""):
+            return c
+    return "其他"
+
+
+def _roc_date(s):
+    s = str(s or "").strip()
+    m = re.match(r"^(\d{2,3})(\d{2})(\d{2})$", s)
+    return f"{int(m.group(1)) + 1911}-{m.group(2)}-{m.group(3)}" if m else ""
+
+
+def _gov_dists(ds):
+    """data.gov.tw 資料集的各月份下載連結，回傳 [(說明, url)]，新的在後。"""
+    j = gjson(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", timeout=40)
+    out = []
+    for d in (j.get("result") or {}).get("distribution") or []:
+        u = d.get("resourceDownloadUrl") or d.get("downloadURL")
+        if u:
+            out.append((d.get("resourceDescription") or "", u))
+    def ym(desc):
+        m = re.search(r"(\d{4})年(\d{1,2})月", desc)
+        return (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+    out.sort(key=lambda x: ym(x[0]))
+    return out
+
+
+def _csv_rows(url, timeout=120):
+    import csv, io
+    b = get(url, timeout=timeout).content
+    for enc in ("utf-8-sig", "big5", "cp950"):
+        try:
+            t = b.decode(enc); break
+        except Exception:
+            t = None
+    return list(csv.DictReader(io.StringIO(t or b.decode("utf-8", "ignore"))))
+
+
+AW_LOG = DATA / "awards_log.json"
+
+
+def p_brands():
+    errs = []
+    months = {}
+    for ds, kind, name_k, date_k, addr_k in ((6047, "公司", "公司名稱", "核准設立日期", "公司所在地"), (6668, "商業", "商業名稱", "設立日期", "商業所在地")):
+        try:
+            dists = _gov_dists(ds)[-2:]
+            for desc, u in dists:
+                m = re.search(r"(\d{4})年(\d{1,2})月", desc)
+                key = f"{m.group(1)}-{int(m.group(2)):02d}" if m else desc
+                rows = _csv_rows(u)
+                for r in rows:
+                    nm = (r.get(name_k) or "").strip()
+                    if not nm:
+                        continue
+                    months.setdefault(key, []).append({"name": nm, "kind": kind, "cap": num(r.get("資本額")), "date": _roc_date(r.get(date_k)),
+                                                       "city": ((r.get("縣市名稱") or r.get(addr_k) or "")[:3]).replace("台", "臺"), "cat": _brand_cat(nm)})
+                time.sleep(0.5)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{kind}: {safe_err(e)}")
+    if not months:
+        raise RuntimeError("; ".join(errs) or "no data")
+    keys = sorted(months)
+    cur_k = keys[-1]; prv_k = keys[-2] if len(keys) > 1 else None
+    cur, prv = months[cur_k], months.get(prv_k, [])
+    def cnt(lst):
+        c = {}
+        for x in lst:
+            c[x["cat"]] = c.get(x["cat"], 0) + 1
+        return c
+    cc, pc = cnt(cur), cnt(prv)
+    cats = []
+    for c, _ in BRAND_CATS + [("其他", "")]:
+        n_, p_ = cc.get(c, 0), pc.get(c, 0)
+        hist_put("brands", c, cur_k, n_)
+        if prv_k:
+            hist_put("brands", c, prv_k, p_)
+        cats.append({"cat": c, "n": n_, "prev": p_, "chg": round((n_ - p_) / p_ * 100, 1) if p_ else None, "spark": hist_get("brands", c, 12)})
+    peers = sorted([x for x in cur if x["cat"] == "設計創意"], key=lambda x: (-(x["cap"] or 0), x["date"]))[:30]
+    big = sorted([x for x in cur if x["kind"] == "公司" and (x["cap"] or 0) >= 5e7], key=lambda x: -(x["cap"] or 0))[:12]
+    # 得標排行：累積決標紀錄（滾動 180 天）＋ 決標金額快取
+    log_ = {}
+    if AW_LOG.exists():
+        try:
+            log_ = json.loads(AW_LOG.read_text(encoding="utf-8"))
+        except Exception:
+            log_ = {}
+    for it in (RESULTS.get("awards") or {}).get("items", []):
+        if it.get("key") and it.get("winner"):
+            log_[it["key"]] = {"d": it.get("date"), "w": it.get("winner"), "a": it.get("amount"), "t": it.get("title")}
+    cut = (TODAY_TPE - timedelta(days=180)).strftime("%Y%m%d")
+    log_ = {k: v for k, v in log_.items() if (v.get("d") or "99999999") >= cut}
+    write_json(AW_LOG, log_, separators=(",", ":"))
+    try:
+        cache = json.loads(AWARD_CACHE.read_text(encoding="utf-8")) if AWARD_CACHE.exists() else {}
+    except Exception:
+        cache = {}
+    board = {}
+    for k in set(log_) | set(cache):
+        v = log_.get(k) or {}
+        c = cache.get(k) or {}
+        w = v.get("w") or c.get("winner") or ""
+        a = v.get("a") if v.get("a") is not None else c.get("amount")
+        for nm in [x.strip() for x in re.split(r"[、,，]", w) if x.strip()]:
+            b = board.setdefault(nm, {"name": nm, "n": 0, "amt": 0})
+            b["n"] += 1
+            b["amt"] += num(a) or 0
+    top = sorted(board.values(), key=lambda b: (-b["n"], -b["amt"]))[:10]
+    return {"month": cur_k, "prev_month": prv_k, "total": len(cur), "total_prev": len(prv),
+            "companies": sum(1 for x in cur if x["kind"] == "公司"), "businesses": sum(1 for x in cur if x["kind"] == "商業"),
+            "cats": cats, "peers": peers, "big": big, "board": top, "board_n": len(set(log_) | set(cache)), "errs": errs}
+
+
+# ---------- 注意力流向：電影票房、App Store 台灣免費榜（YouTube／趨勢／維基沿用既有面板） ----------
+BOX_CACHE = DATA / "box_cache.json"
+
+
+def p_attention():
+    errs, out = [], {}
+    try:
+        j = gjson("https://boxofficetw.tfai.org.tw/OpenData/statistic/since2016", timeout=90)
+        end = (j.get("End") or "")[:10]
+        cut = (datetime.fromisoformat(end) - timedelta(days=70)).date().isoformat() if end else ""
+        films = [f for f in j.get("List") or [] if (f.get("ReleaseDate") or "")[:10] >= cut and (f.get("TotalAmounts") or 0) > 0]
+        cache = json.loads(BOX_CACHE.read_text(encoding="utf-8")) if BOX_CACHE.exists() else {}
+        cache[end] = {f["Name"]: f.get("TotalAmounts") or 0 for f in films}
+        keep = sorted(cache)[-6:]
+        cache = {k: cache[k] for k in keep}
+        write_json(BOX_CACHE, cache, separators=(",", ":"))
+        prev = cache.get(keep[-2]) if len(keep) > 1 else None
+        rows = []
+        for f in films:
+            tot = f.get("TotalAmounts") or 0
+            gain = (tot - prev[f["Name"]]) if prev and f["Name"] in prev else (tot if prev is not None else None)
+            rows.append({"name": f["Name"], "country": f.get("Country"), "release": (f.get("ReleaseDate") or "")[:10], "total": tot,
+                         "tickets": f.get("TotalTickets"), "theaters": f.get("TheaterCount"), "week": gain})
+        rows.sort(key=lambda r: -(r["week"] if r["week"] is not None else r["total"]))
+        out["box"] = {"asOf": end, "weekly": prev is not None, "items": rows[:10]}
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"票房: {safe_err(e)}")
+    try:
+        try:
+            j = gjson("https://rss.marketingtools.apple.com/api/v2/tw/apps/top-free/25/apps.json", timeout=45)
+        except Exception:  # 這個端點偶爾逾時或 502，等一下再試一次
+            time.sleep(3)
+            j = gjson("https://rss.marketingtools.apple.com/api/v2/tw/apps/top-free/25/apps.json", timeout=45)
+        prev = {a["id"]: a["rank"] for a in ((load_prev("attention") or {}).get("apps") or {}).get("items", [])}
+        apps = []
+        for i, a in enumerate(j["feed"]["results"], 1):
+            apps.append({"id": a["id"], "rank": i, "name": a["name"], "dev": a.get("artistName"), "url": a.get("url"),
+                         "prev": prev.get(a["id"]), "new": bool(prev) and a["id"] not in prev})
+        out["apps"] = {"asOf": j["feed"].get("updated"), "items": apps}
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"App Store: {safe_err(e)}")
+        old = (load_prev("attention") or {}).get("apps")
+        if old:
+            out["apps"] = old
+    if not out:
+        raise RuntimeError("; ".join(errs))
+    out["errs"] = errs
+    return out
+
+
+# ---------- 消費溫度計：電子發票各行業金額（月）、零售業態客單價 ----------
+CONSUME_FOCUS = ["零售業", "餐飲業", "住宿業", "旅行及相關服務業", "運動、娛樂及休閒服務業", "創作及藝術表演業", "個人及家庭用品維修業",
+                 "醫療保健業", "教育業", "電信業", "航空運輸業", "陸上運輸業", "不動產經營及相關服務業", "專門設計業", "廣告業及市場研究業", "資訊服務業"]
+
+
+def _ym_shift(ym, k):
+    y, m = int(ym[:4]), int(ym[4:])
+    m += k
+    while m <= 0:
+        m += 12; y -= 1
+    while m > 12:
+        m -= 12; y += 1
+    return f"{y}{m:02d}"
+
+
+def p_consume():
+    rows = _csv_rows("https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/0DBDAF6E-5E44-49A8-8528-E22648B2F32E/17/4A1A0DA1-9C2B-4871-9B49-B742136B052D/0/?fileType=csv", timeout=180)
+    agg = {}
+    for r in rows:
+        k = (r.get("行業別") or "").strip()
+        ym = (r.get("發票年月") or "").strip()
+        a = num(r.get("電子發票金額"))
+        if not k or not ym or a is None:
+            continue
+        agg.setdefault(k, {}).setdefault(ym, 0.0)
+        agg[k][ym] += a
+    months = sorted({ym for v in agg.values() for ym in v})
+    if not months:
+        raise RuntimeError("電子發票資料空白")
+    last = months[-1]
+    def item(k):
+        s = agg.get(k) or {}
+        cur, yo, mo = s.get(last), s.get(_ym_shift(last, -12)), s.get(_ym_shift(last, -1))
+        spark = [round(s.get(_ym_shift(last, -i), 0) / 1e8, 2) for i in range(12, -1, -1)]
+        return {"name": k, "amt": cur, "yoy": round((cur / yo - 1) * 100, 1) if cur and yo else None,
+                "mom": round((cur / mo - 1) * 100, 1) if cur and mo else None, "spark": spark}
+    focus = [item(k) for k in CONSUME_FOCUS if k in agg]
+    allind = sorted([item(k) for k in agg], key=lambda x: -(x["yoy"] if x["yoy"] is not None else -999))
+    # 製造、批發、工程等 B2B 行業的發票受大單影響大，年增常是幾倍，不適合當消費訊號
+    movers = [x for x in allind if x["yoy"] is not None and (x["amt"] or 0) > 1e9 and not re.search(r"製造|批發|工程|礦|金融|證券|保險|電力|燃氣|用水|廢棄物|污染|公共行政|機械|維修及安裝|企業總管理|倉儲|未分類", x["name"])]
+    retail = []
+    try:
+        rr = _csv_rows("https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/3886F055-EB77-4DF9-98E2-F3F49A7D3434/1/6E5DA78C-2586-4CBE-B73D-65B80F67AE2A/0/?fileType=csv", timeout=120)
+        tk = {}
+        for r in rr:
+            k, ym = r.get("行業名稱"), r.get("發票年月")
+            c, a = num(r.get("平均開立張數")), num(r.get("平均開立金額"))
+            if k and ym and c and a:
+                t = tk.setdefault(k, {}).setdefault(ym, [0.0, 0.0])
+                t[0] += a; t[1] += c
+        lm = max(ym for v in tk.values() for ym in v)
+        for k, v in tk.items():
+            cur = v.get(lm); yo = v.get(_ym_shift(lm, -12))
+            ct = cur[0] / cur[1] if cur and cur[1] else None
+            cy = yo[0] / yo[1] if yo and yo[1] else None
+            retail.append({"name": k, "ticket": round(ct) if ct else None, "yoy": round((ct / cy - 1) * 100, 1) if ct and cy else None,
+                           "spark": [round(v[_ym_shift(lm, -i)][0] / v[_ym_shift(lm, -i)][1]) if v.get(_ym_shift(lm, -i)) and v[_ym_shift(lm, -i)][1] else None for i in range(12, -1, -1)]})
+        retail.sort(key=lambda x: -(x["ticket"] or 0))
+        retail_m = lm
+    except Exception as e:  # noqa: BLE001
+        retail_m = None; log("consume retail", e)
+    return {"month": f"{last[:4]}-{last[4:]}", "focus": focus, "up": movers[:6], "down": movers[-6:][::-1],
+            "retail": retail, "retail_month": f"{retail_m[:4]}-{retail_m[4:]}" if retail_m else None}
+
+
 run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
@@ -3740,6 +3989,8 @@ run("poly", p_poly)
 run("tech", p_tech)
 run("trends", p_trends)
 run("youtube", p_youtube, keep_if_fresh_hours=0.5)
+run("attention", p_attention, keep_if_fresh_hours=3)
+run("consume", p_consume, keep_if_fresh_hours=24)
 run("luxury", p_luxury, keep_if_fresh_hours=3)
 run("world", p_world, keep_if_fresh_hours=0.25)
 run("sectors", p_sectors, keep_if_fresh_hours=0.5)
@@ -3754,6 +4005,7 @@ run("gmacro", p_gmacro, keep_if_fresh_hours=6)
 run("liquidity", p_liquidity, keep_if_fresh_hours=3)
 run("calendar", p_calendar, keep_if_fresh_hours=6)
 run("awards", p_awards, keep_if_fresh_hours=1)
+run("brands", p_brands, keep_if_fresh_hours=12)
 _sp = load_prev("supply") or {}
 _sp_next = min([x.get("next") for x in (_sp.get("pmi") or {}, _sp.get("nmi") or {}) if x.get("next")] or ["9999"])
 run("supply", p_supply, keep_if_fresh_hours=1 if TODAY_TPE.isoformat() >= _sp_next else 6)  # 發布日起每小時重抓，抓到新月份 next 會往後推
@@ -3784,6 +4036,46 @@ try:
 except ValueError as e:
     log("NaN in output, not writing:", e)
     sys.exit(1)
+# 每日存檔：把當天出現過的頭條、熱詞、榜單累積起來，之後可以回查「那天發生什麼」
+def archive_day():
+    day = datetime.now(TPE).strftime("%Y-%m-%d")
+    p = DATA / "archive" / f"{day}.json"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        cur = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    except Exception:
+        cur = {}
+    def merge(key, items, idf, cap=300):
+        seen = {idf(x) for x in cur.get(key, [])}
+        lst = cur.get(key, [])
+        for x in items or []:
+            k = idf(x)
+            if k and k not in seen:
+                seen.add(k); lst.append(x)
+        cur[key] = lst[-cap:]
+    R = RESULTS
+    pick = lambda it, *ks: {k: it.get(k) for k in ks if it.get(k) is not None}
+    news = (R.get("news") or {})
+    merge("news", [pick(x, "source", "title", "url", "at") for x in (news.get("tw") or []) + (news.get("intl") or [])], lambda x: x.get("title"))
+    merge("ai", [pick(x, "source", "title", "url", "at", "vendor") for x in (R.get("aiwire") or {}).get("items", [])], lambda x: x.get("title"))
+    merge("hot", [{"term": h.get("term"), "src": h.get("src"), "at": NOW_ISO} for h in ((news.get("signals") or {}).get("hot") or [])], lambda x: x.get("term"), 200)
+    merge("ptt", [pick(x, "board", "title", "push", "url") for x in (R.get("ptt") or {}).get("items", [])], lambda x: x.get("title"))
+    merge("trends", [pick(x, "title", "traffic") for x in (R.get("trends") or {}).get("items", [])], lambda x: x.get("title"), 200)
+    merge("cofacts", [pick(x, "text", "verdict", "requests", "url") for x in (R.get("cofacts") or {}).get("hot", [])], lambda x: (x.get("text") or "")[:60], 100)
+    merge("radar", [pick(x, "company", "amount", "stage", "cat", "title", "url") for x in (R.get("radar") or {}).get("funding", [])], lambda x: x.get("company"), 100)
+    merge("brands", [pick(x, "name", "date", "city", "cap", "cat") for x in (R.get("brands") or {}).get("peers", []) + (R.get("brands") or {}).get("big", [])], lambda x: x.get("name"), 400)
+    md = R.get("mood") or {}
+    cur["mood"] = {k: (md.get(k) or {}).get("score") for k in ("taiwan", "overseas")}
+    tx = (R.get("taiex") or {})
+    cur["close"] = {"taiex": tx.get("index"), "vix": next((f.get("value") for f in (R.get("fear") or {}).get("items", []) if f.get("sym") == "^VIX"), None)}
+    cur["updatedAt"] = NOW_ISO
+    write_json(p, cur, separators=(",", ":"))
+
+try:
+    archive_day()
+except Exception as e:  # noqa: BLE001
+    log("archive failed:", safe_err(e))
+
 ok = [k for k, v in RESULTS.items() if not v.get("error")]
 bad = [k for k, v in RESULTS.items() if v.get("error")]
 log(f"done ok={ok} failed={bad}")

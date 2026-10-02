@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>dalta 情報站</title>
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="referrer" content="no-referrer">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500;600&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=Doto:wght@900&display=swap">
 <style>
@@ -432,6 +434,19 @@ canvas.o-fx{display:block;width:100%}
 .list li.o-grp{display:block;font:500 10px var(--mono);color:var(--dim);letter-spacing:.06em;padding:9px 0 3px;border-top:0}
 body[data-mkt="gl"] #p-pulse{order:1}body[data-mkt="gl"] #p-fear{order:2}body[data-mkt="gl"] #p-poly{order:3}body[data-mkt="gl"] #p-world{order:4}body[data-mkt="gl"] #p-sectors{order:5}body[data-mkt="gl"] #p-taiex{order:6}body[data-mkt="gl"] #p-fx{order:7}body[data-mkt="gl"] #p-tw-stocks{order:8}body[data-mkt="gl"] #p-revenue{order:9}body[data-mkt="gl"] #p-cmdty{order:10}body[data-mkt="gl"] #p-lux{order:11}
 body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[data-mkt="tw"] #p-fx{order:3}body[data-mkt="tw"] #p-tw-stocks{order:4}body[data-mkt="tw"] #p-revenue{order:5}body[data-mkt="tw"] #p-fear{order:6}body[data-mkt="tw"] #p-poly{order:7}body[data-mkt="tw"] #p-world{order:8}body[data-mkt="tw"] #p-sectors{order:9}body[data-mkt="tw"] #p-cmdty{order:10}body[data-mkt="tw"] #p-lux{order:11}
+
+/* 新品牌雷達、注意力流向、消費溫度計 */
+.bt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px}
+.bt-c,.cs-c{background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:6px 8px;min-width:0}
+.bt-c .l,.cs-c .l{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt-c .v,.cs-c .v{font-size:17px;font-weight:500}
+.bt-c .p,.cs-c .p{font-size:10.5px;color:var(--muted)}
+.bt-c .rb{margin-top:3px}
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:6px}
+.cs-c .mini{width:100%;margin:2px 0 0}
+.nw.at5{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media (max-width:1100px){.nw.at5{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.nw.at5{grid-template-columns:minmax(0,1fr)}}
 /* motion off：手動關閉或系統偏好減少動態 */
 .still *,.still *::before,.still *::after{animation:none!important;transition:none!important}
 .still .tape{overflow-x:auto}
@@ -539,6 +554,12 @@ body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[d
 
   <div class="sec">總經 Macro</div>
 
+  <section class="panel w12" id="p-consume">
+    <div class="ph"><h2>Consumption</h2><span class="zh">消費溫度計 · 電子發票各行業金額年增、零售業態客單價</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>財政部電子發票開放資料（月，約晚一到兩個月）· 依賣方登記行業分類，不是商品別 · 客單價＝各縣市平均開立金額 ÷ 平均開立張數</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-calendar">
     <div class="ph"><h2>Calendar</h2><span class="zh">接下來三週 · 數據發布與央行</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -595,6 +616,12 @@ body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[d
     <div class="pf"><span>盯梢：Google News 英文 7 天 · Hacker News 7 天 · Bluesky 24h，聲量是過去中位數兩倍以上標「升溫」· 雷達：新募資（1.5 億美元以下；創意、AI 助理、資安、生技，每類最多 4 筆）· Show HN 兩天內 ≥20 分 · Product Hunt 精選</span></div>
   </section>
 
+  <section class="panel w12" id="p-brands">
+    <div class="ph"><h2>New Brands</h2><span class="zh">新品牌雷達 · 每月新設公司與行號、同業新設、得標排行</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>經濟部商工登記「公司／商業設立登記清冊」（月，約晚一個月）· 類別依名稱關鍵字判斷 · 得標排行累積政府電子採購網決標紀錄（行銷、設計、影片、廣告類，滾動 180 天）</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-aiwire">
     <div class="ph"><h2>AI Wire</h2><span class="zh">AI 快線 · 官方部落格與科技媒體第一手</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -647,6 +674,12 @@ body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[d
     <div class="ph"><h2>Fashion Press</h2><span class="zh">時尚媒體標題</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>WWD RSS · BoF 與台灣時尚媒體（經 Bing News）</span></div>
+  </section>
+
+  <section class="panel w12" id="p-attention">
+    <div class="ph"><h2>Attention</h2><span class="zh">注意力流向 · 台灣這週在看什麼</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>電影票房：國家影視聽中心（週）· App：Apple 台灣免費榜 · YouTube 發燒榜 · Google 搜尋趨勢 · 維基百科中文昨日熱門</span></div>
   </section>
 
   <section class="panel w6" id="p-mood">
@@ -923,6 +956,33 @@ const renderers={
     body("p-tiktok").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">抓不到</div>`;setMeta("p-tiktok",d,30);},
   fx(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num${K("fx:"+it.code,n(it.buy??it.mid))}">${fmt(n(it.buy??it.mid),it.code==="JPY"?4:3)}</td><td class="r num">${it.sell!=null?fmt(n(it.sell),it.code==="JPY"?4:3):""}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td></tr>`).join("");
     const yh=d.source==="yahoo";body("p-fx").innerHTML=`<table><tr><th>幣別</th><th class="r">${yh?"中價":"即期買入"}</th><th class="r">${yh?"":"即期賣出"}</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-fx",d,3);},
+  brands(d){const cats=(d.cats||[]).filter(c=>c.cat!=="其他").sort((a,b)=>b.n-a.n);const mx=Math.max(1,...cats.map(c=>c.n));
+    const tiles=cats.map(c=>`<div class="bt-c"><div class="l">${esc(c.cat)}</div><div class="v num">${c.n}</div><div class="p num ${cls(n(c.chg))}">${c.chg!=null?sgn(n(c.chg),0,"%")+" 月增":"—"}</div><div class="rb"><span class="trk"><i style="width:${c.n/mx*100}%;background:var(--blue)"></i></span></div></div>`).join("");
+    const city=x=>esc((x.city||"").replace("臺","台"));const cap=v=>v?compact(n(v)):"—";
+    const peers=(d.peers||[]).slice(0,14).map(x=>`<li><span class="src">${city(x)}</span><span class="t">${esc(x.name)}<span class="sub">${esc(x.kind)} · ${esc((x.date||"").slice(5))}</span></span><span class="m">${cap(x.cap)}</span></li>`).join("");
+    const big=(d.big||[]).slice(0,10).map(x=>`<li><span class="src">${esc(x.cat)}</span><span class="t">${esc(x.name)}<span class="sub">${city(x)} · ${esc((x.date||"").slice(5))}</span></span><span class="m">${cap(x.cap)}</span></li>`).join("");
+    const board=(d.board||[]).map((b,i)=>`<li><span class="rank">${i+1}</span><span class="t">${esc(b.name)}</span><span class="m">${b.n} 案</span><span class="m" style="min-width:52px;text-align:right">${b.amt?compact(b.amt):"—"}</span></li>`).join("");
+    const tot=n(d.total),pv=n(d.total_prev);
+    body("p-brands").innerHTML=`<div class="kpi"><div><div class="lbl">${esc(d.month||"")} 新設立（公司 ${d.companies}・行號 ${d.businesses}）</div><div class="big">${fmt(tot,0)}</div></div><div class="chg ${cls(tot-pv)}">${pv?sgn((tot/pv-1)*100,1,"%")+" vs "+esc(d.prev_month||""):""}</div></div>
+      <div class="bt-grid">${tiles}</div>
+      <div class="nw nw3" style="margin-top:10px"><div><h3>同業新設 · 設計創意類</h3><ul class="list">${peers||'<li class="empty">本月沒有</li>'}</ul></div><div><h3>大額新設 · 資本額 5000 萬以上</h3><ul class="list">${big||'<li class="empty">本月沒有</li>'}</ul></div><div><h3>得標排行 · 行銷設計類（${d.board_n} 案）</h3><ul class="list">${board||'<li class="empty">累積中</li>'}</ul></div></div>`;
+    setMeta("p-brands",{...d,label:"資料月 "+(d.month||"")},24*40);},
+  attention(d){const P=window.LASTP||{};const col=(h,li)=>`<div><h3>${h}</h3><ul class="list">${li||'<li class="empty">—</li>'}</ul></div>`;
+    const bx=(d.box||{}),box=(bx.items||[]).slice(0,8).map((f,i)=>`<li><span class="rank">${i+1}</span><span class="t">${esc(f.name)}<span class="sub">${esc(f.country||"")} · ${esc((f.release||"").slice(5))} 上映</span></span><span class="m">${f.week!=null&&bx.weekly?"週 "+compact(n(f.week)):compact(n(f.total))}</span></li>`).join("");
+    const apps=((d.apps||{}).items||[]).slice(0,10).map(a=>{const mv=a.new?'<span class="o-rk nw">NEW</span>':a.prev&&a.prev!==a.rank?`<span class="o-rk ${a.prev>a.rank?"up":"dn"}">${a.prev>a.rank?"▲":"▼"}${Math.abs(a.prev-a.rank)}</span>`:"";return`<li><span class="rank">${a.rank}</span><span class="t">${mv}<a href="${esc(safe(a.url))}" target="_blank" rel="noopener">${esc(a.name)}</a><span class="sub">${esc((a.dev||"").slice(0,24))}</span></span></li>`;}).join("");
+    const yt=(((P.youtube||{}).tw||{}).all||[]).slice(0,8).map((v,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="${esc(safe(v.url))}" target="_blank" rel="noopener">${esc(v.title)}</a></span><span class="m">${compact(n(v.views))}</span></li>`).join("");
+    const tr=((P.trends||{}).items||[]).slice(0,8).map((t,i)=>`<li><span class="rank">${i+1}</span><span class="t">${esc(t.title)}</span><span class="m">${esc(t.traffic||"")}</span></li>`).join("");
+    const wk=((((P.news||{}).signals||{}).wiki||{}).zh||[]).slice(0,8).map((w,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="${esc(safe(w.url))}" target="_blank" rel="noopener">${esc(w.title)}</a></span><span class="m">${compact(n(w.views))}</span></li>`).join("");
+    body("p-attention").innerHTML=`<div class="nw at5">${col(`電影票房${bx.asOf?" · 截至 "+esc(bx.asOf.slice(5)):""}`,box)}${col("App Store 免費榜",apps)}${col("YouTube 發燒",yt)}${col("Google 搜尋",tr)}${col("維基中文",wk)}</div>`;
+    setMeta("p-attention",{...d,label:"多源"},6);},
+  consume(d){const tile=x=>{const y=n(x.yoy);const a=Math.min(1,Math.abs(y||0)/15);const bg=y==null?"var(--panel2)":`color-mix(in srgb,var(${y>=0?"--up":"--down"}) ${10+a*45}%,var(--panel2))`;
+      return`<div class="cs-c" style="background:${bg}"><div class="l">${esc(x.name.replace("及相關服務業","").replace("服務業","").replace("業",""))}</div><div class="v num">${y!=null?sgn(y,1,"%"):"—"}</div><div class="p">${x.amt?compact(n(x.amt))+" 元":""}${x.mom!=null?` · 月 ${sgn(n(x.mom),1,"%")}`:""}</div>${mini(x.spark)}</div>`;};
+    const focus=[...(d.focus||[])].sort((a,b)=>(n(b.yoy)||-999)-(n(a.yoy)||-999)).map(tile).join("");
+    const mv=(arr)=>arr.map(x=>`<li><span class="t">${esc(x.name)}</span><span class="m ${cls(n(x.yoy))}">${sgn(n(x.yoy),1,"%")}</span></li>`).join("");
+    const rt=(d.retail||[]).map(x=>`<li><span class="t">${esc(x.name)}${mini(x.spark)}</span><span class="m num">${x.ticket?"$"+fmt(n(x.ticket),0):"—"}</span><span class="m ${cls(n(x.yoy))}" style="min-width:52px;text-align:right">${x.yoy!=null?sgn(n(x.yoy),1,"%"):""}</span></li>`).join("");
+    body("p-consume").innerHTML=`<div class="tp" style="margin-bottom:6px"><div><h3>${esc(d.month||"")} 民生行業 · 年增（依年增排序）</h3></div></div><div class="cs-grid">${focus}</div>
+      <div class="nw nw3" style="margin-top:10px"><div><h3>服務與通路行業 · 年增最多</h3><ul class="list">${mv(d.up||[])}</ul></div><div><h3>服務與通路行業 · 年增最少</h3><ul class="list">${mv(d.down||[])}</ul></div><div><h3>零售業態客單價 · ${esc(d.retail_month||"")}</h3><ul class="list">${rt}</ul></div></div>`;
+    setMeta("p-consume",{...d,label:"資料月 "+(d.month||"")},24*40);},
   luxury(d){const tr=withHeads(grouped(d.items,ORD.lux,i=>i.sym),3,it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.sym)}</span>${mini(it.spark)}</td><td class="r num${K("lux:"+it.sym,n(it.price))}">${fmt(n(it.price))}<span class="sub">${esc(it.ccy||"")}</span></td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`);
     body("p-lux").innerHTML=`<table><tr><th>公司</th><th class="r">收盤</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-lux",d,30);},
   commodities(d){const tr=withHeads(grouped(d.items,ORD.cmd,i=>i.sym),3,it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.unit||"")}</span>${mini(it.spark)}</td><td class="r num${K("cmd:"+it.sym,n(it.price))}">${fmt(n(it.price),n(it.price)<10?3:2)}</td><td class="r num ${cls(n(it.chg_pct))}">${sgn(n(it.chg_pct),2,"%")}</td></tr>`);
@@ -1084,9 +1144,9 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["market","市場"],["macro","總經"],["intel","情報"],["social","輿情"],["live","台灣現場"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"market","p-revenue":"market",
-  "p-calendar":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro",
-  "p-news":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
-  "p-mood":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
+  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro",
+  "p-news":"intel","p-brands":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
+  "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-twpulse":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
   "brief":"overview","ov":"overview"};
 const tabsEl=$("#tabs");
