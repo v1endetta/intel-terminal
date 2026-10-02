@@ -3826,7 +3826,7 @@ def p_brands():
         hist_put("brands", c, cur_k, n_)
         if prv_k:
             hist_put("brands", c, prv_k, p_)
-        cats.append({"cat": c, "n": n_, "prev": p_, "chg": round((n_ - p_) / p_ * 100, 1) if p_ else None, "spark": [v for _, v in hist_get("brands", c, 12)]})
+        cats.append({"cat": c, "n": n_, "prev": p_, "chg": round((n_ - p_) / p_ * 100, 1) if p_ else None, "spark": hist_get("brands", c, 12)})
     peers = sorted([x for x in cur if x["cat"] == "設計創意"], key=lambda x: (-(x["cap"] or 0), x["date"]))[:30]
     big = sorted([x for x in cur if x["kind"] == "公司" and (x["cap"] or 0) >= 5e7], key=lambda x: -(x["cap"] or 0))[:12]
     # 得標排行：累積決標紀錄（滾動 180 天）＋ 決標金額快取
@@ -3946,7 +3946,8 @@ def p_consume():
                 "mom": round((cur / mo - 1) * 100, 1) if cur and mo else None, "spark": spark}
     focus = [item(k) for k in CONSUME_FOCUS if k in agg]
     allind = sorted([item(k) for k in agg], key=lambda x: -(x["yoy"] if x["yoy"] is not None else -999))
-    movers = [x for x in allind if x["yoy"] is not None and (x["amt"] or 0) > 5e8]
+    # 製造、批發、工程等 B2B 行業的發票受大單影響大，年增常是幾倍，不適合當消費訊號
+    movers = [x for x in allind if x["yoy"] is not None and (x["amt"] or 0) > 1e9 and not re.search(r"製造|批發|工程|礦|金融|證券|保險|電力|燃氣|用水|廢棄物|污染|公共行政", x["name"])]
     retail = []
     try:
         rr = _csv_rows("https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/3886F055-EB77-4DF9-98E2-F3F49A7D3434/1/6E5DA78C-2586-4CBE-B73D-65B80F67AE2A/0/?fileType=csv", timeout=120)
