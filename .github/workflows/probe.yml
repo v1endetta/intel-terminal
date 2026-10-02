@@ -15,4 +15,4 @@ jobs:
       - run: python probe.py
       - run: |
           git config user.name intel-bot; git config user.email intel-bot@users.noreply.github.com
-          git add out; git commit -qm "probe results"; git push -q origin HEAD:probe
+          git add out2; git commit -qm "probe results"; git push -q origin HEAD:probe
