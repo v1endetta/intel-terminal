@@ -16,6 +16,6 @@ os.environ["INTEL_DATA_DIR"]=os.path.abspath("tmpdata")
 import traceback
 os.makedirs("out3",exist_ok=True)
 try:
-    exec(compile(code,"fetch_part","exec"),{"__name__":"__main__"})
+    exec(compile(code,"fetch_part","exec"),{"__name__":"__main__","__file__":os.path.abspath("fetch_full.py")})
 except BaseException:
     open("out3/trace.txt","w").write(traceback.format_exc())
