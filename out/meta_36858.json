@@ -1,0 +1,109 @@
+{
+ "help": "",
+ "success": true,
+ "result": {
+  "categoryService": "I00",
+  "categoryDataset": "A",
+  "datasetId": 36858,
+  "identifier": "A07100000D-000824",
+  "title": "所得房價消費分析-縣市電子發票B2C開立資料集",
+  "description": "依照發票年月、縣市代碼、縣市名稱及行業名稱來統計各縣市電子發票B2C之平均開立張數、平均開立金額、平均客單價，並且排除統計之後營業人家數小於5家之資料",
+  "type": "rawData",
+  "license": "1",
+  "cost": "free",
+  "dataProvider": "pikagamed",
+  "publisherOID": "2.16.886.101.20003.20004.20048",
+  "publisherContactName": "莊先生",
+  "publisherContactPhone": "02-27631833#3319",
+  "publisherContactEmail": "N108195@fia.gov.tw",
+  "updateFrequency": {
+   "regularupdate": "1",
+   "Frequency": "3",
+   "unittime": "月"
+  },
+  "dataQuality": "G",
+  "coverageStartedDate": "",
+  "coverageEndedDate": "",
+  "publishedDate": "2016-10-03",
+  "modifiedDate": "2023-12-25 15:26:39",
+  "spatialCoverage": "",
+  "language": "zh",
+  "relatedUrl": "https://www.einvoice.nat.gov.tw/portal/ods/ODS303E/main/3886F055-EB77-4DF9-98E2-F3F49A7D3434/0",
+  "notes": "授權說明網址: http://data.gov.tw/license\n財政部財政資訊中心電子發票組OAS標準之API說明文件: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+  "apiDocUrl": "",
+  "distribution": [
+   {
+    "resourceDescription": "依照發票年月、縣市代碼、縣市名稱及行業名稱來統計各縣市電子發票B2C之平均開立張數、平均開立金額、平均客單價，並且排除統計之後營業人家數小於5家之資料",
+    "resourceField": [
+     {
+      "name": "發票年月",
+      "description": "",
+      "uri": "api/CurrencyandFinancial/CommonData/NormalCommonData/YYYYMM"
+     },
+     {
+      "name": "縣市代碼",
+      "description": ""
+     },
+     {
+      "name": "縣市名稱",
+      "description": ""
+     },
+     {
+      "name": "行業名稱",
+      "description": ""
+     },
+     {
+      "name": "平均開立張數",
+      "description": "",
+      "uri": "api/CurrencyandFinancial/CommonData/NormalCommonData/NumberofCheckCleared"
+     },
+     {
+      "name": "平均開立金額",
+      "description": "",
+      "uri": "api/CurrencyandFinancial/CommonData/NormalCommonData/DollarTWD"
+     },
+     {
+      "name": "平均客單價",
+      "description": ""
+     }
+    ],
+    "qcLevel": "",
+    "resourceFormat": "CSV",
+    "resourceCharacterEncoding": "UTF-8",
+    "resourceQualityCheckTime": "2026-10-01 18:53:44",
+    "resourceDownloadUrl": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/3886F055-EB77-4DF9-98E2-F3F49A7D3434/1/6E5DA78C-2586-4CBE-B73D-65B80F67AE2A/0/?fileType=csv",
+    "resourceAmount": 6999,
+    "resourceNotes": "",
+    "resourceRequestMethod": "",
+    "resourceOasUrl": "",
+    "resourceRequestParameters": [],
+    "resourcePathParameters": []
+   }
+  ],
+  "keyword": [
+   "電子發票"
+  ],
+  "en": {
+   "title": "Analysis of Housing Price Consumption-County and City Electronic Invoice B2C Issuance Dataset",
+   "description": "According to the invoice year and month, county and city codes, county and city names, and industry names to calculate the average number of B2C electronic invoices issued, the average amount of invoices issued, and the average customer unit price, and exclude data from businesses with less than 5 establishments after the statistics.",
+   "publisherContactName": "莊先生",
+   "publisherContactPhone": "02-27631833#3319",
+   "publisherContactEmail": [
+    "N108195@fia.gov.tw"
+   ],
+   "updateFrequency": "Every 3 months",
+   "cost": "free",
+   "notes": "Authorization explanation website: http://data.gov.tw/licenseElectronic invoice OAS standard API documentation from the Ministry of Finance Fiscal Information Center: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+   "keyword": [
+    "Electronic invoice"
+   ],
+   "resources": [
+    {
+     "description": "According to the invoice year and month, county and city code, county and city name, and industry name to statistically calculate the average number of B2C electronic invoices issued in each county and city, the average invoice amount, the average customer unit price, and exclude data with fewer than 5 business establishments after statistics.",
+     "fieldDesc": "Invoice date、County and City Codes、County/City Name、Industry name、Average number of claims issued、Average invoice amount、Average customer spending",
+     "note": ""
+    }
+   ]
+  }
+ }
+}

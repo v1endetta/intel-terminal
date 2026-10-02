@@ -1,0 +1,129 @@
+{
+ "help": "",
+ "success": true,
+ "result": {
+  "categoryService": "I00",
+  "categoryDataset": "A",
+  "datasetId": 36844,
+  "identifier": "A07100000D-000821",
+  "title": "電子發票消費熱度排名年統計",
+  "description": "以全年各縣市、鄉鎮市區、村里為單位計算電子發票消費發票張數、金額或雙月(或每月)營業稅申報銷售額、申報發票字軌起迄估算發票張數，並轉換為張數排名值、銷售額排名值等不透漏營業人營業資訊細節等方式呈現區域的消費排名值。",
+  "type": "rawData",
+  "license": "1",
+  "cost": "free",
+  "dataProvider": "pikagamed",
+  "publisherOID": "2.16.886.101.20003.20004.20048",
+  "publisherContactName": "莊先生",
+  "publisherContactPhone": "02-27631833#3319",
+  "publisherContactEmail": "N108195@fia.gov.tw",
+  "updateFrequency": {
+   "regularupdate": "1",
+   "Frequency": "2",
+   "unittime": "月"
+  },
+  "dataQuality": "G",
+  "coverageStartedDate": "",
+  "coverageEndedDate": "",
+  "publishedDate": "2016-10-03",
+  "modifiedDate": "2023-12-25 15:27:21",
+  "spatialCoverage": "",
+  "language": "zh",
+  "relatedUrl": "https://www.einvoice.nat.gov.tw/portal/ods/ODS303E/main/691C0280-CEFB-488F-9E71-6AA4F39A41CD/0",
+  "notes": "授權說明網址: http://data.gov.tw/license\n財政部財政資訊中心電子發票組OAS標準之API說明文件: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+  "apiDocUrl": "",
+  "distribution": [
+   {
+    "resourceDescription": "以全年各縣市、鄉鎮市區、村里為單位計算電子發票消費發票張數、金額或雙月(或每月)營業稅申報銷售額、申報發票字軌起迄估算發票張數，並轉換為張數排名值、銷售額排名值等不透漏營業人營業資訊細節等方式呈現區域的消費排名值。",
+    "resourceField": [
+     {
+      "name": "年度",
+      "description": "",
+      "uri": "api/Financial/Insurance/BusinessStatisticsofLifeInsurance/Year"
+     },
+     {
+      "name": "縣市",
+      "description": ""
+     },
+     {
+      "name": "縣市代碼",
+      "description": ""
+     },
+     {
+      "name": "鄉鎮市區",
+      "description": ""
+     },
+     {
+      "name": "鄉鎮市區代碼",
+      "description": ""
+     },
+     {
+      "name": "村里",
+      "description": "",
+      "uri": "api/HouseholdRegistration/Thehouseholdregistrationrecords/Personalhouseholdregistrationrecords/Village"
+     },
+     {
+      "name": "村里代碼",
+      "description": ""
+     },
+     {
+      "name": "主行業別",
+      "description": ""
+     },
+     {
+      "name": "主行業別代碼",
+      "description": "",
+      "uri": "api/CompanyandBusiness/commerce/BusinessType/BusinessScopeNumber"
+     },
+     {
+      "name": "消費熱度計算來源",
+      "description": ""
+     },
+     {
+      "name": "發票張數排名值",
+      "description": ""
+     },
+     {
+      "name": "銷售金額排名值",
+      "description": ""
+     }
+    ],
+    "qcLevel": "",
+    "resourceFormat": "CSV",
+    "resourceCharacterEncoding": "UTF-8",
+    "resourceQualityCheckTime": "2026-10-01 18:54:09",
+    "resourceDownloadUrl": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/691C0280-CEFB-488F-9E71-6AA4F39A41CD/1/C82AFD0D-D55F-4B06-8B85-663FBCFC5B93/0/?fileType=csv",
+    "resourceAmount": 100220,
+    "resourceNotes": "",
+    "resourceRequestMethod": "",
+    "resourceOasUrl": "",
+    "resourceRequestParameters": [],
+    "resourcePathParameters": []
+   }
+  ],
+  "keyword": [
+   "電子發票"
+  ],
+  "en": {
+   "title": "The statistical ranking of the popularity of electronic invoice consumption.",
+   "description": "Calculate the number of electronic invoice consumption invoices, amounts, or sales amounts on a monthly basis for every county, city, township, and village, and estimate the number of invoices for double months (or every month) for the declaration of sales amount and invoice number range, and convert them into ranking values for number of invoices and sales amount to present the regional consumption ranking without revealing detailed business information of the business operator in any way.",
+   "publisherContactName": "莊先生",
+   "publisherContactPhone": "02-27631833#3319",
+   "publisherContactEmail": [
+    "N108195@fia.gov.tw"
+   ],
+   "updateFrequency": "Every 2 months",
+   "cost": "free",
+   "notes": "Authorization Description URL: http://data.gov.tw/licenseMinistry of Finance Financial Information Center Electronic Invoice Group OAS Standard API Documentation: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+   "keyword": [
+    "Electronic invoice"
+   ],
+   "resources": [
+    {
+     "description": "Calculate the number and amount of electronic invoice consumption invoices in various counties and cities, townships, and villages throughout the year, or estimate the number of invoices from the beginning to the end of the invoice track for every two months (or monthly) sales tax declaration sales, and convert them into ranking values for the number of invoices, sales, and other ways to present the regional consumption ranking value without revealing detailed business information of the busines",
+     "fieldDesc": "Year、County or city、County and City Codes、Town and city area、Township area code、Village、Village code、Primary industry sector、Main industry code、Consumer Heat Calculation Source、Number of invoices ranking value、Sales amount ranking value",
+     "note": ""
+    }
+   ]
+  }
+ }
+}

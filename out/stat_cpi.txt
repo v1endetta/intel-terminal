@@ -1,0 +1,236 @@
+﻿
+<!DOCTYPE html>
+
+<html id="FormHtml" xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant-tw">
+<head id="Head1">    <style>
+        .for_accessibility a {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 99;
+            width: 1px;
+            height: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            color: #000;
+        }
+            .for_accessibility a:focus {
+                width: auto;
+                height: auto;
+                padding: 6px;
+                background-color: #fff;
+            }
+        .for_accessibility div {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: transparent;
+            opacity: .1
+        }
+    </style>
+<script src='https://www.stat.gov.tw/Scripts/core.min.js'></script>
+<script src='https://www.stat.gov.tw/Scripts/fu_Accessibility.js'></script>
+<script src='https://www.stat.gov.tw/Scripts/jquery.cookie.js'></script>
+<script src='https://www.stat.gov.tw/Scripts/jUtil.js'></script>
+<script src='https://www.stat.gov.tw/Scripts/fancybox/jquery.fancybox.js'></script>
+<link rel='stylesheet' type='text/css'  href='https://www.stat.gov.tw/Scripts/fancybox/jquery.fancybox.css'> 
+<script src='https://www.stat.gov.tw/Scripts/lightGallery/js/lightgallery-all.min.js'></script>
+<link rel='stylesheet' type='text/css'  href='https://www.stat.gov.tw/Scripts/lightGallery/css/lightgallery.min.css'> 
+<script src='https://www.stat.gov.tw/Scripts/J_Pager.js'></script>
+<script  src='https://www.stat.gov.tw/Scripts/Chart/highcharts.js'></script> 
+<script  src='https://www.stat.gov.tw/Scripts/Chart/map.src.js'></script> 
+<script  src='https://www.stat.gov.tw/Scripts/Chart/highcharts_theme.js'></script> 
+<script  src='https://www.stat.gov.tw/Scripts/Chart/tw-all.js'></script> 
+<link rel='stylesheet' type='text/css'  href='https://www.stat.gov.tw/Scripts/Chart/highcharts.css'> 
+<script  src='https://www.stat.gov.tw/Scripts/jquery.mousewheel.min.js'></script> 
+<script  src='https://www.stat.gov.tw/Scripts/jquery.touchwipe.min.js'></script> 
+<script  src='https://www.stat.gov.tw/js/airdatepicker/datepicker.min.js'></script> 
+<script  src='https://www.stat.gov.tw/js/airdatepicker/datepicker.zh-tw.js'></script> 
+<script  src='https://www.stat.gov.tw/js/airdatepicker/datepicker.en.js'></script> 
+<link rel='stylesheet' type='text/css'  href='https://www.stat.gov.tw/js/airdatepicker/datepicker.min.css'> 
+<script>var CCMS_WWWURL='https://www.stat.gov.tw';var CCMS_LanguageSN=1;var CCMS_SitesSN_Encryption='463';</script><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="DC.Title" content="" />
+<meta name="DC.Subject" content="" />
+<meta name="DC.Creator" content="" />
+<meta name="DC.Publisher" content="" />
+<meta name="DC.Date" content="2022-04-19" />
+<meta name="DC.Type" content="" />
+<meta name="DC.Identifier" content="" />
+<meta name="DC.Description" content="" />
+<meta name="DC.Contributor" content="" />
+<meta name="DC.Format" content="" />
+<meta name="DC.Relation" content="" />
+<meta name="DC.Source" content="" />
+<meta name="DC.Language" content="" />
+<meta name="DC.Coverage.t.min" content="2022-04-19" />
+<meta name="DC.Coverage.t.max" content="2022-05-19" />
+<meta name="DC.Rights" content="" />
+<meta name="Category.Theme" content="" />
+<meta name="Category.Cake" content="" />
+<meta name="Category.Service" content="" />
+<meta name="DC.Keywords" content="" />
+<title>
+	中華民國統計資訊網-消費者物價指數年增率
+</title><link id="likCssGlobal" href="/css/global.css" rel="stylesheet" type="text/css" /><link id="likCssPage" href="/css/page.css" rel="stylesheet" type="text/css" /><link id="likPrint" href="/css/print.css" rel="stylesheet" type="text/css" media="print" /><link id="lnkCssSysDetail" href="/css/sys_detail.css" rel="stylesheet" type="text/css" />
+    <script src="Scripts/vue.min.js"></script>
+    <script src="Scripts/amchart/core.js"></script>
+    <script src="Scripts/amchart/charts.js"></script>
+    <script src="Scripts/amchart/themes/animated.js"></script>
+    <script src="Scripts/amchart/lang/zh_Hant.js"></script>
+    <style>
+        #chartdiv {
+            width: 100%;
+            height: 500px;
+            max-width: 100%;
+        }
+    </style>
+<link href="https://ws.dgbas.gov.tw/001/Upload/463/sites/pagebackimage/3bd76593-4e06-45cf-baff-fa9eb57db7da.jpg" rel="icon" type="image/x-icon"><script>const jhxiaoQS = '?sid=t.2&amp;n=3581&amp;sms=11480&amp;_guid=143b508b-2b0a-4f3b-8e81-dcb36b458566&amp;Create=1'</script><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-11389580-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-11389580-3');
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8J7PK1CYVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8J7PK1CYVB');
+</script>
+
+
+<!-- Google tag 4 (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RPGHJ48KGL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-RPGHJ48KGL');
+</script><meta property="og:title" content="消費者物價指數年增率" >
+<meta property="og:type" content="article" >
+<meta property="og:url" content="https://www.stat.gov.tw/Point.aspx?sid=t.2&n=3581&sms=11480&_guid=143b508b-2b0a-4f3b-8e81-dcb36b458566" >
+<meta property="og:site_name" content="中華民國統計資訊網" >
+</head>
+<body id="Formbody" data-js="false"><div class="for_accessibility">
+    <a href="#Accesskey_C" class="" title="跳到主要內容區塊">跳到主要內容區塊</a>    <div>
+        <nav><span style="font-size:0em">跳到主要內容區塊</span></nav>
+    </div>
+    <script>
+        var $a = $('.for_accessibility a');
+        $a.on('click', function (evt) {
+            var $href = $($(this).attr('href')),
+                $target = $href.find('a').eq(0).get(0);
+            setTimeout(function () { try { $target.focus(); } catch (e) { } }, 0);
+        });
+    </script>
+</div>
+<script> document.body.setAttribute("data-js", "true");</script>
+    
+    <form method="post" action="./Point.aspx?sid=t.2&amp;n=3581&amp;sms=11480&amp;_guid=143b508b-2b0a-4f3b-8e81-dcb36b458566&amp;Create=1" id="form1"><input name="__RequestVerificationToken" type="hidden" value="qgJNdli5wZkhJPdh-Lh-gjFekYKhU_0yL-gLeHL0hLFUIWEcztb3ksfvgAcS3uZkRn9ZPa07SO_fkglfqLBu42FT3P81" />
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTMwNjc0OTk3MmRkIk+YeNNQ2Y4zkLnZ/IcZ+1ucSJY=" />
+</div>
+
+        <!--主選單 結束-->
+        <!--標題-->
+
+        <div class="title">
+            
+
+        </div>
+        
+        
+        
+        
+        
+        
+     <div class="group sys-root" data-func="{&#39;datePicker&#39;:{&#39;autoClose&#39;:true,&#39;language&#39;:&#39;zh-tw&#39;,&#39;navTitles&#39;:{&#39;days&#39;:&#39;&lt;i&amp;gt;民國 rrr 年&lt;/i&amp;gt; &amp;nbsp; MM&#39;,&#39;months&#39;:&#39;民國 rrr 年&#39;,&#39;years&#39;:&#39;民國 rrr1 至 rrr2 年&#39;}}}" data-nojs="您的瀏覽器似乎不支援 JavaScript 語法，但沒關係，這並不會影響到內容的陳述。如需要選擇適合您的字級大小，可利用鍵盤 Ctrl   ( )放大 (-)縮小。如需要回到上一頁，可使用瀏覽器提供的 Alt   左方向鍵(←)。如需要列印，可利用鍵盤 Ctrl   p 使用瀏覽器提供的列印功能。" data-type="3" data-child="3"><div class="in"><div class="ct"><div class="in"> <div class="group base-mobile" data-func="{&#39;toggleBtn&#39;:{&#39;btnOrangeText&#39;:&#39;必&#39;,&#39;btnActiveText&#39;:&#39;尚未定義&#39;}}" data-index="1" data-type="3"><div class="in"><div class="hd"><div class="in"><h2   data-index="0"  class="headH3"  >		<span  ><a    title="手機版選單"   >手機版選單</a></span></h2></div></div><div class="ct"><div class="in"> <div class="area-form search" data-index="1" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >		<span  ><a   href="javascript:void(0)"   title="搜尋"   target="_self"   >搜尋</a></span></div></div></div><div class="ct"><div class="in"><div class="fieldset">
+  <span class="search"><input data-search="btn_d45456b195404eb3bb65a1c5d2128584" type="search" placeholder="請輸入關鍵字" title="請輸入關鍵字"></span>
+  <span class="submit"><a href="#" role="button" class='CCMS_SearchBtn' data-search="btn_d45456b195404eb3bb65a1c5d2128584" title="搜尋" >搜尋</a></span>
+</div>
+<div class="list">
+  <ul data-index="1" data-child="3">
+    <li data-index="1"><span><a title="物價指數" href="#">物價指數</a></span></li>
+    <li data-index="2"><span><a title="社會指標" href="#">社會指標</a></span></li>
+    <li data-index="3"><span><a title="國富統計" href="#">國富統計</a></span></li>
+  </ul>
+</div>
+<script >
+$(function () {
+    $('[data-search="d45456b195404eb3bb65a1c5d2128584"]').on("keydown", function (event) {
+        if (event.which == 13) {
+             doSearch($('#btn_d45456b195404eb3bb65a1c5d2128584'));
+            return false;
+        }
+    });
+});
+</script>
+</div></div><div class="ft"><div class="in"><ul data-index="1" data-child="1">
+  <li data-index="1" class="advanced"><span><a target="_blank" rel="noreferrer noopener" href="https://www.google.com.tw/advanced_search?hl=zh-Hant-tw&as_sitesearch=https://www.stat.gov.tw" title="進階搜尋[另開新視窗]">進階搜尋</a></span></li>
+</ul>
+</div></div></div></div> <div class="list-text share" data-index="2" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >		<span  ><a   href="#"  role="button" title="分享"   >分享</a></span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4" class=""><li   data-index="1"  class="facebook"  >		<span  ><a   href="javascript: void(window.open('https://www.facebook.com/share.php?u='.concat(encodeURIComponent(location.href)) ));"   title="Share to Facebook[另開新視窗]"   target="_self"   >Facebook</a></span></li><li   data-index="2"  class="X"  >		<span  ><a   href="javascript: void(window.open('https://twitter.com/share?text='.concat(encodeURIComponent(document.title)).concat('&url=').concat(encodeURIComponent(location.href))));"   title="Share to X[另開新視窗]"   target="_self"   >X</a></span></li><li   data-index="3"  class="line"  >		<span  ><a   href="javascript: void(window.open('https://line.naver.jp/R/msg/text/?'.concat(encodeURIComponent(location.href)) ));"   title="Share to line[另開新視窗]"   target="_self"   >line</a></span></li><li   data-index="4"  class="email"  >		<span  ><a   href="javascript:  void(window.open('mailto:?subject=' + encodeURIComponent(document.title) + '&amp;body=' +  encodeURIComponent(document.URL)));"   title="Share to email[另開新視窗]"   target="_self"   >Email</a></span></li></ul>
+</div></div></div></div> <div class="group-list nav" data-func="{&#39;majorNavMobile&#39;:{}}" data-index="3" data-type="4" data-child="5"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="5"><li data-index="1"> <div class="group nav" data-index="1" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >		<span  ><a   href="cl.aspx?n=3559"       title="重要經社指標"   >重要經社指標</a></span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="13" class=""><li   data-index="1"  >		<span  ><a   href="Point.aspx?sid=t.1&n=3580&sms=11480"       title="經濟成長率"   >經濟成長率</a></span></li><li   data-index="2"  >		<span  ><a   href="Point.aspx?sid=t.2&n=3581&sms=11480"       title="消費者物價指數年增率"   >消費者物價指數年增率</a></span></li><li   data-index="3"  >		<span  ><a   href="Point.aspx?sid=t.3&n=3582&sms=11480"       title="失業率"   >失業率</a></span></li><li   data-index="4"  >		<span  ><a   href="Point.aspx?sid=t.4&n=3583&sms=11480"       title="工業及服務業每人每月經常性薪資"   >工業及服務業每人每月經常性薪資</a></span></li><li   data-index="5"  >		<span  ><a   href="Point.aspx?sid=t.5&n=3585&sms=11480"       title="工業生產指數年增率"   >工業生產指數年增率</a></span></li><li   data-index="6"  >		<span  ><a   href="Point.aspx?sid=t.6&n=3584&sms=11480"       title="外銷訂單"   >外銷訂單</a></span></li><li   data-index="7"  >		<span  ><a   href="Point.aspx?sid=t.7&n=3586&sms=11480"       title="進口年增率"   >進口年增率</a></span></li><li   data-index="8"  >		<span  ><a   href="Point.aspx?sid=t.8&n=3587&sms=11480"       title="出口年增率"   >出口年增率</a></span></li><li   data-index="9"  >		<span  ><a   href="Point.aspx?sid=t.9&n=3588&sms=11480"       title="人口數(期底)"   >人口數(期底)</a></span></li><li   data-index="10"  >		<span  ><a   href="Point.aspx?sid=t.10&n=3589&sms=11480"       title="外匯存底(期底)"   >外匯存底(期底)</a></span></li><li   data-index="11"  >		<span  ><a   href="Point.aspx?sid=t.11&n=3590&sms=11480"       title="景氣領先指標不含趨勢指數"   >景氣領先指標不含趨勢指數</a></span></li><li   data-index="12"  >		<span  ><a   href="Point.aspx?sid=t.12&n=3591&sms=11480"       title="來臺旅客人次"   >來臺旅客人次</a></span></li><li   data-index="13"  >		<span  ><a   href="cp.aspx?n=3851"       title="重要經社指標速報"   >重要經社指標速報</a></span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="2"> <div class="group nav" data-index="2" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >		<span  ><a   href="cl.aspx?n=3560"       title="統計發布訊息"   >統計發布訊息</a></span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="2" class=""><li   data-index="1"  >		<span  ><a   href="cl.aspx?n=3593"       title="主計總處看板"   >主計總處看板</a></span></li><li   data-index="2"  >		<span  ><a   href="cl.aspx?n=3616"       title="全國看板"   >全國看板</a></span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="3"> <div class="group nav" data-index="3" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >		<span  ><a   href="cl.aspx?n=3561"       title="統計調查專區"   >統計調查專區</a></span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="7" class=""><li   data-index="1"  >		<span  ><a   href="https://enterprise.dgbas.gov.tw/STATSVY/manager/indexn.jsp"       title="[另開新視窗]統計調查查詢"   target="_blank"  rel = "noreferrer noopener"   >統計調查查詢</a></span></li><li   data-index="2"  >		<span  ><a   href="News.aspx?n=3138&sms=11479"       title="統計調查網路填報(e-survey)"   >統計調查網路填報(e-survey)</a></span></li><li   data-index="3"  >		<span  ><a   href="News.aspx?n=3663&sms=11198"       title="統計調查管理作業事項"   >統計調查管理作業事項</a></span></li><li   data-index="4"  >		<span  ><a   href="News.aspx?n=2659&sms=11019"       title="主要調查結果應用實例"   >主要調查結果應用實例</a></span></li><li   data-index="5"  >		<span  ><a   href="https://enterprise.dgbas.gov.tw/STATSVY/manager/index_ov.jsp?dummy=2625618&random=12846263416796724"       title="[另開新視窗]指定統計調查總覽"   target="_blank"  rel = "noreferrer noopener"   >指定統計調查總覽</a></span></li><li   data-index="6"  >		<span  ><a   href="cp.aspx?n=3156"       title="統計調查識別標章"   >統計調查識別標章</a></span></li><li   data-index="7"  >		<span  ><a   href="https://chatbot.dgbas.gov.tw/wise/webchat/default/?t=58a4c9c819750cd2d446&category=NWSM"       title="[另開新視窗]統計調查智能客服"   target="_blank"  rel = "noreferrer noopener"   >統計調查智能客服</a></span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="4"> <div class="group nav" data-index="4" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >		<span  ><a   href="cl.aspx?n=3562"       title="主計總處統計專區"   >主計總處統計專區</a></span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="14" class=""><li   data-index="1"  >		<span  ><a   href="cl.aspx?n=2663"       title="物價指數"   >物價指數</a></span></li><li   data-index="2"  >		<span  ><a   href="cl.aspx?n=2672"       title="國民所得及經濟成長"   >國民所得及經濟成長</a></span></li><li   data-index="3"  >		<span  ><a   href="https://www.stat.gov.tw/cp.aspx?n=4660"       title="綠色國民所得(環境與經濟帳)"   >綠色國民所得(環境與經濟帳)</a></span></li><li   data-index="4"  >		<span  ><a   href="cl.aspx?n=2693"       title="家庭收支調查"   >家庭收支調查</a></span></li><li   data-index="5"  >		<span  ><a   href="cl.aspx?n=2700"       title="就業、失業統計"   >就業、失業統計</a></span></li><li   data-index="6"  >		<span  ><a   href="cl.aspx?n=2712"       title="薪資及生產力統計"   >薪資及生產力統計</a></span></li><li   data-index="7"  >		<span  ><a   href="cl.aspx?n=2727"       title="社會指標"   >社會指標</a></span></li><li   data-index="8"  >		<span  ><a   href="cl.aspx?n=2737"       title="工業及服務業普查"   >工業及服務業普查</a></span></li><li   data-index="9"  >		<span  ><a   href="cl.aspx?n=2748"       title="人口及住宅普查"   >人口及住宅普查</a></span></li><li   data-index="10"  >		<span  ><a   href="cl.aspx?n=2759"       title="農林漁牧業普查"   >農林漁牧業普查</a></span></li><li   data-index="11"  >		<span  ><a   href="cl.aspx?n=2771"       title="國富統計"   >國富統計</a></span></li><li   data-index="12"  >		<span  ><a   href="cl.aspx?n=2779"       title="產業關聯統計"   >產業關聯統計</a></span></li><li   data-index="13"  >		<span  ><a   href="cl.aspx?n=2794"       title="其他專案調查"   >其他專案調查</a></span></li><li   data-index="14"  >		<span  ><a   href="cl.aspx?n=3140"       title="統計法制與標準分類"   >統計法制與標準分類</a></span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="5"> <div class="group nav" data-index="5" data-type="3" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >		<span  ><a   href="cl.aspx?n=3563"       title="統計資料查詢"   >統計資料查詢</a></span></div></div></div><div class="ct"><div class="in"> <div class="list-text nav" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="5" class=""><li   data-index="1"  >		<span  ><a   href="cl.aspx?n=3654"       title="主計總處查詢系統"   >主計總處查詢系統</a></span></li><li   data-index="2"  >		<span  ><a   href="News.aspx?n=3674&sms=11014"       title="中央機關統計網站"   >中央機關統計網站</a></span></li><li   data-index="3"  >		<span  ><a   href="cp.aspx?n=3677"       title="縣市政府統計網站"   >縣市政府統計網站</a></span></li><li   data-index="4"  >		<span  ><a   href="https://data.gov.tw/datasets/search?p=1&size=10&cgl-2=518"       title="[另開新視窗]OpenData資料集"   target="_blank"  rel = "noreferrer noopener"   >OpenData資料集</a></span></li><li   data-index="5"  >		<span  ><a   href="cl.aspx?n=3680"       title="全國統計資料"   >全國統計資料</a></span></li></ul>
+</div></div></div></div></div></div></div></div></li></ul></div></div></div></div> <div class="list-text hot-key-word" data-index="4" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >		<span  ><a    title="熱門關鍵字"   >熱門關鍵字</a></span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="3" class=""><li   data-index="1"  >		<span  ><a   href="Advanced_Search.aspx?q=物價指數"   title="物價指數"   target="_self"   >物價指數</a></span></li><li   data-index="2"  >		<span  ><a   href="Advanced_Search.aspx?q=社會指標"   title="社會指標"   target="_self"   >社會指標</a></span></li><li   data-index="3"  >		<span  ><a   href="Advanced_Search.aspx?q=國富統計"   title="國富統計"   target="_self"   >國富統計</a></span></li></ul>
+</div></div></div></div> <div class="list-text link" data-index="5" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >		<span  ><a    title="上方連結"   >上方連結</a></span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="6" class=""><li   data-index="1"  >		<span  ><a   href="SiteMap.aspx"   title="網站導覽"   target="_self"   >網站導覽</a></span></li><li   data-index="2"  >		<span  ><a   href="https://www.dgbas.gov.tw/"   title="[另開新視窗]行政院主計總處"   target="_blank"  rel = "noreferrer noopener"   >行政院主計總處</a></span></li><li   data-index="3"  >		<span  ><a   href="News.aspx?n=3166&sms=11201"   title="雙語詞彙"   target="_self"   >雙語詞彙</a></span></li><li   data-index="4"  >		<span  ><a   href="Epaper.aspx?n=3803&sms=11435"   title="訂閱/取消電子報"   target="_self"   >訂閱/取消電子報</a></span></li><li   data-index="5"  >		<span  ><a   href="cp.aspx?n=3167"   title="RSS"   target="_self"   >RSS</a></span></li><li   data-index="6"  >		<span  ><a   href="https://eng.stat.gov.tw"   title="[另開新視窗]English"   target="_blank"  rel = "noreferrer noopener"   >English</a></span></li></ul>
+</div></div></div></div> <div class="list-text link" data-index="6" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >		<span  ><a    title="下方連結"   >下方連結</a></span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4" class=""><li   data-index="1"  >		<span  ><a   href="cp.aspx?n=3162"   title="隱私權宣告"   target="_self"   >隱私權宣告</a></span></li><li   data-index="2"  >		<span  ><a   href="cp.aspx?n=3163"   title="資訊安全政策"   target="_self"   >資訊安全政策</a></span></li><li   data-index="3"  >		<span  ><a   href="cp.aspx?n=3165"   title="無障礙宣告"   target="_self"   >無障礙宣告</a></span></li><li   data-index="4"  >		<span  ><a   href="cp.aspx?n=3164"   title="政府網站資料開放宣告"   target="_self"   >政府網站資料開放宣告</a></span></li></ul>
+</div></div></div></div></div></div></div></div> <div class="group base-extend" data-index="2" data-type="3"><div class="in"><div class="ct"><div class="in"> <div class="simple-text major-logo" data-index="1" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><h1><a href="Default.aspx" title="回首頁">中華民國統計資訊網</a></h1></div></div></div></div> <div class="simple-text accesskey" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><span><a href="#Accesskey_U" id="Accesskey_U" accesskey="U" title="上方選單連結區，此區塊列有本網站的主要連結">:::</a></span></div></div></div></div> <div class="list-text link" data-index="2" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >		<span  ><a    title="上方連結"   >上方連結</a></span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="6" class=""><li   data-index="1"  >		<span  ><a   href="SiteMap.aspx"   title="網站導覽"   target="_self"   >網站導覽</a></span></li><li   data-index="2"  >		<span  ><a   href="https://www.dgbas.gov.tw/"   title="[另開新視窗]行政院主計總處"   target="_blank"  rel = "noreferrer noopener"   >行政院主計總處</a></span></li><li   data-index="3"  >		<span  ><a   href="News.aspx?n=3166&sms=11201"   title="雙語詞彙"   target="_self"   >雙語詞彙</a></span></li><li   data-index="4"  >		<span  ><a   href="Epaper.aspx?n=3803&sms=11435"   title="訂閱/取消電子報"   target="_self"   >訂閱/取消電子報</a></span></li><li   data-index="5"  >		<span  ><a   href="cp.aspx?n=3167"   title="RSS"   target="_self"   >RSS</a></span></li><li   data-index="6"  >		<span  ><a   href="https://eng.stat.gov.tw"   title="[另開新視窗]English"   target="_blank"  rel = "noreferrer noopener"   >English</a></span></li></ul>
+</div></div></div></div> <div class="list-text font-size" data-func="{&#39;fontSize&#39;:{}}" data-index="3" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >		<span  ><a   href="#"   title="字級"   >字級</a></span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="3" class=""><li   data-index="1"  class="small"  >		<span  ><a   href="#"   role="button" title="字級小"   >字級小</a></span></li><li   data-index="2"  class="medium"  >		<span  ><a   href="#"   role="button" title="字級中"   >字級中</a></span></li><li   data-index="3"  class="large"  >		<span  ><a   href="#"   role="button" title="字級大"   >字級大</a></span></li></ul>
+</div></div></div></div> <div class="area-form search" data-index="4" data-type="0" data-child="1"><div class="in"><div class="ct"><div class="in"><div class="search_keyword">
+     <a id="search_btn" href="#" title="搜尋" class="search_btn" role="button" onclick="ShowSearch()">搜尋</a>
+     <div class="search">
+	        <div class="searchbt1">
+                    <span class="searchbox"><input data-search="btn_91a251961db049ffb17e00ea2ac8b2d2" id="txtSearchBox" type="search" placeholder="Search" title="搜尋"></span>
+		        <div class="searchbt1">
+                    <span class="submit"><a href="#" onClick="doSearchBox()" title="搜尋" role="button">搜尋</a></span>
+             </div>
+<div class="searchbt2">
+ <a target="_blank" href="https://www.google.com.tw/advanced_search?hl=zh-Hant-tw&as_sitesearch=https://www.stat.gov.tw" title="進階搜尋[另開新視窗]">進階搜尋</a>
+</div>
+  <ul data-index="1" data-child="3">
+    <li data-index="1"><span><a href="Advanced_Search.aspx?q=物價指數">物價指數</a></span></li>
+    <li data-index="2"><span><a href="Advanced_Search.aspx?q=社會指標">社會指標</a></span></li>
+    <li data-index="3"><span><a href="Advanced_Search.aspx?q=國富統計">國富統計</a></span></li>
+  </ul>
+         </div>
+     </div>
+     </div>
+<script >
+$(function () {
+    $('[data-search="91a251961db049ffb17e00ea2ac8b2d2"]').on("keydown", function (event) {
+        if (event.which == 13) {
+             doSearchBox();
+            return false;
+        }
+    });
+});
+function ShowSearch() {
+     if ($('.search').hasClass("active")) {
+         $('.search').removeClass("active");
+         $('.searchbox').removeClass("active");
+     }
+     else{
+         $('.search').addClass("active");
+         $('.searchbox').addClass("active");
+     }
+}
+function doSearchBox() {
+    var KeyWord = $('#txtSearchBox').val();
+    window.location.href = "Advanced_Search.aspx?q=" + KeyWord;
+}
+</script>
+</div></div></div></div> <div class="list-text share" data-func="{&#39;toggleBtn&#39;:{&#39;clickToRemove&#39;:true}}" data-index="5" data-type="0" data-child="1"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  >		<span  ><a   href="#"  role="button" title="分享"   >分享</a></span></div></div></div><div class="ct"><div class="in"><ul data-index="1" data-child="4" class=""><li   data-index="1"  class="facebook"  >		<span  ><a   href="javascript: void(window.open('https://www.facebook.com/share.php?u='.concat(encodeURIComponent(location.href)) ));"   title="Share to Facebook[另開新視窗]"   target="_self"   >Facebook</a></span></li><li   data-index="2"  class="X"  >		<span  ><a   href="javascript: void(window.open('https://twitter.com/share?text='.concat(encodeURIComponent(document.title)).concat('&url=').concat(encodeURIComponent(location.href))));"   title="Share to X[另開新視窗]"   target="_self"   >X</a></span></li><li   data-index="3"  class="line"  >		<span  ><a   href="javascript: void(window.open('https://line.naver.jp/R/msg/text/?'.concat(encodeURIComponent(location.href)) ));"   title="Share to line[另開新視窗]"   target="_self"   >line</a></span></li><li   data-index="4"  class="email"  >		<span  ><a   href="javascript:  void(window.open('mailto:?subject=' + encodeURIComponent(document.title) + '&amp;body=' +  encodeURIComponent(document.URL)));"   title="Share to email[另開新視窗]"   target="_self"   >Email</a></span></li></ul>
+</div></div></div></div></div></div></div></div> <div class="group base-wrapper" data-index="3" data-type="3" data-child="3"><div class="in"><div class="ct"><div class="in"> <div class="group base-header" data-index="1" data-type="3" data-child="2"><div class="in"><div class="ct"><div class="in"> <div class="group default info" data-func="{&#39;hud&#39;:{}}" data-index="1" data-type="3"><div class="in"><div class="ct"><div class="in"> <div class="group-list nav" data-func="{&#39;majorNavHorizontal&#39;:{},&#39;setNavWidth&#39;:{}}" data-index="1" data-type="4" data-child="5"><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="5"><li data-index="1" data-width="2"> <div id="Group_497_dgEEDDdoVB" data-width="2" data-Margin_right="0" data-sort="" data-bgColor="#0000ffff" data-AddParentGroup="False" data-GroupSN="497" data-WidthDeskTop="0" data-anchor="" data-tabType="3" class="group nav" data-index="1" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="0" data-groupname="" data-WidthPad="0" data-Margin_left="0" data-MenuWidth="2" data-isgroup="true" data-Margin_bottom="0" data-child="1" data-Margin_Top="0"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >		<span  ><a   href="cl.aspx?n=3559"      role="button"   title="重要經社指標"   >重要經社指標</a></span></div></div></div><div class="ct"><div class="in"> <div id="Group_498_tfFtfpjBck" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="498" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="13" class=""><li   data-index="1"  >		<span  ><a   href="Point.aspx?sid=t.1&n=3580&sms=11480"       title="經濟成長率"   >經濟成長率</a></span></li><li   data-index="2"  >		<span  ><a   href="Point.aspx?sid=t.2&n=3581&sms=11480"       title="消費者物價指數年增率"   >消費者物價指數年增率</a></span></li><li   data-index="3"  >		<span  ><a   href="Point.aspx?sid=t.3&n=3582&sms=11480"       title="失業率"   >失業率</a></span></li><li   data-index="4"  >		<span  ><a   href="Point.aspx?sid=t.4&n=3583&sms=11480"       title="工業及服務業每人每月經常性薪資"   >工業及服務業每人每月經常性薪資</a></span></li><li   data-index="5"  >		<span  ><a   href="Point.aspx?sid=t.5&n=3585&sms=11480"       title="工業生產指數年增率"   >工業生產指數年增率</a></span></li><li   data-index="6"  >		<span  ><a   href="Point.aspx?sid=t.6&n=3584&sms=11480"       title="外銷訂單"   >外銷訂單</a></span></li><li   data-index="7"  >		<span  ><a   href="Point.aspx?sid=t.7&n=3586&sms=11480"       title="進口年增率"   >進口年增率</a></span></li><li   data-index="8"  >		<span  ><a   href="Point.aspx?sid=t.8&n=3587&sms=11480"       title="出口年增率"   >出口年增率</a></span></li><li   data-index="9"  >		<span  ><a   href="Point.aspx?sid=t.9&n=3588&sms=11480"       title="人口數(期底)"   >人口數(期底)</a></span></li><li   data-index="10"  >		<span  ><a   href="Point.aspx?sid=t.10&n=3589&sms=11480"       title="外匯存底(期底)"   >外匯存底(期底)</a></span></li><li   data-index="11"  >		<span  ><a   href="Point.aspx?sid=t.11&n=3590&sms=11480"       title="景氣領先指標不含趨勢指數"   >景氣領先指標不含趨勢指數</a></span></li><li   data-index="12"  >		<span  ><a   href="Point.aspx?sid=t.12&n=3591&sms=11480"       title="來臺旅客人次"   >來臺旅客人次</a></span></li><li   data-index="13"  >		<span  ><a   href="cp.aspx?n=3851"       title="重要經社指標速報"   >重要經社指標速報</a></span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="2" data-width="1"> <div id="Group_499_uoiJSTpjKT" data-width="1" data-Margin_right="0" data-sort="" data-bgColor="#0000ffff" data-AddParentGroup="False" data-GroupSN="499" data-WidthDeskTop="0" data-anchor="" data-tabType="3" class="group nav" data-index="2" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="0" data-groupname="" data-WidthPad="0" data-Margin_left="0" data-MenuWidth="1" data-isgroup="true" data-Margin_bottom="0" data-child="1" data-Margin_Top="0"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >		<span  ><a   href="cl.aspx?n=3560"      role="button"   title="統計發布訊息"   >統計發布訊息</a></span></div></div></div><div class="ct"><div class="in"> <div id="Group_500_UjPhJHDixb" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="500" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="2" class=""><li   data-index="1"  >		<span  ><a   href="cl.aspx?n=3593"       title="主計總處看板"   >主計總處看板</a></span></li><li   data-index="2"  >		<span  ><a   href="cl.aspx?n=3616"       title="全國看板"   >全國看板</a></span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="3" data-width="1"> <div id="Group_501_UqAkAgUXbj" data-width="1" data-Margin_right="0" data-sort="" data-bgColor="#0000ffff" data-AddParentGroup="False" data-GroupSN="501" data-WidthDeskTop="0" data-anchor="" data-tabType="3" class="group nav" data-index="3" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="0" data-groupname="" data-WidthPad="0" data-Margin_left="0" data-MenuWidth="1" data-isgroup="true" data-Margin_bottom="0" data-child="1" data-Margin_Top="0"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >		<span  ><a   href="cl.aspx?n=3561"      role="button"   title="統計調查專區"   >統計調查專區</a></span></div></div></div><div class="ct"><div class="in"> <div id="Group_502_yXFsDrJtau" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="502" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="7" class=""><li   data-index="1"  >		<span  ><a   href="https://enterprise.dgbas.gov.tw/STATSVY/manager/indexn.jsp"       title="[另開新視窗]統計調查查詢"   target="_blank"  rel = "noreferrer noopener"   >統計調查查詢</a></span></li><li   data-index="2"  >		<span  ><a   href="News.aspx?n=3138&sms=11479"       title="統計調查網路填報(e-survey)"   >統計調查網路填報(e-survey)</a></span></li><li   data-index="3"  >		<span  ><a   href="News.aspx?n=3663&sms=11198"       title="統計調查管理作業事項"   >統計調查管理作業事項</a></span></li><li   data-index="4"  >		<span  ><a   href="News.aspx?n=2659&sms=11019"       title="主要調查結果應用實例"   >主要調查結果應用實例</a></span></li><li   data-index="5"  >		<span  ><a   href="https://enterprise.dgbas.gov.tw/STATSVY/manager/index_ov.jsp?dummy=2625618&random=12846263416796724"       title="[另開新視窗]指定統計調查總覽"   target="_blank"  rel = "noreferrer noopener"   >指定統計調查總覽</a></span></li><li   data-index="6"  >		<span  ><a   href="cp.aspx?n=3156"       title="統計調查識別標章"   >統計調查識別標章</a></span></li><li   data-index="7"  >		<span  ><a   href="https://chatbot.dgbas.gov.tw/wise/webchat/default/?t=58a4c9c819750cd2d446&category=NWSM"       title="[另開新視窗]統計調查智能客服"   target="_blank"  rel = "noreferrer noopener"   >統計調查智能客服</a></span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="4" data-width="1"> <div id="Group_503_pRiVfjUsJt" data-width="1" data-Margin_right="0" data-sort="" data-bgColor="#0000ffff" data-AddParentGroup="False" data-GroupSN="503" data-WidthDeskTop="0" data-anchor="" data-tabType="3" class="group nav" data-index="4" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="0" data-groupname="" data-WidthPad="0" data-Margin_left="0" data-MenuWidth="1" data-isgroup="true" data-Margin_bottom="0" data-child="1" data-Margin_Top="0"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >		<span  ><a   href="cl.aspx?n=3562"      role="button"   title="主計總處統計專區"   >主計總處統計專區</a></span></div></div></div><div class="ct"><div class="in"> <div id="Group_504_HphFWqakdJ" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="504" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="14" class=""><li   data-index="1"  >		<span  ><a   href="cl.aspx?n=2663"       title="物價指數"   >物價指數</a></span></li><li   data-index="2"  >		<span  ><a   href="cl.aspx?n=2672"       title="國民所得及經濟成長"   >國民所得及經濟成長</a></span></li><li   data-index="3"  >		<span  ><a   href="https://www.stat.gov.tw/cp.aspx?n=4660"       title="綠色國民所得(環境與經濟帳)"   >綠色國民所得(環境與經濟帳)</a></span></li><li   data-index="4"  >		<span  ><a   href="cl.aspx?n=2693"       title="家庭收支調查"   >家庭收支調查</a></span></li><li   data-index="5"  >		<span  ><a   href="cl.aspx?n=2700"       title="就業、失業統計"   >就業、失業統計</a></span></li><li   data-index="6"  >		<span  ><a   href="cl.aspx?n=2712"       title="薪資及生產力統計"   >薪資及生產力統計</a></span></li><li   data-index="7"  >		<span  ><a   href="cl.aspx?n=2727"       title="社會指標"   >社會指標</a></span></li><li   data-index="8"  >		<span  ><a   href="cl.aspx?n=2737"       title="工業及服務業普查"   >工業及服務業普查</a></span></li><li   data-index="9"  >		<span  ><a   href="cl.aspx?n=2748"       title="人口及住宅普查"   >人口及住宅普查</a></span></li><li   data-index="10"  >		<span  ><a   href="cl.aspx?n=2759"       title="農林漁牧業普查"   >農林漁牧業普查</a></span></li><li   data-index="11"  >		<span  ><a   href="cl.aspx?n=2771"       title="國富統計"   >國富統計</a></span></li><li   data-index="12"  >		<span  ><a   href="cl.aspx?n=2779"       title="產業關聯統計"   >產業關聯統計</a></span></li><li   data-index="13"  >		<span  ><a   href="cl.aspx?n=2794"       title="其他專案調查"   >其他專案調查</a></span></li><li   data-index="14"  >		<span  ><a   href="cl.aspx?n=3140"       title="統計法制與標準分類"   >統計法制與標準分類</a></span></li></ul>
+</div></div></div></div></div></div></div></div></li><li data-index="5" data-width="1"> <div id="Group_505_crQJoEoRCj" data-width="1" data-Margin_right="0" data-sort="" data-bgColor="#0000ffff" data-AddParentGroup="False" data-GroupSN="505" data-WidthDeskTop="0" data-anchor="" data-tabType="3" class="group nav" data-index="5" data-Margin_DefaultSetting="false" data-type="3" data-bgClass="" data-WidthMobile="0" data-groupname="" data-WidthPad="0" data-Margin_left="0" data-MenuWidth="1" data-isgroup="true" data-Margin_bottom="0" data-child="1" data-Margin_Top="0"><div class="in"><div class="hd"><div class="in"><div   data-index="0"  class="headH3"  >		<span  ><a   href="cl.aspx?n=3563"      role="button"   title="統計資料查詢"   >統計資料查詢</a></span></div></div></div><div class="ct"><div class="in"> <div id="Group_506_BimmBuvSdc" data-SitesModuleSN="75" data-Margin_right="" data-sort="2" data-bgColor="" data-AddParentGroup="" data-GroupSN="506" data-WidthDeskTop="" data-anchor="" data-tabType="0" class="list-text nav" data-index="1" data-Margin_DefaultSetting="false" data-type="0" data-bgClass="" data-WidthMobile="" data-groupname="" data-WidthPad="" data-Margin_left="" data-MenuWidth="" data-isgroup="true" data-setLen="0" data-Margin_bottom="" data-child="1" data-Margin_Top=""><div class="in"><div class="ct"><div class="in"><ul data-index="1" data-child="5" class=""><li   data-index="1"  >		<span  ><a   href="cl.aspx?n=3654"       title="主計總處查詢系統"   >主計總處查詢系統</a></span></li><li   data-index="2"  >		<span  ><a   href="News.aspx?n=3674&sms=11014"       title="中央機關統計網站"   >中央機關統計網站

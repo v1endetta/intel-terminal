@@ -1,0 +1,89 @@
+{
+ "help": "",
+ "success": true,
+ "result": {
+  "categoryService": "I00",
+  "categoryDataset": "A",
+  "datasetId": 9590,
+  "identifier": "A07100000D-000027",
+  "title": "電子發票開立數量",
+  "description": "營業人每日電子發票(不區分B2B、B2C、電子發票證明聯或雲端發票)開立數量",
+  "type": "rawData",
+  "license": "1",
+  "cost": "free",
+  "dataProvider": "pikagamed",
+  "publisherOID": "2.16.886.101.20003.20004.20048",
+  "publisherContactName": "莊先生",
+  "publisherContactPhone": "02-27631833#3319",
+  "publisherContactEmail": "N108195@fia.gov.tw",
+  "updateFrequency": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "月"
+  },
+  "dataQuality": "無(白名單)",
+  "coverageStartedDate": "2014-10-01",
+  "coverageEndedDate": "",
+  "publishedDate": "2014-11-26",
+  "modifiedDate": "2024-08-09 13:23:24",
+  "spatialCoverage": "",
+  "language": "zh",
+  "relatedUrl": "",
+  "notes": "授權說明網址: http://data.gov.tw/license\n財政部財政資訊中心電子發票組OAS標準之API說明文件: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+  "apiDocUrl": "",
+  "distribution": [
+   {
+    "resourceDescription": "營業人每日電子發票開立數量",
+    "resourceField": [
+     {
+      "name": "年(西元)/月/日",
+      "description": ""
+     },
+     {
+      "name": "每日電子發票開立數量",
+      "description": ""
+     },
+     {
+      "name": "雲端發票使用數量",
+      "description": ""
+     },
+     {
+      "name": "電子發票每日捐贈數量",
+      "description": ""
+     },
+     {
+      "name": "以捐贈碼每日索取電子發票之捐贈數量",
+      "description": ""
+     }
+    ],
+    "qcLevel": "",
+    "resourceFormat": "CSV",
+    "resourceCharacterEncoding": "UTF-8",
+    "resourceQualityCheckTime": "2026-06-01 10:27:50",
+    "resourceDownloadUrl": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/3886F055-EB77-4DF9-98E2-F3F49A7D3434/1/8B227A99-042A-4902-8B34-5715442A227B/0/?fileType=csv",
+    "resourceAmount": 1000,
+    "resourceNotes": "",
+    "resourceRequestMethod": "",
+    "resourceOasUrl": "",
+    "resourceRequestParameters": [],
+    "resourcePathParameters": []
+   }
+  ],
+  "keyword": [
+   "電子發票",
+   "統計"
+  ],
+  "en": {
+   "title": "Number of e-invoices issued",
+   "description": "Number of electronic invoices issued by the operator daily",
+   "publisherContactName": "莊先生",
+   "publisherContactPhone": "02-27631833#3319",
+   "publisherContactEmail": [
+    "N108195@fia.gov.tw"
+   ],
+   "updateFrequency": "Every 1 month",
+   "cost": "free",
+   "notes": "Authorization explanation URL: http://data.gov.tw/licenseThe Ministry of Finance's Electronic Invoice Group OAS standard API documentation: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json"
+  }
+ }
+}

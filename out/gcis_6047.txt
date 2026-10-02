@@ -1,0 +1,802 @@
+<!DOCTYPE html >
+<html lang="zh-tw">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- jquery ui includes  -->
+<script type="text/javascript" src="/resources/jqueryui/js/jquery-3.5.1.min.js;jsessionid=4879054FC3F08ECB9049E232CD4C163E"></script>
+<script type="text/javascript" src="/resources/jqueryui/js/jquery-ui-1.12.1.min.js;jsessionid=4879054FC3F08ECB9049E232CD4C163E"></script>
+<link type="text/css" rel="stylesheet" href="/resources/jqueryui/css/ui-lightness/jquery-ui-1.12.1.min.css;jsessionid=4879054FC3F08ECB9049E232CD4C163E" />
+<script type="text/javascript" src="/resources/js/ajax.js;jsessionid=4879054FC3F08ECB9049E232CD4C163E"></script>
+<!-- layout css includes -->
+<link type="text/css" rel="stylesheet" href="/resources/layout/opd/css/component.css;jsessionid=4879054FC3F08ECB9049E232CD4C163E" />
+<link type="text/css" rel="stylesheet" href="/resources/layout/opd/css/rwd-table.min.css;jsessionid=4879054FC3F08ECB9049E232CD4C163E" />
+<link type="text/css" rel="stylesheet" href="/resources/layout/opd/css/style.css;jsessionid=4879054FC3F08ECB9049E232CD4C163E" />
+<link type="text/css" rel="stylesheet" href="/resources/layout/opd/css/table.css;jsessionid=4879054FC3F08ECB9049E232CD4C163E" />
+<!-- SpryAssets -->
+<script type="text/javascript" src="/resources/layout/opd/SpryAssets/SpryMenuBar.js;jsessionid=4879054FC3F08ECB9049E232CD4C163E" ></script>
+<link type="text/css" rel="stylesheet" href="/resources/layout/opd/SpryAssets/SpryMenuBarHorizontal.css;jsessionid=4879054FC3F08ECB9049E232CD4C163E" />
+<!-- Paging -->
+<script type="text/javascript" src="/resources/js/Paging.js;jsessionid=4879054FC3F08ECB9049E232CD4C163E"></script>
+<script>
+if( self == top ) {
+document.documentElement.style.display = 'block' ; 
+} else {
+top.location = self.location ; 
+}
+
+$(document).ready(function() {
+	eval("var status = ''");
+
+	if(status != ""){
+		alert(status);
+	}
+	
+	var checkEnter ="";
+	
+	$(".search_data").click(function()
+			{		
+			checkEnter="queryT";
+	});
+	$("#imgNum").click(function()
+			{		
+			checkEnter="queryC";
+	});
+	$("#name").click(function()
+			{		
+			checkEnter="queryC";
+	});
+	
+	$(document).keydown(function(e){
+		
+		  if (e.keyCode==13)
+		  {
+			  if(checkEnter=="queryT"){
+			 	 $("#_m0").attr("value","query");	
+				$("#queryTitle").attr("value",$("#title").val());
+			  }else{
+				  var condition = document.getElementsByName('group1');   	
+					for(var i=0; i <condition.length;i++) {
+						  if(condition[i].checked)  
+						  {
+							  $("#radioType").attr("value",condition[i].value);	
+							  //alert($("#radioType").val());			  	  
+							}
+					}		
+					var condition1 = document.getElementsByName('group0');  		
+					 if(condition1[0].checked){
+						 $("#cmpType").attr("value",condition1[0].value);		
+					 }
+					if(condition1[1].checked){
+						$("#cmpType").attr("value",condition1[1].value);	
+					}
+					
+					if($("#imgNum").val()==$("#verify").val() && $("#radioType").val()!=""&&$("#name").val().trim()!=""){
+							$("._m2").attr("value","cmpQuery");	
+							$("#queryKey").attr("value",$("#name").val());	
+							$("#cmpForm").submit();
+						}else{		
+						alert("請輸入完整的資訊!");
+						}
+				  
+			  }
+		  
+		}
+	});
+	//資料搜尋
+	$("#query").click(function()
+	{		
+		$("#_m0").attr("value","query");		
+		if($("#title").val()==""){			
+		
+		}else{			
+			$("#queryTitle").attr("value",$("#title").val());	
+		$("#queryTitleForm").submit();
+		}
+		
+	});
+	
+	$(function() {
+	    $( ".tabs" ).tabs();
+	});
+
+});
+function changeCate(cate){
+	$("#showType").attr("value", cate);	
+	$("#form0").submit();		
+};
+function focusShowMenu(i){
+	var id = $("#title").val();
+	var re=/select|update|delete|truncate|join|union|exec|insert|drop|count|'|"|;|~|>|<|%/i;
+	if(re.test(id)){
+		alert("請勿輸入非法字元");
+		$("#title").val("");
+		$("#title").focus();
+		return false;
+	}
+	
+	if(i!=-1){
+		$("#showul"+i).removeClass('MenuBarSubmenuVisible')
+		$("#showul"+i).addClass('MenuBarSubmenuVisible')	
+		if(i==2)
+		{
+			$("#showul5").removeClass('MenuBarSubmenuVisible');
+		    $("#showul6").removeClass('MenuBarSubmenuVisible');
+		    $("#showul4").removeClass('MenuBarSubmenuVisible');
+			$("#showul3").removeClass('MenuBarSubmenuVisible');
+			$("#showul1").removeClass('MenuBarSubmenuVisible');
+			$("#showul1").addClass('MenuBarSubmenuVisible');//因為firefox的tab會因為Spry而除去#showul1
+		}
+		if(i==3)
+		{
+			$("#showul5").removeClass('MenuBarSubmenuVisible');
+		    $("#showul6").removeClass('MenuBarSubmenuVisible');
+		    $("#showul4").removeClass('MenuBarSubmenuVisible');
+			$("#showul2").removeClass('MenuBarSubmenuVisible');
+			$("#showul1").removeClass('MenuBarSubmenuVisible');
+			$("#showul1").addClass('MenuBarSubmenuVisible');//因為firefox的tab會因為Spry而除去#showul1
+		}
+		if(i==1){
+			$("#showul2").removeClass('MenuBarSubmenuVisible');
+			$("#showul3").removeClass('MenuBarSubmenuVisible');
+			$("#showul5").removeClass('MenuBarSubmenuVisible');
+			$("#showul6").removeClass('MenuBarSubmenuVisible');
+			$("#showul4").removeClass('MenuBarSubmenuVisible');
+		}
+		if(i==4){
+			$("#showul2").removeClass('MenuBarSubmenuVisible');
+			$("#showul3").removeClass('MenuBarSubmenuVisible');
+			$("#showul5").removeClass('MenuBarSubmenuVisible');
+			$("#showul6").removeClass('MenuBarSubmenuVisible');
+			$("#showul1").removeClass('MenuBarSubmenuVisible');
+		}
+		
+		if(i==5){
+			$("#showul2").removeClass('MenuBarSubmenuVisible');
+		    $("#showul6").removeClass('MenuBarSubmenuVisible');
+			$("#showul3").removeClass('MenuBarSubmenuVisible');
+			$("#showul1").removeClass('MenuBarSubmenuVisible');
+			$("#showul4").removeClass('MenuBarSubmenuVisible');
+			$("#showul4").addClass('MenuBarSubmenuVisible');//因為firefox的tab會因為Spry而除去#showul1
+		}
+		if(i==6){
+			$("#showul2").removeClass('MenuBarSubmenuVisible');
+		    $("#showul5").removeClass('MenuBarSubmenuVisible');
+			$("#showul3").removeClass('MenuBarSubmenuVisible');
+			$("#showul1").removeClass('MenuBarSubmenuVisible');
+			$("#showul4").removeClass('MenuBarSubmenuVisible');
+			$("#showul4").addClass('MenuBarSubmenuVisible');//因為firefox的tab會因為Spry而除去#showul1
+		}
+			
+	}
+	
+	if(i==0){
+		$("#showul1").removeClass('MenuBarSubmenuVisible');
+		$("#showul2").removeClass('MenuBarSubmenuVisible');
+		$("#showul3").removeClass('MenuBarSubmenuVisible');
+		$("#showul4").removeClass('MenuBarSubmenuVisible');
+		$("#showul5").removeClass('MenuBarSubmenuVisible');
+		$("#showul6").removeClass('MenuBarSubmenuVisible');
+	}
+		
+}
+
+</script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<title>商工行政資料開放平臺 -資料目錄-公司設立登記清冊(月份)</title>
+<!-- social network -->
+<script>
+	// Load the SDK asynchronously
+	(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) {
+			return;
+		}
+		js = d.createElement(s);
+		js.id = id;
+		js.src = "//connect.facebook.net/en_US/all.js";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+</script>
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	
+
+	$("#more").click(function(){
+		var show = $(".moreShow");
+	    if (!show.length) {
+	    	show.style.display = "none";
+	    } else {
+			for (var i=0;i<show.length;i++) {
+				show[i].style.display = "";
+			}
+	    }	
+		document.getElementById('moreBtn').style.display="none";
+	});
+
+	$('#copyWord').click(function(){
+		 selectDomElm(this);
+	});
+});
+
+
+function showDialog(url){
+	 $( "#dialog-confirm" ).dialog({
+		 resizable:false,
+	      height: "auto",
+	      width: 550,
+	      modal: true,
+	      buttons: {
+	        "下載檔案": function() {
+	        	window.open(url);
+	        },
+	        "關閉": function() {
+	          $( this ).dialog( "close" );
+	        }
+	      }
+	    });
+}
+
+
+
+//網站推播
+function twitter_click() {
+    window.open('http://www.twitter.com/share?url='+encodeURIComponent(location.href+'&text=商工行政資料開放平臺'),'twitsharer','toolbar=0,status=0,width=626,height=436');
+    return false;    
+} 
+function plurk_click() {
+	window.open('http://www.plurk.com/?qualifier=shares&status='.concat(encodeURIComponent(location.href)).concat(' ').concat('&#40;').concat(encodeURIComponent(document.title)).concat('&#41;'),'prsharer','toolbar=0,status=0,width=626,height=436');
+    return false;    
+} 
+function facebook_click() {
+    window.open('https://www.facebook.com/sharer.php?u='+encodeURIComponent(location.href+'&name=商工行政資料開放平臺'),'fbsharer','toolbar=0,status=0,width=626,height=436');
+    return false;    
+} 
+</script></head>
+
+<body >
+<form id="form0" action="/od/datacategory;jsessionid=4879054FC3F08ECB9049E232CD4C163E" method="POST"><input type="hidden" name="currentPage" value="1" />
+	<input type="hidden" name="showType" value="" id="showType" />
+</form><div class="container">
+<a href="#content" id="gotocenter" title="跳到主要內容區塊" tabindex="1" class="sr-only sr-only-focusable">跳到主要內容區塊</a>
+		<div class="header">
+			<h1>
+			<a href="/" class = "alogo">
+				<div style="position: absolute;" class="logo">
+					<img src="/resources/layout/opd/images/logo.png" height="54" alt="商工行政資料開放平臺 logo" style="float: left;"/>
+					<img
+						src="/resources/layout/opd/images/logo_main.png" alt="商工行政資料開放平臺 data.gcis.nat.gov.tw"
+						width="171" height="56" id="Insert_logo" title="首頁"/>
+				</div>
+			</a>
+			</h1>
+			<div class="topmenu">
+				<div class="t_m">
+					<a href="#U" id="U" accesskey="U" title="上方主選單連結區">:::</a>
+					<a href="/main/aboutUs">平臺說明</a>〡
+					<a href="/main/terms">使用規範</a>〡 
+					<a href="/main/siteMap">網站導覽</a>
+				</div>
+				<!--搜尋box-->
+				<noscript><div>『您的瀏覽器不支援JavaScript功能，搜尋的功能和主選單可能會影響，若網頁功能無法正常使用時，請開啟瀏覽器JavaScript狀態』</div></noscript>
+				<form id="queryTitleForm" action="/od/search;jsessionid=4879054FC3F08ECB9049E232CD4C163E" method="POST"><input type="hidden" id="_m0" name="_m0" value="" />
+					<input type="hidden" id="queryTitle" name="queryTitle" value="" />
+					<div class="search">
+						<label for="title" style="display:none;">關鍵字搜尋</label>
+						<input class="search_data" type="text" tabindex="0" size="26" accesskey="S"
+							maxlength="50" id="title" name="path" placeholder="關鍵字搜尋" />
+						<label for="query" style="display:none;">送出文章關鍵字查詢</label>
+						<input type="button" id="query" value="搜尋" onfocus="focusShowMenu(0)"/>
+					</div>
+				</form></div>
+
+			<!-- end .header -->
+		</div>
+
+		<div class="menu">
+
+
+			<ul id="MenuBar1" class="MenuBarHorizontal">
+				<li><a class="MenuBarItemSubmenu knn" href="#" id="openul1" onfocus="focusShowMenu(1)" >資料目錄 </a>
+					<ul id="showul1">
+						<li><a class="MenuBarItemSubmenu" href="#" id="openul2" onfocus="focusShowMenu(2)" >公司登記</a>
+							<ul id="showul2" >
+							    <li><a href="#" onclick="changeCate('公司登記介接');return false;"  onfocus="focusShowMenu(2)">公司登記介接</a></li>
+								<li><a href="#" onclick="changeCate('公司登記資料');return false;" onfocus="focusShowMenu(2)">公司登記資料</a></li>
+							 </ul>
+							</li>
+						<li><a class="MenuBarItemSubmenu" href="#" id="openul3" onfocus="focusShowMenu(3)">商業登記</a>
+							<ul id="showul3">
+							    <li><a href="#" onclick="changeCate('商業登記介接');return false;"onfocus="focusShowMenu(3)">商業登記介接</a></li>
+								<li><a href="#" onclick="changeCate('商業登記資料');return false;"onfocus="focusShowMenu(3)">商業登記資料</a></li></ul>
+							</li>
+						<li><a href="/od/cmpco" onfocus="focusShowMenu(1)">公私協力</a></li>
+						<li><a href="#" onclick="changeCate('全部');return false;" onfocus="focusShowMenu(1)">全部資料</a></li>
+						<li><a href="/od/datacode" onfocus="focusShowMenu(1)">商工領域資料代碼</a></li>
+					</ul></li>
+				<!--  <li><a class="knn" href="/od/rule" onfocus="focusShowMenu(0)">開發指引 </a></li>
+				-->
+				<li><a class="MenuBarItemSubmenu knn" href="#" id="openul4" onfocus="focusShowMenu(4)">開發指引 </a>
+				    <ul  id="showul4">
+				       <li style="width:16em"><a href="/od/rule"  onfocus="focusShowMenu(4)" >商業行政資料開放API指引</a></li>
+				       
+				    </ul>
+				</li>
+				 
+				<li><a class="knn" href="/od/demo">示範體驗 </a></li>
+				<li><a class="knn" href="/ns/app">主題應用 </a></li>
+			</ul>
+
+
+		</div>
+  <!-- 主要內容  -->
+      <form id="form1" action="/od/detail;jsessionid=4879054FC3F08ECB9049E232CD4C163E?oid=AD28285B-7B0E-4241-9F58-F2F0F289333E" method="POST"><input type="hidden" class="_m" name="_m" value="" />
+
+	<!--  -->
+	<div class="content"  id = "content" >
+		<div class="ba">
+		<a href="#C" id="C" accesskey="C" title="主要內容區塊">:::</a>
+			<a href="/">首頁</a> > <a
+				href="/od/datacategory">資料目錄</a> >
+			<a href="#">公司設立登記清冊(月份)</a>
+		</div>
+		<div class="block_02">
+			<div class="panel_01">
+				<div class="panel panel-default">
+					<div class="panel-heading" style="width: 98%; float: left; vertical-align: middle">
+						<div style="display: inline-block; padding: 10px 0">公司設立登記清冊(月份)</div>
+						<div style="float: right">
+							<a href="#" onclick="facebook_click()" class="alogo"><img
+								src='/resources/layout/opd/images/icon_fb.png;jsessionid=4879054FC3F08ECB9049E232CD4C163E' id="img-shareicons" class="logo"
+								title="分享到臉書(facebook)" alt="分享到臉書(facebook)" ></a>
+							<a href="#" onclick="plurk_click()" class="alogo"><img
+								src='/resources/layout/opd/images/icon_plurk.png;jsessionid=4879054FC3F08ECB9049E232CD4C163E' id="img-shareicons" class="logo"
+								title="分享到噗浪(plurk)" alt="分享到噗浪(plurk)"></a>
+							<a href="#" onclick="twitter_click()" class="alogo"><img
+								src='/resources/layout/opd/images/icon_twitter.png;jsessionid=4879054FC3F08ECB9049E232CD4C163E' id="img-shareicons" class="logo"
+								title="分享到推特(twitter)" alt="分享到推特(twitter)"></a>
+						</div>
+					</div>
+					<div class="panel-body">
+						<table class="customTable">
+							<tr>
+								<td>
+								<noscript>
+								<div>『您的瀏覽器不支援JavaScript功能，導致無法使用推廣功能，請開啟瀏覽器JavaScript狀態』</div>
+								</noscript>
+								</td>
+								</tr>
+						</table>
+						<br>
+						<table class="itable">
+							<tr>
+								<th width="20%" id="name">資料集名稱</th>
+								<td width="30%" headers="name">公司設立登記清冊(月份)</td>
+								<th width="20%" id="des">資料集描述</th>
+								<td width="30%" headers="des">每月產制公司設立登記資料清冊，資料內容包含序號、統一編號、公司名稱、公司所在地、代表人、資本額、核准設立日期
+更新日為每月14日 </td>
+							</tr>
+							<tr>
+								<th id="dataType">資料集類型</th>
+								<td headers="dataType">原始數據</td>
+								<th id="category">分類</th>
+								<td headers="category">公司登記清冊</td>
+							</tr>
+							<tr>
+								<th id="fileDes">主要欄位說明</th>
+								<td headers="fileDes">序號、統一編號、公司名稱、公司所在地、代表人、資本額、核准設立日期  </td>
+								<th id="unit">資料提供機關</th>
+								<td headers="unit">經濟部商業署</td>
+							</tr>
+							<tr>
+								<th id="dataCnt">資料量</th>
+								<td headers="dataCnt">約3730筆</td>
+								<th id="updateFreq">更新頻率</th>
+								<td headers="updateFreq">不定時</td>
+							</tr>
+							<tr>
+								<th id="authorize">授權方式</th>
+								<td headers="authorize">政府資料開放授權條款－第1版</td>
+								<th id="authUrl">授權網址</th>
+								<td headers="authUrl">http://data.gov.tw/license</td>
+							</tr>
+							<tr>
+								<th id="encode">編碼格式</th>
+								<td headers="encode">UTF-8</td>
+								<th id="charge">計費方式</th>
+								<td headers="charge">免費</td>
+							</tr>
+							<tr>
+								<th id="contactName">資料集提供機關<br>聯絡人</th>
+								<td headers="contactName">黃先生</td>
+								<th id="contactTel">資料集提供機關<br>聯絡人電話</th>
+								<td headers="contactTel">02-27841000#2561</td>
+							</tr>
+							<tr>
+								<th id="contactEmail">資料集提供機關<br>聯絡人電子郵件</th>
+								<td headers="contactEmail">opendata.gcis@gmail.com</td>
+								<th id="note">備註</th>
+								<td headers="note">資本額以新台幣元為單位。</td>
+							</tr>
+							<tr>
+										<th width="15%" valign="top" id="downloadFile">原始檔案下載</th>
+										<td headers="downloadFile">
+											<table class="customTable">
+												<!-- s -->
+												<tr>
+																<td>2026年08月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=CE7F370E-9CBF-4A5B-AFD9-5C11ED9BB574')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr>
+																<td>2026年07月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=E00E4A41-4530-474C-9E0D-BE5F03F63701')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr>
+																<td>2026年06月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=50E4D241-B7D3-492C-B76D-FE5FE9D51C36')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr>
+																<td>2026年05月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=4C722CFA-FB16-48EB-8B86-C6DD0EFA78A3')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr>
+																<td>2026年04月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=05D3A71E-0652-4C64-A52D-956699492FFF')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr>
+																<td>2026年03月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=77E38960-8E9C-459C-9DE2-E925518613D0')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2026年02月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=DCFE0A76-601C-4F2B-8488-1780C6D7DB39')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2026年01月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=719B3232-CCC9-4FBD-9280-0CEA470A55D7')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2025年12月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=D4446045-7A9A-4D7A-9121-92B17346054B')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2025年11月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=D335CBAF-5527-4A3F-933A-F42A0AAF9F32')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2025年10月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=6E73795B-0D53-45A2-B9EC-A03B66BC9211')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2025年07月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=E80366A5-23A6-4F5A-8945-CFEC308B9975')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2025年06月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=82721FC7-8E6F-4F61-BD0C-A5C42A8E9FA9')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2025年05月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=55756EC0-FE1D-4891-9FB8-B0AC7EF5FBD6')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2025年04月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=34544286-A565-45E2-B615-F9D02B8E4D0C')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2025年03月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=18ACE6EC-491F-4DD1-8748-757AC880EF99')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2025年02月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=25E6FD63-7A1A-4170-BCB4-84981D23D4AB')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2025年01月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=AA1F8B5E-1261-48D8-8639-364E9C00BAE9')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年12月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=50A99CF5-7AC0-4B07-A174-5D3B8C071BAC')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年11月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=C43BBAB3-D9FA-4EA8-8B9B-B2B7484555D4')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年10月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=EC6BBEFF-1793-4D40-AB39-88331DE56EDF')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年09月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=C6165750-7370-4783-87BC-C3D1194761F3')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年08月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=0215F999-1C70-4745-87D5-DE131844FAFE')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年07月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=0BD938D5-3BF4-491A-A2DA-5E0D181555C9')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年06月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=926033A0-1DB9-4F63-9E50-34FF4AB64EED')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年05月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=C3516646-1923-4D4B-B96F-B317A9D9275E')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年04月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=F9F61243-2A12-4177-9B82-F969901162FB')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年03月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=22C0B74D-CBA1-47E4-9F3C-DEC721542531')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年02月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=41376092-19D6-4AB7-8CA3-40646AF344E9')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2024年01月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=FE6BB06E-AC40-4E2B-BD82-7BC91E2FE4F7')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年12月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=87F82981-BCBA-4B0D-B12F-19D54E76CFAF')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年11月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=9CDEBEDB-05BF-4F87-B398-7EC5FB44A322')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年10月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=8057AC8B-F201-442D-A641-24AAA8B9FF37')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年09月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=5BB516FD-23AB-4B2B-842E-EC4A78277AFC')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年08月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=9B004FAD-DD83-482B-B667-F38358CF1DB4')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年07月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=67401410-3A2F-4C3C-BA3C-DC5AE2A93193')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年06月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=F6A5385E-9ABC-4CBC-933C-9C58819009B7')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年05月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=023E178D-E7C3-4403-995F-BD3E410C78F6')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年04月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=7E280B63-3091-4BF7-922D-A1ED4D97BA0E')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年03月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=B77CB946-B3F4-4CEC-93D9-CB274CAB3ED9')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年02月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=DF2B9F18-36D2-4ADA-A582-59260067655C')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2023年01月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=38B63230-E822-4734-B5A7-37D0815C7791')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年12月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=F3F5836A-8451-4F09-A644-CB266575405B')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年11月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=2EEC9018-6552-48D6-9244-7953DE022B3B')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年10月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=6C19A311-D574-424F-8989-50303903D268')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年09月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=477CE50C-6D11-4659-9C99-E154E908875E')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年08月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=85CFD46C-8399-4875-A587-19A52D416FFB')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年07月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=F7777DAB-FBB5-461E-9319-300A784FBF61')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年06月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=D56F4367-9A76-474A-B937-A2E3698638DA')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年05月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=1EB7062E-8277-4C0E-B46D-C174CF5875AD')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年04月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=D3CB4528-EDA4-4ABE-920E-039E3DC40381')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年03月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=510A7AD9-745C-46BB-B300-B0421F69B73D')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年02月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=B496B854-6DCE-4EBF-A70C-8B8ED251DD84')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2022年01月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=65C3EF8C-FEAC-49BC-8EA2-C1C9D8FA36EB')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年12月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=FD995694-0861-4890-98A5-416C073002B7')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年11月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=2EE0DE5E-769B-41A2-9792-C61BC6069899')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年10月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=3A7DE39F-5CDB-4C55-8ACA-8E9A582EF6C3')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年09月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=7DEBC154-83A2-4A7A-8568-1966746BE9A6')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年08月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=3FC04369-2146-457C-8E0C-6DDF24B0B86F')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年07月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=55CEFB7E-F971-4E83-B2FF-D0BD50F03A8A')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年06月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=08943DFE-4DE7-4C54-972F-8A5E980D8D83')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年05月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=AB0DF7CB-CC90-41BC-A140-51D39B1AF0C7')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年04月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=3FA71E56-75FF-4B35-B807-AC9EE0C2502E')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年03月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=DAE785F2-1194-442F-9B43-79DB51E9B103')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年02月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=4FCF620E-BE8D-498F-8B7A-A77DF1E2CB8A')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2021年01月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=6F64AE3F-9494-4354-9795-14C1D4745D7D')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2020年12月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=BC2A603C-52B7-454B-BF15-4737DF9119E9')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2020年11月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=6E0EA0E9-0FA3-4BC0-9FB9-0255952CEB79')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2020年10月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=4FE7F239-16E4-4B21-BF86-9F4E09014FA0')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2020年09月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=497DE819-45F5-420C-A634-DF0417429CF3')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2020年08月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=537F82C4-0F60-49B2-BC0F-83787B1B162A')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2020年07月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=229B7859-1644-42C1-A881-7743CF538D5B')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2020年06月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=C22F277A-0C6D-455B-B860-110EE1309BED')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2020年05月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=8C261A10-9D8B-410E-AAB8-10C01AA7805F')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="display: none;">
+																<td>2020年04月</td>
+																<td width="15%"><a class="csv"
+																	href="javascript: void(0)" onclick="javascript:showDialog('/od/file?oid=A69BC2CB-C29C-4CDA-8287-E193B5158FEE')"title="點擊跳出視窗">CSV</a></td>
+															</tr>
+														<tr class="moreShow" style="disp

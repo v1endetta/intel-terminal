@@ -1,0 +1,129 @@
+{
+ "help": "",
+ "success": true,
+ "result": {
+  "categoryService": "I00",
+  "categoryDataset": "A",
+  "datasetId": 36843,
+  "identifier": "A07100000D-000820",
+  "title": "電子發票消費熱度指標",
+  "description": "年度、縣市、縣市代碼、鄉鎮市區、鄉鎮市區代碼、村里、村里代碼、主行業別、主行業別代碼、消費熱度計算來源、張數指標、銷售額指標",
+  "type": "rawData",
+  "license": "1",
+  "cost": "free",
+  "dataProvider": "pikagamed",
+  "publisherOID": "2.16.886.101.20003.20004.20048",
+  "publisherContactName": "莊先生",
+  "publisherContactPhone": "02-27631833#3319",
+  "publisherContactEmail": "N108195@fia.gov.tw",
+  "updateFrequency": {
+   "regularupdate": "1",
+   "Frequency": "2",
+   "unittime": "月"
+  },
+  "dataQuality": "G",
+  "coverageStartedDate": "",
+  "coverageEndedDate": "",
+  "publishedDate": "2016-10-03",
+  "modifiedDate": "2023-12-25 15:27:28",
+  "spatialCoverage": "",
+  "language": "zh",
+  "relatedUrl": "https://www.einvoice.nat.gov.tw/portal/ods/ODS303E/main/691C0280-CEFB-488F-9E71-6AA4F39A41CD/0",
+  "notes": "授權說明網址: http://data.gov.tw/license\n財政部財政資訊中心電子發票組OAS標準之API說明文件: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+  "apiDocUrl": "",
+  "distribution": [
+   {
+    "resourceDescription": "年度、縣市、縣市代碼、鄉鎮市區、鄉鎮市區代碼、村里、村里代碼、主行業別、主行業別代碼、消費熱度計算來源、張數指標、銷售額指標",
+    "resourceField": [
+     {
+      "name": "年度",
+      "description": "",
+      "uri": "api/Financial/Insurance/BusinessStatisticsofLifeInsurance/Year"
+     },
+     {
+      "name": "縣市",
+      "description": ""
+     },
+     {
+      "name": "縣市代碼",
+      "description": ""
+     },
+     {
+      "name": "鄉鎮市區",
+      "description": ""
+     },
+     {
+      "name": "鄉鎮市區代碼",
+      "description": ""
+     },
+     {
+      "name": "村里",
+      "description": "",
+      "uri": "api/HouseholdRegistration/Thehouseholdregistrationrecords/Personalhouseholdregistrationrecords/Village"
+     },
+     {
+      "name": "村里代碼",
+      "description": ""
+     },
+     {
+      "name": "主行業別",
+      "description": ""
+     },
+     {
+      "name": "主行業別代碼",
+      "description": "",
+      "uri": "api/CompanyandBusiness/commerce/BusinessType/BusinessScopeNumber"
+     },
+     {
+      "name": "消費熱度計算來源",
+      "description": ""
+     },
+     {
+      "name": "張數指標",
+      "description": ""
+     },
+     {
+      "name": "銷售額指標",
+      "description": ""
+     }
+    ],
+    "qcLevel": "",
+    "resourceFormat": "CSV",
+    "resourceCharacterEncoding": "UTF-8",
+    "resourceQualityCheckTime": "2026-10-01 18:54:14",
+    "resourceDownloadUrl": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/691C0280-CEFB-488F-9E71-6AA4F39A41CD/7/1124193D-09F5-4711-AB9A-01848E3B88E4/0/?fileType=csv",
+    "resourceAmount": 100220,
+    "resourceNotes": "",
+    "resourceRequestMethod": "",
+    "resourceOasUrl": "",
+    "resourceRequestParameters": [],
+    "resourcePathParameters": []
+   }
+  ],
+  "keyword": [
+   "電子發票"
+  ],
+  "en": {
+   "title": "Electronic invoice consumption heat index",
+   "description": "Year, county/city, county/city code, township, township code, village, village code, main industry category, main industry code, source of consumption heat calculation, number of transactions indicator, sales amount indicator",
+   "publisherContactName": "莊先生",
+   "publisherContactPhone": "02-27631833#3319",
+   "publisherContactEmail": [
+    "N108195@fia.gov.tw"
+   ],
+   "updateFrequency": "Every 2 months",
+   "cost": "free",
+   "notes": "Authorization Description URL: http://data.gov.tw/licenseMinistry of Finance, Financial Information Center, Electronic Invoice Group, OAS Standard API Description Document: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+   "keyword": [
+    "Electronic invoice"
+   ],
+   "resources": [
+    {
+     "description": "Year, county, county code, township, township code, village, village code, main industry category, main industry category code, source of consumer popularity calculation, number of items indicator, sales indicator",
+     "fieldDesc": "Year.、County or city、County or city code、Township、Township area code、Village、Village code、Main industry sector、Main industry code、Source of consumer heat calculation、Number of shares index、Sales indicator",
+     "note": ""
+    }
+   ]
+  }
+ }
+}

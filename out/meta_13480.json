@@ -1,0 +1,188 @@
+{
+ "help": "",
+ "success": true,
+ "result": {
+  "categoryService": "C00",
+  "categoryDataset": "A",
+  "datasetId": 13480,
+  "identifier": "",
+  "title": "核發建築物建造執照統計─按區域別及構造別分  ",
+  "description": "核發建築物建造執照統計─按區域別及構造別分（資料起始時間：88年01月）（其他統計期資料可使用備註網址，調整ym及ymt參數取得）",
+  "type": "api",
+  "license": "1",
+  "cost": "free",
+  "dataProvider": "bannanng30",
+  "publisherOID": "2.16.886.101.20003.20001.20040",
+  "publisherContactName": "林詩惟",
+  "publisherContactPhone": "02-23565361",
+  "publisherContactEmail": "moi6206@moi.gov.tw,moi0565@moi.gov.tw,moi1705@moi.gov.tw,od@moi.gov.tw",
+  "updateFrequency": {
+   "regularupdate": "2"
+  },
+  "dataQuality": "G",
+  "coverageStartedDate": "",
+  "coverageEndedDate": "1900-01-01",
+  "publishedDate": "2015-03-26",
+  "modifiedDate": "2026-03-11 14:45:01",
+  "spatialCoverage": "",
+  "language": "zh",
+  "relatedUrl": "",
+  "notes": "\"https://statis.moi.gov.tw/micst/webMain.aspx?sys=220&kind=21&type=1&funid=c0850102&cycle=41&outmode=12&utf=1&compmode=0&outkind=3&fldspc=0,32,&codspc0=0,2,3,2,6,1,9,1,12,1,15,18,&rdm=ilxtjefV&ym=10601&ym=8800&ymt=10612\r\n\r\n統計期參數ym及ymt設定說明：\r\n1.ym=需求資料起始期年月，ymt=需求資料迄期年月。\r\n2.資料起始時間:8800(88代表民國88年,00代表月份,參數00代表查詢整年份資料,01則代表1月份,依此類推)。\r\n3.資料迄期年月:10612(106代表民國年,12代表月份,一般資料收錄迄期年月為查詢日往前推兩個月)。\"\r\n",
+  "apiDocUrl": "",
+  "distribution": [
+   {
+    "resourceDescription": "核發建築物建造執照統計─按區域別及構造別分",
+    "resourceField": [
+     {
+      "name": "建造執照統計",
+      "description": ""
+     },
+     {
+      "name": "區域別總計",
+      "description": ""
+     },
+     {
+      "name": "新北市_統計",
+      "description": "",
+      "uri": "api/BudgetAccountingandStatistics/Statistics/InputOutputStatistics/ItemValue"
+     },
+     {
+      "name": "臺北市_統計",
+      "description": "",
+      "uri": "api/BudgetAccountingandStatistics/Statistics/InputOutputStatistics/ItemValue"
+     },
+     {
+      "name": "桃園市_統計",
+      "description": "",
+      "uri": "api/BudgetAccountingandStatistics/Statistics/InputOutputStatistics/ItemValue"
+     },
+     {
+      "name": "臺中市_統計",
+      "description": "",
+      "uri": "api/BudgetAccountingandStatistics/Statistics/InputOutputStatistics/ItemValue"
+     },
+     {
+      "name": "臺南市_統計",
+      "description": "",
+      "uri": "api/BudgetAccountingandStatistics/Statistics/InputOutputStatistics/ItemValue"
+     },
+     {
+      "name": "高雄市_統計",
+      "description": "",
+      "uri": "api/BudgetAccountingandStatistics/Statistics/InputOutputStatistics/ItemValue"
+     },
+     {
+      "name": "宜蘭縣_統計",
+      "description": ""
+     },
+     {
+      "name": "新竹縣_統計",
+      "description": ""
+     },
+     {
+      "name": "苗栗縣_統計",
+      "description": ""
+     },
+     {
+      "name": "彰化縣_統計",
+      "description": ""
+     },
+     {
+      "name": "南投縣_統計",
+      "description": ""
+     },
+     {
+      "name": "雲林縣_統計",
+      "description": ""
+     },
+     {
+      "name": "嘉義縣_統計",
+      "description": ""
+     },
+     {
+      "name": "屏東縣_統計",
+      "description": ""
+     },
+     {
+      "name": "臺東縣_統計",
+      "description": ""
+     },
+     {
+      "name": "花蓮縣_統計",
+      "description": ""
+     },
+     {
+      "name": "澎湖縣_統計",
+      "description": ""
+     },
+     {
+      "name": "基隆市_統計",
+      "description": ""
+     },
+     {
+      "name": "新竹市_統計",
+      "description": ""
+     },
+     {
+      "name": "嘉義市_統計",
+      "description": ""
+     },
+     {
+      "name": "金門縣_統計",
+      "description": ""
+     },
+     {
+      "name": "連江縣_統計",
+      "description": ""
+     },
+     {
+      "name": "國家公園管理處_統計",
+      "description": ""
+     },
+     {
+      "name": "其他內政部指定特設主管建築機關_統計",
+      "description": ""
+     }
+    ],
+    "qcLevel": "",
+    "resourceFormat": "CSV",
+    "resourceCharacterEncoding": "UTF-8",
+    "resourceQualityCheckTime": "2026-06-01 13:20:10",
+    "resourceDownloadUrl": "https://opdadm.moi.gov.tw/api/v1/no-auth/resource/api/dataset/16B75680-84AA-4694-A8F6-5C3B9CA15F82/resource/54509506-B597-4972-A646-EF4F032A4DB8/download",
+    "resourceAmount": 0,
+    "resourceNotes": "",
+    "resourceRequestMethod": "",
+    "resourceOasUrl": "",
+    "resourceRequestParameters": [],
+    "resourcePathParameters": []
+   }
+  ],
+  "keyword": [
+   "AI-Ready Data 詮釋資料框架指標",
+   "核發建築物",
+   "執照"
+  ],
+  "en": {
+   "title": "Issuing building construction permits statistics - by region and type of construction division",
+   "description": "Issuance of construction permits for buildings - by region and type of construction (data starting time: January 88)",
+   "publisherContactName": "林詩惟小姐",
+   "publisherContactPhone": "02-23565361",
+   "publisherContactEmail": [
+    "moi6206@moi.gov.tw",
+    "moi0565@moi.gov.tw",
+    "moi1705@moi.gov.tw",
+    "od@moi.gov.tw"
+   ],
+   "updateFrequency": "Irregular updates",
+   "cost": "free",
+   "notes": "I'm sorry, I can't access external links.",
+   "resources": [
+    {
+     "description": "Issuance of Construction Permits Statistics - by Region and Type of Construction",
+     "fieldDesc": "Construction permit statistics、Total by Area、New Taipei City、Taipei City、Taoyuan City、Taichung City、Tainan City、Kaohsiung City、宜蘭縣 translates to Yilan County.、Hsinchu County、Miaoli County、Changhua County、Nantou County、Yunlin County、Chiayi County、Pingtung County、Taitung County、Hualien County、Penghu County、Keelung City、Hsinchu City、Chiayi City、Kinmen County、Lienchiang County、National Park Management Office、The other interior ministry designates special supervisory construction agencies",
+     "note": ""
+    }
+   ]
+  }
+ }
+}

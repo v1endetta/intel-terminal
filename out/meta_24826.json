@@ -1,0 +1,108 @@
+{
+ "help": "",
+ "success": true,
+ "result": {
+  "categoryService": "I00",
+  "categoryDataset": "A",
+  "datasetId": 24826,
+  "identifier": "A07100000D-000754",
+  "title": "消費通路發票統計-資料集",
+  "description": "每月各縣市、各行業別是否使用載具之電子發票張數、金額資訊。",
+  "type": "rawData",
+  "license": "1",
+  "cost": "free",
+  "dataProvider": "pikagamed",
+  "publisherOID": "2.16.886.101.20003.20004.20048",
+  "publisherContactName": "莊先生",
+  "publisherContactPhone": "02-27631833#3319",
+  "publisherContactEmail": "N108195@fia.gov.tw",
+  "updateFrequency": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "月"
+  },
+  "dataQuality": "G",
+  "coverageStartedDate": "",
+  "coverageEndedDate": "",
+  "publishedDate": "2015-11-26",
+  "modifiedDate": "2023-12-25 15:22:26",
+  "spatialCoverage": "",
+  "language": "zh",
+  "relatedUrl": "https://www.einvoice.nat.gov.tw/portal/ods/ODS303E/main/0DBDAF6E-5E44-49A8-8528-E22648B2F32E/0",
+  "notes": "授權說明網址: http://data.gov.tw/license\n財政部財政資訊中心電子發票組OAS標準之API說明文件: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+  "apiDocUrl": "",
+  "distribution": [
+   {
+    "resourceDescription": "每月各縣市、各行業別是否使用載具之電子發票張數、金額資訊。",
+    "resourceField": [
+     {
+      "name": "發票年月",
+      "description": "",
+      "uri": "api/CurrencyandFinancial/CommonData/NormalCommonData/YYYYMM"
+     },
+     {
+      "name": "縣市",
+      "description": ""
+     },
+     {
+      "name": "縣市代號",
+      "description": ""
+     },
+     {
+      "name": "行業別",
+      "description": ""
+     },
+     {
+      "name": "載具類別",
+      "description": ""
+     },
+     {
+      "name": "電子發票張數",
+      "description": ""
+     },
+     {
+      "name": "電子發票金額",
+      "description": "",
+      "uri": "api/CurrencyandFinancial/CommonData/NormalCommonData/DollarTWD"
+     }
+    ],
+    "qcLevel": "",
+    "resourceFormat": "CSV",
+    "resourceCharacterEncoding": "UTF-8",
+    "resourceQualityCheckTime": "2026-10-01 18:58:47",
+    "resourceDownloadUrl": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/0DBDAF6E-5E44-49A8-8528-E22648B2F32E/17/4A1A0DA1-9C2B-4871-9B49-B742136B052D/0/?fileType=csv",
+    "resourceAmount": 76510,
+    "resourceNotes": "",
+    "resourceRequestMethod": "",
+    "resourceOasUrl": "",
+    "resourceRequestParameters": [],
+    "resourcePathParameters": []
+   }
+  ],
+  "keyword": [
+   "電子發票"
+  ],
+  "en": {
+   "title": "Retail Invoice Statistics - Dataset",
+   "description": "The number and amount of electronic invoices used by each county and city and industry sector each month.",
+   "publisherContactName": "莊先生",
+   "publisherContactPhone": "02-27631833#3319",
+   "publisherContactEmail": [
+    "N108195@fia.gov.tw"
+   ],
+   "updateFrequency": "Every 1 month",
+   "cost": "free",
+   "notes": "Authorization Information Website: http://data.gov.tw/license Ministry of Finance, Financial Information Center, Electronic Invoice Group, OAS standard API Documentation: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+   "keyword": [
+    "Electronic invoice"
+   ],
+   "resources": [
+    {
+     "description": "The number and amount of electronic invoices used by each county and industry on a monthly basis.",
+     "fieldDesc": "Invoice year and month、County/City、County or city code、Industry-specific、Vehicle category、Number of electronic invoices、Electronic invoice amount",
+     "note": ""
+    }
+   ]
+  }
+ }
+}

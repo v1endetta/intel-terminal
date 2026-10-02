@@ -1,0 +1,121 @@
+{
+ "help": "",
+ "success": true,
+ "result": {
+  "categoryService": "I00",
+  "categoryDataset": "A",
+  "datasetId": 24831,
+  "identifier": "A07100000D-000757",
+  "title": "消費力統計-各分位載具消費張數金額-資料集 ",
+  "description": "每個年度各縣市、行業別，依據三種載具分類方式(共通性載具、會員卡載具、非會員卡載具)，計算十分位之電子發票張數、金額及單筆消費金額平均。為主要資料集。",
+  "type": "rawData",
+  "license": "1",
+  "cost": "free",
+  "dataProvider": "pikagamed",
+  "publisherOID": "2.16.886.101.20003.20004.20048",
+  "publisherContactName": "莊先生",
+  "publisherContactPhone": "02-27631833#3319",
+  "publisherContactEmail": "N108195@fia.gov.tw",
+  "updateFrequency": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "年"
+  },
+  "dataQuality": "G",
+  "coverageStartedDate": "",
+  "coverageEndedDate": "",
+  "publishedDate": "2015-12-08",
+  "modifiedDate": "2023-12-25 15:24:10",
+  "spatialCoverage": "",
+  "language": "zh",
+  "relatedUrl": "https://www.einvoice.nat.gov.tw/portal/ods/ODS303E/main/0C65978C-E417-413E-92E7-C8C54E54BD11/0",
+  "notes": "授權說明網址: http://data.gov.tw/license\n財政部財政資訊中心電子發票組OAS標準之API說明文件: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+  "apiDocUrl": "",
+  "distribution": [
+   {
+    "resourceDescription": "每個年度各縣市、行業別，依據三種載具分類方式(共通性載具、會員卡載具、非會員卡載具)，計算十分位之電子發票張數、金額及單筆消費金額平均。為主要資料集。",
+    "resourceField": [
+     {
+      "name": "分位名次",
+      "description": ""
+     },
+     {
+      "name": "發票年度",
+      "description": "",
+      "uri": "api/Financial/Insurance/BusinessStatisticsofLifeInsurance/Year"
+     },
+     {
+      "name": "縣市代號",
+      "description": ""
+     },
+     {
+      "name": "縣市別",
+      "description": ""
+     },
+     {
+      "name": "行業別",
+      "description": ""
+     },
+     {
+      "name": "行業別代號",
+      "description": ""
+     },
+     {
+      "name": "載具別",
+      "description": ""
+     },
+     {
+      "name": "單筆消費金額平均",
+      "description": "",
+      "uri": "api/CurrencyandFinancial/CommonData/NormalCommonData/DollarfloatTWD"
+     },
+     {
+      "name": "消費金額",
+      "description": "",
+      "uri": "api/CurrencyandFinancial/CommonData/NormalCommonData/DollarTWD"
+     },
+     {
+      "name": "電子發票張數",
+      "description": ""
+     }
+    ],
+    "qcLevel": "",
+    "resourceFormat": "CSV",
+    "resourceCharacterEncoding": "UTF-8",
+    "resourceQualityCheckTime": "2026-07-01 18:50:03",
+    "resourceDownloadUrl": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/0C65978C-E417-413E-92E7-C8C54E54BD11/4/7455C6AC-A7AE-413D-A544-DB8979E6A9A0/0/?fileType=csv",
+    "resourceAmount": 56407,
+    "resourceNotes": "",
+    "resourceRequestMethod": "",
+    "resourceOasUrl": "",
+    "resourceRequestParameters": [],
+    "resourcePathParameters": []
+   }
+  ],
+  "keyword": [
+   "電子發票"
+  ],
+  "en": {
+   "title": "Consumption power statistics - number of vehicles consumed by each percentile amount - dataset",
+   "description": "Every year, each county and city, by industry, classify the number of electronic invoices, amounts, and average single consumption amount into deciles according to three types of vehicles (common vehicles, member card vehicles, non-member card vehicles). This is the main data set.",
+   "publisherContactName": "莊先生",
+   "publisherContactPhone": "02-27631833#3319",
+   "publisherContactEmail": [
+    "N108195@fia.gov.tw"
+   ],
+   "updateFrequency": "Every 1 year",
+   "cost": "free",
+   "notes": "Authorization description URL: http://data.gov.tw/licenseMinistry of Finance, Financial Information Center, Electronic Invoice Group, OAS standard API documentation: https://www.einvoice.nat.gov.tw/portal/ods/openapi.json",
+   "keyword": [
+    "Electronic invoice"
+   ],
+   "resources": [
+    {
+     "description": "Every year, the number of electronic invoices, the amount, and the average single consumption amount of the ten-percentage group are calculated, divided by county and industry category, according to three types of vehicles (common vehicles, member card vehicles, non-member card vehicles). This is the main dataset.",
+     "fieldDesc": "Rank in percentage、Invoice year、County and City Codes、County/City、Industry-specific、Industry code、Vehicle type、Average single transaction amount、Consumption amount、Number of electronic invoices",
+     "note": ""
+    }
+   ]
+  }
+ }
+}

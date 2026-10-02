@@ -1,0 +1,2384 @@
+{
+ "help": "",
+ "success": true,
+ "result": {
+  "categoryService": "I00",
+  "categoryDataset": "A",
+  "datasetId": 94224,
+  "identifier": "A25000000E-000668",
+  "title": "全國電影票房統計數據",
+  "description": "本資料集為行政法人國家電影及視聽文化中心提供全國院線電影票房統計。資料截止至公告日期之前一週日，且不包括上映日數尚未滿7個日曆天之電影，\n本資料集提供JSON格式最早資料為2016年1月1日起，每週更新並包含上映未滿 7 日電影之資料。",
+  "type": "api",
+  "license": "1",
+  "cost": "free",
+  "dataProvider": "jch12moc",
+  "publisherOID": "2.16.886.101.20003.20067",
+  "publisherContactName": "謝 先生",
+  "publisherContactPhone": "02-8522-8000#2307",
+  "publisherContactEmail": "box.admin@tfai.org.tw",
+  "updateFrequency": {
+   "regularupdate": "1",
+   "Frequency": "7",
+   "unittime": "日"
+  },
+  "dataQuality": "G",
+  "coverageStartedDate": "2018-11-01",
+  "coverageEndedDate": "2026-03-04",
+  "publishedDate": "2018-11-01",
+  "modifiedDate": "2026-07-07 14:42:47",
+  "spatialCoverage": "台灣",
+  "language": "zh",
+  "relatedUrl": "https://boxofficetw.tfai.org.tw/",
+  "notes": "",
+  "apiDocUrl": "",
+  "distribution": [
+   {
+    "resourceDescription": "全國電影票房統計數據JSON格式",
+    "resourceField": [
+     {
+      "name": "country",
+      "description": "國別地區"
+     },
+     {
+      "name": "name",
+      "description": "電影名稱"
+     },
+     {
+      "name": "releaseDate",
+      "description": "上映日期",
+      "uri": "api/Commonality/Commonality/CommonData/DateTime"
+     },
+     {
+      "name": "issue",
+      "description": "發行單位"
+     },
+     {
+      "name": "produce",
+      "description": "製作單位"
+     },
+     {
+      "name": "theaterCount",
+      "description": "上映戲院數量",
+      "uri": "api/BudgetAccountingandStatistics/BudgetandAccounting/GeneralFundBudgetandAccounting/Quantity"
+     },
+     {
+      "name": "tickets",
+      "description": "票房"
+     },
+     {
+      "name": "ticketChangeRate",
+      "description": "票房變動率"
+     },
+     {
+      "name": "amounts",
+      "description": "金額",
+      "uri": "api/BudgetAccountingandStatistics/BudgetandAccounting/GeneralFundBudgetandAccounting/Quantity"
+     },
+     {
+      "name": "totalTickets",
+      "description": "總票房"
+     },
+     {
+      "name": "totalAmounts",
+      "description": "總金額",
+      "uri": "api/BudgetAccountingandStatistics/BudgetandAccounting/GeneralFundBudgetandAccounting/Quantity"
+     }
+    ],
+    "qcLevel": "",
+    "resourceFormat": "JSON",
+    "resourceCharacterEncoding": "UTF-8",
+    "resourceQualityCheckTime": "2026-08-25 18:02:51",
+    "resourceDownloadUrl": "https://boxofficetw.tfai.org.tw/OpenData/statistic/since2016",
+    "resourceAmount": 3100,
+    "resourceNotes": "",
+    "resourceRequestMethod": "",
+    "resourceOasUrl": "",
+    "resourceRequestParameters": [],
+    "resourcePathParameters": []
+   }
+  ],
+  "keyword": [
+   "電影",
+   "票房",
+   "AI-Ready Data 詮釋資料框架指標"
+  ],
+  "en": {
+   "title": "National box office statistics",
+   "description": "This dataset provides national theater box office statistics for films distributed by the Administrative Institution National Film and Audiovisual Culture Center. The data is up to the last Sunday before the announcement date and does not include films that have not been screened for less than 7 calendar days. The earliest CSV format data in this dataset begins on July 30, 2018, and the earliest JSON format data begins on March 1, 2020. JSON format queries require entering the start and end dates (in the format of year, month, and day), and can provide data for a maximum of 90 days at a time.",
+   "publisherContactName": "石 小姐",
+   "publisherContactPhone": "02-8522-8000#2304",
+   "publisherContactEmail": [
+    "sunnyecko@tfai.org.tw"
+   ],
+   "updateFrequency": "Every 7 days",
+   "cost": "free",
+   "notes": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20200601",
+   "keyword": [
+    "Movie",
+    "Box office"
+   ],
+   "resources": [
+    {
+     "description": "July 30th to August 5th National Box Office Statistics for 2018",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "August 6th to August 12th, 2018 national box office statistics.",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics from August 13th to August 19th, 2018.",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "August 20 to August 26, 2018 national box office statistics.",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics from August 27th to September 2nd, 2018",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 3 to September 9, 2018 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 10th to September 16th, 2018 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 17 to September 23, 2018 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 24 to September 30, 2018 national movie box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 1-7, 2018 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics from October 8th to October 14th, 2018.",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 15-21, 2018 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 22-28, 2018 National box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 29 to November 4, 2018 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 5 to November 11, 2018 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 12 to November 18, 2018 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 19 to November 25, 2018 national box office statistics.",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 26 to December 02, 2018 nationwide movie box office statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from December 3 to December 9, 2018",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film market from December 10th to December 16th, 2018",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Statistics of national box office from December 17th to December 23rd, 2018",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "December 24th to December 30th, 2018 national movie box office statistics.",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "December 31, 2018 to January 6, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 7th to January 13th, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 14th to January 20th, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 21 to January 27, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film market from January 28th to February 3rd, 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 4th to February 10th, 2019 National Movie Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film from February 11th to February 17th, 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 18th to February 24th, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film from February 25, 2019 to March 3, 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for national films from March 4th to March 10th, 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "March 11th to March 17th, 2019 national box office statistics.",
+     "fieldDesc": "Serial Number、Country or region、Chinese film title、Release date、Applicant、Production、Number of days on release、Number of movie theaters、Sales volume、Weekly ticket change rate、Sales amount、Cumulative ticket sales、Cumulative Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "March 18 to March 24, 2019 National movie box office statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "March 25 to March 31, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 1st to April 7th, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 8th to April 14th, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 15th to 21st, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics for the week of April 22, 2019 to April 28, 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national movie market from April 29th to May 5th, 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "May 6, 2019 to May 12, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "May 13 to May 19, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the week of May 20 to May 26, 2019.",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for national films from May 27, 2019 to June 2, 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film from June 3rd, 2019 to June 9th, 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the week of June 10 to June 16, 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from 17th to 23rd June 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics for the week of June 24th to June 30th, 2019.",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "July 1st to July 7th, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for national movies from July 8th to July 14th, 2019",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "July 15 to July 21, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket sales change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film from July 22 to July 28, 2019",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Issue、Production、Number of theaters showing、Ticket sales、Weekly ticket sales growth rate、Sales amount、Cumulative vote count、Total amount",
+     "note": ""
+    },
+    {
+     "description": "July 29, 2019 to August 4, 2019 National Movie Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket sales change rate、Sales amount、Cumulative ticket sales、Total Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "August 5th to August 11th, 2019 nationwide box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket sales change rate、Sales amount、Cumulative ticket sales、Total Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics from August 12th to August 18th, 2019.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket sales change rate、Sales amount、Cumulative ticket sales、Total Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for national movies from August 19, 2019 to August 25, 2019",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket sales change rate、Sales amount、Cumulative ticket sales、Total Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "August 26, 2019 to September 01, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket sales change rate、Sales amount、Cumulative ticket sales、Total Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "Movie box office statistics for the week of September 2, 2019 to September 8, 2019.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket sales change rate、Sales amount、Cumulative ticket sales、Total Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "September 9 to September 15, 2019 national movie box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket sales change rate、Sales amount、Cumulative ticket sales、Total Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "September 16, 2019 to September 22, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket sales change rate、Sales amount、Cumulative ticket sales、Total Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for national films from September 23rd to September 29th, 2019",
+     "fieldDesc": "Serial number、Country/region、Chinese Film Title、Release date、Applicant、Production、Number of theaters released、Sales volume、Voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 30, 2019 to October 6, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese Film Title、Release date、Applicant、Production、Number of theaters released、Sales volume、Voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 7-13, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese Film Title、Release date、Applicant、Production、Number of theaters released、Sales volume、Voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics from October 14th to October 20th, 2019",
+     "fieldDesc": "Serial number、Country/region、Chinese Film Title、Release date、Applicant、Production、Number of theaters released、Sales volume、Voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 21-27, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese Film Title、Release date、Applicant、Production、Number of theaters released、Sales volume、Voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics for the period from October 28th to November 3rd, 2019.",
+     "fieldDesc": "Serial number、Country/region、Chinese Film Title、Release date、Applicant、Production、Number of theaters released、Sales volume、Voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 4-10, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese Film Title、Release date、Applicant、Production、Number of theaters released、Sales volume、Voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 11-17, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese Film Title、Release date、Applicant、Production、Number of theaters released、Sales volume、Voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 18-24, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese Film Title、Release date、Applicant、Production、Number of theaters released、Sales volume、Voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 25th to December 1st, 2019 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly change rate、Sales amount、Cumulative sales tickets、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics from December 2nd to December 8th, 2019 nationwide.",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly change rate、Sales amount、Cumulative sales tickets、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "December 9 to December 15, 2019 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly change rate、Sales amount、Cumulative sales tickets、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "December 16th to December 22nd, 2019 nationwide box office statistics for movies",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly change rate、Sales amount、Cumulative sales tickets、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics from December 23rd to December 29th, 2019.",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly change rate、Sales amount、Cumulative sales tickets、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for national films from December 30, 2019 to January 5, 2020",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly change rate、Sales amount、Cumulative sales tickets、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 6, 2020 to January 12, 2020 national box office statistics for films",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 13, 2020 to January 19, 2020 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 20, 2020 to January 26, 2020 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 27th, 2020 to February 2nd, 2020 national movie box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 3, 2020 to February 9, 2020 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 10, 2020 to February 16, 2020 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 17, 2020 to February 23, 2020 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 24, 2020 to March 1, 2020 nationwide movie box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics from March 2, 2020 to March 8, 2020.",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for March 9, 2020 to March 15, 2020 nationwide",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film from March 16th, 2020 to March 22nd, 2020.",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film industry from March 23, 2020 to March 29, 2020",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics from March 30, 2020 to April 5, 2020",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film from April 6th, 2020 to April 12th, 2020",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 13, 2020 to April 19, 2020 National Movie Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 20, 2020 to April 26, 2020 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 27, 2020 to May 3, 2020 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "May 4, 2020 to May 10, 2020 National box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film from May 11, 2020 to May 17, 2020.",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics from May 18, 2020 to May 24, 2020",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The statistical data of national box office from May 25, 2020 to May 31, 2020.",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the national film from June 1, 2020 to June 7, 2020",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "June 1, 2020 to June 7, 2020 National movie box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with the OAS standard is located at https://opendata.culture.tw/openData/openApi/movie20200601"
+    },
+    {
+     "description": "The national box office statistics from June 8, 2020 to June 14, 2020",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in JSON format from June 8, 2020 to June 14, 2020.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation that meets OAS standards can be found at https://opendata.culture.tw/openData/openApi/movie20200608"
+    },
+    {
+     "description": "Box office statistics for national films from June 15, 2020 to June 21, 2020",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Produced、Number of movie theaters、Ticket sales、Weekly polling rate change、Sales amount、Cumulative sales ticket volume、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "June 15, 2020 to June 21, 2020 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Meet the API documentation URL that complies with the OAS standard: https://opendata.culture.tw/openData/openApi/movie20200615"
+    },
+    {
+     "description": "June 22, 2020 to June 28, 2020 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release Date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Accumulated ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in JSON format from June 22, 2020 to June 28, 2020.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20200622"
+    },
+    {
+     "description": "Box office statistics for the national film from June 29, 2020 to July 5, 2020",
+     "fieldDesc": "Serial number、Country or region、Chinese Movie Title、Release date、Applicant、Manufactured、Number of cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative sales tickets、Total Sales Volume",
+     "note": ""
+    },
+    {
+     "description": "June 29th, 2020 to July 5th, 2020 National Box Office Statistics Data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20200629"
+    },
+    {
+     "description": "July 6, 2020 to July 12, 2020 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly vote change rate、Sales amount、Cumulative sales volume、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "July 06, 2020 to July 12, 2020 national box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20200706"
+    },
+    {
+     "description": "Box office statistics for the national film industry from July 13th, 2020 to July 19th, 2020.",
+     "fieldDesc": "Serial number、Country/region、Chinese film title、Release date、Applicant、Production、Number of Theaters Showing、Number of tickets sold、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national movie box office statistics data in JSON format from July 13, 2020 to July 19, 2020",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "https://opendata.culture.tw/openData/openApi/movie20200713 is the API documentation URL complying with OAS standards."
+    },
+    {
+     "description": "Box office statistics for the national film from July 20, 2020 to July 26, 2020",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of screens、Sales count、Weekly Change in Number of Votes、Sales amount、Cumulative sales figures、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in the form of JSON format from July 20th, 2020 to July 26th, 2020.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20200720."
+    },
+    {
+     "description": "July 27, 2020 to August 2, 2020 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of screens、Tickets sold、Weekly ticket count change rate、Sales amount、Accumulated sales tickets、Cumulative Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "July 22, 2020, to August 2, 2020 National Box Office Statistics JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation that complies with the OAS standard can be found at the following website: https://opendata.culture.tw/openData/openApi/movie20200727"
+    },
+    {
+     "description": "Box office statistics from August 3, 2020 to August 9, 2020 nationwide.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Produced、Number of cinemas、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Cumulative Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in JSON format from August 3, 2020 to August 9, 2020 nationwide",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20200803"
+    },
+    {
+     "description": "Box office statistics for the national film market from August 10th, 2020 to August 16th, 2020.",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of cinemas screening、Number of tickets sold、Weekly ticket sales variation rate、Sales amount、Cumulative ticket sales、Cumulative sales revenue",
+     "note": ""
+    },
+    {
+     "description": "Box office statistical data in JSON format for the period from August 10, 2020 to August 16, 2020 nationwide.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20200810"
+    },
+    {
+     "description": "Box office statistics from August 17, 2020 to August 23, 2020 nationwide",
+     "fieldDesc": "Serial Number、Country or region、Chinese film title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket count variance、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from August 17, 2020 to August 23, 2020 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with OAS standards is located at https://opendata.culture.tw/openData/openApi/movie20200817"
+    },
+    {
+     "description": "The national movie box office statistics from August 24, 2020 to August 30, 2020.",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Produced、Number of screens、Sales volume、Weekly ticket number change rate、Sales amount、Total sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from August 24, 2020 to August 30, 2020 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that conforms to OAS standards is https://opendata.culture.tw/openData/openApi/movie20200824"
+    },
+    {
+     "description": "Box office statistics for national films from August 31, 2020 to September 6, 2020",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Produced、Number of movie theaters、Ticket sales、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "August 31, 2020 to September 6, 2020 national box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20200831"
+    },
+    {
+     "description": "Box office statistics for national films from September 7, 2020 to September 13, 2020",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、The number of cinemas on show、Ticket sales、Weekly ticket change rate、Sales amount、Cumulative sales ticket number、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The nationwide film box office statistics in JSON format from September 7, 2020 to September 13, 2020",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation link that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20200907"
+    },
+    {
+     "description": "Box office statistics for all movies nationwide from September 14, 2020 to September 20, 2020.",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Produced、Number of cinemas、Sales volume、Weekly fluctuation rate、Sales amount、Cumulative Sales Tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 14, 2020 to September 20, 2020, national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20200914"
+    },
+    {
+     "description": "Box office statistics nationwide from September 21, 2020 to September 27, 2020",
+     "fieldDesc": "Serial number、Country/Region、Chinese Title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Movie box office statistics nationwide from September 21, 2020 to September 27, 2020 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20200921."
+    },
+    {
+     "description": "The national box office statistics from September 28, 2020 to October 4, 2020",
+     "fieldDesc": "Serial Number、Country or region、Movie Title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly ticket count change rate、Sales amount、Total sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 28, 2020 to October 4, 2020 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20200928"
+    },
+    {
+     "description": "October 5, 2020 to October 11, 2020 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly vote rate.、Sales amount、Cumulative sales ticket number、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 5, 2020 to October 11, 2020, national movie box office statistical data in JSON format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20201005"
+    },
+    {
+     "description": "October 12, 2020 to October 18, 2020 nationwide box office statistics.",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Manufactured、Number of cinemas、Sales figures、Weekly vote count change rate、Sales amount、Total sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 12, 2020 to October 18, 2020 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20201012"
+    },
+    {
+     "description": "Box office statistics for the national movie market from October 19th, 2020 to October 25th, 2020",
+     "fieldDesc": "Serial Number、Country or region、Chinese movie title、Release date、Applicant、Production、Number of film screenings、Sales volume、Weekly ticket sales rate of change、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 19, 2020 to October 25, 2020 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20201019"
+    },
+    {
+     "description": "Box office statistics from October 26, 2020 to November 1, 2020.",
+     "fieldDesc": "Serial Number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of screens、Ticket sales、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Cumulative Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "October 26, 2020 to November 1, 2020 nationwide movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20201026"
+    },
+    {
+     "description": "November 2, 2020 to November 8, 2020 national movie box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly Change Rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 2, 2020 to November 8, 2020 National Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20201102"
+    },
+    {
+     "description": "November 9th, 2020 to November 15th, 2020 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release Date、Applicant、Production、Number of theaters showing、Sales volume、Weekly change in number of votes、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 9, 2020 to November 15, 2020 National Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20201109."
+    },
+    {
+     "description": "Box office statistics for the national movie market from November 16th, 2020 to November 22nd, 2020.",
+     "fieldDesc": "Serial number、Country or region、Chinese Movie Title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly vote count change rate、Sales amount、Cumulative ticket sales、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 9, 2020 to November 15, 2020, national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20201116"
+    },
+    {
+     "description": "November 23, 2020 to November 29, 2020 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、The Chinese title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket variation rate、Sales amount、The total sales ticket number、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 23, 2020 to November 29, 2020, national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20201123"
+    },
+    {
+     "description": "Box office statistics for national cinemas from November 30th to December 6th, 2020",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Production、Number of screening venues、Ticket Sales、Weekly ticket number change rate、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 30, 2020 to December 6, 2020 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20201130."
+    },
+    {
+     "description": "Box office statistics for December 7th, 2020 to December 13th, 2020",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release Date、Applicant、Produced、Number of movie theaters、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales ticket number、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "December 7 to December 13, 2020, national box office statistics in JSON format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20201207"
+    },
+    {
+     "description": "Box office statistics for the national film from December 14, 2020 to December 20, 2020.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release Date、Applicant、Production、Number of Theatres Released、Sales volume、Weekly variation rate、Sales amount、Cumulative ticket sales、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from December 14, 2020 to December 20, 2020 in JSON format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20201214"
+    },
+    {
+     "description": "Box office statistics for national films from December 21, 2020, to December 27, 2020",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of theaters released、Sales count、Weekly ticket number fluctuation率、Sales amount、Cumulative ticket sales、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "December 21, 2020 to December 27, 2020 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that conforms to OAS standards is https://opendata.culture.tw/openData/openApi/movie20201221."
+    },
+    {
+     "description": "Box Office Statistics for National Films from December 28, 2020 to January 3, 2021",
+     "fieldDesc": "Serial Number、Country/Region、Chinese movie title、Release date、Applicant、Produced、Number of theaters screening、Sales volume、Weekly ticket variability、Sales amount、Cumulative sales ticket number、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "December 21, 2020 to December 27, 2020 National Box Office Statistics in JSON Format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20201228"
+    },
+    {
+     "description": "Box office statistics for the national film market from January 4th, 2021, to January 10th, 2021",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of theaters in operation、Tickets sold、Weekly ticket change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "2021-01-04 to 2020-01-10 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210104"
+    },
+    {
+     "description": "January 11, 2021 to January 17, 2021 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Produced、Number of Theaters Showing、Sales volume、Weekly change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 11, 2021 to January 17, 2021 National movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Meet the API documentation link that complies with the OAS standard at https://opendata.culture.tw/openData/openApi/movie20210111"
+    },
+    {
+     "description": "Box office statistics from January 18th, 2021 to January 24th, 2021 nationwide.",
+     "fieldDesc": "Serial number、Country / Region、Chinese film title、Release date、Applicant、Produced、Number of movie theaters、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 18th, 2021 to January 24th, 2021, national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210118"
+    },
+    {
+     "description": "January 25, 2021 to January 31, 2021 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、The Chinese movie title、Release Date、Applicant、Production、Number of Cinemas、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Total sales volume",
+     "note": ""
+    },
+    {
+     "description": "January 25, 2021 to January 31, 2020 national box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation that complies with the OAS standard can be found at the following website: https://opendata.culture.tw/openData/openApi/movie20210125"
+    },
+    {
+     "description": "Box office statistics for nationwide cinemas from February 1, 2021 to February 7, 2021",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 1-7, 2021 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210201"
+    },
+    {
+     "description": "February 8th, 2021 to February 14th, 2021 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of cinemas、Tickets sold、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 8, 2021 to February 14, 2021, national movie box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation link that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210208"
+    },
+    {
+     "description": "February 15, 2021 to February 21, 2021 National box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese Title、Release date、Applicant、Produced、Number of theaters in release、Number of tickets sold、Week ticket number change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 15th, 2021 to February 21st, 2020 National Box Office Statistics JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20210215"
+    },
+    {
+     "description": "February 22, 2021 to February 28, 2021 national movie box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Produced、Number of cinemas、Sales volume、Weekly fluctuation rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 22, 2021 to February 28, 2021 National Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210222"
+    },
+    {
+     "description": "Box office statistics for all movies nationwide from March 1, 2021 to March 7, 2021",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release Date、Applicant、Production、Number of Screens、Sales volume、Weekly vote count change rate、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from March 1, 2021 to March 7, 2021 in JSON format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20210301"
+    },
+    {
+     "description": "Box office statistics for the national film from March 8, 2021 to March 14, 2021",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of Theaters Released、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "March 8, 2021 to March 14, 2020, national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20210308"
+    },
+    {
+     "description": "Box office statistics for national movies from March 15, 2021 to March 21, 2021.",
+     "fieldDesc": "Serial Number、Country/region、Chinese movie title、Release date、Applicant、Production、Number of Cinemas、Number of tickets sold、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "March 15, 2021, to March 21, 2020, nationwide movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20210315"
+    },
+    {
+     "description": "Box office statistics for the national film from March 22nd, 2021 to March 28th, 2021",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly change rate、Sales amount、Cumulative sales tickets、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "March 22, 2021 to March 28, 2021 National box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210322"
+    },
+    {
+     "description": "Box office statistics for nationwide films from March 29, 2021 to April 4, 2021",
+     "fieldDesc": "Serial number、Country/Region、The Chinese title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly ticket count variance、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "March 29, 2021 to April 04, 2021 nationwide box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation compliant with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210329"
+    },
+    {
+     "description": "Box office statistics for nationwide cinemas from April 5th, 2021 to April 11th, 2021",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Production、Number of movie theaters、Ticket sales、Weekly vote change rate、Sales amount、Cumulative sales volume、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in JSON format from April 5th, 2021 to April 11th, 2021.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20210405"
+    },
+    {
+     "description": "Box office statistics for the national film industry from April 12, 2021 to April 18, 2021",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Production、Number of Movie Theaters、Ticket sales、Weekly vote change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 12, 2021 to April 18, 2020 national movie box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Compliant API documentation URL in OAS standard https://opendata.culture.tw/openData/openApi/movie20210412"
+    },
+    {
+     "description": "Box office statistics for the national film from April 19, 2021 to April 25, 2021",
+     "fieldDesc": "Serial number、Country/Region、English movie title、Release date、Applicant、Produced、Number of theaters showing、Ticket sales、Weekly ticket number change rate、Sales amount、cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Movie box office statistics for the period from April 19, 2021 to April 25, 2021 in the format of JSON.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210419"
+    },
+    {
+     "description": "Box office statistics from April 26, 2021 to May 2, 2021.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly ticket count changes ratio、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in JSON format for the period from April 26, 2021 to May 2, 2021.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that meets the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210426"
+    },
+    {
+     "description": "May 3 to May 9, 2021 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、The Chinese movie title、Release date、Applicant、Production、Number of cinemas、Ticket sales、Weekly vote rate change、Sales amount、Cumulative ticket sales、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from May 3, 2021 to May 9, 2021 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation link that meets the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210503"
+    },
+    {
+     "description": "Box office statistics for the national movie industry from May 10, 2021 to May 16, 2021",
+     "fieldDesc": "Serial number、Country or region、Chinese Title、Release date、Applicant、Produced、Number of screens、Sales quantity、Weekly ticket count change rate、Sales amount、Cumulative sales ticket number、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from May 10th, 2021 to May 16th, 2021 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20210510"
+    },
+    {
+     "description": "May 17, 2021 to May 20, 2021 National Film Box Office Statistics (Due to the epidemic, nationwide cinemas have suspended operations starting May 20)",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Produced、Number of screens、Number of tickets sold、Weekly vote change rate、Sales Amount、Cumulative ticket sales、Total sales revenue",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics in JSON format from May 17, 2021 to May 20, 2021 (due to the epidemic, all cinemas nationwide suspended operations starting from 5/20).",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20210517"
+    },
+    {
+     "description": "July 12, 2021 to July 25, 2021 national box office statistics (This announcement combines two weeks of data due to the control of the epidemic and the unsealing, resulting in fewer weekly data, so the two weeks of data are announced together.)",
+     "fieldDesc": "Serial number、Country/region、Chinese Title、Release date、Applicant、Production、Number of TheatersShowing、Sales volume、Weekly attendance rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Statistical data on national box office from July 12, 2021 to July 25, 2021 in JSON format (This announcement includes two weeks of data due to the easing of epidemic control measures, resulting in fewer weekly data, so the two weeks of data are announced together.)",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210712"
+    },
+    {
+     "description": "Box office statistics for the national film from July 26, 2021 to August 01, 2021",
+     "fieldDesc": "Serial number、Country/Region、Chinese title、Release date、Applicant、Produced、Number of Theaters、Sales volume、Weekly ticket count volatility、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from July 26, 2021 to August 1, 2021 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210726"
+    },
+    {
+     "description": "The national box office statistics from August 2, 2021 to August 8, 2021.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote rate change、Sales amount、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "Film box office statistics for the whole country from August 2, 2021 to August 8, 2021 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20210802"
+    },
+    {
+     "description": "August 9, 2021 to August 15, 2021 national box office statistics for films",
+     "fieldDesc": "Serial Number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of Theaters Released、Sales number、Weekly change rate、Sales amount、Cumulative sales volume、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "August 9th, 2021 to August 15th, 2021 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation that complies with OAS standards can be found at https://opendata.culture.tw/openData/openApi/movie20210809"
+    },
+    {
+     "description": "Box office statistics for national cinemas from August 16, 2021 to August 22, 2021",
+     "fieldDesc": "Serial number、Country/Region、Chinese Title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "August 16th, 2021 to August 22nd, 2021 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets the OAS standard is https://opendata.culture.tw/openData/openApi/movie20210816"
+    },
+    {
+     "description": "Box office statistics for the national film from 23rd August 2021 to 29th August 2021",
+     "fieldDesc": "Serial number、Country/Region、Chinese Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "August 23, 2021 to August 29, 2021 national box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20210823"
+    },
+    {
+     "description": "Box office statistics for the period from August 30, 2021 to September 5, 2021 nationwide.",
+     "fieldDesc": "Serial number、Country or region、Chinese Movie Title、Release date、Applicant、Production、Number of Theaters Showing、Number of tickets sold、Weekly ticket count variations、Sales amount、Cumulative ticket sales、Cumulative Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "August 30, 2021 to September 5, 2021 National Movie Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Compliant OAS standard API documentation URL https://opendata.culture.tw/openData/openApi/movie20210830"
+    },
+    {
+     "description": "National box office statistics for the period from September 6, 2021 to September 12, 2021",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Produced、Number of screens、Sales volume、Weekly vote count change rate、Sales amount、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from 2021-09-06 to 2021-09-12 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20210906"
+    },
+    {
+     "description": "Box office statistics for the national film market from September 13, 2021 to September 19, 2021",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Ticket sales、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 13 to September 19, 2021 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with OAS standards: https://opendata.culture.tw/openData/openApi/movie20210913"
+    },
+    {
+     "description": "Box office statistics for the national film from September 20th, 2021 to September 26th, 2021",
+     "fieldDesc": "Serial number、Country or region、The Chinese title、Release date、Applicant、Produced、Number of Theaters、Number of tickets sold、Weekly ticket number change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Movie box office statistics in JSON format for the period from September 20, 2021 to September 26, 2021 nationwide.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation that complies with OAS standards can be found at https://opendata.culture.tw/openData/openApi/movie20210920"
+    },
+    {
+     "description": "Box office statistics for films nationwide from September 27th, 2021 to October 3rd, 2021",
+     "fieldDesc": "Serial number、Country/Area、Chinese Film Title、Release date、Applicant、Production、Number of theaters showing、Ticket sales、Weekly ticket number change rate、Sales amount、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in JSON format for the period from September 27, 2021 to October 3, 2021.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that conforms to OAS standards is https://opendata.culture.tw/openData/openApi/movie20210927"
+    },
+    {
+     "description": "National box office statistics from October 4, 2021 to October 10, 2021.",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Production、Number of Theaters、Ticket sales、Weekly ticket count change rate、Sales amount、Cumulative sales tickets、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 4, 2021 to October 10, 2021 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20211004"
+    },
+    {
+     "description": "Box office statistics for the national film from October 11, 2021 to October 17, 2021",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release Date、Applicant、Produced、Number of cinemas、Sales number、Weekly change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 11, 2021, to October 17, 2021, national film box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that meets the OAS standard is https://opendata.culture.tw/openData/openApi/movie20211011"
+    },
+    {
+     "description": "Box office statistics for the week of October 18, 2021 to October 24, 2021.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of theaters in release、Ticket sales、Weekly change in ticket sales、Sales amount、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 18, 2021 to October 24, 2021 National Box Office Statistics Data in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets the OAS standard is https://opendata.culture.tw/openData/openApi/movie20211018"
+    },
+    {
+     "description": "October 25, 2021 to October 31, 2021 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese title、Release date、Applicant、Production、Number of Theaters、Sales ticket number、Weekly vote change rate、Sales amount、Cumulative sales tickets、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 25, 2021 to October 31, 2021 National Box Office Statistics JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that conforms to the OAS standard is at https://opendata.culture.tw/openData/openApi/movie20211025"
+    },
+    {
+     "description": "Box office statistics for national movies from November 1, 2021 to November 7, 2021.",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Production、Number of screens、Sales number、Weekly ticket count fluctuation rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 1, 2021 to November 7, 2021 National Film Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20211101"
+    },
+    {
+     "description": "November 8, 2021 to November 14, 2021 national movie box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release Date、Applicant、Produced、Number of Theaters Released、Sales volume、Weekly change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 8th, 2021 to November 14th, 2021 nationwide movie box office statistics in JSON format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20211108"
+    },
+    {
+     "description": "Box office statistics for national films from November 15, 2021 to November 21, 2021",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Produced、Number of cinemas open、Number of tickets sold、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 15, 2021 to November 21, 2021 National Movie Box Office Statistics JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20211115"
+    },
+    {
+     "description": "November 22, 2021 to November 28, 2021 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese film title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics in JSON format from November 22, 2021 to November 28, 2021.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20211122"
+    },
+    {
+     "description": "November 29, 2021, to December 5, 2021 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release Date、Applicant、Production、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 29th, 2021 to December 5th, 2021 National Box Office Statistics Data in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20211129"
+    },
+    {
+     "description": "Box office statistics for national movies from December 6th, 2021 to December 12th, 2021",
+     "fieldDesc": "Serial Number、Country/Region、Chinese Movie Title、Release date、Applicant、Produced、Number of cinemas in operation、Number of tickets sold、Weekly ticket count change rate、Sales amount、Total ticket sales、Cumulative sales revenue",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from 6th December 2021 to 12th December 2021 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20211206"
+    },
+    {
+     "description": "Box office statistics for the national film from December 13th, 2021 to December 19th, 2021.",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of cinemas screening、Sales volume、Weekly Ticket Variance、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "December 13, 2021 to December 19, 2021 nationwide box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20211213"
+    },
+    {
+     "description": "Box office statistics for the national movie market from December 20, 2021 to December 26, 2021.",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Production、Number of Screens、Ticket sales、Weekly vote count change rate、Sales amount、Cumulative ticket sales、Cumulative sales revenue",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide for the period from December 20, 2021 to December 26, 2021 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20211220"
+    },
+    {
+     "description": "Box office statistics nationwide from December 27, 2021 to January 2, 2022",
+     "fieldDesc": "Serial number、Country or region、Chinese Movie Title、Release date、Applicant、Produced.、Number of Theaters Released、Sales volume、Weekly ticket volume change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for nationwide movies from December 27, 2021 to January 2, 2022 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation that meets the OAS standard is located at https://opendata.culture.tw/openData/openApi/movie20211227"
+    },
+    {
+     "description": "January 3, 2022 to January 9, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Total sales revenue",
+     "note": ""
+    },
+    {
+     "description": "January 3, 2022 to January 9, 2022 National Box Office Statistics JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220103"
+    },
+    {
+     "description": "January 10, 2022 to January 16, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release Date、Applicant、Production、Number of theaters showing、Sales number、Weekly ticket number change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Statistical data on national box office receipts for movies from January 10, 2022 to January 16, 2022 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220110"
+    },
+    {
+     "description": "January 17, 2022 to January 23, 2022 national movie box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Production、Number of screens、Ticket Sales、Weekly Ticket Count Change Rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 17, 2022 to January 23, 2022 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20220117"
+    },
+    {
+     "description": "The national box office statistics from January 24, 2022 to January 30, 2022",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly ticket change rate、Sales amount、Total ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 24, 2022 to January 30, 2022 national box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with OAS standards is located at https://opendata.culture.tw/openData/openApi/movie20220124"
+    },
+    {
+     "description": "January 31, 2022 to February 6, 2022 national box office statistics for movies",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Tickets sold、Weekly fluctuation rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 31, 2022 to February 6, 2022 National Movie Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220131"
+    },
+    {
+     "description": "February 7, 2022, to February 13, 2022 national box office statistics.",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release Date、Applicant、Production、Number of cinemas、Sales figures、Weekly Change Rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 7, 2022 to February 13, 2022 National Box Office Statistics Data in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220207"
+    },
+    {
+     "description": "February 14th, 2022 to February 20th, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Product、Number of Theaters、Sales volume、Weekly vote count change rate、Sales amount、Cumulative Ticket Sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 14, 2022 to February 20, 2022 national box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220214"
+    },
+    {
+     "description": "February 21, 2022, to February 27, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese title、Release date、Applicant、Produced、Number of screens、Number of tickets sold、Weekly vote change rate、Sales amount、Cumulative ticket sales、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the entire country from February 21, 2022, to February 27, 2022, in JSON format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that follows OAS standards is https://opendata.culture.tw/openData/openApi/movie20220221"
+    },
+    {
+     "description": "February 28, 2022 to March 6, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly ticket count variation rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics in JSON format from February 28, 2022, to March 6, 2022.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220228"
+    },
+    {
+     "description": "Box office statistics for national films from March 7, 2022 to March 13, 2022",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Production、Number of screens、Ticket sales、Weekly vote count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "March 7th, 2022 to March 13th, 2022 National Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220307"
+    },
+    {
+     "description": "Box office statistics for national movies from March 14th, 2022 to March 20th, 2022",
+     "fieldDesc": "Serial number、Country/Area、Chinese movie title、Release date、Applicant、Production、Number of Theaters Showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "March 14, 2022 to March 20, 2022, national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220314"
+    },
+    {
+     "description": "Box office statistics for national cinemas from March 21, 2022 to March 27, 2022",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Production、Number of movie theaters、Sales Volume、Weekly ticket change rate、Sales amount、Cumulative sales ticket count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in JSON format for the period from March 21, 2022 to March 27, 2022.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220321"
+    },
+    {
+     "description": "Box office statistics from March 28, 2022 to April 3, 2022 nationwide",
+     "fieldDesc": "Serial number、Country or region、The Chinese title、Release date、Applicant、Product、Number of cinemas、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Movie box office statistics in JSON format from March 28, 2022 to April 3, 2022",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220328"
+    },
+    {
+     "description": "Box office statistics for nationwide cinemas from April 4, 2022, to April 10, 2022.",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of Theaters、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 4th, 2022 to April 10th, 2022 National Movie Box Office Statistics Data in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20220404"
+    },
+    {
+     "description": "The national box office statistics from April 11, 2022 to April 17, 2022.",
+     "fieldDesc": "Serial number、Country or region、Chinese Movie Title、Release date、Applicant、Produced、Number of theaters shown、Sales count、Weekly ticket variance、Sales amount、Cumulative sales tickets、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 11, 2022 to April 17, 2022 National movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220411"
+    },
+    {
+     "description": "April 18, 2022 to April 24, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of screens、Ticket sales、Weekly voting rate fluctuation、Sales amount、Cumulative ticket sales、Cumulative sales volume",
+     "note": ""
+    },
+    {
+     "description": "April 18, 2022 to April 24, 2022 National movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220418"
+    },
+    {
+     "description": "The national box office statistics for the period from April 25, 2022 to May 01, 2022.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Produced、Number of Theaters Released、Sales number、Weekly change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 25, 2022 to May 1, 2022 nationwide movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220425"
+    },
+    {
+     "description": "Box office statistics for the national film from May 2, 2022 to May 8, 2022.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas showing、Sales volume、Week-to-week change rate、Sales amount、Cumulative sales volume、cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "May 2, 2022 to May 8, 2022 National Box Office Statistics Data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Compliant API documentation URL for OAS standards https://opendata.culture.tw/openData/openApi/movie20220502"
+    },
+    {
+     "description": "Box office statistics for the national film from May 9, 2022 to May 15, 2022.",
+     "fieldDesc": "Serial number、Country or region、Chinese Movie Title、Release date、Applicant、Produced、Number of movie theaters、Ticket sales、Weekly change rate、Sales revenue、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "May 9, 2022 to May 15, 2022 nationwide movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220509"
+    },
+    {
+     "description": "May 16, 2022 to May 22, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Produced、Number of theaters、Sales volume、Weekly vote count change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in JSON format for national films from May 16, 2022 to May 22, 2022",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation that complies with OAS standards is available at the following website: https://opendata.culture.tw/openData/openApi/movie20220516"
+    },
+    {
+     "description": "May 23, 2022 to May 29, 2022 national film box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release Date、Applicant、Production、Number of screens、Sales volume、Weekly vote rate.、Sales amount、Total sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Statistical data for national box office from May 23, 2022 to May 29, 2022 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220523"
+    },
+    {
+     "description": "May 30, 2022 to June 5, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Produced、Number of theaters shown、Sales volume、Weekly ticket sales fluctuation rate、Sales amount、Cumulative ticket sales、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "May 30, 2022 to June 5, 2022 National movie box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220530"
+    },
+    {
+     "description": "June 6, 2022 to June 12, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Area、Chinese Title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales ticket number、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "June 6, 2022 to June 12, 2022 national box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220606"
+    },
+    {
+     "description": "Statistics for the national box office from June 13, 2022 to June 19, 2022",
+     "fieldDesc": "Serial number、Country/region、Chinese title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly Variation Rate、Sales amount、Cumulative sales ticket count、The total sales amount",
+     "note": ""
+    },
+    {
+     "description": "Film box office statistics nationwide from June 13, 2022 to June 19, 2022 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220613"
+    },
+    {
+     "description": "June 20, 2022 to June 26, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Produced、Number of movie theaters、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "June 20, 2022 to June 26, 2022 National Box Office Statistics Data in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220620"
+    },
+    {
+     "description": "Box office statistics for national movies from June 27, 2022 to July 3, 2022",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of screens、Ticket sales、Weekly ticket count fluctuation rate、Sales amount、Cumulative sales volume、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in JSON format for the period from June 27, 2022, to July 3, 2022.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220627"
+    },
+    {
+     "description": "July 4th, 2022 to July 10th, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release Date、Applicant、Production、Number of screenings、Sales volume、Weekly voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales revenue",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from July 4, 2022 to July 10, 2022 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220704"
+    },
+    {
+     "description": "Box office statistics for national movies from July 11, 2022 to July 17, 2022",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of Theaters、Sales number、Weekly ticket count change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "July 11, 2022 to July 17, 2022 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20220711"
+    },
+    {
+     "description": "Box office statistics for national movies from July 18, 2022, to July 24, 2022.",
+     "fieldDesc": "Serial number、Country Region、Chinese Movie Title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from July 18, 2022 to July 24, 2022 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation that complies with the OAS standard can be found at https://opendata.culture.tw/openData/openApi/movie20220718."
+    },
+    {
+     "description": "July 25, 2022 to July 31, 2022 national box office statistics for movies",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Week-over-week variation rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "July 25, 2022 to July 31, 2022 National Box Office Statistics Data in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220725"
+    },
+    {
+     "description": "Box office statistics nationwide from August 01, 2022 to August 07, 2022",
+     "fieldDesc": "Serial number、Country or region、Chinese film title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly Ticket Change Rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics data in JSON format from August 1, 2022 to August 7, 2022",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20220801."
+    },
+    {
+     "description": "August 8th, 2022 to August 14th, 2022 national box office statistics for movies",
+     "fieldDesc": "Serial number、National region、Chinese Movie Title、Release date、Applicant、Production.、Number of cinemas、Ticket sales、Weekly ticket change rate、Sales amount、Total sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from August 8, 2022 to August 14, 2022 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20220808"
+    },
+    {
+     "description": "August 15, 2022 to August 21, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie Title、Release date、Applicant、Produced、Number of Theaters Showing、Ticket sales、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "August 15, 2022 to August 21, 2022 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The link to the API documentation that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20220815"
+    },
+    {
+     "description": "August 22, 2022 to August 28, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of movie theaters.、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "National film box office statistics from August 22, 2022 to August 28, 2022 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Compliant API documentation URL for OAS standard: https://opendata.culture.tw/openData/openApi/movie20220822"
+    },
+    {
+     "description": "The nationwide movie box office statistics from August 29, 2022, to September 4, 2022",
+     "fieldDesc": "Serial number、Country/region、Chinese Movie Title、Release Date、Applicant、Production、Number of screens、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from August 29th, 2022 to September 4th, 2022 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "URL for API documentation that complies with OAS standard https://opendata.culture.tw/openData/openApi/movie20220829"
+    },
+    {
+     "description": "September 5, 2022 to September 11, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of theaters released、Sales volume、Weekly ticket sales variation rate、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 5, 2022 to September 11, 2022 National Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "https://opendata.culture.tw/openData/openApi/movie20220905 is the URL for the API documentation that complies with the OAS standard."
+    },
+    {
+     "description": "September 12, 2022 to September 18, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Produced、Number of theaters showing、Number of tickets sold、Weekly ticket number change rate、Total sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 12th to September 18th, 2022 National movie box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220912"
+    },
+    {
+     "description": "September 19, 2022 to September 25, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese Movie Title、Release date、Applicant、Produced、Number of screens、Sales volume、Weekly Ticket Count Variability、Sales amount、Cumulative sales count、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 19, 2022 to September 25, 2022 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220919"
+    },
+    {
+     "description": "September 26, 2022 to October 2, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Title、Release date、Applicant、Production、Number of Theaters、Sales volume、Weekly ticket count fluctuation rate、Sales amount、Cumulative ticket sales、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 26, 2022, to October 2, 2022, national box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20220926"
+    },
+    {
+     "description": "October 3, 2022 to October 9, 2022 National Film Box Office Statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly change rate、Sales amount、Cumulative sales tickets、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 3, 2022 to October 9, 2022 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20221003"
+    },
+    {
+     "description": "October 10th, 2022 to October 16th, 2022 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Produced.、Number of cinemas、Sales number、Weekly vote change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 10 to October 16, 2022 national movie box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20221010"
+    },
+    {
+     "description": "October 17, 2022 to October 23, 2022 National Film Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 17, 2022 to October 23, 2022 National Movie Box Office Statistics JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20221017"
+    },
+    {
+     "description": "October 24, 2022 to October 30, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese Movie Title、Release Date、Applicant、Production、Number of screens、Sales volume、Weekly ticket count change ratio、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics for the week from October 24, 2022 to October 30, 2022 in the format of JSON.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20221024"
+    },
+    {
+     "description": "October 31, 2022 to November 06, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of movie theaters、Number of tickets sold、Weekly vote rate fluctuation、Sales amount、Total sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 31, 2022 to November 6, 2022 national box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20221031"
+    },
+    {
+     "description": "November 7, 2022 to November 13, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release Date、Applicant、Production、Number of theaters showing、Sales volume、Weekly vote rate fluctuation、Sales amount、Cumulative Sales Tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 7th, 2022 to November 13th, 2022 National Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation that complies with the OAS standard can be found at the following URL: https://opendata.culture.tw/openData/openApi/movie20221107"
+    },
+    {
+     "description": "November 14th to November 20th, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of movie theaters、Sales volume、Weekly change in the number of votes、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 14 to November 20, 2022 nationwide movie box office statistics in JSON format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standards is https://opendata.culture.tw/openData/openApi/movie20221114"
+    },
+    {
+     "description": "November 21, 2022 to November 27, 2022 nationwide movie box office statistics",
+     "fieldDesc": "Serial number、Country/region、Chinese Film Title、Release date、Applicant、Product、Number of theaters showing、Sales volume、Weekly ticket fluctuation rate、Sales amount、Accumulated sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 21, 2022 to November 27, 2022 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20221121"
+    },
+    {
+     "description": "November 28, 2022 to December 4, 2022 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese Title、Release date、Applicant、Produce、Number of cinemas、Sales numbers、Weekly vote rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 28, 2022 to December 04, 2022 national box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20221128"
+    },
+    {
+     "description": "Box office statistics for national films from December 5th, 2022 to December 11th, 2022",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Produced、Number of theaters showing、Number of tickets sold、Weekly vote change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The nationwide movie box office statistics in JSON format from December 5th, 2022 to December 11th, 2022",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with OAS standards is located at https://opendata.culture.tw/openData/openApi/movie20221205"
+    },
+    {
+     "description": "The nationwide movie box office statistics from December 12, 2022 to December 18, 2022.",
+     "fieldDesc": "Serial Number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of screens、Ticket sales、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "The nationwide box office statistics in JSON format from December 12, 2022, to December 18, 2022.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20221212"
+    },
+    {
+     "description": "December 19th, 2022 to December 25th, 2022 national box office statistics.",
+     "fieldDesc": "Serial number、Country/Region、Chinese title、The release date、Applicant、Produced、Number of theaters showing、Sales volume、Weekly vote count changes.、Sales amount、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "December 19 to December 25, 2022 national box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20221219"
+    },
+    {
+     "description": "Box office statistics for the national film from December 26, 2022 to January 01, 2023",
+     "fieldDesc": "Serial Number、Country/Region、Chinese movie title、Release Date、Applicant、Production、Number of Theaters on Screen、Sales volume、Weekly change in the number of votes、Sales amount、Cumulative sales tickets、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "December 26, 2022 to January 1, 2023 national movie box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20221226"
+    },
+    {
+     "description": "January 2, 2023 to January 8, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Produced、Number of cinemas in operation、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 2, 2023 to January 8, 2023 National Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "URL of the API documentation that complies with the OAS standard: https://opendata.culture.tw/openData/openApi/movie20230102"
+    },
+    {
+     "description": "January 9, 2023 to January 15, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Ticket sales、Weekly voting rate fluctuation、Sales amount、Cumulative sales tickets、Cumulative sales revenue",
+     "note": ""
+    },
+    {
+     "description": "January 9, 2023 to January 15, 2023 national box office statistics data in JSON format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230109"
+    },
+    {
+     "description": "January 16, 2023 to January 22, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Produced、Number of theaters in release、Ticket sales、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 16, 2023 to January 22, 2023 National box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230116"
+    },
+    {
+     "description": "January 23, 2023 to January 29, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly vote rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 23, 2023 to January 29, 2023 national box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20230123"
+    },
+    {
+     "description": "January 30, 2023 to February 5, 2023 national box office statistics for films",
+     "fieldDesc": "Serial number、Country or region、Chinese Movie Title、Release date、Applicant、Production、Number of cinemas screening、Sales volume、Weekly ticket count changes.、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "January 30, 2023 to February 5, 2023 National Movie Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230130"
+    },
+    {
+     "description": "February 06, 2023 to February 12, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket count variation、Sales amount、Total sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 6, 2023 to February 12, 2023 National Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230206"
+    },
+    {
+     "description": "February 13th, 2023 to February 19th, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of theaters、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 13, 2023 to February 19, 2023 nationwide movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "https://opendata.culture.tw/openData/openApi/movie20230213 is the URL of the API documentation that complies with the OAS standard."
+    },
+    {
+     "description": "February 20, 2023, to February 26, 2023, national film box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Produced、Number of Theaters Released、Number of tickets sold、Weekly ticket count variation rate、Sales amount、Cumulative sales volume、Total sales volume",
+     "note": ""
+    },
+    {
+     "description": "February 20, 2023 to February 26, 2023 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230220"
+    },
+    {
+     "description": "February 27, 2023 to March 5, 2023 national movie box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、The applicant、Production、Number of movie theaters、Sales Volume、Weekly change rate、Sales amount、Total sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "February 27, 2023 to March 5, 2023 national box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20230227"
+    },
+    {
+     "description": "March 6, 2023 to March 12, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Published、Number of movie theaters、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics nationwide from March 6, 2023 to March 12, 2023 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that conforms to the OAS standards is https://opendata.culture.tw/openData/openApi/movie20230306"
+    },
+    {
+     "description": "Box office statistics for national films from March 13, 2023 to March 19, 2023",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Produced、Number of Theaters、Sales Quantity、Week on week change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "March 13, 2023 to March 19, 2023 national box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230313"
+    },
+    {
+     "description": "March 20th, 2023 to March 26th, 2023 nationwide movie box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of theaters、Sales volume、Weekly ticket number change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "National box office statistics in JSON format from March 20, 2023 to March 26, 2023",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230320"
+    },
+    {
+     "description": "March 27, 2023 to April 2, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese Film Title、Release date、Applicant、Production.、Number of Theaters、Sales volume、Weekly change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "March 27, 2023 to April 2, 2023 National Box Office Statistics Data in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230327"
+    },
+    {
+     "description": "Box office statistics from April 3, 2023 to April 9, 2023 nationwide.",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly voting rate fluctuation、Sales amount、Total sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 3, 2023 to April 9, 2023 National Box Office Statistics Data in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230403"
+    },
+    {
+     "description": "April 10, 2023 to April 16, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of Theaters Showing、Number of tickets sold、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Cumulative sales volume",
+     "note": ""
+    },
+    {
+     "description": "April 10, 2023 to April 16, 2023 National Box Office Statistics Data in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230410"
+    },
+    {
+     "description": "April 17th, 2023 to April 23rd, 2023 national box office statistics.",
+     "fieldDesc": "Serial number、Country or region、Chinese film title、Release date、Applicant、Produced、Number of cinemas、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 17, 2023 to April 23, 2023 national movie box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230417"
+    },
+    {
+     "description": "April 24, 2023 to April 30, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country or Region、Chinese Title、Release Date、Applicant、Production、Number of movie theaters、Tickets sold、Weekly vote count variation rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "April 24, 2023, to April 30, 2023 National box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230424"
+    },
+    {
+     "description": "May 01, 2023 to May 07, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Produced、Number of theaters.、Sales volume、Weekly voting rate fluctuation、Sales volume、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "May 1, 2023 to May 7, 2023 National box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Compliant API documentation URL to OAS standard: https://opendata.culture.tw/openData/openApi/movie20230501"
+    },
+    {
+     "description": "May 8, 2023 to May 14, 2023 nationwide movie box office statistics",
+     "fieldDesc": "Serial Number、Country/Region、Chinese film title、Release date、Applicant、Produced、Number of movie theaters、Number of tickets sold、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics in JSON format from May 8, 2023, to May 14, 2023.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230508"
+    },
+    {
+     "description": "May 15, 2023 to May 21, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of Theaters Showing、Sales volume、Weekly ticket change rate、Sales amount、Cumulative ticket sales、Total Sales Amount",
+     "note": ""
+    },
+    {
+     "description": "May 15th, 2023 to May 21st, 2023 National Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20230515"
+    },
+    {
+     "description": "May 22, 2023 to May 28, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of theaters in release、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "May 22, 2023 to May 28, 2023 national box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230522"
+    },
+    {
+     "description": "May 29, 2023 to June 4, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly Ticket Count Variation Rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "May 29, 2023 to June 4, 2023 National Box Office Statistics Data in JSON Format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Compliant API documentation URL of OAS standard https://opendata.culture.tw/openData/openApi/movie20230529"
+    },
+    {
+     "description": "The national box office statistics for the week of June 12, 2023 to June 18, 2023.",
+     "fieldDesc": "Serial number、Country/Region、Chinese Title、Release date、Applicant、Production、Number of screens、Ticket sales、Weekly Vote Change Rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "June 12, 2023 to June 18, 2023 National Box Office Statistics Data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230612"
+    },
+    {
+     "description": "The national box office statistics from June 19, 2023 to June 25, 2023.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Produced、Number of screens、Sales volume、Weekly vote change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics data in JSON format from June 19, 2023, to June 25, 2023.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that meets the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230619"
+    },
+    {
+     "description": "June 26, 2023 to July 2, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、The release date、Applicant、Production、Number of movie theaters、Number of tickets sold、Weekly voting rate fluctuation、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "June 26, 2023 to July 2, 2023 national movie box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20230626"
+    },
+    {
+     "description": "Statistical data on national box office revenue from July 3, 2023 to July 9, 2023",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of Movie Theaters、Sales volume、Weekly change rate、Sales amount、Total sales volume、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "2013-07-03 to 2013-07-09 National box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230703"
+    },
+    {
+     "description": "July 10, 2023 to July 16, 2023 Nationwide Box Office Statistics",
+     "fieldDesc": "Serial Number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of Movie Theaters、Ticket Sales、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "July 10, 2023 to July 16, 2023 National Box Office Statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "URL of API documentation that complies with OAS standards: https://opendata.culture.tw/openData/openApi/movie20230710"
+    },
+    {
+     "description": "Box office statistics for the week of June 5, 2023 to June 11, 2023.",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "June 5, 2023 to June 11, 2023 National movie box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230605"
+    },
+    {
+     "description": "July 17th, 2023 to July 23rd, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Movie title、Release date、Applicant、Produced、Number of Theaters、Sales volume、Weekly vote rate fluctuation、Sales amount、Cumulative sales volume、Accumulated sales amount",
+     "note": ""
+    },
+    {
+     "description": "July 17, 2023, to July 23, 2023, national film box office statistical data in JSON format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation that complies with OAS standards can be found at the following web address: https://opendata.culture.tw/openData/openApi/movie20230717"
+    },
+    {
+     "description": "Box office statistics for films nationwide from July 24, 2023 to July 30, 2023",
+     "fieldDesc": "Serial number、Country/region、Chinese film title、Release date、Applicant、Production、Number of cinemas、Ticket sales、Weekly ticket change rate、Sales amount、Cumulative Sales Tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "July 24, 2023 to July 30, 2023 nationwide movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230724"
+    },
+    {
+     "description": "Box office statistics for nationwide film from July 31, 2023 to August 6, 2023",
+     "fieldDesc": "Serial number、Country / region、Movie Title、Release date、Applicant、Production、Number of Screens、Ticket Sales、Weekly fluctuation rate、Sales amount、Total Sales Tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "July 31, 2023 to August 6, 2023 National Movie Box Office Statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Compliant API documentation website: https://opendata.culture.tw/openData/openApi/movie20230731"
+    },
+    {
+     "description": "The nationwide box office statistics from August 7th, 2023 to August 13th, 2023",
+     "fieldDesc": "Serial number、Country/region、Chinese movie title、Release date、Applicant、Production、Number of cinemas、Sales volume、Week-over-week change in votes、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Box office statistics in JSON format for the week of August 7, 2023 to August 13, 2023.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230807"
+    },
+    {
+     "description": "August 14th to August 20th, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of Theaters、Sales volume、Weekly Ticket Change Rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "August 14, 2023 to August 20, 2023 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that meets OAS standards is https://opendata.culture.tw/openData/openApi/movie20230814"
+    },
+    {
+     "description": "August 21, 2023 to August 27, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of movie theaters、Sales figures、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "August 21, 2023 to August 27, 2023 National Box Office Statistics Data in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20230821"
+    },
+    {
+     "description": "The nationwide movie box office statistics from August 28, 2023 to September 3, 2023.",
+     "fieldDesc": "Serial number、Country or region、Chinese Title、Release date、Applicant、Produced、Number of theaters showing、Ticket sales、Weekly vote count change rate、Sales amount、Total sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "August 28, 2023 to September 3, 2023 nationwide movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with the OAS standard https://opendata.culture.tw/openData/openApi/movie20230828"
+    },
+    {
+     "description": "September 4, 2023 to September 10, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Produced、Number of cinemas、Ticket sales、Weekly vote rate change、Sales Amount、Cumulative Sales Ticket Count、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "National box office statistics in JSON format from September 4, 2023, to September 10, 2023",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230904"
+    },
+    {
+     "description": "September 11, 2023 to September 17, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese film title、Release date、Applicant、Production、Number of theaters released、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 11, 2023 to September 17, 2023 nationwide movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation that conforms to OAS standards is https://opendata.culture.tw/openData/openApi/movie20230911"
+    },
+    {
+     "description": "National movie box office statistics from September 18, 2023 to September 24, 2023",
+     "fieldDesc": "Serial number、Country / region、Chinese Movie Title、Release date、Applicant、Produced、Number of theaters showing、Sales volume、Weekly ticket count change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 18, 2023 to September 24, 2023 nationwide movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that meets the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230918"
+    },
+    {
+     "description": "Statistics of national box office from September 25, 2023 to October 1, 2023",
+     "fieldDesc": "Serial Number、Country/Region、Chinese film title、Release date、Applicant、Production、Number of cinemas、Number of tickets sold.、Weekly fluctuation rate、Sales amount、Accumulated sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "September 25, 2023 to October 1, 2023, national movie box office statistics in JSON format.",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL of the API documentation conforming to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20230925"
+    },
+    {
+     "description": "October 2, 2023 to October 8, 2023 national box office statistics for movies",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release Date、Applicant、Produced、Number of theaters、Sales volume、Weekly ticket change rate、Sales amount、Total Sales Volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 2, 2023 to October 8, 2023 National Film Box Office Statistics JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20231002"
+    },
+    {
+     "description": "October 9, 2023 to October 15, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese Film Title、Release date、Applicant、Production、Number of movie theaters、Sales number、Weekly Ticket Count Change Rate、Sales amount、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 9, 2023 to October 15, 2023 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Compliant OAS standard API documentation URL https://opendata.culture.tw/openData/openApi/movie20231009"
+    },
+    {
+     "description": "October 16-22, 2023 National Box Office Statistics",
+     "fieldDesc": "Serial Number、Country/Region、Chinese Movie Title、Release date、Applicant、Production、Number of cinemas、Sales volume、Weekly vote rate change、Sales amount、Cumulative sales ticket number、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 16th, 2023 to October 22nd, 2023 national movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that complies with OAS standards is https://opendata.culture.tw/openData/openApi/movie20231016"
+    },
+    {
+     "description": "October 23, 2023 to October 29, 2023 national box office statistics.",
+     "fieldDesc": "Serial number、Country/Region、The Chinese title、Release date、Applicant、Produced、Number of movie theaters、Sales volume、Weekly ticket change rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "October 23, 2023 to October 29, 2023 national box office statistical data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that conforms to OAS standards is https://opendata.culture.tw/openData/openApi/movie20231023"
+    },
+    {
+     "description": "October 30, 2023 to November 5, 2023 nationwide box office statistics.",
+     "fieldDesc": "Serial Number、Country/Region、Chinese film title、Release date、Applicant、Produced、Number of cinemas、Sales volume、Week to Week Change Rate、Sales amount、Cumulative ticket sales、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Film box office statistics nationwide from October 30, 2023 to November 5, 2023 in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20231030"
+    },
+    {
+     "description": "The nationwide box office statistics from November 6, 2023 to November 12, 2023",
+     "fieldDesc": "Serial number、Country / Region、Chinese Title、Release date、Applicant、Production、Number of screens、Sales volume、Weekly change rate、Sales amount、Total sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "National box office statistics in JSON format from November 6, 2023 to November 12, 2023",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Compliant OAS API documentation URL https://opendata.culture.tw/openData/openApi/movie20231106"
+    },
+    {
+     "description": "November 13th to November 19th, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country or region、Chinese Movie Title、Release date、Applicant、Produced、Number of screens、Number of tickets sold、Weekly Ticket Change Rate、Sales amount、Cumulative sales volume、Total sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 13, 2023 to November 19, 2023 National Box Office Statistics in JSON Format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation link that conforms to OAS standards is https://opendata.culture.tw/openData/openApi/movie20231113"
+    },
+    {
+     "description": "Statistics of national box office from November 20, 2023 to November 26, 2023",
+     "fieldDesc": "Serial number、Country or region、Chinese movie title、Release date、Applicant、Production、Number of Cinemas、Sales volume、Weekly voting rate fluctuations、Sales amount、Cumulative sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 20 to November 26, 2023 nationwide movie box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The URL for the API documentation that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20231120"
+    },
+    {
+     "description": "Box office statistics for national movies from November 27, 2023 to December 3, 2023",
+     "fieldDesc": "Serial number、Country or region、Movie title in Chinese、Release date、Applicant、Produced、Number of theaters、Sales volume、Weekly Voting Rate fluctuation、Sales amount、Accumulated sales volume、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "November 27, 2023 to December 3, 2023 national box office statistics in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that conforms to the OAS standard is https://opendata.culture.tw/openData/openApi/movie20231127"
+    },
+    {
+     "description": "National movie box office statistics from December 4, 2023, to December 10, 2023",
+     "fieldDesc": "Serial number、Country/Region、Chinese movie title、Release date、Applicant、Production、Number of theaters showing、Sales volume、Weekly vote change rate、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "Movie ticket sales statistics in JSON format from December 4, 2023 to December 10, 2023",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation website that meets OAS standards is located at https://opendata.culture.tw/openData/openApi/movie20231204"
+    },
+    {
+     "description": "December 11 to December 17, 2023 nationwide box office statistics",
+     "fieldDesc": "Serial Number、Country/Region、Chinese Title、Release date、Applicant、Produced、Number of Theaters Released、Sales volume、Weekly change in the number of votes、Sales amount、Cumulative sales tickets、Cumulative sales amount",
+     "note": ""
+    },
+    {
+     "description": "The national box office statistics in JSON format from December 11, 2023 to December 17, 2023",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "The API documentation URL that complies with the OAS standard is https://opendata.culture.tw/openData/openApi/movie20231211"
+    },
+    {
+     "description": "December 18 to December 24, 2023 national box office statistics",
+     "fieldDesc": "Serial number、Country/Region、Chinese film title、Release date、Applicant、Produced.、Number of Theaters Showing、Number of tickets sold、Weekly vote count fluctuation rate、Sales amount、Cumulative sales volume、Cumulative sales revenue",
+     "note": ""
+    },
+    {
+     "description": "December 18th to December 24th, 2023 national movie box office statistics data in JSON format",
+     "fieldDesc": "country、name、releaseDate、issue、produce、theaterCount、tickets、ticketChangeRate、amounts、totalTickets、totalAmounts",
+     "note": "Meeting the OAS standard API description document URL: https://opendata.culture.tw/openData/openApi/movie20231218"
+    }
+   ]
+  }
+ }
+}
