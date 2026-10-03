@@ -637,18 +637,27 @@ FASHION_GENERIC = re.compile(r"[的了是在也和與及就都很最更再又還
                              r"|打造|推出|開幕|登場|進駐|曝光|回歸|首度|限定|必看|推薦|分享|揭曉|公開|看懂|入手|教學|整理|盤點|攻略|秘密|關鍵|方法|技巧|原因|亮點|一次|懶人|穿搭|造型|單品|系列|新品|全新|最新|正式|品牌|設計|女星|男星|明星|網友|今年|秋冬|春夏|台灣|台北|臺北|臺灣|時尚|美麗|質感|靈感|風格|話題|朋友|日常|生活")
 
 
+def _unesc(t: str) -> str:
+    for _ in range(3):  # 來源有重複編碼（&amp;amp;）的情況
+        u = html_mod.unescape(t)
+        if u == t:
+            break
+        t = u
+    return t
+
+
 def _fashion_feed(kind, url):
     root = ET.fromstring(get(url).content.lstrip(b"\xef\xbb\xbf \r\n\t"))
     out = []
     if kind == "gnews":
         ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9", "n": "http://www.google.com/schemas/sitemap-news/0.9"}
         for u in root.findall("s:url", ns):
-            t = (u.findtext("n:news/n:title", "", ns) or "").strip()
+            t = _unesc((u.findtext("n:news/n:title", "", ns) or "").strip())
             if t:
                 out.append({"title": t, "url": (u.findtext("s:loc", "", ns) or "").strip(), "at": _rss_date(u.findtext("n:news/n:publication_date", "", ns) or "")})
     else:
         for it in root.iter("item"):
-            t = html_mod.unescape((it.findtext("title") or "").strip())
+            t = _unesc((it.findtext("title") or "").strip())
             if t:
                 out.append({"title": t, "url": (it.findtext("link") or "").strip(), "at": _rss_date(it.findtext("pubDate") or "")})
     return out
@@ -691,6 +700,8 @@ def p_media():
             k = it["url"] or (src + it["title"])
             if k not in heads:
                 heads[k] = {"s": src, "t": it["title"][:120], "at": it["at"] or NOW_ISO}
+            else:
+                heads[k]["t"] = it["title"][:120]
         latest += [x for x in got if not FASHION_AD.search(x["title"])][:6]
     cut60 = (NOW - timedelta(days=60)).isoformat().replace("+00:00", "Z")
     heads = {k: v for k, v in heads.items() if v.get("at", "") >= cut60}
