@@ -622,41 +622,138 @@ def p_revenue():
     return {"items": sorted(items.values(), key=lambda x: order.index(x["code"]))}
 
 
-def p_media():
-    items = []
-    try:
-        root = ET.fromstring(get("https://wwd.com/feed").content)
-        build = root.findtext("./channel/lastBuildDate") or ""
+FASHION_TW = {  # 台灣時尚媒體官方來源（都經過實測：網站規則允許、從 GitHub 連得到）
+    "美麗佳人": ("gnews", "https://www.marieclaire.com.tw/google-news.xml"),
+    "VOGUE": ("rss", "https://www.vogue.com.tw/feed/rss"),
+    "ELLE": ("rss", "https://www.elle.com/tw/rss/all.xml"),
+    "BAZAAR": ("rss", "https://www.harpersbazaar.com/tw/rss/all.xml"),
+    "COSMO": ("rss", "https://www.cosmopolitan.com/tw/rss/all.xml"),
+}
+FASHION_HEADS = DATA / "fashion_heads.json"  # 標題語感庫：滾動 60 天，寫文案時拿來校準語感
+FASHION_AD = re.compile(r"星座|運勢|塔羅|開箱|懶人包|贈票|優惠|折扣|週年慶|會員日|抽獎|團購|特價|限時|報名|滿額|贈品|試用|好禮|下殺|即日起|快閃店|聯名款開賣")
+FASHION_STOP = {"vogue", "elle", "bazaar", "cosmo", "cosmopolitan", "marie claire", "hot spot", "the", "and", "of", "with", "for", "in", "to", "a",
+                "ig", "netflix", "youtube", "tw", "taiwan", "new", "mv", "vs", "ft", "x", "diy", "ai", "app", "led", "spa", "ok", "nt", "top"}
+FASHION_GENERIC = re.compile(r"[的了是在也和與及就都很最更再又還被把讓為對從到這那個些麼何月日年天款位種件大小新上下中前後一二三四五六七八九十多]"
+                             r"|打造|推出|開幕|登場|進駐|曝光|回歸|首度|限定|必看|推薦|分享|揭曉|公開|看懂|入手|教學|整理|盤點|攻略|秘密|關鍵|方法|技巧|原因|亮點|一次|懶人|穿搭|造型|單品|系列|新品|全新|最新|正式|品牌|設計|女星|男星|明星|網友|今年|秋冬|春夏|台灣|台北|臺北|臺灣|時尚|美麗|質感|靈感|風格|話題|朋友|日常|生活")
+
+
+def _fashion_feed(kind, url):
+    root = ET.fromstring(get(url).content.lstrip(b"\xef\xbb\xbf \r\n\t"))
+    out = []
+    if kind == "gnews":
+        ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9", "n": "http://www.google.com/schemas/sitemap-news/0.9"}
+        for u in root.findall("s:url", ns):
+            t = (u.findtext("n:news/n:title", "", ns) or "").strip()
+            if t:
+                out.append({"title": t, "url": (u.findtext("s:loc", "", ns) or "").strip(), "at": _rss_date(u.findtext("n:news/n:publication_date", "", ns) or "")})
+    else:
         for it in root.iter("item"):
-            d = it.findtext("pubDate") or ""
-            try:
-                dd = datetime.strptime(d[:25].strip(), "%a, %d %b %Y %H:%M:%S").strftime("%m-%d")
-            except Exception:
-                dd = d[5:11]
-            items.append({"source": "WWD", "title": (it.findtext("title") or "").strip(), "url": it.findtext("link"), "date": dd})
-            if len(items) >= 6:
-                break
-    except Exception as e:  # noqa: BLE001
-        log("wwd", e)
-    for q, src in (("site:businessoffashion.com", "BoF"), ("site:vogue.com.tw OR site:elle.com/tw", "TW")):
+            t = html_mod.unescape((it.findtext("title") or "").strip())
+            if t:
+                out.append({"title": t, "url": (it.findtext("link") or "").strip(), "at": _rss_date(it.findtext("pubDate") or "")})
+    return out
+
+
+def _fashion_terms(title: str) -> set:
+    """詞彙來源只取三種比較不會是虛詞的：拉丁字（品牌、人名）、引號書名號內的詞、3–4 字中文片段。"""
+    terms = set()
+    for m in re.findall(r"[「『《〈]([^」』》〉]{2,16})[」』》〉]", title):
+        w = m.strip().lower()
+        if w and not FASHION_GENERIC.fullmatch(w):
+            terms.add(w)
+    t = re.sub(r"[「」『』《》【】〈〉（）()｜|：:！!？?，,。、．…\"'“”‘’#＃＋+~～/]", " ", title)
+    for m in re.findall(r"[A-Za-z][A-Za-z0-9&'.\-]+(?:\s+[A-Za-z][A-Za-z0-9&'.\-]+){0,2}", t):
+        w = m.strip(" .-'").lower()
+        if len(w) >= 2 and w not in FASHION_STOP:
+            terms.add(w)
+    for seg in re.findall(r"[\u4e00-\u9fff]{3,}", t):
+        for L in (3, 4):
+            for i in range(len(seg) - L + 1):
+                g = seg[i:i + L]
+                if not FASHION_GENERIC.search(g):
+                    terms.add(g)
+    return terms
+
+
+def p_media():
+    errs, latest = [], []
+    try:
+        heads = json.loads(FASHION_HEADS.read_text(encoding="utf-8")) if FASHION_HEADS.exists() else {}
+    except Exception:  # noqa: BLE001
+        heads = {}
+    for src, (kind, url) in FASHION_TW.items():
         try:
-            root = ET.fromstring(get("https://www.bing.com/news/search", params={"q": q, "format": "rss"}).content)
-            n = 0
-            for it in root.iter("item"):
-                d = it.findtext("pubDate") or ""
-                try:
-                    dd = datetime.strptime(d[:25].strip(), "%a, %d %b %Y %H:%M:%S").strftime("%m-%d")
-                except Exception:
-                    dd = d[5:11]
-                items.append({"source": src, "title": (it.findtext("title") or "").strip(), "url": it.findtext("link"), "date": dd})
-                n += 1
-                if n >= 4:
-                    break
+            got = _fashion_feed(kind, url)
         except Exception as e:  # noqa: BLE001
-            log("bing news", src, e)
-    if not items:
-        raise RuntimeError("no media items")
-    return {"items": items}
+            log("fashion", src, e); errs.append(f"{src}: {safe_err(e)}"); continue
+        for it in got:
+            it["source"] = src
+            k = it["url"] or (src + it["title"])
+            if k not in heads:
+                heads[k] = {"s": src, "t": it["title"][:120], "at": it["at"] or NOW_ISO}
+        latest += [x for x in got if not FASHION_AD.search(x["title"])][:6]
+    cut60 = (NOW - timedelta(days=60)).isoformat().replace("+00:00", "Z")
+    heads = {k: v for k, v in heads.items() if v.get("at", "") >= cut60}
+    write_json(FASHION_HEADS, heads, separators=(",", ":"))
+    # 本週同框：近 7 天、排除業配與星座專欄，同一個詞在 2 家以上台灣媒體出現（家數多的排前面）
+    cut7 = (NOW - timedelta(days=7)).isoformat().replace("+00:00", "Z")
+    week = [v for v in heads.values() if v.get("at", "") >= cut7 and not FASHION_AD.search(v["t"])]
+    by_term: dict = {}
+    for idx, v in enumerate(week):
+        for term in _fashion_terms(v["t"]):
+            d = by_term.setdefault(term, {"src": set(), "ids": set(), "ex": {}})
+            d["src"].add(v["s"]); d["ids"].add(idx)
+            d["ex"].setdefault(v["s"], v["t"])
+    cand = {t: d for t, d in by_term.items() if len(d["src"]) >= 2}
+    # 同一批標題裡的重疊片段（皮膚科／膚科醫／科醫師）拼回完整詞（皮膚科醫師）
+    groups: dict = {}
+    for t, d in cand.items():
+        groups.setdefault(frozenset(d["ids"]), []).append(t)
+    merged = {}
+    for ids, terms in groups.items():
+        terms = sorted(set(terms), key=len, reverse=True)
+        changed = True
+        while changed:
+            changed = False
+            for x in terms:
+                for y in terms:
+                    if x == y:
+                        continue
+                    for ov in range(min(len(x), len(y)) - 1, 1, -1):
+                        if x.endswith(y[:ov]):
+                            z = x + y[ov:]
+                            if all(z in week[i]["t"].lower() for i in ids):
+                                terms = [w for w in terms if w not in (x, y)] + [z]
+                                changed = True
+                            break
+                    if changed:
+                        break
+                if changed:
+                    break
+        terms = [w for w in terms if not any(w != o and w in o for o in terms)]
+        d0 = cand[next(iter(t for t in cand if frozenset(cand[t]["ids"]) == ids))]
+        for w in terms:
+            merged[w] = {"src": d0["src"], "n": len(ids), "ex": d0["ex"]}
+    keep = []
+    for t, d in sorted(merged.items(), key=lambda kv: (-len(kv[1]["src"]), -kv[1]["n"], not re.match(r"[a-z]", kv[0]), -len(kv[0]))):
+        if any(t in k and t != k and len(merged[k]["src"]) >= len(d["src"]) for k in merged):
+            continue
+        keep.append({"term": t, "sources": sorted(d["src"]), "n": d["n"], "examples": list(d["ex"].items())[:3]})
+    together = keep[:12]
+    # 國際：WWD（官方 RSS）
+    intl = []
+    try:
+        for it in _fashion_feed("rss", "https://wwd.com/feed/")[:6]:
+            it["source"] = "WWD"; intl.append(it)
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"WWD: {safe_err(e)}")
+    latest.sort(key=lambda x: x.get("at") or "", reverse=True)
+    if not latest and not intl:
+        raise RuntimeError("no media items " + "; ".join(errs)[:160])
+    per = {}
+    for v in heads.values():
+        per[v["s"]] = per.get(v["s"], 0) + 1
+    return {"items": latest[:16], "intl": intl, "together": together, "week_n": len(week), "lexicon": len(heads), "per_source": per, "errs": errs}
 
 
 SUBS = ["taiwan", "fashion", "malefashionadvice", "marketing", "design", "artificial"]
@@ -4054,7 +4151,7 @@ run("sectors", p_sectors, keep_if_fresh_hours=0.5)
 run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("revenue", p_revenue, keep_if_fresh_hours=20)
-run("media", p_media, keep_if_fresh_hours=6)
+run("media", p_media, keep_if_fresh_hours=2)
 # run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
 run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=6)

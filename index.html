@@ -677,10 +677,10 @@ body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[d
     <div class="pf"><a href="https://trends.google.com/trending?geo=TW&hl=zh-TW" target="_blank" rel="noopener">Google Trends</a></div>
   </section>
 
-  <section class="panel cap" id="p-media">
-    <div class="ph"><h2>Fashion Press</h2><span class="zh">時尚媒體標題</span><span class="meta">排程</span></div>
+  <section class="panel w12 cap" id="p-media">
+    <div class="ph"><h2>Fashion Press</h2><span class="zh">時尚媒體 · 最新標題、本週同框、標題語感庫</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>WWD RSS · BoF 與台灣時尚媒體（經 Bing News）</span></div>
+    <div class="pf"><span>美麗佳人（官方新聞清單）· VOGUE · ELLE · BAZAAR · COSMO 台灣版官方 RSS · WWD RSS · 同框已排除開箱、懶人包、贈票、星座等業配與專欄字眼 · 每 2 小時</span></div>
   </section>
 
   <section class="panel w12" id="p-attention">
@@ -1011,8 +1011,11 @@ const renderers={
   otc_revenue(d){revenueDocs.otc_revenue=d;renderRevenue();},
   trends(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="https://trends.google.com/trends/explore?geo=TW&q=${encodeURIComponent(it.title)}" target="_blank" rel="noopener">${esc(it.title)}</a>${it.news?`<span class="sub">${esc(it.news)}</span>`:""}</span><span class="m">${esc(it.traffic||"")}</span></li>`).join("");
     body("p-trends").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-trends",d,4);},
-  media(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.source)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${esc(it.date||"")}</span></li>`).join("");
-    body("p-media").innerHTML=`<ul class="list">${li}</ul>${d.note?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.note)}</div>`:""}`;setMeta("p-media",d,26);},
+  media(d){const row=it=>`<li><span class="src">${esc(it.source)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):esc(it.date||"")}</span></li>`;
+    const tw=(d.items||[]).map(row).join(""),intl=(d.intl||[]).map(row).join("");
+    const tg=(d.together||[]).map(t=>`<li><span class="t"><b>${esc(t.term)}</b><span class="sub" style="white-space:normal">${esc(((t.examples||[])[0]||[])[1]||"")}</span></span><span class="m" title="${esc((t.sources||[]).join("、"))}">${(t.sources||[]).length} 家 · ${t.n} 則</span></li>`).join("");
+    const per=Object.entries(d.per_source||{}).map(([k,v])=>`${esc(k)} ${v}`).join(" · ");
+    body("p-media").innerHTML=`<div class="tp"><div><h3>台灣時尚媒體最新</h3><ul class="list">${tw||'<li class="empty">這輪沒抓到</li>'}</ul>${intl?`<h3 style="margin-top:8px">WWD</h3><ul class="list">${intl}</ul>`:""}</div><div><h3>本週同框<span class="sub" style="font-weight:400"> 近 7 天 ${d.week_n||0} 則，同一個詞出現在 2 家以上</span></h3><ul class="list">${tg||'<li class="empty">資料還在累積，幾天後會更準</li>'}</ul><div class="sub" style="margin-top:8px">標題語感庫：近 60 天 ${d.lexicon||0} 則（${per}）</div></div></div>`;setMeta("p-media",d,4);},
   lyst(d){const mv=v=>{const x=n(v);return!isFinite(x)||x===0?`<span class="mv flat">–</span>`:`<span class="mv ${x>0?"up":"down"}">${x>0?"▲":"▼"}${Math.abs(x)}</span>`;};
     const list=(arr,key)=>`<ul class="list">${(arr||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t">${esc(it[key]||it.name)}${it.brand&&key!=="brand"?`<span class="sub">${esc(it.brand)}</span>`:""}</span>${mv(it.move)}</li>`).join("")}</ul>`;
     body("p-lyst").innerHTML=`<div class="twocol"><div><div class="lbl" style="font-size:10.5px;color:var(--dim);margin-bottom:4px">最熱品牌</div>${list(d.brands,"brand")}</div><div><div class="lbl" style="font-size:10.5px;color:var(--dim);margin-bottom:4px">最熱單品</div>${list(d.products,"name")}</div></div>`;
