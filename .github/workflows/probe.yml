@@ -14,7 +14,7 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python -m playwright install --with-deps chromium
       - run: python probe.py 2> log.txt || true
-      - run: mkdir -p out5 && cp log.txt out5/
+      - run: mkdir -p out6 && cp log.txt out6/
       - run: |
           git config user.name intel-bot; git config user.email intel-bot@users.noreply.github.com
-          git add out5; git commit -qm "probe results"; git push -q origin HEAD:probe
+          git add out6; git commit -qm "probe results"; git push -q origin HEAD:probe
