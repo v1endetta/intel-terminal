@@ -12,9 +12,8 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
       - run: pip install -r requirements.txt
-      - run: python -m playwright install --with-deps chromium
       - run: python probe.py 2> log.txt || true
-      - run: mkdir -p out8 && cp log.txt out8/
+      - run: mkdir -p out9 && cp log.txt out9/
       - run: |
           git config user.name intel-bot; git config user.email intel-bot@users.noreply.github.com
-          git add out8; git commit -qm "probe results"; git push -q origin HEAD:probe
+          git add out9; git commit -qm "probe results"; git push -q origin HEAD:probe
