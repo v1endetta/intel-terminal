@@ -3826,48 +3826,48 @@ def p_brands():
 
 
 # ---------- 集資雷達：嘖嘖等平台擋爬，改看新聞（爆案）與操盤代理商動態 ----------
-CROWD_HOT_Q = ['嘖嘖 集資 破千萬 OR 破百萬 OR 達標 OR 突破', '募資 集資 破千萬 OR 創紀錄 OR 史上', 'flyingV OR 嘖嘖 集資 新品 OR 品牌',
-               '群眾集資 首日 OR 開跑 達標']
-CROWD_PRO_Q = ['貝殼放大 集資', '群募貝果 集資', '集資 趨勢 報告 OR 年度 OR 產業', '嘖嘖 集資 品類 OR 趨勢 OR 十週年']
-CROWD_MUST = re.compile(r"集資|募資|群募|眾籌|zeczec|flyingV|嘖嘖|貝殼放大", re.I)
+CROWD_Q = ['嘖嘖 集資', '嘖嘖 募資', '集資 破百萬 OR 破千萬', '募資 天破百萬 OR 小時破百萬', '群眾募資 突破 OR 達標', '集資 達標',
+           'Kickstarter 台灣 募資', 'flyingV 募資', '貝殼放大', '挖貝 集資', '群眾集資 趨勢 OR 報告 OR 年報']
+CROWD_MUST = re.compile(r"集資|群募|群眾募資|嘖嘖|flyingV|貝殼放大|Kickstarter|挖貝|募資平台|募資計畫|募資專案"
+                        r"|募資.{0,8}(破|達標|首日|突破)", re.I)
+CROWD_NOISE = re.compile(r"港股|IPO|新股|招股|上市|ETF|彩券|樂透|創投|估值|融資|人民幣|基金|詐|股價|億美元|香港|拉皮|都更|勸募|侵占|不起訴", re.I)
+CROWD_SRC_BLOCK = re.compile(r"香港|HKET|on\.cc|東網|文匯|信報|TVB|Now |電台|大公|新華|人民網|中新|環球|央視|觀察者|新浪|搜狐|網易|鳳凰", re.I)
+CROWD_PRO = re.compile(r"貝殼放大|挖貝|年報|報告|數據|趨勢|產業|併購|海外|攻略|心法|操盤|排行|總額|累積")
 
 
 def _crowd_amt(t: str):
-    m = re.search(r"(\d+(?:\.\d+)?)\s*(億|千萬|百萬|萬)", t)
-    if not m:
-        return None
-    return float(m.group(1)) * {"億": 1e8, "千萬": 1e7, "百萬": 1e6, "萬": 1e4}[m.group(2)]
+    m = re.search(r"\d[\d,]*(?:\.\d+)?\s*(?:億|千萬|百萬|萬)(?:美元|日圓|港元)?", t)
+    return m.group(0).replace(" ", "") if m else None
 
 
 def p_crowd():
-    cut = (NOW - timedelta(days=45)).isoformat().replace("+00:00", "Z")
-    out, errs = {}, []
-    for key, qs, lim in (("hot", CROWD_HOT_Q, 14), ("pro", CROWD_PRO_Q, 10)):
-        seen, items = set(), []
-        for q in qs:
-            try:
-                got = _gnews(q, limit=12)
-            except Exception as e:  # noqa: BLE001
-                errs.append(f"{q[:12]}: {safe_err(e)}"); continue
-            for it in got:
-                t = it["title"]
-                if not CROWD_MUST.search(t) or WATCH_SRC_BLOCK.search(it.get("source", "") + " " + it.get("url", "")):
-                    continue
-                if it.get("at") and it["at"] < cut:
-                    continue
-                k = re.sub(r"\W", "", t)[:24]
-                if k in seen:
-                    continue
-                seen.add(k)
-                it["amt"] = _crowd_amt(t)
-                items.append(it)
-            time.sleep(0.4)
-        items.sort(key=lambda x: x.get("at") or "", reverse=True)
-        out[key] = items[:lim]
-    if not out.get("hot") and not out.get("pro"):
+    """集資雷達：嘖嘖等平台擋程式讀取，改看近 60 天報導。專案爆案 vs 平台／操盤方動態依標題分流。"""
+    cut = (NOW - timedelta(days=60)).isoformat().replace("+00:00", "Z")
+    seen, hot, pro, errs = set(), [], [], []
+    for q in CROWD_Q:
+        try:
+            got = _gnews(q + " when:60d", limit=15)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{q[:12]}: {safe_err(e)}"); continue
+        for it in got:
+            t = it["title"]
+            if not CROWD_MUST.search(t) or CROWD_NOISE.search(t) or CROWD_SRC_BLOCK.search(it.get("source", "")):
+                continue
+            if it.get("at") and it["at"] < cut:
+                continue
+            k = re.sub(r"\W", "", t)[:20]
+            if k in seen:
+                continue
+            seen.add(k)
+            it["amt"] = _crowd_amt(t)
+            project = it["amt"] and re.search(r"破|達標|突破|紀錄|首日|小時|天", t)
+            (hot if project or not CROWD_PRO.search(t) else pro).append(it)
+        time.sleep(0.4)
+    hot.sort(key=lambda x: x.get("at") or "", reverse=True)
+    pro.sort(key=lambda x: x.get("at") or "", reverse=True)
+    if not hot and not pro:
         raise RuntimeError("crowd: nothing " + "; ".join(errs)[:160])
-    out["errs"] = errs
-    return out
+    return {"hot": hot[:14], "pro": pro[:10], "errs": errs}
 
 
 # ---------- 注意力流向：電影票房、App Store 台灣免費榜（YouTube／趨勢／維基沿用既有面板） ----------
