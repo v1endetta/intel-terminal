@@ -13,7 +13,7 @@ jobs:
         with: {python-version: "3.11"}
       - run: pip install -r requirements.txt
       - run: python probe.py 2> log.txt || true
-      - run: mkdir -p out14 && cp log.txt out14/
+      - run: mkdir -p out15 && cp log.txt out15/
       - run: |
           git config user.name intel-bot; git config user.email intel-bot@users.noreply.github.com
-          git add out14; git commit -qm "probe results"; git push -q origin HEAD:probe
+          git add out15; git commit -qm "probe results"; git push -q origin HEAD:probe

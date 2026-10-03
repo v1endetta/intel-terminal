@@ -43,8 +43,6 @@ FINMIND_TOKEN = os.environ.get("FINMIND_TOKEN", "").strip()
 REDDIT_ID = os.environ.get("REDDIT_CLIENT_ID", "").strip()
 REDDIT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "").strip()
 CWA_KEY = os.environ.get("CWA_API_KEY", "").strip()
-TDX_ID = os.environ.get("TDX_CLIENT_ID", "").strip()
-TDX_SECRET = os.environ.get("TDX_CLIENT_SECRET", "").strip()
 GUARDIAN_KEY = os.environ.get("GUARDIAN_API_KEY", "").strip()
 YOUTUBE_KEY = os.environ.get("YOUTUBE_API_KEY", "").strip()
 CSE_KEY = os.environ.get("GOOGLE_CSE_KEY", "").strip()
@@ -624,41 +622,104 @@ def p_revenue():
     return {"items": sorted(items.values(), key=lambda x: order.index(x["code"]))}
 
 
-def p_media():
-    items = []
-    try:
-        root = ET.fromstring(get("https://wwd.com/feed").content)
-        build = root.findtext("./channel/lastBuildDate") or ""
+FASHION_TW = {  # 台灣時尚媒體官方來源（都經過實測：網站規則允許、從 GitHub 連得到）
+    "美麗佳人": ("gnews", "https://www.marieclaire.com.tw/google-news.xml"),
+    "VOGUE": ("rss", "https://www.vogue.com.tw/feed/rss"),
+    "ELLE": ("rss", "https://www.elle.com/tw/rss/all.xml"),
+    "BAZAAR": ("rss", "https://www.harpersbazaar.com/tw/rss/all.xml"),
+    "COSMO": ("rss", "https://www.cosmopolitan.com/tw/rss/all.xml"),
+}
+FASHION_HEADS = DATA / "fashion_heads.json"  # 標題語感庫：滾動 60 天，寫文案時拿來校準語感
+FASHION_AD = re.compile(r"開箱|懶人包|贈票|優惠|折扣|週年慶|會員日|抽獎|團購|特價|限時|報名|滿額|贈品|試用|好禮|下殺|即日起|快閃店|聯名款開賣")
+FASHION_STOP = {"vogue", "elle", "bazaar", "cosmo", "cosmopolitan", "marie claire", "hot spot", "the", "and", "of", "with", "for", "in", "to", "a",
+                "ig", "netflix", "youtube", "tw", "taiwan", "new", "mv", "vs", "ft", "x", "diy", "ai", "app", "led", "spa", "ok", "nt", "top"}
+FASHION_GENERIC = re.compile(r"^(一次看|懶人包|推薦|必買|亮點|曝光|登場|開賣|上市|穿搭|造型|單品|系列|新品|全新|最新|首度|正式|台灣|台北|臺北|品牌|設計|女星|男星|明星|網友|今年|秋冬|春夏|\d+)$")
+
+
+def _fashion_feed(kind, url):
+    root = ET.fromstring(get(url).content.lstrip(b"\xef\xbb\xbf \r\n\t"))
+    out = []
+    if kind == "gnews":
+        ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9", "n": "http://www.google.com/schemas/sitemap-news/0.9"}
+        for u in root.findall("s:url", ns):
+            t = (u.findtext("n:news/n:title", "", ns) or "").strip()
+            if t:
+                out.append({"title": t, "url": (u.findtext("s:loc", "", ns) or "").strip(), "at": _rss_date(u.findtext("n:news/n:publication_date", "", ns) or "")})
+    else:
         for it in root.iter("item"):
-            d = it.findtext("pubDate") or ""
-            try:
-                dd = datetime.strptime(d[:25].strip(), "%a, %d %b %Y %H:%M:%S").strftime("%m-%d")
-            except Exception:
-                dd = d[5:11]
-            items.append({"source": "WWD", "title": (it.findtext("title") or "").strip(), "url": it.findtext("link"), "date": dd})
-            if len(items) >= 6:
-                break
-    except Exception as e:  # noqa: BLE001
-        log("wwd", e)
-    for q, src in (("site:businessoffashion.com", "BoF"), ("site:vogue.com.tw OR site:elle.com/tw", "TW")):
+            t = html_mod.unescape((it.findtext("title") or "").strip())
+            if t:
+                out.append({"title": t, "url": (it.findtext("link") or "").strip(), "at": _rss_date(it.findtext("pubDate") or "")})
+    return out
+
+
+def _fashion_terms(title: str) -> set:
+    t = re.sub(r"[「」『』《》【】〈〉（）()｜|：:！!？?，,。、．.…\"'“”‘’#＃＋+~～]", " ", title)
+    terms = set()
+    for m in re.findall(r"[A-Za-z][A-Za-z0-9&'.\-]*(?:\s+[A-Za-z0-9&'.\-]+){0,2}", t):  # 拉丁字：品牌、人名（Dior、Jisoo、Miu Miu）
+        w = m.strip(" .-'").lower()
+        if len(w) >= 2 and w not in FASHION_STOP and not w.isdigit():
+            terms.add(w)
+    for seg in re.findall(r"[\u4e00-\u9fff]{2,}", t):  # 中文：2–4 字片段
+        for L in (2, 3, 4):
+            for i in range(len(seg) - L + 1):
+                g = seg[i:i + L]
+                if not FASHION_GENERIC.match(g):
+                    terms.add(g)
+    return terms
+
+
+def p_media():
+    errs, latest = [], []
+    try:
+        heads = json.loads(FASHION_HEADS.read_text(encoding="utf-8")) if FASHION_HEADS.exists() else {}
+    except Exception:  # noqa: BLE001
+        heads = {}
+    for src, (kind, url) in FASHION_TW.items():
         try:
-            root = ET.fromstring(get("https://www.bing.com/news/search", params={"q": q, "format": "rss"}).content)
-            n = 0
-            for it in root.iter("item"):
-                d = it.findtext("pubDate") or ""
-                try:
-                    dd = datetime.strptime(d[:25].strip(), "%a, %d %b %Y %H:%M:%S").strftime("%m-%d")
-                except Exception:
-                    dd = d[5:11]
-                items.append({"source": src, "title": (it.findtext("title") or "").strip(), "url": it.findtext("link"), "date": dd})
-                n += 1
-                if n >= 4:
-                    break
+            got = _fashion_feed(kind, url)
         except Exception as e:  # noqa: BLE001
-            log("bing news", src, e)
-    if not items:
-        raise RuntimeError("no media items")
-    return {"items": items}
+            log("fashion", src, e); errs.append(f"{src}: {safe_err(e)}"); continue
+        for it in got:
+            it["source"] = src
+            k = it["url"] or (src + it["title"])
+            if k not in heads:
+                heads[k] = {"s": src, "t": it["title"][:120], "at": it["at"] or NOW_ISO}
+        latest += [x for x in got if not FASHION_AD.search(x["title"])][:6]
+    cut60 = (NOW - timedelta(days=60)).isoformat().replace("+00:00", "Z")
+    heads = {k: v for k, v in heads.items() if v.get("at", "") >= cut60}
+    write_json(FASHION_HEADS, heads, separators=(",", ":"))
+    # 本週同框：近 7 天、排除業配字眼，同一個詞在 3 家以上台灣媒體出現
+    cut7 = (NOW - timedelta(days=7)).isoformat().replace("+00:00", "Z")
+    week = [v for v in heads.values() if v.get("at", "") >= cut7 and not FASHION_AD.search(v["t"])]
+    by_term: dict = {}
+    for v in week:
+        for term in _fashion_terms(v["t"]):
+            d = by_term.setdefault(term, {"src": set(), "n": 0, "ex": {}})
+            d["src"].add(v["s"]); d["n"] += 1
+            d["ex"].setdefault(v["s"], v["t"])
+    cand = {t: d for t, d in by_term.items() if len(d["src"]) >= 3}
+    # 被更長詞完整包含、且出現家數一樣的短詞丟掉（「微型婚」被「微型婚禮」吃掉）
+    keep = []
+    for t, d in sorted(cand.items(), key=lambda kv: (-len(kv[1]["src"]), -kv[1]["n"], -len(kv[0]))):
+        if any(t in k and t != k and len(cand[k]["src"]) >= len(d["src"]) for k in cand):
+            continue
+        keep.append({"term": t, "sources": sorted(d["src"]), "n": d["n"], "examples": list(d["ex"].items())[:3]})
+    together = keep[:12]
+    # 國際：WWD（官方 RSS）
+    intl = []
+    try:
+        for it in _fashion_feed("rss", "https://wwd.com/feed/")[:6]:
+            it["source"] = "WWD"; intl.append(it)
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"WWD: {safe_err(e)}")
+    latest.sort(key=lambda x: x.get("at") or "", reverse=True)
+    if not latest and not intl:
+        raise RuntimeError("no media items " + "; ".join(errs)[:160])
+    per = {}
+    for v in heads.values():
+        per[v["s"]] = per.get(v["s"], 0) + 1
+    return {"items": latest[:16], "intl": intl, "together": together, "week_n": len(week), "lexicon": len(heads), "per_source": per, "errs": errs}
 
 
 SUBS = ["taiwan", "fashion", "malefashionadvice", "marketing", "design", "artificial"]
@@ -1088,127 +1149,6 @@ def p_weather():
     return {"label": "氣象署", "items": out, "warnings": warns[:12]}
 
 
-# ---------- 第二階段：台灣脈搏（TDX：YouBike＋國道） ----------
-TDX = "https://tdx.transportdata.tw/api/basic/v2/"
-_tdx_token = None
-_tdx_last = 0.0
-_tdx_cache: dict = {}
-
-
-def tdx(path, **params):
-    global _tdx_token
-    headers = {}
-    if TDX_ID and TDX_SECRET:
-        if not _tdx_token:
-            r = S.post("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-                       data={"grant_type": "client_credentials", "client_id": TDX_ID, "client_secret": TDX_SECRET}, timeout=TIMEOUT)
-            r.raise_for_status()
-            _tdx_token = r.json()["access_token"]
-        headers["Authorization"] = "Bearer " + _tdx_token
-    base = TDX.replace("/v2/", "/v1/") if path.startswith("v1:") else TDX
-    ck = path + json.dumps(params, sort_keys=True)
-    if ck in _tdx_cache:  # 同一輪內同一端點只打一次（YouBike 可借數兩個面板共用）
-        return _tdx_cache[ck]
-    # TDX 對連續呼叫會回 429：每次間隔 2 秒，429 時退避重試
-    global _tdx_last
-    for attempt in range(4):
-        wait = max(0.0, 2.0 - (time.time() - _tdx_last))
-        if wait:
-            time.sleep(wait)
-        _tdx_last = time.time()
-        try:
-            out = gjson(base + path.replace("v1:", ""), params={"$format": "JSON", **params}, headers=headers)
-            _tdx_cache[ck] = out
-            return out
-        except requests.HTTPError as e:
-            if e.response is not None and e.response.status_code == 429:
-                if attempt < 3:
-                    time.sleep(5 * (2 ** attempt))  # 5 / 10 / 20 秒；TDX 是每個來源 IP 每秒 50 次，GitHub runner 共用 IP
-                    continue
-                raise RuntimeError(f"429 on {path} body={e.response.text[:160]!r}")
-            raise
-
-
-def p_tw_pulse():
-    """全台脈搏：沿用地圖那一輪的 TDX 快取（不多打 API）。YouBike／停車場依縣市，國道依路線方向。"""
-    st = {}
-    if GEO_STATIC_PATH.exists():
-        try:
-            st = json.loads(GEO_STATIC_PATH.read_text(encoding="utf-8"))
-        except Exception:
-            st = {}
-    avail = st.get("avail", {})
-    key = NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M")
-    bikes = []
-    for city, meta in GEO_CITIES.items():
-        if not avail.get(city, {}).get("bikes"):
-            continue
-        try:
-            rows = _tdx_opt(f"Bike/Availability/City/{city}") or []
-        except Exception as e:  # noqa: BLE001
-            log("tw_pulse bikes", city, e); continue
-        rows = [r for r in rows if r.get("ServiceStatus", 1) == 1]
-        if not rows:
-            continue
-        rent = sum(r.get("AvailableRentBikes") or 0 for r in rows)
-        empty = sum(1 for r in rows if (r.get("AvailableRentBikes") or 0) == 0)
-        full = sum(1 for r in rows if (r.get("AvailableReturnBikes") or 0) == 0)
-        label = meta["label"]
-        hist_put("youbike", label, key, rent)
-        park = None
-        if avail.get(city, {}).get("parking"):
-            try:
-                tot = av_ = 0
-                for r in _tdx_opt(f"v1:Parking/OffStreet/ParkingAvailability/City/{city}") or []:
-                    t_, a_ = r.get("TotalSpaces"), r.get("AvailableSpaces")
-                    car = next((a for a in r.get("Availabilities") or [] if a.get("SpaceType") == 1), None)
-                    if car and car.get("NumberOfSpaces"):
-                        t_, a_ = car["NumberOfSpaces"], car.get("AvailableSpaces")
-                    if t_ and a_ is not None and a_ >= 0 and t_ >= 20:
-                        tot += t_; av_ += a_
-                if tot:
-                    park = round(av_ / tot * 100, 1)
-            except Exception as e:  # noqa: BLE001
-                log("tw_pulse parking", city, e)
-        bikes.append({"city": label, "stations": len(rows), "rent": rent, "empty": empty, "full": full, "park_pct": park,
-                      "spark": hist_get("youbike", label, 48)})
-    bikes.sort(key=lambda b: -b["stations"])
-    # 國道：各國道南北向小客車平均區間速率
-    live = tdx("Road/Traffic/Live/ETag/Freeway")
-    agg = {}
-    for pr in live.get("ETagPairLives", []):
-        pid = pr.get("ETagPairID", "")
-        m = re.match(r"^(\d{2})F\d{4}([NSEW])", pid)
-        if not m:
-            continue
-        for fl in pr.get("Flows", []):
-            if fl.get("VehicleType") == 31 and (fl.get("SpaceMeanSpeed") or 0) > 0 and (fl.get("VehicleCount") or 0) > 0:
-                k = (m.group(1), m.group(2))
-                a = agg.setdefault(k, [0.0, 0])
-                a[0] += fl["SpaceMeanSpeed"] * fl["VehicleCount"]
-                a[1] += fl["VehicleCount"]
-    dirn = {"N": "北", "S": "南", "E": "東", "W": "西"}
-    roads = []
-    for (no, d), (w, c) in sorted(agg.items()):
-        if no in ("01", "03", "05") and c > 0:
-            spd = w / c
-            hist_put("freeway", f"{no}{d}", key, round(spd, 1))
-            roads.append({"road": f"國道{int(no)}", "dir": dirn.get(d, d), "speed": round(spd, 1), "count": c,
-                          "spark": hist_get("freeway", f"{no}{d}", 48)})
-    # 最塞的區間（名稱來自地圖的靜態表）
-    names = {pid: desc for pid, desc, _ in st.get("etag", [])}
-    worst = []
-    for pr in live.get("ETagPairLives", []):
-        for fl in pr.get("Flows", []):
-            if fl.get("VehicleType") == 31 and 0 < (fl.get("SpaceMeanSpeed") or 0) < 40 and (fl.get("VehicleCount") or 0) >= 30:
-                worst.append((fl["SpaceMeanSpeed"], pr.get("ETagPairID")))
-    worst.sort()
-    jams = [{"section": names.get(pid, pid), "speed": round(spd, 0)} for spd, pid in worst[:6]]
-    if not bikes and not roads:
-        raise RuntimeError("tw_pulse: nothing")
-    return {"label": "TDX", "bikes": bikes, "roads": roads, "jams": jams, "roadTime": live.get("UpdateTime")}
-
-
 # ---------- 第二階段：PTT（curl_cffi 模擬瀏覽器） ----------
 PTT_BOARDS = [  # (板, 中文, 情緒面向)
     ("Gossiping", "八卦", "大眾"), ("HatePolitics", "政黑", "政治"), ("Stock", "股板", "市場"), ("WomenTalk", "女板", "生活"),
@@ -1469,201 +1409,276 @@ def p_tw_market():
     return out
 
 
-# ---------- 地圖：停車場剩餘、YouBike、車速（台北／台中） ----------
-# 全台縣市（TDX 代碼）：label、bbox、center、zoom。圖層有無由 TDX 回應決定（404 記在靜態快取，一天重試一次）
-GEO_CITIES = {
-    "Taipei": {"label": "台北市", "bbox": [121.45, 24.95, 121.67, 25.22], "center": [121.54, 25.05], "zoom": 11.3},
-    "NewTaipei": {"label": "新北市", "bbox": [121.28, 24.67, 122.01, 25.30], "center": [121.50, 25.02], "zoom": 10.2},
-    "Keelung": {"label": "基隆市", "bbox": [121.62, 25.05, 121.82, 25.20], "center": [121.74, 25.13], "zoom": 12},
-    "Taoyuan": {"label": "桃園市", "bbox": [121.00, 24.60, 121.45, 25.12], "center": [121.25, 24.95], "zoom": 10.8},
-    "Hsinchu": {"label": "新竹市", "bbox": [120.88, 24.72, 121.05, 24.86], "center": [120.97, 24.80], "zoom": 12},
-    "HsinchuCounty": {"label": "新竹縣", "bbox": [120.90, 24.40, 121.40, 24.95], "center": [121.10, 24.75], "zoom": 10.5},
-    "MiaoliCounty": {"label": "苗栗縣", "bbox": [120.60, 24.25, 121.30, 24.75], "center": [120.90, 24.50], "zoom": 10.3},
-    "Taichung": {"label": "台中市", "bbox": [120.45, 23.95, 121.35, 24.45], "center": [120.68, 24.16], "zoom": 11},
-    "ChanghuaCounty": {"label": "彰化縣", "bbox": [120.25, 23.80, 120.75, 24.20], "center": [120.50, 24.00], "zoom": 10.8},
-    "NantouCounty": {"label": "南投縣", "bbox": [120.60, 23.40, 121.35, 24.20], "center": [120.90, 23.85], "zoom": 9.8},
-    "YunlinCounty": {"label": "雲林縣", "bbox": [120.10, 23.50, 120.75, 23.85], "center": [120.40, 23.70], "zoom": 10.8},
-    "Chiayi": {"label": "嘉義市", "bbox": [120.38, 23.43, 120.52, 23.53], "center": [120.45, 23.48], "zoom": 12.5},
-    "ChiayiCounty": {"label": "嘉義縣", "bbox": [120.10, 23.20, 120.95, 23.65], "center": [120.40, 23.45], "zoom": 10.3},
-    "Tainan": {"label": "台南市", "bbox": [120.00, 22.88, 120.70, 23.45], "center": [120.20, 23.00], "zoom": 11},
-    "Kaohsiung": {"label": "高雄市", "bbox": [120.15, 22.45, 121.05, 23.50], "center": [120.32, 22.63], "zoom": 11},
-    "PingtungCounty": {"label": "屏東縣", "bbox": [120.35, 21.85, 120.95, 22.90], "center": [120.50, 22.55], "zoom": 10.3},
-    "YilanCounty": {"label": "宜蘭縣", "bbox": [121.30, 24.30, 122.00, 24.95], "center": [121.70, 24.70], "zoom": 10.3},
-    "HualienCounty": {"label": "花蓮縣", "bbox": [120.90, 23.10, 121.80, 24.40], "center": [121.55, 23.90], "zoom": 9.5},
-    "TaitungCounty": {"label": "台東縣", "bbox": [120.70, 21.90, 121.65, 23.45], "center": [121.10, 22.75], "zoom": 9.5},
-    "PenghuCounty": {"label": "澎湖縣", "bbox": [119.30, 23.20, 119.75, 23.80], "center": [119.58, 23.57], "zoom": 11},
-    "KinmenCounty": {"label": "金門縣", "bbox": [118.15, 24.35, 118.55, 24.55], "center": [118.35, 24.45], "zoom": 11.5},
-    "LienchiangCounty": {"label": "連江縣", "bbox": [119.85, 25.90, 120.55, 26.40], "center": [119.95, 26.15], "zoom": 10.5},
-}
-GEO_STATIC_PATH = DATA / "geo_static.json"
+# ---------- 台灣現場：YouBike／停車場／市區車速／桃機（全部免金鑰的原始單位開放資料） ----------
+# 2026-10 起不用 TDX（免費額度每月約 4,500 次，地圖一天就用完、帳號被停權）。
+# GitHub 主機連得到的來源只有：台北市資料大平臺（YouBike、停車場、VD 路段）、新北市開放資料（YouBike）、桃園機場航班檔。
+# 國道（高公局 tisvcloud）、台中／高雄等 YouBike 來源擋海外 IP，所以沒有。
 GEO_PATH = DATA / "geo.json"
+GEO_STATIC_PATH = DATA / "geo_static.json"
 GEO_ERRS: list = []
+TPE_YB_URL = "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json"
+NTPC_YB_URL = "https://data.ntpc.gov.tw/api/datasets/010e5b15-3823-4b20-b401-b1cf000550c5/json"
+TPE_PARK_DESC = "https://tcgbusfs.blob.core.windows.net/blobtcmsv/TCMSV_alldesc.json"
+TPE_PARK_AV = "https://tcgbusfs.blob.core.windows.net/blobtcmsv/TCMSV_allavailable.json"
+TPE_VD_URL = "https://tcgbusfs.blob.core.windows.net/blobtisv/GetVD.xml.gz"
+TPE_AIR_URL = "https://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt"
+LIVE_CITIES = {
+    "Taipei": {"label": "台北市", "center": [121.54, 25.05], "zoom": 11.3},
+    "NewTaipei": {"label": "新北市", "center": [121.50, 25.02], "zoom": 10.2},
+}
+_live_cache: dict = {}
 
 
-def _in_bbox(lon, lat, b):
-    return lon is not None and lat is not None and b[0] <= lon <= b[2] and b[1] <= lat <= b[3]
+def _gz_text(r) -> str:
+    raw = r.content
+    if raw[:2] == b"\x1f\x8b":
+        import gzip
+        raw = gzip.decompress(raw)
+    return raw.decode("utf-8-sig", errors="replace")
 
 
-def _tdx_opt(path, **params):
-    """TDX 呼叫；404／空表示該縣市沒有這個資料集 → 回 None，不當錯誤。"""
-    try:
-        out = tdx(path, **params)
-    except requests.HTTPError as e:
-        if e.response is not None and e.response.status_code in (404, 400):
-            return None
-        raise
-    if isinstance(out, dict):
-        for k in ("CarParks", "VDs", "ParkingAvailabilities", "VDLives", "ETagPairs", "ETagPairLives"):
-            if k in out:
-                return out[k] or None
-        return out or None
-    return out or None
+def _twd97_to_wgs84(x: float, y: float):
+    """TWD97 TM2（中央經線 121°）→ WGS84 經緯度。"""
+    import math
+    a, b = 6378137.0, 6356752.314245
+    lon0, k0, dx = math.radians(121), 0.9999, 250000.0
+    e = math.sqrt(1 - (b / a) ** 2)
+    x -= dx
+    m = y / k0
+    mu = m / (a * (1 - e ** 2 / 4 - 3 * e ** 4 / 64 - 5 * e ** 6 / 256))
+    e1 = (1 - math.sqrt(1 - e ** 2)) / (1 + math.sqrt(1 - e ** 2))
+    fp = (mu + (3 * e1 / 2 - 27 * e1 ** 3 / 32) * math.sin(2 * mu) + (21 * e1 ** 2 / 16 - 55 * e1 ** 4 / 32) * math.sin(4 * mu)
+          + (151 * e1 ** 3 / 96) * math.sin(6 * mu) + (1097 * e1 ** 4 / 512) * math.sin(8 * mu))
+    e2 = (e * a / b) ** 2
+    c1 = e2 * math.cos(fp) ** 2
+    t1 = math.tan(fp) ** 2
+    r1 = a * (1 - e ** 2) / (1 - e ** 2 * math.sin(fp) ** 2) ** 1.5
+    n1 = a / math.sqrt(1 - e ** 2 * math.sin(fp) ** 2)
+    d = x / (n1 * k0)
+    lat = fp - (n1 * math.tan(fp) / r1) * (d ** 2 / 2 - (5 + 3 * t1 + 10 * c1 - 4 * c1 ** 2 - 9 * e2) * d ** 4 / 24
+                                           + (61 + 90 * t1 + 298 * c1 + 45 * t1 ** 2 - 252 * e2 - 3 * c1 ** 2) * d ** 6 / 720)
+    lon = lon0 + (d - (1 + 2 * t1 + c1) * d ** 3 / 6 + (5 - 2 * c1 + 28 * t1 - 3 * c1 ** 2 + 8 * e2 + 24 * t1 ** 2) * d ** 5 / 120) / math.cos(fp)
+    return round(math.degrees(lon), 5), round(math.degrees(lat), 5)
 
 
-def _geo_static():
-    """靜態表（停車場座標、YouBike 站點、各縣市 VD 位置、國道 ETag 路段幾何）。
-    一天重建一次，但分批：每輪最多做 5 個縣市，做完的記在 done，全部完成才更新 fetchedAt。
-    沒有的圖層記 avail=False；429 不算沒有，留給下一輪。"""
+def _yb_stations(city: str) -> list:
+    """回 [[lon, lat, 可借, 總車位, 站名, 可還]]（只含營運中的站）。同一輪只抓一次。"""
+    if city in _live_cache:
+        return _live_cache[city]
+    out = []
+    if city == "Taipei":
+        for s in gjson(TPE_YB_URL):
+            if str(s.get("act")) != "1" or not s.get("latitude"):
+                continue
+            out.append([round(float(s["longitude"]), 5), round(float(s["latitude"]), 5), int(s.get("available_rent_bikes") or 0),
+                        int(s.get("Quantity") or 0), (s.get("sna") or "").replace("YouBike2.0_", "")[:14], int(s.get("available_return_bikes") or 0)])
+    elif city == "NewTaipei":
+        rows, page = [], 0
+        while page < 5:  # 新北約 1,800 站：一頁 3,000 通常一次拿完
+            batch = gjson(NTPC_YB_URL, params={"page": page, "size": 3000})
+            rows += batch
+            if len(batch) < 3000:
+                break
+            page += 1
+        for s in rows:
+            if str(s.get("act")) != "1" or not s.get("lat"):
+                continue
+            out.append([round(float(s["lng"]), 5), round(float(s["lat"]), 5), int(num(s.get("sbi_quantity")) or 0),
+                        int(num(s.get("tot_quantity")) or 0), (s.get("sna") or "").replace("YouBike2.0_", "")[:14], int(num(s.get("bemp")) or 0)])
+    _live_cache[city] = out
+    return out
+
+
+def _tpe_parking() -> list:
+    """台北市停車場：[[lon, lat, 剩餘汽車位, 汽車位, 名稱]]。座標表一天更新一次（2.8MB），剩餘每輪抓。"""
+    if "parking" in _live_cache:
+        return _live_cache["parking"]
     st = {}
     if GEO_STATIC_PATH.exists():
         try:
             st = json.loads(GEO_STATIC_PATH.read_text(encoding="utf-8"))
-        except Exception:
+        except Exception:  # noqa: BLE001
             st = {}
-    for k, dflt in (("carparks", {}), ("bikes", {}), ("vd", {}), ("etag", []), ("avail", {}), ("done", [])):
-        st.setdefault(k, dflt)
-    try:
-        t = datetime.fromisoformat(st.get("fetchedAt", "2000-01-01T00:00:00+00:00").replace("Z", "+00:00"))
-    except Exception:
-        t = datetime(2000, 1, 1, tzinfo=timezone.utc)
-    fresh = NOW - t < timedelta(hours=24) and st["avail"]
-    if fresh and not st["done"]:
-        return st
-    todo = [c for c in GEO_CITIES if c not in st["done"]]
-    for city in todo[:5]:
-        if time.time() > SOFT_DEADLINE - 240:
-            break
-        av = dict(st["avail"].get(city) or {"parking": False, "bikes": False, "vd": False})
-        ok = True
-        for key, path, parse in (
-            ("parking", f"v1:Parking/OffStreet/CarPark/City/{city}",
-             lambda rows: {c["CarParkID"]: [round(c["CarParkPosition"]["PositionLon"], 5), round(c["CarParkPosition"]["PositionLat"], 5),
-                                            (c.get("CarParkName") or {}).get("Zh_tw", "")] for c in rows if (c.get("CarParkPosition") or {}).get("PositionLat")}),
-            ("bikes", f"Bike/Station/City/{city}",
-             lambda rows: {b["StationUID"]: [round(b["StationPosition"]["PositionLon"], 5), round(b["StationPosition"]["PositionLat"], 5),
-                                             (b.get("StationName") or {}).get("Zh_tw", "").replace("YouBike2.0_", ""), b.get("BikesCapacity") or 0]
-                           for b in rows if (b.get("StationPosition") or {}).get("PositionLat")}),
-            ("vd", f"Road/Traffic/VD/City/{city}",
-             lambda rows: {v["VDID"]: [round(v["PositionLon"], 5), round(v["PositionLat"], 5), v.get("RoadName", "")] for v in rows if v.get("PositionLat")}),
-        ):
-            store = {"parking": "carparks", "bikes": "bikes", "vd": "vd"}[key]
-            try:
-                rows = _tdx_opt(path)
-                if rows:
-                    st[store][city] = parse(rows)
-                    av[key] = bool(st[store][city])
-                else:
-                    st[store].pop(city, None); av[key] = False
-            except Exception as e:  # noqa: BLE001
-                ok = False
-                log("geo static", key, city, e); GEO_ERRS.append(f"static {key} {city}: " + safe_err(e))
-                break
-        st["avail"][city] = av
-        if ok:
-            st["done"].append(city)
-        else:
-            break  # 這輪 TDX 不順，剩下的縣市下一輪再建
-    if not st["etag"] or not fresh:
+    pos = st.get("tpe_park") if st.get("v") == 2 else None
+    fresh = pos and st.get("fetchedAt", "") >= (NOW - timedelta(hours=24)).isoformat()
+    if not fresh:
         try:
-            et = []
-            for ep in tdx("Road/Traffic/ETagPair/Freeway").get("ETagPairs", []):
-                g = ep.get("Geometry") or ""
-                pts = re.findall(r"(-?\d+\.\d+)\s+(-?\d+\.\d+)", g)
-                if pts:
-                    et.append([ep["ETagPairID"], ep.get("Description", ""), [[round(float(a), 4), round(float(b), 4)] for a, b in pts[::max(1, len(pts) // 12)]]])
-            if et:
-                st["etag"] = et
+            desc = json.loads(_gz_text(get(TPE_PARK_DESC)))["data"]["park"]
+            pos = {}
+            for p in desc:
+                try:
+                    tot = int(p.get("totalcar") or 0)
+                    if tot >= 20 and p.get("tw97x"):
+                        lon, lat = _twd97_to_wgs84(float(p["tw97x"]), float(p["tw97y"]))
+                        pos[p["id"]] = [lon, lat, tot, (p.get("name") or "")[:18]]
+                except Exception:  # noqa: BLE001
+                    continue
+            write_json(GEO_STATIC_PATH, {"v": 2, "fetchedAt": NOW_ISO, "tpe_park": pos}, separators=(",", ":"))
         except Exception as e:  # noqa: BLE001
-            log("geo etag static", e); GEO_ERRS.append("etag static: " + safe_err(e))
-    if all(c in st["done"] for c in GEO_CITIES):
-        st["fetchedAt"] = NOW_ISO; st["done"] = []
-    st["progress"] = f'{len(st["done"])}/{len(GEO_CITIES)}' if st["done"] else "完成"
-    write_json(GEO_STATIC_PATH, st, separators=(",", ":"))
-    return st
+            if not pos:
+                raise
+            log("tpe parking desc", e)  # 座標表抓不到：沿用舊表
+    out = []
+    for p in json.loads(_gz_text(get(TPE_PARK_AV)))["data"]["park"]:
+        meta = pos.get(p.get("id"))
+        av = p.get("availablecar")
+        if meta and isinstance(av, (int, float)) and av >= 0:
+            out.append([meta[0], meta[1], int(min(av, meta[2])), meta[2], meta[3]])
+    _live_cache["parking"] = out
+    return out
+
+
+def _tpe_vd() -> list:
+    """台北市 VD 路段：[{name, road, spd, vol, a:[lon,lat], b:[lon,lat]}]。"""
+    if "vd" in _live_cache:
+        return _live_cache["vd"]
+    t = _gz_text(get(TPE_VD_URL))
+    out = []
+    for s in re.findall(r"<vd:SectionData>(.*?)</vd:SectionData>", t, re.S):
+        g = lambda tag: (re.search(rf"<vd:{tag}>(.*?)</vd:{tag}>", s) or [None, ""])[1]
+        spd, vol = num(g("AvgSpd")), num(g("TotalVol"))
+        ax, ay, bx, by = num(g("StartWgsX")), num(g("StartWgsY")), num(g("EndWgsX")), num(g("EndWgsY"))
+        if not spd or spd <= 0 or None in (ax, ay, bx, by):
+            continue
+        if not all(121.40 <= x <= 121.70 for x in (ax, bx)) or not all(24.90 <= y <= 25.25 for y in (ay, by)) \
+                or abs(ax - bx) + abs(ay - by) > 0.05:  # 座標錯置的路段（會拉出一條橫跨地圖的線）不畫
+            continue
+        name = re.sub(r"\s+", " ", g("SectionName")).strip()
+        out.append({"name": name, "road": name.split(" ")[0], "spd": spd, "vol": vol or 0,
+                    "a": [round(ax, 5), round(ay, 5)], "b": [round(bx, 5), round(by, 5)]})
+    _live_cache["vd"] = out
+    return out
+
+
+def p_tw_pulse():
+    """全台脈搏：雙北 YouBike、台北停車場剩餘率、台北主要道路均速與最塞路段。"""
+    key = NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M")
+    bikes, errs = [], []
+    park_pct = None
+    try:
+        pk = _tpe_parking()
+        tot = sum(p[3] for p in pk)
+        park_pct = round(sum(p[2] for p in pk) / tot * 100, 1) if tot else None
+    except Exception as e:  # noqa: BLE001
+        log("tw_pulse parking", e); errs.append("台北停車場: " + safe_err(e))
+    for city, meta in LIVE_CITIES.items():
+        try:
+            rows = _yb_stations(city)
+        except Exception as e:  # noqa: BLE001
+            log("tw_pulse bikes", city, e); errs.append(f"YouBike {meta['label']}: " + safe_err(e)); continue
+        if not rows:
+            continue
+        rent = sum(r[2] for r in rows)
+        label = meta["label"]
+        hist_put("youbike", label, key, rent)
+        bikes.append({"city": label, "stations": len(rows), "rent": rent, "empty": sum(1 for r in rows if r[2] == 0),
+                      "full": sum(1 for r in rows if r[5] == 0), "park_pct": park_pct if city == "Taipei" else None,
+                      "spark": hist_get("youbike", label, 48)})
+    roads, jams = [], []
+    try:
+        secs = _tpe_vd()
+        agg = {}
+        for s in secs:
+            a = agg.setdefault(s["road"], [0.0, 0.0, 0])
+            w = max(s["vol"], 1)
+            a[0] += s["spd"] * w; a[1] += w; a[2] += 1
+        top = sorted(((r, v) for r, v in agg.items() if v[2] >= 4), key=lambda x: -x[1][1])[:8]
+        for road, (w, c, nsec) in top:
+            spd = round(w / c, 1)
+            hist_put("tpe_road", road, key, spd)
+            roads.append({"road": road, "dir": "", "speed": spd, "count": int(c), "spark": hist_get("tpe_road", road, 48)})
+        slow = sorted((s for s in secs if s["spd"] < 15 and s["vol"] >= 20), key=lambda s: s["spd"])[:6]
+        jams = [{"section": s["name"][:22], "speed": round(s["spd"])} for s in slow]
+    except Exception as e:  # noqa: BLE001
+        log("tw_pulse vd", e); errs.append("台北 VD: " + safe_err(e))
+    if not bikes and not roads:
+        raise RuntimeError("tw_pulse: nothing " + "; ".join(errs)[:200])
+    return {"label": "台北市資料大平臺・新北市開放資料", "bikes": bikes, "roads": roads, "roadKind": "city", "jams": jams, "errs": errs}
 
 
 def p_geo():
+    """地圖：雙北 YouBike、台北停車場、台北市區路段車速（全台概覽畫路段線）。"""
     GEO_ERRS.clear()
-    st = _geo_static()
-    avail = st.get("avail", {})
-    geo = {"generatedAt": NOW_ISO, "labels": {k: v["label"] for k, v in GEO_CITIES.items()},
-           "views": {k: [v["center"], v["zoom"]] for k, v in GEO_CITIES.items()}, "avail": avail, "cities": {}, "freeway": []}
-    prev_geo = {}
+    prev = {}
     if GEO_PATH.exists():
         try:
-            prev_geo = json.loads(GEO_PATH.read_text(encoding="utf-8")).get("cities", {})
-        except Exception:
-            prev_geo = {}
-    for city in GEO_CITIES:
+            prev = json.loads(GEO_PATH.read_text(encoding="utf-8")).get("cities", {})
+        except Exception:  # noqa: BLE001
+            prev = {}
+    geo = {"generatedAt": NOW_ISO, "labels": {k: v["label"] for k, v in LIVE_CITIES.items()},
+           "views": {k: [v["center"], v["zoom"]] for k, v in LIVE_CITIES.items()}, "avail": {}, "cities": {}, "freeway": [],
+           "lineLabel": "台北市區路段"}
+    for city in LIVE_CITIES:
         c = {"parking": [], "bikes": [], "speed": []}
-        av = avail.get(city, {})
-        if time.time() > SOFT_DEADLINE - 120:  # 時間不夠：這個縣市沿用上一輪
-            geo["cities"][city] = prev_geo.get(city, c); continue
-        if av.get("parking"):
+        try:
+            c["bikes"] = [r[:5] for r in _yb_stations(city)]
+        except Exception as e:  # noqa: BLE001
+            GEO_ERRS.append(f"bikes {city}: " + safe_err(e)); c["bikes"] = (prev.get(city) or {}).get("bikes", [])
+        if city == "Taipei":
             try:
-                for r in _tdx_opt(f"v1:Parking/OffStreet/ParkingAvailability/City/{city}") or []:
-                    pos = st["carparks"].get(city, {}).get(r.get("CarParkID"))
-                    if not pos:
-                        continue
-                    total, avail_n = r.get("TotalSpaces"), r.get("AvailableSpaces")
-                    car = next((a for a in r.get("Availabilities") or [] if a.get("SpaceType") == 1), None)
-                    if car and car.get("NumberOfSpaces"):
-                        total, avail_n = car["NumberOfSpaces"], car.get("AvailableSpaces")
-                    if not total or avail_n is None or avail_n < 0 or total < 20:
-                        continue
-                    c["parking"].append([pos[0], pos[1], int(avail_n), int(total), pos[2][:18]])
+                c["parking"] = _tpe_parking()
             except Exception as e:  # noqa: BLE001
-                log("geo parking", city, e); GEO_ERRS.append(f"parking {city}: " + safe_err(e))
-                c["parking"] = (prev_geo.get(city) or {}).get("parking", [])  # 429 等：沿用上一輪
-        if av.get("bikes"):
+                GEO_ERRS.append("parking Taipei: " + safe_err(e)); c["parking"] = (prev.get(city) or {}).get("parking", [])
             try:
-                for r in _tdx_opt(f"Bike/Availability/City/{city}") or []:
-                    pos = st["bikes"].get(city, {}).get(r.get("StationUID"))
-                    if pos and r.get("ServiceStatus", 1) == 1:
-                        c["bikes"].append([pos[0], pos[1], int(r.get("AvailableRentBikes") or 0), int(pos[3] or 0), pos[2][:14]])
+                secs = _tpe_vd()
+                c["speed"] = [[round((s["a"][0] + s["b"][0]) / 2, 5), round((s["a"][1] + s["b"][1]) / 2, 5), round(s["spd"]), s["name"][:16]] for s in secs]
+                geo["freeway"] = [[[s["a"], s["b"]], round(s["spd"]), s["name"][:16]] for s in secs]
             except Exception as e:  # noqa: BLE001
-                log("geo bikes", city, e); GEO_ERRS.append(f"bikes {city}: " + safe_err(e))
-                c["bikes"] = (prev_geo.get(city) or {}).get("bikes", [])  # 429 等：沿用上一輪
-        if av.get("vd"):
-            try:
-                for v in _tdx_opt(f"Road/Traffic/Live/VD/City/{city}") or []:
-                    pos = st["vd"].get(city, {}).get(v.get("VDID"))
-                    if not pos:
-                        continue
-                    sp = [ln.get("Speed") for lf in v.get("LinkFlows") or [] for ln in lf.get("Lanes") or [] if (ln.get("Speed") or 0) > 0]
-                    if sp:
-                        c["speed"].append([pos[0], pos[1], round(sum(sp) / len(sp)), pos[2][:10]])
-            except Exception as e:  # noqa: BLE001
-                log("geo vd live", city, e); GEO_ERRS.append(f"vd {city}: " + safe_err(e))
-                c["speed"] = (prev_geo.get(city) or {}).get("speed", [])  # 429 等：沿用上一輪
+                GEO_ERRS.append("vd Taipei: " + safe_err(e)); c["speed"] = (prev.get(city) or {}).get("speed", [])
         geo["cities"][city] = c
-    # 國道 ETag 路段車速（全台，畫線）
-    try:
-        live = {pr["ETagPairID"]: next((f["SpaceMeanSpeed"] for f in pr.get("Flows", []) if f.get("VehicleType") == 31 and (f.get("SpaceMeanSpeed") or 0) > 0), None)
-                for pr in tdx("Road/Traffic/Live/ETag/Freeway").get("ETagPairLives", [])}
-        for pid, desc, pts in st.get("etag", []):
-            spd = live.get(pid)
-            if spd is not None:
-                geo["freeway"].append([pts, round(spd), desc[:16]])
-    except Exception as e:  # noqa: BLE001
-        log("geo etag live", e); GEO_ERRS.append("etag live: " + safe_err(e))
+        geo["avail"][city] = {"parking": bool(c["parking"]), "bikes": bool(c["bikes"]), "vd": bool(c["speed"])}
     write_json(GEO_PATH, geo, separators=(",", ":"))
     summary = {city: {k: len(v) for k, v in c.items() if v} for city, c in geo["cities"].items()}
-    summary = {k: v for k, v in summary.items() if v}
-    if not summary and not geo["freeway"]:
-        raise RuntimeError(f"geo: nothing errs={GEO_ERRS[:6]}")
-    return {"label": "TDX", "cities_with_data": len(summary), "freeway": len(geo["freeway"]), "static": st.get("progress", ""),
-            "totals": {k: sum(c.get(k, 0) for c in summary.values()) for k in ("parking", "bikes", "speed")}, "errs": GEO_ERRS[:12]}
+    if not any(summary.values()):
+        raise RuntimeError(f"geo: nothing errs={GEO_ERRS[:4]}")
+    return {"label": "台北市資料大平臺・新北市開放資料", "cities_with_data": sum(1 for v in summary.values() if v), "freeway": len(geo["freeway"]),
+            "totals": {k: sum(v.get(k, 0) for v in summary.values()) for k in ("parking", "bikes", "speed")}, "errs": GEO_ERRS[:12]}
+
+
+def p_airport():
+    """桃機今日出發／抵達：班次、延誤、取消，與接下來 8 班出發（桃園機場官網航班檔）。"""
+    r = get(TPE_AIR_URL, headers={"Referer": "https://www.taoyuan-airport.com/"})
+    txt = r.content.decode("cp950", errors="replace")
+    now_tpe = NOW.astimezone(TPE)
+    today = now_tpe.strftime("%Y/%m/%d")
+    out = {k: {"total": 0, "delayed": 0, "cancelled": 0, "upcoming": []} for k in ("dep", "arr")}
+    seen = set()
+    for line in txt.splitlines():
+        f = [x.strip() for x in line.split(",")]
+        if len(f) < 14 or f[1] not in ("A", "D"):
+            continue
+        kind = "dep" if f[1] == "D" else "arr"
+        try:
+            sched = datetime.strptime(f"{f[6]} {f[7]}", "%Y/%m/%d %H:%M:%S").replace(tzinfo=TPE)
+            est = datetime.strptime(f"{f[8]} {f[9]}", "%Y/%m/%d %H:%M:%S").replace(tzinfo=TPE) if f[8] and f[9] else None
+        except ValueError:
+            continue
+        k = (kind, f[6], f[7], f[10], f[5] or f[0])  # 共掛班號（同時間、同航點、同登機門）只算一次
+        if k in seen:
+            continue
+        seen.add(k)
+        status = f[13].upper()
+        zh = re.sub(r"[A-Za-z ]+", "", f[13])
+        late = est is not None and (est - sched) >= timedelta(minutes=30)
+        if f[6] == today:
+            o = out[kind]
+            o["total"] += 1
+            if "CANCEL" in status:
+                o["cancelled"] += 1
+            elif "DELAY" in status or late:
+                o["delayed"] += 1
+        if (kind == "dep" and sched >= now_tpe - timedelta(minutes=5) and sched <= now_tpe + timedelta(hours=12)
+                and not any(w in status for w in ("CANCEL", "DEPARTED"))):
+            out["dep"]["upcoming"].append({"flight": f"{f[2]}{f[4].lstrip()}", "to": f[10], "sched": sched.strftime("%H:%M"),
+                                           "est": est.strftime("%H:%M") if est else "", "remark": zh[:4], "gate": f[5][:4], "_t": sched})
+    up = sorted(out["dep"]["upcoming"], key=lambda x: x["_t"])[:8]
+    for u in up:
+        u.pop("_t", None)
+    out["dep"]["upcoming"] = up
+    if not out["dep"]["total"] and not out["arr"]["total"]:
+        raise RuntimeError("airport: empty")
+    out["label"] = "桃園機場"
+    return out
 
 
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
@@ -1696,7 +1711,7 @@ WATCH_MUST = {
     "家具展 OR 室內設計 OR 設計師品牌": r"家具|室內|設計",
 }
 # 中港官媒、轉載站與明顯不相干的標題
-WATCH_SRC_BLOCK = re.compile(r"大公|文匯|新華|人民網|中新|環球網|央視|觀察者|新浪|搜狐|網易|鳳凰|IndexBox")
+WATCH_SRC_BLOCK = re.compile(r"大公|文匯|新華|人民網|中新|環球網|央視|觀察者|新浪|搜狐|網易|鳳凰|IndexBox|tkww|takungpao|wenweipo|chinanews|xinhua|people\.com|cctv|huanqiu|guancha|sina|sohu|163\.com|ifeng", re.I)
 WATCH_NOISE = re.compile(r"抓去關|處置股|試駕|開箱|星座|運勢|今彩|威力彩|大樂透|發票中獎")
 NEWS_ERRS: list = []
 HOT_POOL: list = []
@@ -3017,47 +3032,6 @@ def p_power():
             "yday_reserve_pct": num(rec.get("yday_peak_resv_rate")), "spark": hist_get("power", "reserve", 30), "asof": str(rec.get("publish_time") or "")[:20]}
 
 
-def p_airport():
-    """桃機今日出發／抵達：班次、延誤、取消，與接下來 8 班出發。"""
-    out = {}
-    for kind, path in (("dep", "Air/FIDS/Airport/Departure/TPE"), ("arr", "Air/FIDS/Airport/Arrival/TPE")):
-        rows = tdx(path)
-        if isinstance(rows, dict):
-            rows = rows.get("FIDS") or rows.get("Departures") or rows.get("Arrivals") or []
-        # 共掛班號（JL802／AA8424／CI9902 同一架）只算一次：以表定時間＋對方機場＋登機門去重
-        seen, uniq = set(), []
-        for r in rows:
-            k = (r.get("ScheduleDepartureTime") if kind == "dep" else r.get("ScheduleArrivalTime"),
-                 r.get("ArrivalAirportID") if kind == "dep" else r.get("DepartureAirportID"), r.get("Gate") or r.get("Terminal"))
-            if k in seen:
-                continue
-            seen.add(k); uniq.append(r)
-        rows = uniq
-        tot = len(rows); delayed = cancelled = 0; upcoming = []
-        now_tpe = NOW.astimezone(TPE)
-        for r in rows:
-            rk = re.sub(r"[A-Za-z ]+", "", (r.get("DepartureRemark") if kind == "dep" else r.get("ArrivalRemark")) or "")
-            if "取消" in rk:
-                cancelled += 1
-            elif "延" in rk:
-                delayed += 1
-            sched = r.get("ScheduleDepartureTime") if kind == "dep" else r.get("ScheduleArrivalTime")
-            est = r.get("EstimatedDepartureTime") if kind == "dep" else r.get("EstimatedArrivalTime")
-            try:
-                st = datetime.fromisoformat(sched)
-                st = st if st.tzinfo else st.replace(tzinfo=TPE)
-            except Exception:
-                continue
-            if kind == "dep" and st >= now_tpe - timedelta(minutes=5) and len(upcoming) < 8 and "取消" not in rk and "出發" not in rk:
-                upcoming.append({"flight": f'{r.get("AirlineID","")}{r.get("FlightNumber","")}', "to": r.get("ArrivalAirportID", ""),
-                                 "sched": st.strftime("%H:%M"), "est": (est or "")[11:16], "remark": rk[:4], "gate": (r.get("Gate") or "")[:4]})
-        upcoming.sort(key=lambda x: x["sched"])
-        out[kind] = {"total": tot, "delayed": delayed, "cancelled": cancelled, "upcoming": upcoming}
-    if not out["dep"]["total"] and not out["arr"]["total"]:
-        raise RuntimeError("airport: empty")
-    return out
-
-
 # ---------- 全球大盤 / 美股板塊輪動 / 恐慌結構 ----------
 
 # Stooq（免金鑰日線 CSV）：Yahoo 掛掉時的備援。鍵＝Yahoo 代碼，值＝Stooq 代碼
@@ -3585,18 +3559,31 @@ def _ndc_pmi(page):
     from playwright.sync_api import sync_playwright
     with sync_playwright() as pw:
         b = pw.chromium.launch()
-        pg = b.new_page(user_agent=UA, locale="zh-TW")
-        pg.goto(f"https://index.ndc.gov.tw/n/zh_tw/{page}", wait_until="networkidle", timeout=60000)
-        pg.wait_for_timeout(2500)
-        txt = pg.inner_text("body")
+        pat = r"擴張（Expansion）(?:\s*\d+\s*)*?(\d+\.\d+)\s*%"  # 刻度是整數、數值帶小數，不綁刻度數量
+        txt = ""
+        for _load in range(2):  # 圖表是 JS 晚畫的：每次載入最多等 4×2.5 秒，還沒有就整頁重載一次
+            pg = b.new_page(user_agent=UA, locale="zh-TW")
+            try:
+                pg.goto(f"https://index.ndc.gov.tw/n/zh_tw/{page}", wait_until="networkidle", timeout=60000)
+            except Exception:  # noqa: BLE001
+                pass
+            for _ in range(4):
+                pg.wait_for_timeout(2500)
+                txt = pg.inner_text("body")
+                if re.search(pat, txt):
+                    break
+            pg.close()
+            if re.search(pat, txt):
+                break
         b.close()
-    head = re.search(r"擴張（Expansion）\s*(?:\d+\s*){7}(\d+\.?\d*)\s*%", txt)
+    head = re.search(pat, txt)
     orders = re.search(r"新增訂單[^\n]*\n(?:\s*\d+\s*\n){4}\s*(\d+\.?\d*)\s*%", txt)
     ym = re.search(r"(20\d\d)\n(\d{1,2})月", txt)
     chg = re.search(r"較上月變化\s*([+-]?\d+(?:\.\d+)?)\s*百分點", txt)
     nxt = re.search(r"下次發布日期\s*:\s*(\d{4}-\d{2}-\d{2})", txt)
     if not head:
-        raise RuntimeError(f"ndc {page} parse")
+        npct = len(re.findall(r"\d+\.\d+\s*%", txt))
+        raise RuntimeError(f"ndc {page} parse (len={len(txt)}, axis={'擴張（Expansion）' in txt}, pct={npct})")
     return {"value": float(head.group(1)), "orders": float(orders.group(1)) if orders else None,
             "period": f"{ym.group(1)}-{int(ym.group(2)):02d}" if ym else "", "chg": float(chg.group(1)) if chg else None,
             "next": nxt.group(1) if nxt else ""}
@@ -3612,6 +3599,14 @@ def p_supply():
             out[key]["spark"] = hist_get("supply", key, 24)
         except Exception as e:  # noqa: BLE001
             log("ndc", page, e); errs.append(f"{page}: {safe_err(e)}")
+            prev = (load_prev("supply") or {}).get(key)
+            if not prev:  # 上一輪也沒有：從歷史序列補最後一個值
+                sp = hist_get("supply", key, 24)
+                if sp:
+                    prev = {"value": sp[-1], "orders": None, "period": "", "chg": round(sp[-1] - sp[-2], 1) if len(sp) > 1 else None,
+                            "next": "", "spark": sp}
+            if prev:  # 抓不到就沿用上一次的值，標成舊值，不讓數字消失
+                out[key] = {**prev, "stale": True}
     # 經濟部零售業營業額指數（分業別）→ 年增率
     try:
         r = get(RETAIL_CSV, headers={"Referer": "https://data.gov.tw/"})
@@ -3761,7 +3756,7 @@ BRAND_CATS = [
     ("美容養生", r"美容|美學|美甲|美睫|化粧|化妝|保養|醫美|髮|美妝|紋繡|SPA|養生|推拿|整復|按摩|足體|美研"),
     ("餐飲", r"餐飲|咖啡|茶|烘焙|料理|小吃|飲|麵|甜點|酒|餐|食堂|廚房|便當|酥雞|滷味|肉飯|鍋物|火鍋|牛排|蔬食|冰品|豆花|餃子|炸雞|雞排|美食|食坊|小館|飯館|河粉|湯包|魚焿|蛋糕|食品|膳"),
     ("農漁食材", r"農產|水產|蔬果|果園|農場|漁業|水果|果行|鮮魚|苗園|草本|茶園"),
-    ("零售選物", r"選物|選品|嚴選|生活館|小舖|本舖|販賣|專賣|百貨|用品|禮品|玩具|娃娃|商店|雜貨|商號|貿易|進出口|商貿|電商|網購|物流"),
+    ("零售選物", r"選物|選品|嚴選|生活館|小舖|本舖|販賣|專賣|百貨|用品|禮品|玩具|娃娃|商店|雜貨|貿易|進出口|商貿|電商|網購|物流"),
     ("時尚服飾", r"服飾|時尚|成衣|鞋|皮件|珠寶|精品|服裝|織|衣"),
     ("不動產營建", r"建設|營造|不動產|開發|地產|室內裝修|裝潢|工程|建築|物業|租賃住宅|包租|代管|租管|建材|五金|住宅|家居|冷氣|軟裝|水電|消防|機電|空調|耐火"),
     ("工業製造", r"工業|精密|機械|金屬|材料|鋼鐵|電機|自動化|動力|製造|製所|包裝|供應鏈|塑膠|化工|模具"),
@@ -3891,6 +3886,103 @@ def p_brands():
     return {"month": cur_k, "prev_month": prv_k, "total": len(cur), "total_prev": len(prv),
             "companies": sum(1 for x in cur if x["kind"] == "公司"), "businesses": sum(1 for x in cur if x["kind"] == "商業"),
             "cats": cats, "peers": peers, "big": big, "board": top, "board_n": len(set(log_) | set(cache)), "errs": errs}
+
+
+# ---------- 集資雷達：嘖嘖等平台擋爬，改看新聞（爆案）與操盤代理商動態 ----------
+CROWD_Q = ['嘖嘖 集資', '嘖嘖 募資', '集資 破百萬 OR 破千萬', '募資 天破百萬 OR 小時破百萬', '群眾募資 突破 OR 達標', '集資 達標',
+           'Kickstarter 台灣 募資', 'Kickstarter 台灣團隊 OR 台灣品牌', 'flyingV 募資', '貝殼放大', '挖貝 集資', '群眾集資 趨勢 OR 報告 OR 年報']
+CROWD_MUST = re.compile(r"集資|群募|群眾募資|嘖嘖|flyingV|貝殼放大|Kickstarter|挖貝|募資平台|募資計畫|募資專案"
+                        r"|募資.{0,8}(破|達標|首日|突破)", re.I)
+CROWD_NOISE = re.compile(r"港股|IPO|新股|招股|上市|ETF|彩券|樂透|創投|估值|融資|人民幣|基金|詐|股價|億美元|香港|拉皮|都更|勸募|侵占|不起訴", re.I)
+CROWD_SRC_BLOCK = re.compile(r"香港|HKET|on\.cc|東網|文匯|信報|TVB|Now |電台|大公|新華|人民網|中新|環球|央視|觀察者|新浪|搜狐|網易|鳳凰", re.I)
+CROWD_PRO = re.compile(r"貝殼放大|挖貝|年報|報告|數據|趨勢|產業|併購|海外|攻略|心法|操盤|排行|總額|累積")
+
+
+def _crowd_amt(t: str):
+    m = re.search(r"\d[\d,]*(?:\.\d+)?\s*(?:億|千萬|百萬|萬)(?:美元|日圓|港元)?", t)
+    return m.group(0).replace(" ", "") if m else None
+
+
+KS_PWL_FEED = "https://www.kickstarter.com/projects/feed.atom"  # 官方 Atom：Projects We Love 新案
+KICKTRAQ_HOT = "https://www.kicktraq.com/hot/"  # robots 允許、Crawl-Delay 6；每 3 小時只讀這一頁
+
+
+def _ks_hot():
+    t = get(KICKTRAQ_HOT, headers={"Referer": "https://www.kicktraq.com/"}).text
+    out = []
+    for blk in re.findall(r'<div class="listentry-mini(?: dark)?"><div class="listentry-mini rank">(.*?)<div class="clear">', t, re.S):
+        rank = re.match(r"(\d+)", blk)
+        a = re.search(r'<a href="/projects/([^"]+?)/?" title="([^"]+)"', blk)
+        if not rank or not a:
+            continue
+        mv = re.search(r"\(([+-]\d+)\)", blk)
+        cat = re.search(r'class="listentry-mini cat">(.*?)</div>', blk)
+        out.append({"rank": int(rank.group(1)), "title": html_mod.unescape(a.group(2))[:70],
+                    "url": "https://www.kickstarter.com/projects/" + a.group(1).strip("/"),
+                    "move": int(mv.group(1)) if mv else None, "new": "title=\"new\"" in blk and not mv,
+                    "cat": html_mod.unescape(cat.group(1)).replace(" > ", "／") if cat else ""})
+    return out[:10]
+
+
+def _ks_pwl():
+    root = ET.fromstring(get(KS_PWL_FEED).content)
+    ns = {"a": "http://www.w3.org/2005/Atom"}
+    out = []
+    for e in root.findall("a:entry", ns):
+        title = (e.findtext("a:title", "", ns) or "").strip()
+        title = re.split(r" by ", title)[0][:70]
+        link = e.find("a:link", ns)
+        body = html_mod.unescape(e.findtext("a:content", "", ns) or "")
+        blurb = re.sub(r"<[^>]+>", " ", body.split("<br />")[-1] if "<br />" in body else body)
+        out.append({"title": title, "url": link.get("href") if link is not None else "", "blurb": re.sub(r"\s+", " ", blurb).strip()[:110],
+                    "at": _rss_date(e.findtext("a:published", "", ns) or "")})
+    out.sort(key=lambda x: x["at"], reverse=True)
+    return out[:8]
+
+
+def p_crowd():
+    """集資雷達：嘖嘖等平台擋程式讀取，改看近 60 天報導。專案爆案 vs 平台／操盤方動態依標題分流。"""
+    cut = (NOW - timedelta(days=60)).isoformat().replace("+00:00", "Z")
+    seen, hot, pro, errs = set(), [], [], []
+    for q in CROWD_Q:
+        try:
+            got = _gnews(q + " when:60d", limit=15)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{q[:12]}: {safe_err(e)}"); continue
+        for it in got:
+            t = it["title"]
+            if not CROWD_MUST.search(t) or CROWD_NOISE.search(t) or CROWD_SRC_BLOCK.search(it.get("source", "")):
+                continue
+            if it.get("at") and it["at"] < cut:
+                continue
+            k = re.sub(r"\W", "", t)[:20]
+            if k in seen:
+                continue
+            seen.add(k)
+            it["amt"] = _crowd_amt(t)
+            project = it["amt"] and re.search(r"破|達標|突破|紀錄|首日|小時|天", t)
+            (hot if project or not CROWD_PRO.search(t) else pro).append(it)
+        time.sleep(0.4)
+    hot.sort(key=lambda x: x.get("at") or "", reverse=True)
+    pro.sort(key=lambda x: x.get("at") or "", reverse=True)
+    ks_hot, ks_pwl = [], []
+    for name, fn in (("Kicktraq", _ks_hot), ("Kickstarter feed", _ks_pwl)):
+        try:
+            got = fn()
+            if name == "Kicktraq":
+                ks_hot = got
+            else:
+                ks_pwl = got
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{name}: {safe_err(e)}")
+    if not hot and not pro and not ks_hot and not ks_pwl:
+        raise RuntimeError("crowd: nothing " + "; ".join(errs)[:160])
+    cats = {}
+    for x in ks_hot:
+        c = x["cat"].split("／")[0] if x["cat"] else "其他"
+        cats[c] = cats.get(c, 0) + 1
+    return {"hot": hot[:14], "pro": pro[:10], "ks_hot": ks_hot, "ks_cats": sorted(cats.items(), key=lambda kv: -kv[1]),
+            "ks_pwl": ks_pwl, "errs": errs}
 
 
 # ---------- 注意力流向：電影票房、App Store 台灣免費榜（YouTube／趨勢／維基沿用既有面板） ----------
@@ -4025,7 +4117,7 @@ run("sectors", p_sectors, keep_if_fresh_hours=0.5)
 run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("revenue", p_revenue, keep_if_fresh_hours=20)
-run("media", p_media, keep_if_fresh_hours=6)
+run("media", p_media, keep_if_fresh_hours=2)
 # run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
 run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
 run("macro", p_macro, keep_if_fresh_hours=6)
@@ -4034,6 +4126,7 @@ run("liquidity", p_liquidity, keep_if_fresh_hours=3)
 run("calendar", p_calendar, keep_if_fresh_hours=6)
 run("awards", p_awards, keep_if_fresh_hours=1)
 run("brands", p_brands, keep_if_fresh_hours=12)
+run("crowd", p_crowd, keep_if_fresh_hours=3)
 _sp = load_prev("supply") or {}
 _sp_next = min([x.get("next") for x in (_sp.get("pmi") or {}, _sp.get("nmi") or {}) if x.get("next")] or ["9999"])
 run("supply", p_supply, keep_if_fresh_hours=1 if TODAY_TPE.isoformat() >= _sp_next else 6)  # 發布日起每小時重抓，抓到新月份 next 會往後推
