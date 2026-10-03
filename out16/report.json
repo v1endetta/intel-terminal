@@ -1,0 +1,80 @@
+{
+ "dgpa": {
+  "status": 200,
+  "bytes": 15036,
+  "ct": "text/html",
+  "head": "<HTML lang=\"zh-TW\">\r\n<HEAD>\r\n<!-- Google tag (gtag.js) --> \r\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-ZWLVHXMHPN\"></script>\r\n<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-ZWLVHXMHPN'); </script>\r\n    <TITLE>行政院人事行政總處全球資訊網-天然災害停止上班及上課情形查詢</TITLE>\r\n    <META http-equiv=Content-Type content=\"text/html; charset=UTF-8\">\r\n    <META content=\"MSHTML 6.00.2800.1400\" name=GENERATOR>\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"I"
+ },
+ "wra_res": {
+  "status": 503,
+  "bytes": 326,
+  "ct": "text/html; charset=us-ascii",
+  "head": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"\"http://www.w3.org/TR/html4/strict.dtd\">\r\n<HTML><HEAD><TITLE>Service Unavailable</TITLE>\r\n<META HTTP-EQUIV=\"Content-Type\" Content=\"text/html; charset=us-ascii\"></HEAD>\r\n<BODY><h2>Service Unavailable</h2>\r\n<hr><p>HTTP Error 503. The service is unavailable.</p>\r\n</BODY></HTML>\r\n"
+ },
+ "wra_res2": {
+  "err": "ConnectionError(MaxRetryError('HTTPSConnectionPool(host=\\'data.wra.gov.tw\\', port=443): Max retries exceeded with url: /Service/OpenData.aspx?format=j"
+ },
+ "cpc": {
+  "status": 200,
+  "bytes": 7587,
+  "ct": "text/xml; charset=utf-8",
+  "head": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<Dataset>\r\n  <Table>\r\n    <型別名稱>汽柴油零售</型別名稱>\r\n    <產品編號>113F 1209800</產品編號>\r\n    <產品名稱>98無鉛汽油</產品名稱>\r\n    <包裝>散裝</包裝>\r\n    <銷售對象>一般自用客戶 </銷售對象>\r\n    <交貨地點>中油自營站</交貨地點>\r\n    <計價單位>元/ 公升</計價單位>\r\n    <參考牌價_金額>34.7000</參考牌價_金額>\r\n    <營業稅_稅捐>5</營業稅_稅捐>\r\n    <貨物稅>內含</貨物稅>\r\n    <牌價生效日期>1150928</牌價生效日期>\r\n    <備註>\r\n    </備�"
+ },
+ "pbs_ds": {
+  "status": 200,
+  "bytes": 3503,
+  "ct": "application/json",
+  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"A00\",\"categoryDataset\":\"A\",\"datasetId\":15221,\"identifier\":\"\",\"title\":\"警廣即時路況\",\"description\":\"由民眾及各單位提供給警察廣播電臺之即時路況資料。\\n介接說明文件：https:\\/\\/opdadmuat.moi.gov.tw\\/警廣即時路況_資料介接說明文件.docx\\n\",\"type\":\"api\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"bannanng30\",\"publisherOID\":\"2.16.886.101.20003.20001.20001\",\"publisherContactName\":\"王琇慧\",\"publisherContactPhone\":\"02-23931791#6122\",\"publisherContactEmail\":\"vibe@npa.gov.tw\",\"updateFrequency\":{\"regu"
+ },
+ "pbs": {
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='od.moi.gov.tw', port=443): Max retries exceeded with url: /MOI/v1/pbs (Caused by ConnectTimeou"
+ },
+ "aqi_nokey": {
+  "status": 200,
+  "bytes": 20,
+  "ct": "text/html; charset=UTF-8",
+  "head": "api_key 不存在。"
+ },
+ "tpe_mrt_crowd": {
+  "status": 200,
+  "bytes": 5475,
+  "ct": "text/html; charset=utf-8",
+  "head": "\r\n\r\n<html>\r\n\r\n    <head><link rel=\"alternate\" type=\"text/xml\" href=\"/metroapi/CarWeight.asmx?disco\" />\r\n\r\n    <style type=\"text/css\">\r\n    \r\n\t\tBODY { color: #000000; background-color: white; font-family: Verdana; margin-left: 0px; margin-top: 0px; }\r\n\t\t#content { margin-left: 30px; font-size: .70em; padding-bottom: 2em; }\r\n\t\tA:link { color: #336699; font-weight: bold; text-decoration: underline; }\r\n\t\tA:visited { color: #6699cc; font-weight: bold; text-decoration: underline; }\r\n\t\tA:active { color: #336699; font-weight: bold; text-decoration: underline; }\r\n\t\tA:hover { color: cc3300; font-weight:"
+ },
+ "ncdr": {
+  "status": 200,
+  "bytes": 593219,
+  "ct": "application/xml; charset=utf-8",
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:cap=\"urn:oasis:names:tc:emergency:cap:1.1\" xmlns:georss=\"http://www.georss.org/georss\"><id>https://alerts.ncdr.nat.gov.tw/RSS.aspx</id><title>NCDR_CAP-即時防災資訊</title><updated>2026-10-04T04:17:00+08:00</updated><author><name>NCDR</name></author><rights>Public Domain</rights><link rel=\"self\" href=\"https://alerts.ncdr.nat.gov.tw/RssAtomFeed.ashx\" /><entry><id>NFA_Fire_2026100322364500499</id><title>火災</title><updated>2026-10-04T04:17:52+08:00</updated><author><name>內政部消防"
+ },
+ "ncdr2": {
+  "status": 429,
+  "bytes": 45,
+  "ct": "application/json; charset=utf-8",
+  "head": "{\"Warning\":\"限制存取間隔時間為3秒\"}"
+ },
+ "tpe_rain": {
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='wic.heo.taipei', port=443): Max retries exceeded with url: /OpenData/API/Rain/Get?stationNo=&l"
+ },
+ "kh_park": {
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='api.kcg.gov.tw', port=443): Max retries exceeded with url: /api/service/Get/2c1d4e8c-2b5b-4bbd"
+ },
+ "tpe_bus_eta": {
+  "status": 200,
+  "bytes": 158933,
+  "ct": "application/octet-stream",
+  "head": "\u001f�\b\u0000���j\u0002���O��M���U�\u0019w��U�{\u0018�\u0010\u0010\u0007Fq�I^���7��\f�q�\u0004!\u0011\u001c�_����I��_Ɩ�\u0018�\u0003����]�:י��<{_gUݫV�Z��7����׿��?�ş����������g�����������������w���o���_�?�o�����������/�������?������o����_��������������w����?��o�����_�������\u0017_�\u0011)�?��\u001f��\u001f��g��Yk�������g�W\u001f?�O���������\u0007���Of����/��ߋ�_��o�����\u001f~������,�:���O������s����c1�����?���\u0003�\u001f��\u001f��?�o>��\u000f�\u000bD�!j�\u0011���Ɓ���\u000e��\u0010�h�\r\"��}!Q�\t����1�U�u�1��JF�S�\u0013\"Fh+�s%�\rm%��h=���\u0013\"k_5\u001f\b=�{q�cuq+���j[q.$i;q��(�Nt��,��y�G/�V\f\u0010�k+9��9/m%�n�ѵ���si���ʙk�/d�����g���S��\u001a�J���������$͆W�|uNM�SA[��\u0001WɈ��qj�\u0007�&\u0006��>_�80�ڳ����b�o.�)F\u0007\u0015վk\u0006�\u0013O5��\u0001�bդ�`"
+ },
+ "tpe_mrt_info": {
+  "status": 200,
+  "bytes": 4702,
+  "ct": "application/json; charset=UTF-8",
+  "head": "{\"updateTime\":\"2026-10-04T07:00:00\",\"News\":[{\"chtmessage\":\"因應「115年國慶活動」交通管制措施，公車配合調整措施\",\"engmessage\":\"\",\"starttime\":\"2026-09-24T17:00:00\",\"endtime\":\"2026-10-24T17:00:00\",\"updatetime\":\"2026-09-24T17:00:00\",\"content\":\"    臺北市公共運輸處表示，因應115年國慶大會活動之LED主題視訊牆、牌樓搭設、活動預演、大會活動及場地復原等作業，115年9月25日22時起至10月12日6時止，於總統府周邊道路分時段實施交通管制（視現場交通管制狀況提前、延後或擴大、縮小範圍），原�"
+ },
+ "taipower_out": {
+  "status": 403,
+  "bytes": 919,
+  "ct": "text/html",
+  "head": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n<HTML><HEAD><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=iso-8859-1\">\n<TITLE>ERROR: The request could not be satisfied</TITLE>\n</HEAD><BODY>\n<H1>403 ERROR</H1>\n<H2>The request could not be satisfied.</H2>\n<HR noshade size=\"1px\">\nRequest blocked.\nWe can't connect to the server for this app or website at this time. There might be too much traffic or a configuration error. Try again later, or contact the app or website owner.\n<BR clear=\"all\">\nIf you provide content to customers th"
+ }
+}
