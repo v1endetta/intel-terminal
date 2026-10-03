@@ -1,5 +1,5 @@
 import os, json, re, requests
-os.makedirs("out11", exist_ok=True)
+os.makedirs("out12", exist_ok=True)
 S = requests.Session(); S.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36", "Accept": "application/json, text/html;q=0.9"})
 U = {"ks_robots": "https://www.kickstarter.com/robots.txt",
      "ks_disc_json": "https://www.kickstarter.com/discover/advanced.json?sort=magic&page=1",
@@ -9,12 +9,12 @@ U = {"ks_robots": "https://www.kickstarter.com/robots.txt",
      "ks_blog_rss": "https://www.kickstarter.com/blog.atom",
      "kicktraq_hot": "https://www.kicktraq.com/hot/",
      "kicktraq_robots": "https://www.kicktraq.com/robots.txt",
-     "kicktraq_rss": "https://www.kicktraq.com/feeds/hot/"}
+     "kicktraq_rss": "https://www.kicktraq.com/feeds/hot/", "kicktraq_new": "https://www.kicktraq.com/hot/?sort=new", "kicktraq_tech": "https://www.kicktraq.com/categories/technology/"}
 rep = {}
 for k, u in U.items():
     try:
         r = S.get(u, timeout=30)
-        rep[k] = {"status": r.status_code, "bytes": len(r.content), "ct": r.headers.get("content-type"), "server": r.headers.get("server"), "head": r.text[:1500]}
+        open(f"out12/{k}.txt","w").write(r.text[:300000]); rep[k] = {"status": r.status_code, "bytes": len(r.content), "ct": r.headers.get("content-type"), "server": r.headers.get("server"), "head": r.text[:1500]}
     except Exception as e:
         rep[k] = {"err": repr(e)[:200]}
-json.dump(rep, open("out11/report.json", "w"), ensure_ascii=False, indent=1)
+json.dump(rep, open("out12/report.json", "w"), ensure_ascii=False, indent=1)
