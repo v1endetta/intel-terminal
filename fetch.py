@@ -1154,8 +1154,13 @@ def _tdx_get_token() -> str:
     raise RuntimeError(_tdx_fail)
 
 
+TDX_OFF = True  # 2026-10：免費額度只有每月約 4,500 次，帳號已因超量停權；全面改用原始單位的公開資料
+
+
 def tdx(path, **params):
     global _tdx_token, _tdx_last
+    if TDX_OFF:
+        raise RuntimeError("TDX 已停用（改用公開資料）")
     headers = {}
     if TDX_ID and TDX_SECRET:
         headers["Authorization"] = "Bearer " + _tdx_get_token()
