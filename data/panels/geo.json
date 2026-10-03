@@ -1,12 +1,12 @@
 {
  "label": "TDX",
- "cities_with_data": 5,
+ "cities_with_data": 2,
  "freeway": 0,
  "static": "完成",
  "totals": {
-  "parking": 686,
-  "bikes": 2839,
-  "speed": 85
+  "parking": 0,
+  "bikes": 401,
+  "speed": 2
  },
  "errs": [
   "bikes ChanghuaCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
@@ -20,7 +20,7 @@
   "parking ChiayiCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
   "bikes ChiayiCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
   "vd ChiayiCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "parking Tainan: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
+  "etag live: HTTPError: 400 Client Error: Bad Request for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
  ],
- "updatedAt": "2026-10-03T04:09:13Z"
+ "updatedAt": "2026-10-03T04:26:40Z"
 }
