@@ -1,24 +1,11 @@
-import os, json, re, requests
-os.makedirs("out9", exist_ok=True)
-S = requests.Session(); S.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36", "Accept-Language": "zh-TW,zh;q=0.9"})
+import os, json, re, requests, xml.etree.ElementTree as ET
+os.makedirs("out10", exist_ok=True)
+S = requests.Session(); S.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0"
+Q = ["嘖嘖 集資", "嘖嘖 募資", "flyingV 募資", "集資 破千萬", "募資 破百萬", "集資 達標", "集資 刷新紀錄", "群眾集資 台灣 品牌",
+     "貝殼放大", "群募貝果", "集資 趨勢", "募資平台 台灣", "集資 操盤"]
 rep = {}
-U = {"robots": "https://www.zeczec.com/robots.txt",
-     "cats": "https://www.zeczec.com/categories",
-     "cats_hot": "https://www.zeczec.com/categories?sort_by=popular",
-     "cats_new": "https://www.zeczec.com/categories?sort_by=newest",
-     "cats_json": "https://www.zeczec.com/categories.json",
-     "proj": "https://www.zeczec.com/projects/qianqiangreen",
-     "proj_json": "https://www.zeczec.com/projects/qianqiangreen.json",
-     "sitemap": "https://www.zeczec.com/sitemap.xml",
-     "terms": "https://www.zeczec.com/terms"}
-for k, u in U.items():
-    try:
-        r = S.get(u, timeout=30)
-        t = r.text
-        rep[k] = {"status": r.status_code, "bytes": len(r.content), "ct": r.headers.get("content-type"), "head": t[:800],
-                  "links": sorted(set(re.findall(r'href="(/projects/[^"?#]+)"', t)))[:30],
-                  "nums": re.findall(r'NT\$\s?[\d,]+', t)[:20], "pct": re.findall(r'\d+%', t)[:20]}
-        open(f"out9/{k}.html", "w").write(t[:500000])
-    except Exception as e:
-        rep[k] = {"err": repr(e)[:200]}
-json.dump(rep, open("out9/report.json", "w"), ensure_ascii=False, indent=1)
+for q in Q:
+    r = S.get("https://news.google.com/rss/search", params={"q": q, "hl": "zh-TW", "gl": "TW", "ceid": "TW:zh-Hant"}, timeout=30)
+    root = ET.fromstring(r.content)
+    rep[q] = [(it.findtext("pubDate"), it.findtext("title")) for it in root.iter("item")][:15]
+json.dump(rep, open("out10/report.json", "w"), ensure_ascii=False, indent=1)
