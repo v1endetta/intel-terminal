@@ -9,18 +9,18 @@
   "speed": 2
  },
  "errs": [
-  "bikes ChanghuaCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "parking NantouCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "vd NantouCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "parking YunlinCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "bikes YunlinCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "vd YunlinCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "parking Chiayi: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "bikes Chiayi: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "parking ChiayiCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "bikes ChiayiCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "vd ChiayiCounty: HTTPError: 429 Client Error: Too Many Requests for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-  "etag live: HTTPError: 400 Client Error: Bad Request for url: https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
+  "parking Taipei: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "bikes Taipei: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "vd Taipei: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "bikes NewTaipei: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "vd Keelung: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "parking Taoyuan: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "bikes Taoyuan: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "vd Taoyuan: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "parking Hsinchu: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "bikes Hsinchu: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "parking HsinchuCounty: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials",
+  "bikes HsinchuCounty: RuntimeError: TDX token 失敗：400 unauthorized_client Invalid client credentials"
  ],
- "updatedAt": "2026-10-03T04:26:40Z"
+ "updatedAt": "2026-10-03T04:48:21Z"
 }
