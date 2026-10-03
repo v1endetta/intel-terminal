@@ -3825,6 +3825,51 @@ def p_brands():
             "cats": cats, "peers": peers, "big": big, "board": top, "board_n": len(set(log_) | set(cache)), "errs": errs}
 
 
+# ---------- 集資雷達：嘖嘖等平台擋爬，改看新聞（爆案）與操盤代理商動態 ----------
+CROWD_HOT_Q = ['嘖嘖 集資 破千萬 OR 破百萬 OR 達標 OR 突破', '募資 集資 破千萬 OR 創紀錄 OR 史上', 'flyingV OR 嘖嘖 集資 新品 OR 品牌',
+               '群眾集資 首日 OR 開跑 達標']
+CROWD_PRO_Q = ['貝殼放大 集資', '群募貝果 集資', '集資 趨勢 報告 OR 年度 OR 產業', '嘖嘖 集資 品類 OR 趨勢 OR 十週年']
+CROWD_MUST = re.compile(r"集資|募資|群募|眾籌|zeczec|flyingV|嘖嘖|貝殼放大", re.I)
+
+
+def _crowd_amt(t: str):
+    m = re.search(r"(\d+(?:\.\d+)?)\s*(億|千萬|百萬|萬)", t)
+    if not m:
+        return None
+    return float(m.group(1)) * {"億": 1e8, "千萬": 1e7, "百萬": 1e6, "萬": 1e4}[m.group(2)]
+
+
+def p_crowd():
+    cut = (NOW - timedelta(days=45)).isoformat().replace("+00:00", "Z")
+    out, errs = {}, []
+    for key, qs, lim in (("hot", CROWD_HOT_Q, 14), ("pro", CROWD_PRO_Q, 10)):
+        seen, items = set(), []
+        for q in qs:
+            try:
+                got = _gnews(q, limit=12)
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{q[:12]}: {safe_err(e)}"); continue
+            for it in got:
+                t = it["title"]
+                if not CROWD_MUST.search(t) or WATCH_SRC_BLOCK.search(it.get("source", "") + " " + it.get("url", "")):
+                    continue
+                if it.get("at") and it["at"] < cut:
+                    continue
+                k = re.sub(r"\W", "", t)[:24]
+                if k in seen:
+                    continue
+                seen.add(k)
+                it["amt"] = _crowd_amt(t)
+                items.append(it)
+            time.sleep(0.4)
+        items.sort(key=lambda x: x.get("at") or "", reverse=True)
+        out[key] = items[:lim]
+    if not out.get("hot") and not out.get("pro"):
+        raise RuntimeError("crowd: nothing " + "; ".join(errs)[:160])
+    out["errs"] = errs
+    return out
+
+
 # ---------- 注意力流向：電影票房、App Store 台灣免費榜（YouTube／趨勢／維基沿用既有面板） ----------
 BOX_CACHE = DATA / "box_cache.json"
 
@@ -3966,6 +4011,7 @@ run("liquidity", p_liquidity, keep_if_fresh_hours=3)
 run("calendar", p_calendar, keep_if_fresh_hours=6)
 run("awards", p_awards, keep_if_fresh_hours=1)
 run("brands", p_brands, keep_if_fresh_hours=12)
+run("crowd", p_crowd, keep_if_fresh_hours=3)
 _sp = load_prev("supply") or {}
 _sp_next = min([x.get("next") for x in (_sp.get("pmi") or {}, _sp.get("nmi") or {}) if x.get("next")] or ["9999"])
 run("supply", p_supply, keep_if_fresh_hours=1 if TODAY_TPE.isoformat() >= _sp_next else 6)  # 發布日起每小時重抓，抓到新月份 next 會往後推

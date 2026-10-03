@@ -623,6 +623,12 @@ body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[d
     <div class="pf"><span>經濟部商工登記「公司／商業設立登記清冊」（月，約晚一個月）· 類別依名稱關鍵字判斷 · 得標排行累積政府電子採購網決標紀錄（行銷、設計、影片、廣告類，滾動 180 天）</span></div>
   </section>
 
+  <section class="panel w12 lite" id="p-crowd">
+    <div class="ph"><h2>Crowdfunding</h2><span class="zh">集資雷達 · 爆案新聞、操盤代理商動態</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Google News（嘖嘖、flyingV 等平台擋程式讀取，改看報導）· 爆案：破百萬／破千萬／達標 · 操盤方：貝殼放大、群募貝果、產業報告 · 近 45 天 · 每 3 小時</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-aiwire">
     <div class="ph"><h2>AI Wire</h2><span class="zh">AI 快線 · 官方部落格與科技媒體第一手</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -882,6 +888,9 @@ const renderers={
     body("p-watch").innerHTML=gs?`<div class="nw nw3">${gs}</div>`:`<div class="empty">等待排程寫入</div>`;setMeta("p-watch",d,2);},
   tenders(d){const mx=Math.max(1,...(d.items||[]).map(x=>n(x.budget)||0));const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.date.slice(4,6))}/${esc(it.date.slice(6,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a><span class="sub">${esc(it.unit)}</span></span><span class="bar o-amt" aria-hidden="true"><i style="width:${it.budget?Math.max(4,n(it.budget)/mx*100):0}%;background:${it.budget>=3e6?"var(--up)":"var(--blue)"}"></i></span><span class="m ${it.budget>=3e6?"up":""}" style="min-width:48px;text-align:right">${it.budget?compact(n(it.budget)):"—"}</span></li>`).join("");
     body("p-tenders").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">沒有命中</div>`;setMeta("p-tenders",d,6);},
+  crowd(d){const row=it=>`<li><span class="src">${esc(it.source||"")}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span>${it.amt?`<span class="m up">${it.amt>=1e8?+(it.amt/1e8).toFixed(1)+" 億":Math.round(it.amt/1e4).toLocaleString()+" 萬"}</span>`:""}<span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`;
+    const hot=(d.hot||[]).map(row).join(""),pro=(d.pro||[]).map(row).join("");
+    body("p-crowd").innerHTML=`<div class="tp"><div><h3>爆案與達標</h3><ul class="list">${hot||'<li class="empty">近 45 天沒有相關報導</li>'}</ul></div><div><h3>操盤方與趨勢</h3><ul class="list">${pro||'<li class="empty">近 45 天沒有相關報導</li>'}</ul></div></div>`;setMeta("p-crowd",d,6);},
   design(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.source)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`).join("");
     body("p-design").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-design",d,6);},
   radar(d){const w=(d.watch||[]).map(c=>`<tr><td class="name">${esc(c.name)}${c.spike?' <span class="kw" style="color:var(--warn)">升溫</span>':''}<span class="sub"> ${esc(c.desc)}</span>${mini(c.spark)}${(c.news||[])[0]?`<div class="sub" style="white-space:normal;margin-top:2px"><a href="${esc(safe(c.news[0].url))}" target="_blank" rel="noopener">${esc(c.news[0].title.slice(0,80))}</a> · ${esc(c.news[0].source||"")} ${c.news[0].at?ago(c.news[0].at):""}</div>`:""}</td><td class="r num">${c.n_news7||"—"}</td><td class="r num">${c.hn_top?`<a href="${esc(safe(c.hn_top.hn))}" target="_blank" rel="noopener">${c.n_hn7}</a>`:(c.n_hn7||"—")}</td><td class="r num">${c.n_bsky1||"—"}</td></tr>`).join("");
@@ -1146,7 +1155,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 const TABS=[["overview","總覽"],["market","市場"],["macro","總經"],["intel","情報"],["social","輿情"],["live","台灣現場"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"market","p-revenue":"market",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro",
-  "p-news":"intel","p-brands":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
+  "p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-twpulse":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
   "brief":"overview","ov":"overview"};
