@@ -1477,6 +1477,9 @@ def _tpe_vd() -> list:
         ax, ay, bx, by = num(g("StartWgsX")), num(g("StartWgsY")), num(g("EndWgsX")), num(g("EndWgsY"))
         if not spd or spd <= 0 or None in (ax, ay, bx, by):
             continue
+        if not all(121.40 <= x <= 121.70 for x in (ax, bx)) or not all(24.90 <= y <= 25.25 for y in (ay, by)) \
+                or abs(ax - bx) + abs(ay - by) > 0.05:  # 座標錯置的路段（會拉出一條橫跨地圖的線）不畫
+            continue
         name = re.sub(r"\s+", " ", g("SectionName")).strip()
         out.append({"name": name, "road": name.split(" ")[0], "spd": spd, "vol": vol or 0,
                     "a": [round(ax, 5), round(ay, 5)], "b": [round(bx, 5), round(by, 5)]})
