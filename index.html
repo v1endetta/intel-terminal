@@ -438,6 +438,34 @@ canvas.o-fx{display:block;width:100%}
 #p-macro{order:1}#p-gmacro{order:2}#p-calendar{order:3}#p-liq{order:4}#p-consume{order:5}#p-supply{order:6}
 #p-mood{order:1}#p-ptt{order:2}#p-cofacts{order:3}#p-attention{order:4}#p-trends{order:5}#p-youtube{order:6}#p-social{order:7}
 .grid{align-items:start}
+/* 桃機翻牌看板：只有變動的字會翻 */
+.fids{display:grid;gap:3px;align-content:start}
+.fids .fr{display:grid;grid-template-columns:auto auto auto auto minmax(0,1fr);gap:8px;align-items:center;font-size:11px}
+.fids .fh{color:var(--dim);font:10.5px var(--mono);letter-spacing:.06em}
+.fids .ch{display:inline-flex;gap:1px}
+.fids .ch b{font:600 12px var(--mono);width:.86em;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:2px;line-height:1.55;position:relative;display:inline-block;color:var(--text)}
+.fids .bad .ch b{color:var(--down)}
+.fids .ch b::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--bg);opacity:.75}
+.fids .to i{font:10.5px var(--mono);color:var(--muted);margin-left:5px;font-style:normal}
+.fids .rm{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fids .ch b.fl{animation:o-flipc .45s cubic-bezier(.3,.7,.3,1) both}
+@keyframes o-flipc{0%{transform:perspective(220px) rotateX(-92deg);opacity:.15}65%{transform:perspective(220px) rotateX(14deg);opacity:1}100%{transform:none}}
+/* 情報：新的 AI 動態點擴散、同框詞新出現或家數增加時彈一下 */
+.ib-ping{fill:none;stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:o-ibping 1.6s ease-out 3}
+@keyframes o-ibping{from{transform:scale(1);opacity:.9}to{transform:scale(4.2);opacity:0}}
+.ib-chip.ib-pop{animation:o-ibpop .6s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes o-ibpop{0%{transform:scale(.6);opacity:0}100%{transform:none;opacity:1}}
+html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animation:none}
+@media (prefers-reduced-motion:reduce){.fids .ch b.fl,.ib-ping,.ib-chip.ib-pop{animation:none}}
+
+#p-geo{order:1}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:4}#p-airport{order:5}#p-quake{order:6}#p-power{order:7}
+.stopbar{margin:0 0 10px;padding:8px 12px;border:1px solid color-mix(in srgb,var(--down) 55%,var(--line));background:color-mix(in srgb,var(--down) 12%,var(--panel));border-radius:4px;font-size:13px;display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
+.stopbar b{color:var(--down);font-weight:600}.stopbar span{color:var(--text)}.stopbar .s{color:var(--muted);font-size:11.5px;margin-left:auto}
+.tn-row{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+.tn-row:last-child{border-bottom:0}.tn-row .c{font-weight:500;font-size:13px}.tn-row .c small{display:block;font:11px var(--mono);color:var(--muted)}
+.tn-al{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:3px}.tn-al span{font-size:11px;border:1px solid var(--line);border-radius:3px;padding:0 6px;cursor:default}
+.tn-nw{list-style:none;margin:0;padding:0;font-size:12.5px}.tn-nw li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tn-nw a{color:var(--text)}.tn-nw .m{color:var(--dim);font:10.5px var(--mono);margin-left:6px}
+.oil{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px;padding-top:6px;border-top:1px solid var(--line)}.oil b{font:500 13px var(--mono);color:var(--text)}
 
 /* 新品牌雷達、注意力流向、消費溫度計 */
 .bt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px}
@@ -531,6 +559,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 <div class="tape" id="tape" aria-hidden="true"></div>
 <section class="movers" id="movers" hidden></section>
 
+<div class="stopbar" id="stopbar" hidden></div>
 <main class="grid">
 
   <section class="pulse" id="p-pulse"></section>
@@ -780,11 +809,17 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ph"><h2>Map</h2><span class="zh">全台 YouBike · 雙北停車場與市區車速</span><span class="meta">排程</span></div>
     <div class="pb" style="padding:6px">
       <div class="mapwrap"><div id="map"></div>
-        <div class="mapctl"><select id="geo-city"><option value="all">雙北總覽</option></select><span id="geo-avail" class="avail"></span><span style="width:6px"></span><button class="layer on" data-layer="parking">停車場</button><button class="layer on" data-layer="bikes">YouBike</button><button class="layer on" data-layer="speed">車速</button></div>
+        <div class="mapctl"><select id="geo-city"><option value="all">全台總覽</option></select><span id="geo-avail" class="avail"></span><span style="width:6px"></span><button class="layer on" data-layer="parking">停車場</button><button class="layer on" data-layer="bikes">YouBike</button><button class="layer on" data-layer="speed">車速</button></div>
         <div class="maplegend"><span><i style="background:#F0524F"></i>停車場快滿／車速慢</span><span><i style="background:#E0A23A"></i>中</span><span><i style="background:#39B978"></i>有位／順暢</span><span>圓越大＝停車場越大 · YouBike 空心＝沒車</span><span id="geo-age"></span></div>
       </div>
     </div>
     <div class="pf"><a href="https://data.taipei/" target="_blank" rel="noopener">台北市資料大平臺</a><span>新北市開放資料 · 台北停車場汽車位 · 台北市區 VD 路段車速 · 每 10 分鐘 · 雙北以外的 YouBike 由瀏覽器即時抓官方站點檔（在台灣網路才抓得到）· 底圖 OpenFreeMap</span></div>
+  </section>
+
+  <section class="panel w6 cap" id="p-twnow">
+    <div class="ph"><h2>Taiwan Now</h2><span class="zh">各地現況 · 災害示警、停班停課、地方新聞</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://alerts.ncdr.nat.gov.tw/" target="_blank" rel="noopener">國家災防中心</a><span>災害示警（仍有效、已解除的不列）· 人事總處停班停課 · Google News 依縣市（近 24 小時、標題要提到該縣市）</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-twpulse">
@@ -799,13 +834,13 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">中央氣象署</a><span>14 縣市 · 有人測站優先、自動站備援 · 觀測每 10 分鐘 · 預報第一段（12h）與下一段降雨機率 · 特報</span></div>
   </section>
 
-  <section class="panel w3 lite" id="p-quake">
+  <section class="panel w6 lite" id="p-quake">
     <div class="ph"><h2>Quake</h2><span class="zh">顯著有感地震</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>氣象署地震報告 · 近 5 筆</span></div>
   </section>
 
-  <section class="panel w3 lite" id="p-power">
+  <section class="panel w6 lite" id="p-power">
     <div class="ph"><h2>Power</h2><span class="zh">台電備轉容量</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>台電開放資料 · 燈號：綠 ≥10% 黃 6–10% 橘 3–6% 紅 &lt;3%</span></div>
@@ -918,6 +953,23 @@ function renderRevenue(){
 
 /* ---------- DB panels (written by the hourly job) ---------- */
 function setMeta(id,doc,hours){metaDocs[id]=[doc,hours];const iso=doc.updatedAt;const m=meta(id);m.textContent=(doc.label?doc.label+" · ":"")+(iso?ago(iso):"");m.classList.toggle("stale",staleAfter(iso,hours)||!!doc.error);if(doc.error){m.textContent+=doc.updatedAt?" · 上次抓取失敗，顯示舊值":" · 抓取失敗";m.title=doc.error;}}
+/* ---------- 台灣現場：各地現況、停班停課 ---------- */
+let TN_SEEN=null;
+function renderTwNow(){const P=window.LASTP||{},A=P.alerts||{},al=A.alerts||[],stop=A.stopwork||{},now=countyNow();
+  const sev=al.filter(a=>a.lvl>=3);const bar=$("#stopbar");
+  if((stop.items||[]).length||sev.length){bar.innerHTML=`${(stop.items||[]).length?`<b>停班停課</b>${stop.items.slice(0,8).map(x=>`<span>${esc(x.area)}：${esc(x.text)}</span>`).join("")}`:""}${sev.length?`<b>災害示警</b>${sev.slice(0,4).map(x=>`<span>${esc(x.cat)}${x.area.length?"・"+esc(x.area.slice(0,3).join("、")):""}</span>`).join("")}`:""}<span class="s">${stop.updated?"人事總處 "+esc(stop.updated.slice(5,16)):""}</span>`;bar.hidden=false;}else bar.hidden=true;
+  const rows=Object.entries(now).sort((a,b)=>(b[1].lvl-a[1].lvl)||(b[1].a.length-a[1].a.length)||(b[1].nw.length-a[1].nw.length));
+  const html=rows.map(([k,c])=>{const sig=c.a.filter(x=>x.lvl>=2),minor=c.a.filter(x=>x.lvl<2);
+    const chips=sig.map(x=>`<span style="border-color:${LVC[x.lvl]};color:${LVC[x.lvl]}" title="${esc(x.text)}">${esc(x.cat)}</span>`).join("")+(minor.length?`<span title="${esc(minor.map(x=>x.cat+"："+x.text).join("\n"))}">${esc([...new Set(minor.map(x=>x.cat))].join("、"))} ${minor.length}</span>`:"");
+    const nw=c.nw.slice(0,2).map(x=>`<li><a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title)}</a><span class="m">${x.at?ago(x.at).replace(" 前",""):""}</span></li>`).join("");
+    return`<div class="tn-row"><div class="c">${esc(k.replace("臺","台"))}${c.w?`<small>${esc(String(c.w.temp??""))}°</small>`:""}</div><div>${chips?`<div class="tn-al">${chips}</div>`:""}${nw?`<ul class="tn-nw">${nw}</ul>`:""}</div></div>`;}).join("");
+  const nosite=al.filter(a=>!(a.area||[]).length&&a.lvl>=2);
+  body("p-twnow").innerHTML=(stop.none===true?`<div class="empty" style="padding:0 0 6px;font-size:11px">今天沒有停班停課 · 有效示警 ${al.length} 則</div>`:"")+(html||'<div class="empty">目前各縣市沒有示警或新聞</div>')+(nosite.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">另有 ${nosite.length} 則示警看不出縣市</div>`:"");
+  setMeta("p-twnow",{updatedAt:A.updatedAt||(P.localnews||{}).updatedAt,label:`${rows.length} 個縣市有動態`},1);
+  const ids=new Set(al.filter(a=>a.lvl>=2).map(a=>a.id));
+  if(TN_SEEN){const fresh=al.filter(a=>a.lvl>=2&&!TN_SEEN.has(a.id)).flatMap(a=>(a.area||[]).map(k=>[TWC[k],LVC[a.lvl]])).filter(x=>x[0]);if(fresh.length&&curCity==="all")setTimeout(()=>mapPulse(fresh),600);}
+  TN_SEEN=ids;try{applyGeo();}catch(e){}}
+let AIRPREV=null;
 const renderers={
   taiex(d){twm.taiex=d;renderTaiex();},
   tw_market(d){twm.market=d;renderTaiex();},
@@ -945,10 +997,11 @@ const renderers={
     if(live){const lab={};Object.values(live).forEach(c=>lab[c.label]=c);rows.forEach(b=>{const c=lab[b.city];if(c){b.rent=c.rent;b.stations=c.bikes.length;b.empty=c.empty;b.full=c.full;delete lab[b.city];}});
       Object.values(lab).forEach(c=>rows.push({city:c.label,stations:c.bikes.length,rent:c.rent,empty:c.empty,full:c.full,park_pct:null,spark:null,live:1}));rows.sort((a,b)=>b.stations-a.stations);}
     const ybNote=(typeof YB!=="undefined"&&YB.ok===false)?'<div class="empty" style="padding:4px 0 0;font-size:10.5px">全台 YouBike 這次抓不到（人在國外或來源暫時擋住），只顯示雙北</div>':(live?`<div class="empty" style="padding:4px 0 0;font-size:10.5px">雙北以外由你的瀏覽器即時抓 · ${esc((YB.t||"").slice(11,16))}</div>`:"");
+    const O=(window.LASTP||{}).oil,oil=O&&O.items?`<div class="oil">中油牌價${O.effective?` · ${esc(O.effective.slice(5).replace("-","/"))} 起`:""}${O.items.map(x=>`<span>${esc(x.name)} <b>${fmt(n(x.price),1)}</b>${x.chg?` <span class="${x.chg>0?"up":"down"}">${x.chg>0?"▲":"▼"}${fmt(Math.abs(x.chg),1)}</span>`:""}</span>`).join("")}</div>`:"";
     const bikes=rows.map(b=>`<tr><td class="name">${esc(b.city)}<span class="sub">${b.stations} 站</span>${b.live?'<span class="sub" style="color:var(--blue)"> 即時</span>':mini(b.spark)}</td><td class="r num${K("yb:"+b.city,n(b.rent))}">${fmt(n(b.rent),0)}</td><td class="r num ${b.empty>b.stations*0.15?"bad":""}">${b.empty}</td><td class="r num">${b.full}</td><td class="r num ${b.park_pct!=null?(n(b.park_pct)<10?"bad":n(b.park_pct)>=30?"up":""):""}">${b.park_pct!=null?fmt(n(b.park_pct),0)+"%":"—"}</td></tr>`).join("");
     const city=d.roadKind==="city",lo=city?20:60,hi=city?40:80;const roads=(d.roads||[]).map(r=>`<tr><td class="name">${esc(r.road)}${r.dir?" "+esc(r.dir)+"向":""}${mini(r.spark)}</td><td class="r num ${n(r.speed)<lo?"bad":n(r.speed)>=hi?"up":""}${K("fw:"+r.road+r.dir,n(r.speed))}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td></tr>`).join("");
     const jams=(d.jams||[]).map(j=>`<li><span class="t">${esc(j.section)}</span><span class="m bad">${fmt(n(j.speed),0)} km/h</span></li>`).join("");
-    body("p-twpulse").innerHTML=`<div class="tp"><div><h3>YouBike 可借</h3><table><tr><th>縣市</th><th class="r">可借車</th><th class="r">空站</th><th class="r">滿站</th><th class="r">停車剩</th></tr>${bikes}</table>${ybNote}</div>
+    body("p-twpulse").innerHTML=`<div class="tp"><div><h3>YouBike 可借</h3><table><tr><th>縣市</th><th class="r">可借車</th><th class="r">空站</th><th class="r">滿站</th><th class="r">停車剩</th></tr>${bikes}</table>${ybNote}${oil}</div>
       <div><h3>${city?"台北主要道路均速":"國道小客車均速"}</h3><table>${roads}</table>${jams?`<h3 style="margin-top:8px">${city?"最塞路段":"最塞區間"}</h3><ul class="list">${jams}</ul>`:""}</div></div>`;setMeta("p-twpulse",d,1);},
   news(d){const li=(arr,kw)=>arr.map(it=>`<li>${kw?`<span class="kw">${esc((it.kw||"").replace(/^en:/,"").replace(/^"/,"").split(" ")[0].slice(0,6))}</span>`:`<span class="src">${esc(it.source)}</span>`}<span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`).join("");
     const g=(d.signals||{}).gdelt,w=(d.signals||{}).wiki;let sig="";
@@ -990,9 +1043,17 @@ const renderers={
     body("p-quake").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-quake",d,48);},
   power(d){const LC={"綠":"#39B978","黃":"#E0A23A","橘":"#E28A2B","紅":"#F0524F"};const c=LC[d.level]||"var(--dim)";
     body("p-power").innerHTML=`<div class="macro"><div class="c"><div class="l">目前用電</div><div class="v"><span class="${K("power:cur",n(d.curr_mw))}">${fmt(n(d.curr_mw)/1000,2)}</span><span class="sub" style="font-size:12px"> GW</span></div><div class="p">使用率 ${fmt(n(d.util_pct),0)}%</div></div><div class="c"><div class="l">預估尖峰備轉率</div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:14px;height:14px;border-radius:50%;background:${c};box-shadow:0 0 0 3px color-mix(in srgb,${c} 25%,transparent)"></span>${fmt(n(d.reserve_pct),2)}%</div><div class="p">尖峰 ${fmt(n(d.peak_mw)/1000,2)} GW · ${esc(d.peak_hours||"")}${d.yday_reserve_pct!=null?` · 昨 ${fmt(n(d.yday_reserve_pct),2)}%`:""}${mini(d.spark)}</div></div></div>`;setMeta("p-power",d,3);},
+  alerts(d){renderTwNow();},
+  localnews(d){renderTwNow();},
+  oil(d){try{const P=window.LASTP||{};if(P.tw_pulse)renderers.tw_pulse(P.tw_pulse);}catch(e){}},
   airport(d){const s=k=>{const x=d[k]||{};return`<div class="c"><div class="l">${k==="dep"?"出發":"抵達"}</div><div class="v">${x.total??"—"}<span class="sub" style="font-size:12px"> 班</span></div><div class="p"><span class="${x.delayed>0?"bad":""}">延誤 ${x.delayed??0}</span> · <span class="${x.cancelled>0?"bad":""}">取消 ${x.cancelled??0}</span></div></div>`;};
-    const up=((d.dep||{}).upcoming||[]).map(u=>`<tr><td class="name">${esc(u.flight)}<span class="sub">→ ${esc(u.to)}${u.gate?" · "+esc(u.gate):""}</span></td><td class="r num">${esc(u.sched)}</td><td class="r num ${/延/.test(u.remark)?"bad":""}">${esc(u.est||"")}<span class="sub">${esc(u.remark||"")}</span></td></tr>`).join("");
-    body("p-airport").innerHTML=`<div class="tp"><div class="macro">${s("dep")}${s("arr")}</div><div><table><tr><th>接下來出發</th><th class="r">表定</th><th class="r">預計</th></tr>${up||'<tr><td colspan="3" class="empty">今天沒有後續班次</td></tr>'}</table></div></div>`;setMeta("p-airport",d,1);},
+    const ups=((d.dep||{}).upcoming||[]),prev=AIRPREV;let k=0;
+    const ch=(str,w,slot)=>{const t=String(str||"").toUpperCase().padEnd(w," ").slice(0,w),pv=prev&&prev[slot];AIRNEXT[slot]=t;
+      return`<span class="ch">${[...t].map((c,i)=>`<b class="${pv!=null&&pv[i]!==c?"fl":""}" style="animation-delay:${(k++%40)*28}ms">${c===" "?"&nbsp;":esc(c)}</b>`).join("")}</span>`;};
+    const AIRNEXT={};
+    const rows=ups.map((u,i)=>`<div class="fr"><span>${ch(u.flight,7,i+"f")}</span><span class="to">${ch(u.to,3,i+"t")}<i>${esc(u.gate||"")}</i></span><span>${ch(u.sched,5,i+"s")}</span><span class="${/延/.test(u.remark||"")||(u.est&&u.est>u.sched)?"bad":""}">${ch(u.est||u.sched,5,i+"e")}</span><span class="rm ${/延|取消/.test(u.remark||"")?"bad":""}">${esc(u.remark||"")}</span></div>`).join("");
+    AIRPREV=AIRNEXT;
+    body("p-airport").innerHTML=`<div class="tp"><div class="macro">${s("dep")}${s("arr")}</div><div class="fids"><div class="fr fh"><span>班次</span><span>目的地</span><span>表定</span><span>預計</span><span></span></div>${rows||'<div class="empty">今天沒有後續班次</div>'}</div></div>`;setMeta("p-airport",d,1);},
   world(d){const reg=grouped(d.items,ORD.world,i=>i.sym);const openG=new Set(reg.filter(r=>r.it.open).map(r=>r.g));const gi=g=>ORD.world.findIndex(x=>x[0]===g);
     reg.sort((a,b)=>((openG.has(a.g)?0:1)-(openG.has(b.g)?0:1))||(gi(a.g)-gi(b.g)));reg.forEach(r=>{if(openG.has(r.g))r.g=r.g+" · 開盤中";});
     const tr=withHeads(reg,4,it=>`<tr><td class="name"><span class="src" style="min-width:14px">${esc(it.flag)}</span>${esc(it.name)}${it.open?`<span class="sub" style="color:var(--up)">盤中</span>`:""}${mini(it.spark)}</td><td class="r num${K("w:"+it.sym,n(it.price))}">${fmt(n(it.price),it.price<100?2:0)}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td><td class="r num ${cls(n(it.chg5_pct))}">${isFinite(n(it.chg5_pct))?sgn(n(it.chg5_pct),1,"%"):""}</td></tr>`);
@@ -1173,7 +1234,7 @@ function movers(P){
 }
 /* ---------- map ---------- */
 const GEO_URL="https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/geo.json";
-const TW_VIEW={center:[121.52,25.04],zoom:10.4};
+const TW_VIEW={center:[120.95,23.7],zoom:matchMedia("(max-width:640px)").matches?6.3:6.9};
 let map=null,mapReady=false,geoData=null,curCity=(()=>{try{return localStorage.getItem("geo-city")||"all";}catch(e){return"all";}})(),layersOn={parking:true,bikes:true,speed:true},lastGeoGen=null;
 const spdColor=v=>(geoData&&geoData.lineLabel)?(v<20?"#F0524F":v<35?"#E0A23A":"#39B978"):(v<40?"#F0524F":v<60?"#E0A23A":"#39B978");
 const parkColor=r=>r<0.1?"#F0524F":r<0.3?"#E0A23A":"#39B978";
@@ -1188,10 +1249,14 @@ function initMap(){
     map.addLayer({id:"parking",type:"circle",source:"parking",paint:{"circle-radius":["interpolate",["linear"],["get","total"],50,4,500,9,2000,14],"circle-color":["get","color"],"circle-opacity":.75,"circle-stroke-color":"#0b0d12","circle-stroke-width":.8}});
     map.addSource("bikes",{type:"geojson",data:{type:"FeatureCollection",features:[]}});
     map.addLayer({id:"bikes",type:"circle",source:"bikes",paint:{"circle-radius":3,"circle-color":["case",["==",["get","rent"],0],"transparent","#7C8FF2"],"circle-stroke-color":"#7C8FF2","circle-stroke-width":1,"circle-opacity":.8}});
+    map.addSource("county",{type:"geojson",data:{type:"FeatureCollection",features:[]}});
+    map.addLayer({id:"county",type:"circle",source:"county",paint:{"circle-radius":["get","r"],"circle-color":["get","color"],"circle-opacity":.28,"circle-stroke-color":["get","color"],"circle-stroke-width":1.4,"circle-stroke-opacity":.9}});
+    map.addSource("mpulse",{type:"geojson",data:{type:"FeatureCollection",features:[]}});
+    map.addLayer({id:"mpulse",type:"circle",source:"mpulse",paint:{"circle-radius":4,"circle-color":"transparent","circle-stroke-color":["get","color"],"circle-stroke-width":2,"circle-stroke-opacity":0}});
     map.addSource("speed",{type:"geojson",data:{type:"FeatureCollection",features:[]}});
     map.addLayer({id:"speed",type:"circle",source:"speed",paint:{"circle-radius":3.5,"circle-color":["get","color"],"circle-opacity":.9}});
     const pop=new maplibregl.Popup({closeButton:false,closeOnClick:false});
-    ["parking","bikes","speed","freeway"].forEach(id=>{map.on("mouseenter",id,e=>{map.getCanvas().style.cursor="pointer";const f=e.features[0];const c=id==="freeway"?e.lngLat:f.geometry.coordinates;pop.setLngLat(c).setHTML(f.properties.label).addTo(map);});map.on("mouseleave",id,()=>{map.getCanvas().style.cursor="";pop.remove();});});
+    ["parking","bikes","speed","freeway","county"].forEach(id=>{map.on("mouseenter",id,e=>{map.getCanvas().style.cursor="pointer";const f=e.features[0];const c=id==="freeway"?e.lngLat:f.geometry.coordinates;pop.setLngLat(c).setHTML(f.properties.label).addTo(map);});map.on("mouseleave",id,()=>{map.getCanvas().style.cursor="";pop.remove();});});
     mapReady=true;applyGeo();if(geoData&&curCity!=="all")map.jumpTo(cityView(curCity));
   });
 }
@@ -1207,14 +1272,29 @@ function applyGeo(){
   map.getSource("parking").setData({type:"FeatureCollection",features:(c.parking||[]).map(p=>({type:"Feature",geometry:{type:"Point",coordinates:[p[0],p[1]]},properties:{total:p[3],color:parkColor(p[2]/p[3]),label:`${esc(p[4])}<br>剩 ${p[2]} / ${p[3]} 位`}}))});
   map.getSource("bikes").setData({type:"FeatureCollection",features:(c.bikes||[]).map(b=>({type:"Feature",geometry:{type:"Point",coordinates:[b[0],b[1]]},properties:{rent:b[2],label:`${esc(b[4])}<br>可借 ${b[2]} / ${b[3]}`}}))});
   map.getSource("speed").setData({type:"FeatureCollection",features:(c.speed||[]).map(v=>({type:"Feature",geometry:{type:"Point",coordinates:[v[0],v[1]]},properties:{color:spdColor(v[2]),label:`${esc(v[3])}<br>${v[2]} km/h`}}))});
-  map.getSource("freeway").setData({type:"FeatureCollection",features:(geoData.freeway||[]).map(f=>({type:"Feature",geometry:{type:"LineString",coordinates:f[0]},properties:{color:spdColor(f[1]),label:`${esc(f[2])}<br>${f[1]} km/h`}}))});
+  map.getSource("county").setData({type:"FeatureCollection",features:curCity==="all"?countyFeatures():[]});
+  map.getSource("freeway").setData({type:"FeatureCollection",features:(curCity!=="Taipei"?[]:geoData.freeway||[]).map(f=>({type:"Feature",geometry:{type:"LineString",coordinates:f[0]},properties:{color:spdColor(f[1]),label:`${esc(f[2])}<br>${f[1]} km/h`}}))});
   Object.entries(layersOn).forEach(([k,on])=>{map.setLayoutProperty(k,"visibility",on?"visible":"none");if(k==="speed")map.setLayoutProperty("freeway","visibility",on?"visible":"none");});
   const a=(geoData.avail||{})[curCity]||{};const have=[a.parking?"停車場":null,a.bikes?"YouBike":null,a.vd?"車速":null].filter(Boolean);
-  $("#geo-avail").textContent=curCity==="all"?(geoData.lineLabel||"國道")+"車速":(have.length?"有："+have.join("、"):"這一輪沒有資料");
+  $("#geo-avail").textContent=curCity==="all"?"各縣市：災害示警、地方新聞、天氣（點圓圈看內容）":(have.length?"有："+have.join("、"):"這一輪沒有資料");
   $("#geo-age").textContent=geoData.generatedAt?"資料 "+ago(geoData.generatedAt):"";
   const n=(c.parking||[]).length+(c.bikes||[]).length+(c.speed||[]).length;const lab=curCity==="all"?"全台":((geoData.labels||{})[curCity]||curCity);
-  setMeta("p-geo",{updatedAt:geoData.generatedAt,label:`${lab} · ${curCity==="all"?(geoData.freeway||[]).length+" 段"+(geoData.lineLabel?"路段":"國道"):n+" 點"}`},0.5);
+  setMeta("p-geo",{updatedAt:geoData.generatedAt,label:`${lab} · ${curCity==="all"?countyFeatures().length+" 個縣市有動態":n+" 點"}`},0.5);
 }
+/* ---------- 全台總覽：各縣市現況（示警＋地方新聞＋天氣） ---------- */
+const TWC={"臺北市":[121.56,25.05],"新北市":[121.47,25.01],"基隆市":[121.74,25.13],"桃園市":[121.22,24.93],"新竹市":[120.97,24.80],"新竹縣":[121.12,24.70],"苗栗縣":[120.87,24.49],"臺中市":[120.68,24.16],"彰化縣":[120.50,24.00],"南投縣":[120.90,23.85],"雲林縣":[120.39,23.70],"嘉義市":[120.45,23.48],"嘉義縣":[120.40,23.43],"臺南市":[120.22,23.00],"高雄市":[120.31,22.63],"屏東縣":[120.55,22.55],"宜蘭縣":[121.75,24.70],"花蓮縣":[121.55,23.90],"臺東縣":[121.10,22.80],"澎湖縣":[119.58,23.57],"金門縣":[118.35,24.45],"連江縣":[119.95,26.15]};
+const WXN={"臺北市":"台北","新北市":"新北","基隆市":"基隆","桃園市":"桃園","新竹市":"新竹","臺中市":"台中","彰化縣":"彰化","嘉義市":"嘉義","臺南市":"台南","高雄市":"高雄","屏東縣":"屏東","宜蘭縣":"宜蘭","花蓮縣":"花蓮","臺東縣":"台東"};
+const LVC={3:"#F0524F",2:"#E0A23A",1:"#8B93A7",0:"#7C8FF2"};
+function countyNow(){const P=window.LASTP||{},al=((P.alerts||{}).alerts)||[],ln=((P.localnews||{}).counties)||{},wx=((P.weather||{}).items)||[],out={};
+  Object.keys(TWC).forEach(k=>{const a=al.filter(x=>(x.area||[]).includes(k)),nw=ln[k]||[],w=wx.find(x=>(x.city||x.name||"").startsWith(WXN[k]||"__"));
+    const lvl=a.reduce((m,x)=>Math.max(m,x.lvl||0),0);if(a.length||nw.length)out[k]={a,nw,w,lvl};});return out;}
+function countyFeatures(){return Object.entries(countyNow()).map(([k,c])=>{const sig=c.a.filter(x=>x.lvl>=2);
+  const lab=`<b>${esc(k)}</b>${c.w?` · ${esc(String(c.w.temp??""))}°`:""}${sig.length?"<br>"+sig.slice(0,3).map(x=>`<span style="color:${LVC[x.lvl]}">●</span> ${esc(x.cat)}：${esc(x.text.slice(0,38))}`).join("<br>"):""}${c.nw.length?"<br>"+c.nw.slice(0,3).map(x=>"· "+esc(x.title.slice(0,30))).join("<br>"):""}`;
+  return{type:"Feature",geometry:{type:"Point",coordinates:TWC[k]},properties:{r:7+Math.min(10,sig.length*3+c.nw.length),color:LVC[sig.length?c.lvl:0],label:lab,id:k}};});}
+function mapPulse(pts){if(!map||!mapReady||!pts.length)return;if(document.documentElement.classList.contains("still")||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const src=map.getSource("mpulse");if(!src)return;src.setData({type:"FeatureCollection",features:pts.map(p=>({type:"Feature",geometry:{type:"Point",coordinates:p[0]},properties:{color:p[1]}}))});
+  const t0=performance.now(),D=1600;(function step(t){const k=Math.min(1,(t-t0)/D);map.setPaintProperty("mpulse","circle-radius",4+k*26);map.setPaintProperty("mpulse","circle-stroke-opacity",(1-k)*0.9);
+    if(k<1)requestAnimationFrame(step);else src.setData({type:"FeatureCollection",features:[]});})(t0);}
 async function loadGeo(){
   try{const r=await fetch(GEO_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const g=await r.json();if(g.generatedAt===lastGeoGen)return;const first=!geoData;lastGeoGen=g.generatedAt;geoData=g;ybMerge();applyGeo();if(first&&mapReady&&curCity!=="all")map.jumpTo(cityView(curCity));}
   catch(e){$("#geo-age").textContent="地圖資料抓不到";}
@@ -1227,7 +1307,8 @@ setInterval(loadGeo,5*60e3);
 const YB={url:"https://apis.youbike.com.tw/json/station-yb2.json",at:0,busy:false,ok:null,cities:null,t:""};
 const YB_AREA={"00":["Taipei","台北市"],"05":["NewTaipei","新北市"],"07":["Taoyuan","桃園市"],"09":["Hsinchu","新竹市"],"0B":["HsinchuCounty","新竹縣"],"10":["HSP","新竹科學園區"],"0A":["Miaoli","苗栗縣"],"01":["Taichung","台中市"],"08":["Chiayi","嘉義市"],"11":["ChiayiCounty","嘉義縣"],"13":["Tainan","台南市"],"12":["Kaohsiung","高雄市"],"14":["Pingtung","屏東縣"],"15":["Taitung","台東縣"]};
 async function ybFetch(force){
-  if(YB.busy||document.hidden||document.body.dataset.tab!=="live")return;
+  if(YB.busy||document.body.dataset.tab!=="live")return;
+  if(document.hidden&&YB.at)return;  // 第一次一定抓；之後在背景才暫停
   if(!force&&Date.now()-YB.at<5*60e3)return;
   YB.busy=true;
   try{const c=new AbortController(),tm=setTimeout(()=>c.abort(),25000);const r=await fetch(YB.url,{signal:c.signal,cache:"no-store"});clearTimeout(tm);if(!r.ok)throw new Error("HTTP "+r.status);
@@ -1237,7 +1318,9 @@ async function ybFetch(force){
       const av=+x.available_spaces||0,cap=+x.parking_spaces||0,emp=+x.empty_spaces||0;
       c.bikes.push([lng,lat,av,cap,(x.name_tw||"").slice(0,14)]);c.rent+=av;if(av===0)c.empty++;if(emp===0)c.full++;
       c.x0=Math.min(c.x0,lng);c.x1=Math.max(c.x1,lng);c.y0=Math.min(c.y0,lat);c.y1=Math.max(c.y1,lat);if(x.updated_at>t)t=x.updated_at;}
-    YB.cities=cities;YB.ok=Object.keys(cities).length>0;YB.t=t;
+    const prevEmpty=YB.empties||null,empt=new Set();Object.values(cities).forEach(c=>c.bikes.forEach(b=>{if(b[2]===0)empt.add(b[0]+","+b[1]);}));
+    YB.cities=cities;YB.ok=Object.keys(cities).length>0;YB.t=t;YB.empties=empt;
+    if(prevEmpty){const fresh=[...empt].filter(k=>!prevEmpty.has(k)).slice(0,60).map(k=>[k.split(",").map(Number),"#F0524F"]);setTimeout(()=>mapPulse(fresh),400);}
   }catch(e){YB.ok=false;console.warn("youbike live",e&&e.message);}
   finally{YB.at=Date.now();YB.busy=false;}
   ybMerge();applyGeo();try{const P=window.LASTP;if(P&&P.tw_pulse)renderers.tw_pulse(P.tw_pulse);}catch(e){console.warn("yb pulse",e);}
@@ -1303,15 +1386,16 @@ function brandsChart(id,rows){const rh=17,W=520,L=92,R=52,pos=Math.max(0,...rows
     p("text",{x:L-8,y:y+12,"text-anchor":"end",style:me2?"fill:var(--blue)":""},(me2?"● ":"")+c.cat);
     p("rect",{x,y:y+4,width:w,height:rh-8,rx:1.5,style:`fill:var(${c.chg>0?"--up":c.chg<0?"--down":"--dim"});opacity:${me2?1:.72}`});
     p("text",{x:W,y:y+12,"text-anchor":"end",class:"num",style:`fill:var(${c.chg>0?"--up":c.chg<0?"--down":"--muted"})`},(c.chg>0?"+":"")+c.chg+"%");});}
-function aiChart(id,rows3,d14){const W=520,L=96,cw=(W-L-6)/14,rh=26;const p=draw(id,W,rows3.length*rh+18);if(!p)return;
+function aiChart(id,rows3,d14,fresh){const W=520,L=96,cw=(W-L-6)/14,rh=26;const p=draw(id,W,rows3.length*rh+18);if(!p)return;
   d14.forEach((d,i)=>{if(i%2===1)p("text",{x:L+cw*i+cw/2,y:rows3.length*rh+14,"text-anchor":"middle"},d.slice(5).replace("-","/"));p("line",{x1:L+cw*i,y1:0,x2:L+cw*i,y2:rows3.length*rh,class:"g",opacity:.45});});
   rows3.forEach((r,ri)=>{const y=ri*rh;p("text",{x:L-10,y:y+16,"text-anchor":"end",style:r.items.length?"fill:var(--text)":"fill:var(--dim)"},r.v);
     const by={};r.items.forEach(a=>(by[a.d]=by[a.d]||[]).push(a));
     Object.entries(by).forEach(([d,arr])=>{const i=d14.indexOf(d),m=Math.min(arr.length,3);arr.slice(0,3).forEach((a,k)=>{const cx=L+cw*i+cw/2,cy=y+12+(k-(m-1)/2)*7;
-      const c=p("circle",a.k?{cx,cy,r:3.4,style:"fill:var(--up)"}:{cx,cy,r:3,style:"fill:none;stroke:var(--blue);stroke-width:1.4"});const tt=document.createElementNS(NS,"title");tt.textContent=a.d+"｜"+a.t;c.appendChild(tt);});});});}
-const OV={};
+      const c=p("circle",a.k?{cx,cy,r:3.4,style:"fill:var(--up)"}:{cx,cy,r:3,style:"fill:none;stroke:var(--blue);stroke-width:1.4"});const tt=document.createElementNS(NS,"title");tt.textContent=a.d+"｜"+a.t;c.appendChild(tt);
+      if(fresh&&fresh.has(a.v+"|"+a.d+"|"+a.t))p("circle",{cx,cy,r:3.4,class:"ib-ping",style:`stroke:var(${a.k?"--up":"--blue"})`});});});});}
+const OV={};let PREV_AI=null,PREV_TG=null;
 function fillOv(){if(OV.b&&document.getElementById("ov-ib1")){brandsChart("ov-ib1",OV.b.rows);$("#ov-ib1s").innerHTML=OV.b.s;}
-  if(OV.a&&document.getElementById("ov-ib3")){aiChart("ov-ib3",OV.a.rows3,OV.a.d14);$("#ov-ib3s").innerHTML=OV.a.s;}}
+  if(OV.a&&document.getElementById("ov-ib3")){aiChart("ov-ib3",OV.a.rows3,OV.a.d14,OV.a.fresh);$("#ov-ib3s").innerHTML=OV.a.s;}}
 function render(P){
   const T=today(),cards=[];
   /* ---- Q1 錢 ---- */
@@ -1357,7 +1441,8 @@ function render(P){
   if(topV.length)cards.push(["ib3","AI 動態",topV[0][1],"則",`近 7 天 <b>${esc(topV[0][0])}</b> 動作最多；共 ${topV.length} 家有動靜`]);
   const busy=rows3.slice().sort((a,b)=>b.items.length-a.items.length),quiet=rows3.filter(r=>!r.items.length).map(r=>r.v),gh=((P.tech||{}).github||[]);
   if(ai.length)$("#ib3a").innerHTML=`近 14 天 <b>${busy[0].v}</b> 動作最多（<em>${busy[0].items.length}</em> 則），其次 <b>${busy[1].v}</b>。${quiet.length?`<b>${quiet.join("、")}</b> 這段時間沒動靜。`:""}${gh[0]?`GitHub 竄升最快的是 <b>${esc(gh[0].name.split("/").pop())}</b>。`:""}`;
-  aiChart("ib3v",rows3,d14);OV.a={rows3,d14,s:topV.length?`近 7 天 <b>${esc(topV[0][0])}</b> 動作最多（${topV[0][1]} 則）${quiet.length?`；<b>${quiet.join("、")}</b> 近 14 天沒動靜`:""}`:""};
+  const aiKeys=new Set(ai.map(a=>a.v+"|"+a.d+"|"+a.t)),aiFresh=PREV_AI?new Set([...aiKeys].filter(x=>!PREV_AI.has(x))):null;PREV_AI=aiKeys;
+  aiChart("ib3v",rows3,d14,aiFresh);OV.a={rows3,d14,fresh:aiFresh,s:topV.length?`近 7 天 <b>${esc(topV[0][0])}</b> 動作最多（${topV[0][1]} 則）${quiet.length?`；<b>${quiet.join("、")}</b> 近 14 天沒動靜`:""}`:""};
   if(gh.length){const g5=gh.slice(0,5),W=420,rh=22,mx=n(g5[0].stars);const p=draw("ib3w",W,g5.length*rh);
     if(p)g5.forEach((x,i)=>{const y=i*rh,bw=Math.max(2,(W-210)*n(x.stars)/mx);p("rect",{x:0,y:y+3,width:bw,height:rh-9,rx:1.5,style:"fill:var(--warn);opacity:.8"});
       p("text",{x:bw+6,y:y+13,class:"num"},(n(x.stars)/1000).toFixed(1)+"k");p("text",{x:bw+44,y:y+13},x.name.split("/").pop().slice(0,22));});}
@@ -1368,7 +1453,9 @@ function render(P){
   if(tg.length)cards.push(["ib4","時尚同框",esc(cap(tg[0].term)),"",`同時出現在 <b>${tg[0].sources.join("、")}</b>，共 ${tg[0].n} 則`]);
   const up=ly.find(l=>n(l.move)>0);
   $("#ib4a").innerHTML=(tg.length?`本週台灣時尚媒體的共同題目是<b>${tg.slice(0,3).map(t=>esc(cap(t.term))).join("、")}</b>。`:"本週還沒有共同題目。")+(ly[0]?`Lyst 全球最熱是 <b>${esc(ly[0].brand)}</b>${up?`，<b>${esc(up.brand)}</b> 往上爬`:""}。`:"");
-  $("#ib4c").innerHTML=tg.length?tg.slice(0,12).map(t=>`<span class="ib-chip ${t.sources.length>=3?"s3":t.n>=3?"s2":""}" title="${esc(((t.examples||[])[0]||[])[1]||"")}">${esc(cap(t.term))}<i>${t.sources.length} 家</i></span>`).join(""):'<span class="ib-empty">資料還在累積</span>';
+  const tgNow={};tg.forEach(t=>tgNow[t.term]=t.sources.length);const popT=t=>PREV_TG&&(!(t.term in PREV_TG)||PREV_TG[t.term]<t.sources.length);
+  $("#ib4c").innerHTML=tg.length?tg.slice(0,12).map((t,i)=>`<span style="animation-delay:${i*60}ms" class="ib-chip ${popT(t)?"ib-pop":""} ${t.sources.length>=3?"s3":t.n>=3?"s2":""}" title="${esc(((t.examples||[])[0]||[])[1]||"")}">${esc(cap(t.term))}<i>${t.sources.length} 家</i></span>`).join(""):'<span class="ib-empty">資料還在累積</span>';
+  PREV_TG=tgNow;
   if(ly.length){const l6=ly.slice(0,6),W=420,rh=20;const p=draw("ib4w",W,l6.length*rh);
     if(p)l6.forEach((x,i)=>{const y=i*rh,mv=n(x.move);p("text",{x:0,y:y+13,class:"num"},String(i+1).padStart(2,"0"));p("text",{x:26,y:y+13,style:"fill:var(--text)"},x.brand);
       p("text",{x:150,y:y+13,class:"num",style:`fill:var(${mv>0?"--up":mv<0?"--down":"--dim"})`},mv>0?"▲"+mv:mv<0?"▼"+(-mv):"–");});}
@@ -1396,7 +1483,7 @@ const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"m
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro",
   "ib-sig":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
-  "p-geo":"live","p-twpulse":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
+  "p-geo":"live","p-twnow":"live","p-twpulse":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
   "brief":"overview","ov":"overview"};
 const tabsEl=$("#tabs");
 tabsEl.innerHTML=TABS.map(([k,nm])=>`<button class="tab" role="tab" id="tab-${k}" data-k="${k}" aria-selected="false" type="button">${nm}<i class="bd" aria-hidden="true"></i></button>`).join("")+'<span class="tbar" id="tbar"></span>';

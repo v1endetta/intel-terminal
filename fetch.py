@@ -1726,6 +1726,142 @@ def p_airport():
     return out
 
 
+# ---------- 台灣現場：各縣市現況（災害示警、停班停課、各地新聞）與油價 ----------
+# 國家災防中心 CAP 示警（全台、不用金鑰；同一來源 3 秒內不能重打）、人事總處停班停課、中油牌價、Google News 依縣市。
+TW_COUNTIES = {  # 名稱：(經度, 緯度, 標題裡會出現的寫法)
+    "臺北市": (121.56, 25.05, ("臺北市", "台北市", "北市")), "新北市": (121.47, 25.01, ("新北",)), "基隆市": (121.74, 25.13, ("基隆",)),
+    "桃園市": (121.22, 24.93, ("桃園", "桃市")), "新竹市": (120.97, 24.80, ("新竹市", "竹市")), "新竹縣": (121.12, 24.70, ("新竹縣", "竹縣", "竹北")),
+    "苗栗縣": (120.87, 24.49, ("苗栗",)), "臺中市": (120.68, 24.16, ("臺中", "台中", "中市")), "彰化縣": (120.50, 24.00, ("彰化",)),
+    "南投縣": (120.90, 23.85, ("南投",)), "雲林縣": (120.39, 23.70, ("雲林",)), "嘉義市": (120.45, 23.48, ("嘉義市", "嘉市")),
+    "嘉義縣": (120.40, 23.43, ("嘉義縣", "嘉縣")), "臺南市": (120.22, 23.00, ("臺南", "台南", "南市")), "高雄市": (120.31, 22.63, ("高雄", "高市")),
+    "屏東縣": (120.55, 22.55, ("屏東",)), "宜蘭縣": (121.75, 24.70, ("宜蘭",)), "花蓮縣": (121.55, 23.90, ("花蓮",)),
+    "臺東縣": (121.10, 22.80, ("臺東", "台東")), "澎湖縣": (119.58, 23.57, ("澎湖",)), "金門縣": (118.35, 24.45, ("金門",)),
+    "連江縣": (119.95, 26.15, ("連江", "馬祖")),
+}
+NCDR_FEED = "https://alerts.ncdr.nat.gov.tw/RssAtomFeed.ashx"
+DGPA_URL = "https://www.dgpa.gov.tw/typh/daily/nds.html"
+CPC_URL = "https://vipmbr.cpc.com.tw/cpcstn/ListPriceWebService.asmx/getCPCMainProdListPrice_XML"
+# 類別嚴重度：3＝可能危及安全、2＝需要注意、1＝生活影響（停水只算數量，不上地圖色）
+ALERT_LEVEL = {"颱風": 3, "地震": 3, "土石流": 3, "淹水": 3, "疏散避難": 3, "海嘯": 3, "降雨": 2, "雷雨": 2, "強風": 2, "高溫": 2, "低溫": 2,
+               "濃霧": 2, "道路封閉": 2, "鐵路事故": 2, "水庫放流": 2, "停電": 2, "火災": 1, "停水": 1, "空氣品質": 1}
+
+
+def _cap_time(s: str):
+    m = re.match(r"(\d{4})/(\d{1,2})/(\d{1,2})\s*(上午|下午)?\s*(\d{1,2}):(\d{2}):(\d{2})", (s or "").strip())
+    if not m:
+        return None
+    y, mo, d, ap, hh, mi, ss = m.groups()
+    hh = int(hh) % 12 + (12 if ap == "下午" else 0) if ap else int(hh)
+    return datetime(int(y), int(mo), int(d), hh, int(mi), int(ss), tzinfo=TPE)
+
+
+def _counties_in(text: str) -> list:
+    out = []
+    for name, (_, _, keys) in TW_COUNTIES.items():
+        if any(k in text for k in keys):
+            out.append(name)
+    return out
+
+
+def p_alerts():
+    """災害示警（現在仍有效的）＋ 停班停課。"""
+    errs, alerts = [], []
+    try:
+        root = ET.fromstring(get(NCDR_FEED).content)
+        ns = {"a": "http://www.w3.org/2005/Atom", "cap": "urn:oasis:names:tc:emergency:cap:1.1"}
+        now_tpe = NOW.astimezone(TPE)
+        for e in root.findall("a:entry", ns):
+            cat = (e.findtext("a:title", "", ns) or "").strip()
+            lvl = ALERT_LEVEL.get(cat)
+            if not lvl or (e.findtext("cap:msgType", "", ns) or "") == "Cancel":
+                continue
+            exp = _cap_time(e.findtext("cap:expires", "", ns))
+            if exp and exp < now_tpe:
+                continue
+            text = re.sub(r"<[^>]+>|\s+", " ", html_mod.unescape(e.findtext("a:summary", "", ns) or "")).strip()
+            if re.search(r"已結案|已無警戒|解除|恢復供水|已恢復", text):
+                continue
+            area = _counties_in(text)
+            link = e.find("a:link", ns)
+            alerts.append({"id": e.findtext("a:id", "", ns), "cat": cat, "lvl": lvl, "area": area, "text": text[:160],
+                           "src": (e.findtext("a:author/a:name", "", ns) or "")[:12], "at": _rss_date(e.findtext("a:updated", "", ns) or ""),
+                           "exp": exp.isoformat() if exp else "", "url": link.get("href") if link is not None else ""})
+    except Exception as e:  # noqa: BLE001
+        log("ncdr", e); errs.append("災害示警: " + safe_err(e))
+    # 同一類別、同一組縣市只留最新一則（水利署會對同一站連發好幾則）
+    seen, uniq = set(), []
+    for a in sorted(alerts, key=lambda x: x["at"], reverse=True):
+        k = (a["cat"], tuple(a["area"]), a["text"][:24])
+        if k in seen:
+            continue
+        seen.add(k); uniq.append(a)
+    stop = {"items": [], "none": None, "updated": ""}
+    try:
+        t = get(DGPA_URL).content.decode("utf-8", errors="replace")
+        m = re.search(r"更新時間：\s*([\d/: ]+)", t)
+        stop["updated"] = (m.group(1).strip() if m else "")
+        body = t[t.find("Table_Body"):] if "Table_Body" in t else ""
+        if "無停班停課訊息" in body[:3000]:
+            stop["none"] = True
+        else:
+            for tr in re.findall(r"<TR[^>]*>(.*?)</TR>", body, re.S | re.I)[:30]:
+                cells = [re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", c)).strip() for c in re.findall(r"<TD[^>]*>(.*?)</TD>", tr, re.S | re.I)]
+                cells = [c for c in cells if c]
+                if len(cells) >= 2 and _counties_in(cells[0]):
+                    stop["items"].append({"area": cells[0][:12], "text": cells[1][:120]})
+            stop["none"] = not stop["items"]
+    except Exception as e:  # noqa: BLE001
+        log("dgpa", e); errs.append("停班停課: " + safe_err(e))
+    if not uniq and stop["none"] is None:
+        raise RuntimeError("alerts: nothing " + "; ".join(errs)[:160])
+    return {"alerts": uniq[:80], "n_total": len(uniq), "stopwork": stop, "errs": errs}
+
+
+def p_oil():
+    root = ET.fromstring(get(CPC_URL).content)
+    want = {"98無鉛汽油": "98", "95無鉛汽油": "95", "92無鉛汽油": "92", "超級柴油": "柴油"}
+    out, eff = [], ""
+    for tb in root.iter("Table"):
+        name = (tb.findtext("產品名稱") or "").strip()
+        if name not in want or "自營站" not in (tb.findtext("交貨地點") or ""):
+            continue
+        price = num(tb.findtext("參考牌價_金額"))
+        d = (tb.findtext("牌價生效日期") or "").strip()
+        if len(d) == 7:
+            d = f"{int(d[:3]) + 1911}-{d[3:5]}-{d[5:7]}"
+        eff = eff or d
+        hist_put("oil", want[name], d, price)
+        hist = hist_get("oil", want[name], 10)  # 依生效日排序；同一天只會有一筆
+        chg = round(hist[-1] - hist[-2], 2) if len(hist) >= 2 else None
+        out.append({"name": want[name], "price": price, "chg": chg})
+    if not out:
+        raise RuntimeError("oil: no rows")
+    order = ["92", "95", "98", "柴油"]
+    out.sort(key=lambda x: order.index(x["name"]))
+    return {"items": out, "effective": eff, "label": "中油"}
+
+
+def p_localnews():
+    """各縣市近 24 小時新聞（Google News；標題要真的提到該縣市）。"""
+    out, errs = {}, []
+    for name, (_, _, keys) in TW_COUNTIES.items():
+        try:
+            got = _gnews(f"{keys[0]} when:1d", limit=12)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{name}: {safe_err(e)}"); continue
+        items = []
+        for it in got:
+            if not any(k in it["title"] for k in keys) or WATCH_SRC_BLOCK.search(it.get("source", "")) or CROWD_SRC_BLOCK.search(it.get("source", "")):
+                continue
+            items.append({"title": it["title"][:70], "url": it["url"], "source": it["source"], "at": it["at"]})
+        items.sort(key=lambda x: x.get("at") or "", reverse=True)
+        out[name] = items[:5]
+        time.sleep(0.3)
+    if not any(out.values()):
+        raise RuntimeError("localnews: nothing " + "; ".join(errs)[:160])
+    return {"counties": out, "errs": errs[:6]}
+
+
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
 # Vin 的關注領域（Google News 繁中）：每組顯示最新 3 則。帶引號＝精準比對。改這裡。
 NEWS_GROUPS = [
@@ -4190,6 +4326,9 @@ run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
 run("power", p_power, keep_if_fresh_hours=0.25)
 run("airport", p_airport, keep_if_fresh_hours=0.25)
+run("alerts", p_alerts, keep_if_fresh_hours=0.15)
+run("oil", p_oil, keep_if_fresh_hours=12)
+run("localnews", p_localnews, keep_if_fresh_hours=1)
 # run("tiktok", p_tiktok, keep_if_fresh_hours=20)  # Creative Center 擋資料中心 IP，每輪白耗 60 秒，先停
 
 DATA.mkdir(exist_ok=True)
