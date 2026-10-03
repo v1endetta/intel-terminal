@@ -1,15 +1,5 @@
 {
- "pmi": {
-  "value": 63.4,
-  "orders": 63.6,
-  "period": "2026-09",
-  "chg": 0.9,
-  "next": "2026-11-02",
-  "spark": [
-   62.5,
-   63.4
-  ]
- },
+ "pmi": null,
  "nmi": {
   "value": 56.9,
   "orders": 56.7,
@@ -193,6 +183,8 @@
   "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNWnZsQk54Nk5kWGVfb2twQkNXaFNVcFpDQUFaSkFBODIxMFVuaklzaTVWSkxMcFJ2bTNFUFVqZnh2YkpVdVhxdVJ6eExiWHZ6QmlKZFNDZlZCZHp5aGFGUGxOYnZPN0ktZmxtT1VlY2lsVXRmbEIzR0k0dnZCTFN2djdwdnJTbktFZGQ2TWVveF94N2VUZlVqWUlWOA?oc=5",
   "at": "2026-09-23T08:00:00Z"
  },
- "errs": [],
- "updatedAt": "2026-10-02T20:51:42Z"
+ "errs": [
+  "PMI: RuntimeError: ndc PMI parse"
+ ],
+ "updatedAt": "2026-10-03T02:53:16Z"
 }
