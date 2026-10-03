@@ -704,20 +704,20 @@ body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[d
   <div class="sec">台灣現場 Taiwan Live</div>
 
   <section class="panel w12 hero" id="p-geo">
-    <div class="ph"><h2>Map</h2><span class="zh">全台 · 停車場剩餘、YouBike、車速</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>Map</h2><span class="zh">雙北 · 停車場剩餘、YouBike、市區車速</span><span class="meta">排程</span></div>
     <div class="pb" style="padding:6px">
       <div class="mapwrap"><div id="map"></div>
-        <div class="mapctl"><select id="geo-city"><option value="all">全台（國道）</option></select><span id="geo-avail" class="avail"></span><span style="width:6px"></span><button class="layer on" data-layer="parking">停車場</button><button class="layer on" data-layer="bikes">YouBike</button><button class="layer on" data-layer="speed">車速</button></div>
+        <div class="mapctl"><select id="geo-city"><option value="all">雙北總覽</option></select><span id="geo-avail" class="avail"></span><span style="width:6px"></span><button class="layer on" data-layer="parking">停車場</button><button class="layer on" data-layer="bikes">YouBike</button><button class="layer on" data-layer="speed">車速</button></div>
         <div class="maplegend"><span><i style="background:#F0524F"></i>停車場快滿／車速慢</span><span><i style="background:#E0A23A"></i>中</span><span><i style="background:#39B978"></i>有位／順暢</span><span>圓越大＝停車場越大 · YouBike 空心＝沒車</span><span id="geo-age"></span></div>
       </div>
     </div>
-    <div class="pf"><a href="https://tdx.transportdata.tw/" target="_blank" rel="noopener">TDX</a><span>全台縣市 · 路外停車場汽車位 · YouBike · 市區 VD 車速（有佈設的縣市）· 國道 ETag 區間速率 · 每 10 分鐘 · 底圖 OpenFreeMap</span></div>
+    <div class="pf"><a href="https://data.taipei/" target="_blank" rel="noopener">台北市資料大平臺</a><span>新北市開放資料 · 雙北 YouBike · 台北停車場汽車位 · 台北市區 VD 路段車速 · 每 10 分鐘 · 底圖 OpenFreeMap</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-twpulse">
-    <div class="ph"><h2>Taiwan Pulse</h2><span class="zh">全台脈搏 · YouBike、停車場、國道</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>Taiwan Pulse</h2><span class="zh">雙北脈搏 · YouBike、停車場、市區道路</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://tdx.transportdata.tw/" target="_blank" rel="noopener">TDX</a><span>YouBike 可借車數每 5 分鐘 · 國道 ETag 區間小客車平均速率</span></div>
+    <div class="pf"><a href="https://data.taipei/" target="_blank" rel="noopener">台北市資料大平臺</a><span>新北市開放資料 · YouBike 可借車數 · 台北 VD 路段車速（車流量加權）</span></div>
   </section>
 
   <section class="panel w6 lite" id="p-weather">
@@ -741,14 +741,14 @@ body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[d
   <section class="panel w6 lite" id="p-airport">
     <div class="ph"><h2>TPE Airport</h2><span class="zh">桃機今日航班</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>TDX 航班顯示（FIDS）· 接下來 8 班出發</span></div>
+    <div class="pf"><a href="https://www.taoyuan-airport.com/" target="_blank" rel="noopener">桃園機場</a><span>官網航班資料 · 延誤＝取消以外、晚 30 分鐘以上 · 接下來 8 班出發</span></div>
   </section>
 
 </main>
 
 <div class="foot">
   <span>資料由 <a href="https://github.com/v1endetta/intel-terminal" target="_blank" rel="noopener">intel-terminal</a> 的 GitHub Actions 常駐迴圈抓取，盤中每 5 分鐘、其餘 15 分鐘一輪，寫進 data 分支；走勢存 history.json，最多 400 點</span>
-  <span>來源：證交所（含 MIS 即時、休市）· 櫃買 · FinMind · 央行 · 主計總處（部分手動）· 國發會（燈號、PMI／NMI）· 經濟部（零售指數）· 信義房價 · 政府電子採購網（g0v）· CBOE · Yahoo Finance · Stooq（備援）· CoinGecko · FRED（含發布時程）· ONS · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · YouTube · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · Google News（含英文）· OpenAI／Anthropic／Google AI／DeepSeek／xAI 官方頁面與 changelog · OpenAI／Google AI 開發者論壇 · The Verge AI · TechCrunch AI · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · GDELT · Wikipedia · PTT · Bluesky · Hacker News 搜尋（Algolia）· Product Hunt · Cofacts 真的假的 · Gemini（情緒判讀）· 氣象署（天氣、地震）· 台電 · TDX（YouBike、停車場、VD、國道、桃機）· OpenFreeMap</span>
+  <span>來源：證交所（含 MIS 即時、休市）· 櫃買 · FinMind · 央行 · 主計總處（部分手動）· 國發會（燈號、PMI／NMI）· 經濟部（零售指數）· 信義房價 · 政府電子採購網（g0v）· CBOE · Yahoo Finance · Stooq（備援）· CoinGecko · FRED（含發布時程）· ONS · Drewry · Polymarket · GitHub · Hugging Face · Hacker News · Google Trends · YouTube · WWD · Lyst · 中央社 · 公視 · BBC · Guardian · Google News（含英文）· OpenAI／Anthropic／Google AI／DeepSeek／xAI 官方頁面與 changelog · OpenAI／Google AI 開發者論壇 · The Verge AI · TechCrunch AI · Dezeen · It's Nice That · Campaign Brief Asia · Creative Review · GDELT · Wikipedia · PTT · Bluesky · Hacker News 搜尋（Algolia）· Product Hunt · Cofacts 真的假的 · Gemini（情緒判讀）· 氣象署（天氣、地震）· 台電 · 台北市資料大平臺（YouBike、停車場、VD）· 新北市開放資料 · 桃園機場 · OpenFreeMap</span>
   <span>未接：Threads（官方搜尋需 App Review；Google Custom Search 已不收新客戶；Gemini 搜尋 grounding 免費層無額度）· Dcard（Cloudflare 擋資料中心 IP）· TikTok（擋資料中心 IP）· 國防部軍事動態（robots.txt 禁抓）· 日本與中國 CPI（無免金鑰官方 API）· X／LinkedIn（無開放 API）· 真實資金流向（付費資料，板塊面板為代理指標）</span>
 </div>
 
@@ -867,10 +867,10 @@ const renderers={
     const w=(d.warnings||[]).length?`<div class="warn">特報：${d.warnings.map(x=>esc(x.where+" "+x.what+(x.level?"("+x.level+")":""))).join("、")}</div>`:"";
     body("p-weather").innerHTML=`${w}<div class="wx wx3">${cards}</div>`;setMeta("p-weather",d,1);},
   tw_pulse(d){const bikes=(d.bikes||[]).map(b=>`<tr><td class="name">${esc(b.city)}<span class="sub">${b.stations} 站</span>${mini(b.spark)}</td><td class="r num${K("yb:"+b.city,n(b.rent))}">${fmt(n(b.rent),0)}</td><td class="r num ${b.empty>b.stations*0.15?"bad":""}">${b.empty}</td><td class="r num">${b.full}</td><td class="r num ${b.park_pct!=null?(n(b.park_pct)<10?"bad":n(b.park_pct)>=30?"up":""):""}">${b.park_pct!=null?fmt(n(b.park_pct),0)+"%":"—"}</td></tr>`).join("");
-    const roads=(d.roads||[]).map(r=>`<tr><td class="name">${esc(r.road)} ${esc(r.dir)}向${mini(r.spark)}</td><td class="r num ${n(r.speed)<60?"bad":n(r.speed)>=80?"up":""}${K("fw:"+r.road+r.dir,n(r.speed))}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td></tr>`).join("");
+    const city=d.roadKind==="city",lo=city?20:60,hi=city?40:80;const roads=(d.roads||[]).map(r=>`<tr><td class="name">${esc(r.road)}${r.dir?" "+esc(r.dir)+"向":""}${mini(r.spark)}</td><td class="r num ${n(r.speed)<lo?"bad":n(r.speed)>=hi?"up":""}${K("fw:"+r.road+r.dir,n(r.speed))}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td></tr>`).join("");
     const jams=(d.jams||[]).map(j=>`<li><span class="t">${esc(j.section)}</span><span class="m bad">${fmt(n(j.speed),0)} km/h</span></li>`).join("");
     body("p-twpulse").innerHTML=`<div class="tp"><div><h3>YouBike 可借</h3><table><tr><th>縣市</th><th class="r">可借車</th><th class="r">空站</th><th class="r">滿站</th><th class="r">停車剩</th></tr>${bikes}</table></div>
-      <div><h3>國道小客車均速</h3><table>${roads}</table>${jams?`<h3 style="margin-top:8px">最塞區間</h3><ul class="list">${jams}</ul>`:""}</div></div>`;setMeta("p-twpulse",d,1);},
+      <div><h3>${city?"台北主要道路均速":"國道小客車均速"}</h3><table>${roads}</table>${jams?`<h3 style="margin-top:8px">${city?"最塞路段":"最塞區間"}</h3><ul class="list">${jams}</ul>`:""}</div></div>`;setMeta("p-twpulse",d,1);},
   news(d){const li=(arr,kw)=>arr.map(it=>`<li>${kw?`<span class="kw">${esc((it.kw||"").replace(/^en:/,"").replace(/^"/,"").split(" ")[0].slice(0,6))}</span>`:`<span class="src">${esc(it.source)}</span>`}<span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`).join("");
     const g=(d.signals||{}).gdelt,w=(d.signals||{}).wiki;let sig="";
     if(g){const r=n(g.vol_ratio);sig+=`<span><span class="l">全球提到 Taiwan</span><span class="v ${r>=1.3?"bad":r<=0.7?"up":""}${K("gdelt:vol",n(g.vol))}">${isFinite(r)?(r>=1?"×"+r.toFixed(2):"×"+r.toFixed(2)):""}</span><span class="sub"> vs 前兩日</span>${mini(g.spark)}</span>`;
@@ -1084,9 +1084,9 @@ function movers(P){
 }
 /* ---------- map ---------- */
 const GEO_URL="https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/geo.json";
-const TW_VIEW={center:[120.95,23.75],zoom:6.9};
+const TW_VIEW={center:[121.52,25.04],zoom:10.4};
 let map=null,mapReady=false,geoData=null,curCity=(()=>{try{return localStorage.getItem("geo-city")||"all";}catch(e){return"all";}})(),layersOn={parking:true,bikes:true,speed:true},lastGeoGen=null;
-const spdColor=v=>v<40?"#F0524F":v<60?"#E0A23A":"#39B978";
+const spdColor=v=>(geoData&&geoData.lineLabel)?(v<20?"#F0524F":v<35?"#E0A23A":"#39B978"):(v<40?"#F0524F":v<60?"#E0A23A":"#39B978");
 const parkColor=r=>r<0.1?"#F0524F":r<0.3?"#E0A23A":"#39B978";
 function initMap(){
   if(!window.maplibregl||map)return;
@@ -1108,7 +1108,7 @@ function initMap(){
 }
 function cityView(c){const v=(geoData&&geoData.views||{})[c];return v?{center:v[0],zoom:v[1]}:TW_VIEW;}
 function fillCitySelect(){const sel=$("#geo-city");if(!geoData||sel.dataset.filled)return;const labels=geoData.labels||{};const av=geoData.avail||{};
-  Object.keys(labels).forEach(k=>{const o=document.createElement("option");o.value=k;const a=av[k]||{};const n=["parking","bikes","vd"].filter(x=>a[x]).length;o.textContent=labels[k]+(n?"":"（僅國道）");sel.appendChild(o);});
+  Object.keys(labels).forEach(k=>{const o=document.createElement("option");o.value=k;const a=av[k]||{};const n=["parking","bikes","vd"].filter(x=>a[x]).length;o.textContent=labels[k]+(n?"":"（暫無資料）");sel.appendChild(o);});
   sel.dataset.filled="1";if(labels[curCity]||curCity==="all")sel.value=curCity;else{curCity="all";sel.value="all";}}
 function applyGeo(){
   if(!map||!mapReady||!geoData)return;
@@ -1120,10 +1120,10 @@ function applyGeo(){
   map.getSource("freeway").setData({type:"FeatureCollection",features:(geoData.freeway||[]).map(f=>({type:"Feature",geometry:{type:"LineString",coordinates:f[0]},properties:{color:spdColor(f[1]),label:`${esc(f[2])}<br>${f[1]} km/h`}}))});
   Object.entries(layersOn).forEach(([k,on])=>{map.setLayoutProperty(k,"visibility",on?"visible":"none");if(k==="speed")map.setLayoutProperty("freeway","visibility",on?"visible":"none");});
   const a=(geoData.avail||{})[curCity]||{};const have=[a.parking?"停車場":null,a.bikes?"YouBike":null,a.vd?"車速":null].filter(Boolean);
-  $("#geo-avail").textContent=curCity==="all"?"國道車速":(have.length?"有："+have.join("、"):"此縣市只有國道");
+  $("#geo-avail").textContent=curCity==="all"?(geoData.lineLabel||"國道")+"車速":(have.length?"有："+have.join("、"):"這一輪沒有資料");
   $("#geo-age").textContent=geoData.generatedAt?"資料 "+ago(geoData.generatedAt):"";
   const n=(c.parking||[]).length+(c.bikes||[]).length+(c.speed||[]).length;const lab=curCity==="all"?"全台":((geoData.labels||{})[curCity]||curCity);
-  setMeta("p-geo",{updatedAt:geoData.generatedAt,label:`${lab} · ${curCity==="all"?(geoData.freeway||[]).length+" 段國道":n+" 點"}`},0.5);
+  setMeta("p-geo",{updatedAt:geoData.generatedAt,label:`${lab} · ${curCity==="all"?(geoData.freeway||[]).length+" 段"+(geoData.lineLabel?"路段":"國道"):n+" 點"}`},0.5);
 }
 async function loadGeo(){
   try{const r=await fetch(GEO_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const g=await r.json();if(g.generatedAt===lastGeoGen)return;const first=!geoData;lastGeoGen=g.generatedAt;geoData=g;applyGeo();if(first&&mapReady&&curCity!=="all")map.jumpTo(cityView(curCity));}

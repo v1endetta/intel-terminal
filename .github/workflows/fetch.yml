@@ -49,8 +49,6 @@ jobs:
           GOOGLE_CSE_KEY: ${{ secrets.GOOGLE_CSE_KEY }}
           GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          TDX_CLIENT_ID: ${{ secrets.TDX_CLIENT_ID }}
-          TDX_CLIENT_SECRET: ${{ secrets.TDX_CLIENT_SECRET }}
         run: |
           cd out
           git config user.name "intel-bot"
@@ -70,7 +68,7 @@ jobs:
             if (cd .. && timeout 900 python fetch.py); then
               # 金鑰防線：任何 secret 的實際值若出現在要 commit 的資料裡，整輪丟棄
               leak=0
-              for v in "$FRED_API_KEY" "$FINMIND_TOKEN" "$REDDIT_CLIENT_ID" "$REDDIT_CLIENT_SECRET" "$CWA_API_KEY" "$TDX_CLIENT_ID" "$TDX_CLIENT_SECRET" "$GUARDIAN_API_KEY" "$YOUTUBE_API_KEY" "$GOOGLE_CSE_KEY" "$GEMINI_API_KEY"; do
+              for v in "$FRED_API_KEY" "$FINMIND_TOKEN" "$REDDIT_CLIENT_ID" "$REDDIT_CLIENT_SECRET" "$CWA_API_KEY" "$GUARDIAN_API_KEY" "$YOUTUBE_API_KEY" "$GOOGLE_CSE_KEY" "$GEMINI_API_KEY"; do
                 [ -n "$v" ] && grep -rqF -- "$v" data && leak=1
               done
               if [ "$leak" = 1 ]; then echo "::error::secret value found in data output; round discarded"; git checkout -q -- data; git clean -fdq data

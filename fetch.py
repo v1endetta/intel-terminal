@@ -43,8 +43,6 @@ FINMIND_TOKEN = os.environ.get("FINMIND_TOKEN", "").strip()
 REDDIT_ID = os.environ.get("REDDIT_CLIENT_ID", "").strip()
 REDDIT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "").strip()
 CWA_KEY = os.environ.get("CWA_API_KEY", "").strip()
-TDX_ID = os.environ.get("TDX_CLIENT_ID", "").strip()
-TDX_SECRET = os.environ.get("TDX_CLIENT_SECRET", "").strip()
 GUARDIAN_KEY = os.environ.get("GUARDIAN_API_KEY", "").strip()
 YOUTUBE_KEY = os.environ.get("YOUTUBE_API_KEY", "").strip()
 CSE_KEY = os.environ.get("GOOGLE_CSE_KEY", "").strip()
@@ -1088,190 +1086,6 @@ def p_weather():
     return {"label": "氣象署", "items": out, "warnings": warns[:12]}
 
 
-# ---------- 第二階段：台灣脈搏（TDX：YouBike＋國道） ----------
-TDX = "https://tdx.transportdata.tw/api/basic/v2/"
-_tdx_token = None
-_tdx_last = 0.0
-_tdx_cache: dict = {}
-
-
-# 通行證快取放在 runner 暫存區（不在 out/ 底下，永遠不會被 commit）；整條迴圈共用一張，
-# 失敗就本輪停手＋冷卻 30 分，避免連續要 token 被 TDX 鎖住。
-_TDX_STATE = Path(os.environ.get("RUNNER_TEMP") or "/tmp") / "intel_tdx_state.json"
-_tdx_fail: str | None = None
-
-
-def _tdx_state(upd: dict | None = None) -> dict:
-    try:
-        st = json.loads(_TDX_STATE.read_text())
-    except Exception:  # noqa: BLE001
-        st = {}
-    if upd is not None:
-        st.update(upd)
-        try:
-            _TDX_STATE.write_text(json.dumps(st))
-            os.chmod(_TDX_STATE, 0o600)
-        except Exception:  # noqa: BLE001
-            pass
-    return st
-
-
-def _tdx_get_token() -> str:
-    global _tdx_token, _tdx_fail
-    if _tdx_token:
-        return _tdx_token
-    if _tdx_fail:
-        raise RuntimeError(_tdx_fail)
-    st = _tdx_state()
-    now = time.time()
-    if st.get("token") and st.get("exp", 0) > now + 600:
-        _tdx_token = st["token"]
-        return _tdx_token
-    if st.get("cool_until", 0) > now:
-        _tdx_fail = f"TDX token 冷卻中（{int((st['cool_until'] - now) / 60)} 分後重試）：{st.get('why', '')}"
-        raise RuntimeError(_tdx_fail)
-    why = ""
-    for attempt in range(2):
-        r = S.post("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-                   data={"grant_type": "client_credentials", "client_id": TDX_ID, "client_secret": TDX_SECRET}, timeout=TIMEOUT)
-        if r.ok:
-            j = r.json()
-            _tdx_token = j["access_token"]
-            _tdx_state({"token": _tdx_token, "exp": now + float(j.get("expires_in") or 3600), "cool_until": 0, "why": ""})
-            return _tdx_token
-        try:  # 只留 TDX 回的錯誤代碼與說明，不帶任何請求內容
-            j = r.json()
-            why = f"{r.status_code} {j.get('error', '')} {j.get('error_description', '')}".strip()
-        except Exception:  # noqa: BLE001
-            body = re.sub(r"<[^>]+>|\s+", " ", r.text)[:80].strip()
-            why = f"{r.status_code} {body}"
-        if r.status_code == 429 and attempt == 0:
-            time.sleep(15)
-            continue
-        break
-    _tdx_state({"cool_until": now + 1800, "why": why})
-    _tdx_fail = f"TDX token 失敗：{why}"
-    raise RuntimeError(_tdx_fail)
-
-
-TDX_OFF = True  # 2026-10：免費額度只有每月約 4,500 次，帳號已因超量停權；全面改用原始單位的公開資料
-
-
-def tdx(path, **params):
-    global _tdx_token, _tdx_last
-    if TDX_OFF:
-        raise RuntimeError("TDX 已停用（改用公開資料）")
-    headers = {}
-    if TDX_ID and TDX_SECRET:
-        headers["Authorization"] = "Bearer " + _tdx_get_token()
-    base = TDX.replace("/v2/", "/v1/") if path.startswith("v1:") else TDX
-    ck = path + json.dumps(params, sort_keys=True)
-    if ck in _tdx_cache:  # 同一輪內同一端點只打一次（YouBike 可借數兩個面板共用）
-        return _tdx_cache[ck]
-    # TDX 對連續呼叫會回 429：每次間隔 2 秒，429 時退避重試
-    for attempt in range(4):
-        wait = max(0.0, 2.0 - (time.time() - _tdx_last))
-        if wait:
-            time.sleep(wait)
-        _tdx_last = time.time()
-        try:
-            out = gjson(base + path.replace("v1:", ""), params={"$format": "JSON", **params}, headers=headers)
-            _tdx_cache[ck] = out
-            return out
-        except requests.HTTPError as e:
-            if e.response is not None and e.response.status_code == 401 and attempt == 0:  # 通行證過期：換一張再試
-                _tdx_token = None
-                _tdx_state({"token": "", "exp": 0})
-                headers["Authorization"] = "Bearer " + _tdx_get_token()
-                continue
-            if e.response is not None and e.response.status_code == 429:
-                if attempt < 3:
-                    time.sleep(5 * (2 ** attempt))  # 5 / 10 / 20 秒；TDX 是每個來源 IP 每秒 50 次，GitHub runner 共用 IP
-                    continue
-                raise RuntimeError(f"429 on {path} body={e.response.text[:160]!r}")
-            raise
-
-
-def p_tw_pulse():
-    """全台脈搏：沿用地圖那一輪的 TDX 快取（不多打 API）。YouBike／停車場依縣市，國道依路線方向。"""
-    st = {}
-    if GEO_STATIC_PATH.exists():
-        try:
-            st = json.loads(GEO_STATIC_PATH.read_text(encoding="utf-8"))
-        except Exception:
-            st = {}
-    avail = st.get("avail", {})
-    key = NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M")
-    bikes = []
-    for city, meta in GEO_CITIES.items():
-        if not avail.get(city, {}).get("bikes"):
-            continue
-        try:
-            rows = _tdx_opt(f"Bike/Availability/City/{city}") or []
-        except Exception as e:  # noqa: BLE001
-            log("tw_pulse bikes", city, e); continue
-        rows = [r for r in rows if r.get("ServiceStatus", 1) == 1]
-        if not rows:
-            continue
-        rent = sum(r.get("AvailableRentBikes") or 0 for r in rows)
-        empty = sum(1 for r in rows if (r.get("AvailableRentBikes") or 0) == 0)
-        full = sum(1 for r in rows if (r.get("AvailableReturnBikes") or 0) == 0)
-        label = meta["label"]
-        hist_put("youbike", label, key, rent)
-        park = None
-        if avail.get(city, {}).get("parking"):
-            try:
-                tot = av_ = 0
-                for r in _tdx_opt(f"v1:Parking/OffStreet/ParkingAvailability/City/{city}") or []:
-                    t_, a_ = r.get("TotalSpaces"), r.get("AvailableSpaces")
-                    car = next((a for a in r.get("Availabilities") or [] if a.get("SpaceType") == 1), None)
-                    if car and car.get("NumberOfSpaces"):
-                        t_, a_ = car["NumberOfSpaces"], car.get("AvailableSpaces")
-                    if t_ and a_ is not None and a_ >= 0 and t_ >= 20:
-                        tot += t_; av_ += a_
-                if tot:
-                    park = round(av_ / tot * 100, 1)
-            except Exception as e:  # noqa: BLE001
-                log("tw_pulse parking", city, e)
-        bikes.append({"city": label, "stations": len(rows), "rent": rent, "empty": empty, "full": full, "park_pct": park,
-                      "spark": hist_get("youbike", label, 48)})
-    bikes.sort(key=lambda b: -b["stations"])
-    # 國道：各國道南北向小客車平均區間速率
-    live = tdx("Road/Traffic/Live/ETag/Freeway")
-    agg = {}
-    for pr in live.get("ETagPairLives", []):
-        pid = pr.get("ETagPairID", "")
-        m = re.match(r"^(\d{2})F\d{4}([NSEW])", pid)
-        if not m:
-            continue
-        for fl in pr.get("Flows", []):
-            if fl.get("VehicleType") == 31 and (fl.get("SpaceMeanSpeed") or 0) > 0 and (fl.get("VehicleCount") or 0) > 0:
-                k = (m.group(1), m.group(2))
-                a = agg.setdefault(k, [0.0, 0])
-                a[0] += fl["SpaceMeanSpeed"] * fl["VehicleCount"]
-                a[1] += fl["VehicleCount"]
-    dirn = {"N": "北", "S": "南", "E": "東", "W": "西"}
-    roads = []
-    for (no, d), (w, c) in sorted(agg.items()):
-        if no in ("01", "03", "05") and c > 0:
-            spd = w / c
-            hist_put("freeway", f"{no}{d}", key, round(spd, 1))
-            roads.append({"road": f"國道{int(no)}", "dir": dirn.get(d, d), "speed": round(spd, 1), "count": c,
-                          "spark": hist_get("freeway", f"{no}{d}", 48)})
-    # 最塞的區間（名稱來自地圖的靜態表）
-    names = {pid: desc for pid, desc, _ in st.get("etag", [])}
-    worst = []
-    for pr in live.get("ETagPairLives", []):
-        for fl in pr.get("Flows", []):
-            if fl.get("VehicleType") == 31 and 0 < (fl.get("SpaceMeanSpeed") or 0) < 40 and (fl.get("VehicleCount") or 0) >= 30:
-                worst.append((fl["SpaceMeanSpeed"], pr.get("ETagPairID")))
-    worst.sort()
-    jams = [{"section": names.get(pid, pid), "speed": round(spd, 0)} for spd, pid in worst[:6]]
-    if not bikes and not roads:
-        raise RuntimeError("tw_pulse: nothing")
-    return {"label": "TDX", "bikes": bikes, "roads": roads, "jams": jams, "roadTime": live.get("UpdateTime")}
-
-
 # ---------- 第二階段：PTT（curl_cffi 模擬瀏覽器） ----------
 PTT_BOARDS = [  # (板, 中文, 情緒面向)
     ("Gossiping", "八卦", "大眾"), ("HatePolitics", "政黑", "政治"), ("Stock", "股板", "市場"), ("WomenTalk", "女板", "生活"),
@@ -1532,201 +1346,273 @@ def p_tw_market():
     return out
 
 
-# ---------- 地圖：停車場剩餘、YouBike、車速（台北／台中） ----------
-# 全台縣市（TDX 代碼）：label、bbox、center、zoom。圖層有無由 TDX 回應決定（404 記在靜態快取，一天重試一次）
-GEO_CITIES = {
-    "Taipei": {"label": "台北市", "bbox": [121.45, 24.95, 121.67, 25.22], "center": [121.54, 25.05], "zoom": 11.3},
-    "NewTaipei": {"label": "新北市", "bbox": [121.28, 24.67, 122.01, 25.30], "center": [121.50, 25.02], "zoom": 10.2},
-    "Keelung": {"label": "基隆市", "bbox": [121.62, 25.05, 121.82, 25.20], "center": [121.74, 25.13], "zoom": 12},
-    "Taoyuan": {"label": "桃園市", "bbox": [121.00, 24.60, 121.45, 25.12], "center": [121.25, 24.95], "zoom": 10.8},
-    "Hsinchu": {"label": "新竹市", "bbox": [120.88, 24.72, 121.05, 24.86], "center": [120.97, 24.80], "zoom": 12},
-    "HsinchuCounty": {"label": "新竹縣", "bbox": [120.90, 24.40, 121.40, 24.95], "center": [121.10, 24.75], "zoom": 10.5},
-    "MiaoliCounty": {"label": "苗栗縣", "bbox": [120.60, 24.25, 121.30, 24.75], "center": [120.90, 24.50], "zoom": 10.3},
-    "Taichung": {"label": "台中市", "bbox": [120.45, 23.95, 121.35, 24.45], "center": [120.68, 24.16], "zoom": 11},
-    "ChanghuaCounty": {"label": "彰化縣", "bbox": [120.25, 23.80, 120.75, 24.20], "center": [120.50, 24.00], "zoom": 10.8},
-    "NantouCounty": {"label": "南投縣", "bbox": [120.60, 23.40, 121.35, 24.20], "center": [120.90, 23.85], "zoom": 9.8},
-    "YunlinCounty": {"label": "雲林縣", "bbox": [120.10, 23.50, 120.75, 23.85], "center": [120.40, 23.70], "zoom": 10.8},
-    "Chiayi": {"label": "嘉義市", "bbox": [120.38, 23.43, 120.52, 23.53], "center": [120.45, 23.48], "zoom": 12.5},
-    "ChiayiCounty": {"label": "嘉義縣", "bbox": [120.10, 23.20, 120.95, 23.65], "center": [120.40, 23.45], "zoom": 10.3},
-    "Tainan": {"label": "台南市", "bbox": [120.00, 22.88, 120.70, 23.45], "center": [120.20, 23.00], "zoom": 11},
-    "Kaohsiung": {"label": "高雄市", "bbox": [120.15, 22.45, 121.05, 23.50], "center": [120.32, 22.63], "zoom": 11},
-    "PingtungCounty": {"label": "屏東縣", "bbox": [120.35, 21.85, 120.95, 22.90], "center": [120.50, 22.55], "zoom": 10.3},
-    "YilanCounty": {"label": "宜蘭縣", "bbox": [121.30, 24.30, 122.00, 24.95], "center": [121.70, 24.70], "zoom": 10.3},
-    "HualienCounty": {"label": "花蓮縣", "bbox": [120.90, 23.10, 121.80, 24.40], "center": [121.55, 23.90], "zoom": 9.5},
-    "TaitungCounty": {"label": "台東縣", "bbox": [120.70, 21.90, 121.65, 23.45], "center": [121.10, 22.75], "zoom": 9.5},
-    "PenghuCounty": {"label": "澎湖縣", "bbox": [119.30, 23.20, 119.75, 23.80], "center": [119.58, 23.57], "zoom": 11},
-    "KinmenCounty": {"label": "金門縣", "bbox": [118.15, 24.35, 118.55, 24.55], "center": [118.35, 24.45], "zoom": 11.5},
-    "LienchiangCounty": {"label": "連江縣", "bbox": [119.85, 25.90, 120.55, 26.40], "center": [119.95, 26.15], "zoom": 10.5},
-}
-GEO_STATIC_PATH = DATA / "geo_static.json"
+# ---------- 台灣現場：YouBike／停車場／市區車速／桃機（全部免金鑰的原始單位開放資料） ----------
+# 2026-10 起不用 TDX（免費額度每月約 4,500 次，地圖一天就用完、帳號被停權）。
+# GitHub 主機連得到的來源只有：台北市資料大平臺（YouBike、停車場、VD 路段）、新北市開放資料（YouBike）、桃園機場航班檔。
+# 國道（高公局 tisvcloud）、台中／高雄等 YouBike 來源擋海外 IP，所以沒有。
 GEO_PATH = DATA / "geo.json"
+GEO_STATIC_PATH = DATA / "geo_static.json"
 GEO_ERRS: list = []
+TPE_YB_URL = "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json"
+NTPC_YB_URL = "https://data.ntpc.gov.tw/api/datasets/010e5b15-3823-4b20-b401-b1cf000550c5/json"
+TPE_PARK_DESC = "https://tcgbusfs.blob.core.windows.net/blobtcmsv/TCMSV_alldesc.json"
+TPE_PARK_AV = "https://tcgbusfs.blob.core.windows.net/blobtcmsv/TCMSV_allavailable.json"
+TPE_VD_URL = "https://tcgbusfs.blob.core.windows.net/blobtisv/GetVD.xml.gz"
+TPE_AIR_URL = "https://www.taoyuan-airport.com/uploads/flightx/a_flight_v4.txt"
+LIVE_CITIES = {
+    "Taipei": {"label": "台北市", "center": [121.54, 25.05], "zoom": 11.3},
+    "NewTaipei": {"label": "新北市", "center": [121.50, 25.02], "zoom": 10.2},
+}
+_live_cache: dict = {}
 
 
-def _in_bbox(lon, lat, b):
-    return lon is not None and lat is not None and b[0] <= lon <= b[2] and b[1] <= lat <= b[3]
+def _gz_text(r) -> str:
+    raw = r.content
+    if raw[:2] == b"\x1f\x8b":
+        import gzip
+        raw = gzip.decompress(raw)
+    return raw.decode("utf-8-sig", errors="replace")
 
 
-def _tdx_opt(path, **params):
-    """TDX 呼叫；404／空表示該縣市沒有這個資料集 → 回 None，不當錯誤。"""
-    try:
-        out = tdx(path, **params)
-    except requests.HTTPError as e:
-        if e.response is not None and e.response.status_code in (404, 400):
-            return None
-        raise
-    if isinstance(out, dict):
-        for k in ("CarParks", "VDs", "ParkingAvailabilities", "VDLives", "ETagPairs", "ETagPairLives"):
-            if k in out:
-                return out[k] or None
-        return out or None
-    return out or None
+def _twd97_to_wgs84(x: float, y: float):
+    """TWD97 TM2（中央經線 121°）→ WGS84 經緯度。"""
+    import math
+    a, b = 6378137.0, 6356752.314245
+    lon0, k0, dx = math.radians(121), 0.9999, 250000.0
+    e = math.sqrt(1 - (b / a) ** 2)
+    x -= dx
+    m = y / k0
+    mu = m / (a * (1 - e ** 2 / 4 - 3 * e ** 4 / 64 - 5 * e ** 6 / 256))
+    e1 = (1 - math.sqrt(1 - e ** 2)) / (1 + math.sqrt(1 - e ** 2))
+    fp = (mu + (3 * e1 / 2 - 27 * e1 ** 3 / 32) * math.sin(2 * mu) + (21 * e1 ** 2 / 16 - 55 * e1 ** 4 / 32) * math.sin(4 * mu)
+          + (151 * e1 ** 3 / 96) * math.sin(6 * mu) + (1097 * e1 ** 4 / 512) * math.sin(8 * mu))
+    e2 = (e * a / b) ** 2
+    c1 = e2 * math.cos(fp) ** 2
+    t1 = math.tan(fp) ** 2
+    r1 = a * (1 - e ** 2) / (1 - e ** 2 * math.sin(fp) ** 2) ** 1.5
+    n1 = a / math.sqrt(1 - e ** 2 * math.sin(fp) ** 2)
+    d = x / (n1 * k0)
+    lat = fp - (n1 * math.tan(fp) / r1) * (d ** 2 / 2 - (5 + 3 * t1 + 10 * c1 - 4 * c1 ** 2 - 9 * e2) * d ** 4 / 24
+                                           + (61 + 90 * t1 + 298 * c1 + 45 * t1 ** 2 - 252 * e2 - 3 * c1 ** 2) * d ** 6 / 720)
+    lon = lon0 + (d - (1 + 2 * t1 + c1) * d ** 3 / 6 + (5 - 2 * c1 + 28 * t1 - 3 * c1 ** 2 + 8 * e2 + 24 * t1 ** 2) * d ** 5 / 120) / math.cos(fp)
+    return round(math.degrees(lon), 5), round(math.degrees(lat), 5)
 
 
-def _geo_static():
-    """靜態表（停車場座標、YouBike 站點、各縣市 VD 位置、國道 ETag 路段幾何）。
-    一天重建一次，但分批：每輪最多做 5 個縣市，做完的記在 done，全部完成才更新 fetchedAt。
-    沒有的圖層記 avail=False；429 不算沒有，留給下一輪。"""
+def _yb_stations(city: str) -> list:
+    """回 [[lon, lat, 可借, 總車位, 站名, 可還]]（只含營運中的站）。同一輪只抓一次。"""
+    if city in _live_cache:
+        return _live_cache[city]
+    out = []
+    if city == "Taipei":
+        for s in gjson(TPE_YB_URL):
+            if str(s.get("act")) != "1" or not s.get("latitude"):
+                continue
+            out.append([round(float(s["longitude"]), 5), round(float(s["latitude"]), 5), int(s.get("available_rent_bikes") or 0),
+                        int(s.get("Quantity") or 0), (s.get("sna") or "").replace("YouBike2.0_", "")[:14], int(s.get("available_return_bikes") or 0)])
+    elif city == "NewTaipei":
+        rows, page = [], 0
+        while page < 5:  # 新北約 1,800 站：一頁 3,000 通常一次拿完
+            batch = gjson(NTPC_YB_URL, params={"page": page, "size": 3000})
+            rows += batch
+            if len(batch) < 3000:
+                break
+            page += 1
+        for s in rows:
+            if str(s.get("act")) != "1" or not s.get("lat"):
+                continue
+            out.append([round(float(s["lng"]), 5), round(float(s["lat"]), 5), int(num(s.get("sbi_quantity")) or 0),
+                        int(num(s.get("tot_quantity")) or 0), (s.get("sna") or "").replace("YouBike2.0_", "")[:14], int(num(s.get("bemp")) or 0)])
+    _live_cache[city] = out
+    return out
+
+
+def _tpe_parking() -> list:
+    """台北市停車場：[[lon, lat, 剩餘汽車位, 汽車位, 名稱]]。座標表一天更新一次（2.8MB），剩餘每輪抓。"""
+    if "parking" in _live_cache:
+        return _live_cache["parking"]
     st = {}
     if GEO_STATIC_PATH.exists():
         try:
             st = json.loads(GEO_STATIC_PATH.read_text(encoding="utf-8"))
-        except Exception:
+        except Exception:  # noqa: BLE001
             st = {}
-    for k, dflt in (("carparks", {}), ("bikes", {}), ("vd", {}), ("etag", []), ("avail", {}), ("done", [])):
-        st.setdefault(k, dflt)
-    try:
-        t = datetime.fromisoformat(st.get("fetchedAt", "2000-01-01T00:00:00+00:00").replace("Z", "+00:00"))
-    except Exception:
-        t = datetime(2000, 1, 1, tzinfo=timezone.utc)
-    fresh = NOW - t < timedelta(hours=24) and st["avail"]
-    if fresh and not st["done"]:
-        return st
-    todo = [c for c in GEO_CITIES if c not in st["done"]]
-    for city in todo[:5]:
-        if time.time() > SOFT_DEADLINE - 240:
-            break
-        av = dict(st["avail"].get(city) or {"parking": False, "bikes": False, "vd": False})
-        ok = True
-        for key, path, parse in (
-            ("parking", f"v1:Parking/OffStreet/CarPark/City/{city}",
-             lambda rows: {c["CarParkID"]: [round(c["CarParkPosition"]["PositionLon"], 5), round(c["CarParkPosition"]["PositionLat"], 5),
-                                            (c.get("CarParkName") or {}).get("Zh_tw", "")] for c in rows if (c.get("CarParkPosition") or {}).get("PositionLat")}),
-            ("bikes", f"Bike/Station/City/{city}",
-             lambda rows: {b["StationUID"]: [round(b["StationPosition"]["PositionLon"], 5), round(b["StationPosition"]["PositionLat"], 5),
-                                             (b.get("StationName") or {}).get("Zh_tw", "").replace("YouBike2.0_", ""), b.get("BikesCapacity") or 0]
-                           for b in rows if (b.get("StationPosition") or {}).get("PositionLat")}),
-            ("vd", f"Road/Traffic/VD/City/{city}",
-             lambda rows: {v["VDID"]: [round(v["PositionLon"], 5), round(v["PositionLat"], 5), v.get("RoadName", "")] for v in rows if v.get("PositionLat")}),
-        ):
-            store = {"parking": "carparks", "bikes": "bikes", "vd": "vd"}[key]
-            try:
-                rows = _tdx_opt(path)
-                if rows:
-                    st[store][city] = parse(rows)
-                    av[key] = bool(st[store][city])
-                else:
-                    st[store].pop(city, None); av[key] = False
-            except Exception as e:  # noqa: BLE001
-                ok = False
-                log("geo static", key, city, e); GEO_ERRS.append(f"static {key} {city}: " + safe_err(e))
-                break
-        st["avail"][city] = av
-        if ok:
-            st["done"].append(city)
-        else:
-            break  # 這輪 TDX 不順，剩下的縣市下一輪再建
-    if not st["etag"] or not fresh:
+    pos = st.get("tpe_park") if st.get("v") == 2 else None
+    fresh = pos and st.get("fetchedAt", "") >= (NOW - timedelta(hours=24)).isoformat()
+    if not fresh:
         try:
-            et = []
-            for ep in tdx("Road/Traffic/ETagPair/Freeway").get("ETagPairs", []):
-                g = ep.get("Geometry") or ""
-                pts = re.findall(r"(-?\d+\.\d+)\s+(-?\d+\.\d+)", g)
-                if pts:
-                    et.append([ep["ETagPairID"], ep.get("Description", ""), [[round(float(a), 4), round(float(b), 4)] for a, b in pts[::max(1, len(pts) // 12)]]])
-            if et:
-                st["etag"] = et
+            desc = json.loads(_gz_text(get(TPE_PARK_DESC)))["data"]["park"]
+            pos = {}
+            for p in desc:
+                try:
+                    tot = int(p.get("totalcar") or 0)
+                    if tot >= 20 and p.get("tw97x"):
+                        lon, lat = _twd97_to_wgs84(float(p["tw97x"]), float(p["tw97y"]))
+                        pos[p["id"]] = [lon, lat, tot, (p.get("name") or "")[:18]]
+                except Exception:  # noqa: BLE001
+                    continue
+            write_json(GEO_STATIC_PATH, {"v": 2, "fetchedAt": NOW_ISO, "tpe_park": pos}, separators=(",", ":"))
         except Exception as e:  # noqa: BLE001
-            log("geo etag static", e); GEO_ERRS.append("etag static: " + safe_err(e))
-    if all(c in st["done"] for c in GEO_CITIES):
-        st["fetchedAt"] = NOW_ISO; st["done"] = []
-    st["progress"] = f'{len(st["done"])}/{len(GEO_CITIES)}' if st["done"] else "完成"
-    write_json(GEO_STATIC_PATH, st, separators=(",", ":"))
-    return st
+            if not pos:
+                raise
+            log("tpe parking desc", e)  # 座標表抓不到：沿用舊表
+    out = []
+    for p in json.loads(_gz_text(get(TPE_PARK_AV)))["data"]["park"]:
+        meta = pos.get(p.get("id"))
+        av = p.get("availablecar")
+        if meta and isinstance(av, (int, float)) and av >= 0:
+            out.append([meta[0], meta[1], int(min(av, meta[2])), meta[2], meta[3]])
+    _live_cache["parking"] = out
+    return out
+
+
+def _tpe_vd() -> list:
+    """台北市 VD 路段：[{name, road, spd, vol, a:[lon,lat], b:[lon,lat]}]。"""
+    if "vd" in _live_cache:
+        return _live_cache["vd"]
+    t = _gz_text(get(TPE_VD_URL))
+    out = []
+    for s in re.findall(r"<vd:SectionData>(.*?)</vd:SectionData>", t, re.S):
+        g = lambda tag: (re.search(rf"<vd:{tag}>(.*?)</vd:{tag}>", s) or [None, ""])[1]
+        spd, vol = num(g("AvgSpd")), num(g("TotalVol"))
+        ax, ay, bx, by = num(g("StartWgsX")), num(g("StartWgsY")), num(g("EndWgsX")), num(g("EndWgsY"))
+        if not spd or spd <= 0 or None in (ax, ay, bx, by):
+            continue
+        name = re.sub(r"\s+", " ", g("SectionName")).strip()
+        out.append({"name": name, "road": name.split(" ")[0], "spd": spd, "vol": vol or 0,
+                    "a": [round(ax, 5), round(ay, 5)], "b": [round(bx, 5), round(by, 5)]})
+    _live_cache["vd"] = out
+    return out
+
+
+def p_tw_pulse():
+    """全台脈搏：雙北 YouBike、台北停車場剩餘率、台北主要道路均速與最塞路段。"""
+    key = NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M")
+    bikes, errs = [], []
+    park_pct = None
+    try:
+        pk = _tpe_parking()
+        tot = sum(p[3] for p in pk)
+        park_pct = round(sum(p[2] for p in pk) / tot * 100, 1) if tot else None
+    except Exception as e:  # noqa: BLE001
+        log("tw_pulse parking", e); errs.append("台北停車場: " + safe_err(e))
+    for city, meta in LIVE_CITIES.items():
+        try:
+            rows = _yb_stations(city)
+        except Exception as e:  # noqa: BLE001
+            log("tw_pulse bikes", city, e); errs.append(f"YouBike {meta['label']}: " + safe_err(e)); continue
+        if not rows:
+            continue
+        rent = sum(r[2] for r in rows)
+        label = meta["label"]
+        hist_put("youbike", label, key, rent)
+        bikes.append({"city": label, "stations": len(rows), "rent": rent, "empty": sum(1 for r in rows if r[2] == 0),
+                      "full": sum(1 for r in rows if r[5] == 0), "park_pct": park_pct if city == "Taipei" else None,
+                      "spark": hist_get("youbike", label, 48)})
+    roads, jams = [], []
+    try:
+        secs = _tpe_vd()
+        agg = {}
+        for s in secs:
+            a = agg.setdefault(s["road"], [0.0, 0.0, 0])
+            w = max(s["vol"], 1)
+            a[0] += s["spd"] * w; a[1] += w; a[2] += 1
+        top = sorted(((r, v) for r, v in agg.items() if v[2] >= 4), key=lambda x: -x[1][1])[:8]
+        for road, (w, c, nsec) in top:
+            spd = round(w / c, 1)
+            hist_put("tpe_road", road, key, spd)
+            roads.append({"road": road, "dir": "", "speed": spd, "count": int(c), "spark": hist_get("tpe_road", road, 48)})
+        slow = sorted((s for s in secs if s["spd"] < 15 and s["vol"] >= 20), key=lambda s: s["spd"])[:6]
+        jams = [{"section": s["name"][:22], "speed": round(s["spd"])} for s in slow]
+    except Exception as e:  # noqa: BLE001
+        log("tw_pulse vd", e); errs.append("台北 VD: " + safe_err(e))
+    if not bikes and not roads:
+        raise RuntimeError("tw_pulse: nothing " + "; ".join(errs)[:200])
+    return {"label": "台北市資料大平臺・新北市開放資料", "bikes": bikes, "roads": roads, "roadKind": "city", "jams": jams, "errs": errs}
 
 
 def p_geo():
+    """地圖：雙北 YouBike、台北停車場、台北市區路段車速（全台概覽畫路段線）。"""
     GEO_ERRS.clear()
-    st = _geo_static()
-    avail = st.get("avail", {})
-    geo = {"generatedAt": NOW_ISO, "labels": {k: v["label"] for k, v in GEO_CITIES.items()},
-           "views": {k: [v["center"], v["zoom"]] for k, v in GEO_CITIES.items()}, "avail": avail, "cities": {}, "freeway": []}
-    prev_geo = {}
+    prev = {}
     if GEO_PATH.exists():
         try:
-            prev_geo = json.loads(GEO_PATH.read_text(encoding="utf-8")).get("cities", {})
-        except Exception:
-            prev_geo = {}
-    for city in GEO_CITIES:
+            prev = json.loads(GEO_PATH.read_text(encoding="utf-8")).get("cities", {})
+        except Exception:  # noqa: BLE001
+            prev = {}
+    geo = {"generatedAt": NOW_ISO, "labels": {k: v["label"] for k, v in LIVE_CITIES.items()},
+           "views": {k: [v["center"], v["zoom"]] for k, v in LIVE_CITIES.items()}, "avail": {}, "cities": {}, "freeway": [],
+           "lineLabel": "台北市區路段"}
+    for city in LIVE_CITIES:
         c = {"parking": [], "bikes": [], "speed": []}
-        av = avail.get(city, {})
-        if time.time() > SOFT_DEADLINE - 120:  # 時間不夠：這個縣市沿用上一輪
-            geo["cities"][city] = prev_geo.get(city, c); continue
-        if av.get("parking"):
+        try:
+            c["bikes"] = [r[:5] for r in _yb_stations(city)]
+        except Exception as e:  # noqa: BLE001
+            GEO_ERRS.append(f"bikes {city}: " + safe_err(e)); c["bikes"] = (prev.get(city) or {}).get("bikes", [])
+        if city == "Taipei":
             try:
-                for r in _tdx_opt(f"v1:Parking/OffStreet/ParkingAvailability/City/{city}") or []:
-                    pos = st["carparks"].get(city, {}).get(r.get("CarParkID"))
-                    if not pos:
-                        continue
-                    total, avail_n = r.get("TotalSpaces"), r.get("AvailableSpaces")
-                    car = next((a for a in r.get("Availabilities") or [] if a.get("SpaceType") == 1), None)
-                    if car and car.get("NumberOfSpaces"):
-                        total, avail_n = car["NumberOfSpaces"], car.get("AvailableSpaces")
-                    if not total or avail_n is None or avail_n < 0 or total < 20:
-                        continue
-                    c["parking"].append([pos[0], pos[1], int(avail_n), int(total), pos[2][:18]])
+                c["parking"] = _tpe_parking()
             except Exception as e:  # noqa: BLE001
-                log("geo parking", city, e); GEO_ERRS.append(f"parking {city}: " + safe_err(e))
-                c["parking"] = (prev_geo.get(city) or {}).get("parking", [])  # 429 等：沿用上一輪
-        if av.get("bikes"):
+                GEO_ERRS.append("parking Taipei: " + safe_err(e)); c["parking"] = (prev.get(city) or {}).get("parking", [])
             try:
-                for r in _tdx_opt(f"Bike/Availability/City/{city}") or []:
-                    pos = st["bikes"].get(city, {}).get(r.get("StationUID"))
-                    if pos and r.get("ServiceStatus", 1) == 1:
-                        c["bikes"].append([pos[0], pos[1], int(r.get("AvailableRentBikes") or 0), int(pos[3] or 0), pos[2][:14]])
+                secs = _tpe_vd()
+                c["speed"] = [[round((s["a"][0] + s["b"][0]) / 2, 5), round((s["a"][1] + s["b"][1]) / 2, 5), round(s["spd"]), s["name"][:16]] for s in secs]
+                geo["freeway"] = [[[s["a"], s["b"]], round(s["spd"]), s["name"][:16]] for s in secs]
             except Exception as e:  # noqa: BLE001
-                log("geo bikes", city, e); GEO_ERRS.append(f"bikes {city}: " + safe_err(e))
-                c["bikes"] = (prev_geo.get(city) or {}).get("bikes", [])  # 429 等：沿用上一輪
-        if av.get("vd"):
-            try:
-                for v in _tdx_opt(f"Road/Traffic/Live/VD/City/{city}") or []:
-                    pos = st["vd"].get(city, {}).get(v.get("VDID"))
-                    if not pos:
-                        continue
-                    sp = [ln.get("Speed") for lf in v.get("LinkFlows") or [] for ln in lf.get("Lanes") or [] if (ln.get("Speed") or 0) > 0]
-                    if sp:
-                        c["speed"].append([pos[0], pos[1], round(sum(sp) / len(sp)), pos[2][:10]])
-            except Exception as e:  # noqa: BLE001
-                log("geo vd live", city, e); GEO_ERRS.append(f"vd {city}: " + safe_err(e))
-                c["speed"] = (prev_geo.get(city) or {}).get("speed", [])  # 429 等：沿用上一輪
+                GEO_ERRS.append("vd Taipei: " + safe_err(e)); c["speed"] = (prev.get(city) or {}).get("speed", [])
         geo["cities"][city] = c
-    # 國道 ETag 路段車速（全台，畫線）
-    try:
-        live = {pr["ETagPairID"]: next((f["SpaceMeanSpeed"] for f in pr.get("Flows", []) if f.get("VehicleType") == 31 and (f.get("SpaceMeanSpeed") or 0) > 0), None)
-                for pr in tdx("Road/Traffic/Live/ETag/Freeway").get("ETagPairLives", [])}
-        for pid, desc, pts in st.get("etag", []):
-            spd = live.get(pid)
-            if spd is not None:
-                geo["freeway"].append([pts, round(spd), desc[:16]])
-    except Exception as e:  # noqa: BLE001
-        log("geo etag live", e); GEO_ERRS.append("etag live: " + safe_err(e))
+        geo["avail"][city] = {"parking": bool(c["parking"]), "bikes": bool(c["bikes"]), "vd": bool(c["speed"])}
     write_json(GEO_PATH, geo, separators=(",", ":"))
     summary = {city: {k: len(v) for k, v in c.items() if v} for city, c in geo["cities"].items()}
-    summary = {k: v for k, v in summary.items() if v}
-    if not summary and not geo["freeway"]:
-        raise RuntimeError(f"geo: nothing errs={GEO_ERRS[:6]}")
-    return {"label": "TDX", "cities_with_data": len(summary), "freeway": len(geo["freeway"]), "static": st.get("progress", ""),
-            "totals": {k: sum(c.get(k, 0) for c in summary.values()) for k in ("parking", "bikes", "speed")}, "errs": GEO_ERRS[:12]}
+    if not any(summary.values()):
+        raise RuntimeError(f"geo: nothing errs={GEO_ERRS[:4]}")
+    return {"label": "台北市資料大平臺・新北市開放資料", "cities_with_data": sum(1 for v in summary.values() if v), "freeway": len(geo["freeway"]),
+            "totals": {k: sum(v.get(k, 0) for v in summary.values()) for k in ("parking", "bikes", "speed")}, "errs": GEO_ERRS[:12]}
+
+
+def p_airport():
+    """桃機今日出發／抵達：班次、延誤、取消，與接下來 8 班出發（桃園機場官網航班檔）。"""
+    r = get(TPE_AIR_URL, headers={"Referer": "https://www.taoyuan-airport.com/"})
+    txt = r.content.decode("cp950", errors="replace")
+    now_tpe = NOW.astimezone(TPE)
+    today = now_tpe.strftime("%Y/%m/%d")
+    out = {k: {"total": 0, "delayed": 0, "cancelled": 0, "upcoming": []} for k in ("dep", "arr")}
+    seen = set()
+    for line in txt.splitlines():
+        f = [x.strip() for x in line.split(",")]
+        if len(f) < 14 or f[1] not in ("A", "D"):
+            continue
+        kind = "dep" if f[1] == "D" else "arr"
+        try:
+            sched = datetime.strptime(f"{f[6]} {f[7]}", "%Y/%m/%d %H:%M:%S").replace(tzinfo=TPE)
+            est = datetime.strptime(f"{f[8]} {f[9]}", "%Y/%m/%d %H:%M:%S").replace(tzinfo=TPE) if f[8] and f[9] else None
+        except ValueError:
+            continue
+        k = (kind, f[6], f[7], f[10], f[5] or f[0])  # 共掛班號（同時間、同航點、同登機門）只算一次
+        if k in seen:
+            continue
+        seen.add(k)
+        status = f[13].upper()
+        zh = re.sub(r"[A-Za-z ]+", "", f[13])
+        late = est is not None and (est - sched) >= timedelta(minutes=30)
+        if f[6] == today:
+            o = out[kind]
+            o["total"] += 1
+            if "CANCEL" in status:
+                o["cancelled"] += 1
+            elif "DELAY" in status or late:
+                o["delayed"] += 1
+        if (kind == "dep" and sched >= now_tpe - timedelta(minutes=5) and sched <= now_tpe + timedelta(hours=12)
+                and not any(w in status for w in ("CANCEL", "DEPARTED"))):
+            out["dep"]["upcoming"].append({"flight": f"{f[2]}{f[4].lstrip()}", "to": f[10], "sched": sched.strftime("%H:%M"),
+                                           "est": est.strftime("%H:%M") if est else "", "remark": zh[:4], "gate": f[5][:4], "_t": sched})
+    up = sorted(out["dep"]["upcoming"], key=lambda x: x["_t"])[:8]
+    for u in up:
+        u.pop("_t", None)
+    out["dep"]["upcoming"] = up
+    if not out["dep"]["total"] and not out["arr"]["total"]:
+        raise RuntimeError("airport: empty")
+    out["label"] = "桃園機場"
+    return out
 
 
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
@@ -3078,47 +2964,6 @@ def p_power():
     return {"curr_mw": mw("curr_load"), "util_pct": num(rec.get("curr_util_rate")), "peak_mw": mw("fore_peak_dema_load"),
             "reserve_pct": reserve, "reserve_mw": mw("fore_peak_resv_capacity"), "level": level, "peak_hours": rec.get("fore_peak_hour_range", ""),
             "yday_reserve_pct": num(rec.get("yday_peak_resv_rate")), "spark": hist_get("power", "reserve", 30), "asof": str(rec.get("publish_time") or "")[:20]}
-
-
-def p_airport():
-    """桃機今日出發／抵達：班次、延誤、取消，與接下來 8 班出發。"""
-    out = {}
-    for kind, path in (("dep", "Air/FIDS/Airport/Departure/TPE"), ("arr", "Air/FIDS/Airport/Arrival/TPE")):
-        rows = tdx(path)
-        if isinstance(rows, dict):
-            rows = rows.get("FIDS") or rows.get("Departures") or rows.get("Arrivals") or []
-        # 共掛班號（JL802／AA8424／CI9902 同一架）只算一次：以表定時間＋對方機場＋登機門去重
-        seen, uniq = set(), []
-        for r in rows:
-            k = (r.get("ScheduleDepartureTime") if kind == "dep" else r.get("ScheduleArrivalTime"),
-                 r.get("ArrivalAirportID") if kind == "dep" else r.get("DepartureAirportID"), r.get("Gate") or r.get("Terminal"))
-            if k in seen:
-                continue
-            seen.add(k); uniq.append(r)
-        rows = uniq
-        tot = len(rows); delayed = cancelled = 0; upcoming = []
-        now_tpe = NOW.astimezone(TPE)
-        for r in rows:
-            rk = re.sub(r"[A-Za-z ]+", "", (r.get("DepartureRemark") if kind == "dep" else r.get("ArrivalRemark")) or "")
-            if "取消" in rk:
-                cancelled += 1
-            elif "延" in rk:
-                delayed += 1
-            sched = r.get("ScheduleDepartureTime") if kind == "dep" else r.get("ScheduleArrivalTime")
-            est = r.get("EstimatedDepartureTime") if kind == "dep" else r.get("EstimatedArrivalTime")
-            try:
-                st = datetime.fromisoformat(sched)
-                st = st if st.tzinfo else st.replace(tzinfo=TPE)
-            except Exception:
-                continue
-            if kind == "dep" and st >= now_tpe - timedelta(minutes=5) and len(upcoming) < 8 and "取消" not in rk and "出發" not in rk:
-                upcoming.append({"flight": f'{r.get("AirlineID","")}{r.get("FlightNumber","")}', "to": r.get("ArrivalAirportID", ""),
-                                 "sched": st.strftime("%H:%M"), "est": (est or "")[11:16], "remark": rk[:4], "gate": (r.get("Gate") or "")[:4]})
-        upcoming.sort(key=lambda x: x["sched"])
-        out[kind] = {"total": tot, "delayed": delayed, "cancelled": cancelled, "upcoming": upcoming}
-    if not out["dep"]["total"] and not out["arr"]["total"]:
-        raise RuntimeError("airport: empty")
-    return out
 
 
 # ---------- 全球大盤 / 美股板塊輪動 / 恐慌結構 ----------
