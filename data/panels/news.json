@@ -571,9 +571,9 @@
     "n": 3,
     "src": 3,
     "sources": [
+     "BigGo 財經",
      "HN",
-     "TechNews 科技新",
-     "finance.bigg"
+     "TechNews 科技新"
     ],
     "sample": {
      "title": "ChatGPT 推出虛擬試穿功能，上傳照片即可 AI 模擬穿搭效果",
@@ -587,27 +587,12 @@
     "src": 3,
     "sources": [
      "TechCrunch",
-     "news.cnyes.c",
-     "tradingview."
+     "TradingView",
+     "news.cnyes.c"
     ],
     "sample": {
      "title": "Meta Muse遭控讀私人訊息 蘋果出手強化Mac AI權限控管",
      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE16MjJHWC10TFNSVndveEpnaEZQWkYweXBrUmNSWExkTk5QcXpwemswSVRveHJiaEZlVlFScUl6WHhnVTU0ZmJuR2JraUFONFE?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "美股",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "CMoney投資網誌",
-     "TradingKey",
-     "自由財經"
-    ],
-    "sample": {
-     "title": "聯準會升息如何影響美股？聯準會升息影響邏輯詳解",
-     "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNVWxibkFLYmRBNGdGNWg5aDdpRktSVzFwR2xTWGI4UXVoazdGWWNLMV93NVFIRGZuXzVJNDBTVjVmRW5pc2RYQTNnTzdua3k4aFVEMVZYbng5QWpTWGdXM2lNa0tqRFdpRGN3cTlrWlZvTlo4czNTaW9JeHlIY2xIRFVsanJ1ZGFIdFppS2hYVEFKcnhMMlVtc3QyMHA3UjZhUnRmZU1NZFNLSDA2NUNKWUJUdktBcnRLaXhEazRoUmw?oc=5"
     },
     "hot": true
    },
@@ -618,6 +603,21 @@
     "sources": [
      "TradingKey",
      "news.cnyes.c",
+     "自由財經"
+    ],
+    "sample": {
+     "title": "聯準會升息如何影響美股？聯準會升息影響邏輯詳解",
+     "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNVWxibkFLYmRBNGdGNWg5aDdpRktSVzFwR2xTWGI4UXVoazdGWWNLMV93NVFIRGZuXzVJNDBTVjVmRW5pc2RYQTNnTzdua3k4aFVEMVZYbng5QWpTWGdXM2lNa0tqRFdpRGN3cTlrWlZvTlo4czNTaW9JeHlIY2xIRFVsanJ1ZGFIdFppS2hYVEFKcnhMMlVtc3QyMHA3UjZhUnRmZU1NZFNLSDA2NUNKWUJUdktBcnRLaXhEazRoUmw?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "美股",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "CMoney投資網誌",
+     "TradingKey",
      "自由財經"
     ],
     "sample": {
@@ -703,5 +703,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-03T02:53:16Z"
+ "updatedAt": "2026-10-03T03:13:26Z"
 }
