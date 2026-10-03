@@ -76,6 +76,18 @@
  "intl": [
   {
    "source": "BBC",
+   "title": "Tennessee prison chief to resign after Christa Pike's failed execution, governor says",
+   "url": "https://www.bbc.co.uk/news/articles/c8zxl62yzxzxo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-03T16:18:04Z"
+  },
+  {
+   "source": "BBC",
+   "title": "Russia hits second major bridge in Ukraine's capital Kyiv",
+   "url": "https://www.bbc.co.uk/news/articles/c83vqxzdg1yko?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-03T16:16:49Z"
+  },
+  {
+   "source": "BBC",
    "title": "Medical plane with 6 on board missing off Massachusetts coast",
    "url": "https://www.bbc.co.uk/news/articles/cme3x85013llo?at_medium=RSS&at_campaign=rss",
    "at": "2026-10-03T15:56:14Z"
@@ -120,12 +132,6 @@
    "at": "2026-10-03T13:34:11Z"
   },
   {
-   "source": "BBC",
-   "title": "Russia hits second major bridge in Ukraine's capital Kyiv",
-   "url": "https://www.bbc.co.uk/news/articles/c83vqxzdg1yko?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-03T12:59:10Z"
-  },
-  {
    "source": "Guardian",
    "title": "They embraced the Fiat 500, the Vespa, even tuk-tuks. But will Romans draw the line at the",
    "url": "https://www.theguardian.com/world/2026/oct/03/rome-golf-cart-tours-crackdown-tourism",
@@ -145,12 +151,6 @@
    "url": "https://www.theguardian.com/world/2026/oct/02/terror-kyiv-russia-ramps-up-attacks-ukraine",
    "at": "2026-10-03T08:52:19Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Kim wins Asian Games gold to secure military exemption",
-   "url": "https://www.bbc.co.uk/sport/golf/articles/cmy0rn425k4xo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-03T08:51:14Z"
   }
  ],
  "groups": [
@@ -704,7 +704,7 @@
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: RuntimeError: gdelt empty"
  ],
- "updatedAt": "2026-10-03T16:09:33Z"
+ "updatedAt": "2026-10-03T16:28:29Z"
 }
