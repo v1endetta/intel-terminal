@@ -493,6 +493,9 @@ body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[d
 .ib-chip i{font-style:normal;font:10.5px var(--mono);color:var(--dim);margin-left:5px}
 .ib-chip.s2{font-size:13px}.ib-chip.s3{font-size:14.5px;border-color:color-mix(in srgb,var(--blue) 65%,var(--line))}
 .ib-empty{font-size:12px;color:var(--dim)}
+.ov .w6{grid-column:span 6}@media (max-width:1100px){.ov .w6{grid-column:span 12}}
+.o-ibv{width:100%;height:auto;display:block}.o-ibv text{font:11px var(--sans);fill:var(--muted)}.o-ibv text.num{font-family:var(--mono);fill:var(--text)}.o-ibv .g{stroke:var(--line);stroke-width:1}
+#ov-ib1s,#ov-ib3s{font-size:12px;color:var(--muted)}#ov-ib1s b,#ov-ib3s b{color:var(--text);font-weight:500}
 body[data-tab="intel"] main .panel[data-band]:not(.ib-open){display:none}
 main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 @media (max-width:1100px){.ib-sig{grid-template-columns:repeat(3,minmax(0,1fr))}.ib-band{grid-template-columns:1fr}.ib-q{border-right:0;border-bottom:1px solid var(--line)}}
@@ -1288,6 +1291,22 @@ const V={OpenAI:"OpenAI",openai:"OpenAI",Anthropic:"Anthropic",anthropic:"Anthro
 const cap=t=>String(t).replace(/\b[a-z]/g,c=>c.toUpperCase());
 const tl=(src,t,url,m,cls)=>`<li><span class="src">${esc(src)}</span><span class="t">${url?`<a href="${esc(safe(url))}" target="_blank" rel="noopener">${esc(t)}</a>`:esc(t)}</span>${m?`<span class="m ${cls||""}">${m}</span>`:""}</li>`;
 
+function brandsChart(id,rows){const rh=17,W=520,L=92,R=52,pos=Math.max(0,...rows.map(c=>c.chg)),neg=Math.max(0,...rows.map(c=>-c.chg));
+  const span=W-L-R,mid=L+span*(neg/(neg+pos||1)),sc=span/((neg+pos)||1)*0.98;const p=draw(id,W,rows.length*rh+16);if(!p)return;
+  p("line",{x1:mid,y1:0,x2:mid,y2:rows.length*rh,class:"g"});p("text",{x:mid,y:rows.length*rh+13,"text-anchor":"middle"},"0");
+  rows.forEach((c,i)=>{const y=i*rh,x=c.chg<0?mid+c.chg*sc:mid,w=Math.max(1.5,Math.abs(c.chg)*sc),me2=c.cat==="設計創意";
+    p("text",{x:L-8,y:y+12,"text-anchor":"end",style:me2?"fill:var(--blue)":""},(me2?"● ":"")+c.cat);
+    p("rect",{x,y:y+4,width:w,height:rh-8,rx:1.5,style:`fill:var(${c.chg>0?"--up":c.chg<0?"--down":"--dim"});opacity:${me2?1:.72}`});
+    p("text",{x:W,y:y+12,"text-anchor":"end",class:"num",style:`fill:var(${c.chg>0?"--up":c.chg<0?"--down":"--muted"})`},(c.chg>0?"+":"")+c.chg+"%");});}
+function aiChart(id,rows3,d14){const W=520,L=96,cw=(W-L-6)/14,rh=26;const p=draw(id,W,rows3.length*rh+18);if(!p)return;
+  d14.forEach((d,i)=>{if(i%2===1)p("text",{x:L+cw*i+cw/2,y:rows3.length*rh+14,"text-anchor":"middle"},d.slice(5).replace("-","/"));p("line",{x1:L+cw*i,y1:0,x2:L+cw*i,y2:rows3.length*rh,class:"g",opacity:.45});});
+  rows3.forEach((r,ri)=>{const y=ri*rh;p("text",{x:L-10,y:y+16,"text-anchor":"end",style:r.items.length?"fill:var(--text)":"fill:var(--dim)"},r.v);
+    const by={};r.items.forEach(a=>(by[a.d]=by[a.d]||[]).push(a));
+    Object.entries(by).forEach(([d,arr])=>{const i=d14.indexOf(d),m=Math.min(arr.length,3);arr.slice(0,3).forEach((a,k)=>{const cx=L+cw*i+cw/2,cy=y+12+(k-(m-1)/2)*7;
+      const c=p("circle",a.k?{cx,cy,r:3.4,style:"fill:var(--up)"}:{cx,cy,r:3,style:"fill:none;stroke:var(--blue);stroke-width:1.4"});const tt=document.createElementNS(NS,"title");tt.textContent=a.d+"｜"+a.t;c.appendChild(tt);});});});}
+const OV={};
+function fillOv(){if(OV.b&&document.getElementById("ov-ib1")){brandsChart("ov-ib1",OV.b.rows);$("#ov-ib1s").innerHTML=OV.b.s;}
+  if(OV.a&&document.getElementById("ov-ib3")){aiChart("ov-ib3",OV.a.rows3,OV.a.d14);$("#ov-ib3s").innerHTML=OV.a.s;}}
 function render(P){
   const T=today(),cards=[];
   /* ---- Q1 錢 ---- */
@@ -1299,13 +1318,8 @@ function render(P){
     cards.push(["ib1","新品牌",n(B.total).toLocaleString(),"家",`${mm} 月新設，比上月 <b class="${chg<0?"down":"up"}">${chg<0?"▼":"▲"}${Math.abs(chg)}%</b>${grow.length&&grow.length<=3?`；只有 <b>${grow.map(c=>c.cat).join("、")}</b> 成長`:""}`]);
     $("#ib1h").innerHTML=`${mm} 月新設公司行號 · 各產業比上月<span class="n">● 同業</span>`;
     $("#ib1a").innerHTML=`${mm} 月新設 <em>${n(B.total).toLocaleString()}</em> 家，比上月 <em class="${chg<0?"down":"up"}">${chg<0?"少":"多"} ${Math.abs(chg)}%</em>；${cats.length} 類裡 ${cats.filter(c=>c.chg<0).length} 類衰退，跌最多是<b>${esc(fall.cat)}</b>。${me?`同業設計創意 <em class="${me.chg<0?"down":"up"}">${me.chg>0?"+":""}${me.chg}%</em>。`:""}${tend.length?`政府行銷標案本週 ${tend.length} 件、合計 <em>${wan(tSum)}</em>。`:""}`;
-    const rows=cats.slice().sort((a,b)=>b.chg-a.chg),rh=17,W=520,L=92,R=52,mx=Math.max(10,...rows.map(c=>Math.abs(c.chg))),pos=Math.max(0,...rows.map(c=>c.chg)),neg=Math.max(0,...rows.map(c=>-c.chg));
-    const span=W-L-R,mid=L+span*(neg/(neg+pos||1)),sc=span/((neg+pos)||1)*0.98;const p=draw("ib1v",W,rows.length*rh+16);
-    if(p){p("line",{x1:mid,y1:0,x2:mid,y2:rows.length*rh,class:"g"});p("text",{x:mid,y:rows.length*rh+13,"text-anchor":"middle"},"0");
-      rows.forEach((c,i)=>{const y=i*rh,x=c.chg<0?mid+c.chg*sc:mid,w=Math.max(1.5,Math.abs(c.chg)*sc),me2=c.cat==="設計創意";
-        p("text",{x:L-8,y:y+12,"text-anchor":"end",style:me2?"fill:var(--blue)":""},(me2?"● ":"")+c.cat);
-        p("rect",{x,y:y+4,width:w,height:rh-8,rx:1.5,style:`fill:var(${c.chg>0?"--up":c.chg<0?"--down":"--dim"});opacity:${me2?1:.72}`});
-        p("text",{x:W,y:y+12,"text-anchor":"end",class:"num",style:`fill:var(${c.chg>0?"--up":c.chg<0?"--down":"--muted"})`},(c.chg>0?"+":"")+c.chg+"%");});}
+    const rows=cats.slice().sort((a,b)=>b.chg-a.chg);brandsChart("ib1v",rows);
+    const ovr=rows.filter((c,i)=>i<4||i>=rows.length-4||c.cat==="設計創意");OV.b={rows:ovr,s:`${mm} 月新設 <b>${n(B.total).toLocaleString()}</b> 家，比上月 <b class="${chg<0?"down":"up"}">${chg<0?"▼":"▲"}${Math.abs(chg)}%</b>；同業設計創意 ${me?`<b class="${me.chg<0?"down":"up"}">${me.chg>0?"+":""}${me.chg}%</b>`:"—"}`};
   }
   if(tend.length){cards.push(["ib1","政府行銷",wan(tSum).replace(" ",""),"",`本週 ${tend.length} 件標案；最大 <b>${esc(tend[0].title.slice(0,12))}</b> ${wan(n(tend[0].budget))}`]);
     const t6=tend.slice(0,6),W=420,rh=22,mx=n(t6[0].budget);const p=draw("ib1w",W,t6.length*rh);
@@ -1338,12 +1352,7 @@ function render(P){
   if(topV.length)cards.push(["ib3","AI 動態",topV[0][1],"則",`近 7 天 <b>${esc(topV[0][0])}</b> 動作最多；共 ${topV.length} 家有動靜`]);
   const busy=rows3.slice().sort((a,b)=>b.items.length-a.items.length),quiet=rows3.filter(r=>!r.items.length).map(r=>r.v),gh=((P.tech||{}).github||[]);
   if(ai.length)$("#ib3a").innerHTML=`近 14 天 <b>${busy[0].v}</b> 動作最多（<em>${busy[0].items.length}</em> 則），其次 <b>${busy[1].v}</b>。${quiet.length?`<b>${quiet.join("、")}</b> 這段時間沒動靜。`:""}${gh[0]?`GitHub 竄升最快的是 <b>${esc(gh[0].name.split("/").pop())}</b>。`:""}`;
-  {const W=520,L=96,cw=(W-L-6)/14,rh=26;const p=draw("ib3v",W,rows3.length*rh+18);
-    if(p){d14.forEach((d,i)=>{if(i%2===1)p("text",{x:L+cw*i+cw/2,y:rows3.length*rh+14,"text-anchor":"middle"},d.slice(5).replace("-","/"));p("line",{x1:L+cw*i,y1:0,x2:L+cw*i,y2:rows3.length*rh,class:"g",opacity:.45});});
-      rows3.forEach((r,ri)=>{const y=ri*rh;p("text",{x:L-10,y:y+16,"text-anchor":"end",style:r.items.length?"fill:var(--text)":"fill:var(--dim)"},r.v);
-        const by={};r.items.forEach(a=>(by[a.d]=by[a.d]||[]).push(a));
-        Object.entries(by).forEach(([d,arr])=>{const i=d14.indexOf(d),m=Math.min(arr.length,3);arr.slice(0,3).forEach((a,k)=>{const cx=L+cw*i+cw/2,cy=y+12+(k-(m-1)/2)*7;
-          const c=p("circle",a.k?{cx,cy,r:3.4,style:"fill:var(--up)"}:{cx,cy,r:3,style:"fill:none;stroke:var(--blue);stroke-width:1.4"});const tt=document.createElementNS(NS,"title");tt.textContent=a.d+"｜"+a.t;c.appendChild(tt);});});});}}
+  aiChart("ib3v",rows3,d14);OV.a={rows3,d14,s:topV.length?`近 7 天 <b>${esc(topV[0][0])}</b> 動作最多（${topV[0][1]} 則）${quiet.length?`；<b>${quiet.join("、")}</b> 近 14 天沒動靜`:""}`:""};
   if(gh.length){const g5=gh.slice(0,5),W=420,rh=22,mx=n(g5[0].stars);const p=draw("ib3w",W,g5.length*rh);
     if(p)g5.forEach((x,i)=>{const y=i*rh,bw=Math.max(2,(W-210)*n(x.stars)/mx);p("rect",{x:0,y:y+3,width:bw,height:rh-9,rx:1.5,style:"fill:var(--warn);opacity:.8"});
       p("text",{x:bw+6,y:y+13,class:"num"},(n(x.stars)/1000).toFixed(1)+"k");p("text",{x:bw+44,y:y+13},x.name.split("/").pop().slice(0,22));});}
@@ -1361,10 +1370,11 @@ function render(P){
   $("#ib4t").innerHTML=((P.design||{}).items||[]).slice(0,3).map(d=>tl(d.source,d.title,d.url)).join("")+(M.intl||[]).slice(0,2).map(w=>tl("WWD",w.title,w.url)).join("")+(M.items||[]).slice(0,2).map(w=>tl(w.source,w.title,w.url)).join("");
 
   /* ---- 訊號卡 ---- */
+  try{fillOv();}catch(e){}
   $("#ib-sig").innerHTML=cards.slice(0,5).map(([b,k,v,u,s])=>`<button type="button" class="ib-card" data-ibgo="${b}"><span class="k">${k}</span><span class="v">${v}${u?`<small>${u}</small>`:""}</span><span class="s">${s}</span></button>`).join("");
 }
 setup();
-return{render};
+return{render,fillOv};
 })();
 
 /* ================= v2：分頁、天空頂欄、總覽、新一輪動態 ================= */
@@ -1478,6 +1488,8 @@ function layout(){
     <div class="o-cols2"><div><div class="o-colh">新聞</div><ul class="o-ls" id="ov-news"></ul></div><div><div class="o-colh">AI 大廠 · 開發者</div><ul class="o-ls" id="ov-ai"></ul></div></div></section>
   <section class="o-card w4" id="ov-c-hot">${H("Hot","多源同提 · 字越大來源越多","intel")}
     <div class="o-words" id="ov-words"></div><div class="o-hr"></div><div class="o-colh">GOOGLE 趨勢</div><ul class="o-ls rk" id="ov-trends"></ul></section>
+  <section class="o-card w6" id="ov-c-brand">${H("New Brands","新設公司 · 各產業比上月","intel")}<div class="o-sub" id="ov-ib1s"></div><svg class="o-ibv" id="ov-ib1" role="img" aria-label="各產業新設家數月增減"></svg></section>
+  <section class="o-card w6" id="ov-c-ai">${H("AI","各家近 14 天 · ● 產品更新 ○ 新聞","intel")}<div class="o-sub" id="ov-ib3s"></div><svg class="o-ibv" id="ov-ib3" role="img" aria-label="各家 AI 近十四天動態"></svg></section>
   <section class="o-card w4" id="ov-c-mood">${H("Mood","情緒波形 · 越亂越負面","social")}
     <canvas class="o-fx" id="ov-wave" height="84"></canvas><div class="o-dv" id="ov-moodsrc"></div><div class="o-sub" id="ov-themes"></div></section>
   <section class="o-card w4" id="ov-c-ptt">${H("PTT","看板熱度 · 100 推發光","social")}<div class="o-eq" id="ov-eq"></div><ul class="o-ls" id="ov-ptt"></ul></section>
@@ -1752,6 +1764,7 @@ function toast(msg){const t=$("#o-toast");t.textContent=msg;t.classList.add("sho
 function after(P,all){
   const isNew=gen!==null&&all.generatedAt!==gen;gen=all.generatedAt;lastP=P;S=snap(P);
   if(!$("#ov").children.length)layout();
+  try{IB.fillOv();}catch(e){}
   if(!isNew){fill(false);try{FX.apply(P,false,false);}catch(e){console.warn("fx",e);}if(cur==="overview")startLoops();return;}
   // 新一輪進來
   scan();
@@ -1766,7 +1779,7 @@ function after(P,all){
   const nm=[...tabsHit].filter(t=>t!=="overview").map(t=>TABS.find(x=>x[0]===t)[1]);
   toast(`新一輪資料進來 · ${changed.length} 個面板有變動${nm.length?" · "+nm.join("、"):""}`);
 }
-function replay(){if(!lastP)return;scan();prev={};seen={};const keep=E("ov-odo");if(keep)keep.dataset.s="";if(cur==="overview"){layout();setTimeout(()=>{fill(true);startLoops();},moving()?350:0);}
+function replay(){if(!lastP)return;scan();prev={};seen={};const keep=E("ov-odo");if(keep)keep.dataset.s="";if(cur==="overview"){layout();try{IB.fillOv();}catch(e){}setTimeout(()=>{fill(true);startLoops();},moving()?350:0);}
   else{document.querySelectorAll(`main .panel:not([data-tab-hide])`).forEach((p,i)=>{p.querySelectorAll('svg path[fill="none"]').forEach(pa=>pa.setAttribute("pathLength","1"));p.classList.remove("o-redraw");void p.offsetWidth;p.classList.add("o-redraw");setTimeout(()=>bump(p),i*90);});
     document.querySelectorAll("main .o-ins").forEach(x=>x.remove());try{FX.apply(lastP,false,true);}catch(e){console.warn("fx",e);}}}
 $("#btn-replay").addEventListener("click",replay);
