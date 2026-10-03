@@ -1,0 +1,104 @@
+{
+ "gov_136781": {
+  "url": "https://data.gov.tw/api/v2/rest/dataset/136781",
+  "status": 200,
+  "bytes": 3062,
+  "ct": "application/json",
+  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"A00\",\"categoryDataset\":\"A\",\"datasetId\":136781,\"identifier\":\"\",\"title\":\"臺中市公共自行車(YouBike2.0)租借站&即時車位資料\",\"description\":\"提供目前臺中市公共自行車(YouBike2.0)租借站點與即時車位資料，附上欄位中英文對照說明檔案下載連結網址，\\nhttps:\\/\\/docs.google.com\\/spreadsheets\\/d\\/1wqj20N4O8QXxUN4wi4dtHbyKZ6Fzn-89\\/edit?usp=sharing&ouid=106432492480916209334&rtpof=true&sd=true\\n。\\n\",\"type\":\"api\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"chaohsien179\",\"publisherOID\":\"2.16.886.101.90027.20002.20020\",\"publisherContactName\":\"陳小姐\",\"publisherContactPhone\":\"04-22289111#60416\",\"publisherContactEmail\":\"erica22231@taichung.gov.tw\",\"updateFrequency\":{\"regularupdate\":\"2\"},\"dataQuality\":\"G\",\"coverageStartedDate\":\"2026-01-01\",\"coverageEndedDate\":\"2027-11-22\",\"publishedDate\":\"2021-02-03\",\"modifiedDate\":\"2026-09-30 14:41:15\",\"spatialCoverage\":\"全臺中市\",\"language\":\"zh\",\"relatedUrl\":\"\",\"notes\":\"\",\"apiDocUrl\":\"\",\"distribution\":[{\"resourceDescription\":\"臺中市公共自行車(YouBike2.CSV\",\"resourceField\":[{\"name\":\"機關代碼\",\"description\":\"\",\"uri\":\"api\\/Commonality\\/Commonality\\/CommonData\\/AgencyCodes\"},{\"name\":\"公共自行車車位使用\",\"description\":\"\"},{\"name\":\"檔案格式範圍\",\"description\":\"\"},{\"name\":\"檔案網址\",\"description\":\"\"},{\"name\":\"縣市別代碼\",\"de"
+ },
+ "gov_136781_0": {
+  "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=682eb096-0255-46c0-bd89-4c8e883b20e5",
+  "status": 200,
+  "bytes": 309,
+  "ct": "application/octet-stream",
+  "head": "﻿機關代碼,公共自行車車位使用,檔案格式範圍,檔案網址,縣市別代碼,檔案說明\n\"387000000A\",\"臺中市公共自行車(YouBike2.0)租借站\",\"json\",\"https://ybjson02.youbike.com.tw:60008/yb2/taichung/gwjs.json\",\"66000\",\"公共自行車(YouBike2.0)租借站json檔由網址取得\"\r\n"
+ },
+ "gov_173477": {
+  "url": "https://data.gov.tw/api/v2/rest/dataset/173477",
+  "status": 200,
+  "bytes": 3249,
+  "ct": "application/json",
+  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"I00\",\"categoryDataset\":\"A\",\"datasetId\":173477,\"identifier\":\"\",\"title\":\"高雄YouBike2.0公共自行車租賃站即時資訊\",\"description\":\"包含租賃站場站名稱、行政區、地址、場站代號、總車位、可借車輛、場站資料修改時間、緯度、經度、可還車輛及營運狀態等資訊，資料每10分鐘更新一次\",\"type\":\"api\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"jingpei6\",\"publisherOID\":\"2.16.886.101.90029.20002.20022\",\"publisherContactName\":\"林孟嫻\",\"publisherContactPhone\":\"(07)3368333\",\"publisherContactEmail\":\"menglin825@kcg.gov.tw\",\"updateFrequency\":{\"regularupdate\":\"2\"},\"dataQuality\":\"G\",\"coverageStartedDate\":\"\",\"coverageEndedDate\":\"\",\"publishedDate\":\"2025-05-12\",\"modifiedDate\":\"2025-06-25 19:33:53\",\"spatialCoverage\":\"高雄\",\"language\":\"zh\",\"relatedUrl\":\"https:\\/\\/data.kcg.gov.tw\\/DataSet\\/Detail\\/f4a70266-cfb6-42f9-87fa-6ed4606f4fea\",\"notes\":\" \",\"apiDocUrl\":\"\",\"distribution\":[{\"resourceDescription\":\"高雄YouBike2.0公共自行車租賃站即時資訊\",\"resourceField\":[{\"name\":\"sbi\",\"description\":\"\"},{\"name\":\"lng\",\"description\":\"\",\"uri\":\"api\\/Weather\\/Common\\/Common\\/Longitude\"},{\"name\":\"mday\",\"description\":\"\"},{\"name\":\"snaen\",\"description\":\"\"},{\"name\":\"aren\",\"description\":\"\"},{\"name\":\"act\",\"description\":\"\"},{\"name\":\"ar\",\"description\":\"\"},{\"name\":\"sna\",\"description\":\"\"},{\"name\""
+ },
+ "gov_173477_0": {
+  "url": "https://openapi.kcg.gov.tw/Api/Service/Get/b4dd9c40-9027-4125-8666-06bef1756092",
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='openapi.kcg.gov.tw', port=443): Max retries exceeded with url: /Api/Service/Get/b4dd9c40-9027-4125-8666-06bef1756092 (Caused by ConnectTimeoutError(<HTTPSConnection(host='openapi.kcg.gov.tw', po"
+ },
+ "gov_146969": {
+  "url": "https://data.gov.tw/api/v2/rest/dataset/146969",
+  "status": 200,
+  "bytes": 3781,
+  "ct": "application/json",
+  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"A00\",\"categoryDataset\":\"A\",\"datasetId\":146969,\"identifier\":\"\",\"title\":\"新北市公共自行車租賃系統(YouBike2.0)\",\"description\":\"為提升市民使用新北市公共自行車租賃系統(YouBike2.0)服務品質，透過資料透明化，提供各資訊平台介接取得系統服務即時資訊，滿足市民第一哩及最後ㄧ哩公共運輸需求。\",\"type\":\"api\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"U221741373\",\"publisherOID\":\"2.16.886.101.90026.20002.20021\",\"publisherContactName\":\"陳昱安\",\"publisherContactPhone\":\"(02)29603456#6984\",\"publisherContactEmail\":\"AR8851@ntpc.gov.tw\",\"updateFrequency\":{\"regularupdate\":\"1\",\"Frequency\":\"5\",\"unittime\":\"分\"},\"dataQuality\":\"G\",\"coverageStartedDate\":\"\",\"coverageEndedDate\":\"\",\"publishedDate\":\"2021-12-13\",\"modifiedDate\":\"2026-10-02 00:45:19\",\"spatialCoverage\":\"\",\"language\":\"zh\",\"relatedUrl\":\"\",\"notes\":\"OpenAPI文件下載: https:\\/\\/data.ntpc.gov.tw\\/api\\/v1\\/openapi\\/units\\/1130000\",\"apiDocUrl\":\"\",\"distribution\":[{\"resourceDescription\":\"新北市公共自行車租賃系統(YouBike2.0)\",\"resourceField\":[{\"name\":\"scity\",\"description\":\"縣市\"},{\"name\":\"scityen\",\"description\":\"縣市英文\"},{\"name\":\"sna\",\"description\":\"中文場站名稱\"},{\"name\":\"sarea\",\"description\":\"中文場站區域\"},{\"name\":\"ar\",\"description\":\"中文地址\"},{\"name\":\"snaen\",\"description\":\"英文場站名稱\"},{\"name\":\"sareaen\",\"description\":\"英文場站區域\"},{\"na"
+ },
+ "gov_146969_0": {
+  "url": "https://data.ntpc.gov.tw/api/datasets/010e5b15-3823-4b20-b401-b1cf000550c5/csv/file",
+  "status": 200,
+  "bytes": 406308,
+  "ct": "text/csv;charset=UTF-8",
+  "head": "scity,scityen,sna,sarea,ar,snaen,sareaen,aren,sno,tot_quantity,sbi_quantity,mday,lat,lng,bemp,act,yb2_quantity,eyb_quantity\n新北市,\"New Taipei City\",YouBike2.0_下庄市場,八里區,舊城路21號(前),\"YouBike2.0_Shia Juang Market\",\"Bali Dist\",\"No.21, Jiucheng Rd., Bali Dist\",500201001,20,7,20261003T135903,25.14678,121.3999,12,1,2,5\n新北市,\"New Taipei City\",YouBike2.0_八里行政中心,八里區,十三行路(靠中山路二段路口西南側人行道),\"YouBike2.0_Bali District Center\",\"Bali Dist\",\"Shisanhang Rd. & Zhongshan Rd. Intersection (Southwest)\",500201002,20,3,20261003T135903,25.15397,121.40721,17,1,3,0\n新北市,\"New Taipei City\",YouBike2.0_八里中庄市場綜合大樓,八里區,中山路一段268巷2號(對面汽車停車場),\"YouBike2.0_Bali Chung Chuang Market Multi-Purpose Building\",\"Bali Dist\",\"No. 2, Ln. 268, Sec. 1, Zhongshan Rd., Bali Dist.\",500201003,28,9,20261003T135903,25.15993,121.41407,18,1,6,3\n新北市,\"New Taipei City\",YouBike2.0_大崁國小,八里區,忠八街2號(前),\"YouBike2.0_DaKan Elementary School\",\"Bali Dist\",\"No. 2, Zhong 8th St., Bali Dist.\",500201004,20,8,20261003T135903,25.16064,121.41938,12,1,7,1\n新北市,\"New Taipei City\",YouBike2.0_龍形停車場,八里區,龍米路一段318號(對面停車場),\"YouBike2.0_Long Xing Parking Tower\",\"Bali Dist\",\"No. 318, Sec 1, Longmi Rd.(Opposite)\",500201006,40,9,20261003T135903,25.13041,121.4513,30,1,6,3\n新北市,\"New "
+ },
+ "gov_67784": {
+  "url": "https://data.gov.tw/api/v2/rest/dataset/67784",
+  "status": 200,
+  "bytes": 28843,
+  "ct": "application/json",
+  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"A00\",\"categoryDataset\":\"A\",\"datasetId\":67784,\"identifier\":\"交通處1300-336356\",\"title\":\"新竹市公共自行車租賃系統(YouBike)使用資料\",\"description\":\"資料來源：微笑單車股份有限公司\",\"type\":\"api\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"bi2712u\",\"publisherOID\":\"2.16.886.101.90006.20002.20059\",\"publisherContactName\":\"柯吟萱|\",\"publisherContactPhone\":\"03-5216121#463\",\"publisherContactEmail\":\"010586@ems.hccg.gov.tw\",\"updateFrequency\":{\"regularupdate\":\"1\",\"Frequency\":\"1\",\"unittime\":\"年\"},\"dataQuality\":\"G\",\"coverageStartedDate\":\"\",\"coverageEndedDate\":\"\",\"publishedDate\":\"2017-09-26\",\"modifiedDate\":\"2026-07-01 17:35:14\",\"spatialCoverage\":\"\",\"language\":\"zh\",\"relatedUrl\":\"\",\"notes\":\"\",\"apiDocUrl\":\"\",\"distribution\":[{\"resourceDescription\":\"新竹市公共自行車使用人次\",\"resourceField\":[{\"name\":\"縣市別代碼\",\"description\":\"\",\"uri\":\"api\\/Commonality\\/Place\\/PlaceAttributes\\/CountyCode\"},{\"name\":\"機關代碼\",\"description\":\"\",\"uri\":\"api\\/Commonality\\/Event\\/EventAttributes\\/AgencyCodes\"},{\"name\":\"所屬年月\",\"description\":\"\"},{\"name\":\"場站編號\",\"description\":\"\"},{\"name\":\"場站名稱\",\"description\":\"\"},{\"name\":\"日期1日使用筆數\",\"description\":\"\",\"uri\":\"api\\/BudgetAccountingandStatistics\\/BudgetandAccounting\\/GeneralFundBudgetandAccoun"
+ },
+ "gov_67784_0": {
+  "url": "https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/105/da4f0f63-4b9e-4309-a57e-88d56a971921.xlsx",
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='odws.hccg.gov.tw', port=443): Max retries exceeded with url: /001/Upload/25/opendataback/9059/105/da4f0f63-4b9e-4309-a57e-88d56a971921.xlsx (Caused by ConnectTimeoutError(<HTTPSConnection(host='"
+ },
+ "gov_67784_1": {
+  "url": "https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/105/da4f0f63-4b9e-4309-a57e-88d56a971921.csv",
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='odws.hccg.gov.tw', port=443): Max retries exceeded with url: /001/Upload/25/opendataback/9059/105/da4f0f63-4b9e-4309-a57e-88d56a971921.csv (Caused by ConnectTimeoutError(<HTTPSConnection(host='o"
+ },
+ "gov_67784_2": {
+  "url": "https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/105/da4f0f63-4b9e-4309-a57e-88d56a971921.xml",
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='odws.hccg.gov.tw', port=443): Max retries exceeded with url: /001/Upload/25/opendataback/9059/105/da4f0f63-4b9e-4309-a57e-88d56a971921.xml (Caused by ConnectTimeoutError(<HTTPSConnection(host='o"
+ },
+ "tycg_page": {
+  "url": "https://opendata.tycg.gov.tw/datalist/be75ea89-fe9c-4aa0-befa-82c8575d4d9b",
+  "status": 200,
+  "bytes": 783770,
+  "ct": "text/html;charset=utf-8",
+  "head": "<!DOCTYPE html><html  lang=\"zh-Hant-TW\" dir=\"ltr\" class=\"\" style=\"\" aria-live=\"polite\"><head><meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<script nonce=\"HpJAG/ijOE6Ds/RFpeq3YTIJ\" type=\"importmap\">{\"imports\":{\"#entry\":\"/_nuxt/UwzXSwFn.js\"}}</script>\n<title>Youbike即時服務資料 - 桃園資料開放平台</title>\n<style nonce=\"HpJAG/ijOE6Ds/RFpeq3YTIJ\">@import\"https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap\";@layer vendor,ui,variations,components,utilities,print;:root{--text-regular-black:48,49,51;--color-white:255,255,255;--color-black:48,49,51;--color-visited:95,73,210;--color-text-primary:48,49,51;--color-text-secondary:96,98,102;--multiline-ellipsis-lines:2;--font-family:\"Noto Sans TC\",system-ui,Helvetica,Arial,sans-serif}@layer vendor{/*!\n* Vuetify v3.12.2\n* Forged by John Leider\n* Released under the MIT License.\n*/@keyframes v-shake{59%{margin-left:0}60%,80%{margin-left:2px}70%,90%{margin-left:-2px}}.bg-black{background-color:#000!important;color:#fff!important}.bg-white{background-color:#fff!important;color:#000!important}.bg-transparent{background-color:initial!important;color:currentColor!important}.bg-red{background-co"
+ },
+ "tycg_links": [
+  "https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap",
+  "https://opendata.tycg.gov.tw/api/v1"
+ ],
+ "fw_http": {
+  "url": "http://tisvcloud.freeway.gov.tw/history/motc20/ETagPairLive.xml",
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPConnectionPool(host='tisvcloud.freeway.gov.tw', port=80): Max retries exceeded with url: /history/motc20/ETagPairLive.xml (Caused by ConnectTimeoutError(<HTTPConnection(host='tisvcloud.freeway.gov.tw', port=80) at 0x"
+ },
+ "fw_https90": {
+  "url": "https://tisvcloud.freeway.gov.tw/history/motc20/SectionLive.xml",
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='tisvcloud.freeway.gov.tw', port=443): Max retries exceeded with url: /history/motc20/SectionLive.xml (Caused by ConnectTimeoutError(<HTTPSConnection(host='tisvcloud.freeway.gov.tw', port=443) at"
+ },
+ "fw_1968": {
+  "url": "https://1968.freeway.gov.tw/",
+  "err": "ConnectionError(MaxRetryError('HTTPSConnectionPool(host=\\'1968.freeway.gov.tw\\', port=443): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPSConnection(host=\\'1968.freeway.gov.tw\\', port=443): Failed to establish a new connection:"
+ },
+ "tpe_vd_static": {
+  "url": "https://tcgbusfs.blob.core.windows.net/blobtisv/GetVD.xml.gz",
+  "status": 200,
+  "bytes": 31332,
+  "ct": "application/octet-stream",
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><vd:ExchangeData xmlns:vd=\"http://www.iii.org.tw/dax/vd\"><vd:CenterName>台北交控中心</vd:CenterName><vd:ExchangeTime>2026/10/03T14:12:03</vd:ExchangeTime><vd:SectionDataSet><vd:SectionData><vd:SectionId>ZVCGQ40</vd:SectionId><vd:SectionName>承德路    大業路-吉利街</vd:SectionName><vd:AvgSpd>50.159763</vd:AvgSpd><vd:AvgOcc>1.85</vd:AvgOcc><vd:TotalVol>169.0</vd:TotalVol><vd:MOELevel>0</vd:MOELevel><vd:StartWgsX>121.5015</vd:StartWgsX><vd:StartWgsY>25.119499</vd:StartWgsY><vd:EndWgsX>121.503337</vd:EndWgsX><vd:EndWgsY>25.117813</vd:EndWgsY></vd:SectionData><vd:SectionData><vd:SectionId>ZQFHC20</vd:SectionId><vd:SectionName>民族西路  中山北路-承德路</vd:SectionName><vd:AvgSpd>56.714287</vd:AvgSpd><vd:AvgOcc>1.9333332</vd:AvgOcc><vd:TotalVol>77.0</vd:TotalVol><vd:MOELevel>0</vd:MOELevel><vd:StartWgsX>121.51841</vd:StartWgsX><vd:StartWgsY>25.068495</vd:StartWgsY><vd:EndWgsX>121.51957</vd:EndWgsX><vd:EndWgsY>25.068509</vd:EndWgsY></vd:SectionData><vd:SectionData><vd:SectionId>Z1010A1</vd:SectionId><vd:SectionName>建國快往北 和平信義</vd:SectionName><vd:AvgSpd>67.8735</vd:AvgSpd><vd:AvgOcc>5.1</vd:AvgOcc><vd:TotalVol>166.0</vd:TotalVol><vd:MOELevel>1</vd:MOELevel><vd:St"
+ },
+ "ntpc_yb_all": {
+  "url": "https://data.ntpc.gov.tw/api/datasets/010e5b15-3823-4b20-b401-b1cf000550c5/json?page=0&size=3000",
+  "status": 200,
+  "bytes": 713069,
+  "ct": "application/json",
+  "head": "[{\"scity\":\"新北市\",\"scityen\":\"New Taipei City\",\"sna\":\"YouBike2.0_下庄市場\",\"sarea\":\"八里區\",\"ar\":\"舊城路21號(前)\",\"snaen\":\"YouBike2.0_Shia Juang Market\",\"sareaen\":\"Bali Dist\",\"aren\":\"No.21, Jiucheng Rd., Bali Dist\",\"sno\":\"500201001\",\"tot_quantity\":\"20\",\"sbi_quantity\":\"6\",\"mday\":\"20261003T140903\",\"lat\":\"25.14678\",\"lng\":\"121.3999\",\"bemp\":\"13\",\"act\":\"1\",\"yb2_quantity\":\"2\",\"eyb_quantity\":\"4\"},{\"scity\":\"新北市\",\"scityen\":\"New Taipei City\",\"sna\":\"YouBike2.0_八里行政中心\",\"sarea\":\"八里區\",\"ar\":\"十三行路(靠中山路二段路口西南側人行道)\",\"snaen\":\"YouBike2.0_Bali District Center\",\"sareaen\":\"Bali Dist\",\"aren\":\"Shisanhang Rd. & Zhongshan Rd. Intersection (Southwest)\",\"sno\":\"500201002\",\"tot_quantity\":\"20\",\"sbi_quantity\":\"3\",\"mday\":\"20261003T140903\",\"lat\":\"25.15397\",\"lng\":\"121.40721\",\"bemp\":\"17\",\"act\":\"1\",\"yb2_quantity\":\"3\",\"eyb_quantity\":\"0\"},{\"scity\":\"新北市\",\"scityen\":\"New Taipei City\",\"sna\":\"YouBike2.0_八里中庄市場綜合大樓\",\"sarea\":\"八里區\",\"ar\":\"中山路一段268巷2號(對面汽車停車場)\",\"snaen\":\"YouBike2.0_Bali Chung Chuang Market Multi-Purpose Building\",\"sareaen\":\"Bali Dist\",\"aren\":\"No. 2, Ln. 268, Sec. 1, Zhongshan Rd., Bali Dist.\",\"sno\":\"500201003\",\"tot_quantity\":\"28\",\"sbi_quantity\":\"8\",\"mday\":\"20261003T140903\",\"lat\":\"25.15993\",\"lng\":\"121.41407\",\"bemp\":\"19\",\"act\":\"1\",\""
+ },
+ "tc_od": {
+  "url": "https://opendata.taichung.gov.tw/search/6e38eb56-0e9a-4b9e-806d-23cd35d44d6b",
+  "status": 200,
+  "bytes": 118309,
+  "ct": "text/html; charset=utf-8",
+  "head": "<!doctype html>\n<html data-n-head-ssr lang=\"zh-Hant-TW\" data-n-head=\"%7B%22lang%22:%7B%22ssr%22:%22zh-Hant-TW%22%7D%7D\">\n  <head >\n    <meta data-n-head=\"ssr\" charset=\"utf-8\"><meta data-n-head=\"ssr\" name=\"viewport\" content=\"width=device-width, initial-scale=1\"><meta data-n-head=\"ssr\" data-hid=\"keywords\" name=\"keywords\" content=\"keywords\"><meta data-n-head=\"ssr\" name=\"author\" content=\"author\"><meta data-n-head=\"ssr\" name=\"copyright\" content=\"copyright\"><meta data-n-head=\"ssr\" name=\"format-detection\" content=\"telephone=no\"><meta data-n-head=\"ssr\" data-hid=\"og:image\" property=\"og:image\" content=\"https://opendata.taichung.gov.tw/images/social-media.png\"><meta data-n-head=\"ssr\" name=\"twitter:card\" content=\"summary_large_image\"><meta data-n-head=\"ssr\" data-hid=\"twitter:image\" name=\"twitter:image\" content=\"https://opendata.taichung.gov.tw/images/social-media.png\"><meta data-n-head=\"ssr\" data-hid=\"description\" name=\"description\" content=\"臺中市政府資料開放平臺資料集：\"><meta data-n-head=\"ssr\" data-hid=\"og:url\" property=\"og:url\" content=\"http://localhost:3000/search/6e38eb56-0e9a-4b9e-806d-23cd35d44d6b\"><meta data-n-head=\"ssr\" data-hid=\"og:title\" property=\"og:title\" content=\" | 臺中市政府資料開放平臺\"><meta data-n-h"
+ }
+}
