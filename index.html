@@ -432,8 +432,12 @@ canvas.o-fx{display:block;width:100%}
 /* 市場分頁：依時段切換面板順序（台股盤中先看台灣，其他時間先看全球） */
 .o-grp th{padding-top:9px!important;font-size:10px;color:var(--dim);letter-spacing:.06em;border-bottom:1px solid var(--line)}
 .list li.o-grp{display:block;font:500 10px var(--mono);color:var(--dim);letter-spacing:.06em;padding:9px 0 3px;border-top:0}
-body[data-mkt="gl"] #p-pulse{order:1}body[data-mkt="gl"] #p-fear{order:2}body[data-mkt="gl"] #p-poly{order:3}body[data-mkt="gl"] #p-world{order:4}body[data-mkt="gl"] #p-sectors{order:5}body[data-mkt="gl"] #p-taiex{order:6}body[data-mkt="gl"] #p-fx{order:7}body[data-mkt="gl"] #p-tw-stocks{order:8}body[data-mkt="gl"] #p-revenue{order:9}body[data-mkt="gl"] #p-cmdty{order:10}body[data-mkt="gl"] #p-lux{order:11}
-body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[data-mkt="tw"] #p-fx{order:3}body[data-mkt="tw"] #p-tw-stocks{order:4}body[data-mkt="tw"] #p-revenue{order:5}body[data-mkt="tw"] #p-fear{order:6}body[data-mkt="tw"] #p-poly{order:7}body[data-mkt="tw"] #p-world{order:8}body[data-mkt="tw"] #p-sectors{order:9}body[data-mkt="tw"] #p-cmdty{order:10}body[data-mkt="tw"] #p-lux{order:11}
+/* 分頁內固定順序：台灣先、國際後；快的先、月更的後；結論先、原文後 */
+#p-pulse{display:none!important}
+#p-taiex{order:1}#p-fx{order:2}#p-tw-stocks{order:3}#p-world{order:4}#p-sectors{order:5}#p-cmdty{order:6}#p-lux{order:7}#p-revenue{order:8}#p-fear{order:9}#p-poly{order:10}
+#p-macro{order:1}#p-gmacro{order:2}#p-calendar{order:3}#p-liq{order:4}#p-consume{order:5}#p-supply{order:6}
+#p-mood{order:1}#p-ptt{order:2}#p-cofacts{order:3}#p-attention{order:4}#p-trends{order:5}#p-youtube{order:6}#p-social{order:7}
+.grid{align-items:start}
 
 /* 新品牌雷達、注意力流向、消費溫度計 */
 .bt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px}
@@ -734,7 +738,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>YouTube Data API · 每 30 分鐘 · 分類：全部／音樂／娛樂／新聞</span></div>
   </section>
 
-  <section class="panel cap" id="p-trends">
+  <section class="panel w6 cap" id="p-trends">
     <div class="ph"><h2>Trends TW</h2><span class="zh">台灣搜尋熱度</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://trends.google.com/trending?geo=TW&hl=zh-TW" target="_blank" rel="noopener">Google Trends</a></div>
@@ -746,7 +750,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>美麗佳人（官方新聞清單）· VOGUE · ELLE · BAZAAR · COSMO 台灣版官方 RSS · WWD RSS · 同框已排除開箱、懶人包、贈票、星座等業配與專欄字眼 · 每 2 小時</span></div>
   </section>
 
-  <section class="panel w12" id="p-attention">
+  <section class="panel w6" id="p-attention">
     <div class="ph"><h2>Attention</h2><span class="zh">注意力流向 · 台灣這週在看什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>電影票房：國家影視聽中心（週）· App：Apple 台灣免費榜 · YouTube 發燒榜 · Google 搜尋趨勢 · 維基百科中文昨日熱門</span></div>
@@ -867,8 +871,10 @@ const POLY_TOPIC=[["加密貨幣",/bitcoin|\bbtc\b|ethereum|\beth\b|crypto|solan
   ["科技",/anthropic|openai|\bai\b|\bipo\b|apple|nvidia|google|tesla|spacex|microsoft|\bmeta\b/i]];
 const MONTHS="January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec";
 const polyNorm=q=>String(q||"").replace(new RegExp(`\\s+(by|before|on|in|after)\\s+(the end of\\s+)?(${MONTHS})\\.?(\\s+\\d{1,2})?(,?\\s*\\d{4})?\\s*\\??$`,"i"),"").replace(/\s+(by|before|in)\s+\d{4}\s*\??$/i,"").replace(/\?$/,"").trim().toLowerCase();
+const polyTopic=m=>(POLY_TOPIC.find(([,re])=>re.test(m.question||""))||["其他"])[0];
+const polyOK=m=>!["政治","其他"].includes(polyTopic(m));  // 只留 Fed、地緣、科技、加密
 function polyArrange(items){const by=new Map();
-  (items||[]).forEach(m=>{const k=polyNorm(m.question);const o=by.get(k);if(!o)by.set(k,{...m,_n:1});else{o._n++;if((n(m.vol24h)||0)>(n(o.vol24h)||0))by.set(k,{...m,_n:o._n});}});
+  (items||[]).filter(polyOK).forEach(m=>{const k=polyNorm(m.question);const o=by.get(k);if(!o)by.set(k,{...m,_n:1});else{o._n++;if((n(m.vol24h)||0)>(n(o.vol24h)||0))by.set(k,{...m,_n:o._n});}});
   const all=[...by.values()].map(m=>({...m,_t:(POLY_TOPIC.find(([,re])=>re.test(m.question))||["其他"])[0]}));
   const hot=all.filter(m=>Math.abs(n(m.d1))>=10).sort((a,b)=>Math.abs(n(b.d1))-Math.abs(n(a.d1)));
   const rest=all.filter(m=>!hot.includes(m));const tmax={};rest.forEach(m=>tmax[m._t]=Math.max(tmax[m._t]||0,n(m.vol24h)||0));
@@ -1055,7 +1061,7 @@ const renderers={
     const yt=(((P.youtube||{}).tw||{}).all||[]).slice(0,8).map((v,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="${esc(safe(v.url))}" target="_blank" rel="noopener">${esc(v.title)}</a></span><span class="m">${compact(n(v.views))}</span></li>`).join("");
     const tr=((P.trends||{}).items||[]).slice(0,8).map((t,i)=>`<li><span class="rank">${i+1}</span><span class="t">${esc(t.title)}</span><span class="m">${esc(t.traffic||"")}</span></li>`).join("");
     const wk=((((P.news||{}).signals||{}).wiki||{}).zh||[]).slice(0,8).map((w,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="${esc(safe(w.url))}" target="_blank" rel="noopener">${esc(w.title)}</a></span><span class="m">${compact(n(w.views))}</span></li>`).join("");
-    body("p-attention").innerHTML=`<div class="nw at5">${col(`電影票房${bx.asOf?" · 截至 "+esc(bx.asOf.slice(5)):""}`,box)}${col("App Store 免費榜",apps)}${col("YouTube 發燒",yt)}${col("Google 搜尋",tr)}${col("維基中文",wk)}</div>`;
+    body("p-attention").innerHTML=`<div class="nw nw2">${col(`電影票房${bx.asOf?" · 截至 "+esc(bx.asOf.slice(5)):""}`,box)}${col("App Store 免費榜",apps)}</div><div class="empty" style="padding:6px 0 0;font-size:10.5px">YouTube 發燒、Google 搜尋在下方各自的面板；維基熱門在情報分頁</div>`;
     setMeta("p-attention",{...d,label:"多源"},6);},
   consume(d){const tile=x=>{const y=n(x.yoy);const a=Math.min(1,Math.abs(y||0)/15);const bg=y==null?"var(--panel2)":`color-mix(in srgb,var(${y>=0?"--up":"--down"}) ${10+a*45}%,var(--panel2))`;
       return`<div class="cs-c" style="background:${bg}"><div class="l">${esc(x.name.replace("及相關服務業","").replace("服務業","").replace("業",""))}</div><div class="v num">${y!=null?sgn(y,1,"%"):"—"}</div><div class="p">${x.amt?compact(n(x.amt))+" 元":""}${x.mom!=null?` · 月 ${sgn(n(x.mom),1,"%")}`:""}</div>${mini(x.spark)}</div>`;};
@@ -1158,7 +1164,6 @@ function movers(P){
   (P.tw_stocks?.items||[]).forEach(it=>{const px=n(it.price),ch=n(it.chg);push("台股",it.name,ch/(px-ch)*100);});
   (P.luxury?.items||[]).forEach(it=>push("精品",it.name,n(it.chg_pct)));
   (P.commodities?.items||[]).forEach(it=>push("原物料",it.name,n(it.chg_pct)));
-    (P.poly?.items||[]).forEach(it=>push("Polymarket",it.question,n(it.d1),"pt"));
   if(P.taiex){const idx=n(P.taiex.index),ch=n(P.taiex.change);push("大盤","TAIEX",ch/(idx-ch)*100);}
   list.sort((a,b)=>Math.abs(b.v)-Math.abs(a.v));
   const seen=new Set();const top=list.filter(x=>{const k=x.k+x.t.slice(0,24);if(seen.has(k))return false;seen.add(k);return true;}).slice(0,8);const el=$("#movers");
@@ -1386,7 +1391,7 @@ root.classList.toggle("still",!motion);
 const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",String(motion));mbtn.textContent=motion?"動畫：開":"動畫：關";};syncBtn();
 
 /* ---------- tabs ---------- */
-const TABS=[["overview","總覽"],["market","市場"],["macro","總經"],["intel","情報"],["social","輿情"],["live","台灣現場"]];
+const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"market","p-revenue":"market",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro",
   "ib-sig":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
@@ -1454,7 +1459,7 @@ function snap(P){
     mood:P.mood||{},boards:(P.ptt||{}).boards||[],ptt:((P.ptt||{}).items||[]).slice(0,4),
     cof:((P.cofacts||{}).hot||[]).slice(0,4),cofs:(P.cofacts||{}).stats||{},
     radar:((P.radar||{}).watch)||[],fund:(((P.radar||{}).funding)||[]).slice(0,3),
-    air:P.airport||{},poly:((P.poly||{}).items||[]).slice(0,4),power:P.power||{},quake:((P.quake||{}).items||[])[0],
+    air:P.airport||{},poly:((P.poly||{}).items||[]).filter(polyOK).slice(0,4),power:P.power||{},quake:((P.quake||{}).items||[])[0],
     wx:((P.weather||{}).items)||[],ussec:((P.sectors||{}).items||[]).map(s=>[s.name,n(s.chg_pct)]),twsec:(tm.sectors||[]).map(s=>[s.name,n(s.pct)]),
     gov:[...(((P.tenders||{}).items)||[]).slice(0,3).map(t=>["招標",t.title,t.unit,t.budget,t.url]),...(((P.awards||{}).items)||[]).slice(0,2).map(a=>["決標",a.title,a.winner,a.amount,a.url])]};
 }
