@@ -1193,8 +1193,8 @@ function fillCitySelect(){const sel=$("#geo-city");if(!geoData)return;const labe
   Object.keys(labels).forEach(k=>{const o=document.createElement("option");o.value=k;const a=av[k]||{};const n=["parking","bikes","vd"].filter(x=>a[x]).length;o.textContent=labels[k]+(n?"":"（暫無資料）")+(a.live?"・即時":"");sel.appendChild(o);});
   sel.dataset.filled=sig;if(labels[curCity]||curCity==="all")sel.value=curCity;else if(typeof YB!=="undefined"&&YB.ok!==null){curCity="all";sel.value="all";}}
 function applyGeo(){
+  if(geoData)fillCitySelect();
   if(!map||!mapReady||!geoData)return;
-  fillCitySelect();
   const c=(geoData.cities||{})[curCity]||{};
   map.getSource("parking").setData({type:"FeatureCollection",features:(c.parking||[]).map(p=>({type:"Feature",geometry:{type:"Point",coordinates:[p[0],p[1]]},properties:{total:p[3],color:parkColor(p[2]/p[3]),label:`${esc(p[4])}<br>剩 ${p[2]} / ${p[3]} 位`}}))});
   map.getSource("bikes").setData({type:"FeatureCollection",features:(c.bikes||[]).map(b=>({type:"Feature",geometry:{type:"Point",coordinates:[b[0],b[1]]},properties:{rent:b[2],label:`${esc(b[4])}<br>可借 ${b[2]} / ${b[3]}`}}))});
@@ -1249,6 +1249,7 @@ new MutationObserver(()=>{if(document.body.dataset.tab==="live")ybFetch();}).obs
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)ybFetch();});
 setInterval(()=>ybFetch(),30e3);
 setTimeout(()=>ybFetch(),1500);
+loadGeo();  // 地圖程式還沒載好也先拿資料，縣市選單和脈搏表不用等地圖
 document.querySelectorAll(".panel.cap").forEach(p=>{const b=document.createElement("button");b.className="more";b.textContent="展開";b.addEventListener("click",()=>{p.classList.toggle("open");b.textContent=p.classList.contains("open")?"收合":"展開";});p.insertBefore(b,p.querySelector(".pf"));});
 /* ================= 情報版 D：今日訊號＋四個問題帶 ================= */
 const IB=(()=>{
