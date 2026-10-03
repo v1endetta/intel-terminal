@@ -1,0 +1,544 @@
+{
+ "mc/robots.txt": {
+  "url": "https://www.marieclaire.com.tw/robots.txt",
+  "status": 200,
+  "bytes": 1025,
+  "ct": "text/plain",
+  "server": "nginx/1.21.4",
+  "head": "User-agent: *\n\nDisallow: /preview/\nDisallow: /admin/\nDisallow: /ap/\nDisallow: /etc/\nDisallow: /tmp/\nDisallow: /ADdemo/\nDisallow: /channel/demo_view/\nDisallow: /mobile/\nDisallow: /talk/view/\nDisallow: /slide_content/\nDisallow: /slide/\nDisallow: /slice/\nDisallow: /share/\nDisallow: /share/fb/\nDisallow: /insight/\nDisallow: /ajax/\nDisallow: /api/\nDisallow: /tags/\nDisallow: /search/\n\nUser-agent: facebookexternalhit\nAllow: /\n\nUser-agent: Facebot\nAllow: /\n\nUser-agent: meta-externalagent\nAllow: /\n\nUser-agent: GPTBot\nAllow: /\nDisallow: /admin/\nDisallow: /preview/\nDisallow: /ap/\n\nUser-agent: ChatGPT-User\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\nDisallow: /admin/\nDisallow: /preview/\n\nUser-agent: anthropic-ai\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nUser-agent: Google-Extended\nAllow: /\nDisallow: /admin/\nDisallow: /preview/\n\nUser-agent: CCBot\nAllow: /\n\nUser-agent: Diffbot\nAllow: /\n\nUser-agent: Amazonbot\nAllow: /\n\nSitemap: https://www.marieclaire.com.tw/sitemap.xml\nSitemap: https://www.marieclaire.com.tw/google-news.xml",
+  "feeds": []
+ },
+ "mc/rss": {
+  "url": "https://www.marieclaire.com.tw/rss",
+  "status": 404,
+  "bytes": 21848,
+  "ct": "text/html; charset=UTF-8",
+  "server": "nginx/1.21.4",
+  "head": "<!DOCTYPE html>\n<html lang=\"zh-TW\">\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=6\" />\n<title>Marie Claire 美麗佳人</title>\n<meta name=\"description\" content=\"\" />\n<link rel=\"canonical\" href=\"\">\n<meta name=\"robots\" content=\"max-snippet:-1,max-image-preview:large\">\n<meta name=\"msvalidate.01\" content=\"9EDDA5AD89E07F6D078D391E26B8E7EB\" />\n<link rel=\"alterna",
+  "feeds": [
+   "https://member.marieclaire.com.tw/edm/add?from=https://www.marieclaire.com.tw/rss"
+  ]
+ },
+ "mc/feed": {
+  "url": "https://www.marieclaire.com.tw/feed",
+  "status": 404,
+  "bytes": 21850,
+  "ct": "text/html; charset=UTF-8",
+  "server": "nginx/1.21.4",
+  "head": "<!DOCTYPE html>\n<html lang=\"zh-TW\">\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=6\" />\n<title>Marie Claire 美麗佳人</title>\n<meta name=\"description\" content=\"\" />\n<link rel=\"canonical\" href=\"\">\n<meta name=\"robots\" content=\"max-snippet:-1,max-image-preview:large\">\n<meta name=\"msvalidate.01\" content=\"9EDDA5AD89E07F6D078D391E26B8E7EB\" />\n<link rel=\"alterna",
+  "feeds": [
+   "https://member.marieclaire.com.tw/edm/add?from=https://www.marieclaire.com.tw/feed"
+  ]
+ },
+ "mc/rss.xml": {
+  "url": "https://www.marieclaire.com.tw/rss.xml",
+  "status": 404,
+  "bytes": 21856,
+  "ct": "text/html; charset=UTF-8",
+  "server": "nginx/1.21.4",
+  "head": "<!DOCTYPE html>\n<html lang=\"zh-TW\">\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=6\" />\n<title>Marie Claire 美麗佳人</title>\n<meta name=\"description\" content=\"\" />\n<link rel=\"canonical\" href=\"\">\n<meta name=\"robots\" content=\"max-snippet:-1,max-image-preview:large\">\n<meta name=\"msvalidate.01\" content=\"9EDDA5AD89E07F6D078D391E26B8E7EB\" />\n<link rel=\"alterna",
+  "feeds": [
+   "https://member.marieclaire.com.tw/edm/add?from=https://www.marieclaire.com.tw/rss.xml"
+  ]
+ },
+ "mc/feed/rss": {
+  "url": "https://www.marieclaire.com.tw/feed/rss",
+  "status": 404,
+  "bytes": 17481,
+  "ct": "text/html; charset=UTF-8",
+  "server": "nginx/1.21.4",
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=6\" /><title>Marie Claire 美麗佳人</title><meta name=\"description\" content=\"\" /><link rel=\"canonical\" href=\"\"><meta name=\"robots\" content=\"max-snippet:-1,max-image-preview:large\"><meta name=\"msvalidate.01\" content=\"9EDDA5AD89E07F6D078D391E26B8E7EB\" /><link rel=\"alternate\" type=\"a",
+  "feeds": [
+   "https://member.marieclaire.com.tw/edm/add?from=https://www.marieclaire.com.tw/feed/rss"
+  ]
+ },
+ "mc/sitemap.xml": {
+  "url": "https://www.marieclaire.com.tw/sitemap.xml",
+  "status": 200,
+  "bytes": 1302,
+  "ct": "text/xml; charset=UTF-8",
+  "server": "nginx/1.21.4",
+  "head": "<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n            <sitemap>\n            <loc>https://www.marieclaire.com.tw/rss/sitemap/fashion</loc>\n            <lastmod>2026-10-03T11:07:59+08:00</lastmod>\n        </sitemap>\n            <sitemap>\n            <loc>https://www.marieclaire.com.tw/rss/sitemap/beauty</loc>\n            <lastmod>2026-10-03T11:07:59+08:00</lastmod>\n        </sitemap>\n            <sitemap>\n            <loc>https://www.marieclaire.com.tw/rss/sitemap/entertai",
+  "feeds": [
+   "https://www.marieclaire.com.tw/rss/sitemap/beauty",
+   "https://www.marieclaire.com.tw/rss/sitemap/community",
+   "https://www.marieclaire.com.tw/rss/sitemap/entertainment",
+   "https://www.marieclaire.com.tw/rss/sitemap/fashion",
+   "https://www.marieclaire.com.tw/rss/sitemap/lifestyle",
+   "https://www.marieclaire.com.tw/rss/sitemap/relationship",
+   "https://www.marieclaire.com.tw/rss/sitemap/video"
+  ]
+ },
+ "mc/": {
+  "url": "https://www.marieclaire.com.tw/",
+  "status": 200,
+  "bytes": 111434,
+  "ct": "text/html; charset=UTF-8",
+  "server": "nginx/1.21.4",
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=6\" /><title>Marie Claire 美麗佳人</title><meta name=\"description\" content=\"內容涵蓋流行時尚、彩妝美容、生活娛樂、名人明星、人文藝術、星座占卜、兩性愛情等，以影音、社群經營方式，提供女性養成自我風格的第一手資訊。\" /><link rel=\"canonical\" href=\"https://www.marieclaire.com.tw\"><meta name=\"robots\" content=\"max-snippet:-1,max-image-preview:large\"><me",
+  "feeds": []
+ },
+ "vogue/robots.txt": {
+  "url": "https://www.vogue.com.tw/robots.txt",
+  "status": 200,
+  "bytes": 2186,
+  "ct": "text/plain",
+  "server": "AmazonS3",
+  "head": "Sitemap: https://www.vogue.com.tw/sitemap.xml\nSitemap: https://www.vogue.com.tw/tagpages-sitemap.xml\nSitemap: https://www.vogue.com.tw/contributors-sitemap.xml\nSitemap: https://www.vogue.com.tw/bundles-sitemap.xml\nSitemap: https://www.vogue.com.tw/branded-sitemap.xml\nSitemap: https://www.vogue.com.tw/feed/sitemap/sitemap-google-news\nSitemap: https://www.vogue.com.tw/feed/rss\nSitemap: https://www.vogue.com.tw/feed/met-gala-feed/rss\n\nUser-agent: *\nDisallow: /*?\nAllow: /*?page\nAllow: /*.xml?\nAllow: /*.js\nAllow: /*.css\nAllow: /*.ico\nAllow: /verso/static\nAllow: /*.svg\nAllow: /*.png\nAllow: /*.jpg\nAllow: /*.jpeg\nAllow: /*rss?\nAllow: /*?id=\nDisallow: /auth/\nDisallow: /account/\nDisallow: /user/\nDisallow: /user-context\nDisallow: /preview/\nDisallow: /search\nDisallow: /product/\nDisallow: /cdn-cgi/\nDisallow: /services.min.js\nDisallow: /com.condenast/yv8\nDisallow: /reject-all\nDisallow: */c_limit/\n\n###\nDisallow: */image/\nDisallow: /newsletter/\nDisallow: /api/blog/*/morearticle/\n###\n\nUser-agent: AmazonAdBot\nUser-agent: FacebookExternalHit\nUser-agent: Google-InspectionTool\nUser-agent: LinkedInBot\nUser-agent: Pinterestbot\nUser-agent: Storebot-Google\nUser-agent: TikTokSpider\nUser-agent: Twitterbot\nAllow: /\n\nUser-agent: Amazonbot\nUser-agent: Applebot-Extended\nUser-agent: archive.org_bot\nUser-agent: Bravebot\nUser-agent: Brightbot 1.0\nUser-agent: Bytespider\nUser-agent: CCBot\nUser-agent: Claude-SearchBot\nUser-agent: Claude-User\nUser-agent: ClaudeBot\nUser-agent: cohere-ai\nUser-agent: cohere-training",
+  "feeds": []
+ },
+ "vogue/rss": {
+  "url": "https://www.vogue.com.tw/rss",
+  "status": 404,
+  "bytes": 421618,
+  "ct": "text/html; charset=utf-8",
+  "server": "CloudFront",
+  "head": "<!DOCTYPE html><html lang=\"zh-Hant-TW\" dir=\"ltr\"><head><title>Page Not Found | Vogue Taiwan</title><meta charSet=\"utf-8\"/><meta content=\"IE=edge\" http-equiv=\"X-UA-Compatible\"/><meta name=\"msapplication-tap-highlight\" content=\"no\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><meta name=\"author\" content=\"Condé Nast\"/><meta name=\"copyright\" content=\"Copyright (c) Condé Nast 2026\"/><meta name=\"description\" content=\"\"/><meta name=\"id\"/><meta name=\"keywords\" content=\"\"/><meta ",
+  "feeds": [
+   "/sitemap",
+   "https://www.vogue.com.tw/feed/rss",
+   "https://www.vogue.com.tw/rss"
+  ]
+ },
+ "vogue/feed": {
+  "url": "https://www.vogue.com.tw/feed",
+  "status": 404,
+  "bytes": 421625,
+  "ct": "text/html; charset=utf-8",
+  "server": "CloudFront",
+  "head": "<!DOCTYPE html><html lang=\"zh-Hant-TW\" dir=\"ltr\"><head><title>Page Not Found | Vogue Taiwan</title><meta charSet=\"utf-8\"/><meta content=\"IE=edge\" http-equiv=\"X-UA-Compatible\"/><meta name=\"msapplication-tap-highlight\" content=\"no\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><meta name=\"author\" content=\"Condé Nast\"/><meta name=\"copyright\" content=\"Copyright (c) Condé Nast 2026\"/><meta name=\"description\" content=\"\"/><meta name=\"id\"/><meta name=\"keywords\" content=\"\"/><meta ",
+  "feeds": [
+   "/sitemap",
+   "https://www.vogue.com.tw/feed",
+   "https://www.vogue.com.tw/feed/rss"
+  ]
+ },
+ "vogue/rss.xml": {
+  "url": "https://www.vogue.com.tw/rss.xml",
+  "status": 404,
+  "bytes": 421646,
+  "ct": "text/html; charset=utf-8",
+  "server": "CloudFront",
+  "head": "<!DOCTYPE html><html lang=\"zh-Hant-TW\" dir=\"ltr\"><head><title>Page Not Found | Vogue Taiwan</title><meta charSet=\"utf-8\"/><meta content=\"IE=edge\" http-equiv=\"X-UA-Compatible\"/><meta name=\"msapplication-tap-highlight\" content=\"no\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><meta name=\"author\" content=\"Condé Nast\"/><meta name=\"copyright\" content=\"Copyright (c) Condé Nast 2026\"/><meta name=\"description\" content=\"\"/><meta name=\"id\"/><meta name=\"keywords\" content=\"\"/><meta ",
+  "feeds": [
+   "/sitemap",
+   "https://www.vogue.com.tw/feed/rss",
+   "https://www.vogue.com.tw/rss.xml"
+  ]
+ },
+ "vogue/feed/rss": {
+  "url": "https://www.vogue.com.tw/feed/rss",
+  "status": 200,
+  "bytes": 31943,
+  "ct": "application/xml",
+  "server": "CloudFront",
+  "head": "<?xml version=\"1.0\" encoding=\"utf-8\"?><rss xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:media=\"http://search.yahoo.com/mrss/\" version=\"2.0\"><channel><title>Vogue Taiwan</title><description>The latest from www.vogue.com.tw</description><link>https://www.vogue.com.tw</link><atom:link href=\"https://www.vogue.com.tw/feed/rss\" rel=\"self\" type=\"application/atom+xml\"/><copyright>© Condé Nast 2026</copyright><language>en-US</language><lastBuildDate>Sat, 03 O",
+  "feeds": [
+   "https://www.vogue.com.tw/feed/rss"
+  ]
+ },
+ "vogue/sitemap.xml": {
+  "url": "https://www.vogue.com.tw/sitemap.xml",
+  "status": 200,
+  "bytes": 8401,
+  "ct": "text/xml; charset=utf-8",
+  "server": null,
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <sitemap>\n    <loc>https://www.vogue.com.tw/sitemap-2026-10.xml</loc>\n    <lastmod>2026-10-03T19:43:01.674+08:00</lastmod>\n  </sitemap>\n  <sitemap>\n    <loc>https://www.vogue.com.tw/sitemap-2026-09.xml</loc>\n    <lastmod>2026-09-30T18:51:21.582+08:00</lastmod>\n  </sitemap>\n  <sitemap>\n    <loc>https://www.vogue.com.tw/sitemap-2026-08.xml</loc>\n    <lastmod>2026-08-31T23:34:09.351+08:00</la",
+  "feeds": [
+   "https://www.vogue.com.tw/sitemap-2021-11.xml",
+   "https://www.vogue.com.tw/sitemap-2021-12.xml",
+   "https://www.vogue.com.tw/sitemap-2022-01.xml",
+   "https://www.vogue.com.tw/sitemap-2022-02.xml",
+   "https://www.vogue.com.tw/sitemap-2022-03.xml",
+   "https://www.vogue.com.tw/sitemap-2022-04.xml",
+   "https://www.vogue.com.tw/sitemap-2022-05.xml",
+   "https://www.vogue.com.tw/sitemap-2022-06.xml",
+   "https://www.vogue.com.tw/sitemap-2022-07.xml",
+   "https://www.vogue.com.tw/sitemap-2022-08.xml",
+   "https://www.vogue.com.tw/sitemap-2022-09.xml",
+   "https://www.vogue.com.tw/sitemap-2022-10.xml",
+   "https://www.vogue.com.tw/sitemap-2022-11.xml",
+   "https://www.vogue.com.tw/sitemap-2022-12.xml",
+   "https://www.vogue.com.tw/sitemap-2023-01.xml"
+  ]
+ },
+ "vogue/": {
+  "url": "https://www.vogue.com.tw/",
+  "status": 200,
+  "bytes": 1227071,
+  "ct": "text/html; charset=utf-8",
+  "server": "CloudFront",
+  "head": "<!DOCTYPE html><html lang=\"zh-Hant-TW\" dir=\"ltr\"><head><title>Vogue Taiwan</title><meta charSet=\"utf-8\"/><meta content=\"IE=edge\" http-equiv=\"X-UA-Compatible\"/><meta name=\"msapplication-tap-highlight\" content=\"no\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><meta name=\"author\" content=\"Condé Nast\"/><meta name=\"copyright\" content=\"Copyright (c) Condé Nast 2026\"/><meta name=\"description\" content=\"關於時尚，VOGUE說了算！台灣第一名的美妝時尚網站，最新的時尚新聞、美容新知、珠寶腕錶、明星穿搭、旅遊展覽、美食餐廳、星座運勢、娛樂新聞,時尚影音都在V",
+  "feeds": [
+   "/sitemap",
+   "https://www.vogue.com.tw/feed/rss"
+  ]
+ },
+ "elle/robots.txt": {
+  "url": "https://www.elle.com/tw/robots.txt",
+  "status": 404,
+  "bytes": 84,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "Static assets must served by the /_assets route or allowed by the site configuration",
+  "feeds": []
+ },
+ "elle/rss": {
+  "url": "https://www.elle.com/tw/rss",
+  "status": 404,
+  "bytes": 178456,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\" data-next-head/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" data-next-head/><meta name=\"X-UA-Compatible\" http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" data-next-head/><meta name=\"msapplication-tap-highlight\" content=\"no\" data-next-head/><title data-next-head>404 | ELLE</title><meta name=\"title\" content=\"404 | ELLE\" data-next-head/><meta name=\"keywords\" content data-next-head/><meta property=\"og:type\" content",
+  "feeds": [
+   "/tw/rss/all.xml"
+  ]
+ },
+ "elle/feed": {
+  "url": "https://www.elle.com/tw/feed",
+  "status": 404,
+  "bytes": 178456,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\" data-next-head/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" data-next-head/><meta name=\"X-UA-Compatible\" http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" data-next-head/><meta name=\"msapplication-tap-highlight\" content=\"no\" data-next-head/><title data-next-head>404 | ELLE</title><meta name=\"title\" content=\"404 | ELLE\" data-next-head/><meta name=\"keywords\" content data-next-head/><meta property=\"og:type\" content",
+  "feeds": [
+   "/tw/rss/all.xml"
+  ]
+ },
+ "elle/rss.xml": {
+  "url": "https://www.elle.com/tw/rss.xml",
+  "status": 404,
+  "bytes": 26,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "XML assets are not allowed",
+  "feeds": []
+ },
+ "elle/feed/rss": {
+  "url": "https://www.elle.com/tw/feed/rss",
+  "status": 404,
+  "bytes": 178456,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\" data-next-head/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" data-next-head/><meta name=\"X-UA-Compatible\" http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" data-next-head/><meta name=\"msapplication-tap-highlight\" content=\"no\" data-next-head/><title data-next-head>404 | ELLE</title><meta name=\"title\" content=\"404 | ELLE\" data-next-head/><meta name=\"keywords\" content data-next-head/><meta property=\"og:type\" content",
+  "feeds": [
+   "/tw/rss/all.xml"
+  ]
+ },
+ "elle/sitemap.xml": {
+  "url": "https://www.elle.com/tw/sitemap.xml",
+  "status": 404,
+  "bytes": 26,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "XML assets are not allowed",
+  "feeds": []
+ },
+ "elle/": {
+  "url": "https://www.elle.com/tw/",
+  "status": 200,
+  "bytes": 556484,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\" data-next-head/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" data-next-head/><meta name=\"X-UA-Compatible\" http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" data-next-head/><link rel=\"canonical\" href=\"https://www.elle.com/tw/\" data-next-head/><meta name=\"msapplication-tap-highlight\" content=\"no\" data-next-head/><title data-next-head>ELLE Taiwan</title><meta name=\"title\" content=\"ELLE Taiwan\" data-next-head/><meta ",
+  "feeds": [
+   "/tw/rss/all.xml",
+   "/tw/rss/default.xml"
+  ]
+ },
+ "bazaar/robots.txt": {
+  "url": "https://www.harpersbazaar.com/tw/robots.txt",
+  "status": 404,
+  "bytes": 84,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "Static assets must served by the /_assets route or allowed by the site configuration",
+  "feeds": []
+ },
+ "bazaar/rss": {
+  "url": "https://www.harpersbazaar.com/tw/rss",
+  "status": 404,
+  "bytes": 180974,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\" data-next-head/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" data-next-head/><meta name=\"X-UA-Compatible\" http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" data-next-head/><meta name=\"msapplication-tap-highlight\" content=\"no\" data-next-head/><title data-next-head>404 | Harper's BAZAAR</title><meta name=\"title\" content=\"404 | Harper's BAZAAR\" data-next-head/><meta name=\"keywords\" content data-next-head/><meta prop",
+  "feeds": [
+   "/tw/rss/all.xml",
+   "/tw/sitemap/"
+  ]
+ },
+ "bazaar/feed": {
+  "url": "https://www.harpersbazaar.com/tw/feed",
+  "status": 404,
+  "bytes": 180974,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\" data-next-head/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" data-next-head/><meta name=\"X-UA-Compatible\" http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" data-next-head/><meta name=\"msapplication-tap-highlight\" content=\"no\" data-next-head/><title data-next-head>404 | Harper's BAZAAR</title><meta name=\"title\" content=\"404 | Harper's BAZAAR\" data-next-head/><meta name=\"keywords\" content data-next-head/><meta prop",
+  "feeds": [
+   "/tw/rss/all.xml",
+   "/tw/sitemap/"
+  ]
+ },
+ "bazaar/rss.xml": {
+  "url": "https://www.harpersbazaar.com/tw/rss.xml",
+  "status": 404,
+  "bytes": 26,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "XML assets are not allowed",
+  "feeds": []
+ },
+ "bazaar/feed/rss": {
+  "url": "https://www.harpersbazaar.com/tw/feed/rss",
+  "status": 404,
+  "bytes": 180974,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\" data-next-head/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" data-next-head/><meta name=\"X-UA-Compatible\" http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" data-next-head/><meta name=\"msapplication-tap-highlight\" content=\"no\" data-next-head/><title data-next-head>404 | Harper's BAZAAR</title><meta name=\"title\" content=\"404 | Harper's BAZAAR\" data-next-head/><meta name=\"keywords\" content data-next-head/><meta prop",
+  "feeds": [
+   "/tw/rss/all.xml",
+   "/tw/sitemap/"
+  ]
+ },
+ "bazaar/sitemap.xml": {
+  "url": "https://www.harpersbazaar.com/tw/sitemap.xml",
+  "status": 404,
+  "bytes": 26,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "XML assets are not allowed",
+  "feeds": []
+ },
+ "bazaar/": {
+  "url": "https://www.harpersbazaar.com/tw/",
+  "status": 200,
+  "bytes": 520989,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\" data-next-head/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" data-next-head/><meta name=\"X-UA-Compatible\" http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" data-next-head/><link rel=\"canonical\" href=\"https://www.harpersbazaar.com/tw/\" data-next-head/><meta name=\"msapplication-tap-highlight\" content=\"no\" data-next-head/><title data-next-head>哈潑時尚 Harper's Bazaar TW </title><meta name=\"title\" content=\"哈潑時尚 Harper's",
+  "feeds": [
+   "/tw/rss/all.xml",
+   "/tw/rss/default.xml",
+   "/tw/sitemap/"
+  ]
+ },
+ "gq/robots.txt": {
+  "url": "https://www.gq.com.tw/robots.txt",
+  "status": 200,
+  "bytes": 2150,
+  "ct": "text/plain",
+  "server": "cloudflare",
+  "head": "Sitemap: https://www.gq.com.tw/sitemap.xml\nSitemap: https://www.gq.com.tw/tagpages-sitemap.xml\nSitemap: https://www.gq.com.tw/contributors-sitemap.xml\nSitemap: https://www.gq.com.tw/bundles-sitemap.xml\nSitemap: https://www.gq.com.tw/branded-sitemap.xml\nSitemap: https://www.gq.com.tw/feed/sitemap/sitemap-google-news\nSitemap: https://www.gq.com.tw/feed/rss\nSitemap: https://www.gq.com.tw/feed/met-gala-feed/rss\n\nUser-agent: *\nDisallow: /*?\nAllow: /*?page\nAllow: /*.xml?\nAllow: /*.js\nAllow: /*.css\nAllow: /*.ico\nAllow: /verso/static\nAllow: /*.svg\nAllow: /*.png\nAllow: /*.jpg\nAllow: /*.jpeg\nAllow: /*rss?\nAllow: /*?id=\nDisallow: /auth/\nDisallow: /account/\nDisallow: /user/\nDisallow: /user-context\nDisallow: /preview/\nDisallow: /search\nDisallow: /product/\nDisallow: /cdn-cgi/\nDisallow: /services.min.js\nDisallow: /com.condenast/yv8\nDisallow: /reject-all\nDisallow: */c_limit/\n\n###\nDisallow: */image/\nDisallow: /newsletter/\nDisallow: *xiaohaole.c\n###\n\nUser-agent: AmazonAdBot\nUser-agent: FacebookExternalHit\nUser-agent: Google-InspectionTool\nUser-agent: LinkedInBot\nUser-agent: Pinterestbot\nUser-agent: Storebot-Google\nUser-agent: TikTokSpider\nUser-agent: Twitterbot\nAllow: /\n\nUser-agent: Amazonbot\nUser-agent: Applebot-Extended\nUser-agent: archive.org_bot\nUser-agent: Bravebot\nUser-agent: Brightbot 1.0\nUser-agent: Bytespider\nUser-agent: CCBot\nUser-agent: Claude-SearchBot\nUser-agent: Claude-User\nUser-agent: ClaudeBot\nUser-agent: cohere-ai\nUser-agent: cohere-training-data-crawler\nUser-agent: Diffbot\nUs",
+  "feeds": []
+ },
+ "gq/rss": {
+  "url": "https://www.gq.com.tw/rss",
+  "status": 403,
+  "bytes": 5669,
+  "ct": "text/html; charset=UTF-8",
+  "server": "cloudflare",
+  "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-3bI5bGsYl2MP5FN0cfnteV&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-s",
+  "feeds": []
+ },
+ "gq/feed": {
+  "url": "https://www.gq.com.tw/feed",
+  "status": 403,
+  "bytes": 5672,
+  "ct": "text/html; charset=UTF-8",
+  "server": "cloudflare",
+  "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-NcwL45ROSIlvB8zU36N4iP&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-s",
+  "feeds": []
+ },
+ "gq/rss.xml": {
+  "url": "https://www.gq.com.tw/rss.xml",
+  "status": 403,
+  "bytes": 5702,
+  "ct": "text/html; charset=UTF-8",
+  "server": "cloudflare",
+  "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-7tpURUonlFkEA6vtKkkIOE&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-s",
+  "feeds": []
+ },
+ "gq/feed/rss": {
+  "url": "https://www.gq.com.tw/feed/rss",
+  "status": 403,
+  "bytes": 5705,
+  "ct": "text/html; charset=UTF-8",
+  "server": "cloudflare",
+  "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-qQq3gdqB1PIgyZy9zrrXTV&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-s",
+  "feeds": []
+ },
+ "gq/sitemap.xml": {
+  "url": "https://www.gq.com.tw/sitemap.xml",
+  "status": 403,
+  "bytes": 5714,
+  "ct": "text/html; charset=UTF-8",
+  "server": "cloudflare",
+  "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-6fso0snA7FRe6HplCnBls0&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-s",
+  "feeds": []
+ },
+ "gq/": {
+  "url": "https://www.gq.com.tw/",
+  "status": 403,
+  "bytes": 5660,
+  "ct": "text/html; charset=UTF-8",
+  "server": "cloudflare",
+  "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-InTY2UYppVQiXYBtzlfSaO&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-s",
+  "feeds": []
+ },
+ "cosmo/robots.txt": {
+  "url": "https://www.cosmopolitan.com/tw/robots.txt",
+  "status": 200,
+  "bytes": 3038,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta\n      http-equiv=\"Content-Security-Policy\"\n      content=\"default-src 'self'; img-src 'self' data:; media-src 'self' data:; object-src 'none'; style-src 'self' 'sha256-o4vzfmmUENEg4chMjjRP9EuW9ucGnGIGVdbl8d0SHQQ='; script-src 'self' 'sha256-a9bHdQGvRzDwDVzx8m+Rzw+0FHZad8L0zjtBwkxOIz4=';\"\n    />\n    <link\n      href=\"/_fs-ch-1T1wmsGaOgGaSxcX/assets/inter-var.woff2\"\n      rel=\"preload\"\n      as=\"font\"\n      type=\"font/woff2\"\n      crossorigin\n    />\n    <link href=\"/_fs-ch-1T1wmsGaOgGaSxcX/assets/styles.css\" rel=\"stylesheet\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>Client Challenge</title>\n    <style>\n      #loading-error {\n        font-size: 16px;\n        font-family: 'Inter', sans-serif;\n        margin-top: 10px;\n        margin-left: 10px;\n        display: none;\n      }\n    </style>\n  </head>\n  <body>\n    <noscript>\n      <div class=\"noscript-container\">\n        <div class=\"noscript-content\">\n          <img\n            src=\"/_fs-ch-1T1wmsGaOgGaSxcX/assets/errorIcon.svg\"\n            alt=\"\"\n            role=\"presentation\"\n            class=\"error-icon\"\n          />\n          <span class=\"noscript-span\"\n            >JavaScript is disabled in your browser.</span\n          >\n          <p>Please enable JavaScript to proceed.</p>\n        </div>\n      </div>\n    </noscript>\n    <div id=\"loading-error\" role=\"alert\" aria-live=\"polite\">\n      A required part of this site couldn’t load. Th",
+  "feeds": []
+ },
+ "cosmo/rss": {
+  "url": "https://www.cosmopolitan.com/tw/rss",
+  "status": 200,
+  "bytes": 3038,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta\n      http-equiv=\"Content-Security-Policy\"\n      content=\"default-src 'self'; img-src 'self' data:; media-src 'self' data:; object-src 'none'; style-src 'self' 'sha256-o4vzfmmUENEg4chMjjRP9EuW9ucGnGIGVdbl8d0SHQQ='; script-src 'self' 'sha256-a9bHdQGvRzDwDVzx8m+Rzw+0FHZad8L0zjtBwkxOIz4=';\"\n    />\n    <link\n      href=\"/_fs-ch-1T1wmsGaOgGaSxcX/assets/inter-var.woff2\"\n      rel=\"preload\"\n      as=\"font\"\n      type=\"font/woff2\"\n      crossorigin\n   ",
+  "feeds": []
+ },
+ "cosmo/feed": {
+  "url": "https://www.cosmopolitan.com/tw/feed",
+  "status": 200,
+  "bytes": 3038,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta\n      http-equiv=\"Content-Security-Policy\"\n      content=\"default-src 'self'; img-src 'self' data:; media-src 'self' data:; object-src 'none'; style-src 'self' 'sha256-o4vzfmmUENEg4chMjjRP9EuW9ucGnGIGVdbl8d0SHQQ='; script-src 'self' 'sha256-a9bHdQGvRzDwDVzx8m+Rzw+0FHZad8L0zjtBwkxOIz4=';\"\n    />\n    <link\n      href=\"/_fs-ch-1T1wmsGaOgGaSxcX/assets/inter-var.woff2\"\n      rel=\"preload\"\n      as=\"font\"\n      type=\"font/woff2\"\n      crossorigin\n   ",
+  "feeds": []
+ },
+ "cosmo/rss.xml": {
+  "url": "https://www.cosmopolitan.com/tw/rss.xml",
+  "status": 200,
+  "bytes": 3038,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta\n      http-equiv=\"Content-Security-Policy\"\n      content=\"default-src 'self'; img-src 'self' data:; media-src 'self' data:; object-src 'none'; style-src 'self' 'sha256-o4vzfmmUENEg4chMjjRP9EuW9ucGnGIGVdbl8d0SHQQ='; script-src 'self' 'sha256-a9bHdQGvRzDwDVzx8m+Rzw+0FHZad8L0zjtBwkxOIz4=';\"\n    />\n    <link\n      href=\"/_fs-ch-1T1wmsGaOgGaSxcX/assets/inter-var.woff2\"\n      rel=\"preload\"\n      as=\"font\"\n      type=\"font/woff2\"\n      crossorigin\n   ",
+  "feeds": []
+ },
+ "cosmo/feed/rss": {
+  "url": "https://www.cosmopolitan.com/tw/feed/rss",
+  "status": 200,
+  "bytes": 3038,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta\n      http-equiv=\"Content-Security-Policy\"\n      content=\"default-src 'self'; img-src 'self' data:; media-src 'self' data:; object-src 'none'; style-src 'self' 'sha256-o4vzfmmUENEg4chMjjRP9EuW9ucGnGIGVdbl8d0SHQQ='; script-src 'self' 'sha256-a9bHdQGvRzDwDVzx8m+Rzw+0FHZad8L0zjtBwkxOIz4=';\"\n    />\n    <link\n      href=\"/_fs-ch-1T1wmsGaOgGaSxcX/assets/inter-var.woff2\"\n      rel=\"preload\"\n      as=\"font\"\n      type=\"font/woff2\"\n      crossorigin\n   ",
+  "feeds": []
+ },
+ "cosmo/sitemap.xml": {
+  "url": "https://www.cosmopolitan.com/tw/sitemap.xml",
+  "status": 200,
+  "bytes": 3038,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta\n      http-equiv=\"Content-Security-Policy\"\n      content=\"default-src 'self'; img-src 'self' data:; media-src 'self' data:; object-src 'none'; style-src 'self' 'sha256-o4vzfmmUENEg4chMjjRP9EuW9ucGnGIGVdbl8d0SHQQ='; script-src 'self' 'sha256-a9bHdQGvRzDwDVzx8m+Rzw+0FHZad8L0zjtBwkxOIz4=';\"\n    />\n    <link\n      href=\"/_fs-ch-1T1wmsGaOgGaSxcX/assets/inter-var.woff2\"\n      rel=\"preload\"\n      as=\"font\"\n      type=\"font/woff2\"\n      crossorigin\n   ",
+  "feeds": []
+ },
+ "cosmo/": {
+  "url": "https://www.cosmopolitan.com/tw/",
+  "status": 200,
+  "bytes": 517333,
+  "ct": "text/html; charset=utf-8",
+  "server": null,
+  "head": "<!DOCTYPE html><html lang=\"zh-TW\"><head><meta charset=\"utf-8\" data-next-head/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" data-next-head/><meta name=\"X-UA-Compatible\" http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" data-next-head/><link rel=\"canonical\" href=\"https://www.cosmopolitan.com/tw/\" data-next-head/><meta name=\"msapplication-tap-highlight\" content=\"no\" data-next-head/><title data-next-head>柯夢波丹COSMOPOLITAN 全球最懂女性美妝媒體：美妝趨勢、時尚穿搭、星座占卜與生活風格指南</title><meta name=\"title",
+  "feeds": [
+   "/tw/rss/all.xml",
+   "/tw/rss/default.xml",
+   "/tw/sitemap/"
+  ]
+ },
+ "wwd/robots.txt": {
+  "url": "https://wwd.com/robots.txt",
+  "status": 200,
+  "bytes": 1675,
+  "ct": "text/plain; charset=utf-8",
+  "server": "nginx",
+  "head": "User-agent: *\nDisallow: /account/\nDisallow: /wp-json/wwd/v1/login/\nSitemap: https://wwd.com/sitemap_index.xml\nSitemap: https://wwd.com/news-sitemap.xml\nUser-agent: *\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\nDisallow: /?s=\nDisallow: /*/?s=\nDisallow: /search/\nDisallow: /search?\nDisallow: *?v02\nDisallow: *?replytocom\nDisallow: /*preview=true\nDisallow: /*theme_preview=true\n\nUser-agent: anthropic-ai\nAllow: /shop/\nDisallow: /\n\nUser-agent: cohere-ai\nAllow: /shop/\nDisallow: /\n\nUser-agent: omgili\nAllow: /shop/\nDisallow: /\n\nUser-agent: omgilibot\nAllow: /shop/\nDisallow: /\n\nUser-agent: Applebot-Extended\nAllow: /shop/\nDisallow: /\n\nUser-agent: Bytespider\nAllow: /shop/\nDisallow: /\n\nUser-agent: CCBot\nAllow: /shop/\nDisallow: /\n\nUser-agent: ChatGPT-User\nAllow: /shop/\nDisallow: /\n\nUser-agent: ChatGPT\nAllow: /shop/\nDisallow: /\n\nUser-agent: DeepSeek\nAllow: /shop/\nDisallow: /\n\nUser-agent: DeepSeekBot\nAllow: /shop/\nDisallow: /\n\nUser-agent: GPTBot\nAllow: /shop/\nDisallow: /\n\nUser-agent: OAI-SearchBot\nAllow: /shop/\nDisallow: /\n\nUser-agent: ClaudeBot\nAllow: /shop/\nDisallow: /\n\nUser-agent: Claude-Web\nAllow: /shop/\nDisallow: /\n\nUser-agent: Diffbot\nAllow: /shop/\nDisallow: /\n\nUser-agent: FacebookBot\nAllow: /shop/\nDisallow: /\n\nUser-agent: Google-Extended\nAllow: /shop/\nDisallow: /\n\nUser-agent: Meta-ExternalAgent\nAllow: /shop/\nDisallow: /\n\nUser-agent: Meta-ExternalFetcher\nAllow: /shop/\nDisallow: /\n\nUser-agent: PerplexityBot\nAllow: /shop/\nDisallow: /\n\nUser-agent: Timpibot\nAllow: /shop/\nDisallow: /\n",
+  "feeds": []
+ },
+ "wwd/rss": {
+  "url": "https://wwd.com/feed/",
+  "status": 200,
+  "bytes": 11585,
+  "ct": "application/rss+xml; charset=UTF-8",
+  "server": "nginx",
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentAPI/\"\n\txmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n\txmlns:atom=\"http://www.w3.org/2005/Atom\"\n\txmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\n\txmlns:slash=\"http://purl.org/rss/1.0/modules/slash/\"\n\t>\n\n<channel>\n\t<title>WWD</title>\n\t<atom:link href=\"https://wwd.com/feed/\" rel=\"self\" type=\"application/rss+xml\" />\n\t<link>https://wwd.co",
+  "feeds": [
+   "https://wwd.com/feed/"
+  ]
+ },
+ "wwd/feed": {
+  "url": "https://wwd.com/feed/",
+  "status": 200,
+  "bytes": 11585,
+  "ct": "application/rss+xml; charset=UTF-8",
+  "server": "nginx",
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentAPI/\"\n\txmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n\txmlns:atom=\"http://www.w3.org/2005/Atom\"\n\txmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\n\txmlns:slash=\"http://purl.org/rss/1.0/modules/slash/\"\n\t>\n\n<channel>\n\t<title>WWD</title>\n\t<atom:link href=\"https://wwd.com/feed/\" rel=\"self\" type=\"application/rss+xml\" />\n\t<link>https://wwd.co",
+  "feeds": [
+   "https://wwd.com/feed/"
+  ]
+ },
+ "wwd/rss.xml": {
+  "url": "https://wwd.com/rss.xml",
+  "status": 404,
+  "bytes": 546647,
+  "ct": "text/html; charset=UTF-8",
+  "server": "nginx",
+  "head": "<!DOCTYPE html>\n<!--[if IE 6]>\n<html id=\"ie6\" lang=\"en-US\">\n<![endif]-->\n<!--[if IE 7]>\n<html id=\"ie7\" lang=\"en-US\">\n<![endif]-->\n<!--[if IE 8]>\n<html id=\"ie8\" lang=\"en-US\">\n<![endif]-->\n<!--[if !(IE 6) | !(IE 7) | !(IE 8) ]><!-->\n<html lang=\"en-US\">\n<!--<![endif]-->\n<head>\n\t<meta charset=\"UTF-8\"/>\n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n\t<meta name=\"theme-color\" content=\"#ffffff\">\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\t\n<!-- Add to home ",
+  "feeds": [
+   "https://wwd.com/feed/rss/"
+  ]
+ },
+ "wwd/feed/rss": {
+  "url": "https://wwd.com/feed/",
+  "status": 200,
+  "bytes": 11585,
+  "ct": "application/rss+xml; charset=UTF-8",
+  "server": "nginx",
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\txmlns:wfw=\"http://wellformedweb.org/CommentAPI/\"\n\txmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n\txmlns:atom=\"http://www.w3.org/2005/Atom\"\n\txmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\n\txmlns:slash=\"http://purl.org/rss/1.0/modules/slash/\"\n\t>\n\n<channel>\n\t<title>WWD</title>\n\t<atom:link href=\"https://wwd.com/feed/\" rel=\"self\" type=\"application/rss+xml\" />\n\t<link>https://wwd.co",
+  "feeds": [
+   "https://wwd.com/feed/"
+  ]
+ },
+ "wwd/sitemap.xml": {
+  "url": "https://wwd.com/sitemap_index.xml/",
+  "status": 200,
+  "bytes": 118406,
+  "ct": "text/xml;charset=utf-8",
+  "server": "nginx",
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"><sitemap><loc>https://wwd.com/post-sitemap202610.xml</loc><lastmod>2026-10-02T15:06:27+00:00</lastmod></sitemap><sitemap><loc>https://wwd.com/post-sitemap202609.xml</loc><lastmod>2026-09-30T11:22:39+00:00</lastmod></sitemap><sitemap><loc>https://wwd.com/post-sitemap202608.xml</loc><lastmod>2026-08-30T09:00:00+00:00</lastmod></sitemap><sitemap><loc>https://wwd.com/post-sitemap202607.xml</loc><l",
+  "feeds": [
+   "https://wwd.com/archive-sitemap.xml",
+   "https://wwd.com/category-sitemap.xml",
+   "https://wwd.com/guest-author-sitemap.xml",
+   "https://wwd.com/page-sitemap200004.xml",
+   "https://wwd.com/page-sitemap201502.xml",
+   "https://wwd.com/page-sitemap201503.xml",
+   "https://wwd.com/page-sitemap201504.xml",
+   "https://wwd.com/page-sitemap201507.xml",
+   "https://wwd.com/page-sitemap201601.xml",
+   "https://wwd.com/page-sitemap201608.xml",
+   "https://wwd.com/page-sitemap201702.xml",
+   "https://wwd.com/page-sitemap201804.xml",
+   "https://wwd.com/page-sitemap202006.xml",
+   "https://wwd.com/page-sitemap202108.xml",
+   "https://wwd.com/page-sitemap202304.xml"
+  ]
+ },
+ "wwd/": {
+  "url": "https://wwd.com/",
+  "status": 200,
+  "bytes": 732783,
+  "ct": "text/html; charset=UTF-8",
+  "server": "nginx",
+  "head": "<!DOCTYPE html>\n<!--[if IE 6]>\n<html id=\"ie6\" lang=\"en-US\">\n<![endif]-->\n<!--[if IE 7]>\n<html id=\"ie7\" lang=\"en-US\">\n<![endif]-->\n<!--[if IE 8]>\n<html id=\"ie8\" lang=\"en-US\">\n<![endif]-->\n<!--[if !(IE 6) | !(IE 7) | !(IE 8) ]><!-->\n<html lang=\"en-US\">\n<!--<![endif]-->\n<head>\n\t<meta charset=\"UTF-8\"/>\n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\n\t<meta name=\"theme-color\" content=\"#ffffff\">\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\t\n<!-- Add to home ",
+  "feeds": [
+   "https://wwd.com/feed/rss/"
+  ]
+ }
+}
