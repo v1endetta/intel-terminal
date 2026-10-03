@@ -1095,22 +1095,75 @@ _tdx_last = 0.0
 _tdx_cache: dict = {}
 
 
+# 通行證快取放在 runner 暫存區（不在 out/ 底下，永遠不會被 commit）；整條迴圈共用一張，
+# 失敗就本輪停手＋冷卻 30 分，避免連續要 token 被 TDX 鎖住。
+_TDX_STATE = Path(os.environ.get("RUNNER_TEMP") or "/tmp") / "intel_tdx_state.json"
+_tdx_fail: str | None = None
+
+
+def _tdx_state(upd: dict | None = None) -> dict:
+    try:
+        st = json.loads(_TDX_STATE.read_text())
+    except Exception:  # noqa: BLE001
+        st = {}
+    if upd is not None:
+        st.update(upd)
+        try:
+            _TDX_STATE.write_text(json.dumps(st))
+            os.chmod(_TDX_STATE, 0o600)
+        except Exception:  # noqa: BLE001
+            pass
+    return st
+
+
+def _tdx_get_token() -> str:
+    global _tdx_token, _tdx_fail
+    if _tdx_token:
+        return _tdx_token
+    if _tdx_fail:
+        raise RuntimeError(_tdx_fail)
+    st = _tdx_state()
+    now = time.time()
+    if st.get("token") and st.get("exp", 0) > now + 600:
+        _tdx_token = st["token"]
+        return _tdx_token
+    if st.get("cool_until", 0) > now:
+        _tdx_fail = f"TDX token 冷卻中（{int((st['cool_until'] - now) / 60)} 分後重試）：{st.get('why', '')}"
+        raise RuntimeError(_tdx_fail)
+    why = ""
+    for attempt in range(2):
+        r = S.post("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+                   data={"grant_type": "client_credentials", "client_id": TDX_ID, "client_secret": TDX_SECRET}, timeout=TIMEOUT)
+        if r.ok:
+            j = r.json()
+            _tdx_token = j["access_token"]
+            _tdx_state({"token": _tdx_token, "exp": now + float(j.get("expires_in") or 3600), "cool_until": 0, "why": ""})
+            return _tdx_token
+        try:  # 只留 TDX 回的錯誤代碼與說明，不帶任何請求內容
+            j = r.json()
+            why = f"{r.status_code} {j.get('error', '')} {j.get('error_description', '')}".strip()
+        except Exception:  # noqa: BLE001
+            body = re.sub(r"<[^>]+>|\s+", " ", r.text)[:80].strip()
+            why = f"{r.status_code} {body}"
+        if r.status_code == 429 and attempt == 0:
+            time.sleep(15)
+            continue
+        break
+    _tdx_state({"cool_until": now + 1800, "why": why})
+    _tdx_fail = f"TDX token 失敗：{why}"
+    raise RuntimeError(_tdx_fail)
+
+
 def tdx(path, **params):
-    global _tdx_token
+    global _tdx_token, _tdx_last
     headers = {}
     if TDX_ID and TDX_SECRET:
-        if not _tdx_token:
-            r = S.post("https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
-                       data={"grant_type": "client_credentials", "client_id": TDX_ID, "client_secret": TDX_SECRET}, timeout=TIMEOUT)
-            r.raise_for_status()
-            _tdx_token = r.json()["access_token"]
-        headers["Authorization"] = "Bearer " + _tdx_token
+        headers["Authorization"] = "Bearer " + _tdx_get_token()
     base = TDX.replace("/v2/", "/v1/") if path.startswith("v1:") else TDX
     ck = path + json.dumps(params, sort_keys=True)
     if ck in _tdx_cache:  # 同一輪內同一端點只打一次（YouBike 可借數兩個面板共用）
         return _tdx_cache[ck]
     # TDX 對連續呼叫會回 429：每次間隔 2 秒，429 時退避重試
-    global _tdx_last
     for attempt in range(4):
         wait = max(0.0, 2.0 - (time.time() - _tdx_last))
         if wait:
@@ -1121,6 +1174,11 @@ def tdx(path, **params):
             _tdx_cache[ck] = out
             return out
         except requests.HTTPError as e:
+            if e.response is not None and e.response.status_code == 401 and attempt == 0:  # 通行證過期：換一張再試
+                _tdx_token = None
+                _tdx_state({"token": "", "exp": 0})
+                headers["Authorization"] = "Bearer " + _tdx_get_token()
+                continue
             if e.response is not None and e.response.status_code == 429:
                 if attempt < 3:
                     time.sleep(5 * (2 ** attempt))  # 5 / 10 / 20 秒；TDX 是每個來源 IP 每秒 50 次，GitHub runner 共用 IP
@@ -3587,10 +3645,15 @@ def _ndc_pmi(page):
         b = pw.chromium.launch()
         pg = b.new_page(user_agent=UA, locale="zh-TW")
         pg.goto(f"https://index.ndc.gov.tw/n/zh_tw/{page}", wait_until="networkidle", timeout=60000)
-        pg.wait_for_timeout(2500)
-        txt = pg.inner_text("body")
+        pat = r"擴張（Expansion）(?:\s*\d+\s*)*?(\d+\.\d+)\s*%"  # 刻度是整數、數值帶小數，不綁刻度數量
+        txt = ""
+        for _ in range(4):  # 圖表是 JS 晚畫的：最多等 4 次、每次 2.5 秒
+            pg.wait_for_timeout(2500)
+            txt = pg.inner_text("body")
+            if re.search(pat, txt):
+                break
         b.close()
-    head = re.search(r"擴張（Expansion）\s*(?:\d+\s*){7}(\d+\.?\d*)\s*%", txt)
+    head = re.search(pat, txt)
     orders = re.search(r"新增訂單[^\n]*\n(?:\s*\d+\s*\n){4}\s*(\d+\.?\d*)\s*%", txt)
     ym = re.search(r"(20\d\d)\n(\d{1,2})月", txt)
     chg = re.search(r"較上月變化\s*([+-]?\d+(?:\.\d+)?)\s*百分點", txt)
@@ -3612,6 +3675,9 @@ def p_supply():
             out[key]["spark"] = hist_get("supply", key, 24)
         except Exception as e:  # noqa: BLE001
             log("ndc", page, e); errs.append(f"{page}: {safe_err(e)}")
+            prev = (load_prev("supply") or {}).get(key)
+            if prev:  # 抓不到就沿用上一次的值，標成舊值，不讓數字消失
+                out[key] = {**prev, "stale": True}
     # 經濟部零售業營業額指數（分業別）→ 年增率
     try:
         r = get(RETAIL_CSV, headers={"Referer": "https://data.gov.tw/"})
