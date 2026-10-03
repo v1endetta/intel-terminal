@@ -3643,13 +3643,20 @@ def _ndc_pmi(page):
     from playwright.sync_api import sync_playwright
     with sync_playwright() as pw:
         b = pw.chromium.launch()
-        pg = b.new_page(user_agent=UA, locale="zh-TW")
-        pg.goto(f"https://index.ndc.gov.tw/n/zh_tw/{page}", wait_until="networkidle", timeout=60000)
         pat = r"擴張（Expansion）(?:\s*\d+\s*)*?(\d+\.\d+)\s*%"  # 刻度是整數、數值帶小數，不綁刻度數量
         txt = ""
-        for _ in range(4):  # 圖表是 JS 晚畫的：最多等 4 次、每次 2.5 秒
-            pg.wait_for_timeout(2500)
-            txt = pg.inner_text("body")
+        for _load in range(2):  # 圖表是 JS 晚畫的：每次載入最多等 4×2.5 秒，還沒有就整頁重載一次
+            pg = b.new_page(user_agent=UA, locale="zh-TW")
+            try:
+                pg.goto(f"https://index.ndc.gov.tw/n/zh_tw/{page}", wait_until="networkidle", timeout=60000)
+            except Exception:  # noqa: BLE001
+                pass
+            for _ in range(4):
+                pg.wait_for_timeout(2500)
+                txt = pg.inner_text("body")
+                if re.search(pat, txt):
+                    break
+            pg.close()
             if re.search(pat, txt):
                 break
         b.close()
@@ -3659,7 +3666,8 @@ def _ndc_pmi(page):
     chg = re.search(r"較上月變化\s*([+-]?\d+(?:\.\d+)?)\s*百分點", txt)
     nxt = re.search(r"下次發布日期\s*:\s*(\d{4}-\d{2}-\d{2})", txt)
     if not head:
-        raise RuntimeError(f"ndc {page} parse")
+        npct = len(re.findall(r"\d+\.\d+\s*%", txt))
+        raise RuntimeError(f"ndc {page} parse (len={len(txt)}, axis={'擴張（Expansion）' in txt}, pct={npct})")
     return {"value": float(head.group(1)), "orders": float(orders.group(1)) if orders else None,
             "period": f"{ym.group(1)}-{int(ym.group(2)):02d}" if ym else "", "chg": float(chg.group(1)) if chg else None,
             "next": nxt.group(1) if nxt else ""}
@@ -3676,6 +3684,11 @@ def p_supply():
         except Exception as e:  # noqa: BLE001
             log("ndc", page, e); errs.append(f"{page}: {safe_err(e)}")
             prev = (load_prev("supply") or {}).get(key)
+            if not prev:  # 上一輪也沒有：從歷史序列補最後一個值
+                sp = hist_get("supply", key, 24)
+                if sp:
+                    prev = {"value": sp[-1], "orders": None, "period": "", "chg": round(sp[-1] - sp[-2], 1) if len(sp) > 1 else None,
+                            "next": "", "spark": sp}
             if prev:  # 抓不到就沿用上一次的值，標成舊值，不讓數字消失
                 out[key] = {**prev, "stale": True}
     # 經濟部零售業營業額指數（分業別）→ 年增率
