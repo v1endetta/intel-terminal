@@ -1,6 +1,21 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610040732001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "南投縣",
+    "雲林縣",
+    "臺南市"
+   ],
+   "text": "天氣晴朗炎熱，今(4)日中午前後南投縣、雲林縣為橙色燈號，有連續出現36度高溫的機率，請加強注意。臺南市為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-03T23:32:14Z",
+   "exp": "2026-10-04T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610040732.cap"
+  },
+  {
    "id": "NFA_Fire_20261003223645004",
    "cat": "火災",
    "lvl": 1,
@@ -231,12 +246,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 20,
+ "n_total": 21,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/04 07:19:15"
+  "updated": "2026/10/04 07:37:14"
  },
  "errs": [],
- "updatedAt": "2026-10-03T23:19:55Z"
+ "updatedAt": "2026-10-03T23:39:32Z"
 }
