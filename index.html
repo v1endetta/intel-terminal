@@ -624,9 +624,9 @@ body[data-mkt="tw"] #p-pulse{order:1}body[data-mkt="tw"] #p-taiex{order:2}body[d
   </section>
 
   <section class="panel w12 lite" id="p-crowd">
-    <div class="ph"><h2>Crowdfunding</h2><span class="zh">集資雷達 · 爆案新聞、操盤代理商動態</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>Crowdfunding</h2><span class="zh">集資雷達 · 台灣爆案、操盤方動態、Kickstarter 熱門</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>Google News（嘖嘖、flyingV 等平台擋程式讀取，改看報導）· 依標題分流：有金額與達標字眼算爆案，平台／操盤方／年報算動態 · 已濾掉港股 IPO、創投融資等同字異義 · 近 60 天 · 每 3 小時</span></div>
+    <div class="pf"><span>Google News（嘖嘖、flyingV 等平台擋程式讀取，改看報導）· 依標題分流：有金額與達標字眼算爆案，平台／操盤方／年報算動態 · 已濾掉港股 IPO、創投融資等同字異義 · 近 60 天 · Kickstarter 熱門：Kicktraq 今日前十（排名變化）· 官方精選：Kickstarter Projects We Love 新案 · 每 3 小時</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-aiwire">
@@ -890,7 +890,12 @@ const renderers={
     body("p-tenders").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">沒有命中</div>`;setMeta("p-tenders",d,6);},
   crowd(d){const row=it=>`<li><span class="src">${esc(it.source||"")}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span>${it.amt?`<span class="m up">${esc(String(it.amt))}</span>`:""}<span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`;
     const hot=(d.hot||[]).map(row).join(""),pro=(d.pro||[]).map(row).join("");
-    body("p-crowd").innerHTML=`<div class="tp"><div><h3>爆案與達標</h3><ul class="list">${hot||'<li class="empty">近 60 天沒有相關報導</li>'}</ul></div><div><h3>操盤方與趨勢</h3><ul class="list">${pro||'<li class="empty">近 60 天沒有相關報導</li>'}</ul></div></div>`;setMeta("p-crowd",d,6);},
+    const mv=x=>x.move>0?`<span class="up">▲${x.move}</span>`:x.move<0?`<span class="bad">▼${-x.move}</span>`:x.new?`<span class="kw">新</span>`:"";
+    const kh=(d.ks_hot||[]).map(x=>`<li><span class="src">${x.rank}</span><span class="t"><a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title)}</a><span class="sub">${esc(x.cat)}</span></span><span class="m">${mv(x)}</span></li>`).join("");
+    const kc=(d.ks_cats||[]).map(([c,k])=>`${esc(c)} ${k}`).join(" · ");
+    const kp=(d.ks_pwl||[]).map(x=>`<li><span class="t"><a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title)}</a><span class="sub" style="white-space:normal">${esc(x.blurb)}</span></span><span class="m">${x.at?ago(x.at).replace(" 前",""):""}</span></li>`).join("");
+    const ks=(kh||kp)?`<div class="tp" style="margin-top:10px"><div><h3>Kickstarter 全球熱門前十${kc?`<span class="sub" style="font-weight:400"> ${kc}</span>`:""}</h3><ul class="list">${kh||'<li class="empty">這輪沒抓到</li>'}</ul></div><div><h3>Kickstarter 官方精選新案</h3><ul class="list">${kp||'<li class="empty">這輪沒抓到</li>'}</ul></div></div>`:"";
+    body("p-crowd").innerHTML=`<div class="tp"><div><h3>爆案與達標</h3><ul class="list">${hot||'<li class="empty">近 60 天沒有相關報導</li>'}</ul></div><div><h3>操盤方與趨勢</h3><ul class="list">${pro||'<li class="empty">近 60 天沒有相關報導</li>'}</ul></div></div>${ks}`;setMeta("p-crowd",d,6);},
   design(d){const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.source)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`).join("");
     body("p-design").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-design",d,6);},
   radar(d){const w=(d.watch||[]).map(c=>`<tr><td class="name">${esc(c.name)}${c.spike?' <span class="kw" style="color:var(--warn)">升溫</span>':''}<span class="sub"> ${esc(c.desc)}</span>${mini(c.spark)}${(c.news||[])[0]?`<div class="sub" style="white-space:normal;margin-top:2px"><a href="${esc(safe(c.news[0].url))}" target="_blank" rel="noopener">${esc(c.news[0].title.slice(0,80))}</a> · ${esc(c.news[0].source||"")} ${c.news[0].at?ago(c.news[0].at):""}</div>`:""}</td><td class="r num">${c.n_news7||"—"}</td><td class="r num">${c.hn_top?`<a href="${esc(safe(c.hn_top.hn))}" target="_blank" rel="noopener">${c.n_hn7}</a>`:(c.n_hn7||"—")}</td><td class="r num">${c.n_bsky1||"—"}</td></tr>`).join("");

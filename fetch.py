@@ -3827,7 +3827,7 @@ def p_brands():
 
 # ---------- 集資雷達：嘖嘖等平台擋爬，改看新聞（爆案）與操盤代理商動態 ----------
 CROWD_Q = ['嘖嘖 集資', '嘖嘖 募資', '集資 破百萬 OR 破千萬', '募資 天破百萬 OR 小時破百萬', '群眾募資 突破 OR 達標', '集資 達標',
-           'Kickstarter 台灣 募資', 'flyingV 募資', '貝殼放大', '挖貝 集資', '群眾集資 趨勢 OR 報告 OR 年報']
+           'Kickstarter 台灣 募資', 'Kickstarter 台灣團隊 OR 台灣品牌', 'flyingV 募資', '貝殼放大', '挖貝 集資', '群眾集資 趨勢 OR 報告 OR 年報']
 CROWD_MUST = re.compile(r"集資|群募|群眾募資|嘖嘖|flyingV|貝殼放大|Kickstarter|挖貝|募資平台|募資計畫|募資專案"
                         r"|募資.{0,8}(破|達標|首日|突破)", re.I)
 CROWD_NOISE = re.compile(r"港股|IPO|新股|招股|上市|ETF|彩券|樂透|創投|估值|融資|人民幣|基金|詐|股價|億美元|香港|拉皮|都更|勸募|侵占|不起訴", re.I)
@@ -3838,6 +3838,43 @@ CROWD_PRO = re.compile(r"貝殼放大|挖貝|年報|報告|數據|趨勢|產業|
 def _crowd_amt(t: str):
     m = re.search(r"\d[\d,]*(?:\.\d+)?\s*(?:億|千萬|百萬|萬)(?:美元|日圓|港元)?", t)
     return m.group(0).replace(" ", "") if m else None
+
+
+KS_PWL_FEED = "https://www.kickstarter.com/projects/feed.atom"  # 官方 Atom：Projects We Love 新案
+KICKTRAQ_HOT = "https://www.kicktraq.com/hot/"  # robots 允許、Crawl-Delay 6；每 3 小時只讀這一頁
+
+
+def _ks_hot():
+    t = get(KICKTRAQ_HOT, headers={"Referer": "https://www.kicktraq.com/"}).text
+    out = []
+    for blk in re.findall(r'<div class="listentry-mini(?: dark)?"><div class="listentry-mini rank">(.*?)<div class="clear">', t, re.S):
+        rank = re.match(r"(\d+)", blk)
+        a = re.search(r'<a href="/projects/([^"]+?)/?" title="([^"]+)"', blk)
+        if not rank or not a:
+            continue
+        mv = re.search(r"\(([+-]\d+)\)", blk)
+        cat = re.search(r'class="listentry-mini cat">(.*?)</div>', blk)
+        out.append({"rank": int(rank.group(1)), "title": html_mod.unescape(a.group(2))[:70],
+                    "url": "https://www.kickstarter.com/projects/" + a.group(1).strip("/"),
+                    "move": int(mv.group(1)) if mv else None, "new": "title=\"new\"" in blk and not mv,
+                    "cat": html_mod.unescape(cat.group(1)).replace(" > ", "／") if cat else ""})
+    return out[:10]
+
+
+def _ks_pwl():
+    root = ET.fromstring(get(KS_PWL_FEED).content)
+    ns = {"a": "http://www.w3.org/2005/Atom"}
+    out = []
+    for e in root.findall("a:entry", ns):
+        title = (e.findtext("a:title", "", ns) or "").strip()
+        title = re.split(r" by ", title)[0][:70]
+        link = e.find("a:link", ns)
+        body = html_mod.unescape(e.findtext("a:content", "", ns) or "")
+        blurb = re.sub(r"<[^>]+>", " ", body.split("<br />")[-1] if "<br />" in body else body)
+        out.append({"title": title, "url": link.get("href") if link is not None else "", "blurb": re.sub(r"\s+", " ", blurb).strip()[:110],
+                    "at": _rss_date(e.findtext("a:published", "", ns) or "")})
+    out.sort(key=lambda x: x["at"], reverse=True)
+    return out[:8]
 
 
 def p_crowd():
@@ -3865,9 +3902,24 @@ def p_crowd():
         time.sleep(0.4)
     hot.sort(key=lambda x: x.get("at") or "", reverse=True)
     pro.sort(key=lambda x: x.get("at") or "", reverse=True)
-    if not hot and not pro:
+    ks_hot, ks_pwl = [], []
+    for name, fn in (("Kicktraq", _ks_hot), ("Kickstarter feed", _ks_pwl)):
+        try:
+            got = fn()
+            if name == "Kicktraq":
+                ks_hot = got
+            else:
+                ks_pwl = got
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{name}: {safe_err(e)}")
+    if not hot and not pro and not ks_hot and not ks_pwl:
         raise RuntimeError("crowd: nothing " + "; ".join(errs)[:160])
-    return {"hot": hot[:14], "pro": pro[:10], "errs": errs}
+    cats = {}
+    for x in ks_hot:
+        c = x["cat"].split("／")[0] if x["cat"] else "其他"
+        cats[c] = cats.get(c, 0) + 1
+    return {"hot": hot[:14], "pro": pro[:10], "ks_hot": ks_hot, "ks_cats": sorted(cats.items(), key=lambda kv: -kv[1]),
+            "ks_pwl": ks_pwl, "errs": errs}
 
 
 # ---------- 注意力流向：電影票房、App Store 台灣免費榜（YouTube／趨勢／維基沿用既有面板） ----------
