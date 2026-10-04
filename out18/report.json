@@ -1,0 +1,68 @@
+{
+ "culture_exh": {
+  "status": 200,
+  "ct": "application/json;charset=UTF-8",
+  "len": null,
+  "head": "[{\"version\":\"1.4\",\"UID\":\"5b3dd544aaa378d7ca9a2e9a\",\"title\":\"科博館《古代人說故事》南屯山仔腳遺址出土的鐵刀首亮相!\",\"category\":\"6\",\"showInfo\":[{\"time\":\"2026/10/04 09:00:00\",\"location\":\"臺中市40453 臺中市北區館前路一號\",\"locationName\":\"人類文化廳二樓\",\"onSales\":\"Y\",\"price\":\"全票100元，半票70元。\",\"latitude\":\"24.157234\",\"longitude\":\"120.66606\",\"endTime\":\"2028/12/31 17:00:00\"}],\"showUnit\":\"國立自然科學博物館\",\"discountInfo\":\"\",\"descriptionFilterHtml\":\"    想要了解東海岸舊石器時代八仙洞，新石器時代的卑南、麒麟文化及中部大坌坑、牛罵頭、大馬璘、營埔及番仔園文化嗎?科博館更新常設"
+ },
+ "culture_show": {
+  "status": 200,
+  "ct": "application/json;charset=UTF-8",
+  "len": null,
+  "head": "[{\"version\":\"1.4\",\"UID\":\"68b5d5f926b32440a8964233\",\"title\":\"2026風動室內樂團《無限》宮崎駿動畫音樂精選\",\"category\":\"1\",\"showInfo\":[{\"time\":\"2026/10/31 14:30:00\",\"location\":\"桃園市桃園區中正路1188號\",\"locationName\":\"桃園展演中心展演廳\",\"onSales\":\"Y\",\"price\":\"\",\"latitude\":\"25.0175106\",\"longitude\":\"121.2986658\",\"endTime\":\"2026/10/31 16:10:00\"},{\"time\":\"2026/12/13 14:30:00\",\"location\":\"臺北市士林區劍潭路1號\",\"locationName\":\"臺北表演藝術中心 大劇院\",\"onSales\":\"Y\",\"price\":\"\",\"latitude\":\"25.0847069488325\",\"longitude\":\"121.524399267913\",\"endTime\":\"2026/12/13 16:10:00\"}],\"showUnit\":\"\",\"discountInfo\":\"\",\"descriptionFilterHtml\":\"\",\"imageUrl\":\"\""
+ },
+ "cdc_dengue": {
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='od.cdc.gov.tw', port=443): Max retries exceeded with url: /eic/Dengue_Daily_last12m.json (Caused by Conn"
+ },
+ "cdc_ili": {
+  "err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='od.cdc.gov.tw', port=443): Max retries exceeded with url: /eic/NHI_InfluenzaLike.json (Caused by Connect"
+ },
+ "moa_veg": {
+  "status": 200,
+  "ct": "application/json; charset=utf-8",
+  "len": "1506",
+  "head": "[\r\n  {\r\n    \"交易日期\": \"115.10.04\",\r\n    \"種類代碼\": \"N05\",\r\n    \"作物代號\": \"rest\",\r\n    \"作物名稱\": \"休市\",\r\n    \"市場代號\": \"105\",\r\n    \"市場名稱\": \"台北市場\",\r\n    \"上價\": 0.0,\r\n    \"中價\": 0.0,\r\n    \"下價\": 0.0,\r\n    \"平均價\": 0.0,\r\n    \"交易量\": 0.0\r\n  },\r\n  {\r\n    \"交易日期\": \"115.10.04\",\r\n    \"種類代碼\": \"N05\",\r\n    \"作物代號\": \"rest\",\r\n    \"作物名稱\": \"休市\",\r\n    \"市場代號\": \"400\",\r\n    \"市場名稱\": \"台中市\",\r\n    \"上價\": 0.0,\r\n    \"中價\": 0.0,\r\n    \"下價\": 0.0,\r\n    \"平均價\": 0.0,\r\n    \"交易量\": 0.0\r\n  },\r\n  {\r\n    \"交易日期\": \"115.10.04\",\r\n    \"種類代碼\": \"N04\",\r\n    \"作物代號\": \"rest\","
+ },
+ "ntpc_park_ds": {
+  "status": 200,
+  "ct": "application/json",
+  "len": null,
+  "head": "{\"success\":false,\"error\":{\"error_type\":\"Not Found\",\"message\":\"Not Available\"}}"
+ },
+ "ntpc_park": {
+  "status": 200,
+  "ct": "application/json",
+  "len": "108",
+  "head": "[{\"ID\":\"010001\",\"AVAILABLECAR\":\"47\"},{\"ID\":\"010002\",\"AVAILABLECAR\":\"16\"},{\"ID\":\"010003\",\"AVAILABLECAR\":\"2\"}]"
+ },
+ "tpe_fire": {
+  "status": 200,
+  "ct": "application/json",
+  "len": "752",
+  "head": "{\"result\":{\"limit\":3,\"offset\":0,\"count\":554,\"sort\":\"\",\"results\":[{\"_id\":1,\"行政區\":\"中正區\",\"路名\":\"忠孝西路\",\"段、號及其他註明\":\"一段70號前(懷寧街口)\",\"經度\":\"121.514357\",\"緯度\":\"25.046823\",\"備註\":\"嚴禁投入家用垃圾，違者重罰新台幣6000元\"},{\"_id\":2,\"行政區\":\"中正區\",\"路名\":\"忠孝西路\",\"段、號及其他註明\":\"一段66號(新光三越前)\",\"經度\":\"121.515252\",\"緯度\":\"25.046607\",\"備註\":\"嚴禁投入家用垃圾，違者重罰新台幣6000元\"},{\"_id\":3,\"行政區\":\"中正區\",\"路名\":\"忠孝西路\",\"段、號及其他註明\":\"一段50號(地下街Z2出入口)\",\"經度\":\"121.5158614\",\"緯度\":\"25.0464181\",\"備註\":\"嚴禁�"
+ },
+ "taiwan_events": {
+  "status": 404,
+  "ct": null,
+  "len": "0",
+  "head": ""
+ },
+ "tourism_ds": {
+  "status": 200,
+  "ct": "application/json",
+  "len": null,
+  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"E00\",\"categoryDataset\":\"A\",\"datasetId\":7279,\"identifier\":\"345000000G-AT00019\",\"title\":\"土石流潛勢溪流資料\",\"description\":\"提供土石流潛勢溪流資料，包括：縣市、鄉鎮、村里、土石流潛勢溪流編號、參考雨量站1ID、參考雨量站2ID、參考雨量站1站名、參考雨量站2站名、縣市代碼、鄉鎮代碼等資訊。\",\"type\":\"api\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"F121799142\",\"publisherOID\":\"2.16.886.101.20003.20064\",\"publisherContactName\":\"李宜珊\",\"publisherContactPhone\":\"049-2394300#7514\",\"publisherContactEmail\":\"Yishan54@mail.ardswc.gov.tw\",\"updateFrequency\":{\"regularupdate\":\""
+ },
+ "plvr": {
+  "status": 200,
+  "ct": "application/octet-stream",
+  "len": "14705972",
+  "head": "PK\u0003\u0004\u0014\u0000\b\b\b\u0000�C�\\\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0010\u0000\u0000\u0000a_lvr_land_a.csv�Y�\u001cE�.��k��z� �6��\u001b㽫\u0010h\u0004�U]��b]\n�\u0002u���$��25�R9j@\b$!J�\u0000\u0012\u001aR��bȗ�_��mr3w�\b\u000f�\u0010�묢(H\u0014�\u0011��Ͷ�������g[_/l���{�e�����G����W7\u0006g����]蝻�����ӛ�Ǐ\u0006\u000b?n�\u001e\u001c,\u001c�/\f~x<|�0x�t��w�\u001f��~��_��7w�w�Qg뫧���\r�\r����\u000f�\u0007l��f��\u0006\u000f��n��_���������e�߃\u001b���_�<�/ӻs��bG}�����\u001f�\u0015��{�\u001c��\u001d�<�xx�\u000b��[\u0007������\u0017�e�\u0016z7���\u0017����\u001cu������{_��}һs������\u001f�\u001e�K������\u001fo�Y�Z=��[\u0018|}qp��`��৯\u0007�,í��R\u001f�U��z��\u0014}���#�m]��7��Ǩ\u001b�W\u0014o������2�p�\u0002\u0018�>w������{w����i��m�\u001fg\u001f���e��y���������G\u001f\u001d��\u000f>{��������?\u001f��_?��\u0003\u001f���\u001f~���\u001f�����\u001e���\u0003���O>~�\u000f����Gp�g\u001f���O>}�/�|��~�����G������^��'�샗>����\u0003u�G\u0007>���ޟ>���u�����^:��\u0007\u0007^�������K���\u000f>�|��\u0014�����c�L��\u001f?��_>��~�?��?�_��>�����|��_>����^�"
+ },
+ "cwa_radar_png": {
+  "status": 200,
+  "ct": "binary/octet-stream",
+  "len": "662842",
+  "head": "�PNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR\u0000\u0000\u000e\u0010\u0000\u0000\u000e\u0010\b\u0002\u0000\u0000\u0000��8m\u0000\u0000\u0000\u0004gAMA\u0000\u0000��\u000b�a\u0005\u0000\u0000\u0000\u0001sRGB\u0000��\u001c�\u0000\u0000\u0000 cHRM\u0000\u0000z&\u0000\u0000��\u0000\u0000�\u0000\u0000\u0000��\u0000\u0000u0\u0000\u0000�`\u0000\u0000:�\u0000\u0000\u0017p��Q<\u0000\u0000\u0000\u0006bKGD\u0000�\u0000�\u0000�����\u0000\u0000\u0000\tpHYs\u0000\u0000\u0000H\u0000\u0000\u0000H\u0000F�k>\u0000\u0000�\u0000IDATx���yx\u001b�}'~�\u0000 N\u0002�\u000f�\u000f�\u0010%J�iI�o˧���M��I�m=��ꦛ�O����&M�$��8�\u001b;�dK�%۲dI��C\u0014��\u0004H�$@\u0012�Aܘ��1\r�%\u0001\u0010\u0018\u001c\u0003J��\u001fz4�9�3\u0004\u0006���|�DZZZqqqRR\u0012\u000f\u0000\u0000�V�t:M&\u0013��S(\u0014�\u001e\u0004\u0000\u000e�4�r�(��\u001d#\u0010\b�B!�M�\u0012EQ\u000e�� \bf�����;$�߃J�r�}��x�N���A�亯N���v���|>���[HRR\u0012I�\\o7\u0000\u0000\u0000�����v�����A\u0000\u0000�%9\u001c\u000e���\u000b�� \u0000\u0000�M��=���\"\u0010\b�n\u000e\u0000\u0000@\\9����iAFF�\u000f�ú�:��\u0003\u0000\u0000\u0010W���/��\u0002����?����j��\u0003\u0000�\"�����ϟ?�t:7�������\u000f��W��x㍑�\u0011��B��\u0007?��B��Q7�k׮���?��x�������O���������˫��***�x<6���p\\�vM��3�fff~�����O:99Ɍ!\b����O=�\u0014�\u001b\r\u0000\u0000�._������<\u001e�\u001f��\u001fjjj�n\u000e\u0000\u0000@\\}���?�яx<�?��?UVVr�\u001c\u0000\u0000�����~��x���.++�9\u0000\u0000\u0000q�����3�ܺ��\u0001\u0000\u0000\u0000\u0000"
+ }
+}
