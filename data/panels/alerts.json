@@ -1,6 +1,34 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261005021840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "雲林縣",
+    "嘉義縣"
+   ],
+   "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
+   "src": "水利署",
+   "at": "2026-10-04T18:18:40Z",
+   "exp": "2026-10-05T05:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005021840_0000.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261005021840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣",
+    "臺中市"
+   ],
+   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
+   "src": "水利署",
+   "at": "2026-10-04T18:18:40Z",
+   "exp": "2026-10-05T05:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005021840_0001.cap"
+  },
+  {
    "id": "CWA-Weather_extremely-rain_202610050042001",
    "cat": "降雨",
    "lvl": 2,
@@ -13,34 +41,6 @@
    "at": "2026-10-04T16:42:10Z",
    "exp": "2026-10-05T11:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610050042.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261005001840_0001",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "苗栗縣",
-    "臺中市"
-   ],
-   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
-   "src": "水利署",
-   "at": "2026-10-04T16:18:40Z",
-   "exp": "2026-10-05T03:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005001840_0001.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261005001840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "雲林縣",
-    "嘉義縣"
-   ],
-   "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
-   "src": "水利署",
-   "at": "2026-10-04T16:18:40Z",
-   "exp": "2026-10-05T03:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005001840_0000.cap"
   },
   {
    "id": "NFA_Fire_20261004223629008",
@@ -389,8 +389,8 @@
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/05 02:08:14"
+  "updated": "2026/10/05 02:20:14"
  },
  "errs": [],
- "updatedAt": "2026-10-04T18:06:18Z"
+ "updatedAt": "2026-10-04T18:25:28Z"
 }
