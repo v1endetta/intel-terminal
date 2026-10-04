@@ -1,44 +1,47 @@
-import os, json, requests, time
-os.makedirs("out20", exist_ok=True)
+import os, json, requests, time, re
+os.makedirs("out21", exist_ok=True)
 S = requests.Session(); S.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0 Safari/537.36"
 rep = {}
 def tree(o, d=0):
-    if d > 4: return "…"
-    if isinstance(o, dict): return {k: tree(v, d + 1) for k, v in list(o.items())[:20]}
+    if d > 3: return "…"
+    if isinstance(o, dict): return {k: tree(v, d + 1) for k, v in list(o.items())[:16]}
     if isinstance(o, list): return [len(o), tree(o[0], d + 1)] if o else [0]
     return str(o)[:50]
-U = {
- "lass_airbox": "https://pm25.lass-net.org/API-1.0.0/project/airbox/latest/",
- "lass_all": "https://pm25.lass-net.org/API-1.0.0/project/all/latest/",
- "civiliot_air": "https://sta.ci.taiwan.gov.tw/STA_AirQuality_v2/v1.0/Things?$top=2&$expand=Locations",
- "civiliot_water": "https://sta.ci.taiwan.gov.tw/STA_WaterResource_v2/v1.0/Things?$top=2&$expand=Locations",
- "civiliot_flood": "https://sta.ci.taiwan.gov.tw/STA_WaterResource_v2/v1.0/Things?$filter=substringof('淹水',name)&$top=2&$expand=Locations,Datastreams/Observations($top=1)",
- "civiliot_earth": "https://sta.ci.taiwan.gov.tw/STA_Earthquake_v2/v1.0/Things?$top=1",
- "moenv_aqi_nokey": "https://data.moenv.gov.tw/api/v2/aqx_p_432?format=json&limit=2",
- "pbs_road": "https://data.moi.gov.tw/MoiOD/System/DownloadFile.aspx?DATA=36384FA8-FACF-432E-BB5B-5F015E7BC1BE",
- "adsb_lol": "https://api.adsb.lol/v2/point/23.7/121/250",
- "opensky": "https://opensky-network.org/api/states/all?lamin=21.5&lomin=118&lamax=26.5&lomax=123",
- "plvr": "https://plvr.land.moi.gov.tw/DownloadSeason?season=115S3&type=zip&fileName=lvr_landcsv.zip",
- "taipei_1999": "https://data.taipei/api/v1/dataset/1bbde7d3-6e12-4d1d-8b2c-2ec2f5f9b6c5?scope=resourceAquire&limit=2",
- "ntpc_garbage": "https://data.ntpc.gov.tw/api/datasets/28ab4122-60e1-4065-98e5-abccb69aaca6/json?page=0&size=2",
- "taipower_outage": "https://service.taipower.com.tw/data/opendata/apply/file/d007008/001.json",
- "fire_tpe": "https://www.119.gov.taipei/detail.php?type=article&id=11519",
- "cctv_freeway": "https://cctv-ss04.thb.gov.tw:443/T2-1K+300",
- "thb_cctv_list": "https://thbapp.thb.gov.tw/opendata/cctv/list.xml",
- "atlas_npm": "https://registry.npmjs.org/taiwan-atlas",
- "gnews_town": "https://news.google.com/rss/search?q=%E4%BF%A1%E7%BE%A9%E5%8D%80+when:1d&hl=zh-TW&gl=TW&ceid=TW:zh-Hant",
- "moenv_quake_free": "https://scweb.cwa.gov.tw/zh-tw/earthquake/data",
-}
-for k, u in U.items():
+def hit(k, u, **kw):
     try:
-        t0 = time.time(); r = S.get(u, timeout=25, stream=True)
-        body = r.raw.read(400000, decode_content=True)
-        info = {"status": r.status_code, "ct": r.headers.get("content-type", "")[:40], "len": len(body), "cors": r.headers.get("access-control-allow-origin"), "sec": round(time.time()-t0,1)}
-        try:
-            j = json.loads(body); info["tree"] = tree(j)
+        t0=time.time(); r = S.get(u, timeout=30, **kw); b = r.content[:300000]
+        info = {"st": r.status_code, "len": len(r.content), "ct": r.headers.get("content-type","")[:30], "cors": r.headers.get("access-control-allow-origin"), "s": round(time.time()-t0,1)}
+        try: info["tree"] = tree(json.loads(b))
         except Exception:
-            info["head"] = body[:300].decode("utf-8", "replace")
-        rep[k] = info
+            for enc in ("utf-8-sig","big5"):
+                try: info["head"] = b[:700].decode(enc); break
+                except Exception: pass
+        rep[k] = info; return r
     except Exception as e:
         rep[k] = repr(e)[:160]
-open("out20/report.json", "w").write(json.dumps(rep, ensure_ascii=False, indent=1))
+# data.gov.tw datasets
+for ds in (27505, 44062):
+    r = hit(f"gov{ds}", f"https://data.gov.tw/api/v2/rest/dataset/{ds}")
+    try:
+        j = r.json(); dist = j["result"]["distribution"]
+        rep[f"gov{ds}"]["title"] = j["result"].get("title"); rep[f"gov{ds}"]["dist"] = [(d.get("resourceDescription","")[:40], d.get("resourceFormat"), d.get("resourceDownloadUrl")) for d in dist][:6]
+        u = dist[-1].get("resourceDownloadUrl"); hit(f"gov{ds}_file", u)
+    except Exception as e:
+        rep[f"gov{ds}_err"] = repr(e)[:150]
+for q in ("減班休息", "停水", "停電", "違反勞動", "人口數"):
+    hit("search_"+q, "https://data.gov.tw/api/v2/rest/dataset", params={"q": q, "limit": 5})
+hit("twse_mopsnews", "https://openapi.twse.com.tw/v1/opendata/t187ap04_L")
+hit("twse_basic", "https://openapi.twse.com.tw/v1/opendata/t187ap03_L")
+hit("gcis_kw", "https://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C", params={"$format": "json", "$filter": "Company_Name like 達而 and Company_Status eq 01", "$skip": 0, "$top": 5})
+hit("gcis_swagger", "https://data.gcis.nat.gov.tw/resources/swagger/swagger.json")
+hit("job104", "https://www.104.com.tw/jobs/search/api/jobs", params={"keyword": "設計", "page": 1, "pagesize": 20}, headers={"Referer": "https://www.104.com.tw/jobs/search/"})
+hit("job104_old", "https://www.104.com.tw/jobs/search/list", params={"ro": 0, "kwop": 7, "keyword": "設計", "page": 1}, headers={"Referer": "https://www.104.com.tw/jobs/search/"})
+hit("cake", "https://www.cake.me/jobs?q=design")
+hit("yourator", "https://www.yourator.co/api/v4/jobs?page=1")
+hit("ris_pop", "https://www.ris.gov.tw/rs-opendata/api/v1/datastore/ODRP019/11508")
+hit("moa_pork", "https://data.moa.gov.tw/Service/OpenData/FromM/PorkTransType.aspx")
+hit("moa_egg", "https://data.moa.gov.tw/Service/OpenData/FromM/PoultryTransType.aspx")
+hit("mol_layoff_page", "https://www.mol.gov.tw/1607/28162/28166/28218/28228/lpsimplelist")
+hit("water_outage", "https://www.water.gov.tw/opendata/WaterStop.json")
+hit("cec", "https://db.cec.gov.tw/")
+open("out21/report.json", "w").write(json.dumps(rep, ensure_ascii=False, indent=1))
