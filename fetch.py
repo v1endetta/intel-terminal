@@ -115,7 +115,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"house": 280, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -1217,7 +1217,13 @@ def p_weather():
                 c["uv"] = uv[sid]
     except Exception as e:  # noqa: BLE001
         log("cwa uv", e)
-    return {"label": "氣象署", "items": out, "warnings": warns[:12], "rainmap": rainmap[:700], "rainN": len(rainmap),
+    tempmap = []
+    for st in list(manned.values()) + list(auto.values()):
+        lon, lat = _cwa_ll(st)
+        t = _cwa_num((st.get("WeatherElement") or {}).get("AirTemperature"))
+        if lon is not None and t is not None and -20 < t < 45:
+            tempmap.append([round(lon, 3), round(lat, 3), t, st.get("StationName", ""), ((st.get("GeoInfo") or {}).get("CountyName") or "")])
+    return {"label": "氣象署", "items": out, "warnings": warns[:12], "rainmap": rainmap[:700], "rainN": len(rainmap), "tempmap": tempmap[:900],
             "countyRain": county_rain, "rainStations": len(rain)}
 
 
@@ -2045,7 +2051,7 @@ def p_localnews():
     out, errs = {}, []
     for name, (_, _, keys) in TW_COUNTIES.items():
         try:
-            got = _gnews(f"{keys[0]} when:1d", limit=12)
+            got = _gnews(f"{keys[0]} when:1d", limit=15)
         except Exception as e:  # noqa: BLE001
             errs.append(f"{name}: {safe_err(e)}"); continue
         items = []
@@ -2054,7 +2060,7 @@ def p_localnews():
                 continue
             items.append({"title": it["title"][:70], "url": it["url"], "source": it["source"], "at": it["at"]})
         items.sort(key=lambda x: x.get("at") or "", reverse=True)
-        out[name] = items[:5]
+        out[name] = items[:8]
         time.sleep(0.3)
     if not any(out.values()):
         raise RuntimeError("localnews: nothing " + "; ".join(errs)[:160])
@@ -2141,7 +2147,7 @@ def p_culture():
     exhib = [e for e in uniq if e["c"] == "展覽"]
     picks = {"closing": [e for e in exhib if e["closing"]][:6], "exhib": exhib[:8],
              "stage": [e for e in uniq if e["c"] in ("演唱會", "戲劇", "舞蹈", "音樂")][:8]}
-    points = [[e["ll"][0], e["ll"][1], e["t"], e["c"], e["venue"], e["at"] or ("至 " + e["end"])] for e in uniq if e["ll"]][:900]
+    points = [[e["ll"][0], e["ll"][1], e["t"], e["c"], e["venue"], e["at"] or ("至 " + e["end"]), e["url"], e["price"]] for e in uniq if e["ll"]][:900]
     cat_n = {c: sum(1 for e in uniq if e["c"] == c) for c in CULTURE_CATS.values()}
     return {"counts": counts, "top": top, "picks": picks, "points": points, "catN": cat_n, "n": len(uniq), "errs": errs}
 
@@ -2205,6 +2211,208 @@ def p_veg():
     items.sort(key=lambda x: -(x["chg14"] or 0))
     return {"market": "台北一", "date": max(i["date"] for i in items), "index": idx, "items": items, "rows": len(rows)}
 
+
+
+# ---------- 地圖：新聞定位到鄉鎮、新公司點位、航班、閃電、實價登錄 ----------
+try:
+    TOWNS = json.loads((ROOT / "tw_towns.json").read_text(encoding="utf-8"))  # 縣市+鄉鎮 -> [經度, 緯度, 縣市, 鄉鎮]
+except Exception:  # noqa: BLE001
+    TOWNS = {}
+_TOWN_BY_NAME: dict = {}
+for _k, (_lo, _la, _c, _t) in TOWNS.items():
+    _TOWN_BY_NAME.setdefault(_t, []).append((_c, _lo, _la, _t))
+    if _t.startswith("臺"):
+        _TOWN_BY_NAME.setdefault("台" + _t[1:], []).append((_c, _lo, _la, _t))
+# 簡稱（竹北、員林、羅東、板橋…）：只收全台唯一、不是常見詞的
+_TOWN_STOP = {"中正", "中山", "信義", "仁愛", "大同", "光復", "和平", "復興", "太平", "永安", "東山", "新城", "新市", "成功", "和美", "安定", "福興",
+              "大城", "大村", "新興", "三民", "前金", "中西", "長治", "民生", "大安", "東區", "西區", "南區", "北區", "中區", "安南", "大雅", "大樹",
+              "大社", "五結", "三星", "大園", "八德", "平鎮", "前鎮", "新園", "萬丹", "竹田", "內埔", "里港", "東勢", "水上", "中和", "大里", "清水", "新化", "南化"}
+_stems: dict = {}
+for _name, _lst in list(_TOWN_BY_NAME.items()):
+    if len(_lst) == 1 and len(_name) >= 3 and _name[-1] in "市鎮區鄉":
+        _stems.setdefault(_name[:-1], []).append(_lst[0])
+for _st, _lst in _stems.items():
+    if len(_lst) == 1 and len(_st) >= 2 and _st not in _TOWN_STOP and _st not in _TOWN_BY_NAME and not any(_st in a or a.startswith(_st) for _v in TW_COUNTIES.values() for a in _v[2]) \
+            and not any(c.startswith(_st) or c.startswith(_st.replace("台", "臺")) for c in TW_COUNTIES):
+        _TOWN_BY_NAME[_st] = _lst
+
+
+def _jitter(key: str, r: float = 0.05):
+    import hashlib
+    h = hashlib.md5(key.encode("utf-8")).digest()
+    return (h[0] / 255 - 0.5) * 2 * r, (h[1] / 255 - 0.5) * 2 * r
+
+
+def _place(text: str, county: str = ""):
+    """標題裡的地名 → (經度, 緯度, 地名, 層級)。鄉鎮優先；同名鄉鎮要靠縣市判斷。"""
+    best = None
+    counties = set(_counties_in(text)) | ({county} if county else set())
+    for name, lst in _TOWN_BY_NAME.items():
+        if name not in text:
+            continue
+        cands = [x for x in lst if x[0] in counties] if counties else (lst if len(lst) == 1 else [])
+        if cands and (best is None or len(name) > len(best[1])):
+            best = (cands[0], name)
+    if best:
+        (c, lo, la, t), _ = best
+        dx, dy = _jitter(text, 0.012)
+        return [round(lo + dx, 4), round(la + dy, 4), c.replace("臺", "台") + t, "town"]
+    c = county or next(iter(_counties_in(text)), "")
+    if c in TW_COUNTIES:
+        lo, la, _ = TW_COUNTIES[c]
+        dx, dy = _jitter(text, 0.07)
+        return [round(lo + dx, 4), round(la + dy, 4), c.replace("臺", "台"), "county"]
+    return None
+
+
+def p_mapfeed():
+    """把已抓到的新聞、示警、新公司放上地圖（不打外部 API）。"""
+    pts, seen = [], set()
+    def add(title, url, source, at, kind, county=""):
+        if not title or title in seen:
+            return
+        pl = _place(title, county)
+        if not pl:
+            return
+        seen.add(title)
+        pts.append({"ll": pl[:2], "place": pl[2], "lvl": pl[3], "t": title[:80], "u": url or "", "s": (source or "")[:12], "at": at or "", "k": kind})
+    for c, items in ((RESULTS.get("localnews") or {}).get("counties") or {}).items():
+        for it in items:
+            add(it.get("title"), it.get("url"), it.get("source"), it.get("at"), "local", c)
+    for it in (RESULTS.get("news") or {}).get("tw") or []:
+        add(it.get("title"), it.get("url"), it.get("source"), it.get("at"), "news")
+    for g in (RESULTS.get("news") or {}).get("groups") or []:
+        for it in (g.get("items") or []) if isinstance(g, dict) else []:
+            add(it.get("title"), it.get("url"), it.get("source"), it.get("at"), "news")
+    alerts = []
+    for a in (RESULTS.get("alerts") or {}).get("alerts") or []:
+        pl = _place(a.get("text", ""), (a.get("area") or [""])[0])
+        if pl and a.get("lvl", 0) >= 1:
+            alerts.append({"ll": pl[:2], "place": pl[2], "lvl": a.get("lvl"), "cat": a.get("cat"), "t": a.get("text", "")[:120], "u": a.get("url", ""), "at": a.get("at", "")})
+    brands = []
+    B = RESULTS.get("brands") or {}
+    for it in (B.get("peers") or []) + (B.get("big") or []):
+        c = it.get("city") or ""
+        if c in TW_COUNTIES:
+            lo, la, _ = TW_COUNTIES[c]
+            dx, dy = _jitter(it.get("name", ""), 0.08)
+            brands.append({"ll": [round(lo + dx, 4), round(la + dy, 4)], "t": it.get("name"), "cat": it.get("cat"), "cap": it.get("cap"), "date": it.get("date"), "city": c})
+    return {"news": pts, "alerts": alerts, "brands": brands, "n_town": sum(1 for p in pts if p["lvl"] == "town"), "n": len(pts)}
+
+
+ADSB_URL = "https://api.adsb.lol/v2/point/23.7/121/250"
+
+
+def p_flights():
+    j = gjson(ADSB_URL, timeout=20)
+    out = []
+    for a in j.get("ac") or []:
+        lat, lon = num(a.get("lat")), num(a.get("lon"))
+        alt = a.get("alt_baro")
+        if lat is None or lon is None or alt == "ground":
+            continue
+        out.append([round(lon, 3), round(lat, 3), num(a.get("track")) or 0, num(alt) or 0, (a.get("flight") or "").strip(), a.get("t") or "", a.get("r") or "", num(a.get("gs")) or 0])
+    if not out:
+        raise RuntimeError("adsb: no aircraft")
+    return {"items": out, "src": "adsb.lol（ODbL）"}
+
+
+def p_lightning():
+    """氣象署閃電資料（欄位結構未知，用掃的找經緯度；抓不到就記下結構）。"""
+    rec = None
+    for ds in ("O-A0039-001",):
+        try:
+            rec = cwa(ds)
+            break
+        except Exception as e:  # noqa: BLE001
+            last = e
+    if rec is None:
+        j = gjson(CWA_FILE + "O-A0039-001", params={"Authorization": CWA_KEY, "downloadType": "WEB", "format": "JSON"})
+        rec = j
+    pts = []
+    for d in _walk_dicts(rec):
+        lon = next((num(d[k]) for k in d if k.lower() in ("longitude", "lon", "lng", "x") and num(d[k]) is not None), None)
+        lat = next((num(d[k]) for k in d if k.lower() in ("latitude", "lat", "y") and num(d[k]) is not None), None)
+        if lon is None or lat is None or not (115 < lon < 127 and 18 < lat < 29):
+            continue
+        t = next((str(d[k]) for k in d if "time" in k.lower()), "")
+        amp = next((num(d[k]) for k in d if "amp" in k.lower() or "intensity" in k.lower() or "current" in k.lower()), None)
+        pts.append([round(lon, 3), round(lat, 3), t[:19], amp])
+    return {"items": pts[-2000:], "n": len(pts), "diag": None if pts else _tree(rec)}
+
+
+PLVR_SEASON = "https://plvr.land.moi.gov.tw/DownloadSeason"
+PLVR_CITY = {"a": "臺北市", "b": "臺中市", "c": "基隆市", "d": "臺南市", "e": "高雄市", "f": "新北市", "g": "宜蘭縣", "h": "桃園市", "i": "嘉義市", "j": "新竹縣",
+             "k": "苗栗縣", "m": "南投縣", "n": "彰化縣", "o": "新竹市", "p": "雲林縣", "q": "嘉義縣", "t": "屏東縣", "u": "花蓮縣", "v": "臺東縣", "w": "金門縣",
+             "x": "澎湖縣", "z": "連江縣"}
+
+
+def _plvr_rows(season):
+    import zipfile
+    raw = get(PLVR_SEASON, params={"season": season, "type": "zip", "fileName": "lvr_landcsv.zip"}, timeout=150).content
+    zf = zipfile.ZipFile(io.BytesIO(raw))
+    rows = []
+    for name in zf.namelist():
+        m = re.match(r"^([a-z])_lvr_land_a\.csv$", name.lower())
+        if not m or m.group(1) not in PLVR_CITY:
+            continue
+        txt = zf.read(name).decode("utf-8-sig", errors="replace")
+        rd = list(csv.reader(io.StringIO(txt)))
+        if len(rd) < 3:
+            continue
+        hd = rd[0]
+        ix = {k: hd.index(k) for k in ("鄉鎮市區", "交易標的", "交易年月日", "主要用途", "單價元平方公尺", "備註") if k in hd}
+        for r in rd[2:]:
+            try:
+                rows.append((PLVR_CITY[m.group(1)], r[ix["鄉鎮市區"]], r[ix["交易標的"]], r[ix.get("主要用途", 0)], r[ix["單價元平方公尺"]], r[ix.get("備註", 0)] if "備註" in ix else "", r[ix["交易年月日"]]))
+            except Exception:  # noqa: BLE001
+                continue
+    return rows
+
+
+def p_house():
+    """實價登錄：最近一季住宅買賣，各鄉鎮每坪單價中位數。"""
+    today = NOW.astimezone(TPE).date()
+    y, q = today.year - 1911, (today.month - 1) // 3 + 1
+    seasons = []
+    for _ in range(3):
+        q -= 1
+        if q == 0:
+            y, q = y - 1, 4
+        seasons.append(f"{y}S{q}")
+    rows, used = [], ""
+    for ssn in seasons:
+        try:
+            rows = _plvr_rows(ssn)
+        except Exception as e:  # noqa: BLE001
+            log("plvr", ssn, e); rows = []
+        if len(rows) >= 20000:
+            used = ssn
+            break
+    if not rows:
+        raise RuntimeError("plvr: no rows")
+    used = used or seasons[-1]
+    groups: dict = {}
+    for city, town, kind, use, unit, note, _d in rows:
+        u = num(unit)
+        if not u or "建物" not in kind or "住" not in (use or "") or re.search(r"親友|特殊|關係|瑕疵|債權|法拍|增建|毛胚", note or ""):
+            continue
+        groups.setdefault((city, town), []).append(u * 3.30579 / 10000)  # 萬元／坪
+    towns, by_city = [], {}
+    for (city, town), vals in groups.items():
+        if len(vals) < 5:
+            continue
+        vals.sort()
+        med = round(vals[len(vals) // 2], 1)
+        by_city.setdefault(city, []).extend(vals)
+        t = TOWNS.get(city + town) or TOWNS.get(city.replace("臺", "台") + town)
+        if t:
+            towns.append([t[0], t[1], city, town, med, len(vals)])
+    city_med = {c: round(sorted(v)[len(v) // 2], 1) for c, v in by_city.items()}
+    for c, v in city_med.items():
+        hist_put("house", c, used, v)
+    towns.sort(key=lambda x: -x[4])
+    return {"season": used, "towns": towns, "city": city_med, "rows": len(rows)}
 
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
 # Vin 的關注領域（Google News 繁中）：每組顯示最新 3 則。帶引號＝精準比對。改這裡。
@@ -4670,6 +4878,9 @@ run("mood", p_mood, keep_if_fresh_hours=1)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
+run("flights", p_flights)
+run("lightning", p_lightning, keep_if_fresh_hours=0.15)
+run("house", p_house, keep_if_fresh_hours=24 * 5)
 run("power", p_power, keep_if_fresh_hours=0.25)
 run("airport", p_airport, keep_if_fresh_hours=0.25)
 run("alerts", p_alerts, keep_if_fresh_hours=0.15)
@@ -4680,6 +4891,7 @@ run("veg", p_veg, keep_if_fresh_hours=6)
 # run("tiktok", p_tiktok, keep_if_fresh_hours=20)  # Creative Center 擋資料中心 IP，每輪白耗 60 秒，先停
 
 DATA.mkdir(exist_ok=True)
+run("mapfeed", p_mapfeed)  # 吃本輪其他面板的結果，不打外部 API
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 FINISHED_ISO = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
