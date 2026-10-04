@@ -1,0 +1,544 @@
+{
+ "gov27505": {
+  "st": 200,
+  "len": 4805,
+  "ct": "application/json",
+  "cors": "https://data.gov.tw",
+  "s": 0.9,
+  "tree": {
+   "help": "",
+   "success": "True",
+   "result": {
+    "categoryService": "500",
+    "categoryDataset": "A",
+    "datasetId": "27505",
+    "identifier": "",
+    "title": "大量解僱通報資料集",
+    "description": "事業單位名稱、解僱人數等",
+    "type": "api",
+    "license": "1",
+    "cost": "free",
+    "dataProvider": "A1850618506",
+    "publisherOID": "2.16.886.101.20003.20063",
+    "publisherContactName": "胡小姐",
+    "publisherContactPhone": "02-85902833",
+    "publisherContactEmail": "huami@mol.gov.tw",
+    "updateFrequency": {
+     "regularupdate": "1",
+     "Frequency": "6",
+     "unittime": "月"
+    },
+    "dataQuality": "G"
+   }
+  },
+  "title": "大量解僱通報資料集",
+  "dist": [
+   [
+    "大量解僱通報資料集",
+    "CSV",
+    "https://apiservice.mol.gov.tw/OdService/download/A17000000J-020115-KYO"
+   ],
+   [
+    "大量解僱通報資料集",
+    "JSON",
+    "https://apiservice.mol.gov.tw/OdService/download/A17000000J-020115-1oZ"
+   ],
+   [
+    "大量解僱通報資料集",
+    "WEBSERVICES",
+    "https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-020115-aUA"
+   ]
+  ]
+ },
+ "gov27505_file": {
+  "st": 200,
+  "len": 2543,
+  "ct": "application/json;charset=UTF-8",
+  "cors": null,
+  "s": 0.7,
+  "tree": {
+   "success": "True",
+   "updateTime": "20260611T154255",
+   "result": {
+    "resource_id": "A17000000J-020115-aUA",
+    "records": [
+     21,
+     {
+      "序號": "…",
+      "民國年（民國年）": "…",
+      "家數（數量）": "…",
+      "人數（數量）": "…",
+      "備註": "…"
+     }
+    ]
+   }
+  }
+ },
+ "gov44062": {
+  "st": 200,
+  "len": 10574,
+  "ct": "application/json",
+  "cors": "https://data.gov.tw",
+  "s": 0.5,
+  "tree": {
+   "help": "",
+   "success": "True",
+   "result": {
+    "categoryService": "500",
+    "categoryDataset": "A",
+    "datasetId": "44062",
+    "identifier": "",
+    "title": "台灣就業通網站職缺清單",
+    "description": "勞動部勞動力發展署【台灣就業通-找工作（https://gov.tw/j2u）】網站刊登中職缺清單，",
+    "type": "api",
+    "license": "1",
+    "cost": "free",
+    "dataProvider": "lobonpan",
+    "publisherOID": "2.16.886.101.20003.20063.20002",
+    "publisherContactName": "潘小姐",
+    "publisherContactPhone": "02-89956030",
+    "publisherContactEmail": "lobonpan@wda.gov.tw",
+    "updateFrequency": {
+     "regularupdate": "1",
+     "Frequency": "1",
+     "unittime": "年"
+    },
+    "dataQuality": "G"
+   }
+  },
+  "title": "台灣就業通網站職缺清單",
+  "dist": [
+   [
+    "台灣就業通網站職缺清單",
+    "CSV",
+    "https://apiservice.mol.gov.tw/OdService/download/A17000000J-030144-MKw"
+   ],
+   [
+    "台灣就業通網站職缺清單",
+    "JSON",
+    "https://apiservice.mol.gov.tw/OdService/download/A17000000J-030144-nkP"
+   ],
+   [
+    "台灣就業通網站職缺清單",
+    "WEBSERVICES",
+    "https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-030144-VAL"
+   ]
+  ]
+ },
+ "gov44062_file": {
+  "st": 200,
+  "len": 1416856,
+  "ct": "application/json;charset=UTF-8",
+  "cors": null,
+  "s": 5.8,
+  "head": "{\"success\":true,\"updateTime\":\"20261004T010001\",\"result\":{\"resource_id\":\"A17000000J-030144-VAL\",\"records\":[{\"OCCU_DESC（職務名稱）\":\"\",\"WK_TYPE（職務性質）\":\"兼職\",\"CJOB1_COUNT（職務大類別代碼）\":\"17\",\"CJOB_NAME1（職務大類別名稱）\":\"醫療／美容／保健\",\"CJOB2_COUNT（職務小類別代碼）\":\"170113\",\"CJOB_NAME2（職務小類別名稱）\":\"照顧服務員\",\"JOB_PERSON（雇用人數）\":\"5\",\"STOP_DATE（應徵截止日期）\":\"20261115\",\"JOB_DETAIL（工作內容）\":\"居家長照服務\",\"CITYNAME（工作地點）\":\"台北市士林區\",\"EXPERIENCE（工作經驗）\":\"無\",\"WKTIME（工作時間）\":\"日班、部份工時：09時00分至12時00分\",\"SAL"
+ },
+ "search_減班休息": {
+  "st": 405,
+  "len": 556,
+  "ct": "text/html;charset=UTF-8",
+  "cors": "https://data.gov.tw",
+  "s": 0.2,
+  "head": "<html>\n    <head>\n        <title>Method not allowed</title>\n        <style>\n            body{\n                margin:0;\n                padding:30px;\n                font:12px/1.5 Helvetica,Arial,Verdana,sans-serif;\n            }\n            h1{\n                margin:0;\n                font-size:48px;\n                font-weight:normal;\n                line-height:48px;\n            }\n        </style>\n    </head>\n    <body>\n        <h1>Method not allowed</h1>\n        <p>Method not allowed. Must be one of: <strong>POST</strong></p>\n    </body>\n</html>"
+ },
+ "search_停水": {
+  "st": 405,
+  "len": 556,
+  "ct": "text/html;charset=UTF-8",
+  "cors": "https://data.gov.tw",
+  "s": 0.2,
+  "head": "<html>\n    <head>\n        <title>Method not allowed</title>\n        <style>\n            body{\n                margin:0;\n                padding:30px;\n                font:12px/1.5 Helvetica,Arial,Verdana,sans-serif;\n            }\n            h1{\n                margin:0;\n                font-size:48px;\n                font-weight:normal;\n                line-height:48px;\n            }\n        </style>\n    </head>\n    <body>\n        <h1>Method not allowed</h1>\n        <p>Method not allowed. Must be one of: <strong>POST</strong></p>\n    </body>\n</html>"
+ },
+ "search_停電": {
+  "st": 405,
+  "len": 556,
+  "ct": "text/html;charset=UTF-8",
+  "cors": "https://data.gov.tw",
+  "s": 0.2,
+  "head": "<html>\n    <head>\n        <title>Method not allowed</title>\n        <style>\n            body{\n                margin:0;\n                padding:30px;\n                font:12px/1.5 Helvetica,Arial,Verdana,sans-serif;\n            }\n            h1{\n                margin:0;\n                font-size:48px;\n                font-weight:normal;\n                line-height:48px;\n            }\n        </style>\n    </head>\n    <body>\n        <h1>Method not allowed</h1>\n        <p>Method not allowed. Must be one of: <strong>POST</strong></p>\n    </body>\n</html>"
+ },
+ "search_違反勞動": {
+  "st": 405,
+  "len": 556,
+  "ct": "text/html;charset=UTF-8",
+  "cors": "https://data.gov.tw",
+  "s": 0.2,
+  "head": "<html>\n    <head>\n        <title>Method not allowed</title>\n        <style>\n            body{\n                margin:0;\n                padding:30px;\n                font:12px/1.5 Helvetica,Arial,Verdana,sans-serif;\n            }\n            h1{\n                margin:0;\n                font-size:48px;\n                font-weight:normal;\n                line-height:48px;\n            }\n        </style>\n    </head>\n    <body>\n        <h1>Method not allowed</h1>\n        <p>Method not allowed. Must be one of: <strong>POST</strong></p>\n    </body>\n</html>"
+ },
+ "search_人口數": {
+  "st": 405,
+  "len": 556,
+  "ct": "text/html;charset=UTF-8",
+  "cors": "https://data.gov.tw",
+  "s": 0.2,
+  "head": "<html>\n    <head>\n        <title>Method not allowed</title>\n        <style>\n            body{\n                margin:0;\n                padding:30px;\n                font:12px/1.5 Helvetica,Arial,Verdana,sans-serif;\n            }\n            h1{\n                margin:0;\n                font-size:48px;\n                font-weight:normal;\n                line-height:48px;\n            }\n        </style>\n    </head>\n    <body>\n        <h1>Method not allowed</h1>\n        <p>Method not allowed. Must be one of: <strong>POST</strong></p>\n    </body>\n</html>"
+ },
+ "twse_mopsnews": {
+  "st": 200,
+  "len": 12573,
+  "ct": "application/json",
+  "cors": null,
+  "s": 0.6,
+  "tree": [
+   5,
+   {
+    "出表日期": "1151004",
+    "發言日期": "1151003",
+    "發言時間": "70004",
+    "公司代號": "2072",
+    "公司名稱": "世紀風電",
+    "主旨 ": "公告本公司名稱由「世紀離岸風電設備股份有限公司」更名\r\n為「世紀能源設備股份有限公司」，公告期間：1",
+    "符合條款": "第51款",
+    "事實發生日": "1150824",
+    "說明": "1.事實發生日：民國115年08月24日\r\n2.公司名稱：世紀能源設備股份有限公司(原名：世紀離岸風"
+   }
+  ]
+ },
+ "twse_basic": {
+  "st": 200,
+  "len": 1327571,
+  "ct": "application/json",
+  "cors": null,
+  "s": 0.7
+ },
+ "gcis_kw": {
+  "st": 200,
+  "len": 889,
+  "ct": "application/json;charset=UTF-8",
+  "cors": null,
+  "s": 3.0,
+  "tree": [
+   2,
+   {
+    "Business_Accounting_NO": "23742666",
+    "Company_Name": "達而特企業股份有限公司",
+    "Company_Status": "01",
+    "Company_Status_Desc": "核准設立",
+    "Capital_Stock_Amount": "60000000",
+    "Paid_In_Capital_Amount": "12500000",
+    "Responsible_Name": "朱榮輝",
+    "Register_Organization": "02",
+    "Register_Organization_Desc": "臺北市政府",
+    "Company_Location": "臺北市南港區南港路3段80巷26號2樓",
+    "Company_Setup_Date": "0790511",
+    "Change_Of_Approval_Data": "1140805"
+   }
+  ]
+ },
+ "gcis_swagger": {
+  "st": 200,
+  "len": 49357,
+  "ct": "application/json;charset=UTF-8",
+  "cors": null,
+  "s": 0.1,
+  "tree": {
+   "swagger": "2.0",
+   "info": {
+    "version": "v1",
+    "title": "商工行政資料開放平臺 data.gcis.nat.gov.tw",
+    "description": "<div class=\"info_description markdown\">一、申請流程說明</d"
+   },
+   "host": "data.gcis.nat.gov.tw",
+   "basePath": "/od/data/api",
+   "schemes": [
+    1,
+    "http"
+   ],
+   "paths": {
+    "/F0E8FB8D-E2FD-472E-886C-91C673641F31": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/FCB90AB1-E382-45CE-8D4F-394861851E28": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/5F64D864-61CB-4D0D-8AD9-492047CC1EA6": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/F05D1060-7D57-4763-BDCE-0DAF5975AFE0": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/236EE382-4942-41A9-BD03-CA0709025E7C": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/7E6AFA72-AD6A-46D3-8681-ED77951D912D": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/F570BC9A-DA4C-4813-8087-FB9CE95F9D38": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/4E5F7653-1B91-4DDC-99D5-468530FAE396": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/4347A009-6489-4F19-AC79-78F366BE7976": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/4B61A0F1-458C-43F9-93F3-9FD6DA5E1B08": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/FDB8D2C8-573D-4276-BFA4-8D3925ABE1CB": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/6BBA2268-1367-4B42-9CCA-BC17499EBE8C": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/C8782705-DA48-4897-8537-9F7B0FC463EF": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/673F0FC0-B3A7-429F-9041-E9866836B66D": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/426D5542-5F05-43EB-83F9-F1300F14E1F1": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    },
+    "/9D17AE0D-09B5-4732-A8F4-81ADED04B679": {
+     "get": {
+      "summary": "…",
+      "parameters": "…",
+      "responses": "…",
+      "deprecated": "…"
+     }
+    }
+   }
+  }
+ },
+ "job104": {
+  "st": 200,
+  "len": 78444,
+  "ct": "application/json",
+  "cors": "https://www.104.com.tw",
+  "s": 1.7,
+  "tree": {
+   "data": [
+    22,
+    {
+     "appearDate": "20261001",
+     "applyCnt": "0",
+     "coIndustry": "1011002001",
+     "coIndustryDesc": "空調水機電工程業",
+     "custName": "中源機電顧問股份有限公司",
+     "custNo": "52811613000",
+     "description": "水電、機電工程施工及管理。熟電腦繪圖者優先錄取!\n知名科技廠建廠工程。\n\n工作待遇為有證照無經驗者之",
+     "descSnippet": "水電、機電工程施工及管理。熟電腦繪圖者優先錄取!\n知名科技廠建廠工程。\n\n工作待遇為有證照無經驗者之",
+     "mrtDist": "0",
+     "jobAddress": "",
+     "jobAddrNo": "6001012003",
+     "jobAddrNoDesc": "雲林縣虎尾鎮",
+     "jobName": "機電工程師【雲林中科虎尾園區、雲林科技工業區(斗六)】",
+     "jobNameSnippet": "機電工程師【雲林中科虎尾園區、雲林科技工業區(斗六)】",
+     "jobNo": "13152477",
+     "jobRo": "1"
+    }
+   ],
+   "metadata": {
+    "pagination": {
+     "count": "22",
+     "currentPage": "1",
+     "lastPage": "150",
+     "total": "91021"
+    },
+    "isPreciseHotJob": "False",
+    "filterQuery": {
+     "order": "15",
+     "asc": "0",
+     "keyword": "設計",
+     "fz": "8",
+     "kwop": "7",
+     "excludeKwFz": "4",
+     "excludeKwKwop": "8",
+     "enableJobNoTopOrder": "1",
+     "ro": [
+      1,
+      "…"
+     ],
+     "scstrict": "0",
+     "scneg": "0",
+     "page": "1",
+     "pagesize": "20"
+    },
+    "offJobs": [
+     0
+    ],
+    "personalBoost": "0"
+   }
+  }
+ },
+ "job104_old": {
+  "st": 200,
+  "len": 3672,
+  "ct": "text/html",
+  "cors": null,
+  "s": 0.2,
+  "head": "<!DOCTYPE html>\n<html lang=\"zh-Hant-TW\">\n  <head>\n    <!-- utility -->\n<meta charset=\"utf-8\" />\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n<meta\n  name=\"viewport\"\n  content=\"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover\"\n/>\n<meta name=\"format-detection\" content=\"telephone=no\" />\n<link rel=\"shortcut icon\" href=\"https://www.104.com.tw/favicon.ico\" />\n<link\n  rel=\"icon\"\n  type=\"image/png\"\n  sizes=\"192x192\"\n  href=\"https://www.104.com.tw/favicon-192x192.png\"\n/>\n <!-- dns prefetch -->\n<link rel=\"dns-prefetch\" href=\"https://cdn.104.com.tw/\" />\n<link rel=\"dns-prefetch\" href=\"https://heybar.an9.104.com.tw/\" />\n<link rel"
+ },
+ "cake": {
+  "st": 403,
+  "len": 5606,
+  "ct": "text/html; charset=UTF-8",
+  "cors": null,
+  "s": 0.4,
+  "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-gaxLHjE9AhJWivX7ikV8K4&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39;; img-src &#39;self&#39; https://challenges.cloudflare.com; connect-src &#39;self&#39; https://challenges.cloudflare.com; frame-src &#39;self&#"
+ },
+ "yourator": {
+  "st": 200,
+  "len": 13317,
+  "ct": "application/json; charset=utf-",
+  "cors": null,
+  "s": 0.4,
+  "tree": {
+   "payload": {
+    "hasMore": "True",
+    "currentPage": "1",
+    "nextPage": "2",
+    "recommendedJobs": [
+     0
+    ],
+    "trendingKeywords": [
+     0
+    ],
+    "jobs": [
+     20,
+     {
+      "id": "…",
+      "name": "…",
+      "path": "…",
+      "salary": "…",
+      "lastActiveAt": "…",
+      "location": "…",
+      "companyId": "…",
+      "tags": "…",
+      "company": "…",
+      "thirdPartyUrl": "…",
+      "follow": "…",
+      "externalSource": "…"
+     }
+    ]
+   }
+  }
+ },
+ "ris_pop": {
+  "st": 200,
+  "len": 64,
+  "ct": "application/json;charset=UTF-8",
+  "cors": "*",
+  "s": 0.9,
+  "tree": {
+   "responseCode": "OD-0102-S",
+   "responseMessage": "查無資料"
+  }
+ },
+ "moa_pork": {
+  "st": 200,
+  "len": 11257,
+  "ct": "text/html; charset=utf-8",
+  "cors": "*",
+  "s": 22.0,
+  "head": "\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset=\"utf-8\" />\r\n    <meta property =\"og:type\" content=\"website\"/>\n<meta property =\"og:url\" content=\"error.aspx\"/>\n\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\r\n    <meta id=\"goosleSiteVerification\" name=\"google-site-verification\" content=\"rSWS3yAAKmIE_O2ppSqqUyLAANSVVlVVzZ19fD8DG5s\"></meta>\r\n\r\n\r\n    <link rel=\"api\" type=\"application/x.atom+xml\" title=\"農業資料開放平臺\" href=\"https://data.moa.gov.tw/openapi.json\"/>\r\n    <link href=\"https://use.fontawesome.com/releases/v5.1.0/css/all.css\" integrity=\"sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt\" crossorigin=\"an"
+ },
+ "moa_egg": {
+  "st": 200,
+  "len": 11257,
+  "ct": "text/html; charset=utf-8",
+  "cors": "*",
+  "s": 21.3,
+  "head": "\r\n\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <meta charset=\"utf-8\" />\r\n    <meta property =\"og:type\" content=\"website\"/>\n<meta property =\"og:url\" content=\"error.aspx\"/>\n\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\r\n    <meta id=\"goosleSiteVerification\" name=\"google-site-verification\" content=\"rSWS3yAAKmIE_O2ppSqqUyLAANSVVlVVzZ19fD8DG5s\"></meta>\r\n\r\n\r\n    <link rel=\"api\" type=\"application/x.atom+xml\" title=\"農業資料開放平臺\" href=\"https://data.moa.gov.tw/openapi.json\"/>\r\n    <link href=\"https://use.fontawesome.com/releases/v5.1.0/css/all.css\" integrity=\"sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt\" crossorigin=\"an"
+ },
+ "mol_layoff_page": {
+  "st": 200,
+  "len": 94504,
+  "ct": "text/html; charset=utf-8",
+  "cors": null,
+  "s": 2.2,
+  "head": "\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"zh-Hant\">\r\n<head>\r\n<!-- Global site tag (gtag.js) - Google Analytics -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-60529020-1\"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n\n  gtag('config', 'UA-60529020-1');\n</script>\n<!-- Google Tag Manager -->\n<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\nnew Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],\nj=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=\n'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);\n})(window,do"
+ },
+ "water_outage": {
+  "st": 200,
+  "len": 123736,
+  "ct": "text/html; charset=utf-8",
+  "cors": null,
+  "s": 4.9,
+  "head": "\r\n\r\n<!DOCTYPE html>\r\n\r\n<html lang=\"zh-Hant\">\r\n<head>\r\n    \r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n<meta charset=\"utf-8\" />\r\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n<meta name=\"Accessible_website\" content=\"本網站通過A+等級無障礙網頁檢測\"/>\r\n<meta name=\"DC.Title\" content=\"\"/>\r\n<meta name=\"DC.Creator\" content=\"\"/>\r\n<meta name=\"DC.Subject\" content=\"\"/>\r\n<meta name=\"DC.Description\" content=\"\"/>\r\n<meta name=\"DC.Contributor\" content=\"臺灣自來水股份有限公司\"/>\r\n<meta name=\"DC.Type\" content=\"文字\"/>\r\n<meta name=\"DC.Format\" content=\"文字\"/>\r\n<meta name=\"DC.Source\" content=\"臺灣自來水股份有限公司\"/>\r\n"
+ },
+ "cec": {
+  "st": 200,
+  "len": 150342,
+  "ct": "text/html; charset=utf-8",
+  "cors": "*",
+  "s": 1.2,
+  "head": "<!doctype html>\n<html data-n-head-ssr lang=\"zh-TW\" data-n-head=\"%7B%22lang%22:%7B%22ssr%22:%22zh-TW%22%7D%7D\">\n  <head >\n    <title>選舉資料庫</title><meta data-n-head=\"ssr\" charset=\"utf-8\"><meta data-n-head=\"ssr\" name=\"viewport\" content=\"width=device-width, initial-scale=1\"><meta data-n-head=\"ssr\" data-hid=\"description\" name=\"description\" content=\"選情資料庫，提供歷年選舉的快速搜尋及資料視覺化。\"><meta data-n-head=\"ssr\" name=\"format-detection\" content=\"telephone=no\"><meta data-n-head=\"ssr\" name=\"robots\" content=\"index,follow\"><meta data-n-head=\"ssr\" name=\"googlebot\" content=\"index,follow\"><meta data-n-head=\"ssr\" property=\"og:title\" content=\"選舉資料庫\"><met"
+ }
+}
