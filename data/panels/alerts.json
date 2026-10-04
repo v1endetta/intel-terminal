@@ -1,6 +1,21 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610041724001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "南投縣",
+    "臺南市",
+    "屏東縣"
+   ],
+   "text": "天氣高溫炎熱，明(5)日中午前後南投縣為橙色燈號，有連續出現36度高溫的機率，請加強注意。臺南市、屏東縣為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-04T09:24:53Z",
+   "exp": "2026-10-05T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610041724.cap"
+  },
+  {
    "id": "CWA-Weather_strong-wind_202610041625001",
    "cat": "強風",
    "lvl": 2,
@@ -60,19 +75,6 @@
    "at": "2026-10-04T07:00:02Z",
    "exp": "2026-10-05T16:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041500.cap"
-  },
-  {
-   "id": "TWC_water_202610041340",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [
-    "臺南市"
-   ],
-   "text": "因將軍區南26線往五棟寮路口(對向)管線設備維修。",
-   "src": "台灣自來水公司",
-   "at": "2026-10-04T05:40:01Z",
-   "exp": "2026-10-04T17:30:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041340.cap"
   },
   {
    "id": "TWC_water_202610041310",
@@ -321,8 +323,8 @@
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/04 17:17:14"
+  "updated": "2026/10/04 17:35:14"
  },
  "errs": [],
- "updatedAt": "2026-10-04T09:12:20Z"
+ "updatedAt": "2026-10-04T09:33:13Z"
 }
