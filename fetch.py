@@ -2318,27 +2318,50 @@ def p_flights():
 
 
 def p_lightning():
-    """氣象署閃電資料（欄位結構未知，用掃的找經緯度；抓不到就記下結構）。"""
-    rec = None
-    for ds in ("O-A0039-001",):
+    """氣象署閃電落雷即時觀測（O-A0039-001，平臺只給 KMZ／XML）：抓經緯度與時間。"""
+    import zipfile
+    last, pts, diag = None, [], None
+    for fmt in ("KMZ", "XML", "JSON"):
         try:
-            rec = cwa(ds)
-            break
+            r = get(CWA_FILE + "O-A0039-001", params={"Authorization": CWA_KEY, "downloadType": "WEB", "format": fmt}, timeout=60)
         except Exception as e:  # noqa: BLE001
-            last = e
-    if rec is None:
-        j = gjson(CWA_FILE + "O-A0039-001", params={"Authorization": CWA_KEY, "downloadType": "WEB", "format": "JSON"})
-        rec = j
-    pts = []
-    for d in _walk_dicts(rec):
-        lon = next((num(d[k]) for k in d if k.lower() in ("longitude", "lon", "lng", "x") and num(d[k]) is not None), None)
-        lat = next((num(d[k]) for k in d if k.lower() in ("latitude", "lat", "y") and num(d[k]) is not None), None)
-        if lon is None or lat is None or not (115 < lon < 127 and 18 < lat < 29):
-            continue
-        t = next((str(d[k]) for k in d if "time" in k.lower()), "")
-        amp = next((num(d[k]) for k in d if "amp" in k.lower() or "intensity" in k.lower() or "current" in k.lower()), None)
-        pts.append([round(lon, 3), round(lat, 3), t[:19], amp])
-    return {"items": pts[-2000:], "n": len(pts), "diag": None if pts else _tree(rec)}
+            last = e; continue
+        raw = r.content
+        if raw[:2] == b"PK":
+            zf = zipfile.ZipFile(io.BytesIO(raw))
+            raw = b"".join(zf.read(n) for n in zf.namelist() if n.lower().endswith((".kml", ".xml")))
+        txt = raw.decode("utf-8", errors="replace")
+        # KML：<Placemark> 內有 <coordinates>經度,緯度</coordinates>；時間可能在 <name>、<when> 或描述裡
+        for pm in re.findall(r"<Placemark\b.*?</Placemark>", txt, re.S):
+            m = re.search(r"<coordinates>\s*([\d.]+)\s*,\s*([\d.]+)", pm)
+            if not m:
+                continue
+            lon, lat = float(m.group(1)), float(m.group(2))
+            tm = re.search(r"(\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(?::\d{2})?)", pm)
+            amp = re.search(r"(-?\d+(?:\.\d+)?)\s*kA", pm)
+            if 115 < lon < 127 and 18 < lat < 29:
+                pts.append([round(lon, 3), round(lat, 3), tm.group(1) if tm else "", float(amp.group(1)) if amp else None])
+        if not pts:  # XML／JSON：掃有經緯度的節點
+            try:
+                rec = json.loads(txt) if fmt == "JSON" else None
+            except Exception:  # noqa: BLE001
+                rec = None
+            if rec is None:
+                for m in re.finditer(r"<(?:\w+:)?(?:lon|longitude)>([\d.]+)</.*?<(?:\w+:)?(?:lat|latitude)>([\d.]+)<", txt, re.S | re.I):
+                    lon, lat = float(m.group(1)), float(m.group(2))
+                    if 115 < lon < 127 and 18 < lat < 29:
+                        pts.append([round(lon, 3), round(lat, 3), "", None])
+            else:
+                for d in _walk_dicts(rec):
+                    lon = next((num(d[k]) for k in d if k.lower() in ("longitude", "lon") and num(d[k]) is not None), None)
+                    lat = next((num(d[k]) for k in d if k.lower() in ("latitude", "lat") and num(d[k]) is not None), None)
+                    if lon and lat and 115 < lon < 127 and 18 < lat < 29:
+                        pts.append([round(lon, 3), round(lat, 3), "", None])
+        diag = {"fmt": fmt, "bytes": len(r.content), "head": re.sub(r"\s+", " ", txt[:600])}
+        break
+    if diag is None:
+        raise RuntimeError(f"lightning: {safe_err(last)}")
+    return {"items": pts[-2000:], "n": len(pts), "diag": None if pts else diag}
 
 
 PLVR_SEASON = "https://plvr.land.moi.gov.tw/DownloadSeason"
