@@ -1,6 +1,19 @@
 {
  "alerts": [
   {
+   "id": "TWC_water_202610041950",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "新竹市"
+   ],
+   "text": "新竹市牛埔路管線汰換工程",
+   "src": "台灣自來水公司",
+   "at": "2026-10-04T11:50:01Z",
+   "exp": "2026-10-05T16:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041950.cap"
+  },
+  {
    "id": "CWA-Weather_extremely-rain_202610041901001",
    "cat": "降雨",
    "lvl": 2,
@@ -307,12 +320,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 24,
+ "n_total": 25,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/04 19:32:15"
+  "updated": "2026/10/04 19:44:15"
  },
  "errs": [],
- "updatedAt": "2026-10-04T11:31:08Z"
+ "updatedAt": "2026-10-04T11:50:01Z"
 }
