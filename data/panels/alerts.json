@@ -1,6 +1,60 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_strong-wind_202610042224001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "臺北市",
+    "新北市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "雲林縣",
+    "嘉義縣",
+    "臺南市",
+    "屏東縣",
+    "澎湖縣",
+    "連江縣"
+   ],
+   "text": "東北風增強，4日晚上至5日晚上蘭嶼、綠島、新北市、桃園市、新竹市、新竹縣、苗栗縣、臺中市、彰化縣、雲林縣、嘉義縣、臺南市、屏東縣、澎湖縣、連江縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-04T14:24:37Z",
+   "exp": "2026-10-05T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610042224.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261004221840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "雲林縣",
+    "嘉義縣"
+   ],
+   "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
+   "src": "水利署",
+   "at": "2026-10-04T14:18:40Z",
+   "exp": "2026-10-05T01:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261004221840_0001.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261004221840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣",
+    "臺中市"
+   ],
+   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
+   "src": "水利署",
+   "at": "2026-10-04T14:18:40Z",
+   "exp": "2026-10-05T01:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261004221840_0000.cap"
+  },
+  {
    "id": "TWC_water_202610042130",
    "cat": "停水",
    "lvl": 1,
@@ -77,34 +131,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610042030.cap"
   },
   {
-   "id": "WRA_ReservoirWarn_20261004201840_0002",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "雲林縣",
-    "嘉義縣"
-   ],
-   "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
-   "src": "水利署",
-   "at": "2026-10-04T12:18:40Z",
-   "exp": "2026-10-04T23:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261004201840_0002.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261004201840_0001",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "苗栗縣",
-    "臺中市"
-   ],
-   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
-   "src": "水利署",
-   "at": "2026-10-04T12:18:40Z",
-   "exp": "2026-10-04T23:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261004201840_0001.cap"
-  },
-  {
    "id": "CWA-Weather_extremely-rain_202610041901001",
    "cat": "降雨",
    "lvl": 2,
@@ -132,32 +158,6 @@
    "at": "2026-10-04T09:24:53Z",
    "exp": "2026-10-05T17:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610041724.cap"
-  },
-  {
-   "id": "CWA-Weather_strong-wind_202610041625001",
-   "cat": "強風",
-   "lvl": 2,
-   "area": [
-    "臺北市",
-    "新北市",
-    "桃園市",
-    "新竹市",
-    "新竹縣",
-    "苗栗縣",
-    "臺中市",
-    "彰化縣",
-    "雲林縣",
-    "嘉義縣",
-    "臺南市",
-    "屏東縣",
-    "澎湖縣",
-    "連江縣"
-   ],
-   "text": "東北風增強，4日晚上至5日晚上蘭嶼、綠島、新北市、桃園市、新竹市、新竹縣、苗栗縣、臺中市、彰化縣、雲林縣、嘉義縣、臺南市、屏東縣、澎湖縣、連江縣局部地區將有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
-   "src": "中央氣象署",
-   "at": "2026-10-04T08:25:59Z",
-   "exp": "2026-10-05T23:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610041625.cap"
   },
   {
    "id": "TWC_water_202610041500",
@@ -391,8 +391,8 @@
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/04 22:02:14"
+  "updated": "2026/10/04 22:29:14"
  },
  "errs": [],
- "updatedAt": "2026-10-04T14:08:33Z"
+ "updatedAt": "2026-10-04T14:29:03Z"
 }
