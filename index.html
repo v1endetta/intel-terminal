@@ -1865,8 +1865,18 @@ function sunTimes(date,lat,lon,tz){const rad=Math.PI/180,day=Math.floor((Date.UT
   const noon=720-4*lon-eq+tz*60;return{rise:noon-4*ha,set:noon+4*ha};}
 function moonPhase(d){const syn=29.530588853,ref=Date.UTC(2000,0,6,18,14);return(((d-ref)/864e5)%syn+syn)%syn/syn;}
 function tpeMinutes(d){return((d.getUTCHours()+TZ)%24)*60+d.getUTCMinutes()+d.getUTCSeconds()/60;}
-const MKT=[["台股",9*60,13*60+30],["歐股",15*60,23*60+30],["美股",21*60+30,4*60]];
-function inSess(m,[_,a,b]){return a<b?m>=a&&m<b:m>=a||m<b;}
+/* 交易時段：各市場用自己的時區算（自動處理夏令時間），週末、國定假日、颱風休市都算休市 */
+const US_HOL=new Set(["2026-01-01","2026-01-19","2026-02-16","2026-04-03","2026-05-25","2026-06-19","2026-07-03","2026-09-07","2026-11-26","2026-12-25","2027-01-01","2027-01-18","2027-02-15","2027-03-26","2027-05-31","2027-06-18","2027-07-05","2027-09-06","2027-11-25","2027-12-24"]);
+const US_EARLY=new Set(["2026-11-27","2026-12-24","2027-11-26"]);/* 美股提早 13:00 收 */
+const UK_HOL=new Set(["2026-01-01","2026-04-03","2026-04-06","2026-05-04","2026-05-25","2026-08-31","2026-12-25","2026-12-28","2027-01-01","2027-03-26","2027-03-29","2027-05-03","2027-05-31","2027-08-30","2027-12-27","2027-12-28"]);
+function twHol(d){const P=window.LASTP||{};const h=(((P.calendar||{}).items)||[]).find(x=>x.kind==="holiday"&&x.date===d);if(h)return(h.label||"").replace("台股休市：","")||"國定假日";
+  const tpeToday=tzParts("Asia/Taipei",new Date()).date;const st=(((P.alerts||{}).stopwork||{}).items)||[];
+  if(d===tpeToday&&st.some(x=>/臺北市|台北市/.test(x.area||"")&&/停止上班/.test(x.text||"")))return"颱風停班";return"";}
+const MKT=[{n:"台股",tz:"Asia/Taipei",o:540,c:810,hol:twHol},{n:"歐股",tz:"Europe/London",o:480,c:990,hol:d=>UK_HOL.has(d)?"倫敦假日":""},{n:"美股",tz:"America/New_York",o:570,c:960,hol:d=>US_HOL.has(d)?"美國假日":"",early:US_EARLY}];
+function tzParts(tz,now){const f=new Intl.DateTimeFormat("en-CA",{timeZone:tz,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false,weekday:"short"});const q={};f.formatToParts(now).forEach(x=>q[x.type]=x.value);return{date:`${q.year}-${q.month}-${q.day}`,min:(+q.hour%24)*60+(+q.minute),wd:q.weekday};}
+function mktState(M,now=new Date()){const t=tzParts(M.tz,now),wk=t.wd==="Sat"||t.wd==="Sun",hol=wk?"":M.hol(t.date),close=M.early&&M.early.has(t.date)?780:M.c;
+  const open=!wk&&!hol&&t.min>=M.o&&t.min<close;const diff=((tzParts("Asia/Taipei",now).min-t.min)%1440+1440)%1440;
+  return{open,off:wk||!!hol,label:open?"交易中":wk?"休市・週末":hol?`休市・${hol}`:(t.min<M.o?"未開盤":"收盤"),a:(M.o+diff)%1440,b:(close+diff)%1440};}
 /* 天空頂欄（方向 C）：今天的太陽高度曲線，參考 Apple Watch Solar Graph */
 function solarFull(d){const rad=Math.PI/180,day=Math.floor((Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate())-Date.UTC(d.getUTCFullYear(),0,0))/864e5);
   const g=2*Math.PI/365*(day-1);const eq=229.18*(0.000075+0.001868*Math.cos(g)-0.032077*Math.sin(g)-0.014615*Math.cos(2*g)-0.040849*Math.sin(2*g));
@@ -1898,7 +1908,7 @@ function drawSky(intro){const c=$("#sky");const W=Math.round(c.clientWidth);if(!
   const hm=v=>`${String(Math.floor(v/60)).padStart(2,"0")}:${String(Math.round(v%60)).padStart(2,"0")}`;
   x.font="400 10.5px 'IBM Plex Mono', monospace";[[S.rise,"日出"],[S.set,"日落"]].forEach(([v,t])=>{if(v>maxM)return;x.fillStyle="rgba(255,214,170,.8)";x.fillRect(X(v)-.5,hz-5,1,10);x.fillStyle="rgba(255,214,170,.75)";x.fillText(`${t} ${hm(v)}`,X(v),hz+18);});
   // 交易時段：時間軸下三條細線，開盤中亮綠
-  MKT.forEach(([n0,a,b],i)=>{const y=H-18+i*5,open=inSess(m,MKT[i]);x.fillStyle=open?"rgba(57,185,120,.95)":"rgba(255,255,255,.12)";const seg=(u,v)=>{const u2=Math.min(u,maxM),v2=Math.min(v,maxM);if(v2>u2)x.fillRect(X(u2),y,X(v2)-X(u2),2);};a<b?seg(a,b):(seg(a,1440),seg(0,b));});
+  MKT.forEach((M,i)=>{const st=mktState(M,now),a=st.a,b=st.b,y=H-18+i*5,open=st.open;x.fillStyle=open?"rgba(57,185,120,.95)":st.off?"rgba(255,255,255,.05)":"rgba(255,255,255,.12)";const seg=(u,v)=>{const u2=Math.min(u,maxM),v2=Math.min(v,maxM);if(v2>u2)x.fillRect(X(u2),y,X(v2)-X(u2),2);};a<b?seg(a,b):(seg(a,1440),seg(0,b));});
   // 現在：細直線＋光點（曲線畫完才出現）
   const alt=altAt(m,S);
   if(pr>=1){const sx=X(m),sy=Y(alt);x.fillStyle="rgba(255,255,255,.22)";x.fillRect(sx-.5,top-8,1,bot-top+14);
@@ -1910,7 +1920,7 @@ function drawSky(intro){const c=$("#sky");const W=Math.round(c.clientWidth);if(!
   $("#salt").textContent=mob?`太陽高度 ${alt.toFixed(1)}°`:`太陽高度 ${alt.toFixed(1)}° · ${alt>0?"地平線以上":"地平線以下"}`;
   const caStr=now.toLocaleTimeString("zh-TW",{timeZone:"America/Los_Angeles",hour:"2-digit",minute:"2-digit",hour12:false});
   const caH=+caStr.slice(0,2);$("#caline").textContent=`加州　${caStr}　${caH>=7&&caH<19?"白天":"夜晚"}`;
-  $("#sessions").innerHTML=MKT.map(s=>`<span class="${inSess(m,s)?"open":""}"><i></i>${s[0]} ${inSess(m,s)?"交易中":"收盤"}</span>`).join("")+`<span>實線＝太陽高度 · 虛線＝月亮 · 下方細線＝交易時段</span>`;
+  $("#sessions").innerHTML=MKT.map(M=>{const st=mktState(M,now);return`<span class="${st.open?"open":""}" title="${esc(M.n+"："+M.tz+" 當地時間判斷")}"><i></i>${M.n} ${st.label}</span>`;}).join("")+`<span>實線＝太陽高度 · 虛線＝月亮 · 下方細線＝交易時段</span>`;
 }
 function skyIntro(){if(!moving()){drawSky();return;}const t0=performance.now(),D=1300;const f=t=>{const p=Math.min(1,(t-t0)/D),e=1-Math.pow(1-p,3);drawSky(e);if(p<1)requestAnimationFrame(f);};requestAnimationFrame(f);setTimeout(()=>drawSky(),D+200);}
 
