@@ -1,6 +1,43 @@
 {
  "alerts": [
   {
+   "id": "TWC_water_202610042130",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "屏東縣"
+   ],
+   "text": "屏東縣東港鎮朝安里延平路等汰換管線工程停水改接",
+   "src": "台灣自來水公司",
+   "at": "2026-10-04T13:30:02Z",
+   "exp": "2026-10-06T18:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610042130.cap"
+  },
+  {
+   "id": "WRA_FloodWarn_20261004212730_0000",
+   "cat": "淹水",
+   "lvl": 3,
+   "area": [
+    "宜蘭縣"
+   ],
+   "text": "水利署訊宜蘭縣冬山鄉淹水二級警戒 (中城站一小時雨量超過50mm) ,如持續降雨轄內易淹水村里及道路可能3小時內開始積淹水 (如：冬山鄉-大進村,丸山村,八寶村,中山村,太和村,安平村,鹿埔村,得安村)，建請即時注意淹水通報及應變，低窪地區及道路請特別注意防範積淹水。",
+   "src": "水利署",
+   "at": "2026-10-04T13:27:30Z",
+   "exp": "2026-10-05T00:28:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/Flood/WRA_FloodWarn_20261004212730_0000.cap"
+  },
+  {
+   "id": "NFA_Fire_20261004204350007",
+   "cat": "火災",
+   "lvl": 1,
+   "area": [],
+   "text": "火災-機關、學校(軍公教辦公廳舍、宿舍)",
+   "src": "內政部消防署",
+   "at": "2026-10-04T13:24:00Z",
+   "exp": "2026-10-05T21:24:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/NFA/2026/NFA_Fire/NFA_Fire_20261004204350007.cap"
+  },
+  {
    "id": "CWA-Weather_extremely-rain_202610042102001",
    "cat": "降雨",
    "lvl": 2,
@@ -254,19 +291,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610021350.cap"
   },
   {
-   "id": "TWC_water_202610021240",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [
-    "屏東縣"
-   ],
-   "text": "屏東縣東港鎮朝安里延平路等汰換管線工程停水改接",
-   "src": "台灣自來水公司",
-   "at": "2026-10-02T04:40:01Z",
-   "exp": "2026-10-06T18:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610021240.cap"
-  },
-  {
    "id": "TWC_water_202610021140",
    "cat": "停水",
    "lvl": 1,
@@ -385,12 +409,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 30,
+ "n_total": 32,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/04 21:08:37"
+  "updated": "2026/10/04 21:29:31"
  },
  "errs": [],
- "updatedAt": "2026-10-04T13:09:59Z"
+ "updatedAt": "2026-10-04T13:30:49Z"
 }
