@@ -444,8 +444,8 @@ canvas.o-fx{display:block;width:100%}
 .list li.o-grp{display:block;font:500 10px var(--mono);color:var(--dim);letter-spacing:.06em;padding:9px 0 3px;border-top:0}
 /* 分頁內固定順序：台灣先、國際後；快的先、月更的後；結論先、原文後 */
 #p-pulse{display:none!important}
-#p-taiex{order:1}#p-fx{order:2}#p-tw-stocks{order:3}#p-mops{order:4}#p-world{order:5}#p-sectors{order:6}#p-cmdty{order:7}#p-lux{order:8}#p-revenue{order:9}#p-fear{order:10}#p-poly{order:11}
-#p-macro{order:1}#p-gmacro{order:2}#p-calendar{order:3}#p-liq{order:4}#p-consume{order:5}#p-supply{order:6}#p-veg{order:7}#p-jobs{order:8}
+#p-taiex{order:1}#p-fx{order:2}#p-taifex{order:3}#p-fear{order:4}#p-tw-stocks{order:5}#p-mops{order:6}#p-world{order:7}#p-usbig{order:8}#p-sectors{order:9}#p-cmdty{order:10}#p-revenue{order:11}#p-lux{order:12}
+#p-macro{order:1}#p-gmacro{order:2}#p-calendar{order:3}#p-liq{order:4}#p-poly{order:5}#p-consume{order:6}#p-supply{order:7}#p-veg{order:8}#p-jobs{order:9}
 #p-mood{order:1}#p-ptt{order:2}#p-cofacts{order:3}#p-attention{order:4}#p-trends{order:5}#p-youtube{order:6}#p-social{order:7}
 .grid{align-items:start}
 /* 桃機翻牌看板：只有變動的字會翻 */
@@ -476,6 +476,10 @@ html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animati
 .tn-al{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:3px}.tn-al span{font-size:11px;border:1px solid var(--line);border-radius:3px;padding:0 6px;cursor:default}
 .tn-nw{list-style:none;margin:0;padding:0;font-size:12.5px}.tn-nw li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tn-nw a{color:var(--text)}.tn-nw .m{color:var(--dim);font:10.5px var(--mono);margin-left:6px}
 .wxl{display:inline-flex;gap:8px;align-items:center}.wxl i{width:9px;height:9px;border-radius:50%;display:inline-block}.wxl .rb{width:54px;height:7px;border-radius:2px;background:linear-gradient(90deg,#3caaff,#00c8c8,#00c85a,#b4e600,#ffdc00,#ff9600,#ff3c1e,#e1005a,#be00c8)}
+.wl-tabs{display:flex;gap:0;margin-bottom:8px}.wl-tabs button{background:var(--panel2);color:var(--muted);border:1px solid var(--line);padding:3px 12px;font:12px var(--mono);cursor:pointer;margin-left:-1px}.wl-tabs button:first-child{border-radius:3px 0 0 3px;margin-left:0}.wl-tabs button:last-child{border-radius:0 3px 3px 0}.wl-tabs button.on{color:var(--blue);border-color:var(--blue);position:relative;z-index:1}
+.wl-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 18px}.wl-r{display:grid;grid-template-columns:1fr 60px auto 58px;gap:6px;align-items:center;font-size:12.5px;padding:3px 0;border-bottom:1px solid var(--line)}.wl-r .nm small{display:block;font:10px var(--mono);color:var(--dim)}.wl-r .r{text-align:right;font-family:var(--mono)}.wl-h{grid-column:1/-1;font:600 10.5px var(--mono);color:var(--dim);margin-top:6px;letter-spacing:.04em}
+.tf-t{width:100%;border-collapse:collapse;font-size:12.5px}.tf-t th{font:500 10.5px var(--mono);color:var(--dim);text-align:right;padding:3px 6px;border-bottom:1px solid var(--line)}.tf-t th:first-child,.tf-t td:first-child{text-align:left}.tf-t td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:right;font-family:var(--mono)}
+.pm-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:4px 22px}.pm-h{grid-column:1/-1;font:600 11px var(--mono);color:var(--blue);margin:8px 0 2px;border-bottom:1px solid var(--line);padding-bottom:3px}.pm-e{padding:4px 0;border-bottom:1px dashed var(--line);font-size:12.5px}.pm-e a{color:var(--text);text-decoration:none}.pm-e a:hover{text-decoration:underline}.pm-o{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:3px;font:11px var(--mono);color:var(--muted)}.pm-o b{color:var(--text)}.pm-e .v{font:10px var(--mono);color:var(--dim);margin-left:6px}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px}.chips button{background:var(--panel2);color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:2px 8px;font:11px var(--mono);cursor:pointer}.chips button.on{color:var(--blue);border-color:var(--blue)}.chips button i{font-style:normal;color:var(--dim);margin-left:4px}
 .mo-row{display:grid;grid-template-columns:78px 58px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:12.5px;align-items:baseline}.mo-row .d{font:10.5px var(--mono);color:var(--dim)}.mo-row .c{font:600 12px var(--mono);color:var(--text)}.mo-row .c small{display:block;font:400 10px var(--mono);color:var(--dim)}
 .mo-row .t a{color:var(--text);text-decoration:none}.mo-row .t a:hover{text-decoration:underline}.mo-row .tag{font:10.5px var(--mono);border:1px solid var(--line2);border-radius:3px;padding:0 5px;margin-right:6px;color:var(--muted)}
@@ -599,10 +603,22 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><a href="https://rate.bot.com.tw/xrt?Lang=zh-TW" target="_blank" rel="noopener">臺灣銀行牌告</a></div>
   </section>
 
+  <section class="panel w6 cap" id="p-taifex">
+    <div class="ph"><h2>TAIFEX</h2><span class="zh">台指期籌碼 · 三大法人淨未平倉</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.taifex.com.tw/" target="_blank" rel="noopener">期交所</a><span>淨未平倉＝多單減空單（口）· 變化＝比前一交易日 · Put/Call 比＞100 偏避險</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-world">
     <div class="ph"><h2>Global Indices</h2><span class="zh">主要經濟體大盤</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Yahoo 日線 · 盤中為未完成棒 · 5 日％＝近 5 個交易日</span></div>
+  </section>
+
+  <section class="panel w6 cap" id="p-usbig">
+    <div class="ph"><h2>US Mega Caps</h2><span class="zh">美股巨頭、期貨與美債</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Yahoo 日線 · 美債為殖利率，變化以基點（bp）計 · ADR 溢價＝台積電 ADR 換算每股台幣 ÷ 台股收盤 − 1</span></div>
   </section>
 
   <section class="panel w6 hero" id="p-fear">
@@ -629,16 +645,16 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>巴黎／馬德里／東京／紐約收盤</span></div>
   </section>
 
-  <section class="panel w6 cap" id="p-tw-stocks">
-    <div class="ph"><h2>TW Supply</h2><span class="zh">台灣供應鏈與通路</span><span class="meta">排程</span></div>
+  <section class="panel w12 cap" id="p-tw-stocks">
+    <div class="ph"><h2>TW Watchlist</h2><span class="zh">台股觀察清單 · 權值／ETF／主動式 ETF／客戶產業</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>紡織：儒鴻、聚陽、遠東新　通路：統一超、統一、遠百</span></div>
+    <div class="pf"><span>證交所盤後＋盤中即時（MIS）· 債券 ETF 為櫃買中心 · 主動式 ETF＝代號結尾 A，依成交值排序 · 客戶產業：儒鴻、聚陽、遠東新、統一超、統一、遠百</span></div>
   </section>
 
-  <section class="panel w6 cap" id="p-poly">
+  <section class="panel w12 cap" id="p-poly">
     <div class="ph"><h2>Polymarket</h2><span class="zh">世界在賭什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a><span>24h 成交量排序，已濾掉運彩</span></div>
+    <div class="pf"><a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a><span>依領域分組 · 每組取 24 小時成交量最大的題目 · 多選題列前 3 個選項 · 已濾掉運彩、每日價位題</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-mops">
@@ -949,8 +965,8 @@ const POLY_TOPIC=[["加密貨幣",/bitcoin|\bbtc\b|ethereum|\beth\b|crypto|solan
   ["科技",/anthropic|openai|\bai\b|\bipo\b|apple|nvidia|google|tesla|spacex|microsoft|\bmeta\b/i]];
 const MONTHS="January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec";
 const polyNorm=q=>String(q||"").replace(new RegExp(`\\s+(by|before|on|in|after)\\s+(the end of\\s+)?(${MONTHS})\\.?(\\s+\\d{1,2})?(,?\\s*\\d{4})?\\s*\\??$`,"i"),"").replace(/\s+(by|before|in)\s+\d{4}\s*\??$/i,"").replace(/\?$/,"").trim().toLowerCase();
-const polyTopic=m=>(POLY_TOPIC.find(([,re])=>re.test(m.question||""))||["其他"])[0];
-const polyOK=m=>!["政治","其他"].includes(polyTopic(m));  // 只留 Fed、地緣、科技、加密
+const polyTopic=m=>m.topic||(POLY_TOPIC.find(([,re])=>re.test(m.question||""))||["其他"])[0];
+const polyOK=m=>!!m.topic||!["政治","其他"].includes(polyTopic(m));  // 只留 Fed、地緣、科技、加密
 function polyArrange(items){const by=new Map();
   (items||[]).filter(polyOK).forEach(m=>{const k=polyNorm(m.question);const o=by.get(k);if(!o)by.set(k,{...m,_n:1});else{o._n++;if((n(m.vol24h)||0)>(n(o.vol24h)||0))by.set(k,{...m,_n:o._n});}});
   const all=[...by.values()].map(m=>({...m,_t:(POLY_TOPIC.find(([,re])=>re.test(m.question))||["其他"])[0]}));
@@ -1053,6 +1069,28 @@ document.addEventListener("click",e=>{const a=e.target.closest("#p-house [data-t
   if(a){if(a.dataset.town){HS.town=a.dataset.town;HS.road=null;}else if(a.dataset.road)HS.road=a.dataset.road;else if(a.dataset.hs==="town")HS.road=null;else{HS.town=null;HS.road=null;}renderHouse();return;}
   const g=e.target.closest("[data-hsgo]");if(g){e.preventDefault();const[c,t]=g.dataset.hsgo.split("|");HS.city=c;HS.town=t||null;HS.road=null;renderHouse();document.getElementById("p-house").scrollIntoView({behavior:"smooth",block:"start"});}});
 document.addEventListener("change",e=>{if(e.target.id==="hs-city"){HS.city=e.target.value;HS.town=null;HS.road=null;renderHouse();}});
+/* ---------- 台股觀察清單 ---------- */
+let TWW=null,TWW_T=(()=>{try{return localStorage.getItem("tw:wl")||"權值";}catch(e){return"權值";}})();
+function renderTWW(){const d=TWW;if(!d)return;const its=d.items||[];const tabs=["權值","ETF","主動式 ETF","客戶產業"];
+  const row=(nm,sub,px,ch,sp,extra)=>{const pct=isFinite(px)&&isFinite(ch)&&px!==ch?ch/(px-ch)*100:null;return`<div class="wl-r"><span class="nm">${esc(nm)}<small>${esc(sub)}</small></span><span>${mini(sp||[])}</span><span class="r${K("tw:"+sub,px)}">${fmt(px)}</span><span class="r ${cls(ch)}">${pct!=null?sgn(pct,2,"%"):"—"}</span>${extra||""}</div>`;};
+  let body_="";
+  if(TWW_T==="主動式 ETF"){body_=(d.active||[]).map(x=>row(x.name,`${x.code} · 成交 ${compact(n(x.value))}`,n(x.price),n(x.chg),[])).join("")||'<div class="empty">沒有資料</div>';body_=`<div class="wl-g">${body_}</div><div class="sub" style="margin-top:6px">目前共 ${d.activeN||0} 檔主動式 ETF，列成交值前 ${(d.active||[]).length} 檔</div>`;}
+  else{const list=its.filter(x=>x.sec===TWW_T);let last=null;body_=`<div class="wl-g">${list.map(x=>{const h=(TWW_T!=="權值"&&x.group!==last)?`<div class="wl-h">${esc(x.group)}</div>`:"";last=x.group;return h+row(x.name,x.code+(x.live?" · 即時 "+x.live:""),n(x.price),n(x.chg),x.spark);}).join("")}</div>`;}
+  body("p-tw-stocks").innerHTML=`<div class="wl-tabs" id="wl-tabs">${tabs.map(t=>`<button type="button" class="${t===TWW_T?"on":""}" data-wl="${t}">${t}</button>`).join("")}</div>${body_}`;
+  setMeta("p-tw-stocks",{...d,label:"盤後 "+(d.date||"")},30);}
+document.addEventListener("click",e=>{const b=e.target.closest("#wl-tabs [data-wl]");if(!b)return;TWW_T=b.dataset.wl;try{localStorage.setItem("tw:wl",TWW_T);}catch(x){}renderTWW();});
+/* ---------- 台指期籌碼 ---------- */
+function renderTaifex(d){const F=d.fut||{},rows=[];["台指期","小台","微台"].forEach(k=>{const f=F[k];if(!f)return;["外資","投信","自營商"].forEach(w=>{const v=f[w];if(!v)return;rows.push(`<tr><td>${k} · ${w}</td><td class="${cls(v.oi)}">${n(v.oi).toLocaleString()}</td><td class="${cls(v.chg)}">${v.chg!=null?(v.chg>0?"+":"")+n(v.chg).toLocaleString():"—"}</td><td>${v.val?fmt(v.val,1)+" 億":"—"}</td></tr>`);});});
+  const p=d.pcr||[],p0=p[0]||{};const pc=p.slice(0,10).reverse().map(x=>x.oi);
+  body("p-taifex").innerHTML=`<table class="tf-t"><tr><th>契約 · 法人</th><th>淨未平倉 口</th><th>變化</th><th>契約金額</th></tr>${rows.join("")}</table>
+  ${p0.oi?`<div class="jb-k" style="margin-top:10px"><div><div class="lbl">台指選擇權 Put/Call（未平倉）</div><b class="num">${fmt(n(p0.oi),1)}%</b> <span class="sub">成交量比 ${fmt(n(p0.vol),1)}%</span></div><div style="flex:1;max-width:220px">${mini(pc)}</div></div>`:""}`;
+  setMeta("p-taifex",{...d,label:d.date||""},30);}
+/* ---------- 美股巨頭 ---------- */
+function renderUsbig(d){const r=(x,v)=>`<div class="wl-r"><span class="nm">${esc(x.name)}<small>${esc(x.sym)}</small></span><span>${mini(x.spark||[])}</span><span class="r">${fmt(n(x.price))}</span><span class="r ${cls(v)}">${v}</span></div>`;
+  const big=(d.big||[]).map(x=>r(x,`<span class="${cls(n(x.chg_pct))}">${sgn(n(x.chg_pct),2,"%")}</span>`)).join("");
+  const fut=(d.fut||[]).map(x=>x.kind==="y"?r({...x,price:x.price},`<span class="${cls(n(x.bp))}">${x.bp!=null?(x.bp>0?"+":"")+fmt(x.bp,1)+"bp":"—"}</span>`):r(x,`<span class="${cls(n(x.chg_pct))}">${sgn(n(x.chg_pct),2,"%")}</span>`)).join("");
+  const a=d.adr;body("p-usbig").innerHTML=`${a?`<div class="sub" style="margin-bottom:6px">台積電 ADR 溢價 <b class="${cls(a.premium)}" style="font-size:14px">${sgn(a.premium,1,"%")}</b>（ADR ${fmt(a.tsm)} USD × ${fmt(a.twd,2)} ÷ 5 vs 台股 ${fmt(a.tw)}）</div>`:""}<div class="wl-h">巨頭</div><div class="wl-g">${big}</div><div class="wl-h" style="margin-top:8px">期貨與美債</div><div class="wl-g">${fut}</div>`;
+  setMeta("p-usbig",d,1);}
 let AIRPREV=null;
 const renderers={
   taiex(d){twm.taiex=d;renderTaiex();},
@@ -1060,10 +1098,12 @@ const renderers={
   _taiex_old(d){const idx=n(d.index),chg=n(d.change);const pct=chg/(idx-chg)*100;const series=(d.history&&d.history.length>5?d.history.map(x=>x[1]):(d.series||[])).map(n);
     body("p-taiex").innerHTML=`<div class="kpi"><div><div class="lbl">加權指數 ${esc(d.date||"")}${d.live?` · <span style="color:var(--up)">即時 ${esc(d.live)}</span>`:""}${d.history&&d.history.length>5?" · 近 "+d.history.length+" 日":" · 本月"}</div><div class="big ${cls(chg)}${K("taiex",idx)}">${fmt(idx)}</div></div><div class="chg ${cls(chg)}">${sgn(chg)}　${sgn(pct,2,"%")}</div></div>${spark(series)}<table><tr><td class="name">成交金額</td><td class="r num">${compact(n(d.value))}</td><td class="name" style="padding-left:12px">成交筆數</td><td class="r num">${compact(n(d.transactions))}</td></tr></table>`;
     setMeta("p-taiex",{...d,label:"盤後"},30);},
-  tw_stocks(d){const tr=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg),pct=ch/(px-ch)*100;return`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)} ${esc(it.group||"")}${it.live?` · <span style="color:var(--up)">即時 ${esc(it.live)}</span>`:""}</span>${mini(it.spark)}</td><td class="r num${K("tw:"+it.code,px)}">${fmt(px)}</td><td class="r num ${cls(ch)}">${sgn(ch)}</td><td class="r num ${cls(ch)}">${sgn(pct,1,"%")}</td></tr>`;}).join("");
+  tw_stocks(d){TWW=d;renderTWW();},
+  _tw_stocks_old(d){const tr=(d.items||[]).map(it=>{const px=n(it.price),ch=n(it.chg),pct=ch/(px-ch)*100;return`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)} ${esc(it.group||"")}${it.live?` · <span style="color:var(--up)">即時 ${esc(it.live)}</span>`:""}</span>${mini(it.spark)}</td><td class="r num${K("tw:"+it.code,px)}">${fmt(px)}</td><td class="r num ${cls(ch)}">${sgn(ch)}</td><td class="r num ${cls(ch)}">${sgn(pct,1,"%")}</td></tr>`;}).join("");
     body("p-tw-stocks").innerHTML=`<table><tr><th>個股</th><th class="r">收盤</th><th class="r">漲跌</th><th class="r">%</th></tr>${tr}</table>`;setMeta("p-tw-stocks",{...d,label:"盤後 "+(d.date||"")},30);},
-  poly(d){let lastG=null;const li=polyArrange(d.items).map(({g,it:m})=>{const p=n(m.yes),dd=n(m.d1);const head=g!==lastG?`<li class="o-grp">${esc(g)}</li>`:"";lastG=g;return head+`<li><span class="t"><a href="https://polymarket.com/event/${esc(m.slug||"")}" target="_blank" rel="noopener">${esc(m.question)}</a>${m._n>1?`<span class="sub">另 ${m._n-1} 個日期</span>`:""}</span><span class="bar" aria-hidden="true"><i style="width:${isFinite(p)?Math.max(0,Math.min(100,p)):0}%"></i></span><span class="m${K("poly:"+(m.slug||m.question),p)}">${isFinite(p)?p.toFixed(0)+"%":"—"}</span><span class="m ${cls(dd)}" style="min-width:44px;text-align:right">${isFinite(dd)?sgn(dd,1,""):""}</span></li>`;}).join("");
-    body("p-poly").innerHTML=`<ul class="list">${li||'<li class="empty">目前沒有非運彩的熱門市場</li>'}</ul>`;setMeta("p-poly",{...d,label:"Yes 機率 / 24h 變動"},3);},
+  poly(d){if(!d.groups){return;}
+    const ev=e=>`<div class="pm-e"><a href="https://polymarket.com/event/${esc(e.slug)}" target="_blank" rel="noopener">${esc(e.title)}</a><span class="v">$${compact(n(e.vol24h))}/24h${e.end?" · 至 "+esc(e.end.slice(5)):""}</span><div class="pm-o">${e.outs.map(o=>`<span>${e.multi?esc(o.name)+" ":""}<b>${fmt(n(o.yes),0)}%</b>${o.d1?` <span class="${cls(o.d1)}">${o.d1>0?"▲":"▼"}${fmt(Math.abs(o.d1),1)}</span>`:""}</span>`).join("")}</div></div>`;
+    body("p-poly").innerHTML=`<div class="pm-g">${d.groups.map(g=>`<div class="pm-h">${esc(g.topic)}</div>${g.events.map(ev).join("")}`).join("")}</div>`;setMeta("p-poly",{...d,label:`${d.groups.length} 個領域`},3);},
   tech(d){const col=(title,html)=>`<div><div class="ph" style="padding:0 0 4px;border-bottom:1px solid var(--line);margin-bottom:4px"><h2 style="font-size:10px">${title}</h2></div>${html||'<div class="err">這輪沒抓到</div>'}</div>`;
     const gh=(d.github||[]).map(r=>`<li><span class="t"><a href="${esc(safe(r.url))}" target="_blank" rel="noopener">${esc(r.name)}</a></span><span class="m">★${compact(n(r.stars))}</span></li>`).join("");
     const hf=(d.hf||[]).map(m=>`<li><span class="t"><a href="https://huggingface.co/${esc(m.id)}" target="_blank" rel="noopener">${esc(m.id)}</a></span><span class="m">↓${compact(n(m.downloads))}</span></li>`).join("");
@@ -1217,6 +1257,8 @@ const renderers={
   flights(d){try{applyWx();}catch(e){}},
   lightning(d){try{applyWx();}catch(e){}},
   house(d){try{applyWx();}catch(e){}renderHouse();},
+  taifex(d){renderTaifex(d);},
+  usbig(d){renderUsbig(d);},
   jobs(d){JOBS=d;renderJobs();try{applyWx();}catch(e){}},
   mops(d){MOPS=d;renderMops();try{applyWx();}catch(e){}},
   typhoon(d){try{applyWx();}catch(e){}},
@@ -1270,7 +1312,7 @@ function tape(P){const items=[];
   (P.pulse?.items||[]).forEach(it=>items.push([it.name,fmt(n(it.price),n(it.price)>=1000?0:2),n(it.chg_pct)]));
   if(P.taiex){const idx=n(P.taiex.index),ch=n(P.taiex.change);items.push(["TAIEX 收盤",fmt(idx),ch/(idx-ch)*100]);}
   (P.fx?.items||[]).forEach(it=>items.push([it.name+"/TWD",fmt(n(it.buy??it.mid),it.code==="JPY"?4:3),n(it.chg_pct)]));
-  (P.tw_stocks?.items||[]).forEach(it=>{const px=n(it.price),ch=n(it.chg);items.push([it.name,fmt(px),ch/(px-ch)*100]);});
+  (P.tw_stocks?.items||[]).filter(it=>!it.sec||it.sec!=="ETF").forEach(it=>{const px=n(it.price),ch=n(it.chg);items.push([it.name,fmt(px),ch/(px-ch)*100]);});
   (P.luxury?.items||[]).forEach(it=>items.push([it.name,fmt(n(it.price)),n(it.chg_pct)]));
   (P.commodities?.items||[]).forEach(it=>items.push([it.name,fmt(n(it.price)),n(it.chg_pct)]));
   (P.commodities?.shipping||[]).forEach(it=>items.push([it.name,fmt(n(it.value),0),n(it.chg_pct)]));
@@ -1718,7 +1760,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"]];
-const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"market","p-revenue":"market","p-mops":"market","p-jobs":"macro","p-house":"live",
+const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"macro","p-house":"live",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro",
   "ib-sig":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",

@@ -301,32 +301,71 @@ def p_taiex():
 
 TW_WATCH = [("1476", "儒鴻", "紡織"), ("1477", "聚陽", "紡織"), ("1402", "遠東新", "紡織"),
             ("2912", "統一超", "通路"), ("1216", "統一", "通路"), ("2903", "遠百", "通路")]
+# 觀察清單：(區塊, 代號, 名稱, 小分類)；債券 ETF 在櫃買
+TW_LIST = [("權值", c, n, "") for c, n in [("2330", "台積電"), ("2317", "鴻海"), ("2454", "聯發科"), ("2382", "廣達"), ("2308", "台達電"), ("3711", "日月光投控"),
+                                          ("2881", "富邦金"), ("2882", "國泰金"), ("2412", "中華電"), ("2603", "長榮")]] + \
+          [("ETF", "0050", "元大台灣50", "市值型"), ("ETF", "006208", "富邦台50", "市值型"), ("ETF", "0056", "元大高股息", "高股息"), ("ETF", "00878", "國泰永續高股息", "高股息"),
+           ("ETF", "00919", "群益台灣精選高息", "高股息"), ("ETF", "00929", "復華台灣科技優息", "高股息"), ("ETF", "00940", "元大台灣價值高息", "高股息"),
+           ("ETF", "00631L", "元大台灣50正2", "槓桿反向"), ("ETF", "00675L", "富邦臺灣加權正2", "槓桿反向"), ("ETF", "00632R", "元大台灣50反1", "槓桿反向"),
+           ("ETF", "00679B", "元大美債20年", "債券"), ("ETF", "00687B", "國泰20年美債", "債券"), ("ETF", "00937B", "群益ESG投等債20+", "債券")] + \
+          [("客戶產業", c, n, g) for c, n, g in TW_WATCH]
+TPEX_DAILY = "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes"
+
+
+def _tpex_rows():
+    for k in range(3):  # 櫃買偶爾傳到一半斷線
+        try:
+            return gjson(TPEX_DAILY, timeout=60)
+        except Exception as e:  # noqa: BLE001
+            log("tpex daily", k, e); time.sleep(2)
+    return []
 
 
 def p_tw_stocks():
     rows = gjson("https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL")
-    by = {r["Code"]: r for r in rows}
-    items, date = [], None
-    for code, name, group in TW_WATCH:
-        r = by.get(code)
+    by = {r["Code"]: ("tse", r) for r in rows}
+    trows = _tpex_rows()
+    for r in trows:
+        c = str(r.get("SecuritiesCompanyCode") or "").strip()
+        if c and c not in by:
+            by[c] = ("otc", r)
+    items, date, otc = [], None, set()
+    for sec, code, name, sub in TW_LIST:
+        mk, r = by.get(code, (None, None))
         if not r:
             continue
-        date = date or roc_to_iso(r["Date"])
-        px, ch = num(r["ClosingPrice"]), num(r["Change"])
-        hist_put("tw_stocks", code, roc_to_iso(r["Date"]), px)
-        items.append({"code": code, "name": name, "group": group, "price": px, "chg": ch,
+        if mk == "tse":
+            d, px, ch, val = roc_to_iso(r["Date"]), num(r["ClosingPrice"]), num(r["Change"]), num(r.get("TradeValue"))
+        else:
+            otc.add(code)
+            d, px, ch, val = roc_to_iso(r.get("Date")), num(r.get("Close")), num(r.get("Change")), num(r.get("TransactionAmount"))
+        date = max(date or d, d)
+        hist_put("tw_stocks", code, d, px)
+        items.append({"code": code, "name": name, "group": sub, "sec": sec, "price": px, "chg": ch, "value": val, "date": d,
                       "spark": hist_get("tw_stocks", code)})
     if not items:
         raise RuntimeError("no watch rows")
+    # 主動式 ETF（代號結尾 A）：成交值前 10
+    act = []
+    for c, (mk, r) in by.items():
+        if not re.match(r"^\d{5}A$", c):
+            continue
+        if mk == "tse":
+            px, ch, val, nm = num(r["ClosingPrice"]), num(r["Change"]), num(r.get("TradeValue")), r.get("Name")
+        else:
+            px, ch, val, nm = num(r.get("Close")), num(r.get("Change")), num(r.get("TransactionAmount")), r.get("CompanyName")
+        if px:
+            act.append({"code": c, "name": (nm or "")[:12], "price": px, "chg": ch, "value": val, "mk": mk})
+    act.sort(key=lambda x: -(x["value"] or 0))
     MIS_DIAG.clear()
     try:
-        qs = twse_mis_quotes([c for c, _, _ in TW_WATCH])
+        qs = twse_mis_quotes([it["code"] for it in items], otc=otc)
         live = [it for it in items if _mis_override(it, qs.get(it["code"]), date)]
         if live:
             date = max(it["date"] for it in live)
     except Exception as e:  # noqa: BLE001
         log("tw_stocks mis", e); MIS_DIAG.append("err " + safe_err(e)[:80])
-    return {"date": date, "items": items, "mis": MIS_DIAG[:6]}
+    return {"date": date, "items": items, "active": act[:12], "activeN": len(act), "mis": MIS_DIAG[:6]}
 
 
 def p_fx():
@@ -386,32 +425,59 @@ def p_fx_any():
 SPORTY = re.compile(r"\b(vs\.?|@)\b|spread|o/u|over/under|\bnfl\b|\bnba\b|\bmlb\b|\bnhl\b|\bufc\b|\bmls\b|premier league|la liga|serie a|bundesliga|ligue 1|champions league|europa|ncaa|grand prix|\batp\b|\bwta\b|\bf1\b|super bowl|world series|stanley cup|world cup|\bcup\b|playoffs?|finals?\b|win the 20\d\d|\bmvp\b|heisman|ballon", re.I)
 
 
+POLY_TOPICS = [("Fed／利率", "fed-rates", 3), ("經濟／通膨", "economy", 2), ("經濟／通膨", "inflation", 2), ("台海／中國", "china", 3),
+               ("台灣選舉", "taiwan", 3), ("地緣政治", "geopolitics", 3), ("地緣政治", "middle-east", 2), ("地緣政治", "ukraine", 2),
+               ("AI／科技", "ai", 3), ("AI／科技", "big-tech", 2), ("美國期中選舉", "midterms", 3), ("加密貨幣", "crypto", 2)]
+POLY_NOISE = re.compile(r"\bon (January|February|March|April|May|June|July|August|September|October|November|December) \d|\d+\s*-\s*(January|February|March|April|May|June|July|August|September|October|November|December)? ?\d+\?|bankruptcy|aliens|Millennium Prize", re.I)
+
+
 def p_poly():
-    rows = gjson("https://gamma-api.polymarket.com/markets", params={
-        "active": "true", "closed": "false", "order": "volume24hr", "ascending": "false", "limit": 60})
-    items = []
-    for m in rows:
-        if m.get("sportsMarketType") or m.get("gameStartTime") or SPORTY.search(m.get("question") or ""):
-            continue
-        end = (m.get("endDate") or m.get("endDateIso") or "")[:19]
-        if end and end.replace("Z", "") < NOW.strftime("%Y-%m-%dT%H:%M:%S"):
-            continue  # 已過結束日、只是還沒結算（例如「九月內」的市場）
+    groups, seen, flat = {}, set(), []
+    for label, tag, k in POLY_TOPICS:
         try:
-            yes = float(json.loads(m.get("outcomePrices") or "[]")[0]) * 100
-        except Exception:
-            yes = None
-        if yes is not None and (yes < 0.5 or yes > 99.5):
-            continue  # 實質已定案，沒有資訊量
-        d1 = m.get("oneDayPriceChange")
-        ev = (m.get("events") or [{}])[0]
-        items.append({"question": m.get("question"), "slug": ev.get("slug") or m.get("slug"),
-                      "yes": yes, "d1": d1 * 100 if isinstance(d1, (int, float)) else None,
-                      "vol24h": m.get("volume24hr"), "end": end[:10]})
-        if len(items) >= 10:
-            break
-    if not items:
-        raise RuntimeError("no non-sports markets")
-    return {"items": items}
+            evs = gjson("https://gamma-api.polymarket.com/events", params={"tag_slug": tag, "active": "true", "closed": "false",
+                                                                          "order": "volume24hr", "ascending": "false", "limit": 12}, timeout=30)
+        except Exception as e:  # noqa: BLE001
+            log("poly", tag, e); continue
+        got = 0
+        for ev in evs:
+            title = ev.get("title") or ""
+            if ev.get("id") in seen or SPORTY.search(title) or POLY_NOISE.search(title):
+                continue
+            outs = []
+            for m in ev.get("markets") or []:
+                if m.get("closed") or m.get("active") is False:
+                    continue
+                try:
+                    yes = float(json.loads(m.get("outcomePrices") or "[]")[0]) * 100
+                except Exception:  # noqa: BLE001
+                    continue
+                if yes < 0.5 or yes > 99.5:
+                    continue
+                d1 = m.get("oneDayPriceChange")
+                outs.append({"name": (m.get("groupItemTitle") or ("Yes" if len(ev.get("markets") or []) == 1 else m.get("question") or ""))[:40],
+                             "yes": round(yes, 1), "d1": round(d1 * 100, 1) if isinstance(d1, (int, float)) else None})
+            if not outs:
+                continue
+            outs.sort(key=lambda o: -o["yes"])
+            seen.add(ev.get("id"))
+            e = {"title": title[:110], "slug": ev.get("slug") or "", "vol24h": round(ev.get("volume24hr") or 0), "end": (ev.get("endDate") or "")[:10],
+                 "multi": len(ev.get("markets") or []) > 1, "outs": outs[:3]}
+            groups.setdefault(label, []).append(e)
+            top = outs[0]
+            flat.append({"question": title + (f" — {top['name']}" if e["multi"] else ""), "slug": e["slug"], "yes": top["yes"], "d1": top["d1"],
+                         "vol24h": e["vol24h"], "end": e["end"], "topic": label})
+            got += 1
+            if got >= k:
+                break
+        time.sleep(0.3)
+    if not flat:
+        raise RuntimeError("poly: nothing")
+    order = []
+    for label, _, _ in POLY_TOPICS:
+        if label in groups and label not in order:
+            order.append(label)
+    return {"groups": [{"topic": t, "events": groups[t]} for t in order], "items": sorted(flat, key=lambda x: -(x["vol24h"] or 0))}
 
 
 HN_KW = re.compile(r"OpenAI|Anthropic|Claude|GPT|Gemini|DeepMind|Google|Meta\b|Llama|Mistral|DeepSeek|Qwen|agent|LLM|model|Nvidia|Apple|Figma|Adobe|design", re.I)
@@ -1055,9 +1121,9 @@ def twse_mis():
 MIS_DIAG: list = []
 
 
-def twse_mis_quotes(codes):
+def twse_mis_quotes(codes, otc=()):
     """證交所官方即時（個股批次）：回 {code: {price, prev, chg, pct, day, time}}；未成交（z='-'）就略過該檔。"""
-    ex = "|".join(f"tse_{c}.tw" for c in codes)
+    ex = "|".join(f"{'otc' if c in otc else 'tse'}_{c}.tw" for c in codes)
     r = S.get("https://mis.twse.com.tw/stock/api/getStockInfo.jsp", params={"ex_ch": ex, "json": "1", "delay": "0", "_": int(time.time() * 1000)},
               headers={"Referer": "https://mis.twse.com.tw/stock/index.jsp", "Accept": "application/json"}, timeout=TIMEOUT)
     r.raise_for_status()
@@ -2727,6 +2793,78 @@ def _gcis_enrich(names, budget=40):
     if n:
         write_json(cp, cache, separators=(",", ":"))
     return cache
+
+
+# ---------- 台指期籌碼（期交所開放資料）----------
+TAIFEX = "https://openapi.taifex.com.tw/v1/"
+
+
+def p_taifex():
+    rows = gjson(TAIFEX + "MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate", timeout=40)
+    want = {"臺股期貨": "台指期", "小型臺指期貨": "小台", "微型臺指期貨": "微台"}
+    out, date = {}, ""
+    for r in rows:
+        name = want.get(str(r.get("ContractCode") or "").strip())
+        if not name:
+            continue
+        who = str(r.get("Item") or "")
+        who = "外資" if "外資" in who else "投信" if "投信" in who else "自營商" if "自營" in who else who
+        rd = str(r.get("Date") or "")
+        date = date or (roc_to_iso(rd) if len(rd) == 7 else f"{rd[:4]}-{rd[4:6]}-{rd[6:8]}")
+        oi = num(r.get("OpenInterest(Net)"))
+        out.setdefault(name, {})[who] = {"oi": oi, "vol": num(r.get("TradingVolume(Net)")), "val": round((num(r.get("ContractValueofOpenInterest(Net)(Thousands)")) or 0) / 100000, 1)}
+        hist_put("taifex", f"{name}:{who}", date, oi)
+    if not out:
+        raise RuntimeError("taifex: no rows")
+    for name, d in out.items():
+        for who, v in d.items():
+            h = hist_get("taifex", f"{name}:{who}", 20)
+            v["chg"] = (h[-1] - h[-2]) if len(h) >= 2 else None
+            v["spark"] = h
+    pcr = []
+    try:
+        for r in gjson(TAIFEX + "PutCallRatio", timeout=40)[:10]:
+            pcr.append({"d": str(r.get("Date")), "vol": num(r.get("PutCallVolumeRatio%")), "oi": num(r.get("PutCallOIRatio%"))})
+    except Exception as e:  # noqa: BLE001
+        log("pcr", e)
+    return {"date": date, "fut": out, "pcr": pcr}
+
+
+# ---------- 美股巨頭、期貨與美債（Yahoo）----------
+US_BIG = [("NVDA", "Nvidia"), ("AAPL", "Apple"), ("MSFT", "Microsoft"), ("GOOGL", "Alphabet"), ("AMZN", "Amazon"), ("META", "Meta"),
+          ("TSLA", "Tesla"), ("AVGO", "Broadcom"), ("TSM", "台積電 ADR")]
+US_FUT = [("ES=F", "S&P 500 期", "idx"), ("NQ=F", "Nasdaq 期", "idx"), ("YM=F", "道瓊期", "idx"), ("RTY=F", "羅素 2000 期", "idx"), ("NIY=F", "日經期", "idx"),
+          ("^IRX", "美債 3 個月", "y"), ("^TNX", "美債 10 年", "y"), ("^TYX", "美債 30 年", "y")]
+
+
+def p_usbig():
+    big, fut, errs = [], [], []
+    for sym, name in US_BIG:
+        try:
+            q = yahoo_daily(sym, "2mo")
+            big.append({"sym": sym, "name": name, "price": q["price"], "chg_pct": q["chg_pct"], "chg5_pct": q["chg5_pct"], "open": q["open"], "spark": q["closes"][-30:]})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{sym}: {safe_err(e)}")
+    for sym, name, kind in US_FUT:
+        try:
+            q = yahoo_daily(sym, "2mo")
+            cl = q["closes"]
+            bp = round((cl[-1] - cl[-2]) * 100, 1) if kind == "y" and len(cl) >= 2 else None
+            fut.append({"sym": sym, "name": name, "kind": kind, "price": q["price"], "chg_pct": q["chg_pct"], "bp": bp, "spark": cl[-30:]})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{sym}: {safe_err(e)}")
+    adr = None
+    try:
+        tsm = next(x for x in big if x["sym"] == "TSM")["price"]
+        twd = yahoo_daily("TWD=X", "1mo")["price"]
+        tw = next((it["price"] for it in (RESULTS.get("tw_stocks") or {}).get("items", []) if it["code"] == "2330"), None) or ((RESULTS.get("tw_market") or {}).get("tsmc") or {}).get("price")
+        if tsm and twd and tw:
+            adr = {"premium": round(100 * (tsm * twd / 5 / tw - 1), 1), "tsm": tsm, "twd": twd, "tw": tw}
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"ADR: {safe_err(e)}")
+    if not big and not fut:
+        raise RuntimeError("usbig: nothing " + "; ".join(errs)[:150])
+    return {"big": big, "fut": fut, "adr": adr, "errs": errs[:4]}
 
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
 # Vin 的關注領域（Google News 繁中）：每組顯示最新 3 則。帶引號＝精準比對。改這裡。
@@ -5152,7 +5290,7 @@ run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
 run("tw_stocks", p_tw_stocks)
 run("fx", p_fx_any)
-run("poly", p_poly)
+run("poly", p_poly, keep_if_fresh_hours=0.5)
 run("tech", p_tech)
 run("trends", p_trends)
 run("youtube", p_youtube, keep_if_fresh_hours=0.5)
@@ -5160,6 +5298,8 @@ run("attention", p_attention, keep_if_fresh_hours=3)
 run("consume", p_consume, keep_if_fresh_hours=24)
 run("luxury", p_luxury, keep_if_fresh_hours=3)
 run("world", p_world, keep_if_fresh_hours=0.25)
+run("usbig", p_usbig, keep_if_fresh_hours=0.25)
+run("taifex", p_taifex, keep_if_fresh_hours=1)
 run("sectors", p_sectors, keep_if_fresh_hours=0.5)
 run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
