@@ -1265,6 +1265,24 @@ function movers(P){
 const GEO_URL="https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/geo.json";
 const TW_VIEW={center:[120.95,23.7],zoom:matchMedia("(max-width:640px)").matches?6.3:6.9};
 let map=null,mapReady=false,geoData=null,curCity=(()=>{try{return localStorage.getItem("geo-city")||"all";}catch(e){return"all";}})(),lastGeoGen=null,CBOUND=null;
+/* 地區篩選：curCity＝"all"／"R:北部"這類區域／單一縣市；沒選到的縣市蓋暗、點點不顯示 */
+const REGIONS={"北部":["臺北市","新北市","基隆市","桃園市","新竹市","新竹縣","宜蘭縣"],"中部":["苗栗縣","臺中市","彰化縣","南投縣","雲林縣"],"南部":["嘉義市","嘉義縣","臺南市","高雄市","屏東縣"],"東部":["花蓮縣","臺東縣"],"離島":["澎湖縣","金門縣","連江縣"]};
+const CTY_ORDER=Object.values(REGIONS).flat();
+const normC=v=>String(v||"").replace(/^台/,"臺");
+const ctyOf=v=>{const t=normC(v);return CTY_ORDER.find(k=>t.startsWith(k))||"";};
+function regionSet(){if(curCity==="all")return null;if(curCity.startsWith("R:"))return REGIONS[curCity.slice(2)]?new Set(REGIONS[curCity.slice(2)]):null;return CTY_ORDER.includes(curCity)?new Set([curCity]):null;}
+function regionLabel(){return curCity==="all"?"全台":curCity.startsWith("R:")?curCity.slice(2):curCity.replace("臺","台");}
+(()=>{const old={Taipei:"臺北市",NewTaipei:"新北市",Taoyuan:"桃園市",Hsinchu:"新竹市",HsinchuCounty:"新竹縣",HSP:"新竹縣",Miaoli:"苗栗縣",Taichung:"臺中市",Chiayi:"嘉義市",ChiayiCounty:"嘉義縣",Tainan:"臺南市",Kaohsiung:"高雄市",Pingtung:"屏東縣",Taitung:"臺東縣"};if(old[curCity])curCity=old[curCity];if(curCity!=="all"&&!regionSet())curCity="all";})();
+const geoKeysIn=set=>Object.keys((geoData&&geoData.labels)||{}).filter(k=>set&&(set.has(ctyOf(geoData.labels[k]))||(k==="HSP"&&(set.has("新竹市")||set.has("新竹縣")))));
+function regionPoly(set){const co=[];((CBOUND&&CBOUND.features)||[]).forEach(f=>{if(!set.has(f.properties.name))return;const g=f.geometry;if(g.type==="Polygon")co.push(g.coordinates);else g.coordinates.forEach(p=>co.push(p));});return co.length?{type:"MultiPolygon",coordinates:co}:null;}
+function goRegion(anim){if(!map)return;const set=regionSet();if(!set){map.flyTo({...TW_VIEW,duration:anim?900:0});return;}
+  let pts=[];const poly=regionPoly(set);if(poly)poly.coordinates.forEach(p=>p[0].forEach(q=>pts.push(q)));else set.forEach(k=>TWC[k]&&pts.push(TWC[k]));if(!pts.length)return;
+  const b=pts.reduce((m,q)=>[[Math.min(m[0][0],q[0]),Math.min(m[0][1],q[1])],[Math.max(m[1][0],q[0]),Math.max(m[1][1],q[1])]],[[180,90],[-180,-90]]);
+  map.fitBounds(b,{padding:{top:56,bottom:40,left:30,right:30},maxZoom:11.5,duration:anim?900:0});}
+const RFIL=["news","alerts","culture","brands","house","rain","temp","lightning","parking","bikes","speed","freeway"];
+function applyRegionFilter(){if(!map||!mapReady)return;const set=regionSet(),poly=set?regionPoly(set):null;
+  RFIL.forEach(id=>{if(!map.getLayer(id))return;if(!set){map.setFilter(id,null);return;}const list=["literal",[...set]];
+    map.setFilter(id,poly?["any",["all",["has","cty"],["in",["get","cty"],list]],["all",["!",["has","cty"]],["within",poly]]]:["all",["has","cty"],["in",["get","cty"],list]]);});}
 const spdColor=v=>(geoData&&geoData.lineLabel)?(v<20?"#F0524F":v<35?"#E0A23A":"#39B978"):(v<40?"#F0524F":v<60?"#E0A23A":"#39B978");
 const parkColor=r=>r<0.1?"#F0524F":r<0.3?"#E0A23A":"#39B978";
 /* 圖層分三組：事件／天氣／生活；細項在「圖層」選單裡個別關 */
@@ -1273,7 +1291,6 @@ const MAPL=[["news","新聞","event",["news"]],["alerts","示警","event",["aler
   ["culture","藝文","life",["culture"]],["brands","新公司","life",["brands"]],["house","房價","life",["house"]],["flights","航班","life",["flights"]],["bikes","YouBike","life",["bikes"]],["parking","停車場","life",["parking"]],["speed","車速","life",["speed","freeway"]]];
 const GRP={event:"事件",wx:"天氣",life:"生活"};
 const MS=(()=>{let g={event:true,wx:false,life:false},off=[];try{const j=JSON.parse(localStorage.getItem("map:vis")||"null");if(j&&j.g){g=j.g;off=j.off||[];}}catch(e){}return{g,off:new Set(off)};})();
-if(curCity!=="all")MS.g.life=true;
 function saveMS(){try{localStorage.setItem("map:vis",JSON.stringify({g:MS.g,off:[...MS.off]}));}catch(e){}}
 const visOn=k=>{const L=MAPL.find(x=>x[0]===k);return!!L&&!!MS.g[L[2]]&&!MS.off.has(k);};
 const CLICK=["news","alerts","quake","ty-pt","culture","brands","house","flights","rain","temp","lightning","parking","bikes","speed","freeway"];
@@ -1328,32 +1345,32 @@ function initMap(){
       const seen=new Set();const fs=map.queryRenderedFeatures(bb,{layers:ids}).filter(f=>{const k=f.properties.card||f.properties.label;if(!k||seen.has(k))return false;seen.add(k);return true;});
       let html="";
       if(fs.length)html=fs.slice(0,8).map(f=>f.properties.card||`<div class="mc"><div class="mc-t">${f.properties.label}</div></div>`).join("")+(fs.length>8?`<div class="mc-more">這裡還有 ${fs.length-8} 個點，放大地圖看</div>`:"");
-      else if(map.getLayer("county-fill")&&map.getLayoutProperty("county-fill","visibility")!=="none"){const cf=map.queryRenderedFeatures(e.point,{layers:["county-fill"]})[0];if(cf)html=countyCard(cf.properties.name);}
+      else if(map.getLayer("county-fill")&&map.getLayoutProperty("county-fill","visibility")!=="none"){const cf=map.queryRenderedFeatures(e.point,{layers:["county-fill"]})[0];if(cf&&!cf.properties.off)html=countyCard(cf.properties.name);}
       if(!html)return;hov.remove();card.setLngLat(e.lngLat).setHTML(`<div class="mcard-in">${html}</div>`).addTo(map);});
-    mapReady=true;applyGeo();if(geoData&&curCity!=="all")map.jumpTo(cityView(curCity));
-    fetch("tw_counties.json").then(r=>r.ok?r.json():null).then(j=>{CBOUND=j;applyWx();}).catch(()=>{});
+    mapReady=true;applyGeo();if(curCity!=="all")goRegion(false);
+    fetch("tw_counties.json").then(r=>r.ok?r.json():null).then(j=>{CBOUND=j;if(curCity!=="all")goRegion(false);applyGeo();}).catch(()=>{});
   });
 }
 function cityView(c){const v=(geoData&&geoData.views||{})[c];return v?{center:v[0],zoom:v[1]}:TW_VIEW;}
-function fillCitySelect(){const sel=$("#geo-city");if(!geoData)return;const labels=geoData.labels||{};const av=geoData.avail||{};const sig=Object.keys(labels).join(",");if(sel.dataset.filled===sig)return;
-  [...sel.querySelectorAll("option:not([value=all])")].forEach(o=>o.remove());
-  Object.keys(labels).forEach(k=>{const o=document.createElement("option");o.value=k;const a=av[k]||{};const n=["parking","bikes","vd"].filter(x=>a[x]).length;o.textContent=labels[k]+(n?"":"（暫無資料）")+(a.live?"・即時":"");sel.appendChild(o);});
-  sel.dataset.filled=sig;if(labels[curCity]||curCity==="all")sel.value=curCity;else if(typeof YB!=="undefined"&&YB.ok!==null){curCity="all";sel.value="all";}}
+function fillCitySelect(){const sel=$("#geo-city");if(!sel)return;const labels=(geoData&&geoData.labels)||{};const live=new Set(Object.keys(labels).map(k=>ctyOf(labels[k])).filter(Boolean));const sig=[...live].sort().join(",")+"|";if(sel.dataset.filled===sig)return;
+  sel.innerHTML=`<option value="all">全台總覽</option><optgroup label="區域">${Object.keys(REGIONS).map(r=>`<option value="R:${r}">${r}</option>`).join("")}</optgroup>`+Object.entries(REGIONS).map(([r,cs])=>`<optgroup label="${r}縣市">${cs.map(c=>`<option value="${c}">${c.replace("臺","台")}${live.has(c)?"・YouBike":""}</option>`).join("")}</optgroup>`).join("");
+  sel.dataset.filled=sig;sel.value=curCity;}
 function applyGeo(){
   if(geoData)fillCitySelect();
   try{applyWx();}catch(e){console.warn("map layers",e);}
   if(!map||!mapReady||!geoData)return;
-  const c=(geoData.cities||{})[curCity]||{};
+  const set=regionSet(),keys=set?geoKeysIn(set):[],c={parking:[],bikes:[],speed:[]};keys.forEach(k=>{const cc=(geoData.cities||{})[k]||{};["parking","bikes","speed"].forEach(t=>{c[t]=c[t].concat(cc[t]||[]);});});
   map.getSource("parking").setData({type:"FeatureCollection",features:(c.parking||[]).map(p=>({type:"Feature",geometry:{type:"Point",coordinates:[p[0],p[1]]},properties:{total:p[3],color:parkColor(p[2]/p[3]),label:`${esc(p[4])}<br>剩 ${p[2]} / ${p[3]} 位`}}))});
   map.getSource("bikes").setData({type:"FeatureCollection",features:(c.bikes||[]).map(b=>({type:"Feature",geometry:{type:"Point",coordinates:[b[0],b[1]]},properties:{rent:b[2],label:`${esc(b[4])}<br>可借 ${b[2]} / ${b[3]}`}}))});
   map.getSource("speed").setData({type:"FeatureCollection",features:(c.speed||[]).map(v=>({type:"Feature",geometry:{type:"Point",coordinates:[v[0],v[1]]},properties:{color:spdColor(v[2]),label:`${esc(v[3])}<br>${v[2]} km/h`}}))});
-  map.getSource("freeway").setData({type:"FeatureCollection",features:(curCity!=="Taipei"?[]:geoData.freeway||[]).map(f=>({type:"Feature",geometry:{type:"LineString",coordinates:f[0]},properties:{color:spdColor(f[1]),label:`${esc(f[2])}<br>${f[1]} km/h`}}))});
+  map.getSource("freeway").setData({type:"FeatureCollection",features:(set&&set.has("臺北市")?geoData.freeway||[]:[]).map(f=>({type:"Feature",geometry:{type:"LineString",coordinates:f[0]},properties:{color:spdColor(f[1]),label:`${esc(f[2])}<br>${f[1]} km/h`}}))});
   applyVis();
-  const a=(geoData.avail||{})[curCity]||{};const have=[a.parking?"停車場":null,a.bikes?"YouBike":null,a.vd?"車速":null].filter(Boolean);
-  $("#geo-avail").textContent=curCity==="all"?"點地圖上的點或縣市看內容、開原文":(have.length?"有："+have.join("、")+"（在「生活」組）":"這一輪沒有資料");
+  applyRegionFilter();
+  const av=keys.map(k=>(geoData.avail||{})[k]||{}),have=[av.some(a=>a.parking)?"停車場":null,av.some(a=>a.bikes)?"YouBike":null,av.some(a=>a.vd)?"車速":null].filter(Boolean);
+  $("#geo-avail").textContent=curCity==="all"?"點地圖上的點或縣市看內容、開原文":`只看${regionLabel()}，其他地區已遮蔽${have.length?"・"+have.join("、")+"在「生活」組":""}`;
   $("#geo-age").textContent=geoData.generatedAt?"資料 "+ago(geoData.generatedAt):"";
-  const n=(c.parking||[]).length+(c.bikes||[]).length+(c.speed||[]).length;const lab=curCity==="all"?"全台":((geoData.labels||{})[curCity]||curCity);const mf=((window.LASTP||{}).mapfeed||{});
-  setMeta("p-geo",{updatedAt:geoData.generatedAt,label:`${lab} · ${curCity==="all"?(mf.n||0)+" 則新聞上地圖":n+" 點"}`},0.5);
+  const mf=((window.LASTP||{}).mapfeed||{}),nn=(mf.news||[]).filter(x=>!set||set.has(ctyOf(x.place))).length;
+  setMeta("p-geo",{updatedAt:geoData.generatedAt,label:`${regionLabel()} · ${nn} 則新聞上地圖`},0.5);
 }
 /* ---------- 地圖資料圖層：新聞、示警、地震、颱風、縣市狀態、天氣、藝文、新公司、房價、航班 ---------- */
 const RADAR_URL="https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/radar.png";
@@ -1371,19 +1388,20 @@ function countyCard(k){const P=window.LASTP||{},al=((P.alerts||{}).alerts||[]).f
 function applyWxNow(){if(!map||!mapReady)return;const P=window.LASTP||{},W=P.weather||{},R=P.radar_wx||{},C=P.culture||{},T=P.typhoon||{},MF=P.mapfeed||{};
   const fc=a=>({type:"FeatureCollection",features:a});const pt=(ll,props)=>({type:"Feature",geometry:{type:"Point",coordinates:ll},properties:props});
   /* 新聞、示警 */
-  map.getSource("news").setData(fc((MF.news||[]).map(x=>{const col=x.k==="local"?"#9FB4FF":"#F2F4F8";return pt(x.ll,{color:col,label:`<b>${esc(x.place)}</b>｜${esc(x.t.slice(0,30))}`,card:mc(esc(x.place)+(x.lvl==="county"?"":" · 鄉鎮"),col,mlink(x.u,esc(x.t)),esc(x.s)+(x.at?" · "+ago(x.at):""))});})));
-  map.getSource("alerts").setData(fc((MF.alerts||[]).map(x=>pt(x.ll,{color:LVC[x.lvl]||LVC[1],label:`<b>${esc(x.cat)}</b>｜${esc(x.place)}`,card:mc(esc(x.cat)+" · "+esc(x.place),LVC[x.lvl]||LVC[1],mlink(x.u,esc(x.t)),x.at?ago(x.at)+" · 國家災防中心":"國家災防中心")}))));
+  map.getSource("news").setData(fc((MF.news||[]).map(x=>{const col=x.k==="local"?"#9FB4FF":"#F2F4F8";return pt(x.ll,{...(ctyOf(x.place)?{cty:ctyOf(x.place)}:{}),color:col,label:`<b>${esc(x.place)}</b>｜${esc(x.t.slice(0,30))}`,card:mc(esc(x.place)+(x.lvl==="county"?"":" · 鄉鎮"),col,mlink(x.u,esc(x.t)),esc(x.s)+(x.at?" · "+ago(x.at):""))});})));
+  map.getSource("alerts").setData(fc((MF.alerts||[]).map(x=>pt(x.ll,{...(ctyOf(x.place)?{cty:ctyOf(x.place)}:{}),color:LVC[x.lvl]||LVC[1],label:`<b>${esc(x.cat)}</b>｜${esc(x.place)}`,card:mc(esc(x.cat)+" · "+esc(x.place),LVC[x.lvl]||LVC[1],mlink(x.u,esc(x.t)),x.at?ago(x.at)+" · 國家災防中心":"國家災防中心")}))));
   /* 地震（近 7 天） */
   const now=Date.now();map.getSource("quake").setData(fc((((P.quake||{}).items)||[]).filter(q=>isFinite(n(q.lat))&&now-new Date(q.at).getTime()<7*864e5).map(q=>{const h=(now-new Date(q.at).getTime())/36e5,col=h<24?"#F0524F":h<72?"#E0A23A":"#8B93A7";
     return pt([n(q.lon),n(q.lat)],{mag:n(q.mag),color:col,label:`<b>M${fmt(n(q.mag),1)}</b> ${esc(q.loc||"").slice(0,24)}`,card:mc(`M${fmt(n(q.mag),1)}`,col,mlink(q.url,esc(q.loc||"")),`深度 ${q.depth} km · 最大震度 ${esc(q.intensity||"")} · ${ago(q.at)}`)});})));
   /* 縣市狀態色塊 */
-  if(CBOUND){const now2=countyNow();map.getSource("cbound").setData(fc(CBOUND.features.map(f=>{const k=f.properties.name,c=now2[k]||{},st=stopOf(k).length;
+  if(CBOUND){const now2=countyNow(),rs=regionSet();map.getSource("cbound").setData(fc(CBOUND.features.map(f=>{const k=f.properties.name,c=now2[k]||{},st=stopOf(k).length;
+    if(rs&&!rs.has(k))return{type:"Feature",geometry:f.geometry,properties:{name:k,color:"#05060a",op:.8,line:"#05060a",lw:.5,off:1}};
     const col=st?"#B15CFF":c.lvl>=3?"#F0524F":c.lvl>=2?"#E0A23A":(c.rain||0)>=10?"#3D8BFF":(c.nw||[]).length?"#7C8FF2":"#7C8FF2";
     const op=st?.32:c.lvl>=3?.24:c.lvl>=2?.11:(c.rain||0)>=10?.16:(c.nw||[]).length?.05:.02;
     return{type:"Feature",geometry:f.geometry,properties:{name:k,color:col,op,line:st||c.lvl>=2?col:"#4a5268",lw:st||c.lvl>=2?1.6:.5}};})));}
   /* 天氣 */
-  map.getSource("rain").setData(fc((W.rainmap||[]).map(r=>pt([r[0],r[1]],{r:r[2],color:rainColor(r[2]),label:`<b>${esc(r[4])}</b> ${esc((r[5]||"").replace("臺","台"))}<br>過去 1 小時 ${r[2]} mm · 10 分鐘 ${r[3]} mm`}))));
-  map.getSource("temp").setData(fc((W.tempmap||[]).map(t=>pt([t[0],t[1]],{color:tempColor(t[2]),label:`<b>${fmt(t[2],1)}°</b> ${esc(t[3])} ${esc((t[4]||"").replace("臺","台"))}`}))));
+  map.getSource("rain").setData(fc((W.rainmap||[]).map(r=>pt([r[0],r[1]],{...(ctyOf(r[5])?{cty:ctyOf(r[5])}:{}),r:r[2],color:rainColor(r[2]),label:`<b>${esc(r[4])}</b> ${esc((r[5]||"").replace("臺","台"))}<br>過去 1 小時 ${r[2]} mm · 10 分鐘 ${r[3]} mm`}))));
+  map.getSource("temp").setData(fc((W.tempmap||[]).map(t=>pt([t[0],t[1]],{...(ctyOf(t[4])?{cty:ctyOf(t[4])}:{}),color:tempColor(t[2]),label:`<b>${fmt(t[2],1)}°</b> ${esc(t[3])} ${esc((t[4]||"").replace("臺","台"))}`}))));
   map.getSource("lightning").setData(fc((((P.lightning||{}).items)||[]).map(l=>pt([l[0],l[1]],{label:`閃電 ${esc(String(l[2]||"").slice(11,16))}`}))));
   const tf=[];(T.items||[]).forEach(t=>{const nm=esc(t.name||t.en||"颱風");const past=(t.past||[]).map(x=>x.ll),fcst=(t.fc||[]).map(x=>x.ll);
     if(past.length>1)tf.push({type:"Feature",geometry:{type:"LineString",coordinates:past},properties:{color:"#F0524F"}});
@@ -1397,9 +1415,9 @@ function applyWxNow(){if(!map||!mapReady)return;const P=window.LASTP||{},W=P.wea
     else if(key!==radarKey)map.getSource("radar").updateImage({url,coordinates:R.bounds});radarKey=key;}
   /* 生活 */
   map.getSource("culture").setData(fc((C.points||[]).map(e=>{const col=CULC[e[3]]||"#C9A3FF";return pt([e[0],e[1]],{color:col,label:`<span style="color:${col}">${esc(e[3])}</span> ${esc(e[2])}`,card:mc(esc(e[3]),col,mlink(e[6],esc(e[2])),esc(e[4])+" · "+esc(e[5])+(e[7]?" · "+esc(e[7]):""))});})));
-  map.getSource("brands").setData(fc((MF.brands||[]).map(b=>pt(b.ll,{label:`<b>新公司</b> ${esc(b.t)}`,card:mc("新公司 · "+esc((b.city||"").replace("臺","台")),"#4FD1C5",mlink("https://www.google.com/search?q="+encodeURIComponent(b.t),esc(b.t)),`${esc(b.cat||"")} · 資本額 ${compact(n(b.cap))} · ${esc(b.date||"")} 設立`)}))));
+  map.getSource("brands").setData(fc((MF.brands||[]).map(b=>pt(b.ll,{...(ctyOf(b.city)?{cty:ctyOf(b.city)}:{}),label:`<b>新公司</b> ${esc(b.t)}`,card:mc("新公司 · "+esc((b.city||"").replace("臺","台")),"#4FD1C5",mlink("https://www.google.com/search?q="+encodeURIComponent(b.t),esc(b.t)),`${esc(b.cat||"")} · 資本額 ${compact(n(b.cap))} · ${esc(b.date||"")} 設立`)}))));
   const H=P.house||{},hv=(H.towns||[]).map(x=>x[4]).sort((a,b)=>a-b),q=v=>{let i=0;while(i<4&&v>hv[Math.floor(hv.length*(i+1)/5)])i++;return HOUSEC[i];};
-  map.getSource("house").setData(fc((H.towns||[]).map(x=>pt([x[0],x[1]],{n:x[5],color:q(x[4]),label:`<b>${esc(x[2].replace("臺","台")+x[3])}</b> ${x[4]} 萬/坪`,card:mc("房價 · "+esc(H.season||""),"#F2C14E",mlink("https://lvr.land.moi.gov.tw/",`${esc(x[2].replace("臺","台")+x[3])} 住宅中位 <b>${x[4]}</b> 萬/坪`),`${x[5]} 筆買賣 · 實價登錄`)}))));
+  map.getSource("house").setData(fc((H.towns||[]).map(x=>pt([x[0],x[1]],{cty:ctyOf(x[2]),n:x[5],color:q(x[4]),label:`<b>${esc(x[2].replace("臺","台")+x[3])}</b> ${x[4]} 萬/坪`,card:mc("房價 · "+esc(H.season||""),"#F2C14E",mlink("https://lvr.land.moi.gov.tw/",`${esc(x[2].replace("臺","台")+x[3])} 住宅中位 <b>${x[4]}</b> 萬/坪`),`${x[5]} 筆買賣 · 實價登錄`)}))));
   map.getSource("flights").setData(fc((((P.flights||{}).items)||[]).map(f=>{const col=f[3]<10000?"#E0A23A":"#9FB4FF";return pt([f[0],f[1]],{trk:f[2],color:col,label:`✈ ${esc(f[4]||f[6])} ${esc(f[5])} · ${compact(f[3])} ft`,card:mc("航班",col,mlink(f[4]?"https://www.flightradar24.com/"+encodeURIComponent(f[4]):"",esc(f[4]||f[6]||"未知")),`${esc(f[5])} ${esc(f[6])} · 高度 ${Math.round(f[3]).toLocaleString()} ft · ${Math.round(f[7])} kt`)});})));
   applyVis();}
 function mapLegend(){const el=$("#map-leg");if(!el)return;const P=window.LASTP||{},W=P.weather||{},R=P.radar_wx||{},MF=P.mapfeed||{},on=visOn,out=[];
@@ -1421,7 +1439,7 @@ document.addEventListener("click",e=>{const g=e.target.closest("#map-grp [data-g
   if(e.target.closest("#map-more")){$("#map-menu").hidden=!$("#map-menu").hidden;return;}
   if(!e.target.closest("#map-menu")&&$("#map-menu"))$("#map-menu").hidden=true;});
 document.addEventListener("change",e=>{const c=e.target.closest("#map-menu [data-lyr]");if(!c)return;c.checked?MS.off.delete(c.dataset.lyr):MS.off.add(c.dataset.lyr);saveMS();applyVis();});
-renderGrpUI();
+renderGrpUI();fillCitySelect();
 /* ---------- 全台總覽：各縣市現況（示警＋地方新聞＋天氣） ---------- */
 const TWC={"臺北市":[121.56,25.05],"新北市":[121.47,25.01],"基隆市":[121.74,25.13],"桃園市":[121.22,24.93],"新竹市":[120.97,24.80],"新竹縣":[121.12,24.70],"苗栗縣":[120.87,24.49],"臺中市":[120.68,24.16],"彰化縣":[120.50,24.00],"南投縣":[120.90,23.85],"雲林縣":[120.39,23.70],"嘉義市":[120.45,23.48],"嘉義縣":[120.40,23.43],"臺南市":[120.22,23.00],"高雄市":[120.31,22.63],"屏東縣":[120.55,22.55],"宜蘭縣":[121.75,24.70],"花蓮縣":[121.55,23.90],"臺東縣":[121.10,22.80],"澎湖縣":[119.58,23.57],"金門縣":[118.35,24.45],"連江縣":[119.95,26.15]};
 const WXN={"臺北市":"台北","新北市":"新北","基隆市":"基隆","桃園市":"桃園","新竹市":"新竹","臺中市":"台中","彰化縣":"彰化","嘉義市":"嘉義","臺南市":"台南","高雄市":"高雄","屏東縣":"屏東","宜蘭縣":"宜蘭","花蓮縣":"花蓮","臺東縣":"台東"};
@@ -1434,12 +1452,12 @@ function mapPulse(pts){if(!map||!mapReady||!pts.length)return;if(document.docume
   const t0=performance.now(),D=1600;(function step(t){const k=Math.min(1,(t-t0)/D);map.setPaintProperty("mpulse","circle-radius",4+k*26);map.setPaintProperty("mpulse","circle-stroke-opacity",(1-k)*0.9);
     if(k<1)requestAnimationFrame(step);else src.setData({type:"FeatureCollection",features:[]});})(t0);}
 async function loadGeo(){
-  try{const r=await fetch(GEO_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const g=await r.json();if(g.generatedAt===lastGeoGen)return;const first=!geoData;lastGeoGen=g.generatedAt;geoData=g;ybMerge();applyGeo();if(first&&mapReady&&curCity!=="all")map.jumpTo(cityView(curCity));}
+  try{const r=await fetch(GEO_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const g=await r.json();if(g.generatedAt===lastGeoGen)return;const first=!geoData;lastGeoGen=g.generatedAt;geoData=g;ybMerge();applyGeo();if(first&&mapReady&&curCity!=="all")goRegion(false);}
   catch(e){$("#geo-age").textContent="地圖資料抓不到";}
 }
 document.addEventListener("click",e=>{const a=e.target.closest("[data-tyfit]");if(!a||!map)return;e.preventDefault();const T=((window.LASTP||{}).typhoon||{}).items||[];const pts=T.flatMap(t=>[...(t.past||[]).slice(-8),...(t.fc||[])].map(x=>x.ll));pts.push([120,22],[122,25.3]);
   const b=pts.reduce((m,p)=>[[Math.min(m[0][0],p[0]),Math.min(m[0][1],p[1])],[Math.max(m[1][0],p[0]),Math.max(m[1][1],p[1])]],[[180,90],[-180,-90]]);$("#p-geo").scrollIntoView({behavior:"smooth",block:"start"});map.fitBounds(b,{padding:40,duration:900});});
-$("#geo-city").addEventListener("change",e=>{curCity=e.target.value;try{localStorage.setItem("geo-city",curCity);}catch(x){}if(curCity!=="all"&&!MS.g.life){MS.g.life=true;saveMS();renderGrpUI();}map&&map.flyTo({...cityView(curCity),duration:900});applyGeo();});
+$("#geo-city").addEventListener("change",e=>{curCity=e.target.value;try{localStorage.setItem("geo-city",curCity);}catch(x){}const set=regionSet();if(set&&set.size===1&&geoKeysIn(set).length&&!MS.g.life){MS.g.life=true;saveMS();renderGrpUI();}goRegion(true);applyGeo();});
 const mapScript=document.createElement("script");mapScript.src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js";mapScript.onload=()=>{initMap();loadGeo();};document.head.appendChild(mapScript);
 setInterval(loadGeo,5*60e3);
 /* ---------- 台灣現場：全台 YouBike 由瀏覽器即時抓（官方站點檔擋海外主機，台灣網路的瀏覽器抓得到） ---------- */
