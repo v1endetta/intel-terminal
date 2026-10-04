@@ -999,7 +999,7 @@ const renderers={
       <div class="t">${isFinite(t)?fmt(t,1)+"°":"—"}<small>${esc(c.weather||"")}</small></div>
       <div class="row"><span>濕 ${isFinite(n(c.rh))?fmt(n(c.rh),0)+"%":"—"}</span><span class="${n(c.rain1h)>0?"bad":""}">雨 ${isFinite(n(c.rain1h))?fmt(n(c.rain1h),1):"—"}</span><span class="${n(c.rain24h)>=30?"bad":""}">24h ${isFinite(n(c.rain24h))?fmt(n(c.rain24h),0):"—"}</span>${c.uv!=null?`<span class="${n(c.uv)>=8?"bad":""}" title="今日紫外線最大值">UV ${fmt(n(c.uv),0)}</span>`:""}</div>
       <div class="fc1 ${wet?"bad":""}">${esc(f.wx||"")} ${esc(f.minT||"")}–${esc(f.maxT||"")}° · 降雨 ${esc(f.pop||"")}%${f2.pop!=null?" → "+esc(f2.pop)+"%":""}</div></div>`;}).join("");
-    const TY=((window.LASTP||{}).typhoon||{}).items||[];const ty=TY.map(t=>{const x=(t.past||[]).slice(-1)[0]||{};return`<div class="warn">颱風 <b>${esc(t.name||t.en)}</b>${t.en&&t.name?" "+esc(t.en):""}${x.ll?` · 中心 ${x.ll[1].toFixed(1)}°N ${x.ll[0].toFixed(1)}°E`:""}${x.wind?` · 最大風速 ${x.wind} m/s`:""}${x.r15?` · 暴風半徑 ${x.r15} km`:""} · 路徑在地圖上</div>`;}).join("");
+    const TY=((window.LASTP||{}).typhoon||{}).items||[];const ty=TY.map(t=>{const x=(t.past||[]).slice(-1)[0]||{};const r15=x.r15||((t.fc||[])[0]||{}).r15;return`<div class="warn">颱風 <b>${esc(t.name||t.en)}</b>${t.en&&t.name?" "+esc(t.en):""}${x.ll?` · 中心 ${x.ll[1].toFixed(1)}°N ${x.ll[0].toFixed(1)}°E`:""}${x.wind?` · 最大風速 ${x.wind} m/s`:""}${r15?` · 暴風半徑 ${r15} km`:""}${x.mv?` · 往${esc(x.dir)} ${x.mv} km/h`:""} · <a href="#" data-tyfit style="color:inherit">地圖看路徑</a></div>`;}).join("");
     const w=ty+((d.warnings||[]).length?`<div class="warn">特報：${d.warnings.map(x=>esc(x.where+" "+x.what+(x.level?"("+x.level+")":""))).join("、")}</div>`:"");
     body("p-weather").innerHTML=`${w}<div class="wx wx3">${cards}</div>`;setMeta("p-weather",d,1);},
   tw_pulse(d){const live=(typeof YB!=="undefined"&&YB.cities)?YB.cities:null;let rows=(d.bikes||[]).map(b=>({...b}));
@@ -1264,6 +1264,7 @@ function initMap(){
     map.addSource("culture",{type:"geojson",data:EMPTY});
     map.addLayer({id:"culture",type:"circle",source:"culture",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,1.8,11,5],"circle-color":["get","color"],"circle-opacity":.9,"circle-stroke-color":"#0b0d12","circle-stroke-width":.4}});
     map.addSource("ty",{type:"geojson",data:EMPTY});
+    map.addLayer({id:"ty-fill",type:"fill",source:"ty",filter:["==",["geometry-type"],"Polygon"],paint:{"fill-color":["get","color"],"fill-opacity":.12,"fill-outline-color":["get","color"]}});
     map.addLayer({id:"ty-line",type:"line",source:"ty",filter:["==",["geometry-type"],"LineString"],paint:{"line-color":["get","color"],"line-width":2,"line-dasharray":[2,1.5]}});
     map.addLayer({id:"ty-pt",type:"circle",source:"ty",filter:["==",["geometry-type"],"Point"],paint:{"circle-radius":["get","r"],"circle-color":["get","color"],"circle-opacity":.25,"circle-stroke-color":["get","color"],"circle-stroke-width":1.2}});
     map.addSource("freeway",{type:"geojson",data:{type:"FeatureCollection",features:[]}});
@@ -1317,7 +1318,8 @@ function applyWx(){if(!map||!mapReady)return;const P=window.LASTP||{},W=P.weathe
   const tf=[];(T.items||[]).forEach(t=>{const nm=esc(t.name||t.en||"颱風");const past=(t.past||[]).map(x=>x.ll),fcst=(t.fc||[]).map(x=>x.ll);
     if(past.length>1)tf.push({type:"Feature",geometry:{type:"LineString",coordinates:past},properties:{color:"#F0524F"}});
     const last=(t.past||[]).slice(-1)[0];if(last&&fcst.length)tf.push({type:"Feature",geometry:{type:"LineString",coordinates:[last.ll,...fcst]},properties:{color:"#E0A23A"}});
-    (t.past||[]).slice(-1).forEach(x=>tf.push({type:"Feature",geometry:{type:"Point",coordinates:x.ll},properties:{color:"#F0524F",r:9,label:`<b>${nm}</b> 中心 ${x.ll[1].toFixed(1)}°N ${x.ll[0].toFixed(1)}°E<br>${x.wind?"最大風速 "+x.wind+" m/s":""}${x.p?" · "+x.p+" hPa":""}${x.r15?"<br>暴風半徑 "+x.r15+" km":""}`}}));
+    const r15=(last&&last.r15)||((t.fc||[])[0]||{}).r15;if(last&&r15){const ring=[];for(let i=0;i<=64;i++){const a=i/64*2*Math.PI,dl=r15/111.32;ring.push([last.ll[0]+dl*Math.sin(a)/Math.cos(last.ll[1]*Math.PI/180),last.ll[1]+dl*Math.cos(a)]);}tf.push({type:"Feature",geometry:{type:"Polygon",coordinates:[ring]},properties:{color:"#F0524F"}});}
+    (t.past||[]).slice(-1).forEach(x=>tf.push({type:"Feature",geometry:{type:"Point",coordinates:x.ll},properties:{color:"#F0524F",r:9,label:`<b>${nm}</b> 中心 ${x.ll[1].toFixed(1)}°N ${x.ll[0].toFixed(1)}°E<br>${x.wind?"最大風速 "+x.wind+" m/s":""}${x.p?" · "+x.p+" hPa":""}${r15?"<br>暴風半徑 "+r15+" km":""}${x.mv?"<br>"+esc(x.dir)+" "+x.mv+" km/h":""}`}}));
     (t.fc||[]).forEach(x=>tf.push({type:"Feature",geometry:{type:"Point",coordinates:x.ll},properties:{color:"#E0A23A",r:4,label:`<b>${nm}</b> ${x.tau?esc(String(x.tau))+" 小時後":"預測"}<br>${x.wind?"風速 "+x.wind+" m/s":""}`}}));});
   map.getSource("ty").setData(fc(tf));
   if(R.img&&R.bounds){const key=R.time||R.updatedAt;const url=RADAR_URL+"?t="+encodeURIComponent(key||"");
@@ -1344,6 +1346,8 @@ async function loadGeo(){
   try{const r=await fetch(GEO_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const g=await r.json();if(g.generatedAt===lastGeoGen)return;const first=!geoData;lastGeoGen=g.generatedAt;geoData=g;ybMerge();applyGeo();if(first&&mapReady&&curCity!=="all")map.jumpTo(cityView(curCity));}
   catch(e){$("#geo-age").textContent="地圖資料抓不到";}
 }
+document.addEventListener("click",e=>{const a=e.target.closest("[data-tyfit]");if(!a||!map)return;e.preventDefault();const T=((window.LASTP||{}).typhoon||{}).items||[];const pts=T.flatMap(t=>[...(t.past||[]).slice(-8),...(t.fc||[])].map(x=>x.ll));pts.push([120,22],[122,25.3]);
+  const b=pts.reduce((m,p)=>[[Math.min(m[0][0],p[0]),Math.min(m[0][1],p[1])],[Math.max(m[1][0],p[0]),Math.max(m[1][1],p[1])]],[[180,90],[-180,-90]]);$("#p-geo").scrollIntoView({behavior:"smooth",block:"start"});map.fitBounds(b,{padding:40,duration:900});});
 $("#geo-city").addEventListener("change",e=>{curCity=e.target.value;try{localStorage.setItem("geo-city",curCity);}catch(x){}map&&map.flyTo({...cityView(curCity),duration:900});applyGeo();});
 document.querySelectorAll(".mapctl .layer").forEach(b=>b.addEventListener("click",()=>{layersOn[b.dataset.layer]=!layersOn[b.dataset.layer];b.classList.toggle("on",layersOn[b.dataset.layer]);applyGeo();}));
 const mapScript=document.createElement("script");mapScript.src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js";mapScript.onload=()=>{initMap();loadGeo();};document.head.appendChild(mapScript);

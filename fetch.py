@@ -1270,27 +1270,46 @@ def _ll_pair(s):
         return None
 
 
+def _ci(d, *keys):
+    """不分大小寫取欄位（氣象署新舊版本命名不同）。"""
+    if not isinstance(d, dict):
+        return None
+    low = {k.lower(): v for k, v in d.items()}
+    for k in keys:
+        if k.lower() in low:
+            return low[k.lower()]
+    return None
+
+
+def _radius(v):
+    if isinstance(v, dict):
+        v = _ci(v, "Radius", "radius", "value")
+    return num(v)
+
+
 def p_typhoon():
     rec = cwa("W-C0034-005")
     tcs = []
     for d in _walk_dicts(rec):
-        if not any(k in d for k in ("analysisData", "forecastData")):
+        if _ci(d, "analysisData") is None and _ci(d, "forecastData") is None:
             continue
         def fixes(part):
-            fx = (d.get(part) or {}).get("fix") or []
+            fx = _ci(_ci(d, part) or {}, "fix") or []
             out = []
             for f in fx if isinstance(fx, list) else [fx]:
-                ll = _ll_pair(f.get("coordinate"))
+                lon, lat = num(_ci(f, "CoordinateLongitude")), num(_ci(f, "CoordinateLatitude"))
+                ll = [lon, lat] if lon is not None and lat is not None else _ll_pair(_ci(f, "coordinate"))
                 if not ll:
                     continue
-                r = f.get("circleOf15Ms") or {}
-                out.append({"t": f.get("fixTime") or f.get("initTime") or "", "tau": f.get("tau"), "ll": ll,
-                            "wind": num(f.get("maxWindSpeed")), "gust": num(f.get("maxGustSpeed")), "p": num(f.get("pressure")),
-                            "r15": num(r.get("radius") if isinstance(r, dict) else r),
-                            "r70": num(f.get("radiusOf70PercentProbability"))})
+                out.append({"t": _ci(f, "DateTime", "fixTime", "InitialTime", "initTime") or "", "tau": num(_ci(f, "ForecastHour", "tau")), "ll": ll,
+                            "wind": num(_ci(f, "MaxWindSpeed")), "gust": num(_ci(f, "MaxGustSpeed")), "p": num(_ci(f, "Pressure")),
+                            "mv": num(_ci(f, "MovingSpeed")), "dir": _ci(f, "MovingDirection") or "",
+                            "r15": _radius(_ci(f, "Circle15ms", "circleOf15Ms")), "r25": _radius(_ci(f, "Circle25ms", "circleOf25Ms")),
+                            "r70": _radius(_ci(f, "Radius70PercentProbability", "radiusOf70PercentProbability"))})
             return out
-        tcs.append({"name": d.get("cwaTyphoonName") or d.get("typhoonName") or "", "en": d.get("typhoonName") or "",
-                    "td": d.get("cwaTdNo") or d.get("cwaTyNo") or "", "past": fixes("analysisData"), "fc": fixes("forecastData")})
+        name = _ci(d, "CwaTyphoonName") or _ci(d, "TyphoonName") or ""
+        tcs.append({"name": name, "en": _ci(d, "TyphoonName") or "", "td": _ci(d, "CwaTyNo", "CwaTdNo") or "",
+                    "past": fixes("analysisData")[-24:], "fc": fixes("forecastData")})
     return {"items": tcs, "diag": None if tcs else _tree(rec)}
 
 
@@ -1310,7 +1329,7 @@ def _png_rgba(w, h, rows):
     return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0)) + chunk(b"IDAT", zlib.compress(raw, 9)) + chunk(b"IEND", b"")
 
 
-def p_radar():
+def p_radar_wx():
     import math
     j = gjson(CWA_FILE + "O-A0059-001", params={"Authorization": CWA_KEY, "downloadType": "WEB", "format": "JSON"})
     ds = (j.get("cwaopendata") or j).get("dataset") or {}
@@ -4637,7 +4656,7 @@ _sp = load_prev("supply") or {}
 _sp_next = min([x.get("next") for x in (_sp.get("pmi") or {}, _sp.get("nmi") or {}) if x.get("next")] or ["9999"])
 run("supply", p_supply, keep_if_fresh_hours=1 if TODAY_TPE.isoformat() >= _sp_next else 6)  # 發布日起每小時重抓，抓到新月份 next 會往後推
 run("weather", p_weather)
-run("radar_wx", p_radar, keep_if_fresh_hours=0.15)
+run("radar_wx", p_radar_wx, keep_if_fresh_hours=0.15)
 run("typhoon", p_typhoon, keep_if_fresh_hours=0.5)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
