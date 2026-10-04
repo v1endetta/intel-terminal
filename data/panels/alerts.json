@@ -1,6 +1,32 @@
 {
  "alerts": [
   {
+   "id": "TWC_water_202610041130",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [],
+   "text": "光復路二段273號 搶修",
+   "src": "台灣自來水公司",
+   "at": "2026-10-04T03:30:01Z",
+   "exp": "2026-10-04T16:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041130.cap"
+  },
+  {
+   "id": "CWA-Weather_heat_202610041128001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "南投縣",
+    "雲林縣",
+    "臺南市"
+   ],
+   "text": "天氣高溫炎熱，今(4)日中午前後南投縣、雲林縣為橙色燈號，有連續出現36度高溫的機率，請加強注意。臺南市為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-04T03:28:13Z",
+   "exp": "2026-10-04T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610041128.cap"
+  },
+  {
    "id": "TWC_water_202610041040",
    "cat": "停水",
    "lvl": 1,
@@ -323,12 +349,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 25,
+ "n_total": 27,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/04 11:02:14"
+  "updated": "2026/10/04 11:32:14"
  },
  "errs": [],
- "updatedAt": "2026-10-04T03:06:17Z"
+ "updatedAt": "2026-10-04T03:35:41Z"
 }
