@@ -1,0 +1,500 @@
+{
+ "taifex_paths": [
+  [
+   "/CCP_CMLists",
+   "店頭集中結算會員名冊"
+  ],
+  [
+   "/productsExemptedAH",
+   "盤後交易時段指定豁免及非豁免代為沖銷商品"
+  ],
+  [
+   "/SSFAdjustedInfo",
+   "股票期貨/選擇權調整型契約資訊內容"
+  ],
+  [
+   "/SSFRefferedOpeningPriceAh",
+   "股票期貨調整開盤參考價(盤後交易時段)"
+  ],
+  [
+   "/SSFRefferedOpeningPrice",
+   "股票期貨/選擇權調整開盤參考價"
+  ],
+  [
+   "/ContractAdj",
+   "股票期貨/選擇權契約調整一覽事項"
+  ],
+  [
+   "/DailyMarketReportFut",
+   "期貨每日交易行情"
+  ],
+  [
+   "/DailyMarketReportOpt",
+   "選擇權每日交易行情"
+  ],
+  [
+   "/DailyOptionsDelta",
+   "選擇權每日Delta值"
+  ],
+  [
+   "/PutCallRatio",
+   "臺指選擇權Put/Call比"
+  ],
+  [
+   "/BlockTradeContinuousMatchingSingleOrder",
+   "鉅額交易逐筆撮合之單式委託成交"
+  ],
+  [
+   "/BlockTradeContinuousMatchingCombinationOrder",
+   "鉅額交易逐筆撮合之組合式委託成交"
+  ],
+  [
+   "/BlockTradeNegotiation",
+   "期貨市場鉅額交易議價申報成交"
+  ],
+  [
+   "/BlockTrade",
+   "期貨市場鉅額交易各商品成交資訊"
+  ],
+  [
+   "/MarketDataOfMajorInstitutionalTradersGeneralBytheDate",
+   "期貨市場三大法人-總表-依日期"
+  ],
+  [
+   "/MarketDataOfMajorInstitutionalTradersGeneralBytheWeek",
+   "期貨市場三大法人-總表-依週別"
+  ],
+  [
+   "/MarketDataOfMajorInstitutionalTradersDividedByFuturesAndOptionsBytheDate",
+   "期貨市場三大法人-區分期貨與選擇權二類-依日期"
+  ],
+  [
+   "/MarketDataOfMajorInstitutionalTradersDividedByFuturesAndOptionsBytheWeek",
+   "期貨市場三大法人-區分期貨與選擇權二類-依週別"
+  ],
+  [
+   "/MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheDate",
+   "期貨市場三大法人-區分各期貨契約-依日期"
+  ],
+  [
+   "/MarketDataOfMajorInstitutionalTradersDetailsOfFuturesContractsBytheWeek",
+   "期貨市場三大法人-區分各期貨契約-依週別"
+  ],
+  [
+   "/MarketDataOfMajorInstitutionalTradersDetailsOfOptionsContractsBytheDate",
+   "期貨市場三大法人-區分各選擇權契約-依日期"
+  ],
+  [
+   "/MarketDataOfMajorInstitutionalTradersDetailsOfOptionsContractsBytheWeek",
+   "期貨市場三大法人-區分各選擇權契約-依週別"
+  ],
+  [
+   "/MarketDataOfMajorInstitutionalTradersDetailsOfCallsAndPutsBytheDate",
+   "期貨市場三大法人-選擇權買賣權分計-依日期"
+  ],
+  [
+   "/MarketDataOfMajorInstitutionalTradersDetailsOfCallsAndPutsBytheWeek",
+   "期貨市場三大法人-選擇權買賣權分計-依週別"
+  ],
+  [
+   "/OpenInterestOfLargeTradersFutures",
+   "期貨大額交易人未沖銷部位資料"
+  ],
+  [
+   "/OpenInterestOfLargeTradersOptions",
+   "選擇權大額交易人未沖銷部位資料"
+  ],
+  [
+   "/DailyForeignExchangeRates",
+   "每日外幣參考匯率"
+  ],
+  [
+   "/TotalMarketPositionLimitForSingleStockFuturesAndEquityOptions",
+   "個股類全市場部位限制"
+  ],
+  [
+   "/SingleStockFuturesContractReferredOpeningPrice",
+   "股票期貨契約調整開盤參考價"
+  ],
+  [
+   "/FuturesAndOptionsFeeSchedule",
+   "期交所期貨暨選擇權商品相關費用表"
+  ],
+  [
+   "/FinalSettlementPrice",
+   "期貨商品最後結算價"
+  ],
+  [
+   "/SettledPositionsOfContractsOnExpirationDate",
+   "到期契約履約交割"
+  ],
+  [
+   "/IndexFuturesAndOptionsMargining",
+   "期貨保證金一覽表-股價指數類"
+  ],
+  [
+   "/InterestRateFuturesMargining",
+   "保證金一覽表-利率類"
+  ],
+  [
+   "/GoldFuturesAndOptionsMargining",
+   "期貨保證金一覽表-商品類"
+  ],
+  [
+   "/SingleStockFuturesMargining",
+   "期貨保證金一覽表-股票類"
+  ],
+  [
+   "/SingleStockFuturesETFMargining",
+   "期貨保證金一覽表-股票類(ETF)"
+  ],
+  [
+   "/AcceptableCollateralGovernmentBonds",
+   "期貨市場有價證券保證金之可抵繳標的-公債"
+  ],
+  [
+   "/AcceptableCollateralInternationalBonds",
+   "期貨市場有價證券保證金之可抵繳標的-國際債"
+  ],
+  [
+   "/AcceptableCollateralStock",
+   "期貨市場有價證券保證金之可抵繳標的-股票(含ETF)"
+  ],
+  [
+   "/NetValuePerShareStatement",
+   "期貨商每股淨值明細表"
+  ],
+  [
+   "/AccumulatedIncomeStatementBeforeTaxStatement",
+   "期貨商稅前累計損益明細表"
+  ],
+  [
+   "/Daily_FUT",
+   "期貨商交易量日報表－期貨"
+  ],
+  [
+   "/Weekly_FUT",
+   "期貨商交易量週報表－期貨"
+  ],
+  [
+   "/Monthly_FUT",
+   "期貨商交易量月報表－期貨"
+  ],
+  [
+   "/Yearly_FUT",
+   "期貨商交易量年報表－期貨"
+  ],
+  [
+   "/Daily_OPT",
+   "期貨商交易量日報表－選擇權"
+  ],
+  [
+   "/Weekly_OPT",
+   "期貨商交易量週報表－選擇權"
+  ],
+  [
+   "/Monthly_OPT",
+   "期貨商交易量月報表－選擇權"
+  ],
+  [
+   "/Yearly_OPT",
+   "期貨商交易量年報表－選擇權"
+  ],
+  [
+   "/CustodianBankLists",
+   "保管銀行名冊"
+  ],
+  [
+   "/CMLists",
+   "結算會員名冊"
+  ],
+  [
+   "/ClearingBankLists",
+   "結算銀行名冊"
+  ],
+  [
+   "/FCMLists",
+   "期貨商總公司名冊"
+  ],
+  [
+   "/FCMBranchLists",
+   "期貨商分公司名冊"
+  ],
+  [
+   "/Daily_OPT_W",
+   "期貨商交易量週到期選擇權日報表"
+  ],
+  [
+   "/PositionLimitNonEquity",
+   "交易人部位限制-非個股類"
+  ],
+  [
+   "/PositionLimitEquity",
+   "交易人部位限制-個股類"
+  ],
+  [
+   "/TimeAndSalesData",
+   "每日期貨每筆成交資料"
+  ],
+  [
+   "/DailyVolumeReportOnCalendarSpreadOrders",
+   "每日期貨價差委託成交概況表"
+  ],
+  [
+   "/TimeAndSalesDataOnCalendarSpreadOrders",
+   "每日期貨價差每筆成交資料"
+  ],
+  [
+   "/OptionsTimeAndSalesData",
+   "每日選擇權每筆成交資料"
+  ],
+  [
+   "/MarketMakerListsFut",
+   "期貨商品造市者清單"
+  ],
+  [
+   "/MarketMakerListsOpt",
+   "選擇權商品造市者清單"
+  ],
+  [
+   "/AnnualTradingVolume",
+   "各商品年成交量統計表"
+  ],
+  [
+   "/SSFLists",
+   "股票期貨交易標的"
+  ],
+  [
+   "/SSOLists",
+   "股票選擇權交易標的"
+  ],
+  [
+   "/BTContinuousMatchingSingleOrderFutures",
+   "鉅額交易逐筆撮合之單式委託成交-期貨商品"
+  ],
+  [
+   "/BTContinuousMatchingSingleOrderOptions",
+   "鉅額交易逐筆撮合之單式委託成交-選擇權商品"
+  ],
+  [
+   "/BTDailyTradeInformationFutures",
+   "鉅額交易各商品成交資訊-期貨商品"
+  ],
+  [
+   "/BTDailyTradeInformationOptions",
+   "鉅額交易各商品成交資訊-選擇權商品"
+  ],
+  [
+   "/DailySummaryOfBlockTradeFutures",
+   "鉅額交易成交量統計-期貨商品"
+  ],
+  [
+   "/DailySummaryOfBlockTradeOptions",
+   "鉅額交易成交量統計-選擇權商品"
+  ],
+  [
+   "/FinalSettlementPriceFutures",
+   "最後結算價-期貨商品"
+  ],
+  [
+   "/FinalSettlementPriceOptions",
+   "最後結算價-選擇權商品"
+  ],
+  [
+   "/SettledPositionsFutures",
+   "到期契約履約交割-期貨商品"
+  ],
+  [
+   "/SettledPositionsOptions",
+   "到期契約履約交割-選擇權商品"
+  ],
+  [
+   "/NetValuePerShareS",
+   "兼營期貨商每股淨值明細表"
+  ],
+  [
+   "/NetValuePerShareF",
+   "專營期貨商每股淨值明細表"
+  ],
+  [
+   "/NetValuePerShareR",
+   "複委託期貨商每股淨值明細表"
+  ]
+ ],
+ "taifex_inst": {
+  "st": 200,
+  "n": 66,
+  "first": [
+   {
+    "Date": "20261002",
+    "ContractCode": "臺股期貨",
+    "Item": "自營商",
+    "TradingVolume(Long)": "3841",
+    "TradingValue(Long)(Thousands)": "37309528",
+    "TradingVolume(Short)": "3413",
+    "TradingValue(Short)(Thousands)": "33195824",
+    "TradingVolume(Net)": "428",
+    "TradingValue(Net)(Thousands)": "4113704",
+    "OpenInterest(Long)": "3340",
+    "ContractValueofOpenInterest(Long)(Thousands)": "32542978",
+    "OpenInterest(Short)": "4346",
+    "ContractValueofOpenInterest(Short)(Thousands)": "42332814",
+    "OpenInterest(Net)": "-1006",
+    "ContractValueofOpenInterest(Net)(Thousands)": "-9789836"
+   },
+   {
+    "Date": "20261002",
+    "ContractCode": "臺股期貨",
+    "Item": "投信",
+    "TradingVolume(Long)": "111",
+    "TradingValue(Long)(Thousands)": "1080923",
+    "TradingVolume(Short)": "57",
+    "TradingValue(Short)(Thousands)": "554805",
+    "TradingVolume(Net)": "54",
+    "TradingValue(Net)(Thousands)": "526118",
+    "OpenInterest(Long)": "77530",
+    "ContractValueofOpenInterest(Long)(Thousands)": "754661514",
+    "OpenInterest(Short)": "2861",
+    "ContractValueofOpenInterest(Short)(Thousands)": "27848402",
+    "OpenInterest(Net)": "74669",
+    "ContractValueofOpenInterest(Net)(Thousands)": "726813112"
+   }
+  ]
+ },
+ "taifex_pcr": {
+  "st": 200,
+  "n": 21,
+  "first": [
+   {
+    "Date": "20261002",
+    "PutVolume": "298761",
+    "CallVolume": "335069",
+    "PutCallVolumeRatio%": "89.16",
+    "PutOI": "41414",
+    "CallOI": "51228",
+    "PutCallOIRatio%": "80.84"
+   },
+   {
+    "Date": "20261001",
+    "PutVolume": "151488",
+    "CallVolume": "166271",
+    "PutCallVolumeRatio%": "91.11",
+    "PutOI": "63998",
+    "CallOI": "77538",
+    "PutCallOIRatio%": "82.54"
+   }
+  ]
+ },
+ "twse_all_etf": {
+  "st": 200,
+  "n": 1380,
+  "first": [
+   {
+    "Date": "1151002",
+    "Code": "00400A",
+    "Name": "主動國泰動能高息",
+    "TradeVolume": "25080047",
+    "TradeValue": "394282158",
+    "OpeningPrice": "15.61",
+    "HighestPrice": "15.80",
+    "LowestPrice": "15.61",
+    "ClosingPrice": "15.78",
+    "Change": "0.1800",
+    "Transaction": "5497"
+   },
+   {
+    "Date": "1151002",
+    "Code": "00401A",
+    "Name": "主動摩根台灣鑫收",
+    "TradeVolume": "4966863",
+    "TradeValue": "71104450",
+    "OpeningPrice": "14.26",
+    "HighestPrice": "14.36",
+    "LowestPrice": "14.23",
+    "ClosingPrice": "14.34",
+    "Change": "0.0800",
+    "Transaction": "1050"
+   }
+  ]
+ },
+ "etf_check": {
+  "0050": "元大台灣50",
+  "006208": "富邦台50",
+  "0056": "元大高股息",
+  "00878": "國泰永續高股息",
+  "00919": "群益台灣精選高息",
+  "00929": "復華台灣科技優息",
+  "00631L": "元大台灣50正2",
+  "00675L": "富邦臺灣加權正2",
+  "00632R": "元大台灣50反1",
+  "00940": "元大台灣價值高息",
+  "2330": "台積電",
+  "2317": "鴻海",
+  "2454": "聯發科",
+  "2382": "廣達",
+  "2308": "台達電",
+  "3711": "日月光投控",
+  "2881": "富邦金",
+  "2882": "國泰金",
+  "2412": "中華電",
+  "2603": "長榮",
+  "00679B": null,
+  "00687B": null,
+  "00937B": null
+ },
+ "tpex_daily": {
+  "st": 200,
+  "n": 11928,
+  "first": [
+   {
+    "Date": "1151002",
+    "SecuritiesCompanyCode": "00411A",
+    "CompanyName": "主動統一前沿科技",
+    "Close": "10.71",
+    "Change": "-0.04 ",
+    "Open": "10.79",
+    "High": "10.79",
+    "Low": "10.68",
+    "Average": "10.71",
+    "TradingShares": "9948068",
+    "TransactionAmount": "106585051",
+    "TransactionNumber": "2366",
+    "LatestBidPrice": "10.70",
+    "LatesAskPrice": "10.71",
+    "Capitals": "409576000",
+    "NextReferencePrice": "10.71",
+    "NextLimitUp": "9999.95",
+    "NextLimitDown": "0.01"
+   },
+   {
+    "Date": "1151002",
+    "SecuritiesCompanyCode": "006201",
+    "CompanyName": "元大富櫃50",
+    "Close": "47.86",
+    "Change": "+1.27",
+    "Open": "46.80",
+    "High": "47.86",
+    "Low": "46.80",
+    "Average": "47.48",
+    "TradingShares": "198026",
+    "TransactionAmount": "9402115",
+    "TransactionNumber": "327",
+    "LatestBidPrice": "47.86",
+    "LatesAskPrice": "47.87",
+    "Capitals": "22946000",
+    "NextReferencePrice": "47.86",
+    "NextLimitUp": "52.60",
+    "NextLimitDown": "43.08"
+   }
+  ]
+ },
+ "tpex_err": "ChunkedEncodingError(ProtocolError('Response ended prematurely'))",
+ "sitca": {
+  "st": 200,
+  "head": "\r\n\r\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n<html xmlns=\"https://www.w3.org/1999/xhtml\">\r\n<head><title>\r\n\t中華民國證券投資信託暨顧問商業同業公會\r\n</title><link rel=\"stylesheet\" href=\"../../WDataStyle.css\" type=\"text/css\" media=\"screen\""
+ },
+ "fundclear": {
+  "st": 200,
+  "head": "<!DOCTYPE html>\r\n<html lang=\"zh-Hant\" data-critters-container>\r\n  <head>\r\n    <meta charset=\"utf-8\">\r\n    <title>基金資訊觀測站</title>\r\n    <base href=\"/\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"favicon.ico\">\r\n  <style>html"
+ }
+}
