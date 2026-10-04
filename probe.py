@@ -1,47 +1,38 @@
-import os, json, requests, time, re
-os.makedirs("out21", exist_ok=True)
+import os, json, requests, time
+os.makedirs("out22", exist_ok=True)
 S = requests.Session(); S.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0 Safari/537.36"
 rep = {}
-def tree(o, d=0):
-    if d > 3: return "…"
-    if isinstance(o, dict): return {k: tree(v, d + 1) for k, v in list(o.items())[:16]}
-    if isinstance(o, list): return [len(o), tree(o[0], d + 1)] if o else [0]
-    return str(o)[:50]
-def hit(k, u, **kw):
+H104 = {"Referer": "https://www.104.com.tw/jobs/search/"}
+def g(u, **kw):
     try:
-        t0=time.time(); r = S.get(u, timeout=30, **kw); b = r.content[:300000]
-        info = {"st": r.status_code, "len": len(r.content), "ct": r.headers.get("content-type","")[:30], "cors": r.headers.get("access-control-allow-origin"), "s": round(time.time()-t0,1)}
-        try: info["tree"] = tree(json.loads(b))
-        except Exception:
-            for enc in ("utf-8-sig","big5"):
-                try: info["head"] = b[:700].decode(enc); break
-                except Exception: pass
-        rep[k] = info; return r
+        r = S.get(u, timeout=40, **kw); return r
     except Exception as e:
-        rep[k] = repr(e)[:160]
-# data.gov.tw datasets
-for ds in (27505, 44062):
-    r = hit(f"gov{ds}", f"https://data.gov.tw/api/v2/rest/dataset/{ds}")
+        return e
+r = g("https://www.104.com.tw/jobs/search/api/jobs", params={"page": 1, "pagesize": 20, "order": 16}, headers=H104)
+try:
+    j = r.json(); rep["104_all_keys"] = list(j.keys()); rep["104_meta"] = j.get("metadata"); d = j["data"]
+    rep["104_first"] = {k: (str(v)[:80]) for k, v in d[0].items()}; rep["104_n"] = len(d)
+except Exception as e: rep["104_all_err"] = repr(r)[:200] + repr(e)[:200]
+r = g("https://www.104.com.tw/jobs/search/api/jobs", params={"page": 1, "pagesize": 20, "jobcat": "2013000000"}, headers=H104)
+try: rep["104_cat_meta"] = r.json().get("metadata")
+except Exception as e: rep["104_cat_err"] = repr(e)[:200]
+r = g("https://www.104.com.tw/jobs/search/api/jobs", params={"page": 1, "pagesize": 20, "area": "6001001000"}, headers=H104)
+try: rep["104_area_meta"] = r.json().get("metadata")
+except Exception as e: rep["104_area_err"] = repr(e)[:200]
+for k, u in [("jobcat", "https://static.104.com.tw/category-tool/json/JobCat.json"), ("area", "https://static.104.com.tw/category-tool/json/Area.json"), ("indust", "https://static.104.com.tw/category-tool/json/Indust.json")]:
+    r = g(u)
     try:
-        j = r.json(); dist = j["result"]["distribution"]
-        rep[f"gov{ds}"]["title"] = j["result"].get("title"); rep[f"gov{ds}"]["dist"] = [(d.get("resourceDescription","")[:40], d.get("resourceFormat"), d.get("resourceDownloadUrl")) for d in dist][:6]
-        u = dist[-1].get("resourceDownloadUrl"); hit(f"gov{ds}_file", u)
-    except Exception as e:
-        rep[f"gov{ds}_err"] = repr(e)[:150]
-for q in ("減班休息", "停水", "停電", "違反勞動", "人口數"):
-    hit("search_"+q, "https://data.gov.tw/api/v2/rest/dataset", params={"q": q, "limit": 5})
-hit("twse_mopsnews", "https://openapi.twse.com.tw/v1/opendata/t187ap04_L")
-hit("twse_basic", "https://openapi.twse.com.tw/v1/opendata/t187ap03_L")
-hit("gcis_kw", "https://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C", params={"$format": "json", "$filter": "Company_Name like 達而 and Company_Status eq 01", "$skip": 0, "$top": 5})
-hit("gcis_swagger", "https://data.gcis.nat.gov.tw/resources/swagger/swagger.json")
-hit("job104", "https://www.104.com.tw/jobs/search/api/jobs", params={"keyword": "設計", "page": 1, "pagesize": 20}, headers={"Referer": "https://www.104.com.tw/jobs/search/"})
-hit("job104_old", "https://www.104.com.tw/jobs/search/list", params={"ro": 0, "kwop": 7, "keyword": "設計", "page": 1}, headers={"Referer": "https://www.104.com.tw/jobs/search/"})
-hit("cake", "https://www.cake.me/jobs?q=design")
-hit("yourator", "https://www.yourator.co/api/v4/jobs?page=1")
-hit("ris_pop", "https://www.ris.gov.tw/rs-opendata/api/v1/datastore/ODRP019/11508")
-hit("moa_pork", "https://data.moa.gov.tw/Service/OpenData/FromM/PorkTransType.aspx")
-hit("moa_egg", "https://data.moa.gov.tw/Service/OpenData/FromM/PoultryTransType.aspx")
-hit("mol_layoff_page", "https://www.mol.gov.tw/1607/28162/28166/28218/28228/lpsimplelist")
-hit("water_outage", "https://www.water.gov.tw/opendata/WaterStop.json")
-hit("cec", "https://db.cec.gov.tw/")
-open("out21/report.json", "w").write(json.dumps(rep, ensure_ascii=False, indent=1))
+        j = r.json(); rep[k] = [(x.get("no"), x.get("des"), len(x.get("n") or [])) for x in j][:40]
+        if k == "area": rep["area_tw"] = [(x.get("no"), x.get("des")) for x in (j[0].get("n") or [])][:30]
+    except Exception as e: rep[k + "_err"] = repr(r)[:120] + repr(e)[:120]
+r = g("https://openapi.twse.com.tw/v1/opendata/t187ap03_L")
+try: j = r.json(); rep["twse_basic_keys"] = list(j[0].keys()); rep["twse_basic_0"] = j[0]
+except Exception as e: rep["twse_basic_err"] = repr(e)[:200]
+for k, u in [("tpex_list", "https://www.tpex.org.tw/openapi/swagger.json"), ("tpex_major", "https://www.tpex.org.tw/openapi/v1/mopsfe_major_message"), ("tpex_basic", "https://www.tpex.org.tw/openapi/v1/mopsfe_company_basic"), ("twse_swagger", "https://openapi.twse.com.tw/v1/swagger.json")]:
+    r = g(u)
+    try:
+        j = r.json()
+        if "paths" in j: rep[k] = [p for p in j["paths"] if any(w in (p + json.dumps(j["paths"][p], ensure_ascii=False)) for w in ("重大", "major", "basic", "基本資料", "t187ap04", "t187ap03"))][:30]
+        else: rep[k] = {"n": len(j), "first": j[0] if isinstance(j, list) and j else str(j)[:300]}
+    except Exception as e: rep[k + "_err"] = (repr(r)[:120], repr(e)[:120])
+open("out22/report.json", "w").write(json.dumps(rep, ensure_ascii=False, indent=1))
