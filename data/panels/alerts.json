@@ -1,6 +1,30 @@
 {
  "alerts": [
   {
+   "id": "TWC_water_202610041510",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "高雄市"
+   ],
+   "text": "高市小港區漢威街169號漏水搶修",
+   "src": "台灣自來水公司",
+   "at": "2026-10-04T07:10:01Z",
+   "exp": "2026-10-04T19:30:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041510.cap"
+  },
+  {
+   "id": "TWC_water_202610041500",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [],
+   "text": "配合新竹科學園區管理局『115年度園區自來水設施增設及改善工程』施工停水",
+   "src": "台灣自來水公司",
+   "at": "2026-10-04T07:00:02Z",
+   "exp": "2026-10-05T16:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041500.cap"
+  },
+  {
    "id": "CWA-Weather_heat_202610041427001",
    "cat": "高溫",
    "lvl": 2,
@@ -15,19 +39,6 @@
    "at": "2026-10-04T06:27:46Z",
    "exp": "2026-10-04T17:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610041427.cap"
-  },
-  {
-   "id": "TWC_water_202610041350",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [
-    "高雄市"
-   ],
-   "text": "高市小港區漢威街169號漏水搶修",
-   "src": "台灣自來水公司",
-   "at": "2026-10-04T05:50:01Z",
-   "exp": "2026-10-04T19:30:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041350.cap"
   },
   {
    "id": "TWC_water_202610041340",
@@ -106,17 +117,6 @@
    "at": "2026-10-04T02:28:37Z",
    "exp": "2026-10-05T23:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610041028.cap"
-  },
-  {
-   "id": "TWC_water_202610041020",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [],
-   "text": "加壓站設備故障緊急搶修。",
-   "src": "台灣自來水公司",
-   "at": "2026-10-04T02:20:02Z",
-   "exp": "2026-10-04T15:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041020.cap"
   },
   {
    "id": "CWA-Weather_heat_202610040732001",
@@ -382,8 +382,8 @@
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/04 14:59:15"
+  "updated": "2026/10/04 15:14:15"
  },
  "errs": [],
- "updatedAt": "2026-10-04T06:54:59Z"
+ "updatedAt": "2026-10-04T07:14:43Z"
 }
