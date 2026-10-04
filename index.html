@@ -1291,7 +1291,7 @@ function fillCitySelect(){const sel=$("#geo-city");if(!geoData)return;const labe
   sel.dataset.filled=sig;if(labels[curCity]||curCity==="all")sel.value=curCity;else if(typeof YB!=="undefined"&&YB.ok!==null){curCity="all";sel.value="all";}}
 function applyGeo(){
   if(geoData)fillCitySelect();
-  try{applyWx();}catch(e){console.warn("wx layers",e);}
+  try{applyWx();}catch(e){console.warn("wx layers",e);const l=document.getElementById("wx-leg");if(l)l.textContent="天氣圖層錯誤："+e.message;}
   if(!map||!mapReady||!geoData)return;
   const c=(geoData.cities||{})[curCity]||{};
   map.getSource("parking").setData({type:"FeatureCollection",features:(c.parking||[]).map(p=>({type:"Feature",geometry:{type:"Point",coordinates:[p[0],p[1]]},properties:{total:p[3],color:parkColor(p[2]/p[3]),label:`${esc(p[4])}<br>剩 ${p[2]} / ${p[3]} 位`}}))});
@@ -1311,7 +1311,7 @@ const RADAR_URL="https://raw.githubusercontent.com/v1endetta/intel-terminal/data
 const rainColor=r=>r>=40?"#C04BE0":r>=25?"#F0524F":r>=10?"#E0A23A":r>=2.5?"#3D8BFF":"#7CC4FF";
 const CULC={"展覽":"#C9A3FF","演唱會":"#FF7FB0","音樂":"#FF7FB0","戲劇":"#FFB36B","舞蹈":"#FFB36B","講座":"#8FD3C7"};
 let radarKey=null;
-function applyWx(){if(!map||!mapReady)return;const P=window.LASTP||{},W=P.weather||{},R=P.radar_wx||{},C=P.culture||{},T=P.typhoon||{};
+function applyWx(){document.documentElement.dataset.wx=(map?"m":"-")+(mapReady?"r":"-")+((window.LASTP||{}).weather?"w":"-");if(!map||!mapReady)return;const P=window.LASTP||{},W=P.weather||{},R=P.radar_wx||{},C=P.culture||{},T=P.typhoon||{};
   const fc=a=>({type:"FeatureCollection",features:a});
   map.getSource("rain").setData(fc((W.rainmap||[]).map(r=>({type:"Feature",geometry:{type:"Point",coordinates:[r[0],r[1]]},properties:{r:r[2],color:rainColor(r[2]),label:`<b>${esc(r[4])}</b> ${esc((r[5]||"").replace("臺","台"))}<br>過去 1 小時 ${r[2]} mm · 10 分鐘 ${r[3]} mm`}}))));
   map.getSource("culture").setData(fc((C.points||[]).map(e=>({type:"Feature",geometry:{type:"Point",coordinates:[e[0],e[1]]},properties:{color:CULC[e[3]]||"#C9A3FF",label:`<span style="color:${CULC[e[3]]||"#C9A3FF"}">${esc(e[3])}</span> ${esc(e[2])}<br>${esc(e[4])} · ${esc(e[5])}`}}))));
