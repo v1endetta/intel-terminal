@@ -1,7 +1,7 @@
 {
  "alerts": [
   {
-   "id": "TWC_water_202610041950",
+   "id": "TWC_water_202610042030",
    "cat": "停水",
    "lvl": 1,
    "area": [
@@ -9,9 +9,37 @@
    ],
    "text": "新竹市牛埔路管線汰換工程",
    "src": "台灣自來水公司",
-   "at": "2026-10-04T11:50:01Z",
+   "at": "2026-10-04T12:30:02Z",
    "exp": "2026-10-05T16:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041950.cap"
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610042030.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261004201840_0002",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "雲林縣",
+    "嘉義縣"
+   ],
+   "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
+   "src": "水利署",
+   "at": "2026-10-04T12:18:40Z",
+   "exp": "2026-10-04T23:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261004201840_0002.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261004201840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣",
+    "臺中市"
+   ],
+   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
+   "src": "水利署",
+   "at": "2026-10-04T12:18:40Z",
+   "exp": "2026-10-04T23:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261004201840_0001.cap"
   },
   {
    "id": "CWA-Weather_extremely-rain_202610041901001",
@@ -320,12 +348,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 25,
+ "n_total": 27,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/04 20:05:15"
+  "updated": "2026/10/04 20:29:15"
  },
  "errs": [],
- "updatedAt": "2026-10-04T12:09:02Z"
+ "updatedAt": "2026-10-04T12:28:32Z"
 }
