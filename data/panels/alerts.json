@@ -1,6 +1,22 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610041427001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "彰化縣",
+    "南投縣",
+    "臺南市",
+    "屏東縣"
+   ],
+   "text": "天氣高溫炎熱，今(4)日中午前後南投縣為橙色燈號，有連續出現36度高溫的機率，請加強注意。彰化縣、臺南市、屏東縣為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-04T06:27:46Z",
+   "exp": "2026-10-04T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610041427.cap"
+  },
+  {
    "id": "TWC_water_202610041350",
    "cat": "停水",
    "lvl": 1,
@@ -40,19 +56,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041310.cap"
   },
   {
-   "id": "TWC_water_202610041220",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [
-    "高雄市"
-   ],
-   "text": "岡山區空醫院路53巷 40mmpvcp緊急搶修",
-   "src": "台灣自來水公司",
-   "at": "2026-10-04T04:20:02Z",
-   "exp": "2026-10-04T14:30:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041220.cap"
-  },
-  {
    "id": "TWC_water_202610041130",
    "cat": "停水",
    "lvl": 1,
@@ -77,19 +80,6 @@
    "at": "2026-10-04T03:28:13Z",
    "exp": "2026-10-04T17:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610041128.cap"
-  },
-  {
-   "id": "TWC_water_202610041040",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [
-    "桃園市"
-   ],
-   "text": "桃園市中壢月眉路三段581號漏水修理",
-   "src": "台灣自來水公司",
-   "at": "2026-10-04T02:40:01Z",
-   "exp": "2026-10-04T14:30:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610041040.cap"
   },
   {
    "id": "CWA-Weather_strong-wind_202610041028001",
@@ -388,12 +378,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 30,
+ "n_total": 29,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/04 14:11:15"
+  "updated": "2026/10/04 14:29:15"
  },
  "errs": [],
- "updatedAt": "2026-10-04T06:20:08Z"
+ "updatedAt": "2026-10-04T06:35:45Z"
 }
