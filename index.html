@@ -444,8 +444,8 @@ canvas.o-fx{display:block;width:100%}
 .list li.o-grp{display:block;font:500 10px var(--mono);color:var(--dim);letter-spacing:.06em;padding:9px 0 3px;border-top:0}
 /* 分頁內固定順序：台灣先、國際後；快的先、月更的後；結論先、原文後 */
 #p-pulse{display:none!important}
-#p-taiex{order:1}#p-fx{order:2}#p-tw-stocks{order:3}#p-world{order:4}#p-sectors{order:5}#p-cmdty{order:6}#p-lux{order:7}#p-revenue{order:8}#p-fear{order:9}#p-poly{order:10}
-#p-macro{order:1}#p-gmacro{order:2}#p-calendar{order:3}#p-liq{order:4}#p-consume{order:5}#p-supply{order:6}#p-veg{order:7}
+#p-taiex{order:1}#p-fx{order:2}#p-tw-stocks{order:3}#p-mops{order:4}#p-world{order:5}#p-sectors{order:6}#p-cmdty{order:7}#p-lux{order:8}#p-revenue{order:9}#p-fear{order:10}#p-poly{order:11}
+#p-macro{order:1}#p-gmacro{order:2}#p-calendar{order:3}#p-liq{order:4}#p-consume{order:5}#p-supply{order:6}#p-veg{order:7}#p-jobs{order:8}
 #p-mood{order:1}#p-ptt{order:2}#p-cofacts{order:3}#p-attention{order:4}#p-trends{order:5}#p-youtube{order:6}#p-social{order:7}
 .grid{align-items:start}
 /* 桃機翻牌看板：只有變動的字會翻 */
@@ -468,7 +468,7 @@ canvas.o-fx{display:block;width:100%}
 html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animation:none}
 @media (prefers-reduced-motion:reduce){.fids .ch b.fl,.ib-ping,.ib-chip.ib-pop{animation:none}}
 
-#p-geo{order:1}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:4}#p-airport{order:5}#p-quake{order:6}#p-power{order:7}
+#p-geo{order:1}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:4}#p-airport{order:5}#p-quake{order:6}#p-power{order:7}#p-house{order:8}
 .stopbar{margin:0 0 10px;padding:8px 12px;border:1px solid color-mix(in srgb,var(--down) 55%,var(--line));background:color-mix(in srgb,var(--down) 12%,var(--panel));border-radius:4px;font-size:13px;display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
 .stopbar b{color:var(--down);font-weight:600}.stopbar span{color:var(--text)}.stopbar .s{color:var(--muted);font-size:11.5px;margin-left:auto}
 .tn-row{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
@@ -476,6 +476,13 @@ html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animati
 .tn-al{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:3px}.tn-al span{font-size:11px;border:1px solid var(--line);border-radius:3px;padding:0 6px;cursor:default}
 .tn-nw{list-style:none;margin:0;padding:0;font-size:12.5px}.tn-nw li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tn-nw a{color:var(--text)}.tn-nw .m{color:var(--dim);font:10.5px var(--mono);margin-left:6px}
 .wxl{display:inline-flex;gap:8px;align-items:center}.wxl i{width:9px;height:9px;border-radius:50%;display:inline-block}.wxl .rb{width:54px;height:7px;border-radius:2px;background:linear-gradient(90deg,#3caaff,#00c8c8,#00c85a,#b4e600,#ffdc00,#ff9600,#ff3c1e,#e1005a,#be00c8)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px}.chips button{background:var(--panel2);color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:2px 8px;font:11px var(--mono);cursor:pointer}.chips button.on{color:var(--blue);border-color:var(--blue)}.chips button i{font-style:normal;color:var(--dim);margin-left:4px}
+.mo-row{display:grid;grid-template-columns:78px 58px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:12.5px;align-items:baseline}.mo-row .d{font:10.5px var(--mono);color:var(--dim)}.mo-row .c{font:600 12px var(--mono);color:var(--text)}.mo-row .c small{display:block;font:400 10px var(--mono);color:var(--dim)}
+.mo-row .t a{color:var(--text);text-decoration:none}.mo-row .t a:hover{text-decoration:underline}.mo-row .tag{font:10.5px var(--mono);border:1px solid var(--line2);border-radius:3px;padding:0 5px;margin-right:6px;color:var(--muted)}
+.jb-k{display:flex;gap:18px;align-items:flex-end;margin-bottom:8px}.jb-k b{font:600 24px var(--mono)}.jb-bar{display:grid;grid-template-columns:130px 1fr 64px 54px;gap:8px;align-items:center;font-size:12px;padding:2px 0}.jb-bar .b{height:7px;background:var(--line);border-radius:2px;overflow:hidden}.jb-bar .b i{display:block;height:100%;background:var(--blue);opacity:.75}
+.hs-nav{display:flex;gap:8px;align-items:center;margin-bottom:8px;font:12px var(--mono);flex-wrap:wrap}.hs-nav select{background:var(--panel2);color:var(--text);border:1px solid var(--line2);border-radius:3px;padding:3px 6px;font:12px var(--mono)}.hs-nav a{color:var(--blue);cursor:pointer;text-decoration:none}.hs-nav .sep{color:var(--dim)}
+.hs-t{width:100%;border-collapse:collapse;font-size:12.5px}.hs-t th{font:500 10.5px var(--mono);color:var(--dim);text-align:left;padding:3px 6px;border-bottom:1px solid var(--line)}.hs-t td{padding:4px 6px;border-bottom:1px solid var(--line)}.hs-t tr.go{cursor:pointer}.hs-t tr.go:hover td{background:var(--panel2)}.hs-t .r{text-align:right;font-family:var(--mono)}
+.hs-rng{position:relative;height:6px;background:var(--line);border-radius:3px;min-width:80px}.hs-rng i{position:absolute;top:0;height:6px;background:#F2C14E;opacity:.7;border-radius:3px}.hs-rng b{position:absolute;top:-2px;width:2px;height:10px;background:var(--text)}
 .veg-h{display:flex;gap:10px;align-items:baseline;margin-bottom:6px;font-size:12px;color:var(--muted)}.veg-h b{font:600 18px var(--mono)}
 .oil{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px;padding-top:6px;border-top:1px solid var(--line)}.oil b{font:500 13px var(--mono);color:var(--text)}
 
@@ -634,6 +641,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a><span>24h 成交量排序，已濾掉運彩</span></div>
   </section>
 
+  <section class="panel w12 cap" id="p-mops">
+    <div class="ph"><h2>Filings</h2><span class="zh">上市櫃重大訊息 · 依類別</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://mops.twse.com.tw/" target="_blank" rel="noopener">公開資訊觀測站</a><span>證交所、櫃買中心開放資料 · 每 30 分鐘 · 保留 14 天 · 類別依主旨關鍵字自動分 · 公司所在地上地圖（生活組「重訊」）</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-revenue">
     <div class="ph"><h2>Revenue</h2><span class="zh">通路與供應鏈 · 月營收</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -650,6 +663,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ph"><h2>Veg Prices</h2><span class="zh">菜價 · 台北一批發市場</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://data.moa.gov.tw/" target="_blank" rel="noopener">農業部開放資料</a><span>蔬菜批發平均價（元／公斤，同品項各品種依交易量加權）· 漲跌＝比前兩週平均 · 颱風前後最敏感</span></div>
+  </section>
+
+  <section class="panel w12 cap" id="p-jobs">
+    <div class="ph"><h2>Jobs</h2><span class="zh">職缺溫度 · 104 全站（不限產業）</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.104.com.tw/" target="_blank" rel="noopener">104 人力銀行</a><span>站上刊登中職缺總數、各職類與縣市 · 每 6 小時 · 漲跌＝比 7 天前（累積一週後才有）· 最新職缺依公司產業分類，有座標的上地圖（生活組「職缺」）</span></div>
   </section>
 
   <div class="sec">總經 Macro</div>
@@ -864,6 +883,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>台電開放資料 · 燈號：綠 ≥10% 黃 6–10% 橘 3–6% 紅 &lt;3%</span></div>
   </section>
 
+  <section class="panel w12 cap tall" id="p-house">
+    <div class="ph"><h2>Real Estate</h2><span class="zh">實價登錄 · 縣市 › 區 › 路段 › 成交</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://lvr.land.moi.gov.tw/" target="_blank" rel="noopener">內政部實價登錄</a><span>最近一季住宅買賣 · 每坪單價已扣車位 · 排除親友、特殊關係、毛胚等交易 · 中位數 · 季變化＝比上一季同區中位數</span></div>
+  </section>
+
   <section class="panel w6 lite" id="p-airport">
     <div class="ph"><h2>TPE Airport</h2><span class="zh">桃機今日航班</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -987,6 +1012,47 @@ function renderTwNow(){const P=window.LASTP||{},A=P.alerts||{},al=A.alerts||[],s
   const ids=new Set(al.filter(a=>a.lvl>=2).map(a=>a.id));
   if(TN_SEEN){const fresh=al.filter(a=>a.lvl>=2&&!TN_SEEN.has(a.id)).flatMap(a=>(a.area||[]).map(k=>[TWC[k],LVC[a.lvl]])).filter(x=>x[0]);if(fresh.length&&curCity==="all")setTimeout(()=>mapPulse(fresh),600);}
   TN_SEEN=ids;try{applyGeo();}catch(e){}}
+/* ---------- 104 職缺溫度 ---------- */
+let JOBS=null,JOBF="";
+function renderJobs(){const d=JOBS;if(!d)return;const mx=Math.max(...(d.cats||[]).map(c=>c.n),1);
+  const cg=v=>v==null?'<span class="sub">—</span>':`<span class="${cls(v)}">${sgn(v,1,"%")}</span>`;
+  const cats=(d.cats||[]).map(c=>`<div class="jb-bar"><span>${esc(c.name)}</span><span class="b"><i style="width:${(100*c.n/mx).toFixed(1)}%"></i></span><span class="r num">${n(c.n).toLocaleString()}</span><span class="r num">${cg(c.chg7)}</span></div>`).join("");
+  const ar=[...(d.areas||[])].sort((a,b)=>b.n-a.n).slice(0,12).map(a=>`<li><span class="t">${esc(a.name)}</span><span class="m num">${n(a.n).toLocaleString()}</span><span class="m num" style="min-width:52px;text-align:right">${cg(a.chg7)}</span></li>`).join("");
+  const mix=d.indMix||[],lat=d.latest||[];
+  const chips=`<div class="chips" id="jb-chips"><button type="button" class="${JOBF?"":"on"}" data-jf="">全部<i>${lat.length}</i></button>${mix.map(([k,v])=>`<button type="button" class="${JOBF===k?"on":""}" data-jf="${esc(k)}">${esc(k)}<i>${v}</i></button>`).join("")}</div>`;
+  const lt=lat.filter(x=>!JOBF||x.ind===JOBF).slice(0,30).map(x=>`<li><span class="t"><a href="${esc(safe(x.u))}" target="_blank" rel="noopener">${esc(x.t)}</a><span class="sub">${esc(x.co)} · ${esc(x.indd||x.ind)} · ${esc(x.place)}${x.sal&&x.sal[0]?` · ${(x.sal[0]/1000).toFixed(0)}K${x.sal[1]?"–"+(x.sal[1]/1000).toFixed(0)+"K":"+"}`:""}</span></span><span class="m">${esc((x.date||"").slice(4,6)+"/"+(x.date||"").slice(6,8))}</span></li>`).join("");
+  body("p-jobs").innerHTML=`<div class="jb-k"><div><div class="lbl">104 刊登中職缺</div><b class="num">${n(d.total).toLocaleString()}</b> ${cg(d.chg7)} <span class="sub">比 7 天前</span></div><div style="flex:1;max-width:260px">${mini(d.spark)}</div></div>
+  <div class="nw nw3"><div><h3>職類</h3>${cats}</div><div><h3>縣市 · 前 12</h3><ul class="list">${ar}</ul></div><div><h3>最新職缺 · 依公司產業分類</h3>${chips}<ul class="list">${lt||'<li class="empty">這類目前沒有</li>'}</ul></div></div>`;
+  setMeta("p-jobs",{...d,label:"104 全站"},8);}
+document.addEventListener("click",e=>{const b=e.target.closest("#jb-chips [data-jf]");if(!b)return;JOBF=b.dataset.jf;renderJobs();});
+/* ---------- 上市櫃重大訊息 ---------- */
+let MOPS=null,MOPF="";
+function renderMops(){const d=MOPS;if(!d)return;const it=d.items||[];
+  const chips=`<div class="chips" id="mo-chips"><button type="button" class="${MOPF?"":"on"}" data-mf="">全部<i>${it.length}</i></button>${(d.cats||[]).map(([k,v])=>`<button type="button" class="${MOPF===k?"on":""}" data-mf="${esc(k)}">${esc(k)}<i>${v}</i></button>`).join("")}</div>`;
+  const rows=it.filter(x=>!MOPF||x.cat===MOPF).slice(0,60).map(x=>`<div class="mo-row"><span class="d">${esc((x.d||"").slice(5).replace("-","/"))} ${esc((x.tm||"").replace(/^(\d\d)(\d\d)$/,"$1:$2"))}</span><span class="c">${esc(x.short||x.name)}<small>${esc(x.code)} ${esc(x.mk)}${x.place?" · "+esc(x.place):""}</small></span><span class="t"><span class="tag">${esc(x.cat)}</span><a href="${esc(safe(x.u))}" target="_blank" rel="noopener" title="${esc(x.desc||"")}">${esc(x.t)}</a></span></div>`).join("");
+  body("p-mops").innerHTML=chips+(rows||'<div class="empty">這個類別最近 14 天沒有</div>');setMeta("p-mops",{...d,label:`今天 ${d.today||0} 則 · 累積 ${it.length}`},2);}
+document.addEventListener("click",e=>{const b=e.target.closest("#mo-chips [data-mf]");if(!b)return;MOPF=b.dataset.mf;renderMops();});
+/* ---------- 實價登錄：縣市 › 區 › 路段 › 成交 ---------- */
+const HS={city:null,town:null,road:null,cache:{}};
+const HOUSE_URL=c=>`https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/house/${encodeURIComponent(c)}.json`;
+async function hsLoad(c){const key=((window.LASTP||{}).house||{}).season||"";if(HS.cache[c]&&HS.cache[c].season===key)return HS.cache[c];const r=await fetch(HOUSE_URL(c)+"?s="+encodeURIComponent(key));if(!r.ok)throw new Error("HTTP "+r.status);return HS.cache[c]=await r.json();}
+async function renderHouse(){const H=(window.LASTP||{}).house;if(!H)return;const files=H.files||Object.keys(H.city||{});if(!files.length)return;
+  if(!HS.city||!files.includes(HS.city)){let pick="臺北市";try{const st=regionSet();if(st&&st.size===1&&files.includes([...st][0]))pick=[...st][0];}catch(e){}HS.city=files.includes(pick)?pick:files[0];}
+  const el=body("p-house");const cm=(H.city||{})[HS.city];
+  const nav=`<div class="hs-nav"><select id="hs-city" aria-label="縣市">${CTY_ORDER.filter(c=>files.includes(c)).map(c=>`<option value="${c}" ${c===HS.city?"selected":""}>${c.replace("臺","台")}</option>`).join("")}</select>${HS.town?`<span class="sep">›</span><a data-hs="city">全部區</a><span class="sep">›</span>${HS.road?`<a data-hs="town">${esc(HS.town)}</a><span class="sep">›</span><b>${esc(HS.road)}</b>`:`<b>${esc(HS.town)}</b>`}`:""}<span class="sub" style="margin-left:auto">${esc(H.season||"")} · ${HS.city.replace("臺","台")}中位 ${cm?cm+" 萬/坪":"—"}</span></div>`;
+  let D;try{D=await hsLoad(HS.city);}catch(e){el.innerHTML=nav+'<div class="empty">這個縣市的明細還沒產生，下一輪排程會補上</div>';return;}
+  const towns=D.towns||[];let html="";
+  if(!HS.town){const lo=Math.min(...towns.map(t=>t.p25)),hi=Math.max(...towns.map(t=>t.p75)),pos=v=>Math.max(0,Math.min(100,100*(v-lo)/((hi-lo)||1)));
+    html=`<table class="hs-t"><tr><th>區</th><th class="r">中位 萬/坪</th><th class="r">季變化</th><th class="r">筆數</th><th style="width:28%">價格帶（25%–75%）</th><th>主力型態</th></tr>${towns.map(t=>`<tr class="go" data-town="${esc(t.town)}"><td>${esc(t.town)} ›</td><td class="r"><b>${t.med}</b></td><td class="r ${t.chg!=null?cls(t.chg):""}">${t.chg!=null?sgn(t.chg,1,"%"):"—"}</td><td class="r">${t.n}</td><td><div class="hs-rng" title="${t.p25}–${t.p75} 萬/坪"><i style="left:${pos(t.p25).toFixed(1)}%;width:${(pos(t.p75)-pos(t.p25)).toFixed(1)}%"></i><b style="left:${pos(t.med).toFixed(1)}%"></b></div></td><td class="sub">${esc((t.types[0]||[""])[0])}</td></tr>`).join("")}</table>`;}
+  else{const t=towns.find(x=>x.town===HS.town);if(!t){HS.town=null;HS.road=null;return renderHouse();}
+    if(!HS.road)html=`<div class="sub" style="margin-bottom:6px">${t.n} 筆 · 中位 ${t.med} 萬/坪（${t.p25}–${t.p75}）· 總價中位 ${n(t.tot).toLocaleString()} 萬 · ${t.types.map(x=>esc(x[0])+" "+x[1]).join("、")}</div><table class="hs-t"><tr><th>路段</th><th class="r">中位 萬/坪</th><th class="r">筆數</th><th class="r">總價中位 萬</th><th class="r">坪數中位</th><th>主力型態</th></tr>${t.roads.map(r=>`<tr class="go" data-road="${esc(r.road)}"><td>${esc(r.road)} ›</td><td class="r"><b>${r.med}</b></td><td class="r">${r.n}</td><td class="r">${n(r.tot).toLocaleString()}</td><td class="r">${r.ping}</td><td class="sub">${esc(r.type)}</td></tr>`).join("")}</table>`;
+    else{const r=t.roads.find(x=>x.road===HS.road);if(!r){HS.road=null;return renderHouse();}
+      html=`<div class="sub" style="margin-bottom:6px">${r.n} 筆 · 中位 ${r.med} 萬/坪 · 總價中位 ${n(r.tot).toLocaleString()} 萬 · 最近 ${r.deals.length} 筆</div><table class="hs-t"><tr><th>日期</th><th>門牌</th><th>樓層</th><th class="r">坪數</th><th class="r">總價 萬</th><th class="r">單價 萬/坪</th><th>型態</th><th class="r">屋齡</th><th class="r">房</th></tr>${r.deals.map(x=>`<tr><td class="sub">${esc(x.date)}</td><td>${esc((r.road.startsWith("（")?"":r.road)+(x.no||""))}</td><td class="sub">${esc(x.floor)}</td><td class="r">${x.ping}</td><td class="r">${n(x.total).toLocaleString()}${x.car?'<span class="sub"> 含車位</span>':""}</td><td class="r"><b>${x.unit}</b></td><td class="sub">${esc(x.type)}</td><td class="r">${x.age??"—"}</td><td class="r">${esc(x.room||"")}</td></tr>`).join("")}</table>`;}}
+  el.innerHTML=nav+html;setMeta("p-house",{...H,label:`${HS.city.replace("臺","台")} · ${D.n} 筆`},24*40);}
+document.addEventListener("click",e=>{const a=e.target.closest("#p-house [data-town],#p-house [data-road],#p-house [data-hs]");
+  if(a){if(a.dataset.town){HS.town=a.dataset.town;HS.road=null;}else if(a.dataset.road)HS.road=a.dataset.road;else if(a.dataset.hs==="town")HS.road=null;else{HS.town=null;HS.road=null;}renderHouse();return;}
+  const g=e.target.closest("[data-hsgo]");if(g){e.preventDefault();const[c,t]=g.dataset.hsgo.split("|");HS.city=c;HS.town=t||null;HS.road=null;renderHouse();document.getElementById("p-house").scrollIntoView({behavior:"smooth",block:"start"});}});
+document.addEventListener("change",e=>{if(e.target.id==="hs-city"){HS.city=e.target.value;HS.town=null;HS.road=null;renderHouse();}});
 let AIRPREV=null;
 const renderers={
   taiex(d){twm.taiex=d;renderTaiex();},
@@ -1150,7 +1216,9 @@ const renderers={
   mapfeed(d){try{applyWx();}catch(e){}},
   flights(d){try{applyWx();}catch(e){}},
   lightning(d){try{applyWx();}catch(e){}},
-  house(d){try{applyWx();}catch(e){}},
+  house(d){try{applyWx();}catch(e){}renderHouse();},
+  jobs(d){JOBS=d;renderJobs();try{applyWx();}catch(e){}},
+  mops(d){MOPS=d;renderMops();try{applyWx();}catch(e){}},
   typhoon(d){try{applyWx();}catch(e){}},
   culture(d){try{applyWx();}catch(e){}},
   consume(d){const tile=x=>{const y=n(x.yoy);const a=Math.min(1,Math.abs(y||0)/15);const bg=y==null?"var(--panel2)":`color-mix(in srgb,var(${y>=0?"--up":"--down"}) ${10+a*45}%,var(--panel2))`;
@@ -1279,7 +1347,7 @@ function goRegion(anim){if(!map)return;const set=regionSet();if(!set){map.flyTo(
   let pts=[];const poly=regionPoly(set);if(poly)poly.coordinates.forEach(p=>p[0].forEach(q=>pts.push(q)));else set.forEach(k=>TWC[k]&&pts.push(TWC[k]));if(!pts.length)return;
   const b=pts.reduce((m,q)=>[[Math.min(m[0][0],q[0]),Math.min(m[0][1],q[1])],[Math.max(m[1][0],q[0]),Math.max(m[1][1],q[1])]],[[180,90],[-180,-90]]);
   map.fitBounds(b,{padding:{top:56,bottom:40,left:30,right:30},maxZoom:11.5,duration:anim?900:0});}
-const RFIL=["news","alerts","culture","brands","house","rain","temp","lightning","parking","bikes","speed","freeway"];
+const RFIL=["news","alerts","culture","brands","jobs","mops","house","rain","temp","lightning","parking","bikes","speed","freeway"];
 function applyRegionFilter(){if(!map||!mapReady)return;const set=regionSet(),poly=set?regionPoly(set):null;
   RFIL.forEach(id=>{if(!map.getLayer(id))return;if(!set){map.setFilter(id,null);return;}const list=["literal",[...set]];
     map.setFilter(id,poly?["any",["all",["has","cty"],["in",["get","cty"],list]],["all",["!",["has","cty"]],["within",poly]]]:["all",["has","cty"],["in",["get","cty"],list]]);});}
@@ -1288,12 +1356,12 @@ const parkColor=r=>r<0.1?"#F0524F":r<0.3?"#E0A23A":"#39B978";
 /* 圖層分三組：事件／天氣／生活；細項在「圖層」選單裡個別關 */
 const MAPL=[["news","新聞","event",["news"]],["alerts","示警","event",["alerts"]],["quake","地震","event",["quake"]],["typhoon","颱風","event",["ty-fill","ty-line","ty-pt"]],["county","縣市狀態","event",["county-fill","county-line"]],
   ["radar","雷達回波","wx",["radar"]],["rain","雨量站","wx",["rain"]],["temp","氣溫","wx",["temp"]],["lightning","閃電","wx",["lightning"]],
-  ["culture","藝文","life",["culture"]],["brands","新公司","life",["brands"]],["house","房價","life",["house"]],["flights","航班","life",["flights"]],["bikes","YouBike","life",["bikes"]],["parking","停車場","life",["parking"]],["speed","車速","life",["speed","freeway"]]];
+  ["culture","藝文","life",["culture"]],["brands","新公司","life",["brands"]],["jobs","職缺","life",["jobs"]],["mops","重訊","life",["mops"]],["house","房價","life",["house"]],["flights","航班","life",["flights"]],["bikes","YouBike","life",["bikes"]],["parking","停車場","life",["parking"]],["speed","車速","life",["speed","freeway"]]];
 const GRP={event:"事件",wx:"天氣",life:"生活"};
 const MS=(()=>{let g={event:true,wx:false,life:false},off=[];try{const j=JSON.parse(localStorage.getItem("map:vis")||"null");if(j&&j.g){g=j.g;off=j.off||[];}}catch(e){}return{g,off:new Set(off)};})();
 function saveMS(){try{localStorage.setItem("map:vis",JSON.stringify({g:MS.g,off:[...MS.off]}));}catch(e){}}
 const visOn=k=>{const L=MAPL.find(x=>x[0]===k);return!!L&&!!MS.g[L[2]]&&!MS.off.has(k);};
-const CLICK=["news","alerts","quake","ty-pt","culture","brands","house","flights","rain","temp","lightning","parking","bikes","speed","freeway"];
+const CLICK=["news","alerts","quake","ty-pt","culture","brands","jobs","mops","house","flights","rain","temp","lightning","parking","bikes","speed","freeway"];
 const mlink=(u,t)=>u?`<a href="${esc(safe(u))}" target="_blank" rel="noopener">${t}</a>`:t;
 const mc=(tag,color,title,sub)=>`<div class="mc"><span class="mc-k" style="color:${color}">${tag}</span><div class="mc-t">${title}</div>${sub?`<div class="mc-s">${sub}</div>`:""}</div>`;
 function renderGrpUI(){const g=$("#map-grp");if(!g)return;g.innerHTML=Object.entries(GRP).map(([k,l])=>`<button type="button" class="grp ${MS.g[k]?"on":""}" data-grp="${k}">${l}</button>`).join("");
@@ -1327,6 +1395,8 @@ function initMap(){
     map.addLayer({id:"parking",type:"circle",source:"parking",paint:{"circle-radius":["interpolate",["linear"],["get","total"],50,4,500,9,2000,14],"circle-color":["get","color"],"circle-opacity":.75,"circle-stroke-color":"#0b0d12","circle-stroke-width":.8}});
     map.addSource("bikes",{type:"geojson",data:{type:"FeatureCollection",features:[]}});
     map.addLayer({id:"bikes",type:"circle",source:"bikes",paint:{"circle-radius":3,"circle-color":["case",["==",["get","rent"],0],"transparent","#7C8FF2"],"circle-stroke-color":"#7C8FF2","circle-stroke-width":1,"circle-opacity":.8}});
+    src("jobs");map.addLayer({id:"jobs",type:"circle",source:"jobs",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,2.6,11,5.5],"circle-color":"#A3E635","circle-opacity":.9,"circle-stroke-color":"#0b0d12","circle-stroke-width":.6}});
+    src("mops");map.addLayer({id:"mops",type:"circle",source:"mops",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,3.4,11,6.5],"circle-color":"#38BDF8","circle-opacity":.95,"circle-stroke-color":"#0b0d12","circle-stroke-width":.8}});
     src("alerts");map.addLayer({id:"alerts",type:"circle",source:"alerts",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,4.5,11,8],"circle-color":["get","color"],"circle-opacity":.92,"circle-stroke-color":"#0b0d12","circle-stroke-width":1}});
     src("news");map.addLayer({id:"news",type:"circle",source:"news",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,3.4,11,6.5],"circle-color":["get","color"],"circle-opacity":.95,"circle-stroke-color":"#0b0d12","circle-stroke-width":1}});
     const cv=document.createElement("canvas");cv.width=cv.height=32;const cx=cv.getContext("2d");cx.fillStyle="#fff";cx.beginPath();[[16,2],[19,13],[30,19],[30,22],[19,19],[18.5,26],[22,29],[22,30.5],[16,29],[10,30.5],[10,29],[13.5,26],[13,19],[2,22],[2,19],[13,13]].forEach((q,i)=>i?cx.lineTo(q[0],q[1]):cx.moveTo(q[0],q[1]));cx.closePath();cx.fill();
@@ -1384,7 +1454,9 @@ function stopOf(k){const st=(((window.LASTP||{}).alerts||{}).stopwork||{}).items
 function countyCard(k){const P=window.LASTP||{},al=((P.alerts||{}).alerts||[]).filter(x=>(x.area||[]).includes(k)),nw=((P.localnews||{}).counties||{})[k]||[],cu=((P.culture||{}).top||{})[k]||[],cr=n(((P.weather||{}).countyRain||{})[k]),st=stopOf(k),w=(((P.weather||{}).items)||[]).find(x=>(x.city||"").startsWith(WXN[k]||"__")),hs=((P.house||{}).city||{})[k];
   const body=st.map(x=>mc("停班停課","#B15CFF",esc(x.text))).join("")+al.slice(0,4).map(x=>mc(esc(x.cat),LVC[x.lvl],mlink(x.url,esc(x.text.slice(0,80))),x.at?ago(x.at):"")).join("")+(cr>=1?mc("雨量",rainColor(cr),`雨量站最大 ${cr} mm／時`):"")
     +nw.slice(0,6).map(x=>mc("新聞","#9FB4FF",mlink(x.url,esc(x.title)),esc(x.source||"")+(x.at?" · "+ago(x.at):""))).join("")+cu.slice(0,3).map(e=>mc(esc(e.c),CULC[e.c]||"#C9A3FF",mlink(e.url,esc(e.t)),esc(e.venue)+(e.at?" · "+esc(e.at):e.end?" · 至 "+esc(e.end):""))).join("");
-  return`<div class="mc-h">${esc(k.replace("臺","台"))}${w&&w.temp!=null?` · ${esc(String(w.temp))}°`:""}${hs?` · 住宅中位 ${hs} 萬/坪`:""}</div>`+(body||'<div class="mc-s">這個縣市目前沒有示警或新聞</div>');}
+  const ja=(((P.jobs||{}).areas)||[]).find(a=>(a.counties||[]).includes(k)),mo=(((P.mops||{}).items)||[]).filter(x=>ctyOf(x.place)===k);
+  const extra=(ja?mc("職缺","#A3E635",`104 刊登中 ${n(ja.n).toLocaleString()} 筆${(ja.counties||[]).length>1?"（"+esc(ja.name)+"合計）":""}`):"")+(mo.length?mc("重訊","#38BDF8",`總部在這裡的上市櫃公司，近 14 天 ${mo.length} 則重大訊息`,mo.slice(0,2).map(x=>esc(x.short||x.name)+"："+esc(x.t.slice(0,24))).join("<br>")):"")+(hs?mc("房價","#F2C14E",`住宅中位 ${hs} 萬/坪`,`<a href="#" data-hsgo="${esc(k)}|">看各區與路段 ›</a>`):"");
+  return`<div class="mc-h">${esc(k.replace("臺","台"))}${w&&w.temp!=null?` · ${esc(String(w.temp))}°`:""}${hs?` · 住宅中位 ${hs} 萬/坪`:""}</div>`+((body+extra)||'<div class="mc-s">這個縣市目前沒有示警或新聞</div>');}
 function applyWxNow(){if(!map||!mapReady)return;const P=window.LASTP||{},W=P.weather||{},R=P.radar_wx||{},C=P.culture||{},T=P.typhoon||{},MF=P.mapfeed||{};
   const fc=a=>({type:"FeatureCollection",features:a});const pt=(ll,props)=>({type:"Feature",geometry:{type:"Point",coordinates:ll},properties:props});
   /* 新聞、示警 */
@@ -1415,9 +1487,12 @@ function applyWxNow(){if(!map||!mapReady)return;const P=window.LASTP||{},W=P.wea
     else if(key!==radarKey)map.getSource("radar").updateImage({url,coordinates:R.bounds});radarKey=key;}
   /* 生活 */
   map.getSource("culture").setData(fc((C.points||[]).map(e=>{const col=CULC[e[3]]||"#C9A3FF";return pt([e[0],e[1]],{color:col,label:`<span style="color:${col}">${esc(e[3])}</span> ${esc(e[2])}`,card:mc(esc(e[3]),col,mlink(e[6],esc(e[2])),esc(e[4])+" · "+esc(e[5])+(e[7]?" · "+esc(e[7]):""))});})));
-  map.getSource("brands").setData(fc((MF.brands||[]).map(b=>pt(b.ll,{...(ctyOf(b.city)?{cty:ctyOf(b.city)}:{}),label:`<b>新公司</b> ${esc(b.t)}`,card:mc("新公司 · "+esc((b.city||"").replace("臺","台")),"#4FD1C5",mlink("https://www.google.com/search?q="+encodeURIComponent(b.t),esc(b.t)),`${esc(b.cat||"")} · 資本額 ${compact(n(b.cap))} · ${esc(b.date||"")} 設立`)}))));
+  map.getSource("brands").setData(fc((MF.brands||[]).map(b=>pt(b.ll,{...(ctyOf(b.city)?{cty:ctyOf(b.city)}:{}),label:`<b>新公司</b> ${esc(b.t)}`,card:mc("新公司 · "+esc(b.place||(b.city||"").replace("臺","台")),"#4FD1C5",mlink("https://www.google.com/search?q="+encodeURIComponent(b.t),esc(b.t)),`${esc(b.cat||"")} · 資本額 ${compact(n(b.cap))} · ${esc(b.date||"")} 設立${b.boss?" · 負責人 "+esc(b.boss):""}${b.addr?"<br>"+esc(b.addr):""}`)}))));
+  map.getSource("jobs").setData(fc((((P.jobs||{}).latest)||[]).filter(x=>x.ll).map(x=>pt(x.ll,{...(ctyOf(x.place)?{cty:ctyOf(x.place)}:{}),label:`<b>職缺</b> ${esc(x.t.slice(0,26))}`,card:mc("職缺 · "+esc(x.ind),"#A3E635",mlink(x.u,esc(x.t)),`${esc(x.co)} · ${esc(x.place)}${x.sal&&x.sal[0]?` · ${(x.sal[0]/1000).toFixed(0)}K${x.sal[1]?"–"+(x.sal[1]/1000).toFixed(0)+"K":"+"}`:""}`)}))));
+  const mg={};(((P.mops||{}).items)||[]).filter(x=>x.ll).forEach(x=>{const k=x.code;if(!mg[k])mg[k]={x,list:[]};mg[k].list.push(x);});
+  map.getSource("mops").setData(fc(Object.values(mg).map(({x,list})=>{const[dx,dy]=[((+x.code)%7-3)*.004,((+x.code)%5-2)*.004];return pt([x.ll[0]+dx,x.ll[1]+dy],{...(ctyOf(x.place)?{cty:ctyOf(x.place)}:{}),label:`<b>${esc(x.short||x.name)}</b> 重訊 ${list.length} 則`,card:list.slice(0,4).map(y=>mc(`${esc(y.cat)} · ${esc(y.short||y.name)} ${esc(y.code)}`,"#38BDF8",mlink(y.u,esc(y.t)),`${esc(y.d)} · ${esc(y.mk)}`)).join("")});})));
   const H=P.house||{},hv=(H.towns||[]).map(x=>x[4]).sort((a,b)=>a-b),q=v=>{let i=0;while(i<4&&v>hv[Math.floor(hv.length*(i+1)/5)])i++;return HOUSEC[i];};
-  map.getSource("house").setData(fc((H.towns||[]).map(x=>pt([x[0],x[1]],{cty:ctyOf(x[2]),n:x[5],color:q(x[4]),label:`<b>${esc(x[2].replace("臺","台")+x[3])}</b> ${x[4]} 萬/坪`,card:mc("房價 · "+esc(H.season||""),"#F2C14E",mlink("https://lvr.land.moi.gov.tw/",`${esc(x[2].replace("臺","台")+x[3])} 住宅中位 <b>${x[4]}</b> 萬/坪`),`${x[5]} 筆買賣 · 實價登錄`)}))));
+  map.getSource("house").setData(fc((H.towns||[]).map(x=>pt([x[0],x[1]],{cty:ctyOf(x[2]),n:x[5],color:q(x[4]),label:`<b>${esc(x[2].replace("臺","台")+x[3])}</b> ${x[4]} 萬/坪`,card:mc("房價 · "+esc(H.season||""),"#F2C14E",`${esc(x[2].replace("臺","台")+x[3])} 住宅中位 <b>${x[4]}</b> 萬/坪`,`${x[5]} 筆買賣 · <a href="#" data-hsgo="${esc(x[2])}|${esc(x[3])}">看路段與成交 ›</a>`)}))));
   map.getSource("flights").setData(fc((((P.flights||{}).items)||[]).map(f=>{const col=f[3]<10000?"#E0A23A":"#9FB4FF";return pt([f[0],f[1]],{trk:f[2],color:col,label:`✈ ${esc(f[4]||f[6])} ${esc(f[5])} · ${compact(f[3])} ft`,card:mc("航班",col,mlink(f[4]?"https://www.flightradar24.com/"+encodeURIComponent(f[4]):"",esc(f[4]||f[6]||"未知")),`${esc(f[5])} ${esc(f[6])} · 高度 ${Math.round(f[3]).toLocaleString()} ft · ${Math.round(f[7])} kt`)});})));
   applyVis();}
 function mapLegend(){const el=$("#map-leg");if(!el)return;const P=window.LASTP||{},W=P.weather||{},R=P.radar_wx||{},MF=P.mapfeed||{},on=visOn,out=[];
@@ -1431,6 +1506,8 @@ function mapLegend(){const el=$("#map-leg");if(!el)return;const P=window.LASTP||
   if(on("lightning"))out.push(d("#FFE24A",`閃電 ${(((P.lightning||{}).items)||[]).length}`));
   if(on("culture"))out.push(d("#C9A3FF",`藝文 ${(((P.culture||{}).points)||[]).length}`));
   if(on("brands"))out.push(d("#4FD1C5",`新公司 ${(MF.brands||[]).length}`));
+  if(on("jobs"))out.push(d("#A3E635",`職缺 ${(((P.jobs||{}).latest)||[]).filter(x=>x.ll).length}`));
+  if(on("mops"))out.push(d("#38BDF8",`重訊公司 ${new Set((((P.mops||{}).items)||[]).filter(x=>x.ll).map(x=>x.code)).size}`));
   if(on("house"))out.push(`<span class="wxl"><span class="rb" style="background:linear-gradient(90deg,${HOUSEC.join(",")})"></span>房價 ${esc((P.house||{}).season||"")}</span>`);
   if(on("flights"))out.push(`<span>✈ 航班 ${(((P.flights||{}).items)||[]).length}</span>`);
   if(curCity!=="all"&&(on("parking")||on("speed")))out.push(d("#F0524F","快滿／慢")+d("#39B978","有位／順"));
@@ -1457,7 +1534,7 @@ async function loadGeo(){
 }
 document.addEventListener("click",e=>{const a=e.target.closest("[data-tyfit]");if(!a||!map)return;e.preventDefault();const T=((window.LASTP||{}).typhoon||{}).items||[];const pts=T.flatMap(t=>[...(t.past||[]).slice(-8),...(t.fc||[])].map(x=>x.ll));pts.push([120,22],[122,25.3]);
   const b=pts.reduce((m,p)=>[[Math.min(m[0][0],p[0]),Math.min(m[0][1],p[1])],[Math.max(m[1][0],p[0]),Math.max(m[1][1],p[1])]],[[180,90],[-180,-90]]);$("#p-geo").scrollIntoView({behavior:"smooth",block:"start"});map.fitBounds(b,{padding:40,duration:900});});
-$("#geo-city").addEventListener("change",e=>{curCity=e.target.value;try{localStorage.setItem("geo-city",curCity);}catch(x){}const set=regionSet();if(set&&set.size===1&&geoKeysIn(set).length&&!MS.g.life){MS.g.life=true;saveMS();renderGrpUI();}goRegion(true);applyGeo();});
+$("#geo-city").addEventListener("change",e=>{curCity=e.target.value;try{localStorage.setItem("geo-city",curCity);}catch(x){}const set=regionSet();if(set&&set.size===1&&geoKeysIn(set).length&&!MS.g.life){MS.g.life=true;saveMS();renderGrpUI();}goRegion(true);applyGeo();if(set&&set.size===1){HS.city=[...set][0];HS.town=null;HS.road=null;renderHouse();}});
 const mapScript=document.createElement("script");mapScript.src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.min.js";mapScript.onload=()=>{initMap();loadGeo();};document.head.appendChild(mapScript);
 setInterval(loadGeo,5*60e3);
 /* ---------- 台灣現場：全台 YouBike 由瀏覽器即時抓（官方站點檔擋海外主機，台灣網路的瀏覽器抓得到） ---------- */
@@ -1641,7 +1718,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"]];
-const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"market","p-revenue":"market",
+const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"market","p-revenue":"market","p-mops":"market","p-jobs":"macro","p-house":"live",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro",
   "ib-sig":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",

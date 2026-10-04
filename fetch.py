@@ -115,7 +115,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"house": 280, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -2291,12 +2291,25 @@ def p_mapfeed():
             alerts.append({"ll": pl[:2], "place": pl[2], "lvl": a.get("lvl"), "cat": a.get("cat"), "t": a.get("text", "")[:120], "u": a.get("url", ""), "at": a.get("at", "")})
     brands = []
     B = RESULTS.get("brands") or {}
-    for it in (B.get("peers") or []) + (B.get("big") or []):
+    bl = (B.get("peers") or []) + (B.get("big") or [])
+    try:
+        gc = _gcis_enrich([it.get("name", "") for it in bl])
+    except Exception as e:  # noqa: BLE001
+        log("gcis enrich", e); gc = {}
+    for it in bl:
         c = it.get("city") or ""
-        if c in TW_COUNTIES:
+        g = gc.get(it.get("name", "")) or {}
+        pl = _place(g["addr"], c) if g.get("addr") else None
+        if pl and pl[3] == "town":
+            ll, place = pl[:2], pl[2]
+        elif c in TW_COUNTIES:
             lo, la, _ = TW_COUNTIES[c]
             dx, dy = _jitter(it.get("name", ""), 0.08)
-            brands.append({"ll": [round(lo + dx, 4), round(la + dy, 4)], "t": it.get("name"), "cat": it.get("cat"), "cap": it.get("cap"), "date": it.get("date"), "city": c})
+            ll, place = [round(lo + dx, 4), round(la + dy, 4)], c.replace("臺", "台")
+        else:
+            continue
+        brands.append({"ll": ll, "place": place, "t": it.get("name"), "cat": it.get("cat"), "cap": it.get("cap"), "date": it.get("date"), "city": c,
+                       "addr": re.sub(r"\d+樓.*$", "", g.get("addr", "")), "boss": g.get("boss", ""), "ban": g.get("ban", "")})
     return {"news": pts, "alerts": alerts, "brands": brands, "n_town": sum(1 for p in pts if p["lvl"] == "town"), "n": len(pts)}
 
 
@@ -2370,11 +2383,17 @@ PLVR_CITY = {"a": "臺北市", "b": "臺中市", "c": "基隆市", "d": "臺南�
              "x": "澎湖縣", "z": "連江縣"}
 
 
+_FW = str.maketrans("０１２３４５６７８９", "0123456789")
+
+
 def _plvr_rows(season):
+    """一季的買賣明細（a 檔），每列回傳 dict。"""
     import zipfile
     raw = get(PLVR_SEASON, params={"season": season, "type": "zip", "fileName": "lvr_landcsv.zip"}, timeout=150).content
     zf = zipfile.ZipFile(io.BytesIO(raw))
     rows = []
+    want = ("鄉鎮市區", "交易標的", "土地位置建物門牌", "交易年月日", "移轉層次", "總樓層數", "建物型態", "主要用途", "建築完成年月", "建物移轉總面積平方公尺",
+            "建物現況格局-房", "建物現況格局-廳", "總價元", "單價元平方公尺", "車位移轉總面積平方公尺", "車位總價元", "備註", "電梯")
     for name in zf.namelist():
         m = re.match(r"^([a-z])_lvr_land_a\.csv$", name.lower())
         if not m or m.group(1) not in PLVR_CITY:
@@ -2383,28 +2402,73 @@ def _plvr_rows(season):
         rd = list(csv.reader(io.StringIO(txt)))
         if len(rd) < 3:
             continue
-        hd = rd[0]
-        ix = {k: hd.index(k) for k in ("鄉鎮市區", "交易標的", "交易年月日", "主要用途", "單價元平方公尺", "備註") if k in hd}
+        hd = [h.strip() for h in rd[0]]
+        ix = {k: hd.index(k) for k in want if k in hd}
         for r in rd[2:]:
-            try:
-                rows.append((PLVR_CITY[m.group(1)], r[ix["鄉鎮市區"]], r[ix["交易標的"]], r[ix.get("主要用途", 0)], r[ix["單價元平方公尺"]], r[ix.get("備註", 0)] if "備註" in ix else "", r[ix["交易年月日"]]))
-            except Exception:  # noqa: BLE001
-                continue
+            d = {k: (r[i].strip() if i < len(r) else "") for k, i in ix.items()}
+            d["city"] = PLVR_CITY[m.group(1)]
+            rows.append(d)
     return rows
 
 
-def p_house():
-    """實價登錄：最近一季住宅買賣，各鄉鎮每坪單價中位數。"""
+def _plvr_seasons():
     today = NOW.astimezone(TPE).date()
     y, q = today.year - 1911, (today.month - 1) // 3 + 1
-    seasons = []
-    for _ in range(3):
+    out = []
+    for _ in range(4):
         q -= 1
         if q == 0:
             y, q = y - 1, 4
-        seasons.append(f"{y}S{q}")
+        out.append(f"{y}S{q}")
+    return out
+
+
+_ROAD_RE = re.compile(r"([^\d\s]{1,12}?(?:大道|路|街)(?:[一二三四五六七八九十]+段)?)")
+
+
+def _plvr_clean(rows):
+    """只留住宅、去掉親友／特殊交易；算出扣掉車位的每坪單價。"""
+    out = []
+    for d in rows:
+        if "建物" not in d.get("交易標的", "") or "住" not in d.get("主要用途", "") or re.search(r"親友|特殊|關係|瑕疵|債權|法拍|增建|毛胚|含增建|地上權", d.get("備註", "")):
+            continue
+        total, area = num(d.get("總價元")), num(d.get("建物移轉總面積平方公尺"))
+        pk_p, pk_a = num(d.get("車位總價元")) or 0, num(d.get("車位移轉總面積平方公尺")) or 0
+        if not total or not area or area <= pk_a:
+            continue
+        ping = (area - pk_a) * 0.3025
+        unit = (total - pk_p) / ping / 10000 if ping > 3 else None
+        if not unit or not (3 < unit < 500):
+            continue
+        addr = d.get("土地位置建物門牌", "").translate(_FW)
+        town = d.get("鄉鎮市區", "")
+        rest = addr.split(town, 1)[-1] if town and town in addr else addr
+        m = _ROAD_RE.search(rest)
+        road = m.group(1) if m else ""
+        road = re.sub(r"^.*?(里|村|鄰)", "", road) or road
+        dt = d.get("交易年月日", "")
+        built = d.get("建築完成年月", "")
+        age = None
+        if len(built) >= 5 and built[:-4].isdigit():
+            age = NOW.astimezone(TPE).year - (int(built[:-4]) + 1911)
+        num_m = re.search(re.escape(road) + r"(.{0,14}?號)", rest) if road else None
+        out.append({"city": d["city"], "town": town, "road": road, "unit": round(unit, 1), "total": round(total / 10000), "ping": round(ping, 1),
+                    "date": f"{dt[:-4]}/{dt[-4:-2]}/{dt[-2:]}" if len(dt) >= 7 else dt, "type": re.sub(r"\(.*?\)", "", d.get("建物型態", ""))[:6],
+                    "floor": (d.get("移轉層次", "")[:8] + "/" + d.get("總樓層數", "")[:6]).strip("/"), "age": age,
+                    "room": d.get("建物現況格局-房", ""), "no": num_m.group(1) if num_m else "", "car": bool(pk_p)})
+    return out
+
+
+def _med(v):
+    v = sorted(v)
+    return round(v[len(v) // 2], 1) if v else None
+
+
+def p_house():
+    """實價登錄：最近一季住宅買賣。全台各鄉鎮中位數（上地圖）＋各縣市明細檔（區→路段→成交，分頁面板用）。"""
+    seasons = _plvr_seasons()
     rows, used = [], ""
-    for ssn in seasons:
+    for ssn in seasons[:3]:
         try:
             rows = _plvr_rows(ssn)
         except Exception as e:  # noqa: BLE001
@@ -2414,28 +2478,249 @@ def p_house():
             break
     if not rows:
         raise RuntimeError("plvr: no rows")
-    used = used or seasons[-1]
-    groups: dict = {}
-    for city, town, kind, use, unit, note, _d in rows:
-        u = num(unit)
-        if not u or "建物" not in kind or "住" not in (use or "") or re.search(r"親友|特殊|關係|瑕疵|債權|法拍|增建|毛胚", note or ""):
+    used = used or seasons[2]
+    deals = _plvr_clean(rows)
+    # 前一季的各區中位數（算季變化）；歷史裡沒有才多抓一次
+    prev_ssn = seasons[seasons.index(used) + 1] if used in seasons and seasons.index(used) + 1 < len(seasons) else None
+    if prev_ssn and not any(prev_ssn == r[0] for r in HISTORY.get("house_town", {}).get("臺北市大安區", [])):
+        try:
+            pv: dict = {}
+            for d in _plvr_clean(_plvr_rows(prev_ssn)):
+                pv.setdefault(d["city"] + d["town"], []).append(d["unit"])
+            for k, v in pv.items():
+                if len(v) >= 5:
+                    hist_put("house_town", k, prev_ssn, _med(v))
+        except Exception as e:  # noqa: BLE001
+            log("plvr prev", e)
+    by_town: dict = {}
+    for d in deals:
+        by_town.setdefault((d["city"], d["town"]), []).append(d)
+    towns, by_city, detail = [], {}, {}
+    for (city, town), lst in by_town.items():
+        units = [d["unit"] for d in lst]
+        by_city.setdefault(city, []).extend(units)
+        if len(lst) < 3:
             continue
-        groups.setdefault((city, town), []).append(u * 3.30579 / 10000)  # 萬元／坪
-    towns, by_city = [], {}
-    for (city, town), vals in groups.items():
-        if len(vals) < 5:
-            continue
-        vals.sort()
-        med = round(vals[len(vals) // 2], 1)
-        by_city.setdefault(city, []).extend(vals)
+        med = _med(units)
+        hist_put("house_town", city + town, used, med)
+        h = HISTORY.get("house_town", {}).get(city + town, [])
+        prev = next((v for s_, v in reversed(h) if s_ < used), None)
+        chg = round(100 * (med / prev - 1), 1) if prev else None
         t = TOWNS.get(city + town) or TOWNS.get(city.replace("臺", "台") + town)
-        if t:
-            towns.append([t[0], t[1], city, town, med, len(vals)])
-    city_med = {c: round(sorted(v)[len(v) // 2], 1) for c, v in by_city.items()}
+        if t and len(lst) >= 5:
+            towns.append([t[0], t[1], city, town, med, len(lst)])
+        roads: dict = {}
+        for d in lst:
+            roads.setdefault(d["road"] or "（未載路名）", []).append(d)
+        road_rows = []
+        for rd, rl in roads.items():
+            rl.sort(key=lambda x: x["date"], reverse=True)
+            types: dict = {}
+            for d in rl:
+                types[d["type"]] = types.get(d["type"], 0) + 1
+            road_rows.append({"road": rd, "n": len(rl), "med": _med([d["unit"] for d in rl]), "tot": _med([d["total"] for d in rl]),
+                              "ping": _med([d["ping"] for d in rl]), "type": max(types, key=types.get) if types else "",
+                              "deals": [{k: d[k] for k in ("date", "no", "floor", "ping", "total", "unit", "type", "age", "room", "car")} for d in rl[:8]]})
+        road_rows.sort(key=lambda x: -x["n"])
+        us = sorted(units)
+        types: dict = {}
+        for d in lst:
+            types[d["type"]] = types.get(d["type"], 0) + 1
+        detail.setdefault(city, []).append({"town": town, "n": len(lst), "med": med, "p25": us[len(us) // 4], "p75": us[3 * len(us) // 4], "chg": chg,
+                                            "tot": _med([d["total"] for d in lst]), "types": sorted(types.items(), key=lambda x: -x[1])[:4], "roads": road_rows[:60]})
+    hd = DATA / "house"
+    hd.mkdir(exist_ok=True)
+    for city, lst in detail.items():
+        lst.sort(key=lambda x: -x["med"])
+        write_json(hd / f"{city}.json", {"season": used, "city": city, "towns": lst, "n": sum(x["n"] for x in lst)}, separators=(",", ":"))
+    city_med = {c: _med(v) for c, v in by_city.items()}
     for c, v in city_med.items():
         hist_put("house", c, used, v)
     towns.sort(key=lambda x: -x[4])
-    return {"season": used, "towns": towns, "city": city_med, "rows": len(rows)}
+    return {"season": used, "towns": towns, "city": city_med, "cityN": {c: len(v) for c, v in by_city.items()}, "rows": len(rows), "deals": len(deals),
+            "files": sorted(detail)}
+
+
+# ---------- 104 職缺：不限產業，依職類、縣市、產業分類 ----------
+J104 = "https://www.104.com.tw/jobs/search/api/jobs"
+J104_H = {"Referer": "https://www.104.com.tw/jobs/search/", "Accept": "application/json"}
+J104_CAT = [("2001000000", "經營／人資"), ("2002000000", "行政／總務／法務"), ("2003000000", "財會／金融"), ("2004000000", "行銷／企劃／專案"),
+            ("2005000000", "客服／門市／業務／貿易"), ("2006000000", "餐飲／旅遊／美容美髮"), ("2007000000", "資訊軟體"), ("2008000000", "研發"),
+            ("2009000000", "生產製造／品管"), ("2010000000", "操作／技術／維修"), ("2011000000", "物流／運輸"), ("2012000000", "營建／製圖"),
+            ("2013000000", "傳播藝術／設計"), ("2014000000", "文字／傳媒"), ("2015000000", "醫療／保健"), ("2016000000", "教育／輔導"),
+            ("2017000000", "軍警消／保全"), ("2018000000", "其他")]
+J104_AREA = [("6001001000", "台北市", ["臺北市"]), ("6001002000", "新北市", ["新北市"]), ("6001005000", "桃園市", ["桃園市"]), ("6001006000", "新竹縣市", ["新竹市", "新竹縣"]),
+             ("6001008000", "台中市", ["臺中市"]), ("6001014000", "台南市", ["臺南市"]), ("6001016000", "高雄市", ["高雄市"]), ("6001004000", "基隆市", ["基隆市"]),
+             ("6001003000", "宜蘭縣", ["宜蘭縣"]), ("6001007000", "苗栗縣", ["苗栗縣"]), ("6001010000", "彰化縣", ["彰化縣"]), ("6001011000", "南投縣", ["南投縣"]),
+             ("6001012000", "雲林縣", ["雲林縣"]), ("6001013000", "嘉義縣市", ["嘉義市", "嘉義縣"]), ("6001018000", "屏東縣", ["屏東縣"]), ("6001020000", "花蓮縣", ["花蓮縣"]),
+             ("6001019000", "台東縣", ["臺東縣"]), ("6001021000", "澎湖縣", ["澎湖縣"]), ("6001022000", "金門縣", ["金門縣"]), ("6001023000", "連江縣", ["連江縣"])]
+J104_IND = {"1001": "電子資訊／半導體", "1002": "一般製造", "1003": "批發零售", "1004": "金融保險", "1005": "文教", "1006": "大眾傳播", "1007": "旅遊休閒運動",
+            "1008": "法律會計顧問設計", "1009": "一般服務", "1010": "運輸物流", "1011": "營建不動產", "1012": "醫療保健", "1013": "政治宗教社福", "1014": "農林漁牧水電",
+            "1015": "礦業", "1016": "住宿餐飲"}
+
+
+def _j104(**params):
+    j = gjson(J104, params={"page": 1, "pagesize": 30, **params}, headers=J104_H, timeout=30)
+    return j, int(((j.get("metadata") or {}).get("pagination") or {}).get("total") or 0)
+
+
+def p_jobs():
+    today = NOW.astimezone(TPE).date().isoformat()
+    j, total = _j104()
+    if not total:
+        raise RuntimeError("104: no total")
+    hist_put("jobs", "total", today, total)
+    def chg(key, v):
+        h = HISTORY.get("jobs", {}).get(key, [])
+        old = next((x for d, x in reversed(h) if d <= (NOW.astimezone(TPE).date() - timedelta(days=7)).isoformat()), None)
+        return round(100 * (v / old - 1), 1) if old else None
+    cats = []
+    for code, name in J104_CAT:
+        try:
+            _, n = _j104(jobcat=code)
+            hist_put("jobs", "cat:" + name, today, n)
+            cats.append({"name": name, "n": n, "chg7": chg("cat:" + name, n), "spark": hist_get("jobs", "cat:" + name, 30)})
+        except Exception as e:  # noqa: BLE001
+            log("104 cat", name, e)
+        time.sleep(0.6)
+    areas = []
+    for code, name, counties in J104_AREA:
+        try:
+            _, n = _j104(area=code)
+            hist_put("jobs", "area:" + name, today, n)
+            areas.append({"name": name, "counties": counties, "n": n, "chg7": chg("area:" + name, n)})
+        except Exception as e:  # noqa: BLE001
+            log("104 area", name, e)
+        time.sleep(0.6)
+    latest, seen = [], set()
+    for page in (1, 2, 3):
+        try:
+            jj = j if page == 1 else gjson(J104, params={"page": page, "pagesize": 30}, headers=J104_H, timeout=30)
+        except Exception as e:  # noqa: BLE001
+            log("104 page", e); break
+        for x in jj.get("data") or []:
+            no = x.get("jobNo")
+            if not no or no in seen:
+                continue
+            seen.add(no)
+            lat, lon = num(x.get("lat")), num(x.get("lon"))
+            link = x.get("link") or {}
+            if isinstance(link, str):
+                m = re.search(r"'job':\s*'([^']+)'", link); link = {"job": m.group(1) if m else ""}
+            lo, hi = num(x.get("salaryLow")) or 0, num(x.get("salaryHigh")) or 0
+            latest.append({"t": (x.get("jobName") or "")[:60], "co": (x.get("custName") or "")[:30], "ind": J104_IND.get(str(x.get("coIndustry") or "")[:4], "其他"),
+                           "indd": (x.get("coIndustryDesc") or "")[:16], "place": (x.get("jobAddrNoDesc") or "")[:10], "date": x.get("appearDate") or "",
+                           "sal": [lo, hi if hi < 9999999 else 0], "u": link.get("job") or "",
+                           "ll": [round(lon, 4), round(lat, 4)] if lat and lon and 118 < lon < 123 and 21 < lat < 27 else None})
+        time.sleep(0.6)
+    latest.sort(key=lambda x: x["date"], reverse=True)
+    ind_mix: dict = {}
+    for x in latest:
+        ind_mix[x["ind"]] = ind_mix.get(x["ind"], 0) + 1
+    cats.sort(key=lambda x: -x["n"])
+    return {"total": total, "chg7": chg("total", total), "spark": hist_get("jobs", "total", 60), "cats": cats, "areas": areas, "latest": latest[:90],
+            "indMix": sorted(ind_mix.items(), key=lambda x: -x[1]), "src": "104 人力銀行"}
+
+
+# ---------- 上市櫃重大訊息（證交所、櫃買中心）：分類、依公司地址上地圖 ----------
+MOPS_SRC = [("上市", "https://openapi.twse.com.tw/v1/opendata/t187ap04_L", "https://openapi.twse.com.tw/v1/opendata/t187ap03_L"),
+            ("上櫃", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap04_O", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O")]
+MOPS_CAT = [("澄清", r"澄清|媒體報導|報載"), ("人事", r"董事長|總經理|發言人|財務主管|會計主管|稽核主管|研發主管|董事|監察人|經理人|獨立董事|委員|辭任|解任|異動"),
+            ("併購投資", r"合併|收購|併購|公開收購|股權|增資|轉投資|合資|策略聯盟|子公司.*設立|設立.*子公司|分割"),
+            ("法律", r"訴訟|判決|裁罰|罰鍰|檢調|搜索|起訴|仲裁|裁定"), ("資產交易", r"取得|處分|不動產|使用權資產|設備|土地|廠房"),
+            ("財務", r"營收|財報|財務報告|盈餘|股利|配息|背書保證|資金貸與|借款|公司債|發行|庫藏股|減資|自結"),
+            ("會議", r"董事會|股東會|法人說明會|業績發表|說明會")]
+
+
+def _roc8(s):
+    s = str(s).strip()
+    return f"{int(s[:-4]) + 1911}-{s[-4:-2]}-{s[-2:]}" if len(s) >= 6 and s[:-4].isdigit() else s
+
+
+def p_mops():
+    prev = load_prev("mops") or {}
+    cache_p = DATA / "listed_basic.json"
+    basic = {}
+    try:
+        c = json.loads(cache_p.read_text(encoding="utf-8")) if cache_p.exists() else {}
+        if c.get("at", "") > (NOW - timedelta(days=7)).isoformat():
+            basic = c.get("map") or {}
+    except Exception:  # noqa: BLE001
+        basic = {}
+    errs = []
+    if not basic:
+        for mk, _, bu in MOPS_SRC:
+            try:
+                for r in gjson(bu, timeout=60):
+                    r = {k.strip(): v for k, v in r.items()}
+                    code = str(r.get("公司代號") or r.get("SecuritiesCompanyCode") or "").strip()
+                    if code:
+                        basic[code] = [str(r.get("住址") or r.get("Address") or "")[:40], str(r.get("公司簡稱") or r.get("CompanyAbbreviation") or "")[:10], str(r.get("產業別") or "")[:4], mk]
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{mk}基本資料: {safe_err(e)}")
+        if basic:
+            write_json(cache_p, {"at": NOW_ISO, "map": basic}, separators=(",", ":"))
+    items = []
+    for mk, u, _ in MOPS_SRC:
+        try:
+            for r in gjson(u, timeout=60):
+                r = {k.strip(): v for k, v in r.items()}
+                code = str(r.get("公司代號") or r.get("SecuritiesCompanyCode") or "").strip()
+                subj = re.sub(r"\s+", " ", str(r.get("主旨") or r.get("Subject") or "")).strip()
+                if not code or not subj:
+                    continue
+                cat = next((c for c, rx in MOPS_CAT if re.search(rx, subj)), "其他")
+                b = basic.get(code) or ["", "", "", mk]
+                pl = _place(b[0]) if b[0] else None
+                items.append({"d": _roc8(r.get("發言日期") or r.get("Date") or ""), "tm": str(r.get("發言時間") or "").zfill(6)[:4], "code": code,
+                              "name": str(r.get("公司名稱") or r.get("CompanyName") or b[1])[:16], "short": b[1], "mk": mk, "cat": cat, "t": subj[:120],
+                              "desc": re.sub(r"\s+", " ", str(r.get("說明") or ""))[:300], "addr": b[0], "ll": pl[:2] if pl else None,
+                              "place": pl[2] if pl else "", "u": f"https://mops.twse.com.tw/mops/#/web/t05st01?companyId={code}"})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{mk}重大訊息: {safe_err(e)}")
+    # 開放資料只給最新一天：跟上一輪合併，留 14 天
+    cutoff = (NOW.astimezone(TPE).date() - timedelta(days=14)).isoformat()
+    keyset, merged = set(), []
+    for it in items + (prev.get("items") or []):
+        k = (it.get("code"), it.get("d"), it.get("t", "")[:40])
+        if k in keyset or (it.get("d") or "") < cutoff:
+            continue
+        keyset.add(k); merged.append(it)
+    if not merged:
+        raise RuntimeError("mops: nothing " + "; ".join(errs)[:150])
+    merged.sort(key=lambda x: (x.get("d", ""), x.get("tm", "")), reverse=True)
+    cats: dict = {}
+    for it in merged:
+        cats[it["cat"]] = cats.get(it["cat"], 0) + 1
+    return {"items": merged[:400], "cats": sorted(cats.items(), key=lambda x: -x[1]), "today": len(items), "errs": errs}
+
+
+# ---------- 新公司：用經濟部商工登記查地址、負責人、資本額（結果快取，不重查） ----------
+GCIS_CO = "https://data.gcis.nat.gov.tw/od/data/api/6BBA2268-1367-4B42-9CCA-BC17499EBE8C"
+
+
+def _gcis_enrich(names, budget=40):
+    cp = DATA / "gcis_cache.json"
+    try:
+        cache = json.loads(cp.read_text(encoding="utf-8")) if cp.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    n = 0
+    for nm in names:
+        if nm in cache or n >= budget or not nm.endswith("公司"):
+            continue
+        n += 1
+        try:
+            rows = gjson(GCIS_CO, params={"$format": "json", "$filter": f"Company_Name like {nm} and Company_Status eq 01", "$skip": 0, "$top": 5}, timeout=20) or []
+            r = next((x for x in rows if x.get("Company_Name") == nm), rows[0] if rows else None)
+            cache[nm] = {"addr": (r or {}).get("Company_Location", "")[:60], "boss": (r or {}).get("Responsible_Name", "")[:12],
+                         "ban": (r or {}).get("Business_Accounting_NO", ""), "paid": num((r or {}).get("Paid_In_Capital_Amount"))} if r else {}
+        except Exception as e:  # noqa: BLE001
+            log("gcis", nm, e); break
+        time.sleep(0.4)
+    if n:
+        write_json(cp, cache, separators=(",", ":"))
+    return cache
 
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
 # Vin 的關注領域（Google News 繁中）：每組顯示最新 3 則。帶引號＝精準比對。改這裡。
@@ -4904,6 +5189,8 @@ run("quake", p_quake)
 run("flights", p_flights)
 run("lightning", p_lightning, keep_if_fresh_hours=0.15)
 run("house", p_house, keep_if_fresh_hours=24 * 5)
+run("jobs", p_jobs, keep_if_fresh_hours=6)
+run("mops", p_mops, keep_if_fresh_hours=0.5)
 run("power", p_power, keep_if_fresh_hours=0.25)
 run("airport", p_airport, keep_if_fresh_hours=0.25)
 run("alerts", p_alerts, keep_if_fresh_hours=0.15)
