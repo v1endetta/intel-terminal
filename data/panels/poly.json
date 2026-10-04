@@ -1,85 +1,942 @@
 {
+ "groups": [
+  {
+   "topic": "Fed／利率",
+   "events": [
+    {
+     "title": "Fed Decision in October?",
+     "slug": "fed-decision-in-october-20260617190323537",
+     "vol24h": 806099,
+     "end": "2026-10-29",
+     "multi": true,
+     "outs": [
+      {
+       "name": "No change",
+       "yes": 82.5,
+       "d1": null
+      },
+      {
+       "name": "25 bps increase",
+       "yes": 16.5,
+       "d1": -1.0
+      }
+     ]
+    },
+    {
+     "title": "How many Fed rate cuts in 2026?",
+     "slug": "how-many-fed-rate-cuts-in-2026",
+     "vol24h": 43719,
+     "end": "2027-01-01",
+     "multi": true,
+     "outs": [
+      {
+       "name": "0 (0 bps)",
+       "yes": 96.0,
+       "d1": -0.1
+      },
+      {
+       "name": "1 (25 bps)",
+       "yes": 1.8,
+       "d1": -0.1
+      },
+      {
+       "name": "2 (50 bps)",
+       "yes": 0.9,
+       "d1": null
+      }
+     ]
+    },
+    {
+     "title": "Fed Decision in December?",
+     "slug": "fed-decision-in-december-20260729232808632",
+     "vol24h": 24582,
+     "end": "2026-12-10",
+     "multi": true,
+     "outs": [
+      {
+       "name": "25 bps increase",
+       "yes": 71.5,
+       "d1": -2.0
+      },
+      {
+       "name": "No change",
+       "yes": 25.5,
+       "d1": 2.0
+      },
+      {
+       "name": "50+ bps increase",
+       "yes": 3.3,
+       "d1": 1.5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "經濟／通膨",
+   "events": [
+    {
+     "title": "Largest Company end of October 2026?",
+     "slug": "largest-company-end-of-october-2026",
+     "vol24h": 76898,
+     "end": "2026-11-01",
+     "multi": true,
+     "outs": [
+      {
+       "name": "NVIDIA",
+       "yes": 95.4,
+       "d1": 0.4
+      },
+      {
+       "name": "Apple",
+       "yes": 4.1,
+       "d1": -0.1
+      },
+      {
+       "name": "Alphabet",
+       "yes": 0.8,
+       "d1": 0.3
+      }
+     ]
+    },
+    {
+     "title": "Strait of Hormuz traffic returns to normal by December 31?",
+     "slug": "strait-of-hormuz-traffic-returns-to-normal-by-december-31",
+     "vol24h": 43251,
+     "end": "2027-01-01",
+     "multi": false,
+     "outs": [
+      {
+       "name": "Yes",
+       "yes": 19.5,
+       "d1": null
+      }
+     ]
+    },
+    {
+     "title": "How high will inflation get in 2026?",
+     "slug": "how-high-will-inflation-get-in-2026",
+     "vol24h": 10913,
+     "end": "2027-02-01",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Above 4.5%",
+       "yes": 12.0,
+       "d1": -4.5
+      },
+      {
+       "name": "Above 5%",
+       "yes": 8.0,
+       "d1": null
+      },
+      {
+       "name": "Above 6%",
+       "yes": 3.9,
+       "d1": null
+      }
+     ]
+    },
+    {
+     "title": "Core PCE YoY - September 2026",
+     "slug": "core-pce-yoy-september-2026",
+     "vol24h": 4115,
+     "end": "2026-10-29",
+     "multi": true,
+     "outs": [
+      {
+       "name": "3.1%",
+       "yes": 25.5,
+       "d1": -2.5
+      },
+      {
+       "name": "3.0%",
+       "yes": 25.0,
+       "d1": -8.0
+      },
+      {
+       "name": "≤2.7%",
+       "yes": 17.5,
+       "d1": 7.0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "台海／中國",
+   "events": [
+    {
+     "title": "Will China invade Taiwan by end of 2026?",
+     "slug": "will-china-invade-taiwan-before-2027",
+     "vol24h": 212652,
+     "end": "2027-01-01",
+     "multi": false,
+     "outs": [
+      {
+       "name": "Yes",
+       "yes": 2.4,
+       "d1": -0.1
+      }
+     ]
+    },
+    {
+     "title": "Will China blockade Taiwan in 2026?",
+     "slug": "will-china-blockade-taiwan-by-in-2026",
+     "vol24h": 27133,
+     "end": "2027-01-01",
+     "multi": false,
+     "outs": [
+      {
+       "name": "Yes",
+       "yes": 3.8,
+       "d1": 0.5
+      }
+     ]
+    },
+    {
+     "title": "China x Japan military clash before 2027?",
+     "slug": "china-x-japan-military-clash-before-2027",
+     "vol24h": 4389,
+     "end": "2027-01-01",
+     "multi": false,
+     "outs": [
+      {
+       "name": "Yes",
+       "yes": 4.0,
+       "d1": -0.5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "台灣選舉",
+   "events": [
+    {
+     "title": "Taipei Mayor Election Winner",
+     "slug": "taipei-mayor-election-winner-20260813125857100",
+     "vol24h": 72180,
+     "end": "2026-11-29",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Chiang Wan-an",
+       "yes": 72.0,
+       "d1": -8.0
+      },
+      {
+       "name": "Puma Shen",
+       "yes": 28.3,
+       "d1": 7.4
+      }
+     ]
+    },
+    {
+     "title": "Kaohsiung Mayor Election Winner",
+     "slug": "kaohsiung-mayor-election-winner-20260813125857600",
+     "vol24h": 14286,
+     "end": "2026-11-29",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Lai Jui-lung",
+       "yes": 60.5,
+       "d1": 9.0
+      },
+      {
+       "name": "Ko Chih-en",
+       "yes": 39.8,
+       "d1": -9.4
+      }
+     ]
+    },
+    {
+     "title": "2026 Taiwanese Local Elections: Party Winner",
+     "slug": "2026-taiwanese-local-elections-party-winner",
+     "vol24h": 6445,
+     "end": "2026-11-29",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Kuomintang (KMT)",
+       "yes": 91.5,
+       "d1": 0.5
+      },
+      {
+       "name": "Democratic Progressive Party (DPP)",
+       "yes": 8.8,
+       "d1": -0.8
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "地緣政治",
+   "events": [
+    {
+     "title": "US announces end of Iranian blockade by...?",
+     "slug": "us-announces-end-of-iranian-blockade-byptptpt-20260713152715080",
+     "vol24h": 487833,
+     "end": "2027-01-01",
+     "multi": true,
+     "outs": [
+      {
+       "name": "March 31",
+       "yes": 71.0,
+       "d1": -0.5
+      },
+      {
+       "name": "December 31",
+       "yes": 52.5,
+       "d1": 0.9
+      },
+      {
+       "name": "November 30",
+       "yes": 33.5,
+       "d1": -2.5
+      }
+     ]
+    },
+    {
+     "title": "Prime Minister of Israel after the next election?",
+     "slug": "who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
+     "vol24h": 448699,
+     "end": "2026-10-28",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Gadi Eizenkot",
+       "yes": 45.8,
+       "d1": 1.1
+      },
+      {
+       "name": "Benjamin Netanyahu",
+       "yes": 36.5,
+       "d1": 2.0
+      },
+      {
+       "name": "Naftali Bennett",
+       "yes": 11.0,
+       "d1": -2.5
+      }
+     ]
+    },
+    {
+     "title": "Will the U.S. invade Iran before 2027?",
+     "slug": "will-the-us-invade-iran-before-2027",
+     "vol24h": 285833,
+     "end": "2027-01-01",
+     "multi": false,
+     "outs": [
+      {
+       "name": "Yes",
+       "yes": 15.5,
+       "d1": -1.0
+      }
+     ]
+    },
+    {
+     "title": "US-Iran ceasefire continues through...?",
+     "slug": "us-iran-ceasefire-continues-throughptptpt",
+     "vol24h": 202612,
+     "end": "2026-10-31",
+     "multi": true,
+     "outs": [
+      {
+       "name": "October 5",
+       "yes": 98.4,
+       "d1": 1.0
+      },
+      {
+       "name": "October 7",
+       "yes": 97.4,
+       "d1": 3.4
+      },
+      {
+       "name": "October 9",
+       "yes": 94.5,
+       "d1": 2.5
+      }
+     ]
+    },
+    {
+     "title": "Iran leader end of 2026?",
+     "slug": "iran-leader-end-of-2026",
+     "vol24h": 95326,
+     "end": "2026-12-31",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Mojtaba Khamenei",
+       "yes": 87.5,
+       "d1": 0.4
+      },
+      {
+       "name": "No Head of State",
+       "yes": 4.7,
+       "d1": 0.1
+      },
+      {
+       "name": "Reza Pahlavi",
+       "yes": 2.8,
+       "d1": -0.1
+      }
+     ]
+    },
+    {
+     "title": "NATO x Russia military clash by...?",
+     "slug": "nato-x-russia-military-clash-in-2025",
+     "vol24h": 53134,
+     "end": "2027-01-03",
+     "multi": true,
+     "outs": [
+      {
+       "name": "December 31",
+       "yes": 21.0,
+       "d1": -0.5
+      },
+      {
+       "name": "October 31",
+       "yes": 8.5,
+       "d1": -2.5
+      }
+     ]
+    },
+    {
+     "title": "Putin out as President of Russia by...?",
+     "slug": "putin-out-before-2027",
+     "vol24h": 33170,
+     "end": "2027-07-01",
+     "multi": true,
+     "outs": [
+      {
+       "name": "June 30, 2027",
+       "yes": 10.5,
+       "d1": 0.5
+      },
+      {
+       "name": "December 31, 2026",
+       "yes": 2.4,
+       "d1": -0.2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "AI／科技",
+   "events": [
+    {
+     "title": "Which company has the best AI model end of October?",
+     "slug": "which-company-has-the-best-ai-model-end-of-october",
+     "vol24h": 124116,
+     "end": "2026-10-31",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Google",
+       "yes": 68.3,
+       "d1": 3.7
+      },
+      {
+       "name": "Anthropic",
+       "yes": 31.5,
+       "d1": -4.0
+      },
+      {
+       "name": "OpenAI",
+       "yes": 1.1,
+       "d1": 0.1
+      }
+     ]
+    },
+    {
+     "title": "Anthropic IPO Closing Market Cap",
+     "slug": "anthropic-ipo-closing-market-cap-higher-strikes",
+     "vol24h": 83316,
+     "end": "2028-01-01",
+     "multi": true,
+     "outs": [
+      {
+       "name": "$2.25–$2.5T",
+       "yes": 30.0,
+       "d1": 6.5
+      },
+      {
+       "name": "$2.0–$2.25T",
+       "yes": 26.5,
+       "d1": -2.1
+      },
+      {
+       "name": "$1.75–$2.0T",
+       "yes": 19.5,
+       "d1": 1.0
+      }
+     ]
+    },
+    {
+     "title": "Who will be Trump's AI \"czar\" in 2026?",
+     "slug": "who-will-be-trumps-ai-czar-in-2026",
+     "vol24h": 61930,
+     "end": "2027-01-01",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Jay Clayton",
+       "yes": 91.0,
+       "d1": 0.5
+      },
+      {
+       "name": "No Czar by December 31",
+       "yes": 6.8,
+       "d1": 2.9
+      }
+     ]
+    },
+    {
+     "title": "Largest Company end of December 2026?",
+     "slug": "largest-company-end-of-december-2026",
+     "vol24h": 25691,
+     "end": "2027-01-01",
+     "multi": true,
+     "outs": [
+      {
+       "name": "NVIDIA",
+       "yes": 84.5,
+       "d1": 2.0
+      },
+      {
+       "name": "Apple",
+       "yes": 10.4,
+       "d1": -1.6
+      },
+      {
+       "name": "Alphabet",
+       "yes": 4.5,
+       "d1": null
+      }
+     ]
+    },
+    {
+     "title": "Largest IPO by market cap in 2026?",
+     "slug": "largest-ipo-by-market-cap-in-2026-287",
+     "vol24h": 13498,
+     "end": "2027-01-02",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Anthropic",
+       "yes": 56.1,
+       "d1": -1.1
+      },
+      {
+       "name": "SpaceX",
+       "yes": 44.5,
+       "d1": 4.0
+      },
+      {
+       "name": "OpenAI",
+       "yes": 0.7,
+       "d1": null
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "美國期中選舉",
+   "events": [
+    {
+     "title": "Balance of Power: 2026 Midterms",
+     "slug": "balance-of-power-2026-midterms",
+     "vol24h": 1287852,
+     "end": "2026-11-04",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Democrats Sweep",
+       "yes": 66.5,
+       "d1": 2.0
+      },
+      {
+       "name": "R Senate, D House",
+       "yes": 27.5,
+       "d1": -1.0
+      },
+      {
+       "name": "Republicans Sweep",
+       "yes": 7.5,
+       "d1": 1.0
+      }
+     ]
+    },
+    {
+     "title": "Texas Senate Election Winner",
+     "slug": "texas-senate-election-winner",
+     "vol24h": 162387,
+     "end": "2026-11-04",
+     "multi": true,
+     "outs": [
+      {
+       "name": "James Talarico (D)",
+       "yes": 63.5,
+       "d1": -1.0
+      },
+      {
+       "name": "Ken Paxton (R)",
+       "yes": 35.5,
+       "d1": null
+      }
+     ]
+    },
+    {
+     "title": "Which party will win the House in 2026?",
+     "slug": "which-party-will-win-the-house-in-2026",
+     "vol24h": 117349,
+     "end": "2026-11-04",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Democratic Party",
+       "yes": 93.5,
+       "d1": null
+      },
+      {
+       "name": "Republican Party",
+       "yes": 7.5,
+       "d1": 1.0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "加密貨幣",
+   "events": [
+    {
+     "title": "What price will Bitcoin hit in October?",
+     "slug": "what-price-will-bitcoin-hit-in-october-2026",
+     "vol24h": 301718,
+     "end": "2026-11-01",
+     "multi": true,
+     "outs": [
+      {
+       "name": "↓ 85,000",
+       "yes": 97.4,
+       "d1": null
+      },
+      {
+       "name": "↑ 87,500",
+       "yes": 78.5,
+       "d1": 6.0
+      },
+      {
+       "name": "↓ 82,500",
+       "yes": 70.5,
+       "d1": -5.0
+      }
+     ]
+    },
+    {
+     "title": "What price will Ethereum hit in 2026?",
+     "slug": "what-price-will-ethereum-hit-before-2027",
+     "vol24h": 110798,
+     "end": "2027-01-01",
+     "multi": true,
+     "outs": [
+      {
+       "name": "↑ 3,000",
+       "yes": 66.5,
+       "d1": 2.0
+      },
+      {
+       "name": "↑ 3,500",
+       "yes": 32.5,
+       "d1": null
+      },
+      {
+       "name": "↓ 2,250",
+       "yes": 26.5,
+       "d1": -11.0
+      }
+     ]
+    }
+   ]
+  }
+ ],
  "items": [
   {
-   "question": "2026 Balance of Power: R Senate, R House",
-   "slug": "balance-of-power-2026-midterms",
-   "yes": 7.5,
-   "d1": 1.0,
-   "vol24h": 445749.381008,
-   "end": "2026-11-04"
-  },
-  {
-   "question": "Will Anthropic announce bankruptcy by December 31, 2027?",
-   "slug": "anthropic-announces-bankruptcy-by",
-   "yes": 9.5,
-   "d1": -1.0,
-   "vol24h": 395697.56769899995,
-   "end": "2028-01-01"
-  },
-  {
-   "question": "2026 Balance of Power: D Senate, R House",
-   "slug": "balance-of-power-2026-midterms",
-   "yes": 0.65,
-   "d1": 0.1,
-   "vol24h": 392609.343335,
-   "end": "2026-11-04"
-  },
-  {
-   "question": "2026 Balance of Power: D Senate, D House",
+   "question": "Balance of Power: 2026 Midterms — Democrats Sweep",
    "slug": "balance-of-power-2026-midterms",
    "yes": 66.5,
    "d1": 2.0,
-   "vol24h": 383531.1284979999,
-   "end": "2026-11-04"
+   "vol24h": 1287852,
+   "end": "2026-11-04",
+   "topic": "美國期中選舉"
+  },
+  {
+   "question": "Fed Decision in October? — No change",
+   "slug": "fed-decision-in-october-20260617190323537",
+   "yes": 82.5,
+   "d1": null,
+   "vol24h": 806099,
+   "end": "2026-10-29",
+   "topic": "Fed／利率"
+  },
+  {
+   "question": "US announces end of Iranian blockade by...? — March 31",
+   "slug": "us-announces-end-of-iranian-blockade-byptptpt-20260713152715080",
+   "yes": 71.0,
+   "d1": -0.5,
+   "vol24h": 487833,
+   "end": "2027-01-01",
+   "topic": "地緣政治"
+  },
+  {
+   "question": "Prime Minister of Israel after the next election? — Gadi Eizenkot",
+   "slug": "who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
+   "yes": 45.8,
+   "d1": 1.1,
+   "vol24h": 448699,
+   "end": "2026-10-28",
+   "topic": "地緣政治"
+  },
+  {
+   "question": "What price will Bitcoin hit in October? — ↓ 85,000",
+   "slug": "what-price-will-bitcoin-hit-in-october-2026",
+   "yes": 97.4,
+   "d1": null,
+   "vol24h": 301718,
+   "end": "2026-11-01",
+   "topic": "加密貨幣"
   },
   {
    "question": "Will the U.S. invade Iran before 2027?",
    "slug": "will-the-us-invade-iran-before-2027",
    "yes": 15.5,
    "d1": -1.0,
-   "vol24h": 285334.174984,
-   "end": "2027-01-01"
-  },
-  {
-   "question": "Will Lula win the most votes in the first round of the 2026 Brazil presidential election?",
-   "slug": "brazil-presidential-election-first-round-winner",
-   "yes": 69.5,
-   "d1": -3.0,
-   "vol24h": 253485.768973,
-   "end": "2026-10-05"
-  },
-  {
-   "question": "Will Flavio Bolsonaro win the most votes in the first round of the 2026 Brazil presidential election?",
-   "slug": "brazil-presidential-election-first-round-winner",
-   "yes": 30.5,
-   "d1": 2.0,
-   "vol24h": 238036.48624699996,
-   "end": "2026-10-05"
-  },
-  {
-   "question": "Will Flávio Bolsonaro finish in second place in the first round of the 2026 Brazilian presidential election?",
-   "slug": "brazil-presidential-election-first-round-2nd-place",
-   "yes": 69.5,
-   "d1": -2.0,
-   "vol24h": 236455.63876999996,
-   "end": "2026-10-05"
-  },
-  {
-   "question": "US announces end of Iranian blockade by October 31, 2026?",
-   "slug": "us-announces-end-of-iranian-blockade-byptptpt-20260713152715080",
-   "yes": 22.5,
-   "d1": 1.0,
-   "vol24h": 218251.632012,
-   "end": "2026-11-01"
+   "vol24h": 285833,
+   "end": "2027-01-01",
+   "topic": "地緣政治"
   },
   {
    "question": "Will China invade Taiwan by end of 2026?",
    "slug": "will-china-invade-taiwan-before-2027",
-   "yes": 2.35,
+   "yes": 2.4,
    "d1": -0.1,
-   "vol24h": 212614.36546500007,
-   "end": "2027-01-01"
+   "vol24h": 212652,
+   "end": "2027-01-01",
+   "topic": "台海／中國"
+  },
+  {
+   "question": "US-Iran ceasefire continues through...? — October 5",
+   "slug": "us-iran-ceasefire-continues-throughptptpt",
+   "yes": 98.4,
+   "d1": 1.0,
+   "vol24h": 202612,
+   "end": "2026-10-31",
+   "topic": "地緣政治"
+  },
+  {
+   "question": "Texas Senate Election Winner — James Talarico (D)",
+   "slug": "texas-senate-election-winner",
+   "yes": 63.5,
+   "d1": -1.0,
+   "vol24h": 162387,
+   "end": "2026-11-04",
+   "topic": "美國期中選舉"
+  },
+  {
+   "question": "Which company has the best AI model end of October? — Google",
+   "slug": "which-company-has-the-best-ai-model-end-of-october",
+   "yes": 68.3,
+   "d1": 3.7,
+   "vol24h": 124116,
+   "end": "2026-10-31",
+   "topic": "AI／科技"
+  },
+  {
+   "question": "Which party will win the House in 2026? — Democratic Party",
+   "slug": "which-party-will-win-the-house-in-2026",
+   "yes": 93.5,
+   "d1": null,
+   "vol24h": 117349,
+   "end": "2026-11-04",
+   "topic": "美國期中選舉"
+  },
+  {
+   "question": "What price will Ethereum hit in 2026? — ↑ 3,000",
+   "slug": "what-price-will-ethereum-hit-before-2027",
+   "yes": 66.5,
+   "d1": 2.0,
+   "vol24h": 110798,
+   "end": "2027-01-01",
+   "topic": "加密貨幣"
+  },
+  {
+   "question": "Iran leader end of 2026? — Mojtaba Khamenei",
+   "slug": "iran-leader-end-of-2026",
+   "yes": 87.5,
+   "d1": 0.4,
+   "vol24h": 95326,
+   "end": "2026-12-31",
+   "topic": "地緣政治"
+  },
+  {
+   "question": "Anthropic IPO Closing Market Cap — $2.25–$2.5T",
+   "slug": "anthropic-ipo-closing-market-cap-higher-strikes",
+   "yes": 30.0,
+   "d1": 6.5,
+   "vol24h": 83316,
+   "end": "2028-01-01",
+   "topic": "AI／科技"
+  },
+  {
+   "question": "Largest Company end of October 2026? — NVIDIA",
+   "slug": "largest-company-end-of-october-2026",
+   "yes": 95.4,
+   "d1": 0.4,
+   "vol24h": 76898,
+   "end": "2026-11-01",
+   "topic": "經濟／通膨"
+  },
+  {
+   "question": "Taipei Mayor Election Winner — Chiang Wan-an",
+   "slug": "taipei-mayor-election-winner-20260813125857100",
+   "yes": 72.0,
+   "d1": -8.0,
+   "vol24h": 72180,
+   "end": "2026-11-29",
+   "topic": "台灣選舉"
+  },
+  {
+   "question": "Who will be Trump's AI \"czar\" in 2026? — Jay Clayton",
+   "slug": "who-will-be-trumps-ai-czar-in-2026",
+   "yes": 91.0,
+   "d1": 0.5,
+   "vol24h": 61930,
+   "end": "2027-01-01",
+   "topic": "AI／科技"
+  },
+  {
+   "question": "NATO x Russia military clash by...? — December 31",
+   "slug": "nato-x-russia-military-clash-in-2025",
+   "yes": 21.0,
+   "d1": -0.5,
+   "vol24h": 53134,
+   "end": "2027-01-03",
+   "topic": "地緣政治"
+  },
+  {
+   "question": "How many Fed rate cuts in 2026? — 0 (0 bps)",
+   "slug": "how-many-fed-rate-cuts-in-2026",
+   "yes": 96.0,
+   "d1": -0.1,
+   "vol24h": 43719,
+   "end": "2027-01-01",
+   "topic": "Fed／利率"
+  },
+  {
+   "question": "Strait of Hormuz traffic returns to normal by December 31?",
+   "slug": "strait-of-hormuz-traffic-returns-to-normal-by-december-31",
+   "yes": 19.5,
+   "d1": null,
+   "vol24h": 43251,
+   "end": "2027-01-01",
+   "topic": "經濟／通膨"
+  },
+  {
+   "question": "Putin out as President of Russia by...? — June 30, 2027",
+   "slug": "putin-out-before-2027",
+   "yes": 10.5,
+   "d1": 0.5,
+   "vol24h": 33170,
+   "end": "2027-07-01",
+   "topic": "地緣政治"
+  },
+  {
+   "question": "Will China blockade Taiwan in 2026?",
+   "slug": "will-china-blockade-taiwan-by-in-2026",
+   "yes": 3.8,
+   "d1": 0.5,
+   "vol24h": 27133,
+   "end": "2027-01-01",
+   "topic": "台海／中國"
+  },
+  {
+   "question": "Largest Company end of December 2026? — NVIDIA",
+   "slug": "largest-company-end-of-december-2026",
+   "yes": 84.5,
+   "d1": 2.0,
+   "vol24h": 25691,
+   "end": "2027-01-01",
+   "topic": "AI／科技"
+  },
+  {
+   "question": "Fed Decision in December? — 25 bps increase",
+   "slug": "fed-decision-in-december-20260729232808632",
+   "yes": 71.5,
+   "d1": -2.0,
+   "vol24h": 24582,
+   "end": "2026-12-10",
+   "topic": "Fed／利率"
+  },
+  {
+   "question": "Kaohsiung Mayor Election Winner — Lai Jui-lung",
+   "slug": "kaohsiung-mayor-election-winner-20260813125857600",
+   "yes": 60.5,
+   "d1": 9.0,
+   "vol24h": 14286,
+   "end": "2026-11-29",
+   "topic": "台灣選舉"
+  },
+  {
+   "question": "Largest IPO by market cap in 2026? — Anthropic",
+   "slug": "largest-ipo-by-market-cap-in-2026-287",
+   "yes": 56.1,
+   "d1": -1.1,
+   "vol24h": 13498,
+   "end": "2027-01-02",
+   "topic": "AI／科技"
+  },
+  {
+   "question": "How high will inflation get in 2026? — Above 4.5%",
+   "slug": "how-high-will-inflation-get-in-2026",
+   "yes": 12.0,
+   "d1": -4.5,
+   "vol24h": 10913,
+   "end": "2027-02-01",
+   "topic": "經濟／通膨"
+  },
+  {
+   "question": "2026 Taiwanese Local Elections: Party Winner — Kuomintang (KMT)",
+   "slug": "2026-taiwanese-local-elections-party-winner",
+   "yes": 91.5,
+   "d1": 0.5,
+   "vol24h": 6445,
+   "end": "2026-11-29",
+   "topic": "台灣選舉"
+  },
+  {
+   "question": "China x Japan military clash before 2027?",
+   "slug": "china-x-japan-military-clash-before-2027",
+   "yes": 4.0,
+   "d1": -0.5,
+   "vol24h": 4389,
+   "end": "2027-01-01",
+   "topic": "台海／中國"
+  },
+  {
+   "question": "Core PCE YoY - September 2026 — 3.1%",
+   "slug": "core-pce-yoy-september-2026",
+   "yes": 25.5,
+   "d1": -2.5,
+   "vol24h": 4115,
+   "end": "2026-10-29",
+   "topic": "經濟／通膨"
   }
  ],
- "updatedAt": "2026-10-04T19:05:04Z"
+ "updatedAt": "2026-10-04T19:46:25Z"
 }
