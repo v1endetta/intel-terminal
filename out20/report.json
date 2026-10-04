@@ -1,0 +1,2122 @@
+{
+ "lass_airbox": {
+  "status": 200,
+  "ct": "application/json",
+  "len": 210646,
+  "cors": null,
+  "sec": 1.5,
+  "tree": {
+   "source": "last-all-airbox by IIS-NRL",
+   "c_d0_source": "AS-IISNRL",
+   "num_of_records": "462",
+   "feeds": [
+    462,
+    {
+     "time": "16:07:38",
+     "SiteAddr": "N/A",
+     "SiteName": "新北市育德國小(2018)",
+     "app": "AirBox",
+     "area": "new_taipei",
+     "date": "2026-09-01",
+     "gps_alt": "2.0",
+     "gps_fix": "1.0",
+     "gps_lat": "24.97",
+     "gps_lon": "121.392",
+     "gps_num": "9.0",
+     "name": "新北市育德國小",
+     "s_d0": "0.0",
+     "s_d1": "0.0",
+     "s_d2": "0.0",
+     "s_h0": "100.0",
+     "s_t0": "26.5",
+     "timestamp": "2026-09-01T16:07:38Z",
+     "device_id": "74DA38F7C64C",
+     "c_d0": "N/A"
+    }
+   ],
+   "descriptions": {
+    "URL": "https://pm25.lass-net.org/data/description.json",
+    "c_d0_method": "method/days/distance(km)",
+    "c_d0": "calibration PM2.5 (ug/m3)"
+   },
+   "version": "2026-09-01T16:11:03Z"
+  }
+ },
+ "lass_all": {
+  "status": 404,
+  "ct": "text/html",
+  "len": 4708,
+  "cors": null,
+  "sec": 0.2,
+  "head": "<!DOCTYPE HTML>\n<!--\n\tTwenty by HTML5 UP\n\thtml5up.net | @ajlkn\n\tFree for personal and commercial use under the CCA 3.0 license (html5up.net/license)\n-->\n<html lang=\"en\">\n<head>\n<title>404 Error</title>\n\n<meta charset=\"utf-8\" />\n<meta property=\"og:title\" content=\"PM2.5 Open Data Portal\" />\n<meta prop"
+ },
+ "civiliot_air": "SSLError(MaxRetryError('HTTPSConnectionPool(host=\\'sta.ci.taiwan.gov.tw\\', port=443): Max retries exceeded with url: /STA_AirQuality_v2/v1.0/Things?$top=2&$expa",
+ "civiliot_water": "SSLError(MaxRetryError('HTTPSConnectionPool(host=\\'sta.ci.taiwan.gov.tw\\', port=443): Max retries exceeded with url: /STA_WaterResource_v2/v1.0/Things?$top=2&$e",
+ "civiliot_flood": "SSLError(MaxRetryError('HTTPSConnectionPool(host=\\'sta.ci.taiwan.gov.tw\\', port=443): Max retries exceeded with url: /STA_WaterResource_v2/v1.0/Things?$filter=s",
+ "civiliot_earth": "SSLError(MaxRetryError('HTTPSConnectionPool(host=\\'sta.ci.taiwan.gov.tw\\', port=443): Max retries exceeded with url: /STA_Earthquake_v2/v1.0/Things?$top=1 (Caus",
+ "moenv_aqi_nokey": {
+  "status": 200,
+  "ct": "text/html; charset=UTF-8",
+  "len": 20,
+  "cors": "https://data.moenv.gov.tw",
+  "sec": 1.1,
+  "head": "api_key 不存在。"
+ },
+ "pbs_road": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='data.moi.gov.tw', port=443): Max retries exceeded with url: /MoiOD/System/DownloadFile.aspx?DATA=36384FA",
+ "adsb_lol": {
+  "status": 200,
+  "ct": "application/json",
+  "len": 21588,
+  "cors": null,
+  "sec": 0.4,
+  "tree": {
+   "ac": [
+    35,
+    {
+     "hex": "780cc0",
+     "type": "adsb_icao",
+     "flight": "CCA1505 ",
+     "r": "B-1879",
+     "t": "A321",
+     "alt_baro": "7500",
+     "alt_geom": "7975",
+     "gs": "210.6",
+     "ias": "181",
+     "tas": "208",
+     "mach": "0.316",
+     "track": "206.81",
+     "track_rate": "0.0",
+     "roll": "0.0",
+     "mag_heading": "212.17",
+     "true_heading": "205.99",
+     "baro_rate": "-1024",
+     "geom_rate": "-992",
+     "squawk": "5625",
+     "emergency": "none"
+    }
+   ],
+   "msg": "No error",
+   "now": "1791084678501",
+   "total": "35",
+   "ctime": "1791084678501",
+   "ptime": "0"
+  }
+ },
+ "opensky": {
+  "status": 200,
+  "ct": "application/json",
+  "len": 9910,
+  "cors": "https://opensky-network.org",
+  "sec": 0.6,
+  "tree": {
+   "time": "1791084671",
+   "states": [
+    78,
+    [
+     17,
+     "885222"
+    ]
+   ]
+  }
+ },
+ "plvr": {
+  "status": 200,
+  "ct": "application/octet-stream",
+  "len": 400000,
+  "cors": "*",
+  "sec": 2.0,
+  "head": "PK\u0003\u0004\u0014\u0000\b\b\b\u0000�A]\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0010\u0000\u0000\u0000a_lvr_land_a.csv�Y�\u001cE�.��k��#�N\u0010�6�Y����U\bej`x��9]�KA]�ν}�$DJJ\r(�\u0001I%\t\u0010\b�,@#ҏiŐ/��pm�����\u0011�\u001e.��\"3<c�n�m\u000f���_\u001e>��ta���{��N\u001f�<}�Us�ek����޹\u000b�s7��|z�����\u0007��o��\u000f\r\u0016N�'\u0006�<\u001c��0�����/\u0006ߞ�ݿ�_�ߛ�ڻ���}�gxE�\u0002O\u0006�WzǏ�\u001bl��{��\u0006w���n?X��\u000f�s��\u001b��σkG�_^���\u000fӻ�U�ꥎ�L�++�"
+ },
+ "taipei_1999": {
+  "status": 200,
+  "ct": "application/json",
+  "len": 2,
+  "cors": "https://data.taipei",
+  "sec": 0.9,
+  "tree": [
+   0
+  ]
+ },
+ "ntpc_garbage": {
+  "status": 200,
+  "ct": "application/json",
+  "len": 212,
+  "cors": "https://data.ntpc.gov.tw",
+  "sec": 1.3,
+  "tree": [
+   1,
+   {
+    "lineid": "235001",
+    "car": "647-TV",
+    "time": "2026/10/03 23:59:17",
+    "location": "新北市新店區薏仁坑路8-3號",
+    "longitude": "121.499593333333",
+    "latitude": "24.95891",
+    "cityid": "6500300",
+    "cityname": "中和區"
+   }
+  ]
+ },
+ "taipower_outage": {
+  "status": 200,
+  "ct": "application/json",
+  "len": 80947,
+  "cors": null,
+  "sec": 1.4,
+  "tree": {
+   "metadata": {
+    "schema_version": "1.0",
+    "名稱": "台灣電力公司各類電價表",
+    "實施日期": "2025-10-01",
+    "單位": "元"
+   },
+   "data": {
+    "包制電價": {
+     "電燈": {
+      "一般電燈": {
+       "100瓦以下部分": "…",
+       "100瓦以上部分，每超出1~100瓦": "…"
+      },
+      "LED公用路燈": {
+       "單位": "…",
+       "單價": "…"
+      }
+     },
+     "小型器具": {
+      "50瓦以下部分": {
+       "單位": "…",
+       "單價": "…"
+      },
+      "50瓦以上部分，每超出1~50瓦": {
+       "單位": "…",
+       "單價": "…"
+      }
+     },
+     "交通指揮燈": {
+      "每一路口為1組": {
+       "單位": "…",
+       "單價": "…"
+      },
+      "每一路口最大入力數": {
+       "單位": "…",
+       "單價": "…"
+      }
+     },
+     "包力(警報器)": {
+      "1瓩以下部分": {
+       "單位": "…",
+       "單價": "…"
+      },
+      "1瓩以上部分，每超出1瓩": {
+       "單位": "…",
+       "單價": "…"
+      }
+     }
+    },
+    "表燈非時間電價": {
+     "住宅用": {
+      "120度以下部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "121~330度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "331~500度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "501~700度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "701~1000度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "1001度以上部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "非營業用": {
+      "120度以下部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "121~330度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "331~500度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "501~700度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "701~1000度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "1001度以上部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "營業用": {
+      "330度以下部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "331~700度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "701~1500度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "1501~3000度部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "3001度以上部分": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     }
+    },
+    "簡易型時間電價(二段式)": {
+     "基本電費": {
+      "按戶計收": {
+       "單位": "…",
+       "單價": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六、週日及離峰日": {
+       "離峰時間": "…"
+      },
+      "每月總度數超過2,000度之部分": {
+       "單位": "…",
+       "單價": "…"
+      }
+     }
+    },
+    "簡易型時間電價(三段式)": {
+     "基本電費": {
+      "按戶計收": {
+       "單位": "…",
+       "單價": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六、週日及離峰日": {
+       "離峰時間": "…"
+      },
+      "每月總度數超過2,000度之部分": {
+       "單位": "…",
+       "單價": "…"
+      }
+     }
+    },
+    "標準型時間電價(二段式)": {
+     "基本電費": {
+      "按戶計收": {
+       "單相": "…",
+       "三相": "…"
+      },
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "非夏月契約": {
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "標準型時間電價(三段式)": {
+     "基本電費": {
+      "按戶計收": {
+       "單相": "…",
+       "三相": "…"
+      },
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "低壓電力非時間電價": {
+     "基本電費": {
+      "裝置契約": {
+       "單位": "…",
+       "單價": "…"
+      },
+      "需量契約": {
+       "經常契約": "…",
+       "非夏月契約": "…"
+      }
+     },
+     "流動電費": {
+      "夏月": {
+       "單位": "…",
+       "單價": "…"
+      },
+      "非夏月": {
+       "單位": "…",
+       "單價": "…"
+      }
+     }
+    },
+    "低壓電力時間電價(二段式)": {
+     "基本電費": {
+      "裝置契約": {
+       "按戶計收": "…",
+       "裝置契約": "…"
+      },
+      "需量契約": {
+       "按戶計收": "…",
+       "經常契約": "…",
+       "非夏月契約": "…",
+       "週六半尖峰契約": "…",
+       "離峰契約": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "低壓電力時間電價(三段式)": {
+     "基本電費": {
+      "按戶計收": {
+       "單位": "…",
+       "單價": "…"
+      },
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "電動車充換電設施電價": {
+     "基本電費": {
+      "按戶計收": {
+       "單位": "…",
+       "單價": "…"
+      },
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六、週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "高壓二段式時間電價": {
+     "基本電費": {
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "非夏月契約": {
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "高壓三段式時間電價(尖峰時間固定)": {
+     "基本電費": {
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "高壓三段式時間電價(尖峰時間可變動)": {
+     "基本電費": {
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "高壓批次生產時間電價": {
+     "基本電費": {
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "非夏月契約": {
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "高壓電動車充換電設施電價": "按「低壓電動車充換電設施電價」95%計算。",
+    "特高壓二段式時間電價": {
+     "基本電費": {
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "非夏月契約": {
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "特高壓三段式時間電價(尖峰時間固定)": {
+     "基本電費": {
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "特高壓三段式時間電價(尖峰時間可變動)": {
+     "基本電費": {
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    },
+    "特高壓批次生產時間電價": {
+     "基本電費": {
+      "經常契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "非夏月契約": {
+       "非夏月": "…"
+      },
+      "週六半尖峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      },
+      "離峰契約": {
+       "夏月": "…",
+       "非夏月": "…"
+      }
+     },
+     "流動電費": {
+      "週一至週五": {
+       "尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週六": {
+       "半尖峰時間": "…",
+       "離峰時間": "…"
+      },
+      "週日及離峰日": {
+       "離峰時間": "…"
+      }
+     }
+    }
+   }
+  }
+ },
+ "fire_tpe": {
+  "status": 404,
+  "ct": "text/html; charset=utf-8",
+  "len": 3253,
+  "cors": null,
+  "sec": 0.9,
+  "head": "\r\n\r\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n\r\n<meta charset=\"UTF-8\">\r\n<html lang=\"zh-TW\">\r\n<head>\r\n    <title>\r\n        臺北市政府消防局中文網站</title>\r\n    <style>\r\n        body {\r\n            font-famil"
+ },
+ "cctv_freeway": "ProtocolError('Connection broken: IncompleteRead(112 bytes read, 16 more expected)', IncompleteRead(112 bytes read, 16 more expected))",
+ "thb_cctv_list": {
+  "status": 502,
+  "ct": "",
+  "len": 0,
+  "cors": null,
+  "sec": 1.3,
+  "head": ""
+ },
+ "atlas_npm": {
+  "status": 200,
+  "ct": "application/json",
+  "len": 66688,
+  "cors": "*",
+  "sec": 0.1,
+  "tree": {
+   "_id": "taiwan-atlas",
+   "_rev": "22-97f07263410b054cf9196aff7e5ed278",
+   "name": "taiwan-atlas",
+   "dist-tags": {
+    "latest": "2021.9.20"
+   },
+   "versions": {
+    "0.0.0": {
+     "name": "taiwan-atlas",
+     "version": "0.0.0",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1"
+     },
+     "gitHead": "16c0b05a86b1d0dc4bedda8d4ee0117a131eb90d",
+     "_id": "taiwan-atlas@0.0.0",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-QKQBdVqeoas1Q2zklpSAivuI+W5K6bF8NcSwGtZd5fL",
+      "shasum": "d304695a811c999ee053252e7200fc9356fa8ed5",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "12519312",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "0.0.1": {
+     "name": "taiwan-atlas",
+     "version": "0.0.1",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1"
+     },
+     "gitHead": "a62441ed0643ba0e83e36adfc2672dc5a61b8c5e",
+     "_id": "taiwan-atlas@0.0.1",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-/tyMNi8U/LcadaGWA0EqBghykZ4S/vc53lNIAjaOZIM",
+      "shasum": "4fcedbab0982a76408b746332a04c6166b54c6a2",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "16726639",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "0.0.2": {
+     "name": "taiwan-atlas",
+     "version": "0.0.2",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1"
+     },
+     "gitHead": "9144d7ef5afb0e2b3a9647a3ddde735100f39875",
+     "_id": "taiwan-atlas@0.0.2",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-5x8cARP6e6X5q5w5pxqVbRX5buRRZNqCaxXwAESBQpE",
+      "shasum": "bae650444a67323e0e0674cc58f38e291a062981",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "10008956",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "0.0.3": {
+     "name": "taiwan-atlas",
+     "version": "0.0.3",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1"
+     },
+     "gitHead": "a0aa16e849a4f2e923217f0518b5f07248a21d97",
+     "_id": "taiwan-atlas@0.0.3",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-veHSbj4gxGWhI3FJu09TvHN2bl4YgTyA7+kOHoxlqRt",
+      "shasum": "e42071bf581237b4467a27d0704e605b9af46adc",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "9310159",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "0.0.4": {
+     "name": "taiwan-atlas",
+     "version": "0.0.4",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1"
+     },
+     "gitHead": "51cfbc89729060b51da8e8b5498999e233c7e227",
+     "_id": "taiwan-atlas@0.0.4",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-+eWawKW1j+QDsHSqTJXIs5xvOnYWEJuhgPdBY5GH1XI",
+      "shasum": "817a5620e86957599e6951c3ee712fada7e61bcc",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "10080830",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "0.0.5": {
+     "name": "taiwan-atlas",
+     "version": "0.0.5",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "6e7f8cf37c2e176d96a50e8ca1cfb027b4bf30f0",
+     "_id": "taiwan-atlas@0.0.5",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-s4YWPldt9wXLhh3OPWKlA3fJyHtHaTPss8jFtry98Go",
+      "shasum": "f483c46ae1e853ab5cb64337e425b2d84be717b5",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "10083471",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "0.0.6": {
+     "name": "taiwan-atlas",
+     "version": "0.0.6",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "299422ff5c9fdb1a7523ace62d2cef1abcce6f0b",
+     "_id": "taiwan-atlas@0.0.6",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-S1meWNZpJazjj+NQUbgg3VW0QHGAgm9xX9/dAqXQyXN",
+      "shasum": "c5c22a6f360c306759a11dfd9518d6a42907183c",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "10091429",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "0.0.7": {
+     "name": "taiwan-atlas",
+     "version": "0.0.7",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "cf39639af08bf9deee4592f07a176c980f0f9923",
+     "_id": "taiwan-atlas@0.0.7",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-I+rJvsOJsTmG2ZcbIaJ9ey14o+/dKvpXxksD7bRuDZg",
+      "shasum": "650f0f3fbff41f763e53e071143ac638387454f1",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "10122272",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "0.0.8": {
+     "name": "taiwan-atlas",
+     "version": "0.0.8",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "145335620a36878f03b350ba768571eb21d23d00",
+     "_id": "taiwan-atlas@0.0.8",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-ZbWYq/uDHWd6KofSNBZd2Wjiee1hOeVUqh1rkoAKgOf",
+      "shasum": "9e42afc1153adcfa5fc6c63c2d856ad5505ee239",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "10128031",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "1.0.0": {
+     "name": "taiwan-atlas",
+     "version": "1.0.0",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "5e02cf05b2d895174daeed4476f0d19441983fb2",
+     "_id": "taiwan-atlas@1.0.0",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-jPIZryq02GT6uc8NHFwrsHF8V9kQ15U4mSm/RC+yDXo",
+      "shasum": "84d30775208fd48e264bf6d0667412c2db76f577",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "10128031",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "1.0.1": {
+     "name": "taiwan-atlas",
+     "version": "1.0.1",
+     "description": "現成 TopoJSON 來自於中華民國內政部",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "@mapbox/geojson-merge": "^1.1.1",
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "556bbc6c3e8a9a43f916018465af87ed89b25c94",
+     "_id": "taiwan-atlas@1.0.1",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-mYWuD1OjjCj8DRPJUs9ihqCHP7GhLgEkN+VWid2Hewa",
+      "shasum": "c65836d3c3f3c032841f2b7fc766764b7caba16f",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "10126323",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "1.0.2": {
+     "name": "taiwan-atlas",
+     "version": "1.0.2",
+     "description": "Pre-built TopoJSON from the Ministry of the Interi",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "@mapbox/geojson-merge": "^1.1.1",
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "96f7aaeb16c44e98c1740046fb46890e80ec9df1",
+     "_id": "taiwan-atlas@1.0.2",
+     "_nodeVersion": "14.15.1",
+     "_npmVersion": "6.14.8",
+     "dist": {
+      "integrity": "sha512-R7PgfnhEx6r0ry6JmxLuFKRn6tZRJc2j4uoSwmDKmK9",
+      "shasum": "01f7946daad2d1cbbf6484b7a468d9e5fc8dac50",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "13",
+      "unpackedSize": "10126307",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "1.1.0": {
+     "name": "taiwan-atlas",
+     "version": "1.1.0",
+     "description": "Pre-built TopoJSON from the Ministry of the Interi",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "@mapbox/geojson-merge": "^1.1.1",
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "46db6ffc547b0ba8cbf9719b7990e2935fd37a8d",
+     "_id": "taiwan-atlas@1.1.0",
+     "_nodeVersion": "14.15.4",
+     "_npmVersion": "6.14.10",
+     "dist": {
+      "integrity": "sha512-QTAqLCLdsN6wFFR3gdkVPPWcm8PZ+xX25FXtu79VQi2",
+      "shasum": "5f3307233fe079c9c5608e663afc7e41ad0d7926",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "15",
+      "unpackedSize": "10709103",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "2020.9.20": {
+     "name": "taiwan-atlas",
+     "version": "2020.9.20",
+     "description": "Pre-built TopoJSON from the Ministry of the Interi",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "@mapbox/geojson-merge": "^1.1.1",
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "57f24b14dcab0cf61b865ffe3da9ced8e387fa1b",
+     "_id": "taiwan-atlas@2020.9.20",
+     "_nodeVersion": "14.15.5",
+     "_npmVersion": "6.14.11",
+     "dist": {
+      "integrity": "sha512-zHPyeam999KMrIrKH67j65V2XxGb+INfSX+fauA8KPK",
+      "shasum": "5f02d7ac824938d89b5acc09891dc1a06195ee30",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "15",
+      "unpackedSize": "10709107",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "2021.4.27": {
+     "name": "taiwan-atlas",
+     "version": "2021.4.27",
+     "description": "Pre-built TopoJSON from the Ministry of the Interi",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "@mapbox/geojson-merge": "^1.1.1",
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "4349c8f880d6ceb8312147a98d92b38abfa64b2f",
+     "_id": "taiwan-atlas@2021.4.27",
+     "_nodeVersion": "14.16.1",
+     "_npmVersion": "6.14.12",
+     "dist": {
+      "integrity": "sha512-aQdGD5ZT0ZkzTlJqYs6XYURfsb4SIpDPNE+28p7ba03",
+      "shasum": "cf4f06e09acb4422ae97a8ccc606d438c1a55fb9",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "15",
+      "unpackedSize": "10698718",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "2021.5.11": {
+     "name": "taiwan-atlas",
+     "version": "2021.5.11",
+     "description": "Pre-built TopoJSON from the Ministry of the Interi",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "@mapbox/geojson-merge": "^1.1.1",
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "cb0b1a2f1943440074da65bb46cdf76d8e2606fb",
+     "_id": "taiwan-atlas@2021.5.11",
+     "_nodeVersion": "14.16.1",
+     "_npmVersion": "6.14.12",
+     "dist": {
+      "integrity": "sha512-4QGSfDh2sgawuv9oj0PktUE5ouclZsGsZhKk8saEjjj",
+      "shasum": "a7c6d0db9050abec7fe4063e5e8e910496e7e618",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "15",
+      "unpackedSize": "10701943",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    },
+    "2021.9.20": {
+     "name": "taiwan-atlas",
+     "version": "2021.9.20",
+     "description": "Pre-built TopoJSON from the Ministry of the Interi",
+     "main": "mercatorTw.cjs.js",
+     "jsnext:main": "mercatorTw.es.js",
+     "scripts": {
+      "lint": "eslint .",
+      "generate:img": "npm run build && bash prepublish.sh && bash genera",
+      "clean": "rimraf mercatorTw.cjs.js mercatorTw.es.js",
+      "build": "npm run clean && npm run build:cjs && npm run buil",
+      "build:cjs": "rollup -c -o mercatorTw.cjs.js -f cjs",
+      "build:es": "rollup -c -o mercatorTw.es.js -f es",
+      "prepublishOnly": "npm run build && bash prepublish.sh"
+     },
+     "repository": {
+      "type": "git",
+      "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+     },
+     "author": {
+      "name": "Daniel Kao",
+      "url": "https://www.diplateevo.com/"
+     },
+     "license": "MIT",
+     "keywords": [
+      3,
+      "topojson"
+     ],
+     "bugs": {
+      "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+     },
+     "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+     "devDependencies": {
+      "@mapbox/geojson-merge": "^1.1.1",
+      "d3-geo-projection": "^3.0.0",
+      "eslint": "^7.14.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-plugin-import": "^2.22.1",
+      "globby": "^11.0.1",
+      "mapshaper": "^0.5.26",
+      "ndjson-cli": "^0.3.1",
+      "rimraf": "^3.0.2",
+      "rollup": "^2.33.3",
+      "shapefile": "^0.6.6",
+      "svgexport": "^0.4.1",
+      "topojson-client": "^3.1.0",
+      "topojson-server": "^3.0.1",
+      "topojson-simplify": "^3.0.3"
+     },
+     "dependencies": {
+      "d3-geo": "^2.0.1",
+      "d3-path": "^2.0.0"
+     },
+     "gitHead": "694684e139783a7417ff2c8591c263f12463bac8",
+     "_id": "taiwan-atlas@2021.9.20",
+     "_nodeVersion": "14.17.6",
+     "_npmVersion": "6.14.15",
+     "dist": {
+      "integrity": "sha512-FZwzY/JiHwHQe0IqOPltHIKOIGWgPUWshtj6IMd+3pH",
+      "shasum": "cd803da66a1ea713f16a2f340f75011b39d98bc5",
+      "tarball": "https://registry.npmjs.org/taiwan-atlas/-/taiwan-a",
+      "fileCount": "15",
+      "unpackedSize": "10687621",
+      "npm-signature": "-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js",
+      "signatures": [
+       1,
+       "…"
+      ]
+     },
+     "_npmUser": {
+      "name": "dkao",
+      "email": "dkao@diplateevo.com"
+     }
+    }
+   },
+   "time": {
+    "created": "2020-12-01T03:10:59.739Z",
+    "0.0.0": "2020-12-01T03:11:00.015Z",
+    "modified": "2022-05-19T08:49:49.283Z",
+    "0.0.1": "2020-12-04T09:38:16.658Z",
+    "0.0.2": "2020-12-05T09:26:22.048Z",
+    "0.0.3": "2020-12-08T07:34:32.022Z",
+    "0.0.4": "2020-12-09T04:20:29.435Z",
+    "0.0.5": "2020-12-10T03:52:52.060Z",
+    "0.0.6": "2020-12-10T08:26:06.741Z",
+    "0.0.7": "2020-12-10T08:45:24.501Z",
+    "0.0.8": "2020-12-10T09:00:15.921Z",
+    "1.0.0": "2020-12-10T09:13:45.199Z",
+    "1.0.1": "2020-12-12T05:31:10.930Z",
+    "1.0.2": "2020-12-31T09:48:43.231Z",
+    "1.1.0": "2021-02-14T07:08:24.610Z",
+    "2020.9.20": "2021-02-23T06:34:14.486Z",
+    "2020.4.25": "2021-04-25T15:00:45.969Z",
+    "2020.4.26": "2021-04-25T15:24:25.068Z",
+    "2021.4.27": "2021-04-27T06:43:13.658Z",
+    "2021.5.11": "2021-05-11T10:11:06.177Z"
+   },
+   "maintainers": [
+    1,
+    {
+     "name": "dkao",
+     "email": "dkao@diplateevo.com"
+    }
+   ],
+   "description": "Pre-built TopoJSON from the Ministry of the Interi",
+   "homepage": "https://github.com/dkaoster/taiwan-atlas#readme",
+   "keywords": [
+    3,
+    "topojson"
+   ],
+   "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dkaoster/taiwan-atlas.git"
+   },
+   "author": {
+    "name": "Daniel Kao",
+    "url": "https://www.diplateevo.com/"
+   },
+   "bugs": {
+    "url": "https://github.com/dkaoster/taiwan-atlas/issues"
+   },
+   "license": "MIT",
+   "readme": "# Taiwan Atlas TopoJSON\n\nSimilar to the [topojson/",
+   "readmeFilename": "README.md"
+  }
+ },
+ "gnews_town": {
+  "status": 200,
+  "ct": "application/xml; charset=utf-8",
+  "len": 54175,
+  "cors": null,
+  "sec": 0.3,
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><rss version=\"2.0\" xmlns:media=\"http://search.yahoo.com/mrss/\"><channel><generator>NFE/5.0</generator><title>\"信義區 when:1d\" - Google 新聞</title><link>https://news.google.com/search?q=%E4%BF%A1%E7%BE%A9%E5%8D%80+when:1d&amp;hl=zh-TW&amp;g"
+ },
+ "moenv_quake_free": {
+  "status": 200,
+  "ct": "text/html; charset=utf-8",
+  "len": 60042,
+  "cors": null,
+  "sec": 1.7,
+  "head": "<!DOCTYPE html>\r\n<html  xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"zh-TW\">\r\n<head>\r\n    <meta charset=\"utf-8\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\">\r\n    <title>地震活動彙整 - 中央�"
+ }
+}
