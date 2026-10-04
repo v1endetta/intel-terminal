@@ -1191,7 +1191,180 @@ def p_weather():
         log("cwa warn", e)
     if not any(c["temp"] is not None for c in out):
         raise RuntimeError("cwa: no observations")
-    return {"label": "氣象署", "items": out, "warnings": warns[:12]}
+    # 雨量站：全台正在下雨的站（過去 1 小時 ≥0.5mm 或 10 分鐘內有雨），地圖畫點；同一筆資料不多打 API
+    rainmap, county_rain = [], {}
+    for st in rain.values():
+        lon, lat = _cwa_ll(st)
+        re_ = st.get("RainfallElement") or {}
+        r1 = _cwa_num((re_.get("Past1hr") or {}).get("Precipitation"))
+        r10 = _cwa_num((re_.get("Past10Min") or {}).get("Precipitation"))
+        if lon is None or lat is None or not ((r1 or 0) >= 0.5 or (r10 or 0) > 0):
+            continue
+        cty = (st.get("GeoInfo") or {}).get("CountyName") or ""
+        rainmap.append([round(lon, 3), round(lat, 3), r1 or 0, r10 or 0, st.get("StationName", ""), cty])
+        if cty:
+            county_rain[cty] = max(county_rain.get(cty, 0), r1 or 0)
+    rainmap.sort(key=lambda x: -x[2])
+    # 紫外線：當日最大值，對應到各城市選用的有人站
+    uv = {}
+    try:
+        for sid, v in _cwa_uv().items():
+            uv[sid] = v
+        id_of = {name: st.get("StationId") for name, st in manned.items()}
+        for c in out:
+            sid = id_of.get(c["station"])
+            if sid and sid in uv:
+                c["uv"] = uv[sid]
+    except Exception as e:  # noqa: BLE001
+        log("cwa uv", e)
+    return {"label": "氣象署", "items": out, "warnings": warns[:12], "rainmap": rainmap[:700], "rainN": len(rainmap),
+            "countyRain": county_rain, "rainStations": len(rain)}
+
+
+def _cwa_ll(st):
+    cs = (st.get("GeoInfo") or {}).get("Coordinates") or []
+    pick = next((c for c in cs if "WGS" in str(c.get("CoordinateName", "")).upper()), cs[-1] if cs else {})
+    lon, lat = num(pick.get("StationLongitude")), num(pick.get("StationLatitude"))
+    if lon is None or not (118 < lon < 123 and 21 < (lat or 0) < 27):
+        return None, None
+    return lon, lat
+
+
+def _walk_dicts(o):
+    if isinstance(o, dict):
+        yield o
+        for v in o.values():
+            yield from _walk_dicts(v)
+    elif isinstance(o, list):
+        for v in o:
+            yield from _walk_dicts(v)
+
+
+def _cwa_uv():
+    """O-A0005-001 每日紫外線最大值：回傳 {測站代號: 指數}（欄位名稱各版本不同，用掃的）。"""
+    out = {}
+    for d in _walk_dicts(cwa("O-A0005-001")):
+        sid = next((d[k] for k in d if k.lower() in ("stationid", "locationcode")), None)
+        val = next((d[k] for k in d if "uv" in k.lower() and not isinstance(d[k], (dict, list))), None)
+        if sid and num(val) is not None:
+            out[str(sid)] = num(val)
+    return out
+
+
+def _tree(o, d=0):
+    if d > 6:
+        return "…"
+    if isinstance(o, dict):
+        return {k: _tree(v, d + 1) for k, v in list(o.items())[:30]}
+    if isinstance(o, list):
+        return [len(o), _tree(o[0], d + 1)] if o else [0]
+    return str(o)[:40]
+
+
+# ---------- 颱風動態（W-C0034-005，沒有颱風時是空的） ----------
+def _ll_pair(s):
+    try:
+        a, b = [float(x) for x in str(s).replace(" ", "").split(",")[:2]]
+        return [a, b] if a > b else [b, a]  # [經度, 緯度]
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def p_typhoon():
+    rec = cwa("W-C0034-005")
+    tcs = []
+    for d in _walk_dicts(rec):
+        if not any(k in d for k in ("analysisData", "forecastData")):
+            continue
+        def fixes(part):
+            fx = (d.get(part) or {}).get("fix") or []
+            out = []
+            for f in fx if isinstance(fx, list) else [fx]:
+                ll = _ll_pair(f.get("coordinate"))
+                if not ll:
+                    continue
+                r = f.get("circleOf15Ms") or {}
+                out.append({"t": f.get("fixTime") or f.get("initTime") or "", "tau": f.get("tau"), "ll": ll,
+                            "wind": num(f.get("maxWindSpeed")), "gust": num(f.get("maxGustSpeed")), "p": num(f.get("pressure")),
+                            "r15": num(r.get("radius") if isinstance(r, dict) else r),
+                            "r70": num(f.get("radiusOf70PercentProbability"))})
+            return out
+        tcs.append({"name": d.get("cwaTyphoonName") or d.get("typhoonName") or "", "en": d.get("typhoonName") or "",
+                    "td": d.get("cwaTdNo") or d.get("cwaTyNo") or "", "past": fixes("analysisData"), "fc": fixes("forecastData")})
+    return {"items": tcs, "diag": None if tcs else _tree(rec)}
+
+
+# ---------- 雷達回波（O-A0059-001 格點 → 自己畫成透明 PNG，地圖疊圖） ----------
+CWA_FILE = "https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/"
+RADAR_COLORS = [(15, (60, 170, 255, 120)), (20, (0, 200, 200, 140)), (25, (0, 200, 90, 155)), (30, (180, 230, 0, 170)), (35, (255, 220, 0, 185)),
+                (40, (255, 150, 0, 200)), (45, (255, 60, 30, 210)), (50, (225, 0, 90, 220)), (55, (190, 0, 200, 230))]
+
+
+def _png_rgba(w, h, rows):
+    import struct
+    import zlib
+    raw = b"".join(b"\x00" + r for r in rows)
+
+    def chunk(t, d):
+        return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xFFFFFFFF)
+    return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0)) + chunk(b"IDAT", zlib.compress(raw, 9)) + chunk(b"IEND", b"")
+
+
+def p_radar():
+    import math
+    j = gjson(CWA_FILE + "O-A0059-001", params={"Authorization": CWA_KEY, "downloadType": "WEB", "format": "JSON"})
+    ds = (j.get("cwaopendata") or j).get("dataset") or {}
+    content, params = "", {}
+    for d in _walk_dicts(ds):
+        for k, v in d.items():
+            if isinstance(v, str) and len(v) > len(content) and v.count(",") > 1000:
+                content = v
+            elif isinstance(v, (str, int, float)) and len(str(v)) < 40:
+                params.setdefault(k, v)
+        if "parameterName" in d and "parameterValue" in d:
+            params.setdefault(str(d["parameterName"]), d["parameterValue"])
+    def pv(*keys, default=None):
+        for k, v in params.items():
+            if any(x.lower() in k.lower().replace(" ", "") for x in keys) and num(v) is not None:
+                return num(v)
+        return default
+    lon0 = pv("StartPointLongitude", "經度", default=118.0)
+    lat0 = pv("StartPointLatitude", "緯度", default=20.0)
+    res = pv("GridResolution", "Resolution", "解析度", default=0.0125)
+    nx = int(pv("GridDimensionX", "DimensionX", default=441))
+    ny = int(pv("GridDimensionY", "DimensionY", default=561))
+    vals = [num(x) for x in content.split(",")] if content else []
+    if len(vals) != nx * ny:
+        return {"error_detail": f"grid {len(vals)} != {nx}x{ny}", "diag": _tree(ds), "params": {k: str(v)[:30] for k, v in list(params.items())[:40]}}
+    when = next((params[k] for k in params if "datetime" in k.lower() or "obstime" in k.lower()), "")
+    def color(v):
+        if v is None or v < RADAR_COLORS[0][0]:
+            return b"\x00\x00\x00\x00"
+        c = RADAR_COLORS[0][1]
+        for th, cc in RADAR_COLORS:
+            if v >= th:
+                c = cc
+        return bytes(c)
+    # 重新取樣成麥卡托等距的列，疊到地圖上不會南北偏移
+    merc = lambda la: math.log(math.tan(math.pi / 4 + math.radians(la) / 2))
+    south, north = lat0 - res / 2, lat0 + (ny - 1) * res + res / 2
+    west, east = lon0 - res / 2, lon0 + (nx - 1) * res + res / 2
+    ys, yn = merc(south), merc(north)
+    H = ny
+    rows, strong = [], 0
+    for r in range(H):
+        y = yn - (r + 0.5) * (yn - ys) / H
+        la = math.degrees(2 * math.atan(math.exp(y)) - math.pi / 2)
+        sr = min(ny - 1, max(0, int(round((la - lat0) / res))))
+        line = vals[sr * nx:(sr + 1) * nx]
+        rows.append(b"".join(color(v) for v in line))
+        strong += sum(1 for v in line if v is not None and v >= 40)
+    png = _png_rgba(nx, H, rows)
+    (DATA / "radar.png").write_bytes(png)
+    echo = sum(1 for v in vals if v is not None and v >= 15)
+    return {"time": str(when), "bounds": [[west, north], [east, north], [east, south], [west, south]], "img": "radar.png",
+            "echoPct": round(100 * echo / len(vals), 1), "strongPct": round(100 * strong / len(vals), 2),
+            "maxDbz": max((v for v in vals if v is not None), default=None), "bytes": len(png)}
 
 
 # ---------- 第二階段：PTT（curl_cffi 模擬瀏覽器） ----------
@@ -1867,6 +2040,151 @@ def p_localnews():
     if not any(out.values()):
         raise RuntimeError("localnews: nothing " + "; ".join(errs)[:160])
     return {"counties": out, "errs": errs[:6]}
+
+
+# ---------- 藝文活動（文化部藝文資訊平台，不用金鑰）：地圖點位、各縣市、本週值得看 ----------
+CULTURE_URL = "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do"
+CULTURE_CATS = {"6": "展覽", "1": "音樂", "2": "戲劇", "17": "演唱會", "7": "講座", "3": "舞蹈"}
+CULTURE_SKIP = re.compile(r"加購|升級|套票|停售|取消|延期|常設展|導覽服務|團體預約")
+
+
+def _cul_dt(s):
+    try:
+        return datetime.strptime(str(s).strip()[:16], "%Y/%m/%d %H:%M").replace(tzinfo=TPE)
+    except Exception:  # noqa: BLE001
+        try:
+            return datetime.strptime(str(s).strip()[:10], "%Y/%m/%d").replace(tzinfo=TPE)
+        except Exception:  # noqa: BLE001
+            return None
+
+
+def p_culture():
+    now = NOW.astimezone(TPE)
+    soon = now + timedelta(days=7)
+    events, errs = [], []
+    for cat, cname in CULTURE_CATS.items():
+        try:
+            rows = gjson(CULTURE_URL, params={"method": "doFindTypeJ", "category": cat}, timeout=60)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{cname}: {safe_err(e)}"); continue
+        for ev in rows:
+            title = re.sub(r"\s+", " ", ev.get("title") or "").strip()
+            if not title or CULTURE_SKIP.search(title):
+                continue
+            sd, ed = _cul_dt(ev.get("startDate")), _cul_dt(ev.get("endDate"))
+            if ed and ed.date() < now.date():
+                continue
+            long_run = bool(sd and ed and (ed - sd).days > 400)  # 跨好幾年的多半是常設展
+            if cat == "6" and long_run:
+                continue
+            # 找本週內（現在～7 天後）還有的場次；展覽只要展期涵蓋本週就算
+            sess = []
+            for si in ev.get("showInfo") or []:
+                if not isinstance(si, dict):
+                    continue
+                t, te = _cul_dt(si.get("time")), _cul_dt(si.get("endTime"))
+                if cat == "6":
+                    ok = (t is None or t <= soon) and (te is None or te >= now)
+                else:
+                    ok = t is not None and now - timedelta(hours=3) <= t <= soon
+                if ok:
+                    sess.append((t or now, si))
+            if not sess:
+                continue
+            sess.sort(key=lambda x: x[0])
+            t, si = sess[0]
+            loc = (si.get("location") or "").strip()
+            county = (_counties_in(loc) or _counties_in(si.get("locationName") or "") or [""])[0]
+            lat, lon = num(si.get("latitude")), num(si.get("longitude"))
+            if not (lat and lon and 21 < lat < 27 and 118 < lon < 123):
+                lat = lon = None
+            closing = bool(cat == "6" and ed and (ed.date() - now.date()).days <= 7)
+            events.append({"t": title[:60], "c": cname, "county": county, "venue": ((si.get("locationName") or "") or loc)[:24],
+                           "at": t.strftime("%m/%d %H:%M") if cat != "6" else "", "end": ed.strftime("%m/%d") if ed else "",
+                           "n": len(sess), "price": re.sub(r"\s+", " ", si.get("price") or "")[:30], "unit": (ev.get("showUnit") or "")[:20],
+                           "url": ev.get("webSales") or ev.get("sourceWebPromote") or "", "hit": int(num(ev.get("hitRate")) or 0),
+                           "ll": [round(lon, 4), round(lat, 4)] if lat else None, "closing": closing})
+        time.sleep(0.3)
+    if not events:
+        raise RuntimeError("culture: nothing " + "; ".join(errs)[:160])
+    # 同名同場地去重
+    seen, uniq = set(), []
+    for e in sorted(events, key=lambda x: -x["hit"]):
+        k = (e["t"][:24], e["venue"][:10])
+        if k not in seen:
+            seen.add(k); uniq.append(e)
+    by_county = {}
+    for e in uniq:
+        if e["county"]:
+            by_county.setdefault(e["county"], []).append(e)
+    counts = {k: len(v) for k, v in by_county.items()}
+    top = {k: v[:4] for k, v in by_county.items()}
+    exhib = [e for e in uniq if e["c"] == "展覽"]
+    picks = {"closing": [e for e in exhib if e["closing"]][:6], "exhib": exhib[:8],
+             "stage": [e for e in uniq if e["c"] in ("演唱會", "戲劇", "舞蹈", "音樂")][:8]}
+    points = [[e["ll"][0], e["ll"][1], e["t"], e["c"], e["venue"], e["at"] or ("至 " + e["end"])] for e in uniq if e["ll"]][:900]
+    cat_n = {c: sum(1 for e in uniq if e["c"] == c) for c in CULTURE_CATS.values()}
+    return {"counts": counts, "top": top, "picks": picks, "points": points, "catN": cat_n, "n": len(uniq), "errs": errs}
+
+
+# ---------- 菜價（農業部批發市場，台北一為基準；颱風前後會跳） ----------
+MOA_VEG = "https://data.moa.gov.tw/Service/OpenData/FromM/FarmTransData.aspx"
+VEG_BASKET = [("甘藍", "高麗菜"), ("包心白", "大白菜"), ("小白菜", "小白菜"), ("青江白菜", "青江菜"), ("蕹菜", "空心菜"), ("菠菜", "菠菜"),
+              ("萵苣菜", "萵苣"), ("青蔥", "青蔥"), ("花椰菜", "花椰菜"), ("胡瓜", "小黃瓜"), ("絲瓜", "絲瓜"), ("茄子", "茄子"),
+              ("番茄", "番茄"), ("胡蘿蔔", "胡蘿蔔"), ("蘿蔔", "白蘿蔔"), ("辣椒", "辣椒")]
+
+
+def p_veg():
+    today = NOW.astimezone(TPE).date()
+    roc = lambda d: f"{d.year - 1911}.{d.month:02d}.{d.day:02d}"
+    have = HISTORY.get("veg", {}).get("高麗菜") or []
+    since = today - timedelta(days=4 if len(have) >= 10 else 30)  # 第一次回補一個月
+    rows, skip = [], 0
+    while skip < 30000:
+        got = gjson(MOA_VEG, params={"StartDate": roc(since), "EndDate": roc(today), "Market": "台北一", "$top": "3000", "$skip": str(skip)}, timeout=60)
+        rows += got
+        if len(got) < 3000:
+            break
+        skip += 3000
+    agg = {}  # (日期, 品名) -> [金額, 量]
+    for r in rows:
+        if r.get("市場名稱") != "台北一":
+            continue
+        name = (r.get("作物名稱") or "").split("-")[0]
+        p, v = num(r.get("平均價")), num(r.get("交易量"))
+        if not p or not v:
+            continue
+        for key, label in VEG_BASKET:
+            if name == key:
+                d = r.get("交易日期") or ""
+                m = re.match(r"(\d+)\.(\d+)\.(\d+)", d)
+                if not m:
+                    continue
+                iso = f"{int(m.group(1)) + 1911}-{m.group(2)}-{m.group(3)}"
+                a = agg.setdefault((iso, label), [0.0, 0.0])
+                a[0] += p * v; a[1] += v
+    for (iso, label), (amt, vol) in agg.items():
+        hist_put("veg", label, iso, round(amt / vol, 1))
+        hist_put("veg_vol", label, iso, round(vol))
+    items, ratios = [], []
+    for _, label in VEG_BASKET:
+        h = HISTORY.get("veg", {}).get(label) or []
+        if not h:
+            continue
+        vals = [v for _, v in h[-15:]]
+        cur = vals[-1]
+        base = sum(vals[:-1]) / len(vals[:-1]) if len(vals) > 1 else None
+        chg = round(100 * (cur / base - 1), 1) if base else None
+        if chg is not None:
+            ratios.append(chg)
+        items.append({"name": label, "price": cur, "date": h[-1][0], "prev": vals[-2] if len(vals) > 1 else None, "chg14": chg, "spark": vals})
+    if not items:
+        raise RuntimeError(f"veg: no basket rows ({len(rows)} rows)")
+    idx = round(sum(ratios) / len(ratios), 1) if ratios else None
+    if idx is not None:
+        hist_put("veg_idx", "basket", max(i["date"] for i in items), idx)
+    items.sort(key=lambda x: -(x["chg14"] or 0))
+    return {"market": "台北一", "date": max(i["date"] for i in items), "index": idx, "items": items, "rows": len(rows)}
 
 
 # ---------- 時事：台灣 / 國際 / 關鍵字 / 訊號 ----------
@@ -4319,6 +4637,8 @@ _sp = load_prev("supply") or {}
 _sp_next = min([x.get("next") for x in (_sp.get("pmi") or {}, _sp.get("nmi") or {}) if x.get("next")] or ["9999"])
 run("supply", p_supply, keep_if_fresh_hours=1 if TODAY_TPE.isoformat() >= _sp_next else 6)  # 發布日起每小時重抓，抓到新月份 next 會往後推
 run("weather", p_weather)
+run("radar_wx", p_radar, keep_if_fresh_hours=0.15)
+run("typhoon", p_typhoon, keep_if_fresh_hours=0.5)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("devpulse", p_devpulse, keep_if_fresh_hours=1)
@@ -4336,6 +4656,8 @@ run("airport", p_airport, keep_if_fresh_hours=0.25)
 run("alerts", p_alerts, keep_if_fresh_hours=0.15)
 run("oil", p_oil, keep_if_fresh_hours=12)
 run("localnews", p_localnews, keep_if_fresh_hours=1)
+run("culture", p_culture, keep_if_fresh_hours=6)
+run("veg", p_veg, keep_if_fresh_hours=6)
 # run("tiktok", p_tiktok, keep_if_fresh_hours=20)  # Creative Center 擋資料中心 IP，每輪白耗 60 秒，先停
 
 DATA.mkdir(exist_ok=True)
