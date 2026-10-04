@@ -1080,7 +1080,7 @@ function renderTWW(){const d=TWW;if(!d)return;const its=d.items||[];const tabs=[
   setMeta("p-tw-stocks",{...d,label:"盤後 "+(d.date||"")},30);}
 document.addEventListener("click",e=>{const b=e.target.closest("#wl-tabs [data-wl]");if(!b)return;TWW_T=b.dataset.wl;try{localStorage.setItem("tw:wl",TWW_T);}catch(x){}renderTWW();});
 /* ---------- 台指期籌碼 ---------- */
-function renderTaifex(d){const F=d.fut||{},rows=[];["台指期","小台","微台"].forEach(k=>{const f=F[k];if(!f)return;["外資","投信","自營商"].forEach(w=>{const v=f[w];if(!v)return;rows.push(`<tr><td>${k} · ${w}</td><td class="${cls(v.oi)}">${n(v.oi).toLocaleString()}</td><td class="${cls(v.chg)}">${v.chg!=null?(v.chg>0?"+":"")+n(v.chg).toLocaleString():"—"}</td><td>${v.val?fmt(v.val,1)+" 億":"—"}</td></tr>`);});});
+function renderTaifex(d){const F=d.fut||{},rows=[];["台指期","小台","微台"].forEach(k=>{const f=F[k];if(!f)return;["外資","投信","自營商"].forEach(w=>{const v=f[w];if(!v||(!v.oi&&!v.vol))return;rows.push(`<tr><td>${k} · ${w}</td><td class="${cls(v.oi)}">${n(v.oi).toLocaleString()}</td><td class="${cls(v.chg)}">${v.chg!=null?(v.chg>0?"+":"")+n(v.chg).toLocaleString():"—"}</td><td>${v.val?fmt(v.val,1)+" 億":"—"}</td></tr>`);});});
   const p=d.pcr||[],p0=p[0]||{};const pc=p.slice(0,10).reverse().map(x=>x.oi);
   body("p-taifex").innerHTML=`<table class="tf-t"><tr><th>契約 · 法人</th><th>淨未平倉 口</th><th>變化</th><th>契約金額</th></tr>${rows.join("")}</table>
   ${p0.oi?`<div class="jb-k" style="margin-top:10px"><div><div class="lbl">台指選擇權 Put/Call（未平倉）</div><b class="num">${fmt(n(p0.oi),1)}%</b> <span class="sub">成交量比 ${fmt(n(p0.vol),1)}%</span></div><div style="flex:1;max-width:220px">${mini(pc)}</div></div>`:""}`;
