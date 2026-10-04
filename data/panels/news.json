@@ -75,6 +75,12 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Christa Pike's prognosis still unclear after failed execution, lawyer says",
+   "url": "https://www.bbc.co.uk/news/articles/ckgelynyg7d3o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-04T16:24:48Z"
+  },
+  {
    "source": "Guardian",
    "title": "Russia strikes Kyiv bridge as German chancellor visits Ukraine in show of support",
    "url": "https://www.theguardian.com/world/2026/oct/04/russia-strikes-kyiv-bridge-german-chancellor-merz-visits-ukraine",
@@ -146,12 +152,6 @@
    "url": "https://www.theguardian.com/world/2026/oct/04/brazil-presidential-election-lula-flavio-bolsonaro",
    "at": "2026-10-04T13:52:33Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Ethiopian rebel forces withdraw from Tigray regional capital",
-   "url": "https://www.bbc.co.uk/news/articles/cqm249v07j4xo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-04T13:33:05Z"
   }
  ],
  "groups": [
@@ -357,7 +357,7 @@
    "name": "時尚與奢華",
    "items": [
     {
-     "source": "Ming Pao Wee",
+     "source": "mpweekly.com",
      "title": "Hermès SS27 女裝系列| 夏日清爽的微風-Fashion- INNER",
      "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxOLUIxRTA0VkQ1ZC1sTFZON0JqOWpIVjQwSTNJWVNyc3V3RUg5VGxkc3QxeVBIYUdIWjJybzc0V2VIMUh2RHBQNTNsQVV1LWlobXZybEF1bzJXMWtoTF9PMG4yQmRSUVNBMjBwRTBhQ1Yyc3lhQVFkcEpMNWNnV1YzZHRqV29uODFhN2l5clpiX1VPclZ4UjNFYm9LV1ZtY1ltQXlveEQ4YUNHYlQzYTFrOERfZFFNMk1QQi1USlpYd1J2WFpaRDdNVHRXRC1ySFJsLVRFOVlmem13MzQ?oc=5",
      "at": "2026-10-04T10:35:32Z",
@@ -580,7 +580,7 @@
     "n": 3,
     "src": 3,
     "sources": [
-     "storm.mg",
+     "Storm.mg",
      "中時新聞網",
      "天下雜誌"
     ],
@@ -694,7 +694,7 @@
   ]
  },
  "errs": [
-  "gdelt: RuntimeError: gdelt empty"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-04T16:24:58Z"
+ "updatedAt": "2026-10-04T16:44:46Z"
 }
