@@ -1,6 +1,20 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261006051840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣",
+    "臺中市"
+   ],
+   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
+   "src": "水利署",
+   "at": "2026-10-05T21:18:40Z",
+   "exp": "2026-10-06T08:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261006051840_0000.cap"
+  },
+  {
    "id": "CWA-Weather_strong-wind_202610060424001",
    "cat": "強風",
    "lvl": 2,
@@ -24,20 +38,6 @@
    "at": "2026-10-05T20:24:29Z",
    "exp": "2026-10-06T23:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610060424.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261006031840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "苗栗縣",
-    "臺中市"
-   ],
-   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
-   "src": "水利署",
-   "at": "2026-10-05T19:18:40Z",
-   "exp": "2026-10-06T06:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261006031840_0000.cap"
   },
   {
    "id": "CWA-Weather_extremely-rain_202610060008001",
@@ -143,8 +143,8 @@
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/06 05:14:17"
+  "updated": "2026/10/06 05:35:16"
  },
  "errs": [],
- "updatedAt": "2026-10-05T21:16:00Z"
+ "updatedAt": "2026-10-05T21:34:24Z"
 }
