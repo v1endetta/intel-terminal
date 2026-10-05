@@ -1,6 +1,44 @@
 {
  "alerts": [
   {
+   "id": "TWC_water_202610051230",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "臺南市"
+   ],
+   "text": "因新化區唪口里400DIP漏水搶修。",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T04:30:01Z",
+   "exp": "2026-10-05T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051230.cap"
+  },
+  {
+   "id": "TWC_water_202610051230",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [],
+   "text": "石牌加壓站設備故障，緊急搶修中，造成不便，敬請見諒。",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T04:30:01Z",
+   "exp": "2026-10-05T16:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051230.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261005121840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣",
+    "臺中市"
+   ],
+   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
+   "src": "水利署",
+   "at": "2026-10-05T04:18:40Z",
+   "exp": "2026-10-05T15:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005121840_0000.cap"
+  },
+  {
    "id": "TWC_water_202610051200",
    "cat": "停水",
    "lvl": 1,
@@ -136,17 +174,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051120.cap"
   },
   {
-   "id": "TWC_water_202610051110",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [],
-   "text": "石牌加壓站設備故障，緊急搶修中，造成不便，敬請見諒。",
-   "src": "台灣自來水公司",
-   "at": "2026-10-05T03:10:02Z",
-   "exp": "2026-10-05T16:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051110.cap"
-  },
-  {
    "id": "TWC_water_202610051050",
    "cat": "停水",
    "lvl": 1,
@@ -222,20 +249,6 @@
    "at": "2026-10-05T02:20:01Z",
    "exp": "2026-10-05T17:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051020.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261005101840_0001",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "苗栗縣",
-    "臺中市"
-   ],
-   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
-   "src": "水利署",
-   "at": "2026-10-05T02:18:40Z",
-   "exp": "2026-10-05T13:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005101840_0001.cap"
   },
   {
    "id": "WRA_ReservoirWarn_20261005101840_0000",
@@ -421,32 +434,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050930.cap"
   },
   {
-   "id": "WRA_FloodWarn_20261005092731_0000",
-   "cat": "淹水",
-   "lvl": 3,
-   "area": [
-    "基隆市"
-   ],
-   "text": "水利署訊基隆市七堵區淹水二級警戒 (五堵站一小時雨量超過45mm) ,如持續降雨轄內易淹水村里及道路可能3小時內開始積淹水 (如：七堵區-堵南里(堵南街),六堵里,自強里,正光里,長安里,長興里,泰安里,堵北里,永安里,友一里,正明里,瑪南里,實踐里,百福里)，建請即時注意淹水通報及應變，低窪地區及道路請特別注意防範積",
-   "src": "水利署",
-   "at": "2026-10-05T01:27:31Z",
-   "exp": "2026-10-05T12:28:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/Flood/WRA_FloodWarn_20261005092731_0000.cap"
-  },
-  {
-   "id": "WRA_FloodWarn_20261005092731_0001",
-   "cat": "淹水",
-   "lvl": 3,
-   "area": [
-    "基隆市"
-   ],
-   "text": "水利署訊基隆市暖暖區淹水二級警戒 (七堵站一小時雨量超過50mm) ,如持續降雨轄內易淹水村里及道路可能3小時內開始積淹水 (如：暖暖區-八南里,暖西里,過港里,八堵里,八西里,八中里,暖暖里,暖同里)，建請即時注意淹水通報及應變，低窪地區及道路請特別注意防範積淹水。",
-   "src": "水利署",
-   "at": "2026-10-05T01:27:31Z",
-   "exp": "2026-10-05T12:28:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/Flood/WRA_FloodWarn_20261005092731_0001.cap"
-  },
-  {
    "id": "TWC_water_202610050920",
    "cat": "停水",
    "lvl": 1,
@@ -478,59 +465,6 @@
    "at": "2026-10-05T01:20:01Z",
    "exp": "2026-10-05T14:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050920.cap"
-  },
-  {
-   "id": "TWC_water_202610050920",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [
-    "臺南市"
-   ],
-   "text": "10/05 09:00-12:30，因『台南市南區灣裡路282巷100號』路面漏水緊急搶修，造成該區域部分無水與降壓",
-   "src": "台灣自來水公司",
-   "at": "2026-10-05T01:20:01Z",
-   "exp": "2026-10-05T12:30:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050920.cap"
-  },
-  {
-   "id": "WRA_FloodWarn_20261005091730_0000",
-   "cat": "淹水",
-   "lvl": 3,
-   "area": [
-    "基隆市"
-   ],
-   "text": "水利署訊基隆市七堵區淹水二級警戒 (七堵站一小時雨量超過45mm) ,如持續降雨轄內易淹水村里及道路可能3小時內開始積淹水 (如：七堵區-堵南里(堵南街),六堵里,富民里,自強里,正光里,長安里,長興里,泰安里,堵北里,永平里,永安里,友一里,八德里,正明里,瑪南里,實踐里,百福里)，建請即時注意淹水通報及應變，低窪地",
-   "src": "水利署",
-   "at": "2026-10-05T01:17:30Z",
-   "exp": "2026-10-05T12:18:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/Flood/WRA_FloodWarn_20261005091730_0000.cap"
-  },
-  {
-   "id": "WRA_FloodWarn_20261005091730_0001",
-   "cat": "淹水",
-   "lvl": 3,
-   "area": [
-    "基隆市"
-   ],
-   "text": "水利署訊基隆市七堵區淹水一級警戒 (國一S006K站一小時雨量超過55mm) ,如持續降雨轄內易淹水村里及道路可能已經開始積淹水 (如：七堵區-堵南里(堵南街),六堵里,友二里,自強里,長安里,長興里,泰安里,堵北里,永安里,友一里(華新一路),正明里,瑪南里,實踐里,百福里)，建請即時注意淹水通報及應變，低窪地區及道",
-   "src": "水利署",
-   "at": "2026-10-05T01:17:30Z",
-   "exp": "2026-10-05T12:18:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/Flood/WRA_FloodWarn_20261005091730_0001.cap"
-  },
-  {
-   "id": "WRA_FloodWarn_20261005091730_0002",
-   "cat": "淹水",
-   "lvl": 3,
-   "area": [
-    "臺北市",
-    "新北市"
-   ],
-   "text": "水利署訊新北市汐止區淹水一級警戒 (國一S006K站一小時雨量超過55mm) ,如持續降雨轄內易淹水村里及道路可能已經開始積淹水 (如：汐止區-鄉長里,長安里,保新里,崇德里,東山里,茄苳里,保安里,橋東里,建成里,保長里)，建請即時注意淹水通報及應變，低窪地區及道路請特別注意防範積淹水。",
-   "src": "水利署",
-   "at": "2026-10-05T01:17:30Z",
-   "exp": "2026-10-05T12:18:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/Flood/WRA_FloodWarn_20261005091730_0002.cap"
   },
   {
    "id": "CWA-Weather_extremely-rain_202610050902001",
@@ -1000,12 +934,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 77,
+ "n_total": 72,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/05 12:14:14"
+  "updated": "2026/10/05 12:32:24"
  },
  "errs": [],
- "updatedAt": "2026-10-05T04:16:29Z"
+ "updatedAt": "2026-10-05T04:33:41Z"
 }
