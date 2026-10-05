@@ -1,6 +1,88 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_extremely-rain_202610050842001",
+   "cat": "降雨",
+   "lvl": 2,
+   "area": [
+    "基隆市",
+    "花蓮縣"
+   ],
+   "text": "對流雲系發展旺盛，易有短延時強降雨，今(5)日基隆北海岸、大臺北山區及花蓮地區有局部大雨發生的機率，請注意雷擊及強陣風，山區請慎防坍方、落石及溪水暴漲，低窪地區請慎防積水。",
+   "src": "中央氣象署",
+   "at": "2026-10-05T00:42:23Z",
+   "exp": "2026-10-06T00:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610050842.cap"
+  },
+  {
+   "id": "TWC_water_202610050840",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [],
+   "text": "汰換管線工程施工",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T00:40:02Z",
+   "exp": "2026-10-05T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050840.cap"
+  },
+  {
+   "id": "TWC_water_202610050840",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [],
+   "text": "因莿桐甘厝126號前100mmPVCP漏水搶修。",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T00:40:02Z",
+   "exp": "2026-10-05T12:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050840.cap"
+  },
+  {
+   "id": "TWC_water_202610050840",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [],
+   "text": "泰林路三段168巷管線汰換工程",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T00:40:02Z",
+   "exp": "2026-10-05T16:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050840.cap"
+  },
+  {
+   "id": "NFA_Fire_20261005073040012",
+   "cat": "火災",
+   "lvl": 1,
+   "area": [],
+   "text": "火災-其他",
+   "src": "內政部消防署",
+   "at": "2026-10-05T00:31:18Z",
+   "exp": "2026-10-06T08:31:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/NFA/2026/NFA_Fire/NFA_Fire_20261005073040012.cap"
+  },
+  {
+   "id": "TWC_water_202610050830",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [],
+   "text": "中山南街、大同南街破管搶修",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T00:30:01Z",
+   "exp": "2026-10-05T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050830.cap"
+  },
+  {
+   "id": "TWC_water_202610050830",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "雲林縣"
+   ],
+   "text": "配合雲林縣府辦理側溝改善，用戶外線調整間歇停水",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T00:30:01Z",
+   "exp": "2026-10-05T16:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050830.cap"
+  },
+  {
    "id": "TWC_water_202610050820",
    "cat": "停水",
    "lvl": 1,
@@ -465,12 +547,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 35,
+ "n_total": 42,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/05 08:20:57"
+  "updated": "2026/10/05 08:41:29"
  },
  "errs": [],
- "updatedAt": "2026-10-05T00:24:16Z"
+ "updatedAt": "2026-10-05T00:43:41Z"
 }
