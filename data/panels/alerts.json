@@ -1,6 +1,46 @@
 {
  "alerts": [
   {
+   "id": "TWC_water_202610051450",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "基隆市"
+   ],
+   "text": "配合基隆市政府汙水破管搶修管線",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T06:50:01Z",
+   "exp": "2026-10-06T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051450.cap"
+  },
+  {
+   "id": "CWA-Weather_heat_202610051443001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "南投縣",
+    "屏東縣"
+   ],
+   "text": "天氣高溫炎熱，今(5)日白天南投縣為橙色燈號，有連續出現36度高溫的機率，請加強注意。屏東縣為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-05T06:43:57Z",
+   "exp": "2026-10-05T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610051443.cap"
+  },
+  {
+   "id": "TWC_water_202610051440",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "臺南市"
+   ],
+   "text": "10/05 14:30-18:00，因『台南市安南區長溪路二段168號』路面漏水緊急搶修，造成該區域部分無水與降壓",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T06:40:01Z",
+   "exp": "2026-10-05T18:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051440.cap"
+  },
+  {
    "id": "cwa.gov.tw_thunderstorm_20261005143151_000",
    "cat": "雷雨",
    "lvl": 2,
@@ -150,20 +190,6 @@
    "at": "2026-10-05T05:40:01Z",
    "exp": "2026-10-05T17:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051340.cap"
-  },
-  {
-   "id": "CWA-Weather_heat_202610051331001",
-   "cat": "高溫",
-   "lvl": 2,
-   "area": [
-    "南投縣",
-    "屏東縣"
-   ],
-   "text": "天氣高溫炎熱，今(5)日白天南投縣為橙色燈號，有連續出現36度高溫的機率，請加強注意。屏東縣為黃色燈號，請注意。",
-   "src": "中央氣象署",
-   "at": "2026-10-05T05:31:04Z",
-   "exp": "2026-10-05T17:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610051331.cap"
   },
   {
    "id": "TWC_water_202610051330",
@@ -1009,12 +1035,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 78,
+ "n_total": 80,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/05 14:41:15"
+  "updated": "2026/10/05 14:53:20"
  },
  "errs": [],
- "updatedAt": "2026-10-05T06:39:07Z"
+ "updatedAt": "2026-10-05T06:58:18Z"
 }
