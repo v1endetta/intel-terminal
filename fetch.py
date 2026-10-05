@@ -2153,12 +2153,14 @@ def p_roads():
             if road:
                 pr = per.setdefault(road, [0, 0])
                 pr[0] += 1; pr[1] += 1 if lvl == 3 else 0
-            if lvl == 3 and spd and spd > 0 and road:
+            if lvl in (2, 3) and spd and spd > 0 and road:
                 tj.append({"title": f'{road}{DIR_ZH.get(s_.get("RoadDirection"), "")}向 {s_.get("SectionMile.StartKM", "")}～{s_.get("SectionMile.EndKM", "")}',
-                           "road": road, "speed": round(spd)})
-        names = {-1: "封閉", 0: "資料不足", 1: "順暢", 2: "車多", 3: "壅塞"}
-        thb["levels"] = {names.get(k, str(k)): v for k, v in sorted(lv.items())}
-        thb["jams"] = sorted(tj, key=lambda x: x["speed"])[:12]
+                           "road": road, "speed": round(spd), "lvl": lvl})
+        names = {-1: "封閉", 0: "資料不足", -99: "資料不足", 1: "順暢", 2: "車多", 3: "壅塞"}
+        for k_, v_ in sorted(lv.items()):
+            nm_ = names.get(k_, str(k_))
+            thb["levels"][nm_] = thb["levels"].get(nm_, 0) + v_
+        thb["jams"] = sorted(tj, key=lambda x: (-x["lvl"], x["speed"]))[:12]
         thb["roads"] = [{"road": r, "n": n_, "jam": j} for r, (n_, j) in sorted(per.items(), key=lambda kv: -kv[1][1]) if j][:10]
         hist_put("thb", "_jam", key, lv.get(3, 0))
     except Exception as e:  # noqa: BLE001
@@ -2202,6 +2204,8 @@ def p_roads():
             for r in relay_rows(relay_get(f"latest/{k}", 60)):
                 at = str(r.get("PublishTime") or r.get("UpdateTime") or "")
                 if at and at.replace(" ", "T") < cutoff:
+                    continue
+                if k == "fw_news" and len(str(r.get("Title") or "")) < 8:  # 高公局只有「出口壅塞」這種分類標題的，事件區已經有
                     continue
                 news.append({"title": str(r.get("Title") or "")[:120], "desc": str(r.get("Description") or "")[:200],
                              "url": r.get("NewsURL") or "", "source": src, "at": at})
