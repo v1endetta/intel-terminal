@@ -806,7 +806,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 
   <section class="ibx ib-band" id="ib-soc"><div class="ib-q"><span class="no">輿情 · 一眼看</span><h2>大家在吵什麼？</h2><p class="ans" id="ibsa">等待排程寫入</p></div>
     <div class="ib-body"><div class="ib-viz"><h3>同一個話題出現在哪些平台<span class="n">● 越大＝越多則 · 越多平台越上面</span></h3><svg id="ibsv" role="img" aria-label="話題在各平台出現的次數"></svg></div>
-      <div class="ib-viz"><h3>情緒溫度<span class="n">−1 負面 ～ +1 正面</span></h3><svg id="ibsm" role="img" aria-label="台灣與國外社群情緒"></svg><h3 style="margin-top:8px">PTT 看板熱度<span class="n">今日推文量 · 顏色＝推噓情緒</span></h3><svg id="ibsp" role="img" aria-label="PTT 看板熱度"></svg></div></div></section>
+      <div class="ib-viz"><h3>情緒溫度<span class="n">−1 負面 ～ +1 正面</span></h3><svg id="ibsm" role="img" aria-label="台灣與國外社群情緒"></svg><h3 style="margin-top:8px">PTT 看板熱度<span class="n">近期推文熱度 · 綠＝推多、紅＝噓多</span></h3><svg id="ibsp" role="img" aria-label="PTT 看板熱度"></svg></div></div></section>
   <section class="panel w6 cap" id="p-social">
     <div class="ph"><h2>Social Pulse</h2><span class="zh">社群脈搏 · Bluesky · 國外大眾情緒＋今日英文熱詞</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -1816,12 +1816,12 @@ function qSoc(P){const T=P.trends||{},N=P.news||{},PT=P.ptt||{},Y=P.youtube||{},
      sp.forEach(([k,c])=>{const a=(M[k]||[]).filter(v=>isFinite(v));if(a.length<2)return;const pts=a.map((v,i)=>[L+i/(a.length-1)*bw,y0+H/2-Math.max(-1,Math.min(1,v))*H/2]);
        p("polyline",{points:pts.map(q=>q.join(",")).join(" "),style:`fill:none;stroke:var(${c});stroke-width:1.6`});});}}
   /* PTT 看板熱度 */
-  {const B=(PT.boards||[]).slice().sort((a,b)=>(b.today||0)-(a.today||0)).slice(0,6),W=420,rh=20;const p=draw("ibsp",W,Math.max(1,B.length)*rh);const mx=Math.max(1,...B.map(b=>b.today||0));
-   if(p)B.forEach((b,i)=>{const y=i*rh,bw=Math.max(2,(W-170)*(b.today||0)/mx),m=+b.mood||0;p("text",{x:62,y:y+13,"text-anchor":"end"},b.zh||b.board);
-     const r=p("rect",{x:70,y:y+3,width:bw,height:rh-8,rx:1.5,style:`fill:var(${m>0.2?"--up":m<-0.2?"--down":"--muted"});opacity:.8`});const tt=document.createElementNS(NS,"title");tt.textContent=`${b.zh||b.board}｜今日 ${b.today} 篇 · 推噓 ${m}`;r.appendChild(tt);
-     p("text",{x:76+bw,y:y+13,class:"num"},String(b.today||0));p("text",{x:102+bw,y:y+13},String(((b.top||[])[0]||{}).title||"").replace(/^\[[^\]]+\]\s*/,"").slice(0,16));});}
+  {const B=(PT.boards||[]).slice().sort((a,b)=>(b.heat||0)-(a.heat||0)).slice(0,6),W=420,rh=20;const p=draw("ibsp",W,Math.max(1,B.length)*rh);const mx=Math.max(1,...B.map(b=>b.heat||0));
+   if(p)B.forEach((b,i)=>{const y=i*rh,bw=Math.max(2,(W-200)*(b.heat||0)/mx),m=+b.mood||0;p("text",{x:62,y:y+13,"text-anchor":"end"},b.zh||b.board);
+     const r=p("rect",{x:70,y:y+3,width:bw,height:rh-8,rx:1.5,style:`fill:var(${m>0.6?"--up":m<0.4?"--down":"--muted"});opacity:.8`});const tt=document.createElementNS(NS,"title");tt.textContent=`${b.zh||b.board}｜熱度 ${b.heat} · 今日 ${b.today} 篇 · 推文比 ${m}`;r.appendChild(tt);
+     p("text",{x:76+bw,y:y+13,class:"num"},String(b.heat||0));p("text",{x:102+bw,y:y+13},String(((b.top||[])[0]||{}).title||"").replace(/^\[[^\]]+\]\s*/,"").slice(0,16));});}
   /* 一句話 */
-  const multi=rows.filter(r=>r.np>=2),tw=M.taiwan||{},hotB=(PT.boards||[]).slice().sort((a,b)=>(b.today||0)-(a.today||0))[0],st=C.stats||{};
+  const multi=rows.filter(r=>r.np>=2),tw=M.taiwan||{},hotB=(PT.boards||[]).slice().sort((a,b)=>(b.heat||0)-(a.heat||0))[0],st=C.stats||{};
   $("#ibsa").innerHTML=(multi.length?`跨平台最熱的是<b>${esc(multi[0].t)}</b>（出現在 <em>${multi[0].np}</em> 個平台）${multi[1]?`，其次<b>${esc(multi[1].t)}</b>`:""}。`:(T.items||[])[0]?`Google 搜尋第一是<b>${esc(T.items[0].title)}</b>。`:"")
     +(tw.label?`台灣社群情緒<b>${esc(tw.label)}</b>（<em class="${tw.score>0.1?"up":tw.score<-0.1?"down":""}">${tw.score>0?"+":""}${(+tw.score).toFixed(2)}</em>）。`:"")
     +(hotB?`PTT 今天最熱是<b>${esc(hotB.zh||hotB.board)}</b>板。`:"")+(st.unchecked?`LINE 群組有 <em>${st.unchecked}</em> 則轉傳還沒查核。`:"")
