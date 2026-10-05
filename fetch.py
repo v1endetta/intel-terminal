@@ -5400,6 +5400,37 @@ except Exception as e:  # noqa: BLE001
 # ---------- 歷史資料庫：每輪把「這輪有更新、內容有變」的面板完整存到 Google Cloud ----------
 # 存法：gs://<bucket>/raw/dt=YYYY-MM-DD/HHMMSS.ndjson.gz，每行 {ts, panel, doc}；BigQuery 外部表 intel.snapshots 直接查這些檔
 # 新增的面板不用改這裡：只要進了 RESULTS 就會自動存。地圖、雷達圖、實價登錄明細也一起存。
+_ITEM_TITLE = ("title", "t", "question", "headline", "jobName", "subject", "term", "text", "name")
+_ITEM_URL = ("url", "u", "link", "href", "slug")
+_ITEM_SRC = ("source", "s", "src", "co", "short", "unit", "venue", "place", "cat", "group", "board")
+
+
+def _vault_items(pid, doc):
+    """把面板裡「有標題的條目」攤平成一筆一筆（新聞、職缺、重訊、藝文、Polymarket…），給全文搜尋用。"""
+    out = []
+
+    def walk(o, path, depth):
+        if depth > 6 or len(out) > 3000:
+            return
+        if isinstance(o, dict):
+            tk = next((k for k in _ITEM_TITLE if isinstance(o.get(k), str) and len(o[k].strip()) >= 2 and not re.match(r"^\d{4}-\d\d-\d\d|^[\d\s:./-]+$", o[k].strip())), None)
+            if tk:
+                url = next((str(o[k]) for k in _ITEM_URL if isinstance(o.get(k), str) and o[k]), "")
+                src = next((str(o[k]) for k in _ITEM_SRC if isinstance(o.get(k), (str, int, float)) and str(o[k]) and k != tk), "")
+                extra = {k: v for k, v in o.items() if k not in (tk,) and isinstance(v, (str, int, float, bool)) and len(str(v)) < 300}
+                out.append({"panel": pid, "path": path[:60], "title": o[tk].strip()[:300], "url": url[:500], "source": src[:60],
+                            "extra": json.dumps(extra, ensure_ascii=False)[:1500]})
+            for k, v in o.items():
+                if isinstance(v, (dict, list)):
+                    walk(v, f"{path}.{k}" if path else k, depth + 1)
+        elif isinstance(o, list):
+            for v in o[:500]:
+                if isinstance(v, (dict, list)):
+                    walk(v, path, depth + 1)
+    walk(doc, "", 0)
+    return out
+
+
 def vault_push():
     bucket, project = os.environ.get("GCP_BUCKET"), os.environ.get("GCP_PROJECT")
     if not bucket or not project or not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
@@ -5422,11 +5453,27 @@ def vault_push():
         pending[name] = h  # 上傳成功才記下，失敗下一輪會重存
         lines.append(json.dumps({"ts": NOW_ISO, "panel": name, "doc": doc_text}, ensure_ascii=False))
 
+    items = []
+    seen_p = Path(os.environ.get("RUNNER_TEMP") or "/tmp") / "vault_items_seen.txt"  # 同一條迴圈內去重（跨迴圈重複無妨，查詢時會合併）
+    try:
+        seen = set(seen_p.read_text(encoding="utf-8").split()) if seen_p.exists() else set()
+    except Exception:  # noqa: BLE001
+        seen = set()
+    new_seen = []
     for pid, doc in RESULTS.items():
         if doc.get("updatedAt") != NOW_ISO:  # 這輪沒重抓（沿用舊值或失敗）就不存
             continue
         body = {k: v for k, v in doc.items() if k != "updatedAt"}
         add(pid, json.dumps(body, ensure_ascii=False, sort_keys=True))
+        try:
+            for it in _vault_items(pid, body):
+                k = hashlib.sha1(f"{pid}|{it['title']}|{it['url']}".encode("utf-8")).hexdigest()[:16]
+                if k in seen:
+                    continue
+                seen.add(k); new_seen.append(k)
+                items.append(json.dumps({"ts": NOW_ISO, **it}, ensure_ascii=False))
+        except Exception as e:  # noqa: BLE001
+            log("vault items", pid, safe_err(e))
     extras = []
     if (RESULTS.get("geo") or {}).get("updatedAt") == NOW_ISO and (DATA / "geo.json").exists():
         extras.append(("geo_map", (DATA / "geo.json").read_text(encoding="utf-8")))
@@ -5445,6 +5492,36 @@ def vault_push():
     data = gzip.compress(("\n".join(lines) + "\n").encode("utf-8"), 9)
     storage.Client(project=project).bucket(bucket).blob(obj).upload_from_string(data, content_type="application/gzip")
     hashes.update(pending)
+    if items:
+        try:
+            iobj = obj.replace("raw/", "items/", 1)
+            storage.Client(project=project).bucket(bucket).blob(iobj).upload_from_string(gzip.compress(("\n".join(items) + "\n").encode("utf-8"), 9), content_type="application/gzip")
+            with open(seen_p, "a", encoding="utf-8") as f:
+                f.write("\n".join(new_seen) + "\n")
+        except Exception as e:  # noqa: BLE001
+            log("vault items upload", safe_err(e))
+    if not state.get("bq_items"):
+        try:
+            from google.cloud import bigquery
+            bq = bigquery.Client(project=project)
+            tid = f"{project}.intel.items"
+            try:
+                bq.get_table(tid)
+            except Exception:  # noqa: BLE001
+                ext = bigquery.ExternalConfig("NEWLINE_DELIMITED_JSON")
+                ext.source_uris = [f"gs://{bucket}/items/*"]
+                ext.compression = "GZIP"
+                hp = bigquery.HivePartitioningOptions()
+                hp.mode = "AUTO"
+                hp.source_uri_prefix = f"gs://{bucket}/items/"
+                ext.hive_partitioning = hp
+                t = bigquery.Table(tid, schema=[bigquery.SchemaField(n, "TIMESTAMP" if n == "ts" else "STRING")
+                                                for n in ("ts", "panel", "path", "title", "url", "source", "extra")])
+                t.external_data_configuration = ext
+                bq.create_table(t)
+            state["bq_items"] = 1
+        except Exception as e:  # noqa: BLE001
+            log("vault bq items", safe_err(e))
     if not state.get("bq_table"):
         try:
             from google.cloud import bigquery
@@ -5467,7 +5544,7 @@ def vault_push():
             state["bq_table"] = 1
         except Exception as e:  # noqa: BLE001
             log("vault bq", safe_err(e))
-    state["last"] = {"at": NOW_ISO, "obj": obj, "n": len(lines), "bytes": len(data)}
+    state["last"] = {"at": NOW_ISO, "obj": obj, "n": len(lines), "bytes": len(data), "items": len(items)}
     write_json(st_p, state, separators=(",", ":"))
     return f"{obj} {len(lines)} rows {len(data)} bytes"
 

@@ -469,6 +469,7 @@ html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animati
 @media (prefers-reduced-motion:reduce){.fids .ch b.fl,.ib-ping,.ib-chip.ib-pop{animation:none}}
 
 #p-geo{order:1}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:4}#p-airport{order:5}#p-quake{order:6}#p-power{order:7}#p-house{order:8}
+#p-vauth{order:1}#p-vsearch{order:2}#p-vtime{order:3}#p-vseries{order:4}
 .stopbar{margin:0 0 10px;padding:8px 12px;border:1px solid color-mix(in srgb,var(--down) 55%,var(--line));background:color-mix(in srgb,var(--down) 12%,var(--panel));border-radius:4px;font-size:13px;display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
 .stopbar b{color:var(--down);font-weight:600}.stopbar span{color:var(--text)}.stopbar .s{color:var(--muted);font-size:11.5px;margin-left:auto}
 .tn-row{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
@@ -480,6 +481,11 @@ html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animati
 .wl-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px 18px}.wl-r{display:grid;grid-template-columns:1fr 60px auto 58px;gap:6px;align-items:center;font-size:12.5px;padding:3px 0;border-bottom:1px solid var(--line)}.wl-r .nm small{display:block;font:10px var(--mono);color:var(--dim)}.wl-r .r{text-align:right;font-family:var(--mono)}.wl-h{grid-column:1/-1;font:600 10.5px var(--mono);color:var(--dim);margin-top:6px;letter-spacing:.04em}
 .tf-t{width:100%;border-collapse:collapse;font-size:12.5px}.tf-t th{font:500 10.5px var(--mono);color:var(--dim);text-align:right;padding:3px 6px;border-bottom:1px solid var(--line)}.tf-t th:first-child,.tf-t td:first-child{text-align:left}.tf-t td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:right;font-family:var(--mono)}
 .pm-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:4px 22px}.pm-h{grid-column:1/-1;font:600 11px var(--mono);color:var(--blue);margin:8px 0 2px;border-bottom:1px solid var(--line);padding-bottom:3px}.pm-e{padding:4px 0;border-bottom:1px dashed var(--line);font-size:12.5px}.pm-e a{color:var(--text);text-decoration:none}.pm-e a:hover{text-decoration:underline}.pm-o{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:3px;font:11px var(--mono);color:var(--muted)}.pm-o b{color:var(--text)}.pm-e .v{font:10px var(--mono);color:var(--dim);margin-left:6px}
+.va-bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.va-btn{background:var(--panel2);color:var(--blue);border:1px solid var(--blue);border-radius:3px;padding:5px 12px;font:12px var(--mono);cursor:pointer}.va-btn.ghost{color:var(--muted);border-color:var(--line2)}.va-btn:disabled{opacity:.4;cursor:default}
+.va-form{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.va-form input,.va-form select{background:var(--panel2);color:var(--text);border:1px solid var(--line2);border-radius:3px;padding:5px 8px;font:12.5px var(--mono)}.va-form input[type=search]{flex:1;min-width:220px}
+.vs-t{width:100%;border-collapse:collapse;font-size:12.5px}.vs-t th{font:500 10.5px var(--mono);color:var(--dim);text-align:left;padding:3px 6px;border-bottom:1px solid var(--line)}.vs-t td{padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}.vs-t td.d{font:11px var(--mono);color:var(--dim);white-space:nowrap}.vs-t a{color:var(--text)}.vs-t mark{background:color-mix(in srgb,var(--warn) 35%,transparent);color:inherit;border-radius:2px}
+.tt-banner{position:sticky;top:0;z-index:50;background:var(--warn);color:#111;font:600 13px var(--mono);padding:8px 14px;display:flex;gap:14px;align-items:center}.tt-banner button{background:#111;color:var(--warn);border:0;border-radius:3px;padding:4px 10px;font:12px var(--mono);cursor:pointer}
+.vr-svg{width:100%;height:220px;display:block}.vr-svg text{font:10px var(--mono);fill:var(--dim)}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px}.chips button{background:var(--panel2);color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:2px 8px;font:11px var(--mono);cursor:pointer}.chips button.on{color:var(--blue);border-color:var(--blue)}.chips button i{font-style:normal;color:var(--dim);margin-left:4px}
 .mo-row{display:grid;grid-template-columns:78px 58px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:12.5px;align-items:baseline}.mo-row .d{font:10.5px var(--mono);color:var(--dim)}.mo-row .c{font:600 12px var(--mono);color:var(--text)}.mo-row .c small{display:block;font:400 10px var(--mono);color:var(--dim)}
 .mo-row .t a{color:var(--text);text-decoration:none}.mo-row .t a:hover{text-decoration:underline}.mo-row .tag{font:10.5px var(--mono);border:1px solid var(--line2);border-radius:3px;padding:0 5px;margin-right:6px;color:var(--muted)}
@@ -905,6 +911,27 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><a href="https://lvr.land.moi.gov.tw/" target="_blank" rel="noopener">內政部實價登錄</a><span>最近一季住宅買賣 · 每坪單價已扣車位 · 排除親友、特殊關係、毛胚等交易 · 中位數 · 季變化＝比上一季同區中位數</span></div>
   </section>
 
+  <section class="panel w12" id="p-vauth">
+    <div class="ph"><h2>Vault</h2><span class="zh">歷史資料庫 · 你的 Google Cloud（intel-vault）</span><span class="meta" id="va-meta">未登入</span></div>
+    <div class="pb"><div class="va-bar"><button type="button" class="va-btn" id="va-login">用 Google 登入</button><span class="sub" id="va-who">資料只存在你的 Google Cloud；要用有權限的 Google 帳號登入才查得到。登入一次約可用 1 小時。</span><span class="sub" id="va-usage" style="margin-left:auto"></span></div></div>
+    <div class="pf"><span>每輪有更新的面板整份存下（約 5～15 分鐘一份）· 查詢用 BigQuery，每月前 1 TB 掃描免費，每次查詢上限 20 GB，超過會直接拒絕不會扣錢</span></div>
+  </section>
+
+  <section class="panel w12" id="p-vsearch">
+    <div class="ph"><h2>Search</h2><span class="zh">全文搜尋 · 新聞、重訊、職缺、Polymarket、PTT、藝文、新公司…</span><span class="meta" id="vs-meta"></span></div>
+    <div class="pb"><form class="va-form" id="vs-form"><input type="search" id="vs-q" placeholder="關鍵字，例如：無薪假、台積電、Anthropic（留空＝列出這段時間全部）" autocomplete="off"><select id="vs-p"></select><select id="vs-r"><option value="7">近 7 天</option><option value="30" selected>近 30 天</option><option value="90">近 90 天</option><option value="365">近一年</option><option value="0">全部</option></select><button type="submit" class="va-btn">搜尋</button><button type="button" class="va-btn ghost" id="vs-csv" disabled>匯出 CSV</button></form><div id="vs-out"><div class="empty">登入後輸入關鍵字搜尋。同一則在不同時間出現只列一次，顯示第一次出現的時間</div></div></div>
+  </section>
+
+  <section class="panel w6" id="p-vtime">
+    <div class="ph"><h2>Time Machine</h2><span class="zh">時光機 · 回到過去某個時間的整個情報站</span><span class="meta"></span></div>
+    <div class="pb"><form class="va-form" id="vt-form"><input type="datetime-local" id="vt-t"><button type="submit" class="va-btn">回到這個時間</button></form><div class="sub" id="vt-out">選一個時間，所有分頁會換成當時的資料（地圖和即時 YouBike 仍是現在的）。看完按頂端的「回到現在」。</div></div>
+  </section>
+
+  <section class="panel w6" id="p-vseries">
+    <div class="ph"><h2>Trend</h2><span class="zh">走勢 · 任一面板的任一數字</span><span class="meta" id="vr-meta"></span></div>
+    <div class="pb"><form class="va-form" id="vr-form"><select id="vr-p"></select><select id="vr-f"></select><select id="vr-r"><option value="7">近 7 天（每小時）</option><option value="30" selected>近 30 天（每天）</option><option value="90">近 90 天（每天）</option><option value="365">近一年（每天）</option></select><button type="submit" class="va-btn">畫走勢</button><button type="button" class="va-btn ghost" id="vr-csv" disabled>匯出 CSV</button></form><div id="vr-out"><div class="empty">先選面板，再選要看的數字</div></div></div>
+  </section>
+
   <section class="panel w6 lite" id="p-airport">
     <div class="ph"><h2>TPE Airport</h2><span class="zh">桃機今日航班</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -1326,6 +1353,10 @@ function countdown(){const el=$("#cd");const per=(inSession()?5:15)*60e3;const s
 setInterval(countdown,1000);
 setInterval(()=>{if(genTime)$("#db-age").textContent="最近抓取 "+ago(new Date(genTime).toISOString());Object.entries(metaDocs).forEach(([id,[doc,h]])=>{if(id==="p-pulse")renderers.pulse(doc);else setMeta(id,doc,h);});},60e3);
 function inSession(){const h=new Date().getUTCHours(),d=new Date().getUTCDay();if(d===0||d===6)return false;return (h>=1&&h<6)||(h>=13&&h<21);}
+function renderAll(P,all){
+    window.LASTP=P;try{V2.before();}catch(e){console.warn("v2",e);}    Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});try{IB.render(P);}catch(e){console.warn("ib",e);}
+    genTime=new Date(all.generatedAt).getTime();$("#db-age").textContent=(window.TT_ON?"時光機 ":"最近抓取 ")+ago(all.generatedAt);$(".k.db").classList.remove("stale");
+    movers(P);tape(P);try{brief(P);}catch(e){console.warn("brief",e);}try{V2.after(P,all);}catch(e){console.warn("v2",e);}}
 async function loadAll(){
   try{
     const r=await fetch("https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/all.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);
@@ -1333,9 +1364,8 @@ async function loadAll(){
     if(all.generatedAt===lastGen&&!firstRender){nextAt=Date.now()+60e3;return;}
     if(lastGen&&all.generatedAt!==lastGen)firstRender=false;
     lastGen=all.generatedAt;
-    window.LASTP=P;try{V2.before();}catch(e){console.warn("v2",e);}    Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});try{IB.render(P);}catch(e){console.warn("ib",e);}
-    genTime=new Date(all.generatedAt).getTime();$("#db-age").textContent="最近抓取 "+ago(all.generatedAt);$(".k.db").classList.remove("stale");
-    movers(P);tape(P);try{brief(P);}catch(e){console.warn("brief",e);}try{V2.after(P,all);}catch(e){console.warn("v2",e);}
+    if(window.TT_ON){nextAt=Date.now()+60e3;return;}  /* 時光機模式不覆蓋畫面 */
+    renderAll(P,all);
     try{localStorage.setItem("intel:prev",JSON.stringify({gen:all.generatedAt,vals:curVals}));}catch(_){}
     prevVals={...prevVals,...curVals};firstRender=false;
     const period=(inSession()?5:15)*60e3;nextAt=new Date(all.finishedAt||all.generatedAt).getTime()+period+(all.finishedAt?60e3:200e3);if(nextAt<Date.now()+30e3)nextAt=Date.now()+60e3;
@@ -1759,13 +1789,13 @@ root.classList.toggle("still",!motion);
 const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",String(motion));mbtn.textContent=motion?"動畫：開":"動畫：關";};syncBtn();
 
 /* ---------- tabs ---------- */
-const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"]];
+const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"macro","p-house":"live",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro",
   "ib-sig":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-twnow":"live","p-twpulse":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
-  "brief":"overview","ov":"overview"};
+  "brief":"overview","ov":"overview","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
 const tabsEl=$("#tabs");
 tabsEl.innerHTML=TABS.map(([k,nm])=>`<button class="tab" role="tab" id="tab-${k}" data-k="${k}" aria-selected="false" type="button">${nm}<i class="bd" aria-hidden="true"></i></button>`).join("")+'<span class="tbar" id="tbar"></span>';
 let cur="overview";
@@ -2175,6 +2205,97 @@ return{before,after};
 })();
 
 /* boot */
+
+/* ================= 資料庫：Google Cloud（BigQuery）查詢 ================= */
+const VAULT=(()=>{
+const GCP={project:"intel-vault-510704",client:"",scope:"https://www.googleapis.com/auth/bigquery https://www.googleapis.com/auth/devstorage.read_only"};
+const T_SNAP="`intel-vault-510704.intel.snapshots`",T_ITEM="`intel-vault-510704.intel.items`";
+let tok=null,tokExp=0,usage=0;
+try{const s=JSON.parse(sessionStorage.getItem("vault:tok")||"null");if(s&&s[1]>Date.now()+60e3){tok=s[0];tokExp=s[1];}}catch(e){}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const fmtB=b=>b>=1e9?(b/1e9).toFixed(2)+" GB":b>=1e6?(b/1e6).toFixed(1)+" MB":Math.round(b/1e3)+" KB";
+function setWho(){const ok=tok&&Date.now()<tokExp;$("#va-meta").textContent=ok?"已登入 · "+Math.max(0,Math.round((tokExp-Date.now())/6e4))+" 分鐘後到期":"未登入";$("#va-login").textContent=ok?"重新登入":"用 Google 登入";
+  $("#va-usage").textContent=usage?`這次瀏覽已掃描 ${fmtB(usage)}（每月免費 1 TB）`:"";}
+function gisLoad(){return new Promise((res,rej)=>{if(window.google&&google.accounts&&google.accounts.oauth2)return res();const s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.onload=()=>res();s.onerror=()=>rej(new Error("Google 登入元件載入失敗"));document.head.appendChild(s);});}
+async function login(){if(!GCP.client)throw new Error("Google 登入還沒設定好（缺 OAuth 用戶端）");await gisLoad();
+  return new Promise((res,rej)=>{const c=google.accounts.oauth2.initTokenClient({client_id:GCP.client,scope:GCP.scope,callback:r=>{if(r.error)return rej(new Error(r.error_description||r.error));tok=r.access_token;tokExp=Date.now()+(+r.expires_in||3600)*1000;try{sessionStorage.setItem("vault:tok",JSON.stringify([tok,tokExp]));}catch(e){}setWho();res(tok);},error_callback:e=>rej(new Error(e&&e.type==="popup_closed"?"登入視窗被關掉了":"登入失敗："+(e&&e.type||"")))});c.requestAccessToken();});}
+async function token(){if(tok&&Date.now()<tokExp-60e3)return tok;return login();}
+async function bq(sql,params={},maxBytes=20e9){const t=await token();const H={Authorization:"Bearer "+t,"Content-Type":"application/json"};
+  const qp=Object.entries(params).map(([name,v])=>Array.isArray(v)?{name,parameterType:{type:"ARRAY",arrayType:{type:"STRING"}},parameterValue:{arrayValues:v.map(x=>({value:String(x)}))}}:{name,parameterType:{type:(v&&v.type)||"STRING"},parameterValue:{value:String(v&&v.type?v.value:v)}});
+  let r=await fetch(`https://bigquery.googleapis.com/bigquery/v2/projects/${GCP.project}/queries`,{method:"POST",headers:H,body:JSON.stringify({query:sql,useLegacySql:false,parameterMode:"NAMED",queryParameters:qp,maximumBytesBilled:String(Math.round(maxBytes)),timeoutMs:45000,location:"US",maxResults:5000})});
+  let j=await r.json();if(r.status===401){tok=null;throw new Error("登入過期，請重新登入");}if(j.error)throw new Error(j.error.message);
+  while(!j.jobComplete){await sleep(1200);const g=await fetch(`https://bigquery.googleapis.com/bigquery/v2/projects/${GCP.project}/queries/${j.jobReference.jobId}?location=US&timeoutMs=30000&maxResults=5000`,{headers:H});j=await g.json();if(j.error)throw new Error(j.error.message);}
+  const f=(j.schema&&j.schema.fields||[]).map(x=>x.name);usage+=+j.totalBytesProcessed||0;setWho();
+  return{rows:(j.rows||[]).map(rw=>Object.fromEntries(rw.f.map((c,i)=>[f[i],c.v]))),bytes:+j.totalBytesProcessed||0};}
+const tsOf=v=>new Date(parseFloat(v)*1000);
+const ymd=d=>new Date(d.getTime()+8*3600e3).toISOString().slice(0,10);
+const hm=d=>new Date(d.getTime()+8*3600e3).toISOString().slice(5,16).replace("T"," ");
+const range=days=>{const now=new Date();return days>0?{d0:{type:"DATE",value:ymd(new Date(now-days*864e5))},d1:{type:"DATE",value:ymd(now)}}:{d0:{type:"DATE",value:"2026-01-01"},d1:{type:"DATE",value:ymd(now)}};};
+function csv(rows,cols,name){const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;const t="﻿"+cols.map(c=>q(c[1])).join(",")+"\n"+rows.map(r=>cols.map(c=>q(r[c[0]])).join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000);}
+const err=(el,e)=>{el.innerHTML=`<div class="err">${esc(e.message||String(e))}</div>`;};
+/* ---- 搜尋 ---- */
+const GROUPS=[["","全部面板"],["news,mapfeed,localnews","新聞（全國＋地方）"],["mops","上市櫃重大訊息"],["jobs","104 職缺"],["poly","Polymarket"],["ptt,social,cofacts,trends,youtube,attention","輿情（PTT、社群、搜尋、YouTube）"],["aiwire,devpulse,tech","AI 與科技"],["media,design,lyst,luxury","時尚與設計"],["brands,crowd,radar","新公司、集資、融資"],["tenders,awards","標案、決標"],["culture","藝文活動"],["alerts","災害示警"]];
+let lastSearch=[];
+async function search(){const out=$("#vs-out"),q=$("#vs-q").value.trim(),days=+$("#vs-r").value,ps=$("#vs-p").value;out.innerHTML='<div class="empty">查詢中…</div>';
+  try{const pr={...range(days),q};let where="dt BETWEEN @d0 AND @d1";if(q)where+=" AND (CONTAINS_SUBSTR(title, @q) OR CONTAINS_SUBSTR(extra, @q))";if(ps){pr.ps=ps.split(",");where+=" AND panel IN UNNEST(@ps)";}
+    if(!q)delete pr.q;
+    const r=await bq(`SELECT title, ANY_VALUE(url) url, ANY_VALUE(source) source, panel, MIN(ts) t0, MAX(ts) t1, COUNT(*) n FROM ${T_ITEM} WHERE ${where} GROUP BY title, panel ORDER BY t0 DESC LIMIT 500`,pr);
+    lastSearch=r.rows.map(x=>({...x,first:hm(tsOf(x.t0)),last:hm(tsOf(x.t1))}));$("#vs-csv").disabled=!lastSearch.length;
+    $("#vs-meta").textContent=`${lastSearch.length} 筆 · 掃描 ${fmtB(r.bytes)}`;
+    const re=q?new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi"):null;const hl=t=>re?esc(t).replace(re,m=>`<mark>${m}</mark>`):esc(t);
+    const link=u=>/^https?:/.test(u||"")?u:(u?`https://polymarket.com/event/${u}`:"");
+    out.innerHTML=lastSearch.length?`<table class="vs-t"><tr><th>第一次出現</th><th>面板</th><th>標題</th><th>來源</th><th>出現次數</th></tr>${lastSearch.map(x=>`<tr><td class="d">${esc(x.first)}</td><td class="d">${esc(x.panel)}</td><td>${link(x.url)?`<a href="${esc(safe(link(x.url)))}" target="_blank" rel="noopener">${hl(x.title)}</a>`:hl(x.title)}</td><td class="d">${esc(x.source||"")}</td><td class="d">${x.n}</td></tr>`).join("")}</table>`:'<div class="empty">這段時間沒有符合的資料。剛開始存檔，越久能查的越多</div>';}
+  catch(e){err(out,e);}}
+/* ---- 時光機 ---- */
+async function travel(){const out=$("#vt-out"),v=$("#vt-t").value;if(!v){out.textContent="先選一個時間";return;}
+  const t=new Date(v+":00+08:00");out.textContent="讀取當時的資料中…";
+  try{const r=await bq(`SELECT panel, ARRAY_AGG(doc ORDER BY ts DESC LIMIT 1)[OFFSET(0)] doc, MAX(ts) t FROM ${T_SNAP} WHERE dt BETWEEN DATE_SUB(@d, INTERVAL 35 DAY) AND @d AND ts <= @t AND NOT STARTS_WITH(panel,'house_detail') AND panel NOT IN ('radar_png','geo_map') GROUP BY panel`,
+      {d:{type:"DATE",value:ymd(t)},t:{type:"TIMESTAMP",value:t.toISOString()}},40e9);
+    if(!r.rows.length){out.textContent="那個時間還沒有存檔（歷史資料庫從 2026-10-05 12:57 開始）";return;}
+    const P={};r.rows.forEach(x=>{try{P[x.panel]={...JSON.parse(x.doc),updatedAt:tsOf(x.t).toISOString()};}catch(e){}});
+    window.TT_ON=true;let b=$("#tt-banner");if(!b){b=document.createElement("div");b.id="tt-banner";b.className="tt-banner";document.body.prepend(b);}
+    b.innerHTML=`<span>⏪ 時光機：正在看 ${esc(v.replace("T"," "))} 的情報站（${r.rows.length} 個面板，掃描 ${fmtB(r.bytes)}）</span><button type="button" id="tt-exit">回到現在</button>`;
+    renderAll(P,{generatedAt:t.toISOString()});out.textContent=`已切換到 ${v.replace("T"," ")}，到其他分頁看當時的樣子。`;}
+  catch(e){out.textContent=e.message;}}
+document.addEventListener("click",e=>{if(e.target.id==="tt-exit"){window.TT_ON=false;$("#tt-banner").remove();lastGen=null;loadAll();}});
+/* ---- 走勢 ---- */
+const IDK=["code","sym","name","question","title","city","t","label","topic","k"];
+function leaves(o,path,out,depth){if(depth>5||out.length>400)return;if(Array.isArray(o)){o.slice(0,60).forEach((v,i)=>{if(v&&typeof v==="object"&&!Array.isArray(v)){const k=IDK.find(k=>typeof v[k]==="string"||typeof v[k]==="number");leaves(v,path.concat([k?{k,v:v[k]}:i]),out,depth+1);}else if(typeof v==="number"&&o.length<=12)out.push({path:path.concat([i]),v});});}
+  else if(o&&typeof o==="object"){for(const[k,v]of Object.entries(o)){if(k==="spark"||k==="updatedAt")continue;if(typeof v==="number")out.push({path:path.concat([k]),v});else if(v&&typeof v==="object")leaves(v,path.concat([k]),out,depth+1);}}}
+const label=p=>p.map(s=>typeof s==="object"?`[${s.v}]`:typeof s==="number"?`[${s}]`:s).join(" › ");
+function pick(o,path){let c=o;for(const s of path){if(c==null)return null;if(typeof s==="object"){c=Array.isArray(c)?c.find(x=>x&&x[s.k]===s.v):null;}else c=c[s];}return typeof c==="number"?c:(c!=null&&isFinite(+c)?+c:null);}
+let LEAVES=[],lastSeries=[];
+function fillFields(){const P=window.LASTP||{},pid=$("#vr-p").value;LEAVES=[];if(P[pid])leaves(P[pid],[],LEAVES,0);
+  $("#vr-f").innerHTML=LEAVES.length?LEAVES.map((l,i)=>`<option value="${i}">${esc(label(l.path))}（現在 ${fmt(l.v)}）</option>`).join(""):'<option value="">這個面板沒有數字</option>';}
+function fillPanels(){const P=window.LASTP||{};const ks=Object.keys(P).filter(k=>P[k]&&!P[k].error).sort();const cur=$("#vr-p").value;
+  $("#vr-p").innerHTML=ks.map(k=>`<option value="${k}" ${k===cur?"selected":""}>${k}</option>`).join("");if(!cur)fillFields();}
+function chart(pts){const W=640,H=220,L=48,B=22;if(pts.length<2)return'<div class="empty">資料點不夠，至少要兩個時間點。剛開始存檔，過幾天就會有</div>';
+  const xs=pts.map(p=>p.t.getTime()),ys=pts.map(p=>p.v),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys),dy=(y1-y0)||Math.abs(y1)||1;
+  const X=t=>L+(t-x0)/((x1-x0)||1)*(W-L-8),Y=v=>8+(1-(v-y0)/dy)*(H-B-16);const d=pts.map((p,i)=>`${i?"L":"M"}${X(p.t.getTime()).toFixed(1)} ${Y(p.v).toFixed(1)}`).join("");
+  const up=ys[ys.length-1]>=ys[0];return`<svg class="vr-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="var(${up?"--up":"--down"})" stroke-width="1.6"/>${pts.map(p=>`<circle cx="${X(p.t.getTime()).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="2" fill="var(--text)"><title>${hm(p.t)}  ${fmt(p.v)}</title></circle>`).join("")}
+    <text x="4" y="14">${fmt(y1)}</text><text x="4" y="${H-B}">${fmt(y0)}</text><text x="${L}" y="${H-4}">${hm(pts[0].t)}</text><text x="${W-8}" y="${H-4}" text-anchor="end">${hm(pts[pts.length-1].t)}</text></svg>
+    <div class="sub">${pts.length} 個點 · 第一筆 ${fmt(ys[0])} → 最新 ${fmt(ys[ys.length-1])}（<span class="${cls(ys[ys.length-1]-ys[0])}">${sgn(ys[0]?(ys[ys.length-1]/ys[0]-1)*100:0,1,"%")}</span>）</div>`;}
+async function series(){const out=$("#vr-out"),pid=$("#vr-p").value,li=LEAVES[+$("#vr-f").value],days=+$("#vr-r").value;if(!li){out.innerHTML='<div class="empty">先選要看的數字</div>';return;}
+  out.innerHTML='<div class="empty">查詢中…</div>';
+  try{const r=await bq(`SELECT ts, doc FROM ${T_SNAP} WHERE panel=@p AND dt BETWEEN @d0 AND @d1 QUALIFY ROW_NUMBER() OVER (PARTITION BY TIMESTAMP_TRUNC(ts, ${days<=7?"HOUR":"DAY"}, 'Asia/Taipei') ORDER BY ts DESC)=1 ORDER BY ts`,{p:pid,...range(days)});
+    lastSeries=[];r.rows.forEach(x=>{try{const v=pick(JSON.parse(x.doc),li.path);if(v!=null)lastSeries.push({t:tsOf(x.ts),v});}catch(e){}});
+    $("#vr-meta").textContent=`${label(li.path)} · 掃描 ${fmtB(r.bytes)}`;$("#vr-csv").disabled=!lastSeries.length;out.innerHTML=chart(lastSeries);}
+  catch(e){err(out,e);}}
+function setup(){$("#vs-p").innerHTML=GROUPS.map(([v,l])=>`<option value="${v}">${l}</option>`).join("");
+  const now=new Date(Date.now()+8*3600e3-36e5);$("#vt-t").value=now.toISOString().slice(0,16);
+  $("#va-login").addEventListener("click",()=>login().catch(e=>{$("#va-who").textContent=e.message;}));
+  $("#vs-form").addEventListener("submit",e=>{e.preventDefault();search();});
+  $("#vt-form").addEventListener("submit",e=>{e.preventDefault();travel();});
+  $("#vr-form").addEventListener("submit",e=>{e.preventDefault();series();});
+  $("#vr-p").addEventListener("change",fillFields);
+  $("#vs-csv").addEventListener("click",()=>csv(lastSearch,[["first","第一次出現"],["last","最後出現"],["panel","面板"],["title","標題"],["url","連結"],["source","來源"],["n","出現次數"]],"情報站搜尋.csv"));
+  $("#vr-csv").addEventListener("click",()=>csv(lastSeries.map(p=>({t:hm(p.t),v:p.v})),[["t","時間"],["v",label((LEAVES[+$("#vr-f").value]||{path:[]}).path)]],"情報站走勢.csv"));
+  new MutationObserver(()=>{if(document.body.dataset.tab==="vault"){fillPanels();setWho();}}).observe(document.body,{attributes:true,attributeFilter:["data-tab"]});
+  if(!GCP.client)$("#va-who").textContent="Google 登入還沒設定好：要先在 intel-vault 專案建立 OAuth 用戶端。";setWho();}
+setup();
+return{bq,login};
+})();
 loadAll();setInterval(()=>{if(Date.now()>=nextAt)loadAll();},15e3);
 })();
 </script>
