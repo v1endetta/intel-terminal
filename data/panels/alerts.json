@@ -1,6 +1,44 @@
 {
  "alerts": [
   {
+   "id": "cwa.gov.tw_thunderstorm_20261005172500_100",
+   "cat": "雷雨",
+   "lvl": 2,
+   "area": [
+    "屏東縣"
+   ],
+   "text": "氣象署針對屏東縣牛角灣溪發布災防告警，持續時間至19時25分；此區域已有暴雨或有暴雨發生的機率，留意溪水暴漲並儘速遠離溪流。",
+   "src": "中央氣象署",
+   "at": "2026-10-05T09:26:48Z",
+   "exp": "2026-10-05T19:25:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/thunderstorm/cwa.gov.tw_thunderstorm_20261005172500_100.cap"
+  },
+  {
+   "id": "cwa.gov.tw_thunderstorm_20261005172511_000",
+   "cat": "雷雨",
+   "lvl": 2,
+   "area": [],
+   "text": "115年10月05日17時25分氣象署發布大雷雨即時訊息，持續時間至18時25分；有短延時強降雨發生，並伴隨較強陣風、閃電落雷，請慎防溪(河)水暴漲、低窪地區積水、低能見度、雷擊",
+   "src": "中央氣象署",
+   "at": "2026-10-05T09:26:05Z",
+   "exp": "2026-10-05T18:25:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/thunderstorm/cwa.gov.tw_thunderstorm_20261005172511_000.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261005171840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "雲林縣",
+    "嘉義縣"
+   ],
+   "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
+   "src": "水利署",
+   "at": "2026-10-05T09:18:40Z",
+   "exp": "2026-10-05T20:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005171840_0001.cap"
+  },
+  {
    "id": "CWA-Weather_strong-wind_202610051637001",
    "cat": "強風",
    "lvl": 2,
@@ -71,31 +109,6 @@
    "at": "2026-10-05T08:15:44Z",
    "exp": "2026-10-05T18:13:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/thunderstorm/cwa.gov.tw_thunderstorm_20261005161300_100.cap"
-  },
-  {
-   "id": "cwa.gov.tw_thunderstorm_20261005161339_000",
-   "cat": "雷雨",
-   "lvl": 2,
-   "area": [],
-   "text": "115年10月05日16時13分氣象署發布大雷雨即時訊息，持續時間至17時13分；有短延時強降雨發生，並伴隨較強陣風、閃電落雷，請慎防溪(河)水暴漲、低窪地區積水、低能見度、雷擊",
-   "src": "中央氣象署",
-   "at": "2026-10-05T08:15:04Z",
-   "exp": "2026-10-05T17:13:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/thunderstorm/cwa.gov.tw_thunderstorm_20261005161339_000.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261005151840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "雲林縣",
-    "嘉義縣"
-   ],
-   "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
-   "src": "水利署",
-   "at": "2026-10-05T07:18:40Z",
-   "exp": "2026-10-05T18:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005151840_0000.cap"
   },
   {
    "id": "CWA-Weather_extremely-rain_202610051428001",
@@ -234,12 +247,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610042224.cap"
   }
  ],
- "n_total": 13,
+ "n_total": 14,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/05 17:08:17"
+  "updated": "2026/10/05 17:27:09"
  },
  "errs": [],
- "updatedAt": "2026-10-05T09:06:56Z"
+ "updatedAt": "2026-10-05T09:29:16Z"
 }
