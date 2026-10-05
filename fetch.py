@@ -696,9 +696,10 @@ FASHION_TW = {  # 台灣時尚媒體官方來源（都經過實測：網站規�
     "COSMO": ("rss", "https://www.cosmopolitan.com/tw/rss/all.xml"),
     "Women's Health": ("rss", "https://www.womenshealthmag.com/tw/rss/all.xml"),
     "美人圈": ("rss", "https://www.beauty321.com/rss"),
+    # GQ 官網擋機房主機（Cloudflare，台灣機房也一樣），改用 Google 新聞收錄的 GQ Taiwan 文章（標題、日期、連結）
+    "GQ": ("rss", "https://news.google.com/rss/search?q=site:gq.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"),
 }
-# GQ 擋 GitHub 主機（Cloudflare），改由彰化機房抓（ops/tw_relay.py 的 gq），這裡讀 relay/latest/gq
-FASHION_RELAY = {"GQ": "gq"}
+FASHION_RELAY: dict = {}
 # 統一分類：先看網址路徑／RSS 分類（各家編輯自己分的），都沒有才用標題關鍵字
 FASHION_CATS = ["時尚", "美容", "生活", "娛樂", "感情", "星座", "文化", "健康"]
 _FC_PATH = [("星座", r"astrolog|horoscope|zodiac|星座"), ("美容", r"beauty|hair|skin|makeup|fragrance|nail|body-care|美容|保養|彩妝"),
@@ -706,7 +707,7 @@ _FC_PATH = [("星座", r"astrolog|horoscope|zodiac|星座"), ("美容", r"beauty
             ("娛樂", r"entertain|celebrit|tvshow|movie|music|star|名人|娛樂"), ("文化", r"culture|\barts?\b|exhibit|\bbooks?\b|文化|藝術"),
             ("健康", r"fitness|health|wellness|nutrition|weight|健康|健身"), ("生活", r"life|living|travel|taste|food|home|design|whats-hot|event|生活|旅遊|美食")]
 _FC_KW = [("星座", r"星座|運勢|塔羅|水逆|上升|太陽星座"), ("美容", r"保養|彩妝|香水|香氛|髮|美甲|肌膚|皮膚|防曬|口紅|唇|粉底|醫美|妝|精華|乳液|面膜|抗老|毛孔"),
-          ("時尚", r"穿搭|秀場|時裝|包款|包包|鞋|精品|聯名|腕錶|珠寶|大衣|洋裝|牛仔|單品|設計師|Chanel|Dior|Gucci|Prada|LV|Hermès|愛馬仕"),
+          ("時尚", r"穿搭|秀場|時裝|包款|包包|鞋|精品|聯名|腕錶|手錶|錶款|西裝|潮流|珠寶|大衣|洋裝|牛仔|單品|設計師|Chanel|Dior|Gucci|Prada|LV|Hermès|愛馬仕"),
           ("感情", r"戀愛|感情|分手|約會|婚姻|另一半|男友|女友|曖昧|渣|伴侶|老公|老婆|兩性"), ("娛樂", r"韓劇|日劇|電影|影集|演唱會|女星|男星|偶像|Netflix|劇|專輯|MV|綜藝|金鐘|金馬|女團|男團"),
           ("文化", r"展覽|藝術|美術館|博物館|書|作家|攝影展|建築"), ("健康", r"運動|健身|減重|減肥|睡眠|醫師|健康|飲食|瘦|脂肪|血糖|蛋白質|跑步")]
 
@@ -799,6 +800,8 @@ def p_media():
                                     "rc": [str(r.get("category") or "").split("/")[0].strip()] if r.get("category") else []})
             else:
                 got = _fashion_feed(kind, url)
+                for it in got:  # Google 新聞的標題尾巴帶「 - GQ Taiwan」
+                    it["title"] = re.sub(r"\s+-\s+GQ Taiwan\s*$", "", it["title"])
         except Exception as e:  # noqa: BLE001
             log("fashion", src, e); errs.append(f"{src}: {safe_err(e)}"); continue
         got.sort(key=lambda x: x.get("at") or "", reverse=True)

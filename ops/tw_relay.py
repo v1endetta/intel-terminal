@@ -23,7 +23,6 @@ LIVE = {
     "thb_cms": THB + "cms/two/CMSLiveList.xml",   # 省道看板即時內容
     "fw_etag": FW + "ETagPairLive.xml",           # 國道 eTag 門架之間的實際旅行時間
     "thb_etag": THB + "etagpair/five/ETagPairLive.xml",  # 省道 eTag 旅行時間
-    "gq": "https://www.gq.com.tw/feed/rss",       # GQ Taiwan（擋 GitHub 主機，台灣機房試試）
 }
 # 一天更新一次（路段名稱、形狀、看板位置）
 STATIC = {
