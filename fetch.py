@@ -2341,6 +2341,22 @@ def p_roads():
         avg = round(w / L, 1)
         hist_put("fw_road", road + d, key, avg)
         roads.append({"road": road, "dir": d, "speed": avg, "km": round(L, 1), "slow_km": round(slow, 1), "spark": hist_get("fw_road", road + d, 48)})
+    # 國道色帶：國 1／3／5 主線依里程排好的 [起 km, 迄 km, 車速, 名稱]
+    def _km(v):
+        m = re.match(r"\s*(\d+)\s*[kK]\s*\+?\s*(\d*)", str(v or ""))
+        return round(int(m.group(1)) + int(m.group(2) or 0) / 1000, 2) if m else None
+    strips: dict = {}
+    for x in fw:
+        if x["road"] not in ("國道1號", "國道3號", "國道5號"):
+            continue
+        s_ = sec.get(x["id"]) or {}
+        a, b = _km(s_.get("SectionMile.StartKM")), _km(s_.get("SectionMile.EndKM"))
+        if a is None or b is None:
+            continue
+        strips.setdefault(x["road"], {}).setdefault(x["dir"], []).append([min(a, b), max(a, b), round(x["spd"]), f'{x["from"]}→{x["to"]}'])
+    for r_ in strips.values():
+        for d_ in r_:
+            r_[d_].sort()
     jams = [{"title": f'{x["road"]}{x["dir"]}向 {x["from"]}→{x["to"]}', "road": x["road"], "dir": x["dir"], "km": x["km"], "speed": round(x["spd"])}
             for x in sorted((x for x in fw if x["spd"] < 50), key=lambda x: x["spd"])[:12]]
     slow_km = round(sum(x["len"] for x in fw if x["spd"] < 60), 1)
@@ -2441,7 +2457,7 @@ def p_roads():
         errs.append("地圖路段: " + safe_err(e))
 
     return {"label": "高公局・公路局（彰化機房每 5 分鐘）", "asOf": (fl.get("meta") or {}).get("UpdateTime") or fl.get("at"),
-            "fw": {"roads": roads, "jams": jams, "slow_km": slow_km, "slow_spark": hist_get("fw_road", "_slow_km", 48), "n": len(fw)},
+            "fw": {"strips": strips, "roads": roads, "jams": jams, "slow_km": slow_km, "slow_spark": hist_get("fw_road", "_slow_km", 48), "n": len(fw)},
             "thb": {**thb, "n": len(tl_rows), "jam_spark": hist_get("thb", "_jam", 48)},
             "etag": etag, "events": events[:80], "kinds": kinds, "cms": sorted(cms.values(), key=lambda c: -c["n"])[:30], "news": news[:30], "errs": errs}
 
