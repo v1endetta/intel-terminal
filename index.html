@@ -127,6 +127,9 @@ td.r,th.r{white-space:nowrap}
 @media (min-width:641px){.pf{opacity:.45;transition:opacity .15s}.panel:hover .pf{opacity:1}}
 /* movers：單列橫向滑 */
 .tp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rd{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.rd h3 .sub{font-weight:400}.rd h3+table,.rd h3+ul{margin-bottom:8px}
+.rd-chips{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 10px}.rd-chip{border:1px solid var(--c);color:var(--c);padding:2px 8px;border-radius:3px;font-size:12px}.rd-chip b{color:var(--text);font-weight:600;margin-left:2px}
+@media (max-width:900px){.rd{grid-template-columns:1fr}}
 @media (max-width:640px){.tp{grid-template-columns:1fr}}
 .tp h3{margin:0 0 4px;font-size:10px;font-weight:500;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;font-family:var(--head)}
 .tx2{display:grid;grid-template-columns:1.1fr 1fr;gap:14px}
@@ -468,7 +471,7 @@ canvas.o-fx{display:block;width:100%}
 html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animation:none}
 @media (prefers-reduced-motion:reduce){.fids .ch b.fl,.ib-ping,.ib-chip.ib-pop{animation:none}}
 
-#p-geo{order:1}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:4}#p-airport{order:5}#p-quake{order:6}#p-power{order:7}#p-house{order:8}
+#p-geo{order:1}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:4}#p-roads{order:5}#p-airport{order:6}#p-quake{order:7}#p-power{order:8}#p-house{order:9}
 #p-vauth{order:1}#p-vsearch{order:2}#p-vtime{order:3}#p-vseries{order:4}
 .stopbar{margin:0 0 10px;padding:8px 12px;border:1px solid color-mix(in srgb,var(--down) 55%,var(--line));background:color-mix(in srgb,var(--down) 12%,var(--panel));border-radius:4px;font-size:13px;display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
 .stopbar b{color:var(--down);font-weight:600}.stopbar span{color:var(--text)}.stopbar .s{color:var(--muted);font-size:11.5px;margin-left:auto}
@@ -885,7 +888,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <section class="panel w6 cap" id="p-twpulse">
     <div class="ph"><h2>Taiwan Pulse</h2><span class="zh">台灣脈搏 · 全台 YouBike、台北停車場與道路</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://data.taipei/" target="_blank" rel="noopener">台北市資料大平臺</a><span>新北市開放資料 · YouBike 可借車數 · 台北 VD 路段車速（車流量加權）</span></div>
+    <div class="pf"><a href="https://data.taipei/" target="_blank" rel="noopener">台北市資料大平臺</a><span>全台 YouBike 由 Google Cloud 彰化機房每 5 分鐘抓 · YouBike 可借車數 · 台北 VD 路段車速（車流量加權）</span></div>
+  </section>
+  <section class="panel w12 cap" id="p-roads">
+    <div class="ph"><h2>Roads</h2><span class="zh">全台路況 · 國道與省道即時車速、事件、看板</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://tisvcloud.freeway.gov.tw/" target="_blank" rel="noopener">高公局交通資料庫</a><a href="https://thbtrafficapp.thb.gov.tw/opendata/" target="_blank" rel="noopener">公路局</a><span>Google Cloud 彰化機房每 5 分鐘抓 · 路段顏色在地圖「交通」組</span></div>
   </section>
 
   <section class="panel w6 lite" id="p-weather">
@@ -1146,10 +1154,22 @@ const renderers={
     const TY=((window.LASTP||{}).typhoon||{}).items||[];const ty=TY.map(t=>{const x=(t.past||[]).slice(-1)[0]||{};const r15=x.r15||((t.fc||[])[0]||{}).r15;return`<div class="warn">颱風 <b>${esc(t.name||t.en)}</b>${t.en&&t.name?" "+esc(t.en):""}${x.ll?` · 中心 ${x.ll[1].toFixed(1)}°N ${x.ll[0].toFixed(1)}°E`:""}${x.wind?` · 最大風速 ${x.wind} m/s`:""}${r15?` · 暴風半徑 ${r15} km`:""}${x.mv?` · 往${esc(x.dir)} ${x.mv} km/h`:""} · <a href="#" data-tyfit style="color:inherit">地圖看路徑</a></div>`;}).join("");
     const w=ty+((d.warnings||[]).length?`<div class="warn">特報：${d.warnings.map(x=>esc(x.where+" "+x.what+(x.level?"("+x.level+")":""))).join("、")}</div>`:"");
     body("p-weather").innerHTML=`${w}<div class="wx wx3">${cards}</div>`;setMeta("p-weather",d,1);},
+  roads(d){const F=d.fw||{},T=d.thb||{},lv=T.levels||{};
+    const fr=(F.roads||[]).map(r=>`<tr><td class="name">${esc(String(r.road).replace("國道","國道 "))} ${esc(r.dir)}${mini(r.spark)}</td><td class="r num ${n(r.speed)<60?"bad":n(r.speed)>=80?"up":""}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td><td class="r num ${n(r.slow_km)>0?"bad":""}">${n(r.slow_km)>0?fmt(n(r.slow_km),1):"—"}</td></tr>`).join("");
+    const jl=a=>(a||[]).slice(0,8).map(j=>`<li><span class="t">${esc(j.title)}${j.km?`<span class="sub"> ${esc(j.km)}</span>`:""}</span><span class="m bad">${fmt(n(j.speed),0)} km/h</span></li>`).join("");
+    const chip=(k,c)=>lv[k]!=null?`<span class="rd-chip" style="--c:${c}">${k}<b>${n(lv[k]).toLocaleString()}</b></span>`:"";
+    const kinds=Object.entries(d.kinds||{}).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${esc(k)} ${v}`).join("・");
+    const ev=(d.events||[]).slice(0,12).map(x=>`<li><span class="kw" style="color:${RDEV(x.kind)}">${esc(x.kind)}</span><span class="t">${esc(x.title)}${x.impact&&x.impact!=="無影響"?`<span class="sub"> · ${esc(x.impact)}</span>`:""}</span><span class="m">${x.at?ago(x.at).replace(" 前",""):""}</span></li>`).join("");
+    const cms=(d.cms||[]).slice(0,10).map(c=>`<li><span class="src">${esc(c.src)}</span><span class="t">${esc(c.title)}</span><span class="m">${c.n>1?"×"+c.n:""}</span></li>`).join("");
+    const nw=(d.news||[]).slice(0,8).map(x=>`<li><span class="src">${esc(x.source)}</span><span class="t">${x.url?`<a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title)}</a>`:esc(x.title)}${x.desc&&x.desc!==x.title?`<span class="sub"> ${esc(x.desc.slice(0,70))}</span>`:""}</span><span class="m">${x.at?ago(String(x.at).replace(" ","T")).replace(" 前",""):""}</span></li>`).join("");
+    body("p-roads").innerHTML=`<div class="rd"><div><h3>國道均速 <span class="sub">慢於 60 共 ${fmt(n(F.slow_km),1)} km</span>${mini(F.slow_spark)}</h3><table><tr><th>路線</th><th class="r">均速</th><th class="r">慢車 km</th></tr>${fr}</table>${jl(F.jams)?`<h3>國道最塞區間</h3><ul class="list">${jl(F.jams)}</ul>`:""}</div>
+      <div><h3>省道 ${n(T.n).toLocaleString()} 段 ${mini(T.jam_spark)}</h3><div class="rd-chips">${chip("順暢","#39B978")}${chip("車多","#E0A23A")}${chip("壅塞","#F0524F")}${chip("封閉","#8B93A7")}</div>${jl(T.jams)?`<h3>省道最塞路段</h3><ul class="list">${jl(T.jams)}</ul>`:""}${cms?`<h3>看板正在說</h3><ul class="list">${cms}</ul>`:""}</div>
+      <div><h3>國道即時事件 <span class="sub">${kinds}</span></h3><ul class="list">${ev||'<li class="empty">目前沒有事件</li>'}</ul>${nw?`<h3>路況新聞</h3><ul class="list">${nw}</ul>`:""}</div></div>${(d.errs||[]).length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,200))}</div>`:""}`;
+    setMeta("p-roads",d,0.5);},
   tw_pulse(d){const live=(typeof YB!=="undefined"&&YB.cities)?YB.cities:null;let rows=(d.bikes||[]).map(b=>({...b}));
     if(live){const lab={};Object.values(live).forEach(c=>lab[c.label]=c);rows.forEach(b=>{const c=lab[b.city];if(c){b.rent=c.rent;b.stations=c.bikes.length;b.empty=c.empty;b.full=c.full;delete lab[b.city];}});
       Object.values(lab).forEach(c=>rows.push({city:c.label,stations:c.bikes.length,rent:c.rent,empty:c.empty,full:c.full,park_pct:null,spark:null,live:1}));rows.sort((a,b)=>b.stations-a.stations);}
-    const ybNote=(typeof YB!=="undefined"&&YB.ok===false)?'<div class="empty" style="padding:4px 0 0;font-size:10.5px">全台 YouBike 這次抓不到（人在國外或來源暫時擋住），只顯示雙北</div>':(live?`<div class="empty" style="padding:4px 0 0;font-size:10.5px">雙北以外由你的瀏覽器即時抓 · ${esc((YB.t||"").slice(11,16))}</div>`:"");
+    const ybNote=(typeof YB!=="undefined"&&YB.ok===false)?'<div class="empty" style="padding:4px 0 0;font-size:10.5px">全台 YouBike 這次抓不到（人在國外或來源暫時擋住），只顯示雙北</div>':(live?`<div class="empty" style="padding:4px 0 0;font-size:10.5px">你的瀏覽器即時抓 · ${esc((YB.t||"").slice(11,16))}</div>`:"");
     const O=(window.LASTP||{}).oil,oil=O&&O.items?`<div class="oil">中油牌價${O.effective?` · ${esc(O.effective.slice(5).replace("-","/"))} 起`:""}${O.items.map(x=>`<span>${esc(x.name)} <b>${fmt(n(x.price),1)}</b>${x.chg?` <span class="${x.chg>0?"up":"down"}">${x.chg>0?"▲":"▼"}${fmt(Math.abs(x.chg),1)}</span>`:""}</span>`).join("")}${(()=>{const V=(window.LASTP||{}).veg;return V&&V.index!=null?`<span title="台北一批發市場 ${esc(V.date||"")}，籃子內蔬菜比前兩週平均">菜價 <b class="${cls(n(V.index))}">${sgn(n(V.index),1,"%")}</b></span>`:"";})()}</div>`:"";
     const bikes=rows.map(b=>`<tr><td class="name">${esc(b.city)}<span class="sub">${b.stations} 站</span>${b.live?'<span class="sub" style="color:var(--blue)"> 即時</span>':mini(b.spark)}</td><td class="r num${K("yb:"+b.city,n(b.rent))}">${fmt(n(b.rent),0)}</td><td class="r num ${b.empty>b.stations*0.15?"bad":""}">${b.empty}</td><td class="r num">${b.full}</td><td class="r num ${b.park_pct!=null?(n(b.park_pct)<10?"bad":n(b.park_pct)>=30?"up":""):""}">${b.park_pct!=null?fmt(n(b.park_pct),0)+"%":"—"}</td></tr>`).join("");
     const city=d.roadKind==="city",lo=city?20:60,hi=city?40:80;const roads=(d.roads||[]).map(r=>`<tr><td class="name">${esc(r.road)}${r.dir?" "+esc(r.dir)+"向":""}${mini(r.spark)}</td><td class="r num ${n(r.speed)<lo?"bad":n(r.speed)>=hi?"up":""}${K("fw:"+r.road+r.dir,n(r.speed))}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td></tr>`).join("");
@@ -1420,7 +1440,7 @@ function goRegion(anim){if(!map)return;const set=regionSet();if(!set){map.flyTo(
   let pts=[];const poly=regionPoly(set);if(poly)poly.coordinates.forEach(p=>p[0].forEach(q=>pts.push(q)));else set.forEach(k=>TWC[k]&&pts.push(TWC[k]));if(!pts.length)return;
   const b=pts.reduce((m,q)=>[[Math.min(m[0][0],q[0]),Math.min(m[0][1],q[1])],[Math.max(m[1][0],q[0]),Math.max(m[1][1],q[1])]],[[180,90],[-180,-90]]);
   map.fitBounds(b,{padding:{top:56,bottom:40,left:30,right:30},maxZoom:11.5,duration:anim?900:0});}
-const RFIL=["news","alerts","culture","brands","jobs","mops","house","rain","temp","lightning","parking","bikes","speed","freeway"];
+const RFIL=["news","alerts","culture","brands","jobs","mops","house","rain","temp","lightning","parking","bikes","speed","freeway","roads-fw","roads-thb","roadev"];
 function applyRegionFilter(){if(!map||!mapReady)return;const set=regionSet(),poly=set?regionPoly(set):null;
   RFIL.forEach(id=>{if(!map.getLayer(id))return;if(!set){map.setFilter(id,null);return;}const list=["literal",[...set]];
     map.setFilter(id,poly?["any",["all",["has","cty"],["in",["get","cty"],list]],["all",["!",["has","cty"]],["within",poly]]]:["all",["has","cty"],["in",["get","cty"],list]]);});}
@@ -1429,12 +1449,13 @@ const parkColor=r=>r<0.1?"#F0524F":r<0.3?"#E0A23A":"#39B978";
 /* 圖層分三組：事件／天氣／生活；細項在「圖層」選單裡個別關 */
 const MAPL=[["news","新聞","event",["news"]],["alerts","示警","event",["alerts"]],["quake","地震","event",["quake"]],["typhoon","颱風","event",["ty-fill","ty-line","ty-pt"]],["county","縣市狀態","event",["county-fill","county-line"]],
   ["radar","雷達回波","wx",["radar"]],["rain","雨量站","wx",["rain"]],["temp","氣溫","wx",["temp"]],["lightning","閃電","wx",["lightning"]],
-  ["culture","藝文","life",["culture"]],["brands","新公司","life",["brands"]],["jobs","職缺","life",["jobs"]],["mops","重訊","life",["mops"]],["house","房價","life",["house"]],["flights","航班","life",["flights"]],["bikes","YouBike","life",["bikes"]],["parking","停車場","life",["parking"]],["speed","車速","life",["speed","freeway"]]];
-const GRP={event:"事件",wx:"天氣",life:"生活"};
-const MS=(()=>{let g={event:true,wx:false,life:false},off=[];try{const j=JSON.parse(localStorage.getItem("map:vis")||"null");if(j&&j.g){g=j.g;off=j.off||[];}}catch(e){}return{g,off:new Set(off)};})();
+  ["culture","藝文","life",["culture"]],["brands","新公司","life",["brands"]],["jobs","職缺","life",["jobs"]],["mops","重訊","life",["mops"]],["house","房價","life",["house"]],
+  ["roads","國道・省道車速","traffic",["roads-thb","roads-fw"]],["roadev","國道事件","traffic",["roadev"]],["bikes","YouBike","traffic",["bikes"]],["parking","停車場","traffic",["parking"]],["speed","台北市區車速","traffic",["speed","freeway"]],["flights","航班","traffic",["flights"]]];
+const GRP={event:"事件",traffic:"交通",wx:"天氣",life:"生活"};
+const MS=(()=>{let g={event:true,traffic:true,wx:false,life:false},off=[];try{const j=JSON.parse(localStorage.getItem("map:vis")||"null");if(j&&j.g){g=j.g;off=j.off||[];}}catch(e){}if(g.traffic===undefined)g.traffic=true;return{g,off:new Set(off)};})();
 function saveMS(){try{localStorage.setItem("map:vis",JSON.stringify({g:MS.g,off:[...MS.off]}));}catch(e){}}
 const visOn=k=>{const L=MAPL.find(x=>x[0]===k);return!!L&&!!MS.g[L[2]]&&!MS.off.has(k);};
-const CLICK=["news","alerts","quake","ty-pt","culture","brands","jobs","mops","house","flights","rain","temp","lightning","parking","bikes","speed","freeway"];
+const CLICK=["news","alerts","quake","ty-pt","roadev","culture","brands","jobs","mops","house","flights","rain","temp","lightning","parking","bikes","speed","freeway","roads-fw","roads-thb"];
 const mlink=(u,t)=>u?`<a href="${esc(safe(u))}" target="_blank" rel="noopener">${t}</a>`:t;
 const mc=(tag,color,title,sub)=>`<div class="mc"><span class="mc-k" style="color:${color}">${tag}</span><div class="mc-t">${title}</div>${sub?`<div class="mc-s">${sub}</div>`:""}</div>`;
 function renderGrpUI(){const g=$("#map-grp");if(!g)return;g.innerHTML=Object.entries(GRP).map(([k,l])=>`<button type="button" class="grp ${MS.g[k]?"on":""}" data-grp="${k}">${l}</button>`).join("");
@@ -1449,6 +1470,9 @@ function initMap(){
     src("cbound");
     map.addLayer({id:"county-fill",type:"fill",source:"cbound",paint:{"fill-color":["get","color"],"fill-opacity":["get","op"]}});
     map.addLayer({id:"county-line",type:"line",source:"cbound",paint:{"line-color":["get","line"],"line-width":["get","lw"],"line-opacity":.85}});
+    src("roads");
+    map.addLayer({id:"roads-thb",type:"line",source:"roads",filter:["==",["get","k"],"thb"],layout:{"line-cap":"round","line-join":"round"},paint:{"line-color":["get","color"],"line-opacity":["get","op"],"line-width":["interpolate",["linear"],["zoom"],6,.7,10,1.6,13,3]}});
+    map.addLayer({id:"roads-fw",type:"line",source:"roads",filter:["==",["get","k"],"fw"],layout:{"line-cap":"round","line-join":"round"},paint:{"line-color":["get","color"],"line-opacity":.95,"line-width":["interpolate",["linear"],["zoom"],6,1.4,10,3,13,5]}});
     src("house");map.addLayer({id:"house",type:"circle",source:"house",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,["interpolate",["linear"],["get","n"],5,2.5,300,7],11,["interpolate",["linear"],["get","n"],5,6,300,18]],"circle-color":["get","color"],"circle-opacity":.55,"circle-stroke-color":["get","color"],"circle-stroke-width":1}});
     src("temp");map.addLayer({id:"temp",type:"circle",source:"temp",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,2.3,11,5.5],"circle-color":["get","color"],"circle-opacity":.9}});
     map.addSource("rain",{type:"geojson",data:EMPTY});
@@ -1470,6 +1494,7 @@ function initMap(){
     map.addLayer({id:"bikes",type:"circle",source:"bikes",paint:{"circle-radius":3,"circle-color":["case",["==",["get","rent"],0],"transparent","#7C8FF2"],"circle-stroke-color":"#7C8FF2","circle-stroke-width":1,"circle-opacity":.8}});
     src("jobs");map.addLayer({id:"jobs",type:"circle",source:"jobs",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,2.6,11,5.5],"circle-color":"#A3E635","circle-opacity":.9,"circle-stroke-color":"#0b0d12","circle-stroke-width":.6}});
     src("mops");map.addLayer({id:"mops",type:"circle",source:"mops",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,3.4,11,6.5],"circle-color":"#38BDF8","circle-opacity":.95,"circle-stroke-color":"#0b0d12","circle-stroke-width":.8}});
+    src("roadev");map.addLayer({id:"roadev",type:"circle",source:"roadev",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,3,11,6.5],"circle-color":["get","color"],"circle-opacity":.95,"circle-stroke-color":"#0b0d12","circle-stroke-width":1}});
     src("alerts");map.addLayer({id:"alerts",type:"circle",source:"alerts",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,4.5,11,8],"circle-color":["get","color"],"circle-opacity":.92,"circle-stroke-color":"#0b0d12","circle-stroke-width":1}});
     src("news");map.addLayer({id:"news",type:"circle",source:"news",paint:{"circle-radius":["interpolate",["linear"],["zoom"],6,3.4,11,6.5],"circle-color":["get","color"],"circle-opacity":.95,"circle-stroke-color":"#0b0d12","circle-stroke-width":1}});
     const cv=document.createElement("canvas");cv.width=cv.height=32;const cx=cv.getContext("2d");cx.fillStyle="#fff";cx.beginPath();[[16,2],[19,13],[30,19],[30,22],[19,19],[18.5,26],[22,29],[22,30.5],[16,29],[10,30.5],[10,29],[13.5,26],[13,19],[2,22],[2,19],[13,13]].forEach((q,i)=>i?cx.lineTo(q[0],q[1]):cx.moveTo(q[0],q[1]));cx.closePath();cx.fill();
@@ -1490,7 +1515,7 @@ function initMap(){
       if(fs.length)html=fs.slice(0,8).map(f=>f.properties.card||`<div class="mc"><div class="mc-t">${f.properties.label}</div></div>`).join("")+(fs.length>8?`<div class="mc-more">這裡還有 ${fs.length-8} 個點，放大地圖看</div>`:"");
       else if(map.getLayer("county-fill")&&map.getLayoutProperty("county-fill","visibility")!=="none"){const cf=map.queryRenderedFeatures(e.point,{layers:["county-fill"]})[0];if(cf&&!cf.properties.off)html=countyCard(cf.properties.name);}
       if(!html)return;hov.remove();card.setLngLat(e.lngLat).setHTML(`<div class="mcard-in">${html}</div>`).addTo(map);});
-    mapReady=true;applyGeo();if(curCity!=="all")goRegion(false);
+    mapReady=true;applyGeo();loadRoads();if(curCity!=="all")goRegion(false);
     fetch("tw_counties.json").then(r=>r.ok?r.json():null).then(j=>{CBOUND=j;if(curCity!=="all")goRegion(false);applyGeo();}).catch(()=>{});
   });
 }
@@ -1544,6 +1569,8 @@ function applyWxNow(){if(!map||!mapReady)return;const P=window.LASTP||{},W=P.wea
     const col=st?"#B15CFF":c.lvl>=3?"#F0524F":c.lvl>=2?"#E0A23A":(c.rain||0)>=10?"#3D8BFF":(c.nw||[]).length?"#7C8FF2":"#7C8FF2";
     const op=st?.32:c.lvl>=3?.24:c.lvl>=2?.11:(c.rain||0)>=10?.16:(c.nw||[]).length?.05:.02;
     return{type:"Feature",geometry:f.geometry,properties:{name:k,color:col,op,line:st||c.lvl>=2?col:"#4a5268",lw:st||c.lvl>=2?1.6:.5}};})));}
+  /* 國道事件 */
+  map.getSource("roadev").setData(fc((((P.roads||{}).events)||[]).filter(x=>x.ll).map(x=>{const col=RDEV(x.kind);return pt(x.ll,{color:col,label:`<b>${esc(x.kind)}</b> ${esc(x.title.slice(0,30))}`,card:mc("國道 · "+esc(x.kind),col,esc(x.title),`${x.at?ago(x.at):""}${x.impact&&x.impact!=="無影響"?" · "+esc(x.impact):""}${n(x.block)>0?" · 封閉 "+n(x.block)+" 車道":""}`)});})));
   /* 天氣 */
   map.getSource("rain").setData(fc((W.rainmap||[]).map(r=>pt([r[0],r[1]],{...(ctyOf(r[5])?{cty:ctyOf(r[5])}:{}),r:r[2],color:rainColor(r[2]),label:`<b>${esc(r[4])}</b> ${esc((r[5]||"").replace("臺","台"))}<br>過去 1 小時 ${r[2]} mm · 10 分鐘 ${r[3]} mm`}))));
   map.getSource("temp").setData(fc((W.tempmap||[]).map(t=>pt([t[0],t[1]],{...(ctyOf(t[4])?{cty:ctyOf(t[4])}:{}),color:tempColor(t[2]),label:`<b>${fmt(t[2],1)}°</b> ${esc(t[3])} ${esc((t[4]||"").replace("臺","台"))}`}))));
@@ -1582,9 +1609,11 @@ function mapLegend(){const el=$("#map-leg");if(!el)return;const P=window.LASTP||
   if(on("jobs"))out.push(d("#A3E635",`職缺 ${(((P.jobs||{}).latest)||[]).filter(x=>x.ll).length}`));
   if(on("mops"))out.push(d("#38BDF8",`重訊公司 ${new Set((((P.mops||{}).items)||[]).filter(x=>x.ll).map(x=>x.code)).size}`));
   if(on("house"))out.push(`<span class="wxl"><span class="rb" style="background:linear-gradient(90deg,${HOUSEC.join(",")})"></span>房價 ${esc((P.house||{}).season||"")}</span>`);
+  if(on("roads")&&RL)out.push(`<span>國道・省道</span>`+d("#39B978","順暢")+d("#E0A23A","車多")+d("#F0524F","壅塞")+d("#B0306F","嚴重"));
+  if(on("roadev"))out.push(d("#F0524F",`國道事件 ${((((P.roads||{}).events)||[]).filter(x=>x.ll)).length}`));
   if(on("flights"))out.push(`<span>✈ 航班 ${(((P.flights||{}).items)||[]).length}</span>`);
   if(curCity!=="all"&&(on("parking")||on("speed")))out.push(d("#F0524F","快滿／慢")+d("#39B978","有位／順"));
-  el.innerHTML=out.join("")||"<span>三組都關了：按上面的 事件／天氣／生活</span>";}
+  el.innerHTML=out.join("")||"<span>都關了：按上面的 事件／交通／天氣／生活</span>";}
 document.addEventListener("click",e=>{const g=e.target.closest("#map-grp [data-grp]");if(g){MS.g[g.dataset.grp]=!MS.g[g.dataset.grp];saveMS();renderGrpUI();applyVis();return;}
   if(e.target.closest("#map-more")){$("#map-menu").hidden=!$("#map-menu").hidden;return;}
   if(!e.target.closest("#map-menu")&&$("#map-menu"))$("#map-menu").hidden=true;});
@@ -1601,6 +1630,23 @@ function mapPulse(pts){if(!map||!mapReady||!pts.length)return;if(document.docume
   const src=map.getSource("mpulse");if(!src)return;src.setData({type:"FeatureCollection",features:pts.map(p=>({type:"Feature",geometry:{type:"Point",coordinates:p[0]},properties:{color:p[1]}}))});
   const t0=performance.now(),D=1600;(function step(t){const k=Math.min(1,(t-t0)/D);map.setPaintProperty("mpulse","circle-radius",4+k*26);map.setPaintProperty("mpulse","circle-stroke-opacity",(1-k)*0.9);
     if(k<1)requestAnimationFrame(step);else src.setData({type:"FeatureCollection",features:[]});})(t0);}
+/* 國道・省道路段：形狀檔一天換一次（快取），車速檔每輪換 */
+const ROADS_GEO_URL="https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/roads_geo.json",ROADS_LIVE_URL="https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/roads_live.json";
+let RG=null,RL=null,rdBusy=false;
+const RDEV=k=>/事故|故障|火/.test(k)?"#F0524F":/施工/.test(k)?"#E0A23A":/壅塞/.test(k)?"#F08A3E":/管制|封/.test(k)?"#B15CFF":"#8B93A7";
+const fwColor=v=>v<20?"#B0306F":v<40?"#F0524F":v<60?"#E0A23A":v<80?"#C8DC5A":"#39B978";
+const THBC={1:"#39B978",2:"#E0A23A",3:"#F0524F",[-1]:"#8B93A7"},THBN={1:"順暢",2:"車多",3:"壅塞",[-1]:"封閉"};
+async function loadRoads(){if(rdBusy||!map||!mapReady)return;rdBusy=true;
+  try{const r=await fetch(ROADS_LIVE_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const L=await r.json();
+    if(!RG||RG.v!==L.v){const g=await fetch(ROADS_GEO_URL+"?v="+encodeURIComponent(L.v||""));if(!g.ok)throw new Error("geo HTTP "+g.status);RG=await g.json();}
+    if(RG.v!==L.v)return;RL=L;applyRoads();}
+  catch(e){console.warn("roads",e&&e.message);}finally{rdBusy=false;}}
+function applyRoads(){if(!map||!mapReady||!RG||!RL||!map.getSource("roads"))return;const fs=[];
+  const line=(c)=>{const o=[];for(let i=0;i<c.length;i+=2)o.push([c[i]/1e4,c[i+1]/1e4]);return o;};
+  (RG.thb.ids||[]).forEach((id,i)=>{const lv=RL.thbL[i];if(!(lv>0||lv===-1))return;fs.push({type:"Feature",geometry:{type:"LineString",coordinates:line(RG.thb.c[i])},properties:{k:"thb",color:THBC[lv]||"#8B93A7",op:lv===1?.45:.95,label:`${esc(RG.thb.n[i]||"省道")}<br>${THBN[lv]||""}${RL.thbS[i]>0?" · "+RL.thbS[i]+" km/h":""}`}});});
+  (RG.fw.ids||[]).forEach((id,i)=>{const v=RL.fw[i];if(!(v>0))return;fs.push({type:"Feature",geometry:{type:"LineString",coordinates:line(RG.fw.c[i])},properties:{k:"fw",color:fwColor(v),label:`${esc(RG.fw.n[i]||"國道")}<br>${v} km/h`}});});
+  map.getSource("roads").setData({type:"FeatureCollection",features:fs});applyVis();applyRegionFilter();}
+setInterval(()=>{if(document.body.dataset.tab==="live"&&!document.hidden)loadRoads();},2.5*60e3);
 async function loadGeo(){
   try{const r=await fetch(GEO_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const g=await r.json();if(g.generatedAt===lastGeoGen)return;const first=!geoData;lastGeoGen=g.generatedAt;geoData=g;ybMerge();applyGeo();if(first&&mapReady&&curCity!=="all")goRegion(false);}
   catch(e){$("#geo-age").textContent="地圖資料抓不到";}
@@ -1795,7 +1841,7 @@ const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"m
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro",
   "ib-sig":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
-  "p-geo":"live","p-twnow":"live","p-twpulse":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
+  "p-geo":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
   "brief":"overview","ov":"overview","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
 const tabsEl=$("#tabs");
 tabsEl.innerHTML=TABS.map(([k,nm])=>`<button class="tab" role="tab" id="tab-${k}" data-k="${k}" aria-selected="false" type="button">${nm}<i class="bd" aria-hidden="true"></i></button>`).join("")+'<span class="tbar" id="tbar"></span>';
@@ -2251,7 +2297,7 @@ async function search(){const out=$("#vs-out"),q=$("#vs-q").value.trim(),days=+$
 /* ---- 時光機 ---- */
 async function travel(){const out=$("#vt-out"),v=$("#vt-t").value;if(!v){out.textContent="先選一個時間";return;}
   const t=new Date(v+":00+08:00");out.textContent="讀取當時的資料中…";
-  try{const r=await bq(`SELECT panel, ARRAY_AGG(doc ORDER BY ts DESC LIMIT 1)[OFFSET(0)] doc, MAX(ts) t FROM ${T_SNAP} WHERE dt BETWEEN DATE_SUB(@d, INTERVAL 35 DAY) AND @d AND ts <= @t AND NOT STARTS_WITH(panel,'house_detail') AND panel NOT IN ('radar_png','geo_map') GROUP BY panel`,
+  try{const r=await bq(`SELECT panel, ARRAY_AGG(doc ORDER BY ts DESC LIMIT 1)[OFFSET(0)] doc, MAX(ts) t FROM ${T_SNAP} WHERE dt BETWEEN DATE_SUB(@d, INTERVAL 2 DAY) AND @d AND ts <= @t AND NOT STARTS_WITH(panel,'house_detail') AND panel NOT IN ('radar_png','geo_map') GROUP BY panel`,
       {d:{type:"DATE",value:ymd(t)},t:{type:"TIMESTAMP",value:t.toISOString()}},40e9);
     if(!r.rows.length){out.textContent="那個時間還沒有存檔（歷史資料庫從 2026-10-05 12:57 開始）";return;}
     const P={};r.rows.forEach(x=>{try{P[x.panel]={...JSON.parse(x.doc),updatedAt:tsOf(x.t).toISOString()};}catch(e){}});

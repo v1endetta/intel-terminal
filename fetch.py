@@ -1737,6 +1737,78 @@ LIVE_CITIES = {
 }
 _live_cache: dict = {}
 
+# ---------- 台灣抓取站（Google Cloud 彰化機房，ops/tw_relay.py）：每 5 分鐘把全台 YouBike、國道、省道存到 bucket 的 relay/ ----------
+YB_AREAS = {"00": ("Taipei", "台北市"), "05": ("NewTaipei", "新北市"), "07": ("Taoyuan", "桃園市"), "09": ("Hsinchu", "新竹市"),
+            "0B": ("HsinchuCounty", "新竹縣"), "10": ("HSP", "新竹科學園區"), "0A": ("Miaoli", "苗栗縣"), "01": ("Taichung", "台中市"),
+            "08": ("Chiayi", "嘉義市"), "11": ("ChiayiCounty", "嘉義縣"), "13": ("Tainan", "台南市"), "12": ("Kaohsiung", "高雄市"),
+            "14": ("Pingtung", "屏東縣"), "15": ("Taitung", "台東縣")}
+_relay_cache: dict = {}
+
+
+def relay_get(name: str, max_age_min: float = 0):
+    """讀 gs://<bucket>/relay/<name>.json.gz（latest/xxx 或 static/xxx）。max_age_min>0 時太舊就丟錯。"""
+    if name not in _relay_cache:
+        bucket, project = os.environ.get("GCP_BUCKET"), os.environ.get("GCP_PROJECT")
+        if not bucket or not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
+            raise RuntimeError("沒有 Google Cloud 憑證")
+        import gzip
+        from google.cloud import storage
+        raw = storage.Client(project=project).bucket(bucket).blob(f"relay/{name}.json.gz").download_as_bytes(timeout=60)
+        _relay_cache[name] = json.loads(gzip.decompress(raw))
+    d = _relay_cache[name]
+    if max_age_min:
+        try:
+            age = (NOW - datetime.fromisoformat(d["at"])).total_seconds() / 60
+        except Exception:  # noqa: BLE001
+            age = 1e9
+        if age > max_age_min:
+            raise RuntimeError(f"relay {name} 太舊（{age:.0f} 分鐘）")
+    return d
+
+
+def relay_rows(d) -> list:
+    cols = d.get("cols") or []
+    return [dict(zip(cols, r)) for r in d.get("rows") or []]
+
+
+def _yb_relay() -> dict:
+    """全台 YouBike（彰化機房抓的）→ {city_key: [[lon, lat, 可借, 總車位, 站名, 可還]]}。"""
+    if "yb_relay" in _live_cache:
+        return _live_cache["yb_relay"]
+    meta = {r[0]: r for r in relay_get("static/yb_meta")["rows"]}
+    out: dict = {}
+    for no, area, bikes, _eb, empty, cap, status, _upd in relay_get("latest/yb", 30)["rows"]:
+        m = meta.get(no)
+        a = YB_AREAS.get(area)
+        if not m or not a or str(status) != "1" or not m[4] or not m[5]:
+            continue
+        out.setdefault(a[0], []).append([round(float(m[5]), 5), round(float(m[4]), 5), int(num(bikes) or 0), int(num(cap) or 0),
+                                         str(m[3] or "").replace("YouBike2.0_", "")[:14], int(num(empty) or 0)])
+    if not out:
+        raise RuntimeError("relay youbike empty")
+    _live_cache["yb_relay"] = out
+    return out
+
+
+def live_cities() -> dict:
+    """地圖與脈搏表要列的城市：雙北固定，其他縣市看彰化機房有沒有抓到。"""
+    out = dict(LIVE_CITIES)
+    try:
+        yb = _yb_relay()
+    except Exception as e:  # noqa: BLE001
+        log("relay yb", safe_err(e))
+        return out
+    for code, (k, label) in YB_AREAS.items():
+        st = yb.get(k)
+        if k in out or not st:
+            continue
+        xs, ys = [r[0] for r in st], [r[1] for r in st]
+        span = max(max(xs) - min(xs), max(ys) - min(ys), 0.02)
+        import math
+        out[k] = {"label": label, "center": [round((min(xs) + max(xs)) / 2, 4), round((min(ys) + max(ys)) / 2, 4)],
+                  "zoom": round(min(12.5, max(9.3, math.log2(1.6 / span) + 8.5)), 2)}
+    return out
+
 
 def _gz_text(r) -> str:
     raw = r.content
@@ -1774,6 +1846,13 @@ def _yb_stations(city: str) -> list:
     """回 [[lon, lat, 可借, 總車位, 站名, 可還]]（只含營運中的站）。同一輪只抓一次。"""
     if city in _live_cache:
         return _live_cache[city]
+    try:
+        rows = _yb_relay().get(city)
+        if rows:
+            _live_cache[city] = rows
+            return rows
+    except Exception as e:  # noqa: BLE001
+        log("yb relay", city, safe_err(e))  # 彰化機房沒資料：雙北退回市府來源
     out = []
     if city == "Taipei":
         for s in gjson(TPE_YB_URL):
@@ -1870,7 +1949,7 @@ def p_tw_pulse():
         park_pct = round(sum(p[2] for p in pk) / tot * 100, 1) if tot else None
     except Exception as e:  # noqa: BLE001
         log("tw_pulse parking", e); errs.append("台北停車場: " + safe_err(e))
-    for city, meta in LIVE_CITIES.items():
+    for city, meta in live_cities().items():
         try:
             rows = _yb_stations(city)
         except Exception as e:  # noqa: BLE001
@@ -1902,7 +1981,8 @@ def p_tw_pulse():
         log("tw_pulse vd", e); errs.append("台北 VD: " + safe_err(e))
     if not bikes and not roads:
         raise RuntimeError("tw_pulse: nothing " + "; ".join(errs)[:200])
-    return {"label": "台北市資料大平臺・新北市開放資料", "bikes": bikes, "roads": roads, "roadKind": "city", "jams": jams, "errs": errs}
+    bikes.sort(key=lambda b: -b["stations"])
+    return {"label": "全台 YouBike（彰化機房）・台北市資料大平臺", "bikes": bikes, "roads": roads, "roadKind": "city", "jams": jams, "errs": errs}
 
 
 def p_geo():
@@ -1914,10 +1994,11 @@ def p_geo():
             prev = json.loads(GEO_PATH.read_text(encoding="utf-8")).get("cities", {})
         except Exception:  # noqa: BLE001
             prev = {}
-    geo = {"generatedAt": NOW_ISO, "labels": {k: v["label"] for k, v in LIVE_CITIES.items()},
-           "views": {k: [v["center"], v["zoom"]] for k, v in LIVE_CITIES.items()}, "avail": {}, "cities": {}, "freeway": [],
+    cities = live_cities()
+    geo = {"generatedAt": NOW_ISO, "labels": {k: v["label"] for k, v in cities.items()},
+           "views": {k: [v["center"], v["zoom"]] for k, v in cities.items()}, "avail": {}, "cities": {}, "freeway": [],
            "lineLabel": "台北市區路段"}
-    for city in LIVE_CITIES:
+    for city in cities:
         c = {"parking": [], "bikes": [], "speed": []}
         try:
             c["bikes"] = [r[:5] for r in _yb_stations(city)]
@@ -1942,6 +2023,207 @@ def p_geo():
         raise RuntimeError(f"geo: nothing errs={GEO_ERRS[:4]}")
     return {"label": "台北市資料大平臺・新北市開放資料", "cities_with_data": sum(1 for v in summary.values() if v), "freeway": len(geo["freeway"]),
             "totals": {k: sum(v.get(k, 0) for v in summary.values()) for k in ("parking", "bikes", "speed")}, "errs": GEO_ERRS[:12]}
+
+
+# ---------- 國道・省道即時路況（彰化機房抓的高公局、公路局資料） ----------
+ROADS_GEO_PATH = DATA / "roads_geo.json"
+ROADS_LIVE_PATH = DATA / "roads_live.json"
+DIR_ZH = {"N": "北", "S": "南", "E": "東", "W": "西", "B": "雙向"}
+CMS_KW = re.compile(r"施工|事故|封閉|封\(|封）|管制|壅塞|回堵|故障|注意|颱風|豪雨|大雨|濃霧|霧|落石|坍方|車禍|散落|改道|地震|強風|拋錨|火警|路面")
+
+
+def _wkt_line(t):
+    m = re.search(r"\(([^()]*)\)", str(t or ""))
+    if not m:
+        return []
+    out = []
+    for pt in m.group(1).split(","):
+        xy = pt.split()
+        if len(xy) >= 2:
+            try:
+                out.append((float(xy[0]), float(xy[1])))
+            except ValueError:
+                pass
+    return out
+
+
+def _dp(pts, tol):
+    """Douglas-Peucker 簡化（度）。"""
+    if len(pts) < 3:
+        return pts
+    keep = [False] * len(pts)
+    keep[0] = keep[-1] = True
+    stack = [(0, len(pts) - 1)]
+    while stack:
+        a, b = stack.pop()
+        (x1, y1), (x2, y2) = pts[a], pts[b]
+        dx, dy = x2 - x1, y2 - y1
+        L = (dx * dx + dy * dy) ** 0.5 or 1e-12
+        best, bi = -1.0, -1
+        for i in range(a + 1, b):
+            d = abs(dy * pts[i][0] - dx * pts[i][1] + x2 * y1 - y2 * x1) / L
+            if d > best:
+                best, bi = d, i
+        if best > tol and bi > 0:
+            keep[bi] = True
+            stack += [(a, bi), (bi, b)]
+    return [q for q, k in zip(pts, keep) if k]
+
+
+def _roads_geo():
+    """路段形狀（一天換一次）：{v, fw:{ids, n, c}, thb:{ids, n, c}}；c 是 [經度*1e4, 緯度*1e4, ...]。"""
+    fs, fg = relay_get("static/fw_section"), relay_get("static/fw_shape")
+    ts, tg = relay_get("static/thb_section"), relay_get("static/thb_shape")
+    v = f'{fg.get("at")}|{tg.get("at")}|{fs.get("at")}|{ts.get("at")}'
+    if ROADS_GEO_PATH.exists():
+        try:
+            old = json.loads(ROADS_GEO_PATH.read_text(encoding="utf-8"))
+            if old.get("v") == v:
+                return old
+        except Exception:  # noqa: BLE001
+            pass
+    out = {"v": v}
+    for key, sec, shp, tol in (("fw", fs, fg, 0.00025), ("thb", ts, tg, 0.0004)):
+        names = {}
+        for r in relay_rows(sec):
+            if key == "fw":
+                names[r["SectionID"]] = f'{r.get("RoadName", "")}{DIR_ZH.get(r.get("RoadDirection"), "")}向 {r.get("RoadSection.Start", "")}→{r.get("RoadSection.End", "")}'
+            else:
+                names[r["SectionID"]] = f'{r.get("RoadName", "")}{DIR_ZH.get(r.get("RoadDirection"), "")}向 {r.get("SectionMile.StartKM", "")}～{r.get("SectionMile.EndKM", "")}'
+        ids, nm, cs = [], [], []
+        for sid, wkt in shp["rows"]:
+            pts = _dp(_wkt_line(wkt), tol)
+            if len(pts) < 2 or not all(118 < x < 123 and 21 < y < 27 for x, y in pts):
+                continue
+            flat = []
+            for x, y in pts:
+                flat += [round(x * 1e4), round(y * 1e4)]
+            ids.append(sid); nm.append(names.get(sid, "")); cs.append(flat)
+        out[key] = {"ids": ids, "n": nm, "c": cs}
+    write_json(ROADS_GEO_PATH, out, separators=(",", ":"))
+    return out
+
+
+def p_roads():
+    """全台國道與省道即時路況：各國道均速、最塞區間、省道壅塞路段、即時事件、看板訊息、路況新聞。"""
+    key = NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:%M")
+    errs = []
+    fl = relay_get("latest/fw_live", 30)
+    sec = {r["SectionID"]: r for r in relay_rows(relay_get("static/fw_section"))}
+    fw = []
+    for r in relay_rows(fl):
+        s_ = sec.get(r.get("SectionID"))
+        spd = num(r.get("TravelSpeed"))
+        if not s_ or not spd or spd <= 0:
+            continue
+        fw.append({"id": r["SectionID"], "road": s_.get("RoadName", ""), "dir": DIR_ZH.get(s_.get("RoadDirection"), ""),
+                   "from": s_.get("RoadSection.Start", ""), "to": s_.get("RoadSection.End", ""), "km": s_.get("SectionMile.StartKM", ""),
+                   "len": num(s_.get("SectionLength")) or 0, "spd": spd})
+    agg: dict = {}
+    for x in fw:
+        a = agg.setdefault((x["road"], x["dir"]), [0.0, 0.0, 0.0])
+        a[0] += x["spd"] * x["len"]; a[1] += x["len"]; a[2] += x["len"] if x["spd"] < 60 else 0
+    roads = []
+    rk = lambda t: (int(re.search(r"\d+", t[0]).group()) if re.search(r"\d+", t[0]) else 99, t[0], t[1])
+    for (road, d), (w, L, slow) in sorted(agg.items(), key=lambda kv: rk(kv[0])):
+        if L < 8:
+            continue
+        avg = round(w / L, 1)
+        hist_put("fw_road", road + d, key, avg)
+        roads.append({"road": road, "dir": d, "speed": avg, "km": round(L, 1), "slow_km": round(slow, 1), "spark": hist_get("fw_road", road + d, 48)})
+    jams = [{"title": f'{x["road"]}{x["dir"]}向 {x["from"]}→{x["to"]}', "road": x["road"], "dir": x["dir"], "km": x["km"], "speed": round(x["spd"])}
+            for x in sorted((x for x in fw if x["spd"] < 50), key=lambda x: x["spd"])[:12]]
+    slow_km = round(sum(x["len"] for x in fw if x["spd"] < 60), 1)
+    hist_put("fw_road", "_slow_km", key, slow_km)
+
+    thb = {"levels": {}, "jams": [], "roads": []}
+    tl_rows = []
+    try:
+        tsec = {r["SectionID"]: r for r in relay_rows(relay_get("static/thb_section"))}
+        tl_rows = relay_rows(relay_get("latest/thb_live", 30))
+        lv: dict = {}
+        per: dict = {}
+        tj = []
+        for r in tl_rows:
+            lvl = int(num(r.get("CongestionLevel")) or 0)
+            lv[lvl] = lv.get(lvl, 0) + 1
+            s_ = tsec.get(r.get("SectionID")) or {}
+            road = s_.get("RoadName") or ""
+            spd = num(r.get("TravelSpeed"))
+            if road:
+                pr = per.setdefault(road, [0, 0])
+                pr[0] += 1; pr[1] += 1 if lvl == 3 else 0
+            if lvl == 3 and spd and spd > 0 and road:
+                tj.append({"title": f'{road}{DIR_ZH.get(s_.get("RoadDirection"), "")}向 {s_.get("SectionMile.StartKM", "")}～{s_.get("SectionMile.EndKM", "")}',
+                           "road": road, "speed": round(spd)})
+        names = {-1: "封閉", 0: "資料不足", 1: "順暢", 2: "車多", 3: "壅塞"}
+        thb["levels"] = {names.get(k, str(k)): v for k, v in sorted(lv.items())}
+        thb["jams"] = sorted(tj, key=lambda x: x["speed"])[:12]
+        thb["roads"] = [{"road": r, "n": n_, "jam": j} for r, (n_, j) in sorted(per.items(), key=lambda kv: -kv[1][1]) if j][:10]
+        hist_put("thb", "_jam", key, lv.get(3, 0))
+    except Exception as e:  # noqa: BLE001
+        errs.append("省道: " + safe_err(e))
+
+    events = []
+    try:
+        for r in relay_rows(relay_get("latest/fw_events", 30)):
+            m = re.search(r"POINT\s*\(\s*([\d.]+)\s+([\d.]+)", str(r.get("Positions") or ""))
+            events.append({"title": str(r.get("Description") or r.get("EventTitle") or "")[:160], "kind": str(r.get("EventTitle") or "").replace("事件", ""),
+                           "road": r.get("Location.FreeExpressHighway.Road") or "", "dir": r.get("Location.FreeExpressHighway.Direction") or "",
+                           "km": r.get("Location.FreeExpressHighway.StartKM") or "", "at": r.get("EffectiveTime") or r.get("PublishTime") or "",
+                           "impact": r.get("Impact.Description") or "", "block": num(r.get("Impact.BlockedLanes")),
+                           "ll": [float(m.group(1)), float(m.group(2))] if m else None})
+        events.sort(key=lambda x: str(x["at"]), reverse=True)
+    except Exception as e:  # noqa: BLE001
+        errs.append("國道事件: " + safe_err(e))
+    kinds: dict = {}
+    for x in events:
+        kinds[x["kind"]] = kinds.get(x["kind"], 0) + 1
+
+    cms: dict = {}
+    for k in ("fw_cms", "thb_cms"):
+        try:
+            for r in relay_rows(relay_get(f"latest/{k}", 30)):
+                texts = [r.get("Messages.Message.Text")]
+                for m_ in r.get("Messages") or []:
+                    if isinstance(m_, dict):
+                        texts.append(m_.get("Text") or m_.get("Message.Text"))
+                for t in texts:
+                    t = re.sub(r"\s+", " ", str(t or "")).strip()
+                    if len(t) >= 4 and CMS_KW.search(t):
+                        c = cms.setdefault(t, {"title": t[:80], "n": 0, "src": "國道" if k == "fw_cms" else "省道"})
+                        c["n"] += 1
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{k}: " + safe_err(e))
+    cutoff = (NOW.astimezone(TPE) - timedelta(days=3)).isoformat()
+    news = []
+    for k, src in (("thb_news", "公路局"), ("fw_news", "高公局")):
+        try:
+            for r in relay_rows(relay_get(f"latest/{k}", 60)):
+                at = str(r.get("PublishTime") or r.get("UpdateTime") or "")
+                if at and at.replace(" ", "T") < cutoff:
+                    continue
+                news.append({"title": str(r.get("Title") or "")[:120], "desc": str(r.get("Description") or "")[:200],
+                             "url": r.get("NewsURL") or "", "source": src, "at": at})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{k}: " + safe_err(e))
+    news.sort(key=lambda x: x["at"], reverse=True)
+
+    # 地圖用：路段形狀（一天換一次）＋這輪的車速／壅塞等級
+    try:
+        g = _roads_geo()
+        fs = {x["id"]: round(x["spd"]) for x in fw}
+        tl = {r.get("SectionID"): (int(num(r.get("CongestionLevel")) or 0), round(num(r.get("TravelSpeed")) or 0)) for r in tl_rows}
+        write_json(ROADS_LIVE_PATH, {"at": fl.get("at"), "v": g["v"], "fw": [fs.get(i, -1) for i in g["fw"]["ids"]],
+                                     "thbL": [tl.get(i, (0, 0))[0] for i in g["thb"]["ids"]], "thbS": [tl.get(i, (0, 0))[1] for i in g["thb"]["ids"]]},
+                   separators=(",", ":"))
+    except Exception as e:  # noqa: BLE001
+        errs.append("地圖路段: " + safe_err(e))
+
+    return {"label": "高公局・公路局（彰化機房每 5 分鐘）", "asOf": (fl.get("meta") or {}).get("UpdateTime") or fl.get("at"),
+            "fw": {"roads": roads, "jams": jams, "slow_km": slow_km, "slow_spark": hist_get("fw_road", "_slow_km", 48), "n": len(fw)},
+            "thb": {**thb, "n": len(tl_rows), "jam_spark": hist_get("thb", "_jam", 48)},
+            "events": events[:80], "kinds": kinds, "cms": sorted(cms.values(), key=lambda c: -c["n"])[:30], "news": news[:30], "errs": errs}
 
 
 def p_airport():
@@ -5347,6 +5629,7 @@ run("veg", p_veg, keep_if_fresh_hours=6)
 # run("tiktok", p_tiktok, keep_if_fresh_hours=20)  # Creative Center 擋資料中心 IP，每輪白耗 60 秒，先停
 
 DATA.mkdir(exist_ok=True)
+run("roads", p_roads)
 run("mapfeed", p_mapfeed)  # 吃本輪其他面板的結果，不打外部 API
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
@@ -5446,9 +5729,11 @@ def vault_push():
     hashes = state.setdefault("h", {})
     lines, pending = [], {}
 
-    def add(name, doc_text):
+    kf = state.setdefault("kf", {})  # 每個面板上次整份寫入的時間（epoch）
+
+    def add(name, doc_text, force=False):
         h = hashlib.sha1(doc_text.encode("utf-8")).hexdigest()
-        if hashes.get(name) == h:
+        if hashes.get(name) == h and not force:
             return
         pending[name] = h  # 上傳成功才記下，失敗下一輪會重存
         lines.append(json.dumps({"ts": NOW_ISO, "panel": name, "doc": doc_text}, ensure_ascii=False))
@@ -5484,6 +5769,12 @@ def vault_push():
             extras.append((f"house_detail:{f.stem}", f.read_text(encoding="utf-8")))
     for name, text in extras:
         add(name, text)
+    # 每日關鍵影格：沒變的面板也至少每 20 小時整份存一次，時光機只要掃前一天的檔就找得到每個面板
+    for pid, doc in RESULTS.items():
+        if pid in pending or time.time() - float(kf.get(pid) or 0) < 20 * 3600:
+            continue
+        body = {k: v for k, v in doc.items() if k != "updatedAt"}
+        add(pid, json.dumps(body, ensure_ascii=False, sort_keys=True), force=True)
     if not lines:
         return "nothing changed"
     from google.cloud import storage
@@ -5492,6 +5783,8 @@ def vault_push():
     data = gzip.compress(("\n".join(lines) + "\n").encode("utf-8"), 9)
     storage.Client(project=project).bucket(bucket).blob(obj).upload_from_string(data, content_type="application/gzip")
     hashes.update(pending)
+    for name in pending:
+        kf[name] = time.time()
     if items:
         try:
             iobj = obj.replace("raw/", "items/", 1)
@@ -5522,6 +5815,28 @@ def vault_push():
             state["bq_items"] = 1
         except Exception as e:  # noqa: BLE001
             log("vault bq items", safe_err(e))
+    if not state.get("bq_relay"):  # 彰化機房的明細（每站、每路段）另外一張表，避免主表越掃越大
+        try:
+            from google.cloud import bigquery
+            bq = bigquery.Client(project=project)
+            tid = f"{project}.intel.tw_detail"
+            try:
+                bq.get_table(tid)
+            except Exception:  # noqa: BLE001
+                ext = bigquery.ExternalConfig("NEWLINE_DELIMITED_JSON")
+                ext.source_uris = [f"gs://{bucket}/relay/raw/*"]
+                ext.compression = "GZIP"
+                hp = bigquery.HivePartitioningOptions()
+                hp.mode = "AUTO"
+                hp.source_uri_prefix = f"gs://{bucket}/relay/raw/"
+                ext.hive_partitioning = hp
+                t = bigquery.Table(tid, schema=[bigquery.SchemaField("ts", "TIMESTAMP"), bigquery.SchemaField("src", "STRING"),
+                                                bigquery.SchemaField("doc", "STRING")])
+                t.external_data_configuration = ext
+                bq.create_table(t)
+            state["bq_relay"] = 1
+        except Exception as e:  # noqa: BLE001
+            log("vault bq relay", safe_err(e))
     if not state.get("bq_table"):
         try:
             from google.cloud import bigquery
