@@ -745,6 +745,9 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <section class="ibx ib-band" id="ib4"><div class="ib-q"><span class="no">Q4 · 美感</span><h2>美感圈在看什麼？</h2><p class="ans" id="ib4a">等待排程寫入</p><div class="ib-more" data-band="4"></div></div>
     <div class="ib-body"><div class="ib-viz"><h3>本週同框 · 2 家以上台灣時尚媒體都寫<span class="n">字越大＝越多家</span></h3><div class="ib-chips" id="ib4c"></div><h3 style="margin-top:6px">Lyst 最熱品牌<span class="n">季更</span></h3><svg id="ib4w" role="img" aria-label="Lyst 品牌排名"></svg></div>
       <div class="ib-viz"><h3>設計與國際時尚<span class="n">最新</span></h3><ul class="ib-top" id="ib4t" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:10px">本週藝文<span class="n">文化部 · 快閉展優先</span></h3><ul class="ib-top" id="ib4e" style="border-top:0;padding-top:0"></ul></div></div></section>
+  <section class="ibx ib-band" id="ib5"><div class="ib-q"><span class="no">Q5 · 觀點</span><h2>顧問在談什麼？</h2><p class="ans" id="ib5a">等待排程寫入</p><div class="ib-more" data-band="5"></div></div>
+    <div class="ib-body"><div class="ib-viz"><h3>McKinsey 主題排行<span class="n" id="ib5n">近 30 天 · 篇數</span></h3><svg id="ib5v" role="img" aria-label="McKinsey 各主題篇數"></svg></div>
+      <div class="ib-viz"><h3>三類每週篇數<span class="n">近 8 週</span></h3><svg id="ib5w" role="img" aria-label="科技、消費、總經三類每週篇數"></svg><h3 style="margin-top:8px">必讀<span class="n">消費與行銷優先</span></h3><ul class="ib-top" id="ib5t"></ul></div></div></section>
 
 
   <section class="panel w12 cap" id="p-think">
@@ -1711,7 +1714,7 @@ document.querySelectorAll(".panel.cap").forEach(p=>{const b=document.createEleme
 const IB=(()=>{
 const NS="http://www.w3.org/2000/svg";
 const BANDS={1:[["p-brands","新品牌雷達"],["p-crowd","集資雷達"],["p-tenders","標案"],["p-awards","決標"],["p-radar","融資雷達"]],
-  2:[["p-news","新聞"],["p-watch","Watchlist"]],3:[["p-aiwire","AI Wire"],["p-devpulse","開發者脈動"],["p-tech","Tech"]],4:[["p-media","Fashion Press"],["p-design","Design"],["p-lyst","Lyst"]]};
+  2:[["p-news","新聞"],["p-watch","Watchlist"]],3:[["p-aiwire","AI Wire"],["p-devpulse","開發者脈動"],["p-tech","Tech"]],4:[["p-media","Fashion Press"],["p-design","Design"],["p-lyst","Lyst"]],5:[["p-think","三欄文章"]]};
 let open=new Set();try{open=new Set(JSON.parse(localStorage.getItem("intel:ibopen")||"[]"));}catch(_){}
 const save=()=>{try{localStorage.setItem("intel:ibopen",JSON.stringify([...open]));}catch(_){}};
 function setup(){
@@ -1719,7 +1722,6 @@ function setup(){
   Object.entries(BANDS).forEach(([b,ps])=>{order["ib"+b]=b*10;ps.forEach(([id],i)=>{const el=document.getElementById(id);if(!el)return;el.dataset.band=b;el.style.order=b*10+1+i;if(open.has(id))el.classList.add("ib-open");});
     const box=document.querySelector(`.ib-more[data-band="${b}"]`);if(!box)return;
     box.innerHTML=`<span class="lbl">看全部</span>`+ps.map(([id,nm])=>`<button type="button" data-ibp="${id}" aria-pressed="${open.has(id)}">${nm}</button>`).join("")+(ps.length>1?`<button type="button" data-iball="${b}">全部</button>`:"");});
-  order["p-think"]=50;
   Object.entries(order).forEach(([id,o])=>{const el=document.getElementById(id);if(el)el.style.order=o;});
   document.addEventListener("click",e=>{
     const p=e.target.closest("[data-ibp]"),all=e.target.closest("[data-iball]"),card=e.target.closest("[data-ibgo]");
@@ -1760,6 +1762,43 @@ function aiChart(id,rows3,d14,fresh){const W=520,L=96,cw=(W-L-6)/14,rh=26;const 
       const c=p("circle",a.k?{cx,cy,r:3.4,style:"fill:var(--up)"}:{cx,cy,r:3,style:"fill:none;stroke:var(--blue);stroke-width:1.4"});const tt=document.createElementNS(NS,"title");tt.textContent=a.d+"｜"+a.t;c.appendChild(tt);
       if(fresh&&fresh.has(a.v+"|"+a.d+"|"+a.t))p("circle",{cx,cy,r:3.4,class:"ib-ping",style:`stroke:var(${a.k?"--up":"--blue"})`});});});});}
 const OV={};let PREV_AI=null,PREV_TG=null;
+const TZH={"Artificial Intelligence":"AI","Generative AI":"生成式 AI","Organization":"組織","Growth":"成長","Leadership":"領導","Operations":"營運","Manufacturing":"製造","Innovation":"創新","Public Sector":"公部門","Health Care":"醫療","Healthcare":"醫療","Corporate Finance":"企業財務","High Tech & Internet":"高科技","Strategy":"策略","Marketing & Sales":"行銷與銷售","Growth, Marketing & Sales":"成長與行銷","Consumer packaged goods":"消費品","Consumer insights":"消費洞察","Retail":"零售","Banking":"銀行","Financial Services":"金融","Sustainability":"永續","Supply chain":"供應鏈","Semiconductors":"半導體","Cloud computing":"雲端","Cybersecurity/Risk":"資安","Digital":"數位","Analytics":"數據分析","Talent":"人才","Economic Studies":"經濟研究","Macroeconomics":"總體經濟","Geopolitics":"地緣政治","Travel":"旅遊","Media & Entertainment":"媒體娛樂","Luxury":"精品","Automotive":"汽車","Real estate":"不動產","Labor markets":"勞動市場","Agriculture":"農業","Aerospace":"航太","Logistics":"物流","Electric Power":"電力","Infrastructure":"基礎建設","Defense & security":"國防","Life Sciences":"生技","Management processes":"管理流程","Human resources":"人資","Disruptive Technology":"顛覆性科技","Globalization":"全球化","Energy, Resources & Materials":"能源原物料","Mining":"礦業","Diversity":"多元","Customer experience":"顧客體驗","Insurance":"保險","Private equity":"私募","Telecommunications":"電信","Machinery & industrial goods":"機械","Commodity markets":"商品市場","Consumer":"消費","Fashion":"時尚","Beauty":"美妝"};
+const TSKIP=/^Insights on|Insights$|^Our Insights|^McKinsey|United States|Europe|Asia|Africa|North America|Middle East|China|India|Japan|Kenya|Nigeria|Morocco|Iran|Emerging Markets|^Future of Asia|Quarterly|on Books|^Research$|Podcast/i;
+function q5(P,cards){const G=(P.think||{}).groups||[];if(!G.length)return;
+  const now=Date.now(),D=864e5,it=[];G.forEach(g=>(g.items||[]).forEach(x=>{const t=new Date(x.at).getTime();if(isFinite(t))it.push({...x,t,g:g.key});}));
+  const span=(now-Math.min(...it.map(x=>x.t)))/D,hasPrev=span>=45,cur=it.filter(x=>now-x.t<30*D),prv=it.filter(x=>now-x.t>=30*D&&now-x.t<60*D);
+  const cnt=a=>{const c={};a.forEach(x=>{const seen=new Set();(x.cats||[]).forEach(k=>{k=String(k).trim();if(!k||TSKIP.test(k))return;const z=TZH[k]||k;if(seen.has(z))return;seen.add(z);c[z]=(c[z]||0)+1;});});return c;};
+  const cc=cnt(cur),pc=cnt(prv),top=Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,8);if(!top.length)return;
+  const share=k=>cur.length?Math.round(cur.filter(x=>x.g===k).length/cur.length*100):0;
+  let rise=null;if(hasPrev){Object.entries(cc).forEach(([k,v])=>{const d=v-(pc[k]||0);if(!rise||d>rise[1])rise=[k,d];});}
+  $("#ib5n").textContent=`近 30 天 · 篇數${hasPrev?" · 旁邊是比前 30 天":""}`;
+  $("#ib5a").innerHTML=`McKinsey 近 30 天 <em>${cur.length}</em> 篇，最常寫 ${top.slice(0,3).map(([k,v])=>`<b>${esc(k)}</b>（<em>${v}</em>）`).join("、")}。科技與 AI 佔 <em>${share("tech")}%</em>，消費與行銷 <em>${share("consumer")}%</em>。`
+    +(hasPrev?(rise&&rise[1]>0?`比前 30 天多最多的是 <b>${esc(rise[0])}</b>（<em class="up">+${rise[1]}</em>）。`:""):`<span style="color:var(--dim)">跟前一期比較要再累積約 ${Math.max(1,Math.ceil((45-span)/7))} 週。</span>`);
+  cards.push(["ib5","顧問焦點",esc(top[0][0]),"",`McKinsey 近 30 天 ${top[0][1]} 篇在寫；科技類佔 ${share("tech")}%`]);
+  /* 圖一：主題排行 */
+  {const W=420,rh=22,L=92,mx=top[0][1];const p=draw("ib5v",W,top.length*rh);
+   if(p)top.forEach(([k,v],i)=>{const y=i*rh,bw=Math.max(2,(W-L-90)*v/mx),d=v-(pc[k]||0);
+     p("text",{x:L-8,y:y+13,"text-anchor":"end",style:i<3?"fill:var(--text)":""},String(k).slice(0,12));
+     p("rect",{x:L,y:y+3,width:bw,height:rh-9,rx:1.5,style:`fill:var(--blue);opacity:${i<3?.9:.6}`});
+     p("text",{x:L+bw+6,y:y+13,class:"num"},String(v));
+     if(hasPrev&&d)p("text",{x:L+bw+30,y:y+13,class:"num",style:`fill:var(${d>0?"--up":"--down"})`},(d>0?"+":"")+d);});}
+  /* 圖二：三類每週篇數 */
+  {const wk=t=>{const d=new Date(t);d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d.getTime();};
+   const w0=wk(now),weeks=[...Array(8)].map((_,i)=>w0-(7-i)*7*D),S=[["tech","科技與 AI","--blue"],["consumer","消費與行銷","--warn"],["macro","總經與產業","--muted"]];
+   const ser=S.map(([k])=>weeks.map(w=>it.filter(x=>x.g===k&&wk(x.t)===w).length)),mx=Math.max(1,...ser.flat());
+   const W=420,H=96,L=22,B=16,cw=(W-L-70)/7;const p=draw("ib5w",W,H+B);
+   if(p){[0,mx].forEach(v=>{const y=H-v/mx*(H-8);p("line",{x1:L,y1:y,x2:W-70,y2:y,class:"g",opacity:.5});p("text",{x:L-4,y:y+4,"text-anchor":"end",class:"num"},String(v));});
+     weeks.forEach((w,i)=>{if(i%2===1||i===7)p("text",{x:L+cw*i,y:H+B-2,"text-anchor":"middle"},new Date(w).toISOString().slice(5,10).replace("-","/"));});
+     const first=weeks.findIndex(w=>it.some(x=>wk(x.t)===w));
+     S.forEach(([k,nm,c],si)=>{const pts=ser[si].map((v,i)=>[L+cw*i,H-v/mx*(H-8)]).slice(Math.max(0,first));if(!pts.length)return;
+       p("polyline",{points:pts.map(q=>q.join(",")).join(" "),style:`fill:none;stroke:var(${c});stroke-width:1.8;opacity:.95`});
+       pts.forEach(q=>p("circle",{cx:q[0],cy:q[1],r:2,style:`fill:var(${c})`}));
+       const last=pts[pts.length-1];p("text",{x:W-66,y:12+si*14,style:`fill:var(${c})`},`● ${nm} ${ser[si][7]}`);});
+     if(first>3)p("text",{x:L+4,y:12,style:"fill:var(--dim)"},`資料從 ${new Date(weeks[first]).toISOString().slice(5,10).replace("-","/")} 起累積`);}}
+  /* 必讀 */
+  const recent=it.filter(x=>now-x.t<14*D).sort((a,b)=>b.t-a.t),pick=[...recent.filter(x=>x.g==="consumer").slice(0,2),...recent.filter(x=>x.g==="tech").slice(0,1)];
+  if(pick.length<3)pick.push(...recent.filter(x=>!pick.includes(x)).slice(0,3-pick.length));
+  $("#ib5t").innerHTML=pick.map(x=>tl(x.g==="consumer"?"消費":x.g==="tech"?"科技":"總經",x.title,x.url,new Date(x.t).toISOString().slice(5,10).replace("-","/"))).join("");}
 function fillOv(){if(OV.b&&document.getElementById("ov-ib1")){brandsChart("ov-ib1",OV.b.rows);$("#ov-ib1s").innerHTML=OV.b.s;}
   if(OV.a&&document.getElementById("ov-ib3")){aiChart("ov-ib3",OV.a.rows3,OV.a.d14,OV.a.fresh);$("#ov-ib3s").innerHTML=OV.a.s;}}
 function render(P){
@@ -1832,6 +1871,9 @@ function render(P){
   $("#ib4e").innerHTML=evs.filter(e=>{if(seenE.has(e.t))return false;seenE.add(e.t);return true;}).slice(0,6).map(e=>tl(e.c,e.t,e.url,`${esc((e.county||"").replace("臺","台").slice(0,2))}${e.tag?` · <b style="color:var(--warn)">${e.tag}</b>`:e.at?" · "+esc(e.at.slice(0,5)):e.end?" · 至 "+esc(e.end):""}`)).join("")||'<li class="ib-empty">藝文資料還沒進來</li>';
   if(CU.n){const ca=$("#ib4a");ca.innerHTML+=` 本週全台有 <b>${CU.n}</b> 檔藝文活動${(pk.closing||[]).length?`，<b>${pk.closing.length}</b> 檔展覽最後一週`:""}。`;}
 
+  /* ---- Q5 觀點 ---- */
+  try{q5(P,cards);}catch(e){console.warn("q5",e);}
+
   /* ---- 訊號卡 ---- */
   try{fillOv();}catch(e){}
   $("#ib-sig").innerHTML=cards.slice(0,5).map(([b,k,v,u,s])=>`<button type="button" class="ib-card" data-ibgo="${b}"><span class="k">${k}</span><span class="v">${v}${u?`<small>${u}</small>`:""}</span><span class="s">${s}</span></button>`).join("");
@@ -1852,7 +1894,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"macro","p-house":"live",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro",
-  "ib-sig":"intel","p-think":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
+  "ib-sig":"intel","p-think":"intel","ib5":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
   "brief":"overview","ov":"overview","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
