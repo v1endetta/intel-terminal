@@ -21,6 +21,8 @@ LIVE = {
     "thb_live": THB + "section/livetrafficdata/LiveTrafficList.xml",  # 省道路段即時
     "thb_news": THB + "new/info/NewsList.xml",    # 公路局路況新聞
     "thb_cms": THB + "cms/two/CMSLiveList.xml",   # 省道看板即時內容
+    "fw_etag": FW + "ETagPairLive.xml",           # 國道 eTag 門架之間的實際旅行時間
+    "thb_etag": THB + "etagpair/five/ETagPairLive.xml",  # 省道 eTag 旅行時間
 }
 # 一天更新一次（路段名稱、形狀、看板位置）
 STATIC = {
@@ -32,6 +34,10 @@ STATIC = {
     "thb_shape": THB + "section/sectionshapeinfo/SectionShapeList.xml",
     "thb_cmsinfo": THB + "cms/info/CMSList.xml",
     "thb_level": THB + "section/congetioninfo/CongestionLevelList.xml",
+    "fw_etagpair": FW + "ETagPair.xml",
+    "fw_etaginfo": FW + "ETag.xml",
+    "thb_etagpair": THB + "etag/info/ETagPairList.xml",
+    "thb_etaginfo": THB + "etag/info/ETagList.xml",
 }
 
 TPE = timezone(timedelta(hours=8))
