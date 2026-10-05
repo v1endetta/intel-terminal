@@ -2070,6 +2070,47 @@ def _dp(pts, tol):
     return [q for q, k in zip(pts, keep) if k]
 
 
+# eTag 常用路段旅行時間：門架編號本身帶路線與里程（01F0017N＝國1 1.7K 北向）
+ETAG_CORR = [("台北→新竹", "01F", "S", 23, 95), ("新竹→台北", "01F", "N", 23, 95),
+             ("新竹→台中", "01F", "S", 95, 178), ("台中→新竹", "01F", "N", 95, 178),
+             ("南港→頭城（雪隧）", "05F", "S", 0, 30), ("頭城→南港（雪隧）", "05F", "N", 0, 30)]
+
+
+def _gid(g):
+    m = re.match(r"(\d\d[A-Z])(\d{4})([NSEW])", str(g or ""))
+    return (m.group(1), int(m.group(2)) / 10, m.group(3)) if m else None
+
+
+def _etag_corridors(key):
+    live = relay_rows(relay_get("latest/fw_etag", 30))
+    pairs = {r["ETagPairID"]: r for r in relay_rows(relay_get("static/fw_etagpair"))}
+    out = []
+    for label, road, d, lo, hi in ETAG_CORR:
+        tt = dist = 0.0
+        n_ = 0
+        for r in live:
+            p_ = pairs.get(r.get("ETagPairID")) or {}
+            a, b = _gid(p_.get("StartETagGantryID")), _gid(p_.get("EndETagGantryID"))
+            if not a or not b or a[0] != road or a[2] != d or b[0] != road:
+                continue
+            if not (lo <= min(a[1], b[1]) and max(a[1], b[1]) <= hi):
+                continue
+            car = next((f for f in (r.get("Flows") or []) if isinstance(f, dict) and str(f.get("VehicleType")) == "31"
+                        and (num(f.get("TravelTime")) or 0) > 0), None)
+            if not car:
+                continue
+            tt += num(car["TravelTime"]); dist += num(p_.get("Distance")) or abs(b[1] - a[1]); n_ += 1
+        L = hi - lo
+        if not n_ or dist < L * 0.6:
+            continue
+        mins = tt / 60 * L / dist  # 少數門架沒資料時按里程補齊
+        ideal = L / 90 * 60
+        hist_put("etag", label, key, round(mins, 1))
+        out.append({"label": label, "min": round(mins), "ideal": round(ideal), "delay": round(mins - ideal), "km": L,
+                    "cover": round(dist / L * 100), "spark": hist_get("etag", label, 48)})
+    return out
+
+
 def _roads_geo():
     """路段形狀（一天換一次）：{v, fw:{ids, n, c}, thb:{ids, n, c}}；c 是 [經度*1e4, 緯度*1e4, ...]。"""
     fs, fg = relay_get("static/fw_section"), relay_get("static/fw_shape")
@@ -2166,6 +2207,12 @@ def p_roads():
     except Exception as e:  # noqa: BLE001
         errs.append("省道: " + safe_err(e))
 
+    etag = []
+    try:
+        etag = _etag_corridors(key)
+    except Exception as e:  # noqa: BLE001
+        errs.append("eTag: " + safe_err(e))
+
     events = []
     try:
         for r in relay_rows(relay_get("latest/fw_events", 30)):
@@ -2227,7 +2274,7 @@ def p_roads():
     return {"label": "高公局・公路局（彰化機房每 5 分鐘）", "asOf": (fl.get("meta") or {}).get("UpdateTime") or fl.get("at"),
             "fw": {"roads": roads, "jams": jams, "slow_km": slow_km, "slow_spark": hist_get("fw_road", "_slow_km", 48), "n": len(fw)},
             "thb": {**thb, "n": len(tl_rows), "jam_spark": hist_get("thb", "_jam", 48)},
-            "events": events[:80], "kinds": kinds, "cms": sorted(cms.values(), key=lambda c: -c["n"])[:30], "news": news[:30], "errs": errs}
+            "etag": etag, "events": events[:80], "kinds": kinds, "cms": sorted(cms.values(), key=lambda c: -c["n"])[:30], "news": news[:30], "errs": errs}
 
 
 def p_airport():
