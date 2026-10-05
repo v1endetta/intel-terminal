@@ -743,7 +743,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ib-body"><div class="ib-viz"><h3>各家近 14 天<span class="n">● 產品更新　○ 新聞消息</span></h3><svg id="ib3v" role="img" aria-label="各家 AI 廠商近十四天動態"></svg></div>
       <div class="ib-viz"><h3>GitHub 竄升 · 星數<span class="n">前 5</span></h3><svg id="ib3w" role="img" aria-label="GitHub 星數"></svg><ul class="ib-top" id="ib3t"></ul></div></div></section>
   <section class="ibx ib-band" id="ib4"><div class="ib-q"><span class="no">Q4 · 美感</span><h2>美感圈在看什麼？</h2><p class="ans" id="ib4a">等待排程寫入</p><div class="ib-more" data-band="4"></div></div>
-    <div class="ib-body"><div class="ib-viz"><h3>本週同框 · 2 家以上台灣時尚媒體都寫<span class="n">字越大＝越多家</span></h3><div class="ib-chips" id="ib4c"></div><h3 style="margin-top:6px">Lyst 最熱品牌<span class="n">季更</span></h3><svg id="ib4w" role="img" aria-label="Lyst 品牌排名"></svg></div>
+    <div class="ib-body"><div class="ib-viz"><h3>各家在寫什麼<span class="n" id="ib4sn">近 30 天 · 分類占比</span></h3><svg id="ib4s" role="img" aria-label="各家時尚媒體近 30 天的文章分類占比"></svg><h3 style="margin-top:10px">本週同框 · 2 家以上台灣時尚媒體都寫<span class="n">字越大＝越多家</span></h3><div class="ib-chips" id="ib4c"></div><h3 style="margin-top:6px">Lyst 最熱品牌<span class="n">季更</span></h3><svg id="ib4w" role="img" aria-label="Lyst 品牌排名"></svg></div>
       <div class="ib-viz"><h3>設計與國際時尚<span class="n">最新</span></h3><ul class="ib-top" id="ib4t" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:10px">本週藝文<span class="n">文化部 · 快閉展優先</span></h3><ul class="ib-top" id="ib4e" style="border-top:0;padding-top:0"></ul></div></div></section>
   <section class="ibx ib-band" id="ib5"><div class="ib-q"><span class="no">Q5 · 觀點</span><h2>顧問在談什麼？</h2><p class="ans" id="ib5a">等待排程寫入</p><div class="ib-more" data-band="5"></div></div>
     <div class="ib-body"><div class="ib-viz"><h3>McKinsey 主題排行<span class="n" id="ib5n">近 30 天 · 篇數</span></h3><svg id="ib5v" role="img" aria-label="McKinsey 各主題篇數"></svg></div>
@@ -849,7 +849,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <section class="panel w12 cap" id="p-media">
     <div class="ph"><h2>Fashion Press</h2><span class="zh">時尚媒體 · 最新標題、本週同框、標題語感庫</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>美麗佳人（官方新聞清單）· VOGUE · ELLE · BAZAAR · COSMO 台灣版官方 RSS · WWD RSS · 同框已排除開箱、懶人包、贈票、星座等業配與專欄字眼 · 每 2 小時</span></div>
+    <div class="pf"><span>美麗佳人（官方新聞清單）· VOGUE · ELLE · BAZAAR · COSMO・Women's Health 台灣版官方 RSS · BEAUTY美人圈 RSS · GQ（彰化機房抓）· WWD RSS · 文章分類照各家網址與 RSS 分類，沒有才看標題關鍵字 · 同框已排除開箱、懶人包、贈票、星座等業配與專欄字眼 · 每 2 小時</span></div>
   </section>
 
   <section class="panel w6" id="p-attention">
@@ -1762,6 +1762,16 @@ function aiChart(id,rows3,d14,fresh){const W=520,L=96,cw=(W-L-6)/14,rh=26;const 
       const c=p("circle",a.k?{cx,cy,r:3.4,style:"fill:var(--up)"}:{cx,cy,r:3,style:"fill:none;stroke:var(--blue);stroke-width:1.4"});const tt=document.createElementNS(NS,"title");tt.textContent=a.d+"｜"+a.t;c.appendChild(tt);
       if(fresh&&fresh.has(a.v+"|"+a.d+"|"+a.t))p("circle",{cx,cy,r:3.4,class:"ib-ping",style:`stroke:var(${a.k?"--up":"--blue"})`});});});});}
 const OV={};let PREV_AI=null,PREV_TG=null;
+const FCC={"時尚":"#C9A3FF","美容":"#FF7FB0","生活":"#6FD3A8","娛樂":"#F2C14E","感情":"#F08A3E","星座":"#8B93A7","文化":"#5BC0EB","健康":"#A3E635"};
+function fashionCats(id,FC){const order=FC.order,rows=[["全部 · 近 7 天",FC.w7,1],...Object.entries(FC.src30||{}).map(([s,c])=>[s,c,0])].filter(r=>Object.values(r[1]).some(v=>v>0));
+  const W=520,L=96,R=34,rh=19,T0=18,bw=W-L-R;const p=draw(id,W,T0+rows.length*rh+2);if(!p)return;
+  let lx=0;order.forEach(k=>{p("rect",{x:lx,y:3,width:8,height:8,rx:1.5,style:`fill:${FCC[k]}`});p("text",{x:lx+11,y:11},k);lx+=11+k.length*12+10;});
+  rows.forEach(([nm,c,all],i)=>{const y=T0+i*rh,tot=order.reduce((a,k)=>a+(c[k]||0),0);if(!tot)return;
+    p("text",{x:L-8,y:y+12,"text-anchor":"end",style:all?"fill:var(--text);font-weight:600":""},nm);
+    let x=L;order.forEach(k=>{const v=c[k]||0;if(!v)return;const w=bw*v/tot;const r=p("rect",{x,y:y+3,width:Math.max(.5,w-1),height:rh-7,style:`fill:${FCC[k]};opacity:${all?.95:.8}`});
+      const tt=document.createElementNS(NS,"title");tt.textContent=`${nm}｜${k} ${v} 篇（${Math.round(v/tot*100)}%）`;r.appendChild(tt);
+      if(w>=30)p("text",{x:x+w/2,y:y+12,"text-anchor":"middle",style:"fill:#0b0d12;font-size:10px;pointer-events:none"},Math.round(v/tot*100)+"%");x+=w;});
+    p("text",{x:W,y:y+12,"text-anchor":"end",class:"num"},String(tot));});}
 const TZH={"Artificial Intelligence":"AI","Generative AI":"生成式 AI","Organization":"組織","Growth":"成長","Leadership":"領導","Operations":"營運","Manufacturing":"製造","Innovation":"創新","Public Sector":"公部門","Health Care":"醫療","Healthcare":"醫療","Corporate Finance":"企業財務","High Tech & Internet":"高科技","Strategy":"策略","Marketing & Sales":"行銷與銷售","Growth, Marketing & Sales":"成長與行銷","Consumer packaged goods":"消費品","Consumer insights":"消費洞察","Retail":"零售","Banking":"銀行","Financial Services":"金融","Sustainability":"永續","Supply chain":"供應鏈","Semiconductors":"半導體","Cloud computing":"雲端","Cybersecurity/Risk":"資安","Digital":"數位","Analytics":"數據分析","Talent":"人才","Economic Studies":"經濟研究","Macroeconomics":"總體經濟","Geopolitics":"地緣政治","Travel":"旅遊","Media & Entertainment":"媒體娛樂","Luxury":"精品","Automotive":"汽車","Real estate":"不動產","Labor markets":"勞動市場","Agriculture":"農業","Aerospace":"航太","Logistics":"物流","Electric Power":"電力","Infrastructure":"基礎建設","Defense & security":"國防","Life Sciences":"生技","Management processes":"管理流程","Human resources":"人資","Disruptive Technology":"顛覆性科技","Globalization":"全球化","Energy, Resources & Materials":"能源原物料","Mining":"礦業","Diversity":"多元","Customer experience":"顧客體驗","Insurance":"保險","Private equity":"私募","Telecommunications":"電信","Machinery & industrial goods":"機械","Commodity markets":"商品市場","Consumer":"消費","Fashion":"時尚","Beauty":"美妝"};
 const TSKIP=/^Insights on|Insights$|^Our Insights|^McKinsey|United States|Europe|Asia|Africa|North America|Middle East|China|India|Japan|Kenya|Nigeria|Morocco|Iran|Emerging Markets|^Future of Asia|Quarterly|on Books|^Research$|Podcast/i;
 function q5(P,cards){const G=(P.think||{}).groups||[];if(!G.length)return;
@@ -1856,7 +1866,11 @@ function render(P){
   const M=P.media||{},tg=M.together||[],ly=((P.lyst||{}).brands||[]);
   if(tg.length)cards.push(["ib4","時尚同框",esc(cap(tg[0].term)),"",`同時出現在 <b>${tg[0].sources.join("、")}</b>，共 ${tg[0].n} 則`]);
   const up=ly.find(l=>n(l.move)>0);
-  $("#ib4a").innerHTML=(tg.length?`本週台灣時尚媒體的共同題目是<b>${tg.slice(0,3).map(t=>esc(cap(t.term))).join("、")}</b>。`:"本週還沒有共同題目。")+(ly[0]?`Lyst 全球最熱是 <b>${esc(ly[0].brand)}</b>${up?`，<b>${esc(up.brand)}</b> 往上爬`:""}。`:"");
+  const FC=M.cats,catLine=FC&&FC.n7?(()=>{const w=FC.order.map(k=>[k,FC.w7[k]||0]).sort((a,b)=>b[1]-a[1]);const pc=k=>Math.round((FC.w7[k]||0)/FC.n7*100);
+      let up=null;if(FC.span_days>=14){FC.order.forEach(k=>{const d=(FC.w7[k]||0)-(FC.p7[k]||0);if(!up||d>up[1])up=[k,d];});}
+      return`近 7 天 <em>${FC.n7}</em> 篇，寫最多的是<b>${w[0][0]}</b>（<em>${pc(w[0][0])}%</em>），其次<b>${w[1][0]}</b>、<b>${w[2][0]}</b>${up&&up[1]>0?`；比上週多最多的是<b>${up[0]}</b>（<em class="up">+${up[1]}</em>）`:""}。`;})():"";
+  if(FC)fashionCats("ib4s",FC);
+  $("#ib4a").innerHTML=catLine+(tg.length?`本週台灣時尚媒體的共同題目是<b>${tg.slice(0,3).map(t=>esc(cap(t.term))).join("、")}</b>。`:"本週還沒有共同題目。")+(ly[0]?`Lyst 全球最熱是 <b>${esc(ly[0].brand)}</b>${up?`，<b>${esc(up.brand)}</b> 往上爬`:""}。`:"");
   const tgNow={};tg.forEach(t=>tgNow[t.term]=t.sources.length);const popT=t=>PREV_TG&&(!(t.term in PREV_TG)||PREV_TG[t.term]<t.sources.length);
   $("#ib4c").innerHTML=tg.length?tg.slice(0,12).map((t,i)=>`<span style="animation-delay:${i*60}ms" class="ib-chip ${popT(t)?"ib-pop":""} ${t.sources.length>=3?"s3":t.n>=3?"s2":""}" title="${esc(((t.examples||[])[0]||[])[1]||"")}">${esc(cap(t.term))}<i>${t.sources.length} 家</i></span>`).join(""):'<span class="ib-empty">資料還在累積</span>';
   PREV_TG=tgNow;

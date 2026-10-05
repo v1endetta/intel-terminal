@@ -694,7 +694,37 @@ FASHION_TW = {  # 台灣時尚媒體官方來源（都經過實測：網站規�
     "ELLE": ("rss", "https://www.elle.com/tw/rss/all.xml"),
     "BAZAAR": ("rss", "https://www.harpersbazaar.com/tw/rss/all.xml"),
     "COSMO": ("rss", "https://www.cosmopolitan.com/tw/rss/all.xml"),
+    "Women's Health": ("rss", "https://www.womenshealthmag.com/tw/rss/all.xml"),
+    "美人圈": ("rss", "https://www.beauty321.com/rss"),
 }
+# GQ 擋 GitHub 主機（Cloudflare），改由彰化機房抓（ops/tw_relay.py 的 gq），這裡讀 relay/latest/gq
+FASHION_RELAY = {"GQ": "gq"}
+# 統一分類：先看網址路徑／RSS 分類（各家編輯自己分的），都沒有才用標題關鍵字
+FASHION_CATS = ["時尚", "美容", "生活", "娛樂", "感情", "星座", "文化", "健康"]
+_FC_PATH = [("星座", r"astrolog|horoscope|zodiac|星座"), ("美容", r"beauty|hair|skin|makeup|fragrance|nail|body-care|美容|保養|彩妝"),
+            ("時尚", r"fashion|(?<!life)style|watch|jewel|\bbags?\b|shoe|runway|時尚|穿搭"), ("感情", r"love|relationship|sex|secret-talk|兩性|感情"),
+            ("娛樂", r"entertain|celebrit|tvshow|movie|music|star|名人|娛樂"), ("文化", r"culture|\barts?\b|exhibit|\bbooks?\b|文化|藝術"),
+            ("健康", r"fitness|health|wellness|nutrition|weight|健康|健身"), ("生活", r"life|living|travel|taste|food|home|design|whats-hot|event|生活|旅遊|美食")]
+_FC_KW = [("星座", r"星座|運勢|塔羅|水逆|上升|太陽星座"), ("美容", r"保養|彩妝|香水|香氛|髮|美甲|肌膚|皮膚|防曬|口紅|唇|粉底|醫美|妝|精華|乳液|面膜|抗老|毛孔"),
+          ("時尚", r"穿搭|秀場|時裝|包款|包包|鞋|精品|聯名|腕錶|珠寶|大衣|洋裝|牛仔|單品|設計師|Chanel|Dior|Gucci|Prada|LV|Hermès|愛馬仕"),
+          ("感情", r"戀愛|感情|分手|約會|婚姻|另一半|男友|女友|曖昧|渣|伴侶|老公|老婆|兩性"), ("娛樂", r"韓劇|日劇|電影|影集|演唱會|女星|男星|偶像|Netflix|劇|專輯|MV|綜藝|金鐘|金馬|女團|男團"),
+          ("文化", r"展覽|藝術|美術館|博物館|書|作家|攝影展|建築"), ("健康", r"運動|健身|減重|減肥|睡眠|醫師|健康|飲食|瘦|脂肪|血糖|蛋白質|跑步")]
+
+
+def _fashion_cat(url: str, rcats=(), title: str = "") -> str:
+    from urllib.parse import urlparse, unquote
+    path = unquote(urlparse(url or "").path.lower())
+    segs = [x for x in path.strip("/").split("/") if x not in ("tw", "article", "")][:2]
+    for txt in [" ".join(rcats or []), " ".join(segs)]:
+        if not txt.strip():
+            continue
+        for cat, rx in _FC_PATH:
+            if re.search(rx, txt, re.I):
+                return cat
+    for cat, rx in _FC_KW:
+        if re.search(rx, title or "", re.I):
+            return cat
+    return "生活"
 FASHION_HEADS = DATA / "fashion_heads.json"  # 標題語感庫：滾動 60 天，寫文案時拿來校準語感
 FASHION_AD = re.compile(r"星座|運勢|塔羅|開箱|懶人包|贈票|優惠|折扣|週年慶|會員日|抽獎|團購|特價|限時|報名|滿額|贈品|試用|好禮|下殺|即日起|快閃店|聯名款開賣")
 FASHION_STOP = {"vogue", "elle", "bazaar", "cosmo", "cosmopolitan", "marie claire", "hot spot", "the", "and", "of", "with", "for", "in", "to", "a",
@@ -725,7 +755,8 @@ def _fashion_feed(kind, url):
         for it in root.iter("item"):
             t = _unesc((it.findtext("title") or "").strip())
             if t:
-                out.append({"title": t, "url": (it.findtext("link") or "").strip(), "at": _rss_date(it.findtext("pubDate") or "")})
+                rc = [(c.text or "").strip().split("/")[0].strip() for c in it.findall("category") if (c.text or "").strip()]
+                out.append({"title": t, "url": (it.findtext("link") or "").strip(), "at": _rss_date(it.findtext("pubDate") or ""), "rc": rc[:3]})
     return out
 
 
@@ -756,22 +787,60 @@ def p_media():
         heads = json.loads(FASHION_HEADS.read_text(encoding="utf-8")) if FASHION_HEADS.exists() else {}
     except Exception:  # noqa: BLE001
         heads = {}
-    for src, (kind, url) in FASHION_TW.items():
+    srcs = list(FASHION_TW.items()) + [(s_, ("relay", k_)) for s_, k_ in FASHION_RELAY.items()]
+    for src, (kind, url) in srcs:
         try:
-            got = _fashion_feed(kind, url)
+            if kind == "relay":
+                got = []
+                for r in relay_rows(relay_get(f"latest/{url}", 120)):
+                    t = _unesc(str(r.get("title") or "").strip())
+                    if t:
+                        got.append({"title": t, "url": str(r.get("link") or ""), "at": _rss_date(str(r.get("pubDate") or "")),
+                                    "rc": [str(r.get("category") or "").split("/")[0].strip()] if r.get("category") else []})
+            else:
+                got = _fashion_feed(kind, url)
         except Exception as e:  # noqa: BLE001
             log("fashion", src, e); errs.append(f"{src}: {safe_err(e)}"); continue
+        got.sort(key=lambda x: x.get("at") or "", reverse=True)
+        got = got[:80]  # 美人圈的 RSS 一次給上千篇，只取最新的
         for it in got:
             it["source"] = src
+            it["cat"] = _fashion_cat(it["url"], it.get("rc"), it["title"])
             k = it["url"] or (src + it["title"])
             if k not in heads:
-                heads[k] = {"s": src, "t": it["title"][:120], "at": it["at"] or NOW_ISO}
+                heads[k] = {"s": src, "t": it["title"][:120], "at": it["at"] or NOW_ISO, "c": it["cat"]}
             else:
                 heads[k]["t"] = it["title"][:120]
+                heads[k]["c"] = it["cat"]
         latest += [x for x in got if not FASHION_AD.search(x["title"])][:6]
     cut60 = (NOW - timedelta(days=60)).isoformat().replace("+00:00", "Z")
     heads = {k: v for k, v in heads.items() if v.get("at", "") >= cut60}
+    for k, v in heads.items():
+        if not v.get("c"):
+            v["c"] = _fashion_cat(k if k.startswith("http") else "", (), v.get("t", ""))
     write_json(FASHION_HEADS, heads, separators=(",", ":"))
+    # 分類統計：近 7 天／30 天各類篇數、各家 30 天分類組成、上一個 7 天（比較用）
+    def _cnt(rows):
+        c = {k: 0 for k in FASHION_CATS}
+        for v in rows:
+            c[v.get("c") or "生活"] = c.get(v.get("c") or "生活", 0) + 1
+        return c
+    cut30 = (NOW - timedelta(days=30)).isoformat().replace("+00:00", "Z")
+    cut7_ = (NOW - timedelta(days=7)).isoformat().replace("+00:00", "Z")
+    cut14 = (NOW - timedelta(days=14)).isoformat().replace("+00:00", "Z")
+    h30 = [v for v in heads.values() if v.get("at", "") >= cut30]
+    h7 = [v for v in h30 if v.get("at", "") >= cut7_]
+    hp7 = [v for v in heads.values() if cut14 <= v.get("at", "") < cut7_]
+    src30: dict = {}
+    for v in h30:
+        src30.setdefault(v["s"], []).append(v)
+    ex7 = {}
+    for v in sorted(h7, key=lambda v: v.get("at", ""), reverse=True):
+        if not FASHION_AD.search(v["t"]) or v.get("c") == "星座":
+            ex7.setdefault(v.get("c") or "生活", v["t"])
+    cats = {"order": FASHION_CATS, "w7": _cnt(h7), "p7": _cnt(hp7), "d30": _cnt(h30), "n7": len(h7), "n30": len(h30),
+            "src30": {s_: _cnt(rows) for s_, rows in sorted(src30.items(), key=lambda kv: -len(kv[1]))}, "ex7": ex7,
+            "span_days": round((NOW - min((datetime.fromisoformat(v["at"].replace("Z", "+00:00")) for v in heads.values() if v.get("at")), default=NOW)).total_seconds() / 86400, 1)}
     # 本週同框：近 7 天、排除業配與星座專欄，同一個詞在 2 家以上台灣媒體出現（家數多的排前面）
     cut7 = (NOW - timedelta(days=7)).isoformat().replace("+00:00", "Z")
     week = [v for v in heads.values() if v.get("at", "") >= cut7 and not FASHION_AD.search(v["t"])]
@@ -830,7 +899,7 @@ def p_media():
     per = {}
     for v in heads.values():
         per[v["s"]] = per.get(v["s"], 0) + 1
-    return {"items": latest[:16], "intl": intl, "together": together, "week_n": len(week), "lexicon": len(heads), "per_source": per, "errs": errs}
+    return {"items": latest[:16], "intl": intl, "together": together, "cats": cats, "week_n": len(week), "lexicon": len(heads), "per_source": per, "errs": errs}
 
 
 SUBS = ["taiwan", "fashion", "malefashionadvice", "marketing", "design", "artificial"]

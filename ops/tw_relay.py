@@ -23,6 +23,7 @@ LIVE = {
     "thb_cms": THB + "cms/two/CMSLiveList.xml",   # 省道看板即時內容
     "fw_etag": FW + "ETagPairLive.xml",           # 國道 eTag 門架之間的實際旅行時間
     "thb_etag": THB + "etagpair/five/ETagPairLive.xml",  # 省道 eTag 旅行時間
+    "gq": "https://www.gq.com.tw/feed/rss",       # GQ Taiwan（擋 GitHub 主機，台灣機房試試）
 }
 # 一天更新一次（路段名稱、形狀、看板位置）
 STATIC = {
@@ -108,7 +109,7 @@ def _flat(e, pre=""):
         k = pre + t
         sub = list(c)
         if not sub:
-            d[k] = (c.text or "").strip() if t.endswith("ID") else _val(c.text)
+            d.setdefault(k, (c.text or "").strip() if t.endswith("ID") else _val(c.text))  # 重複的葉節點（如多個 category）留第一個
         elif len(sub) > 1 and len({_tag(x) for x in sub}) == 1:  # 重複子元素 → 陣列
             d[k] = [(_flat(x) if list(x) else _val(x.text)) for x in sub]
         else:
@@ -121,6 +122,15 @@ def parse_xml(b):
     root = ET.fromstring(b)
     meta = {_tag(c): _val(c.text) for c in root if not list(c)}
     best, bn = None, 0
+    ch = root.find("channel")
+    if ch is not None:  # RSS：channel 底下混著 title、link 和一串 item，直接取 item
+        recs = [_flat(k) for k in ch.findall("item")]
+        cols = []
+        for r in recs:
+            for k in r:
+                if k not in cols:
+                    cols.append(k)
+        return {"meta": {}, "cols": cols, "rows": [[r.get(c) for c in cols] for r in recs]}
     for el in root.iter():
         kids = list(el)
         if len(kids) > bn and len({_tag(k) for k in kids}) == 1:
