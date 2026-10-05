@@ -2030,7 +2030,7 @@ THINK_RSS = "https://www.mckinsey.com/insights/rss"
 THINK_POD = "https://www.omnycontent.com/d/playlist/708664bd-6843-4623-8066-aede00ce0c8a/3f6f52af-fba1-496d-b11b-af040139456a/bfe0b44a-082f-495a-952a-af0401394590/podcast.rss"
 THINK_GROUPS = [
     ("tech", "科技與 AI", re.compile(r"\bAI\b|Artificial|Generative|Technolog|Digital|Cloud|Cyber|Semiconductor|High Tech|Software|Data|Analytics|Disruptive|Automation|Robot|Quantum|Telecom", re.I)),
-    ("consumer", "消費與行銷", re.compile(r"Consumer|Retail|Marketing|Sales|Growth|Luxury|Fashion|Brand|Customer|Travel|Media|Entertainment|Apparel|Beauty|Food|Hospitality", re.I)),
+    ("consumer", "消費與行銷", re.compile(r"Consumer|Retail|Marketing|Sales|Luxury|Fashion|Brand|Customer|Travel|Media|Entertainment|Apparel|Beauty|Food|Hospitality", re.I)),
 ]
 
 
