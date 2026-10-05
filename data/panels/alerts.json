@@ -1,15 +1,42 @@
 {
  "alerts": [
   {
-   "id": "cwa.gov.tw_thunderstorm_20261005152041_000",
+   "id": "WRA_ReservoirWarn_20261005161840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣",
+    "臺中市"
+   ],
+   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
+   "src": "水利署",
+   "at": "2026-10-05T08:18:40Z",
+   "exp": "2026-10-05T19:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005161840_0001.cap"
+  },
+  {
+   "id": "cwa.gov.tw_thunderstorm_20261005161300_100",
+   "cat": "雷雨",
+   "lvl": 2,
+   "area": [
+    "屏東縣"
+   ],
+   "text": "氣象署針對屏東縣沙漠溪(海神宮),屏東縣隘寮北溪(飛龍瀑布群)發布災防告警，持續時間至18時13分；此區域已有暴雨或有暴雨發生的機率，留意溪水暴漲並儘速遠離溪流。",
+   "src": "中央氣象署",
+   "at": "2026-10-05T08:15:44Z",
+   "exp": "2026-10-05T18:13:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/thunderstorm/cwa.gov.tw_thunderstorm_20261005161300_100.cap"
+  },
+  {
+   "id": "cwa.gov.tw_thunderstorm_20261005161339_000",
    "cat": "雷雨",
    "lvl": 2,
    "area": [],
-   "text": "115年10月05日15時20分氣象署發布大雷雨即時訊息，持續時間至16時20分；有短延時強降雨發生，並伴隨較強陣風、閃電落雷，請慎防溪(河)水暴漲、低窪地區積水、低能見度、雷擊",
+   "text": "115年10月05日16時13分氣象署發布大雷雨即時訊息，持續時間至17時13分；有短延時強降雨發生，並伴隨較強陣風、閃電落雷，請慎防溪(河)水暴漲、低窪地區積水、低能見度、雷擊",
    "src": "中央氣象署",
-   "at": "2026-10-05T07:21:45Z",
-   "exp": "2026-10-05T16:20:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/thunderstorm/cwa.gov.tw_thunderstorm_20261005152041_000.cap"
+   "at": "2026-10-05T08:15:04Z",
+   "exp": "2026-10-05T17:13:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/thunderstorm/cwa.gov.tw_thunderstorm_20261005161339_000.cap"
   },
   {
    "id": "WRA_ReservoirWarn_20261005151840_0000",
@@ -53,20 +80,6 @@
    "at": "2026-10-05T06:28:01Z",
    "exp": "2026-10-06T00:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610051428.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261005141840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "苗栗縣",
-    "臺中市"
-   ],
-   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
-   "src": "水利署",
-   "at": "2026-10-05T06:18:40Z",
-   "exp": "2026-10-05T17:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005141840_0000.cap"
   },
   {
    "id": "CWA-Weather_extremely-rain_202610051242001",
@@ -220,12 +233,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610041724.cap"
   }
  ],
- "n_total": 13,
+ "n_total": 14,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/05 16:08:17"
+  "updated": "2026/10/05 16:23:15"
  },
  "errs": [],
- "updatedAt": "2026-10-05T08:04:18Z"
+ "updatedAt": "2026-10-05T08:26:44Z"
 }
