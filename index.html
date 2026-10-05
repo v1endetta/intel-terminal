@@ -1438,17 +1438,17 @@ function panelCharts(P){
       if(vals[i]>mean*2&&vals[i]>=3)p("text",{x:x+(cw-6)/2,y:y-3,"text-anchor":"middle",style:"fill:var(--down)"},"!");if(i%2===1||i===13)p("text",{x:x+(cw-6)/2,y:H+14,"text-anchor":"middle"},d.slice(5).replace("-","/"));});
     let ly=8;topC.slice(0,8).forEach(([c,v])=>{p("rect",{x:590,y:ly-8,width:9,height:9,rx:1.5,style:`fill:${MOPC[c]||"#8B93A7"}`});p("text",{x:604,y:ly},`${c} ${v}`);ly+=13;});}}catch(e){console.warn("pcx mops",e);}
   /* 6. Taiwan Now：縣市燈號格 */
-  try{const now=countyNow(),cells=Object.entries(TILE),sz=40,g=4;let stops=[],bad=[],wet=[];
+  try{const now=countyNow(),cells=Object.entries(TILE),sz=34,g=3;let stops=[],bad=[],wet=[];
     const p=pcx("p-twnow","",6*(sz+g),8*(sz+g));const box=document.querySelector("#p-twnow > .pcx");
     cells.forEach(([k,[cx,cy]])=>{const c=now[k]||{},st=stopOf(k).length,lvl=c.lvl||0,rain=c.rain||0,nw=(c.nw||[]).length;if(st)stops.push(k);if(lvl>=3)bad.push(k);if(rain>=10)wet.push([k,rain]);
       const col=st?"#B15CFF":lvl>=3?"#F0524F":lvl>=2?"#E0A23A":rain>=10?"#3D8BFF":nw?"#4a5268":"#2a3040";const x=cx*(sz+g)+(cx===0?0:14),y=cy*(sz+g);
       p("rect",{x,y,width:sz,height:sz,rx:4,style:`fill:${col};opacity:.9`},null,`${k}${st?"｜停班停課":""}${lvl?"｜示警 "+lvl+" 級":""}${rain?"｜雨 "+rain+" mm":""}${nw?"｜新聞 "+nw+" 則":""}`);
-      p("text",{x:x+sz/2,y:y+17,"text-anchor":"middle",style:"fill:#fff;font-size:11.5px;font-weight:600"},k.replace("臺","台").slice(0,2));
-      p("text",{x:x+sz/2,y:y+31,"text-anchor":"middle",style:"fill:#fff;opacity:.8;font-size:9.5px"},st?"停班":rain>=1?Math.round(rain)+"mm":nw?nw+"則":"");});
+      p("text",{x:x+sz/2,y:y+15,"text-anchor":"middle",style:"fill:#fff;font-size:11px;font-weight:600"},k.replace("臺","台").slice(0,2));
+      p("text",{x:x+sz/2,y:y+27,"text-anchor":"middle",style:"fill:#fff;opacity:.85;font-size:9px"},st?"停班":rain>=1?Math.round(rain)+"mm":nw?nw+"則":"");});
     wet.sort((a,b)=>b[1]-a[1]);
     box.querySelector(".pcx-h").innerHTML=(stops.length?`<b style="color:#B15CFF">停班停課</b> ${stops.map(k=>k.replace("臺","台")).join("、")}；`:"今天沒有停班停課；")+(bad.length?`<b style="color:var(--down)">嚴重示警</b> ${bad.map(k=>k.replace("臺","台")).join("、")}；`:"")+(wet.length?`雨最大 <b>${wet[0][0].replace("臺","台")}</b> <em>${wet[0][1]}</em> mm/時`:"各地沒有明顯降雨")
       +`<br><span style="color:var(--dim);font-size:11px">■紫 停班停課　■紅 嚴重示警　■黃 注意　■藍 下雨　■灰 有地方新聞</span>`;
-    const sv=box.querySelector("svg");sv.style.maxWidth="300px";}catch(e){console.warn("pcx twnow",e);}
+    const sv=box.querySelector("svg");sv.style.maxWidth="250px";}catch(e){console.warn("pcx twnow",e);}
   /* 7. 實價登錄：各縣市住宅中位數 */
   try{const H=P.house||{},cs=Object.entries(H.city||{}).sort((a,b)=>b[1]-a[1]);if(cs.length){const mx=cs[0][1],lo=cs[cs.length-1];
     const p=pcx("p-house",`${esc(H.season||"")} 住宅中位數：<b>台北</b> <em>${n((H.city||{})["臺北市"]).toFixed(1)}</em> 萬/坪最高，<b>${esc(lo[0].replace("臺","台"))}</b> <em>${lo[1]}</em> 最低；交易最多是<b>${esc(Object.entries(H.cityN||{}).sort((a,b)=>b[1]-a[1])[0][0].replace("臺","台"))}</b>`,760,cs.length*17+4);
