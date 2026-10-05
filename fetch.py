@@ -5397,6 +5397,86 @@ try:
 except Exception as e:  # noqa: BLE001
     log("archive failed:", safe_err(e))
 
+# ---------- 歷史資料庫：每輪把「這輪有更新、內容有變」的面板完整存到 Google Cloud ----------
+# 存法：gs://<bucket>/raw/dt=YYYY-MM-DD/HHMMSS.ndjson.gz，每行 {ts, panel, doc}；BigQuery 外部表 intel.snapshots 直接查這些檔
+# 新增的面板不用改這裡：只要進了 RESULTS 就會自動存。地圖、雷達圖、實價登錄明細也一起存。
+def vault_push():
+    bucket, project = os.environ.get("GCP_BUCKET"), os.environ.get("GCP_PROJECT")
+    if not bucket or not project or not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
+        return "skip: no gcp"
+    import base64
+    import gzip
+    import hashlib
+    st_p = DATA / "vault_state.json"
+    try:
+        state = json.loads(st_p.read_text(encoding="utf-8")) if st_p.exists() else {}
+    except Exception:  # noqa: BLE001
+        state = {}
+    hashes = state.setdefault("h", {})
+    lines, pending = [], {}
+
+    def add(name, doc_text):
+        h = hashlib.sha1(doc_text.encode("utf-8")).hexdigest()
+        if hashes.get(name) == h:
+            return
+        pending[name] = h  # 上傳成功才記下，失敗下一輪會重存
+        lines.append(json.dumps({"ts": NOW_ISO, "panel": name, "doc": doc_text}, ensure_ascii=False))
+
+    for pid, doc in RESULTS.items():
+        if doc.get("updatedAt") != NOW_ISO:  # 這輪沒重抓（沿用舊值或失敗）就不存
+            continue
+        body = {k: v for k, v in doc.items() if k != "updatedAt"}
+        add(pid, json.dumps(body, ensure_ascii=False, sort_keys=True))
+    extras = []
+    if (RESULTS.get("geo") or {}).get("updatedAt") == NOW_ISO and (DATA / "geo.json").exists():
+        extras.append(("geo_map", (DATA / "geo.json").read_text(encoding="utf-8")))
+    if (RESULTS.get("radar_wx") or {}).get("updatedAt") == NOW_ISO and (DATA / "radar.png").exists():
+        extras.append(("radar_png", json.dumps({"png_base64": base64.b64encode((DATA / "radar.png").read_bytes()).decode()})))
+    if (RESULTS.get("house") or {}).get("updatedAt") == NOW_ISO and (DATA / "house").exists():
+        for f in sorted((DATA / "house").glob("*.json")):
+            extras.append((f"house_detail:{f.stem}", f.read_text(encoding="utf-8")))
+    for name, text in extras:
+        add(name, text)
+    if not lines:
+        return "nothing changed"
+    from google.cloud import storage
+    tpe = NOW.astimezone(TPE)
+    obj = f"raw/dt={tpe.strftime('%Y-%m-%d')}/{tpe.strftime('%H%M%S')}.ndjson.gz"
+    data = gzip.compress(("\n".join(lines) + "\n").encode("utf-8"), 9)
+    storage.Client(project=project).bucket(bucket).blob(obj).upload_from_string(data, content_type="application/gzip")
+    hashes.update(pending)
+    if not state.get("bq_table"):
+        try:
+            from google.cloud import bigquery
+            bq = bigquery.Client(project=project)
+            tid = f"{project}.intel.snapshots"
+            try:
+                bq.get_table(tid)
+            except Exception:  # noqa: BLE001
+                ext = bigquery.ExternalConfig("NEWLINE_DELIMITED_JSON")
+                ext.source_uris = [f"gs://{bucket}/raw/*"]
+                ext.compression = "GZIP"
+                hp = bigquery.HivePartitioningOptions()
+                hp.mode = "AUTO"
+                hp.source_uri_prefix = f"gs://{bucket}/raw/"
+                ext.hive_partitioning = hp
+                t = bigquery.Table(tid, schema=[bigquery.SchemaField("ts", "TIMESTAMP"), bigquery.SchemaField("panel", "STRING"),
+                                                bigquery.SchemaField("doc", "STRING")])
+                t.external_data_configuration = ext
+                bq.create_table(t)
+            state["bq_table"] = 1
+        except Exception as e:  # noqa: BLE001
+            log("vault bq", safe_err(e))
+    state["last"] = {"at": NOW_ISO, "obj": obj, "n": len(lines), "bytes": len(data)}
+    write_json(st_p, state, separators=(",", ":"))
+    return f"{obj} {len(lines)} rows {len(data)} bytes"
+
+
+try:
+    log("vault:", vault_push())
+except Exception as e:  # noqa: BLE001
+    log("vault failed:", safe_err(e))
+
 ok = [k for k, v in RESULTS.items() if not v.get("error")]
 bad = [k for k, v in RESULTS.items() if v.get("error")]
 log(f"done ok={ok} failed={bad}")

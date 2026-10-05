@@ -12,6 +12,7 @@ on:
 permissions:
   contents: write
   actions: write
+  id-token: write   # 用 GitHub 身分換 Google Cloud 暫時憑證（不存任何金鑰）
 
 concurrency:
   group: fetch-loop
@@ -35,9 +36,18 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: python -m playwright install --with-deps chromium
+      # 歷史資料庫：Google Cloud（只信任這個儲存庫的 GitHub 身分；以下是識別碼，不是密碼）
+      - id: gcp
+        uses: google-github-actions/auth@v2
+        continue-on-error: true
+        with:
+          workload_identity_provider: projects/896764575828/locations/global/workloadIdentityPools/github/providers/intel-terminal
+          service_account: intel-writer@intel-vault-510704.iam.gserviceaccount.com
       - name: Fetch loop
         env:
           INTEL_DATA_DIR: ${{ github.workspace }}/out/data
+          GCP_PROJECT: intel-vault-510704
+          GCP_BUCKET: intel-vault-510704-vault
           GITHUB_TOKEN: ${{ github.token }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
