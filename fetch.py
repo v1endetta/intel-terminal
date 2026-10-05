@@ -700,12 +700,21 @@ FASHION_TW = {  # 台灣時尚媒體官方來源（都經過實測：網站規�
     "GQ": ("rss", "https://news.google.com/rss/search?q=site:gq.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"),
 }
 FASHION_RELAY: dict = {}
+# 國際版（官方 RSS，GitHub 連得到）：只拿來算分類比例，不進「本週同框」熱詞
+FASHION_INTL = {
+    "VOGUE US": "https://www.vogue.com/feed/rss", "ELLE US": "https://www.elle.com/rss/all.xml",
+    "BAZAAR US": "https://www.harpersbazaar.com/rss/all.xml", "COSMO US": "https://www.cosmopolitan.com/rss/all.xml",
+    "Marie Claire US": "https://www.marieclaire.com/feeds/all", "GQ US": "https://www.gq.com/feed/rss",
+    "Women's Health US": "https://www.womenshealthmag.com/rss/all.xml",
+    "VOGUE UK": "https://www.vogue.co.uk/feed/rss", "Marie Claire UK": "https://www.marieclaire.co.uk/feeds/all",
+}
+FASHION_HEADS_INTL = DATA / "fashion_heads_intl.json"
 # 統一分類：先看網址路徑／RSS 分類（各家編輯自己分的），都沒有才用標題關鍵字
 FASHION_CATS = ["時尚", "美容", "生活", "娛樂", "感情", "星座", "文化", "健康"]
-_FC_PATH = [("星座", r"astrolog|horoscope|zodiac|星座"), ("美容", r"beauty|hair|skin|makeup|fragrance|nail|body-care|美容|保養|彩妝"),
-            ("時尚", r"fashion|(?<!life)style|watch|jewel|\bbags?\b|shoe|runway|時尚|穿搭"), ("感情", r"love|relationship|sex|secret-talk|兩性|感情"),
-            ("娛樂", r"entertain|celebrit|tvshow|movie|music|star|名人|娛樂"), ("文化", r"culture|\barts?\b|exhibit|\bbooks?\b|文化|藝術"),
-            ("健康", r"fitness|health|wellness|nutrition|weight|健康|健身"), ("生活", r"life|living|travel|taste|food|home|design|whats-hot|event|生活|旅遊|美食")]
+_FC_PATH = [("星座", r"astrolog|horoscope|zodiac|星座"), ("美容", r"beauty|hair|skin|makeup|fragrance|nail|body-care|groom|美容|保養|彩妝"),
+            ("時尚", r"fashion|(?<!life)style|watch|jewel|\bbags?\b|shoe|runway|時尚|穿搭"), ("感情", r"love|relationship|sex|secret-talk|pleasure|dating|兩性|感情"),
+            ("娛樂", r"entertain|celebrit|tvshow|movie|music|star|royal|名人|娛樂"), ("文化", r"culture|\barts?\b|exhibit|\bbooks?\b|文化|藝術"),
+            ("健康", r"fitness|health|wellness|wellbeing|nutrition|weight|sport|健康|健身"), ("生活", r"life|living|travel|taste|food|home|design|whats-hot|event|shop|business|wedding|生活|旅遊|美食")]
 _FC_KW = [("星座", r"星座|運勢|塔羅|水逆|上升|太陽星座"), ("美容", r"保養|彩妝|香水|香氛|髮|美甲|肌膚|皮膚|防曬|口紅|唇|粉底|醫美|妝|精華|乳液|面膜|抗老|毛孔"),
           ("時尚", r"穿搭|秀場|時裝|包款|包包|鞋|精品|聯名|腕錶|手錶|錶款|西裝|潮流|珠寶|大衣|洋裝|牛仔|單品|設計師|Chanel|Dior|Gucci|Prada|LV|Hermès|愛馬仕"),
           ("感情", r"戀愛|感情|分手|約會|婚姻|另一半|男友|女友|曖昧|渣|伴侶|老公|老婆|兩性"), ("娛樂", r"韓劇|日劇|電影|影集|演唱會|女星|男星|偶像|Netflix|劇|專輯|MV|綜藝|金鐘|金馬|女團|男團"),
@@ -903,6 +912,28 @@ def p_media():
     per = {}
     for v in heads.values():
         per[v["s"]] = per.get(v["s"], 0) + 1
+    # 國際版分類比例
+    try:
+        ih = json.loads(FASHION_HEADS_INTL.read_text(encoding="utf-8")) if FASHION_HEADS_INTL.exists() else {}
+    except Exception:  # noqa: BLE001
+        ih = {}
+    for src, url in FASHION_INTL.items():
+        try:
+            for it in _fashion_feed("rss", url)[:80]:
+                k = it["url"] or (src + it["title"])
+                ih[k] = {"s": src, "t": it["title"][:120], "at": it["at"] or (ih.get(k) or {}).get("at") or NOW_ISO,
+                         "c": _fashion_cat(it["url"], it.get("rc"), it["title"])}
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{src}: {safe_err(e)}")
+    ih = {k: v for k, v in ih.items() if v.get("at", "") >= cut30}
+    write_json(FASHION_HEADS_INTL, ih, separators=(",", ":"))
+    i30 = list(ih.values())
+    i7 = [v for v in i30 if v.get("at", "") >= cut7_]
+    isrc: dict = {}
+    for v in i30:
+        isrc.setdefault(v["s"], []).append(v)
+    cats["intl"] = {"w7": _cnt(i7), "d30": _cnt(i30), "n7": len(i7), "n30": len(i30),
+                    "src30": {s_: _cnt(rows) for s_, rows in sorted(isrc.items(), key=lambda kv: -len(kv[1]))}}
     return {"items": latest[:16], "intl": intl, "together": together, "cats": cats, "week_n": len(week), "lexicon": len(heads), "per_source": per, "errs": errs}
 
 
