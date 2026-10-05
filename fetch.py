@@ -115,7 +115,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"voice": 280, "pop": 150, "house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -2191,6 +2191,167 @@ def p_think():
     week = (NOW.astimezone(TPE) - timedelta(days=7)).isoformat()
     return {"label": "McKinsey Insights", "groups": list(groups.values()), "podcast": pod,
             "week": sum(1 for x in items if x.get("at", "") >= week), "total": len(items)}
+
+
+# ---------- 聲量雷達：關鍵字的搜尋熱度（Google 趨勢，台灣機房抓）、討論量（Google 收錄的 Dcard／PTT／Mobile01／痞客邦）、新聞量 ----------
+VOICE_KW_PATH = ROOT / "ops" / "voice_keywords.json"
+VOICE_SITES = [("Dcard", "dcard.tw"), ("PTT", "ptt.cc"), ("Mobile01", "mobile01.com"), ("痞客邦", "pixnet.net")]
+GNEWS = "https://news.google.com/rss/search"
+
+
+def _gnews(q):
+    from email.utils import parsedate_to_datetime
+    r = get(GNEWS, params={"q": q, "hl": "zh-TW", "gl": "TW", "ceid": "TW:zh-Hant"})
+    out = []
+    for it in ET.fromstring(r.content).iter("item"):
+        try:
+            at = parsedate_to_datetime(it.findtext("pubDate") or "").astimezone(timezone.utc)
+        except Exception:  # noqa: BLE001
+            continue
+        t = html_mod.unescape((it.findtext("title") or "").strip())
+        src = (it.find("source").text if it.find("source") is not None else "") or ""
+        t = re.sub(r"\s+-\s+" + re.escape(src) + r"\s*$", "", t) if src else t
+        out.append({"title": t[:120], "url": (it.findtext("link") or "").strip(), "at": at.isoformat().replace("+00:00", "Z"), "source": src[:30]})
+    return out
+
+
+def p_voice():
+    """每個關鍵字三種訊號：搜尋熱度、討論量（依平台）、新聞量；附 30 天每日新聞量與自動判讀。"""
+    kws = json.loads(VOICE_KW_PATH.read_text(encoding="utf-8"))["keywords"]
+    try:
+        gt = relay_get("latest/gtrends", 60 * 24)
+    except Exception as e:  # noqa: BLE001
+        gt = {"kw": {}, "errs": {"_": safe_err(e)}}
+    now = NOW.astimezone(timezone.utc)
+    d30 = now - timedelta(days=30)
+    d7 = now - timedelta(days=7)
+    days = [(now - timedelta(days=29 - i)).astimezone(TPE).strftime("%Y-%m-%d") for i in range(30)]
+    out, errs = [], []
+    for kw in kws:
+        q = kw["q"]
+        row = {"k": kw["k"], "q": q, "group": kw.get("group", "")}
+        try:
+            news = [x for x in _gnews(f'"{q}" when:30d') if datetime.fromisoformat(x["at"].replace("Z", "+00:00")) >= d30]
+            row["news30"] = len(news)
+            row["news7"] = sum(1 for x in news if datetime.fromisoformat(x["at"].replace("Z", "+00:00")) >= d7)
+            cnt = {d: 0 for d in days}
+            for x in news:
+                dd = datetime.fromisoformat(x["at"].replace("Z", "+00:00")).astimezone(TPE).strftime("%Y-%m-%d")
+                if dd in cnt:
+                    cnt[dd] += 1
+            row["news_daily"] = [cnt[d] for d in days]
+            row["news_top"] = news[:3]
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{kw['k']} 新聞: {safe_err(e)}")
+        disc, ditems = {}, []
+        for nm, site in VOICE_SITES:
+            try:
+                got = [x for x in _gnews(f'"{q.split()[0] if kw.get("group") == "客戶" else q}" site:{site}')]
+                recent = [x for x in got if datetime.fromisoformat(x["at"].replace("Z", "+00:00")) >= now - timedelta(days=90)]
+                disc[nm] = len(recent)
+                ditems += [{**x, "src": nm} for x in recent[:3]]
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{kw['k']} {nm}: {safe_err(e)}")
+            time.sleep(0.4)
+        row["disc90"] = disc
+        row["disc_total"] = sum(disc.values())
+        row["disc_top"] = sorted(ditems, key=lambda x: x["at"], reverse=True)[:4]
+        tr = (gt.get("kw") or {}).get(kw["k"]) or []
+        vals = [v for _, v in tr]
+        row["trend"] = vals[-90:]
+        if len(vals) >= 28:
+            a, b = sum(vals[-14:]) / 14, sum(vals[-28:-14]) / 14
+            row["trend_chg"] = round((a - b) / b * 100) if b else (100 if a else 0)
+            row["trend_level"] = round(a)
+        # 自動判讀
+        up = (row.get("trend_chg") or 0) >= 15
+        down = (row.get("trend_chg") or 0) <= -15
+        talk = row["disc_total"] >= 8
+        press = row.get("news30", 0) >= 10
+        if up and talk:
+            tag = "正在發燒：搜尋和討論一起升，適合借勢"
+        elif up and press and not talk:
+            tag = "媒體在推、消費者還沒聊開：適合做教育型內容卡位"
+        elif up:
+            tag = "搜尋在升：需求變大，可以提前布局"
+        elif down and press:
+            tag = "媒體還熱、搜尋在降：小心追高"
+        elif talk and not press:
+            tag = "社群自己在聊、媒體沒跟：口碑型話題，適合 KOL／UGC"
+        elif press and not talk:
+            tag = "只有媒體在寫：聲量偏公關稿，消費者討論少"
+        elif not row.get("trend") and not talk and not press:
+            tag = "聲量很小：要靠自己定義話題"
+        else:
+            tag = "平穩"
+        row["tag"] = tag
+        hist_put("voice_news", kw["k"], NOW.astimezone(TPE).strftime("%Y-%m-%d"), row.get("news7", 0))
+        out.append(row)
+    for k, e in (gt.get("errs") or {}).items():
+        errs.append(f"搜尋趨勢 {k}: {e}"[:160])
+    return {"label": "Google 趨勢（台灣機房）・Google 新聞收錄", "kw": out, "gt_at": gt.get("at"), "errs": errs[:12]}
+
+
+# ---------- 流行排行：Spotify、Netflix、Apple Podcast、KKBOX、LINE TODAY（台灣） ----------
+def p_pop():
+    out, errs = {}, []
+    try:  # Spotify 台灣每日（kworb 整理官方排行）
+        r = get("https://kworb.net/spotify/country/tw_daily.html")
+        txt = r.content.decode("utf-8", "replace")
+        rows = []
+        for tr in re.findall(r"<tr>(.*?)</tr>", txt, re.S)[1:21]:
+            cells = [html_mod.unescape(re.sub(r"<[^>]+>", "", c)).strip() for c in re.findall(r"<td[^>]*>(.*?)</td>", tr, re.S)]
+            if len(cells) >= 7 and cells[0].isdigit():
+                at = cells[2].split(" - ", 1)
+                rows.append({"rank": int(cells[0]), "move": cells[1], "artist": at[0], "title": at[1] if len(at) > 1 else "", "days": num(cells[3]), "streams": num(cells[6])})
+        out["spotify"] = rows
+    except Exception as e:  # noqa: BLE001
+        errs.append("Spotify: " + safe_err(e))
+    try:  # Netflix 官方每週前十（全球檔，只取台灣最新一週）
+        r = get("https://www.netflix.com/tudum/top10/data/all-weeks-countries.tsv", timeout=90)
+        lines = [l.split("\t") for l in r.content.decode("utf-8", "replace").splitlines() if "\tTW\t" in l]
+        wk = max(l[2] for l in lines)
+        nf = {"week": wk, "films": [], "tv": []}
+        for l in lines:
+            if l[2] != wk:
+                continue
+            item = {"rank": int(l[4]), "title": l[6] if l[6] not in ("N/A", "") else l[5], "show": l[5], "weeks": int(num(l[7]) or 1)}
+            (nf["films"] if l[3] == "Films" else nf["tv"]).append(item)
+        nf["films"].sort(key=lambda x: x["rank"]); nf["tv"].sort(key=lambda x: x["rank"])
+        out["netflix"] = nf
+    except Exception as e:  # noqa: BLE001
+        errs.append("Netflix: " + safe_err(e))
+    try:  # Apple Podcast 台灣熱門
+        j = gjson("https://rss.applemarketingtools.com/api/v2/tw/podcasts/top/25/podcasts.json")
+        out["podcast"] = [{"rank": i + 1, "title": x.get("name", ""), "artist": x.get("artistName", ""), "url": x.get("url", ""),
+                           "genre": ((x.get("genres") or [{}])[0] or {}).get("name", "")} for i, x in enumerate(j["feed"]["results"][:20])]
+    except Exception as e:  # noqa: BLE001
+        errs.append("Podcast: " + safe_err(e))
+    try:  # KKBOX 每日單曲（華語）
+        j = gjson("https://kma.kkbox.com/charts/api/v1/daily", params={"category": "297", "lang": "tc", "limit": "20", "terr": "tw", "type": "song"})
+        songs = (((j.get("data") or {}).get("charts") or {}).get("song") or [])
+        out["kkbox"] = [{"rank": x["rankings"]["this_period"], "last": x["rankings"].get("last_period"), "title": x.get("song_name", ""),
+                         "artist": x.get("artist_name", ""), "url": x.get("song_url", "")} for x in songs[:20]]
+    except Exception as e:  # noqa: BLE001
+        errs.append("KKBOX: " + safe_err(e))
+    try:  # LINE TODAY 即時熱門
+        r = get("https://today.line.me/tw/v2/tab/top")
+        m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', r.text, re.S)
+        fb = json.loads(m.group(1))["props"]["pageProps"]["fallback"]
+        best = []
+        for k, v in fb.items():
+            arts = v if isinstance(v, list) else (v.get("items") or v.get("articles") or []) if isinstance(v, dict) else []
+            arts = [a for a in arts if isinstance(a, dict) and a.get("title")]
+            if len(arts) > len(best):
+                best = arts
+        out["line"] = [{"rank": i + 1, "title": a["title"], "source": a.get("publisher", ""), "cat": a.get("categoryName", ""),
+                        "url": ("https://today.line.me/tw/v2/article/" + a["url"]["hash"]) if isinstance(a.get("url"), dict) and a["url"].get("hash") else ""}
+                       for i, a in enumerate(best[:15])]
+    except Exception as e:  # noqa: BLE001
+        errs.append("LINE TODAY: " + safe_err(e))
+    if not out:
+        raise RuntimeError("pop: nothing " + "; ".join(errs)[:160])
+    return {"label": "Spotify・Netflix・Apple Podcast・KKBOX・LINE TODAY", **out, "errs": errs}
 
 
 # ---------- 國道・省道即時路況（彰化機房抓的高公局、公路局資料） ----------
@@ -5866,6 +6027,8 @@ run("veg", p_veg, keep_if_fresh_hours=6)
 
 DATA.mkdir(exist_ok=True)
 run("think", p_think, keep_if_fresh_hours=2)
+run("voice", p_voice, keep_if_fresh_hours=6)
+run("pop", p_pop, keep_if_fresh_hours=3)
 run("roads", p_roads)
 run("mapfeed", p_mapfeed)  # 吃本輪其他面板的結果，不打外部 API
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
