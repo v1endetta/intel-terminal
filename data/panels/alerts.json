@@ -1,6 +1,33 @@
 {
  "alerts": [
   {
+   "id": "TWC_water_202610051420",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "高雄市"
+   ],
+   "text": "因三民區鼎中路89號100mmPVCP漏水搶修。",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T06:20:02Z",
+   "exp": "2026-10-05T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051420.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261005141840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣",
+    "臺中市"
+   ],
+   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
+   "src": "水利署",
+   "at": "2026-10-05T06:18:40Z",
+   "exp": "2026-10-05T17:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005141840_0000.cap"
+  },
+  {
    "id": "TWC_water_202610051410",
    "cat": "停水",
    "lvl": 1,
@@ -253,20 +280,6 @@
    "at": "2026-10-05T04:30:01Z",
    "exp": "2026-10-05T17:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051230.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261005121840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "苗栗縣",
-    "臺中市"
-   ],
-   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
-   "src": "水利署",
-   "at": "2026-10-05T04:18:40Z",
-   "exp": "2026-10-05T15:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005121840_0000.cap"
   },
   {
    "id": "TWC_water_202610051200",
@@ -998,12 +1011,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 77,
+ "n_total": 78,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/05 14:08:16"
+  "updated": "2026/10/05 14:17:15"
  },
  "errs": [],
- "updatedAt": "2026-10-05T06:11:20Z"
+ "updatedAt": "2026-10-05T06:21:32Z"
 }
