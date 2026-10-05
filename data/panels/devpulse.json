@@ -3,21 +3,11 @@
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "My 10/4 Reset vanished, how do I get it back?",
-   "url": "https://community.openai.com/t/my-10-4-reset-vanished-how-do-i-get-it-back/1403334",
-   "replies": 4,
-   "likes": 8,
-   "views": 140,
-   "at": "2026-10-05T01:40:59Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
    "title": "Looking for a vision replacement for GPT-5-mini",
    "url": "https://community.openai.com/t/looking-for-a-vision-replacement-for-gpt-5-mini/1403328",
    "replies": 2,
-   "likes": 8,
-   "views": 56,
+   "likes": 9,
+   "views": 61,
    "at": "2026-10-05T01:23:01Z"
   },
   {
@@ -26,19 +16,29 @@
    "title": "Gpt-live-transcribe: deltas stop mid-item with no event, and audio appended after that is ",
    "url": "https://community.openai.com/t/gpt-live-transcribe-deltas-stop-mid-item-with-no-event-and-audio-appended-after-that-is-never-transcribed/1403323",
    "replies": 1,
-   "likes": 6,
-   "views": 32,
+   "likes": 8,
+   "views": 35,
    "at": "2026-10-05T00:36:59Z"
   },
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "Selected model is at capacity. Please try a different model. GPT-6 Luna",
-   "url": "https://community.openai.com/t/selected-model-is-at-capacity-please-try-a-different-model-gpt-6-luna/1403410",
-   "replies": 1,
+   "title": "My 10/4 Reset vanished, how do I get it back?",
+   "url": "https://community.openai.com/t/my-10-4-reset-vanished-how-do-i-get-it-back/1403334",
+   "replies": 4,
+   "likes": 8,
+   "views": 145,
+   "at": "2026-10-05T01:40:59Z"
+  },
+  {
+   "source": "OpenAI 論壇",
+   "vendor": "openai",
+   "title": "Codex Windows app displays \"GPT-6 Astra\" but actually requests \"gpt-6-luna\" (UI / effectiv",
+   "url": "https://community.openai.com/t/codex-windows-app-displays-gpt-6-astra-but-actually-requests-gpt-6-luna-ui-effective-model-mismatch/1403393",
+   "replies": 6,
    "likes": 2,
-   "views": 109,
-   "at": "2026-10-05T09:14:26Z"
+   "views": 118,
+   "at": "2026-10-05T08:18:26Z"
   },
   {
    "source": "OpenAI 論壇",
@@ -57,7 +57,7 @@
    "url": "https://discuss.ai.google.dev/t/claude-opus-sonnet-5-5-not-showing-on-google-ai-pro-offered-through-jio/186704",
    "replies": 1,
    "likes": 0,
-   "views": 105,
+   "views": 113,
    "at": "2026-10-05T02:21:20Z"
   },
   {
@@ -67,7 +67,7 @@
    "url": "https://discuss.ai.google.dev/t/claude-opus-5-5-and-sonnet-5-5-not-appearing-in-model-picker-google-ai-pro/186745",
    "replies": 1,
    "likes": 0,
-   "views": 46,
+   "views": 50,
    "at": "2026-10-05T02:25:21Z"
   },
   {
@@ -75,9 +75,9 @@
    "vendor": "google",
    "title": "Can't rename or archive a conversation",
    "url": "https://discuss.ai.google.dev/t/cant-rename-or-archive-a-conversation/186703",
-   "replies": 5,
+   "replies": 6,
    "likes": 0,
-   "views": 24,
+   "views": 26,
    "at": "2026-10-05T02:13:42Z"
   },
   {
@@ -87,18 +87,18 @@
    "url": "https://discuss.ai.google.dev/t/google-ai-pro-plan-not-recognized-stuck-on-antigravity-starter-quota/186741",
    "replies": 2,
    "likes": 0,
-   "views": 21,
+   "views": 22,
    "at": "2026-10-05T02:24:52Z"
   },
   {
    "source": "Google AI 論壇",
    "vendor": "google",
-   "title": "Objet : URGENT — Publier exclusivement la dernière version corrigée le 4 octobre 2026",
-   "url": "https://discuss.ai.google.dev/t/objet-urgent-publier-exclusivement-la-derniere-version-corrigee-le-4-octobre-2026/186641",
-   "replies": 1,
+   "title": "Can't even finish a single /boost with Claude in Pro Plan",
+   "url": "https://discuss.ai.google.dev/t/cant-even-finish-a-single-boost-with-claude-in-pro-plan/186666",
+   "replies": 0,
    "likes": 0,
-   "views": 24,
-   "at": "2026-10-04T15:26:45Z"
+   "views": 31,
+   "at": "2026-10-04T18:52:33Z"
   }
  ],
  "changelogs": [
@@ -141,6 +141,15 @@
   {
    "source": "Claude release notes",
    "vendor": "anthropic",
+   "date": "October 1, 2026",
+   "kind": null,
+   "title": "We've added a line field to the Models API.",
+   "url": "https://platform.claude.com/docs/en/release-notes/overview",
+   "at": "2026-10-01T00:00:00Z"
+  },
+  {
+   "source": "Claude release notes",
+   "vendor": "anthropic",
    "date": "September 30, 2026",
    "kind": null,
    "title": "We announced the deprecation of the Claude Sonnet 4.5 model (claude-sonnet-4-5-20250929), with retirement on the Claude API scheduled for No",
@@ -164,15 +173,6 @@
    "title": "We're resuming billing for refusals that arrive before any output when stopdetails.category is \"bio\", \"frontierllm\", or \"reasoningextraction",
    "url": "https://platform.claude.com/docs/en/release-notes/overview",
    "at": "2026-09-24T00:00:00Z"
-  },
-  {
-   "source": "Claude release notes",
-   "vendor": "anthropic",
-   "date": "September 23, 2026",
-   "kind": null,
-   "title": "Cache diagnostics is out of beta on the Claude API and no longer requires the cache-diagnosis-2026-04-07 beta header.",
-   "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-09-23T00:00:00Z"
   },
   {
    "source": "Gemini changelog",
@@ -297,9 +297,9 @@
  ],
  "errs": [],
  "diag": [
-  "Gemini changelog md: got html 156488b",
+  "Gemini changelog md: got html 156492b",
   "DeepSeek updates md: got html 48088b",
   "xAI release notes md: 18497b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### grok-vo'"
  ],
- "updatedAt": "2026-10-05T16:08:51Z"
+ "updatedAt": "2026-10-05T17:13:49Z"
 }
