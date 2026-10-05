@@ -1782,19 +1782,18 @@ function q5(P,cards){const G=(P.think||{}).groups||[];if(!G.length)return;
      p("rect",{x:L,y:y+3,width:bw,height:rh-9,rx:1.5,style:`fill:var(--blue);opacity:${i<3?.9:.6}`});
      p("text",{x:L+bw+6,y:y+13,class:"num"},String(v));
      if(hasPrev&&d)p("text",{x:L+bw+30,y:y+13,class:"num",style:`fill:var(${d>0?"--up":"--down"})`},(d>0?"+":"")+d);});}
-  /* 圖二：三類每週篇數 */
+  /* 圖二：三類每週篇數（只算已經過完的週，本週還沒過完不畫，避免看起來像掉到 0） */
   {const wk=t=>{const d=new Date(t);d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d.getTime();};
-   const w0=wk(now),weeks=[...Array(8)].map((_,i)=>w0-(7-i)*7*D),S=[["tech","科技與 AI","--blue"],["consumer","消費與行銷","--warn"],["macro","總經與產業","--muted"]];
+   const w0=wk(now)-7*D,weeks=[...Array(8)].map((_,i)=>w0-(7-i)*7*D),S=[["tech","科技與 AI","--blue"],["consumer","消費與行銷","--warn"],["macro","總經與產業","--muted"]];
    const ser=S.map(([k])=>weeks.map(w=>it.filter(x=>x.g===k&&wk(x.t)===w).length)),mx=Math.max(1,...ser.flat());
-   const W=420,H=96,L=22,B=16,cw=(W-L-70)/7;const p=draw("ib5w",W,H+B);
-   if(p){[0,mx].forEach(v=>{const y=H-v/mx*(H-8);p("line",{x1:L,y1:y,x2:W-70,y2:y,class:"g",opacity:.5});p("text",{x:L-4,y:y+4,"text-anchor":"end",class:"num"},String(v));});
-     weeks.forEach((w,i)=>{if(i%2===1||i===7)p("text",{x:L+cw*i,y:H+B-2,"text-anchor":"middle"},new Date(w).toISOString().slice(5,10).replace("-","/"));});
-     const first=weeks.findIndex(w=>it.some(x=>wk(x.t)===w));
-     S.forEach(([k,nm,c],si)=>{const pts=ser[si].map((v,i)=>[L+cw*i,H-v/mx*(H-8)]).slice(Math.max(0,first));if(!pts.length)return;
+   const W=420,T0=22,H=92,L=22,B=16,cw=(W-L-12)/7;const p=draw("ib5w",W,T0+H+B);
+   if(p){S.forEach(([k,nm,c],si)=>p("text",{x:L+si*128,y:11,style:`fill:var(${c})`},`● ${nm} ${ser[si][7]} 篇`));
+     [0,mx].forEach(v=>{const y=T0+H-v/mx*(H-6);p("line",{x1:L,y1:y,x2:W-8,y2:y,class:"g",opacity:.5});p("text",{x:L-4,y:y+4,"text-anchor":"end",class:"num"},String(v));});
+     weeks.forEach((w,i)=>{if(i%2===1)p("text",{x:L+cw*i,y:T0+H+B-2,"text-anchor":"middle"},new Date(w).toISOString().slice(5,10).replace("-","/")+" 週");});
+     const first=Math.max(0,weeks.findIndex(w=>it.some(x=>wk(x.t)===w)));
+     S.forEach(([k,nm,c],si)=>{const pts=ser[si].map((v,i)=>[L+cw*i,T0+H-v/mx*(H-6)]).slice(first);if(!pts.length)return;
        p("polyline",{points:pts.map(q=>q.join(",")).join(" "),style:`fill:none;stroke:var(${c});stroke-width:1.8;opacity:.95`});
-       pts.forEach(q=>p("circle",{cx:q[0],cy:q[1],r:2,style:`fill:var(${c})`}));
-       const last=pts[pts.length-1];p("text",{x:W-66,y:12+si*14,style:`fill:var(${c})`},`● ${nm} ${ser[si][7]}`);});
-     if(first>3)p("text",{x:L+4,y:12,style:"fill:var(--dim)"},`資料從 ${new Date(weeks[first]).toISOString().slice(5,10).replace("-","/")} 起累積`);}}
+       pts.forEach(q=>p("circle",{cx:q[0],cy:q[1],r:2.2,style:`fill:var(${c})`}));});}}
   /* 必讀 */
   const recent=it.filter(x=>now-x.t<14*D).sort((a,b)=>b.t-a.t),pick=[...recent.filter(x=>x.g==="consumer").slice(0,2),...recent.filter(x=>x.g==="tech").slice(0,1)];
   if(pick.length<3)pick.push(...recent.filter(x=>!pick.includes(x)).slice(0,3-pick.length));
