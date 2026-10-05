@@ -1,7 +1,29 @@
 {
  "alerts": [
   {
-   "id": "TWC_water_202610051420",
+   "id": "cwa.gov.tw_thunderstorm_20261005143151_000",
+   "cat": "雷雨",
+   "lvl": 2,
+   "area": [],
+   "text": "115年10月05日14時31分氣象署發布大雷雨即時訊息，持續時間至15時31分；有短延時強降雨發生，並伴隨較強陣風、閃電落雷，請慎防溪(河)水暴漲、低窪地區積水、低能見度、雷擊",
+   "src": "中央氣象署",
+   "at": "2026-10-05T06:32:52Z",
+   "exp": "2026-10-05T15:31:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/thunderstorm/cwa.gov.tw_thunderstorm_20261005143151_000.cap"
+  },
+  {
+   "id": "TWC_water_202610051430",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [],
+   "text": "因惠來里惠來72-42號旁100mmPVCP漏水搶修。",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T06:30:01Z",
+   "exp": "2026-10-05T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051430.cap"
+  },
+  {
+   "id": "TWC_water_202610051430",
    "cat": "停水",
    "lvl": 1,
    "area": [
@@ -9,9 +31,24 @@
    ],
    "text": "因三民區鼎中路89號100mmPVCP漏水搶修。",
    "src": "台灣自來水公司",
-   "at": "2026-10-05T06:20:02Z",
+   "at": "2026-10-05T06:30:01Z",
    "exp": "2026-10-05T17:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051420.cap"
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051430.cap"
+  },
+  {
+   "id": "CWA-Weather_extremely-rain_202610051428001",
+   "cat": "降雨",
+   "lvl": 2,
+   "area": [
+    "基隆市",
+    "彰化縣",
+    "南投縣"
+   ],
+   "text": "東北季風影響，易有短延時強降雨，今(5)日基隆北海岸、大臺北地區有局部大雨發生的機率；午後對流發展旺盛，易有短延時強降雨，彰化以南及南投地區亦有局部大雨發生的機率，請注意雷擊及強陣風，山區請慎防坍方、落石及溪水暴漲，低窪地區請慎防積水。",
+   "src": "中央氣象署",
+   "at": "2026-10-05T06:28:01Z",
+   "exp": "2026-10-06T00:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610051428.cap"
   },
   {
    "id": "WRA_ReservoirWarn_20261005141840_0000",
@@ -378,19 +415,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051130.cap"
   },
   {
-   "id": "TWC_water_202610051120",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [
-    "臺南市"
-   ],
-   "text": "10/05 11:00-14:30，因『台南市安南區長溪路三段458號』路面漏水緊急搶修，造成該區域部分無水與降壓",
-   "src": "台灣自來水公司",
-   "at": "2026-10-05T03:20:01Z",
-   "exp": "2026-10-05T14:30:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051120.cap"
-  },
-  {
    "id": "TWC_water_202610051050",
    "cat": "停水",
    "lvl": 1,
@@ -461,38 +485,12 @@
    "cat": "停水",
    "lvl": 1,
    "area": [
-    "高雄市"
-   ],
-   "text": "彌陀區中正南路一巷與中正南路口漏水搶修",
-   "src": "台灣自來水公司",
-   "at": "2026-10-05T02:10:02Z",
-   "exp": "2026-10-05T14:30:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051010.cap"
-  },
-  {
-   "id": "TWC_water_202610051010",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [
     "臺中市"
    ],
    "text": "台中市西屯區環中路三段與朝馬路口停水施工",
    "src": "台灣自來水公司",
    "at": "2026-10-05T02:10:02Z",
    "exp": "2026-10-05T17:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051010.cap"
-  },
-  {
-   "id": "TWC_water_202610051010",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [
-    "南投縣"
-   ],
-   "text": "南投縣鹿谷鄉151線10k+270m(逆向)興產路81-15號附近破管搶修。",
-   "src": "台灣自來水公司",
-   "at": "2026-10-05T02:10:02Z",
-   "exp": "2026-10-05T14:30:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051010.cap"
   },
   {
@@ -1015,8 +1013,8 @@
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/05 14:17:15"
+  "updated": "2026/10/05 14:41:15"
  },
  "errs": [],
- "updatedAt": "2026-10-05T06:21:32Z"
+ "updatedAt": "2026-10-05T06:39:07Z"
 }
