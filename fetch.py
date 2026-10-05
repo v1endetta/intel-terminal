@@ -2025,6 +2025,70 @@ def p_geo():
             "totals": {k: sum(v.get(k, 0) for v in summary.values()) for k in ("parking", "bikes", "speed")}, "errs": GEO_ERRS[:12]}
 
 
+# ---------- 智庫觀點：McKinsey Insights（RSS 有標題、摘要、分類；全文在官網，擋機房主機所以只存摘要＋連結） ----------
+THINK_RSS = "https://www.mckinsey.com/insights/rss"
+THINK_POD = "https://www.omnycontent.com/d/playlist/708664bd-6843-4623-8066-aede00ce0c8a/3f6f52af-fba1-496d-b11b-af040139456a/bfe0b44a-082f-495a-952a-af0401394590/podcast.rss"
+THINK_GROUPS = [
+    ("tech", "科技與 AI", re.compile(r"\bAI\b|Artificial|Generative|Technolog|Digital|Cloud|Cyber|Semiconductor|High Tech|Software|Data|Analytics|Disruptive|Automation|Robot|Quantum|Telecom", re.I)),
+    ("consumer", "消費與行銷", re.compile(r"Consumer|Retail|Marketing|Sales|Growth|Luxury|Fashion|Brand|Customer|Travel|Media|Entertainment|Apparel|Beauty|Food|Hospitality", re.I)),
+]
+
+
+def _rss_items(text):
+    from email.utils import parsedate_to_datetime
+    root = ET.fromstring(text.encode("utf-8") if isinstance(text, str) else text)
+    out = []
+    for it in root.iter("item"):
+        g = lambda t: html_mod.unescape((it.findtext(t) or "").strip())
+        at = ""
+        try:
+            at = parsedate_to_datetime(g("pubDate")).astimezone(TPE).isoformat()
+        except Exception:  # noqa: BLE001
+            try:  # McKinsey 只給日期（Fri, 02 Oct 2026）
+                at = datetime.strptime(g("pubDate")[:16].strip(), "%a, %d %b %Y").replace(hour=12, tzinfo=TPE).isoformat()
+            except Exception:  # noqa: BLE001
+                at = ""
+        cats = [html_mod.unescape(html_mod.unescape((c.text or "").strip())) for c in it.findall("category") if (c.text or "").strip()]
+        out.append({"title": g("title"), "desc": re.sub(r"<[^>]+>", "", g("description"))[:400], "url": g("link"), "at": at, "cats": cats[:8]})
+    return out
+
+
+def p_think():
+    """McKinsey 最新文章，依分類拆成科技與 AI／消費與行銷／總經與產業；保留 120 天。"""
+    prev = []
+    try:
+        old = json.loads((PANELS / "think.json").read_text(encoding="utf-8"))
+        prev = [x for g_ in old.get("groups", []) for x in g_.get("items", [])]
+    except Exception:  # noqa: BLE001
+        pass
+    fresh = _rss_items(get(THINK_RSS).text)
+    if not fresh:
+        raise RuntimeError("mckinsey rss empty")
+    by_url = {x["url"]: x for x in prev if x.get("url")}
+    for x in fresh:
+        by_url[x["url"]] = {**by_url.get(x["url"], {}), **x}
+    cutoff = (NOW.astimezone(TPE) - timedelta(days=120)).isoformat()
+    items = sorted((x for x in by_url.values() if x.get("at", "") >= cutoff), key=lambda x: x.get("at", ""), reverse=True)
+    groups = {k: {"key": k, "name": nm, "items": []} for k, nm, _ in THINK_GROUPS}
+    groups["macro"] = {"key": "macro", "name": "總經與產業", "items": []}
+    for x in items:
+        blob = " ".join(x.get("cats") or []) + " " + x.get("title", "")
+        score = {k: len(rx.findall(blob)) for k, _, rx in THINK_GROUPS}
+        best = max(score, key=lambda k: score[k])
+        k = best if score[best] > 0 else "macro"
+        x["src"] = "McKinsey"
+        if len(groups[k]["items"]) < 60:
+            groups[k]["items"].append(x)
+    pod = []
+    try:
+        pod = [{"title": x["title"], "url": x["url"], "at": x["at"]} for x in _rss_items(get(THINK_POD).text)[:6]]
+    except Exception as e:  # noqa: BLE001
+        log("think podcast", safe_err(e))
+    week = (NOW.astimezone(TPE) - timedelta(days=7)).isoformat()
+    return {"label": "McKinsey Insights", "groups": list(groups.values()), "podcast": pod,
+            "week": sum(1 for x in items if x.get("at", "") >= week), "total": len(items)}
+
+
 # ---------- 國道・省道即時路況（彰化機房抓的高公局、公路局資料） ----------
 ROADS_GEO_PATH = DATA / "roads_geo.json"
 ROADS_LIVE_PATH = DATA / "roads_live.json"
@@ -5681,6 +5745,7 @@ run("veg", p_veg, keep_if_fresh_hours=6)
 # run("tiktok", p_tiktok, keep_if_fresh_hours=20)  # Creative Center 擋資料中心 IP，每輪白耗 60 秒，先停
 
 DATA.mkdir(exist_ok=True)
+run("think", p_think, keep_if_fresh_hours=2)
 run("roads", p_roads)
 run("mapfeed", p_mapfeed)  # 吃本輪其他面板的結果，不打外部 API
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪

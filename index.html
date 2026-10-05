@@ -128,6 +128,7 @@ td.r,th.r{white-space:nowrap}
 /* movers：單列橫向滑 */
 .tp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .rd{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.rd h3 .sub{font-weight:400}.rd h3+table,.rd h3+ul{margin-bottom:8px}
+.th-c .list li .t a{color:var(--text)}.th-c .list li .t .sub{display:block;margin-top:2px;line-height:1.45}.th-pod{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:10px;padding-top:8px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}.th-pod a{color:var(--muted)}
 .rd-chips{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 10px}.rd-chip{border:1px solid var(--c);color:var(--c);padding:2px 8px;border-radius:3px;font-size:12px}.rd-chip b{color:var(--text);font-weight:600;margin-left:2px}
 @media (max-width:900px){.rd{grid-template-columns:1fr}}
 @media (max-width:640px){.tp{grid-template-columns:1fr}}
@@ -746,6 +747,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
       <div class="ib-viz"><h3>設計與國際時尚<span class="n">最新</span></h3><ul class="ib-top" id="ib4t" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:10px">本週藝文<span class="n">文化部 · 快閉展優先</span></h3><ul class="ib-top" id="ib4e" style="border-top:0;padding-top:0"></ul></div></div></section>
 
 
+  <section class="panel w12 cap" id="p-think">
+    <div class="ph"><h2>Think Tank</h2><span class="zh">智庫觀點 · McKinsey 最新文章</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.mckinsey.com/featured-insights" target="_blank" rel="noopener">McKinsey Insights</a><span>RSS 只有標題、摘要與分類，全文點連結到官網看 · 依分類自動分三欄 · 保留 120 天，可在資料庫搜尋</span></div>
+  </section>
+
   <section class="panel w12 hero cap tall" id="p-news">
     <div class="ph"><h2>News</h2><span class="zh">時事 · 台灣 / 國際 / 關鍵字</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -1154,6 +1161,10 @@ const renderers={
     const TY=((window.LASTP||{}).typhoon||{}).items||[];const ty=TY.map(t=>{const x=(t.past||[]).slice(-1)[0]||{};const r15=x.r15||((t.fc||[])[0]||{}).r15;return`<div class="warn">颱風 <b>${esc(t.name||t.en)}</b>${t.en&&t.name?" "+esc(t.en):""}${x.ll?` · 中心 ${x.ll[1].toFixed(1)}°N ${x.ll[0].toFixed(1)}°E`:""}${x.wind?` · 最大風速 ${x.wind} m/s`:""}${r15?` · 暴風半徑 ${r15} km`:""}${x.mv?` · 往${esc(x.dir)} ${x.mv} km/h`:""} · <a href="#" data-tyfit style="color:inherit">地圖看路徑</a></div>`;}).join("");
     const w=ty+((d.warnings||[]).length?`<div class="warn">特報：${d.warnings.map(x=>esc(x.where+" "+x.what+(x.level?"("+x.level+")":""))).join("、")}</div>`:"");
     body("p-weather").innerHTML=`${w}<div class="wx wx3">${cards}</div>`;setMeta("p-weather",d,1);},
+  think(d){const md=x=>x.at?String(x.at).slice(5,10).replace("-","/"):"";const fresh=x=>x.at&&Date.now()-new Date(x.at).getTime()<2*864e5;
+    const col=g=>`<div class="th-c"><h3>${esc(g.name)} <span class="sub">${(g.items||[]).length} 篇</span></h3><ul class="list">${(g.items||[]).slice(0,10).map(x=>`<li><span class="src" ${fresh(x)?'style="color:var(--up)"':""}>${md(x)}</span><span class="t"><a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title)}</a><span class="sub">${esc((x.cats||[]).filter(c=>!/^Insights on|Insights$/.test(c)).slice(0,3).join(" · "))}${x.desc?" — "+esc(x.desc.slice(0,90))+(x.desc.length>90?"…":""):""}</span></span></li>`).join("")||'<li class="empty">近期沒有</li>'}</ul></div>`;
+    const pod=(d.podcast||[]).length?`<div class="th-pod"><span>🎧 Podcast</span>${d.podcast.slice(0,4).map(x=>`<a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title.slice(0,48))}</a>`).join("")}</div>`:"";
+    body("p-think").innerHTML=`<div class="rd">${(d.groups||[]).map(col).join("")}</div>${pod}`;setMeta("p-think",{...d,label:`${d.label} · 近 7 天 ${d.week||0} 篇`},4);},
   roads(d){const F=d.fw||{},T=d.thb||{},lv=T.levels||{};
     const fr=(F.roads||[]).map(r=>`<tr><td class="name">${esc(String(r.road).replace("國道","國道 "))} ${esc(r.dir)}${mini(r.spark)}</td><td class="r num ${n(r.speed)<60?"bad":n(r.speed)>=80?"up":""}">${fmt(n(r.speed),0)}<span class="sub">km/h</span></td><td class="r num ${n(r.slow_km)>0?"bad":""}">${n(r.slow_km)>0?fmt(n(r.slow_km),1):"—"}</td></tr>`).join("");
     const jl=a=>(a||[]).slice(0,8).map(j=>`<li><span class="t">${esc(j.title)}${j.km?`<span class="sub"> ${esc(j.km)}</span>`:""}</span><span class="m bad">${fmt(n(j.speed),0)} km/h</span></li>`).join("");
@@ -1708,6 +1719,7 @@ function setup(){
   Object.entries(BANDS).forEach(([b,ps])=>{order["ib"+b]=b*10;ps.forEach(([id],i)=>{const el=document.getElementById(id);if(!el)return;el.dataset.band=b;el.style.order=b*10+1+i;if(open.has(id))el.classList.add("ib-open");});
     const box=document.querySelector(`.ib-more[data-band="${b}"]`);if(!box)return;
     box.innerHTML=`<span class="lbl">看全部</span>`+ps.map(([id,nm])=>`<button type="button" data-ibp="${id}" aria-pressed="${open.has(id)}">${nm}</button>`).join("")+(ps.length>1?`<button type="button" data-iball="${b}">全部</button>`:"");});
+  order["p-think"]=50;
   Object.entries(order).forEach(([id,o])=>{const el=document.getElementById(id);if(el)el.style.order=o;});
   document.addEventListener("click",e=>{
     const p=e.target.closest("[data-ibp]"),all=e.target.closest("[data-iball]"),card=e.target.closest("[data-ibgo]");
@@ -1840,7 +1852,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"macro","p-house":"live",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro",
-  "ib-sig":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
+  "ib-sig":"intel","p-think":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
   "brief":"overview","ov":"overview","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
