@@ -1789,7 +1789,7 @@ function q5(P,cards){const G=(P.think||{}).groups||[];if(!G.length)return;
    const W=420,T0=22,H=92,L=22,B=16,cw=(W-L-12)/7;const p=draw("ib5w",W,T0+H+B);
    if(p){S.forEach(([k,nm,c],si)=>p("text",{x:L+si*128,y:11,style:`fill:var(${c})`},`● ${nm} ${ser[si][7]} 篇`));
      [0,mx].forEach(v=>{const y=T0+H-v/mx*(H-6);p("line",{x1:L,y1:y,x2:W-8,y2:y,class:"g",opacity:.5});p("text",{x:L-4,y:y+4,"text-anchor":"end",class:"num"},String(v));});
-     weeks.forEach((w,i)=>{if(i%2===1)p("text",{x:L+cw*i,y:T0+H+B-2,"text-anchor":"middle"},new Date(w).toISOString().slice(5,10).replace("-","/")+" 週");});
+     weeks.forEach((w,i)=>{if(i%2===1)p("text",{x:L+cw*i,y:T0+H+B-2,"text-anchor":i===7?"end":"middle"},new Date(w).toISOString().slice(5,10).replace("-","/")+" 週");});
      const first=Math.max(0,weeks.findIndex(w=>it.some(x=>wk(x.t)===w)));
      S.forEach(([k,nm,c],si)=>{const pts=ser[si].map((v,i)=>[L+cw*i,T0+H-v/mx*(H-6)]).slice(first);if(!pts.length)return;
        p("polyline",{points:pts.map(q=>q.join(",")).join(" "),style:`fill:none;stroke:var(${c});stroke-width:1.8;opacity:.95`});
