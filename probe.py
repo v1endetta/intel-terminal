@@ -1,19 +1,29 @@
-import os, json, requests
-os.makedirs("out24", exist_ok=True)
+import os, json, re, requests
+os.makedirs("out25", exist_ok=True)
 S = requests.Session(); S.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0 Safari/537.36"
 rep = {}
-try:
-    tags = S.get("https://gamma-api.polymarket.com/tags", params={"limit": 300}, timeout=30).json()
-    rep["tags"] = [(t.get("slug"), t.get("label")) for t in tags][:300]
-except Exception as e: rep["tags_err"] = repr(e)[:200]
-for slug in ["fed", "fed-rates", "economy", "geopolitics", "ai", "tech", "crypto", "china", "taiwan", "midterms", "elections", "business", "science", "climate", "ukraine", "middle-east", "trade", "tariffs", "recession", "inflation", "big-tech", "openai"]:
+U = {
+ "rss": "https://www.mckinsey.com/insights/rss",
+ "rss_aspx": "https://www.mckinsey.com/Insights/rss.aspx",
+ "tech_page": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights",
+ "featured": "https://www.mckinsey.com/featured-insights",
+ "mgi": "https://www.mckinsey.com/mgi/our-research",
+ "podcast": "https://www.omnycontent.com/d/playlist/708664bd-6843-4623-8066-aede00ce0c8a/3f6f52af-fba1-496d-b11b-af040139456a/bfe0b44a-082f-495a-952a-af0401394590/podcast.rss",
+ "article": "https://www.mckinsey.com/industries/financial-services/our-insights/pause-pivot-or-accelerate-saas-in-the-age-of-agentic-ai",
+ "bcg_rss": "https://www.bcg.com/rss",
+ "bain_rss": "https://www.bain.com/insights/rss/",
+ "deloitte_insights": "https://www2.deloitte.com/us/en/insights.rss.xml",
+}
+for k, u in U.items():
     try:
-        ev = S.get("https://gamma-api.polymarket.com/events", params={"tag_slug": slug, "active": "true", "closed": "false", "order": "volume24hr", "ascending": "false", "limit": 6}, timeout=30).json()
-        rep["ev_" + slug] = [(e.get("title"), round(e.get("volume24hr") or 0), len(e.get("markets") or [])) for e in ev][:6]
-    except Exception as e: rep["ev_" + slug] = repr(e)[:120]
-for sym in ["2YY=F", "NIY=F", "RTY=F", "YM=F", "^TNX", "TSM", "TWD=X"]:
-    try:
-        j = S.get(f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}", params={"range": "5d", "interval": "1d"}, timeout=20).json()
-        m = j["chart"]["result"][0]["meta"]; rep["y_" + sym] = (m.get("regularMarketPrice"), m.get("currency"), m.get("shortName"))
-    except Exception as e: rep["y_" + sym] = repr(e)[:120]
-open("out24/report.json", "w").write(json.dumps(rep, ensure_ascii=False, indent=1))
+        r = S.get(u, timeout=30)
+        t = r.text
+        rep[k] = {"status": r.status_code, "bytes": len(t), "ct": r.headers.get("content-type", "")[:40],
+                  "items": len(re.findall(r"<item[ >]", t)), "head": re.sub(r"\s+", " ", t[:300])}
+        if "<item" in t:
+            it = t[t.index("<item"):][:2500]
+            rep[k]["item0"] = re.sub(r"\s+", " ", it)
+            rep[k]["cats"] = sorted(set(re.findall(r"<category[^>]*>(?:<!\[CDATA\[)?([^<\]]+)", t)))[:80]
+    except Exception as e:
+        rep[k] = {"err": repr(e)[:200]}
+open("out25/report.json", "w").write(json.dumps(rep, ensure_ascii=False, indent=1))
