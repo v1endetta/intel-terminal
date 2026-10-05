@@ -1,36 +1,39 @@
-import os, json, re, requests
+import os, json, re, requests, time, urllib.parse
 os.makedirs("out25", exist_ok=True)
 S = requests.Session(); S.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0 Safari/537.36"
-GN = "https://news.google.com/rss/search?hl=zh-TW&gl=TW&ceid=TW:zh-Hant&q="
-U = {
- "dcard_api": "https://www.dcard.tw/service/api/v2/posts?popular=true&limit=5",
- "gn_dcard": GN + "site:dcard.tw",
- "gn_dcard_kw": GN + "site:dcard.tw+%E8%A3%9D%E6%BD%A2",
- "gn_threads": GN + "site:threads.net",
- "gn_mobile01": GN + "site:mobile01.com",
- "gn_pixnet": GN + "site:pixnet.net",
- "mobile01": "https://www.mobile01.com/",
- "apple_podcast_tw": "https://rss.applemarketingtools.com/api/v2/tw/podcasts/top/25/podcasts.json",
- "apple_music_tw": "https://rss.applemarketingtools.com/api/v2/tw/music/most-played/25/songs.json",
- "apple_books_tw": "https://rss.applemarketingtools.com/api/v2/tw/books/top-paid/25/books.json",
- "kkbox": "https://kma.kkbox.com/charts/api/v1/daily?category=297&lang=tc&limit=20&terr=tw&type=song",
- "tiktok_cc": "https://ads.tiktok.com/creative_radar_api/v1/popular_trend/hashtag/list?page=1&limit=20&period=7&country_code=TW&sort_by=popular",
- "tiktok_cc_page": "https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en",
- "womany": "https://womany.net/feed",
- "womany2": "https://womany.net/rss",
- "gtrends_rss": "https://trends.google.com/trending/rss?geo=TW",
- "gtrends_explore": "https://trends.google.com/trends/api/explore?hl=zh-TW&tz=-480&req=%7B%22comparisonItem%22%3A%5B%7B%22keyword%22%3A%22%E5%A1%97%E6%96%99%22%2C%22geo%22%3A%22TW%22%2C%22time%22%3A%22today%203-m%22%7D%5D%2C%22category%22%3A0%2C%22property%22%3A%22%22%7D",
- "ptt_search": "https://www.ptt.cc/bbs/home-sale/search?q=%E5%A1%97%E6%96%99",
- "yt_rss_search": "https://www.youtube.com/feeds/videos.xml?search_query=%E8%A3%9D%E6%BD%A2",
- "bahamut": "https://forum.gamer.com.tw/",
- "line_today": "https://today.line.me/tw/v2/tab/top",
-}
 rep = {}
-for k, u in U.items():
+def g(k, u, **kw):
     try:
-        r = S.get(u, timeout=25, cookies={"over18": "1"}); t = r.text
-        rep[k] = {"status": r.status_code, "bytes": len(t), "items": len(re.findall(r"<item>", t)), "head": re.sub(r"\s+", " ", t[:200]),
-                  "titles": [re.sub(r"\s+", " ", x)[:60] for x in re.findall(r"<title>(?:<!\[CDATA\[)?([^<\]]+)", t)[1:5]]}
+        r = S.get(u, timeout=25, **kw); rep[k] = {"status": r.status_code, "bytes": len(r.text), "head": re.sub(r"\s+", " ", r.text[:300])}; return r
     except Exception as e:
         rep[k] = {"err": repr(e)[:150]}
+r = g("kworb_tw", "https://kworb.net/spotify/country/tw_daily.html")
+if r is not None and r.ok: rep["kworb_rows"] = re.findall(r'<td class="text mp"><div>(.*?)</div>', r.text)[:5]
+r = g("kworb_tw_weekly", "https://kworb.net/spotify/country/tw_weekly.html")
+g("spotify_charts", "https://charts-spotify-com-service.spotify.com/public/v0/charts")
+r = g("nf_top10_tw", "https://www.netflix.com/tudum/top10/taiwan")
+if r is not None and r.ok:
+    rep["nf_titles"] = re.findall(r'"name":"([^"]{2,60})"', r.text)[:12]
+    rep["nf_len_json"] = len(re.findall(r"__NEXT_DATA__|window\.netflix", r.text))
+g("nf_tsv", "https://www.netflix.com/tudum/top10/data/all-weeks-countries.tsv")
+g("flixpatrol", "https://flixpatrol.com/top10/netflix/taiwan/")
+r = g("line_today", "https://today.line.me/tw/v2/tab/top")
+if r is not None and r.ok:
+    m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', r.text, re.S)
+    rep["lt_next"] = bool(m); rep["lt_titles"] = re.findall(r'"title":"([^"]{6,60})"', r.text)[:10]
+g("line_today_api", "https://today.line.me/webapi/portal/page/setting?country=tw&path=top")
+r = g("apple_pod", "https://rss.applemarketingtools.com/api/v2/tw/podcasts/top/25/podcasts.json")
+if r is not None and r.ok: rep["pod"] = [x["name"] for x in r.json()["feed"]["results"][:5]]
+# google trends interest over time
+try:
+    req = {"comparisonItem": [{"keyword": k, "geo": "TW", "time": "today 3-m"} for k in ["塗料", "外泌體", "設計家具"]], "category": 0, "property": ""}
+    r = S.get("https://trends.google.com/trends/api/explore", params={"hl": "zh-TW", "tz": "-480", "req": json.dumps(req, ensure_ascii=False)}, timeout=25)
+    rep["gt_explore"] = r.status_code
+    w = json.loads(r.text[4:])["widgets"]; ts = [x for x in w if x["id"] == "TIMESERIES"][0]
+    time.sleep(2)
+    r2 = S.get("https://trends.google.com/trends/api/widgetdata/multiline", params={"hl": "zh-TW", "tz": "-480", "req": json.dumps(ts["request"], ensure_ascii=False), "token": ts["token"]}, timeout=25)
+    rep["gt_multi"] = r2.status_code
+    tl = json.loads(r2.text[5:])["default"]["timelineData"]; rep["gt_points"] = len(tl); rep["gt_last"] = tl[-3:]
+except Exception as e:
+    rep["gt_err"] = repr(e)[:200]
 open("out25/report.json", "w").write(json.dumps(rep, ensure_ascii=False, indent=1))
