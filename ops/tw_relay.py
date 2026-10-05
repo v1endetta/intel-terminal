@@ -189,7 +189,7 @@ def _gt_cookie(headers, ck):
 
 def gtrends(state):
     """Google 搜尋趨勢（台灣、近 90 天、每個關鍵字各自 0–100）。6 小時抓一次。"""
-    if time.time() - state.get("gt_at2", 0) < 6 * 3600:
+    if time.time() - state.get("gt_at3", 0) < 6 * 3600:
         return
     kws = json.loads(get("https://raw.githubusercontent.com/v1endetta/intel-terminal/main/ops/voice_keywords.json"))["keywords"]
     out, errs, ck = {}, {}, {}
@@ -199,7 +199,7 @@ def gtrends(state):
         except Exception as e:  # noqa: BLE001
             errs["_home"] = repr(e)[:160]
     for kw in kws:
-        q = kw["q"].split()[0] if kw.get("group") == "客戶" else kw["q"]
+        q = kw["q"]
         try:
             req = {"comparisonItem": [{"keyword": q, "geo": "TW", "time": "today 3-m"}], "category": 0, "property": ""}
             u = "https://trends.google.com/trends/api/explore?" + urllib.parse.urlencode({"hl": "zh-TW", "tz": "-480", "req": json.dumps(req, ensure_ascii=False)})
@@ -214,7 +214,7 @@ def gtrends(state):
         time.sleep(3)
     errs["_cookies"] = ",".join(sorted(ck))
     gcs_put("relay/latest/gtrends.json.gz", gz({"at": NOW_ISO, "kw": out, "errs": errs}))
-    state["gt_at2"] = time.time() if out else time.time() - 5 * 3600  # 全失敗的話一小時後再試
+    state["gt_at3"] = time.time() if out else time.time() - 5 * 3600  # 全失敗的話一小時後再試
     log("gtrends", len(out), "ok", len(errs), "err", errs.get("_cookies"))
 
 

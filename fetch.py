@@ -2246,7 +2246,7 @@ def p_voice():
         disc, ditems = {}, []
         for nm, site in VOICE_SITES:
             try:
-                got = [x for x in _gnews_full(f'"{q.split()[0] if kw.get("group") == "客戶" else q}" site:{site}')]
+                got = [x for x in _gnews_full(" ".join(f'"{w}"' for w in q.split()) + f" site:{site}")]
                 recent = [x for x in got if datetime.fromisoformat(x["at"].replace("Z", "+00:00")) >= now - timedelta(days=90)]
                 disc[nm] = len(recent)
                 ditems += [{**x, "src": nm} for x in recent[:3]]
@@ -2261,8 +2261,13 @@ def p_voice():
         row["trend"] = vals[-90:]
         if len(vals) >= 28:
             a, b = sum(vals[-14:]) / 14, sum(vals[-28:-14]) / 14
-            row["trend_chg"] = round((a - b) / b * 100) if b else (100 if a else 0)
+            nz_a, nz_b = sum(1 for v in vals[-14:] if v), sum(1 for v in vals[-28:-14] if v)
             row["trend_level"] = round(a)
+            # 搜尋量太低時 Google 會把很多天回 0，前後兩週都要有 10 天以上有數字才算變化
+            if nz_a >= 10 and nz_b >= 10 and b:
+                row["trend_chg"] = round((a - b) / b * 100)
+            else:
+                row["trend_sparse"] = True
         # 自動判讀
         up = (row.get("trend_chg") or 0) >= 15
         down = (row.get("trend_chg") or 0) <= -15
@@ -2280,7 +2285,7 @@ def p_voice():
             tag = "社群自己在聊、媒體沒跟：口碑型話題，適合 KOL／UGC"
         elif press and not talk:
             tag = "只有媒體在寫：聲量偏公關稿，消費者討論少"
-        elif not row.get("trend") and not talk and not press:
+        elif (not row.get("trend") or row.get("trend_sparse")) and not talk and not press:
             tag = "聲量很小：要靠自己定義話題"
         else:
             tag = "平穩"
