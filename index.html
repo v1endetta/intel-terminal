@@ -2208,7 +2208,7 @@ return{before,after};
 
 /* ================= 資料庫：Google Cloud（BigQuery）查詢 ================= */
 const VAULT=(()=>{
-const GCP={project:"intel-vault-510704",client:"",scope:"https://www.googleapis.com/auth/bigquery https://www.googleapis.com/auth/devstorage.read_only"};
+const GCP={project:"intel-vault-510704",client:"896764575828-12fm45fjbmsp2a5ctaa1eret07mbe894.apps.googleusercontent.com",scope:"https://www.googleapis.com/auth/bigquery https://www.googleapis.com/auth/devstorage.read_only"};
 const T_SNAP="`intel-vault-510704.intel.snapshots`",T_ITEM="`intel-vault-510704.intel.items`";
 let tok=null,tokExp=0,usage=0;
 try{const s=JSON.parse(sessionStorage.getItem("vault:tok")||"null");if(s&&s[1]>Date.now()+60e3){tok=s[0];tokExp=s[1];}}catch(e){}
