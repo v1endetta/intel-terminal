@@ -1,6 +1,30 @@
 {
  "alerts": [
   {
+   "id": "TWC_water_202610051110",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [],
+   "text": "石牌加壓站設備故障，緊急搶修中，造成不便，敬請見諒。",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T03:10:02Z",
+   "exp": "2026-10-05T16:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051110.cap"
+  },
+  {
+   "id": "TWC_water_202610051100",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "高雄市"
+   ],
+   "text": "因前鎮區廣東三街420巷27號100mmPVCP漏水搶修。",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T03:00:02Z",
+   "exp": "2026-10-05T12:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610051100.cap"
+  },
+  {
    "id": "TWC_water_202610051050",
    "cat": "停水",
    "lvl": 1,
@@ -675,20 +699,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610050430.cap"
   },
   {
-   "id": "CWA-Weather_extremely-rain_202610050042001",
-   "cat": "降雨",
-   "lvl": 2,
-   "area": [
-    "宜蘭縣",
-    "花蓮縣"
-   ],
-   "text": "對流雲系發展旺盛，易有短延時強降雨，今(5)日宜蘭縣有局部大雨或豪雨，花蓮有局部大雨發生的機率，請注意雷擊及強陣風，山區請慎防坍方、落石及溪水暴漲，低窪地區請慎防積水。",
-   "src": "中央氣象署",
-   "at": "2026-10-04T16:42:10Z",
-   "exp": "2026-10-05T11:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610050042.cap"
-  },
-  {
    "id": "NFA_Fire_20261004223629008",
    "cat": "火災",
    "lvl": 1,
@@ -759,19 +769,6 @@
    "at": "2026-10-04T13:24:00Z",
    "exp": "2026-10-05T21:24:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/NFA/2026/NFA_Fire/NFA_Fire_20261004204350007.cap"
-  },
-  {
-   "id": "CWA-Weather_extremely-rain_202610042102001",
-   "cat": "降雨",
-   "lvl": 2,
-   "area": [
-    "宜蘭縣"
-   ],
-   "text": "對流雲系發展旺盛，易有短延時強降雨，今(4日)晚至明(5)日宜蘭縣有局部大雨或豪雨，請注意雷擊及強陣風，山區請慎防坍方、落石及溪水暴漲，低窪地區請慎防積水。",
-   "src": "中央氣象署",
-   "at": "2026-10-04T13:02:49Z",
-   "exp": "2026-10-05T11:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610042102.cap"
   },
   {
    "id": "TWC_water_202610042050",
@@ -1022,8 +1019,8 @@
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/05 10:44:15"
+  "updated": "2026/10/05 11:08:14"
  },
  "errs": [],
- "updatedAt": "2026-10-05T02:54:37Z"
+ "updatedAt": "2026-10-05T03:10:11Z"
 }
