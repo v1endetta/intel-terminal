@@ -838,7 +838,8 @@ def p_media():
     for v in sorted(h7, key=lambda v: v.get("at", ""), reverse=True):
         if not FASHION_AD.search(v["t"]) or v.get("c") == "星座":
             ex7.setdefault(v.get("c") or "生活", v["t"])
-    cats = {"order": FASHION_CATS, "w7": _cnt(h7), "p7": _cnt(hp7), "d30": _cnt(h30), "n7": len(h7), "n30": len(h30),
+    sp = {v["s"] for v in hp7}  # 跟上週比只算兩週都有資料的雜誌，避免新加入的來源灌水
+    cats = {"order": FASHION_CATS, "w7": _cnt(h7), "p7": _cnt(hp7), "w7cmp": _cnt([v for v in h7 if v["s"] in sp]), "d30": _cnt(h30), "n7": len(h7), "n30": len(h30),
             "src30": {s_: _cnt(rows) for s_, rows in sorted(src30.items(), key=lambda kv: -len(kv[1]))}, "ex7": ex7,
             "span_days": round((NOW - min((datetime.fromisoformat(v["at"].replace("Z", "+00:00")) for v in heads.values() if v.get("at")), default=NOW)).total_seconds() / 86400, 1)}
     # 本週同框：近 7 天、排除業配與星座專欄，同一個詞在 2 家以上台灣媒體出現（家數多的排前面）

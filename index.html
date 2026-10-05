@@ -1867,7 +1867,7 @@ function render(P){
   if(tg.length)cards.push(["ib4","時尚同框",esc(cap(tg[0].term)),"",`同時出現在 <b>${tg[0].sources.join("、")}</b>，共 ${tg[0].n} 則`]);
   const up=ly.find(l=>n(l.move)>0);
   const FC=M.cats,catLine=FC&&FC.n7?(()=>{const w=FC.order.map(k=>[k,FC.w7[k]||0]).sort((a,b)=>b[1]-a[1]);const pc=k=>Math.round((FC.w7[k]||0)/FC.n7*100);
-      let up=null;if(FC.span_days>=14){FC.order.forEach(k=>{const d=(FC.w7[k]||0)-(FC.p7[k]||0);if(!up||d>up[1])up=[k,d];});}
+      let up=null;if(FC.span_days>=14){FC.order.forEach(k=>{const d=((FC.w7cmp||FC.w7)[k]||0)-(FC.p7[k]||0);if(!up||d>up[1])up=[k,d];});}
       return`近 7 天 <em>${FC.n7}</em> 篇，寫最多的是<b>${w[0][0]}</b>（<em>${pc(w[0][0])}%</em>），其次<b>${w[1][0]}</b>、<b>${w[2][0]}</b>${up&&up[1]>0?`；比上週多最多的是<b>${up[0]}</b>（<em class="up">+${up[1]}</em>）`:""}。`;})():"";
   if(FC)fashionCats("ib4s",FC);
   $("#ib4a").innerHTML=catLine+(tg.length?`本週台灣時尚媒體的共同題目是<b>${tg.slice(0,3).map(t=>esc(cap(t.term))).join("、")}</b>。`:"本週還沒有共同題目。")+(ly[0]?`Lyst 全球最熱是 <b>${esc(ly[0].brand)}</b>${up?`，<b>${esc(up.brand)}</b> 往上爬`:""}。`:"");
