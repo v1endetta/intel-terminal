@@ -1,6 +1,73 @@
 {
  "alerts": [
   {
+   "id": "TWC_water_202610050820",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "彰化縣"
+   ],
+   "text": "為提升供水穩定度、降低管線漏水風險並確保民眾用水水質安全，辦理北斗-埔心鄉鎮國路等汰換管線工程，以強化整體供水系統效能，提供更安心可靠之用水服務。",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T00:20:01Z",
+   "exp": "2026-10-05T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050820.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261005081840_0002",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣",
+    "臺中市"
+   ],
+   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
+   "src": "水利署",
+   "at": "2026-10-05T00:18:40Z",
+   "exp": "2026-10-05T11:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005081840_0002.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261005081840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "雲林縣",
+    "嘉義縣"
+   ],
+   "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
+   "src": "水利署",
+   "at": "2026-10-05T00:18:40Z",
+   "exp": "2026-10-05T11:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005081840_0001.cap"
+  },
+  {
+   "id": "TWC_water_202610050810",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "臺南市"
+   ],
+   "text": "為提升供水穩定度、降低管線漏水風險並確保民眾用水水質安全，辦理西港區金砂及南海里等汰換管線工程，以強化整體供水系統效能，提供更安心可靠之用水服務。",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T00:10:02Z",
+   "exp": "2026-10-05T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050810.cap"
+  },
+  {
+   "id": "TWC_water_202610050810",
+   "cat": "停水",
+   "lvl": 1,
+   "area": [
+    "雲林縣"
+   ],
+   "text": "斗六市凱旋街搶修。",
+   "src": "台灣自來水公司",
+   "at": "2026-10-05T00:10:02Z",
+   "exp": "2026-10-05T12:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610050810.cap"
+  },
+  {
    "id": "CWA-Weather_heat_202610050731001",
    "cat": "高溫",
    "lvl": 2,
@@ -14,34 +81,6 @@
    "at": "2026-10-04T23:31:47Z",
    "exp": "2026-10-05T17:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610050731.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261005061840_0001",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "苗栗縣",
-    "臺中市"
-   ],
-   "text": "水利署訊鯉魚潭水庫:(洩洪至景山溪):自由溢流,影響範圍:苗栗縣，三義鄉；臺中市，外埔區、大甲區、后里區、大安區",
-   "src": "水利署",
-   "at": "2026-10-04T22:18:40Z",
-   "exp": "2026-10-05T09:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005061840_0001.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261005061840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "雲林縣",
-    "嘉義縣"
-   ],
-   "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
-   "src": "水利署",
-   "at": "2026-10-04T22:18:40Z",
-   "exp": "2026-10-05T09:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261005061840_0000.cap"
   },
   {
    "id": "CWA-Weather_extremely-rain_202610050454001",
@@ -308,19 +347,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610021440.cap"
   },
   {
-   "id": "TWC_water_202610021350",
-   "cat": "停水",
-   "lvl": 1,
-   "area": [
-    "臺南市"
-   ],
-   "text": "為提升供水穩定度、降低管線漏水風險並確保民眾用水水質安全， 辦理將軍區青鯤鯓等汰換管線工程，以強化整體供水系統效能， 提供更安心可靠之用水服務。",
-   "src": "台灣自來水公司",
-   "at": "2026-10-02T05:50:01Z",
-   "exp": "2026-10-05T17:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202610021350.cap"
-  },
-  {
    "id": "TWC_water_202610021140",
    "cat": "停水",
    "lvl": 1,
@@ -439,12 +465,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/TWC/2026/TWC_water/TWC_water_202609300910.cap"
   }
  ],
- "n_total": 33,
+ "n_total": 35,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/05 08:02:15"
+  "updated": "2026/10/05 08:20:57"
  },
  "errs": [],
- "updatedAt": "2026-10-05T00:01:05Z"
+ "updatedAt": "2026-10-05T00:24:16Z"
 }
