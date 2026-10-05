@@ -2029,6 +2029,7 @@ def p_geo():
 ROADS_GEO_PATH = DATA / "roads_geo.json"
 ROADS_LIVE_PATH = DATA / "roads_live.json"
 DIR_ZH = {"N": "北", "S": "南", "E": "東", "W": "西", "B": "雙向"}
+_dz = lambda x: f"{DIR_ZH[x]}向" if x in DIR_ZH else ""
 CMS_KW = re.compile(r"施工|事故|封閉|封\(|封）|管制|壅塞|回堵|故障|注意|颱風|豪雨|大雨|濃霧|霧|落石|坍方|車禍|散落|改道|地震|強風|拋錨|火警|路面")
 
 
@@ -2128,9 +2129,9 @@ def _roads_geo():
         names = {}
         for r in relay_rows(sec):
             if key == "fw":
-                names[r["SectionID"]] = f'{r.get("RoadName", "")}{DIR_ZH.get(r.get("RoadDirection"), "")}向 {r.get("RoadSection.Start", "")}→{r.get("RoadSection.End", "")}'
+                names[r["SectionID"]] = f'{r.get("RoadName", "")}{_dz(r.get("RoadDirection"))} {r.get("RoadSection.Start", "")}→{r.get("RoadSection.End", "")}'
             else:
-                names[r["SectionID"]] = f'{r.get("RoadName", "")}{DIR_ZH.get(r.get("RoadDirection"), "")}向 {r.get("SectionMile.StartKM", "")}～{r.get("SectionMile.EndKM", "")}'
+                names[r["SectionID"]] = f'{r.get("RoadName", "")}{_dz(r.get("RoadDirection"))} {r.get("SectionMile.StartKM", "")}～{r.get("SectionMile.EndKM", "")}'
         ids, nm, cs = [], [], []
         for sid, wkt in shp["rows"]:
             pts = _dp(_wkt_line(wkt), tol)
@@ -2195,7 +2196,7 @@ def p_roads():
                 pr = per.setdefault(road, [0, 0])
                 pr[0] += 1; pr[1] += 1 if lvl == 3 else 0
             if lvl in (2, 3) and spd and spd > 0 and road:
-                tj.append({"title": f'{road}{DIR_ZH.get(s_.get("RoadDirection"), "")}向 {s_.get("SectionMile.StartKM", "")}～{s_.get("SectionMile.EndKM", "")}',
+                tj.append({"title": f'{road}{_dz(s_.get("RoadDirection"))} {s_.get("SectionMile.StartKM", "")}～{s_.get("SectionMile.EndKM", "")}',
                            "road": road, "speed": round(spd), "lvl": lvl})
         names = {-1: "封閉", 0: "資料不足", -99: "資料不足", 1: "順暢", 2: "車多", 3: "壅塞"}
         for k_, v_ in sorted(lv.items()):
