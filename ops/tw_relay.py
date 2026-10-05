@@ -162,34 +162,60 @@ def gz(obj):
     return gzip.compress(json.dumps(obj, ensure_ascii=False, separators=(",", ":")).encode("utf-8"), 9)
 
 
+def _gt_open(u, ck):
+    """Trends 需要 NID cookie；被 429 時把回應帶的 cookie 收起來再試一次。"""
+    for i in range(3):
+        h = {"User-Agent": UA, "Accept-Language": "zh-TW,zh;q=0.9", "Referer": "https://trends.google.com/trends/explore?geo=TW"}
+        if ck:
+            h["Cookie"] = "; ".join(f"{k}={v}" for k, v in ck.items())
+        try:
+            r = urllib.request.urlopen(urllib.request.Request(u, headers=h), timeout=30)
+            _gt_cookie(r.headers, ck)
+            return r.read().decode("utf-8")
+        except urllib.error.HTTPError as e:
+            _gt_cookie(e.headers, ck)
+            if e.code != 429 or i == 2:
+                raise
+            time.sleep(4 + 4 * i)
+
+
+def _gt_cookie(headers, ck):
+    for c in headers.get_all("Set-Cookie") or []:
+        kv = c.split(";")[0]
+        if "=" in kv:
+            k, v = kv.split("=", 1)
+            ck[k.strip()] = v
+
+
 def gtrends(state):
-    """Google 搜尋趨勢（台灣、近 90 天、每個關鍵字各自 0–100）。GitHub 主機會被 429，所以放台灣機房；6 小時抓一次。"""
-    if time.time() - state.get("gt_at", 0) < 6 * 3600:
+    """Google 搜尋趨勢（台灣、近 90 天、每個關鍵字各自 0–100）。6 小時抓一次。"""
+    if time.time() - state.get("gt_at2", 0) < 6 * 3600:
         return
     kws = json.loads(get("https://raw.githubusercontent.com/v1endetta/intel-terminal/main/ops/voice_keywords.json"))["keywords"]
-    out, errs = {}, {}
-    ck = {}
+    out, errs, ck = {}, {}, {}
+    for u0 in ("https://trends.google.com/?geo=TW", "https://trends.google.com/trends/explore?geo=TW&hl=zh-TW"):
+        try:
+            _gt_open(u0, ck)
+        except Exception as e:  # noqa: BLE001
+            errs["_home"] = repr(e)[:160]
     for kw in kws:
         q = kw["q"].split()[0] if kw.get("group") == "客戶" else kw["q"]
         try:
             req = {"comparisonItem": [{"keyword": q, "geo": "TW", "time": "today 3-m"}], "category": 0, "property": ""}
             u = "https://trends.google.com/trends/api/explore?" + urllib.parse.urlencode({"hl": "zh-TW", "tz": "-480", "req": json.dumps(req, ensure_ascii=False)})
-            r = urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": UA, **({"Cookie": ck["c"]} if ck.get("c") else {})}), timeout=30)
-            if r.headers.get("Set-Cookie") and not ck.get("c"):
-                ck["c"] = r.headers.get("Set-Cookie").split(";")[0]
-            w = json.loads(r.read().decode("utf-8")[4:])["widgets"]
+            w = json.loads(_gt_open(u, ck)[4:])["widgets"]
             ts = [x for x in w if x["id"] == "TIMESERIES"][0]
             time.sleep(1.5)
             u2 = "https://trends.google.com/trends/api/widgetdata/multiline?" + urllib.parse.urlencode({"hl": "zh-TW", "tz": "-480", "req": json.dumps(ts["request"], ensure_ascii=False), "token": ts["token"]})
-            r2 = urllib.request.urlopen(urllib.request.Request(u2, headers={"User-Agent": UA, **({"Cookie": ck["c"]} if ck.get("c") else {})}), timeout=30)
-            tl = json.loads(r2.read().decode("utf-8")[5:])["default"]["timelineData"]
+            tl = json.loads(_gt_open(u2, ck)[5:])["default"]["timelineData"]
             out[kw["k"]] = [[x.get("formattedAxisTime") or x.get("time"), (x.get("value") or [0])[0]] for x in tl]
         except Exception as e:  # noqa: BLE001
             errs[kw["k"]] = repr(e)[:160]
         time.sleep(3)
+    errs["_cookies"] = ",".join(sorted(ck))
     gcs_put("relay/latest/gtrends.json.gz", gz({"at": NOW_ISO, "kw": out, "errs": errs}))
-    state["gt_at"] = time.time() if out else time.time() - 5 * 3600  # 全失敗的話一小時後再試
-    log("gtrends", len(out), "ok", len(errs), "err")
+    state["gt_at2"] = time.time() if out else time.time() - 5 * 3600  # 全失敗的話一小時後再試
+    log("gtrends", len(out), "ok", len(errs), "err", errs.get("_cookies"))
 
 
 def main():

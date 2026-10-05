@@ -2199,7 +2199,7 @@ VOICE_SITES = [("Dcard", "dcard.tw"), ("PTT", "ptt.cc"), ("Mobile01", "mobile01.
 GNEWS = "https://news.google.com/rss/search"
 
 
-def _gnews(q):
+def _gnews_full(q):
     from email.utils import parsedate_to_datetime
     r = get(GNEWS, params={"q": q, "hl": "zh-TW", "gl": "TW", "ceid": "TW:zh-Hant"})
     out = []
@@ -2231,7 +2231,7 @@ def p_voice():
         q = kw["q"]
         row = {"k": kw["k"], "q": q, "group": kw.get("group", "")}
         try:
-            news = [x for x in _gnews(f'"{q}" when:30d') if datetime.fromisoformat(x["at"].replace("Z", "+00:00")) >= d30]
+            news = [x for x in _gnews_full(" ".join(f'"{w}"' for w in q.split()) + " when:30d") if datetime.fromisoformat(x["at"].replace("Z", "+00:00")) >= d30]
             row["news30"] = len(news)
             row["news7"] = sum(1 for x in news if datetime.fromisoformat(x["at"].replace("Z", "+00:00")) >= d7)
             cnt = {d: 0 for d in days}
@@ -2246,7 +2246,7 @@ def p_voice():
         disc, ditems = {}, []
         for nm, site in VOICE_SITES:
             try:
-                got = [x for x in _gnews(f'"{q.split()[0] if kw.get("group") == "客戶" else q}" site:{site}')]
+                got = [x for x in _gnews_full(f'"{q.split()[0] if kw.get("group") == "客戶" else q}" site:{site}')]
                 recent = [x for x in got if datetime.fromisoformat(x["at"].replace("Z", "+00:00")) >= now - timedelta(days=90)]
                 disc[nm] = len(recent)
                 ditems += [{**x, "src": nm} for x in recent[:3]]
@@ -2288,6 +2288,8 @@ def p_voice():
         hist_put("voice_news", kw["k"], NOW.astimezone(TPE).strftime("%Y-%m-%d"), row.get("news7", 0))
         out.append(row)
     for k, e in (gt.get("errs") or {}).items():
+        if k == "_cookies" or (k.startswith("_") and gt.get("kw")):
+            continue
         errs.append(f"搜尋趨勢 {k}: {e}"[:160])
     return {"label": "Google 趨勢（台灣機房）・Google 新聞收錄", "kw": out, "gt_at": gt.get("at"), "errs": errs[:12]}
 
