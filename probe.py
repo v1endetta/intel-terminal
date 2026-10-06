@@ -15,14 +15,16 @@ try:
             except Exception:
                 pass
             pg.wait_for_timeout(3000)
-            for kind in ("industry", "index"):
+            for kind in ("industry",):
                 try:
                     t = pg.evaluate(JS, f"/n/json/data/{page}/{kind}")
                     st, body = t.split("|", 1)
                     info = {"status": st, "len": len(body)}
                     try:
                         j = json.loads(body)
-                        info["lines"] = [(k, v.get("name"), v.get("code"), (v.get("data") or [])[-3:]) for k, v in (j.get("line") or {}).items()]
+                        info["lines"] = [(k, v.get("name"), v.get("code"), [k2 for k2 in v if k2 != "data"], len(v.get("data") or []), [(len(sl), sl[0] if sl else None, sl[-2:] if sl else None) if isinstance(sl, list) else sl for sl in (v.get("data") or [])][:6]) for k, v in (j.get("line") or {}).items()]
+                        info["line2"] = json.dumps(j.get("line2"), ensure_ascii=False)[:3000]
+                        info["formula"] = json.dumps(j.get("formula"), ensure_ascii=False)[:1500]
                         info["keys"] = list(j.keys())
                     except Exception:
                         info["head"] = body[:800]
