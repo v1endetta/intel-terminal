@@ -2,7 +2,7 @@ import os, json, sys, traceback
 os.makedirs("out25", exist_ok=True)
 src = open("fetch_test.py", encoding="utf-8").read()
 cut = src.index("\nrun(")
-g = {"__name__": "fetchmod"}
+g = {"__name__": "fetchmod", "__file__": os.path.abspath("fetch_test.py")}
 rep = {}
 try:
     exec(compile(src[:cut], "fetch_test.py", "exec"), g)
