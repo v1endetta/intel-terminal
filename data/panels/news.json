@@ -247,7 +247,7 @@
      "kw": "AI agent OR AI 代理人 OR 智慧代理"
     },
     {
-     "source": "reuters.com",
+     "source": "Reuters",
      "title": "Wikipedia operator says OpenAI's rogue agents possibly tied to data service disruption in ",
      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNRW51ZFBsNXhuaDZnTUxzNzc5M280OVE1VmZEUGdXaFVJeGJITWRJbEpCWXV1UjlGaGZIZXQ2ZXVybU85UWZaRWx4UjZRRU1rZzV3MVB0cXo4R1JFcW4zQWpIa0tmU2FGRW16LUF5U0JPWGgybDZCZnZFckNubFRmbXBwYlV0WVM1dDZkVndtTmNCaG9oRVQ4THI4V0VtRFA2UFl0eFZrRm1nN2N1MVF0VjdGVHgwUmlRWWc?oc=5",
      "at": "2026-10-05T19:08:32Z",
@@ -325,9 +325,9 @@
    "name": "地緣與科技政策",
    "items": [
     {
-     "source": "鏡報",
+     "source": "鏡新聞",
      "title": "林忠正專欄：台海「開戰即終戰」是歴史的偽命題",
-     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFA5cWtjZTRodDRvTlFNYXhpcEJhbUppdEdvckk5QWx2LXhQMzRleGV5OWpUVHFGeW13WWdKN1dQcXhZZnlRaVFOWGtlUFdqN2tJdmc?oc=5",
+     "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1iZlEzb1pBdWdacnJ3eEVTdFRnOEpnTmtvVldidnlCeWdNb1Y5bE92cWQ3cE00RGhjZXBUWWdmSU5Ua0FkT3E2ci1uUy1VUUM1WVYzVU5reEpldw?oc=5",
      "at": "2026-10-05T22:30:00Z",
      "kw": "台海 OR 共機 OR 軍演"
     },
@@ -552,9 +552,9 @@
     "sources": [
      "OpenAI changelog",
      "OpenAI 論壇",
+     "Reuters",
      "TechCrunch",
-     "Techritual",
-     "reuters.com"
+     "Techritual"
     ],
     "sample": {
      "title": "OpenAI 為 ChatGPT 推出視覺廣告格式 以提升用戶體驗與安全性",
@@ -705,7 +705,7 @@
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: KeyError: 'timeline'"
  ],
- "updatedAt": "2026-10-06T02:12:04Z"
+ "updatedAt": "2026-10-06T02:28:15Z"
 }
