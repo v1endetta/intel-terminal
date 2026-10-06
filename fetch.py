@@ -299,8 +299,8 @@ def p_taiex():
     return out
 
 
-TW_WATCH = [("1476", "儒鴻", "紡織"), ("1477", "聚陽", "紡織"), ("1402", "遠東新", "紡織"),
-            ("2912", "統一超", "通路"), ("1216", "統一", "通路"), ("2903", "遠百", "通路")]
+TW_WATCH = [("2912", "統一超", "通路"), ("1216", "統一", "食品"), ("2903", "遠百", "百貨"), ("2727", "王品", "餐飲"),
+            ("2723", "美食-KY", "餐飲"), ("2707", "晶華", "飯店"), ("1476", "儒鴻", "機能服飾"), ("1477", "聚陽", "機能服飾")]
 # 觀察清單：(區塊, 代號, 名稱, 小分類)；債券 ETF 在櫃買
 TW_LIST = [("權值", c, n, "") for c, n in [("2330", "台積電"), ("2317", "鴻海"), ("2454", "聯發科"), ("2382", "廣達"), ("2308", "台達電"), ("3711", "日月光投控"),
                                           ("2881", "富邦金"), ("2882", "國泰金"), ("2412", "中華電"), ("2603", "長榮")]] + \
@@ -308,7 +308,7 @@ TW_LIST = [("權值", c, n, "") for c, n in [("2330", "台積電"), ("2317", "�
            ("ETF", "00919", "群益台灣精選高息", "高股息"), ("ETF", "00929", "復華台灣科技優息", "高股息"), ("ETF", "00940", "元大台灣價值高息", "高股息"),
            ("ETF", "00631L", "元大台灣50正2", "槓桿反向"), ("ETF", "00675L", "富邦臺灣加權正2", "槓桿反向"), ("ETF", "00632R", "元大台灣50反1", "槓桿反向"),
            ("ETF", "00679B", "元大美債20年", "債券"), ("ETF", "00687B", "國泰20年美債", "債券"), ("ETF", "00937B", "群益ESG投等債20+", "債券")] + \
-          [("客戶產業", c, n, g) for c, n, g in TW_WATCH]
+          [("消費", c, n, g) for c, n, g in TW_WATCH]
 TPEX_DAILY = "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes"
 
 
@@ -3812,7 +3812,17 @@ def p_news():
                     k = re.sub(r"\W+", "", it["title"])[:14]
                     if k not in seen:
                         seen.add(k); picked.append(it)
-        groups.append({"name": name, "items": picked})
+        # 近 7 天每天幾則（用全部命中、去重後算，不是只看挑出來的 4 則）
+        d7, seen7 = {}, set()
+        for it in got:
+            k7 = re.sub(r"\W+", "", it.get("title") or "")[:14]
+            if not it.get("at") or k7 in seen7:
+                continue
+            seen7.add(k7)
+            dd = datetime.fromisoformat(it["at"].replace("Z", "+00:00")).astimezone(TPE).date().isoformat()
+            d7[dd] = d7.get(dd, 0) + 1
+        days7 = [(TODAY_TPE - timedelta(days=6 - i)).isoformat() for i in range(7)]
+        groups.append({"name": name, "items": picked, "daily7": [d7.get(d, 0) for d in days7], "days7": days7})
 
     signals = {}
     g = _try("gdelt", _gdelt_signal)
