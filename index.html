@@ -452,9 +452,9 @@ canvas.o-fx{display:block;width:100%}
 .list li.o-grp{display:block;font:500 10px var(--mono);color:var(--dim);letter-spacing:.06em;padding:9px 0 3px;border-top:0}
 /* 分頁內固定順序：台灣先、國際後；快的先、月更的後；結論先、原文後 */
 #p-pulse{display:none!important}
-#p-taiex{order:1}#p-fx{order:2}#p-taifex{order:3}#p-fear{order:4}#p-tw-stocks{order:5}#p-mops{order:6}#p-world{order:7}#p-usbig{order:8}#p-sectors{order:9}#p-cmdty{order:10}#p-revenue{order:11}#p-lux{order:12}
+#p-taiex{order:1}#p-fx{order:2}#p-fear{order:3}#p-taifex{order:4}#p-world{order:5}#p-tw-stocks{order:6}#p-mops{order:7}#p-usbig{order:8}@media (min-width:1101px){#p-taiex{grid-row:span 2}}#p-sectors{order:9}#p-cmdty{order:10}#p-revenue{order:11}#p-lux{order:12}
 #p-macro{order:1}#p-gmacro{order:2}#p-calendar{order:3}#p-liq{order:4}#p-poly{order:5}#p-consume{order:6}#p-supply{order:7}#p-veg{order:8}#p-jobs{order:9}
-#ib-soc{order:0}#p-voice{order:0}#p-pop{order:0}#p-mood{order:1}#p-ptt{order:2}#p-cofacts{order:3}#p-attention{order:4}#p-trends{order:5}#p-youtube{order:6}#p-social{order:7}
+#ib-soc{order:0}#p-voice{order:0}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
 .grid{align-items:start}
 /* 桃機翻牌看板：只有變動的字會翻 */
 .fids{display:grid;gap:3px;align-content:start}
@@ -496,7 +496,8 @@ html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animati
 .tt-banner{position:sticky;top:0;z-index:50;background:var(--warn);color:#111;font:600 13px var(--mono);padding:8px 14px;display:flex;gap:14px;align-items:center}.tt-banner button{background:#111;color:var(--warn);border:0;border-radius:3px;padding:4px 10px;font:12px var(--mono);cursor:pointer}
 .vr-svg{width:100%;height:220px;display:block}.vr-svg text{font:10px var(--mono);fill:var(--dim)}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px}.chips button{background:var(--panel2);color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:2px 8px;font:11px var(--mono);cursor:pointer}.chips button.on{color:var(--blue);border-color:var(--blue)}.chips button i{font-style:normal;color:var(--dim);margin-left:4px}
-.mo-row{display:grid;grid-template-columns:78px 58px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:12.5px;align-items:baseline}.mo-row .d{font:10.5px var(--mono);color:var(--dim)}.mo-row .c{font:600 12px var(--mono);color:var(--text)}.mo-row .c small{display:block;font:400 10px var(--mono);color:var(--dim)}
+#p-twnow > .pcx.tn-box{display:grid;grid-template-columns:250px minmax(0,1fr);column-gap:22px;align-items:start}#p-twnow > .pcx.tn-box .pcx-h{grid-column:1/-1}.tn-side{list-style:none;margin:0;padding:0;display:grid;gap:0}.tn-side li{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:12.5px;line-height:1.5}.tn-side li:first-child{border-top:0}.tn-side .k{font:500 10.5px var(--mono);color:var(--dim);padding-top:2px}.tn-side b{font-weight:600;color:var(--text)}@media (max-width:640px){#p-twnow > .pcx.tn-box{grid-template-columns:minmax(0,1fr)}}
+.mo-row{display:grid;grid-template-columns:78px 150px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:12.5px;align-items:baseline}.mo-row .d{font:10.5px var(--mono);color:var(--dim)}.mo-row .c{font:600 12px var(--mono);color:var(--text)}.mo-row .c{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mo-row .c small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:400 10px var(--mono);color:var(--dim)}
 .mo-row .t a{color:var(--text);text-decoration:none}.mo-row .t a:hover{text-decoration:underline}.mo-row .tag{font:10.5px var(--mono);border:1px solid var(--line2);border-radius:3px;padding:0 5px;margin-right:6px;color:var(--muted)}
 .jb-k{display:flex;gap:18px;align-items:flex-end;margin-bottom:8px}.jb-k b{font:600 24px var(--mono)}.jb-bar{display:grid;grid-template-columns:130px 1fr 64px 54px;gap:8px;align-items:center;font-size:12px;padding:2px 0}.jb-bar .b{height:7px;background:var(--line);border-radius:2px;overflow:hidden}.jb-bar .b i{display:block;height:100%;background:var(--blue);opacity:.75}
 .hs-nav{display:flex;gap:8px;align-items:center;margin-bottom:8px;font:12px var(--mono);flex-wrap:wrap}.hs-nav select{background:var(--panel2);color:var(--text);border:1px solid var(--line2);border-radius:3px;padding:3px 6px;font:12px var(--mono)}.hs-nav a{color:var(--blue);cursor:pointer;text-decoration:none}.hs-nav .sep{color:var(--dim)}
@@ -636,7 +637,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>Yahoo 日線 · 美債為殖利率，變化以基點（bp）計 · ADR 溢價＝台積電 ADR 換算每股台幣 ÷ 台股收盤 − 1</span></div>
   </section>
 
-  <section class="panel w6 hero" id="p-fear">
+  <section class="panel hero" id="p-fear">
     <div class="ph"><h2>Fear Structure</h2><span class="zh">恐慌三層 ＋ 期限結構 · CBOE 官方</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>CBOE 每日收盤為主、Yahoo 盤中補值 · 狀態判定：恐慌當下（VIX/VIX3M&gt;1）→ 恐慌區（VIX&gt;25）→ 波動放大（VIX、VVIX 五日同升）→ 暴風雨前的平靜（VIX 低、VVIX 或 SKEW 紅）→ 風平浪靜（全綠）</span></div>
@@ -816,15 +817,10 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>搜尋熱度：Google 趨勢台灣近 5 年每週（各關鍵字自己的 5 年最高點＝100，每 6 小時更新）；年增＝近 4 週比去年同期，扣掉季節性；近一月＝近 4 週比前 12 週；近兩年超過 20 週是 0 的字視為量太低· 討論：Google 收錄的 Dcard／PTT／Mobile01／痞客邦近 90 天 · 新聞：Google 新聞近 30 天（兩個來源最多都只回 100 則，大字會頂到上限）· 媒體＝Google 新聞近 7 天 vs 去年同 7 天（舊文章會掉出索引，百分比已用全部關鍵字的中位數校正；一次最多 100 則，頂到就標「量太大」）· 機會窗口＝搜尋年增 20% 以上、最近沒在掉，而且媒體年增不到搜尋的一半 · 關鍵字在 ops/voice_keywords.json</span></div>
   </section>
-  <section class="panel w12 cap" id="p-pop">
+  <section class="panel w12" id="p-pop">
     <div class="ph"><h2>Pop Charts</h2><span class="zh">流行排行 · 台灣在聽、在看、在讀什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Spotify 台灣每日（kworb 整理）· KKBOX 華語每日 · Netflix 官方台灣每週前十 · Apple Podcast 台灣熱門 · LINE TODAY 即時熱門</span></div>
-  </section>
-  <section class="panel w6 cap" id="p-social">
-    <div class="ph"><h2>Social Pulse</h2><span class="zh">社群脈搏 · Bluesky · 國外大眾情緒＋今日英文熱詞</span><span class="meta">排程</span></div>
-    <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>Bluesky 公開 API（限英文貼文）· 熱詞來自多源同提引擎 · 台灣情緒看 PTT · Threads 需登入／App Review、Dcard 擋資料中心 IP，皆未接</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-devpulse">
@@ -881,7 +877,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>Cofacts 開放資料 · 近三天被查詢最多的訊息 · 「被查 N 次」= 有多少人把它丟進查核機器人</span></div>
   </section>
 
-  <section class="panel w6 cap" id="p-ptt">
+  <section class="panel w12" id="p-ptt">
     <div class="ph"><h2>PTT</h2><span class="zh">台灣大眾情緒 · 看板熱度與推噓</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>12 板各最新兩頁 · 熱度＝推文加總 · 情緒＝正推文占比減噓文占比（-1～1）· 爆卦＝八卦板最早的突發訊號 · 標題進熱詞引擎</span></div>
@@ -1273,7 +1269,7 @@ const renderers={
   social(d){const src=d.sources||{};const post=p=>`<li><span class="src">${esc(p.src==="Dcard"?"D·"+(p.user||"").slice(0,6):"B·"+(p.user||"").split(".")[0].slice(0,8))}</span><span class="t"><a href="${esc(safe(p.url))}" target="_blank" rel="noopener">${esc(p.text.slice(0,70))}</a></span><span class="m">${p.likes!=null?`♥${compact(n(p.likes))} `:""}${p.at?ago(p.at).replace(" 前",""):""}</span></li>`;
     const kws=(d.keywords||[]).map(k=>`<div class="wg"><h3><span class="kw" style="margin-right:6px;${k.kind==="hot"?"color:var(--warn)":""}">${k.kind==="hot"?"🔥":(k.region||"固定")}</span>${esc(k.kw)}<span class="sub" style="margin-left:8px">24h ${k.n_24h||0} 則</span></h3>${(k.top||[]).length?`<ul class="list">${k.top.slice(0,2).map(post).join("")}</ul>`:'<div class="empty" style="padding:2px 0 6px">沒有結果</div>'}</div>`).join("");
     const pop=(d.dcard_popular||[]).slice(0,6).map(post).join("");
-    body("p-social").innerHTML=`${pop?`<h3>Dcard 熱門</h3><ul class="list">${pop}</ul>`:""}${kws?`<h3 style="margin-top:8px">關鍵字</h3>${kws}`:""}${!src.bsky?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">Bluesky 這輪沒結果</div>`:""}`;setMeta("p-social",d,2);},
+    if(!body("p-social"))return;body("p-social").innerHTML=`${pop?`<h3>Dcard 熱門</h3><ul class="list">${pop}</ul>`:""}${kws?`<h3 style="margin-top:8px">關鍵字</h3>${kws}`:""}${!src.bsky?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">Bluesky 這輪沒結果</div>`:""}`;setMeta("p-social",d,2);},
   devpulse(d){const VN={openai:"OpenAI",anthropic:"Claude",google:"Gemini",deepseek:"DeepSeek",xai:"Grok"};
     const fo=(d.forums||[]).map(f=>`<li><span class="vd vd-${esc(f.vendor||"")}">${esc(VN[f.vendor]||"")}</span><span class="t"><a href="${esc(safe(f.url))}" target="_blank" rel="noopener">${esc(f.title)}</a></span><span class="m ${n(f.replies)>=30?"bad":""}">${fmt(n(f.replies),0)} 回</span></li>`).join("");
     const cl=(d.changelogs||[]).map(c=>`<li><span class="vd vd-${esc(c.vendor||"")}">${esc(VN[c.vendor]||"")}</span><span class="t">${c.kind?`<span class="kw" style="margin-right:4px">${esc(c.kind)}</span>`:""}<a href="${esc(safe(c.url))}" target="_blank" rel="noopener">${esc(c.title)}</a><span class="sub"> ${esc(c.source)}</span></span><span class="m">${c.at?(c.at.slice(0,4)===String(new Date().getFullYear())?c.at.slice(5,10):c.at.slice(0,10)):esc(c.date||"")}</span></li>`).join("");
@@ -1488,7 +1484,17 @@ function panelCharts(P){
     wet.sort((a,b)=>b[1]-a[1]);
     box.querySelector(".pcx-h").innerHTML=(stops.length?`<b style="color:#B15CFF">停班停課</b> ${stops.map(k=>k.replace("臺","台")).join("、")}；`:"今天沒有停班停課；")+(bad.length?`<b style="color:var(--down)">嚴重示警</b> ${bad.map(k=>k.replace("臺","台")).join("、")}；`:"")+(wet.length?`雨最大 <b>${wet[0][0].replace("臺","台")}</b> <em>${wet[0][1]}</em> mm/時`:"各地沒有明顯降雨")
       +`<br><span style="color:var(--dim);font-size:11px">■紫 停班停課　■紅 嚴重示警　■黃 注意　■藍 下雨　■灰 有地方新聞</span>`;
-    const sv=box.querySelector("svg");sv.style.maxWidth="250px";}catch(e){console.warn("pcx twnow",e);}
+    const sv=box.querySelector("svg");sv.style.maxWidth="250px";
+    const AL=((P.alerts||{}).alerts||[]).slice().sort((a,b)=>(b.lvl||0)-(a.lvl||0)),WX=((P.weather||{}).items||[]).filter(w=>isFinite(n(w.temp))),Q=((P.quake||{}).items||[])[0];
+    const hi=WX.slice().sort((a,b)=>n(b.temp)-n(a.temp))[0],lo=WX.slice().sort((a,b)=>n(a.temp)-n(b.temp))[0],r24=WX.slice().sort((a,b)=>n(b.rain24h)-n(a.rain24h))[0];
+    const li=(k,v)=>`<li><span class="k">${k}</span><span class="v">${v}</span></li>`;
+    const side=document.createElement("ul");side.className="tn-side";
+    side.innerHTML=li("示警",AL.length?AL.slice(0,3).map(a=>`<b style="color:${a.lvl>=3?"var(--down)":"var(--warn)"}">${esc(a.cat)}</b> ${esc((a.area||[]).slice(0,3).map(x=>x.replace("臺","台").slice(0,2)).join("、"))}${(a.area||[]).length>3?" 等 "+a.area.length+" 縣市":""}`).join("<br>"):"目前沒有")
+      +li("氣溫",hi?`最高 <b>${esc(hi.city)}</b> ${n(hi.temp).toFixed(1)}° · 最低 <b>${esc(lo.city)}</b> ${n(lo.temp).toFixed(1)}°`:"—")
+      +li("雨量",r24&&n(r24.rain24h)>0?`24 小時最多 <b>${esc(r24.city)}</b> ${n(r24.rain24h).toFixed(1)} mm`+(wet.length?` · 現在最大 <b>${esc(wet[0][0].replace("臺","台"))}</b> ${wet[0][1]} mm/時`:""):"各地無明顯降雨")
+      +li("地震",Q?`<b>M${n(Q.mag).toFixed(1)}</b> ${esc(String(Q.loc||"").replace(/\s+/g," ").replace(/\s*\(.*$/,"").slice(0,22))} · 最大 ${esc(Q.intensity||"")} · ${Q.at?ago(Q.at):""}`:"近期沒有")
+      +li("停班停課",stops.length?stops.map(k=>k.replace("臺","台")).join("、"):"沒有");
+    box.appendChild(side);box.classList.add("tn-box");}catch(e){console.warn("pcx twnow",e);}
   /* 7. 實價登錄：各縣市住宅中位數 */
   try{const H=P.house||{},cs=Object.entries(H.city||{}).sort((a,b)=>b[1]-a[1]);if(cs.length){const mx=cs[0][1],lo=cs[cs.length-1];
     const p=pcx("p-house",`${esc(H.season||"")} 住宅中位數：<b>台北</b> <em>${n((H.city||{})["臺北市"]).toFixed(1)}</em> 萬/坪最高，<b>${esc(lo[0].replace("臺","台"))}</b> <em>${lo[1]}</em> 最低；交易最多是<b>${esc(Object.entries(H.cityN||{}).sort((a,b)=>b[1]-a[1])[0][0].replace("臺","台"))}</b>`,760,cs.length*17+4);
@@ -2130,7 +2136,7 @@ function snap(P){
     air:P.airport||{},poly:((P.poly||{}).items||[]).filter(polyOK).slice(0,4),power:P.power||{},quake:((P.quake||{}).items||[])[0],
     wx:((P.weather||{}).items)||[],ussec:((P.sectors||{}).items||[]).map(s=>[s.name,n(s.chg_pct)]),twsec:(tm.sectors||[]).map(s=>[s.name,n(s.pct)]),
     opp:{kw:((P.voice||{}).kw)||[],cu:P.consume||{},br:P.brands||{}},
-    gov:[...(((P.tenders||{}).items)||[]).slice(0,3).map(t=>["招標",t.title,t.unit,t.budget,t.url]),...(((P.awards||{}).items)||[]).slice(0,2).map(a=>["決標",a.title,a.winner,a.amount,a.url])]};
+    gov:[...(((P.tenders||{}).items)||[]).slice(0,2).map(t=>["招標",t.title,t.unit,t.budget,t.url]),...(((P.awards||{}).items)||[]).slice(0,2).map(a=>["決標",a.title,a.winner,a.amount,a.url])]};
 }
 
 /* ---------- 版面 ---------- */
@@ -2167,7 +2173,7 @@ function layout(){
     <canvas class="o-fx" id="ov-wave" height="84"></canvas><div class="o-dv" id="ov-moodsrc"></div><div class="o-sub" id="ov-themes"></div></section>
   <section class="o-card w4" id="ov-c-ptt">${H("PTT","看板熱度 · 100 推發光","social")}<div class="o-eq" id="ov-eq"></div><ul class="o-ls" id="ov-ptt"></ul></section>
   <section class="o-card w4" id="ov-c-cof">${H("Cofacts","LINE 轉傳查核","social")}<div class="o-sub" id="ov-cofs"></div><ul class="o-ls cof" id="ov-cof"></ul></section>
-  <section class="o-card w5" id="ov-c-map">${H("Taiwan","縣市氣溫 · 地震漣漪","live")}<canvas class="o-fx" id="ov-map" height="330"></canvas></section>
+  <section class="o-card w5" id="ov-c-map">${H("Taiwan","縣市氣溫 · 地震漣漪","live")}<canvas class="o-fx" id="ov-map" height="250"></canvas></section>
   <section class="o-card w3" id="ov-c-radar">${H("Radar","公司雷達","intel")}<canvas class="o-fx" id="ov-radar" height="150"></canvas><div class="o-hr"></div><div class="o-colh">本週募資</div><ul class="o-ls" id="ov-fund"></ul></section>
   <section class="o-card w4" id="ov-c-live">${H("TPE","桃機翻牌","live")}<div class="o-flaps" id="ov-flaps"></div><div class="o-hr"></div><div class="o-colh">POLYMARKET</div><div class="o-pm" id="ov-pm"></div></section>
   <section class="o-card w8" id="ov-c-sec">${H("Sectors","板塊熱力 · 依漲跌排序","market")}
