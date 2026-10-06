@@ -2025,7 +2025,7 @@ function render(P){
   /* ---- Q2 企業：上市、易主、轉型、法說會 ---- */
   const CO=P.corp||{};
   if(CO.ipo||CO.queue||CO.control){
-    const md=s=>s?String(s).slice(5).replace("-","/"):"",ind=x=>x.ind?`<span class="sm"> · ${esc(String(x.ind).replace(/業$/,""))}</span>`:"";
+    const md=s=>s?String(s).slice(5).replace("-","/"):"",ind=x=>x.ind?`<span class="sm"> · ${esc(String(x.ind).replace(/工業$|業$/,""))}</span>`:"";
     const ipo=CO.ipo||[],up=ipo.filter(x=>x.list>=T),done=ipo.filter(x=>x.list<T).reverse();
     $("#ib6i").innerHTML=[...up,...done].slice(0,6).map(x=>{const st=x.start<=T&&x.end>=T?"申購中":x.start>T?`${md(x.start)} 起申購`:x.list>=T?`${md(x.list)} 掛牌`:`${md(x.list)} 已掛牌`;
       return `<li><span class="src">${esc(x.mk)} ${esc(x.code)}</span><span class="t"><b>${esc(x.name)}</b>${ind(x)}${x.price?`<span class="sm"> · 承銷 ${x.price} 元</span>`:""}</span><span class="m ${x.list>=T?"up":""}">${st}</span></li>`;}).join("")||`<li><span class="t">近期沒有新股抽籤</span></li>`;
