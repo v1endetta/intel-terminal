@@ -75,6 +75,13 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Oil from South Korea being shipped to Russia as Ukraine war grinds on",
+   "url": "https://www.theguardian.com/world/2026/oct/06/oil-tankers-south-korea-russia-ukraine-war",
+   "at": "2026-10-05T23:50:12Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "Trump says 'threat' led US to pull bombers from RAF Fairford",
    "url": "https://www.bbc.co.uk/news/articles/cwj3413e5m1lo?at_medium=RSS&at_campaign=rss",
@@ -146,12 +153,6 @@
    "url": "https://www.theguardian.com/business/nils-pratley-on-finance/2026/oct/05/bt-purchase-talktalk-politically-sensible",
    "at": "2026-10-05T16:40:42Z",
    "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "Pentagon stops using Anthropic AI tools after blacklisting company, BBC told",
-   "url": "https://www.bbc.co.uk/news/articles/c5j9x9pr0240o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-05T16:13:21Z"
   }
  ],
  "groups": [
@@ -159,7 +160,7 @@
    "name": "廣告與代理商",
    "items": [
     {
-     "source": "setn.com",
+     "source": "三立新聞網SETN.co",
      "title": "館長又被罰！蜂膠廣告誇大不實　遭北市衛生局開罰4萬",
      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1XaUc4Z1ZiZVJCamNNU2N4ZUFPbzRxS2tkLWlBTlVzOXBieXpoOEFyMmJ6T3RORnBFdlpCMWIxUU9qak9RNXFB0gFLQVVfeXFMUEFkUGp5dkNSRjFkcUdUeWhqeUtoVm1SLUNZSlhwVS1hUVBwYUNGeUVwY3J5UWxzaTd4RXlwMXhaTGlNTnl2dHdJbTRB?oc=5",
      "at": "2026-10-01T16:41:37Z",
@@ -246,7 +247,7 @@
      "kw": "AI agent OR AI 代理人 OR 智慧代理"
     },
     {
-     "source": "reuters.com",
+     "source": "Reuters",
      "title": "Wikipedia operator says OpenAI's rogue agents possibly tied to data service disruption in ",
      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNRW51ZFBsNXhuaDZnTUxzNzc5M280OVE1VmZEUGdXaFVJeGJITWRJbEpCWXV1UjlGaGZIZXQ2ZXVybU85UWZaRWx4UjZRRU1rZzV3MVB0cXo4R1JFcW4zQWpIa0tmU2FGRW16LUF5U0JPWGgybDZCZnZFckNubFRmbXBwYlV0WVM1dDZkVndtTmNCaG9oRVQ4THI4V0VtRFA2UFl0eFZrRm1nN2N1MVF0VjdGVHgwUmlRWWc?oc=5",
      "at": "2026-10-05T19:08:32Z",
@@ -341,7 +342,7 @@
      "source": "TechNews 科技新",
      "title": "美報告：中國取得數百台浸潤式 DUV 微影機，籲收緊出口管制",
      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPMjkycmljT25fSU0xYmlTYjA3eUF5ZDhWeXMxSVJ4ZFF1M1ZYdWVCM3JiYkdSR3pBZDhjamN4X0JzUGQ4NGlYZXpvRTRuZHB2b0RYWWtfRVI1VkRTNTlzcC1Kc1JTRXZ6YWpoOXZBTW9HdWFoMWtKN3BBMU05TXhER2UwY2tXaUw1YVlPWi1tbjVaalp6VGx1OWFJc19XenBUVlI2T3NGaWc1U2RMY19kZXJ2Yw?oc=5",
-     "at": "2026-10-05T23:25:35Z",
+     "at": "2026-10-05T23:37:30Z",
      "kw": "半導體 出口管制 OR 晶片法案"
     },
     {
@@ -546,15 +547,15 @@
   "hot": [
    {
     "term": "OpenAI",
-    "n": 9,
-    "src": 6,
+    "n": 8,
+    "src": 7,
     "sources": [
      "HN",
      "OpenAI changelog",
      "OpenAI 論壇",
+     "Reuters",
      "TechCrunch",
-     "Techritual",
-     "reuters.com"
+     "Techritual"
     ],
     "sample": {
      "title": "OpenAI 為 ChatGPT 推出視覺廣告格式 以提升用戶體驗與安全性",
@@ -568,8 +569,8 @@
     "src": 4,
     "sources": [
      "UDN",
-     "ctee.com.tw",
      "中央社",
+     "工商時報",
      "經濟日報"
     ],
     "sample": {
@@ -583,14 +584,30 @@
     "n": 4,
     "src": 4,
     "sources": [
-     "BBC",
+     "BusinessFocu",
      "HN",
-     "Mashable",
-     "iThome"
+     "iThome",
+     "mashable.com"
     ],
     "sample": {
-     "title": "Pentagon stops using Anthropic AI tools after blacklisting c",
-     "url": "https://www.bbc.co.uk/news/articles/c5j9x9pr0240o?at_medium=RSS&at_campaign=rss"
+     "title": "Anthropic投入1億美元培訓萬名工程師，強化企業Claude部署能力",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1UQlVXSWRrVkpFUG1VTzdzYzVIdzlxcUNKQ011YmRrMXVtRHlKMWRiTXA3eDB5Y3FrOVdiNENxbUdBdFlpRExuZEtsVnlNZw?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "Claude",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "BusinessFocu",
+     "HN",
+     "iThome",
+     "mashable.com"
+    ],
+    "sample": {
+     "title": "Anthropic投入1億美元培訓萬名工程師，強化企業Claude部署能力",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1UQlVXSWRrVkpFUG1VTzdzYzVIdzlxcUNKQ011YmRrMXVtRHlKMWRiTXA3eDB5Y3FrOVdiNENxbUdBdFlpRExuZEtsVnlNZw?oc=5"
     },
     "hot": true
    },
@@ -600,9 +617,9 @@
     "src": 4,
     "sources": [
      "UDN",
-     "ctee.com.tw",
-     "ec.ltn.com.t",
-     "壹蘋新聞網"
+     "壹蘋新聞網",
+     "工商時報",
+     "自由財經"
     ],
     "sample": {
      "title": "台積電衝2580元新天價！0050、00631L成交雙破百億",
@@ -646,12 +663,12 @@
     "src": 3,
     "sources": [
      "UDN",
-     "ctee.com.tw",
-     "ec.ltn.com.t"
+     "工商時報",
+     "自由財經"
     ],
     "sample": {
-     "title": "美股全收紅！ AI浪潮推動大盤持續衝高 台積電ADR上漲2.75％",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9lNUhrd0RTRzMtSnJZdU1kbTZVMkdodzMwaEp0aFRjaXFuT1pHUndSUWZFTGZlZ3BLXzBlcWRPcGthaHdLUTZsSzZXNUY1eGk1MkdzNTF0QjBST0h6V0xR0gFkQVVfeXFMTjB4ZFJscjY0bFd4UGZwSi05MEx5SHhNVGlTVFVzV1JRUE9meE44dzYtcm14Tng3SVNSbkxRalRkN1I0dWh5cmpnWjdTSno3MTg5UlhQVlpBeFB4MnpuNnhPMUNxRA?oc=5"
+     "title": "美股｜那指締新高 4大指數齊紅 台積電ADR強漲2.75％",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5MWGtOb2dfLXdHSlQ5QmVuaUVaM09VT1cxa01vTXJIbGlXXzAtcV9zYTJ1X3RMSkRDTURfNmFpWDVlbTlacjdwY1VlTnQyR1pia1VvYzg4V2tVb2xUbEdN?oc=5"
     },
     "hot": true
    },
@@ -660,28 +677,13 @@
     "n": 3,
     "src": 3,
     "sources": [
-     "ctee.com.tw",
-     "ec.ltn.com.t",
-     "中央社"
+     "中央社",
+     "工商時報",
+     "自由財經"
     ],
     "sample": {
      "title": "市場觀望企業財報　美股收漲那斯達克指數創新高",
      "url": "https://www.cna.com.tw/news/afe/202610060008.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "生技",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "CMoney",
-     "CMoney投資網誌",
-     "genetinfo.co"
-    ],
-    "sample": {
-     "title": "樂普醫療指控雙重交易掀背信風暴：中國生技NewCo 授權模式下的法律危機與市場動向- 生技投資第一站",
-     "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE41N2trOThSbDhSemdGUGdDRU5ZRDlpQmNYNUtlTDMxYm04aHNlZFREeUc2VkRUSkg2RWIxbmw5RS1xeHVBWVp0b3JyLW0zVjVkWjhwbERHV3NPTGJoQmVhelliVmxIQk1EakNPWQ?oc=5"
     },
     "hot": true
    },
@@ -705,5 +707,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-05T23:36:20Z"
+ "updatedAt": "2026-10-05T23:56:35Z"
 }
