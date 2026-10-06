@@ -1473,7 +1473,7 @@ function panelCharts(P){
     const p=pcx("p-mops",`近 ${ND} 天 <em>${it.length}</em> 則${ND<14?`<span style="color:var(--dim)">（資料從 ${days[0].slice(5).replace("-","/")} 開始累積）</span>`:""}，最多是<b>${esc(topC[0][0])}</b>（<em>${topC[0][1]}</em>）${topC[1]?`、<b>${esc(topC[1][0])}</b>（${topC[1][1]}）`:""}；最多的一天是 ${peak.slice(5).replace("-","/")}（<em>${mx}</em> 則）`,760,112);
     const L=10,cw=Math.min(40,(560-L)/ND),H=78;days.forEach((d,i)=>{let y=H;const x=L+i*cw+3;Object.entries(by[d]||{}).sort((a,b)=>b[1]-a[1]).forEach(([c,v])=>{const h=v/mx*(H-8);y-=h;p("rect",{x,y,width:cw-6,height:Math.max(1,h-1),style:`fill:${MOPC[c]||"#8B93A7"}`},null,`${d}｜${c} ${v} 則`);});
       if(vals[i]>mean*2&&vals[i]>=3)p("text",{x:x+(cw-6)/2,y:y-3,"text-anchor":"middle",style:"fill:var(--down)"},"!");if(ND<=8||i%2===1||i===ND-1)p("text",{x:x+(cw-6)/2,y:H+14,"text-anchor":"middle"},d.slice(5).replace("-","/"));});
-    let ly=8;topC.slice(0,8).forEach(([c,v])=>{p("rect",{x:590,y:ly-8,width:9,height:9,rx:1.5,style:`fill:${MOPC[c]||"#8B93A7"}`});p("text",{x:604,y:ly},`${c} ${v}`);ly+=13;});}}catch(e){console.warn("pcx mops",e);}
+    let ly=8;const LX=Math.min(590,L+ND*cw+40);topC.slice(0,8).forEach(([c,v])=>{p("rect",{x:LX,y:ly-8,width:9,height:9,rx:1.5,style:`fill:${MOPC[c]||"#8B93A7"}`});p("text",{x:LX+14,y:ly},`${c} ${v}`);ly+=13;});}}catch(e){console.warn("pcx mops",e);}
   /* 6. Taiwan Now：縣市燈號格 */
   try{const now=countyNow(),cells=Object.entries(TILE),sz=34,g=3;let stops=[],bad=[],wet=[];
     const p=pcx("p-twnow","",6*(sz+g),8*(sz+g));const box=document.querySelector("#p-twnow > .pcx");
