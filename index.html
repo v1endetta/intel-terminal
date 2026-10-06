@@ -365,6 +365,7 @@ svg.o-gauge{width:100%;max-width:200px;height:auto;display:block;margin:0 auto}
 /* lists */
 .o-cols2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
 @media (max-width:760px){.o-cols2{grid-template-columns:minmax(0,1fr)}}
+.o-opp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}@media (max-width:1100px){.o-opp{grid-template-columns:minmax(0,1fr)}}.o-opp .o-colh a{color:var(--dim);margin-left:6px;letter-spacing:0}.o-opp .o-colh a:hover{color:var(--blue)}.o-ls.op li{grid-template-columns:38px minmax(0,1fr) auto auto;gap:10px;align-items:center}.o-ls.op .num{font-family:var(--mono);font-size:11.5px;text-align:right}.o-tag{font:500 10px var(--mono);color:var(--muted);border:1px solid var(--line2);border-radius:2px;text-align:center;padding:0 2px}.o-tag.w{color:var(--up);border-color:var(--up)}.o-ls.op .o-emp,.o-ls.op .o-foot{display:block;color:var(--dim);font-size:11.5px}
 .o-ls{list-style:none;margin:0;padding:0;display:grid}
 .o-ls li{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;padding:4px 0;border-top:1px solid var(--line);font-size:12.5px;align-items:baseline}
 .o-ls li:first-child{border-top:0}
@@ -854,12 +855,6 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ph"><h2>YouTube</h2><span class="zh">台灣發燒榜 · 美國對照</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>YouTube Data API · 每 30 分鐘 · 分類：全部／音樂／娛樂／新聞</span></div>
-  </section>
-
-  <section class="panel w6 cap" id="p-trends">
-    <div class="ph"><h2>Trends TW</h2><span class="zh">台灣搜尋熱度</span><span class="meta">排程</span></div>
-    <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://trends.google.com/trending?geo=TW&hl=zh-TW" target="_blank" rel="noopener">Google Trends</a></div>
   </section>
 
   <section class="panel w12 cap" id="p-media">
@@ -1402,7 +1397,7 @@ const renderers={
     body("p-macro").innerHTML=`<div class="macro">${pm("pmi","製造業 PMI",sp.pmi)}${pm("nmi","非製造業 NMI",sp.nmi)}${cards}</div>${d.note?`<div class="empty" style="padding:8px 0 0">${esc(d.note)}</div>`:""}`;setMeta("p-macro",d,24*35);},
   otc_revenue(d){revenueDocs.otc_revenue=d;renderRevenue();},
   trends(d){const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="https://trends.google.com/trends/explore?geo=TW&q=${encodeURIComponent(it.title)}" target="_blank" rel="noopener">${esc(it.title)}</a>${it.news?`<span class="sub">${esc(it.news)}</span>`:""}</span><span class="m">${esc(it.traffic||"")}</span></li>`).join("");
-    body("p-trends").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-trends",d,4);},
+    if(!body("p-trends"))return;body("p-trends").innerHTML=`<ul class="list">${li}</ul>`;setMeta("p-trends",d,4);},
   media(d){const row=it=>`<li><span class="src">${esc(it.source)}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span><span class="m">${it.at?ago(it.at).replace(" 前",""):esc(it.date||"")}</span></li>`;
     const tw=(d.items||[]).map(row).join(""),intl=(d.intl||[]).map(row).join("");
     const tg=(d.together||[]).map(t=>`<li><span class="t"><b>${esc(t.term)}</b><span class="sub" style="white-space:normal">${esc(((t.examples||[])[0]||[])[1]||"")}</span></span><span class="m" title="${esc((t.sources||[]).join("、"))}">${(t.sources||[]).length} 家 · ${t.n} 則</span></li>`).join("");
@@ -1466,18 +1461,21 @@ function panelCharts(P){
       p("rect",{x:L,y:y+5,width:BW,height:11,rx:2,style:"fill:var(--line2);opacity:.5"});p("rect",{x:L,y:y+5,width:BW*v/100,height:11,rx:2,style:`fill:var(${v>=50?"--blue":"--muted"});opacity:.85`});
       p("text",{x:L+BW+6,y:y+14,class:"num hi"},v.toFixed(0)+"%");if(d)p("text",{x:L+BW+46,y:y+14,class:"num",style:`fill:var(${d>0?"--up":"--down"})`},(d>0?"▲":"▼")+Math.abs(d).toFixed(1));
       p("text",{x:L+BW+96,y:y+14},x.topic||"");});}}catch(e){console.warn("pcx poly",e);}
-  /* 4. 104 職缺：各類職缺數 */
-  try{const J=P.jobs||{},cs=(J.cats||[]).slice().sort((a,b)=>b.n-a.n).slice(0,10);if(cs.length){const mx=cs[0].n,hasC=cs.some(c=>c.chg7!=null);const up=hasC?cs.slice().sort((a,b)=>(n(b.chg7)||0)-(n(a.chg7)||0))[0]:null;
-    const p=pcx("p-jobs",`104 刊登中 <em>${n(J.total).toLocaleString()}</em> 筆，最多是<b>${esc(cs[0].name)}</b>（<em>${(cs[0].n/1e4).toFixed(1)}</em> 萬）${up&&n(up.chg7)>0?`；一週增加最多是<b>${esc(up.name)}</b>（<em class="up">+${n(up.chg7).toLocaleString()}</em>）`:hasC?"":`<span style="color:var(--dim)">；週增減要累積 7 天才算得出來</span>`}`,760,cs.length*19+4);
-    const L=190,BW=440;cs.forEach((c,i)=>{const y=i*19,w=Math.max(2,BW*c.n/mx);p("text",{x:L-8,y:y+13,"text-anchor":"end",class:i<3?"hi":""},c.name.slice(0,14));p("rect",{x:L,y:y+4,width:w,height:11,rx:1.5,style:"fill:var(--blue);opacity:.8"});
-      p("text",{x:L+w+6,y:y+13,class:"num"},(c.n/1e4).toFixed(1)+"萬");if(c.chg7!=null&&n(c.chg7))p("text",{x:L+w+56,y:y+13,class:"num",style:`fill:var(${n(c.chg7)>0?"--up":"--down"})`},(n(c.chg7)>0?"+":"")+n(c.chg7).toLocaleString());});}}catch(e){console.warn("pcx jobs",e);}
+  /* 4. 104 職缺：比 7 天前哪些職類變多（總量表格在下面，這裡只看變化） */
+  try{const J=P.jobs||{},all=(J.cats||[]).slice();if(all.length){const cs=all.filter(c=>c.chg7!=null&&isFinite(n(c.chg7)));
+    if(!cs.length){pcx("p-jobs",`104 刊登中 <em>${n(J.total).toLocaleString()}</em> 筆 <span style="color:var(--dim)">· 職類一週增減要累積 7 天才算得出來，算出來後這裡會畫「哪些職類變多、哪些變少」</span>`,760,0);}
+    else{const srt=cs.sort((a,b)=>n(b.chg7)-n(a.chg7)),pick=[...srt.slice(0,6),...srt.slice(-6).filter(x=>!srt.slice(0,6).includes(x))],mx=Math.max(1,...pick.map(c=>Math.abs(n(c.chg7)))),up=srt[0],dn=srt[srt.length-1];
+      const p=pcx("p-jobs",`比 7 天前：<b>${esc(up.name)}</b> 增加最多（<em class="up">+${n(up.chg7).toLocaleString()}</em>）${n(dn.chg7)<0?`，<b>${esc(dn.name)}</b> 減少最多（<em class="down">${n(dn.chg7).toLocaleString()}</em>）`:""}`,760,pick.length*19+4);
+      const L=200,C=L+230,BW=210;pick.forEach((c,i)=>{const y=i*19,v=n(c.chg7),w=Math.max(1.5,BW*Math.abs(v)/mx);p("text",{x:L-8,y:y+13,"text-anchor":"end",class:i<3?"hi":""},c.name.slice(0,14));
+        p("rect",{x:v>=0?C:C-w,y:y+4,width:w,height:11,rx:1.5,style:`fill:var(${v>=0?"--up":"--down"});opacity:.85`});p("text",{x:v>=0?C+w+6:C-w-6,y:y+13,"text-anchor":v>=0?"start":"end",class:"num"},(v>0?"+":"")+v.toLocaleString());});
+      p("line",{x1:C,y1:0,x2:C,y2:pick.length*19+4,style:"stroke:var(--line2)"});}}}catch(e){console.warn("pcx jobs",e);}
   /* 5. 重大訊息：近 14 天每天幾則、什麼類 */
   try{const it=(P.mops||{}).items||[];if(it.length){const T=Date.now(),days=[...Array(14)].map((_,i)=>new Date(T-(13-i)*864e5).toLocaleDateString("sv-SE"));
     const by={},cat={};it.forEach(x=>{(by[x.d]=by[x.d]||{})[x.cat]=((by[x.d]||{})[x.cat]||0)+1;cat[x.cat]=(cat[x.cat]||0)+1;});const tot=d=>Object.values(by[d]||{}).reduce((a,b)=>a+b,0);
-    const vals=days.map(tot),mean=vals.reduce((a,b)=>a+b,0)/14,mx=Math.max(1,...vals),topC=Object.entries(cat).sort((a,b)=>b[1]-a[1]);const peak=days[vals.indexOf(mx)];
-    const p=pcx("p-mops",`近 14 天 <em>${it.length}</em> 則，最多是<b>${esc(topC[0][0])}</b>（<em>${topC[0][1]}</em>）${topC[1]?`、<b>${esc(topC[1][0])}</b>（${topC[1][1]}）`:""}；最多的一天是 ${peak.slice(5).replace("-","/")}（<em>${mx}</em> 則）`,760,112);
-    const L=10,cw=(560-L)/14,H=78;days.forEach((d,i)=>{let y=H;const x=L+i*cw+3;Object.entries(by[d]||{}).sort((a,b)=>b[1]-a[1]).forEach(([c,v])=>{const h=v/mx*(H-8);y-=h;p("rect",{x,y,width:cw-6,height:Math.max(1,h-1),style:`fill:${MOPC[c]||"#8B93A7"}`},null,`${d}｜${c} ${v} 則`);});
-      if(vals[i]>mean*2&&vals[i]>=3)p("text",{x:x+(cw-6)/2,y:y-3,"text-anchor":"middle",style:"fill:var(--down)"},"!");if(i%2===1||i===13)p("text",{x:x+(cw-6)/2,y:H+14,"text-anchor":"middle"},d.slice(5).replace("-","/"));});
+    let vals0=days.map(tot);const f0=Math.max(0,vals0.findIndex(v=>v>0));days.splice(0,f0);const vals=vals0.slice(f0),ND=days.length,mean=vals.reduce((a,b)=>a+b,0)/ND,mx=Math.max(1,...vals),topC=Object.entries(cat).sort((a,b)=>b[1]-a[1]);const peak=days[vals.indexOf(mx)];
+    const p=pcx("p-mops",`近 ${ND} 天 <em>${it.length}</em> 則${ND<14?`<span style="color:var(--dim)">（資料從 ${days[0].slice(5).replace("-","/")} 開始累積）</span>`:""}，最多是<b>${esc(topC[0][0])}</b>（<em>${topC[0][1]}</em>）${topC[1]?`、<b>${esc(topC[1][0])}</b>（${topC[1][1]}）`:""}；最多的一天是 ${peak.slice(5).replace("-","/")}（<em>${mx}</em> 則）`,760,112);
+    const L=10,cw=Math.min(40,(560-L)/ND),H=78;days.forEach((d,i)=>{let y=H;const x=L+i*cw+3;Object.entries(by[d]||{}).sort((a,b)=>b[1]-a[1]).forEach(([c,v])=>{const h=v/mx*(H-8);y-=h;p("rect",{x,y,width:cw-6,height:Math.max(1,h-1),style:`fill:${MOPC[c]||"#8B93A7"}`},null,`${d}｜${c} ${v} 則`);});
+      if(vals[i]>mean*2&&vals[i]>=3)p("text",{x:x+(cw-6)/2,y:y-3,"text-anchor":"middle",style:"fill:var(--down)"},"!");if(ND<=8||i%2===1||i===ND-1)p("text",{x:x+(cw-6)/2,y:H+14,"text-anchor":"middle"},d.slice(5).replace("-","/"));});
     let ly=8;topC.slice(0,8).forEach(([c,v])=>{p("rect",{x:590,y:ly-8,width:9,height:9,rx:1.5,style:`fill:${MOPC[c]||"#8B93A7"}`});p("text",{x:604,y:ly},`${c} ${v}`);ly+=13;});}}catch(e){console.warn("pcx mops",e);}
   /* 6. Taiwan Now：縣市燈號格 */
   try{const now=countyNow(),cells=Object.entries(TILE),sz=34,g=3;let stops=[],bad=[],wet=[];
@@ -2129,6 +2127,7 @@ function snap(P){
     radar:((P.radar||{}).watch)||[],fund:(((P.radar||{}).funding)||[]).slice(0,3),
     air:P.airport||{},poly:((P.poly||{}).items||[]).filter(polyOK).slice(0,4),power:P.power||{},quake:((P.quake||{}).items||[])[0],
     wx:((P.weather||{}).items)||[],ussec:((P.sectors||{}).items||[]).map(s=>[s.name,n(s.chg_pct)]),twsec:(tm.sectors||[]).map(s=>[s.name,n(s.pct)]),
+    opp:{kw:((P.voice||{}).kw)||[],cu:P.consume||{},br:P.brands||{}},
     gov:[...(((P.tenders||{}).items)||[]).slice(0,3).map(t=>["招標",t.title,t.unit,t.budget,t.url]),...(((P.awards||{}).items)||[]).slice(0,2).map(a=>["決標",a.title,a.winner,a.amount,a.url])]};
 }
 
@@ -2136,6 +2135,7 @@ function snap(P){
 function layout(){
   $("#ov").innerHTML=`
   <section class="w12 o-tks" id="ov-tks" aria-label="主要行情"></section>
+  <section class="o-card w12" id="ov-c-opp">${H("Opportunities","本週機會 · 搜尋長得比媒體快 · 消費在長 · 新公司在開","social")}<div class="o-opp" id="ov-opp"></div></section>
   <section class="o-card w4" id="ov-c-tw">${H("TAIEX","加權 · 法人 · 家數","market")}
     <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><div class="o-odo" id="ov-odo"></div><span class="num" id="ov-twchg"></span></div>
     <svg class="o-tw-spark" id="ov-twspark" viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%;height:46px;display:block" aria-hidden="true"></svg>
@@ -2161,8 +2161,6 @@ function layout(){
     <div class="o-cols2"><div><div class="o-colh">新聞</div><ul class="o-ls" id="ov-news"></ul></div><div><div class="o-colh">AI 大廠 · 開發者</div><ul class="o-ls" id="ov-ai"></ul></div></div></section>
   <section class="o-card w4" id="ov-c-hot">${H("Hot","多源同提 · 字越大來源越多","intel")}
     <div class="o-words" id="ov-words"></div><div class="o-hr"></div><div class="o-colh">GOOGLE 趨勢</div><ul class="o-ls rk" id="ov-trends"></ul></section>
-  <section class="o-card w6" id="ov-c-brand">${H("New Brands","新設公司 · 各產業比上月","intel")}<div class="o-sub" id="ov-ib1s"></div><svg class="o-ibv" id="ov-ib1" role="img" aria-label="各產業新設家數月增減"></svg></section>
-  <section class="o-card w6" id="ov-c-ai">${H("AI","各家近 14 天 · ● 產品更新 ○ 新聞","intel")}<div class="o-sub" id="ov-ib3s"></div><svg class="o-ibv" id="ov-ib3" role="img" aria-label="各家 AI 近十四天動態"></svg></section>
   <section class="o-card w4" id="ov-c-mood">${H("Mood","情緒波形 · 越亂越負面","social")}
     <canvas class="o-fx" id="ov-wave" height="84"></canvas><div class="o-dv" id="ov-moodsrc"></div><div class="o-sub" id="ov-themes"></div></section>
   <section class="o-card w4" id="ov-c-ptt">${H("PTT","看板熱度 · 100 推發光","social")}<div class="o-eq" id="ov-eq"></div><ul class="o-ls" id="ov-ptt"></ul></section>
@@ -2253,7 +2251,17 @@ function heat(id,rows){const el=E(id),before={};el.querySelectorAll("[data-k]").
   if(moving())el.querySelectorAll("[data-k]").forEach(d=>{const b=before[d.dataset.k];if(!b)return;const a=d.getBoundingClientRect(),dx=b.left-a.left,dy=b.top-a.top;if(dx||dy)d.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:"none"}],{duration:700,easing:"cubic-bezier(.3,1.1,.4,1)"});});}
 function gov(){E("ov-gov").innerHTML=S.gov.map(r=>`<li><span class="ag" style="color:${r[0]==="招標"?"var(--accent)":"var(--muted)"}">${r[0]}</span><span class="tt"><a href="${safe(r[4])}" target="_blank" rel="noopener">${esc(r[1])}</a><br><span class="sc">${esc((r[2]||"").slice(0,24))} · ${r[3]?F(n(r[3])/1e4,0)+" 萬":"金額待補"}</span></span></li>`).join("")||'<li><span></span><span class="o-sub">今天沒有新標案</span></li>';}
 
-function fill(anim){const parts=[["tk",()=>tickers(anim)],["tw",tw],["macro",macro],["risk",risk],["lists",()=>lists(anim)],["hot",()=>hot(anim)],["mood",mood],["ptt",ptt],["cof",()=>cof(anim)],["fund",fund],["flaps",flaps],["poly",poly],["us",()=>heat("ov-ussec",S.ussec)],["tw2",()=>heat("ov-twsec",S.twsec)],["gov",gov]];
+function opp(){const el=E("ov-opp");if(!el)return;const O=S.opp,pc=v=>`${v>0?"+":""}${v}%`;
+  const K=O.kw.filter(k=>!k.ref),win=K.filter(k=>/機會窗口/.test(k.tag||"")),hot=K.filter(k=>!win.includes(k)&&(k.trend_yoy??-999)>=15).sort((a,b)=>b.trend_yoy-a.trend_yoy);
+  const tr=[...win.map(k=>[k,"窗口"]),...hot.map(k=>[k,"升溫"])].slice(0,4);
+  const c1=tr.length?tr.map(([k,t])=>`<li><span class="o-tag ${t==="窗口"?"w":""}">${t}</span><span class="tt"><b>${esc(k.k)}</b> <span class="sc">${esc(k.group)}</span></span><span class="num up">搜尋 ${pc(k.trend_yoy??k.trend_chg)}</span><span class="num ${k.media_yoy==null?"":k.media_yoy>=15?"up":k.media_yoy<=-15?"down":""}">${k.media_capped?"媒體 量大":k.media_yoy!=null?"媒體 "+pc(k.media_yoy):""}</span></li>`).join(""):'<li class="o-emp">趨勢雷達這輪沒有明顯升溫的字</li>';
+  const up=(O.cu.up||[]).slice(0,4);const c2=up.length?up.map(x=>`<li><span class="o-tag">年增</span><span class="tt">${esc(x.name)}</span><span class="num up">${pc(x.yoy)}</span><span class="num sc">${x.mom!=null?"月 "+pc(x.mom):""}</span></li>`).join(""):'<li class="o-emp">消費資料還沒進來</li>';
+  const cats=((O.br.cats)||[]).filter(c=>n(c.chg)>0).sort((a,b)=>b.chg-a.chg).slice(0,4),bt=n(O.br.total),bp=n(O.br.total_prev),bchg=bp?Math.round((bt-bp)/bp*1000)/10:null;
+  const c3=(cats.length?cats.map(c=>`<li><span class="o-tag">增加</span><span class="tt">${esc(c.cat)}</span><span class="num up">${pc(c.chg)}</span><span class="num sc">${c.n} 家</span></li>`).join(""):'<li class="o-emp">這個月沒有產業的新設家數在成長</li>')+(bt?`<li class="o-foot"><span class="sc">全體 ${bt.toLocaleString()} 家 · 比上月 <span class="${bchg<0?"down":"up"}">${bchg!=null?pc(bchg):"—"}</span></span></li>`:"");
+  el.innerHTML=`<div><div class="o-colh">趨勢雷達 · 搜尋年增 vs 媒體年增 <a data-go="social" href="#">看全部 →</a></div><ul class="o-ls op">${c1}</ul></div>
+    <div><div class="o-colh">消費溫度計 · ${esc(O.cu.month||"")} 營業額年增最多 <a data-go="macro" href="#">看全部 →</a></div><ul class="o-ls op">${c2}</ul></div>
+    <div><div class="o-colh">新設公司 · ${esc(O.br.month||"")} 比上月在成長的產業 <a data-go="intel" href="#">看全部 →</a></div><ul class="o-ls op">${c3}</ul></div>`;}
+function fill(anim){const parts=[["tk",()=>tickers(anim)],["opp",opp],["tw",tw],["macro",macro],["risk",risk],["lists",()=>lists(anim)],["hot",()=>hot(anim)],["mood",mood],["ptt",ptt],["cof",()=>cof(anim)],["fund",fund],["flaps",flaps],["poly",poly],["us",()=>heat("ov-ussec",S.ussec)],["tw2",()=>heat("ov-twsec",S.twsec)],["gov",gov]];
   parts.forEach(([k,f])=>{try{f();}catch(e){console.warn("ov",k,e);}});}
 
 /* ---------- 三個持續動態的畫布：只在掛載或寬度改變時調尺寸 ---------- */
@@ -2458,7 +2466,7 @@ function after(P,all){
     const old=snapItems[p.id]||new Set();if(old.size)p.querySelectorAll(".list li").forEach(li=>{const t2=li.querySelector(".t");if(t2&&!old.has(t2.textContent.trim()))li.classList.add("o-in");});});
   tabsHit.forEach(t=>{if(t!==cur)$(`#tab-${t}`).classList.add("lit");});
   try{FX.apply(P,true,false);}catch(e){console.warn("fx",e);}
-  setTimeout(()=>{fill(true);if(cur==="overview"){["ov-c-tw","ov-c-risk","ov-c-news","ov-c-hot","ov-c-ptt","ov-c-cof","ov-c-sec"].forEach((id,i)=>setTimeout(()=>bump(E(id)),i*110));}},moving()?350:0);
+  setTimeout(()=>{fill(true);if(cur==="overview"){["ov-c-opp","ov-c-tw","ov-c-risk","ov-c-news","ov-c-hot","ov-c-ptt","ov-c-cof","ov-c-sec"].forEach((id,i)=>setTimeout(()=>bump(E(id)),i*110));}},moving()?350:0);
   const nm=[...tabsHit].filter(t=>t!=="overview").map(t=>TABS.find(x=>x[0]===t)[1]);
   toast(`新一輪資料進來 · ${changed.length} 個面板有變動${nm.length?" · "+nm.join("、"):""}`);
 }
