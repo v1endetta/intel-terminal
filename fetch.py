@@ -762,6 +762,112 @@ def p_etfholders():
             "items": items, "src": "集保結算所 集保戶股權分散表（每週）；人數為各 ETF 持有人數加總（同一人持有多檔會重複計算）"}
 
 
+# ---------- 稅籍新開家數：財政部全國營業（稅籍）登記，細類行業代碼（每天更新，只含營業中） ----------
+TAXREG_CODES = DATA / "taxreg_codes.json"
+# 消費與生活服務類（行業代碼前兩碼）：零售、電商、住宿餐飲、廣告設計攝影、教育、照顧、藝文運動娛樂、個人服務
+TAXREG_CONSUMER = {"47", "48", "55", "56", "73", "74", "76", "85", "87", "88", "90", "91", "93", "96"}
+
+
+def p_taxreg():
+    """各細類行業近 6 個月新設家數年增。資料只含營業中的店、最近 1–2 個月登錄還沒補齊，
+    兩者都會讓原始年增偏低，所以每個行業都除以「全體」的比值，看的是相對全體的成長。"""
+    import zipfile, io, csv as _csv
+    from collections import defaultdict
+    raw = get("https://eip.fia.gov.tw/data/BGMOPEN1.zip", timeout=300).content
+    z = zipfile.ZipFile(io.BytesIO(raw))
+    m0 = TODAY_TPE.replace(day=1)
+    def mback(k):
+        y, m = m0.year, m0.month - k
+        while m <= 0:
+            y, m = y - 1, m + 12
+        return f"{y}-{m:02d}"
+    w6, w3 = [mback(k) for k in range(6, 0, -1)], [mback(k) for k in range(3, 0, -1)]
+    l6, l3 = [mback(k + 12) for k in range(6, 0, -1)], [mback(k + 12) for k in range(3, 0, -1)]
+    keep = set(mback(k) for k in range(1, 26))
+    cnt = defaultdict(lambda: defaultdict(int))  # code -> ym -> n（主＋副行業都算，同一家同一碼只算一次）
+    names, total, asof, rows = {}, defaultdict(int), "", 0
+    with z.open(z.infolist()[0]) as fh:
+        rd = _csv.reader(io.TextIOWrapper(fh, encoding="utf-8-sig", newline=""))
+        hdr = next(rd)
+        ci = {h.strip(): i for i, h in enumerate(hdr)}
+        idate = ci["設立日期"]
+        pairs = [(ci[c], ci[n]) for c, n in (("行業代號", "名稱"), ("行業代號1", "名稱1"), ("行業代號2", "名稱2"), ("行業代號3", "名稱3")) if c in ci and n in ci]
+        for row in rd:
+            if len(row) <= idate:
+                continue
+            d = row[idate].strip()
+            if not rows and not d.isdigit():  # 第二行是資料日期，例如 07-OCT-26
+                asof = row[0].strip()
+                continue
+            rows += 1
+            if len(d) < 6 or not d.isdigit():
+                continue
+            ym = f"{int(d[:-4]) + 1911}-{d[-4:-2]}"
+            if ym not in keep:
+                continue
+            total[ym] += 1
+            seen = set()
+            for ic, inn in pairs:
+                if ic < len(row):
+                    c = row[ic].strip()
+                    if c and c not in seen:
+                        seen.add(c)
+                        cnt[c][ym] += 1
+                        if c not in names and inn < len(row):
+                            names[c] = row[inn].strip()
+    if rows < 500000:
+        raise RuntimeError(f"taxreg: only {rows} rows")
+    s = lambda dct, ms: sum(dct.get(m, 0) for m in ms)  # noqa: E731
+    N6, L6, N3, L3 = s(total, w6), s(total, l6), s(total, w3), s(total, l3)
+    base6, base3 = (N6 / L6 if L6 else 1), (N3 / L3 if L3 else 1)
+    codes, items = {}, []
+    for c, dct in cnt.items():
+        n6, ly6, n3, ly3 = s(dct, w6), s(dct, l6), s(dct, w3), s(dct, l3)
+        codes[c] = [names.get(c, ""), n6, ly6, n3, ly3]
+        if n6 < 30:
+            continue
+        it = {"code": c, "name": names.get(c, "")[:16], "n6": n6, "ly6": ly6, "n3": n3,
+              "spark": [dct.get(mback(k), 0) for k in range(13, 0, -1)]}
+        cons = c[:2] in TAXREG_CONSUMER
+        if cons:
+            it["cons"] = True
+        if ly6 < max(8, n6 * 0.15):  # 去年同期幾乎沒有：多半是新設的行業代碼，年增沒有意義
+            it["new"] = True
+        else:
+            it["yoy"] = round(((n6 / ly6) / base6 - 1) * 100)
+        items.append(it)
+    write_json(TAXREG_CODES, {"at": NOW_ISO, "asof": asof, "w6": [w6[0], w6[-1]], "base6": round(base6, 3), "codes": codes}, separators=(",", ":"))
+    grown = sorted([x for x in items if "yoy" in x and x["ly6"] >= 15 and x.get("cons")], key=lambda x: -x["yoy"])
+    hist_put("taxreg", "n6", TODAY_TPE.isoformat(), N6)
+    return {"asof": asof, "rows": rows, "win": [w6[0], w6[-1]], "n6": N6, "ly6": L6, "raw_yoy": round((base6 - 1) * 100, 1),
+            "monthly": [[mback(k), total.get(mback(k), 0)] for k in range(25, 0, -1)],
+            "up": grown[:15], "down": grown[::-1][:10], "new": sorted([x for x in items if x.get("new") and x.get("cons")], key=lambda x: -x["n6"])[:8],
+            "big": sorted(items, key=lambda x: -x["n6"])[:12],
+            "src": "財政部 全國營業（稅籍）登記資料集（只含營業中）；年增已除以全體比值，校正倒店與登錄延遲；排行只列消費與生活服務類"}
+
+
+def taxreg_supply(pattern, codes=None):
+    """把趨勢關鍵字對應到稅籍細類（用行業名稱比對），回傳供給面的新開家數與相對年增。"""
+    if not pattern:
+        return None
+    try:
+        if codes is None:
+            codes = json.loads(TAXREG_CODES.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        return None
+    base, cs = codes.get("base6") or 1, codes.get("codes") or {}
+    hit = [(c, v) for c, v in cs.items() if re.search(pattern, v[0])]
+    if not hit:
+        return None
+    n6 = sum(v[1] for _, v in hit)
+    old = [(c, v) for c, v in hit if v[2] >= max(8, v[1] * 0.15)]  # 年增只用去年就有的代碼，新代碼會灌水
+    n6o, ly6 = sum(v[1] for _, v in old), sum(v[2] for _, v in old)
+    out = {"n6": n6, "ly6": ly6, "codes": [v[0][:14] for _, v in sorted(hit, key=lambda kv: -kv[1][1])[:3]], "n_codes": len(hit),
+           "win": codes.get("w6")}
+    if ly6 >= 10:
+        out["yoy"] = round(((n6o / ly6) / base - 1) * 100)
+    return out
+
 # ---------- 企業動向：誰要上市、誰易主、誰換跑道、誰要開法說會（證交所／櫃買／公開資訊觀測站，全部官方免費） ----------
 CONSUMER_IND = r"食品|紡織|觀光|餐旅|貿易百貨|居家生活|生技醫療|文化創意|運動休閒|數位雲端|電子商務"
 
@@ -2556,7 +2662,15 @@ def p_voice():
     # Google 新聞的舊文章會慢慢掉出索引，去年同期一定比較少；用全部關鍵字的中位數當基準校正
     rs = sorted(r["_mratio"] for r in out if "_mratio" in r)
     base = rs[len(rs) // 2] if rs else 1
+    sup_pat = {kw["k"]: kw.get("supply") for kw in kws}
+    try:
+        tcodes = json.loads(TAXREG_CODES.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        tcodes = None
     for row in out:
+        sp = taxreg_supply(sup_pat.get(row["k"]), tcodes) if tcodes else None
+        if sp:
+            row["supply"] = sp
         mr = row.pop("_mratio", None)
         if mr is not None:
             row["media_yoy"] = round((mr / base - 1) * 100)
@@ -2570,8 +2684,12 @@ def p_voice():
             tag = "搜尋趨勢抓取中"
         elif g is None:
             tag = "搜尋量太低，數字不穩"
+        elif g >= 20 and (c or 0) >= -10 and not capped and my is not None and my <= g / 2 and (sy := (row.get("supply") or {}).get("yoy")) is not None and sy <= g / 2:
+            tag = "機會窗口：需求在長，媒體和新店都還沒跟上"
+        elif g >= 20 and (c or 0) >= -10 and (sy := (row.get("supply") or {}).get("yoy")) is not None and sy >= 15:
+            tag = "需求在長，新店也在湧入：競爭變多"
         elif g >= 20 and (c or 0) >= -10 and not capped and my is not None and my <= g / 2:
-            tag = "機會窗口：搜尋長得比媒體快"
+            tag = "搜尋長得比媒體快（供給面沒有對應資料）" if not row.get("supply") else "搜尋長得比媒體快"
         elif g >= 15 and capped:
             tag = "正在發燒：媒體已經全面跟上"
         elif g >= 15 and (c or 0) >= -10:
@@ -6342,6 +6460,7 @@ run("liquidity", p_liquidity, keep_if_fresh_hours=3)
 run("calendar", p_calendar, keep_if_fresh_hours=6)
 run("awards", p_awards, keep_if_fresh_hours=1)
 run("brands", p_brands, keep_if_fresh_hours=12)
+run("taxreg", p_taxreg, keep_if_fresh_hours=72)
 run("crowd", p_crowd, keep_if_fresh_hours=3)
 _sp = load_prev("supply") or {}
 _sp_next = min([x.get("next") for x in (_sp.get("pmi") or {}, _sp.get("nmi") or {}) if x.get("next")] or ["9999"])
