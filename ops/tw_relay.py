@@ -188,13 +188,15 @@ def _gt_cookie(headers, ck):
 
 
 def gtrends(state):
-    """Google 搜尋趨勢（台灣、近 90 天、每個關鍵字各自 0–100）。
+    """Google 搜尋趨勢（台灣、近 5 年每週、每個關鍵字各自 0–100；日資料舊的那段常被 Google 填 0，週資料穩定得多）。
     一次最多抓 12 個字（再多會被擋）：先補還沒有資料的字，之後兩批輪流、每批每 6 小時更新一次。"""
     kws = json.loads(get("https://raw.githubusercontent.com/v1endetta/intel-terminal/main/ops/voice_keywords.json"))["keywords"]
     names = [k["k"] for k in kws]
     try:
         prev = json.loads(gzip.decompress(gcs_get("relay/latest/gtrends.json.gz") or gz({})))
     except Exception:  # noqa: BLE001
+        prev = {}
+    if prev.get("span") != "today 5-y":  # 時間範圍換了就整批重抓
         prev = {}
     kwd = {k: v for k, v in (prev.get("kw") or {}).items() if k in names}
     kat = {k: v for k, v in (prev.get("kat") or {}).items() if k in names}
@@ -221,14 +223,14 @@ def gtrends(state):
         k, q = kw["k"], kw["q"]
         tried[k] = now
         try:
-            req = {"comparisonItem": [{"keyword": q, "geo": "TW", "time": "today 3-m"}], "category": 0, "property": ""}
+            req = {"comparisonItem": [{"keyword": q, "geo": "TW", "time": "today 5-y"}], "category": 0, "property": ""}
             u = "https://trends.google.com/trends/api/explore?" + urllib.parse.urlencode({"hl": "zh-TW", "tz": "-480", "req": json.dumps(req, ensure_ascii=False)})
             w = json.loads(_gt_open(u, ck)[4:])["widgets"]
             ts = [x for x in w if x["id"] == "TIMESERIES"][0]
             time.sleep(1.5)
             u2 = "https://trends.google.com/trends/api/widgetdata/multiline?" + urllib.parse.urlencode({"hl": "zh-TW", "tz": "-480", "req": json.dumps(ts["request"], ensure_ascii=False), "token": ts["token"]})
             tl = json.loads(_gt_open(u2, ck)[5:])["default"]["timelineData"]
-            kwd[k] = [[x.get("formattedAxisTime") or x.get("time"), (x.get("value") or [0])[0]] for x in tl]
+            kwd[k] = [[datetime.fromtimestamp(int(x["time"]), timezone.utc).strftime("%Y-%m-%d"), (x.get("value") or [0])[0]] for x in tl if not x.get("isPartial")]
             kat[k] = NOW_ISO
             errs.pop(k, None)
             ok += 1
@@ -238,7 +240,7 @@ def gtrends(state):
     if ok:
         errs.pop("_home", None)
     state["gt_tried"] = {k: v for k, v in tried.items() if k in names}
-    gcs_put("relay/latest/gtrends.json.gz", gz({"at": NOW_ISO, "kw": kwd, "kat": kat, "errs": errs}))
+    gcs_put("relay/latest/gtrends.json.gz", gz({"at": NOW_ISO, "span": "today 5-y", "kw": kwd, "kat": kat, "errs": errs}))
     log("gtrends", len(todo), "tried", ok, "ok", len(kwd), "have")
 
 

@@ -813,7 +813,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <section class="panel w12" id="p-voice">
     <div class="ph"><h2>Trend Radar</h2><span class="zh">趨勢雷達 · 台灣正在發生的大轉變，哪裡有機會</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>搜尋熱度：Google 趨勢台灣近 90 天（各關鍵字自己的最高點＝100，每 6 小時更新；近兩週要有 10 天以上有數字才算變化）· 討論：Google 收錄的 Dcard／PTT／Mobile01／痞客邦近 90 天 · 新聞：Google 新聞近 30 天（兩個來源最多都只回 100 則，大字會頂到上限）· 機會窗口＝搜尋在升、媒體還沒跟 · 關鍵字在 ops/voice_keywords.json</span></div>
+    <div class="pf"><span>搜尋熱度：Google 趨勢台灣近 5 年每週（各關鍵字自己的 5 年最高點＝100，每 6 小時更新）；年增＝近 4 週比去年同期，扣掉季節性；近一月＝近 4 週比前 12 週；近兩年超過 20 週是 0 的字視為量太低· 討論：Google 收錄的 Dcard／PTT／Mobile01／痞客邦近 90 天 · 新聞：Google 新聞近 30 天（兩個來源最多都只回 100 則，大字會頂到上限）· 機會窗口＝搜尋在升、媒體還沒跟 · 關鍵字在 ops/voice_keywords.json</span></div>
   </section>
   <section class="panel w12 cap" id="p-pop">
     <div class="ph"><h2>Pop Charts</h2><span class="zh">流行排行 · 台灣在聽、在看、在讀什麼</span><span class="meta">排程</span></div>
@@ -1185,21 +1185,21 @@ const renderers={
     const pod=(d.podcast||[]).length?`<div class="th-pod"><span>🎧 Podcast</span>${d.podcast.slice(0,4).map(x=>`<a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title.slice(0,48))}</a>`).join("")}</div>`:"";
     body("p-think").innerHTML=`<div class="rd">${(d.groups||[]).map(col).join("")}</div>${pod}`;setMeta("p-think",{...d,label:`${d.label} · 近 7 天 ${d.week||0} 篇`},4);},
   voice(d){const K=d.kw||[],G=d.groups||{},SC={"Dcard":"#5BC0EB","PTT":"#8B93A7","Mobile01":"#F2C14E","痞客邦":"#C9A3FF"};
-    const spark=(a,w=150,h=22)=>{const v=(a||[]).filter(isFinite);if(v.length<2)return"";const mx=Math.max(...v,1);return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${v.map((x,i)=>`${(i/(v.length-1)*w).toFixed(1)},${(h-2-x/mx*(h-4)).toFixed(1)}`).join(" ")}" style="fill:none;stroke:var(--blue);stroke-width:1.5"/></svg>`;};
+    const spark=(a,w=150,h=24)=>{const v=(a||[]).filter(isFinite);if(v.length<2)return"";const mx=Math.max(...v,1);return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${v.map((x,i)=>`${(i/(v.length-1)*w).toFixed(1)},${(h-2-x/mx*(h-4)).toFixed(1)}`).join(" ")}" style="fill:none;stroke:var(--blue);stroke-width:1.5"/></svg>`;};
     const bars=(a,w=120,h=20)=>{const v=a||[];const mx=Math.max(1,...v),bw=w/Math.max(1,v.length);return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${v.map((x,i)=>x?`<rect x="${(i*bw).toFixed(1)}" y="${(h-x/mx*(h-2)).toFixed(1)}" width="${Math.max(1,bw-1).toFixed(1)}" height="${(x/mx*(h-2)).toFixed(1)}" style="fill:var(--warn);opacity:.85"><title>${x} 則</title></rect>`:"").join("")}</svg>`;};
     const stack=(o,w=120,h=8)=>{const tot=Object.values(o||{}).reduce((a,b)=>a+b,0);if(!tot)return"";let x=0;return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${Object.entries(o).map(([k,v])=>{if(!v)return"";const ww=w*v/tot;const r=`<rect x="${x.toFixed(1)}" y="0" width="${Math.max(1,ww-1).toFixed(1)}" height="${h}" style="fill:${SC[k]}"><title>${k} ${v} 篇</title></rect>`;x+=ww;return r;}).join("")}</svg>`;};
     const hot=t=>/機會窗口/.test(t)?"vr-hot":/發燒|在升/.test(t)?"vr-up":/降溫|追高/.test(t)?"vr-down":"";
-    const row=k=>{const c=k.trend_chg;return`<tr class="${k.ref?"vr-ref":""}"><td class="name"><b>${esc(k.k)}</b></td>
-        <td>${spark(k.trend)}<span class="sub">${c!=null?`<span class="${c>=15?"up":c<=-15?"down":""}">近兩週 ${c>0?"+":""}${c}%</span>`:k.trend_sparse?"量太低":k.trend&&k.trend.length?"":"抓取中"}</span></td>
+    const row=k=>{const c=k.trend_chg,y=k.trend_yoy;return`<tr class="${k.ref?"vr-ref":""}"><td class="name"><b>${esc(k.k)}</b></td>
+        <td title="${k.trend_peak?"5 年高點："+esc(k.trend_peak):""}">${spark(k.trend)}<span class="sub">${y!=null||c!=null?`${y!=null?`<span class="${y>=15?"up":y<=-15?"down":""}">年增 ${y>0?"+":""}${y}%</span>`:""}${c!=null?` · 近一月 <span class="${c>=15?"up":c<=-15?"down":""}">${c>0?"+":""}${c}%</span>`:""}`:k.trend_sparse?"量太低":k.trend&&k.trend.length?"":"抓取中"}</span></td>
         <td>${stack(k.disc90)}<span class="sub">討論 ${k.disc_total||0}</span></td>
         <td>${bars(k.news_daily)}<span class="sub">新聞 30 天 ${k.news30||0}</span></td>
         <td class="tag ${hot(k.tag||"")}">${esc(k.tag||"")}</td></tr>`;};
     const order=[...new Set(K.map(k=>k.group))];
-    const tbl=g=>{const ks=K.filter(k=>k.group===g).sort((a,b)=>(b.trend_chg??-999)-(a.trend_chg??-999));return`<table class="vr-t"><colgroup><col style="width:17%"><col style="width:24%"><col style="width:18%"><col style="width:19%"><col></colgroup><tr class="grp"><td colspan="5">${esc(g)}<span class="sub" style="letter-spacing:0;font-weight:400"> · ${esc(G[g]||"")}</span></td></tr>${ks.map(row).join("")}</table>`;};
+    const tbl=g=>{const ks=K.filter(k=>k.group===g).sort((a,b)=>((b.trend_yoy??b.trend_chg)??-999)-((a.trend_yoy??a.trend_chg)??-999));return`<table class="vr-t"><colgroup><col style="width:17%"><col style="width:24%"><col style="width:18%"><col style="width:19%"><col></colgroup><tr class="grp"><td colspan="5">${esc(g)}<span class="sub" style="letter-spacing:0;font-weight:400"> · ${esc(G[g]||"")}</span></td></tr>${ks.map(row).join("")}</table>`;};
     const half=Math.ceil(order.length/2),colA=order.slice(0,half),colB=order.slice(half);
-    const live=K.filter(k=>!k.ref&&k.trend_chg!=null),win=K.filter(k=>/機會窗口/.test(k.tag||"")),up=live.filter(k=>k.trend_chg>=15).sort((a,b)=>b.trend_chg-a.trend_chg),dn=live.filter(k=>k.trend_chg<=-15).sort((a,b)=>a.trend_chg-b.trend_chg);
-    const nm=a=>a.slice(0,3).map(k=>`<b>${esc(k.k)}</b> ${k.trend_chg>0?"+":""}${k.trend_chg}%`).join("、");
-    const head=`${win.length?`🎯 機會窗口：${win.map(k=>`<b>${esc(k.k)}</b>`).join("、")}（搜尋在升、媒體還沒跟）。`:""}${up.length?`升溫：${nm(up)}。`:"近兩週沒有關鍵字明顯升溫。"}${dn.length?`降溫：${nm(dn)}。`:""}<span class="sub">　討論色塊 <span style="color:#5BC0EB">■Dcard</span> <span style="color:#8B93A7">■PTT</span> <span style="color:#F2C14E">■Mobile01</span> <span style="color:#C9A3FF">■痞客邦</span></span>`;
+    const G2=k=>k.trend_yoy??k.trend_chg,live=K.filter(k=>!k.ref&&G2(k)!=null),win=K.filter(k=>/機會窗口/.test(k.tag||"")),up=live.filter(k=>G2(k)>=15).sort((a,b)=>G2(b)-G2(a)),dn=live.filter(k=>G2(k)<=-15).sort((a,b)=>G2(a)-G2(b));
+    const nm=a=>a.slice(0,3).map(k=>`<b>${esc(k.k)}</b> ${G2(k)>0?"+":""}${G2(k)}%`).join("、");
+    const head=`${win.length?`🎯 機會窗口：${win.map(k=>`<b>${esc(k.k)}</b>`).join("、")}（搜尋在升、媒體還沒跟）。`:""}${up.length?`比去年同期升溫：${nm(up)}。`:"沒有關鍵字比去年同期明顯升溫。"}${dn.length?`降溫：${nm(dn)}。`:""}<span class="sub">　討論色塊 <span style="color:#5BC0EB">■Dcard</span> <span style="color:#8B93A7">■PTT</span> <span style="color:#F2C14E">■Mobile01</span> <span style="color:#C9A3FF">■痞客邦</span></span>`;
     body("p-voice").innerHTML=`<div class="pcx-h" style="padding:2px 0 6px">${head}</div><div class="vr-g"><div>${colA.map(tbl).join("")}</div><div>${colB.map(tbl).join("")}</div></div>${(d.errs||[]).length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.slice(0,3).join(" · ").slice(0,220))}</div>`:""}`;
     setMeta("p-voice",d,8);},
   pop(d){const L=(arr,f)=>(arr||[]).slice(0,10).map(f).join("")||'<li class="empty">抓不到</li>';

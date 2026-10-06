@@ -2259,39 +2259,44 @@ def p_voice():
         row["disc_top"] = sorted(ditems, key=lambda x: x["at"], reverse=True)[:4]
         tr = (gt.get("kw") or {}).get(kw["k"]) or []
         vals = [v for _, v in tr]
-        row["trend"] = vals[-90:]
-        if len(vals) >= 28:
-            a, b = sum(vals[-14:]) / 14, sum(vals[-28:-14]) / 14
-            nz_a, nz_b = sum(1 for v in vals[-14:] if v), sum(1 for v in vals[-28:-14] if v)
-            row["trend_level"] = round(a)
-            # 搜尋量太低時 Google 會把很多天回 0，前後兩週都要有 10 天以上有數字才算變化
-            if nz_a >= 10 and nz_b >= 10 and b:
-                row["trend_chg"] = round((a - b) / b * 100)
-            else:
+        row["trend"] = vals[-260:]  # 5 年每週
+        if len(vals) >= 60:
+            zeros = sum(1 for v in vals[-104:] if not v)
+            mean = lambda a: sum(a) / len(a) if a else 0  # noqa: E731
+            last4, prev12, ly4 = vals[-4:], vals[-16:-4], vals[-56:-52]
+            row["trend_level"] = round(mean(last4))
+            if zeros > 20 or not mean(prev12):  # 近兩年有 20 週以上是 0：量太低
                 row["trend_sparse"] = True
+            else:
+                row["trend_chg"] = round((mean(last4) - mean(prev12)) / mean(prev12) * 100)  # 近一月 vs 前三個月
+                if mean(ly4):
+                    row["trend_yoy"] = round((mean(last4) - mean(ly4)) / mean(ly4) * 100)  # 年增（同期比，扣掉季節性）
+            pk = max(range(len(vals)), key=lambda i: vals[i])
+            row["trend_peak"] = tr[pk][0][:7]
         # 自動判讀（找機會用）：新聞與討論的來源最多回 100 則，大字會頂到上限，所以主訊號看搜尋變化
-        c = row.get("trend_chg")
+        c, y = row.get("trend_chg"), row.get("trend_yoy")
         talk, press = row["disc_total"] >= 8, row.get("news30", 0) >= 15
+        g = y if y is not None else c  # 主看年增（扣季節性），沒有就看近一月
         if kw.get("ref"):
-            tag = "對照組：" + ("在降溫" if c is not None and c <= -15 else "回溫中" if c is not None and c >= 15 else "持平")
+            tag = "對照組：" + ("在降溫" if g is not None and g <= -15 else "回溫中" if g is not None and g >= 15 else "持平")
         elif kw["k"] not in (gt.get("kw") or {}):
             tag = "搜尋趨勢抓取中"
-        elif c is None:
+        elif g is None:
             tag = "搜尋量太低，數字不穩"
-        elif c >= 30 and not press:
+        elif g >= 30 and (c or 0) >= 0 and not press:
             tag = "搜尋急升、媒體還沒跟：機會窗口"
-        elif c >= 15 and talk and not press:
+        elif g >= 15 and talk and not press:
             tag = "消費者先動、媒體還沒跟：機會窗口"
-        elif c >= 15 and press:
-            tag = "正在發燒：大家都看到了，要快或要差異化"
-        elif c >= 15:
-            tag = "搜尋在升：需求變大"
-        elif c <= -15 and press:
+        elif g >= 15 and (c or 0) >= 0:
+            tag = "還在升溫：大家都看到了，要快或要差異化"
+        elif g >= 15:
+            tag = "一年來在升、最近一個月放緩"
+        elif g <= -15 and press:
             tag = "媒體還熱、搜尋在降：小心追高"
-        elif c <= -15:
+        elif g <= -15:
             tag = "在降溫"
-        elif talk and not press:
-            tag = "社群自己在聊、媒體沒跟：口碑型話題"
+        elif (c or 0) >= 20:
+            tag = "最近一個月突然升溫：觀察是不是新趨勢"
         else:
             tag = "平穩"
         row["tag"] = tag
