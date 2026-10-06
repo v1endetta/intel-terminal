@@ -3,35 +3,13 @@ os.makedirs("out25", exist_ok=True)
 S = requests.Session(); S.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0 Safari/537.36"
 rep = {}
 
-# 法說會：MOPS 舊站 GET 有回表格；存整頁 + 試 CSV 下載
-for typek in ("sii", "otc"):
-    try:
-        r = S.get("https://mopsov.twse.com.tw/mops/web/ajax_t100sb02_1", timeout=40,
-                  params={"encodeURIComponent": 1, "step": 1, "firstin": 1, "off": 1, "TYPEK": typek, "year": "115", "month": "10"})
-        r.encoding = "utf-8"
-        open(f"out25/mops_{typek}.html", "w").write(r.text)
-        fn = re.search(r"name='filename' value='([^']+)'", r.text)
-        rep[f"mops_{typek}"] = {"status": r.status_code, "len": len(r.text), "fn": fn.group(1) if fn else None,
-                                "rows": len(re.findall(r"<tr", r.text))}
-        if fn:
-            c = S.post("https://mopsov.twse.com.tw/server-java/t105sb02", timeout=40,
-                       data={"firstin": "true", "step": "10", "filename": fn.group(1)})
-            raw = c.content
-            try:
-                t = raw.decode("utf-8-sig")
-            except UnicodeDecodeError:
-                t = raw.decode("big5", errors="ignore")
-            rep[f"mops_{typek}_csv"] = {"status": c.status_code, "ct": c.headers.get("content-type", ""), "head": t[:2500]}
-    except Exception as e:
-        rep[f"mops_{typek}_err"] = repr(e)[:200]
-
 # 國發會 PMI/NMI：用瀏覽器抓 XHR，找各產業資料
 try:
     from playwright.sync_api import sync_playwright
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         for page in ("PMI", "NMI"):
-            pg = b.new_page(locale="zh-TW")
+            pg = b.new_page(locale="zh-TW", user_agent=S.headers["User-Agent"])
             xhr = []
             def on_resp(resp, xhr=xhr):
                 try:
@@ -46,14 +24,21 @@ try:
                 pg.goto(f"https://index.ndc.gov.tw/n/zh_tw/{page}", wait_until="networkidle", timeout=60000)
             except Exception:
                 pass
-            pg.wait_for_timeout(6000)
+            pg.wait_for_timeout(9000)
             txt = pg.inner_text("body")
-            rep[f"ndc_{page}"] = {"xhr": xhr, "text": txt[:6000]}
+            rep[f"ndc_{page}"] = {"xhr": xhr, "text": txt[:15000]}
             pg.close()
         b.close()
 except Exception as e:
     rep["ndc_err"] = repr(e)[:300]
 
+for name, url in (("cier_home","https://www.cier.edu.tw/"),("cier_pmi2","https://www.cier.edu.tw/pmi"),("cier_nmi2","https://www.cier.edu.tw/nmi")):
+    try:
+        r = S.get(url, timeout=40); r.encoding="utf-8"
+        links = sorted(set(re.findall(r'href="([^"]+)"[^>]*>([^<]{0,40})', r.text)))
+        rep[name] = {"status": r.status_code, "links": [l for l in links if re.search(r"pmi|nmi|PMI|NMI|採購|經理人|pdf", l[0]+l[1])][:80]}
+    except Exception as e:
+        rep[name] = {"err": repr(e)[:200]}
 # IPO 公告完整一次
 for name, url in (("publicForm", "https://www.twse.com.tw/rwd/zh/announcement/publicForm?response=json"),
                   ("tpex_esb", "https://www.tpex.org.tw/openapi/v1/tpex_esb_applicant_companies"),
