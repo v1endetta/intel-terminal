@@ -1,6 +1,19 @@
 {
  "alerts": [
   {
+   "id": "CWA-EQ115068-2026-1006-164108",
+   "cat": "地震",
+   "lvl": 3,
+   "area": [
+    "高雄市"
+   ],
+   "text": "10/06 16:41臺灣西南部海域發生規模4.5有感地震，最大震度高雄市3級。",
+   "src": "中央氣象署",
+   "at": "2026-10-06T08:44:33Z",
+   "exp": "2026-10-06T17:45:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Earthquake/CWA-EQ115068-2026-1006-164108.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261006151840_0000",
    "cat": "水庫放流",
    "lvl": 2,
@@ -161,12 +174,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610051033.cap"
   }
  ],
- "n_total": 7,
+ "n_total": 8,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/06 16:22:14"
+  "updated": "2026/10/06 16:46:16"
  },
  "errs": [],
- "updatedAt": "2026-10-06T08:22:37Z"
+ "updatedAt": "2026-10-06T08:44:33Z"
 }
