@@ -188,18 +188,38 @@ def _gt_cookie(headers, ck):
 
 
 def gtrends(state):
-    """Google 搜尋趨勢（台灣、近 90 天、每個關鍵字各自 0–100）。6 小時抓一次。"""
-    if time.time() - state.get("gt_at3", 0) < 6 * 3600:
-        return
+    """Google 搜尋趨勢（台灣、近 90 天、每個關鍵字各自 0–100）。
+    一次最多抓 12 個字（再多會被擋）：先補還沒有資料的字，之後兩批輪流、每批每 6 小時更新一次。"""
     kws = json.loads(get("https://raw.githubusercontent.com/v1endetta/intel-terminal/main/ops/voice_keywords.json"))["keywords"]
-    out, errs, ck = {}, {}, {}
+    names = [k["k"] for k in kws]
+    try:
+        prev = json.loads(gzip.decompress(gcs_get("relay/latest/gtrends.json.gz") or gz({})))
+    except Exception:  # noqa: BLE001
+        prev = {}
+    kwd = {k: v for k, v in (prev.get("kw") or {}).items() if k in names}
+    kat = {k: v for k, v in (prev.get("kat") or {}).items() if k in names}
+    errs = {k: v for k, v in (prev.get("errs") or {}).items() if k in names}
+    now = time.time()
+    tried = state.setdefault("gt_tried", {})
+    missing = [k for k in kws if k["k"] not in kwd and now - tried.get(k["k"], 0) > 3600]
+    if missing:
+        todo = missing[:12]
+    elif now - state.get("gt_at4", 0) >= 3 * 3600:
+        bi = state.get("gt_b", 0) % 2
+        todo = kws[bi::2]
+        state["gt_b"] = bi + 1
+        state["gt_at4"] = now
+    else:
+        return
+    ck, ok = {}, 0
     for u0 in ("https://trends.google.com/?geo=TW", "https://trends.google.com/trends/explore?geo=TW&hl=zh-TW"):
         try:
             _gt_open(u0, ck)
         except Exception as e:  # noqa: BLE001
             errs["_home"] = repr(e)[:160]
-    for kw in kws:
-        q = kw["q"]
+    for kw in todo:
+        k, q = kw["k"], kw["q"]
+        tried[k] = now
         try:
             req = {"comparisonItem": [{"keyword": q, "geo": "TW", "time": "today 3-m"}], "category": 0, "property": ""}
             u = "https://trends.google.com/trends/api/explore?" + urllib.parse.urlencode({"hl": "zh-TW", "tz": "-480", "req": json.dumps(req, ensure_ascii=False)})
@@ -208,14 +228,18 @@ def gtrends(state):
             time.sleep(1.5)
             u2 = "https://trends.google.com/trends/api/widgetdata/multiline?" + urllib.parse.urlencode({"hl": "zh-TW", "tz": "-480", "req": json.dumps(ts["request"], ensure_ascii=False), "token": ts["token"]})
             tl = json.loads(_gt_open(u2, ck)[5:])["default"]["timelineData"]
-            out[kw["k"]] = [[x.get("formattedAxisTime") or x.get("time"), (x.get("value") or [0])[0]] for x in tl]
+            kwd[k] = [[x.get("formattedAxisTime") or x.get("time"), (x.get("value") or [0])[0]] for x in tl]
+            kat[k] = NOW_ISO
+            errs.pop(k, None)
+            ok += 1
         except Exception as e:  # noqa: BLE001
-            errs[kw["k"]] = repr(e)[:160]
+            errs[k] = repr(e)[:160]
         time.sleep(3)
-    errs["_cookies"] = ",".join(sorted(ck))
-    gcs_put("relay/latest/gtrends.json.gz", gz({"at": NOW_ISO, "kw": out, "errs": errs}))
-    state["gt_at3"] = time.time() if out else time.time() - 5 * 3600  # 全失敗的話一小時後再試
-    log("gtrends", len(out), "ok", len(errs), "err", errs.get("_cookies"))
+    if ok:
+        errs.pop("_home", None)
+    state["gt_tried"] = {k: v for k, v in tried.items() if k in names}
+    gcs_put("relay/latest/gtrends.json.gz", gz({"at": NOW_ISO, "kw": kwd, "kat": kat, "errs": errs}))
+    log("gtrends", len(todo), "tried", ok, "ok", len(kwd), "have")
 
 
 def main():

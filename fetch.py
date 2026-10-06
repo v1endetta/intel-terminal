@@ -2217,7 +2217,8 @@ def _gnews_full(q):
 
 def p_voice():
     """每個關鍵字三種訊號：搜尋熱度、討論量（依平台）、新聞量；附 30 天每日新聞量與自動判讀。"""
-    kws = json.loads(VOICE_KW_PATH.read_text(encoding="utf-8"))["keywords"]
+    cfg = json.loads(VOICE_KW_PATH.read_text(encoding="utf-8"))
+    kws, groups = cfg["keywords"], cfg.get("groups") or {}
     try:
         gt = relay_get("latest/gtrends", 60 * 24)
     except Exception as e:  # noqa: BLE001
@@ -2229,7 +2230,7 @@ def p_voice():
     out, errs = [], []
     for kw in kws:
         q = kw["q"]
-        row = {"k": kw["k"], "q": q, "group": kw.get("group", "")}
+        row = {"k": kw["k"], "q": q, "group": kw.get("group", ""), **({"ref": True} if kw.get("ref") else {})}
         try:
             news = [x for x in _gnews_full(" ".join(f'"{w}"' for w in q.split()) + " when:30d") if datetime.fromisoformat(x["at"].replace("Z", "+00:00")) >= d30]
             row["news30"] = len(news)
@@ -2268,25 +2269,29 @@ def p_voice():
                 row["trend_chg"] = round((a - b) / b * 100)
             else:
                 row["trend_sparse"] = True
-        # 自動判讀
-        up = (row.get("trend_chg") or 0) >= 15
-        down = (row.get("trend_chg") or 0) <= -15
-        talk = row["disc_total"] >= 8
-        press = row.get("news30", 0) >= 10
-        if up and talk:
-            tag = "正在發燒：搜尋和討論一起升，適合借勢"
-        elif up and press and not talk:
-            tag = "媒體在推、消費者還沒聊開：適合做教育型內容卡位"
-        elif up:
-            tag = "搜尋在升：需求變大，可以提前布局"
-        elif down and press:
+        # 自動判讀（找機會用）：新聞與討論的來源最多回 100 則，大字會頂到上限，所以主訊號看搜尋變化
+        c = row.get("trend_chg")
+        talk, press = row["disc_total"] >= 8, row.get("news30", 0) >= 15
+        if kw.get("ref"):
+            tag = "對照組：" + ("在降溫" if c is not None and c <= -15 else "回溫中" if c is not None and c >= 15 else "持平")
+        elif kw["k"] not in (gt.get("kw") or {}):
+            tag = "搜尋趨勢抓取中"
+        elif c is None:
+            tag = "搜尋量太低，數字不穩"
+        elif c >= 30 and not press:
+            tag = "搜尋急升、媒體還沒跟：機會窗口"
+        elif c >= 15 and talk and not press:
+            tag = "消費者先動、媒體還沒跟：機會窗口"
+        elif c >= 15 and press:
+            tag = "正在發燒：大家都看到了，要快或要差異化"
+        elif c >= 15:
+            tag = "搜尋在升：需求變大"
+        elif c <= -15 and press:
             tag = "媒體還熱、搜尋在降：小心追高"
+        elif c <= -15:
+            tag = "在降溫"
         elif talk and not press:
-            tag = "社群自己在聊、媒體沒跟：口碑型話題，適合 KOL／UGC"
-        elif press and not talk:
-            tag = "只有媒體在寫：聲量偏公關稿，消費者討論少"
-        elif (not row.get("trend") or row.get("trend_sparse")) and not talk and not press:
-            tag = "聲量很小：要靠自己定義話題"
+            tag = "社群自己在聊、媒體沒跟：口碑型話題"
         else:
             tag = "平穩"
         row["tag"] = tag
@@ -2296,7 +2301,7 @@ def p_voice():
         if k == "_cookies" or (k.startswith("_") and gt.get("kw")):
             continue
         errs.append(f"搜尋趨勢 {k}: {e}"[:160])
-    return {"label": "Google 趨勢（台灣機房）・Google 新聞收錄", "kw": out, "gt_at": gt.get("at"), "errs": errs[:12]}
+    return {"label": "Google 趨勢・Google 新聞收錄", "kw": out, "groups": groups, "gt_at": gt.get("at"), "errs": errs[:12]}
 
 
 # ---------- 流行排行：Spotify、Netflix、Apple Podcast、KKBOX、LINE TODAY（台灣） ----------
