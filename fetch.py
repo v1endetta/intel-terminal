@@ -3379,6 +3379,20 @@ def p_jobs():
         except Exception as e:  # noqa: BLE001
             log("104 area", name, e)
         time.sleep(0.6)
+    inds = []  # 各產業刊登中職缺（看哪個產業在搶人）
+    for code, name in J104_IND.items():
+        if name == "礦業":
+            continue
+        try:
+            _, n = _j104(indcat=code + "000000")
+            if not n or n >= total:  # 參數沒生效會回全站總數
+                continue
+            hist_put("jobs", "ind:" + name, today, n)
+            inds.append({"name": name, "n": n, "chg7": chg("ind:" + name, n), "spark": hist_get("jobs", "ind:" + name, 30)})
+        except Exception as e:  # noqa: BLE001
+            log("104 ind", name, e)
+        time.sleep(0.6)
+    inds.sort(key=lambda x: -x["n"])
     latest, seen = [], set()
     for page in (1, 2, 3):
         try:
@@ -3405,7 +3419,7 @@ def p_jobs():
     for x in latest:
         ind_mix[x["ind"]] = ind_mix.get(x["ind"], 0) + 1
     cats.sort(key=lambda x: -x["n"])
-    return {"total": total, "chg7": chg("total", total), "spark": hist_get("jobs", "total", 60), "cats": cats, "areas": areas, "latest": latest[:90],
+    return {"total": total, "chg7": chg("total", total), "spark": hist_get("jobs", "total", 60), "cats": cats, "inds": inds, "areas": areas, "latest": latest[:90],
             "indMix": sorted(ind_mix.items(), key=lambda x: -x[1]), "src": "104 人力銀行"}
 
 

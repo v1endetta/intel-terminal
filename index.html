@@ -740,7 +740,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 
   <section class="ibx ib-sig" id="ib-sig" aria-label="今日訊號"></section>
   <section class="ibx ib-band" id="ib1"><div class="ib-q"><span class="no">Q1 · 錢</span><h2>錢往哪裡流？</h2><p class="ans" id="ib1a">等待排程寫入</p><div class="ib-more" data-band="1"></div></div>
-    <div class="ib-body"><div class="ib-viz"><h3 id="ib1h">新設公司行號 · 各產業月增減<span class="n">● 同業</span></h3><svg id="ib1v" role="img" aria-label="各產業新設家數月增減"></svg></div>
+    <div class="ib-body"><div class="ib-viz"><h3 id="ib1h">新設公司行號 · 各產業月增減<span class="n">● 同業</span></h3><svg id="ib1v" role="img" aria-label="各產業新設家數月增減"></svg><h3 style="margin-top:14px" id="ib1jh">104 職缺 · 哪個產業在搶人<span class="n">比 7 天前</span></h3><svg id="ib1j" role="img" aria-label="各產業職缺週增減"></svg></div>
       <div class="ib-viz"><h3>本週政府行銷標案 · 預算<span class="n">前 6 件</span></h3><svg id="ib1w" role="img" aria-label="標案預算"></svg><ul class="ib-top" id="ib1t"></ul></div></div></section>
   <section class="ibx ib-band" id="ib2"><div class="ib-q"><span class="no">Q2 · 話題</span><h2>大家在講什麼？</h2><p class="ans" id="ib2a">等待排程寫入</p><div class="ib-more" data-band="2"></div></div>
     <div class="ib-body"><div class="ib-viz"><h3>Watchlist · 近 7 天每天幾則新聞<span class="n">● 越大越多（全部命中去重後計）</span></h3><svg id="ib2v" role="img" aria-label="追蹤主題近七天活躍度"></svg></div>
@@ -1831,7 +1831,7 @@ document.querySelectorAll(".panel.cap").forEach(p=>{const b=document.createEleme
 /* ================= 情報版 D：今日訊號＋四個問題帶 ================= */
 const IB=(()=>{
 const NS="http://www.w3.org/2000/svg";
-const BANDS={1:[["p-brands","新品牌雷達"],["p-crowd","集資雷達"],["p-tenders","標案"],["p-awards","決標"],["p-radar","融資雷達"]],
+const BANDS={1:[["p-brands","新品牌雷達"],["p-jobs","104 職缺"],["p-crowd","集資雷達"],["p-tenders","標案"],["p-awards","決標"],["p-radar","融資雷達"]],
   2:[["p-news","新聞"],["p-watch","Watchlist"]],3:[["p-aiwire","AI Wire"],["p-devpulse","開發者脈動"],["p-tech","Tech"]],4:[["p-media","Fashion Press"],["p-design","Design"],["p-lyst","Lyst"]],5:[["p-think","三欄文章"]]};
 let open=new Set();try{open=new Set(JSON.parse(localStorage.getItem("intel:ibopen")||"[]"));}catch(_){}
 const save=()=>{try{localStorage.setItem("intel:ibopen",JSON.stringify([...open]));}catch(_){}};
@@ -1981,6 +1981,14 @@ function render(P){
     const rows=cats.slice().sort((a,b)=>b.chg-a.chg);brandsChart("ib1v",rows);
     const ovr=rows.filter((c,i)=>i<4||i>=rows.length-4||c.cat==="設計創意");OV.b={rows:ovr,s:`${mm} 月新設 <b>${n(B.total).toLocaleString()}</b> 家，比上月 <b class="${chg<0?"down":"up"}">${chg<0?"▼":"▲"}${Math.abs(chg)}%</b>；同業設計創意 ${me?`<b class="${me.chg<0?"down":"up"}">${me.chg>0?"+":""}${me.chg}%</b>`:"—"}`};
   }
+  const JI=((P.jobs||{}).inds||[]).filter(x=>n(x.n)>0);let jTxt="";
+  if(JI.length){const hasC=JI.some(x=>x.chg7!=null);
+    if(hasC){const rows=JI.filter(x=>x.chg7!=null).map(x=>({cat:x.name,chg:n(x.chg7)})).sort((a,b)=>b.chg-a.chg);brandsChart("ib1j",rows);const up=rows[0],dn=rows[rows.length-1];
+      $("#ib1jh").innerHTML=`104 職缺 · 哪個產業在搶人<span class="n">各產業刊登中職缺比 7 天前</span>`;jTxt=`104 職缺增加最快的是<b>${esc(up.cat)}</b>（<em class="${up.chg>=0?"up":"down"}">${up.chg>0?"+":""}${up.chg}%</em>）${dn.chg<0?`，<b>${esc(dn.cat)}</b> 在縮編（<em class="down">${dn.chg}%</em>）`:""}。`;}
+    else{const t=JI.slice(0,10),mx=n(t[0].n),W=520,L=118,rh=18;const p=draw("ib1j",W,t.length*rh+4);
+      if(p)t.forEach((x,i)=>{const y=i*rh,w=Math.max(2,(W-L-70)*n(x.n)/mx);p("text",{x:L-8,y:y+12,"text-anchor":"end"},x.name);p("rect",{x:L,y:y+4,width:w,height:rh-8,rx:1.5,style:"fill:var(--blue);opacity:.75"});p("text",{x:L+w+6,y:y+12,class:"num"},(n(x.n)/1e4).toFixed(1)+"萬");});
+      $("#ib1jh").innerHTML=`104 職缺 · 各產業刊登中<span class="n">週增減累積 7 天後改畫「比 7 天前」</span>`;}}
+  if(jTxt&&B.total)$("#ib1a").insertAdjacentHTML("beforeend",jTxt);
   if(tend.length){cards.push(["ib1","政府行銷",wan(tSum).replace(" ",""),"",`本週 ${tend.length} 件標案；最大 <b>${esc(tend[0].title.slice(0,12))}</b> ${wan(n(tend[0].budget))}`]);
     const t6=tend.slice(0,6),W=420,rh=22,mx=n(t6[0].budget);const p=draw("ib1w",W,t6.length*rh);
     if(p)t6.forEach((x,i)=>{const y=i*rh,w=Math.max(2,(W-230)*n(x.budget)/mx);const r=p("rect",{x:0,y:y+3,width:w,height:rh-9,rx:1.5,style:`fill:var(${n(x.budget)>=3e6?"--up":"--blue"});opacity:.85`});
@@ -2067,7 +2075,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
-const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"macro","p-house":"live",
+const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"live",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro",
   "ib-sig":"intel","ib-soc":"social","p-voice":"social","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
