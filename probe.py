@@ -8,7 +8,7 @@ try:
     from playwright.sync_api import sync_playwright
     with sync_playwright() as pw:
         b = pw.chromium.launch()
-        for page in ("PMI", "NMI"):
+        for page in ("data/PMI", "data/NMI"):
             pg = b.new_page(locale="zh-TW", user_agent=S.headers["User-Agent"])
             xhr = []
             def on_resp(resp, xhr=xhr):
@@ -26,31 +26,24 @@ try:
                 pass
             pg.wait_for_timeout(9000)
             txt = pg.inner_text("body")
-            rep[f"ndc_{page}"] = {"xhr": xhr, "text": txt[:15000]}
+            rep[f"ndc_{page.replace('/','_')}"] = {"xhr": xhr, "text": txt[:15000]}
             pg.close()
         b.close()
 except Exception as e:
     rep["ndc_err"] = repr(e)[:300]
 
-for name, url in (("cier_home","https://www.cier.edu.tw/"),("cier_pmi2","https://www.cier.edu.tw/pmi"),("cier_nmi2","https://www.cier.edu.tw/nmi")):
+for cat in ("pmi-ch", "nmi-ch"):
     try:
-        r = S.get(url, timeout=40); r.encoding="utf-8"
-        links = sorted(set(re.findall(r'href="([^"]+)"[^>]*>([^<]{0,40})', r.text)))
-        rep[name] = {"status": r.status_code, "links": [l for l in links if re.search(r"pmi|nmi|PMI|NMI|採購|經理人|pdf", l[0]+l[1])][:80]}
+        r = S.get(f"https://www.cier.edu.tw/eco_cat/{cat}/", timeout=40); r.encoding = "utf-8"
+        links = [l for l in dict.fromkeys(re.findall(r'href="(https://www\.cier\.edu\.tw/[^"]+)"', r.text)) if "eco_cat" not in l and "/category/" not in l]
+        rep[f"cier_{cat}"] = {"status": r.status_code, "links": links[:60]}
+        art = [l for l in links if re.search(r"/eco/|pmi|nmi", l)]
+        if art:
+            a = S.get(art[0], timeout=40); a.encoding = "utf-8"
+            t = re.sub(r"<script.*?</script>|<style.*?</style>", " ", a.text, flags=re.S)
+            t = re.sub(r"<[^>]+>", " ", t); t = re.sub(r"\s+", " ", t)
+            i = t.find("產業")
+            rep[f"cier_{cat}_art"] = {"url": art[0], "len": len(t), "txt": t[max(0, i-1500):i+6000]}
     except Exception as e:
-        rep[name] = {"err": repr(e)[:200]}
-# IPO 公告完整一次
-for name, url in (("publicForm", "https://www.twse.com.tw/rwd/zh/announcement/publicForm?response=json"),
-                  ("tpex_esb", "https://www.tpex.org.tw/openapi/v1/tpex_esb_applicant_companies"),
-                  ("applyLocal", "https://openapi.twse.com.tw/v1/company/applylistingLocal"),
-                  ("ap24L", "https://openapi.twse.com.tw/v1/opendata/t187ap24_L"),
-                  ("ap25L", "https://openapi.twse.com.tw/v1/opendata/t187ap25_L"),
-                  ("ap24O", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap24_O"),
-                  ("ap25O", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap25_O"),
-                  ("tpex_apply", "https://www.tpex.org.tw/openapi/v1/tpex_apply_listing")):
-    try:
-        r = S.get(url, timeout=40)
-        rep[name] = {"status": r.status_code, "len": len(r.content), "head": r.text[:3000]}
-    except Exception as e:
-        rep[name] = {"err": repr(e)[:200]}
+        rep[f"cier_{cat}"] = {"err": repr(e)[:200]}
 json.dump(rep, open("out25/probe.json", "w"), ensure_ascii=False, indent=1)
