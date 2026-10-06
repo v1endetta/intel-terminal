@@ -762,6 +762,192 @@ def p_etfholders():
             "items": items, "src": "集保結算所 集保戶股權分散表（每週）；人數為各 ETF 持有人數加總（同一人持有多檔會重複計算）"}
 
 
+# ---------- 企業動向：誰要上市、誰易主、誰換跑道、誰要開法說會（證交所／櫃買／公開資訊觀測站，全部官方免費） ----------
+CONSUMER_IND = r"食品|紡織|觀光|餐旅|貿易百貨|居家生活|生技醫療|文化創意|運動休閒|數位雲端|電子商務"
+
+
+def _clean(s, n=120):
+    import html as _h
+    s = _h.unescape(str(s or "")).replace(" ", " ")
+    s = re.sub(r"\s+", " ", s).strip()
+    return s if len(s) <= n else s[:n - 1] + "…"
+
+
+IND_CODE = {"01": "水泥工業", "02": "食品工業", "03": "塑膠工業", "04": "紡織纖維", "05": "電機機械", "06": "電器電纜", "08": "玻璃陶瓷",
+            "09": "造紙工業", "10": "鋼鐵工業", "11": "橡膠工業", "12": "汽車工業", "14": "建材營造", "15": "航運業", "16": "觀光餐旅",
+            "17": "金融保險", "18": "貿易百貨", "19": "綜合", "20": "其他", "21": "化學工業", "22": "生技醫療業", "23": "油電燃氣業",
+            "24": "半導體業", "25": "電腦及週邊設備業", "26": "光電業", "27": "通信網路業", "28": "電子零組件業", "29": "電子通路業",
+            "30": "資訊服務業", "31": "其他電子業", "32": "文化創意業", "33": "農業科技業", "34": "電子商務", "35": "綠能環保",
+            "36": "數位雲端", "37": "運動休閒", "38": "居家生活"}
+
+
+def p_corp():
+    errs, ind = [], {}
+    for url in ("https://openapi.twse.com.tw/v1/opendata/t187ap03_L", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O",
+                "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_R"):  # 上市、上櫃、興櫃基本資料（新股多半從興櫃來）
+        for _att in range(2):  # 櫃買的大檔偶爾傳到一半斷線，重試一次
+            try:
+                for r in gjson(url, timeout=90):
+                    c = str(r.get("公司代號") or r.get("SecuritiesCompanyCode") or "").strip()
+                    k = str(r.get("產業別") or r.get("SecuritiesIndustryCode") or "").strip()
+                    if c and k:
+                        ind[c] = IND_CODE.get(k.zfill(2), "")
+                break
+            except Exception as e:  # noqa: BLE001
+                if _att:
+                    errs.append(f"產業對照: {safe_err(e)}")
+    for url in ("https://openapi.twse.com.tw/v1/opendata/t187ap05_L", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O"):
+        try:  # 基本資料沒抓到的，用月營收表的產業別補
+            for r in gjson(url, timeout=60):
+                c = str(r.get("公司代號") or "").strip()
+                if c and not ind.get(c):
+                    ind[c] = (r.get("產業別") or "").strip()
+        except Exception as e:  # noqa: BLE001
+            log("corp ind fill", e)
+    today = TODAY_TPE.isoformat()
+    ago = lambda d: (TODAY_TPE - timedelta(days=d)).isoformat()  # noqa: E731
+    ahead = lambda d: (TODAY_TPE + timedelta(days=d)).isoformat()  # noqa: E731
+    # 1) 公開申購（新股掛牌前的抽籤）：只留初上市／初上櫃，掛牌日在過去 45 天到未來
+    ipo = []
+    try:
+        j = gjson("https://www.twse.com.tw/rwd/zh/announcement/publicForm?response=json", timeout=60)
+        fi = {f.strip(): i for i, f in enumerate(j.get("fields") or [])}
+        g = lambda row, k: str(row[fi[k]]).strip() if k in fi and fi[k] < len(row) else ""  # noqa: E731
+        for row in j.get("data") or []:
+            mk = g(row, "發行市場")
+            if not re.search(r"初上市|初上櫃", mk):
+                continue
+            lst = roc_to_iso(g(row, "撥券日期(上市、上櫃日期)"))
+            if not re.match(r"\d{4}-", lst) or lst < ago(45):
+                continue
+            code = g(row, "證券代號")
+            price = num(g(row, "實際承銷價(元)")) or num(g(row, "承銷價(元)"))
+            ipo.append({"code": code, "name": g(row, "證券名稱")[:8], "mk": "上市" if "上市" in mk else "上櫃",
+                        "start": roc_to_iso(g(row, "申購開始日")), "end": roc_to_iso(g(row, "申購結束日")),
+                        "draw": roc_to_iso(g(row, "抽籤日期")), "list": lst, "price": price,
+                        "rate": num(g(row, "中籤率(%)")), "ind": ind.get(code, "")})
+        ipo.sort(key=lambda x: x["list"])
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"公開申購: {safe_err(e)}")
+    # 2) 排隊申請上市／上櫃：近 120 天送件的
+    queue = []
+    try:  # 證交所這支的欄位名稱錯位一格，照位置讀：序號、代號、名稱、申請日、董事長、資本額、審議會、董事會、核准、上市日…
+        for r in gjson("https://openapi.twse.com.tw/v1/company/applylistingLocal", timeout=60):
+            v = [str(x or "").strip() for x in r.values()]
+            if len(v) < 6 or not re.match(r"^\d{4}[A-Z]?$", v[1]):
+                continue
+            ad = roc_to_iso(v[3])
+            if not re.match(r"\d{4}-", ad) or ad < ago(120):
+                continue
+            steps = sum(1 for x in v[6:10] if re.match(r"^\d{7}$", x))
+            queue.append({"code": v[1], "name": v[2][:8], "mk": "上市", "apply": ad, "steps": steps,
+                          "cap": num(v[5]), "uw": v[10][:6] if len(v) > 10 else "", "note": _clean(v[-1], 12), "ind": ind.get(v[1], "")})
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"申請上市: {safe_err(e)}")
+    try:
+        for r in gjson("https://www.tpex.org.tw/openapi/v1/tpex_esb_applicant_companies", timeout=60):
+            ad = str(r.get("Date") or "")
+            ad = f"{ad[:4]}-{ad[4:6]}-{ad[6:8]}" if re.match(r"^\d{8}$", ad) else ""
+            if not ad or ad < ago(120):
+                continue
+            code = str(r.get("SecuritiesCompanyCode") or "").strip()
+            steps = sum(1 for k in ("TPExListingScreeningCommitteeDate", "TPExSanctionedDate", "TPExApprovedTradingDate", "ListingDate") if str(r.get(k) or "").strip())
+            cap = num(r.get("CapitalWhileApplying"))
+            queue.append({"code": code, "name": str(r.get("CompanyName") or "")[:8], "mk": "上櫃", "apply": ad, "steps": steps,
+                          "cap": round(cap / 1000) if cap else None, "uw": str(r.get("LeadUnderwriter") or "")[:6], "note": "", "ind": ind.get(code, "")})
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"申請上櫃: {safe_err(e)}")
+    queue.sort(key=lambda x: x["apply"], reverse=True)
+    # 3) 經營權異動（近一年）＋ 4) 營業範圍重大變更（最新一季）
+    control, pivot = [], []
+    for mk, url in (("上市", "https://openapi.twse.com.tw/v1/opendata/t187ap24_L"), ("上櫃", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap24_O")):
+        try:
+            for r in gjson(url, timeout=60):
+                code = str(r.get("公司代號") or r.get("SecuritiesCompanyCode") or "").strip()
+                d = roc_to_iso(r.get("經營權異動日期"))
+                if not re.match(r"\d{4}-", d) or d < ago(365):
+                    continue
+                desc = _clean(r.get("經營權異動說明"), 400)
+                ent = r"[^，。、；「」（()\s]{2,24}?(?:集團|有限公司|株式會社|Ltd\.?|Inc\.?)"
+                who = None
+                for pat in (rf"予({ent})", rf"最大股東({ent})", rf"由({ent})", rf"({ent})(?:及[^，。]{{0,40}}?)?(?:等[^，。]{{0,6}}?)?公開收購",
+                            r"^([A-Za-z][A-Za-z0-9&.,\s]{2,40}?(?:Ltd\.?|Inc\.?))"):
+                    who = re.search(pat, desc)
+                    if who:
+                        break
+                who = re.sub(r"(股份)?有限公司$", "", who.group(1)).strip() if who else ""
+                how = "公開收購" if "公開收購" in desc else "股權轉讓" if re.search(r"轉讓|股權交割|取得.{0,10}股權|納入合併", desc) else \
+                      "合併" if "合併" in desc and "合併財務" not in desc else "董事會改組" if re.search(r"改選|改派|解任|補選", desc) else ""
+                control.append({"code": code, "name": str(r.get("公司名稱") or r.get("CompanyName") or "")[:8], "mk": mk, "date": d,
+                                "who": who, "how": how, "desc": _clean(desc, 160), "ind": ind.get(code, "")})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"經營權{mk}: {safe_err(e)}")
+    control.sort(key=lambda x: x["date"], reverse=True)
+    for mk, url in (("上市", "https://openapi.twse.com.tw/v1/opendata/t187ap25_L"), ("上櫃", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap25_O")):
+        try:
+            for r in gjson(url, timeout=60):
+                code = str(r.get("公司代號") or r.get("SecuritiesCompanyCode") or "").strip()
+                t = str(r.get("營業範圍重大變更說明") or "")
+                tags = [lbl for pat, lbl in ((r"新增主要經營業務", "新業務過半"), (r"經營業務變更", "舊本業縮到兩成以下"),
+                                             (r"處分不動產、廠房", "處分廠房"), (r"營建", "轉做營建"), (r"轉投資|金融資產", "轉投資")) if re.search(pat, t)]
+                pivot.append({"code": code, "name": str(r.get("公司名稱") or r.get("CompanyName") or "")[:8], "mk": mk,
+                              "q": f"{r.get('年度', '')}Q{r.get('季別', '')}", "tags": tags or [_clean(t, 30)], "ind": ind.get(code, "")})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"營業範圍{mk}: {safe_err(e)}")
+    pivot.sort(key=lambda x: (x["q"], "新業務過半" in x["tags"]), reverse=True)
+    # 5) 法說會：公開資訊觀測站 法人說明會一覽表（本月＋下月），留今天起 21 天內
+    conf, seen = [], set()
+    months = [TODAY_TPE.replace(day=1)]
+    nm = (TODAY_TPE.replace(day=28) + timedelta(days=5)).replace(day=1)
+    if TODAY_TPE.day >= 10:
+        months.append(nm)
+    import csv as _csv, io as _io
+    for typek, mk in (("sii", "上市"), ("otc", "上櫃")):
+        for m0 in months:
+            try:
+                r = S.get("https://mopsov.twse.com.tw/mops/web/ajax_t100sb02_1", timeout=60,
+                          params={"encodeURIComponent": 1, "step": 1, "firstin": 1, "off": 1, "TYPEK": typek,
+                                  "year": str(m0.year - 1911), "month": f"{m0.month:02d}"})
+                r.encoding = "utf-8"
+                fn = re.search(r"name='filename' value='([^']+)'", r.text)
+                if not fn:
+                    if "查無" not in r.text:
+                        errs.append(f"法說會{mk}{m0.month}月: 沒有下載檔名")
+                    continue
+                c = S.post("https://mopsov.twse.com.tw/server-java/t105sb02", timeout=60, data={"firstin": "true", "step": "10", "filename": fn.group(1)})
+                raw = c.content
+                try:
+                    txt = raw.decode("utf-8-sig")
+                except UnicodeDecodeError:
+                    txt = raw.decode("big5", errors="ignore")
+                for row in _csv.DictReader(_io.StringIO(txt)):
+                    row = {(k or "").strip(): v for k, v in row.items()}
+                    code = str(row.get("公司代號") or "").strip()
+                    dm = re.findall(r"\d{3}/\d{2}/\d{2}", str(row.get("召開法人說明會日期") or ""))
+                    if not code or not dm:
+                        continue
+                    d0, d1 = roc_to_iso(dm[0]), roc_to_iso(dm[-1])
+                    if d1 < today or d0 > ahead(21) or (code, d0) in seen:
+                        continue
+                    seen.add((code, d0))
+                    summ = _clean(row.get("法人說明會擇要訊息"), 160)
+                    routine = bool(re.search(r"受邀|邀請|參加.{0,20}(論壇|研討會|投資人會議|座談)", summ)) and len(summ) < 90
+                    i_ = ind.get(code, "")
+                    conf.append({"code": code, "name": _clean(row.get("公司名稱"), 8), "mk": mk, "date": max(d0, today) if d0 < today <= d1 else d0,
+                                 "time": _clean(row.get("召開法人說明會時間"), 8), "place": _clean(row.get("召開法人說明會地點"), 24),
+                                 "summary": summ, "ind": i_, "cons": bool(i_ and re.search(CONSUMER_IND, i_)), "routine": routine})
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"法說會{mk}{m0.month}月: {safe_err(e)}")
+    conf.sort(key=lambda x: (x["date"], not x["cons"]))
+    if not (ipo or queue or control or conf):
+        raise RuntimeError(f"corp: nothing {errs[:3]}")
+    hist_put("corp", "queue", today, len(queue))
+    return {"ipo": ipo[:20], "queue": queue[:40], "queue_n": len(queue), "control": control[:30], "control_n": len(control),
+            "pivot": pivot[:20], "pivot_n": len(pivot), "conf": conf[:120], "conf_n": len(conf),
+            "src": "證交所／櫃買中心 OpenAPI（公開申購、申請上市櫃、經營權及營業範圍異動專區）＋ 公開資訊觀測站 法人說明會一覽表",
+            "errs": errs[:6]}
+
+
 FASHION_TW = {  # 台灣時尚媒體官方來源（都經過實測：網站規則允許、從 GitHub 連得到）
     "美麗佳人": ("gnews", "https://www.marieclaire.com.tw/google-news.xml"),
     "VOGUE": ("rss", "https://www.vogue.com.tw/feed/rss"),
@@ -5568,7 +5754,7 @@ def _ndc_pmi(page):
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         pat = r"擴張（Expansion）(?:\s*\d+\s*)*?(\d+\.\d+)\s*%"  # 刻度是整數、數值帶小數，不綁刻度數量
-        txt = ""
+        txt, inds = "", []
         for _load in range(2):  # 圖表是 JS 晚畫的：每次載入最多等 4×2.5 秒，還沒有就整頁重載一次
             pg = b.new_page(user_agent=UA, locale="zh-TW")
             try:
@@ -5580,6 +5766,20 @@ def _ndc_pmi(page):
                 txt = pg.inner_text("body")
                 if re.search(pat, txt):
                     break
+            if re.search(pat, txt) and not inds:  # 各產業：同一頁的 JSON 介面（要帶頁面上的 csrf token）；data[0]＝產業指數、data[1]＝新增訂單
+                try:
+                    raw = pg.evaluate(_NDC_JS, f"/n/json/data/{page}/industry")
+                    for ln in (json.loads(raw).get("line") or {}).values():
+                        ser = (ln.get("data") or [[]])[0] or []
+                        od = (ln.get("data") or [[], []])[1] if len(ln.get("data") or []) > 1 else []
+                        if len(ser) < 2:
+                            continue
+                        nm = str(ln.get("name") or "")
+                        nm = nm[:-1] if nm.endswith("不動產業") else nm[:-2] if nm.endswith("產業") else nm[:-1] if nm.endswith("業") else nm
+                        inds.append({"name": nm, "value": ser[-1].get("y"), "prev": ser[-2].get("y"), "period": str(ser[-1].get("x") or ""),
+                                     "orders": od[-1].get("y") if od else None, "spark": [x.get("y") for x in ser[-13:]]})
+                except Exception as e:  # noqa: BLE001
+                    log("ndc industry", page, e)
             pg.close()
             if re.search(pat, txt):
                 break
@@ -5594,7 +5794,11 @@ def _ndc_pmi(page):
         raise RuntimeError(f"ndc {page} parse (len={len(txt)}, axis={'擴張（Expansion）' in txt}, pct={npct})")
     return {"value": float(head.group(1)), "orders": float(orders.group(1)) if orders else None,
             "period": f"{ym.group(1)}-{int(ym.group(2)):02d}" if ym else "", "chg": float(chg.group(1)) if chg else None,
-            "next": nxt.group(1) if nxt else ""}
+            "next": nxt.group(1) if nxt else "", "inds": inds}
+
+
+_NDC_JS = """async (u) => { const t=(document.querySelector('meta[name=csrf-token]')||{}).content||'';
+  const r=await fetch(u,{method:'POST',headers:{'X-CSRF-TOKEN':t,'X-Requested-With':'XMLHttpRequest'}}); return await r.text(); }"""
 
 
 def p_supply():
@@ -6128,6 +6332,7 @@ run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("revenue", p_revenue, keep_if_fresh_hours=20)
 run("etfholders", p_etfholders, keep_if_fresh_hours=12)
+run("corp", p_corp, keep_if_fresh_hours=6)
 run("media", p_media, keep_if_fresh_hours=2)
 # run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
 run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
