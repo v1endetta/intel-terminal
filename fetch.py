@@ -2244,6 +2244,23 @@ def p_voice():
             row["news_top"] = news[:3]
         except Exception as e:  # noqa: BLE001
             errs.append(f"{kw['k']} 新聞: {safe_err(e)}")
+        try:  # 媒體年增：近 7 天 vs 去年同 7 天（Google 新聞 after:/before:，一次最多回 100 則）
+            qq = " ".join(f'"{w}"' for w in q.split())
+            t1 = NOW.astimezone(TPE).date() + timedelta(days=1)
+            t0 = t1 - timedelta(days=7)
+            def _win(a, b):
+                lo, hi = datetime(a.year, a.month, a.day, tzinfo=TPE), datetime(b.year, b.month, b.day, tzinfo=TPE)
+                return [x for x in _gnews_full(f"{qq} after:{a.isoformat()} before:{b.isoformat()}")
+                        if lo <= datetime.fromisoformat(x["at"].replace("Z", "+00:00")) < hi]
+            cur = _win(t0, t1)
+            time.sleep(0.4)
+            ly = _win(t0 - timedelta(days=364), t1 - timedelta(days=364))
+            row["media7"], row["media7_ly"] = len(cur), len(ly)
+            row["media_capped"] = len(cur) >= 90
+            if not row["media_capped"]:
+                row["media_yoy"] = round((len(cur) - len(ly)) / max(len(ly), 3) * 100)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{kw['k']} 媒體年增: {safe_err(e)}")
         disc, ditems = {}, []
         for nm, site in VOICE_SITES:
             try:
@@ -2275,24 +2292,24 @@ def p_voice():
             row["trend_peak"] = tr[pk][0][:7]
         # 自動判讀（找機會用）：新聞與討論的來源最多回 100 則，大字會頂到上限，所以主訊號看搜尋變化
         c, y = row.get("trend_chg"), row.get("trend_yoy")
-        talk, press = row["disc_total"] >= 8, row.get("news30", 0) >= 15
-        g = y if y is not None else c  # 主看年增（扣季節性），沒有就看近一月
+        my, capped = row.get("media_yoy"), row.get("media_capped")
+        g = y if y is not None else c  # 主看搜尋年增（扣季節性），沒有就看近一月
         if kw.get("ref"):
             tag = "對照組：" + ("在降溫" if g is not None and g <= -15 else "回溫中" if g is not None and g >= 15 else "持平")
         elif kw["k"] not in (gt.get("kw") or {}):
             tag = "搜尋趨勢抓取中"
         elif g is None:
             tag = "搜尋量太低，數字不穩"
-        elif g >= 30 and (c or 0) >= 0 and not press:
-            tag = "搜尋急升、媒體還沒跟：機會窗口"
-        elif g >= 15 and talk and not press:
-            tag = "消費者先動、媒體還沒跟：機會窗口"
-        elif g >= 15 and (c or 0) >= 0:
-            tag = "還在升溫：大家都看到了，要快或要差異化"
+        elif g >= 20 and (c or 0) >= -10 and not capped and my is not None and my <= g / 2:
+            tag = "機會窗口：搜尋長得比媒體快"
+        elif g >= 15 and capped:
+            tag = "正在發燒：媒體已經全面跟上"
+        elif g >= 15 and (c or 0) >= -10:
+            tag = "還在升溫：媒體也在跟"
         elif g >= 15:
             tag = "一年來在升、最近一個月放緩"
-        elif g <= -15 and press:
-            tag = "媒體還熱、搜尋在降：小心追高"
+        elif g <= -15 and ((my or 0) >= 15 or capped):
+            tag = "搜尋在降、媒體還在炒：小心追高"
         elif g <= -15:
             tag = "在降溫"
         elif (c or 0) >= 20:

@@ -813,7 +813,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <section class="panel w12" id="p-voice">
     <div class="ph"><h2>Trend Radar</h2><span class="zh">趨勢雷達 · 台灣正在發生的大轉變，哪裡有機會</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>搜尋熱度：Google 趨勢台灣近 5 年每週（各關鍵字自己的 5 年最高點＝100，每 6 小時更新）；年增＝近 4 週比去年同期，扣掉季節性；近一月＝近 4 週比前 12 週；近兩年超過 20 週是 0 的字視為量太低· 討論：Google 收錄的 Dcard／PTT／Mobile01／痞客邦近 90 天 · 新聞：Google 新聞近 30 天（兩個來源最多都只回 100 則，大字會頂到上限）· 機會窗口＝搜尋在升、媒體還沒跟 · 關鍵字在 ops/voice_keywords.json</span></div>
+    <div class="pf"><span>搜尋熱度：Google 趨勢台灣近 5 年每週（各關鍵字自己的 5 年最高點＝100，每 6 小時更新）；年增＝近 4 週比去年同期，扣掉季節性；近一月＝近 4 週比前 12 週；近兩年超過 20 週是 0 的字視為量太低· 討論：Google 收錄的 Dcard／PTT／Mobile01／痞客邦近 90 天 · 新聞：Google 新聞近 30 天（兩個來源最多都只回 100 則，大字會頂到上限）· 媒體＝Google 新聞近 7 天 vs 去年同 7 天（一次最多 100 則，頂到就標「量太大」）· 機會窗口＝搜尋年增 20% 以上、最近沒在掉，而且媒體年增不到搜尋的一半 · 關鍵字在 ops/voice_keywords.json</span></div>
   </section>
   <section class="panel w12 cap" id="p-pop">
     <div class="ph"><h2>Pop Charts</h2><span class="zh">流行排行 · 台灣在聽、在看、在讀什麼</span><span class="meta">排程</span></div>
@@ -1192,14 +1192,14 @@ const renderers={
     const row=k=>{const c=k.trend_chg,y=k.trend_yoy;return`<tr class="${k.ref?"vr-ref":""}"><td class="name"><b>${esc(k.k)}</b></td>
         <td title="${k.trend_peak?"5 年高點："+esc(k.trend_peak):""}">${spark(k.trend)}<span class="sub">${y!=null||c!=null?`${y!=null?`<span class="${y>=15?"up":y<=-15?"down":""}">年增 ${y>0?"+":""}${y}%</span>`:""}${c!=null?` · 近一月 <span class="${c>=15?"up":c<=-15?"down":""}">${c>0?"+":""}${c}%</span>`:""}`:k.trend_sparse?"量太低":k.trend&&k.trend.length?"":"抓取中"}</span></td>
         <td>${stack(k.disc90)}<span class="sub">討論 ${k.disc_total||0}</span></td>
-        <td>${bars(k.news_daily)}<span class="sub">新聞 30 天 ${k.news30||0}</span></td>
+        <td>${bars(k.news_daily)}<span class="sub">${k.media7!=null?`媒體 7 天 ${k.media7}${k.media_capped?"+":""} · 去年 ${k.media7_ly}${k.media_yoy!=null?` <span class="${k.media_yoy>=15?"up":k.media_yoy<=-15?"down":""}">${k.media_yoy>0?"+":""}${k.media_yoy}%</span>`:k.media_capped?" · 量太大":""}`:`新聞 30 天 ${k.news30||0}`}</span></td>
         <td class="tag ${hot(k.tag||"")}">${esc(k.tag||"")}</td></tr>`;};
     const order=[...new Set(K.map(k=>k.group))];
     const tbl=g=>{const ks=K.filter(k=>k.group===g).sort((a,b)=>((b.trend_yoy??b.trend_chg)??-999)-((a.trend_yoy??a.trend_chg)??-999));return`<table class="vr-t"><colgroup><col style="width:17%"><col style="width:24%"><col style="width:18%"><col style="width:19%"><col></colgroup><tr class="grp"><td colspan="5">${esc(g)}<span class="sub" style="letter-spacing:0;font-weight:400"> · ${esc(G[g]||"")}</span></td></tr>${ks.map(row).join("")}</table>`;};
     const half=Math.ceil(order.length/2),colA=order.slice(0,half),colB=order.slice(half);
     const G2=k=>k.trend_yoy??k.trend_chg,live=K.filter(k=>!k.ref&&G2(k)!=null),win=K.filter(k=>/機會窗口/.test(k.tag||"")),up=live.filter(k=>G2(k)>=15).sort((a,b)=>G2(b)-G2(a)),dn=live.filter(k=>G2(k)<=-15).sort((a,b)=>G2(a)-G2(b));
     const nm=a=>a.slice(0,3).map(k=>`<b>${esc(k.k)}</b> ${G2(k)>0?"+":""}${G2(k)}%`).join("、");
-    const head=`${win.length?`🎯 機會窗口：${win.map(k=>`<b>${esc(k.k)}</b>`).join("、")}（搜尋在升、媒體還沒跟）。`:""}${up.length?`比去年同期升溫：${nm(up)}。`:"沒有關鍵字比去年同期明顯升溫。"}${dn.length?`降溫：${nm(dn)}。`:""}<span class="sub">　討論色塊 <span style="color:#5BC0EB">■Dcard</span> <span style="color:#8B93A7">■PTT</span> <span style="color:#F2C14E">■Mobile01</span> <span style="color:#C9A3FF">■痞客邦</span></span>`;
+    const head=`${win.length?`🎯 機會窗口：${win.map(k=>`<b>${esc(k.k)}</b>`).join("、")}（搜尋長得比媒體快）。`:""}${up.length?`比去年同期升溫：${nm(up)}。`:"沒有關鍵字比去年同期明顯升溫。"}${dn.length?`降溫：${nm(dn)}。`:""}<span class="sub">　討論色塊 <span style="color:#5BC0EB">■Dcard</span> <span style="color:#8B93A7">■PTT</span> <span style="color:#F2C14E">■Mobile01</span> <span style="color:#C9A3FF">■痞客邦</span></span>`;
     body("p-voice").innerHTML=`<div class="pcx-h" style="padding:2px 0 6px">${head}</div><div class="vr-g"><div>${colA.map(tbl).join("")}</div><div>${colB.map(tbl).join("")}</div></div>${(d.errs||[]).length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.slice(0,3).join(" · ").slice(0,220))}</div>`:""}`;
     setMeta("p-voice",d,8);},
   pop(d){const L=(arr,f)=>(arr||[]).slice(0,10).map(f).join("")||'<li class="empty">抓不到</li>';
