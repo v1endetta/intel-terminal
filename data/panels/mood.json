@@ -1,39 +1,38 @@
 {
  "taiwan": {
-  "score": -0.2,
-  "label": "焦慮",
+  "score": -0.1,
+  "label": "防備",
   "themes": [
-   "台電找台積電",
-   "聯發科砍額度",
-   "個資外洩"
+   "省錢優惠",
+   "防範詐騙",
+   "車禍資安"
   ],
-  "line": "台灣人今天關注台電台積電供電爭議與聯發科利空，並對個資外洩與詐騙感到焦慮。"
+  "line": "民眾熱衷於搜刮小確幸折價，同時對簡訊詐騙與個資外洩保持高度戒備。"
  },
  "overseas": {
   "score": -0.6,
-  "label": "憤怒",
+  "label": "焦慮",
   "themes": [
-   "通膨與薪資",
-   "產業裁員潮",
-   "OpenAI爭議"
+   "關稅通膨",
+   "企業裁員",
+   "AI版權"
   ],
-  "line": "國外社群充斥對通膨吃掉薪水、教育藝術界裁員以及AI巨頭爭議的強烈不滿。"
+  "line": "海外討論籠罩在關稅衝擊、油價與房貸上漲的經濟壓力，並對裁員潮極度不滿。"
  },
  "sources": {
   "PTT": {
-   "score": -0.1,
-   "note": "關注科技股營收與供電爭議"
+   "score": 0.1,
+   "note": "聚焦省錢情報與車輛房產閒聊"
   },
   "LINE": {
    "score": -0.3,
-   "note": "瘋傳資安外洩、詐騙與健康謠言"
+   "note": "多為詐騙警告與資安事件轉貼"
   }
  },
- "watch": "盯緊台積電供電爭議與科技業營收利空帶來的市場恐慌情緒",
+ "watch": "觀察 LINE 轉傳的資安外洩與簡訊詐騙情事是否擴大。",
  "_grounding": [],
- "model": "gemini-3.5-flash",
+ "model": "gemini-3.6-flash",
  "spark_tw": [
-  -0.1,
   -0.1,
   0.05,
   -0.05,
@@ -104,10 +103,10 @@
   -0.15,
   -0.15,
   -0.2,
-  -0.2
+  -0.2,
+  -0.1
  ],
  "spark_os": [
-  -0.4,
   -0.6,
   -0.3,
   -0.2,
@@ -178,14 +177,14 @@
   -0.45,
   -0.3,
   -0.4,
+  -0.6,
   -0.6
  ],
  "n_inputs": {
   "PTT": 24,
   "LINE（Cofacts）": 15,
   "Threads": 0,
-  "Bluesky（國外）": 8
+  "Bluesky（國外）": 12
  },
- "updatedAt": "2026-10-06T13:24:28Z",
- "error": "2026-10-06T19:49:26Z RuntimeError: gemini-3.5-flash 503 This model is currently experiencing high demand. Spikes in demand are usually temporary. "
+ "updatedAt": "2026-10-06T20:53:30Z"
 }
