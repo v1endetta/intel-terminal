@@ -839,10 +839,11 @@ def p_taxreg():
     write_json(TAXREG_CODES, {"at": NOW_ISO, "asof": asof, "w6": [w6[0], w6[-1]], "base6": round(base6, 3), "codes": codes}, separators=(",", ":"))
     grown = sorted([x for x in items if "yoy" in x and x["ly6"] >= 15 and x.get("cons")], key=lambda x: -x["yoy"])
     hist_put("taxreg", "n6", TODAY_TPE.isoformat(), N6)
+    me = taxreg_supply(r"視覺傳達|專門設計|廣告服務|廣告代理|室內設計")  # 同業：廣告、設計
     return {"asof": asof, "rows": rows, "win": [w6[0], w6[-1]], "n6": N6, "ly6": L6, "raw_yoy": round((base6 - 1) * 100, 1),
             "monthly": [[mback(k), total.get(mback(k), 0)] for k in range(25, 0, -1)],
             "up": grown[:15], "down": grown[::-1][:10], "new": sorted([x for x in items if x.get("new") and x.get("cons")], key=lambda x: -x["n6"])[:8],
-            "big": sorted(items, key=lambda x: -x["n6"])[:12],
+            "big": sorted(items, key=lambda x: -x["n6"])[:12], "me": me,
             "src": "財政部 全國營業（稅籍）登記資料集（只含營業中）；年增已除以全體比值，校正倒店與登錄延遲；排行只列消費與生活服務類"}
 
 

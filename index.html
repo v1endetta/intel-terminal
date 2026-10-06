@@ -742,7 +742,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 
   <section class="ibx ib-sig" id="ib-sig" aria-label="今日訊號"></section>
   <section class="ibx ib-band" id="ib1"><div class="ib-q"><span class="no">Q1 · 錢</span><h2>錢往哪裡流？</h2><p class="ans" id="ib1a">等待排程寫入</p><div class="ib-more" data-band="1"></div></div>
-    <div class="ib-body"><div class="ib-viz"><h3 id="ib1h">新設公司行號 · 各產業月增減<span class="n">● 同業</span></h3><svg id="ib1v" role="img" aria-label="各產業新設家數月增減"></svg><h3 style="margin-top:14px" id="ib1xh">稅籍新開店 · 哪類小店在變多</h3><svg id="ib1x" role="img" aria-label="稅籍細類新開家數年增"></svg><h3 style="margin-top:14px" id="ib1jh">104 職缺 · 哪個產業在搶人<span class="n">比 7 天前</span></h3><svg id="ib1j" role="img" aria-label="各產業職缺週增減"></svg><h3 style="margin-top:14px" id="ib1eh">ETF 存股族 · 集保持有人數</h3><svg id="ib1e" role="img" aria-label="ETF 持有人數"></svg><h3 style="margin-top:14px" id="ib1ph">景氣 · 各產業 PMI／NMI<span class="n">50 以上＝擴張</span></h3><svg id="ib1p" role="img" aria-label="各產業採購經理人指數"></svg></div>
+    <div class="ib-body"><div class="ib-viz"><h3 id="ib1xh">稅籍新開店 · 哪類小店在變多</h3><svg id="ib1x" role="img" aria-label="稅籍細類新開家數年增"></svg><h3 style="margin-top:14px" id="ib1jh">104 職缺 · 哪個產業在搶人<span class="n">比 7 天前</span></h3><svg id="ib1j" role="img" aria-label="各產業職缺週增減"></svg><h3 style="margin-top:14px" id="ib1eh">ETF 存股族 · 集保持有人數</h3><svg id="ib1e" role="img" aria-label="ETF 持有人數"></svg><h3 style="margin-top:14px" id="ib1ph">景氣 · 各產業 PMI／NMI<span class="n">50 以上＝擴張</span></h3><svg id="ib1p" role="img" aria-label="各產業採購經理人指數"></svg></div>
       <div class="ib-viz"><h3>本週政府行銷標案 · 預算<span class="n">前 6 件</span></h3><svg id="ib1w" role="img" aria-label="標案預算"></svg><ul class="ib-top" id="ib1t"></ul><h3 style="margin-top:14px" id="ib1rh">上市櫃營收 · 各產業年增</h3><svg id="ib1r" role="img" aria-label="各產業營收年增"></svg><ul class="ib-top" id="ib1rl" style="border-top:0;padding-top:0"></ul></div></div></section>
   <section class="ibx ib-band" id="ib6"><div class="ib-q"><span class="no">Q2 · 企業</span><h2>誰要上市、誰易主、誰換跑道？</h2><p class="ans" id="ib6a">等待排程寫入</p></div>
     <div class="ib-body"><div class="ib-viz"><h3 id="ib6ih">即將掛牌 · 公開申購<span class="n">證交所抽籤日程</span></h3><ul class="ib-top" id="ib6i" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:14px" id="ib6qh">排隊上市櫃<span class="n">近 120 天送件</span></h3><ul class="ib-top" id="ib6q" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:14px" id="ib6fh">法說會 · 未來 3 週<span class="n">消費相關產業優先</span></h3><ul class="ib-top ib-conf" id="ib6f" style="border-top:0;padding-top:0"></ul></div>
@@ -1981,13 +1981,10 @@ function render(P){
   const B=P.brands||{},cats=(B.cats||[]).filter(c=>c.cat!=="名稱看不出產業"&&c.cat!=="其他"&&c.chg!=null);
   const tend=((P.tenders||{}).items||[]).filter(t=>n(t.budget)>0).sort((a,b)=>b.budget-a.budget),tSum=tend.reduce((s,t)=>s+n(t.budget),0);
   const crowd=((P.crowd||{}).hot||[]).map(c=>({...c,v:amtNum(c.amt)})).filter(c=>c.v>0).sort((a,b)=>b.v-a.v);
-  if(B.total){const chg=Math.round((B.total-B.total_prev)/B.total_prev*100),grow=cats.filter(c=>c.chg>0),fall=cats.slice().sort((a,b)=>a.chg-b.chg)[0],me=cats.find(c=>c.cat==="設計創意");
+  if(B.total){const chg=Math.round((B.total-B.total_prev)/B.total_prev*100);
     const mm=+String(B.month||"").slice(5);
-    cards.push(["ib1","新品牌",n(B.total).toLocaleString(),"家",`${mm} 月新設，比上月 <b class="${chg<0?"down":"up"}">${chg<0?"▼":"▲"}${Math.abs(chg)}%</b>${grow.length&&grow.length<=3?`；只有 <b>${grow.map(c=>c.cat).join("、")}</b> 成長`:""}`]);
-    $("#ib1h").innerHTML=`${mm} 月新設公司行號 · 各產業比上月<span class="n">● 同業</span>`;
-    $("#ib1a").innerHTML=`${mm} 月新設 <em>${n(B.total).toLocaleString()}</em> 家，比上月 <em class="${chg<0?"down":"up"}">${chg<0?"少":"多"} ${Math.abs(chg)}%</em>；${cats.length} 類裡 ${cats.filter(c=>c.chg<0).length} 類衰退，跌最多是<b>${esc(fall.cat)}</b>。${me?`同業設計創意 <em class="${me.chg<0?"down":"up"}">${me.chg>0?"+":""}${me.chg}%</em>。`:""}${tend.length?`政府行銷標案本週 ${tend.length} 件、合計 <em>${wan(tSum)}</em>。`:""}`;
-    const rows=cats.slice().sort((a,b)=>b.chg-a.chg);brandsChart("ib1v",rows);
-    const ovr=rows.filter((c,i)=>i<4||i>=rows.length-4||c.cat==="設計創意");OV.b={rows:ovr,s:`${mm} 月新設 <b>${n(B.total).toLocaleString()}</b> 家，比上月 <b class="${chg<0?"down":"up"}">${chg<0?"▼":"▲"}${Math.abs(chg)}%</b>；同業設計創意 ${me?`<b class="${me.chg<0?"down":"up"}">${me.chg>0?"+":""}${me.chg}%</b>`:"—"}`};
+    cards.push(["ib1","新品牌",n(B.total).toLocaleString(),"家",`${mm} 月新設公司行號，比上月 <b class="${chg<0?"down":"up"}">${chg<0?"▼":"▲"}${Math.abs(chg)}%</b>`]);
+    $("#ib1a").innerHTML=`${mm} 月新設公司行號 <em>${n(B.total).toLocaleString()}</em> 家，比上月 <em class="${chg<0?"down":"up"}">${chg<0?"少":"多"} ${Math.abs(chg)}%</em>。${tend.length?`政府行銷標案本週 ${tend.length} 件、合計 <em>${wan(tSum)}</em>。`:""}`;
   }
   const JI=((P.jobs||{}).inds||[]).filter(x=>n(x.n)>0);let jTxt="";
   if(JI.length){const hasC=JI.some(x=>x.chg7!=null);
@@ -2016,7 +2013,7 @@ function render(P){
     const w=(TX.win||[]).map(m=>String(m).replace("-","/")).join("–");
     $("#ib1xh").innerHTML=`稅籍新開店 · 哪類小店在變多<span class="n">消費與生活服務類 · ${esc(w)} 新開家數，比去年同期、已扣掉全體 ${TX.raw_yoy>0?"+":""}${TX.raw_yoy}%</span>`;
     const nw=(TX.new||[])[0];
-    if(B.total)$("#ib1a").insertAdjacentHTML("beforeend",`小店新開最快的是<b>${esc(up[0].name)}</b>（<em class="up">+${up[0].yoy}%</em>）${dn.length?`，最慢是<b>${esc(dn[0].name)}</b>（<em class="down">${dn[0].yoy}%</em>）`:""}${nw?`；新出現的類別<b>${esc(nw.name)}</b> 半年 ${n(nw.n6)} 家`:""}。`);}
+    if(B.total)$("#ib1a").insertAdjacentHTML("beforeend",`小店新開最快的是<b>${esc(up[0].name)}</b>（<em class="up">+${up[0].yoy}%</em>）${dn.length?`，最慢是<b>${esc(dn[0].name)}</b>（<em class="down">${dn[0].yoy}%</em>）`:""}${nw?`；新出現的類別<b>${esc(nw.name)}</b> 半年 ${n(nw.n6)} 家`:""}。${TX.me&&TX.me.yoy!=null?`同業（廣告、設計）新開 <em>${n(TX.me.n6)}</em> 家，<em class="${TX.me.yoy>=0?"up":"down"}">${TX.me.yoy>0?"+":""}${TX.me.yoy}%</em>。`:""}`);}
   /* 景氣：各產業 PMI／NMI（國發會） */
   const SP=P.supply||{},PI=[...((SP.nmi||{}).inds||[]).map(x=>({...x,g:"服務"})),...((SP.pmi||{}).inds||[]).map(x=>({...x,g:"製造"}))].filter(x=>isFinite(n(x.value)));
   if(PI.length){const W=520,L=118,R=96,rh=17,lo=35,hi=75,sx=v=>L+(Math.max(lo,Math.min(hi,v))-lo)/(hi-lo)*(W-L-R);
