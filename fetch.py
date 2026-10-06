@@ -689,12 +689,14 @@ def p_revenue():
             for r in gjson(url):
                 ind = (r.get("產業別") or "").strip() or "其他"
                 cur, ly, pm = num(r.get("營業收入-當月營收")), num(r.get("營業收入-去年當月營收")), num(r.get("營業收入-上月營收"))
-                if not cur or cur <= 0:
+                if not cur or cur <= 0 or not ly or ly <= 0 or re.search(r"金融|保險|證券", ind):  # 金融業營收含投資損益、會出現負值，不適合比
                     continue
                 period = period or roc_ym(r.get("資料年月"))
                 a = agg.setdefault(ind, {"name": ind, "cur": 0.0, "ly": 0.0, "pm": 0.0, "n": 0, "top": []})
-                a["cur"] += cur; a["ly"] += ly or 0; a["pm"] += pm or 0; a["n"] += 1
-                if ly and ly > 0:
+                a["cur"] += cur; a["ly"] += ly; a["n"] += 1
+                if pm and pm > 0:
+                    a["pm"] += pm; a["cur_pm"] = a.get("cur_pm", 0) + cur
+                if True:
                     a["top"].append((cur - ly, r.get("公司名稱") or r.get("公司簡稱") or r.get("公司代號"), round((cur - ly) / ly * 100, 1)))
         except Exception as e:  # noqa: BLE001
             errs.append(f"{mk}全體營收: {safe_err(e)}")
@@ -704,7 +706,7 @@ def p_revenue():
             continue
         a["top"].sort(key=lambda t: -t[0])
         inds.append({"name": a["name"], "n": a["n"], "rev": round(a["cur"]), "yoy": round((a["cur"] - a["ly"]) / a["ly"] * 100, 1),
-                     "mom": round((a["cur"] - a["pm"]) / a["pm"] * 100, 1) if a["pm"] else None,
+                     "mom": round((a.get("cur_pm", 0) - a["pm"]) / a["pm"] * 100, 1) if a["pm"] else None,
                      "lead": [{"name": str(t[1])[:10], "yoy": t[2]} for t in a["top"][:2]]})
     inds.sort(key=lambda x: -x["yoy"])
     if not items and not inds:

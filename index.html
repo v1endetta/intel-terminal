@@ -1992,7 +1992,7 @@ function render(P){
   const RV=((P.revenue||{}).inds||[]).filter(x=>isFinite(n(x.yoy)));
   if(RV.length){const pd=String((P.revenue||{}).ind_period||"").replace(/^(\d{4})[\/-](\d{2}).*/,"$1/$2"),srt=RV.slice().sort((a,b)=>n(b.yoy)-n(a.yoy)),pick=[...srt.slice(0,7),...srt.slice(-4).filter(x=>!srt.slice(0,7).includes(x))];
     brandsChart("ib1r",pick.map(x=>({cat:String(x.name).replace(/業$/,"").slice(0,7),chg:n(x.yoy)})));
-    $("#ib1rh").innerHTML=`上市櫃營收 · 各產業年增<span class="n">${esc(pd)} · ${RV.length} 個產業 · 前 7 與後 4</span>`;
+    $("#ib1rh").innerHTML=`上市櫃營收 · 各產業年增<span class="n">${esc(pd)} · ${RV.length} 個產業（不含金融）· 前 7 與後 4</span>`;
     $("#ib1rl").innerHTML=srt.slice(0,3).map(x=>`<li><span class="src">${esc(String(x.name).slice(0,8))}</span><span class="t">主要靠 ${(x.lead||[]).map(l=>`${esc(l.name)} <em class="${n(l.yoy)>=0?"up":"down"}">${n(l.yoy)>0?"+":""}${l.yoy}%</em>`).join("、")||"—"}</span><span class="m num up">${n(x.yoy)>0?"+":""}${x.yoy}%</span></li>`).join("");
     if(B.total){const u=srt[0];$("#ib1a").insertAdjacentHTML("beforeend",`上市櫃 ${esc(pd)} 營收年增最多的是<b>${esc(u.name)}</b>（<em class="${n(u.yoy)>=0?"up":"down"}">${n(u.yoy)>0?"+":""}${u.yoy}%</em>）。`);}}
   if(tend.length){cards.push(["ib1","政府行銷",wan(tSum).replace(" ",""),"",`本週 ${tend.length} 件標案；最大 <b>${esc(tend[0].title.slice(0,12))}</b> ${wan(n(tend[0].budget))}`]);
