@@ -682,10 +682,35 @@ def p_revenue():
                                        "period": roc_ym(r.get("資料年月"))}
             except Exception as e:  # noqa: BLE001
                 log("revenue fallback", url, e)
-    if not items:
+    # 3) 全體上市櫃月營收依產業加總：哪個產業的營收在長
+    agg, period, errs = {}, None, []
+    for mk, url in (("上市", "https://openapi.twse.com.tw/v1/opendata/t187ap05_L"), ("上櫃", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O")):
+        try:
+            for r in gjson(url):
+                ind = (r.get("產業別") or "").strip() or "其他"
+                cur, ly, pm = num(r.get("營業收入-當月營收")), num(r.get("營業收入-去年當月營收")), num(r.get("營業收入-上月營收"))
+                if not cur or cur <= 0:
+                    continue
+                period = period or roc_ym(r.get("資料年月"))
+                a = agg.setdefault(ind, {"name": ind, "cur": 0.0, "ly": 0.0, "pm": 0.0, "n": 0, "top": []})
+                a["cur"] += cur; a["ly"] += ly or 0; a["pm"] += pm or 0; a["n"] += 1
+                if ly and ly > 0:
+                    a["top"].append((cur - ly, r.get("公司名稱") or r.get("公司簡稱") or r.get("公司代號"), round((cur - ly) / ly * 100, 1)))
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{mk}全體營收: {safe_err(e)}")
+    inds = []
+    for a in agg.values():
+        if a["n"] < 3 or not a["ly"]:
+            continue
+        a["top"].sort(key=lambda t: -t[0])
+        inds.append({"name": a["name"], "n": a["n"], "rev": round(a["cur"]), "yoy": round((a["cur"] - a["ly"]) / a["ly"] * 100, 1),
+                     "mom": round((a["cur"] - a["pm"]) / a["pm"] * 100, 1) if a["pm"] else None,
+                     "lead": [{"name": str(t[1])[:10], "yoy": t[2]} for t in a["top"][:2]]})
+    inds.sort(key=lambda x: -x["yoy"])
+    if not items and not inds:
         raise RuntimeError("no revenue rows")
     order = list(REV_WATCH)
-    return {"items": sorted(items.values(), key=lambda x: order.index(x["code"]))}
+    return {"items": sorted(items.values(), key=lambda x: order.index(x["code"])), "inds": inds, "ind_period": period, "errs": errs}
 
 
 FASHION_TW = {  # 台灣時尚媒體官方來源（都經過實測：網站規則允許、從 GitHub 連得到）
