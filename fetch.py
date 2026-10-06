@@ -2258,7 +2258,7 @@ def p_voice():
             row["media7"], row["media7_ly"] = len(cur), len(ly)
             row["media_capped"] = len(cur) >= 90
             if not row["media_capped"]:
-                row["media_yoy"] = round((len(cur) - len(ly)) / max(len(ly), 3) * 100)
+                row["_mratio"] = max(len(cur), 1) / max(len(ly), 3)
         except Exception as e:  # noqa: BLE001
             errs.append(f"{kw['k']} 媒體年增: {safe_err(e)}")
         disc, ditems = {}, []
@@ -2291,6 +2291,16 @@ def p_voice():
             pk = max(range(len(vals)), key=lambda i: vals[i])
             row["trend_peak"] = tr[pk][0][:7]
         # 自動判讀（找機會用）：新聞與討論的來源最多回 100 則，大字會頂到上限，所以主訊號看搜尋變化
+        hist_put("voice_news", kw["k"], NOW.astimezone(TPE).strftime("%Y-%m-%d"), row.get("news7", 0))
+        out.append(row)
+    # Google 新聞的舊文章會慢慢掉出索引，去年同期一定比較少；用全部關鍵字的中位數當基準校正
+    rs = sorted(r["_mratio"] for r in out if "_mratio" in r)
+    base = rs[len(rs) // 2] if rs else 1
+    for row in out:
+        mr = row.pop("_mratio", None)
+        if mr is not None:
+            row["media_yoy"] = round((mr / base - 1) * 100)
+        kw = {"k": row["k"], "ref": row.get("ref")}
         c, y = row.get("trend_chg"), row.get("trend_yoy")
         my, capped = row.get("media_yoy"), row.get("media_capped")
         g = y if y is not None else c  # 主看搜尋年增（扣季節性），沒有就看近一月
@@ -2317,13 +2327,11 @@ def p_voice():
         else:
             tag = "平穩"
         row["tag"] = tag
-        hist_put("voice_news", kw["k"], NOW.astimezone(TPE).strftime("%Y-%m-%d"), row.get("news7", 0))
-        out.append(row)
     for k, e in (gt.get("errs") or {}).items():
         if k == "_cookies" or (k.startswith("_") and gt.get("kw")):
             continue
         errs.append(f"搜尋趨勢 {k}: {e}"[:160])
-    return {"label": "Google 趨勢・Google 新聞收錄", "kw": out, "groups": groups, "gt_at": gt.get("at"), "errs": errs[:12]}
+    return {"label": "Google 趨勢・Google 新聞收錄", "kw": out, "media_base": round(base, 2), "groups": groups, "gt_at": gt.get("at"), "errs": errs[:12]}
 
 
 # ---------- 流行排行：Spotify、Netflix、Apple Podcast、KKBOX、LINE TODAY（台灣） ----------
