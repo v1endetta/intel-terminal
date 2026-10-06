@@ -8,7 +8,7 @@ try:
     exec(compile(src[:cut], "fetch_test.py", "exec"), g)
 except Exception:
     rep["import_err"] = traceback.format_exc()[-1500:]
-for name, call in (("corp", lambda: g["p_corp"]()), ("nmi", lambda: g["_ndc_pmi"]("NMI")), ("pmi", lambda: g["_ndc_pmi"]("PMI"))):
+for name, call in (("corp", lambda: g["p_corp"]()), ("nmi", lambda: g["_ndc_pmi"]("NMI"))):
     try:
         rep[name] = call()
     except Exception:

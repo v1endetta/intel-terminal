@@ -763,7 +763,7 @@ def p_etfholders():
 
 
 # ---------- 企業動向：誰要上市、誰易主、誰換跑道、誰要開法說會（證交所／櫃買／公開資訊觀測站，全部官方免費） ----------
-CONSUMER_IND = r"食品|紡織|觀光|餐旅|貿易百貨|居家生活|生技醫療|文化創意|運動休閒|數位雲端|其他"
+CONSUMER_IND = r"食品|紡織|觀光|餐旅|貿易百貨|居家生活|生技醫療|文化創意|運動休閒|數位雲端|電子商務"
 
 
 def _clean(s, n=120):
@@ -773,15 +773,24 @@ def _clean(s, n=120):
     return s if len(s) <= n else s[:n - 1] + "…"
 
 
+IND_CODE = {"01": "水泥工業", "02": "食品工業", "03": "塑膠工業", "04": "紡織纖維", "05": "電機機械", "06": "電器電纜", "08": "玻璃陶瓷",
+            "09": "造紙工業", "10": "鋼鐵工業", "11": "橡膠工業", "12": "汽車工業", "14": "建材營造", "15": "航運業", "16": "觀光餐旅",
+            "17": "金融保險", "18": "貿易百貨", "19": "綜合", "20": "其他", "21": "化學工業", "22": "生技醫療業", "23": "油電燃氣業",
+            "24": "半導體業", "25": "電腦及週邊設備業", "26": "光電業", "27": "通信網路業", "28": "電子零組件業", "29": "電子通路業",
+            "30": "資訊服務業", "31": "其他電子業", "32": "文化創意業", "33": "農業科技業", "34": "電子商務", "35": "綠能環保",
+            "36": "數位雲端", "37": "運動休閒", "38": "居家生活"}
+
+
 def p_corp():
     errs, ind = [], {}
-    for url in ("https://openapi.twse.com.tw/v1/opendata/t187ap05_L", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O",
-                "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_R"):
+    for url in ("https://openapi.twse.com.tw/v1/opendata/t187ap03_L", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O",
+                "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_R"):  # 上市、上櫃、興櫃基本資料（新股多半從興櫃來）
         try:
             for r in gjson(url, timeout=60):
-                c = str(r.get("公司代號") or "").strip()
-                if c:
-                    ind[c] = (r.get("產業別") or "").strip()
+                c = str(r.get("公司代號") or r.get("SecuritiesCompanyCode") or "").strip()
+                k = str(r.get("產業別") or r.get("SecuritiesIndustryCode") or "").strip()
+                if c and k:
+                    ind[c] = IND_CODE.get(k.zfill(2), "")
         except Exception as e:  # noqa: BLE001
             errs.append(f"產業對照: {safe_err(e)}")
     today = TODAY_TPE.isoformat()
@@ -848,9 +857,18 @@ def p_corp():
                 if not re.match(r"\d{4}-", d) or d < ago(365):
                     continue
                 desc = _clean(r.get("經營權異動說明"), 400)
-                who = re.search(r"(?:由|係由|最大股東|^)([^，。、；\s]{2,24}?(?:集團|公司|投資|控股|株式會社|Ltd\.?|Inc\.?|基金|資產))(?:[^，。]{0,20})?(?:取得|納入|推派|正式取得)", desc)
+                ent = r"[^，。、；「」（()\s]{2,24}?(?:集團|有限公司|株式會社|Ltd\.?|Inc\.?)"
+                who = None
+                for pat in (rf"予({ent})", rf"最大股東({ent})", rf"由({ent})", rf"({ent})(?:及[^，。]{{0,40}}?)?(?:等[^，。]{{0,6}}?)?公開收購",
+                            r"^([A-Za-z][A-Za-z0-9&.,\s]{2,40}?(?:Ltd\.?|Inc\.?))"):
+                    who = re.search(pat, desc)
+                    if who:
+                        break
+                who = re.sub(r"(股份)?有限公司$", "", who.group(1)).strip() if who else ""
+                how = "公開收購" if "公開收購" in desc else "股權轉讓" if re.search(r"轉讓|股權交割|取得.{0,10}股權|納入合併", desc) else \
+                      "合併" if "合併" in desc and "合併財務" not in desc else "董事會改組" if re.search(r"改選|改派|解任|補選", desc) else ""
                 control.append({"code": code, "name": str(r.get("公司名稱") or r.get("CompanyName") or "")[:8], "mk": mk, "date": d,
-                                "who": who.group(1) if who else "", "desc": _clean(desc, 110), "ind": ind.get(code, "")})
+                                "who": who, "how": how, "desc": _clean(desc, 160), "ind": ind.get(code, "")})
         except Exception as e:  # noqa: BLE001
             errs.append(f"經營權{mk}: {safe_err(e)}")
     control.sort(key=lambda x: x["date"], reverse=True)
@@ -5745,7 +5763,8 @@ def _ndc_pmi(page):
                         od = (ln.get("data") or [[], []])[1] if len(ln.get("data") or []) > 1 else []
                         if len(ser) < 2:
                             continue
-                        nm = re.sub(r"(產業|業)$", "", str(ln.get("name") or ""))
+                        nm = str(ln.get("name") or "")
+                        nm = nm[:-1] if nm.endswith("不動產業") else nm[:-2] if nm.endswith("產業") else nm[:-1] if nm.endswith("業") else nm
                         inds.append({"name": nm, "value": ser[-1].get("y"), "prev": ser[-2].get("y"), "period": str(ser[-1].get("x") or ""),
                                      "orders": od[-1].get("y") if od else None, "spark": [x.get("y") for x in ser[-13:]]})
                 except Exception as e:  # noqa: BLE001
