@@ -715,6 +715,53 @@ def p_revenue():
     return {"items": sorted(items.values(), key=lambda x: order.index(x["code"])), "inds": inds, "ind_period": period, "errs": errs}
 
 
+# ---------- ETF 存股族：集保戶股權分散表（每週）裡 ETF 的持有人數 ----------
+def p_etfholders():
+    import csv, io
+    raw = get("https://opendata.tdcc.com.tw/getOD.ashx?id=1-5", timeout=90).content.decode("utf-8-sig", "replace")
+    rows = list(csv.reader(io.StringIO(raw)))
+    if len(rows) < 100:
+        raise RuntimeError("tdcc 1-5: too few rows")
+    hdr = rows[0]
+    ci = {k: i for i, k in enumerate(hdr)}
+    i_d, i_c, i_l, i_n = (ci.get("資料日期", 0), ci.get("證券代號", 1), ci.get("持股分級", 2), ci.get("人數", 3))
+    date, etf, allh = None, {}, 0
+    for r in rows[1:]:
+        if len(r) <= i_n or r[i_l].strip() != "17":  # 17 = 合計
+            continue
+        date = date or r[i_d].strip()
+        code, n = r[i_c].strip(), num(r[i_n]) or 0
+        allh += n
+        if code.startswith("00"):
+            etf[code] = n
+    if not etf:
+        raise RuntimeError("tdcc 1-5: no ETF rows")
+    d = f"{date[:4]}-{date[4:6]}-{date[6:8]}" if date and len(date) == 8 else TODAY_TPE.isoformat()
+    names = {}
+    for url, kc, kn in (("https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL", "Code", "Name"),
+                        ("https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes", "SecuritiesCompanyCode", "CompanyName")):
+        try:
+            for x in gjson(url):
+                if str(x.get(kc, "")).startswith("00"):
+                    names[x[kc]] = (x.get(kn) or "").strip()
+        except Exception as e:  # noqa: BLE001
+            log("etf names", url, e)
+    total = sum(etf.values())
+    prev_total = next((v for dd, v in reversed(HISTORY.get("etf", {}).get("holders_total", [])) if dd < d), None)
+    hist_put("etf", "holders_total", d, total)
+    hist_put("etf", "share_pct", d, round(total / allh * 100, 2) if allh else None)
+    top = sorted(etf.items(), key=lambda kv: -kv[1])[:40]
+    items = []
+    for code, n in top:
+        pv = next((v for dd, v in reversed(HISTORY.get("etf", {}).get("h:" + code, [])) if dd < d), None)
+        hist_put("etf", "h:" + code, d, n)
+        items.append({"code": code, "name": names.get(code, code)[:14], "n": n, "chg": (n - pv) if pv else None,
+                      "chg_pct": round((n - pv) / pv * 100, 2) if pv else None})
+    return {"date": d, "total": total, "chg": (total - prev_total) if prev_total else None, "n_etf": len(etf),
+            "share_pct": round(total / allh * 100, 2) if allh else None, "spark": hist_get("etf", "holders_total", 26),
+            "items": items, "src": "集保結算所 集保戶股權分散表（每週）；人數為各 ETF 持有人數加總（同一人持有多檔會重複計算）"}
+
+
 FASHION_TW = {  # 台灣時尚媒體官方來源（都經過實測：網站規則允許、從 GitHub 連得到）
     "美麗佳人": ("gnews", "https://www.marieclaire.com.tw/google-news.xml"),
     "VOGUE": ("rss", "https://www.vogue.com.tw/feed/rss"),
@@ -6080,6 +6127,7 @@ run("sectors", p_sectors, keep_if_fresh_hours=0.5)
 run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("revenue", p_revenue, keep_if_fresh_hours=20)
+run("etfholders", p_etfholders, keep_if_fresh_hours=12)
 run("media", p_media, keep_if_fresh_hours=2)
 # run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
 run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)

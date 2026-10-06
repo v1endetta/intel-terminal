@@ -740,7 +740,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 
   <section class="ibx ib-sig" id="ib-sig" aria-label="今日訊號"></section>
   <section class="ibx ib-band" id="ib1"><div class="ib-q"><span class="no">Q1 · 錢</span><h2>錢往哪裡流？</h2><p class="ans" id="ib1a">等待排程寫入</p><div class="ib-more" data-band="1"></div></div>
-    <div class="ib-body"><div class="ib-viz"><h3 id="ib1h">新設公司行號 · 各產業月增減<span class="n">● 同業</span></h3><svg id="ib1v" role="img" aria-label="各產業新設家數月增減"></svg><h3 style="margin-top:14px" id="ib1jh">104 職缺 · 哪個產業在搶人<span class="n">比 7 天前</span></h3><svg id="ib1j" role="img" aria-label="各產業職缺週增減"></svg></div>
+    <div class="ib-body"><div class="ib-viz"><h3 id="ib1h">新設公司行號 · 各產業月增減<span class="n">● 同業</span></h3><svg id="ib1v" role="img" aria-label="各產業新設家數月增減"></svg><h3 style="margin-top:14px" id="ib1jh">104 職缺 · 哪個產業在搶人<span class="n">比 7 天前</span></h3><svg id="ib1j" role="img" aria-label="各產業職缺週增減"></svg><h3 style="margin-top:14px" id="ib1eh">ETF 存股族 · 集保持有人數</h3><svg id="ib1e" role="img" aria-label="ETF 持有人數"></svg></div>
       <div class="ib-viz"><h3>本週政府行銷標案 · 預算<span class="n">前 6 件</span></h3><svg id="ib1w" role="img" aria-label="標案預算"></svg><ul class="ib-top" id="ib1t"></ul><h3 style="margin-top:14px" id="ib1rh">上市櫃營收 · 各產業年增</h3><svg id="ib1r" role="img" aria-label="各產業營收年增"></svg><ul class="ib-top" id="ib1rl" style="border-top:0;padding-top:0"></ul></div></div></section>
   <section class="ibx ib-band" id="ib2"><div class="ib-q"><span class="no">Q2 · 話題</span><h2>大家在講什麼？</h2><p class="ans" id="ib2a">等待排程寫入</p><div class="ib-more" data-band="2"></div></div>
     <div class="ib-body"><div class="ib-viz"><h3>Watchlist · 近 7 天每天幾則新聞<span class="n">● 越大越多（全部命中去重後計）</span></h3><svg id="ib2v" role="img" aria-label="追蹤主題近七天活躍度"></svg></div>
@@ -1989,6 +1989,12 @@ function render(P){
       if(p)t.forEach((x,i)=>{const y=i*rh,w=Math.max(2,(W-L-70)*n(x.n)/mx);p("text",{x:L-8,y:y+12,"text-anchor":"end"},x.name);p("rect",{x:L,y:y+4,width:w,height:rh-8,rx:1.5,style:"fill:var(--blue);opacity:.75"});p("text",{x:L+w+6,y:y+12,class:"num"},(n(x.n)/1e4).toFixed(1)+"萬");});
       $("#ib1jh").innerHTML=`104 職缺 · 各產業刊登中<span class="n">週增減累積 7 天後改畫「比 7 天前」</span>`;}}
   if(jTxt&&B.total)$("#ib1a").insertAdjacentHTML("beforeend",jTxt);
+  const EH=P.etfholders||{};
+  if((EH.items||[]).length){const t=EH.items.slice(0,8),mx=n(t[0].n),W=520,L=128,rh=18;const p=draw("ib1e",W,t.length*rh+4);
+    if(p)t.forEach((x,i)=>{const y=i*rh,w=Math.max(2,(W-L-120)*n(x.n)/mx);p("text",{x:L-8,y:y+12,"text-anchor":"end"},String(x.name).slice(0,10));p("rect",{x:L,y:y+4,width:w,height:rh-8,rx:1.5,style:"fill:var(--blue);opacity:.75"});
+      p("text",{x:L+w+6,y:y+12,class:"num"},(n(x.n)/1e4).toFixed(1)+"萬");if(x.chg!=null)p("text",{x:L+w+52,y:y+12,class:"num",style:`fill:var(${n(x.chg)>=0?"--up":"--down"})`},(n(x.chg)>0?"+":"")+n(x.chg).toLocaleString());});
+    $("#ib1eh").innerHTML=`ETF 存股族 · 集保持有人數<span class="n">${esc(EH.date||"")} · ${n(EH.n_etf)} 檔合計 ${(n(EH.total)/1e4).toFixed(0)} 萬人次${EH.chg!=null?` <b class="${n(EH.chg)>=0?"up":"down"}">${n(EH.chg)>0?"+":""}${n(EH.chg).toLocaleString()}</b> 比上週`:""} · 占全市場 ${EH.share_pct}%</span>`;
+    if(B.total)$("#ib1a").insertAdjacentHTML("beforeend",`ETF 持有人次 <em>${(n(EH.total)/1e4).toFixed(0)} 萬</em>，占全市場股東人次 <em>${EH.share_pct}%</em>。`);}
   const RV=((P.revenue||{}).inds||[]).filter(x=>isFinite(n(x.yoy)));
   if(RV.length){const pd=String((P.revenue||{}).ind_period||"").replace(/^(\d{4})[\/-](\d{2}).*/,"$1/$2"),srt=RV.slice().sort((a,b)=>n(b.yoy)-n(a.yoy)),pick=[...srt.slice(0,7),...srt.slice(-4).filter(x=>!srt.slice(0,7).includes(x))];
     brandsChart("ib1r",pick.map(x=>({cat:String(x.name).replace(/業$/,"").slice(0,7),chg:n(x.yoy)})));
