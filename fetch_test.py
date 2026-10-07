@@ -764,6 +764,8 @@ def p_etfholders():
 
 # ---------- 稅籍新開家數：財政部全國營業（稅籍）登記，細類行業代碼（每天更新，只含營業中） ----------
 TAXREG_CODES = DATA / "taxreg_codes.json"
+# 消費與生活服務類（行業代碼前兩碼）：零售、電商、住宿餐飲、廣告設計攝影、教育、照顧、藝文運動娛樂、個人服務
+TAXREG_CONSUMER = {"47", "48", "55", "56", "73", "74", "76", "85", "87", "88", "90", "91", "93", "96"}
 
 
 def p_taxreg():
@@ -826,19 +828,23 @@ def p_taxreg():
             continue
         it = {"code": c, "name": names.get(c, "")[:16], "n6": n6, "ly6": ly6, "n3": n3,
               "spark": [dct.get(mback(k), 0) for k in range(13, 0, -1)]}
-        if ly6 < 8:
+        cons = c[:2] in TAXREG_CONSUMER
+        if cons:
+            it["cons"] = True
+        if ly6 < max(8, n6 * 0.15):  # 去年同期幾乎沒有：多半是新設的行業代碼，年增沒有意義
             it["new"] = True
         else:
             it["yoy"] = round(((n6 / ly6) / base6 - 1) * 100)
         items.append(it)
     write_json(TAXREG_CODES, {"at": NOW_ISO, "asof": asof, "w6": [w6[0], w6[-1]], "base6": round(base6, 3), "codes": codes}, separators=(",", ":"))
-    grown = sorted([x for x in items if "yoy" in x and x["ly6"] >= 15], key=lambda x: -x["yoy"])
+    grown = sorted([x for x in items if "yoy" in x and x["ly6"] >= 15 and x.get("cons")], key=lambda x: -x["yoy"])
     hist_put("taxreg", "n6", TODAY_TPE.isoformat(), N6)
+    me = taxreg_supply(r"視覺傳達|專門設計|廣告服務|廣告代理|室內設計")  # 同業：廣告、設計
     return {"asof": asof, "rows": rows, "win": [w6[0], w6[-1]], "n6": N6, "ly6": L6, "raw_yoy": round((base6 - 1) * 100, 1),
             "monthly": [[mback(k), total.get(mback(k), 0)] for k in range(25, 0, -1)],
-            "up": grown[:15], "down": grown[::-1][:10], "new": sorted([x for x in items if x.get("new")], key=lambda x: -x["n6"])[:8],
-            "big": sorted(items, key=lambda x: -x["n6"])[:12],
-            "src": "財政部 全國營業（稅籍）登記資料集（只含營業中）；年增已除以全體比值，校正倒店與登錄延遲"}
+            "up": grown[:15], "down": grown[::-1][:10], "new": sorted([x for x in items if x.get("new") and x.get("cons")], key=lambda x: -x["n6"])[:8],
+            "big": sorted(items, key=lambda x: -x["n6"])[:12], "me": me,
+            "src": "財政部 全國營業（稅籍）登記資料集（只含營業中）；年增已除以全體比值，校正倒店與登錄延遲；排行只列消費與生活服務類"}
 
 
 def taxreg_supply(pattern, codes=None):
@@ -852,13 +858,15 @@ def taxreg_supply(pattern, codes=None):
         return None
     base, cs = codes.get("base6") or 1, codes.get("codes") or {}
     hit = [(c, v) for c, v in cs.items() if re.search(pattern, v[0])]
-    n6, ly6 = sum(v[1] for _, v in hit), sum(v[2] for _, v in hit)
     if not hit:
         return None
+    n6 = sum(v[1] for _, v in hit)
+    old = [(c, v) for c, v in hit if v[2] >= max(8, v[1] * 0.15)]  # 年增只用去年就有的代碼，新代碼會灌水
+    n6o, ly6 = sum(v[1] for _, v in old), sum(v[2] for _, v in old)
     out = {"n6": n6, "ly6": ly6, "codes": [v[0][:14] for _, v in sorted(hit, key=lambda kv: -kv[1][1])[:3]], "n_codes": len(hit),
            "win": codes.get("w6")}
     if ly6 >= 10:
-        out["yoy"] = round(((n6 / ly6) / base - 1) * 100)
+        out["yoy"] = round(((n6o / ly6) / base - 1) * 100)
     return out
 
 # ---------- 企業動向：誰要上市、誰易主、誰換跑道、誰要開法說會（證交所／櫃買／公開資訊觀測站，全部官方免費） ----------
@@ -1346,20 +1354,30 @@ def p_lyst():
             q, y = 4, y - 1
     else:
         raise RuntimeError("no lyst page: " + tried[-1])
-    text = re.sub(r"<[^>]+>", "\n", html)
+    text = re.sub(r"<script.*?</script>|<style.*?</style>", "\n", html, flags=re.S)  # 先拿掉 script：meta 和 JSON 裡也有 hottest brands
+    text = re.sub(r"<[^>]+>", "\n", text)
     text = re.sub(r"\n\s*\n+", "\n", text)
     lines = [l.strip() for l in text.split("\n") if l.strip()]
 
     def grab(anchor):
+        best = []
+        for i in [k for k, l in enumerate(lines) if anchor.lower() in l.lower()]:  # 每個出現位置都試，取抓到最多的
+            got = _lyst_list(lines[i + 1:i + 80])
+            if len(got) > len(best):
+                best = got
+        return best
+
+    def _lyst_list(seg):
         out = []
-        try:
-            i = next(k for k, l in enumerate(lines) if anchor.lower() in l.lower())
-        except StopIteration:
-            return out
-        for l in lines[i + 1:i + 80]:
-            m = re.match(r"^(\d{1,2})\.?\s*(.+)$", l)
-            if m and int(m.group(1)) == len(out) + 1:
-                out.append(m.group(2).strip())
+        for k, l in enumerate(seg):
+            m = re.match(r"^(\d{1,2})\.?\s*(.*)$", l)
+            if not m or int(m.group(1)) != len(out) + 1:
+                continue
+            name = m.group(2).strip()
+            if not name and k + 1 < len(seg):  # 2026 起新版面：「01」一行、品牌名下一行、名次變動再下一行
+                name = seg[k + 1].strip()
+            if name and not re.match(r"^[+\-–]?\d*$", name):
+                out.append(name.title() if name.isupper() else name)
                 if len(out) == 10:
                     break
         return out
