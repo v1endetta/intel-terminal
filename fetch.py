@@ -1364,10 +1364,16 @@ def p_lyst():
             i = next(k for k, l in enumerate(lines) if anchor.lower() in l.lower())
         except StopIteration:
             return out
-        for l in lines[i + 1:i + 80]:
-            m = re.match(r"^(\d{1,2})\.?\s*(.+)$", l)
-            if m and int(m.group(1)) == len(out) + 1:
-                out.append(m.group(2).strip())
+        seg = lines[i + 1:i + 80]
+        for k, l in enumerate(seg):
+            m = re.match(r"^(\d{1,2})\.?\s*(.*)$", l)
+            if not m or int(m.group(1)) != len(out) + 1:
+                continue
+            name = m.group(2).strip()
+            if not name and k + 1 < len(seg):  # 2026 起新版面：「01」一行、品牌名下一行、名次變動再下一行
+                name = seg[k + 1].strip()
+            if name and not re.match(r"^[+\-–]?\d*$", name):
+                out.append(name.title() if name.isupper() else name)
                 if len(out) == 10:
                     break
         return out

@@ -453,8 +453,8 @@ canvas.o-fx{display:block;width:100%}
 .list li.o-grp{display:block;font:500 10px var(--mono);color:var(--dim);letter-spacing:.06em;padding:9px 0 3px;border-top:0}
 /* 分頁內固定順序：台灣先、國際後；快的先、月更的後；結論先、原文後 */
 #p-pulse{display:none!important}
-#p-taiex{order:1}#p-fx{order:2}#p-fear{order:3}#p-taifex{order:4}#p-world{order:5}#p-tw-stocks{order:6}#p-mops{order:7}#p-usbig{order:8}@media (min-width:1101px){#p-taiex{grid-row:span 2}}#p-sectors{order:9}#p-cmdty{order:10}#p-revenue{order:11}#p-lux{order:12}
-#p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-poly{order:9}#p-jobs{order:10}
+#p-taiex{order:1}#p-fx{order:2}#p-fear{order:3}#p-taifex{order:4}#p-world{order:5}#p-tw-stocks{order:6}#p-lux{order:7}#p-mops{order:8}#p-usbig{order:9}@media (min-width:1101px){#p-taiex{grid-row:span 2}}#p-sectors{order:10}#p-cmdty{order:11}#p-revenue{order:12}
+#p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-house{order:8}#p-poly{order:9}#p-jobs{order:10}
 #ib-soc{order:0}#p-voice{order:2}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
 .grid{align-items:start}
 /* 桃機翻牌看板：只有變動的字會翻 */
@@ -477,7 +477,7 @@ canvas.o-fx{display:block;width:100%}
 html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animation:none}
 @media (prefers-reduced-motion:reduce){.fids .ch b.fl,.ib-ping,.ib-chip.ib-pop{animation:none}}
 
-#p-geo{order:1}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:4}#p-roads{order:5}#p-airport{order:6}#p-quake{order:7}#p-power{order:8}#p-house{order:9}
+#p-geo{order:1}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:4}#p-airport{order:5}#p-roads{order:6}#p-quake{order:7}#p-power{order:8}
 #p-vauth{order:1}#p-vsearch{order:2}#p-vtime{order:3}#p-vseries{order:4}
 .stopbar{margin:0 0 10px;padding:8px 12px;border:1px solid color-mix(in srgb,var(--down) 55%,var(--line));background:color-mix(in srgb,var(--down) 12%,var(--panel));border-radius:4px;font-size:13px;display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
 .stopbar b{color:var(--down);font-weight:600}.stopbar span{color:var(--text)}.stopbar .s{color:var(--muted);font-size:11.5px;margin-left:auto}
@@ -665,7 +665,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>巴黎／馬德里／東京／紐約收盤</span></div>
   </section>
 
-  <section class="panel w12 cap" id="p-tw-stocks">
+  <section class="panel w6 cap" id="p-tw-stocks">
     <div class="ph"><h2>TW Watchlist</h2><span class="zh">台股觀察清單 · 權值／ETF／主動式 ETF／消費</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>證交所盤後＋盤中即時（MIS）· 債券 ETF 為櫃買中心 · 主動式 ETF＝代號結尾 A，依成交值排序 · 消費：通路、食品、百貨、餐飲、飯店、機能服飾的代表股，看消費景氣</span></div>
@@ -755,7 +755,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ib-body"><div class="ib-viz"><h3>各家近 14 天<span class="n">● 產品更新　○ 新聞消息</span></h3><svg id="ib3v" role="img" aria-label="各家 AI 廠商近十四天動態"></svg></div>
       <div class="ib-viz"><h3>GitHub 竄升 · 星數<span class="n">前 5</span></h3><svg id="ib3w" role="img" aria-label="GitHub 星數"></svg><ul class="ib-top" id="ib3t"></ul></div></div></section>
   <section class="ibx ib-band" id="ib4"><div class="ib-q"><span class="no">Q5 · 美感</span><h2>美感圈在看什麼？</h2><p class="ans" id="ib4a">等待排程寫入</p><div class="ib-more" data-band="4"></div></div>
-    <div class="ib-body"><div class="ib-viz"><h3>各家在寫什麼<span class="n" id="ib4sn">近 30 天 · 分類占比 · 上台灣版、下國際版</span></h3><svg id="ib4s" role="img" aria-label="各家時尚媒體近 30 天的文章分類占比"></svg><h3 style="margin-top:10px">本週同框 · 2 家以上台灣時尚媒體都寫<span class="n">字越大＝越多家</span></h3><div class="ib-chips" id="ib4c"></div><h3 style="margin-top:6px">Lyst 最熱品牌<span class="n">季更</span></h3><svg id="ib4w" role="img" aria-label="Lyst 品牌排名"></svg></div>
+    <div class="ib-body"><div class="ib-viz"><h3>各家在寫什麼<span class="n" id="ib4sn">近 7 天 · 分類占比 · 各家明細在「看全部」</span></h3><svg id="ib4s" role="img" aria-label="各家時尚媒體近 30 天的文章分類占比"></svg><h3 style="margin-top:10px">本週同框 · 2 家以上台灣時尚媒體都寫<span class="n">字越大＝越多家</span></h3><div class="ib-chips" id="ib4c"></div><h3 style="margin-top:6px">Lyst 最熱品牌<span class="n">季更</span></h3><svg id="ib4w" role="img" aria-label="Lyst 品牌排名"></svg></div>
       <div class="ib-viz"><h3>設計與國際時尚<span class="n">最新</span></h3><ul class="ib-top" id="ib4t" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:10px">本週藝文<span class="n">文化部 · 六都優先 · 快閉展／展覽／表演</span></h3><ul class="ib-top" id="ib4e" style="border-top:0;padding-top:0"></ul></div></div></section>
   <section class="ibx ib-band" id="ib5"><div class="ib-q"><span class="no">Q6 · 觀點</span><h2>顧問在談什麼？</h2><p class="ans" id="ib5a">等待排程寫入</p><div class="ib-more" data-band="5"></div></div>
     <div class="ib-body"><div class="ib-viz"><h3>McKinsey 主題排行<span class="n" id="ib5n">近 30 天 · 篇數</span></h3><svg id="ib5v" role="img" aria-label="McKinsey 各主題篇數"></svg></div>
@@ -1890,9 +1890,9 @@ function aiChart(id,rows3,d14,fresh){const W=520,L=96,cw=(W-L-6)/14,rh=26;const 
       if(fresh&&fresh.has(a.v+"|"+a.d+"|"+a.t))p("circle",{cx,cy,r:3.4,class:"ib-ping",style:`stroke:var(${a.k?"--up":"--blue"})`});});});});}
 const OV={};let PREV_AI=null,PREV_TG=null;
 const FCC={"時尚":"#C9A3FF","美容":"#FF7FB0","生活":"#6FD3A8","娛樂":"#F2C14E","感情":"#F08A3E","星座":"#8B93A7","文化":"#5BC0EB","健康":"#A3E635"};
-function fashionCats(id,FC){const order=FC.order,I=FC.intl||{};const nz=r=>Object.values(r[1]||{}).some(v=>v>0);
-  const rows=[["台灣 · 全部 · 近 7 天",FC.w7,1],...Object.entries(FC.src30||{}).map(([s,c])=>[s,c,0])].filter(nz);
-  const irows=I.n30?[["國際 · 全部 · 近 7 天",I.w7,1],...Object.entries(I.src30||{}).map(([s,c])=>[s,c,0])].filter(nz):[];
+function fashionCats(id,FC,compact){const order=FC.order,I=FC.intl||{};const nz=r=>Object.values(r[1]||{}).some(v=>v>0);
+  const rows=[[compact?"台灣版 · 近 7 天":"台灣 · 全部 · 近 7 天",FC.w7,1],...(compact?[]:Object.entries(FC.src30||{}).map(([s,c])=>[s,c,0]))].filter(nz);
+  const irows=I.n30?[[compact?"國際版 · 近 7 天":"國際 · 全部 · 近 7 天",I.w7,1],...(compact?[]:Object.entries(I.src30||{}).map(([s,c])=>[s,c,0]))].filter(nz):[];
   const W=520,L=118,R=34,rh=19,T0=18,gap=irows.length?14:0,bw=W-L-R;const p=draw(id,W,T0+(rows.length+irows.length)*rh+gap+2);if(!p)return;
   let lx=0;order.forEach(k=>{p("rect",{x:lx,y:3,width:8,height:8,rx:1.5,style:`fill:${FCC[k]}`});p("text",{x:lx+11,y:11},k);lx+=11+k.length*12+10;});
   const row=([nm,c,all],y)=>{const tot=order.reduce((a,k)=>a+(c[k]||0),0);if(!tot)return;
@@ -2102,7 +2102,7 @@ function render(P){
       const I=FC.intl||{};let cmp="";if(I.n7>=20){const ip=k=>Math.round((I.w7[k]||0)/I.n7*100);const gaps=FC.order.map(k=>[k,pc(k)-ip(k)]).sort((a,b)=>b[1]-a[1]);const mo=gaps[0],le=gaps[gaps.length-1];
         if(mo[1]>=5)cmp+=`跟國際版比，台灣版多寫<b>${mo[0]}</b>（<em>${pc(mo[0])}%</em> vs ${ip(mo[0])}%）`;if(le[1]<=-5)cmp+=`${cmp?"、":"跟國際版比，台灣版"}少寫<b>${le[0]}</b>（<em>${pc(le[0])}%</em> vs ${ip(le[0])}%）`;if(cmp)cmp+="。";}
       return`近 7 天 <em>${FC.n7}</em> 篇，寫最多的是<b>${w[0][0]}</b>（<em>${pc(w[0][0])}%</em>），其次<b>${w[1][0]}</b>、<b>${w[2][0]}</b>${up&&up[1]>0?`；比上週多最多的是<b>${up[0]}</b>（<em class="up">+${up[1]}</em>）`:""}。${cmp}`;})():"";
-  if(FC)fashionCats("ib4s",FC);
+  if(FC)fashionCats("ib4s",FC,true);
   $("#ib4a").innerHTML=catLine+(tg.length?`本週台灣時尚媒體的共同題目是<b>${tg.slice(0,3).map(t=>esc(cap(t.term))).join("、")}</b>。`:"本週還沒有共同題目。")+(ly[0]?`Lyst 全球最熱是 <b>${esc(ly[0].brand)}</b>${up?`，<b>${esc(up.brand)}</b> 往上爬`:""}。`:"");
   const tgNow={};tg.forEach(t=>tgNow[t.term]=t.sources.length);const popT=t=>PREV_TG&&(!(t.term in PREV_TG)||PREV_TG[t.term]<t.sources.length);
   $("#ib4c").innerHTML=tg.length?tg.slice(0,12).map((t,i)=>`<span style="animation-delay:${i*60}ms" class="ib-chip ${popT(t)?"ib-pop":""} ${t.sources.length>=3?"s3":t.n>=3?"s2":""}" title="${esc(((t.examples||[])[0]||[])[1]||"")}">${esc(cap(t.term))}<i>${t.sources.length} 家</i></span>`).join(""):'<span class="ib-empty">資料還在累積</span>';
@@ -2140,7 +2140,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
-const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"live",
+const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro",
   "ib-sig":"intel","ib-soc":"social","p-voice":"intel","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
