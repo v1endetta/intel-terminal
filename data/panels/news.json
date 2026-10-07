@@ -76,6 +76,13 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "French police suspend use of stun grenades at school protests as minister rejects accusati",
+   "url": "https://www.theguardian.com/world/2026/oct/07/french-police-suspend-use-stun-grenades-high-school-protester-loses-hand",
+   "at": "2026-10-07T20:04:00Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
    "title": "Houthi forces appear to make slow advance in south-west Yemen",
    "url": "https://www.theguardian.com/world/2026/oct/07/houthi-forces-slow-advance-south-west-yemen-taiz-aden-airport",
    "at": "2026-10-07T19:45:47Z",
@@ -99,13 +106,6 @@
    "title": "Flávio Bolsonaro’s advance in Brazil’s election is grim jolt for climate campaigners",
    "url": "https://www.theguardian.com/world/2026/oct/07/flavio-bolsonaro-advance-brazil-election-jolt-climate-campaigners",
    "at": "2026-10-07T19:23:30Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "French police suspend use of stun grenades at school protests as minister rejects accusati",
-   "url": "https://www.theguardian.com/world/2026/oct/07/french-police-suspend-use-stun-grenades-high-school-protester-loses-hand",
-   "at": "2026-10-07T19:19:12Z",
    "sec": "World news"
   },
   {
@@ -240,7 +240,7 @@
     }
    ],
    "daily7": [
-    10,
+    9,
     3,
     4,
     10,
@@ -262,10 +262,10 @@
    "name": "AI 大廠與模型",
    "items": [
     {
-     "source": "鉅亨網",
-     "title": "OpenAI公布青少年ChatGPT使用報告！安全防護遭獨立測試打問號",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBqN25pUlVkS0xUS3lrUU45amxqQm83QUpxWTRpWU93QVRfYjZBMzB2YXdqUEh4Y3g4LVcxV01fTzNTTE9QZzdVWl9ia0paN3c?oc=5",
-     "at": "2026-10-07T19:30:54Z",
+     "source": "股市報價& 財經新聞",
+     "title": "Anthropic推出低成本高速度Claude Haiku 5.5，擴展AI模型陣容 作者 Investing.com - Investing.com 香港",
+     "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1rRDZkR2pjQm50MmlQcExNTHFsUjVxQ0lYcEFkdUhRT3VfYkJlOWpibFZScGlZSEozRTliMWJreVdrRWZYaGIxVFBTZlU5N2lMRU05RXZMcS15TjhaaGhxQXUwN210UDFqc2NFTGE4blM?oc=5",
+     "at": "2026-10-07T20:03:05Z",
      "kw": "OpenAI OR Anthropic OR DeepMind 發布 OR 推出"
     },
     {
@@ -291,13 +291,13 @@
     }
    ],
    "daily7": [
-    12,
+    11,
     10,
     4,
     22,
     36,
     48,
-    13
+    15
    ],
    "days7": [
     "2026-10-02",
@@ -444,9 +444,9 @@
     }
    ],
    "daily7": [
-    11,
+    10,
     12,
-    7,
+    8,
     12,
     16,
     20,
@@ -550,9 +550,9 @@
     1,
     1,
     18,
-    59,
+    58,
     98,
-    9
+    10
    ],
    "days7": [
     "2026-10-02",
@@ -601,8 +601,8 @@
     3,
     3,
     6,
-    15,
-    26,
+    16,
+    25,
     6
    ],
    "days7": [
@@ -651,10 +651,10 @@
     11,
     5,
     12,
-    22,
+    21,
     39,
     41,
-    0
+    1
    ],
    "days7": [
     "2026-10-02",
@@ -727,13 +727,14 @@
   "hot": [
    {
     "term": "Claude",
-    "n": 6,
-    "src": 4,
+    "n": 7,
+    "src": 5,
     "sources": [
      "Claude release notes",
      "HN",
      "Reuters",
-     "流動日報"
+     "流動日報",
+     "股市報價& 財經新聞"
     ],
     "sample": {
      "title": "Anthropic 發佈 Claude Haiku 5.5 運行成本較前代低約 75%",
@@ -754,6 +755,22 @@
     "sample": {
      "title": "美學者：美軍不該介入台海 兩岸和統不違「台灣關係法」",
      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5oUU5GdzhITU9rQjBZTXRNeHFILXpoSWdFM0ZEdFNOSk1hNEc1NEZPNXpXX0NaUGlnOThMUE1jUnhlUXJaNDd0V3VaaHVfV0dvZ3fSAVdBVV95cUxOaFByZkFpSDFfWmMwWTc3RE56R0E3Rzh2TnJfWlZLSVRLeHdZOTdCVHQ0UEx5UHJfOWozR3cxa015bVBFVUVXekpvaW9IRG5mM1BaYmFMdWc?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "Anthropic",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "Reuters",
+     "流動日報",
+     "股市報價& 財經新聞",
+     "鏈新聞 ABMedia"
+    ],
+    "sample": {
+     "title": "Anthropic 發布 Haiku 5.5，執行成本比前代低約 75%",
+     "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9mUUR6U19KTFBhN0phSkR6b0VaSHQ5NE5yb2hNZXA1WlFpNEphLXFxdVNjbGpjSG8yenZBYVNhTjhoVmxvSE14TS1tck84SnBvd08ySQ?oc=5"
     },
     "hot": true
    },
@@ -789,17 +806,17 @@
     "hot": true
    },
    {
-    "term": "Anthropic",
+    "term": "Claude Haiku",
     "n": 3,
     "src": 3,
     "sources": [
-     "Reuters",
+     "HN",
      "流動日報",
-     "鏈新聞 ABMedia"
+     "股市報價& 財經新聞"
     ],
     "sample": {
-     "title": "Anthropic 發布 Haiku 5.5，執行成本比前代低約 75%",
-     "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9mUUR6U19KTFBhN0phSkR6b0VaSHQ5NE5yb2hNZXA1WlFpNEphLXFxdVNjbGpjSG8yenZBYVNhTjhoVmxvSE14TS1tck84SnBvd08ySQ?oc=5"
+     "title": "Anthropic 發佈 Claude Haiku 5.5 運行成本較前代低約 75%",
+     "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQWnJHUmNzVWlTNENaR3BtUTZlNTFLbUFEWnBiVkhmYkpVM3hpdEFHYWNFcklzVHk5ZEEyck5UNllVNTh2ZkVkYmE1MjFNajZjZDhuSnFKeFRkcElGMDl0dlRpdll6amwtVFdQWnRQOUVxVHNmcTluMUhIbXlTamNlNQ?oc=5"
     },
     "hot": true
    },
@@ -834,21 +851,6 @@
     "hot": true
    },
    {
-    "term": "Meta",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "HN",
-     "TIKR.com",
-     "iThome"
-    ],
-    "sample": {
-     "title": "Sierra、Meta推Personal Agent Protocol，規範AI代理人存取企業服務",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE55elVhdmdMN2ZENGhkUTRDaGhSYlFQa0ZsVV9sN0RnVGNxUWNwQmMtMVNLRXBkZThvNXVXZ2piUnNzYnlRZ3VlcVhNLWYzUQ?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "美股",
     "n": 3,
     "src": 3,
@@ -864,24 +866,24 @@
     "hot": true
    },
    {
-    "term": "攻擊",
+    "term": "成本",
     "n": 3,
     "src": 3,
     "sources": [
-     "iThome",
-     "工商時報",
-     "自由財經"
+     "流動日報",
+     "股市報價& 財經新聞",
+     "鏈新聞 ABMedia"
     ],
     "sample": {
-     "title": "日本大阪公立大學傳出遭勒索軟體攻擊而被迫停課",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFB5RkF4M1NJRkItUThrNl9Qc1Nhb0h6ZkRhNUgweFIwUVJUNnRMQklGSGFWRDlXWml6OHZfNFF6S0ctWUhKZzdDVVlESTVDQQ?oc=5"
+     "title": "Anthropic 發布 Haiku 5.5，執行成本比前代低約 75%",
+     "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9mUUR6U19KTFBhN0phSkR6b0VaSHQ5NE5yb2hNZXA1WlFpNEphLXFxdVNjbGpjSG8yenZBYVNhTjhoVmxvSE14TS1tck84SnBvd08ySQ?oc=5"
     },
     "hot": true
    }
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: IndexError: list index out of range"
  ],
- "updatedAt": "2026-10-07T19:58:07Z"
+ "updatedAt": "2026-10-07T20:17:47Z"
 }
