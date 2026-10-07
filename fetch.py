@@ -1354,17 +1354,23 @@ def p_lyst():
             q, y = 4, y - 1
     else:
         raise RuntimeError("no lyst page: " + tried[-1])
-    text = re.sub(r"<[^>]+>", "\n", html)
+    text = re.sub(r"<script.*?</script>|<style.*?</style>", "\n", html, flags=re.S)  # 先拿掉 script：meta 和 JSON 裡也有 hottest brands
+    text = re.sub(r"<[^>]+>", "\n", text)
     text = re.sub(r"\n\s*\n+", "\n", text)
     lines = [l.strip() for l in text.split("\n") if l.strip()]
 
+    page_move = {}  # 新版面每個品牌下面直接寫名次變動（+2、-1、-）
+
     def grab(anchor):
+        best = []
+        for i in [k for k, l in enumerate(lines) if anchor.lower() in l.lower()]:  # 每個出現位置都試，取抓到最多的
+            got = _lyst_list(lines[i + 1:i + 80])
+            if len(got) > len(best):
+                best = got
+        return best
+
+    def _lyst_list(seg):
         out = []
-        try:
-            i = next(k for k, l in enumerate(lines) if anchor.lower() in l.lower())
-        except StopIteration:
-            return out
-        seg = lines[i + 1:i + 80]
         for k, l in enumerate(seg):
             m = re.match(r"^(\d{1,2})\.?\s*(.*)$", l)
             if not m or int(m.group(1)) != len(out) + 1:
@@ -1373,7 +1379,11 @@ def p_lyst():
             if not name and k + 1 < len(seg):  # 2026 起新版面：「01」一行、品牌名下一行、名次變動再下一行
                 name = seg[k + 1].strip()
             if name and not re.match(r"^[+\-–]?\d*$", name):
-                out.append(name.title() if name.isupper() else name)
+                nm = name.title() if name.isupper() else name
+                mv = seg[k + 2].strip() if not m.group(2).strip() and k + 2 < len(seg) else ""
+                if re.match(r"^([+\-–]\d+|[-–])$", mv):
+                    page_move[nm] = 0 if mv in ("-", "–") else int(mv.replace("–", "-"))
+                out.append(nm)
                 if len(out) == 10:
                     break
         return out
@@ -1392,7 +1402,7 @@ def p_lyst():
         old_products = {}
     out_b = []
     for i, b in enumerate(brands):
-        move = (prev_brands.index(b) - i) if b in prev_brands else 0
+        move = page_move[b] if b in page_move else ((prev_brands.index(b) - i) if b in prev_brands else 0)
         out_b.append({"brand": b, "move": move})
     out_p = [{**old_products.get(p, {}), "name": p, "move": old_products.get(p, {}).get("move", 0)} for p in products]
     return {"quarter": quarter, "brands": out_b, "products": out_p, "prevQuarterBrands": prev_brands}
