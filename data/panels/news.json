@@ -192,7 +192,7 @@
     1,
     0,
     0,
-    2,
+    1,
     0,
     0,
     0
@@ -294,10 +294,10 @@
     12,
     10,
     5,
-    21,
+    22,
     36,
     49,
-    6
+    7
    ],
    "days7": [
     "2026-10-02",
@@ -399,7 +399,7 @@
     26,
     45,
     69,
-    4
+    3
    ],
    "days7": [
     "2026-10-02",
@@ -446,10 +446,10 @@
    "daily7": [
     9,
     12,
-    8,
-    11,
+    7,
+    12,
     17,
-    19,
+    20,
     1
    ],
    "days7": [
@@ -500,7 +500,7 @@
     2,
     6,
     13,
-    4,
+    3,
     1
    ],
    "days7": [
@@ -550,9 +550,9 @@
     1,
     2,
     18,
-    55,
-    105,
-    5
+    59,
+    102,
+    6
    ],
    "days7": [
     "2026-10-02",
@@ -575,10 +575,10 @@
      "kw": "生技 新藥 OR 生技 募資 OR 生技 授權"
     },
     {
-     "source": "TVBS 健康2.0",
-     "title": "細胞治療FACT全領域國際認證 長庚醫院奪全台第一",
-     "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFAyNjdTNHgzbjQ0YmFjQjR5RXMyQVZQelJrMnBsRUNfNUhhQ2xNd2Ztb1Rwc2pobzkwb1E5TDBKTjZoaERWSmNBNkRpZmx6RzVwdnNR?oc=5",
-     "at": "2026-10-07T16:27:00Z",
+     "source": "經濟日報",
+     "title": "2026生技論壇／把脈再生醫療發展策略 和迅生命科學董座黃濟鴻 打造細胞治療基地",
+     "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNWjZUM3JrT28zMVp0WjhEQ0JTbHFVUXhjYktzX2l2dzBybnl4ZXliTVFnclFOLURMbEtnNGZTTGtnb2dQbkc3MnY1RDlfU1NIQjhiNzcxVGlya0RUSnN6d0dKbW1VR3BrSEZxazRISkxHd2h5ZFRKZHoxcmVtVlZaQ9IBX0FVX3lxTFB0eGxycjc3czkxYjM0RnRuSU5iV3g1MDQyM1JJRkpUZzE1UlQ2eE1JbXd1RzEzdERmYlNYLVZwTXZQUjhBZE1CNFlJZE9KRTVoUHlIbmFPOEszVUJLN09v?oc=5",
+     "at": "2026-10-07T18:35:49Z",
      "kw": "細胞治療 OR 基因治療 OR 再生醫療 OR 外泌體"
     },
     {
@@ -603,7 +603,7 @@
     6,
     15,
     25,
-    3
+    5
    ],
    "days7": [
     "2026-10-02",
@@ -651,7 +651,7 @@
     11,
     5,
     12,
-    22,
+    21,
     39,
     43,
     0
@@ -727,7 +727,7 @@
   "hot": [
    {
     "term": "Claude",
-    "n": 5,
+    "n": 6,
     "src": 4,
     "sources": [
      "Claude release notes",
@@ -758,8 +758,24 @@
     "hot": true
    },
    {
-    "term": "ChatGPT",
+    "term": "美股",
     "n": 4,
+    "src": 4,
+    "sources": [
+     "Yahoo股市",
+     "三立新聞",
+     "中央社",
+     "鉅亨網"
+    ],
+    "sample": {
+     "title": "10年期美債殖利率創24年新高　美股早盤走跌",
+     "url": "https://www.cna.com.tw/news/afe/202610070363.aspx"
+    },
+    "hot": true
+   },
+   {
+    "term": "ChatGPT",
+    "n": 5,
     "src": 3,
     "sources": [
      "HN",
@@ -788,6 +804,21 @@
     "hot": true
    },
    {
+    "term": "細胞治療",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "TVBS 健康2.0",
+     "台灣新聞雲報",
+     "經濟日報"
+    ],
+    "sample": {
+     "title": "2026生技論壇／把脈再生醫療發展策略 和迅生命科學董座黃濟鴻 打造細胞治療基地",
+     "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNWjZUM3JrT28zMVp0WjhEQ0JTbHFVUXhjYktzX2l2dzBybnl4ZXliTVFnclFOLURMbEtnNGZTTGtnb2dQbkc3MnY1RDlfU1NIQjhiNzcxVGlya0RUSnN6d0dKbW1VR3BrSEZxazRISkxHd2h5ZFRKZHoxcmVtVlZaQ9IBX0FVX3lxTFB0eGxycjc3czkxYjM0RnRuSU5iV3g1MDQyM1JJRkpUZzE1UlQ2eE1JbXd1RzEzdERmYlNYLVZwTXZQUjhBZE1CNFlJZE9KRTVoUHlIbmFPOEszVUJLN09v?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "設計展",
     "n": 3,
     "src": 3,
@@ -803,13 +834,13 @@
     "hot": true
    },
    {
-    "term": "美股",
+    "term": "利率",
     "n": 3,
     "src": 3,
     "sources": [
-     "Yahoo股市",
-     "三立新聞",
-     "中央社"
+     "Rti 中央廣播電臺",
+     "中央社",
+     "鉅亨網"
     ],
     "sample": {
      "title": "10年期美債殖利率創24年新高　美股早盤走跌",
@@ -846,40 +877,11 @@
      "url": "https://www.cna.com.tw/news/aipl/202610070346.aspx"
     },
     "hot": true
-   },
-   {
-    "term": "資安",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "UDN",
-     "iThome",
-     "自由財經"
-    ],
-    "sample": {
-     "title": "龔化中上任兩個月揭「國家資安防護2.0」，明年4月AI紅隊先攻政府機關",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE14X21OMC1CZzNMMGlHSXpMVzN1N3ZSTXFWOS1MU25wakEyaXhJOXoxdjhVbHk1U0dEQjBuX1FXd1FBbzZEMkNnRHlGeTlZZw?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "投資",
-    "n": 3,
-    "src": 2,
-    "sources": [
-     "中央社",
-     "大紀元"
-    ],
-    "sample": {
-     "title": "行政院提修中小微企業條例　估帶動投資效益逾500億",
-     "url": "https://www.cna.com.tw/news/aipl/202610070341.aspx"
-    },
-    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: IndexError: list index out of range"
  ],
- "updatedAt": "2026-10-07T18:28:26Z"
+ "updatedAt": "2026-10-07T18:43:36Z"
 }
