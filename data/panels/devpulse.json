@@ -7,7 +7,7 @@
    "url": "https://community.openai.com/t/update-to-openai-api-rate-limits/1403852",
    "replies": 1,
    "likes": 9,
-   "views": 397,
+   "views": 409,
    "at": "2026-10-06T18:41:08Z"
   },
   {
@@ -25,9 +25,9 @@
    "vendor": "openai",
    "title": "Results from toy experiments with Decisions API",
    "url": "https://community.openai.com/t/results-from-toy-experiments-with-decisions-api/1404010",
-   "replies": 4,
-   "likes": 9,
-   "views": 47,
+   "replies": 10,
+   "likes": 20,
+   "views": 70,
    "at": "2026-10-07T10:44:17Z"
   },
   {
@@ -37,7 +37,7 @@
    "url": "https://community.openai.com/t/new-updates-of-codex-6-1-sol-autocontrol/1404073",
    "replies": 0,
    "likes": 3,
-   "views": 41,
+   "views": 47,
    "at": "2026-10-07T14:17:38Z"
   },
   {
@@ -57,18 +57,8 @@
    "url": "https://discuss.ai.google.dev/t/gemini-3-5-transcribe-returns-400-thinking-is-not-enabled-for-this-model-without-thinking-configuration/187295",
    "replies": 7,
    "likes": 1,
-   "views": 163,
+   "views": 171,
    "at": "2026-10-07T08:27:11Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Gemini 3.8 is absolutely",
-   "url": "https://discuss.ai.google.dev/t/gemini-3-8-is-absolutely/187181",
-   "replies": 5,
-   "likes": 1,
-   "views": 70,
-   "at": "2026-10-06T16:59:12Z"
   },
   {
    "source": "Google AI 論壇",
@@ -77,8 +67,18 @@
    "url": "https://discuss.ai.google.dev/t/gemini-3-5-transcribe-returns-400-thinking-is-not-enabled-for-this-model-without-thinking-settings/187280",
    "replies": 0,
    "likes": 0,
-   "views": 150,
+   "views": 153,
    "at": "2026-10-07T06:41:57Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "How were the prebuilt Gemini TTS voices (Puck, Charon, ...) created? Any official page?",
+   "url": "https://discuss.ai.google.dev/t/how-were-the-prebuilt-gemini-tts-voices-puck-charon-created-any-official-page/187196",
+   "replies": 0,
+   "likes": 1,
+   "views": 18,
+   "at": "2026-10-06T21:11:06Z"
   },
   {
    "source": "Google AI 論壇",
@@ -93,15 +93,24 @@
   {
    "source": "Google AI 論壇",
    "vendor": "google",
-   "title": "How were the prebuilt Gemini TTS voices (Puck, Charon, ...) created? Any official page?",
-   "url": "https://discuss.ai.google.dev/t/how-were-the-prebuilt-gemini-tts-voices-puck-charon-created-any-official-page/187196",
-   "replies": 0,
-   "likes": 1,
-   "views": 18,
-   "at": "2026-10-06T21:11:06Z"
+   "title": "AI Studio - Recitation Block",
+   "url": "https://discuss.ai.google.dev/t/ai-studio-recitation-block/187271",
+   "replies": 2,
+   "likes": 0,
+   "views": 31,
+   "at": "2026-10-07T05:33:20Z"
   }
  ],
  "changelogs": [
+  {
+   "source": "OpenAI changelog",
+   "vendor": "openai",
+   "date": "Oct 7",
+   "kind": "Update",
+   "title": "Updated the chat-latest snapshot, which points to the latest model available in ChatGPT for Plus, Pro, Business and Enterprise users.",
+   "url": "https://developers.openai.com/api/docs/changelog",
+   "at": "2026-10-07T00:00:00Z"
+  },
   {
    "source": "OpenAI changelog",
    "vendor": "openai",
@@ -130,49 +139,40 @@
    "at": "2026-10-06T00:00:00Z"
   },
   {
-   "source": "OpenAI changelog",
-   "vendor": "openai",
-   "date": "Oct 6",
-   "kind": "Update",
-   "title": "Added function calling support to the Fine-tuning API",
-   "url": "https://developers.openai.com/api/docs/changelog",
-   "at": "2026-10-06T00:00:00Z"
+   "source": "Claude release notes",
+   "vendor": "anthropic",
+   "date": "October 8, 2026",
+   "kind": null,
+   "title": "The Compliance API chat endpoints now also return chats from the unified Claude experience, in beta for Claude Enterprise organizations, wit",
+   "url": "https://platform.claude.com/docs/en/release-notes/overview",
+   "at": "2026-10-08T00:00:00Z"
   },
   {
    "source": "Claude release notes",
    "vendor": "anthropic",
-   "date": "October 5, 2026",
+   "date": "October 7, 2026",
    "kind": null,
-   "title": "We've added capabilities.thinking.types.disabled to the Models API.",
+   "title": "We've lowered the price of prompt cache reads on Claude Sonnet 5.5 from $0.20 USD to $0.10 USD per million tokens: 0.05x the base input pric",
    "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-10-05T00:00:00Z"
+   "at": "2026-10-07T00:00:00Z"
   },
   {
    "source": "Claude release notes",
    "vendor": "anthropic",
-   "date": "October 1, 2026",
+   "date": "October 7, 2026",
    "kind": null,
-   "title": "We've added a line field to the Models API.",
+   "title": "We've launched Claude Haiku 5.5 (claude-haiku-5-5), our most capable model tuned for high-volume and latency-sensitive work.",
    "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-10-01T00:00:00Z"
+   "at": "2026-10-07T00:00:00Z"
   },
   {
    "source": "Claude release notes",
    "vendor": "anthropic",
-   "date": "September 30, 2026",
+   "date": "October 7, 2026",
    "kind": null,
-   "title": "In Python SDK 1.10.0, TypeScript SDK 0.130.0, C SDK 12.52.0, Go SDK 1.77.0, Java SDK 2.67.0, PHP SDK 0.53.0, Ruby SDK 1.75.0, and version 1.",
+   "title": "The Python and TypeScript SDKs now include classes, in beta, for the browser use tool and the computer use tool.",
    "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-09-30T00:00:00Z"
-  },
-  {
-   "source": "Claude release notes",
-   "vendor": "anthropic",
-   "date": "September 28, 2026",
-   "kind": null,
-   "title": "We've launched Claude Sonnet 5.5 (claude-sonnet-5-5).",
-   "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-09-28T00:00:00Z"
+   "at": "2026-10-07T00:00:00Z"
   },
   {
    "source": "Gemini changelog",
@@ -273,6 +273,14 @@
   {
    "source": "claude-code release",
    "vendor": "anthropic",
+   "date": "2026-10-07",
+   "title": "v2.1.293",
+   "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.293",
+   "at": "2026-10-07T18:10:20Z"
+  },
+  {
+   "source": "claude-code release",
+   "vendor": "anthropic",
    "date": "2026-10-06",
    "title": "v2.1.292",
    "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.292",
@@ -285,14 +293,6 @@
    "title": "v2.1.291",
    "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.291",
    "at": "2026-10-06T03:55:19Z"
-  },
-  {
-   "source": "claude-code release",
-   "vendor": "anthropic",
-   "date": "2026-10-05",
-   "title": "v2.1.290",
-   "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.290",
-   "at": "2026-10-05T23:33:17Z"
   }
  ],
  "errs": [],
@@ -301,5 +301,5 @@
   "DeepSeek updates md: got html 48088b",
   "xAI release notes md: 18497b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### grok-vo'"
  ],
- "updatedAt": "2026-10-07T17:26:05Z"
+ "updatedAt": "2026-10-07T18:28:26Z"
 }
