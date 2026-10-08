@@ -2728,6 +2728,20 @@ return{bq,login};
 })();
 loadAll();setInterval(()=>{if(Date.now()>=nextAt)loadAll();},15e3);
 })();
+
+/* ---------- 自動更新版面：網站有新版本時自己重新載入（只看 index.html，不影響資料） ---------- */
+(()=>{const mine=Date.parse(document.lastModified)||0;let base=null,busy=false;
+  const chk=async()=>{if(busy||document.visibilityState!=="visible")return;busy=true;
+    try{const r=await fetch(location.pathname+"?chk="+Date.now(),{method:"HEAD",cache:"no-store"});if(!r.ok)return;
+      const lm=Date.parse(r.headers.get("last-modified")||"")||0,tag=r.headers.get("etag")||String(lm);
+      const newer=lm&&mine&&lm>mine+1000;if(base===null)base=tag;
+      if((newer||tag!==base)&&!document.querySelector("input:focus,select:focus,textarea:focus")){
+        let done="";try{done=sessionStorage.getItem("intel:reloaded")||"";}catch(e){}
+        if(done===tag)return;try{sessionStorage.setItem("intel:reloaded",tag);}catch(e){}
+        const u=new URL(location.href);u.searchParams.set("u",String(lm||Date.now()));location.replace(u.toString());}
+    }catch(e){}finally{busy=false;}};
+  setTimeout(chk,4000);setInterval(chk,10*60e3);
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")chk();});})();
 </script>
 </body>
 </html>
