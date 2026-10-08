@@ -296,9 +296,9 @@
     2,
     9,
     26,
-    45,
-    64,
-    9
+    44,
+    65,
+    8
    ],
    "days7": [
     "2026-10-03",
@@ -399,7 +399,7 @@
     11,
     27,
     40,
-    77,
+    76,
     2
    ],
    "days7": [
@@ -549,11 +549,11 @@
    "daily7": [
     1,
     2,
-    9,
-    37,
+    7,
+    36,
     29,
-    92,
-    20
+    93,
+    21
    ],
    "days7": [
     "2026-10-03",
@@ -602,9 +602,9 @@
     2,
     5,
     16,
-    24,
-    31,
-    3
+    25,
+    29,
+    2
    ],
    "days7": [
     "2026-10-03",
@@ -620,10 +620,10 @@
    "name": "文化與生活",
    "items": [
     {
-     "source": "Yahoo新聞",
-     "title": "115馬祖秋慶「媽祖在馬祖昇天祭」即將登場！",
-     "url": "https://news.google.com/rss/articles/CBMimgJBVV95cUxQejdfTE5tbUpZT3VoQWZGYXk1MFE2U2l2T3l2QjI4dDRENUd0dnNWTEoyZXJkWGh4S0J4c0RTMUdERnlxLUlScnVMU0lYQ2lyeEctUWNYcjZPeHBQZ0FVU3RvMnFfTmxIUGVlRXV6M2YtZ2pJeHpkZ2V2SXFOVGt5d3ZRVXlVRW5oV2hKWlc5d2ZTV1M3Y09TMG9vZWRsb1RyUzRTSTNNb2xlUy1DVEU3dGZkanYtMUVIYnRSb240RGFkcmVIeXFldFNnZUdkSXZrb3h4ZWd2N2otbS1xblFTclY4RnI1N1RITUlPOXlDZV9zRmh2dldCZ2xRU3pEZXFYWWZaRUoxZWtxSG5XSWdBRUJBRUJIV3JFMmc?oc=5",
-     "at": "2026-10-08T12:33:05Z",
+     "source": "卡優新聞網",
+     "title": "圓山卡位國慶空中秀 跟著媽祖遊台中海線",
+     "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5XSmQ4SFU1OVZpQm81SXFJZHBxVGdVNzB5Y0VvZm1kNkFab25nN3BvUzZDRzREQ082VmczdlZabUFVekwtNGZhNmRFZ2g2LVBvVkU3WWtpX29Ndw?oc=5",
+     "at": "2026-10-08T20:04:51Z",
      "kw": "廟宇 OR 媽祖 OR 民間信仰"
     },
     {
@@ -652,7 +652,7 @@
     4,
     6,
     12,
-    36,
+    37,
     24,
     58,
     1
@@ -780,16 +780,32 @@
    },
    {
     "term": "國慶",
-    "n": 5,
-    "src": 3,
+    "n": 6,
+    "src": 4,
     "sources": [
      "UDN",
      "Yahoo新聞",
-     "中央社"
+     "中央社",
+     "卡優新聞網"
     ],
     "sample": {
      "title": "駐韓代表部雙十國慶酒會　丘高偉：台韓交流創新高",
      "url": "https://www.cna.com.tw/news/aipl/202610080388.aspx"
+    },
+    "hot": true
+   },
+   {
+    "term": "Gemini",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "CBS News",
+     "Quartz",
+     "TechCrunch"
+    ],
+    "sample": {
+     "title": "Google brings agentic AI to Gemini, starting with businesses",
+     "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNVmlZXzdMc1F5aTdGUFlIaUVtZmlZSWNyejQ4ejY3R1h2QUI0UU56QVpXUXB6a25ja3I5OHlDSm5TamVTbk5XZHJwdjFoSHpKa3VheURjQWgtQUtEalJCek90M0JjSjcycWJVSXUyc2wwS2ViMXE1OVN5bFJFUmhiY253OU5DNHMxbmJRZW5IWmtGWHVRdXZ1NDFR?oc=5"
     },
     "hot": true
    },
@@ -799,8 +815,8 @@
     "src": 3,
     "sources": [
      "CBS News",
-     "TechCrunch",
-     "The Next Web"
+     "Quartz",
+     "TechCrunch"
     ],
     "sample": {
      "title": "Google brings agentic AI to Gemini, starting with businesses",
@@ -867,26 +883,11 @@
      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE1YNlMxdEN5aGMwVTY1Wno2TVJfZFc4OHluS2FtMHMtOV9XOV85bFlvWmFiaE1NOVByVm50UmJ1djVHM3lUV1Q0eC1jZzYxbm9OUzV0YXRpaUhadmQ2OFRz?oc=5"
     },
     "hot": true
-   },
-   {
-    "term": "晚宴",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "ETtoday新聞雲",
-     "UDN",
-     "Yahoo新聞"
-    ],
-    "sample": {
-     "title": "陸委會115年國慶晚宴 邱垂正：致力維持台海和平穩定現狀",
-     "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5uRVh0OFI1UlM5c1daekN1Q2d3SEtnS19hZEExRFN3RjlKM1U4WWdRalI2MXMwcGRPeGV0YkN3Nk1IdWNBeHkwOXpLZTlMWkZC0gFWQVVfeXFMTXoxckRoRDNiRkNzamw4aG9lXzBiZUpGcTgtVUowSzhBLWswWTkxajJOOXJnb0VwRVR2ajFfc200Zm9oeUpqZ3dtbldYclF3Y2xtVkxpVUE?oc=5"
-    },
-    "hot": true
    }
   ]
  },
  "errs": [
-  "gdelt: IndexError: list index out of range"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-08T20:33:07Z"
+ "updatedAt": "2026-10-08T20:49:54Z"
 }
