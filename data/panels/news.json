@@ -294,10 +294,10 @@
     12,
     10,
     2,
-    19,
-    39,
+    20,
+    38,
     47,
-    36
+    37
    ],
    "days7": [
     "2026-10-02",
@@ -396,10 +396,10 @@
     7,
     5,
     4,
-    12,
+    13,
     23,
-    54,
-    49
+    53,
+    53
    ],
    "days7": [
     "2026-10-02",
@@ -418,7 +418,7 @@
      "source": "Yahoo新聞",
      "title": "蔡英文史丹佛演說 曝台海新警訊：台灣不能只等大戰來臨",
      "url": "https://news.google.com/rss/articles/CBMi9gJBVV95cUxPODJMNEpsUjlJcFphN1JMY3dicVZ0aGRCbE5JbHE4cjlCdWt2d2piTjkzM3lOYzlJSjNabHJ1YTV1Z1B1MHY1OEs1RHEycmlCYUVHTTE0TmpLcmRzNF94V0RlNGtOTDNIU1FBbldiRmlmeXNCX21mVmFudXRUaXh1R2J4cUk3WDhiNktDampnREcyQTk5YTBkV3dFSVhqV0k1aUpSLXhQZERLX0RHRmNoUFhLbEljOFlNSFVILXI0SzRJV2RDaHBTZ2J0elpmNEV3M1FhVDc0NjRyTi0tTFoxX3BjVW9nWkQzRkpfWU9hWVVWZS05X2lvLVYtdHhTVGVKYktOYzVnbFBIQndoelllcXlfNVJ2XzJvdjdIcVlqTmpheFk1bVVwb1Z5dWE5VWZmaXRTOXcyVDMxMlJUWml0LUhXTWhJcFkyZ1FReHhHVWt6NWRWbTVOMHcteU1YUE8xcWVKeGJXczczblVwdFJURXRyaFRydw?oc=5",
-     "at": "2026-10-08T02:26:41Z",
+     "at": "2026-10-08T02:26:50Z",
      "kw": "台海 OR 共機 OR 軍演"
     },
     {
@@ -501,7 +501,7 @@
     5,
     13,
     2,
-    3
+    2
    ],
    "days7": [
     "2026-10-02",
@@ -550,8 +550,8 @@
     1,
     2,
     17,
-    56,
-    77,
+    58,
+    75,
     37
    ],
    "days7": [
@@ -653,8 +653,8 @@
     10,
     25,
     39,
-    36,
-    7
+    35,
+    8
    ],
    "days7": [
     "2026-10-02",
@@ -734,7 +734,7 @@
      "HN",
      "Reuters",
      "TechNews 科技新",
-     "Yahoo 財經",
+     "https://cybe",
      "數位時代"
     ],
     "sample": {
@@ -745,12 +745,13 @@
    },
    {
     "term": "Anthropic",
-    "n": 4,
-    "src": 4,
+    "n": 5,
+    "src": 5,
     "sources": [
      "Reuters",
      "TechNews 科技新",
-     "Yahoo 財經",
+     "https://cybe",
+     "鉅亨網",
      "鏈新聞 ABMedia"
     ],
     "sample": {
@@ -776,32 +777,17 @@
     "hot": true
    },
    {
-    "term": "ChatGPT",
-    "n": 4,
-    "src": 3,
-    "sources": [
-     "OpenAI 論壇",
-     "TechCrunch",
-     "鉅亨網"
-    ],
-    "sample": {
-     "title": "OpenAI公布青少年ChatGPT使用報告！安全防護遭獨立測試打問號",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBqN25pUlVkS0xUS3lrUU45amxqQm83QUpxWTRpWU93QVRfYjZBMzB2YXdqUEh4Y3g4LVcxV01fTzNTTE9QZzdVWl9ia0paN3c?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "OpenAI",
+    "term": "Claude Haiku",
     "n": 3,
     "src": 3,
     "sources": [
-     "New Scientis",
-     "The Washingt",
-     "鉅亨網"
+     "HN",
+     "TechNews 科技新",
+     "https://cybe"
     ],
     "sample": {
-     "title": "OpenAI公布青少年ChatGPT使用報告！安全防護遭獨立測試打問號",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBqN25pUlVkS0xUS3lrUU45amxqQm83QUpxWTRpWU93QVRfYjZBMzB2YXdqUEh4Y3g4LVcxV01fTzNTTE9QZzdVWl9ia0paN3c?oc=5"
+     "title": "成本狂降 75%！Anthropic 推出最快小模型 Claude Haiku 5.5，效能輾壓前代",
+     "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5qd19oR2xVMjRyR0diVVVMZUlUazdkZ3VCUkxOS2ZYUTV3S2NpTHhTV2xac0s5dGhwRUY3Y0EzbU5jdVNVUXpWa1hHb2I5VXV6Sklqb1ZYZlVJX3luUWZGV1V3SGhoSUpjd3c?oc=5"
     },
     "hot": true
    },
@@ -855,28 +841,43 @@
     "n": 3,
     "src": 3,
     "sources": [
-     "Yahoo股市",
+     "PTT",
      "太報 TaiSounds",
      "自由財經"
     ],
     "sample": {
-     "title": "台股連假前5萬點無望？美股四大指數全倒 台積電ADR挫1.4％、台指期夜盤殺回49K",
-     "url": "https://news.google.com/rss/articles/CBMivANBVV95cUxONmdSc3BrN2I3NjZndVUwLWpCcHJaTVhVaEFDRHZ1c1JIVDBldUp5OTlSRmlOelYxSUNHM2I0ZmxDQjBRdDNWdEpQSGNfM3J2dmlBZ0FobmhsWEtaamNNWWJFQ2p0UzBkLUxCVjVncUZLMGszTGxxSmN1LWduWjdsOFFlWkR5Mlc1RlF6SzBrc0NQOFk4MVpxRkU1bGw4eG9QVFFLMl8zcnRfaHR0b1hGNVdIeFVla3p3RkUtd2hyUFZwYTFCSFl2dk9lVGxhNlp1OTVVMjhRMGI5cjZIbHljUDg5N3Z4NjVSUTBPMmdnUVhHMFNJWHZ2d2FZWS1mbWswMWs1c1c2UDhDTThZT29QYjM4UVR5RkN0N000X1dHZzBxWmRRdDJvbHhhelJWZ3F3QkkwUjhwQzNaX0Z0ZVMtWWhLR0R2aExPMndiVTBMVFA0QUc0VW15LU1lNUJVUkZOYWZ0enY1OXFnaDYyd3NvMlRSRW55N2FKV0lzNHVweTRhMGoxdXJjWDIxMXRER2wycXd4WnJSVGk5T3ZXQnMtZmJROHl1R09uakxMMXBpS1NwN0hyd3FyYVUwRlE?oc=5"
+     "title": "美債殖利率再走高！美股全線收黑 台積電ADR挫逾2%",
+     "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE1xYmIxRUc1QkxycC1jMFl6YXZ0RGJsdWk3czEtVXpQRWw0cnlZVEFsWnRnY05DckJQRUtpMXptS3hMNGstNGpySk9pbVBtLWNRUDdsUEFGM2JSNEQx?oc=5"
     },
     "hot": true
    },
    {
-    "term": "ADR",
+    "term": "官員",
     "n": 3,
     "src": 3,
     "sources": [
-     "Yahoo股市",
-     "太報 TaiSounds",
-     "自由財經"
+     "中央社",
+     "經濟日報",
+     "鉅亨網"
     ],
     "sample": {
-     "title": "台股連假前5萬點無望？美股四大指數全倒 台積電ADR挫1.4％、台指期夜盤殺回49K",
-     "url": "https://news.google.com/rss/articles/CBMivANBVV95cUxONmdSc3BrN2I3NjZndVUwLWpCcHJaTVhVaEFDRHZ1c1JIVDBldUp5OTlSRmlOelYxSUNHM2I0ZmxDQjBRdDNWdEpQSGNfM3J2dmlBZ0FobmhsWEtaamNNWWJFQ2p0UzBkLUxCVjVncUZLMGszTGxxSmN1LWduWjdsOFFlWkR5Mlc1RlF6SzBrc0NQOFk4MVpxRkU1bGw4eG9QVFFLMl8zcnRfaHR0b1hGNVdIeFVla3p3RkUtd2hyUFZwYTFCSFl2dk9lVGxhNlp1OTVVMjhRMGI5cjZIbHljUDg5N3Z4NjVSUTBPMmdnUVhHMFNJWHZ2d2FZWS1mbWswMWs1c1c2UDhDTThZT29QYjM4UVR5RkN0N000X1dHZzBxWmRRdDJvbHhhelJWZ3F3QkkwUjhwQzNaX0Z0ZVMtWWhLR0R2aExPMndiVTBMVFA0QUc0VW15LU1lNUJVUkZOYWZ0enY1OXFnaDYyd3NvMlRSRW55N2FKV0lzNHVweTRhMGoxdXJjWDIxMXRER2wycXd4WnJSVGk5T3ZXQnMtZmJROHl1R09uakxMMXBpS1NwN0hyd3FyYVUwRlE?oc=5"
+     "title": "賴總統家人遭監控　前白宮官員：台灣人須嚴肅看待中共脅迫行動",
+     "url": "https://www.cna.com.tw/news/aipl/202610080027.aspx"
+    },
+    "hot": true
+   },
+   {
+    "term": "成本",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "TechNews 科技新",
+     "鉅亨網",
+     "鏈新聞 ABMedia"
+    ],
+    "sample": {
+     "title": "成本狂降 75%！Anthropic 推出最快小模型 Claude Haiku 5.5，效能輾壓前代",
+     "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5qd19oR2xVMjRyR0diVVVMZUlUazdkZ3VCUkxOS2ZYUTV3S2NpTHhTV2xac0s5dGhwRUY3Y0EzbU5jdVNVUXpWa1hHb2I5VXV6Sklqb1ZYZlVJX3luUWZGV1V3SGhoSUpjd3c?oc=5"
     },
     "hot": true
    }
@@ -885,5 +886,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-08T02:29:07Z"
+ "updatedAt": "2026-10-08T02:45:33Z"
 }
