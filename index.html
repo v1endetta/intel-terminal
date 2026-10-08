@@ -130,7 +130,7 @@ td.r,th.r{white-space:nowrap}
 .rd{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.rd h3 .sub{font-weight:400}.rd h3+table,.rd h3+ul{margin-bottom:8px}
 .th-c .list li .t a{color:var(--text)}.th-c .list li .t .sub{display:block;margin-top:2px;line-height:1.45}.th-pod{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:10px;padding-top:8px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}.th-pod a{color:var(--muted)}
 .pcx{padding:8px 14px 6px;border-bottom:1px solid var(--line)}.pcx-h{font-size:12.5px;line-height:1.6;color:var(--text);margin-bottom:4px}.pcx-h b{font-weight:600}.pcx-h em{font-style:normal;font-family:var(--mono)}.pcx svg text{font:11px var(--sans);fill:var(--muted)}.pcx svg .num{font-family:var(--mono)}.pcx svg .hi{fill:var(--text)}
-.vr-g{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}@media (max-width:1100px){.vr-g{grid-template-columns:1fr}}.vr-t{table-layout:fixed;width:100%;margin-bottom:4px}.vr-t .vr-ref td{opacity:.55}.vr-t .vr-hot{color:var(--up);font-weight:600}.vr-t .vr-up{color:var(--up)}.vr-t .vr-down{color:var(--down)}.vr-t td{vertical-align:middle;padding:5px 6px}.vr-t td .sub{white-space:nowrap}.vr-t .tag{font-size:12px;color:var(--text)}.vr-t .grp td{color:var(--dim);font:500 10.5px var(--mono);letter-spacing:.1em;padding-top:10px}.vr-t svg{display:block}
+.vr-g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 22px}.vr-g>div{min-width:0}@media (max-width:1100px){.vr-g{grid-template-columns:1fr}}.vr-t{table-layout:fixed;width:100%;margin-bottom:4px}.vr-t .vr-ref td{opacity:.55}.vr-t .vr-hot{color:var(--up);font-weight:600}.vr-t .vr-up{color:var(--up)}.vr-t .vr-down{color:var(--down)}.vr-t td{vertical-align:middle;padding:5px 6px}.vr-t td .sub{white-space:nowrap}.vr-t .tag{font-size:12px;color:var(--text)}.vr-t .grp td{color:var(--dim);font:500 10.5px var(--mono);letter-spacing:.1em;padding-top:10px}.vr-t svg{display:block}
 .pop{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}@media (max-width:1100px){.pop{grid-template-columns:repeat(2,minmax(0,1fr))}}.pop .list li .src{min-width:20px;text-align:right}
 .rd-chips{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 10px}.rd-chip{border:1px solid var(--c);color:var(--c);padding:2px 8px;border-radius:3px;font-size:12px}.rd-chip b{color:var(--text);font-weight:600;margin-left:2px}
 @media (max-width:900px){.rd{grid-template-columns:1fr}}
@@ -575,6 +575,65 @@ body[data-tab="intel"] main .panel[data-band]:not(.ib-open){display:none}
 main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 @media (max-width:1100px){.ib-sig{grid-template-columns:repeat(3,minmax(0,1fr))}.ib-band{grid-template-columns:1fr}.ib-q{border-right:0;border-bottom:1px solid var(--line)}}
 @media (max-width:640px){.ib-sig{grid-template-columns:repeat(2,minmax(0,1fr))}.ib-body{grid-template-columns:1fr}}
+
+/* ===== 手機版（≤640px）：只動手機，電腦版不受影響 ===== */
+.ib-mmore,.vr-mmore,.sky-hint{display:none}
+@media (max-width:640px){
+  /* 1. 頂端天空圖：預設收成一條，點一下展開 */
+  .sky{cursor:pointer;margin-top:8px}
+  .sky:not(.open) canvas{display:none}
+  .sky:not(.open) .over{position:static;padding:8px 12px;align-items:center}
+  .sky:not(.open) .sky-clock .t{font-size:28px}
+  .sky:not(.open) #salt{display:none}
+  .sky:not(.open) .sessions{padding:5px 12px;gap:10px}
+  .sky-hint{display:inline;font:10.5px var(--mono);color:var(--dim)}
+  .sky.open .sky-hint{display:none}
+  /* 2. 分頁列：固定在上方、七個分頁擠得下；狀態列只留抓取時間與倒數 */
+  .tab{padding:10px 8px 9px;font-size:14px}
+  .mast .mbtn{display:none}
+  .mast .status{padding-block:2px 6px;font-size:11px}
+  /* 面板標題：中文說明換到下一行，不要擠成直條 */
+  .ph{flex-wrap:wrap;row-gap:2px}.ph h2{white-space:nowrap}.ph .zh{flex:1 1 55%;min-width:0}
+  /* 7. 總覽：訊號卡橫滑一列、本週機會排到行情前面 */
+  .brief{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;gap:8px}
+  .brief::-webkit-scrollbar{display:none}
+  .brief .b{flex:0 0 44%;scroll-snap-align:start}
+  #ov-c-opp{order:-1}
+  .ib-sig{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;gap:8px}
+  .ib-sig::-webkit-scrollbar{display:none}
+  .ib-sig .ib-card{flex:0 0 46%;scroll-snap-align:start}
+  /* 4. 本週機會：數字換到名稱下一行，不再被切掉 */
+  .o-ls.op li,.o-ls.op.tr li{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+  .o-ls.op li .tt{flex:1 1 calc(100% - 52px);min-width:0}
+  .o-ls.op li .num{text-align:left}
+  .o-ls.op li .num:first-of-type{margin-left:48px}
+  .o-opp .o-colh{white-space:normal}
+  /* 3. 趨勢雷達：一個關鍵字一張小卡 */
+  .vr-g{grid-template-columns:1fr}
+  .vr-t,.vr-t tbody{display:block;width:100%}
+  .vr-t colgroup{display:none}
+  .vr-t tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:3px 10px;padding:9px 0;border-top:1px solid var(--line)}
+  .vr-t tr.grp{display:block;border-top:0;padding:12px 0 2px}
+  .vr-t td{display:block;padding:0;min-width:0}
+  .vr-t td:nth-child(1){grid-column:1;grid-row:1;font-size:15px;max-width:none;width:auto}
+  .vr-t td:nth-child(6){grid-column:2;grid-row:1;text-align:right;font-size:12px;line-height:1.35;white-space:normal}
+  .vr-t td:nth-child(2){grid-column:1/3;grid-row:2}
+  .vr-t td:nth-child(2) svg{width:100%;height:30px}
+  .vr-t td:nth-child(2) .sub{display:block}
+  .vr-t td:nth-child(3){display:none}
+  .vr-t td:nth-child(4){grid-column:1;grid-row:3}
+  .vr-t td:nth-child(4) svg{display:none}
+  .vr-t td:nth-child(5){grid-column:2;grid-row:3;text-align:right}
+  .vr-t .sub{white-space:normal}
+  #p-voice:not(.mopen) .vr-g{max-height:1150px;overflow:hidden;position:relative}
+  #p-voice:not(.mopen) .vr-g::after{content:"";position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(transparent,var(--panel))}
+  .vr-mmore,.ib-mmore{display:block;width:100%;background:none;border:0;border-top:1px solid var(--line);color:var(--blue);font:12px var(--mono);padding:10px;cursor:pointer;margin-top:6px}
+  #p-voice.mopen .vr-mmore{display:none}
+  /* 6. 情報各區：先看結論和第一張圖，其餘按「展開」 */
+  .ib-band:not(.mopen) .ib-body>.ib-viz:not(:first-child){display:none}
+  .ib-band:not(.mopen) .ib-body>.ib-viz:first-child>:is(svg,ul,.ib-chips)~*{display:none}
+  .ib-band.mopen .ib-mmore{display:none}
+}
 </style>
 </head>
 <body>
@@ -583,7 +642,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 <section class="sky" aria-label="時間與市場時段">
   <div style="position:relative"><canvas id="sky"></canvas>
   <div class="over">
-    <div class="sky-brand"><b><span class="dot" aria-hidden="true"></span>dalta 情報站</b><span id="sunline">台北</span><span id="caline"></span></div>
+    <div class="sky-brand"><b><span class="dot" aria-hidden="true"></span>dalta 情報站 <span class="sky-hint">▾ 天空</span></b><span id="sunline">台北</span><span id="caline"></span></div>
     <div class="sky-clock"><div class="t" id="tclock">--:--</div><div class="s" id="salt"></div><div class="s" id="tdate"></div></div>
   </div></div>
   <div class="sessions" id="sessions"></div>
@@ -1183,7 +1242,7 @@ const renderers={
     const pod=(d.podcast||[]).length?`<div class="th-pod"><span>🎧 Podcast</span>${d.podcast.slice(0,4).map(x=>`<a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title.slice(0,48))}</a>`).join("")}</div>`:"";
     body("p-think").innerHTML=`<div class="rd">${(d.groups||[]).map(col).join("")}</div>${pod}`;setMeta("p-think",{...d,label:`${d.label} · 近 7 天 ${d.week||0} 篇`},4);},
   voice(d){const K=d.kw||[],G=d.groups||{},SC={"Dcard":"#5BC0EB","PTT":"#8B93A7","Mobile01":"#F2C14E","痞客邦":"#C9A3FF"};
-    const spark=(a,w=150,h=24)=>{const v=(a||[]).filter(isFinite);if(v.length<2)return"";const mx=Math.max(...v,1);return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${v.map((x,i)=>`${(i/(v.length-1)*w).toFixed(1)},${(h-2-x/mx*(h-4)).toFixed(1)}`).join(" ")}" style="fill:none;stroke:var(--blue);stroke-width:1.5"/></svg>`;};
+    const spark=(a,w=150,h=24)=>{const v=(a||[]).filter(isFinite);if(v.length<2)return"";const mx=Math.max(...v,1);return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${v.map((x,i)=>`${(i/(v.length-1)*w).toFixed(1)},${(h-2-x/mx*(h-4)).toFixed(1)}`).join(" ")}" vector-effect="non-scaling-stroke" style="fill:none;stroke:var(--blue);stroke-width:1.5"/></svg>`;};
     const bars=(a,w=120,h=20)=>{const v=a||[];const mx=Math.max(1,...v),bw=w/Math.max(1,v.length);return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${v.map((x,i)=>x?`<rect x="${(i*bw).toFixed(1)}" y="${(h-x/mx*(h-2)).toFixed(1)}" width="${Math.max(1,bw-1).toFixed(1)}" height="${(x/mx*(h-2)).toFixed(1)}" style="fill:var(--warn);opacity:.85"><title>${x} 則</title></rect>`:"").join("")}</svg>`;};
     const stack=(o,w=120,h=8)=>{const tot=Object.values(o||{}).reduce((a,b)=>a+b,0);if(!tot)return"";let x=0;return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${Object.entries(o).map(([k,v])=>{if(!v)return"";const ww=w*v/tot;const r=`<rect x="${x.toFixed(1)}" y="0" width="${Math.max(1,ww-1).toFixed(1)}" height="${h}" style="fill:${SC[k]}"><title>${k} ${v} 篇</title></rect>`;x+=ww;return r;}).join("")}</svg>`;};
     const hot=t=>/機會窗口/.test(t)?"vr-hot":/發燒|在升/.test(t)?"vr-up":/降溫|追高/.test(t)?"vr-down":"";
@@ -1200,7 +1259,7 @@ const renderers={
     const nm=a=>a.slice(0,3).map(k=>`<b>${esc(k.k)}</b> ${G2(k)>0?"+":""}${G2(k)}%`).join("、");
     const crowd=K.filter(k=>/湧入/.test(k.tag||""));
     const head=`${win.length?`🎯 機會窗口：${win.map(k=>`<b>${esc(k.k)}</b>`).join("、")}（需求在長，媒體和新開店都還沒跟上）。`:""}${crowd.length?`⚠️ 新店湧入：${crowd.map(k=>`<b>${esc(k.k)}</b> ${k.supply.yoy>0?"+":""}${k.supply.yoy}%`).join("、")}。`:""}${up.length?`比去年同期升溫：${nm(up)}。`:"沒有關鍵字比去年同期明顯升溫。"}${dn.length?`降溫：${nm(dn)}。`:""}<span class="sub">　新店＝財政部稅籍近 6 個月新開家數，年增已校正倒店與登錄延遲 · 討論色塊 <span style="color:#5BC0EB">■Dcard</span> <span style="color:#8B93A7">■PTT</span> <span style="color:#F2C14E">■Mobile01</span> <span style="color:#C9A3FF">■痞客邦</span></span>`;
-    body("p-voice").innerHTML=`<div class="pcx-h" style="padding:2px 0 6px">${head}</div><div class="vr-g"><div>${colA.map(tbl).join("")}</div><div>${colB.map(tbl).join("")}</div></div>${(d.errs||[]).length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.slice(0,3).join(" · ").slice(0,220))}</div>`:""}`;
+    body("p-voice").innerHTML=`<div class="pcx-h" style="padding:2px 0 6px">${head}</div><div class="vr-g"><div>${colA.map(tbl).join("")}</div><div>${colB.map(tbl).join("")}</div></div><button type="button" class="vr-mmore" onclick="this.closest('.panel').classList.add('mopen')">看全部 ${K.length} 個關鍵字 ▾</button>${(d.errs||[]).length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.slice(0,3).join(" · ").slice(0,220))}</div>`:""}`;
     setMeta("p-voice",d,8);},
   pop(d){const L=(arr,f)=>(arr||[]).slice(0,10).map(f).join("")||'<li class="empty">抓不到</li>';
     const li=(r,t,sub,u,m)=>`<li><span class="src">${r}</span><span class="t">${u?`<a href="${esc(safe(u))}" target="_blank" rel="noopener">${esc(t)}</a>`:esc(t)}${sub?`<span class="sub"> ${esc(sub)}</span>`:""}</span>${m?`<span class="m">${m}</span>`:""}</li>`;
@@ -1461,11 +1520,14 @@ const TILE={"基隆市":[4,0],"桃園市":[2,1],"臺北市":[3,1],"新北市":[4
 function panelCharts(P){
   /* 3. Polymarket：24 小時變動最大的 8 題 */
   try{const it=((P.poly||{}).items||[]).filter(x=>isFinite(n(x.yes)));if(it.length){const mv=it.slice().sort((a,b)=>Math.abs(n(b.d1)||0)-Math.abs(n(a.d1)||0)||n(b.vol24h)-n(a.vol24h)).slice(0,8);const t=mv[0];
-    const p=pcx("p-poly",`24 小時變動最大：<b>${esc(t.question.slice(0,40))}</b> <em class="${n(t.d1)>0?"up":"down"}">${n(t.d1)>0?"▲":"▼"}${Math.abs(n(t.d1)).toFixed(1)}</em> 點，現在 <em>${n(t.yes).toFixed(0)}%</em>`,860,mv.length*20+4);
-    const L=330,BW=300;mv.forEach((x,i)=>{const y=i*20,v=n(x.yes),d=n(x.d1)||0;p("text",{x:L-8,y:y+14,"text-anchor":"end",class:i<3?"hi":""},x.question.slice(0,42),x.question);
+    const p=pcx("p-poly",`24 小時變動最大：<b>${esc(t.question.slice(0,40))}</b> <em class="${n(t.d1)>0?"up":"down"}">${n(t.d1)>0?"▲":"▼"}${Math.abs(n(t.d1)).toFixed(1)}</em> 點，現在 <em>${n(t.yes).toFixed(0)}%</em>`,innerWidth<=640?340:860,mv.length*(innerWidth<=640?34:20)+4);
+    if(innerWidth<=640){const BW=220;mv.forEach((x,i)=>{const y=i*34,v=n(x.yes),d=n(x.d1)||0;p("text",{x:0,y:y+12,class:i<3?"hi":""},x.question.length>24?x.question.slice(0,23)+"…":x.question,x.question);
+      p("rect",{x:0,y:y+17,width:BW,height:10,rx:2,style:"fill:var(--line2);opacity:.5"});p("rect",{x:0,y:y+17,width:BW*v/100,height:10,rx:2,style:`fill:var(${v>=50?"--blue":"--muted"});opacity:.85`});
+      p("text",{x:BW+6,y:y+26,class:"num hi"},v.toFixed(0)+"%");if(d)p("text",{x:BW+44,y:y+26,class:"num",style:`fill:var(${d>0?"--up":"--down"})`},(d>0?"▲":"▼")+Math.abs(d).toFixed(1));});}
+    else{const L=330,BW=300;mv.forEach((x,i)=>{const y=i*20,v=n(x.yes),d=n(x.d1)||0;p("text",{x:L-8,y:y+14,"text-anchor":"end",class:i<3?"hi":""},x.question.slice(0,42),x.question);
       p("rect",{x:L,y:y+5,width:BW,height:11,rx:2,style:"fill:var(--line2);opacity:.5"});p("rect",{x:L,y:y+5,width:BW*v/100,height:11,rx:2,style:`fill:var(${v>=50?"--blue":"--muted"});opacity:.85`});
       p("text",{x:L+BW+6,y:y+14,class:"num hi"},v.toFixed(0)+"%");if(d)p("text",{x:L+BW+46,y:y+14,class:"num",style:`fill:var(${d>0?"--up":"--down"})`},(d>0?"▲":"▼")+Math.abs(d).toFixed(1));
-      p("text",{x:L+BW+96,y:y+14},x.topic||"");});}}catch(e){console.warn("pcx poly",e);}
+      p("text",{x:L+BW+96,y:y+14},x.topic||"");});}}}catch(e){console.warn("pcx poly",e);}
   /* 4. 104 職缺：比 7 天前哪些職類變多（總量表格在下面，這裡只看變化） */
   try{const J=P.jobs||{},all=(J.cats||[]).slice();if(all.length){const cs=all.filter(c=>c.chg7!=null&&isFinite(n(c.chg7)));
     if(!cs.length){pcx("p-jobs",`104 刊登中 <em>${n(J.total).toLocaleString()}</em> 筆 <span style="color:var(--dim)">· 職類一週增減要累積 7 天才算得出來，算出來後這裡會畫「哪些職類變多、哪些變少」</span>`,760,0);}
@@ -1478,10 +1540,10 @@ function panelCharts(P){
   try{const it=(P.mops||{}).items||[];if(it.length){const T=Date.now(),days=[...Array(14)].map((_,i)=>new Date(T-(13-i)*864e5).toLocaleDateString("sv-SE"));
     const by={},cat={};it.forEach(x=>{(by[x.d]=by[x.d]||{})[x.cat]=((by[x.d]||{})[x.cat]||0)+1;cat[x.cat]=(cat[x.cat]||0)+1;});const tot=d=>Object.values(by[d]||{}).reduce((a,b)=>a+b,0);
     let vals0=days.map(tot);const f0=Math.max(0,vals0.findIndex(v=>v>0));days.splice(0,f0);const vals=vals0.slice(f0),ND=days.length,mean=vals.reduce((a,b)=>a+b,0)/ND,mx=Math.max(1,...vals),topC=Object.entries(cat).sort((a,b)=>b[1]-a[1]);const peak=days[vals.indexOf(mx)];
-    const p=pcx("p-mops",`近 ${ND} 天 <em>${it.length}</em> 則${ND<14?`<span style="color:var(--dim)">（資料從 ${days[0].slice(5).replace("-","/")} 開始累積）</span>`:""}，最多是<b>${esc(topC[0][0])}</b>（<em>${topC[0][1]}</em>）${topC[1]?`、<b>${esc(topC[1][0])}</b>（${topC[1][1]}）`:""}；最多的一天是 ${peak.slice(5).replace("-","/")}（<em>${mx}</em> 則）`,760,112);
-    const L=10,cw=Math.min(40,(560-L)/ND),H=78;days.forEach((d,i)=>{let y=H;const x=L+i*cw+3;Object.entries(by[d]||{}).sort((a,b)=>b[1]-a[1]).forEach(([c,v])=>{const h=v/mx*(H-8);y-=h;p("rect",{x,y,width:cw-6,height:Math.max(1,h-1),style:`fill:${MOPC[c]||"#8B93A7"}`},null,`${d}｜${c} ${v} 則`);});
+    const p=pcx("p-mops",`近 ${ND} 天 <em>${it.length}</em> 則${ND<14?`<span style="color:var(--dim)">（資料從 ${days[0].slice(5).replace("-","/")} 開始累積）</span>`:""}，最多是<b>${esc(topC[0][0])}</b>（<em>${topC[0][1]}</em>）${topC[1]?`、<b>${esc(topC[1][0])}</b>（${topC[1][1]}）`:""}；最多的一天是 ${peak.slice(5).replace("-","/")}（<em>${mx}</em> 則）`,innerWidth<=640?340:760,112);
+    const MB=innerWidth<=640,L=10,cw=Math.min(40,((MB?330:560)-L)/ND),H=78;days.forEach((d,i)=>{let y=H;const x=L+i*cw+3;Object.entries(by[d]||{}).sort((a,b)=>b[1]-a[1]).forEach(([c,v])=>{const h=v/mx*(H-8);y-=h;p("rect",{x,y,width:cw-6,height:Math.max(1,h-1),style:`fill:${MOPC[c]||"#8B93A7"}`},null,`${d}｜${c} ${v} 則`);});
       if(vals[i]>mean*2&&vals[i]>=3)p("text",{x:x+(cw-6)/2,y:y-3,"text-anchor":"middle",style:"fill:var(--down)"},"!");if(ND<=8||i%2===1||i===ND-1)p("text",{x:x+(cw-6)/2,y:H+14,"text-anchor":"middle"},d.slice(5).replace("-","/"));});
-    let ly=8;const LX=Math.min(590,L+ND*cw+40);topC.slice(0,8).forEach(([c,v])=>{p("rect",{x:LX,y:ly-8,width:9,height:9,rx:1.5,style:`fill:${MOPC[c]||"#8B93A7"}`});p("text",{x:LX+14,y:ly},`${c} ${v}`);ly+=13;});}}catch(e){console.warn("pcx mops",e);}
+    let ly=8;const LX=Math.min(590,L+ND*cw+40);if(!MB)topC.slice(0,8).forEach(([c,v])=>{p("rect",{x:LX,y:ly-8,width:9,height:9,rx:1.5,style:`fill:${MOPC[c]||"#8B93A7"}`});p("text",{x:LX+14,y:ly},`${c} ${v}`);ly+=13;});}}catch(e){console.warn("pcx mops",e);}
   /* 6. Taiwan Now：縣市燈號格 */
   try{const now=countyNow(),cells=Object.entries(TILE),sz=34,g=3;let stops=[],bad=[],wet=[];
     const p=pcx("p-twnow","",6*(sz+g),8*(sz+g));const box=document.querySelector("#p-twnow > .pcx");
@@ -1506,8 +1568,8 @@ function panelCharts(P){
     box.appendChild(side);box.classList.add("tn-box");}catch(e){console.warn("pcx twnow",e);}
   /* 7. 實價登錄：各縣市住宅中位數 */
   try{const H=P.house||{},cs=Object.entries(H.city||{}).sort((a,b)=>b[1]-a[1]);if(cs.length){const mx=cs[0][1],lo=cs[cs.length-1];
-    const p=pcx("p-house",`${esc(H.season||"")} 住宅中位數：<b>台北</b> <em>${n((H.city||{})["臺北市"]).toFixed(1)}</em> 萬/坪最高，<b>${esc(lo[0].replace("臺","台"))}</b> <em>${lo[1]}</em> 最低；交易最多是<b>${esc(Object.entries(H.cityN||{}).sort((a,b)=>b[1]-a[1])[0][0].replace("臺","台"))}</b>`,760,cs.length*17+4);
-    const L=70,BW=520;cs.forEach(([k,v],i)=>{const y=i*17,w=Math.max(2,BW*v/mx);p("text",{x:L-8,y:y+12,"text-anchor":"end",class:k==="臺北市"||k==="臺中市"?"hi":""},k.replace("臺","台"));
+    const p=pcx("p-house",`${esc(H.season||"")} 住宅中位數：<b>台北</b> <em>${n((H.city||{})["臺北市"]).toFixed(1)}</em> 萬/坪最高，<b>${esc(lo[0].replace("臺","台"))}</b> <em>${lo[1]}</em> 最低；交易最多是<b>${esc(Object.entries(H.cityN||{}).sort((a,b)=>b[1]-a[1])[0][0].replace("臺","台"))}</b>`,innerWidth<=640?340:760,cs.length*17+4);
+    const L=70,BW=innerWidth<=640?170:520;cs.forEach(([k,v],i)=>{const y=i*17,w=Math.max(2,BW*v/mx);p("text",{x:L-8,y:y+12,"text-anchor":"end",class:k==="臺北市"||k==="臺中市"?"hi":""},k.replace("臺","台"));
       p("rect",{x:L,y:y+3,width:w,height:10,rx:1.5,style:`fill:var(--warn);opacity:${.45+.5*v/mx}`},null,`${k} 中位 ${v} 萬/坪 · ${(H.cityN||{})[k]||0} 筆`);
       p("text",{x:L+w+6,y:y+12,class:"num hi"},String(v));p("text",{x:L+w+44,y:y+12,class:"num"},((H.cityN||{})[k]||0).toLocaleString()+" 筆");});}}catch(e){console.warn("pcx house",e);}
   /* 8. 行事曆：未來 21 天時間軸 */
@@ -1846,6 +1908,7 @@ const save=()=>{try{localStorage.setItem("intel:ibopen",JSON.stringify([...open]
 function setup(){
   const order={"ib-sig":1};
   order.ib6=15;/* Q2 企業：排在 Q1 錢 後面 */
+  document.querySelectorAll(".ib-band").forEach(b=>{const body=b.querySelector(".ib-body");if(!body||b.querySelector(".ib-mmore"))return;const bt=document.createElement("button");bt.type="button";bt.className="ib-mmore";bt.textContent="展開這一區 ▾";bt.addEventListener("click",()=>{b.classList.add("mopen");});b.appendChild(bt);});
   Object.entries(BANDS).forEach(([b,ps])=>{order["ib"+b]=b*10;ps.forEach(([id],i)=>{const el=document.getElementById(id);if(!el)return;el.dataset.band=b;el.style.order=b*10+1+i;if(open.has(id))el.classList.add("ib-open");});
     const box=document.querySelector(`.ib-more[data-band="${b}"]`);if(!box)return;
     box.innerHTML=`<span class="lbl">看全部</span>`+ps.map(([id,nm])=>`<button type="button" data-ibp="${id}" aria-pressed="${open.has(id)}">${nm}</button>`).join("")+(ps.length>1?`<button type="button" data-iball="${b}">全部</button>`:"");});
@@ -1868,17 +1931,19 @@ const today=()=>dstr(new Date());
 const back=(n,base)=>{const d=new Date(base+"T12:00:00+08:00");d.setDate(d.getDate()-n);return dstr(d);};
 function pdate(s,yr){if(!s)return"";s=String(s).replace(/^Date:\s*/,"").trim();if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);
   let t=Date.parse(/\d{4}/.test(s)?s:s+", "+yr);if(isNaN(t))return"";return dstr(new Date(t+12*3600e3));}
+function fitW(id,def,min){const el=document.getElementById(id),pa=el&&el.parentElement;let cw=pa?pa.clientWidth-(parseFloat(getComputedStyle(pa).paddingLeft)||0)-(parseFloat(getComputedStyle(pa).paddingRight)||0):0;if(cw<=0&&innerWidth<=640)cw=innerWidth-60;/* 分頁還沒打開時量不到寬度：手機就用螢幕寬度估 */return cw>0&&cw<def?Math.max(min||290,Math.floor(cw)):def;}
 function draw(id,w,h){const el=document.getElementById(id);if(!el)return null;el.setAttribute("viewBox",`0 0 ${w} ${h}`);el.style.maxWidth=w*1.15+"px";el.innerHTML="";
   return(tag,a,txt)=>{const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;el.appendChild(e);return e;};}
 const V={OpenAI:"OpenAI",openai:"OpenAI",Anthropic:"Anthropic",anthropic:"Anthropic","Google AI":"Google",Gemini:"Google",google:"Google",xAI:"xAI",xai:"xAI",DeepSeek:"DeepSeek",deepseek:"DeepSeek",HF:"Hugging Face"};
 const cap=t=>String(t).replace(/\b[a-z]/g,c=>c.toUpperCase());
 const tl=(src,t,url,m,cls)=>`<li><span class="src">${esc(src)}</span><span class="t">${url?`<a href="${esc(safe(url))}" target="_blank" rel="noopener">${esc(t)}</a>`:esc(t)}</span>${m?`<span class="m ${cls||""}">${m}</span>`:""}</li>`;
 
-function brandsChart(id,rows){const rh=17,W=520,L=92,R=52,pos=Math.max(0,...rows.map(c=>c.chg)),neg=Math.max(0,...rows.map(c=>-c.chg));
+function brandsChart(id,rows){const rh=17,W=fitW(id,520),L=W<420?84:92,R=W<420?44:52,pos=Math.max(0,...rows.map(c=>c.chg)),neg=Math.max(0,...rows.map(c=>-c.chg));
   const span=W-L-R,mid=L+span*(neg/(neg+pos||1)),sc=span/((neg+pos)||1)*0.98;const p=draw(id,W,rows.length*rh+16);if(!p)return;
   p("line",{x1:mid,y1:0,x2:mid,y2:rows.length*rh,class:"g"});p("text",{x:mid,y:rows.length*rh+13,"text-anchor":"middle"},"0");
   rows.forEach((c,i)=>{const y=i*rh,x=c.chg<0?mid+c.chg*sc:mid,w=Math.max(1.5,Math.abs(c.chg)*sc),me2=c.cat==="設計創意";
-    p("text",{x:L-8,y:y+12,"text-anchor":"end",style:me2?"fill:var(--blue)":""},(me2?"● ":"")+c.cat);
+    const mc=W<420?Math.floor((L-10)/12):99,cn=String(c.cat).replace(/^[、，,\s]+/,""),lab=cn.length>mc?cn.slice(0,mc-1)+"…":cn;
+    p("text",{x:L-8,y:y+12,"text-anchor":"end",style:me2?"fill:var(--blue)":""},(me2?"● ":"")+lab).appendChild(Object.assign(document.createElementNS(NS,"title"),{textContent:cn}));
     p("rect",{x,y:y+4,width:w,height:rh-8,rx:1.5,style:`fill:var(${c.chg>0?"--up":c.chg<0?"--down":"--dim"});opacity:${me2?1:.72}`});
     p("text",{x:W,y:y+12,"text-anchor":"end",class:"num",style:`fill:var(${c.chg>0?"--up":c.chg<0?"--down":"--muted"})`},(c.chg>0?"+":"")+c.chg+"%");});}
 function aiChart(id,rows3,d14,fresh){const W=520,L=96,cw=(W-L-6)/14,rh=26;const p=draw(id,W,rows3.length*rh+18);if(!p)return;
@@ -1893,7 +1958,7 @@ const FCC={"時尚":"#C9A3FF","美容":"#FF7FB0","生活":"#6FD3A8","娛樂":"#F
 function fashionCats(id,FC,compact){const order=FC.order,I=FC.intl||{};const nz=r=>Object.values(r[1]||{}).some(v=>v>0);
   const rows=[[compact?"台灣版 · 近 7 天":"台灣 · 全部 · 近 7 天",FC.w7,1],...(compact?[]:Object.entries(FC.src30||{}).map(([s,c])=>[s,c,0]))].filter(nz);
   const irows=I.n30?[[compact?"國際版 · 近 7 天":"國際 · 全部 · 近 7 天",I.w7,1],...(compact?[]:Object.entries(I.src30||{}).map(([s,c])=>[s,c,0]))].filter(nz):[];
-  const W=520,L=118,R=34,rh=19,T0=18,gap=irows.length?14:0,bw=W-L-R;const p=draw(id,W,T0+(rows.length+irows.length)*rh+gap+2);if(!p)return;
+  const W=fitW(id,520),L=W<420?100:118,R=34,rh=19,T0=18,gap=irows.length?14:0,bw=W-L-R;const p=draw(id,W,T0+(rows.length+irows.length)*rh+gap+2);if(!p)return;
   let lx=0;order.forEach(k=>{p("rect",{x:lx,y:3,width:8,height:8,rx:1.5,style:`fill:${FCC[k]}`});p("text",{x:lx+11,y:11},k);lx+=11+k.length*12+10;});
   const row=([nm,c,all],y)=>{const tot=order.reduce((a,k)=>a+(c[k]||0),0);if(!tot)return;
     p("text",{x:L-8,y:y+12,"text-anchor":"end",style:all?"fill:var(--text);font-weight:600":""},nm);
@@ -1952,7 +2017,7 @@ function q5(P,cards){const G=(P.think||{}).groups||[];if(!G.length)return;
     +(hasPrev?(rise&&rise[1]>0?`比前 30 天多最多的是 <b>${esc(rise[0])}</b>（<em class="up">+${rise[1]}</em>）。`:""):`<span style="color:var(--dim)">跟前一期比較要再累積約 ${Math.max(1,Math.ceil((45-span)/7))} 週。</span>`);
   cards.push(["ib5","顧問焦點",esc(top[0][0]),"",`McKinsey 近 30 天 ${top[0][1]} 篇在寫；科技類佔 ${share("tech")}%`]);
   /* 圖一：主題排行 */
-  {const W=420,rh=22,L=92,mx=top[0][1];const p=draw("ib5v",W,top.length*rh);
+  {const W=fitW("ib5v",420),rh=22,L=92,mx=top[0][1];const p=draw("ib5v",W,top.length*rh);
    if(p)top.forEach(([k,v],i)=>{const y=i*rh,bw=Math.max(2,(W-L-90)*v/mx),d=v-(pc[k]||0);
      p("text",{x:L-8,y:y+13,"text-anchor":"end",style:i<3?"fill:var(--text)":""},String(k).slice(0,12));
      p("rect",{x:L,y:y+3,width:bw,height:rh-9,rx:1.5,style:`fill:var(--blue);opacity:${i<3?.9:.6}`});
@@ -1962,7 +2027,7 @@ function q5(P,cards){const G=(P.think||{}).groups||[];if(!G.length)return;
   {const wk=t=>{const d=new Date(t);d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d.getTime();};
    const w0=wk(now)-7*D,weeks=[...Array(8)].map((_,i)=>w0-(7-i)*7*D),S=[["tech","科技與 AI","--blue"],["consumer","消費與行銷","--warn"],["macro","總經與產業","--muted"]];
    const ser=S.map(([k])=>weeks.map(w=>it.filter(x=>x.g===k&&wk(x.t)===w).length)),mx=Math.max(1,...ser.flat());
-   const W=420,T0=22,H=92,L=22,B=16,cw=(W-L-12)/7;const p=draw("ib5w",W,T0+H+B);
+   const W=fitW("ib5w",420),T0=22,H=92,L=22,B=16,cw=(W-L-12)/7;const p=draw("ib5w",W,T0+H+B);
    if(p){S.forEach(([k,nm,c],si)=>p("text",{x:L+si*128,y:11,style:`fill:var(${c})`},`● ${nm} ${ser[si][7]} 篇`));
      [0,mx].forEach(v=>{const y=T0+H-v/mx*(H-6);p("line",{x1:L,y1:y,x2:W-8,y2:y,class:"g",opacity:.5});p("text",{x:L-4,y:y+4,"text-anchor":"end",class:"num"},String(v));});
      weeks.forEach((w,i)=>{if(i%2===1)p("text",{x:L+cw*i,y:T0+H+B-2,"text-anchor":i===7?"end":"middle"},new Date(w).toISOString().slice(5,10).replace("-","/")+" 週");});
@@ -1991,12 +2056,12 @@ function render(P){
   if(JI.length){const hasC=JI.some(x=>x.chg7!=null);
     if(hasC){const rows=JI.filter(x=>x.chg7!=null).map(x=>({cat:x.name,chg:n(x.chg7)})).sort((a,b)=>b.chg-a.chg);brandsChart("ib1j",rows);const up=rows[0],dn=rows[rows.length-1];
       $("#ib1jh").innerHTML=`104 職缺 · 哪個產業在搶人<span class="n">各產業刊登中職缺比 7 天前</span>`;jTxt=`104 職缺增加最快的是<b>${esc(up.cat)}</b>（<em class="${up.chg>=0?"up":"down"}">${up.chg>0?"+":""}${up.chg}%</em>）${dn.chg<0?`，<b>${esc(dn.cat)}</b> 在縮編（<em class="down">${dn.chg}%</em>）`:""}。`;}
-    else{const t=JI.slice(0,10),mx=n(t[0].n),W=520,L=118,rh=18;const p=draw("ib1j",W,t.length*rh+4);
+    else{const t=JI.slice(0,10),mx=n(t[0].n),W=fitW("ib1j",520),L=W<420?100:118,rh=18;const p=draw("ib1j",W,t.length*rh+4);
       if(p)t.forEach((x,i)=>{const y=i*rh,w=Math.max(2,(W-L-70)*n(x.n)/mx);p("text",{x:L-8,y:y+12,"text-anchor":"end"},x.name);p("rect",{x:L,y:y+4,width:w,height:rh-8,rx:1.5,style:"fill:var(--blue);opacity:.75"});p("text",{x:L+w+6,y:y+12,class:"num"},(n(x.n)/1e4).toFixed(1)+"萬");});
       $("#ib1jh").innerHTML=`104 職缺 · 各產業刊登中<span class="n">週增減累積 7 天後改畫「比 7 天前」</span>`;}}
   if(jTxt)A1.jobs=jTxt;
   const EH=P.etfholders||{};
-  if((EH.items||[]).length){const t=EH.items.slice(0,8),mx=n(t[0].n),W=520,L=128,rh=18;const p=draw("ib1e",W,t.length*rh+4);
+  if((EH.items||[]).length){const t=EH.items.slice(0,8),mx=n(t[0].n),W=fitW("ib1e",520),L=W<420?104:128,rh=18;const p=draw("ib1e",W,t.length*rh+4);
     if(p)t.forEach((x,i)=>{const y=i*rh,w=Math.max(2,(W-L-120)*n(x.n)/mx);p("text",{x:L-8,y:y+12,"text-anchor":"end"},String(x.name).slice(0,10));p("rect",{x:L,y:y+4,width:w,height:rh-8,rx:1.5,style:"fill:var(--blue);opacity:.75"});
       p("text",{x:L+w+6,y:y+12,class:"num"},(n(x.n)/1e4).toFixed(1)+"萬");if(x.chg!=null)p("text",{x:L+w+52,y:y+12,class:"num",style:`fill:var(${n(x.chg)>=0?"--up":"--down"})`},(n(x.chg)>0?"+":"")+n(x.chg).toLocaleString());});
     $("#ib1eh").innerHTML=`ETF 存股族 · 集保持有人數<span class="n">${esc(EH.date||"")} · ${n(EH.n_etf)} 檔合計 ${(n(EH.total)/1e4).toFixed(0)} 萬人次${EH.chg!=null?` <b class="${n(EH.chg)>=0?"up":"down"}">${n(EH.chg)>0?"+":""}${n(EH.chg).toLocaleString()}</b> 比上週`:""} · 占全市場 ${EH.share_pct}%</span>`;
@@ -2018,7 +2083,7 @@ function render(P){
     if(TX.me&&TX.me.yoy!=null)A1.me=`同業（廣告、設計）新開 <em>${n(TX.me.n6)}</em> 家，<em class="${TX.me.yoy>=0?"up":"down"}">${TX.me.yoy>0?"+":""}${TX.me.yoy}%</em>。`;}
   /* 景氣：各產業 PMI／NMI（國發會） */
   const SP=P.supply||{},PI=[...((SP.nmi||{}).inds||[]).map(x=>({...x,g:"服務"})),...((SP.pmi||{}).inds||[]).map(x=>({...x,g:"製造"}))].filter(x=>isFinite(n(x.value)));
-  if(PI.length){const W=520,L=118,R=96,rh=17,lo=35,hi=75,sx=v=>L+(Math.max(lo,Math.min(hi,v))-lo)/(hi-lo)*(W-L-R);
+  if(PI.length){const W=fitW("ib1p",520),L=W<420?96:118,R=W<420?84:96,rh=17,lo=35,hi=75,sx=v=>L+(Math.max(lo,Math.min(hi,v))-lo)/(hi-lo)*(W-L-R);
     const rows=[];["服務","製造"].forEach(g=>{const r=PI.filter(x=>x.g===g).sort((a,b)=>n(b.value)-n(a.value));if(r.length){rows.push({head:g==="服務"?"服務業 NMI":"製造業 PMI"});rows.push(...r);}});
     const p=draw("ib1p",W,rows.length*rh+16);
     if(p){const x50=sx(50);p("line",{x1:x50,y1:0,x2:x50,y2:rows.length*rh,class:"g"});p("text",{x:x50,y:rows.length*rh+13,"text-anchor":"middle"},"50");
@@ -2055,7 +2120,7 @@ function render(P){
     $("#ib6a").innerHTML=`${nx?`最近要掛牌的是<b>${esc(nx.name)}</b>（${esc(nx.ind||nx.mk)}，${md(nx.list)}）；`:""}近 120 天 <em>${n(CO.queue_n)}</em> 家送件排隊上市櫃；近一年 <em>${n(CO.control_n)}</em> 家經營權易主，最新一季 <em>${n(CO.pivot_n)}</em> 家本業大轉彎；未來 3 週 <em>${cf.length}</em> 場法說會${cons.length?`，消費相關 ${cons.length} 場`:""}。`;
   }
   if(tend.length){cards.push(["ib1","政府行銷",wan(tSum).replace(" ",""),"",`本週 ${tend.length} 件標案；最大 <b>${esc(tend[0].title.slice(0,12))}</b> ${wan(n(tend[0].budget))}`]);
-    const t6=tend.slice(0,6),W=420,rh=22,mx=n(t6[0].budget);const p=draw("ib1w",W,t6.length*rh);
+    const t6=tend.slice(0,6),W=fitW("ib1w",420),rh=22,mx=n(t6[0].budget);const p=draw("ib1w",W,t6.length*rh);
     if(p)t6.forEach((x,i)=>{const y=i*rh,w=Math.max(2,(W-230)*n(x.budget)/mx);const r=p("rect",{x:0,y:y+3,width:w,height:rh-9,rx:1.5,style:`fill:var(${n(x.budget)>=3e6?"--up":"--blue"});opacity:.85`});
       const tt=document.createElementNS(NS,"title");tt.textContent=x.title+"｜"+x.unit;r.appendChild(tt);
       p("text",{x:w+6,y:y+13,class:"num"},wan(n(x.budget)));p("text",{x:w+64,y:y+13},x.title.slice(0,11));});}
@@ -2068,13 +2133,13 @@ function render(P){
   const hmx=Math.max(1,...act.flatMap(g=>g.hit));
   const hotG=act.slice().sort((a,b)=>b.score-a.score),wiki=((N.signals||{}).wiki||{}).zh||[],hot=((N.signals||{}).hot||[]);
   if(act.length){$("#ib2a").innerHTML=`近 3 天最熱的追蹤主題是<b>${esc(hotG[0].name)}</b>${hotG[1]?`和<b>${esc(hotG[1].name)}</b>`:""}${wiki[0]?`；台灣人在維基上查最多的是<b>${esc(wiki[0].title)}</b>（<em>${n(wiki[0].views).toLocaleString()}</em> 次）`:""}${hot[0]?`；新聞熱詞第一名是<b>${esc(hot[0].term)}</b>，${hot[0].src} 家同時寫`:""}。`;
-    const W=520,L=118,cw=(W-L-8)/7,rh=20;const p=draw("ib2v",W,act.length*rh+18);
+    const W=fitW("ib2v",520),L=W<420?96:118,cw=(W-L-8)/7,rh=20;const p=draw("ib2v",W,act.length*rh+18);
     if(p){days.forEach((d,i)=>p("text",{x:L+cw*i+cw/2,y:act.length*rh+14,"text-anchor":"middle"},d.slice(5).replace("-","/")));
       act.forEach((g,r)=>{const y=r*rh;p("text",{x:L-10,y:y+13,"text-anchor":"end",style:g.score>=2?"fill:var(--text)":""},g.name);
         g.hit.forEach((h,i)=>{const cx=L+cw*i+cw/2,cy=y+9;p("circle",h?{cx,cy,r:2.2+Math.sqrt(h/hmx)*6,style:`fill:var(${i>=4?"--warn":"--blue"});opacity:.9`}:{cx,cy,r:1.6,style:"fill:var(--line2)"},null,h?`${days[i].slice(5)}｜${h} 則`:null);});});}}
-  if(wiki.length){const w6=wiki.slice(0,6),W=420,rh=22,mx=n(w6[0].views);const p=draw("ib2w",W,w6.length*rh);
+  if(wiki.length){const w6=wiki.slice(0,6),W=fitW("ib2w",420),rh=22,mx=n(w6[0].views);const p=draw("ib2w",W,w6.length*rh);
     if(p)w6.forEach((x,i)=>{const y=i*rh,bw=Math.max(2,(W-200)*n(x.views)/mx);p("rect",{x:0,y:y+3,width:bw,height:rh-9,rx:1.5,style:"fill:var(--blue);opacity:.75"});
-      p("text",{x:bw+6,y:y+13,class:"num"},(n(x.views)/1e4).toFixed(1)+"萬");p("text",{x:bw+52,y:y+13},String(x.title).slice(0,16));});}
+      p("text",{x:bw+6,y:y+13,class:"num"},(n(x.views)/1e4).toFixed(1)+"萬");p("text",{x:bw+52,y:y+13},String(x.title).slice(0,W<420?10:16));});}
   $("#ib2c").innerHTML=hot.length?hot.slice(0,10).map(h=>`<span class="ib-chip ${h.src>=3?"s3":h.src>=2?"s2":""}">${esc(h.term)}<i>${h.src} 家</i></span>`).join(""):'<span class="ib-empty">這輪沒有共同熱詞</span>';
 
   /* ---- Q3 AI ---- */
@@ -2088,7 +2153,7 @@ function render(P){
   if(ai.length)$("#ib3a").innerHTML=`近 14 天 <b>${busy[0].v}</b> 動作最多（<em>${busy[0].items.length}</em> 則），其次 <b>${busy[1].v}</b>。${quiet.length?`<b>${quiet.join("、")}</b> 這段時間沒動靜。`:""}${gh[0]?`GitHub 竄升最快的是 <b>${esc(gh[0].name.split("/").pop())}</b>。`:""}`;
   const aiKeys=new Set(ai.map(a=>a.v+"|"+a.d+"|"+a.t)),aiFresh=PREV_AI?new Set([...aiKeys].filter(x=>!PREV_AI.has(x))):null;PREV_AI=aiKeys;
   aiChart("ib3v",rows3,d14,aiFresh);OV.a={rows3,d14,fresh:aiFresh,s:topV.length?`近 7 天 <b>${esc(topV[0][0])}</b> 動作最多（${topV[0][1]} 則）${quiet.length?`；<b>${quiet.join("、")}</b> 近 14 天沒動靜`:""}`:""};
-  if(gh.length){const g5=gh.slice(0,5),W=420,rh=22,mx=n(g5[0].stars);const p=draw("ib3w",W,g5.length*rh);
+  if(gh.length){const g5=gh.slice(0,5),W=fitW("ib3w",420),rh=22,mx=n(g5[0].stars);const p=draw("ib3w",W,g5.length*rh);
     if(p)g5.forEach((x,i)=>{const y=i*rh,bw=Math.max(2,(W-210)*n(x.stars)/mx);p("rect",{x:0,y:y+3,width:bw,height:rh-9,rx:1.5,style:"fill:var(--warn);opacity:.8"});
       p("text",{x:bw+6,y:y+13,class:"num"},(n(x.stars)/1000).toFixed(1)+"k");p("text",{x:bw+44,y:y+13},x.name.split("/").pop().slice(0,22));});}
   $("#ib3t").innerHTML=ai.slice().sort((a,b)=>b.d.localeCompare(a.d)).slice(0,3).map(a=>tl(a.v,a.t,a.u,a.d.slice(5).replace("-","/"))).join("");
@@ -2107,7 +2172,7 @@ function render(P){
   const tgNow={};tg.forEach(t=>tgNow[t.term]=t.sources.length);const popT=t=>PREV_TG&&(!(t.term in PREV_TG)||PREV_TG[t.term]<t.sources.length);
   $("#ib4c").innerHTML=tg.length?tg.slice(0,12).map((t,i)=>`<span style="animation-delay:${i*60}ms" class="ib-chip ${popT(t)?"ib-pop":""} ${t.sources.length>=3?"s3":t.n>=3?"s2":""}" title="${esc(((t.examples||[])[0]||[])[1]||"")}">${esc(cap(t.term))}<i>${t.sources.length} 家</i></span>`).join(""):'<span class="ib-empty">資料還在累積</span>';
   PREV_TG=tgNow;
-  if(ly.length){const l6=ly.slice(0,6),W=420,rh=20;const p=draw("ib4w",W,l6.length*rh);
+  if(ly.length){const l6=ly.slice(0,6),W=fitW("ib4w",420),rh=20;const p=draw("ib4w",W,l6.length*rh);
     if(p)l6.forEach((x,i)=>{const y=i*rh,mv=n(x.move);p("text",{x:0,y:y+13,class:"num"},String(i+1).padStart(2,"0"));p("text",{x:26,y:y+13,style:"fill:var(--text)"},x.brand);
       p("text",{x:150,y:y+13,class:"num",style:`fill:var(${mv>0?"--up":mv<0?"--down":"--dim"})`},mv>0?"▲"+mv:mv<0?"▼"+(-mv):"–");});}
   $("#ib4t").innerHTML=((P.design||{}).items||[]).slice(0,3).map(d=>tl(d.source,d.title,d.url)).join("")+(M.intl||[]).slice(0,2).map(w=>tl("WWD",w.title,w.url)).join("")+(M.items||[]).slice(0,2).map(w=>tl(w.source,w.title,w.url)).join("");
@@ -2456,6 +2521,8 @@ function skyIntro(){if(!moving()){drawSky();return;}const t0=performance.now(),D
 
 function skyTick(){const now=new Date();$("#tclock").textContent=now.toLocaleTimeString("zh-TW",{timeZone:"Asia/Taipei",hour:"2-digit",minute:"2-digit",hour12:false});
   $("#tdate").textContent=now.toLocaleDateString("zh-TW",{timeZone:"Asia/Taipei",month:"long",day:"numeric",weekday:"short"});}
+document.querySelector(".sky").addEventListener("click",()=>{if(innerWidth>640)return;const s=document.querySelector(".sky");s.classList.toggle("open");skyW=0;requestAnimationFrame(()=>skyMaybe());});
+matchMedia("(max-width:640px)").addEventListener("change",()=>{try{if(window.LASTP)renderAll(window.LASTP,true);}catch(e){try{IB.render(window.LASTP);}catch(_){}}});
 let skyW=0;function skyMaybe(){const w=Math.round($("#sky").clientWidth);if(w!==skyW){skyW=w;drawSky();}}
 skyTick();drawSky(0);skyIntro();
 setInterval(()=>{if(document.hidden)return;skyTick();updFuse();ring();},1000);
