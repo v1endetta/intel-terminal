@@ -294,7 +294,7 @@
     10,
     2,
     8,
-    29,
+    28,
     45,
     67,
     3
@@ -396,9 +396,9 @@
     5,
     4,
     13,
-    31,
+    30,
     40,
-    86,
+    85,
     2
    ],
    "days7": [
@@ -445,9 +445,9 @@
    ],
    "daily7": [
     3,
-    5,
+    6,
     11,
-    16,
+    15,
     18,
     30,
     2
@@ -531,10 +531,10 @@
      "kw": "資安署 OR 數位發展部 資安 OR 資安法"
     },
     {
-     "source": "商傳媒",
+     "source": "蕃新聞",
      "title": "慧與、Red Hat共築量子安全防線 助EigenQ搶攻併購市場",
-     "url": "https://news.google.com/rss/articles/CBMi4AJBVV95cUxOdVNXQjIwZlM0dGxUOE80NHBCalV0ZGJ0TFF5ZjQwRHYtOFBqT2ppdHhZM2lKS0JUdFoxR3liMU9pUGxkcnJuaEEwSXhPWktVRjZDWGw4a3VuMmo2NEcxdmozRER3Qm52UjNRQWhpYlpzcmxURnljeU5YU3lna1RHWXByNlhBX0tsLUViVHc5eG1JMGJDZkx5RjBUT1JfamVtSXdJT0tXbmoyR2swaTFkWUUwaEtmUE5YZ0ZsemM4d3RfLXNwbGZjeHh0NFhib09vVkRKT3hyZ1laSG5ERDN6dmRUZUhRZGNMZEV2QUpRRmVTcF94anhhOWFYSGJYUzhnRG1aamtLQUdJV3hnYnYxZFdTcGNkTm12VUthQVVTcVFZeXJ2SkdEcE1XMXZBVkdFQ2lVanNFUThZV011Mm5GengtR2NPT2pQTl9wN2lxaVFEV1k5NWFEUjRudE1vb250?oc=5",
-     "at": "2026-10-08T17:44:45Z",
+     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE91ZDM3RVJtby1IZkVIYWMwLTJvSklLM0JuSXVZdUFkNlE4QWlGMThTY29GZUNONTNseWhQNFE0cjVlWWRzVHhXN1NzS1hiOGdEeXc?oc=5",
+     "at": "2026-10-08T17:44:00Z",
      "kw": "資安 新創 OR 資安 募資 OR 資安 併購"
     },
     {
@@ -549,10 +549,10 @@
     1,
     2,
     9,
-    32,
-    32,
-    100,
-    12
+    33,
+    31,
+    98,
+    14
    ],
    "days7": [
     "2026-10-03",
@@ -602,7 +602,7 @@
     5,
     16,
     24,
-    30,
+    31,
     2
    ],
    "days7": [
@@ -650,10 +650,10 @@
    "daily7": [
     4,
     6,
-    14,
+    13,
     38,
     22,
-    57,
+    58,
     0
    ],
    "days7": [
@@ -791,22 +791,6 @@
     "hot": true
    },
    {
-    "term": "生醫",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "Yahoo新聞",
-     "中央社 CNA",
-     "環球生技",
-     "經濟日報"
-    ],
-    "sample": {
-     "title": "BioJapan台灣館搶商機李逸洋盼深化台日再生醫療合作| 產經",
-     "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBLUzlSUGZXS2taSHM2dnlobG9Vb0x5RVo4QTZxaGYyWHkyUklGdmFWT1FVZnV3azd1OHNKdHVWdmprVmtDSzBtLW9DUnlmVVRHYVIwaFZLeWM3N0VaSGc?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "國慶",
     "n": 5,
     "src": 3,
@@ -880,11 +864,26 @@
      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9UVHA4SDNVb2hVRmtnZjNIRWlJek5CVUp4MVBNemp6Rmhlc2I2SG1UU1N2ZWxIU2hmb0loVS1nSEhCSXRJeWxZbndRZ0ZpZFhmX20yXw?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "生醫療",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Yahoo新聞",
+     "中央社 CNA",
+     "環球生技"
+    ],
+    "sample": {
+     "title": "BioJapan台灣館搶商機李逸洋盼深化台日再生醫療合作| 產經",
+     "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBLUzlSUGZXS2taSHM2dnlobG9Vb0x5RVo4QTZxaGYyWHkyUklGdmFWT1FVZnV3azd1OHNKdHVWdmprVmtDSzBtLW9DUnlmVVRHYVIwaFZLeWM3N0VaSGc?oc=5"
+    },
+    "hot": true
    }
   ]
  },
  "errs": [
-  "gdelt: IndexError: list index out of range"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-08T18:34:17Z"
+ "updatedAt": "2026-10-08T18:49:17Z"
 }
