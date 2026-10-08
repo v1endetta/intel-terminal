@@ -296,9 +296,9 @@
     2,
     8,
     28,
-    46,
-    65,
-    8
+    45,
+    63,
+    11
    ],
    "days7": [
     "2026-10-03",
@@ -398,8 +398,8 @@
     4,
     11,
     27,
-    41,
-    77,
+    42,
+    76,
     2
    ],
    "days7": [
@@ -447,7 +447,7 @@
    "daily7": [
     3,
     5,
-    8,
+    10,
     16,
     18,
     29,
@@ -518,10 +518,10 @@
    "name": "資訊安全",
    "items": [
     {
-     "source": "自由時報",
-     "title": "美FBI查扣中國駭客「亞麻颱風」工具 台灣大專院校與關鍵基礎設施曾遭鎖定",
-     "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1ERm1MX1haNXJ4bExkYmc5LU95R1c5ZHgxU3NqanB2S3ppRGRMaThDTWFxWXhHdHhVZkdzOUprZ0ZMcnlLZFFxanRrMmRJWmZuOGtNR1JIWWR1eFlyLVkweWVKSUU5QdIBa0FVX3lxTE9JWTBZeHdkSjI1a25hUkRzbW1GX0sxZTBCeG9Ob3YyM2VoODJIVnF5MzJUN1BiWUJEbmxGem1PaEZBbFpzRUphai1EUkZpT2NDOE5xWmV0UkxDSEl4MmNuWVE4UUJld3poaVkw?oc=5",
-     "at": "2026-10-08T19:30:56Z",
+     "source": "Storm.mg",
+     "title": "觀點投書：歐盟資安新法上路，產品售後的硬性考驗 | 蕭國振 | 評論",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9RSC1wU1VQVlNrcnppMFB1LWZwcUlxYnJFYXA1dE5aU2hvQWZUVkowdWRNc3pPamJIalBfMVdjV1JEUThCZ0x2MUZRekNVdw?oc=5",
+     "at": "2026-10-08T21:22:00Z",
      "kw": "資安 OR 駭客 OR 勒索軟體 OR 個資外洩"
     },
     {
@@ -550,10 +550,10 @@
     1,
     2,
     7,
-    34,
+    33,
     27,
-    90,
-    24
+    88,
+    28
    ],
    "days7": [
     "2026-10-03",
@@ -651,10 +651,10 @@
    "daily7": [
     4,
     6,
-    11,
+    13,
     37,
     24,
-    58,
+    57,
     1
    ],
    "days7": [
@@ -728,15 +728,15 @@
   "hot": [
    {
     "term": "Claude",
-    "n": 8,
-    "src": 7,
+    "n": 6,
+    "src": 6,
     "sources": [
-     "Google AI 論壇",
      "Guardian",
      "HN",
      "INSIDE",
      "Reuters",
-     "未來商務"
+     "未來商務",
+     "鉅亨號"
     ],
     "sample": {
      "title": "A teen tried to navigate Canadian mountains with Claude. His",
@@ -885,7 +885,7 @@
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: IndexError: list index out of range"
  ],
- "updatedAt": "2026-10-08T21:15:39Z"
+ "updatedAt": "2026-10-08T21:35:00Z"
 }
