@@ -5,14 +5,6 @@
   "cancelled": 1,
   "upcoming": [
    {
-    "flight": "5J311",
-    "to": "MNL",
-    "sched": "03:15",
-    "est": "03:15",
-    "remark": "準時",
-    "gate": "A8"
-   },
-   {
     "flight": "CI190",
     "to": "PUS",
     "sched": "06:00",
@@ -67,16 +59,23 @@
     "est": "06:30",
     "remark": "準時",
     "gate": "D2"
+   },
+   {
+    "flight": "BR217",
+    "to": "KUL",
+    "sched": "06:30",
+    "est": "06:30",
+    "remark": "準時",
+    "gate": "B7"
    }
   ]
  },
  "arr": {
   "total": 352,
-  "delayed": 5,
+  "delayed": 6,
   "cancelled": 2,
   "upcoming": []
  },
  "label": "桃園機場",
- "updatedAt": "2026-10-08T19:05:22Z",
- "error": "2026-10-08T19:23:38Z RuntimeError: airport: empty"
+ "updatedAt": "2026-10-08T19:40:16Z"
 }
