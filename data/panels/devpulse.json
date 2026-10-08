@@ -3,22 +3,22 @@
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "GPT-6 is now rolling out to all ChatGPT users",
-   "url": "https://community.openai.com/t/gpt-6-is-now-rolling-out-to-all-chatgpt-users/1404163",
-   "replies": 0,
-   "likes": 1,
-   "views": 642,
-   "at": "2026-10-07T20:53:25Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
    "title": "Terence Tao on \"Math 2.0\" and the need for a holistic approach",
    "url": "https://community.openai.com/t/terence-tao-on-math-2-0-and-the-need-for-a-holistic-approach/1404266",
    "replies": 1,
    "likes": 3,
-   "views": 233,
+   "views": 277,
    "at": "2026-10-08T06:52:58Z"
+  },
+  {
+   "source": "OpenAI 論壇",
+   "vendor": "openai",
+   "title": "GPT-6 is now rolling out to all ChatGPT users",
+   "url": "https://community.openai.com/t/gpt-6-is-now-rolling-out-to-all-chatgpt-users/1404163",
+   "replies": 0,
+   "likes": 1,
+   "views": 661,
+   "at": "2026-10-07T20:53:25Z"
   },
   {
    "source": "OpenAI 論壇",
@@ -27,7 +27,7 @@
    "url": "https://community.openai.com/t/codex-pro-usage-transparency-community-evidence-and-coordination-hub/1404360",
    "replies": 2,
    "likes": 6,
-   "views": 49,
+   "views": 54,
    "at": "2026-10-08T14:09:47Z"
   },
   {
@@ -37,7 +37,7 @@
    "url": "https://community.openai.com/t/chatgpt-is-becoming-workgpt-and-plus-users-are-losing-the-product-they-actually-paid-for/1404121",
    "replies": 1,
    "likes": 2,
-   "views": 106,
+   "views": 112,
    "at": "2026-10-07T17:56:34Z"
   },
   {
@@ -47,7 +47,7 @@
    "url": "https://community.openai.com/t/solved-windows-browser-control-repeatedly-crashes-with-trusted-node-process-exited-unexpectedly-after-update/1404242",
    "replies": 3,
    "likes": 2,
-   "views": 259,
+   "views": 283,
    "at": "2026-10-08T04:17:34Z"
   },
   {
@@ -57,27 +57,17 @@
    "url": "https://discuss.ai.google.dev/t/app-suspended-for-abuse/187378",
    "replies": 0,
    "likes": 1,
-   "views": 30,
+   "views": 32,
    "at": "2026-10-07T17:59:45Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Gemini 3.8 today almost unavailable",
-   "url": "https://discuss.ai.google.dev/t/gemini-3-8-today-almost-unavailable/187372",
-   "replies": 2,
-   "likes": 0,
-   "views": 69,
-   "at": "2026-10-07T17:20:45Z"
   },
   {
    "source": "Google AI 論壇",
    "vendor": "google",
    "title": "Antigravity is quietly writing ~30 GiB/day to my SSD — a WAL-level breakdown of where it g",
    "url": "https://discuss.ai.google.dev/t/antigravity-is-quietly-writing-30-gib-day-to-my-ssd-a-wal-level-breakdown-of-where-it-goes/187421",
-   "replies": 4,
+   "replies": 5,
    "likes": 2,
-   "views": 31,
+   "views": 34,
    "at": "2026-10-08T02:59:35Z"
   },
   {
@@ -99,9 +89,28 @@
    "likes": 0,
    "views": 37,
    "at": "2026-10-07T17:41:34Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "Google Antigravity clears the conversation history automatically if it's too large",
+   "url": "https://discuss.ai.google.dev/t/google-antigravity-clears-the-conversation-history-automatically-if-its-too-large/187476",
+   "replies": 4,
+   "likes": 1,
+   "views": 22,
+   "at": "2026-10-08T05:45:42Z"
   }
  ],
  "changelogs": [
+  {
+   "source": "OpenAI changelog",
+   "vendor": "openai",
+   "date": "Oct 8",
+   "kind": "Feature",
+   "title": "Added Ultrafast mode for GPT-6.1 Sol in the Responses API.",
+   "url": "https://developers.openai.com/api/docs/changelog",
+   "at": "2026-10-08T00:00:00Z"
+  },
   {
    "source": "OpenAI changelog",
    "vendor": "openai",
@@ -126,15 +135,6 @@
    "date": "Oct 6",
    "kind": "Update",
    "title": "Simplified API usage tiers from five to three: Build, Launch, and Grow.",
-   "url": "https://developers.openai.com/api/docs/changelog",
-   "at": "2026-10-06T00:00:00Z"
-  },
-  {
-   "source": "OpenAI changelog",
-   "vendor": "openai",
-   "date": "Oct 6",
-   "kind": "Feature",
-   "title": "Released several new features at OpenAI DevDay:",
    "url": "https://developers.openai.com/api/docs/changelog",
    "at": "2026-10-06T00:00:00Z"
   },
@@ -297,9 +297,9 @@
  ],
  "errs": [],
  "diag": [
-  "Gemini changelog md: got html 157943b",
+  "Gemini changelog md: got html 157939b",
   "DeepSeek updates md: got html 48088b",
   "xAI release notes md: 18497b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### grok-vo'"
  ],
- "updatedAt": "2026-10-08T17:05:29Z"
+ "updatedAt": "2026-10-08T18:06:54Z"
 }
