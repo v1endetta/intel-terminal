@@ -1,59 +1,48 @@
-import os, json, re, requests, collections
+import os, json, re, time, requests
 os.makedirs("out25", exist_ok=True)
 H = {"User-Agent": "Mozilla/5.0 (intel-terminal research)"}
 rep = {}
-def text(html):
-    html = re.sub(r"<script[\s\S]*?</script>|<style[\s\S]*?</style>", " ", html)
-    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html))
-def get(name, url, n=4000, raw=False, **kw):
+def j(name, url, n=2500, headers=None, **kw):
     try:
-        r = requests.get(url, headers=H, timeout=90, **kw)
-        ct = r.headers.get("content-type") or ""
-        body = r.text if (raw or "json" in ct or "plain" in ct or "xml" in ct or "csv" in ct) else text(r.text)
-        rep[name] = {"status": r.status_code, "ct": ct, "url": r.url, "len": len(r.content), "body": body[:n]}
-        return r
+        r = requests.get(url, headers=headers or H, timeout=90, **kw)
+        rep[name] = {"status": r.status_code, "url": r.url, "len": len(r.content), "body": r.text[:n]}
+        return r.json()
     except Exception as e:
-        rep[name] = {"err": repr(e)[:300]}
-for ds in ("6951", "41430", "7299", "17327"):
-    try:
-        js = requests.get(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", headers=H, timeout=40).json()["result"]
-        rep["dgt_" + ds] = {k: js.get(k) for k in ("title", "updateFrequency", "license", "modifiedDate", "description")}
-        rep["dgt_" + ds]["dist"] = [(x.get("resourceFormat"), x.get("resourceDownloadUrl")) for x in (js.get("distribution") or [])][:4]
-    except Exception as e:
-        rep["dgt_" + ds] = {"err": repr(e)[:200]}
-# health food sample
-for k, v in list(rep.items()):
-    if k == "dgt_6951" and "dist" in v:
-        for fmt, u in v["dist"]:
-            if fmt == "JSON" or "json" in (u or "").lower():
-                r = requests.get(u, headers=H, timeout=120)
-                try:
-                    js = r.json(); rows = js if isinstance(js, list) else js.get("data") or js
-                    rep["hf_n"] = len(rows); rep["hf_keys"] = list(rows[0].keys()); rep["hf_first"] = rows[:2]; rep["hf_last"] = rows[-2:]
-                    dk = [c for c in rows[0] if "日期" in c]
-                    rep["hf_datecols"] = dk
-                    for c in dk:
-                        vals = sorted(str(x.get(c)) for x in rows if x.get(c))
-                        rep["hf_" + c] = vals[-8:]
-                        rep["hf_" + c + "_byyear"] = collections.Counter(v[:3] if v[:3].isdigit() and len(v) < 10 else v[:4] for v in vals).most_common(40)
-                except Exception as e:
-                    rep["hf_err"] = repr(e)[:300] + r.text[:300]
-                break
-# fish market sample
-get("fish_api", "https://data.moa.gov.tw/api/v1/FisheryProductsTransType/?Start_time=115.10.01&End_time=115.10.08", n=1500)
-get("moa_terms", "https://data.moa.gov.tw/", n=200)
-# LYAPI disclaimer
-r = get("ly_v2", "https://ly.govapi.tw/v2", n=200, raw=True)
-if r is not None and r.ok:
-    links = re.findall(r'href="([^"]+)"[^>]*>([\s\S]{0,60}?)</a>', r.text)
-    rep["ly_links"] = [(h, re.sub(r"<[^>]+>|\s+", " ", t).strip()) for h, t in links][:60]
-    for h, t in rep["ly_links"]:
-        if re.search(r"免責|Disclaimer|CC-BY|License|授權", t + h, re.I):
-            u = h if h.startswith("http") else "https://ly.govapi.tw" + h
-            get("ly_doc_" + t[:10], u, n=4000)
-# PCC copyright: search homepage html for 著作權
-r = requests.get("https://web.pcc.gov.tw/pis/", headers=H, timeout=60)
-rep["pcc_cr_ctx"] = [r.text[max(0, m.start()-300):m.start()+100] for m in re.finditer("著作權|版權|資料開放宣告|隱私", r.text)][:6]
-for u in ("https://web.pcc.gov.tw/pis/prac/declarationClient/copyright", "https://web.pcc.gov.tw/pis/prac/declarationClient/readCopyright", "https://web.pcc.gov.tw/tps/tp/copyright"):
-    get("pcc_try_" + u.rsplit("/", 1)[-1], u, n=3000)
+        rep[name] = rep.get(name, {}); rep[name]["err"] = repr(e)[:300]
+# SEC efts shape (single request)
+js = j("efts", "https://efts.sec.gov/LATEST/search-index?q=%22GLP-1%22&dateRange=custom&startdt=2026-07-01&enddt=2026-09-30&forms=10-K,10-Q,8-K", n=600,
+       headers={"User-Agent": "intel-terminal research admin@example.com"})
+if js:
+    rep["efts_total"] = js.get("hits", {}).get("total"); rep["efts_keys"] = list(js.keys()); rep["efts_aggs"] = {k: (v.get("buckets") or [])[:5] for k, v in (js.get("aggregations") or {}).items()}
+    h = (js.get("hits", {}).get("hits") or [{}])[0]; rep["efts_hit"] = {k: h.get("_source", {}).get(k) for k in ("display_names", "file_date", "form", "root_forms", "sics", "biz_locations")}
+# LY bills
+js = j("ly_recent", "https://ly.govapi.tw/v2/bills?limit=50&議案類別=法律案", n=300)
+if js:
+    rep["ly_total"] = js.get("total"); b = js.get("bills") or []
+    rep["ly_sample"] = [{k: x.get(k) for k in ("議案名稱", "提案單位/提案委員", "議案狀態", "提案來源", "最新進度日期", "提案日期", "會期")} for x in b[:12]]
+    rep["ly_dates"] = [x.get("最新進度日期") for x in b]
+js = j("ly_one", "https://ly.govapi.tw/v2/bills/201110233750000", n=3000)
+js = j("ly_bydate", "https://ly.govapi.tw/v2/bills?limit=5&提案日期=2026-10-01", n=1500)
+js = j("ly_srcfilter", "https://ly.govapi.tw/v2/bills?limit=5&提案來源=委員提案&議案類別=法律案", n=1500)
+# PCC search shape
+js = j("pcc_s", "https://pcc-api.openfun.app/api/searchbytitle?query=" + requests.utils.quote("人工智慧") + "&page=1", n=1500, headers={"User-Agent": "Mozilla/5.0"})
+if js:
+    rep["pcc_keys"] = list(js.keys()); rep["pcc_meta"] = {k: v for k, v in js.items() if k != "records"}
+    rec = js.get("records") or []
+    rep["pcc_n"] = len(rec); rep["pcc_dates"] = [r.get("date") for r in rec][:120]; rep["pcc_types"] = [((r.get("brief") or {}).get("type")) for r in rec][:40]
+js = j("pcc_s3", "https://pcc-api.openfun.app/api/searchbytitle?query=" + requests.utils.quote("人工智慧") + "&page=3", n=300, headers={"User-Agent": "Mozilla/5.0"})
+if js:
+    rep["pcc_p3_dates"] = [r.get("date") for r in (js.get("records") or [])][:5]
+# fish market
+js = j("fish", "https://data.moa.gov.tw/Service/OpenData/FromM/AquaticTransData.aspx?IsTransData=1&UnitId=039", n=1500)
+if isinstance(js, list):
+    rep["fish_n"] = len(js); rep["fish_keys"] = list(js[0].keys()) if js else None
+    from collections import Counter
+    rep["fish_dates"] = Counter(x.get("交易日期") for x in js).most_common(10)
+    rep["fish_markets"] = Counter(x.get("市場名稱") for x in js).most_common(12)
+    rep["fish_sample"] = js[:4]
+js = j("fish_range", "https://data.moa.gov.tw/Service/OpenData/FromM/AquaticTransData.aspx?IsTransData=1&UnitId=039&Start_time=115.09.01&End_time=115.09.03", n=400)
+if isinstance(js, list):
+    from collections import Counter
+    rep["fish_range_dates"] = Counter(x.get("交易日期") for x in js).most_common(10); rep["fish_range_n"] = len(js)
 json.dump(rep, open("out25/probe.json", "w"), ensure_ascii=False, indent=1, default=str)
