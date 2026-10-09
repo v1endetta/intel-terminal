@@ -1,285 +1,1288 @@
 {
- "pcc_robots": {
-  "err": "ConnectionError(MaxRetryError('HTTPConnectionPool(host=\\'web.pcc.gov.tw\\', port=80): Max retries exceeded with url: /pis (Caused by NewConnectionError(\"HTTPConnection(host=\\'web.pcc.gov.tw\\', port=80): Failed to establish a new connection: [Errno 101] Network is unreachable\"))'))"
+ "p_policy": {
+  "drafts": [
+   {
+    "title": "預告「消防機具器材及設備認可實施辦法」第3條修正草案",
+    "gov": "內政部",
+    "under": "內政部消防署",
+    "pub": "2026-10-08",
+    "due": "2026-12-07",
+    "kw": "消防系統(消防設施，消防設備);認證認可;標示;型式認可;廠商;登錄",
+    "topic": "消費與食品",
+    "url": "https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg032187/ch02/type3/gov10/num2/Eg.htm"
+   },
+   {
+    "title": "預告「移動污染源燃料成分管制標準」第2條、第3條、第4條修正草案",
+    "gov": "環境部",
+    "under": "環境部",
+    "pub": "2026-10-08",
+    "due": "2026-12-07",
+    "kw": "汽油;柴油;成分分析;移動污染源;空氣污染防制法;品質管制;管制措施(限制措施);燃料",
+    "topic": "能源與環境",
+    "url": "https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg032187/ch07/type3/gov60/num27/Eg.htm"
+   },
+   {
+    "title": "預告「購物用塑膠袋限制使用對象、實施方式及實施日期」修正草案",
+    "gov": "環境部",
+    "under": "環境部",
+    "pub": "2026-10-08",
+    "due": "2026-10-22",
+    "kw": "塑膠袋;專用垃圾袋;管制措施(限制措施);資源循環推動法(資源回收再利用法)",
+    "topic": "能源與環境",
+    "url": "https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg032187/ch07/type3/gov60/num28/Eg.htm"
+   },
+   {
+    "title": "預告「限制含聚氯乙烯之平板包材、公告應回收容器及非平板類免洗餐具不得製造、輸入及販賣」公告事項第1項修正草案",
+    "gov": "環境部",
+    "under": "環境部",
+    "pub": "2026-10-08",
+    "due": "2026-10-22",
+    "kw": "聚氯乙烯(PVC);塑膠;免洗餐具;包裝廢棄物管理;限制進口(禁止輸入);管制措施(限制措施);回收;塑膠容器;資源循環",
+    "topic": "能源與環境",
+    "url": "https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg032187/ch07/type3/gov60/num29/Eg.htm"
+   }
+  ],
+  "open_n": 4,
+  "d30_n": 4,
+  "d_topics": [
+   [
+    "能源與環境",
+    3
+   ],
+   [
+    "消費與食品",
+    1
+   ]
+  ],
+  "since": "2026-10-08",
+  "ideas_hot": [
+   {
+    "k": "b75e5a18-7f4",
+    "title": "應將「購票附加費用」納入《藝文表演票券定型化契約》規範，禁止業者外加轉嫁消費者，保障消費者權利",
+    "sup": 6718,
+    "th": 5000,
+    "pub": "2026-08-12",
+    "url": "https://join.gov.tw/idea/detail/b75e5a18-7f4f-4fd3-b4b1-043ce17518de",
+    "topic": "消費與食品",
+    "chg7": null
+   },
+   {
+    "k": "6ad79fdd-0f8",
+    "title": "強化婚姻依親防詐、親屬依親審查及公共資源負擔制度",
+    "sup": 6298,
+    "th": 5000,
+    "pub": "2026-08-13",
+    "url": "https://join.gov.tw/idea/detail/6ad79fdd-0f80-44cd-b37d-d6353dd47f94",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "cdebcaee-682",
+    "title": "取消教師學期中例假日及國定假日『非因公出國』強制報備制度",
+    "sup": 5491,
+    "th": 5000,
+    "pub": "2026-08-25",
+    "url": "https://join.gov.tw/idea/detail/cdebcaee-682f-46f2-872e-98a07e43ee64",
+    "topic": "觀光與文化",
+    "chg7": null
+   },
+   {
+    "k": "a54af383-3ee",
+    "title": "建請政府研擬並增設專任輔導教師之「輔導職務加給」",
+    "sup": 5376,
+    "th": 5000,
+    "pub": "2026-08-11",
+    "url": "https://join.gov.tw/idea/detail/a54af383-3ee9-4338-9990-e17468090164",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "7badb782-28e",
+    "title": "落實女性生育正義，全面廢除刑法墮胎罪章，修正刑法重傷定義與優生保健法",
+    "sup": 5243,
+    "th": 5000,
+    "pub": "2026-08-19",
+    "url": "https://join.gov.tw/idea/detail/7badb782-28ea-440a-a8eb-2806a8ba3437",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "f80d3ed2-951",
+    "title": "規範商業廣告與電商平臺使用 AI 生成圖片作為商品圖之機制，以保障消費者權益",
+    "sup": 3405,
+    "th": 5000,
+    "pub": "2026-08-11",
+    "url": "https://join.gov.tw/idea/detail/f80d3ed2-9511-4f79-ab0e-7da8f3c2bcfb",
+    "topic": "消費與食品",
+    "chg7": null
+   },
+   {
+    "k": "1e54e299-4dc",
+    "title": "「拿刀砍人的人死了，徒手反擊的人卻可能坐牢？」——全面放寬正當防衛，保障人民活下來的權利",
+    "sup": 2616,
+    "th": 5000,
+    "pub": "2026-08-11",
+    "url": "https://join.gov.tw/idea/detail/1e54e299-4dc8-4615-85ac-fa80cc05bd00",
+    "topic": "其他",
+    "chg7": null
+   },
+   {
+    "k": "7d839a76-dfb",
+    "title": "幼兒園師生比不能再等，還給孩子安全上學的環境",
+    "sup": 2406,
+    "th": 5000,
+    "pub": "2026-09-06",
+    "url": "https://join.gov.tw/idea/detail/7d839a76-dfb3-4906-bc43-4634c2a48b75",
+    "topic": "教育與勞動",
+    "chg7": null
+   },
+   {
+    "k": "3f8d6e57-a24",
+    "title": "停止「全民偷拍」！廢除民眾交通檢舉，回歸專注駕駛與防禦安全",
+    "sup": 1835,
+    "th": 5000,
+    "pub": "2026-09-14",
+    "url": "https://join.gov.tw/idea/detail/3f8d6e57-a246-47ef-8fe1-d3d03e1ae87e",
+    "topic": "交通與移動",
+    "chg7": null
+   },
+   {
+    "k": "e8432817-659",
+    "title": "推動全國設置幼兒園監視錄影設備及統一標準，建構親師生安全保障機制",
+    "sup": 1378,
+    "th": 5000,
+    "pub": "2026-08-24",
+    "url": "https://join.gov.tw/idea/detail/e8432817-6598-4789-bc10-b5cbe2ee3105",
+    "topic": "數位與 AI",
+    "chg7": null
+   }
+  ],
+  "ideas_passed": [
+   {
+    "k": "cdebcaee-682",
+    "title": "取消教師學期中例假日及國定假日『非因公出國』強制報備制度",
+    "sup": 5491,
+    "th": 5000,
+    "pub": "2026-08-25",
+    "url": "https://join.gov.tw/idea/detail/cdebcaee-682f-46f2-872e-98a07e43ee64",
+    "topic": "觀光與文化",
+    "chg7": null
+   },
+   {
+    "k": "7badb782-28e",
+    "title": "落實女性生育正義，全面廢除刑法墮胎罪章，修正刑法重傷定義與優生保健法",
+    "sup": 5243,
+    "th": 5000,
+    "pub": "2026-08-19",
+    "url": "https://join.gov.tw/idea/detail/7badb782-28ea-440a-a8eb-2806a8ba3437",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "6ad79fdd-0f8",
+    "title": "強化婚姻依親防詐、親屬依親審查及公共資源負擔制度",
+    "sup": 6298,
+    "th": 5000,
+    "pub": "2026-08-13",
+    "url": "https://join.gov.tw/idea/detail/6ad79fdd-0f80-44cd-b37d-d6353dd47f94",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "b75e5a18-7f4",
+    "title": "應將「購票附加費用」納入《藝文表演票券定型化契約》規範，禁止業者外加轉嫁消費者，保障消費者權利",
+    "sup": 6718,
+    "th": 5000,
+    "pub": "2026-08-12",
+    "url": "https://join.gov.tw/idea/detail/b75e5a18-7f4f-4fd3-b4b1-043ce17518de",
+    "topic": "消費與食品",
+    "chg7": null
+   },
+   {
+    "k": "a54af383-3ee",
+    "title": "建請政府研擬並增設專任輔導教師之「輔導職務加給」",
+    "sup": 5376,
+    "th": 5000,
+    "pub": "2026-08-11",
+    "url": "https://join.gov.tw/idea/detail/a54af383-3ee9-4338-9990-e17468090164",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "fa34a2b4-915",
+    "title": "擬定非台籍人士若要享有健保，需依照本國國民標準繳清從出生至今的健保費",
+    "sup": 5430,
+    "th": 5000,
+    "pub": "2026-08-07",
+    "url": "https://join.gov.tw/idea/detail/fa34a2b4-915d-4f9a-b7bb-a656b4c21b7c",
+    "topic": "健康與照護"
+   },
+   {
+    "k": "2a30e8d9-a4f",
+    "title": "規定採用實名制之活動僅得選用退票方案一或方案四",
+    "sup": 6485,
+    "th": 5000,
+    "pub": "2026-08-06",
+    "url": "https://join.gov.tw/idea/detail/2a30e8d9-a4fc-44b9-945c-4db6deb323d0",
+    "topic": "消費與食品"
+   },
+   {
+    "k": "c339671b-1d6",
+    "title": "建議檢討未成年人身心科就醫需家長陪同或同意之規定，建立青少年心理健康就醫的彈性制度。",
+    "sup": 5772,
+    "th": 5000,
+    "pub": "2026-08-01",
+    "url": "https://join.gov.tw/idea/detail/c339671b-1d62-4737-b361-2100a1921cc7",
+    "topic": "健康與照護"
+   }
+  ],
+  "ideas_n30": 293,
+  "i_topics": [
+   [
+    "其他",
+    53
+   ],
+   [
+    "消費與食品",
+    51
+   ],
+   [
+    "健康與照護",
+    50
+   ],
+   [
+    "教育與勞動",
+    48
+   ],
+   [
+    "交通與移動",
+    36
+   ],
+   [
+    "數位與 AI",
+    26
+   ],
+   [
+    "寵物與動物",
+    14
+   ],
+   [
+    "金融與支付",
+    7
+   ],
+   [
+    "居住與不動產",
+    7
+   ],
+   [
+    "能源與環境",
+    1
+   ]
+  ],
+  "consumer": [
+   "健康與照護",
+   "寵物與動物",
+   "居住與不動產",
+   "數位與 AI",
+   "消費與食品",
+   "觀光與文化"
+  ],
+  "src": "行政院公報資訊網 Open Data（法規命令草案預告）＋ 公共政策網路參與平臺「提點子」開放資料",
+  "errs": []
  },
- "pcc_opendata": {
-  "status": 200,
-  "ct": "text/html;charset=UTF-8",
-  "len": 226898,
-  "url": "https://web.pcc.gov.tw/tps/tp/OpenData/showList",
-  "head": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<html lang=\"zh-Hant-TW\" xml:lang=\"zh-tw\">\r\n<head>\r\n<meta charset=\"UTF-8\"/>\r\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\r\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\r\n<meta property=\"og:image\" content=\"/tps/images/icon.gif\" />\r\n\r\n\r\n\r\n\r\n<title>政府電子採購網</title>\r\n<link rel=\"icon\" href=\"/tps/images/icon.gif\">\r\n\r\n<!--練習區滑鼠跟隨游標CSS設定及是否「練習區」-->\r\n\r\n\r\n<!--練習區滑鼠跟隨游標CSS設定及是否「練習區」-->\r\n<script type=\"application/ld+json\">\r\n{\r\n  \"@context\": \"https://schema.org\",\r\n  \"@type\": \"WebSite\",\r\n  \"name\": \"政府電子採購網\",\r\n  \"alternateName\": [\"臺灣政府採購\", \"電子採購\", \"臺灣採購\", \"政府採購\", \"採購網\"],\r\n  \"url\": \"https://web.pcc.gov.tw\"\r\n}\r\n</script>\r\n<style>\r\ninput:focus {\r\n    color: #495057;\r\n    border-color: #80bdff;\r\n    outline: 0;\r\n    box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);\r\n}\r\n\r\ntextarea:focus {\r\n    color: #495057;\r\n    background-color: #fff;\r\n    border-color: #80bdff;\r\n    outline: 0;\r\n    box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);\r\n}\r\n\r\nselect:focus-visible {\r\n    color: #495057;\r\n    background-color: #fff;\r\n    border-color: #80bdff;\r\n    outline: 0;\r\n    box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);\r\n}\r\n\r\n</style>\r\n\r\n<link href=\"/tps/css/all.css\" rel=\"stylesheet\" type=\"text/css\"/>\r\n\r\n<link href=\"/tps/css/bootstrap.css\" rel=\"stylesheet\" type=\"text/css\"/>\r\n<link href=\"/tps/css/v2/font-awesome/css/font-awesome.css\" rel=\"stylesheet\"/>\r\n<link href=\"/tps/css/tab_menu.css\" rel=\"stylesheet\" type=\"text/css\"/> \r\n<link href=\"/tps/css/tab.css\" rel=\"stylesheet\" type=\"text/css\"/>\r\n<link href=\"/tps/css/index_tab.css\" type=\"text/css\" rel=\"stylesheet\"/><!--首頁最上方下拉選單-->\r\n\r\n\r\n\r\n<script src=\"/tps/js/calendar.js\"></script><!--日期--> \r\n<script src=\"/tps/js/jquery-3.5.0.min.js\"></script><!--函式庫--> \r\n<script src=\"/tps/js/tab.js\"></script><!--頁簽--> \r\n<script src=\"/tps/js/menu.js\" type=\"text/javascript\"></script><!--下拉選單-->\r\n<script src=\"/tps/js/index_tab.js\" type=\"text/javascript\"></script><!--首頁最上方下拉選單-->\r\n<script src=\"/tps/js/jquery.blockUI.js\"></script>\r\n<script src=\"/tps/js/jquery.validate.min.js\" type=\"text/javascript\"></script>\r\n<script src=\"/tps/js/additional-methods.js\" type=\"text/javascript\"></script>\r\n\r\n\r\n\r\n<meta name=\"google-site-verification\" content=\"_RsXySMeLvSPD4xblNnXL5YTiToz0qucp2NflC2YnO8\" />\r\n</head>\r\n\r\n<body style=\"background:#ddd5b8\">\r\n<!--TOP-->\r\n\r\n\t\r\n\t\r\n\t\t<div class=\"top\">\r\n\t\t\t\r\n\r\n<noscript>\r\n<td style=\"color:red;\">\r\n您的瀏覽器不支援JavaScript功能，若網頁功能無法正常使用時，請開啟瀏覽器JavaScript狀態\r\n</td>\r\n</noscript>\r\n<style>\n.sr-only {\r\n  position: absolute;\r\n  width: 1px;\r\n  height: 1px;\r\n  padding: 0;\r\n  margin: -1px;\r\n  overflow: hidden;\r\n  clip: rect(0, 0, 0, 0);\r\n  white-space: nowrap;\r\n  border: 0;\r\n}\r\n\r\n.sr-only-focusable:active, .sr-only-focusable:focus {\r\n  position: static;\r\n  width: auto;\r\n  height: auto;\r\n  overflow: visible;\r\n  clip: auto;\r\n  white-space: normal;\r\n}\n</style>\r\n<!--TOP-->\r\n<div class=\"top\">\r\n\t<div class=\"top_a\">\r\n\t  <div class=\"top_a_cen\">\r\n\t    <div class=\"top_a_l\">\r\n\t      <ul>\r\n\t      \t<li><a href=\"#content\" tabindex=\"5\" class=\"sr-only sr-only-focusable\"><span style=\"color:#FFFFFF;background-color:#81b1c9;margin-right:5px;Opacity:80;\">中央內容區塊</span></a></li>\r\n\t        <!--上方內容導盲磚--> \r\n\t        <li><a href=\"#U\" id=\"AU\" name=\"U\" title=\"上方功能區塊\" class=\"guide\" accesskey=\"U\" tabindex=\"0\">:::</a></li>\r\n\t        <li><a  href=\"/pis/\" title=\"回首頁\">回首頁</a></li>\r\n\t        <li><a  href=\"/pis/prac/sitemapClient/readG3Sitemap\" title=\"網站導覽\">網站導覽</a></li>\r\n\t        <li><a  href=\"/qdcs/webmobile/Home\" title=\"行動版\">行動版</a></li>\r\n\t        <li><a  href=\"/tps/QueryTender/query/queryEng?mode=\" title=\"ENGLISH\">ENGLISH</a></li>\r\n\t        <li><a  href=\"/pis/pia/client/mail\" title=\"意見信箱\">意見信箱</a></li>\r\n<!-- \t\t\t<li><a  href=\"/csci/pf/feedback\" title=\"試辦問題回報\">試辦問題回報</a></li> -->\r\n\t      </ul>\r\n\t    </div>\r\n\t   <div class=\"top_a_r\">\r\n\t\t\t<div class=\"top_a_r_1\">\r\n\r\n\t\t\t\t<a href=\"https://web.pcc.gov.tw/pis/\" title=\"前往正式區的按鈕\"> \r\n\t\t\t\t<img src=\"/tps/images/r_btn1.png\" alt=\"前往正式區的按鈕\">\r\n\t\t\t\t</a>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"top_a_r_2\">\r\n\r\n\t\t\t\t<a href=\"https://webtest.pcc.gov.tw/pis/\" title=\"前往練習區的按鈕\"> \t\r\n                 <img src=\"/tps/images/r_btn2.png\" alt=\"前往練習區的按鈕\">\r\n\t\t\t\t</a>\r\n\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div class=\"top_b\">\r\n\t\t<h1>政府電子採購網</h1>\r\n\t</div>\r\n\t\t\t\r\n\t\t\t\r\n\r\n\r\n\r\n\r\n\r\n<!--BANNER--> <div class=\"top_c\"> \t<div class=\"top_ca\"> \t\t<div class=\"nav\"> \t\t\t<ul class=\"menu\"> \t\t\t \t\t\t    \t\t\t    \t<!--第一階選項 --> \t\t\t\t\t<li class=\"li_tp fix_menu\"> \t\t\t\t\t\t<a href=\"#\" class=\"bind_menu_a\" data-layerid=\"layer1\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" onclick=\"toggleMenu(this); return false;\">網站導覽</a> \t\t\t\t\t</li> \t\t\t\t\t<!--第一階選項結束 --> \t\t\t\t\t \t\t\t\t\t<div class=\"sub_menu bind_menu_a\" id=\"layer1\" data-layerid=\"layer1\" style=\"display: none;\"> \t\t\t\t\t\t\t<i></i> \t\t\t\t\t\t\t<div class=\"sub_area clearfix\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t<!--第二階選項 --> \t\t\t\t\t\t\t \t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">網站導覽</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/sitemapClient/readG3Sitemap\"class=\"tmd\">網站導覽(三代)</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/sitemapClient/readG2Sitemap\"class=\"tmd\">網站導覽(二代)</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t<!--第二階選項結束 --> \t\t\t\t\t\t\t \t\t\t\t\t\t\t</div> \t\t\t\t\t\t</div> \t\t\t    \t<!--第一階選項 --> \t\t\t\t\t<li class=\"li_tp fix_menu\"> \t\t\t\t\t\t<a href=\"#\" class=\"bind_menu_a\" data-layerid=\"layer2\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" onclick=\"toggleMenu(this); return false;\">學習資源</a> \t\t\t\t\t</li> \t\t\t\t\t<!--第一階選項結束 --> \t\t\t\t\t \t\t\t\t\t<div class=\"sub_menu bind_menu_a\" id=\"layer2\" data-layerid=\"layer2\" style=\"display: none;\"> \t\t\t\t\t\t\t<i></i> \t\t\t\t\t\t\t<div class=\"sub_area clearfix\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t<!--第二階選項 --> \t\t\t\t\t\t\t \t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">教育訓練</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/ol/entityCourse/index\"class=\"tmd\">機關端(線上報名)</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/ol/trgEnroll/index\"class=\"tmd\">廠商端(線上報名)</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">線上學習</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/qdcs/trainingIndex\"class=\"tmd\">線上教學</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">教學資料(下載專區)</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=20000003\"class=\"tmd\">系統使用手冊</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=60000731\"class=\"tmd\">三代採購網教育訓練教材</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=60000736\"class=\"tmd\">三代教學影片</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/getClientDownloadForDownloadFile?id=70000016\"class=\"tmd\">環境檢測安裝步驟及FAQ</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/getClientDownloadForDownloadFile?id=70000015\"class=\"tmd\">用戶端程式偵測障礙排除</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readPreparation\"class=\"tmd\">第一次使用三代政府電子採購網之前置作業</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">採購專業人員訓練</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/psms/pptom/pptomPublic/indexRead\"class=\"tmd\">代訓機構名單</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/psms/pptcm/pptcmPublic/indexReadPptcm\"class=\"tmd\">代訓機構開課</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/psms/plrtqdm/questionPublic/indexReadQuestion\"class=\"tmd\">採購法規題庫</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/psms/plrtm/plrtmQuery/indexReadCertificate\"class=\"tmd\">採購專業人員及格證書查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/psms/plrtm/plrtmReissue/certificateReissue\"class=\"tmd\">採購專業人員及格證書補發申請</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t<!--第二階選項結束 --> \t\t\t\t\t\t\t \t\t\t\t\t\t\t</div> \t\t\t\t\t\t</div> \t\t\t    \t<!--第一階選項 --> \t\t\t\t\t<li class=\"li_tp fix_menu\"> \t\t\t\t\t\t<a href=\"#\" class=\"bind_menu_a\" data-layerid=\"layer3\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" onclick=\"toggleMenu(this); return false;\">採購作業</a> \t\t\t\t\t</li> \t\t\t\t\t<!--第一階選項結束 --> \t\t\t\t\t \t\t\t\t\t<div class=\"sub_menu bind_menu_a\" id=\"layer3\" data-layerid=\"layer3\" style=\"display: none;\"> \t\t\t\t\t\t\t<i></i> \t\t\t\t\t\t\t<div class=\"sub_area clearfix\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t<!--第二階選項 --> \t\t\t\t\t\t\t \t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">標案查詢</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"#\" onclick=\"goTender()\" class=\"tmd\">標案查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">等標期</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/declarationClient/bWait\"class=\"tmd\">等標期</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">電子公報</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/ebm/public/EbmMain/indexEbmMain\"class=\"tmd\">電子公報</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t<!--第二階選項結束 --> \t\t\t\t\t\t\t \t\t\t\t\t\t\t</div> \t\t\t\t\t\t</div> \t\t\t    \t<!--第一階選項 --> \t\t\t\t\t<li class=\"li_tp fix_menu\"> \t\t\t\t\t\t<a href=\"#\" class=\"bind_menu_a\" data-layerid=\"layer4\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" onclick=\"toggleMenu(this); return false;\">查詢服務</a> \t\t\t\t\t</li> \t\t\t\t\t<!--第一階選項結束 --> \t\t\t\t\t \t\t\t\t\t<div class=\"sub_menu bind_menu_a\" id=\"layer4\" data-layerid=\"layer4\" style=\"display: none;\"> \t\t\t\t\t\t\t<i></i> \t\t\t\t\t\t\t<div class=\"sub_area clearfix\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t<!--第二階選項 --> \t\t\t\t\t\t\t \t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">標案相關</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"#\" onclick=\"goTender()\" class=\"tmd\">標案查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/prkms/gpaPredict/common/indexGpaPredict\"class=\"tmd\">採購預告查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/prkms/tpRead/common/indexTpRead\"class=\"tmd\">公開閱覽查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/prkms/tpAppeal/common/indexTpAppeal\"class=\"tmd\">公開徵求查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/opas/pspad/pspadClient/readPublicPspadListInit\"class=\"tmd\">公示送達查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/cscps/ciom/medicineSearch\"class=\"tmd\">衛材藥品查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/prkms/priority/common/indexTenderPriority\"class=\"tmd\">優先採購查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/osm/public/proctrg\"class=\"tmd\">採購標的分類</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">財物相關</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/opas/arpam/public/indexArpam\"class=\"tmd\">財物出租查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/opas/aspam/public/indexAspam\"class=\"tmd\">財物變賣查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/tps/pia/PiaPriceWithoutSsoController/query/commonPiaPriceSearch\"class=\"tmd\">物調公告查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">國外採購</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"https://service.meettaiwan.com/gpa/zh/home\"class=\"tmd\"title=\"前往全球政府採購商機(另開頁面)\"rel=\"noopener noreferrer\"target=\"_blank\">全球政府採購商機</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"https://www.pcc.gov.tw/content/list?eid=3166&amp;lang=1\"class=\"tmd\"title=\"前往外國政府採購網站(另開頁面)\"rel=\"noopener noreferrer\"target=\"_blank\">外國政府採購網站</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/prkms/foreignGov/common/indexTenderForeignGov\"class=\"tmd\"title=\"前往外國政府採購商情\">外國政府採購商情</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">廠商相關</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/osm/public/foreSupp\"class=\"tmd\">外國廠商代碼</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/vms/stiem/stiemPublic/indexSearchPublic\"class=\"tmd\">科技研究機構</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/peems/lapeem/lapeemGeneralQuery\"class=\"tmd\">效益評估查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/vms/jgvm/jgvmPublic/indexReadJgvmPublic\"class=\"tmd\">連帶保證廠商</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/vms/emlm/emlmPublicSearch/indexSearchEmlmPublic\"class=\"tmd\">優良廠商名單</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/vms/rvlm/rvlmPublicSearch/indexSearchRvlmPublic\"class=\"tmd\">拒絕往來廠商</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/vms/rvlm/rvlmPublicSearchRevoked/indexSearchRevokedRvlmPublic\"class=\"tmd\">註銷拒絕往來廠商</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/vms/gblm/gblmPublicSearch/indexSearchGblmPublic\"class=\"tmd\">全球化廠商名單</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/vms/gblm/gblmPublicCompositeSearch/indexCompositeSearch\"class=\"tmd\">廠商綜合查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/tps/tom/obtainment/common/printTokenPublic/printVerifyToken\"class=\"tmd\">列印領標憑據</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/qdcs/yellowPageQuery\"class=\"tmd\">廠商名錄</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/piat/dispute/oneOOne/indexSearch\"class=\"tmd\">政府採購法第101條停權案例</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">其他</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/prkms/rebuild/common/indexRebuild\"class=\"tmd\">災區重建工程案件查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/peems/lapeem/lapeemGeneralPolit\"class=\"tmd\">政治獻金法第七條查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/tps/common/atmAbroad/commonSearchAtmAbroad/search\"class=\"tmd\">得標外國政府採購案件查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/tps/tom/thdTender/query/enterToThdTender\"class=\"tmd\">歷史文件瀏覽</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pec/PecQueryPublic/indexPecQueryPublicInit\"class=\"tmd\">採購評選委員名單</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/wr-report/wr/homeClient/list\"class=\"tmd\">採購統計</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/bsmizone/readBsmizone\"class=\"tmd\">商品檢驗查詢</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t</ul> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--第三階選項結束 --> \t\t\t\t\t\t\t\t\t\t\t\t</li> \t\t\t\t\t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t</ul> \t\t\t\t\t\t\t<!--第二階選項結束 --> \t\t\t\t\t\t\t \t\t\t\t\t\t\t</div> \t\t\t\t\t\t</div> \t\t\t    \t<!--第一階選項 --> \t\t\t\t\t<li class=\"li_tp fix_menu\"> \t\t\t\t\t\t<a href=\"#\" class=\"bind_menu_a\" data-layerid=\"layer5\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" onclick=\"toggleMenu(this); return false;\">下載專區</a> \t\t\t\t\t</li> \t\t\t\t\t<!--第一階選項結束 --> \t\t\t\t\t \t\t\t\t\t<div class=\"sub_menu bind_menu_a\" id=\"layer5\" data-layerid=\"layer5\" style=\"display: none;\"> \t\t\t\t\t\t\t<i></i> \t\t\t\t\t\t\t<div class=\"sub_area clearfix\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t<!--第二階選項 --> \t\t\t\t\t\t\t \t\t\t\t\t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t    \t\t\t<ul class=\"sub_nav list\" style=\"margin-bottom:20px\"> \t\t\t\t\t\t\t    \t\t\t \t\t\t\t\t\t\t\t\t\t\t\t<li class=\"li_tp tm\"><a class=\"tmc\">下載專區</a> \t\t\t\t\t\t\t\t\t\t\t\t\t<!--下載專區 > 下載專區 > 第三階選項 --> \t\t\t\t\t\t\t\t\t\t\t\t\t<ul class=\"sub02\"> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/declarationClient/bWait\"class=\"tmd\" title=\"前往等標期(另開頁面)\" rel=\"noopener noreferrer\"target=\"_blank\">等標期</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=50003004\"class=\"tmd\" title=\"前往拒絕往來名單\">拒絕往來名單</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"https://www.pcc.gov.tw/content/list?eid=9807&lang=1\"class=\"tmd\" title=\"前往招標文件範本(另開頁面)\" rel=\"noopener noreferrer\"target=\"_blank\">招標文件範本</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=42000000\"class=\"tmd\" title=\"前往共同供應契約\">共同供應契約</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=20000003\"class=\"tmd\" title=\"前往系統使用手冊\">系統使用手冊</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=60000736\"class=\"tmd\" title=\"前往三代教學影片\">三代教學影片</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=60000731\"class=\"tmd\" title=\"前往教育訓練教材\">教育訓練教材</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=20000004\"class=\"tmd\" title=\"前往常用工具下載\">常用工具下載</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=70000000\"class=\"tmd\" title=\"前往安裝程式環境檢測及障礙排除說明\">安裝程式環境檢測及障礙排除說明</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/tps/tp/OpenData/showList\"class=\"tmd\" title=\"前往資料集下載(另開頁面)\" rel=\"noopener noreferrer\"target=\"_blank\">資料集下載</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"https://web.pcc.gov.tw/tps/tp/OpenData/showGPAList\"class=\"tmd\" title=\"前往近半年GPA資料集下載(另開頁面)\" rel=\"noopener noreferrer\"target=\"_blank\">近半年GPA資料集下載</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=60000716\"class=\"tmd\" title=\"前往帳號處理\">帳號處理</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=50003000\"class=\"tmd\" title=\"前往重要訊息通告\">重要訊息通告</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/downloadGroupClient/readDownloadGroupClient?id=70000026\"class=\"tmd\" title=\"前往ODF專區\">ODF專區</a></li> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li class=\"tpb_a\"><a href=\"/pis/prac/"
+ "p_policy_sec": 5,
+ "p_ipr": {
+  "tm": {
+   "latest": "2026-10-01",
+   "win": [
+    "2026-08-03",
+    "2026-10-01"
+   ],
+   "rows": [
+    {
+     "cls": 3,
+     "name": "美妝保養",
+     "n": 263,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 5,
+     "name": "藥品保健",
+     "n": 330,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 9,
+     "name": "科技軟體",
+     "n": 474,
+     "prev": 2,
+     "chg": null
+    },
+    {
+     "cls": 10,
+     "name": "醫療器材",
+     "n": 122,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 14,
+     "name": "珠寶鐘錶",
+     "n": 100,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 16,
+     "name": "文具印刷",
+     "n": 158,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 18,
+     "name": "皮件包袋",
+     "n": 133,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 20,
+     "name": "家具",
+     "n": 81,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 21,
+     "name": "居家廚具",
+     "n": 113,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 24,
+     "name": "寢具布品",
+     "n": 54,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 25,
+     "name": "服飾鞋帽",
+     "n": 251,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 28,
+     "name": "玩具運動",
+     "n": 167,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 29,
+     "name": "肉蛋乳品",
+     "n": 170,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 30,
+     "name": "烘焙咖啡茶",
+     "n": 326,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 31,
+     "name": "農產寵食",
+     "n": 79,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 32,
+     "name": "飲料",
+     "n": 76,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 33,
+     "name": "酒",
+     "n": 33,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 35,
+     "name": "廣告零售",
+     "n": 836,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 36,
+     "name": "金融不動產",
+     "n": 76,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 41,
+     "name": "教育娛樂",
+     "n": 411,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 42,
+     "name": "科技服務",
+     "n": 351,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 43,
+     "name": "餐飲住宿",
+     "n": 272,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 44,
+     "name": "醫療美容",
+     "n": 143,
+     "prev": 0,
+     "chg": null
+    }
+   ],
+   "total": 5867,
+   "new": [
+    {
+     "name": "蚌殼燒餅及圖",
+     "co": "唐門食品有限公司",
+     "date": "2026-10-01",
+     "cls": [
+      30
+     ]
+    },
+    {
+     "name": "MANTENGA及圖",
+     "co": "蔓杜尼雅企業有限公司",
+     "date": "2026-10-01",
+     "cls": [
+      20
+     ]
+    },
+    {
+     "name": "嬌釀",
+     "co": "香港商香港可妙兒酒業有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      33
+     ]
+    },
+    {
+     "name": "SATx5D",
+     "co": "德林股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      10
+     ]
+    },
+    {
+     "name": "生生生生生物科技有限公司標章(一)",
+     "co": "生生生生生物科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      31
+     ]
+    },
+    {
+     "name": "生生生生生物科技有限公司標章(二)",
+     "co": "生生生生生物科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "面對面",
+     "co": "面對面有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      30
+     ]
+    },
+    {
+     "name": "Gutzilla設計圖",
+     "co": "生展生物科技股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "HOLMAN",
+     "co": "信實環球（澳洲）有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9,
+      21
+     ]
+    },
+    {
+     "name": "KLARIS",
+     "co": "亞斯德科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      3
+     ]
+    },
+    {
+     "name": "絲沐羽",
+     "co": "拓普闐有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      3
+     ]
+    },
+    {
+     "name": "6 FOUNDATIONS IMMUNE +",
+     "co": "法商洛伊爾肯寧股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5,
+      31
+     ]
+    },
+    {
+     "name": "PRIMAORA",
+     "co": "亞斯德科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      3
+     ]
+    },
+    {
+     "name": "PICK ZONE及圖",
+     "co": "嘉翔運動股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      41
+     ]
+    },
+    {
+     "name": "33BODY",
+     "co": "安沛森生物科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "SARA智慧排程系統",
+     "co": "塔台智能網絡股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      42
+     ]
+    },
+    {
+     "name": "辰寶",
+     "co": "辰寶有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      14
+     ]
+    },
+    {
+     "name": "標章圖",
+     "co": "辰寶有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      14
+     ]
+    },
+    {
+     "name": "夏霖農場WAIPU MEADOWS及圖",
+     "co": "圖馬克農業科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      31
+     ]
+    },
+    {
+     "name": "NTInno NeoTech Innovation及設計圖",
+     "co": "日商新科智創股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      42
+     ]
+    },
+    {
+     "name": "YTB‧N-SMZ",
+     "co": "連亨企業有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "良研食品",
+     "co": "良研食品有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      29
+     ]
+    },
+    {
+     "name": "YTB‧SMZ",
+     "co": "連亨企業有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "Eberle",
+     "co": "連亨企業有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "INVISIX MEASURING SYSTEMS logo",
+     "co": "荷蘭商英維思測量系統有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9
+     ]
+    },
+    {
+     "name": "崩落之國",
+     "co": "日商ＣＹ遊戲公司",
+     "date": "2026-09-30",
+     "cls": [
+      9,
+      41
+     ]
+    },
+    {
+     "name": "旺旺食技研及圖",
+     "co": "宜蘭食品工業股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      32
+     ]
+    },
+    {
+     "name": "沙諾威",
+     "co": "鉅洋國際實業有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "INVISIX logo",
+     "co": "荷蘭商英維思測量系統有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9
+     ]
+    },
+    {
+     "name": "風順水吉",
+     "co": "風順水吉投資股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      16
+     ]
+    },
+    {
+     "name": "天吉地昌",
+     "co": "風順水吉投資股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      16
+     ]
+    },
+    {
+     "name": "清立堂",
+     "co": "風順水吉投資股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      16
+     ]
+    },
+    {
+     "name": "withmann",
+     "co": "韓商美好生活股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      21
+     ]
+    },
+    {
+     "name": "悅誠設計YUE&CO Design及圖",
+     "co": "悅誠室內裝修有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      42
+     ]
+    },
+    {
+     "name": "XUANGE",
+     "co": "大陸商知合行一技術（上海）有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9,
+      42
+     ]
+    },
+    {
+     "name": "玄戈 (XUANGE in Chinese)",
+     "co": "大陸商知合行一技術（上海）有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9,
+      42
+     ]
+    },
+    {
+     "name": "bedsonline+ Part of HBX Group ",
+     "co": "西班牙商豪特佰西班牙有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      43
+     ]
+    },
+    {
+     "name": "HAN•CHEF KOREAN CUISINE及圖",
+     "co": "南韓商韓國誇利有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      29,
+      30
+     ]
+    },
+    {
+     "name": "MBEyes",
+     "co": "聚積科技股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9
+     ]
+    },
+    {
+     "name": "FucoLite 及圖",
+     "co": "和司特股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "A-VMT",
+     "co": "愛爾蘭商斯坦福裝置有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      10
+     ]
+    },
+    {
+     "name": "Rhamnox",
+     "co": "日商江南化工股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "EVENTgo",
+     "co": "巨思文化股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35,
+      41
+     ]
+    },
+    {
+     "name": "NutriElevate",
+     "co": "芷宇創研有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9,
+      41,
+      44
+     ]
+    },
+    {
+     "name": "SENSONUM 森索姆設計字",
+     "co": "帕特農國際有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9
+     ]
+    },
+    {
+     "name": "U-TAH RENEW",
+     "co": "美商諾信公司",
+     "date": "2026-09-30",
+     "cls": [
+      20
+     ]
+    },
+    {
+     "name": "OPTIMUM RENEW",
+     "co": "美商諾信公司",
+     "date": "2026-09-30",
+     "cls": [
+      20
+     ]
+    },
+    {
+     "name": "Hommage à Elisabeth Bouchet",
+     "co": "法國商天使城堡股份公司",
+     "date": "2026-09-30",
+     "cls": [
+      33
+     ]
+    },
+    {
+     "name": "NX ELESOL",
+     "co": "日通電策物流股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "AZCIELO",
+     "co": "瑞士商諾華公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "DURZIVOY",
+     "co": "瑞士商諾華公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "DEVICE",
+     "co": "瑞士商諾華公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "DEVICE 2",
+     "co": "瑞士商諾華公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "DEVICE 3",
+     "co": "瑞士商諾華公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "Goojob及圖",
+     "co": "鼎盛佳科技股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "DUOOUD",
+     "co": "多優品牌管理私人有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      25,
+      35
+     ]
+    },
+    {
+     "name": "CLAUDE MEYLAN",
+     "co": "瑞士商克勞美隆手錶股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      14
+     ]
+    },
+    {
+     "name": "VERMACORE",
+     "co": "德商巴斯夫農業解決方案德國有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5,
+      31
+     ]
+    },
+    {
+     "name": "MARIAFLORA",
+     "co": "義大利商瑪莉亞弗洛拉股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      24
+     ]
+    },
+    {
+     "name": "金銀花圖",
+     "co": "日商救心製藥股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      30
+     ]
+    }
+   ]
+  },
+  "pat": {
+   "latest": "2026-10-01",
+   "win": [
+    "2026-09-02",
+    "2026-10-01"
+   ],
+   "rows": [
+    {
+     "name": "AI",
+     "n": 21,
+     "prev": 25,
+     "chg": -16,
+     "cons": true,
+     "top": [
+      [
+       "美商谷歌有限責任公司",
+       3
+      ],
+      [
+       "美商超越ＡＧＩ公司",
+       2
+      ],
+      [
+       "荷蘭商ＡＳＭＬ荷蘭公司",
+       2
+      ]
+     ]
+    },
+    {
+     "name": "電商與商業模式",
+     "n": 17,
+     "prev": 8,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "日商日本製鐵股份有限公司",
+       2
+      ],
+      [
+       "新加坡商光寶科技新加坡私人有限公司",
+       2
+      ],
+      [
+       "日商杰富意鋼鐵股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "醫療資訊",
+     "n": 4,
+     "prev": 0,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "日商三得利控股股份有限公司",
+       2
+      ],
+      [
+       "美商普羅基德尼有限責任公司",
+       1
+      ],
+      [
+       "日商江崎固力菓股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "美妝保養",
+     "n": 6,
+     "prev": 4,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "日商菲婷絲股份有限公司",
+       1
+      ],
+      [
+       "日商花王股份有限公司",
+       1
+      ],
+      [
+       "加拿大商艾爾科學股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "保健食品與藥",
+     "n": 198,
+     "prev": 85,
+     "chg": 133,
+     "cons": true,
+     "top": [
+      [
+       "日商小野藥品工業股份有限公司",
+       5
+      ],
+      [
+       "大陸商康百達（四川）生物醫藥科技有限公司",
+       5
+      ],
+      [
+       "加拿大商阿奎特斯醫療公司",
+       4
+      ]
+     ]
+    },
+    {
+     "name": "食品飲料",
+     "n": 8,
+     "prev": 6,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "日商朝日集團控股股份有限公司",
+       2
+      ],
+      [
+       "日商麒麟控股股份有限公司",
+       2
+      ],
+      [
+       "日商朝日啤酒股份有限公司",
+       2
+      ]
+     ]
+    },
+    {
+     "name": "醫療器材",
+     "n": 22,
+     "prev": 16,
+     "chg": 38,
+     "cons": false,
+     "top": [
+      [
+       "日商久光製藥股份有限公司",
+       4
+      ],
+      [
+       "瑞士商諾沃庫勒有限責任公司",
+       2
+      ],
+      [
+       "日商奧斯泛朗生物材料股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "居家與家具",
+     "n": 16,
+     "prev": 7,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "大陸商追覓創新科技（蘇州）有限公司",
+       4
+      ],
+      [
+       "新加坡商居佳國際有限公司",
+       2
+      ],
+      [
+       "瑞士商明門瑞士股份有限公司",
+       2
+      ]
+     ]
+    },
+    {
+     "name": "個人用品",
+     "n": 5,
+     "prev": 3,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "日商日本彈性體股份有限公司",
+       1
+      ],
+      [
+       "美商百美貼股份有限公司",
+       1
+      ],
+      [
+       "日商昂峰科技股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "寵物與農業",
+     "n": 14,
+     "prev": 6,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "新加坡商居佳國際有限公司",
+       7
+      ],
+      [
+       "日商三洋化成工業股份有限公司",
+       2
+      ],
+      [
+       "美商伊利諾工具工程公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "運動與遊戲",
+     "n": 4,
+     "prev": 5,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "美商卡斯登製造公司",
+       2
+      ],
+      [
+       "美商盧伯利索先進材料有限公司",
+       1
+      ],
+      [
+       "日商雙葉電子工業股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "車輛與移動",
+     "n": 37,
+     "prev": 35,
+     "chg": 6,
+     "cons": false,
+     "top": [
+      [
+       "瑞士商明門瑞士股份有限公司",
+       8
+      ],
+      [
+       "美商速聯有限責任公司",
+       6
+      ],
+      [
+       "南韓商ＬＧ新能源股份有限公司",
+       4
+      ]
+     ]
+    },
+    {
+     "name": "電池與能源",
+     "n": 47,
+     "prev": 23,
+     "chg": 104,
+     "cons": false,
+     "top": [
+      [
+       "南韓商ＬＧ新能源股份有限公司",
+       5
+      ],
+      [
+       "美商博隆能源股份有限公司",
+       3
+      ],
+      [
+       "日商艾普凌科有限公司",
+       3
+      ]
+     ]
+    },
+    {
+     "name": "半導體",
+     "n": 566,
+     "prev": 284,
+     "chg": 99,
+     "cons": false,
+     "top": [
+      [
+       "日商東京威力科創股份有限公司",
+       34
+      ],
+      [
+       "日商信越化學工業股份有限公司",
+       24
+      ],
+      [
+       "美商應用材料股份有限公司",
+       23
+      ]
+     ]
+    },
+    {
+     "name": "通訊",
+     "n": 75,
+     "prev": 83,
+     "chg": -10,
+     "cons": false,
+     "top": [
+      [
+       "美商高通公司",
+       16
+      ],
+      [
+       "聯發科技股份有限公司",
+       8
+      ],
+      [
+       "美商松下電器（美國）知識產權公司",
+       6
+      ]
+     ]
+    }
+   ],
+   "n": 1933
+  },
+  "src": "經濟部智慧財產局開放資料 API（商標註冊申請案、發明公開）",
+  "errs": []
  },
- "pcc_links": [
-  "#",
-  "#C",
-  "#U",
-  "#Z",
-  "#content",
-  "/csci/pf/feedback",
-  "/csci/pf/readCsciFaqDetlList",
-  "/csci/pf/readCsciFaqStatList",
-  "/cscps/ciom/medicineSearch",
-  "/ebm/public/EbmMain/indexEbmMain",
-  "/ol/entityCourse/index",
-  "/ol/trgEnroll/index",
-  "/opas/arpam/public/indexArpam",
-  "/opas/aspam/public/indexAspam",
-  "/opas/pspad/pspadClient/readPublicPspadListInit",
-  "/osm/public/foreSupp",
-  "/osm/public/newSysOn",
-  "/osm/public/proctrg",
-  "/osm/public/sysDownRcd",
-  "/pec/PecQueryPublic/indexPecQueryPublicInit",
-  "/peems/lapeem/lapeemGeneralPolit",
-  "/peems/lapeem/lapeemGeneralQuery",
-  "/piat/dispute/oneOOne/indexSearch",
-  "/pis",
-  "/pis/",
-  "/pis/bsmizone/readBsmizone",
-  "/pis/images/RWD_QRcode_L_1080328.jpg",
-  "/pis/pia/client/mail",
-  "/pis/prac/declarationClient/accessibility",
-  "/pis/prac/declarationClient/bWait",
-  "/pis/prac/declarationClient/private",
-  "/pis/prac/declarationClient/right",
-  "/pis/prac/declarationClient/security",
-  "/pis/prac/downloadGroupClient/getClientDownloadForDownloadFile?id=70000015",
-  "/pis/prac/downloadGroupClient/getClientDownloadForDownloadFile?id=70000016",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=20000003",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=20000004",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=42000000",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=50003000",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=50003002",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=50003004",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=50003006",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=60000716",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=60000731",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=60000736",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=70000000",
-  "/pis/prac/downloadGroupClient/readDownloadGroupClient?id=70000026",
-  "/pis/prac/downloadGroupClient/readPreparation",
-  "/pis/prac/sitemapClient/readG2Sitemap",
-  "/pis/prac/sitemapClient/readG3Sitemap",
-  "/pis/srml/linkGroupClient/readLinkGroupClient?id=50003006",
-  "/pis/srml/linkGroupClient/readLinkGroupClient?id=50003007",
-  "/prkms/foreignGov/common/indexTenderForeignGov",
-  "/prkms/gpaPredict/common/indexGpaPredict",
-  "/prkms/priority/common/indexTenderPriority",
-  "/prkms/rebuild/common/indexRebuild",
-  "/prkms/tpAppeal/common/indexTpAppeal",
-  "/prkms/tpRead/common/indexTpRead",
-  "/psms/plrtm/plrtmQuery/indexReadCertificate",
-  "/psms/plrtm/plrtmReissue/certificateReissue",
-  "/psms/plrtqdm/questionPublic/indexReadQuestion",
-  "/psms/pptcm/pptcmPublic/indexReadPptcm",
-  "/psms/pptom/pptomPublic/indexRead",
-  "/qdcs/trainingIndex",
-  "/qdcs/webmobile/Home",
-  "/qdcs/yellowPageQuery",
-  "/tps/QueryTender/query/queryEng?mode=",
-  "/tps/common/atmAbroad/commonSearchAtmAbroad/search",
-  "/tps/css/all.css",
-  "/tps/css/bootstrap.css",
-  "/tps/css/index_tab.css",
-  "/tps/css/tab.css",
-  "/tps/css/tab_menu.css",
-  "/tps/css/v2/font-awesome/css/font-awesome.css",
-  "/tps/images/icon.gif",
-  "/tps/pia/PiaPriceWithoutSsoController/query/commonPiaPriceSearch",
-  "/tps/tom/obtainment/common/printTokenPublic/printVerifyToken",
-  "/tps/tom/thdTender/query/enterToThdTender",
-  "/tps/tp/OpenData/showList",
-  "/vms/emlm/emlmPublicSearch/indexSearchEmlmPublic",
-  "/vms/gblm/gblmPublicCompositeSearch/indexCompositeSearch",
-  "/vms/gblm/gblmPublicSearch/indexSearchGblmPublic",
-  "/vms/jgvm/jgvmPublic/indexReadJgvmPublic",
-  "/vms/rvlm/rvlmPublicSearch/indexSearchRvlmPublic",
-  "/vms/rvlm/rvlmPublicSearchRevoked/indexSearchRevokedRvlmPublic",
-  "/vms/stiem/stiemPublic/indexSearchPublic",
-  "/wr-report/wr/homeClient/list",
-  "downloadFile?fileName=award_20150401.xml",
-  "downloadFile?fileName=award_20150402.xml",
-  "downloadFile?fileName=award_20150501.xml",
-  "downloadFile?fileName=award_20150502.xml",
-  "downloadFile?fileName=award_20150601.xml",
-  "downloadFile?fileName=award_20150602.xml",
-  "downloadFile?fileName=award_20150701.xml",
-  "downloadFile?fileName=award_20150702.xml",
-  "downloadFile?fileName=award_20150801.xml",
-  "downloadFile?fileName=award_20150802.xml",
-  "downloadFile?fileName=award_20150901.xml",
-  "downloadFile?fileName=award_20150902.xml",
-  "downloadFile?fileName=award_20151001.xml",
-  "downloadFile?fileName=award_20151002.xml",
-  "downloadFile?fileName=award_20151101.xml",
-  "downloadFile?fileName=award_20151102.xml",
-  "downloadFile?fileName=award_20151201.xml",
-  "downloadFile?fileName=award_20151202.xml",
-  "downloadFile?fileName=award_20160101.xml",
-  "downloadFile?fileName=award_20160102.xml",
-  "downloadFile?fileName=award_20160201.xml",
-  "downloadFile?fileName=award_20160202.xml",
-  "downloadFile?fileName=award_20160301.xml",
-  "downloadFile?fileName=award_20160302.xml",
-  "downloadFile?fileName=award_20160401.xml",
-  "downloadFile?fileName=award_20160402.xml",
-  "downloadFile?fileName=award_20160501.xml",
-  "downloadFile?fileName=award_20160502.xml",
-  "downloadFile?fileName=award_20160601.xml",
-  "downloadFile?fileName=award_20160602.xml",
-  "downloadFile?fileName=award_20160701.xml",
-  "downloadFile?fileName=award_20160702.xml",
-  "downloadFile?fileName=award_20160801.xml",
-  "downloadFile?fileName=award_20160802.xml",
-  "downloadFile?fileName=award_20160901.xml",
-  "downloadFile?fileName=award_20160902.xml",
-  "downloadFile?fileName=award_20161001.xml",
-  "downloadFile?fileName=award_20161002.xml",
-  "downloadFile?fileName=award_20161101.xml",
-  "downloadFile?fileName=award_20161102.xml",
-  "downloadFile?fileName=award_20161201.xml",
-  "downloadFile?fileName=award_20161202.xml",
-  "downloadFile?fileName=award_20170101.xml",
-  "downloadFile?fileName=award_20170102.xml",
-  "downloadFile?fileName=award_20170201.xml",
-  "downloadFile?fileName=award_20170202.xml",
-  "downloadFile?fileName=award_20170301.xml",
-  "downloadFile?fileName=award_20170302.xml",
-  "downloadFile?fileName=award_20170401.xml",
-  "downloadFile?fileName=award_20170402.xml",
-  "downloadFile?fileName=award_20170501.xml",
-  "downloadFile?fileName=award_20170502.xml",
-  "downloadFile?fileName=award_20170601.xml",
-  "downloadFile?fileName=award_20170602.xml",
-  "downloadFile?fileName=award_20170701.xml",
-  "downloadFile?fileName=award_20170702.xml",
-  "downloadFile?fileName=award_20170801.xml",
-  "downloadFile?fileName=award_20170802.xml",
-  "downloadFile?fileName=award_20170901.xml",
-  "downloadFile?fileName=award_20170902.xml",
-  "downloadFile?fileName=award_20171001.xml",
-  "downloadFile?fileName=award_20171002.xml",
-  "downloadFile?fileName=award_20171101.xml",
-  "downloadFile?fileName=award_20171102.xml",
-  "downloadFile?fileName=award_20171201.xml",
-  "downloadFile?fileName=award_20171202.xml",
-  "downloadFile?fileName=award_20180101.xml",
-  "downloadFile?fileName=award_20180102.xml",
-  "downloadFile?fileName=award_20180201.xml",
-  "downloadFile?fileName=award_20180202.xml",
-  "downloadFile?fileName=award_20180301.xml",
-  "downloadFile?fileName=award_20180302.xml",
-  "downloadFile?fileName=award_20180401.xml",
-  "downloadFile?fileName=award_20180402.xml",
-  "downloadFile?fileName=award_20180501.xml",
-  "downloadFile?fileName=award_20180502.xml",
-  "downloadFile?fileName=award_20180601.xml",
-  "downloadFile?fileName=award_20180602.xml",
-  "downloadFile?fileName=award_20180701.xml",
-  "downloadFile?fileName=award_20180702.xml",
-  "downloadFile?fileName=award_20180801.xml",
-  "downloadFile?fileName=award_20180802.xml",
-  "downloadFile?fileName=award_20180901.xml",
-  "downloadFile?fileName=award_20180902.xml",
-  "downloadFile?fileName=award_20181001.xml",
-  "downloadFile?fileName=award_20181002.xml",
-  "downloadFile?fileName=award_20181101.xml",
-  "downloadFile?fileName=award_20181102.xml",
-  "downloadFile?fileName=award_20181201.xml",
-  "downloadFile?fileName=award_20181202.xml",
-  "downloadFile?fileName=award_20190101.xml",
-  "downloadFile?fileName=award_20190102.xml",
-  "downloadFile?fileName=award_20190201.xml",
-  "downloadFile?fileName=award_20190202.xml",
-  "downloadFile?fileName=award_20190301.xml",
-  "downloadFile?fileName=award_20190302.xml",
-  "downloadFile?fileName=award_20190401.xml",
-  "downloadFile?fileName=award_20190402.xml",
-  "downloadFile?fileName=award_20190501.xml",
-  "downloadFile?fileName=award_20190502.xml",
-  "downloadFile?fileName=award_20190601.xml",
-  "downloadFile?fileName=award_20190602.xml",
-  "downloadFile?fileName=award_20190701.xml",
-  "downloadFile?fileName=award_20190702.xml",
-  "downloadFile?fileName=award_20190801.xml",
-  "downloadFile?fileName=award_20190802.xml",
-  "downloadFile?fileName=award_20190901.xml",
-  "downloadFile?fileName=award_20190902.xml",
-  "downloadFile?fileName=award_20191001.xml",
-  "downloadFile?fileName=award_20191002.xml",
-  "downloadFile?fileName=award_20191101.xml",
-  "downloadFile?fileName=award_20191102.xml",
-  "downloadFile?fileName=award_20191201.xml"
- ],
- "pcc_text": " 政府電子採購網 { \"@context\": \"https://schema.org\", \"@type\": \"WebSite\", \"name\": \"政府電子採購網\", \"alternateName\": [\"臺灣政府採購\", \"電子採購\", \"臺灣採購\", \"政府採購\", \"採購網\"], \"url\": \"https://web.pcc.gov.tw\" } input:focus { color: #495057; border-color: #80bdff; outline: 0; box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%); } textarea:focus { color: #495057; background-color: #fff; border-color: #80bdff; outline: 0; box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%); } select:focus-visible { color: #495057; background-color: #fff; border-color: #80bdff; outline: 0; box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%); } 您的瀏覽器不支援JavaScript功能，若網頁功能無法正常使用時，請開啟瀏覽器JavaScript狀態 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; } .sr-only-focusable:active, .sr-only-focusable:focus { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; } 中央內容區塊 ::: 回首頁 網站導覽 行動版 ENGLISH 意見信箱 試辦問題回報 --> 政府電子採購網 網站導覽 網站導覽 網站導覽(三代) 網站導覽(二代) 學習資源 教育訓練 機關端(線上報名) 廠商端(線上報名) 線上學習 線上教學 教學資料(下載專區) 系統使用手冊 三代採購網教育訓練教材 三代教學影片 環境檢測安裝步驟及FAQ 用戶端程式偵測障礙排除 第一次使用三代政府電子採購網之前置作業 採購專業人員訓練 代訓機構名單 代訓機構開課 採購法規題庫 採購專業人員及格證書查詢 採購專業人員及格證書補發申請 採購作業 標案查詢 標案查詢 等標期 等標期 電子公報 電子公報 查詢服務 標案相關 標案查詢 採購預告查詢 公開閱覽查詢 公開徵求查詢 公示送達查詢 衛材藥品查詢 優先採購查詢 採購標的分類 財物相關 財物出租查詢 財物變賣查詢 物調公告查詢 國外採購 全球政府採購商機 外國政府採購網站 外國政府採購商情 廠商相關 外國廠商代碼 科技研究機構 效益評估查詢 連帶保證廠商 優良廠商名單 拒絕往來廠商 註銷拒絕往來廠商 全球化廠商名單 廠商綜合查詢 列印領標憑據 廠商名錄 政府採購法第101條停權案例 其他 災區重建工程案件查詢 政治獻金法第七條查詢 得標外國政府採購案件查詢 歷史文件瀏覽 採購評選委員名單 採購統計 商品檢驗查詢 下載專區 下載專區 下載專區 > 第三階選項 --> 等標期 拒絕往來名單 招標文件範本 共同供應契約 系統使用手冊 三代教學影片 教育訓練教材 常用工具下載 安裝程式環境檢測及障礙排除說明 資料集下載 近半年GPA資料集下載 帳號處理 重要訊息通告 ODF專區 中央組改文件 ５都改制文件 下載專區 > 第三階選項結束 --> 相關連結 憑證 政府憑證管理中心 工商憑證管理中心 自然人憑證管理中心 組織及團體憑證管理中心 內政部行動自然人憑證系統 行政院工程會全球資訊網 行政院工程會全球資訊網 其他 其他 > 第三階選項 --> 工程標案管理系統 工程延遲付款通報 促進民間參與公共建設公告 經濟部商工行政服務入口網 技師與工程技術顧問公司管理資訊系統 內政部國土管理署全國建築管理資訊入口網 財政部稅務入口網 經濟部能源署節能標章綠色採購網 衛生福利部社會及家庭署身心障礙服務入口網 衛生福利部社福人員勞動申訴及溝通平臺-違規停止補助名單 內政部國土管理署工程重機械編管及運用管理系統 經濟部(投資審議司)公告陸資資訊 經濟部地質調查及礦業管理中心 廠商承攬公共工程履歷查詢 公共工程人員履歷查詢 技師懲戒資料 內政部國土管理署營造業評鑑結果查詢 行政法人相關採購資訊 採購網加值服務訂閱 更改HiNet連線密碼 HiNet點數卡購買 勞動部「違反勞動法令事業單位(雇主)查詢系統」 其他 > 第三階選項結束 --> 請求協助 熱門問答 熱門問答 問題檢索 問題檢索 我要發問 我要發問 最新功能 最新功能 最新功能 function toggleMenu(el) { const expanded = el.getAttribute(\"aria-expanded\") === \"true\"; el.setAttribute(\"aria-expanded\", !expanded); } if (typeof(\"\".replaceAll)==\"undefined\") { String.prototype.replaceAll = function(s1,s2) { return this.replace(new RegExp(s1, \"gm\"), s2); }; } $(document).ready(function() { document.cookie = 'SameSite=strict;secure;httpOnly'; // 設定cookie-SameSite參數為strict; cookie僅能由https傳送; cookie僅能透過伺服器存取 }); ::: 首頁 $(document).ready(function(){ $(\"#loginBreadcrumbs\").find(\"a\").eq(0).addClass(\"t-link\"); var urlOne = \" 資料集下載 \"; $(\"#breadcrumb\").html(\" > 下載專區 > \" + urlOne); }); 招標資料 1. 2026/08/16 to 2026/08/31 [ Download ] 2. 2026/08/01 to 2026/08/15 [ Download ] 3. 2026/07/16 to 2026/07/31 [ Download ] 4. 2026/07/01 to 2026/07/15 [ Download ] 5. 2026/06/16 to 2026/06/30 [ Download ] 6. 2026/06/01 to 2026/06/15 [ Download ] 7. 2026/05/16 to 2026/05/31 [ Download ] 8. 2026/05/01 to 2026/05/15 [ Download ] 9. 2026/04/16 to 2026/04/30 [ Download ] 10. 2026/04/01 to 2026/04/15 [ Download ] 11. 2026/03/16 to 2026/03/31 [ Download ] 12. 2026/03/01 to 2026/03/15 [ Download ] 13. 2026/02/16 to 2026/02/28 [ Download ] 14. 2026/02/01 to 2026/02/15 [ Download ] 15. 2026/01/16 to 2026/01/31 [ Download ] 16. 2026/01/01 to 2026/01/15 [ Download ] 17. 2025/12/16 to 2025/12/31 [ Download ] 18. 2025/12/01 to 2025/12/15 [ Download ] 19. 2025/11/16 to 2025/11/30 [ Download ] 20. 2025/11/01 to 2025/11/15 [ Download ] 21. 2025/10/16 to 2025/10/31 [ Download ] 22. 2025/10/01 to 2025/10/15 [ Download ] 23. 2025/09/16 to 2025/09/30 [ Download ] 24. 2025/09/01 to 2025/09/15 [ Download ] 25. 2025/08/16 to 2025/08/31 [ Download ] 26. 2025/08/01 to 2025/08/15 [ Download ] 27. 2025/07/16 to 2025/07/31 [ Download ] 28. 2025/07/01 to 2025/07/15 [ Download ] 29. 2025/06/16 to 2025/06/30 [ Download ] 30. 2025/06/01 to 2025/06/15 [ Download ] 31. 2025/05/16 to 2025/05/31 [ Download ] 32. 2025/05/01 to 2025/05/15 [ Download ] 33. 2025/04/16 to 2025/04/30 [ Download ] 34. 2025/04/01 to 2025/04/15 [ Download ] 35. 2025/03/16 to 2025/03/31 [ Download ] 36. 2025/03/01 to 2025/03/15 [ Download ] 37. 2025/02/16 to 2025/02/28 [ Download ] 38. 2025/02/01 to 2025/02/15 [ Download ] 39. 2025/01/16 to 2025/01/31 [ Download ] 40. 2025/01/01 to 2025/01/15 [ Download ] 41. 2024/12/16 to 2024/12/31 [ Download ] 42. 2024/12/01 to 2024/12/15 [ Download ] 43. 2024/11/16 to 2024/11/30 [ Download ] 44. 2024/11/01 to 2024/11/15 [ Download ] 45. 2024/10/16 to 2024/10/31 [ Download ] 46. 2024/10/01 to 2024/10/15 [ Download ] 47. 2024/09/16 to 2024/09/30 [ Download ] 48. 2024/09/01 to 2024/09/15 [ Download ] 49. 2024/08/16 to 2024/08/31 [ Download ] 50. 2024/08/01 to 2024/08/15 [ Download ] 51. 2024/07/16 to 2024/07/31 [ Download ] 52. 2024/07/01 to 2024/07/15 [ Download ] 53. 2024/06/16 to 2024/06/30 [ Download ] 54. 2024/06/01 to 2024/06/15 [ Download ] 55. 2024/05/16 to 2024/05/31 [ Download ] 56. 2024/05/01 to 2024/05/15 [ Download ] 57. 2024/04/16 to 2024/04/30 [ Download ] 58. 2024/04/01 to 2024/04/15 [ Download ] 59. 2024/03/16 to 2024/03/31 [ Download ] 60. 2024/03/01 to 2024/03/15 [ Download ] 61. 2024/02/16 to 2024/02/29 [ Download ] 62. 2024/02/01 to 2024/02/15 [ Download ] 63. 2024/01/16 to 2024/01/31 [ Download ] 64. 2024/01/01 to 2024/01/15 [ Download ] 65. 2023/12/16 to 2023/12/31 [ Download ] 66. 2023/12/01 to 2023/12/15 [ Download ] 67. 2023/11/16 to 2023/11/30 [ Download ] 68. 2023/11/01 to 2023/11/15 [ Download ] 69. 2023/10/16 to 2023/10/31 [ Download ] 70. 2023/10/01 to 2023/10/15 [ Download ] 71. 2023/09/16 to 2023/09/30 [ Download ] 72. 2023/09/01 to 2023/09/15 [ Download ] 73. 2023/08/16 to 2023/08/31 [ Download ] 74. 2023/08/01 to 2023/08/15 [ Download ] 75. 2023/07/16 to 2023/07/31 [ Download ] 76. 2023/07/01 to 2023/07/15 [ Download ] 77. 2023/06/16 to 2023/06/30 [ Download ] 78. 2023/06/01 to 2023/06/15 [ Download ] 79. 2023/05/16 to 2023/05/31 [ Download ] 80. 2023/05/01 to 2023/05/15 [ Download ] 81. 2023/04/16 to 2023/04/30 [ Download ] 82. 2023/04/01 to 2023/04/15 [ Download ] 83. 2023/03/16 to 2023/03/31 [ Download ] 84. 2023/03/01 to 2023/03/15 [ Download ] 85. 2023/02/16 to 2023/02/28 [ Download ] 86. 2023/02/01 to 2023/02/15 [ Download ] 87. 2023/01/16 to 2023/01/31 [ Download ] 88. 2023/01/01 to 2023/01/15 [ Download ] 89. 2022/12/16 to 2022/12/31 [ Download ] 90. 2022/12/01 to 2022/12/15 [ Download ] 91. 2022/11/16 to 2022/11/30 [ Download ] 92. 2022/11/01 to 2022/11/15 [ Download ] 93. 2022/10/16 to 2022/10/31 [ Download ] 94. 2022/10/01 to 2022/10/15 [ Download ] 95. 2022/09/16 to 2022/09/30 [ Download ] 96. 2022/09/01 to 2022/09/15 [ Download ] 97. 2022/08/16 to 2022/08/31 [ Download ] 98. 2022/08/01 to 2022/08/15 [ Download ] 99. 2022/07/16 to 2022/07/31 [ Download ] 100. 2022/07/01 to 2022/07/15 [ Download ] 101. 2022/06/16 to 2022/06/30 [ Download ] 102. 2022/06/01 to 2022/06/15 [ Download ] 103. 2022/05/16 to 2022/05/31 [ Download ] 104. 2022/05/01 to 2022/05/15 [ Download ] 105. 2022/04/16 to 2022/04/30 [ Download ] 106. 2022/04/01 to 2022/04/15 [ Download ] 107. 2022/03/16 to 2022/03/31 [ Download ] 108. 2022/03/01 to 2022/03/15 [ Download ] 109. 2022/02/16 to 2022/02/28 [ Download ] 110. 2022/02/01 to 2022/02/15 [ Download ] 111. 2022/01/16 to 2022/01/31 [ Download ] 112. 2022/01/01 to 2022/01/15 [ Download ] 113. 2021/12/16 to 2021/12/31 [ Download ] 114. 2021/12/01 to 2021/12/15 [ Download ] 115. 2021/11/16 to 2021/11/30 [ Download ] 116. 2021/11/01 to 2021/11/15 [ Download ] 117. 2021/10/16 to 2021/10/31 [ Download ] 118. 2021/10/01 to 2021/10/15 [ Download ] 119. 2021/09/16 to 2021/09/30 [ Download ] 120. 2021/09/01 to 2021/09/15 [ Download ] 121. 2021/08/16 to 2021/08/31 [ Download ] 122. 2021/08/01 to 2021/08/15 [ Download ] 123. 2021/07/16 to 2021/07/31 [ Download ] 124. 2021/07/01 to 2021/",
- "dgt_robots": {
-  "status": 500,
-  "ct": "text/html;charset=UTF-8",
-  "len": 4364,
-  "url": "https://data.gov.tw/robots.txt",
-  "head": "<!DOCTYPE html><html lang=\"en\"><head><title>500 - undefined | Nuxt</title><meta charset=\"utf-8\"><meta content=\"width=device-width,initial-scale=1.0,minimum-scale=1.0\" name=\"viewport\"><style>.spotlight{background:linear-gradient(45deg,#00dc82,#36e4da 50%,#0047e1);filter:blur(20vh)}*,:after,:before{border-color:var(--un-default-border-color,#e5e7eb);border-style:solid;border-width:0;box-sizing:border-box}:after,:before{--un-content:\"\"}html{line-height:1.5;-webkit-text-size-adjust:100%;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-moz-tab-size:4;tab-size:4;-webkit-tap-highlight-color:transparent}body{line-height:inherit;margin:0}h1{font-size:inherit;font-weight:inherit}h1,p{margin:0}*,:after,:before{--un-rotate:0;--un-rotate-x:0;--un-rotate-y:0;--un-rotate-z:0;--un-scale-x:1;--un-scale-y:1;--un-scale-z:1;--un-skew-x:0;--un-skew-y:0;--un-translate-x:0;--un-translate-y:0;--un-translate-z:0;--un-pan-x: ;--un-pan-y: ;--un-pinch-zoom: ;--un-scroll-snap-strictness:proximity;--un-ordinal: ;--un-slashed-zero: ;--un-numeric-figure: ;--un-numeric-spacing: ;--un-numeric-fraction: ;--un-border-spacing-x:0;--un-border-spacing-y:0;--un-ring-offset-shadow:0 0 transparent;--un-ring-shadow:0 0 transparent;--un-shadow-inset: ;--un-shadow:0 0 transparent;--un-ring-inset: ;--un-ring-offset-width:0px;--un-ring-offset-color:#fff;--un-ring-width:0px;--un-ring-color:rgba(147,197,253,.5);--un-blur: ;--un-brightness: ;--un-contrast: ;--un-drop-shadow: ;--un-grayscale: ;--un-hue-rotate: ;--un-invert: ;--un-saturate: ;--un-sepia: ;--un-backdrop-blur: ;--un-backdrop-brightness: ;--un-backdrop-contrast: ;--un-backdrop-grayscale: ;--un-backdrop-hue-rotate: ;--un-backdrop-invert: ;--un-backdrop-opacity: ;--un-backdrop-saturate: ;--un-backdrop-sepia: }.fixed{position:fixed}.-bottom-1\\/2{bottom:-50%}.left-0{left:0}.right-0{right:0}.grid{display:grid}.mb-16{margin-bottom:4rem}.mb-8{margin-bottom:2rem}.h-1\\/2{height:50%}.max-w-520px{max-width:520px}.min-h-screen{min-height:100vh}.place-content-center{place-content:center}.overflow-hidden{overflow:hidden}.bg-white{--un-bg-opacity:1;background-color:rgb(255 255 255/var(--un-bg-opacity))}.px-8{padding-left:2rem;padding-right:2rem}.text-center{text-align:center}.text-8xl{font-size:6rem;line-height:1}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-black{--un-text-opacity:1;color:rgb(0 0 0/var(--un-text-opacity))}.font-light{font-weight:300}.font-medium{font-weight:500}.leading-tight{line-height:1.25}.font-sans{font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}@media(prefers-color-scheme:dark){.dark\\:bg-black{--un-bg-opacity:1;background-color:rgb(0 0 0/var(--un-bg-opacity))}.dark\\:text-white{--un-text-opacity:1;color:rgb(255 255 255/var(--un-text-opacity))}}@media(min-width:640px){.sm\\:px-0{padding-left:0;padding-right:0}.sm\\:text-4xl{font-size:2.25rem;line-height:2.5rem}}</style><script>!function(){const e=document.createElement(\"link\").relList;if(!(e&&e.supports&&e.supports(\"modulepreload\"))){for(const e of document.querySelectorAll('link[rel=\"modulepreload\"]'))r(e);new MutationObserver(e=>{for(const o of e)if(\"childList\"===o.type)for(const e of o.addedNodes)\"LINK\"===e.tagName&&\"modulepreload\"===e.rel&&r(e)}).observe(document,{childList:!0,subtree:!0})}function r(e){if(e.ep)return;e.ep=!0;const r=function(e){const r={};return e.integrity&&(r.integrity=e.integrity),e.referrerPolicy&&(r.referrerPolicy=e.referrerPolicy),\"use-credentials\"===e.crossOrigin?r.credentials=\"include\":\"anonymous\"===e.crossOrigin?r.credentials=\"omit\":r.credentials=\"same-origin\",r}(e);fetch(e.href,r)}}();</script></head><body class=\"antialiased bg-white dark:bg-black dark:text-white font-sans grid min-h-screen overflow-hidden place-content-center text-black\"><div class=\"-bottom-1/2 fixed h-1/2 left-0 right-0 spotlight\"></div><div class=\"max-w-520px text-center\"><h1 class=\"font-medium mb-8 sm:text-10xl text-8xl\">500</h1><p class=\"font-light leading-tight mb-16 px-8 sm:px-0 sm:text-4xl text-xl\">This page is temporarily unavailable.</p></div></body></html>"
- },
- "dgt_6576": {
-  "status": 200,
-  "ct": "application/json",
-  "len": 2543,
-  "url": "https://data.gov.tw/api/v2/rest/dataset/6576",
-  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"I00\",\"categoryDataset\":\"A\",\"datasetId\":6576,\"identifier\":\"360000000G-000025\",\"title\":\"政府電子採購網採購標的分類\",\"description\":\"提供政府電子採購網採用之採購標的分類代碼及中英文名稱清單。\",\"type\":\"rawData\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"kristytien\",\"publisherOID\":\"2.16.886.101.20003.20035\",\"publisherContactName\":\"徐小姐\",\"publisherContactPhone\":\"0287897639;02878978639\",\"publisherContactEmail\":\"ywhsu@mail.pcc.gov.tw\",\"updateFrequency\":{\"regularupdate\":\"1\",\"Frequency\":\"1\",\"unittime\":\"月\"},\"dataQuality\":\"無(白名單)\",\"coverageStartedDate\":\"\",\"coverageEndedDate\":\"\",\"publishedDate\":\"2013-11-04\",\"modifiedDate\":\"2023-04-11 15:10:59\",\"spatialCoverage\":\"\",\"language\":\"zh\",\"relatedUrl\":\"\",\"notes\":\"授權說明網址: http:\\/\\/data.gov.tw\\/license\",\"apiDocUrl\":\"\",\"distribution\":[{\"resourceDescription\":\"政府電子採購網採購標的分類\",\"resourceField\":[{\"name\":\"標的分類\",\"description\":\"\"},{\"name\":\"標的代碼\",\"description\":\"\"},{\"name\":\"分類名稱中文\",\"description\":\"\"},{\"name\":\"分類名稱英文\",\"description\":\"\"},{\"name\":\"本分類之下1層CPC細項\",\"description\":\"\"},{\"name\":\"我國採購標的舉例\",\"description\":\"\"}],\"qcLevel\":\"\",\"resourceFormat\":\"XML\",\"resourceCharacterEncoding\":\"UTF-8\",\"resourceQualityCheckTime\":\"2026-06-01 08:42:08\",\"resourceDownloadUrl\":\"https:\\/\\/web.pcc.gov.tw\\/osm\\/public\\/proctrg\\/download\\/CpcOpenData.xml\",\"resourceAmount\":262,\"resourceNotes\":\"\",\"resourceRequestMethod\":\"\",\"resourceOasUrl\":\"\",\"resourceRequestParameters\":[],\"resourcePathParameters\":[]}],\"keyword\":[\"標的分類\",\"CPC\",\"統一代碼\"],\"en\":{\"title\":\"Government Electronic Procurement System Procurement Target Classification\",\"description\":\"Provide a list of procurement target classification codes and their Chinese and English names adopted by the government electronic procurement website.\",\"publisherContactName\":\"徐小姐\",\"publisherContactPhone\":\"0287897639;02878978639\",\"publisherContactEmail\":[\"ywhsu@mail.pcc.gov.tw\"],\"updateFrequency\":\"Every 1 month\",\"cost\":\"free\",\"notes\":\"Authorization explanation website: http:\\/\\/data.gov.tw\\/license\",\"keyword\":[\"Target classification\",\"CPC\",\"Unified code\"],\"resources\":[{\"description\":\"Government Electronic Procurement Service Category\",\"fieldDesc\":\"Target categorization、Target code、Category Name Chinese、Category Name in English、1st layer CPC subcategory under this category、My country's procurement targets as examples\",\"note\":\"\"}]}}}"
- },
- "dgt_6155": {
-  "status": 200,
-  "ct": "application/json",
-  "len": 2393,
-  "url": "https://data.gov.tw/api/v2/rest/dataset/6155",
-  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"I00\",\"categoryDataset\":\"A\",\"datasetId\":6155,\"identifier\":\"360000000G-000005\",\"title\":\"決標金額前5大之決標公告\",\"description\":\"總決標金額前5大之決標公告資訊\",\"type\":\"rawData\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"kristytien\",\"publisherOID\":\"2.16.886.101.20003.20035\",\"publisherContactName\":\"黃先生\",\"publisherContactPhone\":\"0287897645\",\"publisherContactEmail\":\"alpha2@mail.pcc.gov.tw\",\"updateFrequency\":{\"regularupdate\":\"1\",\"Frequency\":\"1\",\"unittime\":\"日\"},\"dataQuality\":\"無(白名單)\",\"coverageStartedDate\":\"\",\"coverageEndedDate\":\"\",\"publishedDate\":\"2013-04-22\",\"modifiedDate\":\"2023-04-11 15:15:32\",\"spatialCoverage\":\"\",\"language\":\"zh\",\"relatedUrl\":\"\",\"notes\":\"更新頻率說明: 每日(上班日)\\r\\n授權說明網址: http:\\/\\/data.gov.tw\\/license\",\"apiDocUrl\":\"\",\"distribution\":[{\"resourceDescription\":\"決標金額前5大之決標公告\",\"resourceField\":[{\"name\":\"序列\",\"description\":\"\"},{\"name\":\"招標機關\",\"description\":\"\"},{\"name\":\"標案案號\",\"description\":\"\"},{\"name\":\"標案名稱\",\"description\":\"\"},{\"name\":\"標的分類\",\"description\":\"\"},{\"name\":\"決標日期\",\"description\":\"\"},{\"name\":\"決標金額\",\"description\":\"\"},{\"name\":\"得標廠商名稱1\",\"description\":\"\"}],\"qcLevel\":\"\",\"resourceFormat\":\"JSON\",\"resourceCharacterEncoding\":\"UTF-8\",\"resourceQualityCheckTime\":\"2026-06-01 08:19:50\",\"resourceDownloadUrl\":\"https:\\/\\/web.pcc.gov.tw\\/tps\\/openDataApi\\/atmTop5\",\"resourceAmount\":0,\"resourceNotes\":\"\",\"resourceRequestMethod\":\"\",\"resourceOasUrl\":\"\",\"resourceRequestParameters\":[],\"resourcePathParameters\":[]}],\"keyword\":[\"政府統計\"],\"en\":{\"title\":\"The top 5 winning bid notices by bid amount.\",\"description\":\"The top 5 winning bid announcement information by total bid amount.\",\"publisherContactName\":\"黃先生\",\"publisherContactPhone\":\"0287897645\",\"publisherContactEmail\":[\"alpha2@mail.pcc.gov.tw\"],\"updateFrequency\":\"Every 1 day\",\"cost\":\"free\",\"notes\":\"Update frequency description: Daily (working days)Authorization description URL: http:\\/\\/data.gov.tw\\/license\",\"keyword\":[\"Government statistics\"],\"resources\":[{\"description\":\"The top 5 procurement notices by procurement amount\",\"fieldDesc\":\"Sequence、Procuring entity、Tender case number、Tender Name、Target classification、Tender closing date、Bid amount、The name of the winning bidder 1.\",\"note\":\"\"}]}}}"
- },
- "dgt_165150": {
-  "status": 200,
-  "ct": "application/json",
-  "len": 2211,
-  "url": "https://data.gov.tw/api/v2/rest/dataset/165150",
-  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"I00\",\"categoryDataset\":\"A\",\"datasetId\":165150,\"identifier\":\"\",\"title\":\"前1年度公告金額以上採購限制性決標公告\",\"description\":\"提供前1年度公告金額以上採購限制性決標公告\",\"type\":\"rawData\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"kristytien\",\"publisherOID\":\"2.16.886.101.20003.20035\",\"publisherContactName\":\"游先生\",\"publisherContactPhone\":\"02-87897621\",\"publisherContactEmail\":\"ziyi@mail.pcc.gov.tw\",\"updateFrequency\":{\"regularupdate\":\"1\",\"Frequency\":\"1\",\"unittime\":\"年\"},\"dataQuality\":\"G\",\"coverageStartedDate\":\"2023-08-31\",\"coverageEndedDate\":\"\",\"publishedDate\":\"2023-08-31\",\"modifiedDate\":\"2024-02-23 14:17:12\",\"spatialCoverage\":\"\",\"language\":\"zh\",\"relatedUrl\":\"\",\"notes\":\"\",\"apiDocUrl\":\"\",\"distribution\":[{\"resourceDescription\":\"\",\"resourceField\":[{\"name\":\"序號\",\"description\":\"\",\"uri\":\"api\\/Financial\\/Common\\/FinancialstatisticsData\\/seqno\"},{\"name\":\"機關名稱\",\"description\":\"\"},{\"name\":\"標案案號\",\"description\":\"\"},{\"name\":\"標案名稱\",\"description\":\"\"},{\"name\":\"標的分類\",\"description\":\"\"},{\"name\":\"決標方式\",\"description\":\"\"},{\"name\":\"決標日期\",\"description\":\"\",\"uri\":\"api\\/Weather\\/Common\\/Common\\/Date\"},{\"name\":\"決標金額(元)\",\"description\":\"\",\"uri\":\"api\\/CurrencyandFinancial\\/CommonData\\/NormalCommonData\\/DollarTWD\"},{\"name\":\"得標廠商名稱\",\"description\":\"\"}],\"qcLevel\":\"\",\"resourceFormat\":\"JSON\",\"resourceCharacterEncoding\":\"UTF-8\",\"resourceQualityCheckTime\":\"2026-07-27 17:06:52\",\"resourceDownloadUrl\":\"https:\\/\\/web.pcc.gov.tw\\/tps\\/openDataApi\\/lyOpenData?runType=3\",\"resourceAmount\":622,\"resourceNotes\":\"\",\"resourceRequestMethod\":\"\",\"resourceOasUrl\":\"\",\"resourceRequestParameters\":[],\"resourcePathParameters\":[]}],\"keyword\":[\"限制性決標\"],\"en\":{\"title\":\"Restrictive bidding announcement for procurement in excess of the announced amount in the previous fiscal year\",\"description\":\"Provide above the announced amount of the previous year's procurement restricted bidding announcement.\",\"publisherContactName\":\"游先生\",\"publisherContactPhone\":\"02-87897621\",\"publisherContactEmail\":[\"ziyi@mail.pcc.gov.tw\"],\"updateFrequency\":\"Every 1 year\",\"cost\":\"free\"}}}"
- },
- "dgt_23838": {
-  "status": 200,
-  "ct": "application/json",
-  "len": 4337,
-  "url": "https://data.gov.tw/api/v2/rest/dataset/23838",
-  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"400\",\"categoryDataset\":\"A\",\"datasetId\":23838,\"identifier\":\"\",\"title\":\"本署政府採購決標案件統計表\",\"description\":\"本署辦理新臺幣十萬元以上之工程、財物、勞務採購案件統計資料。\",\"type\":\"api\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"bannanng30\",\"publisherOID\":\"2.16.886.101.20003.20001.20068\",\"publisherContactName\":\"黃琇靖\",\"publisherContactPhone\":\"049-2394434\",\"publisherContactEmail\":\"moi3216@moi.gov.tw\",\"updateFrequency\":{\"regularupdate\":\"2\"},\"dataQuality\":\"G\",\"coverageStartedDate\":\"\",\"coverageEndedDate\":\"1900-01-01\",\"publishedDate\":\"2015-10-19\",\"modifiedDate\":\"2025-12-05 19:09:58\",\"spatialCoverage\":\"\",\"language\":\"zh\",\"relatedUrl\":\"\",\"notes\":\"\",\"apiDocUrl\":\"\",\"distribution\":[{\"resourceDescription\":\"役政署109年政府採購決標案件統計表\",\"resourceField\":[{\"name\":\"採購編號\",\"description\":\"\"},{\"name\":\"標案名稱\",\"description\":\"\"},{\"name\":\"預算_金額\",\"description\":\"\",\"uri\":\"api\\/BudgetAccountingandStatistics\\/Statistics\\/NationalWealthStatistics\\/NT\"},{\"name\":\"採購價值_金額\",\"description\":\"\",\"uri\":\"api\\/BudgetAccountingandStatistics\\/Statistics\\/NationalWealthStatistics\\/NT\"},{\"name\":\"得標金額詳情\",\"description\":\"\"},{\"name\":\"得標金額\",\"description\":\"\",\"uri\":\"api\\/BudgetAccountingandStatistics\\/Statistics\\/NationalWealthStatistics\\/NT\"},{\"name\":\"得標者\",\"description\":\"\"},{\"name\":\"得標者地址\",\"description\":\"\"},{\"name\":\"得標者電話\",\"description\":\"\"},{\"name\":\"簽約日期\",\"description\":\"\"},{\"name\":\"合約完成日期\",\"description\":\"\"}],\"qcLevel\":\"\",\"resourceFormat\":\"CSV\",\"resourceCharacterEncoding\":\"UTF-8\",\"resourceQualityCheckTime\":\"2026-06-01 21:14:02\",\"resourceDownloadUrl\":\"https:\\/\\/opdadm.moi.gov.tw\\/api\\/v1\\/no-auth\\/resource\\/api\\/dataset\\/79F74B1C-C1D0-4204-B0B7-D415F2F9A550\\/resource\\/F3C78E84-836B-4385-BC81-C74FBA05D4DF\\/download\",\"resourceAmount\":0,\"resourceNotes\":\"\",\"resourceRequestMethod\":\"\",\"resourceOasUrl\":\"\",\"resourceRequestParameters\":[],\"resourcePathParameters\":[]}],\"keyword\":[\"AI-Ready Data 詮釋資料框架指標\",\"決標\",\"役政署\"],\"en\":{\"title\":\"The government procurement bidding case statistics form of this office\",\"description\":\"This office handles the statistical data of procurement cases of construction, property, and services with a value of over one hundred thousand New Taiwan dollars.\",\"publisherContactName\":\"胡智翔先生\",\"publisherContactPhone\":\"049-2394373\",\"publisherContactEmail\":[\"5046@mail.nca.gov.tw\",\"moi0565@moi.gov.tw\",\"5046@mail.nca.gov.tw\",\"od@moi.gov.tw\"],\"updateFrequency\":\"Irregular updates\",\"cost\":\"free\",\"resources\":[{\"description\":\"The statistical table of government procurement tender cases in the 109th year of this agency.\",\"fieldDesc\":\"ProcurementID、BidName、Budget、ProcurementValue、TenderAwardingPriceDetails、TenderAwardingPrice、WinningTenderer、WinningTendererAddress、WinningTendererPhoneNumber、ContractSigningDate、ContractCompletionDate\",\"note\":\"Case number, tender name, budget amount, procurement amount, details of winning bid amount, winning bid amount, winning bidder, winning bidder address, winning bidder phone number, signing date, performance period from start to finish.\"},{\"description\":\"109 annual government procurement bidding case statistics table - URL access JSON format\",\"fieldDesc\":\"ProcurementID、BidName、Budget、ProcurementValue、TenderAwardingPriceDetails、TenderAwardingPrice、WinningTenderer、WinningTendererAddress、WinningTendererPhoneNumber、ContractSigningDate、ContractCompletionDate\",\"note\":\"Case number, tender name, budget amount, procurement amount, detailed winning bid amount, winning bid amount, winning bidder, winning bidder address, winning bidder phone number, signing date, performance period from and to.\"},{\"description\":\"Ministry of the Interior, National Conscription Agency, Purchasing Tender Processing Status Table for the Year 104\",\"fieldDesc\":\"name、description\",\"note\":\"\"},{\"description\":\"Ministry of the Interior, National Conscription Agency, 106 Year Procurement Case Processing Overview Table\",\"fieldDesc\":\"name、description\",\"note\":\"\"},{\"description\":\"Ministry of the Interior, National Conscription Agency, 105 Procurement Case Handling Summary Table\",\"fieldDesc\":\"n"
- },
- "dgt_56284": {
-  "status": 200,
-  "ct": "application/json",
-  "len": 2174,
-  "url": "https://data.gov.tw/api/v2/rest/dataset/56284",
-  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"I00\",\"categoryDataset\":\"A\",\"datasetId\":56284,\"identifier\":\"\",\"title\":\"國家發展委員會檔案管理局公告金額以上採購資訊\",\"description\":\"計收錄國家發展委員會檔案管理局前一年度公告金額以上採購資訊供參考\",\"type\":\"rawData\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"info02pa\",\"publisherOID\":\"2.16.886.101.20003.20069.20001\",\"publisherContactName\":\"黃小姐\",\"publisherContactPhone\":\"02-89953609\",\"publisherContactEmail\":\"tyhuang2@archives.gov.tw\",\"updateFrequency\":{\"regularupdate\":\"1\",\"Frequency\":\"1\",\"unittime\":\"年\"},\"dataQuality\":\"G\",\"coverageStartedDate\":\"2016-01-01\",\"coverageEndedDate\":\"2017-10-11\",\"publishedDate\":\"2017-10-12\",\"modifiedDate\":\"2025-12-16 16:03:44\",\"spatialCoverage\":\"臺灣\",\"language\":\"zh\",\"relatedUrl\":\"https:\\/\\/web.pcc.gov.tw\\/tps\\/\",\"notes\":\"\",\"apiDocUrl\":\"\",\"distribution\":[{\"resourceDescription\":\"提供至前一年度資料,逐年進行更新.\",\"resourceField\":[{\"name\":\"編號\",\"description\":\"\",\"uri\":\"api\\/CurrencyandFinancial\\/CommonData\\/NormalCommonData\\/SeqNo\"},{\"name\":\"標案名稱\",\"description\":\"\"},{\"name\":\"決標總計金額\",\"description\":\"\"},{\"name\":\"採購日期\",\"description\":\"\"}],\"qcLevel\":\"\",\"resourceFormat\":\"CSV\",\"resourceCharacterEncoding\":\"UTF-8\",\"resourceQualityCheckTime\":\"2026-08-26 13:47:11\",\"resourceDownloadUrl\":\"https:\\/\\/www.archives.gov.tw\\/opendata\\/公告金額採購資訊.csv\",\"resourceAmount\":219,\"resourceNotes\":\"\",\"resourceRequestMethod\":\"\",\"resourceOasUrl\":\"\",\"resourceRequestParameters\":[],\"resourcePathParameters\":[]}],\"keyword\":[\"AI-Ready Data 詮釋資料框架指標\",\"採購資訊\"],\"en\":{\"title\":\"The National Development Council Archives Management Office announces procurement information above a certain amount.\",\"description\":\"The last year's announcement of the National Development Commission's archives management office's procurement information is included for reference.\",\"publisherContactName\":\"蔡先生\",\"publisherContactPhone\":\"02-89953609\",\"publisherContactEmail\":[\"shtsai@archives.gov.tw\"],\"updateFrequency\":\"Every 1 year\",\"cost\":\"free\",\"keyword\":[\"Procurement information\"]}}}"
- },
- "dgt_90711": {
-  "status": 200,
-  "ct": "application/json",
-  "len": 1947,
-  "url": "https://data.gov.tw/api/v2/rest/dataset/90711",
-  "head": "{\"help\":\"\",\"success\":true,\"result\":{\"categoryService\":\"I00\",\"categoryDataset\":\"A\",\"datasetId\":90711,\"identifier\":\"\",\"title\":\"中央研究院科研採購公告招標之決標資料\",\"description\":\"中央研究院科研採購公告招標112年8月份決標\",\"type\":\"rawData\",\"license\":\"1\",\"cost\":\"free\",\"dataProvider\":\"wingwarcom\",\"publisherOID\":\"2.16.886.101.20002.20001.20059\",\"publisherContactName\":\"姚一忠\",\"publisherContactPhone\":\"02-27899991\",\"publisherContactEmail\":\"yaoyc@gate.sinica.edu.tw\",\"updateFrequency\":{\"regularupdate\":\"2\"},\"dataQuality\":\"G\",\"coverageStartedDate\":\"2018-09-05\",\"coverageEndedDate\":\"2018-09-05\",\"publishedDate\":\"2018-09-05\",\"modifiedDate\":\"2023-10-05 17:37:16\",\"spatialCoverage\":\"\",\"language\":\"zh\",\"relatedUrl\":\"\",\"notes\":\"\",\"apiDocUrl\":\"\",\"distribution\":[{\"resourceDescription\":\"\",\"resourceField\":[{\"name\":\"案號\",\"description\":\"\"},{\"name\":\"採購案名稱\",\"description\":\"\"},{\"name\":\"契約金額\",\"description\":\"\"},{\"name\":\"得標廠商\",\"description\":\"\"},{\"name\":\"決標日期\",\"description\":\"\"}],\"qcLevel\":\"\",\"resourceFormat\":\"CSV\",\"resourceCharacterEncoding\":\"BIG5\",\"resourceQualityCheckTime\":\"2026-03-01 19:45:33\",\"resourceDownloadUrl\":\"https:\\/\\/dga.sinica.edu.tw\\/archives\\/1d785cbbdc82844b\",\"resourceAmount\":23,\"resourceNotes\":\"\",\"resourceRequestMethod\":\"\",\"resourceOasUrl\":\"\",\"resourceRequestParameters\":[],\"resourcePathParameters\":[]}],\"keyword\":[\"\"],\"en\":{\"title\":\"The award information for the procurement announcement and bidding of the Academia Sinica research institute.\",\"description\":\"Academia Sinica Research Procurement Announcement Tendering Awarded in August, 112th Year\",\"publisherContactName\":\"姚一忠\",\"publisherContactPhone\":\"02-27899991\",\"publisherContactEmail\":[\"yaoyc@gate.sinica.edu.tw\"],\"updateFrequency\":\"Irregular updates\",\"cost\":\"free\",\"resources\":[{\"description\":\"\",\"fieldDesc\":\"Case number、Procurement case name、Contract amount、Winning bidder、Bid date\",\"note\":\"\"}]}}}"
- },
- "hub_robots": {
-  "status": 200,
-  "ct": "text/plain; charset=utf-8",
-  "len": 2304,
-  "url": "https://hub.twinkleai.tw/robots.txt",
-  "head": "# Twinkle Hub — robots.txt\n# 我們是 agent-first 服務，歡迎 LLM / agent crawler。\n\nUser-agent: *\nAllow: /\n# Auth-walled / private / API — no SEO value, save crawl budget.\nDisallow: /admin\nDisallow: /dashboard\nDisallow: /account\nDisallow: /usage\nDisallow: /login\nDisallow: /api/\n\n# Cloudflare Content Signals (https://blog.cloudflare.com/content-signals/)\n# search=yes : 可以索引\n# ai-input=yes : agent 可即時 fetch 給 LLM 當 context\n# ai-train=yes : 可以拿來訓練模型（我們的內容是公開資料相關文件，鼓勵）\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: GPTBot\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: ChatGPT-User\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: OAI-SearchBot\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: ClaudeBot\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: Claude-User\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: Claude-SearchBot\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: anthropic-ai\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: PerplexityBot\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: Perplexity-User\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: Google-Extended\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: Bytespider\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: Amazonbot\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: Applebot-Extended\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: CCBot\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: cohere-ai\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: DuckAssistBot\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: Meta-ExternalAgent\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nUser-agent: FacebookBot\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\n\nSitemap: https://hub.twinkleai.tw/sitemap.xml\nHost: https://hub.twinkleai.tw\n"
- },
- "hub_docs": {
-  "status": 200,
-  "ct": "text/html; charset=utf-8",
-  "len": 237948,
-  "url": "https://hub.twinkleai.tw/docs",
-  "head": "<!DOCTYPE html><html lang=\"en\" class=\"__variable_bea9d5 __variable_a7d6c4 __variable_5f34dc\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" as=\"image\" imageSrcSet=\"/_next/image?url=%2Flogo%2Ficon-circle.png&amp;w=32&amp;q=75 1x, /_next/image?url=%2Flogo%2Ficon-circle.png&amp;w=64&amp;q=75 2x\"/><link rel=\"stylesheet\" href=\"/_next/static/css/d289688ab0287127.css\" data-precedence=\"next\"/><link rel=\"stylesheet\" href=\"/_next/static/css/3dae1053ae6e701b.css\" data-precedence=\"next\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webpack-1515332e2a331946.js\"/><script src=\"/_next/static/chunks/efdd3080-a3cfaee517b787e2.js\" async=\"\"></script><script src=\"/_next/static/chunks/2121-0810c35bc20e6a87.js\" async=\"\"></script><script src=\"/_next/static/chunks/main-app-c3d67bbe86dca56e.js\" async=\"\"></script><script src=\"/_next/static/chunks/app/global-error-f6324314247727fd.js\" async=\"\"></script><script src=\"/_next/static/chunks/e02457bf-55c39e7ac63db429.js\" async=\"\"></script><script src=\"/_next/static/chunks/4507-a2fd32d2eab78fd1.js\" async=\"\"></script><script src=\"/_next/static/chunks/1117-7eec45ec68eaade8.js\" async=\"\"></script><script src=\"/_next/static/chunks/9346-f9d4dac1de057fa8.js\" async=\"\"></script><script src=\"/_next/static/chunks/8293-ab047534c95f5879.js\" async=\"\"></script><script src=\"/_next/static/chunks/app/%5Blocale%5D/(site)/layout-df0245b7b6407956.js\" async=\"\"></script><script src=\"/_next/static/chunks/app/%5Blocale%5D/(site)/page-6c9f1e83c37d1212.js\" async=\"\"></script><script src=\"/_next/static/chunks/app/%5Blocale%5D/(site)/docs/page-e2382a8f3d604025.js\" async=\"\"></script><script src=\"/_next/static/chunks/app/%5Blocale%5D/error-0e286424f14c3565.js\" async=\"\"></script><meta name=\"next-size-adjust\" content=\"\"/><link rel=\"mcp-server\" href=\"https://api.twinkleai.tw/mcp/\" type=\"application/x-mcp\"/><link rel=\"alternate\" href=\"https://api.twinkleai.tw/mcp/\" type=\"application/x-mcp\" title=\"Twinkle Hub MCP\"/><title>Docs - Twinkle Hub</title><meta name=\"description\" content=\"Government open data from 7 countries and regions (Taiwan, Hong Kong, Japan, Korea, the US, Singapore, the UK) wrapped as one MCP service. One API key, deterministic per-tool pricing — 769,422+ datasets (KR/JP figures are the integrating footprint).\"/><link rel=\"alternate\" hrefLang=\"en\" href=\"https://hub.twinkleai.tw\"/><link rel=\"alternate\" hrefLang=\"zh-TW\" href=\"https://hub.twinkleai.tw/zh-TW\"/><link rel=\"alternate\" hrefLang=\"ja\" href=\"https://hub.twinkleai.tw/ja\"/><link rel=\"alternate\" hrefLang=\"ko\" href=\"https://hub.twinkleai.tw/ko\"/><link rel=\"alternate\" hrefLang=\"fr\" href=\"https://hub.twinkleai.tw/fr\"/><link rel=\"alternate\" hrefLang=\"x-default\" href=\"https://hub.twinkleai.tw\"/><meta property=\"og:title\" content=\"Twinkle Hub — MCP service for government open data\"/><meta property=\"og:description\" content=\"Government open data from 7 countries and regions (Taiwan, Hong Kong, Japan, Korea, the US, Singapore, the UK) wrapped as one MCP service. One API key, deterministic per-tool pricing — 769,422+ datasets (KR/JP figures are the integrating footprint).\"/><meta property=\"og:url\" content=\"https://hub.twinkleai.tw\"/><meta property=\"og:site_name\" content=\"Twinkle Hub\"/><meta property=\"og:locale\" content=\"en_US\"/><meta property=\"og:image\" content=\"https://hub.twinkleai.tw/og.png\"/><meta property=\"og:image:width\" content=\"1200\"/><meta property=\"og:image:height\" content=\"630\"/><meta property=\"og:image:alt\" content=\"Twinkle Hub — government open data, as one MCP endpoint.\"/><meta property=\"og:image:type\" content=\"image/png\"/><meta property=\"og:type\" content=\"website\"/><meta name=\"twitter:card\" content=\"summary_large_image\"/><meta name=\"twitter:title\" content=\"Twinkle Hub — MCP service for government open data\"/><meta name=\"twitter:description\" content=\"Government open data from 7 countries and regions (Taiwan, Hong Kong, Japan, Korea, the US, Singapore, the UK) wrapped as one MCP service. One API key, deterministic per-tool pricing — 769,422+ datasets (KR/JP figures are the integrating footprint).\"/><meta name=\"twitter:image\" content=\"https://hub.twinkleai.tw/og.png\"/><link rel=\"icon\" href=\"/favicon.ico\" type=\"image/x-icon\" sizes=\"16x16\"/><link rel=\"icon\" href=\"/logo/icon-circle.png\"/><link rel=\"apple-touch-icon\" href=\"/logo/icon-circle-1024.png\"/><script type=\"application/webmcp+json\">{\"version\":\"0.1\",\"servers\":[{\"name\":\"twinkle-hub\",\"description\":\"Government open data MCP — 7 countries/regions\",\"url\":\"https://api.twinkleai.tw/mcp/\",\"transport\":\"streamable-http\",\"auth\":{\"type\":\"bearer\",\"signupUrl\":\"https://hub.twinkleai.tw/login\"}}],\"tools\":[{\"name\":\"tw_list_domains\",\"description\":\"List 19 Taiwan open-data domains\",\"inputSchema\":{\"type\":\"object\",\"properties\":{}}},{\"name\":\"tw_search_datasets\",\"description\":\"Search Taiwan public datasets by free-text query\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\"},\"domain\":{\"type\":\"string\"},\"limit\":{\"type\":\"integer\"}},\"required\":[\"query\"]}},{\"name\":\"tw_get_dataset\",\"description\":\"Get dataset metadata + schema\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"dataset_id\":{\"type\":\"string\"}},\"required\":[\"dataset_id\"]}},{\"name\":\"tw_query_rows\",\"description\":\"Query rows from a normalised Taiwan dataset\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"dataset_id\":{\"type\":\"string\"},\"where\":{\"type\":\"object\"},\"limit\":{\"type\":\"integer\"}},\"required\":[\"dataset_id\"]}},{\"name\":\"tw_materialize_dataset\",\"description\":\"Materialise full dataset as CSV / JSON\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"dataset_id\":{\"type\":\"string\"},\"format\":{\"type\":\"string\",\"enum\":[\"csv\",\"json\"]}},\"required\":[\"dataset_id\"]}}]}</script><script>(function() {\n  var register = function() {\n    try {\n      if (typeof navigator === \"undefined\" || !navigator.modelContext) return;\n      var tools = [{\"name\":\"tw_list_domains\",\"description\":\"List 19 Taiwan open-data domains\",\"inputSchema\":{\"type\":\"object\",\"properties\":{}}},{\"name\":\"tw_search_datasets\",\"description\":\"Search Taiwan public datasets by free-text query\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\"},\"domain\":{\"type\":\"string\"},\"limit\":{\"type\":\"integer\"}},\"required\":[\"query\"]}},{\"name\":\"tw_get_dataset\",\"description\":\"Get dataset metadata + schema\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"dataset_id\":{\"type\":\"string\"}},\"required\":[\"dataset_id\"]}},{\"name\":\"tw_query_rows\",\"description\":\"Query rows from a normalised Taiwan dataset\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"dataset_id\":{\"type\":\"string\"},\"where\":{\"type\":\"object\"},\"limit\":{\"type\":\"integer\"}},\"required\":[\"dataset_id\"]}},{\"name\":\"tw_materialize_dataset\",\"description\":\"Materialise full dataset as CSV / JSON\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"dataset_id\":{\"type\":\"string\"},\"format\":{\"type\":\"string\",\"enum\":[\"csv\",\"json\"]}},\"required\":[\"dataset_id\"]}}];\n      if (typeof navigator.modelContext.provideContext === \"function\") {\n        navigator.modelContext.provideContext({ tools: tools });\n      } else if (typeof navigator.modelContext.registerTool === \"function\") {\n        tools.forEach(function(t) { navigator.modelContext.registerTool(t); });\n      }\n    } catch (e) {}\n  };\n  register();\n  if (typeof document !== \"undefined\" && document.readyState !== \"complete\") {\n    document.addEventListener(\"DOMContentLoaded\", register);\n    window.addEventListener(\"load\", register);\n  }\n})();</script><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"Organization\",\"name\":\"Twinkle AI\",\"url\":\"https://hub.twinkleai.tw\",\"logo\":\"https://hub.twinkleai.tw/logo/icon-circle.png\",\"email\":\"support@twinkleai.tw\"},{\"@type\":\"WebSite\",\"name\":\"Twinkle Hub\",\"url\":\"https://hub.twinkleai.tw\",\"inLanguage\":\"en\"},{\"@type\":\"WebAPI\",\"name\":\"Twinkle Hub MCP\",\"url\":\"https://api.twinkleai.tw/mcp/\",\"documentation\":\"https://hub.twinkleai.tw/docs\",\"provider\":{\"@type\":\"Organization\",\"name\":\"Twinkle AI\"}}]}</script><script defer=\"\" src=\"https://um.w-w.club/script.js\" data-website-id=\"ff8623c2-fa65-4584-b0dd-b7f45849bc42\"></script><script defer=\"\" src=\"https://analytics.twinkleai.tw/api/script.js\" data-site-id=\"8eaed32ab996\"></script><script src=\"/_next/static/chunks/polyfills-42372ed130431b0a.js\" noModule=\"\"></script></head><body class=\"flex min-h-screen flex-col\"><div hidden=\"\"><!--$--><!--/$--></div><header class=\"sticky top-0 z-40 border-b border-border bg-card/85 backdrop-blur\"><div class=\"relative mx-auto flex h-14 max-w-[1440px] items-center justify-between gap-3 px-4 sm:px-6\"><a class=\"flex shrink-0 items-center\" href=\"/\"><span class=\"inline-flex items-center gap-2\"><img alt=\"Twinkle Hub\" width=\"28\" height=\"28\" decoding=\"async\" data-nimg=\"1\" style=\"color:transparent\" srcSet=\"/_next/image?url=%2Flogo%2Ficon-circle.png&amp;w=32&amp;q=75 1x, /_next/image?url=%2Flogo%2Ficon-circle.png&amp;w=64&amp;q=75 2x\" src=\"/_next/image?url=%2Flogo%2Ficon-circle.png&amp;w=64&amp;q=75\"/><span class=\"text-base font-semibold tracking-tight\">Twinkle <span class=\"text-brand\">Hub</span></span></span></a><nav class=\"pointer-events-none absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 text-sm md:flex\"><a class=\"pointer-events-auto rounded-md px-2 py-2 text-foreground/70 hover:bg-surface hover:text-foreground\" href=\"/docs\">Docs</a><a class=\"pointer-events-auto rounded-md px-2 py-2 text-foreground/70 hover:bg-surface hover:text-foreground\" href=\"/data\">Data</a><a class=\"pointer-events-auto rounded-md px-2 py-2 text-foreground/70 hover:bg-surface hover:text-foreground\" href=\"/findings\">Observatory</a><a class=\"pointer-events-auto rounded-md px-2 py-2 text-foreground/70 hover:bg-surface hover:text-foreground\" href=\"/discussions\">Discussions</a><a class=\"pointer-events-auto rounded-md px-2 py-2 text-foreground/70 hover:bg-surface hover:text-foreground\" href=\"/galaxy\">Galaxy</a><a class=\"pointer-events-auto rounded-md px-2 py-2 text-foreground/70 hover:bg-surface hover:text-foreground\" href=\"/pricing\">Pricing</a><a class=\"pointer-events-auto rounded-md px-2 py-2 text-foreground/70 hover:bg-surface hover:text-foreground\" href=\"/solutions\">Solutions</a><div class=\"pointer-events-auto relative\"><button type=\"button\" aria-expanded=\"false\" class=\"relative rounded-md px-2 py-2 text-sm text-foreground/70 hover:bg-surface hover:text-foreground\">What&#x27;s new</button></div></nav><div class=\"hidden shrink-0 items-center gap-3 md:flex\"><div class=\"relative\"><button type=\"button\" aria-label=\"Select language\" aria-expanded=\"false\" class=\"inline-flex h-9 w-9 items-center justify-center rounded-lg text-muted hover:bg-surface hover:text-foreground\"><svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"></circle><path d=\"M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18\"></path></svg></button></div><a class=\"text-sm text-foreground/70 hover:text-foreground\" href=\"/login\">Sign in</a><a class=\"rounded-md bg-brand px-4 py-1.5 text-sm font-semibold text-ink hover:bg-brand-deep\" href=\"/login\">Get started</a></div><div class=\"flex shrink-0 items-center gap-2 md:hidden\"><a class=\"rounded-md bg-brand px-3 py-1.5 text-sm font-semibold text-ink\" href=\"/login\">Sign in</a><button type=\"button\" aria-label=\"Account menu\" aria-expanded=\"false\" class=\"inline-flex h-9 w-9 items-center justify-center rounded-md border border-border md:hidden\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><line x1=\"3\" y1=\"6\" x2=\"21\" y2=\"6\"></line><line x1=\"3\" y1=\"12\" x2=\"21\" y2=\"12\"></line><line x1=\"3\" y1=\"18\" x2=\"21\" y2=\"18\"></line></svg></button></div></div></header><div class=\"flex-1\"><div class=\"bg-background\"><div class=\"border-b border-border bg-card\"><div class=\"mx-auto max-w-[1280px] px-4 pt-4 sm:px-8\"><nav class=\"flex items-center gap-1.5 text-xs text-faint\"><span>Docs</span><span "
- },
- "ronny_robots": {
-  "status": 403,
-  "ct": "text/html; charset=UTF-8",
-  "len": 5409,
-  "url": "https://pcc-api.openfun.app",
-  "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-4qhjospd882DKPcT9ooOyI&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39;; img-src &#39;self&#39; https://challenges.cloudflare.com; connect-src &#39;self&#39; https://challenges.cloudflare.com; frame-src &#39;self&#39; https://challenges.cloudflare.com blob:; child-src &#39;self&#39; https://challenges.cloudflare.com blob:; worker-src blob:; form-action http: https:; base-uri &#39;self&#39;\"><style>*{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"}body{display:flex;flex-direction:column;height:100vh;min-height:100vh}.main-content{margin:8rem auto;padding-left:1.5rem;max-width:60rem}@media (width <= 720px){.main-content{margin-top:4rem}}#challenge-error-text{background-image:url(\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI0IyMEYwMyIgZD0iTTE2IDNhMTMgMTMgMCAxIDAgMTMgMTNBMTMuMDE1IDEzLjAxNSAwIDAgMCAxNiAzbTAgMjRhMTEgMTEgMCAxIDEgMTEtMTEgMTEuMDEgMTEuMDEgMCAwIDEtMTEgMTEiLz48cGF0aCBmaWxsPSIjQjIwRjAzIiBkPSJNMTcuMDM4IDE4LjYxNUgxNC44N0wxNC41NjMgOS41aDIuNzgzem0tMS4wODQgMS40MjdxLjY2IDAgMS4wNTcuMzg4LjQwNy4zODkuNDA3Ljk5NCAwIC41OTYtLjQwNy45ODQtLjM5Ny4zOS0xLjA1Ny4zODktLjY1IDAtMS4wNTYtLjM4OS0uMzk4LS4zODktLjM5OC0uOTg0IDAtLjU5Ny4zOTgtLjk4NS40MDYtLjM5NyAxLjA1Ni0uMzk3Ii8+PC9zdmc+\");background-repeat:no-repeat;background-size:contain;padding-left:34px}</style><meta http-equiv=\"refresh\" content=\"360\"></head><body><div class=\"main-wrapper\" role=\"main\"><div class=\"main-content\"><noscript><div class=\"h2\"><span id=\"challenge-error-text\">Enable JavaScript and cookies to continue</span></div></noscript></div></div><script nonce=\"4qhjospd882DKPcT9ooOyI\">(function(){window._cf_chl_opt = {cFPWv: 'g',cH: 'n.X5Xq8O0e2n_vfSlGWQHMe.6_OKw_LqZkiB1Eojz1I-1791568205-1.2.1.1-xFwzBdLzIvbTiTOVfNOtbATkcZstLLIjO1ds8DXWMLvGsAfiARKLjija_nUgzNfS',cITimeS: '1791568205',cN: '4qhjospd882DKPcT9ooOyI',cRay: 'a47f39c41d7febf8',cTplB: '0',cTplC:0,cTplO:0,cTplV:5,cType: 'managed',cUPMDTk:\"/?__cf_chl_tk=KToifYkiXRpNQX00wHaykW0wodPLPDhuei10fGCwRew-1791568205-1.0.1.1-x3PsRq.gAPQtW8xvssffY1PjahRQ5Bn8pMtGPOVnn5Q\",cvId: '3',cZone: 'pcc-api.openfun.app',fa:\"/?__cf_chl_f_tk=KToifYkiXRpNQX00wHaykW0wodPLPDhuei10fGCwRew-1791568205-1.0.1.1-x3PsRq.gAPQtW8xvssffY1PjahRQ5Bn8pMtGPOVnn5Q\",md: 'M0iFVfYZUFzBEmJpiWeQr50p1bRWG8Licfn6avN63M8-1791568205-1.2.1.1-0LdjxvYK4HoN7cZodkL6wuB0SaacRIhL95Ope10jgmf5jjvszfYqy7SDgYztNFA9t1qd2f4xQGWGzUxAPi7jfTGkVkESBR0YhgG3tdDZ5oCxIsPU89BlBummqy6A2ZBHFIm0Dp76CRj5gp8JdKNkzbQ9JK4FkW3CkoI_6ItzIgyNKR8BvE1FbQsveRYHLmgfNzO6Ar77MIzYUwus_D3WnqI5oPjpiqWABcJeuSx0pKEXiLeXKTsNWUN6D5z8wc7gLQQ6GuMj6EFtzMnc7kjNfRipl5lHMea2yf.rzDsmU8HO7hwggWPoWFtfiXaXRPfWQEbmmjTFoNS6OvAlJUQkib585uBj394_eAYJlZ7GdpC.cQvFtcDaSM5JuYHr.YL0IRy18WDkq7VmTELLivgz1I2YBusbwmZqsC4UkOB0begpWvpEGF79QfYTsYjH.5oeKbL4EmPFYf0UPcwLhxTUCvPJ8Mz1Qd5_7PE5aS2.aezx_92sfcHKXH6gd05wWNtaDfphNF7BjgY33VrP_wRcbUxPh3SLGeyWlSJrJgdg5Dz6b8.Oji9vKFggEITEDAUDaeStNYBB5NbpWYbYbKWVg_10sjUD6wBCBvMx.73npTHWmpLc8YKAqoANeStUeZFYH_B_x0f657w7JTz6WcI6f_25DSxdtVlMrcsggFEtYqty7Eqnam8zXA5HCnbfikIIkMQKenLxbur_5Ck2vl3NFoKg0M94iC140kOuFNNiM5nuzJDQq9B_Z6xNyktxkR35XBYP5LEq6o0x9M70dyo.1OW4ba.h7cmfbbVI094gP3RVr8V8jq1g4JRrZMcNUgduOkmbj_VQzSkTX7uKfueUF3gduSGHJFJmhizB0yHJMoZaB6E1RMdRAlvPq.4vPlHCFFo2QXHTCD1VheLl1rrqNdlnnlZ.rS2gO7sfZsxEfelDAU1QNHkQCFhya7mUTwfAfNG3A5ascZ7DJUeoFjXqzCWqPbY.INZhXpVjtMiuTq1ZYHEW7H9Rh9WziqHZEEyg',mdrd: '9TM4hFbYcvBLm.a07DRWt_3id.V.Ga4N69dm6ZdoZmE-1791568205-1.2.1.1-8W_rXkOsbwzC_n4d.cp8wV9K5yOdX_bLk_RtY5itDKmgtg_PUdw2SaSXOBt.0xaV6tjV2.2AW4LaU9uyzrTZQi1sI_xAoPVJOsqt6zNxbTmJKSoFduCpStuWv.8H5EESXSJGG8Px_XU7iokai6Ff.eqJW8ujUmjFThT55CZbOwrLYSla51BOrA4oSglss0Agtr2ZCIkl3q.UzDWNKJsYe79pA_chuESYObKto5_jHZGbKQA4IRF3FNnLKSfhq7ikewfy_ooulAHbzr2VuhOpxOKmDLx5N3zEbZbhJphCuOM2zCG27IxlIJr4p8zTuF66',};var a = document.createElement('script');a.nonce = '4qhjospd882DKPcT9ooOyI';a.src = '/cdn-cgi/challenge-platform/h/g/orchestrate/chl_page/v1?ray=a47f39c41d7febf8';window._cf_chl_opt.cOgUHash = location.hash === '' && location.href.indexOf('#') !== -1 ? '#' : location.hash;window._cf_chl_opt.cOgUQuery = location.search === '' && location.href.slice(0, location.href.length - window._cf_chl_opt.cOgUHash.length).indexOf('?') !== -1 ? '?' : location.search;if (window.history && window.history.replaceState) {var ogU = location.pathname + window._cf_chl_opt.cOgUQuery + window._cf_chl_opt.cOgUHash;history.replaceState(null, null,\"/?__cf_chl_rt_tk=KToifYkiXRpNQX00wHaykW0wodPLPDhuei10fGCwRew-1791568205-1.0.1.1-x3PsRq.gAPQtW8xvssffY1PjahRQ5Bn8pMtGPOVnn5Q\"+ window._cf_chl_opt.cOgUHash);a.onload = function() {history.replaceState(null, null, ogU);}}document.getElementsByTagName('head')[0].appendChild(a);}());</script></body></html>"
- }
+ "p_ipr_sec": 40
 }
