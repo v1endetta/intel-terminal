@@ -3,30 +3,16 @@
   {
    "name": "openai/math",
    "url": "https://github.com/openai/math",
-   "stars": 12053,
+   "stars": 12069,
    "lang": "Lean",
    "desc": ""
   },
   {
    "name": "alchaincyf/huashu-art-motion",
    "url": "https://github.com/alchaincyf/huashu-art-motion",
-   "stars": 2423,
+   "stars": 2428,
    "lang": "JavaScript",
    "desc": "艺术动画skill：35种艺术风格、9种解说语法，用代码让画动起来。"
-  },
-  {
-   "name": "QingYunA/answer-me-with-html",
-   "url": "https://github.com/QingYunA/answer-me-with-html",
-   "stars": 2319,
-   "lang": "JavaScript",
-   "desc": "Answer me with HTML — an agent skill that answers hard questions with a one-page HTML you "
-  },
-  {
-   "name": "facebookincubator/muse-gadget-sdk",
-   "url": "https://github.com/facebookincubator/muse-gadget-sdk",
-   "stars": 1790,
-   "lang": "C",
-   "desc": "Open source SDK to build Muse gadgets"
   },
   {
    "name": "kargulstudio/sales-crm",
@@ -36,38 +22,52 @@
    "desc": ""
   },
   {
-   "name": "mizorewww/x_gift_bot",
-   "url": "https://github.com/mizorewww/x_gift_bot",
-   "stars": 1080,
-   "lang": "Go",
-   "desc": "X Premium gift CLI and redemption site"
-  },
-  {
    "name": "Jakeschincariol/replica-skill",
    "url": "https://github.com/Jakeschincariol/replica-skill",
-   "stars": 1072,
+   "stars": 1075,
    "lang": "Python",
    "desc": "Eleven free Claude skills that clone any app: reverse-engineer it, rebuild it, test it for"
   },
   {
    "name": "nullmoth/nvidia-macos-driver",
    "url": "https://github.com/nullmoth/nvidia-macos-driver",
-   "stars": 1051,
+   "stars": 1065,
    "lang": "Rust",
    "desc": "Metal driver for NVIDIA GeForce RTX cards on macOS 15 Sequoia (Intel / OpenCore). Free, so"
+  },
+  {
+   "name": "alejandrobujan/tendedero",
+   "url": "https://github.com/alejandrobujan/tendedero",
+   "stars": 995,
+   "lang": "Swift",
+   "desc": "Screenshots, hung out to dry. A tiny native macOS app that hangs every screenshot on a lin"
+  },
+  {
+   "name": "LoreanXavier/pt-pc",
+   "url": "https://github.com/LoreanXavier/pt-pc",
+   "stars": 983,
+   "lang": "C++",
+   "desc": "Native PC port of P.T. (runs from your own PS4 game files)"
+  },
+  {
+   "name": "storytold/wordcraft",
+   "url": "https://github.com/storytold/wordcraft",
+   "stars": 811,
+   "lang": "Rust",
+   "desc": "An open-source, clean-room reimplementation of Microsoft Word in pure Rust"
   }
  ],
  "hf": [
   {
    "id": "autotrust/JEV-27B-VL",
    "downloads": 1533034,
-   "likes": 2868,
+   "likes": 2883,
    "task": "image-text-to-text"
   },
   {
    "id": "autotrust/GEV-26B-Decide",
    "downloads": 903866,
-   "likes": 1811,
+   "likes": 1814,
    "task": "text-classification"
   },
   {
@@ -79,7 +79,7 @@
   {
    "id": "google/embeddinggemma-2",
    "downloads": 21148,
-   "likes": 1188,
+   "likes": 1191,
    "task": "feature-extraction"
   },
   {
@@ -109,31 +109,31 @@
  ],
  "hn": [
   {
-   "title": "OpenAI annualised revenues $20B less than previously signalled",
-   "url": "https://www.cnbc.com/2026/10/08/open-ai-revenue-nvidia-oracle-coreweave.html",
-   "score": 346,
-   "comments": 240,
+   "title": "Why isn't the industry freaking out about DeepSeek 4.1 Flash?",
+   "url": "https://www.dgt.is/blog/2026-10-07-deepseek-freek-out/",
+   "score": 352,
+   "comments": 305,
    "hot": true
   },
   {
-   "title": "Why isn't the industry freaking out about DeepSeek 4.1 Flash?",
-   "url": "https://www.dgt.is/blog/2026-10-07-deepseek-freek-out/",
-   "score": 344,
-   "comments": 296,
+   "title": "OpenAI annualised revenues $20B less than previously signalled",
+   "url": "https://www.cnbc.com/2026/10/08/open-ai-revenue-nvidia-oracle-coreweave.html",
+   "score": 346,
+   "comments": 244,
    "hot": true
   },
   {
    "title": "OpenAI withdraws three mathematical results",
    "url": "https://twitter.com/danintheory/status/2108065033070789090",
-   "score": 241,
-   "comments": 540,
+   "score": 242,
+   "comments": 542,
    "hot": true
   },
   {
    "title": "I think I found a planet nobody knew existed. I used Claude Code to find it",
    "url": "https://www.reddit.com/r/ClaudeAI/s/mbe5IY2LF9",
-   "score": 103,
-   "comments": 37,
+   "score": 104,
+   "comments": 38,
    "hot": true
   },
   {
@@ -151,19 +151,19 @@
    "hot": true
   },
   {
+   "title": "OpenAI, the Partition Principle, and Mathematics",
+   "url": "https://karagila.org/2026/openai-pp/",
+   "score": 27,
+   "comments": 4,
+   "hot": true
+  },
+  {
    "title": "Show HN: I Put an AI Agent on a Nokia 110",
    "url": "https://github.com/anupray95/AI-Agent-on-a-NOKIA",
    "score": 25,
    "comments": 7,
    "hot": true
-  },
-  {
-   "title": "Show HN: TerrainSR – fast, realistic heightmap upscaling model",
-   "url": "https://huggingface.co/joe-gibbs/terrainsr",
-   "score": 22,
-   "comments": 5,
-   "hot": true
   }
  ],
- "updatedAt": "2026-10-08T23:56:07Z"
+ "updatedAt": "2026-10-09T00:18:12Z"
 }
