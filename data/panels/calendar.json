@@ -1,13 +1,6 @@
 {
  "items": [
   {
-   "date": "2026-10-09",
-   "label": "台股休市：國慶日",
-   "region": "台",
-   "approx": false,
-   "kind": "holiday"
-  },
-  {
    "date": "2026-10-14",
    "label": "美國 CPI",
    "region": "美",
@@ -83,10 +76,17 @@
    "region": "美",
    "approx": false,
    "kind": "data"
+  },
+  {
+   "date": "2026-10-31",
+   "label": "GDP 概估（主計總處）",
+   "region": "台",
+   "approx": true,
+   "kind": "data"
   }
  ],
- "from": "2026-10-09",
- "to": "2026-10-30",
+ "from": "2026-10-10",
+ "to": "2026-10-31",
  "errs": [],
- "updatedAt": "2026-10-09T14:49:51Z"
+ "updatedAt": "2026-10-09T20:54:40Z"
 }
