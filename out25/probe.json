@@ -1,205 +1,127 @@
 {
- "notes41664": "授權說明網址: https://data.gov.tw/license\nAPI說明：https://cloud.tipo.gov.tw/S220/opdata/api/file/api/trademark\nOAS說明：https://cloud.tipo.gov.tw/S220/opdata/api/file/oas\nSwagger 產生API說明頁面網址：https://petstore.swagger.io/",
- "notes15992": "",
- "tm_total": 3422226,
- "tm_n": 1000,
- "tm_dates": [
-  "2026/09/29",
-  "2025/09/05",
-  "115068057",
-  "115980329"
- ],
- "tm_months": [
-  [
-   "2026/09",
-   484
-  ],
-  [
-   "2025/07",
-   64
-  ],
-  [
-   "2025/12",
-   50
-  ],
-  [
-   "2025/08",
-   44
-  ],
-  [
-   "2025/09",
-   41
-  ],
-  [
-   "2026/01",
-   36
+ "ds5959": {
+  "title": "行政院公報",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "日"
+  },
+  "notes": "授權說明網址: https://data.gov.tw/license",
+  "desc": "行政院及所屬機關涉及人民權益之法令等重要事項，主要內容有法規、行政規則、公告及送達、處分、特載（總統文告及院長談話）、轉載（經總統公布之條約、法律、緊急命令）、專載（院會院長提示、決定、決議事項）及其他等8大類。",
+  "dist": [
+   [
+    "每工作日下午6:30更新為當日已刊登之公報資料(XML檔)",
+    "XML",
+    "https://gazette.nat.gov.tw/egFront/OpenData/downloadXML.jsp"
+   ],
+   [
+    "每工作日下午6:30更新為當日已刊登之公報資料(XML及PDF檔)",
+    "ZIP",
+    "https://gazette.nat.gov.tw/egFront/OpenData/download.jsp"
+   ]
   ]
- ],
- "tm_sample": [
-  {
-   "appl-no": "115890014",
-   "appl-date": "2005/03/16",
-   "tmark-name": "Newport 及圖",
-   "tmark-class-desc": "商標",
-   "cls": [
-    "025"
-   ],
-   "app": [
-    "林秋城"
-   ]
-  },
-  {
-   "appl-no": "115890015",
-   "appl-date": "2025/03/21",
-   "tmark-name": "CaraQ",
-   "tmark-class-desc": "商標",
-   "cls": [
-    "009",
-    "035",
-    "038",
-    "041"
-   ],
-   "app": [
-    "悟空科技股份有限公司"
-   ]
-  },
-  {
-   "appl-no": "115890016",
-   "appl-date": "2025/03/21",
-   "tmark-name": "CaraQ",
-   "tmark-class-desc": "商標",
-   "cls": [
-    "009",
-    "035",
-    "038",
-    "041"
-   ],
-   "app": [
-    "悟空科技股份有限公司"
-   ]
-  },
-  {
-   "appl-no": "115890017",
-   "appl-date": "2008/10/09",
-   "tmark-name": "ROADSTER",
-   "tmark-class-desc": "商標",
-   "cls": [
-    "003",
-    "016",
-    "025"
-   ],
-   "app": [
-    "ＤＲ　ＩＮＧ　Ｈ　Ｃ　Ｆ　保時捷股份有限公司"
-   ]
-  },
-  {
-   "appl-no": "115890018",
-   "appl-date": "2008/10/09",
-   "tmark-name": "ROADSTER",
-   "tmark-class-desc": "商標",
-   "cls": [
-    "003",
-    "016",
-    "025"
-   ],
-   "app": [
-    "ＤＲ　ＩＮＧ　Ｈ　Ｃ　Ｆ　保時捷股份有限公司"
-   ]
-  },
-  {
-   "appl-no": "115980329",
-   "appl-date": "2025/09/05",
-   "tmark-name": "maimai でらっくす CiRCLE",
-   "tmark-class-desc": "商標",
-   "cls": [
-    "009"
-   ],
-   "app": [
-    "世雅股份有限公司"
-   ]
-  }
- ],
- "tm_keys": [
-  "-sequence",
-  "appl-no",
-  "appl-date",
-  "tmark-name",
-  "tmark-class",
-  "tmark-class-desc",
-  "tmark-image-url",
-  "tmark-type",
-  "tmark-type-desc",
-  "tmark-color",
-  "tmark-color-desc",
-  "tmark-draft-c",
-  "tmark-draft-e",
-  "tmark-draft-j",
-  "tmark-sign",
-  "word-description",
-  "out-off-draft",
-  "tmark-desc",
-  "receive-date",
-  "goodsclasses",
-  "parties"
- ],
- "tm_top5000": 5000,
- "pp_total": 1079822,
- "pp_n": 500,
- "pp_keys": [
-  "-sequence",
-  "publication-reference",
-  "application-reference",
-  "patent-title",
-  "parties",
-  "classification-ipc",
-  "link"
- ],
- "pp_sample": "{\"-sequence\": 500, \"publication-reference\": {\"notice-no\": 202639053, \"notice-volno\": 24, \"notice-isuno\": 19, \"notice-date\": \"2026/10/01\"}, \"application-reference\": {\"appl-no\": \"115125325\", \"appl-date\": \"2025/07/25\", \"first-date\": \"2026/06/26\", \"foreign-language\": null, \"foreign-language-desc\": null}, \"patent-title\": {\"patent-name-chinese\": \"嬰兒床\", \"patent-name-english\": \"BABY CRIB\"}, \"parties\": {\"applicants\": [{\"-sequence\": 1, \"chinese-name\": \"瑞士商明門瑞士股份有限公司\", \"english-name\": \"WONDERLAND SWITZERLAND AG\", \"address\": \"瑞士\", \"english-country\": \"CH\", \"chinese-country\": \"瑞士\", \"english-address\": \"BEIM BAHNHOF 5, 6312, STEINHAUSEN, SWITZERLAND\"}], \"inventors\": [{\"-sequence\": 1, \"chinese-name\": \"胡問渠\", \"english-name\": \"HU, WENQU\", \"english-country\": \"CN\", \"chinese-country\": \"中國大陸\"}, {\"-sequence\": 2, \"chinese-name\": \"胡留輝\", \"english-name\": \"HU, LIUHUI\", \"english-country\": \"CN\", \"chinese-country\": \"中國大陸\"}, {\"-sequence\": 3, \"chinese-name\": \"汪濤\", \"english-name\": \"WANG, TAO\", \"english-country\": \"CN\", \"chinese-country\": \"中國大陸\"}, {\"-sequence\": 4, \"chinese-name\": \"陳寶忠\", \"english-name\": \"CHEN, BAOZHONG\", \"english-country\": \"CN\", \"chinese-country\": \"中國大陸\"}, {\"-sequence\": 5, \"chinese-name\": \"劉偉\", \"english-name\": \"LIU, WEI\", \"english-country\": \"CN\", \"chinese-country\": \"中國大陸\"}], \"agents\": [{\"-sequence\": 1, \"chinese-name\": \"卓俊傑\", \"english-name\": null, \"address\": \"臺北市中正區羅斯福路2段100號7樓之1\", \"english-country\": \"TW\", \"chinese-country\": \"中華民國\"}, {\"-sequence\": 2, \"chinese-name\": \"劉亞君\", \"english-name\": null, \"address\": \"臺北市中正區羅斯福路2段100號7樓之1\", \"english-country\": \"TW\", \"chinese-country\": \"中華民國\"}]}, \"classification-ipc\": [{\"-sequence\": 1, \"ipc-full\": \"A47D13/02\", \"ipc-section\": \"A\", \"ipc-class\": \"47\", \"ipc-subclass\": \"D\", \"ipc-main-group\": \"13\", \"ipc-group\": \"02\", \"ipc-version\": \"200601\"}, {\"-sequence\": 2, \"ipc-full\": \"A47D9/00\", \"ipc-section\": \"A\", \"ipc-class\": \"47\", \"ipc-subclass\": \"D\", \"ipc-main-group\": \"9\", \"ipc-group\": \"00\", \"ipc-version\": \"200601\"}, {\"-sequence\": 3, \"ipc-full\": \"A47D7/00\", \"ipc-section\": \"A\", \"ipc-class\": \"47\", \"ipc-subclass\": \"D\", \"ipc-main-group\": \"7\", \"ipc-group\": \"00\", \"ipc-version\": \"200601\"}, {\"-sequence\": 4, \"ipc-full\": \"A47D7/03\", \"ipc-section\": \"A\", \"ipc-class\": \"47\", \"ipc-subclass\": \"D\", \"ipc-main-group\": \"7\", \"ipc-group\": \"03\", \"ipc-version\": \"200601\"}, {\"-sequence\": 5, \"ipc-full\": \"A47D15/00\", \"ipc-section\": \"A\", \"ipc-class\": \"47\", \"ipc-subclass\": \"D\", \"ipc-main-group\": \"15\", \"ipc-group\": \"00\", \"ipc-version\": \"200601\"}], \"link\": {\"patentpubregxmla-url\": \"ftps:/",
- "pp_notice_dates": [
-  [
-   "2026/08",
-   190
+ },
+ "latest_jsp": {
+  "status": 200,
+  "ct": "text/html;charset=UTF-8",
+  "links": [
+   "../css/inner.css",
+   "#",
+   "/old",
+   "javascript:history.go(0);",
+   "/old/sitemap.jsp",
+   "/old/downloadArea/table02.jsp",
+   "/old/question/question.jsp",
+   "/old/eng/EngIndex.jsp",
+   "/old/Gaz/paragraph.jsp",
+   "/old/Gaz/browseVolume.jsp",
+   "/old/Gaz/searchGaz.jsp",
+   "/old/siteResource/table01.jsp",
+   "/old/member/login.jsp",
+   "/old/OpenData/list.jsp",
+   "help.jsp",
+   "latest.jsp",
+   "list.jsp?flag=zip",
+   "history.jsp",
+   "list.jsp?flag=115",
+   "list.jsp?flag=114",
+   "list.jsp?flag=113",
+   "list.jsp?flag=112",
+   "list.jsp?flag=111",
+   "list.jsp?flag=110",
+   "list.jsp?flag=109",
+   "list.jsp?flag=108",
+   "list.jsp?flag=107",
+   "list.jsp?flag=106",
+   "list.jsp?flag=105",
+   "list.jsp?flag=104",
+   "list.jsp?flag=103",
+   "list.jsp?flag=102",
+   "list.jsp?flag=101",
+   "list.jsp?flag=100",
+   "list.jsp?flag=099",
+   "list.jsp?flag=098",
+   "list.jsp?flag=097",
+   "list.jsp?flag=096",
+   "list.jsp?flag=095",
+   "list.jsp?flag=094"
   ],
-  [
-   "2026/09",
-   171
+  "text": "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \r\n \r\n\r\n  \r\n \r\n 行政院公報資訊網 \r\n \r\n \r\n \r\n \r\n \r\n\r\n\t\r\n\r\n\r\n \r\n\r\n\t \r\n\t \r\n\t\t  :::  \r\n\t\t \r\n\t\t \r\n\t\t\t訪客人數： null 人\r\n\t\t \r\n\t\t \r\n\r\n\t\t \r\n\t\t \r\n\t\t\t\t  首頁  \r\n\t\t\t\t  設為首頁  \r\n\t\t\t\t  網站導覽  \r\n\t\t\t\t  下載專區  \r\n\t\t\t\t  常見問題  \r\n\t\t\t\t  English  \r\n\t\t\t \r\n\t\t \r\n\t\t \r\n\r\n\t\t \r\n\t\t \r\n\t\t \r\n\t\t\t \r\n\t\t\t\t  關於公報  \r\n\t\t\t\t  公報瀏覽  \r\n\t\t\t\t  公報查詢  \r\n\t\t\t\t  網路資源  \r\n\t\t\t\t  會員專區  \r\n\t\t\t\t  Open Data  \r\n\t\t\t \r\n\t\t \r\n\t\t \r\n\t\t \r\n\t \r\n\t \r\n\r\n\t \r\n\t \r\n\t\t \r\n           \r\n           \r\n            \r\n\t\t   行政院公報資訊網-每日即時刊登行政院及所屬各機關公布之法令規章等資訊 \r\n\t   \r\n\t \r\n\t \r\n\r\n\t\r\n\t \r\n\t \r\n\t\t \r\n\t\t\t \r\n\t\t   \r\n\t\t\t  :::  \r\n\t\t\t \r\n\r\n         Open Data \r\n         \r\n\t         \r\n\t\t\t  使用說明  \r\n\t\t          最新下載  \r\n\t\t\t  本月資料  \r\n\t\t          歷史資料 \r\n\t\t\t \r\n\r\n\t\t\t  民國115年  \r\n\r\n\t\t\t  民國114年  \r\n\r\n\t\t\t  民國113年  \r\n\r\n\t\t\t  民國112年  \r\n\r\n\t\t\t  民國111年  \r\n\r\n\t\t\t  民國110年  \r\n\r\n\t\t\t  民國109年  \r\n\r\n\t\t\t  民國108年  \r\n\r\n\t\t\t  民國107年  \r\n\r\n\t\t\t  民國106年  \r\n\r\n\t\t\t  民國105年  \r\n\r\n\t\t\t  民國104年  \r\n\r\n\t\t\t  民國103年  \r\n\r\n\t\t\t  民國102年  \r\n\r\n\t\t\t  民國101年  \r\n\r\n\t\t\t  民國100年  \r\n\r\n\t\t\t  民國099年  \r\n\r\n\t\t\t  民國098年  \r\n\r\n\t\t\t  民國097年  \r\n\r\n\t\t\t  民國096年  \r\n\r\n\t\t\t  民國095年  \r\n\r\n\t\t\t  民國094年  \r\n\r\n\t\t\t \r\n\t\t\t \r\n\t\t \t         \t\t  \r\n\t \r\n\t\t\t \r\n\t\t\t \r\n\t\t\t \r\n\r\n\t\t\t \r\n\t\t   \r\n\t\t\t  :::  \r\n\t\t\t\t \r\n\t\t\t\t \r\n\t\t\t\t   \r\n\t\t\t\t\t   首頁   &gt;\r\n\t\t\t\t\t   Open Data   &gt;\r\n\t\t\t\t\t  最新下載\r\n\t\t\t\t\t  \r\n\t\t\t\t   \r\n\t\t\t\t \r\n\t\t\t\t \r\n\r\n\t\t\t\t \t\t\t \r\n             最新下載 \r\n                 \r\n                 提供 最新一個出刊日 所出刊之公報壓縮檔，請 下載 ，壓縮檔之內容請參考 使用說明 。 \r\n                 \r\n                \r\n        \t\t\t \t\t\t  Top  \r\n                 \r\n             \r\n\t\t\t \r\n\t\t\t\r\n\t\t \r\n   \r\n\t \r\n\t\r\n\t \r\n\t\r\n\r\n\r\n\r\n\t \r\n\t\t \r\n\t\t\t \r\n\t\t\t\t  "
+ },
+ "dl https://gazette.nat.gov.tw/egFront/OpenData/downloadXML.jsp": {
+  "status": 200,
+  "ct": "application/xml",
+  "len": 80565,
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Gazette>\n<Record>\n<MetaId><![CDATA[168803]]></MetaId>\n<Doc_Style_LName><![CDATA[公告及送達]]></Doc_Style_LName>\n<Doc_Style_SName><![CDATA[法規命令訂定、修正草案及廢止案之預告]]></Doc_Style_SName>\n<PreviewStageURL/>\n<Chapter><![CDATA[內政篇]]></Chapter>\n<PubGov><![CDATA[內政部]]></PubGov>\n<PubGovName><![CDATA[內政部]]></PubGovName>\n<UndertakeGov><![CDATA[內政部消防署]]></UndertakeGov>\n<Officer_name><![CDATA[部長 劉世芳]]></Officer_name>\n<Date_Created><![CDATA[中華民國115年10月8日]]></Date_Created>\n<GazetteId><![CDATA[台內消字第1150402127號]]></GazetteId>\n<Date_Published><![CDATA[中華民國115年10月8日]]></Date_Published>\n<Comment_Deadline><![CDATA[中華民國115年12月7日]]></Comment_Deadline>\n<Comment_Days><![CDATA[60]]></Comment_Days>\n<Title><![CDATA[內政部公告：預告「消防機具器材及設備認可實施辦法」第3條修正草案]]></Title>\n<TitleEnglish><![CDATA[MINISTRY OF THE INTERIOR Notice is hereby given, to commence a period of public comments for the draft amendment on Article 3 of \"Regulations of Approval for Fire Safety Appliances and Equipments\" (former name: Regulations of Approval for Fire Safety Appliances and Equipment)]]></TitleEnglish>\n<ThemeSubject><![CDATA[預告修正「消防機具器材及設備認可實施辦法」第3條條文。]]></ThemeSubject>\n<Keyword><![CDATA[消防系統(消防設施，消防設備);認證認可;標示;型式認可;廠商;登錄]]></Keyword>\n<Eng_Keyword/>\n<Explain><![CDATA[一、修正機關：內政部。\r\n二、修正依據：消防法第12條第3項。\r\n三、「消防機具器材及設備認可實施辦法」第3條修正草案如附件。本案另載於本部全球資訊網（網址https://www.moi.gov.tw）。\r\n四、對於公告內容有任何意見或修正建議者，請於本公告刊登公報之次日起60日內陳述意見或洽詢：\r\n（一）承辦單位：內政部消防署\r\n（二）地址：新北市新店區北新路3段200號6樓\r\n（三）聯絡人：蕭科員\r\n（四）電話：02-81959233\r\n（五）傳真：02-89114268\r\n（六）電子郵件：lamy1994＠nfa.gov.tw]]></Explain>\n<Category><![CDATA[160(消防)]]></Category>\n<Cake><![CDATA[J33(法令草案);151(火災預防)]]></Cake>\n<Service/>\n<GazetteHTML><![CDATA[https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg032187/ch02/type3/gov10/num2/Eg.htm]]></GazetteHTML>\n<HTMLContent><![CDATA[<!-- content Start --> \n<div class=\"content\"> \n<div class=\"information\"> \n<div class=\"dept\"> \n<div class=\"from\"> \n<span><a href=\"https://www.moi.gov.tw\">內政部</a>公告</span> \n</div> \n</div> \n<div class=\"announcement\"> \n<span>中華民國115年10月8日</span> \n<span>台內消字第1150402127號</span> \n</div> \n</div> \n<p><span class=\"title\">主　　旨：</span><span class=\"p_content\">預告修正「<a href=\"https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=D0120050\">消防機具器材及設備認可實施辦法</a>」第3條條文。</span></p> \n<p><span class=\"title\">依　　據：</span><span class=\"p_content\"><a href=\"https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=A0030055\">行政程序法</a>第151條第2項及第154條第1項。</span></p> \n<p><span class=\"title\">公告事項：</span><span class=\"p_content\"></span></p> \n<p class=\"line level_1\"><span class=\"num\">一、</span><span class=\"p_content\">修正機關：內政部。 \n</span></p> \n<p class=\"line level_1\"><span class=\"num\">二、</span><span class=\"p_content\">修正依據：<a href=\"https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=D0120001\">消防法</a>第12條第3項。 \n</span></p> \n<p class=\"line level_1\"><span class=\"num\">三、</span><span class=\"p_content\">「消防機具器材及設備認可實施辦法」第3條修正草案如附件。本案另載於本部全球資訊網（網址<a href=\"https://www.moi.gov.tw\">https://www.moi.gov.tw</a>）。 \n</span></p> \n<p class=\"line level_1\"><span class=\"",
+  "kinds": []
+ },
+ "dl https://gazette.nat.gov.tw/egFront/OpenData/download.jsp": {
+  "status": 200,
+  "ct": "application/zip",
+  "len": 5802226,
+  "zip": [
+   [
+    "115-10-08/168786.pdf",
+    371909
+   ],
+   [
+    "115-10-08/168809.pdf",
+    159891
+   ],
+   [
+    "115-10-08/168785.pdf",
+    3564301
+   ],
+   [
+    "115-10-08/168784.pdf",
+    117924
+   ],
+   [
+    "115-10-08/168799.pdf",
+    298977
+   ],
+   [
+    "115-10-08/168798.pdf",
+    250833
+   ],
+   [
+    "115-10-08/168810.pdf",
+    76912
+   ],
+   [
+    "115-10-08/168811.pdf",
+    275212
+   ],
+   [
+    "115-10-08/168796.pdf",
+    385306
+   ],
+   [
+    "115-10-08/168803.pdf",
+    152625
+   ]
   ],
-  [
-   "2026/10",
-   136
-  ],
-  [
-   "2026/07",
-   3
-  ]
- ],
- "pol_n": 417,
- "pol_latest": [
-  "2024-10-08",
-  "2024-12-25",
-  "2025-03-29",
-  "2025-05-21",
-  "2025-07-31"
- ],
- "pol_recent": [
-  {
-   "標題": "*無標題*",
-   "發佈日期": "無",
-   "下線日期": "無",
-   "關注數量": "0",
-   "留言數量": "0"
-  }
- ],
- "pol_keys": [
-  "網址",
-  "標題",
-  "內文摘要",
-  "內容",
-  "發佈日期",
-  "下線日期",
-  "關注數量",
-  "留言數量",
-  "googleAnalytics",
-  "Facebook分享數量"
- ]
+  "head": "%PDF-1.4\n%����\n2 0 obj\n<</Filter/FlateDecode/Length 10>>stream\nx�+�\u0002\u0000\u0000�\u0000|\nendstream\nendobj\n3 0 obj\n<</Filter/FlateDecode/Length 139>>stream\nx�S\b�*\u0004B\u0003=3 0W(�27P071�\u0003�s�L���\u001c�`.C��S\b�2\u0000BC\u0005�JS\u0003��\\.��L�\u0000��ƥ\u0011���yZL����M�G�@�+\f�\f&\f���`�\u0011�%���q�\f�1PƘ�\u001c(f\b�� ��(KQ�\b�V�|͐,.�\u0010�@ \u0004\u0000�\u001f5�\nendstream\nendobj\n5 0 obj\n<</Filter/FlateDecode/Length 2762>>stream\nx��]M�#G\u0012��W��05�ߙ`\f�Y��0L�\u000f�\u001e�\u0018{1;f\u0007\u001f��oIj���9ʒ��+S�\u0007�G�RDT�STT��x��O?5��Ѽ��������O��\r�;�4��r�\u000bM����e������������9�9|�Ͽo�\u001f\fl\u000e�O�?���_����W�5��W���W\u0015�7|�x�ڽ\u0019߿�O�2ڮ�^���w㗻�����M�{�G�Ʈ�6��\u000e��^����U\u0015[۹>��\u001a�n]�ڛ���K\u0017t�B\fQ���S����QG�\u000b�Ԃ\\-\u001f\u001bD^E�&��\rG\u001d!/�S\u000br�|l\u0010y\u0015���.7\u001c��\u001c\u001b��qj@��e���oTj^~iԾ����˗�6��м��|�w���y�m�����2���齹���Qb@bA�vR�AP���� *\u0001�8�$�d���6\u001b��˖\u0007���\u0002�Ob�3h� �Wu7�U��\f��^�2��\u0002\t|\u001f\u0014~\u001f���+zU�+�p��ʉ-�7r�\u0012H�S\u0002-�j�wL���w��.;\u001cu���N-���A�U\u0014j��#�V���lku��{��mTN\u001be��2��j�<j\u001d�6�<�#�\u0007z�\u0007X�T^�\u0014\u0015l���wA�2\u000fLi�ƹ��>\\�c��\u0016���\u001cP:\"\u0001�Gm��,\u001b�\u0015'�e�T�\u0001��8�eBf��\t��z\u0002\t0���X�;�\u0000S��)���i`�5��=H�}�������[�<�\u0004ボ��yi���Xb\fD��:}�;_��^3�kƐ�#��\u000e&��`W|��cF��,�1����\u000e�\u0016\"��[q�����WT8�jٵ}�lø���\u0003�)��t��\f�kI>��<���򪻨`3\u000f���\u000br�y`J;6ζ�M��x���\u0002�7{��|\u0006�����jK��\u0000jO�e\b^~5���\f\u0002!f\u0010�@�\u0019 �.Z�vł5$�.��\f�u 1g\u0010x�\\�%��%\u0016�H��n#�ƻ\u0016�FA�]��E�\u0001�m\u001cz�\u001e�D\u001e�G�\u0011y��<l�mx���fMK\u000f����Й�i��\u0014�\u000f��)��}�\u0013�N@�8�D^U�+*\u001cJ�6���n��\u001d���h�/�\u000f�*�[��q;�\u001eI��a\u001e��_�#E\u0005�y`=�]���\u0003Sڱq�\u0019\u0013>\u001d\u0007\u0000`]��J�*��T��\u0016B��9Z^W�/�\u000f�\u001b\u0018�\u0011+X\u0012oaI���5\u001d,�>g{u�\b�\u0010\u000e\r2�bo\u0014��\u0005�Zd\u001e��\u0010�LV�k\"��#�{C^Q�Pڴ�D�vUt_ [�Ҹ�>ɇU��mt��Cu}�#�s=�\u0003��+���\n6��z�� W�\u0007��c�<l�o���o�Ž\\�fc��S\u000b���\u001c-�`c�� �1����`�pO�[\u0016�����-}�Zk-o\u0004l��<�Y},���crM�x\u0017a�[34˭v�<\u000e0pğ�#�V\u001cp\"�*�\u0015\u0015��*\u000e���X3��O�Um��\u0006��0��%�@\u000f�\u0000��ʫ�<���.�U�)��8\u001f�d�[�Z<��N�����Bh�sMoh�\u0015�t2xՑ�\u0016����C��\u001dz����#�-`�,�:\u0016v�5�!�!l��;��,,ܳ�2���(\u00071tp]�\u001e�+xr\u0013����pp\"\u0011��m�'Z��\u0012Ė(��+Zč���\u0015�{\u0014[�f����Yl\u0011�Ή�=��q��F�^]aG���+z[��|=Fl\u0011�\u000br\f&�G�\u0005�z<�\u000e\u001e�\u001a�,�����Cr�t�!9{H�\u001eR��T�!�zH�\u001e�j�n���1��srve�1�_2\u0019�A��L���D#��D�D��\u0011\r��\u0013� 'A\u0019U\u0017� Π�\f\u001aΠ�1�FA�]��E�\u0001Π!�\\=��<\"��#��\ryE�cP-��\u0007�\u001f\u001a��ê;��'�M\u001cUݒ<��<���򪻨`3\u000f���\u000br�y`J;6�6����\u0001;\u00018�;�AS[�Z\b-;\u001a/CK��\f��A�{��Z���S�\u0002P�\u0001�\u0004 `\u0003\u0010�\u0001�\t@�\u0006 `\u0003\u0010�\nO�\u0006=\u0011f�D`Q#��\u0011�D�w3ST#JΠ�q�\u000fR�\u0011Hu�ш7!��;�Q�$c'҂�6B1B�#B�*�E\u0000pD��4R��\u001cYL�\u001ah���C�q���\u000f�G�8�D^U�+*\u001c�}�:���}���.�%r\u0018U�'����]/O�����\u001eI>��<���򪻨`3\u000f���\u000br�y`J;6�3���t�\u0012W~�\u0001��+c�$!��\\��G�.�O|Z���:\r\f\"=\u0005LKZ�\u0000�t�F��hN�<\u000fy\u001e�<�׬4k�f��&�Ǉ{��\u0013yDފ\u0003N�U����1���nb�ף�;�\u000f�n�{yTj\\uK�\\\u000f�\u0000��ʫ�<���.�U�)��8\u001b�c�\u0015y\u001e<\u001a�Nx��2�2���<'�$s\u0013�'\u0003��E��~�\t\u00168%X\u0016���(\\�p�\u0014Jp�Q��\u0019ت\u0004�J�F��q�ʓ?\"D���\u0001V��@��\n���\u0001G�<\"o�\u0001'�B^Q�\u0018T˱M]�~\\u��ê{�]���\u001f��Z��z�\u0007XuW^u\u0017\u0015l���wA�2\u000fLi����#\u0017d�\b��\u0013���̵\f~\u000e��\u001b~R�\rt2\blQ��אQJ�#�Y�y�?B��\u0003\u0019\u001b26dl�yY3�\u0002�rkF\"���\u001c7'�\u0015\u0007�ȫ\nyE�cP-�֨��q�}�\u000f��Z��K��Z��z�\u0007XuW^u\u0017\u0015l���wA�2\u000fLi���\u0018�ԉ�\r\u001e/u/�Me�k\u0019�\u001c\u0018�7�l��06'��� ?���8��I-\u001e�K���\u001a�n{y�V����ȫ�D�'�\u0007�\u001f\u0019<\u0010K<[ibE�h�{\"�E��\u0017�`��k�f��7���\u000e�\u000fD\u001e���\u0013yU!��pdU��T\u001b�3vTug�U�]\u001b��fT]��\\\u000f�\u0000��ʫ�<���.�U�)��8\u001b��\u0011I�-l&v'�Wm�k\u0019�왯\u0013~��&�Wf\u0010��u3_Wpb\u0013̗�\u0019�\u0003+2T�#�D��l\u0013�\u001a�wk�f��.��!\u0006��\u0013yDފ\u0003N�U����1��c��q��L3���v�UVu�sKEy��y�Uw�UwQ�f\u001eXO\u0017�*���vl��mr^f��u�Um�k\u0019�\u001cئ7��h�Uf\u0010V\u0000m#l�\b\u0012d���8� �3�g��������N䡒�\"�P�6'rp��xu���+|�ʎ�\u001cj�j��ȫ���ʾ\u0016h�[�\u0013y\u001cL!�A�\u0011y+\u000e8�W\t�q�a\tӼ�J\u001fg�.~��չ=�#\u001c �>,�SJ�>m\u001f��@������\f��|���ߝ�x����\u00127������\u0001t\u0016�e\nendstream\nendobj\n6 0 obj\n[/Pattern/DeviceR",
+  "kinds": []
+ }
 }
