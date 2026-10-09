@@ -75,6 +75,9 @@ jobs:
             # 每輪先同步到遠端最新（含你手改的 macro.json），任何殘留的 rebase 一律放棄
             git rebase --abort 2>/dev/null || true
             git fetch -q origin data && git reset -q --hard origin/data
+            # 程式碼也同步到 main 最新：改 fetch.py 後下一輪就生效，不用等迴圈重開
+            # （只更新程式碼；requirements.txt 新增套件仍要等下一條迴圈重裝，同步失敗就沿用目前版本）
+            (cd .. && git fetch -q --depth 1 origin main && git reset -q --hard origin/main) || echo "::warning::code sync failed; using current code"
             if (cd .. && timeout 900 python fetch.py); then
               # 金鑰防線：任何 secret 的實際值若出現在要 commit 的資料裡，整輪丟棄
               leak=0
