@@ -1136,7 +1136,7 @@ def p_policy():
                 who = (b.get("提案單位/提案委員") or "").replace("本院委員", "")
                 bills.append({"id": b.get("議案編號"), "title": nm[:80], "who": who[:24], "src": b.get("提案來源") or "",
                               "st": b.get("議案狀態") or "", "d": d, "topic": _pol_topic(nm + " " + laws),
-                              "new": "草案" in nm and not re.search(r"修正|增訂|廢止|刪除|條文", nm),
+                              "new": "草案" in nm and not re.search(r"修正|增訂|廢止|刪除|條文|併案|^報告", nm),
                               "url": b.get("url") or f"https://ppg.ly.gov.tw/ppg/bills/{b.get('議案編號')}/details"})
             if not got or (got[-1].get("最新進度日期") or "") < c45:
                 break
@@ -1154,7 +1154,7 @@ def p_policy():
             seen3.add(b["title"]); third.append(b)
     newlaw, seenn = [], set()
     for b in sorted(b30, key=lambda b: b["d"], reverse=True):  # 同一部新法常有好幾位委員各提一版，只留最新一筆
-        if b["new"] and b["title"] not in seenn:
+        if b["new"] and b["title"] not in seenn and b["title"] not in seen3:
             seenn.add(b["title"]); newlaw.append(b)
     bpick = sorted(sorted(newlaw, key=lambda b: b["d"], reverse=True), key=lambda b: b["topic"] not in POL_CONSUMER)[:8]
     if not drafts and not ideas and not bills:
