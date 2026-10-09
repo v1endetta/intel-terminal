@@ -1032,7 +1032,9 @@ POL_TOPICS = [
     ("交通與移動", r"交通|車輛|汽車|機車|道路|捷運|鐵路|航空|停車|自行車|駕駛"),
     ("觀光與文化", r"觀光|旅館|民宿|旅行|文化|藝文|運動|體育|展演|博物館"),
     ("教育與勞動", r"教育|學校|補習|學生|勞工|勞動|工時|薪資|就業|托育|育兒|兒少|幼兒"),
-    ("能源與環境", r"能源|電力|環境|減碳|碳|回收|廢棄物|空氣|水資源|再生能源|氣候|污染|汙染|塑膠|容器|包材|消防"),
+    ("能源與環境", r"能源|電力|環境|減碳|碳|回收|廢棄物|空氣|水資源|再生能源|氣候|污染|汙染|塑膠|容器|包材|消防|原子能|核"),
+    ("稅務與財政", r"稅|預算|財政|特別條例|補助|國債|公債"),
+    ("司法與治安", r"法院|刑法|刑事|檢察|治安|詐欺|詐騙|毒品|監獄|犯罪|警察|槍砲"),
 ]
 POL_CONSUMER = {"消費與食品", "健康與照護", "寵物與動物", "居住與不動產", "數位與 AI", "觀光與文化"}
 GAZ_DRAFTS = DATA / "gazette_drafts.json"
@@ -1121,7 +1123,7 @@ def p_policy():
     # 3) 立法院法律案（OpenFun LYAPI，資料 CC-BY-4.0）：依「最新進度日期」排序，抓近 45 天有動的
     bills = []
     try:
-        c45 = (TODAY_TPE - timedelta(days=45)).isoformat()
+        c45 = (TODAY_TPE - timedelta(days=75)).isoformat()
         for page in range(1, 25):
             js = gjson("https://ly.govapi.tw/v2/bills", params={"議案類別": "法律案", "limit": "100", "page": str(page)}, timeout=60)
             got = js.get("bills") or []
@@ -1134,19 +1136,22 @@ def p_policy():
                 who = (b.get("提案單位/提案委員") or "").replace("本院委員", "")
                 bills.append({"id": b.get("議案編號"), "title": nm[:80], "who": who[:24], "src": b.get("提案來源") or "",
                               "st": b.get("議案狀態") or "", "d": d, "topic": _pol_topic(nm + " " + laws),
-                              "new": "草案" in nm and "修正" not in nm and "增訂" not in nm and "廢止" not in nm,
+                              "new": "草案" in nm and not re.search(r"修正|增訂|廢止|刪除|條文", nm),
                               "url": b.get("url") or f"https://ppg.ly.gov.tw/ppg/bills/{b.get('議案編號')}/details"})
             if not got or (got[-1].get("最新進度日期") or "") < c45:
                 break
             time.sleep(0.5)
     except Exception as e:  # noqa: BLE001
         errs.append(f"立法院: {safe_err(e)}")
-    c30 = (TODAY_TPE - timedelta(days=30)).isoformat()
+    c30 = (TODAY_TPE - timedelta(days=60)).isoformat()  # 立法院有休會期，用 60 天才不會整段空掉
     b30 = [b for b in bills if b["d"] >= c30]
     btopic = {}
     for b in b30:
         btopic[b["topic"]] = btopic.get(b["topic"], 0) + 1
-    third = [b for b in bills if "三讀" in b["st"]]
+    third, seen3 = [], set()
+    for b in sorted(bills, key=lambda b: b["d"], reverse=True):
+        if "三讀" in b["st"] and b["title"] not in seen3:
+            seen3.add(b["title"]); third.append(b)
     newlaw = [b for b in b30 if b["new"]]
     bpick = sorted(sorted(newlaw, key=lambda b: b["d"], reverse=True), key=lambda b: b["topic"] not in POL_CONSUMER)[:8]
     if not drafts and not ideas and not bills:
@@ -3808,7 +3813,8 @@ def p_fish():
         name = (r.get("魚貨名稱") or "").strip()
         p, v = num(r.get("平均價")), num(r.get("交易量"))
         m = re.match(r"(\d{3})(\d{2})(\d{2})$", str(r.get("交易日期") or ""))
-        if not name or name.startswith("其他") or not p or not v or not m:
+        # 冷凍大宗（鮪、鯊、下雜魚）多在漁港拍賣，跟餐桌價格無關，排除
+        if not name or name.startswith("其他") or "凍" in name or "雜" in name or not p or not v or not m:
             continue
         iso = f"{int(m.group(1)) + 1911}-{m.group(2)}-{m.group(3)}"
         a = agg.setdefault((iso, name), [0.0, 0.0])
@@ -3834,7 +3840,7 @@ def p_fish():
             ratios.append(chg)
         items.append({"name": name, "price": cur, "date": h[-1][0], "prev": vals[-2] if len(vals) > 1 else None, "chg14": chg,
                       "spark": vals, "vol": round(vol10[name] / 1000, 1)})
-    idx = round(sum(ratios) / len(ratios), 1) if ratios else None
+    idx = round(sorted(ratios)[len(ratios) // 2], 1) if ratios else None  # 中位數：單一魚種暴漲暴跌不會拉歪
     date = max(i["date"] for i in items)
     if idx is not None:
         hist_put("fish_idx", "basket", date, idx)
