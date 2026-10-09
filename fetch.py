@@ -3873,10 +3873,14 @@ def p_secwords():
     start = end - timedelta(days=89)
     ly = lambda d: d.replace(year=d.year - 1)  # noqa: E731
     def q(word, a, b):
-        r = S.get("https://efts.sec.gov/LATEST/search-index", headers=hdr, timeout=40,
-                  params={"q": f'"{word}"', "dateRange": "custom", "startdt": a.isoformat(), "enddt": b.isoformat(), "forms": "10-K,10-Q,8-K"})
-        r.raise_for_status(); time.sleep(0.3)
-        return r.json()
+        for k in range(3):  # 全文檢索偶爾回 500，稍等重試
+            r = S.get("https://efts.sec.gov/LATEST/search-index", headers=hdr, timeout=40,
+                      params={"q": f'"{word}"', "dateRange": "custom", "startdt": a.isoformat(), "enddt": b.isoformat(), "forms": "10-K,10-Q,8-K"})
+            time.sleep(0.4)
+            if r.status_code < 500 or k == 2:
+                r.raise_for_status()
+                return r.json()
+            time.sleep(3 * (k + 1))
     rows, errs = [], []
     for word, label in SEC_WORDS:
         try:

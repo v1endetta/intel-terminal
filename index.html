@@ -2247,11 +2247,11 @@ function render(P){
 
   /* ---- Q5 觀點 ---- */
   try{q5(P,cards);}catch(e){console.warn("q5",e);}
-  try{const SW=P.secwords||{},rs=(SW.rows||[]).filter(r=>r.chg!=null);if(rs.length){
+  try{const SW=P.secwords||{},rs=(SW.rows||[]).filter(r=>r.chg!=null||(n(r.n)>=30&&n(r.n)>n(r.prev)*2)).map(r=>r.chg!=null?r:{...r,label:r.label+"（新）"}).sort((a,b)=>(b.chg??9999)-(a.chg??9999));if(rs.length){
     const hi=new Set(["GLP-1","private label","trade down","Gen Z","loyalty program","resale","influencer","pet food","non-alcoholic","longevity"]);
     hbar("ib5s",rs.map(r=>({name:r.label,n:r.n,chg:r.chg,hi:hi.has(r.w)})),{R:110});
-    $("#ib5sh").innerHTML=`美國企業在財報裡談什麼<span class="n">SEC 10-K／10-Q／8-K · 近 90 天文件數 · 旁邊是比去年同期 · 依成長排序 · 藍色＝消費相關</span>`;
-    const up=rs.filter(r=>r.chg>0).slice(0,2),dn=rs.slice().reverse().find(r=>r.chg<0);
+    $("#ib5sh").innerHTML=`美國企業在財報裡談什麼<span class="n">SEC 10-K／10-Q／8-K · 近 90 天文件數 · 旁邊是比去年同期 · 依成長排序 ·（新）＝去年同期不到 20 件 · 藍色＝消費相關</span>`;
+    const up=rs.filter(r=>r.chg!=null&&r.chg>0).slice(0,2),dn=rs.slice().reverse().find(r=>r.chg<0);
     const a5=$("#ib5a");a5.querySelectorAll(".sec-a").forEach(x=>x.remove());if(a5.textContent.trim()==="等待排程寫入")a5.innerHTML="";
     if(up.length)a5.insertAdjacentHTML("beforeend",`<span class="sec-a"> 美國企業財報裡，比去年同期提得多最多的是${up.map(r=>`<b>${esc(r.label)}</b>（<em class="up">+${r.chg}%</em>）`).join("、")}${dn?`；少最多的是<b>${esc(dn.label)}</b>（<em class="down">${dn.chg}%</em>）`:""}。</span>`);}}catch(e){console.warn("sec",e);}
   try{qSoc(P);}catch(e){console.warn("qsoc",e);}
