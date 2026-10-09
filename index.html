@@ -2119,7 +2119,7 @@ function render(P){
   const hbar=(id,rows,opt={})=>{const W=fitW(id,520),L=W<420?96:120,R=opt.R||(W<420?78:96),rh=18;const p=draw(id,W,rows.length*rh+4);if(!p)return;const mx=Math.max(1,...rows.map(r=>n(r.n)));
     rows.forEach((r,i)=>{const y=i*rh,w=Math.max(2,(W-L-R)*n(r.n)/mx),mc=W<420?6:9,lab=String(r.name).length>mc?String(r.name).slice(0,mc-1)+"…":String(r.name);
       p("text",{x:L-8,y:y+12,"text-anchor":"end",style:r.hi?"fill:var(--text)":""},lab);p("rect",{x:L,y:y+4,width:w,height:rh-8,rx:1.5,style:`fill:var(${r.hi?"--blue":"--dim"});opacity:${r.hi?.85:.55}`});
-      p("text",{x:L+w+6,y:y+12,class:"num"},n(r.n).toLocaleString());if(r.chg!=null)p("text",{x:L+w+(W<420?36:44),y:y+12,class:"num",style:`fill:var(${r.chg>=0?"--up":"--down"})`},(r.chg>0?"+":"")+r.chg+"%");});};
+      const nt=n(r.n).toLocaleString();p("text",{x:L+w+6,y:y+12,class:"num"},nt);if(r.chg!=null)p("text",{x:L+w+14+nt.length*7.4,y:y+12,class:"num",style:`fill:var(${r.chg>=0?"--up":"--down"})`},(r.chg>0?"+":"")+r.chg+"%");});};
   const PO=P.policy||{};
   if(PO.drafts||PO.ideas_hot){const md=s=>s?String(s).slice(5).replace("-","/"):"",CS=new Set(PO.consumer||[]),tag=t=>`<span class="tag">${esc(t)}</span>`;
     const open=(PO.drafts||[]).filter(d=>(d.due||"")>=T),pick=[...open.filter(d=>CS.has(d.topic)),...open.filter(d=>!CS.has(d.topic))].slice(0,7);
@@ -2131,7 +2131,7 @@ function render(P){
     $("#ib7i").innerHTML=hot.slice(0,7).map(i=>{const pc=i.th?Math.min(100,Math.round(i.sup/i.th*100)):0;return`<li title="${esc(i.title)}"><span class="src">${pc>=100?"已成案":pc+"%"}</span><span class="t">${tag(i.topic)}<a href="${esc(safe(i.url||""))}" target="_blank" rel="noopener">${esc(i.title)}</a></span><span class="m num ${pc>=100?"up":""}">${n(i.sup).toLocaleString()}${i.chg7!=null?` <span class="up">+${n(i.chg7).toLocaleString()}</span>`:""}</span></li>`;}).join("");
     const it=(PO.i_topics||[]).filter(([k])=>k!=="其他").map(([k,v])=>({name:k,n:v,hi:CS.has(k)}));if(it.length)hbar("ib7it",it);$("#ib7ith").innerHTML=`民眾近 30 天在提什麼<span class="n">${n(PO.ideas_n30)} 件新提議 · 依關鍵字粗分</span>`;
     const c1=pick.find(d=>CS.has(d.topic)),h1=hot[0],it1=it[0];
-    $("#ib7a").innerHTML=`${open.length?`公報上有 <em>${open.length}</em> 件法規草案正在徵詢意見${c1?`，跟消費有關的像<b>${esc(c1.title.replace(/^預告/,"").slice(0,28))}</b>（${md(c1.due)} 截止）`:""}。`:""}${it1?`民眾近 30 天提最多的是<b>${esc(it1.name)}</b>（${it1.n} 件）`:""}${h1?`；連署最高的是<b>${esc(h1.title.slice(0,26))}</b>（<em>${n(h1.sup).toLocaleString()}</em> 人）`:""}。`;}
+    $("#ib7a").innerHTML=`${open.length?`公報上有 <em>${open.length}</em> 件法規草案正在徵詢意見${c1?`，跟消費有關的像<b>${esc(c1.title.replace(/^預告/,"").slice(0,28))}</b>（${md(c1.due)} 截止）`:""}。`:""}${it1?`民眾近 30 天提最多的是<b>${esc(it1.name)}</b>（${it1.n} 件）`:""}${h1?`；連署最高的是<b>${esc(h1.title.length>26?h1.title.slice(0,25)+"…":h1.title)}</b>（<em>${n(h1.sup).toLocaleString()}</em> 人）`:""}。`;}
   /* ---- Q4 卡位：商標＋專利 ---- */
   const IP=P.ipr||{};
   if(IP.tm||IP.pat){const TM=IP.tm||{},PT=IP.pat||{},md=s=>s?String(s).slice(5).replace("-","/"):"";

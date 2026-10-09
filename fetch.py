@@ -1032,7 +1032,7 @@ POL_TOPICS = [
     ("交通與移動", r"交通|車輛|汽車|機車|道路|捷運|鐵路|航空|停車|自行車|駕駛"),
     ("觀光與文化", r"觀光|旅館|民宿|旅行|文化|藝文|運動|體育|展演|博物館"),
     ("教育與勞動", r"教育|學校|補習|學生|勞工|勞動|工時|薪資|就業|托育|育兒|兒少|幼兒"),
-    ("能源與環境", r"能源|電力|環境|減碳|碳|回收|廢棄物|空氣|水資源|再生能源|氣候"),
+    ("能源與環境", r"能源|電力|環境|減碳|碳|回收|廢棄物|空氣|水資源|再生能源|氣候|污染|汙染|塑膠|容器|包材|消防"),
 ]
 POL_CONSUMER = {"消費與食品", "健康與照護", "寵物與動物", "居住與不動產", "數位與 AI", "觀光與文化"}
 GAZ_DRAFTS = DATA / "gazette_drafts.json"
@@ -1179,7 +1179,7 @@ def p_ipr():
             apps = [a.get("chinese-name") or a.get("english-name") or "" for a in ((r.get("parties") or {}).get("applicants") or [])]
             co = next((a for a in apps if _is_co(a)), "")
             nm = (r.get("tmark-name") or "").strip()
-            if d >= w1 and co and nm and any(c in NICE for c in cls) and (nm, co) not in seen:
+            if d >= w1 and co and nm and not re.search(r"公司|標章", nm) and any(c in NICE for c in cls) and (nm, co) not in seen:
                 seen.add((nm, co))
                 newest.append({"name": nm[:30], "co": re.sub(r"\s+", "", co)[:24], "date": d.replace("/", "-"), "cls": [c for c in cls if c in NICE][:3]})
         rows = []
