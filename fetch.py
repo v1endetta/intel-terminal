@@ -3853,7 +3853,7 @@ def p_fish():
 
 # ---------- 美國企業在談什麼（SEC EDGAR 全文檢索：10-K / 10-Q / 8-K 提到的次數，比去年同期） ----------
 # SEC 存取規範：每秒不超過 10 次、User-Agent 要寫聯絡信箱。信箱放在 GitHub secret（SEC_CONTACT），不寫進公開程式碼。
-SEC_WORDS = [("GLP-1", "GLP-1 減重藥"), ("tariffs", "關稅"), ("agentic", "AI agent"), ("generative AI", "生成式 AI"),
+SEC_WORDS = [("GLP-1", "GLP-1"), ("tariffs", "關稅"), ("agentic", "AI 代理"), ("generative AI", "生成式 AI"),
              ("data center", "資料中心"), ("humanoid", "人形機器人"), ("small modular reactor", "小型核電"), ("stablecoin", "穩定幣"),
              ("Taiwan", "台灣"), ("private label", "自有品牌"), ("trade down", "消費降級"), ("Gen Z", "Z 世代"),
              ("loyalty program", "會員經濟"), ("resale", "二手轉售"), ("influencer", "網紅行銷"), ("pet food", "寵物食品"),
