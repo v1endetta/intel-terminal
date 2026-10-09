@@ -585,6 +585,29 @@ def p_oss():
         out["trending"] = _gh_trending("daily", 10)
     except Exception as e:  # noqa: BLE001
         errs.append("GitHub Trending: " + safe_err(e))
+    # Gemini 一句話：只替「沒看過的 repo」補，一輪最多一次呼叫；看過的從上一輪快取帶出，不重複花額度
+    prev = load_prev("oss") or {}
+    cache = dict(prev.get("zh_cache") or {})
+    todo = [r for r in out.get("trending") or [] if r["name"] not in cache]
+    if todo and GEMINI_KEY:
+        lines = "\n".join(f"- {r['name']}｜{r.get('lang') or '—'}｜{r.get('desc') or '（沒有描述）'}" for r in todo)
+        prompt = f"""下面是今天 GitHub Trending 上的 repo（名稱｜語言｜英文描述）。替每一個寫一句繁體中文、台灣用語的說明，告訴非工程師它是做什麼的、能拿來幹嘛。
+規則：每句 25 字以內；不要用「不是…而是…」句型；不要空詞（賦能、打造、極致）；描述不夠判斷就寫「描述太少，看不出用途」，不要猜。
+輸出 JSON：{{"items": [{{"name": "owner/repo", "zh": "一句話"}}]}}
+
+{lines}"""
+        try:
+            js, _model = _gemini_json(prompt)
+            for it in (js.get("items") or []):
+                nm, zh = (it.get("name") or "").strip(), (it.get("zh") or "").strip()
+                if nm and zh:
+                    cache[nm] = zh[:40]
+        except Exception as e:  # noqa: BLE001
+            errs.append("Gemini 摘要: " + safe_err(e))
+    for r in out.get("trending") or []:
+        if r["name"] in cache:
+            r["zh"] = cache[r["name"]]
+    out["zh_cache"] = dict(list(cache.items())[-300:])
     try:
         out["simonw"] = _atom("https://simonwillison.net/atom/everything/", "Simon Willison", 8)
     except Exception as e:  # noqa: BLE001
@@ -6651,7 +6674,7 @@ def archive_day():
     merge("ptt", [pick(x, "board", "title", "push", "url") for x in (R.get("ptt") or {}).get("items", [])], lambda x: x.get("title"))
     merge("trends", [pick(x, "title", "traffic") for x in (R.get("trends") or {}).get("items", [])], lambda x: x.get("title"), 200)
     merge("cofacts", [pick(x, "text", "verdict", "requests", "url") for x in (R.get("cofacts") or {}).get("hot", [])], lambda x: (x.get("text") or "")[:60], 100)
-    merge("oss", [pick(x, "name", "desc", "stars", "today", "url") for x in (R.get("oss") or {}).get("trending", [])], lambda x: x.get("name"), 300)
+    merge("oss", [pick(x, "name", "desc", "zh", "stars", "today", "url") for x in (R.get("oss") or {}).get("trending", [])], lambda x: x.get("name"), 300)
     merge("radar", [pick(x, "company", "amount", "stage", "cat", "title", "url") for x in (R.get("radar") or {}).get("funding", [])], lambda x: x.get("company"), 100)
     merge("brands", [pick(x, "name", "date", "city", "cap", "cat") for x in (R.get("brands") or {}).get("peers", []) + (R.get("brands") or {}).get("big", [])], lambda x: x.get("name"), 400)
     md = R.get("mood") or {}
