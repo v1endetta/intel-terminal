@@ -586,27 +586,58 @@ def p_oss():
     except Exception as e:  # noqa: BLE001
         errs.append("GitHub Trending: " + safe_err(e))
     # Gemini 一句話：只替「沒看過的 repo」補，一輪最多一次呼叫；看過的從上一輪快取帶出，不重複花額度
+    # ZH_VER 改版時舊快取作廢、全部重寫；寫得爛的（套話、重複詞）不進快取，下一輪再試一次，第二次就收
+    ZH_VER = "v2"
     prev = load_prev("oss") or {}
-    cache = dict(prev.get("zh_cache") or {})
+    same = prev.get("zh_ver") == ZH_VER
+    cache = dict(prev.get("zh_cache") or {}) if same else {}
+    tries = dict(prev.get("zh_tries") or {}) if same else {}
     todo = [r for r in out.get("trending") or [] if r["name"] not in cache]
     if todo and GEMINI_KEY:
         lines = "\n".join(f"- {r['name']}｜{r.get('lang') or '—'}｜{r.get('desc') or '（沒有描述）'}" for r in todo)
-        prompt = f"""下面是今天 GitHub Trending 上的 repo（名稱｜語言｜英文描述）。替每一個寫一句繁體中文、台灣用語的說明，告訴非工程師它是做什麼的、能拿來幹嘛。
-規則：每句 25 字以內；不要用「不是…而是…」句型；不要空詞（賦能、打造、極致）；描述不夠判斷就寫「描述太少，看不出用途」，不要猜。
+        prompt = f"""下面是今天 GitHub Trending 上的 repo（名稱｜語言｜英文描述）。替每一個寫一句繁體中文、台灣用語的說明，讓不寫程式的設計師一看就懂它是什麼、能拿來幹嘛。
+
+寫法：
+- 15 到 25 字，直接講它做什麼，動詞開頭或直接講它是什麼
+- 有知名產品可以比，就說「像 Photoshop 的開源版」這種講法，比抽象描述好懂
+- 同一個詞在一句裡只能出現一次
+- 不要用：「專為…設計」「一款」「打造」「賦能」「極致」「實用的」「強大的」，也不要每句都用「工具」結尾
+- 描述太少看不出用途，就寫「描述太少，看不出用途」，不要猜
+
+好的寫法：
+- 把 PS5 遊戲搬到電腦上跑
+- 讓 AI 寫程式助手畫出好看的架構圖
+- 像 Photoshop 的開源版，用 Rust 從零重寫
+- 讓 Claude 跨對話記住你講過的事
+
+不要這樣寫：
+- 專為藝術家設計的創作引擎（套話，沒講它做什麼）
+- 有圖形介面的除錯與除錯輔助軟體（同一個詞重複）
+- 分享給 AI 助理使用的實用工作技能（空泛）
+
 輸出 JSON：{{"items": [{{"name": "owner/repo", "zh": "一句話"}}]}}
 
 {lines}"""
+        bad = re.compile(r"專為|一款|打造|賦能|極致|實用的|強大的")
         try:
             js, _model = _gemini_json(prompt)
             for it in (js.get("items") or []):
-                nm, zh = (it.get("name") or "").strip(), (it.get("zh") or "").strip()
-                if nm and zh:
-                    cache[nm] = zh[:40]
+                nm, zh = (it.get("name") or "").strip(), (it.get("zh") or "").strip().rstrip("。")
+                if not (nm and zh):
+                    continue
+                poor = bool(bad.search(zh) or re.search(r"([\u4e00-\u9fff]{2,}).*\1", zh))
+                if poor and tries.get(nm, 0) < 1:
+                    tries[nm] = tries.get(nm, 0) + 1  # 這輪先不收，下一輪重寫
+                    continue
+                cache[nm] = "" if poor else zh[:40]  # 重寫還是爛就放棄，頁面改顯示英文描述，也不再花額度重試
+                tries.pop(nm, None)
         except Exception as e:  # noqa: BLE001
             errs.append("Gemini 摘要: " + safe_err(e))
     for r in out.get("trending") or []:
-        if r["name"] in cache:
+        if cache.get(r["name"]):
             r["zh"] = cache[r["name"]]
+    out["zh_ver"] = ZH_VER
+    out["zh_tries"] = dict(list(tries.items())[-100:])
     out["zh_cache"] = dict(list(cache.items())[-300:])
     try:
         out["simonw"] = _atom("https://simonwillison.net/atom/everything/", "Simon Willison", 8)
