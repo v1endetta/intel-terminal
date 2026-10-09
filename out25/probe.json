@@ -1,107 +1,205 @@
 {
- "tm_top5": {
-  "status": 200,
-  "ct": "application/json;charset=UTF-8",
-  "len": 8864,
-  "cd": null,
-  "head": "{\n  \"version\": \"1.0\",\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"top\": 5,\n  \"skip\": 0,\n  \"order-by\": \"appl-no\",\n  \"total-count\": 3422226,\n  \"tmarkappl\": {\n    \"-page-count\": 5,\n    \"-create-date\": \"2026/10/10\",\n    \"tmarkcontent\": [\n      {\n        \"-sequence\": 1,\n        \"appl-no\": \"000000001\",\n        \"appl-date\": \"1951/02/27\",\n        \"tmark-name\": \"林森\",\n        \"tmark-class\": \"1\",\n        \"tmark-class-desc\": \"商標\",\n        \"tmark-image-url\": [\n          {\n            \"image-data-1\": \"https://cloud.tipo.gov.tw/S282/S282WV1/pic/20160227/000/000/001/pic_000000001_20110105_1.jpg\",\n            \"image-data-2\": null,\n            \"image-data-3\": null,\n            \"image-data-4\": null,\n            \"image-data-5\": null,\n            \"image-data-6\": null,\n            \"audio-filename\": null\n          }\n        ],\n        \"tmark-type\": null,\n        \"tmark-type-desc\": null,\n        \"tmark-color\": \"1\",\n        \"tmark-color-desc\": \"墨色\",\n        \"tmark-draft-c\": \"林森\",\n        \"tmark-draft-e\": null,\n        \"tmark-draft-j\": null,\n        \"tmark-sign\": null,\n        \"word-description\": null,\n        \"out-off-draft\": null,\n        \"tmark-desc\": null,\n        \"receive-date\": null,\n        \"goodsclasses\": [\n          {\n            \"-sequence\": 1,\n            \"goodsclass-code\": \"032\",\n            \"goods-name\": \"美髮霜商品。\",\n            \"goods-group\": \"\"\n          }\n        ],\n        \"parties\": {\n          \"applicants\": [\n            {\n              \"-sequence\": 1,\n              \"chinese-name\": \"盛香堂　許鉗\",\n              \"english-name\": null,\n              \"japanese-name\": null,\n              \"address\": \"臺中市復興路170號\",\n              \"country-code\": \"TW\",\n              \"chinese-country-name\": \"中華民國\"\n            }\n          ],\n          \"agents\": [\n            {\n              \"-sequence\": 1,\n              \"chinese-name\": \"陳家蔭\",\n              \"address\": null\n            }\n          ]\n        }\n      },\n      {\n        \"-sequence\": 2,\n        \"appl-no\": \"000000002\",\n        \"appl-date\": \"1951/02/27\",\n        \"tmark-name\": \"林森\",\n        \"tmark-class\": \"1\",\n        \"tmark-class-desc\": \"商標\",\n        \"tmark-image-url\": [\n          {\n            \"image-data-1\": \"https://cloud.tipo.gov.tw/S282/S282WV1/pic/20160227/000/000/002/pic_000000002_20110105_1.jpg\",\n            \"image-data-2\": null,\n            \"image-data-3\": null,\n            \"image-data-4\": null,\n            \"image-data-5\": null,\n            \"image-data-6\": null,\n            \"audio-filename\": null\n          }\n        ],\n        \"tmark-type\": null,\n        \"tmark-type-desc\": null,\n        \"tmark-color\": \"1\",\n        \"tmark-color-desc\": \"墨色\",\n        \"tmark-draft-c\": \"林森\",\n        \"tmark-draft-e\": null,\n        \"tmark-draft-j\": null,\n        \"tmark-sign\": null,\n        \"word-description\": null,\n        \"out-off-draft\": null,\n        \"tmark-desc\": null,\n        \"receive-date\": null,\n        \"goodsclasses\": [\n          {\n            \"-sequence\": 1,\n            \"goodsclass-code\": \"033\",\n            \"goods-name\": \"面霜商品。\",\n            \"goods-group\": \"\"\n          }\n        ],\n        \"parties\": {\n          \"applicants\": [\n            {\n              \"-sequence\": 1,\n              \"chinese-name\": \"盛香堂　許鉗\",\n              \"english-name\": null,\n              \"japanese-name\": null,\n              \"address\": \"臺中市復興路170號\",\n              \"country-code\": \"TW\",\n              \"chinese-country-name\": \"中華民國\"\n            }\n          ],\n          \"agents\": [\n            {\n              \"-sequence\": 1,\n              \"chinese-name\": \"陳家蔭\",\n              \"address\": null\n            }\n          ]\n        }\n      },\n      {\n        \"-sequence\": 3,\n        \"appl-no\": \"000000003\",\n        \"appl-date\": \"1951/02/27\",\n        \"tmark-name\": \"日月潭\",\n        \"tmark-class\": \"1\",\n        \"tmark-class-desc\": \"商標\",\n        \"tmark-image-url\": [\n          {\n            \"image-data-1\": \"https://cloud.tipo.gov.tw/S282/S282WV1/pic/20160227/000/000/003/pic_000000003_20110105_1.jpg\",\n            \"image-data-2\": null,\n            \"image-data-3\": null,\n            \"image-data-4\": null,\n            \"image-data-5\": null,\n            \"image-data-6\": null,\n            \"audio-filename\": null\n          }\n        ],\n        \"tmark-type\": null,\n        \"tmark-type-desc\": null,\n        \"tmark-color\": \"3\",\n        \"tmark-color-desc\": \"紅色\",\n        \"tmark-draft-c\": \"日月潭\",\n        \"tmark-draft-e\": null,\n        \"tmark-draft-j\": null,\n        \"tmark-sign\": null,\n        \"word-description\": null,\n        \"out-off-draft\": null,\n        \"tmark-desc\": null,\n        \"receive-date\": null,\n        \"goodsclasses\": [\n          {\n            \"-sequence\": 1,\n            \"goodsclass-code\": \"271\",\n            \"goods-name\": \"各支棉紗商品。\",\n            \"goods-group\": \"\"\n          }\n        ],\n        \"parties\": {\n          \"applicants\": [\n            {\n              \"-sequence\": 1,\n              \"chinese-name\": \"台灣大秦紡織股份有限公司\",\n              \"english-name\": null,\n              \"japanese-name\": null,\n              \"address\": \"臺北市中正區南陽街8號\",\n              \"country-code\": \"TW\",\n"
- },
- "tm_skip": {
-  "status": 200,
-  "ct": "application/json;charset=UTF-8",
-  "len": 5332,
-  "cd": null,
-  "head": "{\n  \"version\": \"1.0\",\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"top\": 3,\n  \"skip\": 5000,\n  \"order-by\": \"appl-no\",\n  \"total-count\": 3422226,\n  \"tmarkappl\": {\n    \"-page-count\": 3,\n    \"-create-date\": \"2026/10/10\",\n    \"tmarkcontent\": [\n      {\n        \"-sequence\": 1,\n        \"appl-no\": \"000005142\",\n        \"appl-date\": \"1955/09/23\",\n        \"tmark-name\": \"英興牌\",\n        \"tmark-class\": \"1\",\n        \"tmark-class-desc\": \"商標\",\n        \"tmark-image-url\": [\n          {\n            \"image-data-1\": \"https://cloud.tipo.gov.tw/S282/S282WV1/pic/20160227/000/005/142/pic_000005142_20110105_1.jpg\",\n            \"image-data-2\": null,\n            \"image-data-3\": null,\n            \"image-data-4\": null,\n            \"image-data-5\": null,\n            \"image-data-6\": null,\n            \"audio-filename\": null\n          }\n        ],\n        \"tmark-type\": null,\n        \"tmark-type-desc\": null,\n        \"tmark-color\": \"1\",\n        \"tmark-color-desc\": \"墨色\",\n        \"tmark-draft-c\": null,\n        \"tmark-draft-e\": null,\n        \"tmark-draft-j\": null,\n        \"tmark-sign\": null,\n        \"word-description\": null,\n        \"out-off-draft\": null,\n        \"tmark-desc\": null,\n        \"receive-date\": null,\n        \"goodsclasses\": [\n          {\n            \"-sequence\": 1,\n            \"goodsclass-code\": \"512\",\n            \"goods-name\": \"革商品\",\n            \"goods-group\": \"\"\n          }\n        ],\n        \"parties\": {\n          \"applicants\": [\n            {\n              \"-sequence\": 1,\n              \"chinese-name\": \"英興製皮工廠　"
- },
- "opdata_home": {
-  "status": 200,
-  "ct": "text/html",
-  "len": 2216,
-  "cd": null,
-  "head": "<!doctype html><html lang=\"zh-Hant\"><head><meta charset=\"utf-8\"/><meta http-equiv=\"x-ua-compatible\" content=\"IE=edge, chrome=1\"><link rel=\"icon\" href=\"/S220/opdata/favicon.ico\"/><meta name=\"viewport\" "
- },
- "opdata_links": [
-  "/S220/opdata/favicon.ico",
-  "/S220/opdata/static/css/main.263c254d.chunk.css",
-  "/S220/opdata/static/js/2.4a6f13e2.chunk.js",
-  "/S220/opdata/static/js/main.b8db6380.chunk.js"
+ "notes41664": "授權說明網址: https://data.gov.tw/license\nAPI說明：https://cloud.tipo.gov.tw/S220/opdata/api/file/api/trademark\nOAS說明：https://cloud.tipo.gov.tw/S220/opdata/api/file/oas\nSwagger 產生API說明頁面網址：https://petstore.swagger.io/",
+ "notes15992": "",
+ "tm_total": 3422226,
+ "tm_n": 1000,
+ "tm_dates": [
+  "2026/09/29",
+  "2025/09/05",
+  "115068057",
+  "115980329"
  ],
- "opdata_api_mentions": [],
- "try_PatentPub": {
-  "status": 200,
-  "ct": "application/json;charset=UTF-8",
-  "len": 5903,
-  "cd": null,
-  "head": "{\n  \"version\": \"1.0\",\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"top\": 2,\n  \"skip\": 0,\n  \"order-by\": \"appl-no\",\n  \"total-count\": 1079822,\n  \"tw-patent-pub\": {\n    \"-page-count\": 2,\n    \"-create-date\": \"2026/10/10\",\n    \"patentcontent\": [\n      {\n        \"-sequence\": 1,\n        \"publication-reference\": {\n          \"notice-no\": 200406930,\n          \"notice-volno\": 2,\n          \"notice-isuno\": 9,\n          \"notice-date\": \"2004/05/01\"\n        },\n        \"application-reference\": {\n          \"appl-no\": \"091132001\",\n          \"appl-date\": \"2002/10/28\",\n          \"first-date\": \"2002/10/28\",\n          \"fore"
- },
- "try_PatentAppl": {
-  "status": 200,
-  "ct": "application/json;charset=UTF-8",
-  "len": 1010,
-  "cd": null,
-  "head": "{\n  \"version\": \"1.0\",\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"top\": 2,\n  \"skip\": 0,\n  \"order-by\": \"appl-no\",\n  \"total-count\": 1471189,\n  \"tw-patent-applI\": {\n    \"-page-count\": 2,\n    \"-create-date\": \"2026/10/10\",\n    \"patentcontent\": [\n      {\n        \"-sequence\": 1,\n        \"appl-no\": \"06202104\",\n        \"appl-date\": \"1972/07/26\",\n        \"appl-countrycode\": \"TW\",\n        \"appl-country\": \"中華民國\",\n        \"classification-ipc\": [\n          {\n            \"-sequence\": 1,\n            \"ipc-full\": \"F23D\",\n            \"ipc-section\": \"F\",\n            \"ipc-class\": \"23\",\n            \"ipc-subclass\": \"D\",\n "
- },
- "try_PatPub": {
-  "status": 404,
-  "ct": "application/json",
-  "len": 58,
-  "cd": null,
-  "head": "{\n  \"status\": \"error\",\n  \"message\": \"找不到此頁面\"\n}"
- },
- "try_InventionPub": {
-  "status": 404,
-  "ct": "application/json",
-  "len": 58,
-  "cd": null,
-  "head": "{\n  \"status\": \"error\",\n  \"message\": \"找不到此頁面\"\n}"
- },
- "try_PatentRights": {
-  "status": 200,
-  "ct": "application/json;charset=UTF-8",
-  "len": 6951,
-  "cd": null,
-  "head": "{\n  \"version\": \"1.0\",\n  \"status\": \"ok\",\n  \"message\": \"\",\n  \"top\": 2,\n  \"skip\": 0,\n  \"order-by\": \"appl-no\",\n  \"total-count\": 932455,\n  \"tw-patent-rightsI\": {\n    \"-page-count\": 2,\n    \"-create-date\": \"2026/10/10\",\n    \"patentcontent\": [\n      {\n        \"-sequence\": 1,\n        \"publication-reference\": {\n          \"notice-no\": 0,\n          \"notice-volno\": 0,\n          \"notice-isuno\": 0,\n          \"notice-date\": null,\n          \"publish-no\": \"013964\",\n          \"publish-volno\": 0,\n          \"publish-isuno\": 252,\n          \"publish-date\": \"1973/10/01\"\n        },\n        \"application-reference\": {\n "
- },
- "try_TmarkStat": {
-  "status": 404,
-  "ct": "application/json",
-  "len": 58,
-  "cd": null,
-  "head": "{\n  \"status\": \"error\",\n  \"message\": \"找不到此頁面\"\n}"
- },
- "gaz_I07": {
-  "status": 200,
-  "ct": "application/octet-stream",
-  "len": 11820800,
-  "cd": "attachment; filename=\"index.xml\"",
-  "head": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<tw-patent-applications total-count=\"1828\"> \n  <tw-patent-application no=\"1\" publication-number=\"202635437\"> \n    <tif-files tif-type=\"multi-tif\"> \n      <tif no=\"1\" file=\"TIF/202635437.zip\"/> \n    </tif-files>  \n    <tw-bibliographic-data-application> \n      <volno>24</volno>  \n      <isuno>17</isuno>  \n      <publication-reference> \n        <document-id> \n          <doc-number>202635437</doc-number> \n        </document-id> \n      </publication-reference>  \n      <application-reference appl-type=\"invention-public\"> \n        <document-id> \n          <doc-number>114103901</doc-number> \n        </document-id> \n      </application-reference>  \n      <invention-title> \n        <chinese-title>物件固定裝置以及製造方法</chinese-title>  \n        <english-title>OBJECT HOL"
- },
- "gaz_T02": {
-  "status": 200,
-  "ct": "application/octet-stream",
-  "len": 6891046,
-  "cd": "attachment; filename=\"RegContent.xml\"",
-  "head": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<RegContentList total-count=\"3372\">\n  <RegContent>\n    <CaseNo>114025879</CaseNo>\n    <RegisterNo>02559723</RegisterNo>\n    <Trademark_Name>Qnity 及圖</Trademark_Name>\n    <Trademark_Design>(墨色)(平面)</Trademark_Design>\n    <Filing_Date>114.04.21</Filing_Date>\n    <Censor>程瑋琳</Censor>\n    <Priority_Date></Priority_Date>\n    <SDate>115.10.01</SDate>\n    <EDate>125.09.30</EDate>\n    <Word_Description></Word_Description>\n    <Mark_Type>0</Mark_Type>\n    <Memo></Memo>\n    <Wavpath></Wavpath>\n    <ServiceMark>false</ServiceMark>\n    <RegContentAgent>\n      <BChinese>郭雨嵐</BChinese>\n    </RegContentAgent>\n    <RegContentAgent>\n      <BChinese>汪家倩</BChinese>\n    </RegContentAgent>\n    <RegContentClassification>\n      <Enforcement_Rules>商標法施行細則第19條第001類</Enforceme"
- },
- "tm_stat_csv": {
-  "status": 200,
-  "ct": "text/csv",
-  "len": 43512,
-  "cd": null,
-  "head": "ï»¿åºè,å¹´,æ,ç³è«é¡å,ä»¶æ¸\r\n1,107,1,è¨»åç³è«(æä»¶),7158\r\n2,107,1,è¨»åç³è«(æé¡),9121\r\n3,107,1,ç°è­°,54\r\n4,107,1,è©å®,33\r\n5,107,1,å»¢æ­¢,32\r\n6,107,1,å»¶å±,3630\r\n7,107,1,ç§»è½,823\r\n8,107,1,è®æ´,713\r\n9,107,1,ååæ¸ç¸®,11\r\n10,107,1,ææ¬,62\r\n11,107,1,åææ¬,0\r\n12,107,1,è£è­,134\r\n13,107,1,è±æè­ææ¸,23\r\n14,107,1,è¨»åååå²,22\r\n15,107,1,è¨»ååå²,0\r\n16,107,1,è¨­å®è³ªæ¬,0\r\n17,107,2,è¨»åç³è«(æä»¶),5138\r\n18,107,2,è¨»åç³è«(æé¡),6766\r\n19,107,2,ç°è­°,75\r\n20,107,2,è©å®,11\r\n21,107,2,å»¢æ­¢,25\r\n22,107,2,å»¶å±,2683\r\n23,107,2,ç§»è½,758\r\n24,107,2,è®æ´,303\r\n25,107,2,ååæ¸ç¸®,15\r\n26,107,2,ææ¬,77\r\n27,107,2,åææ¬,0\r\n28,107,2,è£è­,102\r\n29,107,2,è±æè­ææ¸,49\r\n30,107,2,è¨»åååå²,14\r\n31,107,2,è¨»ååå²,0\r\n32,107,2,è¨­å®è³ªæ¬,4\r\n33,107,3,è¨»åç³è«(æä»¶),7914\r\n34,107,3,è¨»åç³è«(æé¡),10145\r\n35,107,3,ç°è­°,80\r\n36,107,3,è©å®,12\r\n37,107,3,å»¢æ­¢,35\r\n38,107,3,å»¶å±,4505\r\n39,107,3,ç§»è½,1091\r\n40,107,3,è®æ´,776\r\n41,107,3,ååæ¸ç¸®,5\r\n42,107,3,ææ¬,76\r\n43,107,3,åææ¬,0\r\n44,107,3,è£è­,101\r\n45,107,3,è±æè­ææ¸,88\r\n46,107,3,è¨»åååå²,26\r\n47,107,3,è¨»ååå²,1\r\n48,107,3,è¨­å®è³ªæ¬,4\r\n49,107,4,è¨»åç³è«(æä»¶),6592\r\n50,107,4,è¨»åç³è«(æé¡),8492\r\n51,107,4,ç°è­°,81\r\n52,107,4,è©å®,21\r\n53,107,4,å»¢æ­¢,33\r\n54,107,4,å»¶å±,3596\r\n55,107,4,ç§»è½,530\r\n56,107,4,è®æ´,1056\r\n57,107,4,ååæ¸ç¸®,10\r\n58,107,4,ææ¬,57\r\n59,107,4,åææ¬,9\r\n60,107,4,è£è­,105\r\n61,107,4,è±æè­ææ¸,33\r\n62,107,4,è¨»åååå²,22\r\n63,107,4,è¨»ååå²,0\r\n64,107,4,è¨­å®è³ªæ¬,0\r\n65,107,5,è¨»åç³è«(æä»¶),7833\r\n66,107,5,è¨»åç³è«(æé¡),10183\r\n67,107,5,ç°è­°,69\r\n68,107,5,è©å®,11\r\n69,107,5,å»¢æ­¢,56\r\n70,107,5,å»¶å±,4025\r\n71,107,5,ç§»è½,758\r\n72,107,5,è®æ´,752\r\n73,107,5,ååæ¸ç¸®,6\r\n74,107,5,ææ¬,77\r\n75,107,5,åææ¬,4\r\n76,107,5,è£è­,104\r\n77,107,5,è±æè­ææ¸,54\r\n78,107,5,è¨»åååå²,29\r\n79,107,5,è¨»ååå²,3\r\n80,107,5,è¨­å®è³ªæ¬,12\r\n81,107,6,è¨»åç³è«(æä»¶),7521\r\n82,107,6,è¨»åç³è«(æé¡),9747\r\n83,107,6,ç°è­°,38\r\n84,107,6,è©å®,26\r\n85,107,6,å»¢æ­¢,60\r\n86,107,6,å»¶å±,4275\r\n87,107,6,ç§»è½,479\r\n88,107,6,è®æ´,1367\r\n89,107,6,ååæ¸ç¸®,9\r\n90,107,6,ææ¬,59\r\n91,107,6,åææ¬,1\r\n92,107,6,è£è­,106\r\n93,107,6,è±æè­ææ¸,46\r\n94,107,6,è¨»åååå²,28\r\n95,107,6,è¨»ååå²,1\r\n96,107,6,è¨­å®è³ªæ¬,0\r\n97,107,7,è¨»åç³è«(æä»¶),7352\r\n98,107,7,è¨»åç³è«(æé¡),9469\r\n99,107,7,ç°è­°,94\r\n100,107,7,è©å®,"
- },
- "join_policy": {
-  "status": 200,
-  "ct": "application/json;charset=UTF-8",
-  "len": 1012144,
-  "cd": null,
-  "head": "[\n{\n  \"網址\" : \"https://join.gov.tw/policies/detail/cdd122b3-fefa-4627-a0bf-8536c758f47f\",\n  \"標題\" : \"*無標題*\",\n  \"內文摘要\" : \"無\",\n  \"內容\" : \"\",\n  \"發佈日期\" : \"無\",\n  \"下線日期\" : \"無\",\n  \"關注數量\" : \"0\",\n  \"留言數量\" : \"0\",\n  \"googleAnalytics\" : \"無\",\n  \"Facebook分享數量\" : \"0\"\n},\n{\n  \"網址\" : \"https://join.gov.tw/policies/detail/07409767-16cb-49db-a56c-73b13abca2f6\",\n  \"標題\" : \"怎麼讓你/妳的聲音被聽見？ 一個更好的公民提議方式，需要你/妳的建議\",\n  \"內文摘要\" : \"我們一直在思考如何打造一個更好的方式，讓你/妳的聲音被聽到。\\n\\n\\n\\n長期以來，民眾與政府機關之間缺乏互動溝通的管道，只能透過首長信箱或留言單向的表達意見。\\n\\n我們知道公民是推動社會創新最豐沛的量能，因此，為了改善現行機制的不足，國家發展委員會積極著手建置「公共政策網路參與平台」，並規劃「提點子」功能，讓民眾用更簡便的方式，提供好的點子和想法。所有公民提議都會公開在網站上讓全民瀏覽，而且只要民眾的提\",\n  \"內容\" : \"我們一直在思考如何打造一個更好的方式，讓你/妳的聲音被聽到。 \\n  \\n長期以來，民眾與政府機關之間缺乏互動溝通的管道，只能透過首長信箱或留言單向的表達意見。 \\n我們知道公民是推動社會創新最豐沛的量能，因此，為了改善現行機制的不足，國家發展委員會積極著手建置「公共政策網路參與平台」，並規劃「提點子」功能，讓民眾用更簡便的方式，提供好的點子和想法。所有公民提議都會公開在網站上讓全民瀏覽，而且只要民眾的提議達到支持門檻，政府就一定會回應。 \\n  \\n「提點子」將會是一個開放的公民提議空間，勾勒更美好的施政理念，但我們不希望裡面充斥著口水，而淹沒了真正有建設性的點子。因此，我們規劃了基本的規範，並由衷的期盼能為台灣帶來一些改變和正向的力量。 \\n  \\n這是一個新的嘗試，什麼樣的規範才是有益於公民提議的運作，還在摸索中。摸索中需要公民的提點，找出最適運作模式，因此，希望在正式上線運作前，可以先在這裡徵詢大家的意見。 \\n  \\n  \\n我們想知道…… \\n  \\n關於附議方式，為了能聚焦在較多人關心的公共議題上，我們目前規劃如下： \\n  \\n第一階段是基本最低門檻，應於30天內取得150份附議門檻，未能於期限內取得門檻資格，平台管理者將退回申請人。 \\n  \\n第二階段應於60天內再取得30,000份附議門檻，即可成案，通過後，將由相關機關具體回復採行措施。 \\n  \\n任何階段若提前完成門檻，則可馬上進入下一階段，不需受期限的限制，而未能於期限內取得門檻資格，平台管理者退回申請人外，此議題於半年內無法再提案申請。另外，提案者於90天附議期間隨時可撤回提案，惟一旦成案，即無法撤案。 \\n  \\n我們期待上述規劃的討論期限以及附議人數門檻，能夠幫助平台聚焦在較多人關注的公共議題上，而不是拿來刁難大家的。因此如果你/妳覺得這些規範有任何不合理的地方，歡迎留言提出您的建議。\",\n  \"發佈日期\" : \"2015-02-10\",\n  \"下線日期\" : \"2015-04-11\",\n  \"關注數量\" : \"23\",\n  \"留言數量\" : \"81\",\n  \"googleAnalytics\" : \"無\",\n  \"Facebook分享數量\" : \"0\"\n},\n{\n  \"網址\" : \"https://join.gov.tw/policies/detail/294ad36e-0e43-4ed4-a4dd-8032c972fbc3\",\n  \"標題\" : \"「網路智慧新臺灣政策白皮書」第二波行動計畫意見徵詢中，歡迎全民繼續來開講\",\n  \"內文摘要\" : \"我們誠摯邀請您共同協作「網路智慧新臺灣政策白皮書」！\\n\\n\\n\\n所謂白皮書，是政府將政策或施政方針公諸發行之報告書。而「網路．智慧．新臺灣」是對臺灣未來經社發展的願景，希望能因應資通訊科技發展新趨勢，透過提升發展網路與智慧科技應用環境與安全，增強政府透明治理與資訊公開，提供更多創新服務，進一步滿足民眾在社會、經濟與環境等方面的多種需求。因此，「網路智慧新臺灣政策白皮書」完成後，將會是日後政府推動相關政\",\n  \"內容\" : \"我們誠摯邀請您共同協作「網路智慧新臺灣政策白皮書」！ \\n  \\n所謂白皮書，是政府將政策或施政方針公諸發行之報告書。而「網路．智慧．新臺灣」是對臺灣未來經社發展的願景，希望能因應資通訊科技發展新趨勢，透過提升發展網路與智慧科技應用環境與安全，增強政府透明治理與資訊公開，提供更多創新服務，進一步滿足民眾在社會、經濟與環境等方面的多種需求。因此，「網路智慧新臺灣政策白皮書」完成後，將會是日後政府推動相關政策的主要依據及全民參與公共事務的主要指導原則。 \\n  \\n為了聚焦討論與凝聚共識，我們在白皮書編擬規劃初期，邀請大家從「基礎環境」、「透明治理」、「智慧生活」、「網路經濟」、「智慧國土」五個重要組成構面切入，一齊來思考如何妥善因應網路及智慧、行動裝置發展新趨勢。我們相信，這五大構面可以涵蓋所有攸關民眾福祉的社會、經濟、環境與政府治理議題，以及達成規劃目標必要的基礎建設與法規調適。但同時，我們也保持極大彈性，期望透過實體會議與網路討論，在不斷的腦力激盪與集思廣益後，能讓白皮書的架構與內容更臻於完善。 \\n  \\n白皮書的編擬原則是透過多元溝通、網實整合及全民協作的理念為出發點，在先期籌備時舉辦與部會正副首長、中高階官員「網路發展趨勢研習營」，先凝聚政府內部共識。在全民徵詢期，一方面在2-3月間分別邀請學者專家與網路社群代表舉行多次議題別實體會議，據以擬定、修正白皮書初稿，並預定於4/28擴大召開全民意見徵詢會議，討論並確認白皮書（草案）；一方面將持續運用公共政策網路參與平台，為白皮書撰擬各階段提供多元意見。 \\n  \\n您可以： \\n \\n 點閱白皮書完整內容 \\n 留言提供您的意見，或是在各推動項目討論議題寫下您的建議。 \\n 按下「贊成」↑或「反對」↓表達您的立場。 \\n \\n  \\n我們將於平台中持續開放討論，討論期結束後將彙整意見並召開全民意見徵詢會議，確定白皮書內容，最後報行政院核定，做為政府推動的依據。 \\n  \\n期待您的參與！體現公民參與的力量與共同耕耘的成果。\",\n  \"發佈日期\" : \"2015-02-27\",\n  \"下線日期\" : \"2015-05-07\",\n  \"關注數量\" : \"96\",\n  \"留言數量\" : \"93\",\n  \"googleAnalytics\" : \"無\",\n  \"Facebook分享數量\" : \"0\"\n},\n{\n  \"網址\" : \"https://join.gov.tw/policies/detail/a0d1e22b-de71-42ef-9a15-aca5408874e7\",\n  \"標題\" : \"「創新創業政策會報」議題討論\",\n  \"內文摘要\" : \"行政院科技會報辦公室於103年12月18日行政院3429次院會報告「網路溝通與優化施政規劃」，依會議決議，行政院成立創新創業政策會報，作為「為青年找出路」之施政重點，也是「網路溝通與優化施政三支箭」中，選擇各部會在實體世界中合適的方案，建置對應的網路擴大推動機制，擴大打擊面，來提升方案或計畫成效之重點工作之ㄧ。\\n\\n\\n\\n創新創業政策會報成立的目的在整合、協調跨部會創新創業資源及政策，督導創新創業相關\",\n  \"內容\" : \"行政院科技會報辦公室於103年12月18日行政院3429次院會報告「網路溝通與優化施政規劃」，依會議決議，行政院成立創新創業政策會報，作為「為青年找出路」之施政重點，也是「網路溝通與優化施政三支箭」中，選擇各部會在實體世界中合適的方案，建置對應的網路擴大推動機制，擴大打擊面，來提升方案或計畫成效之重點工作之ㄧ。 \\n  \\n創新創業政策會報成立的目的在整合、協調跨部會創新創業資源及政策，督導創新創業相關方案及重大計畫，提供青年創業及新創事業優化環境等，期能整合各部會各自推動之方案，發揮綜合效應。 \\n  \\n依103年12月31日函頒之「行政院創新創業政策會報設置要點」，會報置召集人一人，由行政院副院長（張副院長善政）兼任之；副召集人四人，由行政院院長指派政務委員（馮政務委員燕、蔡政務委員玉玲、杜政務委員紫軍、顏政務委員鴻森）兼任之；執行秘書一人，由行政院院長指派政務委員（顏政務委員鴻森）兼任之。 \\n  \\n將透過「創建虛實創業網絡」、「建構友善創新創業環境」、「發展創新創業群聚效應」、「激勵創意發想及加速青創育成」、「強化國際資源鏈結」等五大策略，整合政府及民間資源，朝「打造臺灣的矽谷創業模式，構築青年的創業圓夢基地」之願景而努力。 \\n  \\n相關連結：官方網站\",\n  \"發佈日期\" : \"2015-04-10\",\n  \"下線日期\" : \"2015-07-09\",\n  \"關注數量\" : \"14\",\n  \"留言數量\" : \"62\",\n  \"googleAnalytics\" : \"無\",\n  \"Facebook分享數量\" : \"0\"\n},\n{\n  \"網址\" : \"https://join.gov.tw/policies/detail/dff3228c-ef02-"
- },
- "join_idea": {
-  "status": 200,
-  "ct": "application/json;charset=UTF-8",
-  "len": 13948949,
-  "cd": null,
-  "head": "[\n{\n  \"publishDate\" : \"2026-01-01 00:39:22\",\n  \"網址\" : \"https://join.gov.tw/idea/detail/a2d03be4-df07-415b-8d10-6741bd3d3ecb\",\n  \"標題\" : \"建議政府逐步推動禁售與禁放煙火，以降低環境污染並保護動物福祉\",\n  \"提議內容\" : \"近年來，節慶與活動中施放煙火所造成的環境與動物影響日益明顯。煙火施放會產生空氣污染、噪音污染與殘留垃圾，對生活環境造成負擔，亦對寵物及野生動物造成驚嚇、受傷，甚至影響其生存行為。 \\n國際上已有國家開始正視此議題，例如歐洲國家捷克，已針對煙火施放進行禁止或嚴格限制，並以更環保、安全的方式取代傳統煙火，顯示節慶活動與環境及動物保護可以並行。 \\n基於環境永續與動物福利考量，建議政府： \\n1.規劃並推動 逐步禁放與禁售煙火的政策時程，優先限制高噪音、高污染之煙火種類2.推廣 低噪音或環保替代方案，如燈光秀、無火藥表演或其他創新形式3.加強對煙火對環境與動物影響的 公共宣導與教育 \\n \",\n  \"利益與影響\" : \"1.降低空氣污染與噪音污染，改善整體生活環境品質2.減少對寵物與野生動物造成的驚嚇、受傷與長期壓力3.促進節慶活動轉型，兼顧文化活動與永續發展4.提升社會對動物保護與環境議題的重視，與國際趨勢接軌 \\n \",\n  \"附議數量\" : \"0\",\n  \"附議門檻\" : \"5000\",\n  \"提送日期\" : \"2026-01-01 00:39:01\",\n  \"關注數量\" : \"0\",\n  \"留言數量\" : \"0\",\n  \"googleAnalytics\" : \"無\",\n  \"提議者\" : \"Tyler\"\n},\n{\n  \"publishDate\" : \"2026-01-01 12:34:35\",\n  \"網址\" : \"https://join.gov.tw/idea/detail/2c64727f-bd52-46a5-9f5f-8438745c8d8f\",\n  \"標題\" : \"路邊停車回歸民意、實現社會公平\",\n  \"提議內容\" : \"以最小的選舉單位村、里來決定是否辦理轄內合規道路的路邊收費停車經營。 \\n經營盈餘僅將低於百分之50以下收益繳付上級自治團體，其餘留作村、里特定用途支出。 \\n \",\n  \"利益與影響\" : \"1.路邊收費停車回歸民意。 \\n2.使用者付費，實踐社會公平。 \\n3.積極管理，改善路邊停車亂象。 \\n4.盈餘留用當地，居民付費有感。\",\n  \"附議數量\" : \"0\",\n  \"附議門檻\" : \"0\",\n  \"提送日期\" : \"無\",\n  \"關注數量\" : \"0\",\n  \"留言數量\" : \"1\",\n  \"googleAnalytics\" : \"無\",\n  \"提議者\" : \"Dastin\"\n},\n{\n  \"publishDate\" : \"2026-01-01 12:57:10\",\n  \"網址\" : \"https://join.gov.tw/idea/detail/3078787d-0113-4ba5-ba63-68ad0a95f027\",\n  \"標題\" : \"禁止擺放彈簧殺傷力大的〔捕獸夾〕造成流浪動物受傷害，也可能會害別人受傷\",\n  \"提議內容\" : \"【行動號召｜拒絕公告式禁止】 \\n審動保法，請大家ㄧ起站出來要求法律明禁山豬吊（續壓彈簧金屬套索陷阱） \\n山豬吊（續壓彈簧金屬套索陷阱）在台灣氾濫，是長期被法律忽視、放任流通的結果。 \\n多年來，政府僅以「公告」方式處理山豬吊問題。但公告可以更改、可以撤銷，卻無法阻止山豬吊被持續輸入、製造、販售、持有與使用，更無法阻止動物被纏住、勒斷肢體，在痛苦中慢慢死亡。 \\n我們要的不是口號，而是寫進法律、不能迴避的明文禁止👇 \\n👉 修正《動物保護法》 \\n👉 明文禁止山豬吊（續壓彈簧金屬套索陷阱） \\n👉 全面禁止：輸入、製造、販售、持有與使用 \\n👉 建立明確法律責任與罰則，杜絕公告式卸責 \\n只要法律沒有明文禁止，續壓彈簧金屬套索陷阱就會繼續在電商平台販售、在山林與農地奪命，而動物的痛苦，永遠被推給一紙可撤回的行政公告。 \\n如果你也認為：動物的命，不該被卡在「公告」裡，請站出來，或至少幫忙分享這篇貼文。 \\n🪧 拒絕公告式禁止 \\n🪧 要求法律明文禁止山豬吊（續壓彈簧金屬套索陷阱）\",\n  \"利益與影響\" : \" \\n 害人害己 \\n 得不償失 \\n 殺傷力大 \\n 危險性 \\n 預防惡意虐待動物 \\n\",\n  \"附議數量\" : \"122\",\n  \"附議門檻\" : \"5000\",\n  \"提送日期\" : \"2026-01-01 12:59:11\",\n  \"關注數量\" : \"2\",\n  \"留言數量\" : \"0\",\n  \"googleAnalytics\" : \"無\",\n  \"提議者\" : \"min min\"\n},\n{\n  \"publishDate\" : \"2026-01-01 13:17:45\",\n  \"網址\" : \"https://join.gov.tw/idea/detail/992919f1-1d5e-4aa0-b345-365c29ea5882\",\n  \"標題\" : \"建議各級學校〔霸凌嚴懲制度〕也列入評鑑，嚴懲加害者也保護被害者，應該公平對待每位學生\",\n  \"提議內容\" : \" \\n 教室應裝設360%監視度無死角 \\n 嚴懲輔導加害者 \\n 保護被害者 \\n 公平公正公開 \\n 不因學生家長背景，去強迫被害學生隱瞞家長 \\n 宣導〔友善無霸凌〕 \\n 加害者須做公開道歉，不強迫被害者原諒加害者 \\n 宣導〔兩性關係平等〕 \\n\",\n  \"利益與影響\" : \"亞洲家長有一個錯誤觀念〔別人欺負我們沒關係，我們不能欺負別人〕 \\n小孩打架吵架不看原因，誰先找麻煩，就要雙方〔對方和解〕，為了面子怕麻煩 \\n〔當做在跟你玩〕，導致小孩以後〔被欺負覺得跟家長講了也沒用〕 \\n \",\n  \"附議數量\" : \"11\",\n  \"附議門檻\" : \"5000\",\n  \"提送日期\" : \"2026-01-01 13:17:53\",\n  \"關注數量\" : \"0\",\n  \"留言數量\" : \"0\",\n  \"googleAnalytics\" : \"無\",\n  \"提議者\" : \"min min\"\n},\n{\n  \"publishDate\" : \"2026-01-01 14:03:18\",\n  \"網址\" : \"https://join.gov.tw/idea/detail/a594c468-83f7-4072-a240-5962d0b6e834\",\n  \"標題\" : \"學校公務員幹事，應該比照老師兼行政職，發給行政加給\",\n  \"提議內容\" : \"1.學校的公務員除了主計人事，還有行政幹事。主任有主管加給，另外兼任組長的教師也領行政加給，幹事同為行政一員，卻什麼津貼都沒有。 \\n  \\n2.在學校幹事多為總務處職缺，工作包含做財管、全校薪資、所有人勞健保勞退業務、二代健保、公文收發、協助採購、學校總務雜事、還有會議紀錄、印信管理等。但除了這些，其他處室組長的工作不想做了卻都會丟出來 \\n \\n 教務處-圖書館管理、愛的書庫業務、鐘點費計算等 \\n 輔導室-學生教科書學雜費申請 \\n \\n該處室丟出來業務不屬於其他處室，其他組長都不接，最後就落在倒楣的幹事身上，幹事身兼數人的工作，比一個組長業務還多。 \\n3.組長本身已經減課了，兼行政可以領加給，卻把工作丟給幹事，另外空閒沒事還可去代課再另一筆鐘點費，結果代課鐘點費也是幹事在做。幹事一人兼多項重要工作，每年還要有一定比例考績乙等，不像老師年年甲等。現在老師的行政加給、鐘點費又要提高，辛苦的幹事卻什麼津貼補助都沒有，強烈要求應該讓幹事比照其他組長領行政加給。\",\n  \"利益與影響\" : \"讓學校幹事可以更安心在學校工作， 不會讓幹事流動頻繁，影響重要業務運作。\",\n  \"附議數量\" : \"37\",\n  \"附議門檻\" : \"5000\",\n  \"提送日期\" : \"2026-01-01 14:05:23\",\n  \"關注數量\" : \"1\",\n  \"留言數量\" : \"0\",\n  \"googleAnalytics\" : \"無\",\n  \"提議者\" : \"BOIL\"\n},\n{\n  \"publishDate\" : \"2026-01-01 14:43:18\",\n  \"網址\" : \"https://join.gov.tw/idea/detail/7c01b6e4-03f5-409b-8324-4477f1ccd0c7\",\n  \"標題\" : \"AI 智慧動態增班計畫\",\n  \"提議內容\" : \"每次大家上下學、上下班，因為班次少都要人擠人的很不舒服。本計畫建議政府導入「即時客流感測系統」，當候車人潮超過警戒值時，自動啟動加班車（Extra-bus）機制。透過區塊鏈記錄發車時間與載客量，確保班次誠實履行，嚴禁「虛假發車」或「過站不停」。並結合交通號誌優先權（TSP）縮短週轉時間，預計可提升運輸能量，有效解決擠不上車的痛點。以「數據驅動」與「效率」優先\",\n  \"利益與影響\" : \"讓我們有一個稍微舒服一點的搭乘大眾運輸工具體驗\",\n  \"附議數量\" : \"0\",\n  \"附議門檻\" : \"5000\",\n  \"提送日期\" : \"2026-01-01 14:44:09\",\n  \"關注數量\" : \"0\",\n  \"留言數量\" : \"0\",\n  \"googleAnalytics\" : \"無\",\n  \"提議者\" : \"Xuan\"\n},\n{\n"
- }
+ "tm_months": [
+  [
+   "2026/09",
+   484
+  ],
+  [
+   "2025/07",
+   64
+  ],
+  [
+   "2025/12",
+   50
+  ],
+  [
+   "2025/08",
+   44
+  ],
+  [
+   "2025/09",
+   41
+  ],
+  [
+   "2026/01",
+   36
+  ]
+ ],
+ "tm_sample": [
+  {
+   "appl-no": "115890014",
+   "appl-date": "2005/03/16",
+   "tmark-name": "Newport 及圖",
+   "tmark-class-desc": "商標",
+   "cls": [
+    "025"
+   ],
+   "app": [
+    "林秋城"
+   ]
+  },
+  {
+   "appl-no": "115890015",
+   "appl-date": "2025/03/21",
+   "tmark-name": "CaraQ",
+   "tmark-class-desc": "商標",
+   "cls": [
+    "009",
+    "035",
+    "038",
+    "041"
+   ],
+   "app": [
+    "悟空科技股份有限公司"
+   ]
+  },
+  {
+   "appl-no": "115890016",
+   "appl-date": "2025/03/21",
+   "tmark-name": "CaraQ",
+   "tmark-class-desc": "商標",
+   "cls": [
+    "009",
+    "035",
+    "038",
+    "041"
+   ],
+   "app": [
+    "悟空科技股份有限公司"
+   ]
+  },
+  {
+   "appl-no": "115890017",
+   "appl-date": "2008/10/09",
+   "tmark-name": "ROADSTER",
+   "tmark-class-desc": "商標",
+   "cls": [
+    "003",
+    "016",
+    "025"
+   ],
+   "app": [
+    "ＤＲ　ＩＮＧ　Ｈ　Ｃ　Ｆ　保時捷股份有限公司"
+   ]
+  },
+  {
+   "appl-no": "115890018",
+   "appl-date": "2008/10/09",
+   "tmark-name": "ROADSTER",
+   "tmark-class-desc": "商標",
+   "cls": [
+    "003",
+    "016",
+    "025"
+   ],
+   "app": [
+    "ＤＲ　ＩＮＧ　Ｈ　Ｃ　Ｆ　保時捷股份有限公司"
+   ]
+  },
+  {
+   "appl-no": "115980329",
+   "appl-date": "2025/09/05",
+   "tmark-name": "maimai でらっくす CiRCLE",
+   "tmark-class-desc": "商標",
+   "cls": [
+    "009"
+   ],
+   "app": [
+    "世雅股份有限公司"
+   ]
+  }
+ ],
+ "tm_keys": [
+  "-sequence",
+  "appl-no",
+  "appl-date",
+  "tmark-name",
+  "tmark-class",
+  "tmark-class-desc",
+  "tmark-image-url",
+  "tmark-type",
+  "tmark-type-desc",
+  "tmark-color",
+  "tmark-color-desc",
+  "tmark-draft-c",
+  "tmark-draft-e",
+  "tmark-draft-j",
+  "tmark-sign",
+  "word-description",
+  "out-off-draft",
+  "tmark-desc",
+  "receive-date",
+  "goodsclasses",
+  "parties"
+ ],
+ "tm_top5000": 5000,
+ "pp_total": 1079822,
+ "pp_n": 500,
+ "pp_keys": [
+  "-sequence",
+  "publication-reference",
+  "application-reference",
+  "patent-title",
+  "parties",
+  "classification-ipc",
+  "link"
+ ],
+ "pp_sample": "{\"-sequence\": 500, \"publication-reference\": {\"notice-no\": 202639053, \"notice-volno\": 24, \"notice-isuno\": 19, \"notice-date\": \"2026/10/01\"}, \"application-reference\": {\"appl-no\": \"115125325\", \"appl-date\": \"2025/07/25\", \"first-date\": \"2026/06/26\", \"foreign-language\": null, \"foreign-language-desc\": null}, \"patent-title\": {\"patent-name-chinese\": \"嬰兒床\", \"patent-name-english\": \"BABY CRIB\"}, \"parties\": {\"applicants\": [{\"-sequence\": 1, \"chinese-name\": \"瑞士商明門瑞士股份有限公司\", \"english-name\": \"WONDERLAND SWITZERLAND AG\", \"address\": \"瑞士\", \"english-country\": \"CH\", \"chinese-country\": \"瑞士\", \"english-address\": \"BEIM BAHNHOF 5, 6312, STEINHAUSEN, SWITZERLAND\"}], \"inventors\": [{\"-sequence\": 1, \"chinese-name\": \"胡問渠\", \"english-name\": \"HU, WENQU\", \"english-country\": \"CN\", \"chinese-country\": \"中國大陸\"}, {\"-sequence\": 2, \"chinese-name\": \"胡留輝\", \"english-name\": \"HU, LIUHUI\", \"english-country\": \"CN\", \"chinese-country\": \"中國大陸\"}, {\"-sequence\": 3, \"chinese-name\": \"汪濤\", \"english-name\": \"WANG, TAO\", \"english-country\": \"CN\", \"chinese-country\": \"中國大陸\"}, {\"-sequence\": 4, \"chinese-name\": \"陳寶忠\", \"english-name\": \"CHEN, BAOZHONG\", \"english-country\": \"CN\", \"chinese-country\": \"中國大陸\"}, {\"-sequence\": 5, \"chinese-name\": \"劉偉\", \"english-name\": \"LIU, WEI\", \"english-country\": \"CN\", \"chinese-country\": \"中國大陸\"}], \"agents\": [{\"-sequence\": 1, \"chinese-name\": \"卓俊傑\", \"english-name\": null, \"address\": \"臺北市中正區羅斯福路2段100號7樓之1\", \"english-country\": \"TW\", \"chinese-country\": \"中華民國\"}, {\"-sequence\": 2, \"chinese-name\": \"劉亞君\", \"english-name\": null, \"address\": \"臺北市中正區羅斯福路2段100號7樓之1\", \"english-country\": \"TW\", \"chinese-country\": \"中華民國\"}]}, \"classification-ipc\": [{\"-sequence\": 1, \"ipc-full\": \"A47D13/02\", \"ipc-section\": \"A\", \"ipc-class\": \"47\", \"ipc-subclass\": \"D\", \"ipc-main-group\": \"13\", \"ipc-group\": \"02\", \"ipc-version\": \"200601\"}, {\"-sequence\": 2, \"ipc-full\": \"A47D9/00\", \"ipc-section\": \"A\", \"ipc-class\": \"47\", \"ipc-subclass\": \"D\", \"ipc-main-group\": \"9\", \"ipc-group\": \"00\", \"ipc-version\": \"200601\"}, {\"-sequence\": 3, \"ipc-full\": \"A47D7/00\", \"ipc-section\": \"A\", \"ipc-class\": \"47\", \"ipc-subclass\": \"D\", \"ipc-main-group\": \"7\", \"ipc-group\": \"00\", \"ipc-version\": \"200601\"}, {\"-sequence\": 4, \"ipc-full\": \"A47D7/03\", \"ipc-section\": \"A\", \"ipc-class\": \"47\", \"ipc-subclass\": \"D\", \"ipc-main-group\": \"7\", \"ipc-group\": \"03\", \"ipc-version\": \"200601\"}, {\"-sequence\": 5, \"ipc-full\": \"A47D15/00\", \"ipc-section\": \"A\", \"ipc-class\": \"47\", \"ipc-subclass\": \"D\", \"ipc-main-group\": \"15\", \"ipc-group\": \"00\", \"ipc-version\": \"200601\"}], \"link\": {\"patentpubregxmla-url\": \"ftps:/",
+ "pp_notice_dates": [
+  [
+   "2026/08",
+   190
+  ],
+  [
+   "2026/09",
+   171
+  ],
+  [
+   "2026/10",
+   136
+  ],
+  [
+   "2026/07",
+   3
+  ]
+ ],
+ "pol_n": 417,
+ "pol_latest": [
+  "2024-10-08",
+  "2024-12-25",
+  "2025-03-29",
+  "2025-05-21",
+  "2025-07-31"
+ ],
+ "pol_recent": [
+  {
+   "標題": "*無標題*",
+   "發佈日期": "無",
+   "下線日期": "無",
+   "關注數量": "0",
+   "留言數量": "0"
+  }
+ ],
+ "pol_keys": [
+  "網址",
+  "標題",
+  "內文摘要",
+  "內容",
+  "發佈日期",
+  "下線日期",
+  "關注數量",
+  "留言數量",
+  "googleAnalytics",
+  "Facebook分享數量"
+ ]
 }
