@@ -1066,7 +1066,7 @@ def p_policy():
                 continue
             mid = g("MetaId")
             title = re.sub(r"^.{0,20}?公告：", "", g("Title"))
-            txt = " ".join([title, g("ThemeSubject"), g("Keyword"), g("Category")])
+            txt = " ".join([title, g("ThemeSubject")])
             store[mid] = {"title": title[:90], "gov": g("PubGovName") or g("PubGov"), "under": g("UndertakeGov"),
                           "pub": _roc_cn_date(g("Date_Published")), "due": _roc_cn_date(g("Comment_Deadline")),
                           "kw": g("Keyword")[:60], "topic": _pol_topic(txt), "url": g("GazetteHTML")}
@@ -1153,12 +1153,13 @@ def p_ipr():
     try:
         total = int(_tipo("TmarkAppl", top=1)["total-count"])
         recs, skip = [], total
-        for _ in range(8):  # 最多 4 萬筆
+        stop = (TODAY_TPE - timedelta(days=150)).strftime("%Y/%m/%d")
+        for _ in range(10):  # 最多 5 萬筆；申請號大致照收件順序，整頁中位日期早於比較窗口就停
             skip = max(0, skip - 5000)
-            j = _tipo("TmarkAppl", top=5000, skip=skip)
-            recs += j["tmarkappl"]["tmarkcontent"]
-            dates = sorted(r.get("appl-date") or "" for r in recs if (r.get("appl-date") or "") >= "2000")
-            if skip == 0 or (len(dates) > 2000 and dates[len(dates) // 10] < (TODAY_TPE - timedelta(days=150)).strftime("%Y/%m/%d")):
+            page = _tipo("TmarkAppl", top=5000, skip=skip)["tmarkappl"]["tmarkcontent"]
+            recs += page
+            pd_ = sorted(r.get("appl-date") or "" for r in page if (r.get("appl-date") or "") >= "2000")
+            if skip == 0 or (pd_ and pd_[len(pd_) // 2] < stop):
                 break
             time.sleep(1)
         ds = sorted({(r.get("appl-date") or "")[:10] for r in recs if (r.get("appl-date") or "") >= "2020"})
@@ -1194,12 +1195,14 @@ def p_ipr():
     try:
         total = int(_tipo("PatentPub", top=1)["total-count"])
         recs, skip = [], total
-        for _ in range(6):
+        stop = (TODAY_TPE - timedelta(days=95)).strftime("%Y/%m/%d")
+        for _ in range(12):  # 申請號順序和公開日不完全一致，整頁中位公開日早於比較窗口一段時間才停
             skip = max(0, skip - 5000)
-            j = _tipo("PatentPub", top=5000, skip=skip)
-            recs += j["tw-patent-pub"]["patentcontent"]
-            nd = sorted(((r.get("publication-reference") or {}).get("notice-date") or "") for r in recs)
-            if skip == 0 or (nd and nd[len(nd) // 10] < (TODAY_TPE - timedelta(days=100)).strftime("%Y/%m/%d")):
+            page = _tipo("PatentPub", top=5000, skip=skip)["tw-patent-pub"]["patentcontent"]
+            recs += page
+            nd = sorted(((r.get("publication-reference") or {}).get("notice-date") or "") for r in page)
+            nd = [x for x in nd if x]
+            if skip == 0 or (nd and nd[len(nd) // 2] < stop):
                 break
             time.sleep(1)
         nds = sorted({((r.get("publication-reference") or {}).get("notice-date") or "") for r in recs} - {""})
