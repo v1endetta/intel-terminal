@@ -1032,7 +1032,9 @@ POL_TOPICS = [
     ("交通與移動", r"交通|車輛|汽車|機車|道路|捷運|鐵路|航空|停車|自行車|駕駛"),
     ("觀光與文化", r"觀光|旅館|民宿|旅行|文化|藝文|運動|體育|展演|博物館"),
     ("教育與勞動", r"教育|學校|補習|學生|勞工|勞動|工時|薪資|就業|托育|育兒|兒少|幼兒"),
-    ("能源與環境", r"能源|電力|環境|減碳|碳|回收|廢棄物|空氣|水資源|再生能源|氣候|污染|汙染|塑膠|容器|包材|消防"),
+    ("能源與環境", r"能源|電力|環境|減碳|碳|回收|廢棄物|空氣|水資源|再生能源|氣候|污染|汙染|塑膠|容器|包材|消防|原子能|核"),
+    ("稅務與財政", r"稅|預算|財政|特別條例|補助|國債|公債"),
+    ("司法與治安", r"法院|刑法|刑事|檢察|治安|詐欺|詐騙|毒品|監獄|犯罪|警察|槍砲"),
 ]
 POL_CONSUMER = {"消費與食品", "健康與照護", "寵物與動物", "居住與不動產", "數位與 AI", "觀光與文化"}
 GAZ_DRAFTS = DATA / "gazette_drafts.json"
@@ -1118,13 +1120,52 @@ def p_policy():
     for i in ideas:
         if i["pub"] >= (TODAY_TPE - timedelta(days=30)).isoformat():
             itopic[i["topic"]] = itopic.get(i["topic"], 0) + 1
-    if not drafts and not ideas:
+    # 3) 立法院法律案（OpenFun LYAPI，資料 CC-BY-4.0）：依「最新進度日期」排序，抓近 45 天有動的
+    bills = []
+    try:
+        c45 = (TODAY_TPE - timedelta(days=75)).isoformat()
+        for page in range(1, 25):
+            js = gjson("https://ly.govapi.tw/v2/bills", params={"議案類別": "法律案", "limit": "100", "page": str(page)}, timeout=60)
+            got = js.get("bills") or []
+            for b in got:
+                d = b.get("最新進度日期") or ""
+                if d < c45:
+                    continue
+                nm = re.sub(r"[，,]?請審議案。?$|案。$", "", b.get("議案名稱") or "").strip("「」 ")
+                laws = " ".join(b.get("法律編號:str") or [])
+                who = (b.get("提案單位/提案委員") or "").replace("本院委員", "")
+                bills.append({"id": b.get("議案編號"), "title": nm[:80], "who": who[:24], "src": b.get("提案來源") or "",
+                              "st": b.get("議案狀態") or "", "d": d, "topic": _pol_topic(nm + " " + laws),
+                              "new": "草案" in nm and not re.search(r"修正|增訂|廢止|刪除|條文", nm),
+                              "url": b.get("url") or f"https://ppg.ly.gov.tw/ppg/bills/{b.get('議案編號')}/details"})
+            if not got or (got[-1].get("最新進度日期") or "") < c45:
+                break
+            time.sleep(0.5)
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"立法院: {safe_err(e)}")
+    c30 = (TODAY_TPE - timedelta(days=60)).isoformat()  # 立法院有休會期，用 60 天才不會整段空掉
+    b30 = [b for b in bills if b["d"] >= c30]
+    btopic = {}
+    for b in b30:
+        btopic[b["topic"]] = btopic.get(b["topic"], 0) + 1
+    third, seen3 = [], set()
+    for b in sorted(bills, key=lambda b: b["d"], reverse=True):
+        if "三讀" in b["st"] and b["title"] not in seen3:
+            seen3.add(b["title"]); third.append(b)
+    newlaw, seenn = [], set()
+    for b in sorted(b30, key=lambda b: b["d"], reverse=True):  # 同一部新法常有好幾位委員各提一版，只留最新一筆
+        if b["new"] and b["title"] not in seenn:
+            seenn.add(b["title"]); newlaw.append(b)
+    bpick = sorted(sorted(newlaw, key=lambda b: b["d"], reverse=True), key=lambda b: b["topic"] not in POL_CONSUMER)[:8]
+    if not drafts and not ideas and not bills:
         raise RuntimeError(f"policy: nothing {errs[:2]}")
     return {"drafts": drafts[:40], "open_n": len(open_), "d30_n": len(d30), "d_topics": sorted(tcount.items(), key=lambda kv: -kv[1]),
             "since": min((d.get("pub") for d in drafts if d.get("pub")), default=""),
             "ideas_hot": hot, "ideas_passed": sorted(passed, key=lambda i: i["pub"], reverse=True)[:8], "ideas_n30": n30,
             "i_topics": sorted(itopic.items(), key=lambda kv: -kv[1]), "consumer": sorted(POL_CONSUMER),
-            "src": "行政院公報資訊網 Open Data（法規命令草案預告）＋ 公共政策網路參與平臺「提點子」開放資料", "errs": errs[:4]}
+            "bills_n30": len(b30), "b_topics": sorted(btopic.items(), key=lambda kv: -kv[1]), "b_new": bpick,
+            "b_newn": len(newlaw), "b_third": sorted(third, key=lambda b: b["d"], reverse=True)[:6],
+            "src": "行政院公報資訊網 Open Data（法規命令草案預告）＋ 公共政策網路參與平臺「提點子」開放資料 ＋ 立法院議案（OpenFun LYAPI，CC-BY-4.0）", "errs": errs[:4]}
 
 
 # ---------- 品牌與專利：智慧局商標申請、發明公開（政府開放資料 API） ----------
@@ -3762,6 +3803,102 @@ def p_veg():
         hist_put("veg_idx", "basket", max(i["date"] for i in items), idx)
     items.sort(key=lambda x: -(x["chg14"] or 0))
     return {"market": "台北一", "date": max(i["date"] for i in items), "index": idx, "items": items, "rows": len(rows)}
+
+
+# ---------- 魚價（農業部漁產品交易行情：全台魚市場，近十個交易日） ----------
+MOA_FISH = "https://data.moa.gov.tw/Service/OpenData/FromM/AquaticTransData.aspx"
+
+
+def p_fish():
+    rows = gjson(MOA_FISH, params={"IsTransData": "1", "UnitId": "039"}, timeout=120)
+    agg, vol10 = {}, {}  # (日期, 魚) -> [金額, 量]；魚 -> 十日量
+    for r in rows:
+        name = (r.get("魚貨名稱") or "").strip()
+        p, v = num(r.get("平均價")), num(r.get("交易量"))
+        m = re.match(r"(\d{3})(\d{2})(\d{2})$", str(r.get("交易日期") or ""))
+        # 冷凍大宗（鮪、鯊、下雜魚）多在漁港拍賣，跟餐桌價格無關，排除
+        if not name or name.startswith("其他") or "凍" in name or "雜" in name or not p or not v or not m:
+            continue
+        iso = f"{int(m.group(1)) + 1911}-{m.group(2)}-{m.group(3)}"
+        a = agg.setdefault((iso, name), [0.0, 0.0])
+        a[0] += p * v; a[1] += v
+        vol10[name] = vol10.get(name, 0) + v
+    if not agg:
+        raise RuntimeError(f"fish: no rows ({len(rows)})")
+    top = [k for k, _ in sorted(vol10.items(), key=lambda kv: -kv[1])[:40]]  # 只存量大的，歷史檔才不會膨脹
+    for (iso, name), (amt, vol) in agg.items():
+        if name in top:
+            hist_put("fish", name, iso, round(amt / vol, 1))
+    basket = top[:16]
+    items, ratios = [], []
+    for name in basket:
+        h = HISTORY.get("fish", {}).get(name) or []
+        vals = [v for _, v in h[-15:]]
+        if not vals:
+            continue
+        cur = vals[-1]
+        base = sum(vals[:-1]) / len(vals[:-1]) if len(vals) > 1 else None
+        chg = round(100 * (cur / base - 1), 1) if base else None
+        if chg is not None:
+            ratios.append(chg)
+        items.append({"name": name, "price": cur, "date": h[-1][0], "prev": vals[-2] if len(vals) > 1 else None, "chg14": chg,
+                      "spark": vals, "vol": round(vol10[name] / 1000, 1)})
+    idx = round(sorted(ratios)[len(ratios) // 2], 1) if ratios else None  # 中位數：單一魚種暴漲暴跌不會拉歪
+    date = max(i["date"] for i in items)
+    if idx is not None:
+        hist_put("fish_idx", "basket", date, idx)
+    items.sort(key=lambda x: -(x["chg14"] or 0))
+    return {"date": date, "index": idx, "items": items, "rows": len(rows), "src": "農業部資料開放平臺 · 漁產品交易行情"}
+
+
+# ---------- 美國企業在談什麼（SEC EDGAR 全文檢索：10-K / 10-Q / 8-K 提到的次數，比去年同期） ----------
+# SEC 存取規範：每秒不超過 10 次、User-Agent 要寫聯絡信箱。信箱放在 GitHub secret（SEC_CONTACT），不寫進公開程式碼。
+SEC_WORDS = [("GLP-1", "GLP-1 減重藥"), ("tariffs", "關稅"), ("agentic", "AI agent"), ("generative AI", "生成式 AI"),
+             ("data center", "資料中心"), ("humanoid", "人形機器人"), ("small modular reactor", "小型核電"), ("stablecoin", "穩定幣"),
+             ("Taiwan", "台灣"), ("private label", "自有品牌"), ("trade down", "消費降級"), ("Gen Z", "Z 世代"),
+             ("loyalty program", "會員經濟"), ("resale", "二手轉售"), ("influencer", "網紅行銷"), ("pet food", "寵物食品"),
+             ("non-alcoholic", "無酒精"), ("longevity", "長壽經濟")]
+SIC2 = {"01": "農業", "13": "油氣", "20": "食品飲料", "23": "服飾", "28": "製藥化學", "35": "電腦機械", "36": "電子半導體", "37": "汽車運輸",
+        "38": "醫材儀器", "48": "電信", "49": "公用事業", "50": "批發", "51": "批發", "53": "百貨量販", "54": "食品零售", "56": "服飾零售",
+        "58": "餐飲", "59": "零售", "60": "銀行", "61": "金融", "62": "證券", "63": "保險", "67": "投資控股", "70": "旅館", "73": "軟體服務",
+        "78": "影視", "79": "娛樂", "80": "醫療服務", "87": "工程顧問"}
+
+
+def p_secwords():
+    contact = os.environ.get("SEC_CONTACT", "").strip()
+    if "@" not in contact:
+        raise RuntimeError("SEC_CONTACT secret 還沒設定")
+    hdr = {"User-Agent": f"intel-terminal {contact}", "Accept": "application/json"}
+    end = TODAY_TPE - timedelta(days=1)
+    start = end - timedelta(days=89)
+    ly = lambda d: d.replace(year=d.year - 1)  # noqa: E731
+    def q(word, a, b):
+        r = S.get("https://efts.sec.gov/LATEST/search-index", headers=hdr, timeout=40,
+                  params={"q": f'"{word}"', "dateRange": "custom", "startdt": a.isoformat(), "enddt": b.isoformat(), "forms": "10-K,10-Q,8-K"})
+        r.raise_for_status(); time.sleep(0.3)
+        return r.json()
+    rows, errs = [], []
+    for word, label in SEC_WORDS:
+        try:
+            cur = q(word, start, end)
+            prev = q(word, ly(start), ly(end))
+            n_cur = int(((cur.get("hits") or {}).get("total") or {}).get("value") or 0)
+            n_prev = int(((prev.get("hits") or {}).get("total") or {}).get("value") or 0)
+            ag = cur.get("aggregations") or {}
+            ent = [re.sub(r"\s*\(CIK \d+\)", "", b.get("key") or "").strip() for b in (ag.get("entity_filter") or {}).get("buckets", [])[:3]]
+            sic = [(b.get("key") or "")[:2] for b in (ag.get("sic_filter") or {}).get("buckets", [])[:3]]
+            rows.append({"w": word, "label": label, "n": n_cur, "prev": n_prev,
+                         "chg": round(100 * (n_cur / n_prev - 1)) if n_prev >= 20 else None,
+                         "co": [re.sub(r"\s{2,}", " ", e) for e in ent if e][:3], "ind": [SIC2[s] for s in dict.fromkeys(sic) if s in SIC2][:2]})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{word}: {safe_err(e)}")
+    if not rows:
+        raise RuntimeError(f"sec: nothing {errs[:2]}")
+    for r in rows:
+        hist_put("secwords", r["w"], end.isoformat(), r["n"])
+    rows.sort(key=lambda r: -(r["chg"] if r["chg"] is not None else -999))
+    return {"win": [start.isoformat(), end.isoformat()], "rows": rows, "errs": errs[:4],
+            "src": "SEC EDGAR 全文檢索（10-K、10-Q、8-K 含附件，計文件數）"}
 
 
 
@@ -6882,6 +7019,8 @@ run("oil", p_oil, keep_if_fresh_hours=12)
 run("localnews", p_localnews, keep_if_fresh_hours=1)
 run("culture", p_culture, keep_if_fresh_hours=6)
 run("veg", p_veg, keep_if_fresh_hours=6)
+run("fish", p_fish, keep_if_fresh_hours=6)
+run("secwords", p_secwords, keep_if_fresh_hours=24)
 # run("tiktok", p_tiktok, keep_if_fresh_hours=20)  # Creative Center 擋資料中心 IP，每輪白耗 60 秒，先停
 
 DATA.mkdir(exist_ok=True)

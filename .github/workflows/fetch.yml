@@ -59,6 +59,7 @@ jobs:
           GOOGLE_CSE_KEY: ${{ secrets.GOOGLE_CSE_KEY }}
           GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SEC_CONTACT: ${{ secrets.SEC_CONTACT }}
         run: |
           cd out
           git config user.name "intel-bot"
