@@ -1021,6 +1021,224 @@ def taxreg_supply(pattern, codes=None):
         out["yoy"] = round(((n6o / ly6) / base - 1) * 100)
     return out
 
+# ---------- 政策與民意：行政院公報「法規草案預告」＋ JOIN「提點子」連署（政府開放資料，授權可再利用） ----------
+POL_TOPICS = [
+    ("消費與食品", r"食品|飲料|餐飲|零售|消費|化粧品|化妝品|標示|廣告|電商|網購|網路購物|菸|酒|商品|價格|外送"),
+    ("健康與照護", r"醫療|藥|健康|長照|長期照顧|照護|醫美|保健|健保|醫院|護理|心理|身心|失智"),
+    ("寵物與動物", r"寵物|動物|犬|貓|動保|飼主"),
+    ("居住與不動產", r"住宅|房屋|租賃|建築|社宅|社會住宅|都市|不動產|房價|包租|代管"),
+    ("數位與 AI", r"數位|資訊|個資|個人資料|資安|網路|人工智慧|\bAI\b|電信|平臺|平台|演算法|電子"),
+    ("金融與支付", r"金融|銀行|保險|支付|證券|虛擬資產|電子票證|信用|投資"),
+    ("交通與移動", r"交通|車輛|汽車|機車|道路|捷運|鐵路|航空|停車|自行車|駕駛"),
+    ("觀光與文化", r"觀光|旅館|民宿|旅行|文化|藝文|運動|體育|展演|博物館"),
+    ("教育與勞動", r"教育|學校|補習|學生|勞工|勞動|工時|薪資|就業|托育|育兒|兒少|幼兒"),
+    ("能源與環境", r"能源|電力|環境|減碳|碳|回收|廢棄物|空氣|水資源|再生能源|氣候"),
+]
+POL_CONSUMER = {"消費與食品", "健康與照護", "寵物與動物", "居住與不動產", "數位與 AI", "觀光與文化"}
+GAZ_DRAFTS = DATA / "gazette_drafts.json"
+
+
+def _pol_topic(text):
+    for nm, pat in POL_TOPICS:
+        if re.search(pat, text or ""):
+            return nm
+    return "其他"
+
+
+def _roc_cn_date(s):
+    m = re.search(r"(\d{2,3})年(\d{1,2})月(\d{1,2})日", s or "")
+    return f"{int(m.group(1)) + 1911}-{int(m.group(2)):02d}-{int(m.group(3)):02d}" if m else ""
+
+
+def p_policy():
+    import xml.etree.ElementTree as ET
+    errs, today = [], TODAY_TPE.isoformat()
+    # 1) 公報：每天只給「最新一期」，所以每輪都把草案預告存起來，累積成清單
+    try:
+        store = json.loads(GAZ_DRAFTS.read_text(encoding="utf-8")) if GAZ_DRAFTS.exists() else {}
+    except Exception:  # noqa: BLE001
+        store = {}
+    try:
+        root = ET.fromstring(get("https://gazette.nat.gov.tw/egFront/OpenData/downloadXML.jsp", timeout=90).content)
+        for rec in root.findall("Record"):
+            g = lambda k: (rec.findtext(k) or "").strip()  # noqa: E731
+            if "草案" not in g("Doc_Style_SName") or "預告" not in g("Doc_Style_SName"):
+                continue
+            mid = g("MetaId")
+            title = re.sub(r"^.{0,20}?公告：", "", g("Title"))
+            txt = " ".join([title, g("ThemeSubject")])
+            store[mid] = {"title": title[:90], "gov": g("PubGovName") or g("PubGov"), "under": g("UndertakeGov"),
+                          "pub": _roc_cn_date(g("Date_Published")), "due": _roc_cn_date(g("Comment_Deadline")),
+                          "kw": g("Keyword")[:60], "topic": _pol_topic(txt), "url": g("GazetteHTML")}
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"公報: {safe_err(e)}")
+    cut = (TODAY_TPE - timedelta(days=120)).isoformat()
+    store = {k: v for k, v in store.items() if (v.get("pub") or today) >= cut}
+    write_json(GAZ_DRAFTS, store, separators=(",", ":"))
+    drafts = sorted(store.values(), key=lambda x: x.get("pub") or "", reverse=True)
+    open_ = [d for d in drafts if (d.get("due") or "") >= today]
+    d30 = [d for d in drafts if (d.get("pub") or "") >= (TODAY_TPE - timedelta(days=30)).isoformat()]
+    tcount = {}
+    for d in d30:
+        tcount[d["topic"]] = tcount.get(d["topic"], 0) + 1
+    # 2) JOIN 提點子：今年的提議與附議數；存每天附議數，算 7 天增加
+    ideas = []
+    try:
+        arr = gjson(f"https://join.gov.tw/toOpenData/v2/ey/idea?year={TODAY_TPE.year}", timeout=180)
+        if TODAY_TPE.month <= 2:  # 年初也看去年底的
+            try:
+                arr += gjson(f"https://join.gov.tw/toOpenData/v2/ey/idea?year={TODAY_TPE.year - 1}", timeout=180)
+            except Exception:  # noqa: BLE001
+                pass
+        for x in arr:
+            sup, th = int(num(x.get("附議數量")) or 0), int(num(x.get("附議門檻")) or 0)
+            pub = (x.get("publishDate") or "")[:10]
+            if not pub:
+                continue
+            url = x.get("網址") or ""
+            key = url.rsplit("/", 1)[-1][:12]
+            ideas.append({"k": key, "title": (x.get("標題") or "")[:70], "sup": sup, "th": th, "pub": pub, "url": url,
+                          "topic": _pol_topic((x.get("標題") or "") + " " + (x.get("提議內容") or "")[:300])})
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"提點子: {safe_err(e)}")
+    hot = []
+    if ideas:
+        d60 = (TODAY_TPE - timedelta(days=60)).isoformat()
+        live = [i for i in ideas if i["pub"] >= d60 and i["sup"] > 0]
+        for i in sorted(live, key=lambda i: -i["sup"])[:40]:
+            old = next((v for d, v in reversed(HISTORY.get("join", {}).get(i["k"], [])) if d <= (TODAY_TPE - timedelta(days=7)).isoformat()), None)
+            hist_put("join", i["k"], today, i["sup"])
+            i["chg7"] = (i["sup"] - old) if old is not None else None
+        passed = [i for i in ideas if i["th"] and i["sup"] >= i["th"] and i["pub"] >= (TODAY_TPE - timedelta(days=120)).isoformat()]
+        hot = sorted(live, key=lambda i: -(i.get("chg7") if i.get("chg7") is not None else i["sup"]))[:10]
+    else:
+        passed = []
+    n30 = sum(1 for i in ideas if i["pub"] >= (TODAY_TPE - timedelta(days=30)).isoformat())
+    itopic = {}
+    for i in ideas:
+        if i["pub"] >= (TODAY_TPE - timedelta(days=30)).isoformat():
+            itopic[i["topic"]] = itopic.get(i["topic"], 0) + 1
+    if not drafts and not ideas:
+        raise RuntimeError(f"policy: nothing {errs[:2]}")
+    return {"drafts": drafts[:40], "open_n": len(open_), "d30_n": len(d30), "d_topics": sorted(tcount.items(), key=lambda kv: -kv[1]),
+            "since": min((d.get("pub") for d in drafts if d.get("pub")), default=""),
+            "ideas_hot": hot, "ideas_passed": sorted(passed, key=lambda i: i["pub"], reverse=True)[:8], "ideas_n30": n30,
+            "i_topics": sorted(itopic.items(), key=lambda kv: -kv[1]), "consumer": sorted(POL_CONSUMER),
+            "src": "行政院公報資訊網 Open Data（法規命令草案預告）＋ 公共政策網路參與平臺「提點子」開放資料", "errs": errs[:4]}
+
+
+# ---------- 品牌與專利：智慧局商標申請、發明公開（政府開放資料 API） ----------
+TIPO_TK = "43b47d07-4795-45d9-819a-9c71c72e4105"  # 智慧局在政府資料開放平臺公開的 API 金鑰
+NICE = {3: "美妝保養", 5: "藥品保健", 9: "科技軟體", 10: "醫療器材", 14: "珠寶鐘錶", 16: "文具印刷", 18: "皮件包袋", 20: "家具",
+        21: "居家廚具", 24: "寢具布品", 25: "服飾鞋帽", 28: "玩具運動", 29: "肉蛋乳品", 30: "烘焙咖啡茶", 31: "農產寵食", 32: "飲料",
+        33: "酒", 35: "廣告零售", 36: "金融不動產", 41: "教育娛樂", 42: "科技服務", 43: "餐飲住宿", 44: "醫療美容"}
+IPC_THEMES = [("AI", r"^G06N"), ("電商與商業模式", r"^G06Q"), ("醫療資訊", r"^G16H"), ("美妝保養", r"^A61Q|^A61K8"),
+              ("保健食品與藥", r"^A61K(?!8)|^A61P|^A23L33"), ("食品飲料", r"^A23|^C12G|^A21"), ("醫療器材", r"^A61[BCFGHJMN]"),
+              ("居家與家具", r"^A47"), ("個人用品", r"^A4[1-5]"), ("寵物與農業", r"^A01K|^A01"), ("運動與遊戲", r"^A63"),
+              ("車輛與移動", r"^B60|^B62|^B64"), ("電池與能源", r"^H01M|^H02J|^Y02"), ("半導體", r"^H01L|^H10"), ("通訊", r"^H04")]
+IPR_CONSUMER = {"美妝保養", "保健食品與藥", "食品飲料", "居家與家具", "個人用品", "寵物與農業", "運動與遊戲", "電商與商業模式", "AI", "醫療資訊"}
+
+
+def _tipo(ep, **p):
+    return gjson("https://cloud.tipo.gov.tw/S220/opdataapi/api/" + ep, params={"tk": TIPO_TK, "format": "json", **p}, timeout=180)
+
+
+def _is_co(name):
+    return bool(re.search(r"公司|有限|股份|集團|企業|商行|工作室|Inc|Ltd|LLC|Corp|GmbH|AG$|S\.A\.", name or ""))
+
+
+def p_ipr():
+    errs, out = [], {}
+    # 商標：依申請號由新往回抓，用申請日期分桶；智慧局每月更新
+    try:
+        total = int(_tipo("TmarkAppl", top=1)["total-count"])
+        recs, skip = [], total
+        stop = (TODAY_TPE - timedelta(days=150)).strftime("%Y/%m/%d")
+        for _ in range(10):  # 最多 5 萬筆；申請號大致照收件順序，整頁中位日期早於比較窗口就停
+            skip = max(0, skip - 5000)
+            page = _tipo("TmarkAppl", top=5000, skip=skip)["tmarkappl"]["tmarkcontent"]
+            recs += page
+            pd_ = sorted(r.get("appl-date") or "" for r in page if (r.get("appl-date") or "") >= "2000")
+            if skip == 0 or (pd_ and pd_[len(pd_) // 2] < stop):
+                break
+            time.sleep(1)
+        ds = sorted({(r.get("appl-date") or "")[:10] for r in recs if (r.get("appl-date") or "") >= "2020"})
+        latest = ds[-1] if ds else ""
+        # 最後一天可能還沒補齊：以「最新日期的前一個月底」為窗口終點，比較近 60 天與前 60 天
+        end = datetime.strptime(latest, "%Y/%m/%d").date() if latest else TODAY_TPE
+        w1 = (end - timedelta(days=59)).strftime("%Y/%m/%d"); w0 = (end - timedelta(days=119)).strftime("%Y/%m/%d")
+        cur, prv, newest, seen = {}, {}, [], set()
+        for r in recs:
+            d = (r.get("appl-date") or "")[:10]
+            if d < w0:
+                continue
+            cls = sorted({int(g.get("goodsclass-code") or 0) for g in (r.get("goodsclasses") or []) if str(g.get("goodsclass-code") or "").isdigit() and int(g.get("goodsclass-code")) <= 45})
+            tgt = cur if d >= w1 else prv
+            for c in cls:
+                tgt[c] = tgt.get(c, 0) + 1
+            apps = [a.get("chinese-name") or a.get("english-name") or "" for a in ((r.get("parties") or {}).get("applicants") or [])]
+            co = next((a for a in apps if _is_co(a)), "")
+            nm = (r.get("tmark-name") or "").strip()
+            if d >= w1 and co and nm and any(c in NICE for c in cls) and (nm, co) not in seen:
+                seen.add((nm, co))
+                newest.append({"name": nm[:30], "co": re.sub(r"\s+", "", co)[:24], "date": d.replace("/", "-"), "cls": [c for c in cls if c in NICE][:3]})
+        rows = []
+        for c, lab in NICE.items():
+            a, b = cur.get(c, 0), prv.get(c, 0)
+            rows.append({"cls": c, "name": lab, "n": a, "prev": b, "chg": round((a / b - 1) * 100) if b >= 20 else None})
+        newest.sort(key=lambda x: x["date"], reverse=True)
+        out["tm"] = {"latest": latest.replace("/", "-"), "win": [w1.replace("/", "-"), end.isoformat()], "rows": rows,
+                     "total": sum(cur.values()), "new": newest[:60]}
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"商標: {safe_err(e)}")
+    # 發明公開：依申請號由新往回抓，用公開日分桶
+    try:
+        total = int(_tipo("PatentPub", top=1)["total-count"])
+        recs, skip = [], total
+        stop = (TODAY_TPE - timedelta(days=95)).strftime("%Y/%m/%d")
+        for _ in range(12):  # 申請號順序和公開日不完全一致，整頁中位公開日早於比較窗口一段時間才停
+            skip = max(0, skip - 5000)
+            page = _tipo("PatentPub", top=5000, skip=skip)["tw-patent-pub"]["patentcontent"]
+            recs += page
+            nd = sorted(((r.get("publication-reference") or {}).get("notice-date") or "") for r in page)
+            nd = [x for x in nd if x]
+            if skip == 0 or (nd and nd[len(nd) // 2] < stop):
+                break
+            time.sleep(1)
+        nds = sorted({((r.get("publication-reference") or {}).get("notice-date") or "") for r in recs} - {""})
+        end = datetime.strptime(nds[-1], "%Y/%m/%d").date() if nds else TODAY_TPE
+        w1 = (end - timedelta(days=29)).strftime("%Y/%m/%d"); w0 = (end - timedelta(days=59)).strftime("%Y/%m/%d")
+        cur, prv, who = {}, {}, {}
+        for r in recs:
+            d = (r.get("publication-reference") or {}).get("notice-date") or ""
+            if d < w0:
+                continue
+            ipcs = [(c.get("ipc-full") or "").replace(" ", "") for c in (r.get("classification-ipc") or [])]
+            themes = {nm for nm, pat in IPC_THEMES if any(re.match(pat, i) for i in ipcs)}
+            tgt = cur if d >= w1 else prv
+            for t in themes:
+                tgt[t] = tgt.get(t, 0) + 1
+            if d >= w1:
+                apps = [a.get("chinese-name") or a.get("english-name") or "" for a in ((r.get("parties") or {}).get("applicants") or [])]
+                co = next((a for a in apps if _is_co(a)), "")
+                for t in themes:
+                    if co:
+                        who.setdefault(t, {})
+                        who[t][co] = who[t].get(co, 0) + 1
+        rows = []
+        for nm, _ in IPC_THEMES:
+            a, b = cur.get(nm, 0), prv.get(nm, 0)
+            top = sorted((who.get(nm) or {}).items(), key=lambda kv: -kv[1])[:3]
+            rows.append({"name": nm, "n": a, "prev": b, "chg": round((a / b - 1) * 100) if b >= 15 else None,
+                         "cons": nm in IPR_CONSUMER, "top": [[re.sub(r"\s+", "", k)[:20], v] for k, v in top]})
+        out["pat"] = {"latest": nds[-1].replace("/", "-") if nds else "", "win": [w1.replace("/", "-"), end.isoformat()], "rows": rows,
+                      "n": sum(1 for r in recs if ((r.get("publication-reference") or {}).get("notice-date") or "") >= w1)}
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"專利: {safe_err(e)}")
+    if not out:
+        raise RuntimeError(f"ipr: nothing {errs[:2]}")
+    return {**out, "src": "經濟部智慧財產局開放資料 API（商標註冊申請案、發明公開）", "errs": errs[:4]}
+
 # ---------- 企業動向：誰要上市、誰易主、誰換跑道、誰要開法說會（證交所／櫃買／公開資訊觀測站，全部官方免費） ----------
 CONSUMER_IND = r"食品|紡織|觀光|餐旅|貿易百貨|居家生活|生技醫療|文化創意|運動休閒|數位雲端|電子商務"
 
@@ -6621,6 +6839,8 @@ run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("revenue", p_revenue, keep_if_fresh_hours=20)
 run("etfholders", p_etfholders, keep_if_fresh_hours=12)
 run("corp", p_corp, keep_if_fresh_hours=6)
+run("policy", p_policy, keep_if_fresh_hours=6)
+run("ipr", p_ipr, keep_if_fresh_hours=72)
 run("media", p_media, keep_if_fresh_hours=2)
 # run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
 run("lyst", p_lyst, keep_if_fresh_hours=24 * 6)
