@@ -907,6 +907,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>GitHub：近 7 天新 repo 星數　HF：趨勢分數　HN：首頁</span></div>
   </section>
 
+  <section class="panel w6 cap" id="p-oss">
+    <div class="ph"><h2>OSS 雷達</h2><span class="zh">GitHub Trending · Simon Willison · HF Spaces · 盯梢 repo</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Trending：今日新增星數，含舊 repo 爆紅　Spaces：趨勢分數　新版本：ComfyUI、Open Design、Remotion、Postiz、PhotoCraft</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-lyst">
     <div class="ph"><h2>Lyst Index</h2><span class="zh">全球最熱品牌與單品</span><span class="meta">排程 · 季更</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -1338,6 +1344,12 @@ const renderers={
     const kws=(d.keywords||[]).map(k=>`<div class="wg"><h3><span class="kw" style="margin-right:6px;${k.kind==="hot"?"color:var(--warn)":""}">${k.kind==="hot"?"🔥":(k.region||"固定")}</span>${esc(k.kw)}<span class="sub" style="margin-left:8px">24h ${k.n_24h||0} 則</span></h3>${(k.top||[]).length?`<ul class="list">${k.top.slice(0,2).map(post).join("")}</ul>`:'<div class="empty" style="padding:2px 0 6px">沒有結果</div>'}</div>`).join("");
     const pop=(d.dcard_popular||[]).slice(0,6).map(post).join("");
     if(!body("p-social"))return;body("p-social").innerHTML=`${pop?`<h3>Dcard 熱門</h3><ul class="list">${pop}</ul>`:""}${kws?`<h3 style="margin-top:8px">關鍵字</h3>${kws}`:""}${!src.bsky?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">Bluesky 這輪沒結果</div>`:""}`;setMeta("p-social",d,2);},
+  oss(d){const tr=(d.trending||[]).map(r=>`<li><span class="t"><a href="${esc(safe(r.url))}" target="_blank" rel="noopener">${esc(r.name)}</a>${r.desc?`<span class="sub"> ${esc(r.desc)}</span>`:""}</span><span class="m">${r.today?"+"+compact(n(r.today)):"★"+compact(n(r.stars))}</span></li>`).join("");
+    const sw=(d.simonw||[]).map(x=>`<li><span class="t"><a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title)}</a></span><span class="m">${x.at?ago(x.at):""}</span></li>`).join("");
+    const sp=(d.spaces||[]).map(x=>`<li><span class="t"><a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.id)}</a>${x.sdk?`<span class="sub"> ${esc(x.sdk)}</span>`:""}</span><span class="m">♥${compact(n(x.likes))}</span></li>`).join("");
+    const rl=(d.releases||[]).map(x=>`<li><span class="src">${esc(x.label)}</span><span class="t"><a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title||x.tag)}</a></span><span class="m">${x.at?ago(x.at):esc(x.tag||"")}</span></li>`).join("");
+    const sec=(t,h,top)=>`<h3${top?' style="margin-top:10px"':""}>${t}</h3>${h?`<ul class="list">${h}</ul>`:'<div class="empty">這輪沒抓到</div>'}`;
+    body("p-oss").innerHTML=sec("GitHub Trending · 今日爆紅",tr)+sec("盯梢 repo 新版本",rl,1)+sec("Simon Willison",sw,1)+sec("HF 熱門 Spaces",sp,1)+(d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,220))}</div>`:"");setMeta("p-oss",d,3);},
   devpulse(d){const VN={openai:"OpenAI",anthropic:"Claude",google:"Gemini",deepseek:"DeepSeek",xai:"Grok"};
     const fo=(d.forums||[]).map(f=>`<li><span class="vd vd-${esc(f.vendor||"")}">${esc(VN[f.vendor]||"")}</span><span class="t"><a href="${esc(safe(f.url))}" target="_blank" rel="noopener">${esc(f.title)}</a></span><span class="m ${n(f.replies)>=30?"bad":""}">${fmt(n(f.replies),0)} 回</span></li>`).join("");
     const cl=(d.changelogs||[]).map(c=>`<li><span class="vd vd-${esc(c.vendor||"")}">${esc(VN[c.vendor]||"")}</span><span class="t">${c.kind?`<span class="kw" style="margin-right:4px">${esc(c.kind)}</span>`:""}<a href="${esc(safe(c.url))}" target="_blank" rel="noopener">${esc(c.title)}</a><span class="sub"> ${esc(c.source)}</span></span><span class="m">${c.at?(c.at.slice(0,4)===String(new Date().getFullYear())?c.at.slice(5,10):c.at.slice(0,10)):esc(c.date||"")}</span></li>`).join("");
@@ -1902,7 +1914,7 @@ document.querySelectorAll(".panel.cap").forEach(p=>{const b=document.createEleme
 const IB=(()=>{
 const NS="http://www.w3.org/2000/svg";
 const BANDS={1:[["p-brands","新品牌雷達"],["p-jobs","104 職缺"],["p-crowd","集資雷達"],["p-tenders","標案"],["p-awards","決標"],["p-radar","融資雷達"]],
-  2:[["p-news","新聞"],["p-watch","Watchlist"]],3:[["p-aiwire","AI Wire"],["p-devpulse","開發者脈動"],["p-tech","Tech"]],4:[["p-media","Fashion Press"],["p-design","Design"],["p-lyst","Lyst"]],5:[["p-think","三欄文章"]]};
+  2:[["p-news","新聞"],["p-watch","Watchlist"]],3:[["p-aiwire","AI Wire"],["p-devpulse","開發者脈動"],["p-tech","Tech"],["p-oss","OSS 雷達"]],4:[["p-media","Fashion Press"],["p-design","Design"],["p-lyst","Lyst"]],5:[["p-think","三欄文章"]]};
 let open=new Set();try{open=new Set(JSON.parse(localStorage.getItem("intel:ibopen")||"[]"));}catch(_){}
 const save=()=>{try{localStorage.setItem("intel:ibopen",JSON.stringify([...open]));}catch(_){}};
 function setup(){
@@ -2207,7 +2219,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro",
-  "ib-sig":"intel","ib-soc":"social","p-voice":"intel","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-lyst":"intel","p-media":"intel",
+  "ib-sig":"intel","ib-soc":"social","p-voice":"intel","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
   "brief":"overview","ov":"overview","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
@@ -2665,7 +2677,7 @@ function csv(rows,cols,name){const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000);}
 const err=(el,e)=>{el.innerHTML=`<div class="err">${esc(e.message||String(e))}</div>`;};
 /* ---- 搜尋 ---- */
-const GROUPS=[["","全部面板"],["news,mapfeed,localnews","新聞（全國＋地方）"],["mops","上市櫃重大訊息"],["jobs","104 職缺"],["poly","Polymarket"],["ptt,social,cofacts,trends,youtube,attention","輿情（PTT、社群、搜尋、YouTube）"],["aiwire,devpulse,tech","AI 與科技"],["media,design,lyst,luxury","時尚與設計"],["brands,crowd,radar","新公司、集資、融資"],["tenders,awards","標案、決標"],["culture","藝文活動"],["alerts","災害示警"]];
+const GROUPS=[["","全部面板"],["news,mapfeed,localnews","新聞（全國＋地方）"],["mops","上市櫃重大訊息"],["jobs","104 職缺"],["poly","Polymarket"],["ptt,social,cofacts,trends,youtube,attention","輿情（PTT、社群、搜尋、YouTube）"],["aiwire,devpulse,tech,oss","AI 與科技"],["media,design,lyst,luxury","時尚與設計"],["brands,crowd,radar","新公司、集資、融資"],["tenders,awards","標案、決標"],["culture","藝文活動"],["alerts","災害示警"]];
 let lastSearch=[];
 async function search(){const out=$("#vs-out"),q=$("#vs-q").value.trim(),days=+$("#vs-r").value,ps=$("#vs-p").value;out.innerHTML='<div class="empty">查詢中…</div>';
   try{const pr={...range(days),q};let where="dt BETWEEN @d0 AND @d1";if(q)where+=" AND (CONTAINS_SUBSTR(title, @q) OR CONTAINS_SUBSTR(extra, @q))";if(ps){pr.ps=ps.split(",");where+=" AND panel IN UNNEST(@ps)";}

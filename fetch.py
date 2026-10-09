@@ -520,6 +520,104 @@ def p_tech():
     return out
 
 
+# ---------- OSS 雷達：GitHub Trending（舊 repo 突然爆紅）＋ Simon Willison ＋ HF 熱門 Spaces ＋ 盯梢 repo 新版本 ----------
+OSS_WATCH = [  # (owner/repo, 顯示名) — 名單 2026-10-09 定
+    ("Comfy-Org/ComfyUI", "ComfyUI"),
+    ("nexu-io/open-design", "Open Design"),
+    ("remotion-dev/remotion", "Remotion"),
+    ("gitroomhq/postiz-app", "Postiz"),
+    ("storytold/photocraft", "PhotoCraft"),
+]
+OSS_SPACE_SKIP = re.compile(r"uncensored|nsfw|nude|porn|hentai", re.I)
+
+
+def _strip_tags(s: str) -> str:
+    return " ".join(html_mod.unescape(re.sub(r"<[^>]+>", " ", s or "")).split())
+
+
+def _gh_trending(since="daily", limit=10):
+    page = get("https://github.com/trending", params={"since": since}, headers={"Accept": "text/html", "User-Agent": "Mozilla/5.0"}).text
+    out = []
+    for blk in re.findall(r"<article[^>]*Box-row[^>]*>(.*?)</article>", page, re.S):
+        m = re.search(r'<h2[^>]*>\s*<a[^>]*href="/([^"/]+/[^"/]+)"', blk, re.S)
+        if not m:
+            continue
+        name = m.group(1).strip()
+        desc = re.search(r'<p[^>]*>(.*?)</p>', blk, re.S)
+        lang = re.search(r'itemprop="programmingLanguage"[^>]*>(.*?)<', blk, re.S)
+        stars = re.search(r'href="/' + re.escape(name) + r'/stargazers"[^>]*>(.*?)</a>', blk, re.S)
+        today = re.search(r'([\d,]+)\s+stars?\s+(today|this week|this month)', _strip_tags(blk))
+        out.append({"name": name, "url": "https://github.com/" + name,
+                    "desc": _strip_tags(desc.group(1))[:110] if desc else "",
+                    "lang": _strip_tags(lang.group(1)) if lang else None,
+                    "stars": num(_strip_tags(stars.group(1)).replace(",", "")) if stars else None,
+                    "today": num(today.group(1).replace(",", "")) if today else None})
+        if len(out) >= limit:
+            break
+    if not out:
+        raise RuntimeError("trending: 頁面結構變了，沒解析到 repo")
+    return out
+
+
+def _atom(url, source, limit=8):
+    raw = get(url, headers={"User-Agent": "Mozilla/5.0"}).content
+    root = ET.fromstring(raw.lstrip(b"\xef\xbb\xbf \r\n\t"))
+    ns = {"a": "http://www.w3.org/2005/Atom"}
+    out = []
+    for e in root.findall("a:entry", ns):
+        title = (e.findtext("a:title", default="", namespaces=ns) or "").strip()
+        link = ""
+        for l in e.findall("a:link", ns):
+            if l.get("rel") in (None, "alternate"):
+                link = l.get("href") or ""; break
+        at = (e.findtext("a:published", default="", namespaces=ns) or e.findtext("a:updated", default="", namespaces=ns) or "").strip()
+        if title:
+            out.append({"source": source, "title": title[:100], "url": link, "at": at[:19] + "Z" if len(at) >= 19 else at})
+        if len(out) >= limit:
+            break
+    return out
+
+
+def p_oss():
+    errs, out = [], {}
+    gh_hdr = {"Accept": "application/vnd.github+json", **({"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"]} if os.environ.get("GITHUB_TOKEN") else {})}
+    try:
+        out["trending"] = _gh_trending("daily", 10)
+    except Exception as e:  # noqa: BLE001
+        errs.append("GitHub Trending: " + safe_err(e))
+    try:
+        out["simonw"] = _atom("https://simonwillison.net/atom/everything/", "Simon Willison", 8)
+    except Exception as e:  # noqa: BLE001
+        errs.append("Simon Willison: " + safe_err(e))
+    try:
+        sp = gjson("https://huggingface.co/api/spaces", params={"sort": "trendingScore", "limit": 20})
+        out["spaces"] = [{"id": s.get("id"), "likes": s.get("likes"), "sdk": s.get("sdk"), "url": "https://huggingface.co/spaces/" + (s.get("id") or "")}
+                         for s in sp if s.get("id") and not OSS_SPACE_SKIP.search(s["id"])][:8]
+    except Exception as e:  # noqa: BLE001
+        errs.append("HF Spaces: " + safe_err(e))
+    rel = []
+    for repo, label in OSS_WATCH:
+        try:
+            rs = gjson(f"https://api.github.com/repos/{repo}/releases", params={"per_page": 1}, headers=gh_hdr)
+            if rs:
+                r = rs[0]
+                rel.append({"repo": repo, "label": label, "tag": (r.get("tag_name") or "")[:40], "title": (r.get("name") or r.get("tag_name") or "")[:90],
+                            "url": r.get("html_url"), "at": r.get("published_at") or ""})
+            else:  # 沒發 Release 的專案退回看最新 tag
+                ts = gjson(f"https://api.github.com/repos/{repo}/tags", params={"per_page": 1}, headers=gh_hdr)
+                if ts:
+                    rel.append({"repo": repo, "label": label, "tag": ts[0].get("name", "")[:40], "title": ts[0].get("name", "")[:90],
+                                "url": f"https://github.com/{repo}/releases/tag/{ts[0].get('name', '')}", "at": ""})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{label}: " + safe_err(e))
+    rel.sort(key=lambda x: x.get("at") or "", reverse=True)
+    out["releases"] = rel
+    if not any(out.get(k) for k in ("trending", "simonw", "spaces", "releases")):
+        raise RuntimeError(f"oss: nothing {errs[:3]}")
+    out["errs"] = errs[:6]
+    return out
+
+
 def p_trends():
     r = get("https://trends.google.com/trending/rss", params={"geo": "TW"})
     root = ET.fromstring(r.content)
@@ -6454,6 +6552,7 @@ run("tw_stocks", p_tw_stocks)
 run("fx", p_fx_any)
 run("poly", p_poly, keep_if_fresh_hours=0.5)
 run("tech", p_tech)
+run("oss", p_oss, keep_if_fresh_hours=1)
 run("trends", p_trends)
 run("youtube", p_youtube, keep_if_fresh_hours=0.5)
 run("attention", p_attention, keep_if_fresh_hours=3)
@@ -6552,6 +6651,7 @@ def archive_day():
     merge("ptt", [pick(x, "board", "title", "push", "url") for x in (R.get("ptt") or {}).get("items", [])], lambda x: x.get("title"))
     merge("trends", [pick(x, "title", "traffic") for x in (R.get("trends") or {}).get("items", [])], lambda x: x.get("title"), 200)
     merge("cofacts", [pick(x, "text", "verdict", "requests", "url") for x in (R.get("cofacts") or {}).get("hot", [])], lambda x: (x.get("text") or "")[:60], 100)
+    merge("oss", [pick(x, "name", "desc", "stars", "today", "url") for x in (R.get("oss") or {}).get("trending", [])], lambda x: x.get("name"), 300)
     merge("radar", [pick(x, "company", "amount", "stage", "cat", "title", "url") for x in (R.get("radar") or {}).get("funding", [])], lambda x: x.get("company"), 100)
     merge("brands", [pick(x, "name", "date", "city", "cap", "cat") for x in (R.get("brands") or {}).get("peers", []) + (R.get("brands") or {}).get("big", [])], lambda x: x.get("name"), 400)
     md = R.get("mood") or {}
