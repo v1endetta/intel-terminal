@@ -1,4 +1,334 @@
 {
- "robots": "# Welcome to 104.com.tw's robots.txt!\r\n# We're flattered by your interest in our data, but we have some ground rules:\r\n\r\n# 1. No automated scraping of job listings for commercial purposes.\r\n# 2. Respect our users' privacy and our intellectual property.\r\n# 3. If you're a bot with good intentions, let's talk!\r\n\r\n# Fill this form https://forms.cloud.microsoft/r/Zim6WH7i7U to apply for crawling permissions.\r\n\r\n# Remember: 104.com.tw is here to help people find great jobs and companies \r\n# find great talent. Let's work together to make that happen!\r\n\r\n# P.S. If you're a human reading this,\r\n# check out our career opportunities at https://www.104.com.tw/company/12v3o7uw#info06.\r\n# We're always looking for talented individuals to join our team.\r\n# :)\r\n\r\nUser-agent: Bytespider\r\nUser-agent: CCBot\r\nUser-agent: ClaudeBot\r\nUser-agent: GPTBot\r\nUser-agent: Google-Extended\r\nUser-agent: Meta-ExternalAgent\r\nUser-agent: Novellum AI Crawl\r\nUser-agent: PetalBot\r\nUser-agent: ProRataInc\r\nUser-agent: Timpibot\r\nUser-agent: LinkedInBot\r\nDisallow: /\r\nAllow: /$\r\nAllow: /company/main/\r\nAllow: /jobs/\r\nAllow: /mobile/\r\nAllow: /faq/\r\nAllow: /csr/\r\nAllow: /topic/\r\nAllow: /blog/\r\nAllow: /careerfair/\r\nAllow: /ai/\r\nAllow: /part-time/\r\nAllow: /category/\r\nAllow: /students/\r\nAllow: /sitemap/\r\nAllow: /feedback/\r\nAllow: /favicon.ico\r\nAllow: /llms.txt\r\n\r\nUser-agent: Amazonbot\r\nUser-agent: Anchor Browser\r\nUser-agent: ChatGPT-User\r\nUser-agent: Claude-SearchBot\r\nUser-agent: Claude-User\r\nUser-agent: DuckAssistBot\r\nUser-agent: Google-CloudVertexBot\r\nUser-agent: Meta-ExternalFetcher\r\nUser-agent: MistralAI-User\r\nUser-agent: OAI-SearchBot\r\nUser-agent: Perplexity-User\r\nUser-agent: PerplexityBot\r\nDisallow: /\r\nAllow: /$\r\nAllow: /job/\r\nAllow: /company/\r\nAllow: /jobs/\r\nAllow: /mobile/\r\nAllow: /faq/\r\nAllow: /csr/\r\nAllow: /topic/\r\nAllow: /blog/\r\nAllow: /careerfair/\r\nAllow: /ai/\r\nAllow: /part-time/\r\nAllow: /category/\r\nAllow: /students/\r\nAllow: /sitemap/\r\nAllow: /feedback/\r\nAllow: /favicon.ico\r\nAllow: /llms.txt\r\n\r\nUser-agent: *\r\nDisallow: /jobs/adimode/\r\nDisallow: /*?v=aimode\r\nDisallow: /*&v=aimode\r\nDisallow: /*?aimode=1\r\nDisallow: /*&aimode=1\r\nDisallow: *excludeCompanyByCustno=*\r\nDisallow: *excludeIndustryCat=*\r\nDisallow: *expansionType=*\r\nDisallow: *recommendJob=*\r\nDisallow: *langStatus=*\r\nDisallow: *langFlag=*\r\nDisallow: *hotJob=*\r\nDisallow: *kwop=*\r\nDisallow: *irsTag=*\r\nDisallow: /job/*apply=form*\r\nDisallow: /job/apply/done/\r\nDisallow: *keyword=*\r\nDisallow: /\r\nAllow: /$\r\nAllow: /job/\r\nAllow: /company/\r\nAllow:",
- "footer_links": []
+ "174681": {
+  "title": "行政院公報「法規命令草案預告天數統計」",
+  "provider": "sylin5954",
+  "desc": "行政院秘書長函已揭示法規命令草案預告期間原則應至少60日，並應刊登於行政院公報，以利各界能事先瞭解，並有充分時間表達意見。爰就各機關刊登行政院公報之法規命令草案預告期間進行統計，以落實政府資訊公開。",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "3",
+   "unittime": "月"
+  },
+  "modified": "2025-08-28 16:42:22",
+  "dist": [
+   [
+    "提供114年至今檔案",
+    "CSV",
+    "https://ws.ndc.gov.tw/Download.ashx?u=LzAwMS9hZG1pbmlzdHJhdG9yLzEwL3JlbGZpbGUvNTc4MS8zOTExOS8zOTAyNzAwNi00ZTI0LTRjMGMtYjgyOS00NzQzMjY1MjY0OTMuY3N2&n=5rOV6KaP5ZG95Luk6I2J5qGI6aCQ5ZGK5aSp5pW457Wx6KiI6KGoLmNzdg%3d%3d&icon=.csv",
+    null
+   ]
+  ]
+ },
+ "10895": {
+  "title": "政府會計公報",
+  "provider": "hongpin0105",
+  "desc": "政府會計觀念公報及政府會計準則公報",
+  "freq": {
+   "regularupdate": "2"
+  },
+  "modified": "2025-05-16 10:31:05",
+  "dist": [
+   [
+    "政府會計公報",
+    "XML",
+    "https://ws.dgbas.gov.tw/001/Upload/461/relfile/11525/230578/51697942-3d50-48b3-89a6-127ec4754235.xml",
+    null
+   ]
+  ]
+ },
+ "43381": {
+  "title": "行政院所屬各機關近五年個案計畫預算執行情形",
+  "provider": "ycwangndc",
+  "desc": "為利民眾瞭解政府計畫執行概況，提供行政院所屬各機關近五年整體個案計畫預算執行情形之資訊。",
+  "freq": {
+   "regularupdate": "2"
+  },
+  "modified": "2025-12-31 11:58:52",
+  "dist": [
+   [
+    "提供近5年資料",
+    "JSON",
+    "https://gpmnet.ndc.gov.tw/gpmopenapi/api/v1/rest/datastore/A41000000G-000483-001",
+    null
+   ]
+  ]
+ },
+ "163765": {
+  "title": "數位發展部行政公告",
+  "provider": "targeemoda",
+  "desc": "數位發展部全球資訊網行政公告相關資訊。",
+  "freq": {
+   "regularupdate": "2"
+  },
+  "modified": "2026-01-27 13:47:24",
+  "dist": [
+   [
+    "數位發展部行政公告(xml)",
+    "XML",
+    "https://www-api.moda.gov.tw/OpenData/xml/15",
+    null
+   ],
+   [
+    "數位發展部行政公告(json)",
+    "JSON",
+    "https://www-api.moda.gov.tw/OpenData/json/15",
+    null
+   ],
+   [
+    "數位發展部行政公告(csv)",
+    "CSV",
+    "https://www-api.moda.gov.tw/OpenData/csv/15",
+    null
+   ]
+  ]
+ },
+ "58036": {
+  "title": "公共政策網路參與平臺-提點子(行政院版本)",
+  "provider": "sylin5954",
+  "desc": "為徵集民眾創意見解或政策建言，擴大施政量能，建置符合我國政府體制及國情之提議平臺，「提點子」於104年9月10日上線服務，為我國政府首創網路提議機制，開啟公民參與里程碑。",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "日"
+  },
+  "modified": "2025-12-16 09:55:59",
+  "dist": [
+   [
+    "2024年度提點子資料下載",
+    "JSON",
+    "https://join.gov.tw/toOpenData/v2/ey/idea?year=2024",
+    null
+   ],
+   [
+    "2023年度提點子資料下載",
+    "JSON",
+    "https://join.gov.tw/toOpenData/v2/ey/idea?year=2023",
+    null
+   ],
+   [
+    "2022年度提點子資料下載",
+    "JSON",
+    "https://join.gov.tw/toOpenData/v2/ey/idea?year=2022",
+    null
+   ],
+   [
+    "2021年度提點子資料下載",
+    "JSON",
+    "https://join.gov.tw/toOpenData/v2/ey/idea?year=2021",
+    null
+   ],
+   [
+    "2020年度提點子資料下載",
+    "JSON",
+    "https://join.gov.tw/toOpenData/v2/ey/idea?year=2020",
+    null
+   ]
+  ]
+ },
+ "58297": {
+  "title": "公共政策網路參與平臺-眾開講(行政院版本)",
+  "provider": "sylin5954",
+  "desc": "為政策制定過程中，建構政府與公民網路參與及對話機制，提供政府各部會近期正在規劃推動的政策資料，並透過平臺機制公開徵詢民眾意見，周延政策之研訂，「眾開講」於104年2月10日上線服務。",
+  "freq": {
+   "regularupdate": "2"
+  },
+  "modified": "2025-08-01 16:28:48",
+  "dist": [
+   [
+    "眾開講資料下載",
+    "JSON",
+    "https://join.gov.tw/toOpenData/ey/policy",
+    null
+   ]
+  ]
+ },
+ "41664": {
+  "title": "商標註冊申請案",
+  "provider": "sam33725632",
+  "desc": "提供商標註冊申請案件資料，含所有商標新申請註冊案相關資訊。",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "月"
+  },
+  "modified": "2026-08-26 17:21:28",
+  "dist": [
+   [
+    "商標註冊申請案API，本連結提供前10筆資料，如需其它資料，請參考備註網址定義查",
+    "XML",
+    "https://cloud.tipo.gov.tw/S220/opdataapi/api/TmarkAppl?tk=43b47d07-4795-45d9-819a-9c71c72e4105&format=xml&top=10",
+    null
+   ],
+   [
+    "商標註冊申請案API，本連結提供前10筆資料，如需其它資料，請參考備註網址定義查",
+    "JSON",
+    "https://cloud.tipo.gov.tw/S220/opdataapi/api/TmarkAppl?tk=43b47d07-4795-45d9-819a-9c71c72e4105&format=json&top=10",
+    null
+   ]
+  ]
+ },
+ "167826": {
+  "title": "商標申請案圖庫資料",
+  "provider": "sam33725632",
+  "desc": "提供商標申請案號及圖檔下載路徑",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "月"
+  },
+  "modified": "2026-08-26 15:14:20",
+  "dist": [
+   [
+    "商標申請案號及圖檔下載路徑-xml",
+    "XML",
+    "https://cloud.tipo.gov.tw/S220/opdataapi/api/TmarkPics?format=XML&tk=b6d29bcb-a917-4182-8425-7c567c0101b3",
+    null
+   ]
+  ]
+ },
+ "6436": {
+  "title": "商標案件數量統計",
+  "provider": "sam33725632",
+  "desc": "本表係由經濟部智慧財產局提供每月之申請註冊案、公告註冊案、核駁案、異議案、評定案、廢止案及延展案等統計。",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "月"
+  },
+  "modified": "2026-08-26 18:19:48",
+  "dist": [
+   [
+    "民國97年迄今-商標案件數量統計",
+    "CSV",
+    "https://tiponet.tipo.gov.tw/datagov/tm/003-102-001.csv",
+    null
+   ]
+  ]
+ },
+ "101673": {
+  "title": "商標案件申請統計表",
+  "provider": "sam33725632",
+  "desc": "彙整每月份各種類型商標案件申請數量之統計資料，供外界參考利用。",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "月"
+  },
+  "modified": "2026-08-26 16:28:28",
+  "dist": [
+   [
+    "商標案件申請統計表",
+    "CSV",
+    "https://tiponet.tipo.gov.tw/datagov/tm/163-108-001.csv",
+    null
+   ]
+  ]
+ },
+ "30117": {
+  "title": "商標權狀態異動資料",
+  "provider": "sam33725632",
+  "desc": "依商標法第12條規定，商標專責機關應刊行公報，登載註冊商標及其相關事項。隨著時間的累積，會發生公告後權利異動之情形，包含註冊號、申請案號、商標名稱、商標種類、商標圖樣圖檔連結...等項目。",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "月"
+  },
+  "modified": "2026-08-26 17:40:04",
+  "dist": [
+   [
+    "商標權狀態異動資料API，此API範例可查詢商標權狀態異動資料前10筆案件資料內",
+    "XML",
+    "https://cloud.tipo.gov.tw/S220/opdataapi/api/TmarkRights?tk=43b47d07-4795-45d9-819a-9c71c72e4105&format=xml&top=10",
+    null
+   ],
+   [
+    "商標權狀態異動資料API，此API範例可查詢商標權狀態異動資料前10筆案件資料內",
+    "JSON",
+    "https://cloud.tipo.gov.tw/S220/opdataapi/api/TmarkRights?tk=43b47d07-4795-45d9-819a-9c71c72e4105&format=json&top=10",
+    null
+   ]
+  ]
+ },
+ "30119": {
+  "title": "商標註冊案分割紀錄",
+  "provider": "sam33725632",
+  "desc": "依商標法第12條規定，商標專責機關應刊行公報，登載註冊商標及其相關事項。將曾取得商標權之案件，依移轉、分割等關聯案件紀錄，包含商標種類、註冊號、商標名稱、商品或服務類別資訊、分割日期、原註冊號、原註冊號商標種類、分割件數等項目。",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "月"
+  },
+  "modified": "2026-08-26 17:45:51",
+  "dist": [
+   [
+    "商標註冊案分割紀錄API，此API範例可查詢商標註冊案分割紀錄前10筆案件資料內",
+    "XML",
+    "https://cloud.tipo.gov.tw/S220/opdataapi/api/TmarkDivide?tk=43b47d07-4795-45d9-819a-9c71c72e4105&format=xml&top=10",
+    null
+   ],
+   [
+    "商標註冊案分割紀錄API，此API範例可查詢商標註冊案分割紀錄前10筆案件資料內",
+    "JSON",
+    "https://cloud.tipo.gov.tw/S220/opdataapi/api/TmarkDivide?tk=43b47d07-4795-45d9-819a-9c71c72e4105&format=json&top=10",
+    null
+   ]
+  ]
+ },
+ "15975": {
+  "title": "商標註冊案公報(1卷期1XML檔)",
+  "provider": "sam33725632",
+  "desc": "依商標法第12條規定，商標專責機關應刊行公報，登載註冊商標及其相關事項。依此公開程序開放商標註冊案公報資料，包含商標權人、代理人姓名、商品用途、商品類別等項目，以1公報卷期1XML檔方式呈現。",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "月"
+  },
+  "modified": "2026-08-26 18:08:23",
+  "dist": [
+   [
+    "最新期-商標註冊案公報(1卷期1XML檔)-XML",
+    "XML",
+    "https://cloud.tipo.gov.tw/S220/opdata/api/gazettes/T02",
+    null
+   ]
+  ]
+ },
+ "15992": {
+  "title": "發明公開公報及說明書(1案1XML檔)",
+  "provider": "sam33725632",
+  "desc": "依專利法第36條規定，自申請日起18個月後應將該申請案公開。依此公開程序開放發明公開公報書目及說明資料，包括申請人、發明人及代理人姓名、發明申請案件IPC分類、發明摘要、代表圖式等項目，並包含說明書影像掃描檔，以1案1XML檔方式呈現。",
+  "freq": {
+   "regularupdate": "1",
+   "Frequency": "1",
+   "unittime": "月"
+  },
+  "modified": "2026-08-26 18:09:20",
+  "dist": [
+   [
+    "最新期-發明公開公報及說明書(1案1XML檔)-XML",
+    "XML",
+    "https://cloud.tipo.gov.tw/S220/opdata/api/gazettes/I07",
+    null
+   ]
+  ]
+ },
+ "https://cloud.tipo.gov.tw/S220/opdata/api/file/api/patent": {
+  "status": 200,
+  "ct": "application/octet-stream",
+  "head": "%PDF-1.7\n\n4 0 obj\n(Identity)\nendobj\n5 0 obj\n(Adobe)\nendobj\n8 0 obj\n<<\n/Filter /FlateDecode\n/Length 113702\n/Length1 406220\n/Type /Stream\n>>\nstream\nx��}\t`T���w޵���7�+�96\u0017�\b!���\u0015.\u0001!� I�!ܠ�(xP5�����\nV�\u0003��\u00040�����\u001e�x_m\u0005\u0015\u000flimkm=���3�D��\"�\u0017��y;�yo���͛���\u0005\u0002\u0000N$\u00016�N\u001c9���{׃��\u0001��\u001d^[7,]��\u0007��J\u0000>:|���|t��o\u001d\u0001����'�Y\u001d�{d\u0002�W\u0017\u0000\\�x��I�\u0016eϗ@�nŽ���4q�#\u001f�i<@-��/\u001871�о��l\u0000΁�M�kFOj|�w���y�.�\\;�alp��\u0000�c\u0000��f.j^�[����\u0005��q\u00023�^�K�Ž\u0006\\\u0014�\u001b/��t�E�����\u0000�ƹ�+��\u00130�7�\u0001涮��x>�\u0000��\u0002|z�Y��͛�y1��Z \u000f�5ov�Ov�q\u0015\u0000��\u001e\u001e:X�����q;}ޢ�����n<��\u0000U�\u0016�^���?|v)�\u000b��n\u000bZ��l�T4\\\u000b�p\u0001����ܥN��>����[4{e3�Ul����iZܼh��ً��_<\u000b �|�\u0015+��0\u000b�K�˷t�쥝��^\u0003\\A+��g@��B�l�W\nf\u0018*��t�e@����G��֋��_�<z��,�\u0019��b�)�V���`�\u0011�X�ًƳz|�зP\u0017�j�\u0000F\u0018\r<phG�\u0000�a<.��<_B6�\bJ�\u0017b\u0011�2����0�3\u0013��$^\u0014D�\u0017\u000eB^|/��\u0013�\u0002Ĥ15>ܗ/��xe�0R��\u0007�@��8ƾN\u001cM�\u0014�� ⡡����ka��\u0014J��\bi\u0010Գ0��$4y��0�bܞ��5� �1�G��\u0018M\u000e��h|hZ�4�\u0019�f\r�30l��\u0017.��1�_\u0005Ө��\u0004\u0018��\u0010@3\n׃»�-�\u0000?����x�\">\u0015�q=�~Y�T\f�D�=��\u0002l\u001f�1�\nX��C�]�Ƭ�\n�h\u001b�X��rW�f�&@�/�ܯ����\u0005��0��h��0�p}\b\u001a\u001d���\u001b\u0014���&\\\u001f�yc�u-�:��\u0019���u��Y蟂�\u001c\r��ա��a�q^#n�\u000b��\rڅI�\u00022�\u000b�u�����Z�P������_��2�Dc��}�\\*�c\u0019���=p�d�+C�\f\u00192dȐAA����4��\u0010�?��ʐ!CF�@|�\u0012�\u0011dݔ!C�\f\u00192dȐ!C�\f\u00192dȐ!C�\f\u00192dȐ�w\u0010\u001e�9����`���\"CƏ\u0005�\u0017��\u0002\u00192dȐ�C\u0005�6Ts�����P�_\u0004����ηA1}g��\u0000j��`\u0001}gJ\u0018\u0004s�G`<}����*��ޭ����ޭ�\u0010^�,�\t4wA�0\u0007��6�\u0003��\u0006�0\u001cF\n����\u000eJ�\u0019��ɶ\u001d�\u00152���\u0011VB\u0006�\u0002d�.���`\u0011��H�.P\u000bC CH\u0003\u001b�\t��4�\u000b��RЃZ�\b.��\bfP�w^�_��U�A��=��`G�\u001a�\u0019�@4Z4����\u0004�n��6\u001c֯�J\u0005\f���!C�\f\u00192d�X`^� ��<\u0000�b�$\u0000�t吴\u001e\f\u0007�R�\fԍ�G\u001d-ÇΞ=s�#\u001am�Ƞ\tњ�k�\u0010�OA\t�gU��?4k������t�Yg�\u0007�&5O��\u0004�>Q��,����\u0017s¦���=\u001b��\u000f9���>;��S\u0007��A�CP\u0019�\u0001U\u0019\u00192dȐ!�\u0007�5���T9�\u001f=H:v}H\u001aI0[�\u0006;C�W�K\n�\"\u0003H���\u0007\t��(\r�t\u0007�^ѯI�!C�\u000f\u0018<�L%D�'\u001c��C��f/�K\u0019\u0007%(�ݠ\u00025�"
+ },
+ "https://cloud.tipo.gov.tw/S220/opdata/api/file/api/trademark": {
+  "status": 200,
+  "ct": "application/octet-stream",
+  "head": "%PDF-1.7\r\n%����\r\n1 0 obj\r\n<</Type/Catalog/Pages 2 0 R/Lang(zh) /StructTreeRoot 214 0 R/MarkInfo<</Marked true>>/Metadata 22561 0 R/ViewerPreferences 22562 0 R>>\r\nendobj\r\n2 0 obj\r\n<</Type/Pages/Count 61/Kids[ 3 0 R 16 0 R 24 0 R 26 0 R 29 0 R 30 0 R 35 0 R 36 0 R 39 0 R 40 0 R 41 0 R 42 0 R 43 0 R 44 0 R 45 0 R 47 0 R 48 0 R 49 0 R 50 0 R 51 0 R 52 0 R 53 0 R 54 0 R 55 0 R 56 0 R 57 0 R 59 0 R 60 0 R 61 0 R 62 0 R 63 0 R 64 0 R 66 0 R 67 0 R 68 0 R 69 0 R 71 0 R 72 0 R 73 0 R 74 0 R 75 0 R 76 0 R 78 0 R 79 0 R 80 0 R 81 0 R 82 0 R 83 0 R 84 0 R 85 0 R 87 0 R 88 0 R 89 0 R 93 0 R 199 0 R 201 0 R 203 0 R 205 0 R 207 0 R 209 0 R 211 0 R] >>\r\nendobj\r\n3 0 obj\r\n<</Type/Page/Parent 2 0 R/Resources<</Font<</F1 5 0 R/F2 9 0 R/F3 11 0 R>>/ExtGState<</GS7 7 0 R/GS8 8 0 R>>/ProcSet[/PDF/Text/ImageB/ImageC/ImageI] >>/MediaBox[ 0 0 595.2 841.92] /Contents 4 0 R/Group<</Type/Group/S/Transparency/CS/DeviceRGB>>/Tabs/S/StructParents 0>>\r\nendobj\r\n4 0 obj\r\n<</Filter/FlateDecode/Length 629>>\r\nstream\r\nx���[k�@\u0010��\u0005�\u000f�h\u0007������1X�\u001cR\u001ah�K\u001eJ\u001fL��>Դi��_ߵ�:�\u0012�\u000f\u0016��g�9:{����b\r���nr�\u0003\u000e�.�+�=��?���\u0011d�\u0004~�\t*�|��\u0001\u0010L0��\u000b�����&�W�N�l�&�)\u00011̗iBQ�@ �\f\n��*\b̿E�����g,\u000b���Ww7i�\u0007�O0�&E,�>M���\u0000�b��1\u0019�+�;��Adp6ֱ%i\t؜���\"�ȼ�KW\\��\\��_ƥ�p�G�\u0002X���+��G@�9��\u001d�!N��\f\u00178��g��嘡��\u0010'��d��l'ҍÂF��w��a������c��\n�\u0011T\u001cГ�V�P�r�{���`\u0015��Fܣ�'�Ѭ�6 ����\u001f�4�*�z:�7�\u000eґ\u0019O�\u0011�i�z�v��Z\u0016\u000eZyߔ�\u001c3\u0019/�e�q!$i�ǘ\u0019%\u000b秄;\u0011�6�|\u0000\u001bp\u000f���Dʑ�\u0000F�2��\"\u001a�c\",rF��y'C\u0017N��Jl��n��]_�n\u001blx؅����m��I�A�\u0005\u0005�f��S�t\u001b���\u0004Y�鄟ǂ\u0019���������\u0013d�A���@\"`1.R&�,��¸�n\u0010�WM%���M'�\u001d�\fZeB��\u000b�T3U�TYW2Ռ�Sh�R��"
+ },
+ "https://join.gov.tw/idea/index": {
+  "status": 200,
+  "ct": "text/html;charset=UTF-8",
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n<!DOCTYPE html>\r\n<html lang=\"zh-Hant\">\r\n<head>\r\n<title>\n  \r\n\t提點子-公共政策網路參與平臺</title>\r\n<script type=\"text/javascript\" src=\"/scripts/debug.js\"></script>\r\n<script type=\"text/javascript\" src=\"/scripts/aes.1.js\"></script>\r\n<script type=\"text/javascript\">\r\n\r\nvar _locale=\"zh_TW\";\r\nfunction aesDecode(value) {\r\n\tvar encrypted = CryptoJS.enc.Base64.parse(value);\r\n\tvar key = CryptoJS.enc.Base64.parse('b3BlbnVwam9pbnNlY3VydA==');\r\n\tvar iv = CryptoJS.enc.Base64.parse('b3BlbnVwam9pbml2c0tleQ==');\r\n\tvar decode = CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt(\r\n    \t\t{ ciphertext: encrypted },\r\n    \t\tkey,\r\n    \t\t{ mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv}));\r\n    return decode;\r\n}\r\nfunction aesEncode(value) {\r\n\tvar key = CryptoJS.enc.Base64.parse('b3BlbnVwam9pbnNlY3VydA==');\r\n\tvar iv = CryptoJS.enc.Base64.parse('b3BlbnVwam9pbml2c0tleQ==');\r\n\tvar encryptedData = CryptoJS.AES.encrypt(value, key, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv});\r\n\treturn encryptedData.toString();\r\n}\r\nvar theme = JSON.parse(\"{\\\"banner\\\":\\\"yellow_bg\\\",\\\"master\\\":\\\"propose\\\",\\\"listBackground\\\":\\\"deepgray_bg\\\",\\\"word\\\":\\\"\\u63D0\\u8B70\\\"}\");\r\n    var keyName = \"theme\";\r\n    if(keyName == \"pages\") {\r\n    \t\tvar decode = aesDecode(tpages);\r\n    \t\tvar parameters = JSON.parse(\"\\\"\" + decode + \"\\\"\");\r\n    \t\tdebug.attributes[keyName] = parameters;\r\n    \t} else if(keyName == \"parameters\") {\r\n    \t\tvar decode = aesDecode(tparameters);\r\n    \t\tvar para"
+ },
+ "https://join.gov.tw/policies/": {
+  "status": 200,
+  "ct": "text/html;charset=UTF-8",
+  "head": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n<!DOCTYPE html>\r\n<html lang=\"zh-Hant\">\r\n<head>\r\n<title>\n  \r\n眾開講-公共政策網路參與平臺</title>\r\n<script type=\"text/javascript\" src=\"/scripts/debug.js\"></script>\r\n<script type=\"text/javascript\" src=\"/scripts/aes.1.js\"></script>\r\n<script type=\"text/javascript\">\r\n\r\nvar _locale=\"zh_TW\";\r\nfunction aesDecode(value) {\r\n\tvar encrypted = CryptoJS.enc.Base64.parse(value);\r\n\tvar key = CryptoJS.enc.Base64.parse('b3BlbnVwam9pbnNlY3VydA==');\r\n\tvar iv = CryptoJS.enc.Base64.parse('b3BlbnVwam9pbml2c0tleQ==');\r\n\tvar decode = CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt(\r\n    \t\t{ ciphertext: encrypted },\r\n    \t\tkey,\r\n    \t\t{ mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv}));\r\n    return decode;\r\n}\r\nfunction aesEncode(value) {\r\n\tvar key = CryptoJS.enc.Base64.parse('b3BlbnVwam9pbnNlY3VydA==');\r\n\tvar iv = CryptoJS.enc.Base64.parse('b3BlbnVwam9pbml2c0tleQ==');\r\n\tvar encryptedData = CryptoJS.AES.encrypt(value, key, { mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv});\r\n\treturn encryptedData.toString();\r\n}\r\nvar _surplusResults = 0\r\n    var keyName = \"_surplusResults\";\r\n    if(keyName == \"pages\") {\r\n    \t\tvar decode = aesDecode(tpages);\r\n    \t\tvar parameters = JSON.parse(\"\\\"\" + decode + \"\\\"\");\r\n    \t\tdebug.attributes[keyName] = parameters;\r\n    \t} else if(keyName == \"parameters\") {\r\n    \t\tvar decode = aesDecode(tparameters);\r\n    \t\tvar parameters = JSON.parse(\"\\\"\" + decode + \"\\\"\");\r\n    \t\tdebug.attributes[keyName] = parameters;\r\n    \t} else if"
+ }
 }
