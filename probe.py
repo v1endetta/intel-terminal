@@ -1,56 +1,47 @@
-import os, json, re, io, csv, zipfile, requests, collections
+import os, json, re, io, csv, requests, collections, time
 os.makedirs("out25", exist_ok=True)
 H = {"User-Agent": "intel-terminal/1.0 (personal research; github.com/v1endetta/intel-terminal)"}
 rep = {}
-r = requests.get("https://data.gov.tw/datasets/export/csv", headers=H, timeout=180)
-rows = list(csv.reader(io.StringIO(r.content.decode("utf-8-sig", "ignore"))))
-hdr = rows[0]; idx = {h: i for i, h in enumerate(hdr)}
-def col(r, nm): return r[idx[nm]] if idx[nm] < len(r) else ""
-meta = {col(r, "資料集識別碼"): r for r in rows[1:]}
-def urls(i): return [u for u in col(meta[i], "資料下載網址").split(";") if u] if i in meta else []
-def peek(name, u, n=1500):
-    try:
-        x = requests.get(u, headers=H, timeout=120)
-        c = x.content
-        info = {"status": x.status_code, "len": len(c), "url": u[:200]}
-        if c[:2] == b"PK":
-            z = zipfile.ZipFile(io.BytesIO(c)); info["zip"] = [(f.filename, f.file_size) for f in z.infolist()][:12]
-            big = max(z.infolist(), key=lambda f: f.file_size); c = z.read(big); info["zip_pick"] = big.filename
-        s = c.decode("utf-8-sig", "ignore")
-        info["head"] = s[:n]; info["tail"] = s[-600:]
-        rep[name] = info
-        return s
-    except Exception as e:
-        rep[name] = {"err": repr(e)[:200], "url": u[:200]}
-# B 簽帳
-for i in ("175018", "38311", "25364"):
-    us = urls(i); rep["meta_" + i] = {"title": col(meta[i], "資料集名稱") if i in meta else None, "urls": us[:4], "fields": col(meta[i], "主要欄位說明")[:300] if i in meta else None}
-    if us: peek("s_" + i, us[0])
-# E 捷運
-i = "128506"; us = urls(i); rep["meta_" + i] = {"urls": us[:4], "fields": col(meta[i], "主要欄位說明")[:300], "desc": col(meta[i], "資料集描述")[:300]}
-if us: peek("s_128506", us[0], 2500)
-# G 銷售額 second link
-us = urls("161861"); rep["meta_161861"] = us[:4]
-for k, u in enumerate(us[:3]): peek(f"s_161861_{k}", u, 1200)
-# H 外銷訂單 tail, I 景氣 zip
-peek("s_6845", urls("6845")[0], 300)
-peek("s_6099", urls("6099")[0], 1200)
-# F 新設立
-for i in ("29260", "29254"):
-    us = urls(i); rep["meta_" + i] = us[:3]
-    if us: peek("s_" + i, us[0], 1200)
-# J 農產品進口：彙整品名，找寵物食品、咖啡、茶等
-s = peek("s_40331", urls("40331")[0], 300)
-if s:
-    try:
-        js = json.loads(s)
-        rep["imp_n"] = len(js)
-        rep["imp_dates"] = collections.Counter(x["date"] for x in js).most_common(5)
-        names = collections.Counter(x["dname1"] for x in js)
-        rep["imp_names_n"] = len(names)
-        rep["imp_hits"] = [n for n in names if re.search(r"狗|犬|貓|寵物|咖啡|茶|酪梨|燕麥|乳|起司|乾酪|巧克力|可可|堅果|藍莓|草莓|牛肉|鮭", n)][:80]
-    except Exception as e:
-        rep["imp_err"] = repr(e)[:200]
-# 台北 1999
-rep["tp1999"] = [(col(r, "資料集識別碼"), col(r, "資料集名稱")[:50], col(r, "更新頻率"), col(r, "詮釋資料更新時間")[:10]) for r in rows[1:] if re.search(r"1999", col(r, "資料集名稱")) and re.search(r"臺北|台北", col(r, "資料集名稱") + col(r, "提供機關"))][:15]
+# 捷運 OD 檔大小與格式
+u = "http://tcgmetro.blob.core.windows.net/stationod/%E8%87%BA%E5%8C%97%E6%8D%B7%E9%81%8B%E6%AF%8F%E6%97%A5%E5%88%86%E6%99%82%E5%90%84%E7%AB%99OD%E6%B5%81%E9%87%8F%E7%B5%B1%E8%A8%88%E8%B3%87%E6%96%99_202608.csv"
+try:
+    h = requests.head(u, headers=H, timeout=60); rep["od_head"] = {"status": h.status_code, "len": h.headers.get("content-length"), "type": h.headers.get("content-type")}
+    r = requests.get(u, headers=H, timeout=60, stream=True); chunk = next(r.iter_content(4000)); r.close()
+    rep["od_head_bytes"] = chunk.decode("utf-8-sig", "ignore")[:1500]
+    rep["od_head_big5"] = chunk.decode("big5", "ignore")[:600]
+except Exception as e:
+    rep["od_err"] = repr(e)[:300]
+# 果菜：種類代碼
+try:
+    js = requests.get("https://data.moa.gov.tw/Service/OpenData/FromM/FarmTransData.aspx", params={"StartDate": "115.10.07", "EndDate": "115.10.08", "Market": "台北一", "$top": "3000"}, headers=H, timeout=90).json()
+    rep["farm_keys"] = list(js[0].keys()) if js else None
+    rep["farm_kinds"] = collections.Counter(x.get("種類代碼") for x in js).most_common()
+    fr = [x for x in js if x.get("種類代碼") not in ("N04",)]
+    vol = collections.Counter()
+    for x in fr: vol[(x.get("種類代碼"), (x.get("作物名稱") or "").split("-")[0])] += float(x.get("交易量") or 0)
+    rep["farm_top_nonveg"] = vol.most_common(40)
+except Exception as e:
+    rep["farm_err"] = repr(e)[:300]
+# 1999 派工
+try:
+    r = requests.get("https://data.gov.tw/api/v2/rest/dataset/121414", headers=H, timeout=60).json()["result"]
+    rep["d1999"] = {"title": r.get("title"), "dist": [(d.get("resourceFormat"), d.get("resourceDownloadUrl")) for d in r.get("distribution", [])][:3], "fields": r.get("fieldDescription") or r.get("columnDescription")}
+    u = rep["d1999"]["dist"][0][1]
+    x = requests.get(u, headers=H, timeout=90); rep["d1999_sample"] = x.content[:1500].decode("utf-8-sig", "ignore"); rep["d1999_len"] = len(x.content)
+except Exception as e:
+    rep["d1999_err"] = repr(e)[:300]
+# 維基：一個主題多語瀏覽量
+def pv(lang, title):
+    t = requests.utils.quote(title.replace(" ", "_"), safe="")
+    r = requests.get(f"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{lang}.wikipedia/all-access/user/{t}/monthly/20200101/20260930", headers=H, timeout=40)
+    return [(i["timestamp"][:6], i["views"]) for i in r.json().get("items", [])] if r.ok else r.status_code
+try:
+    j = requests.get("https://zh.wikipedia.org/w/api.php", params={"action": "query", "titles": "匹克球", "prop": "langlinks", "lllimit": 50, "format": "json", "redirects": 1}, headers=H, timeout=40).json()
+    pg = list(j["query"]["pages"].values())[0]; ll = {x["lang"]: x["*"] for x in pg.get("langlinks", [])}
+    rep["wk_title"] = pg.get("title"); rep["wk_ll"] = {k: ll.get(k) for k in ("en", "ja", "ko")}
+    rep["wk_zh"] = pv("zh", pg["title"])[-14:]
+    if ll.get("en"): rep["wk_en"] = pv("en", ll["en"])[-14:]
+    if ll.get("ja"): rep["wk_ja"] = pv("ja", ll["ja"])[-14:]
+except Exception as e:
+    rep["wk_err"] = repr(e)[:300]
 json.dump(rep, open("out25/probe.json", "w"), ensure_ascii=False, indent=1)
