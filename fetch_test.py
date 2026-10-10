@@ -4312,6 +4312,21 @@ def p_wiki():
                     errs.append(f"{q}/{lang}: {safe_err(e)}")
         series[q] = s
     write_json(WIKI_SERIES, series, separators=(",", ":"))
+    # 維基整體流量這幾年在掉（AI 摘要分走讀者），所以每個主題都除以該語言維基的總瀏覽量，看「占比」的變化才公平
+    base = {}
+    for lang in ("zh", "en", "ja"):
+        try:
+            r = requests.get(f"https://wikimedia.org/api/rest_v1/metrics/pageviews/aggregate/{lang}.wikipedia/all-access/user/monthly/2016010100/{end}00",
+                             headers=WIKI_UA, timeout=40)
+            r.raise_for_status()
+            base[lang] = {i["timestamp"][:6]: i["views"] for i in r.json().get("items", [])}
+            time.sleep(0.4)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"總量 {lang}: {safe_err(e)}")
+    def norm(lang, ser):
+        b_ = base.get(lang) or {}
+        return [[k, round(v / b_[k] * 1e7, 2)] for k, v in ser if b_.get(k)] if b_ else ser
+    series = {q: {lang: norm(lang, ser) for lang, ser in s.items()} for q, s in series.items()}
     rows = []
     for q, grp in cfg:
         s = series.get(q) or {}
@@ -4368,7 +4383,7 @@ def p_wiki():
     order = {"新興加速": 0, "長期上升": 1, "穩定": 3, "退燒中": 4, "熱潮已退": 5}
     rows.sort(key=lambda r: (order[r["kind"]] - (1 if r["abroad"] else 0) * .5, -(r["yoy3"] or 0)))
     return {"rows": rows, "month": rows[0]["last"], "errs": errs[:5],
-            "src": "維基百科逐月瀏覽量（Wikimedia Pageviews API，2016 起；中文維基＝全球中文讀者，台灣占大宗）"}
+            "src": "維基百科逐月瀏覽量（Wikimedia Pageviews API，2016 起）· 每千萬次瀏覽中的占比，已扣掉維基整體流量下滑 · 中文維基＝全球中文讀者，台灣占大宗"}
 
 
 # ---------- 美國企業在談什麼（SEC EDGAR 全文檢索：10-K / 10-Q / 8-K 提到的次數，比去年同期） ----------

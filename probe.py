@@ -5,7 +5,7 @@ g = {"__name__": "fetchmod", "__file__": os.path.abspath("fetch_test.py")}
 rep = {}
 exec(compile(src[:src.index("\nrun(")], "fetch_test.py", "exec"), g)
 g["DATA"].mkdir(exist_ok=True)
-for fn in ("p_cards", "p_wiki"):
+for fn in ("p_wiki",):
     try:
         t0 = time.time(); r = g[fn](); rep[fn] = r; rep[fn + "_sec"] = round(time.time() - t0)
     except Exception:
