@@ -240,6 +240,12 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 /* ================= v2：天空頂欄 · 分頁 · 總覽 · 動態 ================= */
 :root{--dot:"Doto","IBM Plex Mono",ui-monospace,monospace}
 .sec{display:none}
+.el-g{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}@media (max-width:1100px){.el-g{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:640px){.el-g{grid-template-columns:1fr}}
+.el-c{border:1px solid var(--line);border-radius:4px;padding:10px 12px;min-width:0}.el-h{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}.el-h b{font-size:16px}.el-h a{margin-left:auto;font:10.5px var(--mono);color:var(--dim);text-decoration:none}
+.el-rel{font:10.5px var(--mono);border:1px solid var(--line2);border-radius:3px;padding:0 5px;color:var(--muted)}.el-rel.weak{color:var(--warn);border-color:var(--warn)}
+.el-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;padding:6px 0;border-top:1px solid var(--line)}.el-r:first-of-type{border-top:0}.el-n{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.el-n .sub{margin-left:4px}
+.el-p{font:600 18px var(--mono);text-align:right}.el-m{grid-column:1/-1;display:flex;align-items:center;gap:8px;font:11px var(--mono);color:var(--muted)}.el-m .nb{display:inline-flex;align-items:flex-end;gap:1px;height:14px}.el-m .nb i{display:block;width:4px;background:var(--dim);border-radius:1px}
+.el-poll{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted)}.el-poll a{color:var(--muted)}
 /* sky */
 .sky{position:relative;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--panel);margin:12px 0 0}
 .sky canvas{display:block;width:100%;height:200px}
@@ -477,7 +483,7 @@ canvas.o-fx{display:block;width:100%}
 html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animation:none}
 @media (prefers-reduced-motion:reduce){.fids .ch b.fl,.ib-ping,.ib-chip.ib-pop{animation:none}}
 
-#p-geo{order:1}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:4}#p-airport{order:5}#p-roads{order:6}#p-quake{order:7}#p-power{order:8}
+#p-geo{order:1}#p-elect{order:2}#p-twnow{order:3}#p-weather{order:4}#p-twpulse{order:5}#p-airport{order:6}#p-roads{order:7}#p-quake{order:8}#p-power{order:9}
 #p-vauth{order:1}#p-vsearch{order:2}#p-vtime{order:3}#p-vseries{order:4}
 .stopbar{margin:0 0 10px;padding:8px 12px;border:1px solid color-mix(in srgb,var(--down) 55%,var(--line));background:color-mix(in srgb,var(--down) 12%,var(--panel));border-radius:4px;font-size:13px;display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
 .stopbar b{color:var(--down);font-weight:600}.stopbar span{color:var(--text)}.stopbar .s{color:var(--muted);font-size:11.5px;margin-left:auto}
@@ -974,6 +980,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><a href="https://data.taipei/" target="_blank" rel="noopener">台北市資料大平臺</a><span>新北市開放資料 · 台北停車場汽車位 · 台北市區 VD 路段車速 · 每 10 分鐘 · 雙北以外的 YouBike 由瀏覽器即時抓官方站點檔（在台灣網路才抓得到）· 氣象署雷達整合回波與雨量站 · 文化部藝文活動（本週有場次的）· 底圖 OpenFreeMap</span></div>
   </section>
 
+  <section class="panel w12" id="p-elect">
+    <div class="ph"><h2>Election</h2><span class="zh">2026 五都選戰 · 預測市場 × 新聞聲量</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://polymarket.com/" target="_blank" rel="noopener">Polymarket</a><span>市場機率＝押注者的看法，不是民調 · 可信度依交易量判斷 · 新聞聲量＝情報站收進來的新聞、地方新聞、PTT 標題提到名字的則數（現任市長會因市政新聞偏高）· 民調手動整理，附出處 · 台灣下注選舉違法，只看不押</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-twnow">
     <div class="ph"><h2>Taiwan Now</h2><span class="zh">各地現況 · 災害示警、停班停課、地方新聞</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -1456,6 +1468,14 @@ const renderers={
     const wk=((((P.news||{}).signals||{}).wiki||{}).zh||[]).slice(0,8).map((w,i)=>`<li><span class="rank">${i+1}</span><span class="t"><a href="${esc(safe(w.url))}" target="_blank" rel="noopener">${esc(w.title)}</a></span><span class="m">${compact(n(w.views))}</span></li>`).join("");
     body("p-attention").innerHTML=`<div class="nw nw2">${col(`電影票房${bx.asOf?" · 截至 "+esc(bx.asOf.slice(5)):""}`,box)}${col("App Store 免費榜",apps)}</div><div class="empty" style="padding:6px 0 0;font-size:10.5px">YouTube 發燒、Google 搜尋在下方各自的面板；維基熱門在情報分頁</div>`;
     setMeta("p-attention",{...d,label:"多源"},6);},
+  elect(d){const dl=Math.ceil((new Date(d.day+"T00:00:00+08:00")-Date.now())/864e5);
+    const cards=(d.cities||[]).map(c=>{const mxn=Math.max(1,...(c.cands||[]).flatMap(x=>x.news||[]));
+      const rows=(c.cands||[]).map(x=>{const nt=(x.news||[]).reduce((a,b)=>a+b,0);return`<div class="el-r"><div class="el-n">${esc(x.name)}${x.party?`<span class="sub">${esc(x.party)}</span>`:""}</div><div class="el-p">${fmt(n(x.p),0)}%</div>
+        <div class="el-m">${mini(x.spark)}<span class="${cls(n(x.d7))}">${x.d7!=null?`7天 ${sgn(n(x.d7),1)}`:"7天 —"}</span><span title="近 7 天每天新聞與 PTT 標題提到幾次">聲量 ${nt}</span><span class="nb">${(x.news||[]).map(v=>`<i style="height:${Math.max(1,Math.round(v/mxn*14))}px"></i>`).join("")}</span></div></div>`;}).join("");
+      const pl=(c.polls||[]).map(q=>`<div>${q.url?`<a href="${esc(safe(q.url))}" target="_blank" rel="noopener">${esc(q.by)}</a>`:esc(q.by)} ${esc(String(q.date||"").slice(5).replace("-","/"))}：${(q.rows||[]).map(([k,v])=>`${esc(k)} ${v}%`).join("、")}</div>`).join("");
+      return`<div class="el-c"><div class="el-h"><b>${esc(c.city)}</b><span class="el-rel${/偏弱|幾乎/.test(c.rel)?" weak":""}" title="累計交易 ${n(c.vol).toLocaleString()} 美元 · 近 24 小時 ${n(c.vol24).toLocaleString()} 美元">${esc(c.rel)}</span><a href="${esc(safe(c.url))}" target="_blank" rel="noopener">盤口 ↗</a></div>${rows||'<div class="empty">沒有報價</div>'}${pl?`<div class="el-poll">${pl}</div>`:""}</div>`;}).join("");
+    body("p-elect").innerHTML=`<div class="veg-h">距投票<b>${dl>0?dl:0}</b><span>天 · ${esc(d.day.replace(/-/g,"/"))} · ${dl>10?`11/18 起禁止發布民調`:"已進入民調封關期"}${d.pollsAt?` · 民調整理於 ${esc(String(d.pollsAt).slice(5).replace("-","/"))}`:" · 民調：跟 Claude 說「更新民調」"}</span></div><div class="el-g">${cards}</div>`;
+    setMeta("p-elect",d,1);},
   veg(d){VF.veg=d;renderVF();},
   fish(d){VF.fish=d;renderVF();},
   radar_wx(d){try{applyWx();}catch(e){}},
@@ -2278,7 +2298,7 @@ const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"m
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro",
   "ib-sig":"intel","ib-soc":"social","p-voice":"intel","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
-  "p-geo":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
+  "p-geo":"live","p-elect":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
   "brief":"overview","ov":"overview","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
 const tabsEl=$("#tabs");
 tabsEl.innerHTML=TABS.map(([k,nm])=>`<button class="tab" role="tab" id="tab-${k}" data-k="${k}" aria-selected="false" type="button">${nm}<i class="bd" aria-hidden="true"></i></button>`).join("")+'<span class="tbar" id="tbar"></span>';

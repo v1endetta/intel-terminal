@@ -431,6 +431,98 @@ POLY_TOPICS = [("Fed／利率", "fed-rates", 3), ("經濟／通膨", "economy", 
 POLY_NOISE = re.compile(r"\bon (January|February|March|April|May|June|July|August|September|October|November|December) \d|\d+\s*-\s*(January|February|March|April|May|June|July|August|September|October|November|December)? ?\d+\?|bankruptcy|aliens|Millennium Prize", re.I)
 
 
+# ---------- 2026 五都選戰：Polymarket 機率（只看不押；台灣下注選舉違法）＋ 新聞聲量 ＋ 手動民調 ----------
+ELECT_DAY = "2026-11-28"
+ELECT_CITIES = [("台北", "taipei-mayor-election-winner-20260813125857100"), ("新北", "new-taipei-mayor-election-winner-20260813125857200"),
+                ("台中", "taichung-mayor-election-winner-20260813125857400"), ("台南", "tainan-mayor-election-winner-20260813125857500"),
+                ("高雄", "kaohsiung-mayor-election-winner-20260813125857600")]
+ELECT_NAMES = {"Chiang Wan-an": ("蔣萬安", "國民黨"), "Puma Shen": ("沈伯洋", "民進黨"), "Lee Shu-chuan": ("李四川", "國民黨"),
+               "Su Chiao-hui": ("蘇巧慧", "民進黨"), "Johnny Chiang": ("江啟臣", "國民黨"), "Ho Hsin-chun": ("何欣純", "民進黨"),
+               "Hsieh Lung-chieh": ("謝龍介", "國民黨"), "Chen Ting-fei": ("陳亭妃", "民進黨"), "Lin Yi-feng": ("林義豐", ""),
+               "Ko Chih-en": ("柯志恩", "國民黨"), "Lai Jui-lung": ("賴瑞隆", "民進黨"), "Huang Kuo-chang": ("黃國昌", "民眾黨")}
+ELECT_MENTIONS = DATA / "elect_mentions.json"
+
+
+def p_elect():
+    errs, today = [], TODAY_TPE.isoformat()
+    # 1) 新聞聲量：每輪把看到的標題記下來（依日期去重），算每位候選人每天被提到幾次
+    titles = []
+    nw = RESULTS.get("news") or {}
+    titles += [x.get("title") or "" for x in (nw.get("tw") or [])]
+    for v in ((RESULTS.get("localnews") or {}).get("counties") or {}).values():
+        titles += [x.get("title") or "" for x in (v if isinstance(v, list) else [])]
+    titles += [x.get("title") or "" for x in ((RESULTS.get("ptt") or {}).get("items") or [])]
+    try:
+        store = json.loads(ELECT_MENTIONS.read_text(encoding="utf-8")) if ELECT_MENTIONS.exists() else {}
+    except Exception:  # noqa: BLE001
+        store = {}
+    day = store.setdefault(today, {})
+    zh_names = [v[0] for v in ELECT_NAMES.values()]
+    for t in set(titles):
+        for nm in zh_names:
+            if nm in t:
+                lst = day.setdefault(nm, [])
+                h = t[:40]
+                if h not in lst:
+                    lst.append(h)
+    cut = (TODAY_TPE - timedelta(days=21)).isoformat()
+    store = {d: v for d, v in store.items() if d >= cut}
+    write_json(ELECT_MENTIONS, store, separators=(",", ":"))
+    days7 = [(TODAY_TPE - timedelta(days=i)).isoformat() for i in range(6, -1, -1)]
+    # 2) 手動民調（ops/polls.json，說「更新民調」時由 Claude 填，附出處）
+    try:
+        polls = json.loads((ROOT / "ops" / "polls.json").read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        polls = {}
+    # 3) 預測市場
+    cities = []
+    for city, slug in ELECT_CITIES:
+        try:
+            evs = gjson("https://gamma-api.polymarket.com/events", params={"slug": slug}, timeout=30)
+            ev = evs[0] if isinstance(evs, list) and evs else {}
+            cands = []
+            for m in ev.get("markets") or []:
+                en = m.get("groupItemTitle") or ""
+                if en not in ELECT_NAMES:
+                    continue
+                try:
+                    p = float(json.loads(m.get("outcomePrices") or "[]")[0]) * 100
+                except Exception:  # noqa: BLE001
+                    continue
+                if p < 1.5:
+                    continue
+                zh, party = ELECT_NAMES[en]
+                key = f"{city}:{zh}"
+                hist = HISTORY.get("elect", {}).get(key) or []
+                if len(hist) < 5:  # 第一次：用 Polymarket 公開歷史價格回補開盤以來的日線
+                    try:
+                        tok = json.loads(m.get("clobTokenIds") or "[]")[0]
+                        ph = gjson("https://clob.polymarket.com/prices-history", params={"market": tok, "interval": "max", "fidelity": "1440"}, timeout=30)
+                        for pt in ph.get("history") or []:
+                            d = datetime.fromtimestamp(int(pt["t"]), TPE).date().isoformat()
+                            hist_put("elect", key, d, round(float(pt["p"]) * 100, 1))
+                        time.sleep(0.3)
+                    except Exception as e:  # noqa: BLE001
+                        errs.append(f"{city} 回補: {safe_err(e)}")
+                hist_put("elect", key, today, round(p, 1))
+                h = HISTORY.get("elect", {}).get(key) or []
+                prev7 = next((v for d, v in reversed(h) if d <= (TODAY_TPE - timedelta(days=7)).isoformat()), None)
+                cands.append({"name": zh, "party": party, "p": round(p, 1), "d7": round(p - prev7, 1) if prev7 is not None else None,
+                              "spark": [v for _, v in h[-45:]], "news": [len(store.get(d, {}).get(zh, [])) for d in days7]})
+            cands.sort(key=lambda c: -c["p"])
+            vol, v24 = float(ev.get("volume") or 0), float(ev.get("volume24hr") or 0)
+            rel = "可信" if vol >= 300000 else "普通" if vol >= 50000 and v24 >= 1000 else "偏弱" if vol >= 10000 else "幾乎沒交易"
+            cities.append({"city": city, "cands": cands[:3], "vol": round(vol), "vol24": round(v24), "rel": rel,
+                           "url": f"https://polymarket.com/event/{slug}", "polls": (polls.get(city) or [])[:3]})
+            time.sleep(0.3)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{city}: {safe_err(e)}")
+    if not cities:
+        raise RuntimeError(f"elect: nothing {errs[:2]}")
+    return {"day": ELECT_DAY, "cities": cities, "days": days7, "pollsAt": polls.get("_updated"), "errs": errs[:5],
+            "src": "Polymarket 公開報價（只看不押）＋ 情報站收進來的新聞與 PTT 標題 ＋ 手動整理民調"}
+
+
 def p_poly():
     groups, seen, flat = {}, set(), []
     for label, tag, k in POLY_TOPICS:
@@ -7021,6 +7113,7 @@ run("airport", p_airport, keep_if_fresh_hours=0.25)
 run("alerts", p_alerts, keep_if_fresh_hours=0.15)
 run("oil", p_oil, keep_if_fresh_hours=12)
 run("localnews", p_localnews, keep_if_fresh_hours=1)
+run("elect", p_elect, keep_if_fresh_hours=0.5)  # 要在新聞、地方新聞、PTT 之後
 run("culture", p_culture, keep_if_fresh_hours=6)
 run("veg", p_veg, keep_if_fresh_hours=6)
 run("fish", p_fish, keep_if_fresh_hours=6)
