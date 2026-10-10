@@ -246,6 +246,10 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .el-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;padding:6px 0;border-top:1px solid var(--line)}.el-r:first-of-type{border-top:0}.el-n{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.el-n .sub{margin-left:4px}
 .el-p{font:600 18px var(--mono);text-align:right}.el-m{grid-column:1/-1;display:flex;align-items:center;gap:8px;font:11px var(--mono);color:var(--muted)}.el-m .nb{display:inline-flex;align-items:flex-end;gap:1px;height:14px}.el-m .nb i{display:block;width:4px;background:var(--dim);border-radius:1px}
 .el-poll{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);font-size:11.5px;color:var(--muted)}.el-poll a{color:var(--muted)}
+.el-t{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}.el-t span{font:10.5px var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:0 4px}
+.el-w{border:1px solid var(--line);border-radius:4px;padding:8px 12px;margin-bottom:10px}.el-wh{font-size:12.5px;margin-bottom:6px}.el-wh span{color:var(--dim);font-size:11px;margin-left:8px}.el-wh b,.el-wr b{color:var(--up);font-weight:600}
+.el-wr{display:grid;grid-template-columns:110px minmax(60px,180px) minmax(0,1fr);gap:10px;align-items:center;font-size:12px;padding:2px 0}.el-wr .b{height:8px;background:var(--line);border-radius:2px;overflow:hidden}.el-wr .b i{display:block;height:100%;background:var(--blue)}.el-wr .c{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:640px){.el-wr{grid-template-columns:96px minmax(50px,1fr)}.el-wr .c{grid-column:1/-1;white-space:normal}}
 /* sky */
 .sky{position:relative;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--panel);margin:12px 0 0}
 .sky canvas{display:block;width:100%;height:200px}
@@ -809,7 +813,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <section class="ibx ib-sig" id="ib-sig" aria-label="今日訊號"></section>
   <section class="ibx ib-band" id="ib1"><div class="ib-q"><span class="no">Q1 · 錢</span><h2>錢往哪裡流？</h2><p class="ans" id="ib1a">等待排程寫入</p><div class="ib-more" data-band="1"></div></div>
     <div class="ib-body"><div class="ib-viz"><div class="ib-col-h">供給 · 誰在開店、搶人、擴張</div><h3 id="ib1xh">稅籍新開店 · 哪類小店在變多</h3><svg id="ib1x" role="img" aria-label="稅籍細類新開家數年增"></svg><h3 style="margin-top:14px" id="ib1jh">104 職缺 · 哪個產業在搶人<span class="n">比 7 天前</span></h3><svg id="ib1j" role="img" aria-label="各產業職缺週增減"></svg><h3 style="margin-top:14px" id="ib1ph">景氣 · 各產業 PMI／NMI<span class="n">50 以上＝擴張</span></h3><svg id="ib1p" role="img" aria-label="各產業採購經理人指數"></svg></div>
-      <div class="ib-viz"><div class="ib-col-h">錢 · 營收、資金、預算往哪去</div><h3 id="ib1rh">上市櫃營收 · 各產業年增</h3><svg id="ib1r" role="img" aria-label="各產業營收年增"></svg><ul class="ib-top" id="ib1rl" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:14px" id="ib1eh">ETF 存股族 · 集保持有人數</h3><svg id="ib1e" role="img" aria-label="ETF 持有人數"></svg><h3 style="margin-top:14px">本週政府行銷標案 · 預算<span class="n">前 6 件</span></h3><svg id="ib1w" role="img" aria-label="標案預算"></svg><ul class="ib-top" id="ib1t"></ul></div></div></section>
+      <div class="ib-viz"><div class="ib-col-h">錢 · 營收、資金、預算往哪去</div><h3 id="ib1rh">上市櫃營收 · 各產業年增</h3><svg id="ib1r" role="img" aria-label="各產業營收年增"></svg><ul class="ib-top" id="ib1rl" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:14px" id="ib1eh">ETF 存股族 · 集保持有人數</h3><svg id="ib1e" role="img" aria-label="ETF 持有人數"></svg><h3 style="margin-top:14px">本週政府標案 · AI／長照／淨零／觀光／運動<span class="n">預算前 6 件</span></h3><svg id="ib1w" role="img" aria-label="標案預算"></svg><ul class="ib-top" id="ib1t"></ul></div></div></section>
   <section class="ibx ib-band" id="ib6"><div class="ib-q"><span class="no">Q2 · 企業</span><h2>誰要上市、誰易主、誰換跑道？</h2><p class="ans" id="ib6a">等待排程寫入</p></div>
     <div class="ib-body"><div class="ib-viz"><h3 id="ib6ih">即將掛牌 · 公開申購<span class="n">證交所抽籤日程</span></h3><ul class="ib-top" id="ib6i" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:14px" id="ib6qh">排隊上市櫃<span class="n">近 120 天送件</span></h3><ul class="ib-top" id="ib6q" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:14px" id="ib6fh">法說會 · 未來 3 週<span class="n">消費相關產業優先</span></h3><ul class="ib-top ib-conf" id="ib6f" style="border-top:0;padding-top:0"></ul></div>
       <div class="ib-viz"><h3 id="ib6ch">經營權易主<span class="n">近一年 · 證交所／櫃買認定</span></h3><ul class="ib-top ib-conf" id="ib6c" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:14px" id="ib6ph">營業範圍大轉彎<span class="n">最新一季 · 本業換掉的公司</span></h3><ul class="ib-top" id="ib6p" style="border-top:0;padding-top:0"></ul></div></div></section>
@@ -852,7 +856,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   </section>
 
   <section class="panel w6 cap" id="p-tenders">
-    <div class="ph"><h2>Tenders</h2><span class="zh">政府標案 · 行銷／品牌／影片／廣告／視覺設計</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>Tenders</h2><span class="zh">政府標案 · AI／長照／淨零／觀光／運動</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>政府電子採購網（g0v 鏡像）· 只列招標公告 · 預算補抓，可能晚一輪</span></div>
   </section>
@@ -1350,7 +1354,7 @@ const renderers={
     body("p-news").innerHTML=`${sig?`<div class="sig">${sig}</div>`:""}<div class="nw nw2"><div><h3>台灣</h3><ul class="list">${li(d.tw||[])}</ul></div><div><h3>國際</h3><ul class="list">${li(d.intl||[])}</ul></div></div>${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.join(" · ").slice(0,200))}</div>`:""}`;setMeta("p-news",d,2);
     const gs=(d.groups||[]).map(g=>`<div class="wg"><h3>${esc(g.name)}</h3><ul class="list">${li(g.items||[])||'<li class="empty">沒有結果</li>'}</ul></div>`).join("");
     body("p-watch").innerHTML=gs?`<div class="nw nw3">${gs}</div>`:`<div class="empty">等待排程寫入</div>`;setMeta("p-watch",d,2);},
-  tenders(d){const mx=Math.max(1,...(d.items||[]).map(x=>n(x.budget)||0));const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.date.slice(4,6))}/${esc(it.date.slice(6,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a><span class="sub">${esc(it.unit)}</span></span><span class="bar o-amt" aria-hidden="true"><i style="width:${it.budget?Math.max(4,n(it.budget)/mx*100):0}%;background:${it.budget>=3e6?"var(--up)":"var(--blue)"}"></i></span><span class="m ${it.budget>=3e6?"up":""}" style="min-width:48px;text-align:right">${it.budget?compact(n(it.budget)):"—"}</span></li>`).join("");
+  tenders(d){const mx=Math.max(1,...(d.items||[]).map(x=>n(x.budget)||0));const li=(d.items||[]).map(it=>`<li><span class="src">${esc(it.date.slice(4,6))}/${esc(it.date.slice(6,8))}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a><span class="sub">${(it.kw||[]).map(k=>esc(k)).join("・")} · ${esc(it.unit)}</span></span><span class="bar o-amt" aria-hidden="true"><i style="width:${it.budget?Math.max(4,n(it.budget)/mx*100):0}%;background:${it.budget>=3e6?"var(--up)":"var(--blue)"}"></i></span><span class="m ${it.budget>=3e6?"up":""}" style="min-width:48px;text-align:right">${it.budget?compact(n(it.budget)):"—"}</span></li>`).join("");
     body("p-tenders").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">沒有命中</div>`;setMeta("p-tenders",d,6);},
   crowd(d){const row=it=>`<li><span class="src">${esc(it.source||"")}</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title)}</a></span>${it.amt?`<span class="m up">${esc(String(it.amt))}</span>`:""}<span class="m">${it.at?ago(it.at).replace(" 前",""):""}</span></li>`;
     const hot=(d.hot||[]).map(row).join(""),pro=(d.pro||[]).map(row).join("");
@@ -1471,10 +1475,12 @@ const renderers={
   elect(d){const dl=Math.ceil((new Date(d.day+"T00:00:00+08:00")-Date.now())/864e5);
     const cards=(d.cities||[]).map(c=>{const mxn=Math.max(1,...(c.cands||[]).flatMap(x=>x.news||[]));
       const rows=(c.cands||[]).map(x=>{const nt=(x.news||[]).reduce((a,b)=>a+b,0);return`<div class="el-r"><div class="el-n">${esc(x.name)}${x.party?`<span class="sub">${esc(x.party)}</span>`:""}</div><div class="el-p">${fmt(n(x.p),0)}%</div>
-        <div class="el-m">${mini(x.spark)}<span class="${cls(n(x.d7))}">${x.d7!=null?`7天 ${sgn(n(x.d7),1)}`:"7天 —"}</span><span title="近 7 天每天新聞與 PTT 標題提到幾次">聲量 ${nt}</span><span class="nb">${(x.news||[]).map(v=>`<i style="height:${Math.max(1,Math.round(v/mxn*14))}px"></i>`).join("")}</span></div></div>`;}).join("");
+        <div class="el-m">${mini(x.spark)}<span class="${cls(n(x.d7))}">${x.d7!=null?`7天 ${sgn(n(x.d7),1)}`:"7天 —"}</span><span title="近 7 天每天新聞與 PTT 標題提到幾次">聲量 ${nt}</span><span class="nb">${(x.news||[]).map(v=>`<i style="height:${Math.max(1,Math.round(v/mxn*14))}px"></i>`).join("")}</span></div>${(x.topics||[]).length?`<div class="el-t">${x.topics.slice(0,3).map(([k,v])=>`<span>${esc(k)} ${v}</span>`).join("")}</div>`:""}</div>`;}).join("");
       const pl=(c.polls||[]).map(q=>`<div>${q.url?`<a href="${esc(safe(q.url))}" target="_blank" rel="noopener">${esc(q.by)}</a>`:esc(q.by)} ${esc(String(q.date||"").slice(5).replace("-","/"))}：${(q.rows||[]).map(([k,v])=>`${esc(k)} ${v}%`).join("、")}</div>`).join("");
       return`<div class="el-c"><div class="el-h"><b>${esc(c.city)}</b><span class="el-rel${/偏弱|幾乎/.test(c.rel)?" weak":""}" title="累計交易 ${n(c.vol).toLocaleString()} 美元 · 近 24 小時 ${n(c.vol24).toLocaleString()} 美元">${esc(c.rel)}</span><a href="${esc(safe(c.url))}" target="_blank" rel="noopener">盤口 ↗</a></div>${rows||'<div class="empty">沒有報價</div>'}${pl?`<div class="el-poll">${pl}</div>`:""}</div>`;}).join("");
-    body("p-elect").innerHTML=`<div class="veg-h">距投票<b>${dl>0?dl:0}</b><span>天 · ${esc(d.day.replace(/-/g,"/"))} · ${dl>10?`11/18 起禁止發布民調`:"已進入民調封關期"}${d.pollsAt?` · 民調整理於 ${esc(String(d.pollsAt).slice(5).replace("-","/"))}`:" · 民調：跟 Claude 說「更新民調」"}</span></div><div class="el-g">${cards}</div>`;
+    const W=(d.wind||[]).slice(0,6),wmx=Math.max(.01,...W.map(w=>w.score));
+    const wind=W.length?`<div class="el-w"><div class="el-wh">勝率加權政策風向<span>近 14 天報導議題 × 市場勝率 · <b>共識</b>＝同城市兩邊陣營都在講，不管誰贏都會推</span></div>${W.map(w=>`<div class="el-wr"><span class="k">${esc(w.topic)}</span><span class="b"><i style="width:${Math.round(w.score/wmx*100)}%"></i></span><span class="c">${(w.cities||[]).map(c=>esc(c)).join("、")}${(w.both||[]).length?` · <b>共識：${w.both.map(c=>esc(c)).join("、")}</b>`:""}</span></div>`).join("")}</div>`:"";
+    body("p-elect").innerHTML=wind+`<div class="veg-h">距投票<b>${dl>0?dl:0}</b><span>天 · ${esc(d.day.replace(/-/g,"/"))} · ${dl>10?`11/18 起禁止發布民調`:"已進入民調封關期"}${d.pollsAt?` · 民調整理於 ${esc(String(d.pollsAt).slice(5).replace("-","/"))}`:" · 民調：跟 Claude 說「更新民調」"}</span></div><div class="el-g">${cards}</div>`;
     setMeta("p-elect",d,1);},
   veg(d){VF.veg=d;renderVF();},
   fish(d){VF.fish=d;renderVF();},
@@ -2098,7 +2104,7 @@ function render(P){
   if(B.total){const chg=Math.round((B.total-B.total_prev)/B.total_prev*100);
     const mm=+String(B.month||"").slice(5);
     cards.push(["ib1","新品牌",n(B.total).toLocaleString(),"家",`${mm} 月新設公司行號，比上月 <b class="${chg<0?"down":"up"}">${chg<0?"▼":"▲"}${Math.abs(chg)}%</b>`]);
-    A1.base=`${mm} 月新設公司行號 <em>${n(B.total).toLocaleString()}</em> 家，比上月 <em class="${chg<0?"down":"up"}">${chg<0?"少":"多"} ${Math.abs(chg)}%</em>。${tend.length?`政府行銷標案本週 ${tend.length} 件、合計 <em>${wan(tSum)}</em>。`:""}`;
+    A1.base=`${mm} 月新設公司行號 <em>${n(B.total).toLocaleString()}</em> 家，比上月 <em class="${chg<0?"down":"up"}">${chg<0?"少":"多"} ${Math.abs(chg)}%</em>。${tend.length?`政府在 AI、長照、淨零、觀光、運動的標案本週 ${tend.length} 件、合計 <em>${wan(tSum)}</em>。`:""}`;
   }
   const JI=((P.jobs||{}).inds||[]).filter(x=>n(x.n)>0);let jTxt="";
   if(JI.length){const hasC=JI.some(x=>x.chg7!=null);
@@ -2201,7 +2207,7 @@ function render(P){
     const nx=up[0];
     $("#ib6a").innerHTML=`${nx?`最近要掛牌的是<b>${esc(nx.name)}</b>（${esc(nx.ind||nx.mk)}，${md(nx.list)}）；`:""}近 120 天 <em>${n(CO.queue_n)}</em> 家送件排隊上市櫃；近一年 <em>${n(CO.control_n)}</em> 家經營權易主，最新一季 <em>${n(CO.pivot_n)}</em> 家本業大轉彎；未來 3 週 <em>${cf.length}</em> 場法說會${cons.length?`，消費相關 ${cons.length} 場`:""}。`;
   }
-  if(tend.length){cards.push(["ib1","政府行銷",wan(tSum).replace(" ",""),"",`本週 ${tend.length} 件標案；最大 <b>${esc(tend[0].title.slice(0,12))}</b> ${wan(n(tend[0].budget))}`]);
+  if(tend.length){cards.push(["ib1","政府標案",wan(tSum).replace(" ",""),"",`本週 ${tend.length} 件標案；最大 <b>${esc(tend[0].title.slice(0,12))}</b> ${wan(n(tend[0].budget))}`]);
     const t6=tend.slice(0,6),W=fitW("ib1w",420),rh=22,mx=n(t6[0].budget);const p=draw("ib1w",W,t6.length*rh);
     if(p)t6.forEach((x,i)=>{const y=i*rh,w=Math.max(2,(W-230)*n(x.budget)/mx);const r=p("rect",{x:0,y:y+3,width:w,height:rh-9,rx:1.5,style:`fill:var(${n(x.budget)>=3e6?"--up":"--blue"});opacity:.85`});
       const tt=document.createElementNS(NS,"title");tt.textContent=x.title+"｜"+x.unit;r.appendChild(tt);
@@ -2406,7 +2412,7 @@ function layout(){
   <section class="o-card w4" id="ov-c-live">${H("TPE","桃機翻牌","live")}<div class="o-flaps" id="ov-flaps"></div><div class="o-hr"></div><div class="o-colh">接下來出發</div><ul class="o-ls" id="ov-deps"></ul></section>
   <section class="o-card w8" id="ov-c-sec">${H("Sectors","板塊熱力 · 依漲跌排序","market")}
     <div class="o-cols2"><div><div class="o-colh">美股 11 板塊</div><div class="o-heat" id="ov-ussec"></div></div><div><div class="o-colh">台股類股</div><div class="o-heat" id="ov-twsec"></div></div></div></section>
-  <section class="o-card w4" id="ov-c-gov">${H("Gov","行銷標案 · 決標","intel")}<ul class="o-ls" id="ov-gov"></ul></section>`;
+  <section class="o-card w4" id="ov-c-gov">${H("Gov","政府標案 · 決標（產業方向）","intel")}<ul class="o-ls" id="ov-gov"></ul></section>`;
 }
 
 /* ---------- 各區塊 ---------- */
