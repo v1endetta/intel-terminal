@@ -4525,6 +4525,13 @@ def p_tech2():
         out["steam"] = games
     except Exception as e:  # noqa: BLE001
         errs.append(f"Steam: {safe_err(e)}")
+    for k in ("pypi", "npm"):  # 整個平台的下載量會一起起伏（CI、鏡像、統計口徑），看「比同一組其他套件」才準
+        xs = sorted(x["chg90"] for x in out.get(k, []) if x["chg90"] is not None)
+        m = xs[len(xs) // 2] if xs else 0
+        for x in out.get(k, []):
+            x["rel90"] = round(x["chg90"] - m, 1) if x["chg90"] is not None else None
+        out[k + "_base"] = m
+        out[k] = sorted(out.get(k, []), key=lambda x: -(x["rel90"] if x["rel90"] is not None else -999))
     if not any(out.get(k) for k in ("pypi", "npm", "papers", "steam")):
         raise RuntimeError(f"tech2: nothing {errs[:3]}")
     out["errs"] = errs[:6]
@@ -4563,8 +4570,8 @@ def p_imports():
         if a + b < 20000:  # 太小的品項（不到 20 公噸）不看
             continue
         label = re.sub(r"[，,]\s*(生鮮|冷藏|冷凍|鮮).*$", "", nm)
-        label = re.sub(r"[（(](發酵|未發酵|於.*?)[）)]", "", label)
-        label = re.sub(r"[（(][^）)]*$", "", label)[:16]
+        label = re.sub(r"[（(][^）)]*[）)]", "", label)
+        label = re.sub(r"[（(][^）)]*$", "", label).strip("，, ")[:16]
         rows.append({"name": label, "full": nm, "t": round(a / 1000, 1), "chg": round(100 * (a / b - 1), 1) if b else None,
                      "spark": [round(ser.get(ym_add(last, -i), 0) / 1000, 1) for i in range(23, -1, -1)]})
     rows.sort(key=lambda r: -(r["chg"] if r["chg"] is not None else 999))

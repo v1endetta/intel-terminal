@@ -250,6 +250,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .el-w{border:1px solid var(--line);border-radius:4px;padding:8px 12px;margin-bottom:10px}.el-wh{font-size:12.5px;margin-bottom:6px}.el-wh span{color:var(--dim);font-size:11px;margin-left:8px}.el-wh b,.el-wr b{color:var(--up);font-weight:600}
 .el-wr{display:grid;grid-template-columns:110px minmax(60px,180px) minmax(0,1fr);gap:10px;align-items:center;font-size:12px;padding:2px 0}.el-wr .b{height:8px;background:var(--line);border-radius:2px;overflow:hidden}.el-wr .b i{display:block;height:100%;background:var(--blue)}.el-wr .c{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media (max-width:640px){.el-wr{grid-template-columns:96px minmax(50px,1fr)}.el-wr .c{grid-column:1/-1;white-space:normal}}
+#p-ledger .vr-t td.name{white-space:normal;max-width:none}#p-ledger .vr-t{table-layout:auto}
 /* sky */
 .sky{position:relative;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--panel);margin:12px 0 0}
 .sky canvas{display:block;width:100%;height:200px}
@@ -933,7 +934,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <section class="panel w12 cap" id="p-tech2">
     <div class="ph"><h2>Frontier</h2><span class="zh">科技前沿 · 開發者在裝什麼、研究在追什麼、玩家在玩什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://pypistats.org/" target="_blank" rel="noopener">PyPI Stats</a><a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm</a><a href="https://openalex.org/" target="_blank" rel="noopener">OpenAlex</a><a href="https://store.steampowered.com/charts" target="_blank" rel="noopener">Steam</a><span>下載量用每日中位數（避開 CI 機器人暴量）· 三個月＝近 28 天比三個月前 · 論文＝近 12 個月比前 12 個月（標題與摘要）· Steam＝官方最多人玩排行，7 天變化從今天開始累積</span></div>
+    <div class="pf"><a href="https://pypistats.org/" target="_blank" rel="noopener">PyPI Stats</a><a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm</a><a href="https://openalex.org/" target="_blank" rel="noopener">OpenAlex</a><a href="https://store.steampowered.com/charts" target="_blank" rel="noopener">Steam</a><span>下載量用每日中位數（避開 CI 機器人暴量）· 三個月＝近 28 天比三個月前 · 整個平台的下載量會一起起伏，所以看「比同組」＝扣掉同一組套件的中位數 · 論文＝近 12 個月比前 12 個月（標題與摘要）· Steam＝官方最多人玩排行，7 天變化從今天開始累積</span></div>
   </section>
   <section class="panel w12" id="p-pop">
     <div class="ph"><h2>Pop Charts</h2><span class="zh">流行排行 · 台灣在聽、在看、在讀什麼</span><span class="meta">排程</span></div>
@@ -1555,9 +1556,9 @@ const renderers={
     setMeta("p-ledger",d,24);},
   tech2(d){const tb=(rows,cols)=>`<table class="vr-t"><tr>${cols.map(c=>`<th${c[2]?' class="r"':""}>${c[0]}</th>`).join("")}</tr>${(rows||[]).map(x=>`<tr>${cols.map(c=>`<td${c[2]?' class="r num"':' class="name"'}>${c[1](x)}</td>`).join("")}</tr>`).join("")}</table>`;
     const pct=v=>v!=null?`<span class="${cls(n(v))}">${sgn(n(v),0,"%")}</span>`:"—",K=v=>v>=1e6?fmt(v/1e6,1)+"M":v>=1e3?fmt(v/1e3,0)+"k":fmt(v,0);
-    const dl=[["套件",x=>esc(x.name)+mini(x.spark)],["每日",x=>K(n(x.day)),1],["近月",x=>pct(x.chg),1],["三個月",x=>pct(x.chg90),1]];
-    body("p-tech2").innerHTML=`<div class="vr-g"><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">Python 套件（PyPI）· 依三個月排序</h3>${tb(d.pypi,dl)}<h3 style="font-size:11px;color:var(--dim);margin:12px 0 4px">論文主題（OpenAlex）· 近 12 個月比前 12 個月</h3>${tb(d.papers,[["主題",x=>esc(x.name)+`<span class="sub">${esc(x.q)}</span>`],["篇數",x=>fmt(n(x.n12),0),1],["成長",x=>pct(x.chg),1]])}</div>
-      <div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">JavaScript 套件（npm）· 依三個月排序</h3>${tb(d.npm,dl)}<h3 style="font-size:11px;color:var(--dim);margin:12px 0 4px">Steam 最多人玩 · 同時在線高峰</h3>${tb((d.steam||[]).slice(0,10),[["遊戲",x=>`<span class="sub">#${n(x.rank)}</span> ${esc(x.name)}`],["人數",x=>K(n(x.peak)),1],["7 天",x=>pct(x.chg7),1]])}</div></div>`;
+    const dl=[["套件",x=>esc(x.name)+mini(x.spark)],["每日",x=>K(n(x.day)),1],["三個月",x=>pct(x.chg90),1],["比同組",x=>x.rel90!=null?`<span class="${cls(n(x.rel90))}">${sgn(n(x.rel90),0)}</span>`:"—",1]];
+    body("p-tech2").innerHTML=`<div class="vr-g"><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">Python 套件（PyPI）· 依「比同組」排序</h3>${tb(d.pypi,dl)}<h3 style="font-size:11px;color:var(--dim);margin:12px 0 4px">論文主題（OpenAlex）· 近 12 個月比前 12 個月</h3>${tb(d.papers,[["主題",x=>esc(x.name)+`<span class="sub">${esc(x.q)}</span>`],["篇數",x=>fmt(n(x.n12),0),1],["成長",x=>pct(x.chg),1]])}</div>
+      <div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">JavaScript 套件（npm）· 依「比同組」排序</h3>${tb(d.npm,dl)}<h3 style="font-size:11px;color:var(--dim);margin:12px 0 4px">Steam 最多人玩 · 同時在線高峰</h3>${tb((d.steam||[]).slice(0,10),[["遊戲",x=>`<span class="sub">#${n(x.rank)}</span> ${esc(x.name)}`],["人數",x=>K(n(x.peak)),1],["7 天",x=>pct(x.chg7),1]])}</div></div>`;
     setMeta("p-tech2",d,48);},
   imports(d){const R=d.rows||[],up=R.filter(x=>x.chg!=null&&x.chg>0),dn=R.filter(x=>x.chg!=null&&x.chg<0).reverse();
     const li=a=>a.slice(0,8).map(x=>`<li title="${esc(x.full)}"><span class="t">${esc(x.name)}${mini(x.spark)}<span class="sub">${fmt(n(x.t),0)} 公噸</span></span><span class="m num"><span class="${cls(n(x.chg))}">${sgn(n(x.chg),1,"%")}</span></span></li>`).join("");
