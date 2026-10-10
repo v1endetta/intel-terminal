@@ -1,6 +1,27 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_strong-wind_202610101627001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "桃園市",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "雲林縣",
+    "臺南市",
+    "屏東縣",
+    "臺東縣",
+    "澎湖縣"
+   ],
+   "text": "東北風偏強，10日下午至11日晚上桃園市、苗栗縣、臺中市、彰化縣、雲林縣、臺南市、屏東縣、臺東縣(含蘭嶼)、澎湖縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-10T08:27:25Z",
+   "exp": "2026-10-11T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610101627.cap"
+  },
+  {
    "id": "CWA-Weather_heat_202610101426001",
    "cat": "高溫",
    "lvl": 2,
@@ -118,12 +139,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610091038.cap"
   }
  ],
- "n_total": 6,
+ "n_total": 7,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/10 16:11:14"
+  "updated": "2026/10/10 16:32:14"
  },
  "errs": [],
- "updatedAt": "2026-10-10T08:08:16Z"
+ "updatedAt": "2026-10-10T08:33:15Z"
 }

@@ -78,7 +78,7 @@
    "source": "BBC",
    "title": "Hurricane Isaias downgraded after making landfall in Florida",
    "url": "https://www.bbc.co.uk/news/articles/c3vgx4450v2lo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-10T06:54:16Z"
+   "at": "2026-10-10T08:29:59Z"
   },
   {
    "source": "BBC",
@@ -292,10 +292,10 @@
    "daily7": [
     2,
     7,
-    17,
-    39,
-    51,
-    45,
+    16,
+    38,
+    52,
+    44,
     20
    ],
    "days7": [
@@ -394,10 +394,10 @@
    "daily7": [
     4,
     13,
-    11,
-    29,
+    10,
+    30,
     60,
-    29,
+    28,
     20
    ],
    "days7": [
@@ -446,10 +446,10 @@
     3,
     3,
     7,
-    9,
+    8,
     24,
-    23,
-    29
+    22,
+    31
    ],
    "days7": [
     "2026-10-04",
@@ -500,7 +500,7 @@
     2,
     5,
     4,
-    10
+    12
    ],
    "days7": [
     "2026-10-04",
@@ -549,7 +549,7 @@
     7,
     16,
     18,
-    36,
+    37,
     37,
     39
    ],
@@ -640,18 +640,18 @@
     },
     {
      "source": "UDN",
-     "title": "台中北屯要道今晚起斥資2000萬燙平 連7天夜間交管一次看",
-     "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBfTlliV0diS1RtUE0wdlZfa0pVaHA3b3RpZXZJZVRiN1NQa2hMMFdETGFnVDVEa2hHS1JhMUpsWlA2ZE56dEphR0hWSjN5amtW0gFWQVVfeXFMT3hldkhVYW5HXzFfaXZpN3ZqTnczUXBQeGVjaUcwUXNKbUw3RmF3Z3BqMGNBbi1SUzNfSkxfZ21QUmFvVGhUc1NXbnVrRzh0NWVJWlI1emc?oc=5",
+     "title": "台中北屯要道今晚起斥資2000萬燙平連7天夜間交管一次看| 中彰投| 地方",
+     "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQOExNdkpMaHYwZkFwbDZ3TjdocUUxWWVPbFVYNjlmVzMwSlZiZWVabFRIaEZYNW1LVTNndmQyZkFmUmMzc1hXS1M2Ul9UYks2SXNvZFd2MWZjMmgxLVBUWDBpc1NyV3JEbFlBdGs3bTIyZXZuM2Jrd2pTM1I3dVVfRg?oc=5",
      "at": "2026-10-10T06:01:12Z",
      "kw": "潭子 OR 台中 北屯"
     }
    ],
    "daily7": [
-    6,
-    7,
+    5,
+    8,
     14,
-    10,
-    43,
+    9,
+    44,
     43,
     15
    ],
@@ -759,13 +759,12 @@
    },
    {
     "term": "OpenAI",
-    "n": 6,
-    "src": 5,
+    "n": 5,
+    "src": 4,
     "sources": [
      "Business Ins",
      "HN",
      "PChome Onlin",
-     "TechNews 科技新",
      "TradingView"
     ],
     "sample": {
@@ -775,7 +774,7 @@
     "hot": true
    },
    {
-    "term": "紅酒噴濺",
+    "term": "錦樹聲明",
     "n": 4,
     "src": 4,
     "sources": [
@@ -807,7 +806,7 @@
     "hot": true
    },
    {
-    "term": "仕包遭紅",
+    "term": "包遭紅酒",
     "n": 3,
     "src": 3,
     "sources": [
@@ -898,6 +897,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-10-10T08:08:16Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-10-10T08:33:15Z"
 }
