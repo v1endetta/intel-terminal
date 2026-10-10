@@ -4389,9 +4389,19 @@ def p_wiki():
             r["kind"] = "退燒中"
         else:
             r["kind"] = "穩定"
+    fmed = {lang: med([f["yoy3"] for r in rows for f in r["foreign"] if f["lang"] == lang and f["yoy3"] is not None]) for lang in ("en", "ja")}
+    # 走勢線也除以「所有主題每月的中位數」，線往上＝比其他主題熱
+    mon = {}
+    for q in series:
+        for k, v in (series[q].get("zh") or []):
+            mon.setdefault(k, []).append(v)
+    mmed = {k: med(v) for k, v in mon.items() if len(v) >= 10}
+    for r in rows:
+        zs = series[r["q"]]["zh"][-60:]
+        r["spark"] = [round(v / mmed[k], 3) for k, v in zs if mmed.get(k)]
         for f in r["foreign"]:
-            f["yoy3"] = max(-99, min(300, f["yoy3"])) if f["yoy3"] is not None else None
-        r["abroad"] = any((f["yoy3"] or 0) >= 30 for f in r["foreign"]) and (r["rel3"] is None or r["rel3"] < 10)
+            f["rel3"] = max(-99, min(300, f["yoy3"] - fmed[f["lang"]])) if f["yoy3"] is not None else None
+        r["abroad"] = any((f["rel3"] or 0) >= 30 for f in r["foreign"]) and (r["rel3"] is None or r["rel3"] < 10)
     order = {"新興加速": 0, "長期上升": 1, "穩定": 3, "退燒中": 4, "熱潮已退": 5}
     rows.sort(key=lambda r: (order[r["kind"]] - (1 if r["abroad"] else 0) * .5, -(r["yoy3"] or 0)))
     return {"rows": rows, "month": rows[0]["last"], "base3": m3, "base12": m12, "errs": errs[:5],
