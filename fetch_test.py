@@ -4342,16 +4342,7 @@ def p_wiki():
         pk = max(range(len(v)), key=lambda i: v[i])
         ratio = now / v[pk] if v[pk] else 0
         y3 = yoy3(v)
-        if y3 is not None and y3 >= 50 and ratio >= .7:
-            kind = "新興加速"
-        elif ratio < .5 and pk >= len(v) - 60 and v[pk] > 2 * (sum(v[max(0, pk - 36):max(1, pk - 24)]) / 12 or 1):
-            kind = "熱潮已退"
-        elif g12 is not None and g12 >= 15 and (g12p is None or g12p > 0):
-            kind = "長期上升"
-        elif g12 is not None and g12 <= -15:
-            kind = "退燒中"
-        else:
-            kind = "穩定"
+        spiked = ratio < .5 and pk >= len(v) - 60 and v[pk] > 2 * (sum(v[max(0, pk - 36):max(1, pk - 24)]) / 12 or 1)
         foreign, lead = [], None
         for lang in ("en", "ja"):
             fv = [x[1] for x in (s.get(lang) or [])]
@@ -4372,17 +4363,38 @@ def p_wiki():
                 r = _corr(a, b)
                 if r is not None and r >= .5 and (best is None or r > best[1]):
                     best = (L, round(r, 2))
-            if best and (lead is None or best[1] > lead["r"]):
+            if best and best[0] >= 2 and best[1] >= .6 and (lead is None or best[1] > lead["r"]):
                 lead = {"lang": lang, "lag": best[0], "r": best[1]}
-        abroad = any((f["yoy3"] or 0) >= 30 for f in foreign) and (y3 is None or y3 < 10)
-        rows.append({"q": q, "title": mp[q]["zh"], "grp": grp, "kind": kind, "yoy3": y3, "g12": g12,
+        abroad = False
+        rows.append({"q": q, "title": mp[q]["zh"], "grp": grp, "spiked": spiked, "g12p": g12p, "yoy3": y3, "g12": g12,
                      "peak": zh[pk][0], "ratio": round(ratio, 2), "spark": v[-60:], "foreign": foreign, "lead": lead, "abroad": abroad,
                      "last": zh[-1][0]})
     if not rows:
         raise RuntimeError(f"wiki: nothing {errs[:3]}")
+    # 不同主題一起比：用所有主題的中位數當基準，扣掉「維基整體被 AI 摘要分流」這種大家一起掉的效應
+    med = lambda xs: sorted(xs)[len(xs) // 2] if xs else 0  # noqa: E731
+    m3 = med([r["yoy3"] for r in rows if r["yoy3"] is not None]); m12 = med([r["g12"] for r in rows if r["g12"] is not None])
+    m12p = med([r["g12p"] for r in rows if r["g12p"] is not None])
+    for r in rows:
+        r["rel3"] = r["yoy3"] - m3 if r["yoy3"] is not None else None
+        r["rel12"] = r["g12"] - m12 if r["g12"] is not None else None
+        rel12p = r["g12p"] - m12p if r["g12p"] is not None else None
+        if r["rel3"] is not None and r["rel3"] >= 40 and r["ratio"] >= .6:
+            r["kind"] = "新興加速"
+        elif r["spiked"]:
+            r["kind"] = "熱潮已退"
+        elif r["rel12"] is not None and r["rel12"] >= 15 and (rel12p is None or rel12p > 0):
+            r["kind"] = "長期上升"
+        elif r["rel12"] is not None and r["rel12"] <= -15:
+            r["kind"] = "退燒中"
+        else:
+            r["kind"] = "穩定"
+        for f in r["foreign"]:
+            f["yoy3"] = max(-99, min(300, f["yoy3"])) if f["yoy3"] is not None else None
+        r["abroad"] = any((f["yoy3"] or 0) >= 30 for f in r["foreign"]) and (r["rel3"] is None or r["rel3"] < 10)
     order = {"新興加速": 0, "長期上升": 1, "穩定": 3, "退燒中": 4, "熱潮已退": 5}
     rows.sort(key=lambda r: (order[r["kind"]] - (1 if r["abroad"] else 0) * .5, -(r["yoy3"] or 0)))
-    return {"rows": rows, "month": rows[0]["last"], "errs": errs[:5],
+    return {"rows": rows, "month": rows[0]["last"], "base3": m3, "base12": m12, "errs": errs[:5],
             "src": "維基百科逐月瀏覽量（Wikimedia Pageviews API，2016 起）· 每千萬次瀏覽中的占比，已扣掉維基整體流量下滑 · 中文維基＝全球中文讀者，台灣占大宗"}
 
 
