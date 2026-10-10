@@ -1523,7 +1523,7 @@ const renderers={
     const em=(d.rows||[]).filter(x=>x.kind==="新興加速"||x.kind==="長期上升").map(x=>x.q),ab=(d.rows||[]).filter(x=>x.abroad).map(x=>x.q);
     body("p-wiki").innerHTML=`<div class="veg-h">${em.length?`在升溫<b class="up" style="font-size:14px">${em.slice(0,4).map(esc).join("、")}</b>`:"目前沒有明顯升溫的主題"}<span>${ab.length?`國外在漲、台灣還沒：${ab.slice(0,3).map(esc).join("、")} · `:""}基準＝所有主題中位數（近 3 月年增 ${sgn(n(d.base3),0,"%")}）· ${esc(String(d.month||"").slice(0,4))}/${esc(String(d.month||"").slice(4))}</span></div><table class="vr-t"><tr><th>主題</th><th>型態</th><th>5 年走勢（相對其他主題）</th><th class="r">比基準</th><th class="r">國外比基準</th><th class="r">時間差</th></tr>${tr}</table>`;
     setMeta("p-wiki",{...d,label:"月資料"},24*40);},
-  metro(d){const li=(a)=>(a||[]).map(x=>`<li><span class="t">${esc(x.st)}<span class="sub">${fmt(n(x.n)/1e4,0)} 萬人次</span></span><span class="m num ${cls(n(x.chg))}">${sgn(n(x.chg),1,"%")}</span></li>`).join("");
+  metro(d){const li=(a)=>(a||[]).map(x=>`<li><span class="t">${esc(x.st)}<span class="sub">${fmt(n(x.n)/1e4,0)} 萬人次</span></span><span class="m num"><span class="${cls(n(x.chg))}">${sgn(n(x.chg),1,"%")}</span></span></li>`).join("");
     body("p-metro").innerHTML=`<div class="veg-h">全系統<b class="${cls(n(d.total_chg))}">${sgn(n(d.total_chg),1,"%")}</b><span>${esc(d.month||"")} 比去年同月 · ${fmt(n(d.total)/1e6,1)} 百萬人次 · ${n(d.n)} 站</span></div><div class="vr-g"><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">成長最多</h3><ul class="list">${li(d.up)}</ul></div><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">減少最多</h3><ul class="list">${li(d.down)}</ul></div></div>`;
     setMeta("p-metro",{...d,label:(d.month||"")+" 月資料"},24*40);},
   fruit(d){VF.fruit=d;renderVF();},
