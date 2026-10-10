@@ -4109,10 +4109,12 @@ def p_cards():
         s = agg.get(cat) or {}
         if last not in s:
             continue
-        y3 = [yoy(s, m) for m in sorted(s)[-3:]]
-        y3 = [v for v in y3 if v is not None]
-        rows.append({"cat": cat, "amt": round(s[last] / 1e8, 1), "yoy": yoy(s, last), "yoy3": round(sum(y3) / len(y3), 1) if y3 else None,
+        y3 = sorted(v for v in (yoy(s, m) for m in sorted(s)[-3:]) if v is not None)
+        rows.append({"cat": cat, "amt": round(s[last] / 1e8, 1), "yoy": yoy(s, last), "yoy3": y3[len(y3) // 2] if y3 else None,  # 中位數，避開單月異常大額
                      "spark": [yoy(s, m) for m in yms if yoy(s, m) is not None]})
+    t3 = next((r["yoy3"] for r in rows if r["cat"] == "總計"), None)
+    for r in rows:  # 刷卡本身每年在長，所以看「比整體多長多少」才是真的變熱
+        r["rel"] = round(r["yoy3"] - t3, 1) if r["yoy3"] is not None and t3 is not None and r["cat"] != "總計" else None
     return {"month": f"{last[:4]}-{last[4:]}", "rows": rows, "src": "聯合信用卡處理中心（金管會銀行局開放資料）"}
 
 
@@ -4225,13 +4227,31 @@ WIKI_MAP = DATA / "wiki_map.json"
 WIKI_SERIES = DATA / "wiki_series.json"
 
 
+WIKI_UA = {"User-Agent": "intel-terminal/1.0 (personal research; https://github.com/v1endetta/intel-terminal)"}  # 維基媒體規定要寫清楚的 UA
+
+
+def _wiki_api(params):
+    for k in range(4):
+        r = requests.get("https://zh.wikipedia.org/w/api.php", params=params, headers=WIKI_UA, timeout=40)
+        if r.status_code == 429:
+            time.sleep(5 * (k + 1)); continue
+        r.raise_for_status()
+        return r.json()
+    r.raise_for_status()
+
+
 def _wiki_pv(lang, title, end):
     t = requests.utils.quote(title.replace(" ", "_"), safe="")
-    r = S.get(f"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{lang}.wikipedia/all-access/user/{t}/monthly/20160101/{end}", timeout=40)
-    if r.status_code == 404:
-        return []
+    for k in range(4):
+        r = requests.get(f"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{lang}.wikipedia/all-access/user/{t}/monthly/20160101/{end}",
+                         headers=WIKI_UA, timeout=40)
+        if r.status_code == 429:
+            time.sleep(5 * (k + 1)); continue
+        if r.status_code == 404:
+            return []
+        r.raise_for_status()
+        return [[i["timestamp"][:6], i["views"]] for i in r.json().get("items", [])]
     r.raise_for_status()
-    return [[i["timestamp"][:6], i["views"]] for i in r.json().get("items", [])]
 
 
 def _corr(a, b):
@@ -4251,20 +4271,31 @@ def p_wiki():
     except Exception:  # noqa: BLE001
         mp = {}
     errs = []
-    for q, _ in cfg:
-        if q in mp and mp[q].get("at", "") >= (TODAY_TPE - timedelta(days=30)).isoformat():
-            continue
+    todo = [q for q, _ in cfg if not (q in mp and mp[q].get("at", "") >= (TODAY_TPE - timedelta(days=30)).isoformat())]
+    if todo:  # 一次查全部（維基 API 一次最多 50 個標題）；英文、日文各查一次
         try:
-            j = gjson("https://zh.wikipedia.org/w/api.php", params={"action": "query", "titles": q, "prop": "langlinks", "lllimit": "500",
-                                                                  "redirects": "1", "converttitles": "1", "format": "json"}, timeout=40)
-            pg = list(j["query"]["pages"].values())[0]
-            if "missing" in pg:
-                mp[q] = {"zh": None, "at": TODAY_TPE.isoformat()}; continue
-            ll = {x["lang"]: x["*"] for x in pg.get("langlinks", [])}
-            mp[q] = {"zh": pg["title"], "en": ll.get("en"), "ja": ll.get("ja"), "at": TODAY_TPE.isoformat()}
-            time.sleep(0.2)
+            got = {}
+            for lang in ("en", "ja"):
+                j = _wiki_api({"action": "query", "titles": "|".join(todo[:50]), "prop": "langlinks", "lllang": lang, "lllimit": "500",
+                               "redirects": "1", "converttitles": "1", "format": "json"})
+                alias = {}
+                for k in ("normalized", "converted", "redirects"):
+                    for x in j["query"].get(k, []):
+                        alias[x["from"]] = x["to"]
+                for pg in j["query"]["pages"].values():
+                    t = pg.get("title")
+                    g_ = got.setdefault(t, {"missing": "missing" in pg})
+                    for x in pg.get("langlinks", []):
+                        g_[lang] = x["*"]
+                time.sleep(1)
+            for q in todo:
+                t = q
+                for _ in range(4):
+                    t = alias.get(t, t)
+                g_ = got.get(t)
+                mp[q] = {"zh": None if (not g_ or g_["missing"]) else t, "en": (g_ or {}).get("en"), "ja": (g_ or {}).get("ja"), "at": TODAY_TPE.isoformat()}
         except Exception as e:  # noqa: BLE001
-            errs.append(f"{q}: {safe_err(e)}")
+            errs.append(f"對應條目: {safe_err(e)}")
     write_json(WIKI_MAP, mp)
     end = (TODAY_TPE.replace(day=1) - timedelta(days=1)).strftime("%Y%m%d")
     series = {}
@@ -4276,7 +4307,7 @@ def p_wiki():
         for lang in ("zh", "en", "ja"):
             if m.get(lang):
                 try:
-                    s[lang] = _wiki_pv(lang, m[lang], end); time.sleep(0.15)
+                    s[lang] = _wiki_pv(lang, m[lang], end); time.sleep(0.4)
                 except Exception as e:  # noqa: BLE001
                     errs.append(f"{q}/{lang}: {safe_err(e)}")
         series[q] = s
