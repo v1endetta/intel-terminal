@@ -441,6 +441,13 @@ ELECT_NAMES = {"Chiang Wan-an": ("蔣萬安", "國民黨"), "Puma Shen": ("沈�
                "Hsieh Lung-chieh": ("謝龍介", "國民黨"), "Chen Ting-fei": ("陳亭妃", "民進黨"), "Lin Yi-feng": ("林義豐", ""),
                "Ko Chih-en": ("柯志恩", "國民黨"), "Lai Jui-lung": ("賴瑞隆", "民進黨"), "Huang Kuo-chang": ("黃國昌", "民眾黨")}
 ELECT_MENTIONS = DATA / "elect_mentions.json"
+# 政見主題：看候選人在哪些議題上被報導，再用勝率加權，推估接下來四年政策和預算的方向
+ELECT_TOPICS = [("居住／社宅", r"社宅|社會住宅|住宅|租金|房價|囤房|都更|危老|打房"), ("托育／生育", r"托育|育兒|生育|少子|幼兒園|托嬰|育嬰|產後|兒童"),
+                ("長照／高齡", r"長照|高齡|銀髮|老人|失智|敬老|照顧"), ("交通建設", r"捷運|輕軌|交通|公車|道路|鐵路|停車|機場|高鐵|塞車"),
+                ("觀光／城市活動", r"觀光|旅遊|旅宿|城市行銷|演唱會|大型活動|夜市|跨年|燈會"), ("產業／AI 科技", r"產業|AI|人工智慧|半導體|科技|招商|園區|新創|台積電"),
+                ("能源／環境", r"淨零|減碳|能源|電力|綠能|空污|空氣|環保|垃圾|缺水|水情|核電"), ("治安／防詐", r"治安|詐騙|防詐|毒品|警察|酒駕"),
+                ("教育／青年", r"教育|學校|青年|學生|營養午餐|課後|租屋補貼"), ("運動／文化", r"運動|體育|巨蛋|球場|文化|藝文|博物館"),
+                ("醫療／健康", r"醫療|醫院|健保|健康|急診"), ("補助／發錢", r"普發|補助|津貼|發現金|減稅|退稅|紅包")]
 
 
 def p_elect():
@@ -456,19 +463,34 @@ def p_elect():
         store = json.loads(ELECT_MENTIONS.read_text(encoding="utf-8")) if ELECT_MENTIONS.exists() else {}
     except Exception:  # noqa: BLE001
         store = {}
-    day = store.setdefault(today, {})
     zh_names = [v[0] for v in ELECT_NAMES.values()]
+    def add(d, nm, t):
+        lst = store.setdefault(d, {}).setdefault(nm, [])
+        h = t[:80]
+        if h not in lst:
+            lst.append(h)
     for t in set(titles):
         for nm in zh_names:
             if nm in t:
-                lst = day.setdefault(nm, [])
-                h = t[:40]
-                if h not in lst:
-                    lst.append(h)
+                add(today, nm, t)
+    # 每 3 小時用 Google News 搜一次每位候選人，補足情報站本身沒收到的報導（依刊出日期歸檔）
+    last = store.get("_gn_at") or ""
+    if not last or (NOW - datetime.fromisoformat(last)).total_seconds() > 3 * 3600:
+        for nm in zh_names:
+            try:
+                for it in _gnews_full(f'"{nm}"') or []:
+                    d = datetime.fromisoformat(it["at"].replace("Z", "+00:00")).astimezone(TPE).date().isoformat()
+                    if nm in it["title"] and d >= (TODAY_TPE - timedelta(days=20)).isoformat():
+                        add(d, nm, it["title"])
+                time.sleep(1)
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"新聞 {nm}: {safe_err(e)}")
+        store["_gn_at"] = NOW.isoformat()
     cut = (TODAY_TPE - timedelta(days=21)).isoformat()
-    store = {d: v for d, v in store.items() if d >= cut}
+    store = {d: v for d, v in store.items() if d.startswith("_") or d >= cut}
     write_json(ELECT_MENTIONS, store, separators=(",", ":"))
     days7 = [(TODAY_TPE - timedelta(days=i)).isoformat() for i in range(6, -1, -1)]
+    days14 = [(TODAY_TPE - timedelta(days=i)).isoformat() for i in range(13, -1, -1)]
     # 2) 手動民調（ops/polls.json，說「更新民調」時由 Claude 填，附出處）
     try:
         polls = json.loads((ROOT / "ops" / "polls.json").read_text(encoding="utf-8"))
@@ -507,8 +529,16 @@ def p_elect():
                 hist_put("elect", key, today, round(p, 1))
                 h = HISTORY.get("elect", {}).get(key) or []
                 prev7 = next((v for d, v in reversed(h) if d <= (TODAY_TPE - timedelta(days=7)).isoformat()), None)
+                tc = {}
+                for d in days14:
+                    for t in store.get(d, {}).get(zh, []):
+                        for tn, pat in ELECT_TOPICS:
+                            if re.search(pat, t):
+                                tc[tn] = tc.get(tn, 0) + 1
                 cands.append({"name": zh, "party": party, "p": round(p, 1), "d7": round(p - prev7, 1) if prev7 is not None else None,
-                              "spark": [v for _, v in h[-45:]], "news": [len(store.get(d, {}).get(zh, [])) for d in days7]})
+                              "spark": [v for _, v in h[-45:]], "news": [len(store.get(d, {}).get(zh, [])) for d in days7],
+                              "n14": sum(len(store.get(d, {}).get(zh, [])) for d in days14),
+                              "topics": sorted(tc.items(), key=lambda kv: -kv[1])[:4]})
             cands.sort(key=lambda c: -c["p"])
             vol, v24 = float(ev.get("volume") or 0), float(ev.get("volume24hr") or 0)
             rel = "可信" if vol >= 300000 else "普通" if vol >= 50000 and v24 >= 1000 else "偏弱" if vol >= 10000 else "幾乎沒交易"
@@ -519,7 +549,22 @@ def p_elect():
             errs.append(f"{city}: {safe_err(e)}")
     if not cities:
         raise RuntimeError(f"elect: nothing {errs[:2]}")
-    return {"day": ELECT_DAY, "cities": cities, "days": days7, "pollsAt": polls.get("_updated"), "errs": errs[:5],
+    # 政策風向：每位候選人的議題占比 × 勝率，五都加總；兩大陣營都在講的議題另外標出（不管誰贏都會推）
+    wind = {}
+    for c in cities:
+        for x in c["cands"]:
+            tot = sum(v for _, v in x["topics"]) or 0
+            for tn, v in x["topics"]:
+                w = wind.setdefault(tn, {"score": 0.0, "cities": set(), "both": set(), "_side": {}})
+                w["score"] += (x["p"] / 100) * (v / tot)
+                w["cities"].add(c["city"])
+                w["_side"].setdefault(c["city"], set()).add(x["party"] or x["name"])
+    out_wind = []
+    for tn, w in wind.items():
+        both = sorted(ci for ci, sides in w["_side"].items() if len(sides) >= 2)
+        out_wind.append({"topic": tn, "score": round(w["score"], 2), "cities": sorted(w["cities"]), "both": both})
+    out_wind.sort(key=lambda r: -r["score"])
+    return {"day": ELECT_DAY, "cities": cities, "wind": out_wind[:8], "days": days7, "pollsAt": polls.get("_updated"), "errs": errs[:5],
             "src": "Polymarket 公開報價（只看不押）＋ 情報站收進來的新聞與 PTT 標題 ＋ 手動整理民調"}
 
 
@@ -5802,8 +5847,9 @@ def p_radar():
 
 
 # ---------- 第三批（免新金鑰）：標案 / 設計廣告媒體 / 地震 / 台電 / 桃機 ----------
-PCC_KW = ["行銷", "品牌", "影片", "廣告", "視覺設計"]
-PCC_EXCLUDE = ("拆除", "租賃", "印刷", "看板", "招牌", "廣告物", "廣告牌", "設備", "工程")
+# 看政府把錢花在哪些產業方向（不是找案子）：關鍵字數量維持 5 個，不增加抓取次數
+PCC_KW = ["人工智慧", "長照", "淨零", "觀光", "運動"]
+PCC_EXCLUDE = ("拆除", "租賃", "印刷", "清潔", "保全")
 PCC_CACHE = DATA / "pcc_cache.json"
 _pcc_search_cache: dict = {}
 
@@ -6406,7 +6452,7 @@ AWARD_CACHE = DATA / "award_cache.json"
 
 
 def p_awards():
-    """決標公告：行銷／品牌／影片／廣告類標案誰得標、決標金額。"""
+    """決標公告：產業方向關鍵字（AI、長照、淨零、觀光、運動）誰得標、決標金額。"""
     cache = {}
     if AWARD_CACHE.exists():
         try:
