@@ -1,1841 +1,1288 @@
 {
- "kw_捷運": [
-  {
-   "id": "175718",
-   "title": "20612-02-02-2 臺中捷運股份有限公司捷運各站旅運量",
-   "org": "臺中捷運股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "JSON;JSON;JSON;JSON;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=e9e033b3-105b-4da1-b6fd-9899da5cadcf;https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=5b1c566d-4014-4fa8-88b9-5b0a32e69",
-   "upd": "2026-10-06",
-   "desc": "臺中捷運各站旅運量",
-   "fields": "地區;項目;欄位名稱;數值;資料時間日期;資料週期;郵遞區號;機關代碼;電子郵件;行動電話;市話;縣市別代碼;行政區域代碼"
-  },
-  {
-   "id": "164956",
-   "title": "桃園大眾捷運每月平均日運量統計",
-   "org": "桃園市政府桃園捷運公司",
-   "freq": "每1月",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/1a51d61b-d040-47c2-9300-9a19d99a46a4/resource/06f878b6-92e3-4b63-9960-1210d12fd27e/download;https://opendata.tycg.gov.tw/api/dataset/1a51d61b-d040-47c2-9300-9a19d99a46a4/resource/",
-   "upd": "2026-10-01",
-   "desc": "提供桃園捷運單月平均日運量。",
-   "fields": "年度(年度);月份(月份);單月平均日運量(單月平均日運量)"
-  },
-  {
-   "id": "164957",
-   "title": "桃園大眾捷運各場站運量每月統計表",
-   "org": "桃園市政府桃園捷運公司",
-   "freq": "每1月",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/7a7e006b-ec19-47ad-8fc8-6640a7a72f8a/resource/f401c58d-f9e2-41e4-91b5-cd0ac7a901e5/download;https://opendata.tycg.gov.tw/api/dataset/7a7e006b-ec19-47ad-8fc8-6640a7a72f8a/resource/",
-   "upd": "2026-10-01",
-   "desc": "提供桃園捷運各站運量統計表",
-   "fields": "年度(年度);月份(月份);捷運站別(捷運站別);平均日運量(平均日運量)"
-  },
-  {
-   "id": "128609",
-   "title": "臺北捷運每日貓空纜車系統旅運量統計表",
-   "org": "北捷遊憩事業股份有限公司",
-   "freq": "每1月",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/bed9c297-da71-4251-ba46-74d52ac9a991/resource/ddf5092b-fd86-4354-b7bc-958841649022/download;https://data.taipei/api/dataset/bed9c297-da71-4251-ba46-74d52ac9a991/resource/fbb6aa63-82f3-472a",
-   "upd": "2026-09-21",
-   "desc": "臺北捷運每日貓空纜車系統旅運量統計",
-   "fields": "月份;營運日;星期;總運量;平日/假日"
-  },
-  {
-   "id": "128506",
-   "title": "臺北捷運各站分時進出量統計",
-   "org": "臺北大眾捷運股份有限公司",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/63f31c7e-7fc3-418b-bd82-b95158755b4d/resource/eb481f58-1238-4cff-8caa-fa7bb20cb4f4/download",
-   "upd": "2026-09-16",
-   "desc": "臺北捷運每日分時各車站進出站(OD)流量統計",
-   "fields": "SeqNo;西元年;月;URL;說明/備註"
-  },
-  {
-   "id": "128641",
-   "title": "臺北捷運全系統旅運量統計",
-   "org": "臺北大眾捷運股份有限公司",
-   "freq": "每1月",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/660e3969-c011-481c-aa24-8a949ac2d62d/resource/cf6540e6-4df2-4afa-a71c-c6efdf62318d/download;https://data.taipei/api/dataset/660e3969-c011-481c-aa24-8a949ac2d62d/resource/b07c5b9d-8959-4dff",
-   "upd": "2026-09-16",
-   "desc": "臺北捷運公司全系統旅客運送量統計",
-   "fields": "西元年;月;日;星期;人次"
-  },
-  {
-   "id": "146920",
-   "title": "臺中捷運全系統旅運量統計",
-   "org": "臺中捷運股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=4d7f31a9-f4db-4546-8d2b-30fee5ee3a2c;https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=7c67e4c5-f7cf-4f0b-85fb-bbea0d0b1",
-   "upd": "2026-09-07",
-   "desc": "提供臺中捷運全系統旅運量統計",
-   "fields": "編號;日期;星期;總運量;資料更新時間"
-  },
-  {
-   "id": "159640",
-   "title": "高雄都會區大眾捷運系統各站旅運量出站",
-   "org": "高雄市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "JSON;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://openapi.kcg.gov.tw/Api/Service/Get/70cde7b5-5b1d-48da-a27a-b85a6295b710;https://data.kcg.gov.tw/File/DirectDownload/70cde7b5-5b1d-48da-a27a-b85a6295b710",
-   "upd": "2026-08-22",
-   "desc": "提供高雄都會區大眾捷運系統各站旅運量出站資料",
-   "fields": "Seq(Seq);年份(年份);總計(總計);紅線小計(紅線小計);R3 小港站(R3 小港站);R4 高雄國際機場站(R4 高雄國際機場站);R4A 草衙站(R4A 草衙站);R5 前鎮高中站(R5 前鎮高中站);R6 凱旋站(R6 凱旋站);R7 獅甲站(R7 獅甲站);R8 三多商圈站(R8 三多商圈站);R9 中央公園站(R9 中央公園站);R11 高雄車站(R11 高雄車站);R12 後"
-  },
-  {
-   "id": "159641",
-   "title": "高雄都會區大眾捷運系統各站旅運量入站",
-   "org": "高雄市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "JSON;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://openapi.kcg.gov.tw/Api/Service/Get/1e595d78-2f73-4edd-9c17-7cce8c2d7ce9;https://data.kcg.gov.tw/File/DirectDownload/1e595d78-2f73-4edd-9c17-7cce8c2d7ce9",
-   "upd": "2026-08-22",
-   "desc": "提供高雄都會區大眾捷運系統各站旅運量入站資料",
-   "fields": "Seq(Seq);年份(年份);總計(總計);紅線小計(紅線小計);R3小港站(R3小港站);R4高雄國際機場站(R4高雄國際機場站);R4A草衙站(R4A草衙站);R5前鎮高中站(R5前鎮高中站);R6凱旋站(R6凱旋站);R7獅甲站(R7獅甲站);R8三多商圈站(R8三多商圈站);R9中央公園站(R9中央公園站);R11高雄車站(R11高雄車站);R12後驛站(R12後驛站);R13凹子底站("
-  },
-  {
-   "id": "133184",
-   "title": "臺北捷運各站進出人次",
-   "org": "臺北市政府主計處",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=8500&kind=21&type=0&funid=a05023601&cycle=4&outmode=12&compmode=0&outkind=3&deflst=2&nzo=1",
-   "upd": "2026-04-23",
-   "desc": "臺北捷運各站進出人次時間數列統計資料\r\n",
-   "fields": "統計期;捷運站別;進站人次;出站人次;進站人次增減率[%];出站人次增減率[%]"
-  },
-  {
-   "id": "128683",
-   "title": "臺北捷運各站進出量統計",
-   "org": "臺北大眾捷運股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/1d71c478-205f-42c5-8386-35f86d74fdd1/resource/df2da2b6-a3d5-47e7-8c97-8b047d9a2bd1/download",
-   "upd": "2025-12-12",
-   "desc": "捷運車站每日各站進出量統計(自104年11月起提供每小時各站進出站量統計)。\r\n本公司考量拓展資料使用之面向，自106年1月起提供「臺北捷運每日分時各站OD流量統計資料」(資料集名稱：臺北捷運各站分時進出量統計)，故本項統計資料將提供至10",
-   "fields": "SeqNo;項目;西元年;月;URL"
-  }
- ],
- "kw_1999": [
-  {
-   "id": "177110",
-   "title": "新竹市政府1999服務專線熱門問答點閱數統計表-115年",
-   "org": "數位發展處",
-   "freq": "不定期更新",
-   "fmt": "XLSX;CSV;XML;JSON",
-   "lic": "政府資料開放授權條款",
-   "url": "https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/1963/38c346ad-8aad-482c-be55-3b9af2d1fc56.xlsx;https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/1963/38c346ad-8aad-482c-be55-3b9af2d1fc56.csv;https://odws.",
-   "upd": "2026-10-08",
-   "desc": "新竹市政府1999服務專線熱門問答點閱數",
-   "fields": "機關代碼;民國年月;排名;知識標題;點閱次數"
-  },
-  {
-   "id": "67515",
-   "title": "新竹市政府1999服務專線熱門問答點閱數統計表",
-   "org": "數位發展處",
-   "freq": "不定期更新",
-   "fmt": "XLSX;CSV;XML;JSON",
-   "lic": "政府資料開放授權條款",
-   "url": "https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/36/0cddae95-524e-4041-bf8d-06ff9f358534.xlsx;https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/36/0cddae95-524e-4041-bf8d-06ff9f358534.csv;https://odws.hccg",
-   "upd": "2026-10-08",
-   "desc": "新竹市政府1999服務專線熱門問答點閱數",
-   "fields": "機關代碼;民國年月;排名;知識標題;點閱次數"
-  },
-  {
-   "id": "67514",
-   "title": "新竹市政府1999服務專線來電總數統計表",
-   "org": "數位發展處",
-   "freq": "不定期更新",
-   "fmt": "XLSX;CSV;XML;JSON",
-   "lic": "政府資料開放授權條款",
-   "url": "https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/99/e0891d57-eb49-4c6e-89f1-58e5d3fa53c1.xlsx;https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/99/e0891d57-eb49-4c6e-89f1-58e5d3fa53c1.csv;https://odws.hccg",
-   "upd": "2026-10-08",
-   "desc": "新竹市政府1999服務專線每月來電總數",
-   "fields": "縣市代碼;機關代碼;年;月;來電總數"
-  },
-  {
-   "id": "177109",
-   "title": "新竹市政府1999服務專線來電總數統計表-115年",
-   "org": "數位發展處",
-   "freq": "不定期更新",
-   "fmt": "XLSX;CSV;XML;JSON",
-   "lic": "政府資料開放授權條款",
-   "url": "https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/1962/7b9ab4df-f8b9-42c1-8eab-ed8f3e52cee2.xlsx;https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/1962/7b9ab4df-f8b9-42c1-8eab-ed8f3e52cee2.csv;https://odws.",
-   "upd": "2026-10-08",
-   "desc": "新竹市政府1999服務專線每月來電總數",
-   "fields": "縣市代碼;機關代碼;年;月;來電總數"
-  },
-  {
-   "id": "25936",
-   "title": "桃園市1999統計報表",
-   "org": "桃園市政府智慧城鄉發展委員會",
-   "freq": "每1月",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/65806bfe-6be2-4525-b431-28b6f471a9ee/resource/b6e4e1d8-72ea-4c6f-9c01-82d3e738ed06/download;https://opendata.tycg.gov.tw/api/dataset/65806bfe-6be2-4525-b431-28b6f471a9ee/resource/",
-   "upd": "2026-10-08",
-   "desc": "「桃園市1999市民諮詢服務熱線」各年度進線統計數據資料",
-   "fields": "縣市(縣市);鄉鎮市區編碼(鄉鎮市區編碼);機關代碼(機關代碼);民國年月(民國年月);數量(數量)"
-  },
-  {
-   "id": "176818",
-   "title": "臺中市政府115年1999進線統計表",
-   "org": "臺中市政府研究發展考核委員會",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=377ca8d4-a1ef-406f-96aa-dcfdbb1a3cba",
-   "upd": "2026-10-07",
-   "desc": "提供民眾查詢及了解本府1999話務中心各月話務統計數據資料。",
-   "fields": "縣市別代碼;機關代碼;日期;進線總電話量;文字應答;接聽率;平均通話時間;滿意度指標"
-  },
-  {
-   "id": "132486",
-   "title": "「1999臺北市民當家熱線」話後滿意度調查 ( 1999整體 )",
-   "org": "臺北市政府研究發展考核委員會",
-   "freq": "每3月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/1c5fcd0f-19d8-444c-84e3-4db362ca499b/resource/b8c3836c-e293-4573-bcb0-160282ae7232/download",
-   "upd": "2026-10-06",
-   "desc": "1999整體話後滿意度調查",
-   "fields": "序號;年;季;滿意程度;百分比"
-  },
-  {
-   "id": "132485",
-   "title": "「1999臺北市民當家熱線」話後滿意度調查 ( 話務人員 )",
-   "org": "臺北市政府研究發展考核委員會",
-   "freq": "每3月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/90d34f67-2bc6-4c58-beb2-3e466c031a77/resource/1e4acf86-95b9-4604-997b-7087730bb7e0/download",
-   "upd": "2026-10-06",
-   "desc": "話務人員話後滿意度調查",
-   "fields": "序號;年;季;滿意程度;百分比"
-  },
-  {
-   "id": "176795",
-   "title": "115年臺南1999每月派工案件",
-   "org": "研究發展考核委員會",
-   "freq": "每年",
-   "fmt": "JSON;CSV;JSON;CSV;JS",
-   "lic": "政府資料開放授權條款",
-   "url": "https://soa.tainan.gov.tw/Api/Service/Get/056d4217-c5fd-4f39-8f24-1c8e4bb97af3;https://data.tainan.gov.tw/File/ResourceCsvDownload/056d4217-c5fd-4f39-8f24-1c8e4bb97af3;https://soa.tainan.gov.tw/Api/Service/Get/d589ebd3-9",
-   "upd": "2026-10-01",
-   "desc": "1999每月派工案件",
-   "fields": "Seq;案件編號;承辦機關;建議日期;除管日期;案件類型;案件事項;區別;陳情案件位置"
-  },
-  {
-   "id": "128712",
-   "title": "澎湖縣政府「1999縣民服務專線」每日話務統計報表",
-   "org": "澎湖縣政府",
-   "freq": "不定期更新",
-   "fmt": "CSV;XML;JSON",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.penghu.gov.tw/dataset/24266763-9d63-49f7-8de3-61f65aeede30/resource/49cce5d8-09e0-4813-8c82-61747340b0b2/download/u020000-06-2017-05-31-1496206241.csv;https://opendata.penghu.gov.tw/dataset/24266763-9d63",
-   "upd": "2026-09-16",
-   "desc": "澎湖縣政府「1999縣民服務專線」每日話務統計報表相關資料",
-   "fields": "時間;來話數量;要求應答量-1-;應答量-2-;應答率-百分比-;十五秒應答量-3-;十五秒應答率-百分比-等於-3-除-1-;平均通話時間;平均等待時間;最長等時間待;電話外撥量-4-;轉縣府量;電話處理總量等於-2-加-4-"
-  },
-  {
-   "id": "177854",
-   "title": "高雄市政府1999話務中心電話處理量統計表",
-   "org": "高雄市政府研究發展考核委員會",
-   "freq": "不定期更新",
-   "fmt": "JSON;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://openapi.kcg.gov.tw/Api/Service/Get/bb13d7d7-fd90-494f-8f3b-83f34ca31d11;https://data.kcg.gov.tw/File/DirectDownload/bb13d7d7-fd90-494f-8f3b-83f34ca31d11",
-   "upd": "2026-09-09",
-   "desc": "提供高雄市政府1999話務中心電話處理量統計表",
-   "fields": "Seq(Seq);年(年);月(月);電話處理量(電話處理量)"
-  },
-  {
-   "id": "162216",
-   "title": "新北市政府1999市政快速服務各機關案件統計(每月)",
-   "org": "新北市政府研究發展考核委員會",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.ntpc.gov.tw/api/datasets/ef78a646-78fc-4b3c-9ba9-e2efb450f8f3/csv/file",
-   "upd": "2026-09-07",
-   "desc": "新北市政府1999市政快速服務各機關案件統計(統計期間:106年1月至115年8月)",
-   "fields": "yyymmroc(民國年月);field2(序號);field3(機關);field4(案件數);field5(案件比率)"
-  },
-  {
-   "id": "125250",
-   "title": "新北市政府1999市政快速服務各機關案件統計表(總計)",
-   "org": "新北市政府研究發展考核委員會",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.ntpc.gov.tw/api/datasets/d5ef0ea1-2c08-4c7c-a169-30a43caed960/csv/file",
-   "upd": "2026-09-07",
-   "desc": "新北市政府1999市政快速服務各機關案件統計表(統計期間: 100年4月15日至115年8月)",
-   "fields": "no(序號);department(機關);agencycodes(機關代碼);casenumber(案件數);ratio(案件比率)"
-  },
-  {
-   "id": "113632",
-   "title": "106年臺南1999每月派工案件",
-   "org": "研究發展考核委員會",
-   "freq": "不定期更新",
-   "fmt": "JSON;CSV;JSON;CSV;JS",
-   "lic": "政府資料開放授權條款",
-   "url": "https://soa.tainan.gov.tw/Api/Service/Get/05ed82de-9475-4318-8015-0633cb86a1f2;https://data.tainan.gov.tw/File/ResourceCsvDownload/05ed82de-9475-4318-8015-0633cb86a1f2;https://soa.tainan.gov.tw/Api/Service/Get/e1b64719-a",
-   "upd": "2026-07-10",
-   "desc": "106年-臺南1999每月派工案件",
-   "fields": "縣市代碼(縣市代碼);行政區代碼(行政區代碼);立案案號(立案案號);承辦機關(承辦機關);立案日期(立案日期);類型(類型);事項(事項);行政區(行政區);地點(地點)"
-  },
-  {
-   "id": "118025",
-   "title": "109年臺南1999每月派工案件",
-   "org": "研究發展考核委員會",
-   "freq": "不定期更新",
-   "fmt": "JSON;CSV;JSON;CSV;JS",
-   "lic": "政府資料開放授權條款",
-   "url": "https://soa.tainan.gov.tw/Api/Service/Get/514b7863-2168-4ec5-ab91-2a8f4d474af8;https://data.tainan.gov.tw/File/ResourceCsvDownload/514b7863-2168-4ec5-ab91-2a8f4d474af8;https://soa.tainan.gov.tw/Api/Service/Get/1f0a9e97-a",
-   "upd": "2026-07-10",
-   "desc": "1999每月派工案件",
-   "fields": "案件編號;承辦機關;立案日期;結案日期;案件類型;案件事項;行政區域;案件地點"
-  }
- ],
- "kw_結婚": [
-  {
-   "id": "152655",
-   "title": "桃園市結婚人數按原屬國籍別分每年統計",
-   "org": "桃園市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/a7f8f241-f65c-43da-a7d7-394d13f5ead1/resource/6ecd5853-6f7d-46fb-b0be-5407a9847e1c/download",
-   "upd": "2026-10-09",
-   "desc": "提供桃園市結婚人數按原屬國籍別分\n",
-   "fields": "年別(年別);總計－男性(總計－男性);總計－女性(總計－女性);本國籍－男性(本國籍－男性);本國籍－女性(本國籍－女性);大陸港澳地區－男性(大陸港澳地區－男性);大陸港澳地區－女性(大陸港澳地區－女性);外國籍－男性(外國籍－男性);外國籍－女性(外國籍－女性)"
-  },
-  {
-   "id": "158129",
-   "title": "桃園市各行政區嬰兒出生數每年統計",
-   "org": "桃園市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/8e98e66c-ea89-4a0f-9753-97989cc6e6bc/resource/934f1452-ac35-4ee5-97a3-10bf94ce3ca8/download",
-   "upd": "2026-10-09",
-   "desc": "提供桃園市各行政區嬰兒出生數",
-   "fields": "年別(年別);總計－男性(總計－男性);總計－女性(總計－女性);桃園區－男性(桃園區－男性);桃園區－女性(桃園區－女性);中壢區－男性(中壢區－男性);中壢區－女性(中壢區－女性);大溪區－男性(大溪區－男性);大溪區－女性(大溪區－女性);楊梅區－男性(楊梅區－男性);楊梅區－女性(楊梅區－女性);蘆竹區－男性(蘆竹區－男性);蘆竹區－女性(蘆竹區－女性);大園區－男性(大園區－男性);大園"
-  },
-  {
-   "id": "147856",
-   "title": "桃園市出生登記人數每年統計",
-   "org": "桃園市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/f0d5de48-979f-4d40-b5de-3a21e90bafed/resource/4675b36c-9625-4322-84db-6df6f1ec7795/download",
-   "upd": "2026-10-09",
-   "desc": "提供桃園市出生登記人數",
-   "fields": "年別(年別);男性(男性);女性(女性)"
-  },
-  {
-   "id": "158147",
-   "title": "桃園市父母離婚終止結婚之子女權利義務行使歸屬每年統計",
-   "org": "桃園市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/a9aeeb16-f8c8-4bf2-a590-49eccd3b2677/resource/6759cd3c-5892-4fb2-a837-5e6da7e277b2/download",
-   "upd": "2026-10-09",
-   "desc": "提供桃園市父母離婚終止結婚之子女權利義務行使歸屬",
-   "fields": "年別及子女性別(年別及子女性別);總計(總計);父(父);母(母);父母共同行使(父母共同行使)"
-  },
-  {
-   "id": "147880",
-   "title": "桃園市有偶人口離婚或終止結婚率每年統計",
-   "org": "桃園市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/869c3fc9-ba1d-486e-ade5-96ff3d075001/resource/ec1214f9-4149-4f52-8a9a-d5bfb2766446/download",
-   "upd": "2026-10-08",
-   "desc": "提供桃園市有偶人口離婚或終止結婚率",
-   "fields": "年別(年別);男性(男性);女性(女性)"
-  },
-  {
-   "id": "158127",
-   "title": "桃園市嬰兒出生數按生父母教育程度及生母生育胎次分每年統計",
-   "org": "桃園市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/0111a581-5780-40c6-9e26-5e33536c56c0/resource/a216d78e-132a-4b0d-874b-6f3468bc9721/download",
-   "upd": "2026-10-08",
-   "desc": "提供桃園市嬰兒出生數按生父母教育程度及生母生育胎次分",
-   "fields": "年別(年別);嬰兒出生數(嬰兒出生數);生父－博士－1胎(生父－博士－1胎);生父－博士－2胎(生父－博士－2胎);生父－博士－3胎(生父－博士－3胎);生父－博士－4胎(生父－博士－4胎);生父－博士－5胎以上(生父－博士－5胎以上);生父－碩士－1胎(生父－碩士－1胎);生父－碩士－2胎(生父－碩士－2胎);生父－碩士－3胎(生父－碩士－3胎);生父－碩士－4胎(生父－碩士－4胎);生父－碩士"
-  },
-  {
-   "id": "148170",
-   "title": "桃園市相同性別終止結婚對數每年統計",
-   "org": "桃園市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/0a4d2507-6270-4b8f-ac41-5c5232361a92/resource/4a5f7964-fb5c-4bd3-bde3-da8904a21101/download",
-   "upd": "2026-10-08",
-   "desc": " 提供桃園市相同性別終止結婚對數",
-   "fields": "年別(年別);男性(男性);女性(女性)"
-  },
-  {
-   "id": "158128",
-   "title": "桃園市嬰兒出生數按嬰兒性別及生父母年齡分每年統計",
-   "org": "桃園市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/5c0e09ab-ca87-4e60-8d50-8445ec7c7c75/resource/de1f517d-8636-4407-905c-fc667bc8a345/download",
-   "upd": "2026-10-08",
-   "desc": "提供桃園市嬰兒出生數按嬰兒性別及生父母年齡分",
-   "fields": "年別(年別);總計－男性(總計－男性);總計－女性(總計－女性);生父未滿20歲－男性(生父未滿20歲－男性);生父未滿20歲－女性(生父未滿20歲－女性);生父20至24歲－男性(生父20至24歲－男性);生父20至24歲－女性(生父20至24歲－女性);生父25至29歲－男性(生父25至29歲－男性);生父25至29歲－女性(生父25至29歲－女性);生父30至34歲－男性(生父30至34歲－"
-  },
-  {
-   "id": "148176",
-   "title": "桃園市相同性別結婚對數每年統計",
-   "org": "桃園市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/290159af-f341-408b-8d6f-ede9aaebe501/resource/3c96c86d-e920-403a-bea6-89f006807655/download",
-   "upd": "2026-10-08",
-   "desc": "提供桃園市相同性別結婚對數",
-   "fields": "年別(年別);男性(男性);女性(女性)"
-  },
-  {
-   "id": "131136",
-   "title": "結婚人數按婚姻類型及結婚者雙方原屬國籍（地區）分",
-   "org": "戶政司",
-   "freq": "不定期更新",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.ris.gov.tw/AS2/infocenter/opendata11112M051.zip;https://www.ris.gov.tw/AS2/infocenter/opendata11503M051.zip;https://www.ris.gov.tw/AS2/infocenter/opendata11102M051.zip;https://www.ris.gov.tw/AS2/infocenter/op",
-   "upd": "2026-10-05",
-   "desc": "(資料調整中)\n統計年月、區域別代碼、區域別、村里名稱、婚姻類型、性別、原屬國籍或地區、\t設籍情形、結婚人數\n",
-   "fields": "statistic_yyymm;district_code;site_id;village;marriage_type;sex;nation;registration;marry_count"
-  },
-  {
-   "id": "176713",
-   "title": "115年結婚人數按性別及原屬國籍（地區）分",
-   "org": "臺南市政府民政局",
-   "freq": "不定期更新",
-   "fmt": "JSON;CSV;JSON;CSV;JS",
-   "lic": "政府資料開放授權條款",
-   "url": "https://soa.tainan.gov.tw/Api/Service/Get/e492fd95-bbcc-4b1f-89f9-2e99fbdf40aa;https://data.tainan.gov.tw/File/ResourceCsvDownload/e492fd95-bbcc-4b1f-89f9-2e99fbdf40aa;https://soa.tainan.gov.tw/Api/Service/Get/e475a6ef-4",
-   "upd": "2026-10-05",
-   "desc": "區域別、性別、總計總計、總計本國籍合計、總計本國籍已設籍、總計本國籍未設籍、總計大陸地區合計、總計大陸地區已設籍、總計大陸地區未設籍、總計港澳地區合計、總計港澳地區已設籍、總計港澳地區未設籍、總計外國籍合計計、總計外國籍合計已設籍、總計外國",
-   "fields": "Seq;區域別;性別;總計總計;總計本國籍合計;總計本國籍已設籍;總計本國籍未設籍;總計大陸地區合計;總計大陸地區已設籍;總計大陸地區未設籍;總計港澳地區合計;總計港澳地區已設籍;總計港澳地區未設籍;總計外國籍合計計;總計外國籍合計已設籍;總計外國籍合計未設籍;總計外國籍東南亞地區計小計;總計外國籍東南亞地區計已設籍;總計外國籍東南亞地區計未設籍;總計外國籍東南亞地區印尼;總計外國籍東南亞地區馬來"
-  },
-  {
-   "id": "176712",
-   "title": "115年離婚人數按性別及原屬國籍（地區）分",
-   "org": "臺南市政府民政局",
-   "freq": "不定期更新",
-   "fmt": "JSON;CSV;JSON;CSV;JS",
-   "lic": "政府資料開放授權條款",
-   "url": "https://soa.tainan.gov.tw/Api/Service/Get/146b407b-325f-4051-81e1-26b6b0776c81;https://data.tainan.gov.tw/File/ResourceCsvDownload/146b407b-325f-4051-81e1-26b6b0776c81;https://soa.tainan.gov.tw/Api/Service/Get/c4f52c5b-7",
-   "upd": "2026-10-05",
-   "desc": "區域別、性別、總計總計、總計本國籍合計、總計本國籍已設籍、總計本國籍未設籍、總計大陸地區合計、總計大陸地區已設籍、總計大陸地區未設籍、總計港澳地區合計、總計港澳地區已設籍、總計港澳地區未設籍、總計外國籍合計計、總計外國籍合計已設籍、總計外國",
-   "fields": "Seq;區域別;性別;總計總計;總計本國籍合計;總計本國籍已設籍;總計本國籍未設籍;總計大陸地區合計;總計大陸地區已設籍;總計大陸地區未設籍;總計港澳地區合計;總計港澳地區已設籍;總計港澳地區未設籍;總計外國籍合計計;總計外國籍合計已設籍;總計外國籍合計未設籍;總計外國籍東南亞地區計小計;總計外國籍東南亞地區計已設籍;總計外國籍東南亞地區計未設籍;總計外國籍東南亞地區印尼;總計外國籍東南亞地區馬來"
-  },
-  {
-   "id": "131137",
-   "title": "離婚/終止結婚人數按婚姻類型及離婚者雙方原屬國籍（地區）分",
-   "org": "戶政司",
-   "freq": "不定期更新",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.ris.gov.tw/AS2/infocenter/opendata10909M061.zip;https://www.ris.gov.tw/AS2/infocenter/opendata11112M061.zip;https://www.ris.gov.tw/AS2/infocenter/opendata11507M061.zip;https://www.ris.gov.tw/AS2/infocenter/op",
-   "upd": "2026-10-05",
-   "desc": "(資料調整中)\r\n\r\n統計年月、區域別代碼、區域別、村里名稱、婚姻類型、性別、原屬國籍或地區、\t設籍情形、離婚/終止結婚人數\r\n",
-   "fields": "statistic_yyymm;district_code;site_id;village;marriage_type;sex;nation;registration;divorce_count"
-  },
-  {
-   "id": "157994",
-   "title": "出生登記子女從姓人數按性別及從姓方式分",
-   "org": "戶政司",
-   "freq": "不定期更新",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opdadm.moi.gov.tw/api/v1/no-auth/resource/api/dataset/6C884574-AED9-46EF-8444-E63F94FC1943/resource/3E6D8572-91A3-4B5C-BFB0-0A3EA36BBC23/download;https://opdadm.moi.gov.tw/api/v1/no-auth/resource/api/dataset/6C88",
-   "upd": "2026-10-02",
-   "desc": "統計年月、區域別代碼、區域別、性別、從姓方式、子女人數。",
-   "fields": "統計年月;區域別代碼;區域別;性別;從姓方式;子女人數"
-  },
-  {
-   "id": "177519",
-   "title": "115年9月基隆市現住人口出生.死亡.結婚.離婚登記數",
-   "org": "基隆市政府民政處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.klcg.gov.tw/wSite/public/Attachment/00810/f1790903582458.csv",
-   "upd": "2026-10-02",
-   "desc": "人口統計月報資料",
-   "fields": "1.2-現住人口出生;死亡;結婚;離婚登記數;"
-  }
- ],
- "kw_寵物": [
-  {
-   "id": "41771",
-   "title": "年度犬貓統計表",
-   "org": "農業部",
-   "freq": "每2年",
-   "fmt": "JSON;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=ccezNvv4oYbO&IsTransData=1;https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=ccezNvv4oYbO&FOTT=CSV&IsTransData=1",
-   "upd": "2026-08-24",
-   "desc": "提供資料包含：流水號、年度、縣市代碼、縣市別、家犬總估計數、家貓總估計數、遊蕩犬總估計數、備註等欄位資料。",
-   "fields": "ID(流水號);rpt_year(民國年);rpt_country_code(縣市代碼);rpt_county(縣市名);calcu_dog_count(家犬總估計數);calcu_cat_count(家貓總估計數);stray_dog_count(遊蕩犬總估計數);els_note(備註)"
-  },
-  {
-   "id": "25606",
-   "title": "102年度全國家犬貓數量調查結果統計表",
-   "org": "農業部",
-   "freq": "不定期更新",
-   "fmt": "JSON;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.moa.gov.tw/Service/OpenData/DataFileService.aspx?UnitId=411&IsTransData=1;https://data.moa.gov.tw/Service/OpenData/DataFileService.aspx?UnitId=411&FOTT=CSV&IsTransData=1",
-   "upd": "2024-08-27",
-   "desc": "提供102年度全國家犬貓數量調查結果統計表資料查詢網址。",
-   "fields": "名稱(名稱);連結(連結);資料日期(資料日期)"
-  }
- ],
- "kw_用電": [
-  {
-   "id": "172161",
-   "title": "中部科學園區台中園區用電量歷史資料",
-   "org": "國家科學及技術委員會中部科學園區管理局",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://mas.nstc.gov.tw/OPENDATA/GetFile?format=csv&serialno=536&fileodr=1",
-   "upd": "2026-06-29",
-   "desc": "臺中園區歷史用電量，查詢臺中園區歷史用電量。",
-   "fields": "園區別;年度;月份;用電負載量;年度最高用電負載量;資料更新日"
-  },
-  {
-   "id": "41299",
-   "title": "南部科學園區管理局用電量歷史資料",
-   "org": "國家科學及技術委員會南部科學園區管理局",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://mas.nstc.gov.tw/OPENDATA/GetFile?format=csv&serialno=357&fileodr=0",
-   "upd": "2026-06-29",
-   "desc": "各園區契約容量。追蹤長期用電趨勢以輔助能源政策制定。",
-   "fields": "民國年;月份;園區別;用電負載量(萬kW);年度最高用電負載量(萬kW)"
-  },
-  {
-   "id": "7533",
-   "title": "南部科學園區管理局用電量統計",
-   "org": "國家科學及技術委員會南部科學園區管理局",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://mas.nstc.gov.tw/OPENDATA/GetFile?format=csv&serialno=102&fileodr=0",
-   "upd": "2026-06-29",
-   "desc": "用電量:園區各廠商每月與台電公司訂定之用電契約容量。評估園區能源消耗狀況與供電需求規劃。",
-   "fields": "民國年;月份;園區別;用電負載量(萬kW);年度最高用電負載量(萬kW)"
-  },
-  {
-   "id": "41213",
-   "title": "中部科學園區管理局用電量統計",
-   "org": "國家科學及技術委員會中部科學園區管理局",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://mas.nstc.gov.tw/OPENDATA/GetFile?format=csv&serialno=346&fileodr=0",
-   "upd": "2026-06-29",
-   "desc": "用電統計，查詢園區用電量使用狀況。",
-   "fields": "園區別;年度;月份;用電負載量;資料更新日"
-  },
-  {
-   "id": "159119",
-   "title": "臺中市售電量統計",
-   "org": "臺中市政府經濟發展局",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=c84c7b7b-2367-4007-bde8-1ad1aec57b7b",
-   "upd": "2026-06-24",
-   "desc": "本市110年電燈用電情形，包含一般用電、公用路燈、營業用電、非營業用電",
-   "fields": "年度;縣市別;一般用電_用戶數;一般用電_售電量度數;公用路燈用電_用戶數;公用路燈用電_售電量度數;用戶數小計;售電量度數小計;非營業用電_用戶數;非營業用電_售電量度數;營業用_用戶數;營業用_售電量度數;用戶數合計;售電量度數合計"
-  },
-  {
-   "id": "83704",
-   "title": "台灣電力公司花蓮縣非營業用戶售電量",
-   "org": "台灣電力股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://service.taipower.com.tw/data/opendata/apply/file/d007021/018.csv",
-   "upd": "2026-06-24",
-   "desc": "提供花蓮縣的非營業用戶售電量。",
-   "fields": "帳單年月;一級發布區代碼;度數;村里代碼;村里名稱;鄉鎮區代碼;鄉鎮區名稱;縣市代碼;縣市名稱"
-  },
-  {
-   "id": "83422",
-   "title": "台灣電力公司台北市非營業用戶售電量",
-   "org": "台灣電力股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://service.taipower.com.tw/data/opendata/apply/file/d007021/002.csv",
-   "upd": "2026-06-24",
-   "desc": "提供台北市的非營業用戶售電量。",
-   "fields": "帳單年月;一級發布區代碼;度數;村里代碼;村里名稱;鄉鎮區代碼;鄉鎮區名稱;縣市代碼;縣市名稱"
-  },
-  {
-   "id": "83427",
-   "title": "台灣電力公司桃園市非營業用戶售電量",
-   "org": "台灣電力股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://service.taipower.com.tw/data//opendata/apply/file/d007021/004.csv",
-   "upd": "2026-06-24",
-   "desc": "提供桃園市的非營業用戶售電量。",
-   "fields": "帳單年月;一級發布區代碼;度數;村里代碼;村里名稱;鄉鎮區代碼;鄉鎮區名稱;縣市代碼;縣市名稱"
-  },
-  {
-   "id": "83429",
-   "title": "台灣電力公司新竹市非營業用戶售電量",
-   "org": "台灣電力股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://service.taipower.com.tw/data/opendata/apply/file/d007021/005.csv",
-   "upd": "2026-06-24",
-   "desc": "提供新竹市的非營業用戶售電量。",
-   "fields": "帳單年月;一級發布區代碼;度數;村里代碼;村里名稱;鄉鎮區代碼;鄉鎮區名稱;縣市代碼;縣市名稱"
-  },
-  {
-   "id": "83431",
-   "title": "台灣電力公司苗栗縣非營業用戶售電量",
-   "org": "台灣電力股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://service.taipower.com.tw/data/opendata/apply/file/d007021/007.csv",
-   "upd": "2026-06-24",
-   "desc": "提供苗栗縣的非營業用戶售電量。",
-   "fields": "帳單年月;一級發布區代碼;度數;村里代碼;村里名稱;鄉鎮區代碼;鄉鎮區名稱;縣市代碼;縣市名稱"
-  },
-  {
-   "id": "83434",
-   "title": "台灣電力公司雲林縣非營業用戶售電量",
-   "org": "台灣電力股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://service.taipower.com.tw/data/opendata/apply/file/d007021/010.csv",
-   "upd": "2026-06-24",
-   "desc": "提供雲林縣的非營業用戶售電量。",
-   "fields": "帳單年月;一級發布區代碼;度數;村里代碼;村里名稱;鄉鎮區代碼;鄉鎮區名稱;縣市代碼;縣市名稱"
-  },
-  {
-   "id": "83634",
-   "title": "台灣電力公司屏東縣非營業用戶售電量",
-   "org": "台灣電力股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://service.taipower.com.tw/data/opendata/apply/file/d007021/015.csv",
-   "upd": "2026-06-24",
-   "desc": "提供屏東縣的非營業用戶售電量。",
-   "fields": "帳單年月;一級發布區代碼;度數;村里代碼;村里名稱;鄉鎮區代碼;鄉鎮區名稱;縣市代碼;縣市名稱"
-  },
-  {
-   "id": "83624",
-   "title": "台灣電力公司高雄市非營業用戶售電量",
-   "org": "台灣電力股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://service.taipower.com.tw/data/opendata/apply/file/d007021/014.csv",
-   "upd": "2026-06-24",
-   "desc": "提供高雄市的非營業用戶售電量。",
-   "fields": "帳單年月;一級發布區代碼;度數;村里代碼;村里名稱;鄉鎮區代碼;鄉鎮區名稱;縣市代碼;縣市名稱"
-  },
-  {
-   "id": "83619",
-   "title": "台灣電力公司嘉義縣非營業用戶售電量",
-   "org": "台灣電力股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://service.taipower.com.tw/data/opendata/apply/file/d007021/011.csv",
-   "upd": "2026-06-24",
-   "desc": "提供嘉義縣的非營業用戶售電量。",
-   "fields": "帳單年月;一級發布區代碼;度數;村里代碼;村里名稱;鄉鎮區代碼;鄉鎮區名稱;縣市代碼;縣市名稱"
-  },
-  {
-   "id": "83735",
-   "title": "台灣電力公司台東縣非營業用戶售電量",
-   "org": "台灣電力股份有限公司",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://service.taipower.com.tw/data//opendata/apply/file/d007021/019.csv",
-   "upd": "2026-06-24",
-   "desc": "提供台東縣的非營業用戶售電量。",
-   "fields": "帳單年月;一級發布區代碼;度數;村里代碼;村里名稱;鄉鎮區代碼;鄉鎮區名稱;縣市代碼;縣市名稱"
-  }
- ],
- "kw_減班": [
-  {
-   "id": "40169",
-   "title": "勞雇雙方協商減少工時概況",
-   "org": "勞動部",
-   "freq": "每1年",
-   "fmt": "CSV;JSON;WEBSERVICES",
-   "lic": "政府資料開放授權條款",
-   "url": "https://apiservice.mol.gov.tw/OdService/download/A17000000J-020143-WB9;https://apiservice.mol.gov.tw/OdService/download/A17000000J-020143-m7u;https://apiservice.mol.gov.tw/OdService/rest/datastore/A17000000J-020143-f3D;h",
-   "upd": "2026-06-10",
-   "desc": "勞雇雙方協商減少工時概況(本項資料係事業單位向縣市政府通報)。",
-   "fields": "項目別;事業單位家數;通報人數;實際實施人數;序號"
-  }
- ],
- "kw_簽帳": [
-  {
-   "id": "175018",
-   "title": "各地區持卡人於各行業別總簽帳金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/Billing Address/BANK_LCSUM_IDSUM_BA.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2020年8月起，臺灣六都十六縣居民以信用卡支付各信用卡產業類別(食、衣、住、交通、文教康樂、百貨、其他)消費之金額及筆數。",
-   "fields": "年月;地區;信用卡產業別;信用卡交易筆數;信用卡交易金額[新臺幣]"
-  },
-  {
-   "id": "171403",
-   "title": "民眾於六都十六縣以信用卡消費之金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/NCCC%20Open%20Data/NCCC_LCSUM.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，持卡人於臺灣六都十六縣的信用卡簽帳金額及筆數(資料範圍係指經聯合信用卡處理中心處理之信用卡消費交易)",
-   "fields": "年月;地區;信用卡處理中心處理筆數;信用卡處理中心處理金額[新臺幣]"
-  },
-  {
-   "id": "25364",
-   "title": "以信用卡消費之金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/NCCC%20Open%20Data/Location/NCCC_TWN.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，持卡人於臺灣以信用卡消費之金額及筆數(資料範圍係指經聯合信用卡處理中心處理之信用卡消費交易)",
-   "fields": "年月;地區;信用卡處理中心處理筆數;信用卡處理中心處理金額[新臺幣]"
-  },
-  {
-   "id": "33458",
-   "title": "外國持卡人於六都十六縣以信用卡消費之金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/Foreign/NCCC_LCSUM_FR.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，外國卡持卡人於臺灣六都十六縣的信用卡簽帳金額及筆數(資料範圍係指經聯合信用卡處理中心處理之信用卡消費交易)",
-   "fields": "年月;地區;信用卡處理中心處理筆數;信用卡處理中心處理金額[新臺幣]"
-  },
-  {
-   "id": "11701",
-   "title": "聯合信用卡處理中心簽帳端末機裝機臺數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/07_Number_of_NCCC_POS_Terminals_Installed.csv",
-   "upd": "2025-11-27",
-   "desc": "統計自2009年起，聯合信用卡處理中心之簽帳端末機(本中心及特約商店自購機台、虛擬端末機)裝機台數",
-   "fields": "西元年;簽帳端末機裝機台數"
-  },
-  {
-   "id": "11697",
-   "title": "信用卡簽帳金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/03_Sales_Volume_and_Number_of_Sales_Drafts_Processed_of_NCCC.csv",
-   "upd": "2025-11-27",
-   "desc": "統計自2009年起，聯合信用卡處理中心及會員機構處理之信用卡簽帳金額及筆數",
-   "fields": "西元年;信用卡處理中心簽帳金額[新臺幣，億元];信用卡處理中心簽帳筆數[千筆]"
-  },
-  {
-   "id": "38311",
-   "title": "兩性持卡人於各行業別總簽帳金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/Gender/BANK_TWN_ALL_GD.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，兩性持卡人於臺灣以信用卡支付各信用卡產業類別(食、衣、住、交通、文教康樂、百貨、其他)消費之金額及筆數",
-   "fields": "年月;地區;信用卡產業別;性別;信用卡交易筆數;信用卡交易金額[新臺幣]"
-  },
-  {
-   "id": "38324",
-   "title": "各教育程度持卡人各行業別總簽帳金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/Education Level/BANK_TWN_ALL_EL.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，各教育程度持卡人於臺灣以信用卡支付各信用卡產業類別(食、衣、住、交通、文教康樂、百貨、其他)消費之金額及筆數",
-   "fields": "年月;地區;信用卡產業別;教育程度類別;信用卡交易筆數;信用卡交易金額[新臺幣]"
-  },
-  {
-   "id": "38321",
-   "title": "各年齡層持卡人於各行業別總簽帳金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/Age Group/BANK_TWN_ALL_AG.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，各年齡層持卡人於臺灣以信用卡支付各信用卡產業類別(食、衣、住、交通、文教康樂、百貨、其他)消費之金額及筆數",
-   "fields": "年月;地區;信用卡產業別;年齡層;信用卡交易筆數;信用卡交易金額[新臺幣]"
-  },
-  {
-   "id": "62945",
-   "title": "以信用卡支付網路購物(EC)消費之各產業類別的金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/EC/BANK_EC_ALL.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，持卡人於臺灣網路商店以信用卡支付各信用卡產業類別(食、衣、住、交通、文教康樂、百貨、其他)消費之金額及筆數",
-   "fields": "年月;地區;信用卡產業別;信用卡交易筆數;信用卡交易金額[新臺幣]"
-  },
-  {
-   "id": "63029",
-   "title": "十六縣持卡人前十大國外消費金額及筆數(依簽帳筆數排名)",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/Country/BANK_LOC_ALL_COUNTRY_NO.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，臺灣十六縣持卡人於國外信用卡簽帳筆數前十大國家或地區消費之金額及筆數",
-   "fields": "年月;國別;地區;信用卡交易筆數;信用卡交易金額[新臺幣]"
-  },
-  {
-   "id": "79308",
-   "title": "各教育程度女性持卡人於各行業別總簽帳金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/Gender X Education Level/BANK_TWN_ALL_EL_F.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，各教育程度女性持卡人於臺灣以信用卡支付各信用卡產業類別(食、衣、住、交通、文教康樂、百貨、其他)消費之金額及筆數",
-   "fields": "年月;地區;信用卡產業別;性別;教育程度類別;信用卡交易筆數;信用卡交易金額[新臺幣]"
-  },
-  {
-   "id": "79290",
-   "title": "各年齡層女性持卡人於各行業別總簽帳金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/Gender X Age Group/BANK_TWN_ALL_AG_F.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，各年齡層女性持卡人於臺灣以信用卡支付各信用卡產業類別(食、衣、住、交通、文教康樂、百貨、其他)消費之金額及筆數",
-   "fields": "年月;地區;信用卡產業別;性別;年齡層;信用卡交易筆數;信用卡交易金額[新臺幣]"
-  },
-  {
-   "id": "171401",
-   "title": "以信用卡支付各產業類別消費之金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/NCCC%20Open%20Data/NCCC_TWN_IDSUM.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，持卡人於臺灣以信用卡支付各信用卡產業類別(食、衣、住、交通、文教康樂、百貨)消費之金額及筆數(資料範圍係指經聯合信用卡處理中心處理之信用卡消費交易)",
-   "fields": "年月;地區;信用卡產業別;信用卡處理中心處理筆數;信用卡處理中心處理金額[新臺幣]"
-  },
-  {
-   "id": "38327",
-   "title": "各職業類別持卡人各行業別總簽帳金額及筆數",
-   "org": "金融監督管理委員會銀行局",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.nccc.com.tw/dataDownload/Classified Employment/BANK_TWN_ALL_CE.CSV",
-   "upd": "2025-11-27",
-   "desc": "統計自2014年起，各職業類別持卡人於臺灣以信用卡支付各信用卡產業類別(食、衣、住、交通、文教康樂、百貨、其他)消費之金額及筆數",
-   "fields": "年月;地區;信用卡產業別;職業類別;信用卡交易筆數;信用卡交易金額[新臺幣]"
-  }
- ],
- "kw_消保": [
-  {
-   "id": "46402",
-   "title": "桃園市房地產消費糾紛原因及來源明細統計表",
-   "org": "桃園市政府地政局",
-   "freq": "不定期更新",
-   "fmt": "CSV;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/e7f38b29-901c-444d-ac7a-483a941a60ce/resource/c9dd38bd-d9af-4015-83de-4a005717b629/download;https://opendata.tycg.gov.tw/api/dataset/e7f38b29-901c-444d-ac7a-483a941a60ce/resource/",
-   "upd": "2026-10-09",
-   "desc": " 房地產消費糾紛原因及來源明細統計表-桃園市",
-   "fields": "消費糾紛原因(消費糾紛原因);已備查仲介(已備查仲介);未備查仲介(未備查仲介);非法仲介(非法仲介);仲介(仲介);代銷(代銷);建商(建商);地政士(地政士);非不動產服務業(非不動產服務業);其他(其他);小計(小計)"
-  },
-  {
-   "id": "149422",
-   "title": "桃園市政府每年度消費爭議申訴案及調解案商品類型分析表",
-   "org": "桃園市政府法務局",
-   "freq": "每1年",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/782a2aed-8f19-4604-8036-40db53fc5fd1/resource/25f09139-0eb3-4565-ba35-d42b87c0238b/download;https://opendata.tycg.gov.tw/api/dataset/782a2aed-8f19-4604-8036-40db53fc5fd1/resource/",
-   "upd": "2026-10-08",
-   "desc": "統計桃園市政府每年度受理消費爭議申訴案及調解案商品類型",
-   "fields": "申訴及調解程序(申訴及調解程序);食品(食品);健康食品(健康食品);藥品(藥品);醫療器材(醫療器材);化粧品(化粧品);菸酒(菸酒);農產品(農產品);飲用水(飲用水);能源產品(能源產品);房屋(房屋);車輛(車輛);電器及周邊產品(電器及周邊產品);通訊及周邊產品(通訊及周邊產品);電腦及周邊產品(電腦及周邊產品);相機及周邊產品(相機及周邊產品);攝影機及周邊產品(攝影機及周邊產品);玩"
-  },
-  {
-   "id": "149403",
-   "title": "桃園市消費爭議調解委員會每年度受理消費爭議案件收辦情形",
-   "org": "桃園市政府法務局",
-   "freq": "每1年",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/256909ab-7c6b-4da8-b430-bdbfc4bc23ae/resource/bb945d40-1246-4b3b-b9eb-048ff53f475e/download;https://opendata.tycg.gov.tw/api/dataset/256909ab-7c6b-4da8-b430-bdbfc4bc23ae/resource/",
-   "upd": "2026-10-08",
-   "desc": "統計桃園市消費爭議調解委員會每年度受理消費爭議案件辦理情形",
-   "fields": "年度(年度);調解成立(調解成立);調解不成立(調解不成立);移送他機關(移送他機關);撤案(撤案);其他(其他);不受理(不受理);未結案(未結案);合計(合計)"
-  },
-  {
-   "id": "149409",
-   "title": "桃園市政府消費者保護官每年度受理消費爭議案件收辦情形",
-   "org": "桃園市政府法務局",
-   "freq": "每1年",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/3df9dcd8-d747-4118-b254-6a61e1ddef8c/resource/93b55401-80ec-4829-aee9-a2c20fcfb4a1/download;https://opendata.tycg.gov.tw/api/dataset/3df9dcd8-d747-4118-b254-6a61e1ddef8c/resource/",
-   "upd": "2026-10-08",
-   "desc": "統計桃園市政府消費者保護官每年度受理消費爭議案件辦理情形",
-   "fields": "年度(年度);協商成立(協商成立);協商不成立(協商不成立);移送他機關(移送他機關);撤案(撤案);其他(其他);不受理(不受理);未結案(未結案);合計(合計)"
-  },
-  {
-   "id": "149424",
-   "title": "桃園市政府每年度消費爭議申訴案及調解案服務類型分析表",
-   "org": "桃園市政府法務局",
-   "freq": "每1年",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/7c17a83c-dce6-4f9e-995f-15afa1672097/resource/993c6b19-5aa5-4633-ac5e-8c3274dc11a5/download;https://opendata.tycg.gov.tw/api/dataset/7c17a83c-dce6-4f9e-995f-15afa1672097/resource/",
-   "upd": "2026-10-08",
-   "desc": "統計桃園市政府每年度受理消費爭議申訴案及調解案服務類型",
-   "fields": "申訴及調解程序(申訴及調解程序);金融(金融);保險(保險);電信(電信);旅遊(旅遊);住宿(住宿);遊樂園(遊樂園);運輸(運輸);停車場(停車場);社服(社服);坐月子(坐月子);瘦身美容(瘦身美容);健身(健身);補習(補習);遊學(遊學);殯葬服務及生前契約(殯葬服務及生前契約);移民(移民);不動產經紀(不動產經紀);就業服務及職業訓練(就業服務及職業訓練);線上遊戲(線上遊戲);有線"
-  },
-  {
-   "id": "145816",
-   "title": "臺北市消費爭議無故不到場協商之被申訴企業經營者列表",
-   "org": "臺北市政府法務局",
-   "freq": "每1年",
-   "fmt": "CSV;CSV;CSV;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/c15e49fd-f511-46c8-8613-0ad91f370bfd/resource/43fbe88e-ed8b-4b96-a8da-edd49e70448b/download;https://data.taipei/api/dataset/c15e49fd-f511-46c8-8613-0ad91f370bfd/resource/9c17b43d-4579-4452",
-   "upd": "2026-10-06",
-   "desc": "臺北市消費爭議無故不到場協商之被申訴企業經營者依臺北市消費者保護自治條例第24條第1款規定予以公告之「無故不到場協商之被申訴企業經營者」。",
-   "fields": "年度;被申訴人;申訴人;協商日;爭議內容"
-  },
-  {
-   "id": "132382",
-   "title": "臺北市政府年度消費申訴案件統計結果",
-   "org": "臺北市政府法務局",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/037c6446-83e8-4d54-beb0-12c9375a362a/resource/05a2a902-5852-4719-9329-ab1d07f9ef40/download",
-   "upd": "2026-10-06",
-   "desc": "臺北市政府受理消費申訴案依類型、案量年度排名資料",
-   "fields": "名次;消費類型;案件數量;榜首業者;榜首案數量"
-  },
-  {
-   "id": "132383",
-   "title": "臺北市消費爭議調解委員會處理調解案件辦理情形表",
-   "org": "臺北市政府法務局",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/672d0b91-c9fc-42bc-ad65-b6b064f54c51/resource/5e382da4-ae0a-479a-9810-f794bf0a1993/download",
-   "upd": "2026-10-06",
-   "desc": "依臺北市政府法務局施政報告公開臺北市消費爭議調解委員會處理調解案件辦理情形表",
-   "fields": "年度;調解成立件數;調解不成立（當事人兩造意見不一致或當事人一造或兩造未到場）件數;其他（達成其他協議）件數;會前自行和解件數;撤回件數;移轉管轄件數;函覆處理件數;不予受理件數;其他處理件數;合計"
-  },
-  {
-   "id": "128833",
-   "title": "臺北市消費爭議調解委員會委員",
-   "org": "臺北市政府法務局",
-   "freq": "不定期更新",
-   "fmt": "CSV;CSV;CSV;CSV;CSV;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/c669d15f-41a0-481d-b257-b649e1407cdf/resource/2ffa98dd-656e-403b-8c65-11a595a311d8/download;https://data.taipei/api/dataset/c669d15f-41a0-481d-b257-b649e1407cdf/resource/ab924ea2-da65-4cd6",
-   "upd": "2026-10-06",
-   "desc": "臺北市消費爭議調解委員會委員相關資料",
-   "fields": "職稱;姓名;學歷;現職／經歷;性別（M:男,F:女,X:第三性別）"
-  },
-  {
-   "id": "158027",
-   "title": "臺北市政府受理消費申訴案件數(以月份統計)",
-   "org": "臺北市政府法務局",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/690f46c7-cf8d-448f-9b01-f24417d3c22f/resource/8d21fb1b-d524-4f83-907b-1d3283db8618/download",
-   "upd": "2026-10-06",
-   "desc": "本資料為臺北市政府受理消費案件統計資料",
-   "fields": "年度;一月件數;二月件數;三月件數;四月件數;五月件數;六月件數;七月件數;八月件數;九月件數;十月件數;十一月件數;十二月件數;小計"
-  },
-  {
-   "id": "84335",
-   "title": "臺中市每季房地產消費糾紛原因及來源明細統計表",
-   "org": "臺中市政府地政局",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=1225dc32-0dc8-4144-afad-8c7c225b363c",
-   "upd": "2026-10-06",
-   "desc": "為臺中市最新1季房地產消費糾紛原因及來源明細統計表",
-   "fields": "編號;消費糾紛原因;已備查仲介件數;未備查仲介件數;非法仲介件數;代銷件數;建商件數;地政士件數;非不動產服務業件數;其他件數;小計"
-  },
-  {
-   "id": "121510",
-   "title": "臺北市不動產消費爭議案件統計報表",
-   "org": "臺北市政府地政局",
-   "freq": "每6月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/861a2ee4-e034-41f8-ba11-4f62c48ef3be/resource/4eda2572-8c80-4ef2-99c3-6801897115c5/download",
-   "upd": "2026-09-23",
-   "desc": "本局辦理之不動產消費爭議案件查處結果，每月所統計之相關資料",
-   "fields": "日期;收件筆數;移他機關含外縣市或其他主管機關;非屬消費爭議案件筆數;自行和解筆數;本局協商會和解;議會協商和解或撤案;撤案;函告後續處理方式;移消費者保護官申訴;本局協商會不成立;議會協商不成立或其他結論;其他"
-  },
-  {
-   "id": "121511",
-   "title": "臺北市不動產消費爭議案件處理資料",
-   "org": "臺北市政府地政局",
-   "freq": "每6月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/e0954ed4-78c8-4bde-a511-49cdbf61f4eb/resource/e25c65b2-3c17-47c9-b941-2a132a8b9cc3/download",
-   "upd": "2026-09-23",
-   "desc": "本局消費爭議案理辦理情形之相關資料",
-   "fields": "序號;日期;被申訴公司名稱;案件類型;標的種類;公司類別;糾紛主要原因;查處結果;備註"
-  },
-  {
-   "id": "127149",
-   "title": "高雄市消費者保護",
-   "org": "高雄市政府主計處",
-   "freq": "不定期更新",
-   "fmt": "JSON;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://openapi.kcg.gov.tw/Api/Service/Get/de6a4b3c-86a8-432c-8e1b-764925334404;https://data.kcg.gov.tw/File/DirectDownload/de6a4b3c-86a8-432c-8e1b-764925334404",
-   "upd": "2026-08-20",
-   "desc": "消費者保護",
-   "fields": "Seq(Seq);年別(年別);年底女性消費者保護官人數(年底女性消費者保護官人數);年底男性消費者保護保官人數(年底男性消費者保護保官人數);年底消費爭議調解委員會女性委員人數(年底消費爭議調解委員會女性委員人數);年底消費爭議調解委員會男性委員人數(年底消費爭議調解委員會男性委員人數)"
-  },
-  {
-   "id": "14503",
-   "title": "財產保險申訴案件統計表",
-   "org": "金融監督管理委員會保險局",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://openapi.tii.org.tw/TIIOPENDATA/API/CSV_EXPORT?TableID=I22",
-   "upd": "2026-08-18",
-   "desc": "財產保險申訴案件統計表(財團法人保險事業發展中心)",
-   "fields": "年;申訴比率;簽單契約件數_千;申訴件數;依申訴人意見辦理件數;依申訴人意見辦理占申訴案件比率%;依保險公司意見辦理件數;依保險公司意見辦理占申訴案件比率%;和解件數;和解占申訴案件比率%;其他件數;其他占申訴案件比率%;備註"
-  }
- ],
- "kw_建物": [
-  {
-   "id": "168540",
-   "title": "桃園市各行政區建物買賣移轉棟數每年統計",
-   "org": "桃園市政府地政局",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/c0bd1afd-3994-4386-b184-55581cd4f437/resource/2749c7c0-06d3-400f-8164-0a691f9fe9fe/download",
-   "upd": "2026-10-09",
-   "desc": "桃園市各行政區建物買賣移轉棟數每年統計報表",
-   "fields": "年;月;行政區;買賣棟數"
-  },
-  {
-   "id": "168538",
-   "title": "桃園市各行政區土地買賣移轉筆數每年統計",
-   "org": "桃園市政府地政局",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opendata.tycg.gov.tw/api/dataset/2c1e3682-202a-4b1b-83ea-e6315c31de1f/resource/ab7b6d8f-5f20-4cd7-815b-c5ef257ea651/download",
-   "upd": "2026-10-08",
-   "desc": "桃園市各行政區土地買賣移轉筆數每年統計報表",
-   "fields": "年;月;行政區;買賣筆數"
-  },
-  {
-   "id": "123612",
-   "title": "新北市政府核發建築物使用執照-使用分區別",
-   "org": "新北市政府工務局",
-   "freq": "每3月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.ntpc.gov.tw/api/datasets/3aa5fd0e-7595-484c-bd56-e13a1681d1c6/csv/file",
-   "upd": "2026-10-06",
-   "desc": "新北市政府核發建築物使用執照-使用分區別。",
-   "fields": "yyymmroc(民國年月);field1(總樓地板面積總計);field2(住宅區總樓地板面積);field3(商業區總樓地板面積);field4(工業區總樓地板面積)"
-  },
-  {
-   "id": "117676",
-   "title": "20536-01-04-2 臺中市核發建築物拆除執照統計-按構造別分",
-   "org": "臺中市政府都市發展局",
-   "freq": "每6月",
-   "fmt": "JSON;JSON;JSON;JSON;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=86229d46-fb3c-4178-8732-8efb44cc3ce8;https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=32353ff9-2006-4e7d-a6c8-3af2ae6da",
-   "upd": "2026-10-06",
-   "desc": "臺中市核發建築物建造及拆除執照統計-按構造別分資料集",
-   "fields": "地區;項目;欄位名稱;數值;資料時間日期;資料週期;郵遞區號;機關代碼;電子郵件;行動電話;市話;縣市別代碼;行政區域代碼"
-  },
-  {
-   "id": "90731",
-   "title": "20536-02-01-2 臺中市核發建築物使用執照統計-按用途別分",
-   "org": "臺中市政府都市發展局",
-   "freq": "每6月",
-   "fmt": "JSON;JSON;JSON;JSON;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=b01bcffa-4e20-45d6-b3ab-c69d281ddf01;https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=3d81cc69-cd2d-4ca5-b408-47f1746cf",
-   "upd": "2026-10-06",
-   "desc": "2017年臺中市核發建築物使用執照統計-按用途別分資料表",
-   "fields": "地區;項目;欄位名稱;數值;資料時間日期;資料週期;郵遞區號;機關代碼;電子郵件;行動電話;市話;縣市別代碼;行政區域代碼"
-  },
-  {
-   "id": "90732",
-   "title": "20536-02-04-2 臺中市核發建築物使用執照統計-按層數別分",
-   "org": "臺中市政府都市發展局",
-   "freq": "每6月",
-   "fmt": "JSON;JSON;JSON;JSON;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=8c5604de-6f1e-461a-8264-11ec8a1be0e8;https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=beb09d1a-dba6-441b-83eb-23f827edc",
-   "upd": "2026-10-06",
-   "desc": "2017年9月-11月臺中市核發建築物使用執照統計-按層數別分資料",
-   "fields": "地區;項目;欄位名稱;數值;資料時間日期;資料週期;郵遞區號;機關代碼;電子郵件;行動電話;市話;縣市別代碼;行政區域代碼"
-  },
-  {
-   "id": "90733",
-   "title": "20536-02-05-2 臺中市核發建築物使用執照統計-按土地使用分區別分",
-   "org": "臺中市政府都市發展局",
-   "freq": "每6月",
-   "fmt": "JSON;JSON;JSON;JSON;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=9efaa887-8868-42f5-889c-46e72c454c7f;https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=16db3c8b-2b78-436b-b1d8-7511454c9",
-   "upd": "2026-10-06",
-   "desc": "2015-2017年臺中市核發建築物使用執照統計-按土地使用分區別分資料",
-   "fields": "地區;項目;欄位名稱;數值;資料時間日期;資料週期;郵遞區號;機關代碼;電子郵件;行動電話;市話;縣市別代碼;行政區域代碼"
-  },
-  {
-   "id": "137299",
-   "title": "新竹市各年度土地買賣移轉筆數",
-   "org": "地政處",
-   "freq": "不定期更新",
-   "fmt": "XLSX;CSV;XML;JSON",
-   "lic": "政府資料開放授權條款",
-   "url": "https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/366/6d53ab56-5d7f-4a64-bd04-09e11e8fad60.xlsx;https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/366/6d53ab56-5d7f-4a64-bd04-09e11e8fad60.csv;https://odws.hc",
-   "upd": "2026-10-02",
-   "desc": "縣市別代碼、統計年度、統計月份、筆數、面積平方公尺",
-   "fields": "縣市別代碼;統計年度;統計月份;筆數;面積平方公尺"
-  },
-  {
-   "id": "89668",
-   "title": "新竹市各年度建物買賣移轉棟數",
-   "org": "地政處",
-   "freq": "不定期更新",
-   "fmt": "XLSX;CSV;XML;JSON",
-   "lic": "政府資料開放授權條款",
-   "url": "https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/367/aaa8483a-3b1c-43e3-9120-6323b990c15d.xlsx;https://odws.hccg.gov.tw/001/Upload/25/opendataback/9059/367/aaa8483a-3b1c-43e3-9120-6323b990c15d.csv;https://odws.hc",
-   "upd": "2026-10-02",
-   "desc": "縣市別代碼、統計年度、統計月份、棟數、面積平方公尺",
-   "fields": "縣市別代碼;統計年度;統計月份;棟數;面積平方公尺"
-  },
-  {
-   "id": "134490",
-   "title": "臺北市各行政區不動產登記統計(建物第一次登記後30日內買賣移轉)",
-   "org": "臺北市政府地政局",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/47bca15e-10d4-479d-a4bd-b76156ecde54/resource/9f9543ae-1034-455f-9c95-91820dda1651/download",
-   "upd": "2026-09-17",
-   "desc": "本市各行政區建物第一次登記後30日內買賣移轉之件數、建物棟數及建物面積統計。",
-   "fields": "縣市;行政區;件數;建物棟數;建物面積（平方公尺）"
-  },
-  {
-   "id": "178537",
-   "title": "臺北市建築物能源耗用管制辦法列管之新建建築物建造執照列表",
-   "org": "臺北市建築管理工程處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/e2c7bc64-6f81-48c2-8fc5-065ac504a15d/resource/82714387-b4c3-4bb4-8138-f6765163ac37/download",
-   "upd": "2026-09-09",
-   "desc": "臺北市新建建築物建築能效達1+級之案件",
-   "fields": "執照號碼;建物用途;地上層數;總樓地板面積;基地面積總計"
-  },
-  {
-   "id": "176909",
-   "title": "115年臺南市建物第一次移轉統計表",
-   "org": "臺南市政府地政局",
-   "freq": "每月",
-   "fmt": "JSON;CSV;JSON;CSV;JS",
-   "lic": "政府資料開放授權條款",
-   "url": "https://soa.tainan.gov.tw/Api/Service/Get/5e3b8ff9-6deb-49e7-9a30-04b27cbd7802;https://data.tainan.gov.tw/File/ResourceCsvDownload/5e3b8ff9-6deb-49e7-9a30-04b27cbd7802;https://soa.tainan.gov.tw/Api/Service/Get/536ce44d-7",
-   "upd": "2026-09-08",
-   "desc": "提供臺南市建物第一次移轉統計",
-   "fields": "Seq;年月;區名;六層以下-筆數;六層以下-面積(M2);七層以上-筆數;七層以上-面積(M2)"
-  },
-  {
-   "id": "158096",
-   "title": "臺北市營造建築物核發拆除執照用途別",
-   "org": "臺北市建築管理工程處",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/962339f3-a9ba-4e3e-be26-daadab05b1d0/resource/2883f183-5d29-4038-a6e5-270518694bb1/download",
-   "upd": "2026-07-15",
-   "desc": "臺北市年度營造建築物核發拆除執照統計",
-   "fields": "年度;所有件數（數量）;所有總樓地板面積;住宅件數（數量）;住宅戶數（數量）;住宅總樓地板面積;其他件數（數量）;其他總樓地板面積"
-  },
-  {
-   "id": "158097",
-   "title": "臺北市營造建築物核發拆除執照構造別",
-   "org": "臺北市建築管理工程處",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/a5d5a31b-4166-4b43-ad7b-59eff1fe3126/resource/7711960b-c4cf-45a4-918a-0aa703a64d18/download",
-   "upd": "2026-07-15",
-   "desc": "臺北市年度營造建築物核發拆除執照構造別",
-   "fields": "年度;總件數（數量）;總棟數（數量）;總樓地板面積;磚構造件數（數量）;磚構造棟數（數量）;磚構造總樓地板面積;木構造件數（數量）;木構造棟數（數量）;木構造總樓地板面積;鋼構造件數（數量）;鋼構造棟數（數量）;鋼構造總樓地板面積;混凝土含鋼筋混凝土構造件數（數量）;混凝土含鋼筋混凝土構造棟數（數量）;混凝土含鋼筋混凝土構造總樓地板面積;鋼骨鋼筋混凝土構造件數（數量）;鋼骨鋼筋混凝土構造棟數（數量"
-  },
-  {
-   "id": "13482",
-   "title": "核發建築物拆除執照統計─按區域別及構造別分",
-   "org": "統計處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://opdadm.moi.gov.tw/api/v1/no-auth/resource/api/dataset/C15CDED4-CFB9-42BA-97FE-01F44DF90C6F/resource/0EFD6F5C-FD90-4BE1-8EE9-69A4CED52A80/download",
-   "upd": "2026-05-26",
-   "desc": "核發建築物拆除執照統計─按區域別及構造別分（資料起始時間：88年01月）（其他統計期資料可使用備註網址，調整ym及ymt參數取得）",
-   "fields": "拆除執照統計_統計;區域別總計_統計;新北市_統計;臺北市_統計;桃園市_統計;臺中市_統計;臺南市_統計;高雄市_統計;宜蘭縣_統計;新竹縣_統計;苗栗縣_統計;彰化縣_統計;南投縣_統計;雲林縣_統計;嘉義縣_統計;屏東縣_統計;臺東縣_統計;花蓮縣_統計;澎湖縣_統計;基隆市_統計;新竹市_統計;嘉義市_統計;金門縣_統計;連江縣_統計;國家公園管理處_統計;其他內政部指定特設主管建築機關"
-  }
- ],
- "kw_出國": [
-  {
-   "id": "8360",
-   "title": "歷年中華民國國民出國年齡統計",
-   "org": "交通部觀光署",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://stat.taiwan.net.tw/data/opendata/2",
-   "upd": "2026-09-15",
-   "desc": "資料提供歷年中華民國國民出國年齡統計",
-   "fields": "年別;首站抵達地;細分;12歲以下;13歲至19歲;20至29歲;30至39歲;40至49歲;50至59歲;60歲及以上;合計"
-  },
-  {
-   "id": "7325",
-   "title": "歷年中華民國國民出國目的地人數統計",
-   "org": "交通部觀光署",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://stat.taiwan.net.tw/data/opendata/1",
-   "upd": "2026-09-15",
-   "desc": "資料內容提供91年起中華民國國民出國目的地人數統計",
-   "fields": "首站抵達地;細分;2002;2003;2004;2005;2006;2007;2008;2009;2010;2011;2012;2013;2014;2015;2016;2017;2018;2019;2020;2021;2022;2023;2024;2025"
-  },
-  {
-   "id": "8587",
-   "title": "歷年國人出國旅遊重要指標統計表",
-   "org": "交通部觀光署",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://media.taiwan.net.tw/od/01_PRD/國人出國旅遊重要指標統計表.csv",
-   "upd": "2026-09-15",
-   "desc": "提供歷年我國國人出國總人次、停留夜數、每人每次平均消費支出及出國旅遊消費總支出等重要指標統計資料",
-   "fields": "年度;國人出國總人次;平均停留夜數;每人每次平均消費支出_新台幣_元;每人每次平均消費支出_美金_元;出國旅遊消費總支出_含國際機票_新台幣_億元;出國旅遊消費總支出_含國際機票_美金_億元"
-  },
-  {
-   "id": "8361",
-   "title": "歷年中華民國國民出國搭乘交通工具及出境港口統計",
-   "org": "交通部觀光署",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://stat.taiwan.net.tw/data/opendata/3",
-   "upd": "2026-09-15",
-   "desc": "提供歷年我國國人出國所搭乘飛機或郵輪之統計數據資料",
-   "fields": "年別;首站抵達地;細分;合計;飛機小計;飛機松山;飛機桃園;飛機臺中;飛機高雄;飛機其他;輪船小計;輪船基隆;輪船臺中;輪船高雄;輪船蘇澳;輪船花蓮;輪船金門;輪船馬祖;輪船其他"
-  },
-  {
-   "id": "7326",
-   "title": "歷年國人出國按性別分析",
-   "org": "交通部觀光署",
-   "freq": "每1年",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://stat.taiwan.net.tw/data/opendata/17",
-   "upd": "2026-09-15",
-   "desc": "資料內容提供歷年國人出國按性別分析",
-   "fields": "年別;男;女;隨行人員;合計"
-  },
-  {
-   "id": "94533",
-   "title": "出國考察研習人數性別統計",
-   "org": "經濟部國際貿易署",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.trade.gov.tw/OpenData/getOpenData.aspx?oid=8E2AD7B2E35760DA",
-   "upd": "2026-09-09",
-   "desc": "「臺日、 臺德、臺法、臺奧、臺俄及臺加技術合作計畫」出國研習人員暨日本專家來臺人數依性別統計(不再更新)",
-   "fields": "序號;年度;男性人數;女性人數;總人數"
-  },
-  {
-   "id": "13837",
-   "title": "海巡署查獲非法入出國統計-按單位分",
-   "org": "海洋委員會海巡署",
-   "freq": "不定期更新",
-   "fmt": "ZIP",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.cga.gov.tw/GipOpen/wSite/public/Attachment/OD0402202604A0.zip",
-   "upd": "2026-06-05",
-   "desc": "本署業務績效統計",
-   "fields": "單位;案件數/總計(件次);嫌犯人數/總計(人次);嫌犯人數/仲介(人次);嫌犯人數/蛇頭(人次);嫌犯人數/藏匿(人次);嫌犯人數/運輸(人次);嫌犯人數/雇主(人次);嫌犯人數/其他(人次);偷渡犯人數/總計/合計/計(人次);偷渡犯人數/總計/合計/男(人次);偷渡犯人數/總計/合計/女(人次);偷渡犯人數/總計/本國籍/計(人次);偷渡犯人數/總計/本國籍/男(人次);偷渡犯人數/總計/本"
-  },
-  {
-   "id": "9854",
-   "title": "海巡署查獲非法入出國統計-按月份分",
-   "org": "海洋委員會海巡署",
-   "freq": "不定期更新",
-   "fmt": "ZIP",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.cga.gov.tw/GipOpen/wSite/public/Attachment/OD0401202604A0.zip",
-   "upd": "2026-06-05",
-   "desc": "本署業務績效情形",
-   "fields": "年月;案件數/總計(件次);嫌犯人數/總計(人次);嫌犯人數/仲介(人次);嫌犯人數/蛇頭(人次);嫌犯人數/藏匿(人次);嫌犯人數/運輸(人次);嫌犯人數/雇主(人次);嫌犯人數/其他(人次);偷渡犯人數/總計/合計/計(人次);偷渡犯人數/總計/合計/男(人次);偷渡犯人數/總計/合計/女(人次);偷渡犯人數/總計/本國籍/計(人次);偷渡犯人數/總計/本國籍/男(人次);偷渡犯人數/總計/本"
-  },
-  {
-   "id": "94816",
-   "title": "30280-02-01-2 臺中市政府各機關公務出國或赴大陸地區人員所提報告書建議事項執行情形統計表",
-   "org": "臺中市政府研究發展考核委員會",
-   "freq": "不定期更新",
-   "fmt": "JSON;JSON",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=fe94bb06-fe04-4fb1-87e9-680434d4973b;https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=8d462815-8195-44d6-a6a5-5767874a3",
-   "upd": "2026-03-18",
-   "desc": "臺中市政府各機關公務出國或赴大陸地區人員所提報告書建議事項執行情形統計表",
-   "fields": "地區;項目;欄位名稱;數值;資料時間日期;資料週期;郵遞區號;機關代碼;電子郵件;行動電話;市話;縣市別代碼;行政區域代碼"
-  }
- ],
- "kw_人口": [
-  {
-   "id": "177516",
-   "title": "115年9月基隆市現住人口遷入遷出登記數",
-   "org": "基隆市政府民政處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.klcg.gov.tw/wSite/public/Attachment/00810/f1790903908407.csv",
-   "upd": "2026-10-02",
-   "desc": "人口統計月報資料",
-   "fields": "1.5-現住人口遷入;遷出登記;"
-  },
-  {
-   "id": "59115",
-   "title": "115年3月基隆市現住人口遷入遷出登記數",
-   "org": "基隆市政府民政處",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://www.klcg.gov.tw/wSite/public/Attachment/00810/f1775029143888.csv",
-   "upd": "2026-04-01",
-   "desc": "115年3月基隆市現住人口遷入遷出登記數資料",
-   "fields": "1.5-現住人口遷入;遷出登記;"
-  }
- ],
- "kw_營業登記": [
-  {
-   "id": "29257",
-   "title": "新設立公司登記資本額－按行業別分",
-   "org": "經濟部商業發展署",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.gcis.nat.gov.tw/od/file?oid=418575D5-2955-4555-8E54-64CC6969091A",
-   "upd": "2026-09-26",
-   "desc": "本資料庫儲存全國公司登記基本資料。",
-   "fields": "年月別;總計資本額;農林漁牧業資本額;礦業及土石採取業資本額;製造業資本額;電力及燃氣供應業資本額;用水供應及污染整治業資本額;營造業資本額;批發及零售業資本額;運輸及倉儲業資本額;住宿及餐飲業資本額;資訊及通訊傳播業資本額;金融及保險業資本額;不動產業資本額;專業科學及技術服務資本額;支援服務業資本額;公共行政及國防強制性社會安全資本額;教育服務業資本額;醫療保健及社會工作服務業資本額;藝術娛樂"
-  },
-  {
-   "id": "29254",
-   "title": "新設立商業登記家數－按行業分",
-   "org": "經濟部商業發展署",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.gcis.nat.gov.tw/od/file?oid=11B8EDBE-9D33-4A91-978B-C1E8316690AE",
-   "upd": "2026-09-26",
-   "desc": "本資料庫儲存全國商業登記基本資料。",
-   "fields": "年月別;總計家數;農林漁牧業家數;礦業及土石採取業家數;製造業家數;電力及燃氣供應業家數;用水供應及污染整治業家數;營造業家數;批發及零售業家數;運輸及倉儲業家數;住宿及餐飲業家數;資訊及通訊傳播業家數;金融及保險業家數;不動產業家數;專業科學及技術服務家數;支援服務業家數;公共行政及國防強制性社會安全家數;教育服務業家數;醫療保健及社會工作服務業家數;藝術娛樂及休閒服務業家數;其他服務業家數"
-  },
-  {
-   "id": "29258",
-   "title": "新設立公司登記資本額－按縣市分",
-   "org": "經濟部商業發展署",
-   "freq": "每1月",
-   "fmt": "CSV;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.gcis.nat.gov.tw/od/file?oid=70E48A27-6078-4DFB-990C-9B354E03CAE4;https://data.gcis.nat.gov.tw/od/file?oid=063216AB-0E78-42C3-BE75-B961356CDB6D",
-   "upd": "2026-09-26",
-   "desc": "本資料庫儲存全國公司登記基本資料。",
-   "fields": "年月別;縣市別;新設立公司資本額(新設立，以新台幣元為單位);備註;資料摘述"
-  },
-  {
-   "id": "29259",
-   "title": "新設立商業登記家數－按縣市分",
-   "org": "經濟部商業發展署",
-   "freq": "每1月",
-   "fmt": "CSV;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.gcis.nat.gov.tw/od/file?oid=38427D7E-BF28-4411-AC13-56DCC5B04E86;https://data.gcis.nat.gov.tw/od/file?oid=21E9C12E-85D0-4CDD-A66D-94DE39FAE507",
-   "upd": "2026-09-26",
-   "desc": "本資料庫儲存全國商業登記基本資料。",
-   "fields": "年月別;縣市別;新設立家數;備註;資料摘述"
-  },
-  {
-   "id": "29273",
-   "title": "新設立商業登記資本額－按縣市分",
-   "org": "經濟部商業發展署",
-   "freq": "每1月",
-   "fmt": "CSV;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.gcis.nat.gov.tw/od/file?oid=98584561-D54D-4F46-959B-B6F41EF0785E;https://data.gcis.nat.gov.tw/od/file?oid=F001BA1E-5B08-4AF7-B68E-4ADB1C97C9AF",
-   "upd": "2026-09-26",
-   "desc": "本資料庫儲存全國商業登記基本資料。",
-   "fields": "年月別;縣市別;新設立家數之資本額(以新台幣元為單位);備註;資料摘述"
-  },
-  {
-   "id": "29260",
-   "title": "新設立公司登記家數－按行業別分",
-   "org": "經濟部商業發展署",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.gcis.nat.gov.tw/od/file?oid=6E7D11F4-748A-4FF3-9686-D616FE163A31",
-   "upd": "2026-09-26",
-   "desc": "本資料庫儲存全國公司登記基本資料。",
-   "fields": "年月別;總計家數;農林漁牧業家數;礦業及土石採取業家數;製造業家數;電力及燃氣供應業家數;用水供應及污染整治業家數;營造業家數;批發及零售業家數;運輸及倉儲業家數;住宿及餐飲業家數;資訊及通訊傳播業家數;金融及保險業家數;不動產業家數;專業科學及技術服務家數;支援服務業家數;公共行政及國防強制性社會安全家數;教育服務業家數;醫療保健及社會工作服務業家數;藝術娛樂及休閒服務業家數;其他服務業家數;未"
-  },
-  {
-   "id": "29269",
-   "title": "新設立公司登記家數－按縣市分",
-   "org": "經濟部商業發展署",
-   "freq": "每1月",
-   "fmt": "CSV;CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.gcis.nat.gov.tw/od/file?oid=EF20BAA7-5F81-4BFA-9B46-2176B4C23CC6;https://data.gcis.nat.gov.tw/od/file?oid=DF593C21-DA8E-45C7-89D2-B47AB1C1652C",
-   "upd": "2026-09-26",
-   "desc": "本資料庫儲存全國公司登記基本資料。",
-   "fields": "年月別;縣市別;新設立公司登記家數(新設立);備註;資料摘述"
-  },
-  {
-   "id": "29264",
-   "title": "新設立商業登記資本額－按行業分",
-   "org": "經濟部商業發展署",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.gcis.nat.gov.tw/od/file?oid=0D9EE501-A5C9-4665-94E5-ED0658209691",
-   "upd": "2026-09-26",
-   "desc": "本資料庫儲存全國商業登記基本資料。",
-   "fields": "年月別;總計資本額;農林漁牧業資本額;礦業及土石採取業資本額;製造業資本額;電力及燃氣供應業資本額;用水供應及污染整治業資本額;營造業資本額;批發及零售業資本額;運輸及倉儲業資本額;住宿及餐飲業資本額;資訊及通訊傳播業資本額;金融及保險業資本額;不動產業資本額;專業科學及技術服務資本額;支援服務業資本額;公共行政及國防強制性社會安全資本額;教育服務業資本額;醫療保健及社會工作服務業資本額;藝術娛樂"
-  }
- ],
- "kw_電子發票": [
-  {
-   "id": "24834",
-   "title": "愛心溫度計-行業別電子發票開立統計-資料集 ",
-   "org": "財政部財政資訊中心",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/55B7CB0E-8182-4FDE-A5A0-085A64625D02/85/8B227A99-042A-4900-8B34-5715442A227A/0/?fileType=csv",
-   "upd": "2024-10-09",
-   "desc": "依年月和行業別維度統計電子發票開立張數。",
-   "fields": "年月;行業別2碼編碼;行業別;發票張數"
-  },
-  {
-   "id": "24839",
-   "title": "中獎落點統計-中獎電子發票統計_依行業別-資料集 ",
-   "org": "財政部財政資訊中心",
-   "freq": "每2月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/1487A5C3-8F08-4F56-AB87-E00CC5429427/7/132FD972-F5E9-465B-B536-2B8BC72E6DC4/0/?fileType=csv",
-   "upd": "2024-10-09",
-   "desc": "依開獎期別(每兩個月)統計各行業別所開出的電子發票中獎張數及中獎總金額。",
-   "fields": "開獎期別編碼;開獎期別年月;年;中獎獎項;中獎獎項編碼;行業別;行業別2碼編碼;中獎總金額;中獎電子發票張數;獎項金額"
-  },
-  {
-   "id": "24833",
-   "title": "愛心溫度計-行業別電子發票捐贈統計-資料集",
-   "org": "財政部財政資訊中心",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/55B7CB0E-8182-4FDE-A5A0-085A64625D02/11/C26E0A14-70D7-4672-A7C0-4E703E10748D/0/?fileType=csv",
-   "upd": "2023-12-25",
-   "desc": "依年月和行業別維度統計電子發票捐贈張數。",
-   "fields": "年;年月;行業別2碼編碼;行業別;捐贈發票張數"
-  },
-  {
-   "id": "24837",
-   "title": "愛心溫度計-縣市電子發票開立張數統計-資料集",
-   "org": "財政部財政資訊中心",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/55B7CB0E-8182-4FDE-A5A0-085A64625D02/81/3975BF8A-2CF0-449C-A64D-0E121C6566EF/0/?fileType=csv",
-   "upd": "2023-12-25",
-   "desc": "依年月和縣市維度統計電子發票開立張數。可參照資料集[縣市電子發票捐贈統計]，對照各縣市中文說明，及計算捐贈率。",
-   "fields": "年月;縣市編碼;發票張數"
-  },
-  {
-   "id": "24838",
-   "title": "中獎落點統計-B2C電子發票統計_依鄉鎮市區-資料集 ",
-   "org": "財政部財政資訊中心",
-   "freq": "每2月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/1487A5C3-8F08-4F56-AB87-E00CC5429427/7/DE74B2A2-BFB5-4281-9DAD-4D477B5028CB/0/?fileType=csv",
-   "upd": "2023-12-25",
-   "desc": "依開獎期別(每兩個月)統計各縣市、鄉鎮市區統計電子發票開立張數，並可區分是否列印紙本電子發票證明聯。縣市及鄉鎮市區中文說明可參考資料集[中獎電子發票統計_依鄉鎮市區]。",
-   "fields": "雙數月;年;是否列印紙本;縣市編碼;鄉鎮市區編碼;電子發票開立張數"
-  },
-  {
-   "id": "24840",
-   "title": "中獎落點統計-中獎電子發票統計_依鄉鎮市區-資料集",
-   "org": "財政部財政資訊中心",
-   "freq": "每2月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/1487A5C3-8F08-4F56-AB87-E00CC5429427/7/43D68302-55F9-408D-ACA9-6B5A04A5E707/0/?fileType=csv",
-   "upd": "2023-12-25",
-   "desc": "依開獎期別(每兩個月)統計各縣市、鄉鎮市區，每個中獎獎項所開出的電子發票中獎張數及中獎總金額。",
-   "fields": "開獎期別編碼;開獎期別年月;年;中獎獎項;獎項編碼;縣市;縣市編碼;鄉鎮市區;鄉鎮市區編碼;獎別金額;電子發票中獎張數;電子發票中獎總金額"
-  },
-  {
-   "id": "24836",
-   "title": "愛心溫度計-縣市電子發票捐贈統計-資料集 ",
-   "org": "財政部財政資訊中心",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/55B7CB0E-8182-4FDE-A5A0-085A64625D02/81/428D97C9-6BA9-48E5-AC33-8CA1C651905B/0/?fileType=csv",
-   "upd": "2023-12-25",
-   "desc": "年,年月,是否使用載具編碼,縣市,縣市編碼,載具類別,捐贈發票張數。",
-   "fields": "年;年月;是否使用載具編碼;縣市;縣市編碼;載具類別;捐贈發票張數"
-  },
-  {
-   "id": "36845",
-   "title": "電子發票載具客源地區統計",
-   "org": "財政部財政資訊中心",
-   "freq": "每2月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/691C0280-CEFB-488F-9E71-6AA4F39A41CD/1/48544764-8D2F-4A71-B9E1-4C16AA5B2797/0/?fileType=csv",
-   "upd": "2023-12-25",
-   "desc": "以年度統計各載具單位消費最多電子發票張數的區域作為該載具的客源區域，客源區域維度可分為縣市、鄉鎮市區兩個層級，可由客源區域欄位挑選。",
-   "fields": "年度;縣市;縣市代碼;鄉鎮市區;鄉鎮市區代碼;主行業別;主行業別代碼;外來生活圈;客源區域維度;客源縣市;客源縣市代碼;客源鄉鎮市區;客源鄉鎮市區代碼;消費金額;載具人次"
-  },
-  {
-   "id": "36843",
-   "title": "電子發票消費熱度指標",
-   "org": "財政部財政資訊中心",
-   "freq": "每2月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/691C0280-CEFB-488F-9E71-6AA4F39A41CD/7/1124193D-09F5-4711-AB9A-01848E3B88E4/0/?fileType=csv",
-   "upd": "2023-12-25",
-   "desc": "年度、縣市、縣市代碼、鄉鎮市區、鄉鎮市區代碼、村里、村里代碼、主行業別、主行業別代碼、消費熱度計算來源、張數指標、銷售額指標",
-   "fields": "年度;縣市;縣市代碼;鄉鎮市區;鄉鎮市區代碼;村里;村里代碼;主行業別;主行業別代碼;消費熱度計算來源;張數指標;銷售額指標"
-  },
-  {
-   "id": "36844",
-   "title": "電子發票消費熱度排名年統計",
-   "org": "財政部財政資訊中心",
-   "freq": "每2月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://dataset.einvoice.nat.gov.tw/ods/portal/ODS303W/download/691C0280-CEFB-488F-9E71-6AA4F39A41CD/1/C82AFD0D-D55F-4B06-8B85-663FBCFC5B93/0/?fileType=csv",
-   "upd": "2023-12-25",
-   "desc": "以全年各縣市、鄉鎮市區、村里為單位計算電子發票消費發票張數、金額或雙月(或每月)營業稅申報銷售額、申報發票字軌起迄估算發票張數，並轉換為張數排名值、銷售額排名值等不透漏營業人營業資訊細節等方式呈現區域的消費排名值。",
-   "fields": "年度;縣市;縣市代碼;鄉鎮市區;鄉鎮市區代碼;村里;村里代碼;主行業別;主行業別代碼;消費熱度計算來源;發票張數排名值;銷售金額排名值"
-  }
- ],
- "kw_旅宿": [
-  {
-   "id": "135459",
-   "title": "臺北市民宿營運報表",
-   "org": "臺北市政府觀光傳播局",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://data.taipei/api/dataset/1882223c-c3f9-4c68-912d-527e16ad13e4/resource/33c6e7ba-e558-43a6-93ec-c176dc303ac9/download",
-   "upd": "2026-09-09",
-   "desc": "臺北市民宿營運相關資料",
-   "fields": "年度;縣市;客房住用數;客房住用率;平均房價;收入合計"
-  },
-  {
-   "id": "88697",
-   "title": "20703-03-01-2 臺中市旅館業及民宿業營運報告表",
-   "org": "臺中市政府觀光旅遊局",
-   "freq": "不定期更新",
-   "fmt": "JSON;JSON;JSON;JSON;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=72d1af80-6751-4eed-b37a-b51264510e77;https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=3326bfa9-c95e-4f72-ba1d-7316d37f4",
-   "upd": "2026-05-12",
-   "desc": "臺中市旅館業及民宿業營運報告表",
-   "fields": "地區;項目;欄位名稱;數值;資料時間日期;資料週期;郵遞區號;機關代碼;電子郵件;行動電話;市話;縣市別代碼;行政區域代碼"
-  },
-  {
-   "id": "88700",
-   "title": "20703-03-03-2 臺中市一般旅館業營運報告表",
-   "org": "臺中市政府觀光旅遊局",
-   "freq": "不定期更新",
-   "fmt": "JSON;JSON;JSON;JSON;",
-   "lic": "政府資料開放授權條款",
-   "url": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=90739b6d-605f-4e24-908a-772bda99d423;https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=6ddbda12-8945-4f9c-acdc-7c8dff5f1",
-   "upd": "2026-03-18",
-   "desc": "臺中市一般旅館業營運報告表",
-   "fields": "地區;項目;欄位名稱;數值;資料時間日期;資料週期;郵遞區號;機關代碼;電子郵件;行動電話;市話;縣市別代碼;行政區域代碼"
-  }
- ],
- "kw_景氣": [
-  {
-   "id": "55781",
-   "title": "兩岸經貿交流相關統計指標─中國大陸景氣指標：中國大陸採購經理人指數",
-   "org": "國家發展委員會",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://ws.ndc.gov.tw/001/administrator/10/relfile/0/9862/ed538e7c-fb90-48ee-905e-15b57a22d3c8.csv",
-   "upd": "2025-06-24",
-   "desc": "提供中國大陸及兩岸經貿往來之相關指標供社會大眾參考",
-   "fields": "年度;製造業;非製造業;資料週期;檔案格式"
-  },
-  {
-   "id": "55784",
-   "title": "兩岸經貿交流相關統計指標─中國大陸景氣指標：中國大陸鐵路貨運量",
-   "org": "國家發展委員會",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://ws.ndc.gov.tw/001/administrator/10/relfile/0/9862/6347929a-60c7-44c5-a228-43a0a3f691b3.csv",
-   "upd": "2025-06-24",
-   "desc": "提供中國大陸及兩岸經貿往來之相關指標供社會大眾參考\r\n",
-   "fields": "年度;鐵路貨運量;成長率;資料週期;檔案格式"
-  },
-  {
-   "id": "31564",
-   "title": "臺灣景氣指標月刊",
-   "org": "國家發展委員會",
-   "freq": "每1月",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://ws.ndc.gov.tw/Download.ashx?u=LzAwMS9hZG1pbmlzdHJhdG9yLzEwL3JlbGZpbGUvMC85ODYyL2ZiNmYyNmZlLWE0YzctNGYzOC04M2MwLTc4NjFmYmRjZjYzZi5jc3Y%3d&n=6Ie654Gj5pmv5rCj5oyH5qiZ5pyI5YiKLmNzdg%3d%3d&icon=..csv",
-   "upd": "2025-03-20",
-   "desc": "彙編當月景氣概況集結成冊，包括：景氣概況新聞稿，景氣指標（包含領先、同時、落後指標）、對策信號及其構成項目之時間數列等",
-   "fields": "書名;日期;出版單位;出版週期;檔案連結"
-  },
-  {
-   "id": "55783",
-   "title": "兩岸經貿交流相關統計指標─中國大陸景氣指標：中國大陸工業及服務業用電量及成長率",
-   "org": "國家發展委員會",
-   "freq": "不定期更新",
-   "fmt": "CSV",
-   "lic": "政府資料開放授權條款",
-   "url": "https://ws.ndc.gov.tw/Download.ashx?u=LzAwMS9hZG1pbmlzdHJhdG9yLzEwL3JlbGZpbGUvMC85ODYyLzA3MDk5OGVkLTUzNDQtNDZjMi05ZjAyLTY5ODc3ODk5OTA1Ni5jc3Y%3d&n=5Lit5ZyL5aSn6Zm45bel5qWt5Y%2bK5pyN5YuZ5qWt55So6Zu76YePci5jc3Y%3d&icon=..c",
-   "upd": "2024-11-21",
-   "desc": "提供中國大陸及兩岸經貿往來之相關指標供社會大眾參考",
-   "fields": "年度;工業─用電量;工業─成長率;服務業─用電量;服務業─成長率"
-  },
-  {
-   "id": "6099",
-   "title": "景氣指標及燈號",
-   "org": "國家發展委員會",
-   "freq": "每1月",
-   "fmt": "ZIP",
-   "lic": "政府資料開放授權條款",
-   "url": "https://ws.ndc.gov.tw/Download.ashx?u=LzAwMS9hZG1pbmlzdHJhdG9yLzEwL3JlbGZpbGUvNTc4MS82MzkyL2VhMjM1YmQ5LWQwNTItNGE2OS1hYmZjLWQ1Yzc4NWQzZDBlMi56aXA%3d&n=5pmv5rCj5oyH5qiZ5Y%2bK54eI6JmfLnppcA%3d%3d&icon=.zip",
-   "upd": "2024-08-28",
-   "desc": "景氣指標、景氣對策信號(燈號及綜合判斷分數)",
-   "fields": "Date;工業生產指數(Index2021=100);電力(企業)總用電量(十億度);製造業銷售量指數(Index2021=100);批發;零售及餐飲業營業額(十億元);工業及服務業加班工時(小時);海關出口值(十億元);機械及電機設備進口值(十億元);領先指標綜合指數;領先指標不含趨勢指數;同時指標綜合指數;同時指標不含趨勢指數;落後指標綜合指數;落後指標不含趨勢指數;景氣對策信號綜合分數;景氣"
-  }
- ],
- "want": {
-  "6053": {
-   "title": "海關進出口貿易統計",
-   "url": "https://opendata.customs.gov.tw/data/6053/csv.csv",
-   "fields": "年度;月份;出口總值(新臺幣千元);出口(新臺幣千元);復出口(新臺幣千元);進口總值(新臺幣千元);進口(新臺幣千元);復進口(新臺幣千元);出入超(新臺幣千元);備註",
-   "desc": "提供海關進出口通關貨物統計數值。",
-   "freq": "每1月",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_status": 200,
-   "sample_len": 14496,
-   "sample": "\"年度\",\"月份\",\"出口總值(新臺幣千元)\",\"出口(新臺幣千元)\",\"復出口(新臺幣千元)\",\"進口總值(新臺幣千元)\",\"進口(新臺幣千元)\",\"復進口(新臺幣千元)\",\"出入超(新臺幣千元)\",\"備註\"\r\n\"115\",\"7\",\"2409367504\",\"2182761519\",\"226605985\",\"1859295290\",\"1857187195\",\"2108095\",\"550072214\",\r\n\"115\",\"6\",\"2356625115\",\"2116180186\",\"240444929\",\"1972449590\",\"1969849136\",\"2600454\",\"384175525\",\r\n\"115\",\"5\",\"2475945706\",\"2269531138\",\"206414568\",\"1910107175\",\"1907592863\",\"2514312\",\"565838531\",\r\n\"115\",\"4\",\"2153671224\",\"1965063010\",\"188608214\",\"1696534497\",\"1694277358\",\"2257139\",\"457136727\",\r\n\"115\",\"3\",\"2536953556\",\"2335712753\",\"201240803\",\"1863945507\",\"1861028714\",\"2916793\",\"673008049\",\r\n\"115\",\"2\",\"1571858381\",\"1437414655\",\"134443726\",\"1169216458\",\"1167578312\",\"1638146\",\"402641923\",\r\n\"115\",\"1\",\"2073372196\",\"1907999210\",\"165372986\",\"1476923766\",\"1474908075\",\"201"
-  },
-  "161861": {
-   "title": "營利事業銷售額-按地區別及稅務行業別分(112年~116年)",
-   "url": "https://web02.mof.gov.tw/njswww/webMain.aspx?sys=220&ym=11200&ymt=11212&kind=21&type=6&funid=i0520&cycle=41&outmode=12&compmode=00&outkind=3&fldspc=23;23;&codspc0=0;358;&utf=1;https://web02.mof.gov.tw/njswww/webMain.aspx?sys=220&ym=11300&ymt=11312&kind=21&type=6&funid=i0520&cycle=41&outmode=12&compmode=00&outkind=3&fldspc=23;23;&codspc0=0;358;&utf=1;https://web02.mof.gov.tw/njswww/webMain.aspx?sys=220&ym=11400&ymt=11412&kind=21&type=6&funid=i0520&cycle=41&outmode=12&compmode=00&outkind=3&fldspc=23;23;&codspc0=0;358;&utf=1;https://web02.mof.gov.tw/njswww/webMain.aspx?sys=220&ym=11500&ymt=11512&kind=21&type=6&funid=i0520&cycle=41&outmode=12&compmode=00&outkind=3&fldspc=23;23;&codspc0=0;358;&utf=1",
-   "fields": "項目及地區別;總計/銷售額;新北市/銷售額;臺北市/銷售額;桃園市/銷售額;臺中市/銷售額;臺南市/銷售額;高雄市/銷售額;宜蘭縣/銷售額;新竹縣/銷售額;苗栗縣/銷售額;彰化縣/銷售額;南投縣/銷售額;雲林縣/銷售額;嘉義縣/銷售額;屏東縣/銷售額;臺東縣/銷售額;花蓮縣/銷售額;澎湖縣/銷售額;基隆市/銷售額;新竹市/銷售額;嘉義市/銷售額;金門縣/銷售額;連江縣/銷售額",
-   "desc": "以全國營利事業各類營業人營業銷售額為統計範圍，按地區別及第9次稅務行業標準分類之行業別進行小計，再依照日曆年合計。",
-   "freq": "每1月",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_status": 200,
-   "sample_len": 444,
-   "sample": "\"項目及地區別\",\"總計/家數\"\r\n\"112年/ 總計\",1647005\r\n\"112年 1月/ 總計\",1596790\r\n\"112年 2月/ 總計\",1599813\r\n\"112年 3月/ 總計\",1604789\r\n\"112年 4月/ 總計\",1610844\r\n\"112年 5月/ 總計\",1615568\r\n\"112年 6月/ 總計\",1619817\r\n\"112年 7月/ 總計\",1622629\r\n\"112年 8月/ 總計\",1627678\r\n\"112年 9月/ 總計\",1632473\r\n\"112年 10月/ 總計\",1638438\r\n\"112年 11月/ 總計\",1644084\r\n\"112年 12月/ 總計\",1647005\r\n\r\n"
-  },
-  "40331": {
-   "title": "農產品進口貿易重量_CCC代碼",
-   "url": "https://data.moa.gov.tw/service/opendata/agrstatUnit.aspx?item_code=GA0410&dimension_group_code_1=GA01&dimension_group_code_2=XX32&IsTransData=1&UnitId=634;https://data.moa.gov.tw/service/opendata/agrstatUnit.aspx?item_code=GA0410&dimension_group_code_1=GA01&dimension_group_code_2=XX32&FOTT=CSV&IsTransData=1&UnitId=634;https://data.moa.gov.tw/service/opendata/agrstatUnit.aspx?item_code=GA0410&dimension_group_code_1=GA01&dimension_group_code_2=XX32&FOTT=Xml&IsTransData=1&UnitId=634",
-   "fields": "dname1(貨品號列代碼);dname2(國家代碼);date(年月份);value(數值);unit(單位)",
-   "desc": "提供資料包含：貨品號列代碼、國家代碼年、月份、數值、單位等欄位資料",
-   "freq": "每1月",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_status": 200,
-   "sample_len": 1566728,
-   "sample": "[\r\n  {\r\n    \"dname1\": \"烏魚，生鮮或冷藏(1021128刪除)\",\r\n    \"dname2\": \"希臘\",\r\n    \"date\": \"10007\",\r\n    \"value\": 12.000000000000,\r\n    \"unit\": \"公斤\"\r\n  },\r\n  {\r\n    \"dname1\": \"烏魚，生鮮或冷藏(1021128刪除)\",\r\n    \"dname2\": \"希臘\",\r\n    \"date\": \"100\",\r\n    \"value\": 81.000000000000,\r\n    \"unit\": \"公斤\"\r\n  },\r\n  {\r\n    \"dname1\": \"烏魚，生鮮或冷藏(1021128刪除)\",\r\n    \"dname2\": \"希臘\",\r\n    \"date\": \"09911\",\r\n    \"value\": 6.000000000000,\r\n    \"unit\": \"公斤\"\r\n  },\r\n  {\r\n    \"dname1\": \"烏魚，生鮮或冷藏(1021128刪除)\",\r\n    \"dname2\": \"希臘\",\r\n    \"date\": \"09910\",\r\n    \"value\": 24.000000000000,\r\n    \"unit\": \"公斤\"\r\n  },\r\n  {\r\n    \"dname1\": \"烏魚，生鮮或冷藏(1021128刪除)\",\r\n    \"dname2\": \"希臘\",\r\n    \"date\": \"09909\",\r\n    \"value\": 6.000000000000,\r\n    \"unit\": \"公斤\"\r\n  },\r\n  {\r\n    \"dname1\": \"烏魚，生鮮或冷藏(1021128刪"
-  },
-  "8938": {
-   "title": "食品業者登錄資料集",
-   "url": "https://data.fda.gov.tw/data/opendata/export/97/csv;https://data.fda.gov.tw/data/opendata/export/97/json;https://data.fda.gov.tw/data/opendata/export/97/xml",
-   "fields": "公司或商業登記名稱;公司統一編號;業者地址;食品業者登錄字號;登錄項目",
-   "desc": "藉由本資料集可查詢於食品業者登錄平台完成登錄之食品業者資訊。",
-   "freq": "每1月",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_status": 200,
-   "sample_len": 17276919,
-   "sample": "PK\u0003\u0004\u0014\u0000\b\b\b\u0000AE]\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\b\u0000\u0000\u000097_2.csvԽYo$ϖ\u001fOѸ\u000fƽ\u001aG\u0019\u001e\u0000C~\u0011`gl\f\u0006\u0001,Â^\u0004n}){lM$K7E`@C\u0015<DdFfd(vW,Qe3w22oo od\u0019Lo*~ηH}!<ÿJ5~i\u0001%hF\u001ad_\u0004g|X\u000bw!j-\u000b`A\u000e֢Sr\u000baBM\u001c\u000b߂90\u0012o\u0006[Ѧҙ|_45M\u001ds>j>jĿʓO\u000b99\u00138\u001byNSb!،7o/w^{Ye ·\u0012\"ߟ\bI\u001b]kr\u0010̌P`)ؚG9ښ\f\u001e(dX\u000e6(3{zzV\u0005A\u0007!\u001f\u0003\u0005BI1:y6v\u0001r\u001f\u0002u^\u00037oboU\u0002DwZ8~4G^DSMxFơCkB\u00138U\u0013\u0018zվ\\翿g[/I)\\tFa=\u0006\u0013l-F\u001f~{\u0017\u0019ln-S`cot3\fp\u0002:~\u00015\f^j=S$vH)\u0005\u0004OK\u0010Jx1>lOo\u0000Ҽλ\u0004\u00156\t^2{3U/C׉ܿ\u0002U̝02w5S5(KR\u000b\nb؅o럏_5*hq\u0016\u0011E<5a\u0010\u0005(*\fݲt]y\u0007X|\u001bzF@mۺ)7\u000e#?'SZ8Gp}SSt&{\u0007`\u0011u\u0012Nߚ_0\u00021eʃ24\"t\u000b߀F\u0017\u00025<t\u001bg{sm\u001d>s\u000b\u0013t|{E\u0005zt]F\u000b\u001anop"
-  },
-  "16461": {
-   "title": "全國立案短期補習班基本資料",
-   "url": "https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=24;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=20;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=21;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=33;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=35;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=36;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=37;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=42;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=47;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=55;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=49;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=52;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=53;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=62;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=70;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=87;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=39;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=38;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=89;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=69;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=82;https://bsb.kh.edu.tw/afterschool/opendata/afterschool_json.jsp?city=83",
-   "fields": "地區縣市;短期補習班名稱;主管機關文件單位代碼;電子郵件;短期補習班類別;地址;立案時間;各地短期補習班數量",
-   "desc": "為提升全國各立案短期補習班之管理，藉由資訊公開加強各短其補習補之品質，並充分提供民眾（含學生、家長）知的訊息，掌握選擇合法立案之短期補習班訊息，避免未立案者影響民眾（含學生、家長）權益",
-   "freq": "每1日",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_err": "ConnectionError(MaxRetryError('HTTPSConnectionPool(host=\\'bsb.kh.edu.tw\\', port=443): Max retries exceeded with url: /afterschool/opendata/afterschool_json.jsp?city=24 (Caused by NewConnectionError(\"H"
-  },
-  "7296": {
-   "title": "毛豬交易行情",
-   "url": "https://data.moa.gov.tw/Service/OpenData/FromM/AnimalTransData.aspx?IsTransData=1&UnitId=026;https://data.moa.gov.tw/Service/OpenData/FromM/AnimalTransData.aspx?FOTT=CSV&IsTransData=1&UnitId=026;https://data.moa.gov.tw/Service/OpenData/FromM/AnimalTransData.aspx?FOTT=Xml&IsTransData=1&UnitId=026",
-   "fields": "交易日期(交易日期);市場名稱(市場名稱);成交頭數-總數(成交頭數-總數(頭));成交頭數-平均重量(成交頭數-平均重量(公斤));成交頭數-平均價格(成交頭數-平均價格(元/公斤));規格豬-頭數(規格豬-頭數(頭));規格豬-平均重量(規格豬-平均重量(公斤));規格豬-平均價格(規格豬-平均價格(元/公斤));95(含)-115(含)-頭數(95(含)-115(含)-頭數(頭));95(含)-115(含)-平均重量(95(含)-115(含)-平均重量(公斤));95(含)-115(含)-平均價格(95(含)-115(含)-平均價格(元/公斤));75(含)-95(不含)-頭數(75(含)-95(不含)-頭數(頭));75(含)-95(不含)-平均重量(75(含)-95(不含)-平均重量(公斤));75(含)-95(不含)-平均價格(75(含)-95(不含)-平均價格(元/公斤));",
-   "desc": "提供資料包含：交易日期、市場名稱、成交頭數頭數及價格等欄位資料。",
-   "freq": "每1天",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_status": 200,
-   "sample_len": 15718571,
-   "sample": "[\r\n  {\r\n    \"交易日期\": \"1151010\",\r\n    \"市場名稱\": \"花蓮縣\",\r\n    \"成交頭數-總數\": 281,\r\n    \"成交頭數-平均重量\": 131.80,\r\n    \"成交頭數-平均價格\": 108.13,\r\n    \"規格豬-頭數\": 278,\r\n    \"規格豬-平均重量\": 132.26,\r\n    \"規格豬-平均價格\": 108.28,\r\n    \"95(含)-115(含)-頭數\": 34,\r\n    \"95(含)-115(含)-平均重量\": 110.18,\r\n    \"95(含)-115(含)-平均價格\": 102.15,\r\n    \"75(含)-95(不含)-頭數\": 3,\r\n    \"75(含)-95(不含)-平均重量\": 89.00,\r\n    \"75(含)-95(不含)-平均價格\": 87.35,\r\n    \"115(含)-135(不含)-頭數\": 135,\r\n    \"115(含)-135(不含)-平均重量\": 125.98,\r\n    \"115(含)-135(不含)-平均價格\": 107.36,\r\n    \"75公斤以下-頭數\": 0,\r\n    \"75公斤以下-平均重量\": 0.00,\r\n    \"75公斤以下-平均價格\": 0.00,\r\n    \"淘汰種豬-頭數\": 0,\r\n    \"淘汰種豬-平均重量\": 0.00,\r\n    \"淘汰"
-  },
-  "7536": {
-   "title": "家禽交易行情(白肉雞/雞蛋)",
-   "url": "https://data.moa.gov.tw/Service/OpenData/FromM/PoultryTransBoiledChickenData.aspx?IsTransData=1&UnitId=056;https://data.moa.gov.tw/Service/OpenData/FromM/PoultryTransBoiledChickenData.aspx?FOTT=CSV&IsTransData=1&UnitId=056;https://data.moa.gov.tw/Service/OpenData/FromM/PoultryTransBoiledChickenData.aspx?FOTT=Xml&IsTransData=1&UnitId=056",
-   "fields": "日期(日期);農曆(農曆);白肉雞(2.0Kg以上)(白肉雞(2.0Kg以上) (元/台斤));白肉雞(1.75-1.95Kg)(白肉雞(1.75-1.95Kg) (元/台斤));白肉雞(門市價高屏)(白肉雞(門市價高屏) (元/台斤));雞蛋(產地價)(雞蛋(產地價)(元/台斤));雞蛋(大運輸價)(雞蛋(大運輸價)(元/台斤))",
-   "desc": "提供資料包含：日期、農曆、白肉雞（2.0Kg以上）、白肉雞（1.75-1.95Kg）、白肉雞（門市價高屏）、雞蛋(產地價)、雞蛋(大運輸價)等欄位資料。",
-   "freq": "每1天",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_status": 200,
-   "sample_len": 1487562,
-   "sample": "[\r\n  {\r\n    \"日期\": \"2026/10/07\",\r\n    \"農曆\": \"廿七\",\r\n    \"白肉雞(2.0Kg以上)\": \"35.0\",\r\n    \"白肉雞(1.75-1.95Kg)\": \"35.0\",\r\n    \"白肉雞(門市價高屏)\": \"36.5\",\r\n    \"雞蛋(產地價)\": \"33.5\",\r\n    \"雞蛋(大運輸價)\": \"36.5\"\r\n  },\r\n  {\r\n    \"日期\": \"2026/10/06\",\r\n    \"農曆\": \"廿六\",\r\n    \"白肉雞(2.0Kg以上)\": \"35.0\",\r\n    \"白肉雞(1.75-1.95Kg)\": \"35.0\",\r\n    \"白肉雞(門市價高屏)\": \"36.5\",\r\n    \"雞蛋(產地價)\": \"33.5\",\r\n    \"雞蛋(大運輸價)\": \"36.5\"\r\n  },\r\n  {\r\n    \"日期\": \"2026/10/05\",\r\n    \"農曆\": \"廿五\",\r\n    \"白肉雞(2.0Kg以上)\": \"35.0\",\r\n    \"白肉雞(1.75-1.95Kg)\": \"35.0\",\r\n    \"白肉雞(門市價高屏)\": \"36.5\",\r\n    \"雞蛋(產地價)\": \"35.5\",\r\n    \"雞蛋(大運輸價)\": \"38.5\"\r\n  },\r\n  {\r\n    \"日期\": \"2026/10/04\",\r\n    \"農曆\": \"廿四\",\r\n    \"白肉雞(2.0Kg以上)\": \"35.0\",\r\n    \"白肉雞(1.75-1.95Kg)\": \""
-  },
-  "14584": {
-   "title": "急診傳染病監測統計-類流感",
-   "url": "https://od.cdc.gov.tw/eic/RODS_Influenza_like_illness.csv;https://od.cdc.gov.tw/eic/RODS_Influenza_like_illness.json",
-   "fields": "年;週;年齡別;縣市;類流感急診就診人次;縣市別代碼",
-   "desc": "各縣市、年齡別及年週之類流感急診就診人次統計表",
-   "freq": "每1日",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='od.cdc.gov.tw', port=443): Max retries exceeded with url: /eic/RODS_Influenza_like_illness.csv (Caused by ConnectTimeoutError(<HTTPSConnection(h"
-  },
-  "14593": {
-   "title": "健保門診及住院就診人次統計-類流感",
-   "url": "https://od.cdc.gov.tw/eic/NHI_Influenza_like_illness.csv;https://od.cdc.gov.tw/eic/NHI_Influenza_like_illness.json",
-   "fields": "年;週;就診類別;年齡別;縣市;類流感健保就診人次;健保就診總人次;縣市別代碼",
-   "desc": "各縣市、年齡別、年週之類流感門診及住院就診人次統計表",
-   "freq": "每1日",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_err": "ConnectTimeout(MaxRetryError(\"HTTPSConnectionPool(host='od.cdc.gov.tw', port=443): Max retries exceeded with url: /eic/NHI_Influenza_like_illness.csv (Caused by ConnectTimeoutError(<HTTPSConnection(ho"
-  },
-  "6845": {
-   "title": "外銷訂單",
-   "url": "https://service.moea.gov.tw/EE520/opendata/b.csv",
-   "fields": "統計項目;資料期(民國年);統計值(美元);計量單位(美元);統計值(新台幣);計量單位(新台幣)",
-   "desc": "提供外銷接單變動之統計\r\n106年4月起停止發布實質指數",
-   "freq": "不定期更新",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_status": 200,
-   "sample_len": 33883,
-   "sample": "統計項目,資料期(民國年),統計值(美元),計量單位(美元),統計值(新台幣),計量單位(新台幣)\r\n外銷訂單金額,07301,2627,百萬美元,1056,新臺幣億元\r\n外銷訂單金額,07302,2321,百萬美元,933,新臺幣億元\r\n外銷訂單金額,07303,2821,百萬美元,1129,新臺幣億元\r\n外銷訂單金額,07304,2797,百萬美元,1112,新臺幣億元\r\n外銷訂單金額,07305,2879,百萬美元,1142,新臺幣億元\r\n外銷訂單金額,07306,2759,百萬美元,1098,新臺幣億元\r\n外銷訂單金額,07307,2776,百萬美元,1094,新臺幣億元\r\n外銷訂單金額,07308,2741,百萬美元,1070,新臺幣億元\r\n外銷訂單金額,07309,2507,百萬美元,980,新臺幣億元\r\n外銷訂單金額,07310,2568,百萬美元,1006,新臺幣億元\r\n外銷訂單金額,07311,2534,百萬美元,997,新臺幣億元\r\n外銷訂單金額,07312,2446,百萬美元,965,新臺幣億元\r\n"
-  },
-  "6099": {
-   "title": "景氣指標及燈號",
-   "url": "https://ws.ndc.gov.tw/Download.ashx?u=LzAwMS9hZG1pbmlzdHJhdG9yLzEwL3JlbGZpbGUvNTc4MS82MzkyL2VhMjM1YmQ5LWQwNTItNGE2OS1hYmZjLWQ1Yzc4NWQzZDBlMi56aXA%3d&n=5pmv5rCj5oyH5qiZ5Y%2bK54eI6JmfLnppcA%3d%3d&icon=.zip",
-   "fields": "Date;工業生產指數(Index2021=100);電力(企業)總用電量(十億度);製造業銷售量指數(Index2021=100);批發;零售及餐飲業營業額(十億元);工業及服務業加班工時(小時);海關出口值(十億元);機械及電機設備進口值(十億元);領先指標綜合指數;領先指標不含趨勢指數;同時指標綜合指數;同時指標不含趨勢指數;落後指標綜合指數;落後指標不含趨勢指數;景氣對策信號綜合分數;景氣對策信號;貨幣總計數M1B(百萬元);股價指數(Index1966=100);失業率(%);製造業單位產出勞動成本指數(2021=100);五大銀行新承做放款平均利率(年息百分比);全體金融機構放款與投資(10億元);製造業存貨價值(千元);外銷訂單動向指數(以家數計);工業及服務業受僱員工淨進入率(%);建築物開工樓地板面積(住宅類住宅;商業辦公;工業倉儲)(千平方公尺);名目半導體設備進口(新",
-   "desc": "景氣指標、景氣對策信號(燈號及綜合判斷分數)",
-   "freq": "每1月",
-   "lic": "政府資料開放授權條款-第1版",
-   "sample_status": 200,
-   "sample_len": 71400,
-   "sample": "PK\u0003\u0004\u0014\u0000\b\u0000\b\u0000^%R\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\f\u0000 \u0000manifest.csvux\u000b\u0000\u0001\u0004\u0000\u0000\u0000\u0000\u0004\u0000\u0000\u0000\u0000UT\r\u0000\u0007\u0005_0j0jKM)NHMII-N.,(z:̦g=V|YǄ\u000bZ^\\\\\u0006ՠW\r.I^g3?۰\u0018\"y{ǋŭ\u0000\fħ\u001bzdB\u0018.'\u0013\u0012\u0012^\u0017\u0013>׃?d%r\u001dƫ\u0006$/\u0017\u0000PK\u0007\b\u0014#U\u0000\u0000\u0000\u0001\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000\u0019ZdX\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000#\u0000 \u0000schema-同時指標構成項目.csvux\u000b\u0000\u0001\u0004\u0000\u0000\u0000\u0000\u0004\u0000\u0000\u0000\u0000UT\r\u0000\u0007\"=e0j0jJ@\u0010ĞR͋Q0\u0007ǤVѰ\u001eR$XH)hj҇|\u0005g\u0004\u0015xo>b-%}lX^\u0013\u0007mO$añ`a\u001cvӖj7MAnD\u0018\u0017[\u0012Ћ\u000eCO\u001a\u0010e8\u0012n\u0015:#!|$`[$IŋWP>]c:y\t+n\u001cg,NT\u0000.#>#-3G=\u0003fbw)Ǜ!xK)8寈\u001fy!Q\u0019\u000b:o\u0019\"t*\u0007PK\u0007\b}ES\t\u0001\u0000\u0000]\u0002\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000ÊL\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 \u0000 \u0000schema-景氣指標與燈號.csvux\u000b\u0000\u0001\u0004\u0000\u0000\u0000\u0000\u0004\u0000\u0000\u0000\u0000UT\r\u0000\u0007>U[0j0j{{^bnNIfIN*/KbI\u000e\u0002r_.YO\u00153ot\u0002=u\u0007P\tN)4mOv>Ŷ\u0015O\u0017aՌE\u0001Ј\u0013zlj3N)4mXm&\u0000hċ\t{j3N)4mXm&\u0000hĳmXtCӞ_b|%O; F\u0010P\bڀJ\u0001PK\u0007\b\u0006[\u0000\u0000\u0000\u0001\u0000\u0000PK\u0003\u0004\u0014\u0000\b\b\b\u0000ZdX\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
-  }
- }
+ "p_policy": {
+  "drafts": [
+   {
+    "title": "預告「消防機具器材及設備認可實施辦法」第3條修正草案",
+    "gov": "內政部",
+    "under": "內政部消防署",
+    "pub": "2026-10-08",
+    "due": "2026-12-07",
+    "kw": "消防系統(消防設施，消防設備);認證認可;標示;型式認可;廠商;登錄",
+    "topic": "消費與食品",
+    "url": "https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg032187/ch02/type3/gov10/num2/Eg.htm"
+   },
+   {
+    "title": "預告「移動污染源燃料成分管制標準」第2條、第3條、第4條修正草案",
+    "gov": "環境部",
+    "under": "環境部",
+    "pub": "2026-10-08",
+    "due": "2026-12-07",
+    "kw": "汽油;柴油;成分分析;移動污染源;空氣污染防制法;品質管制;管制措施(限制措施);燃料",
+    "topic": "能源與環境",
+    "url": "https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg032187/ch07/type3/gov60/num27/Eg.htm"
+   },
+   {
+    "title": "預告「購物用塑膠袋限制使用對象、實施方式及實施日期」修正草案",
+    "gov": "環境部",
+    "under": "環境部",
+    "pub": "2026-10-08",
+    "due": "2026-10-22",
+    "kw": "塑膠袋;專用垃圾袋;管制措施(限制措施);資源循環推動法(資源回收再利用法)",
+    "topic": "能源與環境",
+    "url": "https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg032187/ch07/type3/gov60/num28/Eg.htm"
+   },
+   {
+    "title": "預告「限制含聚氯乙烯之平板包材、公告應回收容器及非平板類免洗餐具不得製造、輸入及販賣」公告事項第1項修正草案",
+    "gov": "環境部",
+    "under": "環境部",
+    "pub": "2026-10-08",
+    "due": "2026-10-22",
+    "kw": "聚氯乙烯(PVC);塑膠;免洗餐具;包裝廢棄物管理;限制進口(禁止輸入);管制措施(限制措施);回收;塑膠容器;資源循環",
+    "topic": "能源與環境",
+    "url": "https://gazette.nat.gov.tw/EG_FileManager/eguploadpub/eg032187/ch07/type3/gov60/num29/Eg.htm"
+   }
+  ],
+  "open_n": 4,
+  "d30_n": 4,
+  "d_topics": [
+   [
+    "能源與環境",
+    3
+   ],
+   [
+    "消費與食品",
+    1
+   ]
+  ],
+  "since": "2026-10-08",
+  "ideas_hot": [
+   {
+    "k": "b75e5a18-7f4",
+    "title": "應將「購票附加費用」納入《藝文表演票券定型化契約》規範，禁止業者外加轉嫁消費者，保障消費者權利",
+    "sup": 6718,
+    "th": 5000,
+    "pub": "2026-08-12",
+    "url": "https://join.gov.tw/idea/detail/b75e5a18-7f4f-4fd3-b4b1-043ce17518de",
+    "topic": "消費與食品",
+    "chg7": null
+   },
+   {
+    "k": "6ad79fdd-0f8",
+    "title": "強化婚姻依親防詐、親屬依親審查及公共資源負擔制度",
+    "sup": 6298,
+    "th": 5000,
+    "pub": "2026-08-13",
+    "url": "https://join.gov.tw/idea/detail/6ad79fdd-0f80-44cd-b37d-d6353dd47f94",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "cdebcaee-682",
+    "title": "取消教師學期中例假日及國定假日『非因公出國』強制報備制度",
+    "sup": 5491,
+    "th": 5000,
+    "pub": "2026-08-25",
+    "url": "https://join.gov.tw/idea/detail/cdebcaee-682f-46f2-872e-98a07e43ee64",
+    "topic": "觀光與文化",
+    "chg7": null
+   },
+   {
+    "k": "a54af383-3ee",
+    "title": "建請政府研擬並增設專任輔導教師之「輔導職務加給」",
+    "sup": 5376,
+    "th": 5000,
+    "pub": "2026-08-11",
+    "url": "https://join.gov.tw/idea/detail/a54af383-3ee9-4338-9990-e17468090164",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "7badb782-28e",
+    "title": "落實女性生育正義，全面廢除刑法墮胎罪章，修正刑法重傷定義與優生保健法",
+    "sup": 5243,
+    "th": 5000,
+    "pub": "2026-08-19",
+    "url": "https://join.gov.tw/idea/detail/7badb782-28ea-440a-a8eb-2806a8ba3437",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "f80d3ed2-951",
+    "title": "規範商業廣告與電商平臺使用 AI 生成圖片作為商品圖之機制，以保障消費者權益",
+    "sup": 3405,
+    "th": 5000,
+    "pub": "2026-08-11",
+    "url": "https://join.gov.tw/idea/detail/f80d3ed2-9511-4f79-ab0e-7da8f3c2bcfb",
+    "topic": "消費與食品",
+    "chg7": null
+   },
+   {
+    "k": "1e54e299-4dc",
+    "title": "「拿刀砍人的人死了，徒手反擊的人卻可能坐牢？」——全面放寬正當防衛，保障人民活下來的權利",
+    "sup": 2616,
+    "th": 5000,
+    "pub": "2026-08-11",
+    "url": "https://join.gov.tw/idea/detail/1e54e299-4dc8-4615-85ac-fa80cc05bd00",
+    "topic": "其他",
+    "chg7": null
+   },
+   {
+    "k": "7d839a76-dfb",
+    "title": "幼兒園師生比不能再等，還給孩子安全上學的環境",
+    "sup": 2406,
+    "th": 5000,
+    "pub": "2026-09-06",
+    "url": "https://join.gov.tw/idea/detail/7d839a76-dfb3-4906-bc43-4634c2a48b75",
+    "topic": "教育與勞動",
+    "chg7": null
+   },
+   {
+    "k": "3f8d6e57-a24",
+    "title": "停止「全民偷拍」！廢除民眾交通檢舉，回歸專注駕駛與防禦安全",
+    "sup": 1835,
+    "th": 5000,
+    "pub": "2026-09-14",
+    "url": "https://join.gov.tw/idea/detail/3f8d6e57-a246-47ef-8fe1-d3d03e1ae87e",
+    "topic": "交通與移動",
+    "chg7": null
+   },
+   {
+    "k": "e8432817-659",
+    "title": "推動全國設置幼兒園監視錄影設備及統一標準，建構親師生安全保障機制",
+    "sup": 1378,
+    "th": 5000,
+    "pub": "2026-08-24",
+    "url": "https://join.gov.tw/idea/detail/e8432817-6598-4789-bc10-b5cbe2ee3105",
+    "topic": "數位與 AI",
+    "chg7": null
+   }
+  ],
+  "ideas_passed": [
+   {
+    "k": "cdebcaee-682",
+    "title": "取消教師學期中例假日及國定假日『非因公出國』強制報備制度",
+    "sup": 5491,
+    "th": 5000,
+    "pub": "2026-08-25",
+    "url": "https://join.gov.tw/idea/detail/cdebcaee-682f-46f2-872e-98a07e43ee64",
+    "topic": "觀光與文化",
+    "chg7": null
+   },
+   {
+    "k": "7badb782-28e",
+    "title": "落實女性生育正義，全面廢除刑法墮胎罪章，修正刑法重傷定義與優生保健法",
+    "sup": 5243,
+    "th": 5000,
+    "pub": "2026-08-19",
+    "url": "https://join.gov.tw/idea/detail/7badb782-28ea-440a-a8eb-2806a8ba3437",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "6ad79fdd-0f8",
+    "title": "強化婚姻依親防詐、親屬依親審查及公共資源負擔制度",
+    "sup": 6298,
+    "th": 5000,
+    "pub": "2026-08-13",
+    "url": "https://join.gov.tw/idea/detail/6ad79fdd-0f80-44cd-b37d-d6353dd47f94",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "b75e5a18-7f4",
+    "title": "應將「購票附加費用」納入《藝文表演票券定型化契約》規範，禁止業者外加轉嫁消費者，保障消費者權利",
+    "sup": 6718,
+    "th": 5000,
+    "pub": "2026-08-12",
+    "url": "https://join.gov.tw/idea/detail/b75e5a18-7f4f-4fd3-b4b1-043ce17518de",
+    "topic": "消費與食品",
+    "chg7": null
+   },
+   {
+    "k": "a54af383-3ee",
+    "title": "建請政府研擬並增設專任輔導教師之「輔導職務加給」",
+    "sup": 5376,
+    "th": 5000,
+    "pub": "2026-08-11",
+    "url": "https://join.gov.tw/idea/detail/a54af383-3ee9-4338-9990-e17468090164",
+    "topic": "健康與照護",
+    "chg7": null
+   },
+   {
+    "k": "fa34a2b4-915",
+    "title": "擬定非台籍人士若要享有健保，需依照本國國民標準繳清從出生至今的健保費",
+    "sup": 5430,
+    "th": 5000,
+    "pub": "2026-08-07",
+    "url": "https://join.gov.tw/idea/detail/fa34a2b4-915d-4f9a-b7bb-a656b4c21b7c",
+    "topic": "健康與照護"
+   },
+   {
+    "k": "2a30e8d9-a4f",
+    "title": "規定採用實名制之活動僅得選用退票方案一或方案四",
+    "sup": 6485,
+    "th": 5000,
+    "pub": "2026-08-06",
+    "url": "https://join.gov.tw/idea/detail/2a30e8d9-a4fc-44b9-945c-4db6deb323d0",
+    "topic": "消費與食品"
+   },
+   {
+    "k": "c339671b-1d6",
+    "title": "建議檢討未成年人身心科就醫需家長陪同或同意之規定，建立青少年心理健康就醫的彈性制度。",
+    "sup": 5772,
+    "th": 5000,
+    "pub": "2026-08-01",
+    "url": "https://join.gov.tw/idea/detail/c339671b-1d62-4737-b361-2100a1921cc7",
+    "topic": "健康與照護"
+   }
+  ],
+  "ideas_n30": 293,
+  "i_topics": [
+   [
+    "其他",
+    53
+   ],
+   [
+    "消費與食品",
+    51
+   ],
+   [
+    "健康與照護",
+    50
+   ],
+   [
+    "教育與勞動",
+    48
+   ],
+   [
+    "交通與移動",
+    36
+   ],
+   [
+    "數位與 AI",
+    26
+   ],
+   [
+    "寵物與動物",
+    14
+   ],
+   [
+    "金融與支付",
+    7
+   ],
+   [
+    "居住與不動產",
+    7
+   ],
+   [
+    "能源與環境",
+    1
+   ]
+  ],
+  "consumer": [
+   "健康與照護",
+   "寵物與動物",
+   "居住與不動產",
+   "數位與 AI",
+   "消費與食品",
+   "觀光與文化"
+  ],
+  "src": "行政院公報資訊網 Open Data（法規命令草案預告）＋ 公共政策網路參與平臺「提點子」開放資料",
+  "errs": []
+ },
+ "p_policy_sec": 5,
+ "p_ipr": {
+  "tm": {
+   "latest": "2026-10-01",
+   "win": [
+    "2026-08-03",
+    "2026-10-01"
+   ],
+   "rows": [
+    {
+     "cls": 3,
+     "name": "美妝保養",
+     "n": 263,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 5,
+     "name": "藥品保健",
+     "n": 330,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 9,
+     "name": "科技軟體",
+     "n": 474,
+     "prev": 2,
+     "chg": null
+    },
+    {
+     "cls": 10,
+     "name": "醫療器材",
+     "n": 122,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 14,
+     "name": "珠寶鐘錶",
+     "n": 100,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 16,
+     "name": "文具印刷",
+     "n": 158,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 18,
+     "name": "皮件包袋",
+     "n": 133,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 20,
+     "name": "家具",
+     "n": 81,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 21,
+     "name": "居家廚具",
+     "n": 113,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 24,
+     "name": "寢具布品",
+     "n": 54,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 25,
+     "name": "服飾鞋帽",
+     "n": 251,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 28,
+     "name": "玩具運動",
+     "n": 167,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 29,
+     "name": "肉蛋乳品",
+     "n": 170,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 30,
+     "name": "烘焙咖啡茶",
+     "n": 326,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 31,
+     "name": "農產寵食",
+     "n": 79,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 32,
+     "name": "飲料",
+     "n": 76,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 33,
+     "name": "酒",
+     "n": 33,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 35,
+     "name": "廣告零售",
+     "n": 836,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 36,
+     "name": "金融不動產",
+     "n": 76,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 41,
+     "name": "教育娛樂",
+     "n": 411,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 42,
+     "name": "科技服務",
+     "n": 351,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 43,
+     "name": "餐飲住宿",
+     "n": 272,
+     "prev": 0,
+     "chg": null
+    },
+    {
+     "cls": 44,
+     "name": "醫療美容",
+     "n": 143,
+     "prev": 0,
+     "chg": null
+    }
+   ],
+   "total": 5867,
+   "new": [
+    {
+     "name": "蚌殼燒餅及圖",
+     "co": "唐門食品有限公司",
+     "date": "2026-10-01",
+     "cls": [
+      30
+     ]
+    },
+    {
+     "name": "MANTENGA及圖",
+     "co": "蔓杜尼雅企業有限公司",
+     "date": "2026-10-01",
+     "cls": [
+      20
+     ]
+    },
+    {
+     "name": "嬌釀",
+     "co": "香港商香港可妙兒酒業有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      33
+     ]
+    },
+    {
+     "name": "SATx5D",
+     "co": "德林股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      10
+     ]
+    },
+    {
+     "name": "生生生生生物科技有限公司標章(一)",
+     "co": "生生生生生物科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      31
+     ]
+    },
+    {
+     "name": "生生生生生物科技有限公司標章(二)",
+     "co": "生生生生生物科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "面對面",
+     "co": "面對面有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      30
+     ]
+    },
+    {
+     "name": "Gutzilla設計圖",
+     "co": "生展生物科技股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "HOLMAN",
+     "co": "信實環球（澳洲）有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9,
+      21
+     ]
+    },
+    {
+     "name": "KLARIS",
+     "co": "亞斯德科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      3
+     ]
+    },
+    {
+     "name": "絲沐羽",
+     "co": "拓普闐有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      3
+     ]
+    },
+    {
+     "name": "6 FOUNDATIONS IMMUNE +",
+     "co": "法商洛伊爾肯寧股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5,
+      31
+     ]
+    },
+    {
+     "name": "PRIMAORA",
+     "co": "亞斯德科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      3
+     ]
+    },
+    {
+     "name": "PICK ZONE及圖",
+     "co": "嘉翔運動股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      41
+     ]
+    },
+    {
+     "name": "33BODY",
+     "co": "安沛森生物科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "SARA智慧排程系統",
+     "co": "塔台智能網絡股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      42
+     ]
+    },
+    {
+     "name": "辰寶",
+     "co": "辰寶有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      14
+     ]
+    },
+    {
+     "name": "標章圖",
+     "co": "辰寶有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      14
+     ]
+    },
+    {
+     "name": "夏霖農場WAIPU MEADOWS及圖",
+     "co": "圖馬克農業科技有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      31
+     ]
+    },
+    {
+     "name": "NTInno NeoTech Innovation及設計圖",
+     "co": "日商新科智創股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      42
+     ]
+    },
+    {
+     "name": "YTB‧N-SMZ",
+     "co": "連亨企業有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "良研食品",
+     "co": "良研食品有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      29
+     ]
+    },
+    {
+     "name": "YTB‧SMZ",
+     "co": "連亨企業有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "Eberle",
+     "co": "連亨企業有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "INVISIX MEASURING SYSTEMS logo",
+     "co": "荷蘭商英維思測量系統有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9
+     ]
+    },
+    {
+     "name": "崩落之國",
+     "co": "日商ＣＹ遊戲公司",
+     "date": "2026-09-30",
+     "cls": [
+      9,
+      41
+     ]
+    },
+    {
+     "name": "旺旺食技研及圖",
+     "co": "宜蘭食品工業股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      32
+     ]
+    },
+    {
+     "name": "沙諾威",
+     "co": "鉅洋國際實業有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "INVISIX logo",
+     "co": "荷蘭商英維思測量系統有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9
+     ]
+    },
+    {
+     "name": "風順水吉",
+     "co": "風順水吉投資股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      16
+     ]
+    },
+    {
+     "name": "天吉地昌",
+     "co": "風順水吉投資股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      16
+     ]
+    },
+    {
+     "name": "清立堂",
+     "co": "風順水吉投資股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      16
+     ]
+    },
+    {
+     "name": "withmann",
+     "co": "韓商美好生活股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      21
+     ]
+    },
+    {
+     "name": "悅誠設計YUE&CO Design及圖",
+     "co": "悅誠室內裝修有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      42
+     ]
+    },
+    {
+     "name": "XUANGE",
+     "co": "大陸商知合行一技術（上海）有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9,
+      42
+     ]
+    },
+    {
+     "name": "玄戈 (XUANGE in Chinese)",
+     "co": "大陸商知合行一技術（上海）有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9,
+      42
+     ]
+    },
+    {
+     "name": "bedsonline+ Part of HBX Group ",
+     "co": "西班牙商豪特佰西班牙有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      43
+     ]
+    },
+    {
+     "name": "HAN•CHEF KOREAN CUISINE及圖",
+     "co": "南韓商韓國誇利有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      29,
+      30
+     ]
+    },
+    {
+     "name": "MBEyes",
+     "co": "聚積科技股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9
+     ]
+    },
+    {
+     "name": "FucoLite 及圖",
+     "co": "和司特股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "A-VMT",
+     "co": "愛爾蘭商斯坦福裝置有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      10
+     ]
+    },
+    {
+     "name": "Rhamnox",
+     "co": "日商江南化工股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "EVENTgo",
+     "co": "巨思文化股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35,
+      41
+     ]
+    },
+    {
+     "name": "NutriElevate",
+     "co": "芷宇創研有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9,
+      41,
+      44
+     ]
+    },
+    {
+     "name": "SENSONUM 森索姆設計字",
+     "co": "帕特農國際有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      9
+     ]
+    },
+    {
+     "name": "U-TAH RENEW",
+     "co": "美商諾信公司",
+     "date": "2026-09-30",
+     "cls": [
+      20
+     ]
+    },
+    {
+     "name": "OPTIMUM RENEW",
+     "co": "美商諾信公司",
+     "date": "2026-09-30",
+     "cls": [
+      20
+     ]
+    },
+    {
+     "name": "Hommage à Elisabeth Bouchet",
+     "co": "法國商天使城堡股份公司",
+     "date": "2026-09-30",
+     "cls": [
+      33
+     ]
+    },
+    {
+     "name": "NX ELESOL",
+     "co": "日通電策物流股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "AZCIELO",
+     "co": "瑞士商諾華公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "DURZIVOY",
+     "co": "瑞士商諾華公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "DEVICE",
+     "co": "瑞士商諾華公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "DEVICE 2",
+     "co": "瑞士商諾華公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "DEVICE 3",
+     "co": "瑞士商諾華公司",
+     "date": "2026-09-30",
+     "cls": [
+      5
+     ]
+    },
+    {
+     "name": "Goojob及圖",
+     "co": "鼎盛佳科技股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      35
+     ]
+    },
+    {
+     "name": "DUOOUD",
+     "co": "多優品牌管理私人有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      25,
+      35
+     ]
+    },
+    {
+     "name": "CLAUDE MEYLAN",
+     "co": "瑞士商克勞美隆手錶股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      14
+     ]
+    },
+    {
+     "name": "VERMACORE",
+     "co": "德商巴斯夫農業解決方案德國有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      5,
+      31
+     ]
+    },
+    {
+     "name": "MARIAFLORA",
+     "co": "義大利商瑪莉亞弗洛拉股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      24
+     ]
+    },
+    {
+     "name": "金銀花圖",
+     "co": "日商救心製藥股份有限公司",
+     "date": "2026-09-30",
+     "cls": [
+      30
+     ]
+    }
+   ]
+  },
+  "pat": {
+   "latest": "2026-10-01",
+   "win": [
+    "2026-09-02",
+    "2026-10-01"
+   ],
+   "rows": [
+    {
+     "name": "AI",
+     "n": 21,
+     "prev": 25,
+     "chg": -16,
+     "cons": true,
+     "top": [
+      [
+       "美商谷歌有限責任公司",
+       3
+      ],
+      [
+       "美商超越ＡＧＩ公司",
+       2
+      ],
+      [
+       "荷蘭商ＡＳＭＬ荷蘭公司",
+       2
+      ]
+     ]
+    },
+    {
+     "name": "電商與商業模式",
+     "n": 17,
+     "prev": 8,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "日商日本製鐵股份有限公司",
+       2
+      ],
+      [
+       "新加坡商光寶科技新加坡私人有限公司",
+       2
+      ],
+      [
+       "日商杰富意鋼鐵股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "醫療資訊",
+     "n": 4,
+     "prev": 0,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "日商三得利控股股份有限公司",
+       2
+      ],
+      [
+       "美商普羅基德尼有限責任公司",
+       1
+      ],
+      [
+       "日商江崎固力菓股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "美妝保養",
+     "n": 6,
+     "prev": 4,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "日商菲婷絲股份有限公司",
+       1
+      ],
+      [
+       "日商花王股份有限公司",
+       1
+      ],
+      [
+       "加拿大商艾爾科學股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "保健食品與藥",
+     "n": 198,
+     "prev": 85,
+     "chg": 133,
+     "cons": true,
+     "top": [
+      [
+       "日商小野藥品工業股份有限公司",
+       5
+      ],
+      [
+       "大陸商康百達（四川）生物醫藥科技有限公司",
+       5
+      ],
+      [
+       "加拿大商阿奎特斯醫療公司",
+       4
+      ]
+     ]
+    },
+    {
+     "name": "食品飲料",
+     "n": 8,
+     "prev": 6,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "日商朝日集團控股股份有限公司",
+       2
+      ],
+      [
+       "日商麒麟控股股份有限公司",
+       2
+      ],
+      [
+       "日商朝日啤酒股份有限公司",
+       2
+      ]
+     ]
+    },
+    {
+     "name": "醫療器材",
+     "n": 22,
+     "prev": 16,
+     "chg": 38,
+     "cons": false,
+     "top": [
+      [
+       "日商久光製藥股份有限公司",
+       4
+      ],
+      [
+       "瑞士商諾沃庫勒有限責任公司",
+       2
+      ],
+      [
+       "日商奧斯泛朗生物材料股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "居家與家具",
+     "n": 16,
+     "prev": 7,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "大陸商追覓創新科技（蘇州）有限公司",
+       4
+      ],
+      [
+       "新加坡商居佳國際有限公司",
+       2
+      ],
+      [
+       "瑞士商明門瑞士股份有限公司",
+       2
+      ]
+     ]
+    },
+    {
+     "name": "個人用品",
+     "n": 5,
+     "prev": 3,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "日商日本彈性體股份有限公司",
+       1
+      ],
+      [
+       "美商百美貼股份有限公司",
+       1
+      ],
+      [
+       "日商昂峰科技股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "寵物與農業",
+     "n": 14,
+     "prev": 6,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "新加坡商居佳國際有限公司",
+       7
+      ],
+      [
+       "日商三洋化成工業股份有限公司",
+       2
+      ],
+      [
+       "美商伊利諾工具工程公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "運動與遊戲",
+     "n": 4,
+     "prev": 5,
+     "chg": null,
+     "cons": true,
+     "top": [
+      [
+       "美商卡斯登製造公司",
+       2
+      ],
+      [
+       "美商盧伯利索先進材料有限公司",
+       1
+      ],
+      [
+       "日商雙葉電子工業股份有限公司",
+       1
+      ]
+     ]
+    },
+    {
+     "name": "車輛與移動",
+     "n": 37,
+     "prev": 35,
+     "chg": 6,
+     "cons": false,
+     "top": [
+      [
+       "瑞士商明門瑞士股份有限公司",
+       8
+      ],
+      [
+       "美商速聯有限責任公司",
+       6
+      ],
+      [
+       "南韓商ＬＧ新能源股份有限公司",
+       4
+      ]
+     ]
+    },
+    {
+     "name": "電池與能源",
+     "n": 47,
+     "prev": 23,
+     "chg": 104,
+     "cons": false,
+     "top": [
+      [
+       "南韓商ＬＧ新能源股份有限公司",
+       5
+      ],
+      [
+       "美商博隆能源股份有限公司",
+       3
+      ],
+      [
+       "日商艾普凌科有限公司",
+       3
+      ]
+     ]
+    },
+    {
+     "name": "半導體",
+     "n": 566,
+     "prev": 284,
+     "chg": 99,
+     "cons": false,
+     "top": [
+      [
+       "日商東京威力科創股份有限公司",
+       34
+      ],
+      [
+       "日商信越化學工業股份有限公司",
+       24
+      ],
+      [
+       "美商應用材料股份有限公司",
+       23
+      ]
+     ]
+    },
+    {
+     "name": "通訊",
+     "n": 75,
+     "prev": 83,
+     "chg": -10,
+     "cons": false,
+     "top": [
+      [
+       "美商高通公司",
+       16
+      ],
+      [
+       "聯發科技股份有限公司",
+       8
+      ],
+      [
+       "美商松下電器（美國）知識產權公司",
+       6
+      ]
+     ]
+    }
+   ],
+   "n": 1933
+  },
+  "src": "經濟部智慧財產局開放資料 API（商標註冊申請案、發明公開）",
+  "errs": []
+ },
+ "p_ipr_sec": 40
 }

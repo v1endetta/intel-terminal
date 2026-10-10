@@ -1,4 +1,4 @@
-import os, json, re, io, csv, requests
+import os, json, re, io, csv, zipfile, requests, collections
 os.makedirs("out25", exist_ok=True)
 H = {"User-Agent": "intel-terminal/1.0 (personal research; github.com/v1endetta/intel-terminal)"}
 rep = {}
@@ -6,47 +6,51 @@ r = requests.get("https://data.gov.tw/datasets/export/csv", headers=H, timeout=1
 rows = list(csv.reader(io.StringIO(r.content.decode("utf-8-sig", "ignore"))))
 hdr = rows[0]; idx = {h: i for i, h in enumerate(hdr)}
 def col(r, nm): return r[idx[nm]] if idx[nm] < len(r) else ""
-KW = {
- "捷運": r"捷運.*(OD|分時|各站|進出站|運量)",
- "1999": r"1999.*(案件|陳情|統計)|市民當家熱線",
- "結婚": r"結婚|離婚|出生數|出生人數|出生登記",
- "寵物": r"寵物.*(統計|數量|登記數)|犬貓.*(統計|數)",
- "用電": r"用電量|售電量",
- "減班": r"減班|無薪假|減少工時",
- "簽帳": r"簽帳|刷卡金額|信用卡.*(消費|業務統計)",
- "消保": r"消費者保護|消費爭議|消費糾紛|申訴.*統計",
- "建物": r"建物.*移轉|買賣移轉|建築物.*(執照|核發)|建造執照.*統計|使用執照.*統計",
- "出國": r"出國.*(目的地|人次|統計)|國人出國",
- "人口": r"人口.*(遷入|遷出|移動)",
- "營業登記": r"營業(登記|項目).*(新設|統計)|新設立.*(公司|商業)",
- "電子發票": r"電子發票.*(行業|消費|統計)",
- "旅宿": r"旅館業.*(營運|住用)|民宿.*(營運|住用)",
- "景氣": r"景氣(指標|對策)|領先指標|同時指標",
-}
-for k, pat in KW.items():
-    hits = []
-    for r in rows[1:]:
-        title = col(r, "資料集名稱")
-        if re.search(pat, title):
-            hits.append({"id": col(r, "資料集識別碼"), "title": title[:60], "org": col(r, "提供機關")[:20], "freq": col(r, "更新頻率")[:10],
-                         "fmt": col(r, "檔案格式")[:20], "lic": col(r, "授權方式")[:10], "url": col(r, "資料下載網址")[:220], "upd": col(r, "詮釋資料更新時間")[:10],
-                         "desc": col(r, "資料集描述")[:120], "fields": col(r, "主要欄位說明")[:200]})
-    hits.sort(key=lambda h: h["upd"], reverse=True)
-    rep["kw_" + k] = hits[:15]
-# fetch sample of key datasets found earlier
-want = {"6053": None, "161861": None, "40331": None, "8938": None, "16461": None, "7296": None, "7536": None, "14584": None, "14593": None, "6845": None, "6099": None}
-for r in rows[1:]:
-    i = col(r, "資料集識別碼")
-    if i in want:
-        want[i] = {"title": col(r, "資料集名稱"), "url": col(r, "資料下載網址"), "fields": col(r, "主要欄位說明")[:400], "desc": col(r, "資料集描述")[:200], "freq": col(r, "更新頻率"), "lic": col(r, "授權方式")}
-rep["want"] = want
-for i, w in want.items():
-    if not w: continue
-    u = w["url"].split(";")[0]
+meta = {col(r, "資料集識別碼"): r for r in rows[1:]}
+def urls(i): return [u for u in col(meta[i], "資料下載網址").split(";") if u] if i in meta else []
+def peek(name, u, n=1500):
     try:
-        x = requests.get(u, headers=H, timeout=90)
-        w["sample_status"] = x.status_code; w["sample_len"] = len(x.content)
-        w["sample"] = x.content[:900].decode("utf-8-sig", "ignore") if x.ok else None
+        x = requests.get(u, headers=H, timeout=120)
+        c = x.content
+        info = {"status": x.status_code, "len": len(c), "url": u[:200]}
+        if c[:2] == b"PK":
+            z = zipfile.ZipFile(io.BytesIO(c)); info["zip"] = [(f.filename, f.file_size) for f in z.infolist()][:12]
+            big = max(z.infolist(), key=lambda f: f.file_size); c = z.read(big); info["zip_pick"] = big.filename
+        s = c.decode("utf-8-sig", "ignore")
+        info["head"] = s[:n]; info["tail"] = s[-600:]
+        rep[name] = info
+        return s
     except Exception as e:
-        w["sample_err"] = repr(e)[:200]
+        rep[name] = {"err": repr(e)[:200], "url": u[:200]}
+# B 簽帳
+for i in ("175018", "38311", "25364"):
+    us = urls(i); rep["meta_" + i] = {"title": col(meta[i], "資料集名稱") if i in meta else None, "urls": us[:4], "fields": col(meta[i], "主要欄位說明")[:300] if i in meta else None}
+    if us: peek("s_" + i, us[0])
+# E 捷運
+i = "128506"; us = urls(i); rep["meta_" + i] = {"urls": us[:4], "fields": col(meta[i], "主要欄位說明")[:300], "desc": col(meta[i], "資料集描述")[:300]}
+if us: peek("s_128506", us[0], 2500)
+# G 銷售額 second link
+us = urls("161861"); rep["meta_161861"] = us[:4]
+for k, u in enumerate(us[:3]): peek(f"s_161861_{k}", u, 1200)
+# H 外銷訂單 tail, I 景氣 zip
+peek("s_6845", urls("6845")[0], 300)
+peek("s_6099", urls("6099")[0], 1200)
+# F 新設立
+for i in ("29260", "29254"):
+    us = urls(i); rep["meta_" + i] = us[:3]
+    if us: peek("s_" + i, us[0], 1200)
+# J 農產品進口：彙整品名，找寵物食品、咖啡、茶等
+s = peek("s_40331", urls("40331")[0], 300)
+if s:
+    try:
+        js = json.loads(s)
+        rep["imp_n"] = len(js)
+        rep["imp_dates"] = collections.Counter(x["date"] for x in js).most_common(5)
+        names = collections.Counter(x["dname1"] for x in js)
+        rep["imp_names_n"] = len(names)
+        rep["imp_hits"] = [n for n in names if re.search(r"狗|犬|貓|寵物|咖啡|茶|酪梨|燕麥|乳|起司|乾酪|巧克力|可可|堅果|藍莓|草莓|牛肉|鮭", n)][:80]
+    except Exception as e:
+        rep["imp_err"] = repr(e)[:200]
+# 台北 1999
+rep["tp1999"] = [(col(r, "資料集識別碼"), col(r, "資料集名稱")[:50], col(r, "更新頻率"), col(r, "詮釋資料更新時間")[:10]) for r in rows[1:] if re.search(r"1999", col(r, "資料集名稱")) and re.search(r"臺北|台北", col(r, "資料集名稱") + col(r, "提供機關"))][:15]
 json.dump(rep, open("out25/probe.json", "w"), ensure_ascii=False, indent=1)
