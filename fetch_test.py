@@ -18,6 +18,7 @@ import html as html_mod
 import sys
 import time
 import xml.etree.ElementTree as ET
+import zipfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -3988,6 +3989,357 @@ def p_fish():
     return {"date": date, "index": idx, "items": items, "rows": len(rows), "src": "農業部資料開放平臺 · 漁產品交易行情"}
 
 
+# ---------- 水果（同一個果菜批發資料源，台北一，量最大的 16 種） ----------
+def p_fruit():
+    today = NOW.astimezone(TPE).date()
+    roc = lambda d: f"{d.year - 1911}.{d.month:02d}.{d.day:02d}"  # noqa: E731
+    have = HISTORY.get("fruit", {}).get("香蕉") or []
+    since = today - timedelta(days=4 if len(have) >= 10 else 30)
+    rows, skip = [], 0
+    while skip < 30000:
+        got = gjson(MOA_VEG, params={"StartDate": roc(since), "EndDate": roc(today), "Market": "台北一", "$top": "3000", "$skip": str(skip)}, timeout=60)
+        rows += got
+        if len(got) < 3000:
+            break
+        skip += 3000
+    agg, vol = {}, {}
+    for r in rows:
+        if r.get("種類代碼") != "N05" or r.get("市場名稱") != "台北一":
+            continue
+        name = (r.get("作物名稱") or "").split("-")[0]
+        p, v = num(r.get("平均價")), num(r.get("交易量"))
+        m = re.match(r"(\d+)\.(\d+)\.(\d+)", r.get("交易日期") or "")
+        if not name or name == "其他" or not p or not v or not m:
+            continue
+        iso = f"{int(m.group(1)) + 1911}-{m.group(2)}-{m.group(3)}"
+        a = agg.setdefault((iso, name), [0.0, 0.0]); a[0] += p * v; a[1] += v
+        vol[name] = vol.get(name, 0) + v
+    top = [k for k, _ in sorted(vol.items(), key=lambda kv: -kv[1])[:30]]
+    for (iso, name), (amt, v) in agg.items():
+        if name in top:
+            hist_put("fruit", name, iso, round(amt / v, 1))
+    items, ratios = [], []
+    for name in top[:16]:
+        h = HISTORY.get("fruit", {}).get(name) or []
+        vals = [v for _, v in h[-15:]]
+        if not vals:
+            continue
+        cur, base = vals[-1], (sum(vals[:-1]) / len(vals[:-1]) if len(vals) > 1 else None)
+        chg = round(100 * (cur / base - 1), 1) if base else None
+        if chg is not None:
+            ratios.append(chg)
+        items.append({"name": name, "price": cur, "date": h[-1][0], "prev": vals[-2] if len(vals) > 1 else None, "chg14": chg, "spark": vals})
+    if not items:
+        raise RuntimeError(f"fruit: no rows ({len(rows)})")
+    idx = round(sorted(ratios)[len(ratios) // 2], 1) if ratios else None
+    items.sort(key=lambda x: -(x["chg14"] or 0))
+    return {"date": max(i["date"] for i in items), "index": idx, "items": items, "market": "台北一"}
+
+
+# ---------- 肉蛋（農業部毛豬交易行情、家禽交易行情） ----------
+def p_meat():
+    out = []
+    try:  # 毛豬：各市場依成交頭數加權
+        rows = gjson("https://data.moa.gov.tw/Service/OpenData/FromM/AnimalTransData.aspx", params={"IsTransData": "1", "UnitId": "026"}, timeout=120)
+        agg = {}
+        for r in rows:
+            m = re.match(r"(\d{3})(\d{2})(\d{2})$", str(r.get("交易日期") or ""))
+            n_, p = num(r.get("成交頭數-總數")), num(r.get("成交頭數-平均價格"))
+            if not m or not n_ or not p:
+                continue
+            iso = f"{int(m.group(1)) + 1911}-{m.group(2)}-{m.group(3)}"
+            a = agg.setdefault(iso, [0.0, 0.0]); a[0] += p * n_; a[1] += n_
+        for iso, (amt, n_) in agg.items():
+            hist_put("meat", "毛豬", iso, round(amt / n_, 1))
+    except Exception as e:  # noqa: BLE001
+        log("pig", e)
+    try:  # 白肉雞、雞蛋（元／台斤）
+        rows = gjson("https://data.moa.gov.tw/Service/OpenData/FromM/PoultryTransBoiledChickenData.aspx", params={"IsTransData": "1", "UnitId": "056"}, timeout=120)
+        for r in rows:
+            d = (r.get("日期") or "").replace("/", "-")
+            if not re.match(r"\d{4}-\d{2}-\d{2}$", d):
+                continue
+            for k, label in (("白肉雞(2.0Kg以上)", "白肉雞"), ("雞蛋(產地價)", "雞蛋產地價"), ("雞蛋(大運輸價)", "雞蛋批發價")):
+                v = num(r.get(k))
+                if v:
+                    hist_put("meat", label, d, v)
+    except Exception as e:  # noqa: BLE001
+        log("poultry", e)
+    units = {"毛豬": "元/公斤", "白肉雞": "元/台斤", "雞蛋產地價": "元/台斤", "雞蛋批發價": "元/台斤"}
+    for label, unit in units.items():
+        h = HISTORY.get("meat", {}).get(label) or []
+        vals = [v for _, v in h[-15:]]
+        if not vals:
+            continue
+        cur, base = vals[-1], (sum(vals[:-1]) / len(vals[:-1]) if len(vals) > 1 else None)
+        out.append({"name": label, "unit": unit, "price": cur, "date": h[-1][0], "prev": vals[-2] if len(vals) > 1 else None,
+                    "chg14": round(100 * (cur / base - 1), 1) if base else None, "spark": vals,
+                    "yoy": next((round(100 * (cur / v - 1), 1) for d, v in reversed(h) if d <= (date_from(h[-1][0]) - timedelta(days=365)).isoformat()), None)})
+    if not out:
+        raise RuntimeError("meat: nothing")
+    return {"date": max(i["date"] for i in out), "items": out}
+
+
+def date_from(iso):
+    return datetime.strptime(iso[:10], "%Y-%m-%d").date()
+
+
+# ---------- 信用卡各類簽帳（聯合信用卡處理中心，金管會開放資料，2014 起每月） ----------
+def p_cards():
+    txt = get("https://www.nccc.com.tw/dataDownload/Gender/BANK_TWN_ALL_GD.CSV", timeout=90).content.decode("utf-8-sig", "ignore")
+    agg = {}
+    for row in csv.reader(io.StringIO(txt)):
+        if len(row) < 6 or not row[0].isdigit():
+            continue
+        ym, cat, amt = row[0], row[2], num(row[5])
+        if amt:
+            agg.setdefault(cat, {}); agg[cat][ym] = agg[cat].get(ym, 0) + amt
+    tot = {}
+    for cat, s in agg.items():
+        for ym, v in s.items():
+            tot[ym] = tot.get(ym, 0) + v
+    agg["總計"] = tot
+    last = max(tot)
+    def yoy(s, ym):
+        p = f"{int(ym[:4]) - 1}{ym[4:]}"
+        return round(100 * (s[ym] / s[p] - 1), 1) if s.get(ym) and s.get(p) else None
+    yms = sorted(tot)[-24:]
+    rows = []
+    for cat in ["總計", "食", "衣", "住", "行", "文教康樂", "百貨", "其他"]:
+        s = agg.get(cat) or {}
+        if last not in s:
+            continue
+        y3 = [yoy(s, m) for m in sorted(s)[-3:]]
+        y3 = [v for v in y3 if v is not None]
+        rows.append({"cat": cat, "amt": round(s[last] / 1e8, 1), "yoy": yoy(s, last), "yoy3": round(sum(y3) / len(y3), 1) if y3 else None,
+                     "spark": [yoy(s, m) for m in yms if yoy(s, m) is not None]})
+    return {"month": f"{last[:4]}-{last[4:]}", "rows": rows, "src": "聯合信用卡處理中心（金管會銀行局開放資料）"}
+
+
+# ---------- 景氣轉向：國發會領先指標、經濟部外銷訂單 ----------
+def p_lead():
+    out, errs = {}, []
+    try:
+        meta = gjson("https://data.gov.tw/api/v2/rest/dataset/6099", timeout=60)["result"]
+        u = next(d["resourceDownloadUrl"] for d in meta["distribution"] if d.get("resourceDownloadUrl"))
+        z = zipfile.ZipFile(io.BytesIO(get(u, timeout=90).content))
+        name = next(n for n in z.namelist() if n.startswith("景氣指標與燈號"))
+        rows = list(csv.DictReader(io.StringIO(z.read(name).decode("utf-8-sig", "ignore"))))
+        rows = [r for r in rows if re.match(r"\d{6}$", r.get("Date") or "")]
+        lead = [(r["Date"], num(r.get("領先指標不含趨勢指數"))) for r in rows if num(r.get("領先指標不含趨勢指數"))]
+        coin = [(r["Date"], num(r.get("同時指標不含趨勢指數"))) for r in rows if num(r.get("同時指標不含趨勢指數"))]
+        sig = [(r["Date"], r.get("景氣對策信號"), num(r.get("景氣對策信號綜合分數"))) for r in rows if num(r.get("景氣對策信號綜合分數"))]
+        streak = 0
+        for i in range(len(lead) - 1, 0, -1):
+            d = lead[i][1] - lead[i - 1][1]
+            if streak == 0:
+                streak = 1 if d > 0 else -1
+            elif (d > 0) == (streak > 0):
+                streak += 1 if streak > 0 else -1
+            else:
+                break
+        out["lead"] = {"month": lead[-1][0], "value": round(lead[-1][1], 2), "chg": round(lead[-1][1] - lead[-2][1], 2), "streak": streak,
+                       "spark": [round(v, 2) for _, v in lead[-36:]], "coin": [round(v, 2) for _, v in coin[-36:]],
+                       "signal": sig[-1][1] if sig else None, "score": sig[-1][2] if sig else None, "scores": [s for _, _, s in sig[-24:]]}
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"領先指標: {safe_err(e)}")
+    try:
+        txt = get("https://service.moea.gov.tw/EE520/opendata/b.csv", timeout=60).content.decode("utf-8-sig", "ignore")
+        s = {}
+        for row in csv.reader(io.StringIO(txt)):
+            if len(row) >= 3 and row[0] == "外銷訂單金額" and re.match(r"\d{5}$", row[1]):
+                s[row[1]] = num(row[2])
+        ks = sorted(s)
+        def yoy(k):
+            p = f"{int(k[:3]) - 1:03d}{k[3:]}"
+            return round(100 * (s[k] / s[p] - 1), 1) if s.get(p) else None
+        out["orders"] = {"month": f"{int(ks[-1][:3]) + 1911}-{ks[-1][3:]}", "value": s[ks[-1]], "yoy": yoy(ks[-1]),
+                         "spark": [yoy(k) for k in ks[-24:] if yoy(k) is not None]}
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"外銷訂單: {safe_err(e)}")
+    if not out:
+        raise RuntimeError(f"lead: nothing {errs}")
+    out["errs"] = errs
+    return out
+
+
+# ---------- 台北捷運各站進站人次（逐月 OD 檔，約 300MB／月，只在新月份出現時抓） ----------
+METRO_STORE = DATA / "metro_months.json"
+
+
+def _metro_month(url):
+    tot = {}
+    with S.get(url, stream=True, timeout=300) as r:
+        r.raise_for_status()
+        first = True
+        for raw in r.iter_lines():
+            if first:
+                first = False; continue
+            parts = raw.decode("utf-8", "ignore").split(",")
+            if len(parts) < 5:
+                continue
+            try:
+                v = int(parts[4])
+            except ValueError:
+                continue
+            if v:
+                st = re.sub(r"^[A-Z]+", "", parts[2])
+                tot[st] = tot.get(st, 0) + v
+    return tot
+
+
+def p_metro():
+    try:
+        store = json.loads(METRO_STORE.read_text(encoding="utf-8")) if METRO_STORE.exists() else {}
+    except Exception:  # noqa: BLE001
+        store = {}
+    idx = get("https://data.taipei/api/dataset/63f31c7e-7fc3-418b-bd82-b95158755b4d/resource/eb481f58-1238-4cff-8caa-fa7bb20cb4f4/download", timeout=60)
+    months = {}
+    for row in csv.reader(io.StringIO(idx.content.decode("utf-8-sig", "ignore"))):
+        if len(row) >= 4 and row[1].isdigit() and row[2].isdigit():
+            months[f"{row[1]}-{int(row[2]):02d}"] = row[3]
+    latest = max(months)
+    ly = f"{int(latest[:4]) - 1}{latest[4:]}"
+    fetched = 0
+    for m in (latest, ly):
+        if m not in store and m in months and fetched < 2:
+            store[m] = _metro_month(months[m]); fetched += 1
+            write_json(METRO_STORE, store, separators=(",", ":"))
+    if latest not in store or ly not in store:
+        raise RuntimeError("metro: months missing")
+    cur, prev = store[latest], store[ly]
+    rows = []
+    for st, v in cur.items():
+        p = prev.get(st)
+        if p and p >= 150000:
+            rows.append({"st": st, "n": v, "prev": p, "chg": round(100 * (v / p - 1), 1)})
+    tc, tp = sum(cur.values()), sum(prev.values())
+    rows.sort(key=lambda r: -r["chg"])
+    newst = [st for st, v in cur.items() if st not in prev and v >= 50000]
+    return {"month": latest, "total": tc, "total_chg": round(100 * (tc / tp - 1), 1) if tp else None,
+            "up": rows[:10], "down": rows[-6:][::-1], "new": newst[:6], "n": len(rows)}
+
+
+# ---------- 主題溫度計（維基百科逐月瀏覽量，2016 起；中文 vs 英文、日文看誰先動） ----------
+WIKI_MAP = DATA / "wiki_map.json"
+WIKI_SERIES = DATA / "wiki_series.json"
+
+
+def _wiki_pv(lang, title, end):
+    t = requests.utils.quote(title.replace(" ", "_"), safe="")
+    r = S.get(f"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{lang}.wikipedia/all-access/user/{t}/monthly/20160101/{end}", timeout=40)
+    if r.status_code == 404:
+        return []
+    r.raise_for_status()
+    return [[i["timestamp"][:6], i["views"]] for i in r.json().get("items", [])]
+
+
+def _corr(a, b):
+    n = len(a)
+    if n < 12:
+        return None
+    ma, mb = sum(a) / n, sum(b) / n
+    va = sum((x - ma) ** 2 for x in a) ** .5
+    vb = sum((y - mb) ** 2 for y in b) ** .5
+    return sum((x - ma) * (y - mb) for x, y in zip(a, b)) / (va * vb) if va and vb else None
+
+
+def p_wiki():
+    cfg = json.loads((ROOT / "ops" / "wiki_topics.json").read_text(encoding="utf-8"))["topics"]
+    try:
+        mp = json.loads(WIKI_MAP.read_text(encoding="utf-8")) if WIKI_MAP.exists() else {}
+    except Exception:  # noqa: BLE001
+        mp = {}
+    errs = []
+    for q, _ in cfg:
+        if q in mp and mp[q].get("at", "") >= (TODAY_TPE - timedelta(days=30)).isoformat():
+            continue
+        try:
+            j = gjson("https://zh.wikipedia.org/w/api.php", params={"action": "query", "titles": q, "prop": "langlinks", "lllimit": "500",
+                                                                  "redirects": "1", "converttitles": "1", "format": "json"}, timeout=40)
+            pg = list(j["query"]["pages"].values())[0]
+            if "missing" in pg:
+                mp[q] = {"zh": None, "at": TODAY_TPE.isoformat()}; continue
+            ll = {x["lang"]: x["*"] for x in pg.get("langlinks", [])}
+            mp[q] = {"zh": pg["title"], "en": ll.get("en"), "ja": ll.get("ja"), "at": TODAY_TPE.isoformat()}
+            time.sleep(0.2)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{q}: {safe_err(e)}")
+    write_json(WIKI_MAP, mp)
+    end = (TODAY_TPE.replace(day=1) - timedelta(days=1)).strftime("%Y%m%d")
+    series = {}
+    for q, grp in cfg:
+        m = mp.get(q) or {}
+        if not m.get("zh"):
+            continue
+        s = {}
+        for lang in ("zh", "en", "ja"):
+            if m.get(lang):
+                try:
+                    s[lang] = _wiki_pv(lang, m[lang], end); time.sleep(0.15)
+                except Exception as e:  # noqa: BLE001
+                    errs.append(f"{q}/{lang}: {safe_err(e)}")
+        series[q] = s
+    write_json(WIKI_SERIES, series, separators=(",", ":"))
+    rows = []
+    for q, grp in cfg:
+        s = series.get(q) or {}
+        zh = s.get("zh") or []
+        if len(zh) < 27:
+            continue
+        v = [x[1] for x in zh]
+        def yoy3(vals):
+            return round(100 * (sum(vals[-3:]) / sum(vals[-15:-12]) - 1)) if len(vals) >= 15 and sum(vals[-15:-12]) > 0 else None
+        g12 = round(100 * (sum(v[-12:]) / sum(v[-24:-12]) - 1)) if sum(v[-24:-12]) else None
+        g12p = round(100 * (sum(v[-24:-12]) / sum(v[-36:-24]) - 1)) if len(v) >= 36 and sum(v[-36:-24]) else None
+        now = sum(v[-3:]) / 3
+        pk = max(range(len(v)), key=lambda i: v[i])
+        ratio = now / v[pk] if v[pk] else 0
+        y3 = yoy3(v)
+        if y3 is not None and y3 >= 50 and ratio >= .7:
+            kind = "新興加速"
+        elif ratio < .5 and pk >= len(v) - 60 and v[pk] > 2 * (sum(v[max(0, pk - 36):max(1, pk - 24)]) / 12 or 1):
+            kind = "熱潮已退"
+        elif g12 is not None and g12 >= 15 and (g12p is None or g12p > 0):
+            kind = "長期上升"
+        elif g12 is not None and g12 <= -15:
+            kind = "退燒中"
+        else:
+            kind = "穩定"
+        foreign, lead = [], None
+        for lang in ("en", "ja"):
+            fv = [x[1] for x in (s.get(lang) or [])]
+            if len(fv) < 27:
+                continue
+            fy = yoy3(fv)
+            foreign.append({"lang": lang, "yoy3": fy})
+            # 時間差：用年增率序列找「國外領先幾個月」相關最高
+            zmap = dict(zh); fmap = {k: x for k, x in s[lang]}
+            keys = sorted(set(zmap) & set(fmap))
+            zy = {k: zmap[k] / zmap[p] - 1 for k in keys for p in [f"{int(k[:4]) - 1}{k[4:]}"] if zmap.get(p)}
+            fyy = {k: fmap[k] / fmap[p] - 1 for k in keys for p in [f"{int(k[:4]) - 1}{k[4:]}"] if fmap.get(p)}
+            kk = sorted(set(zy) & set(fyy))[-72:]
+            best = None
+            for L in range(1, 13):
+                a = [fyy[kk[i - L]] for i in range(L, len(kk))]
+                b = [zy[kk[i]] for i in range(L, len(kk))]
+                r = _corr(a, b)
+                if r is not None and r >= .5 and (best is None or r > best[1]):
+                    best = (L, round(r, 2))
+            if best and (lead is None or best[1] > lead["r"]):
+                lead = {"lang": lang, "lag": best[0], "r": best[1]}
+        abroad = any((f["yoy3"] or 0) >= 30 for f in foreign) and (y3 is None or y3 < 10)
+        rows.append({"q": q, "title": mp[q]["zh"], "grp": grp, "kind": kind, "yoy3": y3, "g12": g12,
+                     "peak": zh[pk][0], "ratio": round(ratio, 2), "spark": v[-60:], "foreign": foreign, "lead": lead, "abroad": abroad,
+                     "last": zh[-1][0]})
+    if not rows:
+        raise RuntimeError(f"wiki: nothing {errs[:3]}")
+    order = {"新興加速": 0, "長期上升": 1, "穩定": 3, "退燒中": 4, "熱潮已退": 5}
+    rows.sort(key=lambda r: (order[r["kind"]] - (1 if r["abroad"] else 0) * .5, -(r["yoy3"] or 0)))
+    return {"rows": rows, "month": rows[0]["last"], "errs": errs[:5],
+            "src": "維基百科逐月瀏覽量（Wikimedia Pageviews API，2016 起；中文維基＝全球中文讀者，台灣占大宗）"}
+
+
 # ---------- 美國企業在談什麼（SEC EDGAR 全文檢索：10-K / 10-Q / 8-K 提到的次數，比去年同期） ----------
 # SEC 存取規範：每秒不超過 10 次、User-Agent 要寫聯絡信箱。信箱放在 GitHub secret（SEC_CONTACT），不寫進公開程式碼。
 SEC_WORDS = [("GLP-1", "GLP-1"), ("tariffs", "關稅"), ("agentic", "AI 代理"), ("generative AI", "生成式 AI"),
@@ -7163,6 +7515,12 @@ run("elect", p_elect, keep_if_fresh_hours=0.5)  # 要在新聞、地方新聞、
 run("culture", p_culture, keep_if_fresh_hours=6)
 run("veg", p_veg, keep_if_fresh_hours=6)
 run("fish", p_fish, keep_if_fresh_hours=6)
+run("fruit", p_fruit, keep_if_fresh_hours=6)
+run("meat", p_meat, keep_if_fresh_hours=6)
+run("cards", p_cards, keep_if_fresh_hours=24)
+run("lead", p_lead, keep_if_fresh_hours=24)
+run("wiki", p_wiki, keep_if_fresh_hours=72)
+run("metro", p_metro, keep_if_fresh_hours=72)
 run("secwords", p_secwords, keep_if_fresh_hours=24)
 # run("tiktok", p_tiktok, keep_if_fresh_hours=20)  # Creative Center 擋資料中心 IP，每輪白耗 60 秒，先停
 
