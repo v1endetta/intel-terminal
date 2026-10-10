@@ -4099,6 +4099,7 @@ def p_cards():
         for ym, v in s.items():
             tot[ym] = tot.get(ym, 0) + v
     agg["總計"] = tot
+    write_json(DATA / "cards_series.json", agg, separators=(",", ":"))  # 給預測帳本回測用
     last = max(tot)
     def yoy(s, ym):
         p = f"{int(ym[:4]) - 1}{ym[4:]}"
@@ -4140,6 +4141,7 @@ def p_lead():
                 streak += 1 if streak > 0 else -1
             else:
                 break
+        write_json(DATA / "lead_series.json", {"lead": lead, "coin": coin}, separators=(",", ":"))  # 給預測帳本回測用
         out["lead"] = {"month": lead[-1][0], "value": round(lead[-1][1], 2), "chg": round(lead[-1][1] - lead[-2][1], 2), "streak": streak,
                        "spark": [round(v, 2) for _, v in lead[-36:]], "coin": [round(v, 2) for _, v in coin[-36:]],
                        "signal": sig[-1][1] if sig else None, "score": sig[-1][2] if sig else None, "scores": [s for _, _, s in sig[-24:]]}
@@ -4341,6 +4343,7 @@ def p_wiki():
         b_ = base.get(lang) or {}
         return [[k, round(v / b_[k] * 1e7, 2)] for k, v in ser if b_.get(k)] if b_ else ser
     series = {q: {lang: norm(lang, ser) for lang, ser in s.items()} for q, s in series.items()}
+    write_json(DATA / "wiki_norm.json", {"series": series, "young_cut": 0.15}, separators=(",", ":"))  # 給預測帳本回測用
     rows = []
     for q, grp in cfg:
         s = series.get(q) or {}
@@ -4423,6 +4426,411 @@ def p_wiki():
     rows.sort(key=lambda r: (order[r["kind"]] - (1 if r["abroad"] else 0) * .5, -(r["yoy3"] or 0)))
     return {"rows": rows, "month": rows[0]["last"], "base3": m3, "base12": m12, "errs": errs[:5],
             "src": "維基百科逐月瀏覽量（Wikimedia Pageviews API，2016 起）· 每千萬次瀏覽中的占比，已扣掉維基整體流量下滑 · 中文維基＝全球中文讀者，台灣占大宗"}
+
+
+# ---------- 科技前沿：開發者在裝什麼（PyPI、npm）、研究在追什麼（OpenAlex）、玩家在玩什麼（Steam） ----------
+TECH_PYPI = ["openai", "anthropic", "google-genai", "langchain", "llama-index", "litellm", "mcp", "openai-agents", "pydantic-ai",
+             "crewai", "browser-use", "transformers", "vllm", "ollama"]
+TECH_NPM = ["ai", "openai", "@anthropic-ai/sdk", "@google/genai", "@modelcontextprotocol/sdk", "langchain", "@mastra/core", "next", "astro", "svelte"]
+TECH_PAPERS = [("agentic AI", "AI 代理"), ("humanoid robot", "人形機器人"), ("GLP-1", "GLP-1"), ("solid-state battery", "固態電池"),
+               ("quantum error correction", "量子糾錯"), ("small modular reactor", "小型核反應爐"), ("microplastics", "微塑膠"),
+               ("longevity", "長壽"), ("digital twin", "數位分身"), ("brain-computer interface", "腦機介面"), ("perovskite solar", "鈣鈦礦太陽能"),
+               ("gut microbiome", "腸道菌")]
+TECH_UA = {"User-Agent": "intel-terminal/1.0 (personal research; https://github.com/v1endetta/intel-terminal)"}
+
+
+def _dl_row(pkg, v):
+    """下載量很吵（CI、機器人），用每日中位數比：近 28 天 vs 前 28 天、vs 三個月前。"""
+    med = lambda xs: sorted(xs)[len(xs) // 2] if xs else 0  # noqa: E731
+    a, b, c = med(v[-28:]), med(v[-56:-28]), med(v[-112:-84])
+    return {"name": pkg, "day": a, "chg": round(100 * (a / b - 1), 1) if b else None, "chg90": round(100 * (a / c - 1), 1) if c else None,
+            "spark": [med(v[i:i + 7]) for i in range(max(0, len(v) - 112), len(v) - 6, 7)]}
+
+
+def p_tech2():
+    out, errs = {}, []
+    # PyPI：近 30 天 vs 前 30 天（不含鏡像站）
+    rows = []
+    for pkg in TECH_PYPI:
+        try:
+            r = requests.get(f"https://pypistats.org/api/packages/{pkg}/overall", params={"mirrors": "false"}, headers=TECH_UA, timeout=40)
+            if r.status_code == 429:
+                time.sleep(10); r = requests.get(f"https://pypistats.org/api/packages/{pkg}/overall", params={"mirrors": "false"}, headers=TECH_UA, timeout=40)
+            r.raise_for_status()
+            days = sorted((x["date"], x["downloads"]) for x in r.json().get("data", []) if x.get("category") == "without_mirrors")
+            v = [d for _, d in days]
+            if len(v) >= 112:
+                rows.append(_dl_row(pkg, v))
+            time.sleep(1.2)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"PyPI {pkg}: {safe_err(e)}")
+    out["pypi"] = sorted(rows, key=lambda x: -(x["chg90"] if x["chg90"] is not None else -999))
+    # npm：近 30 天 vs 前 30 天
+    rows = []
+    end = TODAY_TPE - timedelta(days=1); start = end - timedelta(days=125)
+    for pkg in TECH_NPM:
+        try:
+            r = requests.get(f"https://api.npmjs.org/downloads/range/{start.isoformat()}:{end.isoformat()}/{pkg}", headers=TECH_UA, timeout=40)
+            r.raise_for_status()
+            v = [x["downloads"] for x in r.json().get("downloads", [])]
+            if len(v) >= 112:
+                rows.append(_dl_row(pkg, v))
+            time.sleep(0.5)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"npm {pkg}: {safe_err(e)}")
+    out["npm"] = sorted(rows, key=lambda x: -(x["chg90"] if x["chg90"] is not None else -999))
+    # OpenAlex：近 12 個月 vs 前 12 個月論文數（標題與摘要）
+    rows = []
+    d0 = TODAY_TPE - timedelta(days=365); d1 = d0 - timedelta(days=365)
+    for q, zh in TECH_PAPERS:
+        try:
+            def cnt(a, b):
+                r = requests.get("https://api.openalex.org/works", params={"filter": f"title_and_abstract.search:{q},from_publication_date:{a},to_publication_date:{b}",
+                                                                          "per-page": "1", "mailto": "intel-terminal@users.noreply.github.com"}, headers=TECH_UA, timeout=40)
+                r.raise_for_status(); time.sleep(0.3)
+                return r.json()["meta"]["count"]
+            a = cnt(d0.isoformat(), TODAY_TPE.isoformat()); b = cnt(d1.isoformat(), (d0 - timedelta(days=1)).isoformat())
+            rows.append({"name": zh, "q": q, "n12": a, "chg": round(100 * (a / b - 1), 1) if b else None})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"OpenAlex {q}: {safe_err(e)}")
+    out["papers"] = sorted(rows, key=lambda x: -(x["chg"] or -999))
+    # Steam：官方最多人玩排行（每天存一份，看誰在爬升）
+    try:
+        r = requests.get("https://api.steampowered.com/ISteamChartsService/GetMostPlayedGames/v1/", headers=TECH_UA, timeout=40)
+        r.raise_for_status()
+        ranks = (r.json().get("response") or {}).get("ranks") or []
+        names = {}
+        try:
+            names = json.loads((DATA / "steam_names.json").read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            names = {}
+        games = []
+        for x in ranks[:20]:
+            aid = str(x.get("appid"))
+            if aid not in names:
+                try:
+                    d = requests.get("https://store.steampowered.com/api/appdetails", params={"appids": aid, "l": "tchinese", "filters": "basic"},
+                                     headers=TECH_UA, timeout=30).json()
+                    names[aid] = ((d.get(aid) or {}).get("data") or {}).get("name") or aid
+                    time.sleep(1.5)
+                except Exception:  # noqa: BLE001
+                    names[aid] = aid
+            peak = x.get("peak_in_game") or x.get("concurrent_in_game")
+            hist_put("steam", aid, TODAY_TPE.isoformat(), peak)
+            h = HISTORY.get("steam", {}).get(aid) or []
+            prev = next((v for d, v in reversed(h) if d <= (TODAY_TPE - timedelta(days=7)).isoformat()), None)
+            games.append({"name": names[aid], "rank": x.get("rank"), "peak": peak, "chg7": round(100 * (peak / prev - 1), 1) if prev and peak else None,
+                          "last_rank": x.get("last_week_rank")})
+        write_json(DATA / "steam_names.json", names)
+        out["steam"] = games
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"Steam: {safe_err(e)}")
+    if not any(out.get(k) for k in ("pypi", "npm", "papers", "steam")):
+        raise RuntimeError(f"tech2: nothing {errs[:3]}")
+    out["errs"] = errs[:6]
+    return out
+
+
+# ---------- 農產品進口量（農業部，依貨品，每月；只涵蓋約 50 項主要農產品） ----------
+def p_imports():
+    base = "https://data.moa.gov.tw/service/opendata/agrstatUnit.aspx"
+    s = {}
+    for sk in range(0, 200000, 9999):
+        js = gjson(base, params={"item_code": "GA0410", "dimension_group_code_1": "GA01", "dimension_group_code_2": "XX32", "IsTransData": "1",
+                                 "UnitId": "634", "$top": "9999", "$skip": str(sk)}, timeout=120)
+        for j in js or []:
+            nm, d, v = j.get("dname1") or "", str(j.get("date") or ""), num(j.get("value"))
+            if "刪除" in nm or not re.match(r"\d{5}$", d) or v is None:
+                continue
+            s.setdefault(nm, {}); s[nm][d] = s[nm].get(d, 0) + v  # 各國加總
+        if not js or len(js) < 9999:
+            break
+    if not s:
+        raise RuntimeError("imports: nothing")
+    last = max(max(v) for v in s.values())
+    def ym_add(ym, k):
+        y, m = int(ym[:3]), int(ym[3:]) + k
+        while m <= 0:
+            y -= 1; m += 12
+        while m > 12:
+            y += 1; m -= 12
+        return f"{y:03d}{m:02d}"
+    cur = [ym_add(last, -i) for i in range(3)]
+    prev = [ym_add(m, -12) for m in cur]
+    rows = []
+    for nm, ser in s.items():
+        a, b = sum(ser.get(m, 0) for m in cur), sum(ser.get(m, 0) for m in prev)
+        if a + b < 20000:  # 太小的品項（不到 20 公噸）不看
+            continue
+        label = re.sub(r"[，,]\s*(生鮮|冷藏|冷凍|鮮).*$", "", nm)
+        label = re.sub(r"[（(](發酵|未發酵|於.*?)[）)]", "", label)
+        label = re.sub(r"[（(][^）)]*$", "", label)[:16]
+        rows.append({"name": label, "full": nm, "t": round(a / 1000, 1), "chg": round(100 * (a / b - 1), 1) if b else None,
+                     "spark": [round(ser.get(ym_add(last, -i), 0) / 1000, 1) for i in range(23, -1, -1)]})
+    rows.sort(key=lambda r: -(r["chg"] if r["chg"] is not None else 999))
+    return {"month": f"{int(last[:3]) + 1911}-{last[3:]}", "window": "近 3 個月 vs 去年同期", "rows": rows, "n": len(s),
+            "src": "農業部農產品進口貿易重量（CCC 代碼，各國加總）"}
+
+
+# ---------- 預測帳本：把訊號寫成可驗證的預測，到期自動對答案；機率用歷史回測的命中率 ----------
+LEDGER = DATA / "forecast_ledger.json"
+LEDGER_RULES = {
+    "wiki_up": ("熱潮還是趨勢", "升溫的主題 3 個月後仍比其他主題熱"),
+    "wiki_down": ("熱潮還是趨勢", "退燒的主題 3 個月後仍比其他主題冷"),
+    "wiki_abroad": ("國外先、台灣後", "國外在漲、台灣還沒的主題，6 個月內台灣也轉熱"),
+    "cards_hot": ("品類起落", "上個月最熱的刷卡類別，下個月仍比整體熱"),
+    "lead_up": ("景氣轉向", "領先指標連升 3 個月以上，3 個月後同時指標更高"),
+    "lead_down": ("景氣轉向", "領先指標連降 3 個月以上，3 個月後同時指標更低"),
+    "veg_revert": ("生活成本", "兩週內漲超過 20% 的菜，再兩週會回落"),
+    "elect_fav": ("事件機率", "預測市場看好的候選人當選"),
+}
+
+
+def _ym_add(ym, k):  # ym = "YYYYMM"
+    y, m = int(ym[:4]), int(ym[4:6]) + k
+    while m > 12:
+        y += 1; m -= 12
+    while m <= 0:
+        y -= 1; m += 12
+    return f"{y}{m:02d}"
+
+
+def _wiki_state(series, t):
+    """在月份 t（YYYYMM）當下，每個主題的近 3 月年增、近 12 月成長、是否新條目；回傳 (rows, 中位數)。"""
+    rows = {}
+    for q, s in series.items():
+        zh = {k: v for k, v in (s.get("zh") or []) if k <= t}
+        ks = sorted(zh)
+        if len(ks) < 48 or ks[-1] != t:
+            continue
+        v = [zh[k] for k in ks]
+        if sum(v[-48:-36]) < 0.15 * sum(v[-12:]) or not sum(v[-15:-12]) or not sum(v[-24:-12]):
+            continue
+        rows[q] = {"y3": 100 * (sum(v[-3:]) / sum(v[-15:-12]) - 1), "g12": 100 * (sum(v[-12:]) / sum(v[-24:-12]) - 1)}
+    if len(rows) < 8:
+        return {}, 0, 0
+    med = lambda xs: sorted(xs)[len(xs) // 2]  # noqa: E731
+    return rows, med([r["y3"] for r in rows.values()]), med([r["g12"] for r in rows.values()])
+
+
+def _backtests():
+    bt = {}
+    # 維基：升溫／退燒延續
+    try:
+        series = json.loads((DATA / "wiki_norm.json").read_text(encoding="utf-8"))["series"]
+        months = sorted({k for s in series.values() for k, _ in (s.get("zh") or [])})
+        up, dn = [0, 0], [0, 0]
+        for t in months:
+            t3 = _ym_add(t, 3)
+            if t3 > months[-1]:
+                break
+            now, _, m12 = _wiki_state(series, t)
+            later, l3, _ = _wiki_state(series, t3)
+            for q, r in now.items():
+                if q not in later:
+                    continue
+                rel_later = later[q]["y3"] - l3
+                if r["g12"] - m12 >= 15:
+                    up[1] += 1; up[0] += rel_later > 0
+                elif r["g12"] - m12 <= -15:
+                    dn[1] += 1; dn[0] += rel_later < 0
+        bt["wiki_up"], bt["wiki_down"] = up, dn
+        # 國外先：英文近 3 月年增比英文中位數高 30 以上、中文還沒熱 → 6 個月後中文比中位數熱
+        ab = [0, 0]
+        en_s = {q: dict(s.get("en") or []) for q, s in series.items()}
+        for t in months:
+            t6 = _ym_add(t, 6)
+            if t6 > months[-1]:
+                break
+            now, n3, _ = _wiki_state(series, t)
+            later, l3, _ = _wiki_state(series, t6)
+            ey = {}
+            for q in now:
+                e = en_s.get(q) or {}
+                a = sum(e.get(_ym_add(t, -i), 0) for i in range(3)); b = sum(e.get(_ym_add(t, -12 - i), 0) for i in range(3))
+                if a and b:
+                    ey[q] = 100 * (a / b - 1)
+            if len(ey) < 8:
+                continue
+            em = sorted(ey.values())[len(ey) // 2]
+            for q, y in ey.items():
+                if y - em >= 30 and now[q]["y3"] - n3 < 10 and q in later:
+                    ab[1] += 1; ab[0] += later[q]["y3"] - l3 > 0
+        bt["wiki_abroad"] = ab
+    except Exception as e:  # noqa: BLE001
+        log("ledger bt wiki", e)
+    # 信用卡：最熱類別下個月仍比整體熱
+    try:
+        agg = json.loads((DATA / "cards_series.json").read_text(encoding="utf-8"))
+        tot = agg["總計"]; cats = [c for c in agg if c not in ("總計", "其他")]
+        def rel(c, ym):
+            p = f"{int(ym[:4]) - 1}{ym[4:]}"
+            if not (agg[c].get(ym) and agg[c].get(p) and tot.get(ym) and tot.get(p)):
+                return None
+            return (agg[c][ym] / agg[c][p]) - (tot[ym] / tot[p])
+        hc = [0, 0]
+        for ym in sorted(tot):
+            nx = _ym_add(ym, 1)
+            rs = {c: rel(c, ym) for c in cats}
+            rs = {c: v for c, v in rs.items() if v is not None}
+            if not rs or nx not in tot:
+                continue
+            c = max(rs, key=rs.get); v = rel(c, nx)
+            if v is not None:
+                hc[1] += 1; hc[0] += v > 0
+        bt["cards_hot"] = hc
+    except Exception as e:  # noqa: BLE001
+        log("ledger bt cards", e)
+    # 領先指標
+    try:
+        ls = json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))
+        lead = dict(ls["lead"]); coin = dict(ls["coin"]); ks = sorted(lead)
+        u, d = [0, 0], [0, 0]
+        for i in range(3, len(ks)):
+            t = ks[i]; t3 = _ym_add(t, 3)
+            if t3 not in coin or t not in coin:
+                continue
+            diffs = [lead[ks[j]] - lead[ks[j - 1]] for j in range(i - 2, i + 1)]
+            if all(x > 0 for x in diffs):
+                u[1] += 1; u[0] += coin[t3] > coin[t]
+            elif all(x < 0 for x in diffs):
+                d[1] += 1; d[0] += coin[t3] < coin[t]
+        bt["lead_up"], bt["lead_down"] = u, d
+    except Exception as e:  # noqa: BLE001
+        log("ledger bt lead", e)
+    # 菜價：兩週漲超過 20% 後再兩週回落
+    vr = [0, 0]
+    for label, h in (HISTORY.get("veg") or {}).items():
+        dd = dict(h); ks = sorted(dd)
+        for t in ks:
+            t0 = (date_from(t) - timedelta(days=14)).isoformat(); t1 = (date_from(t) + timedelta(days=14)).isoformat()
+            p0 = next((dd[k] for k in reversed(ks) if k <= t0), None); p1 = next((dd[k] for k in ks if k >= t1), None)
+            if p0 and p1 and dd[t] / p0 - 1 >= .2 and (date_from(next(k for k in ks if k >= t1)) - date_from(t)).days <= 18:
+                vr[1] += 1; vr[0] += p1 < dd[t]
+    bt["veg_revert"] = vr
+    return bt
+
+
+def p_ledger():
+    try:
+        L = json.loads(LEDGER.read_text(encoding="utf-8")) if LEDGER.exists() else {}
+    except Exception:  # noqa: BLE001
+        L = {}
+    preds = L.get("preds", [])
+    today = TODAY_TPE.isoformat()
+    # 1) 回測（每週一次）
+    if not L.get("bt_at") or (date_from(today) - date_from(L["bt_at"])).days >= 7:
+        L["bt"] = _backtests(); L["bt_at"] = today
+    bt = L.get("bt", {})
+    def prob(rule, default=.6):
+        h, n = (bt.get(rule) or [0, 0])
+        return round(min(.95, max(.05, h / n)), 2) if n >= 20 else default
+    # 2) 對答案
+    series = None
+    try:
+        series = json.loads((DATA / "wiki_norm.json").read_text(encoding="utf-8"))["series"]
+    except Exception:  # noqa: BLE001
+        pass
+    for p in preds:
+        if p["status"] != "open":
+            continue
+        try:
+            r = p["rule"]
+            if r in ("wiki_up", "wiki_down", "wiki_abroad") and series:
+                due = p["due"].replace("-", "")
+                rows, m3, _ = _wiki_state(series, due)
+                if rows:
+                    if p["subject"] not in rows:
+                        p["status"] = "void"; p["actual"] = "資料不足"; continue
+                    rel = rows[p["subject"]]["y3"] - m3
+                    ok = rel > 0 if r != "wiki_down" else rel < 0
+                    p.update(status="hit" if ok else "miss", actual=f"比基準 {rel:+.0f}", resolved=today)
+            elif r == "cards_hot":
+                agg = json.loads((DATA / "cards_series.json").read_text(encoding="utf-8"))
+                due = p["due"].replace("-", ""); prv = f"{int(due[:4]) - 1}{due[4:]}"
+                c, tot = agg.get(p["subject"], {}), agg["總計"]
+                if c.get(due) and c.get(prv) and tot.get(due):
+                    rel = 100 * ((c[due] / c[prv]) - (tot[due] / tot[prv]))
+                    p.update(status="hit" if rel > 0 else "miss", actual=f"比整體 {rel:+.1f}", resolved=today)
+            elif r in ("lead_up", "lead_down"):
+                ls = json.loads((DATA / "lead_series.json").read_text(encoding="utf-8")); coin = dict(ls["coin"])
+                due = p["due"].replace("-", ""); base = p["base"]
+                if due in coin:
+                    ok = coin[due] > base if r == "lead_up" else coin[due] < base
+                    p.update(status="hit" if ok else "miss", actual=f"同時指標 {base:.2f} → {coin[due]:.2f}", resolved=today)
+            elif r == "veg_revert":
+                h = dict(HISTORY.get("veg", {}).get(p["subject"]) or [])
+                later = [k for k in sorted(h) if k >= p["due"]]
+                if later and (date_from(later[0]) - date_from(p["due"])).days <= 4:
+                    v = h[later[0]]
+                    p.update(status="hit" if v < p["base"] else "miss", actual=f"{p['base']} → {v} 元/公斤", resolved=today)
+            elif r == "elect_fav" and today >= p["due"]:
+                ev = gjson("https://gamma-api.polymarket.com/events", params={"slug": p["slug"]}, timeout=30)
+                ms = (ev[0] if ev else {}).get("markets") or []
+                win = [m.get("groupItemTitle") for m in ms if m.get("closed") and (json.loads(m.get("outcomePrices") or "[0]")[0] in ("1", 1, "1.0"))]
+                if win:
+                    p.update(status="hit" if p["en"] in win else "miss", actual=f"當選：{win[0]}", resolved=today)
+        except Exception as e:  # noqa: BLE001
+            log("ledger resolve", p.get("id"), e)
+    # 3) 每週寫新預測（同一規則同一對象還沒到期就不重寫）
+    if not L.get("gen_at") or (date_from(today) - date_from(L["gen_at"])).days >= 7:
+        open_keys = {(p["rule"], p["subject"]) for p in preds if p["status"] == "open"}
+        new = []
+        def add(rule, subject, text, due, **kw):
+            if (rule, subject) in open_keys:
+                return
+            new.append({"id": f"{today}-{rule}-{len(preds) + len(new)}", "made": today, "rule": rule, "subject": subject, "text": text,
+                        "prob": kw.pop("prob", None) or prob(rule), "due": due, "status": "open", **kw})
+        W = RESULTS.get("wiki") or {}
+        wm = str(W.get("month") or "")
+        if wm:
+            for r in (W.get("rows") or []):
+                if r.get("kind") in ("長期上升", "新興加速"):
+                    add("wiki_up", r["q"], f"「{r['q']}」到 {_ym_add(wm, 3)[:4]}/{_ym_add(wm, 3)[4:]} 仍比其他主題熱", f"{_ym_add(wm, 3)[:4]}-{_ym_add(wm, 3)[4:]}")
+                elif r.get("kind") in ("退燒中", "熱潮已退"):
+                    add("wiki_down", r["q"], f"「{r['q']}」到 {_ym_add(wm, 3)[:4]}/{_ym_add(wm, 3)[4:]} 仍比其他主題冷", f"{_ym_add(wm, 3)[:4]}-{_ym_add(wm, 3)[4:]}")
+                if r.get("abroad"):
+                    add("wiki_abroad", r["q"], f"「{r['q']}」國外先熱，台灣到 {_ym_add(wm, 6)[:4]}/{_ym_add(wm, 6)[4:]} 也會轉熱", f"{_ym_add(wm, 6)[:4]}-{_ym_add(wm, 6)[4:]}")
+        C = RESULTS.get("cards") or {}
+        cr = [r for r in (C.get("rows") or []) if r.get("rel") is not None and r["cat"] not in ("總計", "其他")]
+        if cr and C.get("month"):
+            top = max(cr, key=lambda r: r["rel"]); nx = _ym_add(C["month"].replace("-", ""), 1)
+            add("cards_hot", top["cat"], f"刷卡「{top['cat']}」到 {nx[:4]}/{nx[4:]} 仍比整體熱", f"{nx[:4]}-{nx[4:]}")
+        LD = (RESULTS.get("lead") or {}).get("lead") or {}
+        if LD.get("streak") and abs(LD["streak"]) >= 3:
+            try:
+                ls = json.loads((DATA / "lead_series.json").read_text(encoding="utf-8")); coin = dict(ls["coin"]); m = max(coin)
+                d3 = _ym_add(m, 3); rule = "lead_up" if LD["streak"] > 0 else "lead_down"
+                add(rule, "景氣", f"同時指標到 {d3[:4]}/{d3[4:]} {'高於' if rule == 'lead_up' else '低於'}現在（{coin[m]:.2f}）", f"{d3[:4]}-{d3[4:]}", base=coin[m])
+            except Exception as e:  # noqa: BLE001
+                log("ledger lead gen", e)
+        for it in ((RESULTS.get("veg") or {}).get("items") or []):
+            if (it.get("chg14") or 0) >= 20:
+                due = (date_from(it["date"]) + timedelta(days=14)).isoformat()
+                add("veg_revert", it["name"], f"{it['name']}（{it['price']} 元）兩週後會比現在便宜", due, base=it["price"])
+        for c in ((RESULTS.get("elect") or {}).get("cities") or []):
+            if c.get("cands") and c.get("rel") != "幾乎沒交易":
+                f = c["cands"][0]
+                en = next((k for k, v in ELECT_NAMES.items() if v[0] == f["name"]), f["name"])
+                slug = dict(ELECT_CITIES).get(c["city"])
+                add("elect_fav", c["city"], f"{c['city']}市長：{f['name']} 當選", "2026-11-29", prob=round(f["p"] / 100, 2), en=en, slug=slug)
+        preds += new
+        L["gen_at"] = today
+    L["preds"] = preds[-600:]
+    write_json(LEDGER, L)
+    # 4) 統計
+    stats = {}
+    for rule, (cat, desc) in LEDGER_RULES.items():
+        rs = [p for p in preds if p["rule"] == rule]
+        done = [p for p in rs if p["status"] in ("hit", "miss")]
+        brier = round(sum((p["prob"] - (1 if p["status"] == "hit" else 0)) ** 2 for p in done) / len(done), 3) if done else None
+        h, n = bt.get(rule) or [0, 0]
+        stats[rule] = {"cat": cat, "desc": desc, "open": sum(1 for p in rs if p["status"] == "open"), "done": len(done),
+                       "hits": sum(1 for p in done if p["status"] == "hit"), "brier": brier, "bt_n": n, "bt_rate": round(h / n, 2) if n else None}
+    done = [p for p in preds if p["status"] in ("hit", "miss")]
+    opn = sorted([p for p in preds if p["status"] == "open"], key=lambda p: p["due"])
+    return {"stats": stats, "open": opn[:40], "recent": sorted(done, key=lambda p: p.get("resolved", ""), reverse=True)[:12],
+            "n_open": len(opn), "n_done": len(done), "n_hit": sum(1 for p in done if p["status"] == "hit"), "gen_at": L.get("gen_at"), "bt_at": L.get("bt_at")}
 
 
 # ---------- 美國企業在談什麼（SEC EDGAR 全文檢索：10-K / 10-Q / 8-K 提到的次數，比去年同期） ----------
@@ -7605,6 +8013,8 @@ run("meat", p_meat, keep_if_fresh_hours=6)
 run("cards", p_cards, keep_if_fresh_hours=24)
 run("lead", p_lead, keep_if_fresh_hours=24)
 run("wiki", p_wiki, keep_if_fresh_hours=72)
+run("tech2", p_tech2, keep_if_fresh_hours=24)
+run("imports", p_imports, keep_if_fresh_hours=24 * 5)
 run("metro", p_metro, keep_if_fresh_hours=72)
 run("secwords", p_secwords, keep_if_fresh_hours=24)
 # run("tiktok", p_tiktok, keep_if_fresh_hours=20)  # Creative Center 擋資料中心 IP，每輪白耗 60 秒，先停
@@ -7617,6 +8027,7 @@ run("roads", p_roads)
 run("mapfeed", p_mapfeed)  # 吃本輪其他面板的結果，不打外部 API
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
+run("ledger", p_ledger)  # 預測帳本：放最後，吃本輪其他面板的結果
 FINISHED_ISO = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 try:
     write_json(HIST_PATH, HISTORY, separators=(",", ":"))

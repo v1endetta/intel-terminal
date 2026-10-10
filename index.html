@@ -464,8 +464,8 @@ canvas.o-fx{display:block;width:100%}
 /* 分頁內固定順序：台灣先、國際後；快的先、月更的後；結論先、原文後 */
 #p-pulse{display:none!important}
 #p-taiex{order:1}#p-fx{order:2}#p-fear{order:3}#p-taifex{order:4}#p-world{order:5}#p-tw-stocks{order:6}#p-lux{order:7}#p-mops{order:8}#p-usbig{order:9}@media (min-width:1101px){#p-taiex{grid-row:span 2}}#p-sectors{order:10}#p-cmdty{order:11}#p-revenue{order:12}
-#p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-cards{order:7}#p-lead{order:7}#p-house{order:8}#p-poly{order:9}#p-jobs{order:10}
-#ib-soc{order:0}#p-voice{order:2}#p-wiki{order:3}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
+#p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-cards{order:7}#p-lead{order:7}#p-imports{order:7}#p-house{order:8}#p-poly{order:9}#p-jobs{order:10}
+#ib-soc{order:0}#p-ledger{order:2}#p-voice{order:2}#p-wiki{order:3}#p-tech2{order:4}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
 .grid{align-items:start}
 /* 桃機翻牌看板：只有變動的字會翻 */
 .fids{display:grid;gap:3px;align-content:start}
@@ -782,6 +782,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><a href="https://index.ndc.gov.tw/" target="_blank" rel="noopener">國發會景氣指標</a><a href="https://www.moea.gov.tw/" target="_blank" rel="noopener">經濟部統計處</a><a href="https://www.fao.org/worldfoodsituation/foodpricesindex/en/" target="_blank" rel="noopener">FAO Food Price Index（CC BY-NC-SA 3.0 IGO）</a><span>領先指標（不含趨勢）連續上升＝半年內景氣大多續溫，連續下滑＝轉弱前兆 · 外銷訂單領先出口 1 到 3 個月</span></div>
   </section>
 
+  <section class="panel w12 cap" id="p-imports">
+    <div class="ph"><h2>Imports</h2><span class="zh">農產品進口量 · 上游在備什麼貨</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://data.moa.gov.tw/" target="_blank" rel="noopener">農業部開放資料</a><span>進口重量（各國加總），近 3 個月比去年同期 · 只涵蓋農業部列管的約 50 項主要農產品（飼料、肉、茶、蛋、蔬果等），不是全部進口 · 不到 20 公噸的品項不列</span></div>
+  </section>
+
   <section class="panel w12 cap" id="p-jobs">
     <div class="ph"><h2>Jobs</h2><span class="zh">職缺溫度 · 104 全站（不限產業）</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -906,6 +912,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <section class="ibx ib-band" id="ib-soc"><div class="ib-q"><span class="no">輿情 · 一眼看</span><h2>大家在吵什麼？</h2><p class="ans" id="ibsa">等待排程寫入</p></div>
     <div class="ib-body"><div class="ib-viz"><h3>同一個話題出現在哪些平台<span class="n">● 越大＝越多則 · 越多平台越上面</span></h3><svg id="ibsv" role="img" aria-label="話題在各平台出現的次數"></svg></div>
       <div class="ib-viz"><h3>情緒溫度<span class="n">−1 負面 ～ +1 正面</span></h3><svg id="ibsm" role="img" aria-label="台灣與國外社群情緒"></svg><h3 style="margin-top:8px">PTT 看板熱度<span class="n">近期推文熱度 · 綠＝推多、紅＝噓多</span></h3><svg id="ibsp" role="img" aria-label="PTT 看板熱度"></svg></div></div></section>
+  <section class="panel w12 cap" id="p-ledger">
+    <div class="ph"><h2>Forecast Ledger</h2><span class="zh">預測帳本 · 寫下來、到期對答案</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>每週一次把訊號寫成可驗證的預測，到期自動用原始資料對答案 · 機率＝這條規則在歷史資料上的回測命中率（樣本不到 20 筆用 60%）· 選舉用預測市場機率 · 準的規則之後加權，不準的降權</span></div>
+  </section>
+
   <section class="panel w12" id="p-voice">
     <div class="ph"><h2>Trend Radar</h2><span class="zh">趨勢雷達 · 台灣正在發生的大轉變，哪裡有機會</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -916,6 +928,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ph"><h2>Topic Gauge</h2><span class="zh">主題溫度計 · 熱潮還是趨勢、國外先還是台灣先</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://wikimedia.org/api/rest_v1/" target="_blank" rel="noopener">Wikimedia Pageviews</a><span>維基百科逐月瀏覽量，2016 起 · 先換算成占該語言總瀏覽量的比例，再跟所有主題的中位數比（維基整體被 AI 摘要分流，大家一起掉的部分會扣掉）· 國外＝英文、日文維基 · 領先＝國外年增率比中文早幾個月、相關係數 ≥ 0.6 才顯示 · 主題清單在 ops/wiki_topics.json</span></div>
+  </section>
+
+  <section class="panel w12 cap" id="p-tech2">
+    <div class="ph"><h2>Frontier</h2><span class="zh">科技前沿 · 開發者在裝什麼、研究在追什麼、玩家在玩什麼</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://pypistats.org/" target="_blank" rel="noopener">PyPI Stats</a><a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm</a><a href="https://openalex.org/" target="_blank" rel="noopener">OpenAlex</a><a href="https://store.steampowered.com/charts" target="_blank" rel="noopener">Steam</a><span>下載量用每日中位數（避開 CI 機器人暴量）· 三個月＝近 28 天比三個月前 · 論文＝近 12 個月比前 12 個月（標題與摘要）· Steam＝官方最多人玩排行，7 天變化從今天開始累積</span></div>
   </section>
   <section class="panel w12" id="p-pop">
     <div class="ph"><h2>Pop Charts</h2><span class="zh">流行排行 · 台灣在聽、在看、在讀什麼</span><span class="meta">排程</span></div>
@@ -1503,7 +1521,7 @@ const renderers={
     const cards=(d.cities||[]).map(c=>{const mxn=Math.max(1,...(c.cands||[]).flatMap(x=>x.news||[]));
       const rows=(c.cands||[]).map(x=>{const nt=(x.news||[]).reduce((a,b)=>a+b,0);return`<div class="el-r"><div class="el-n">${esc(x.name)}${x.party?`<span class="sub">${esc(x.party)}</span>`:""}</div><div class="el-p">${fmt(n(x.p),0)}%</div>
         <div class="el-m">${mini(x.spark)}<span class="${cls(n(x.d7))}">${x.d7!=null?`7天 ${sgn(n(x.d7),1)}`:"7天 —"}</span><span title="近 7 天每天新聞與 PTT 標題提到幾次">聲量 ${nt}</span><span class="nb">${(x.news||[]).map(v=>`<i style="height:${Math.max(1,Math.round(v/mxn*14))}px"></i>`).join("")}</span></div>${(x.topics||[]).length?`<div class="el-t">${x.topics.slice(0,3).map(([k,v])=>`<span>${esc(k)} ${v}</span>`).join("")}</div>`:""}</div>`;}).join("");
-      const pl=(c.polls||[]).map(q=>`<div>${q.url?`<a href="${esc(safe(q.url))}" target="_blank" rel="noopener">${esc(q.by)}</a>`:esc(q.by)} ${esc(String(q.date||"").slice(5).replace("-","/"))}：${(q.rows||[]).map(([k,v])=>`${esc(k)} ${v}%`).join("、")}</div>`).join("");
+      const pl=(c.polls||[]).map(q=>`<div>${q.url?`<a href="${esc(safe(q.url))}" target="_blank" rel="noopener">${esc(q.by)}</a>`:esc(q.by)} ${esc(String(q.date||"").slice(5).replace("-","/"))}：${(q.rows||[]).map(([k,v])=>`${esc(k)} ${v}%`).join("、")}${q.note?`<span style="color:var(--dim)"> · ${esc(q.note)}</span>`:""}</div>`).join("");
       return`<div class="el-c"><div class="el-h"><b>${esc(c.city)}</b><span class="el-rel${/偏弱|幾乎/.test(c.rel)?" weak":""}" title="累計交易 ${n(c.vol).toLocaleString()} 美元 · 近 24 小時 ${n(c.vol24).toLocaleString()} 美元">${esc(c.rel)}</span><a href="${esc(safe(c.url))}" target="_blank" rel="noopener">盤口 ↗</a></div>${rows||'<div class="empty">沒有報價</div>'}${pl?`<div class="el-poll">${pl}</div>`:""}</div>`;}).join("");
     const W=(d.wind||[]).slice(0,6),wmx=Math.max(.01,...W.map(w=>w.score));
     const wind=W.length?`<div class="el-w"><div class="el-wh">勝率加權政策風向<span>近 14 天報導議題 × 市場勝率 · <b>共識</b>＝同城市兩邊陣營都在講，不管誰贏都會推</span></div>${W.map(w=>`<div class="el-wr"><span class="k">${esc(w.topic)}</span><span class="b"><i style="width:${Math.round(w.score/wmx*100)}%"></i></span><span class="c">${(w.cities||[]).map(c=>esc(c)).join("、")}${(w.both||[]).length?` · <b>共識：${w.both.map(c=>esc(c)).join("、")}</b>`:""}</span></div>`).join("")}</div>`:"";
@@ -1527,6 +1545,24 @@ const renderers={
   metro(d){const li=(a)=>(a||[]).map(x=>`<li><span class="t">${esc(x.st)}<span class="sub">${fmt(n(x.n)/1e4,0)} 萬人次</span></span><span class="m num"><span class="${cls(n(x.chg))}">${sgn(n(x.chg),1,"%")}</span></span></li>`).join("");
     body("p-metro").innerHTML=`<div class="veg-h">全系統<b class="${cls(n(d.total_chg))}">${sgn(n(d.total_chg),1,"%")}</b><span>${esc(d.month||"")} 比去年同月 · ${fmt(n(d.total)/1e6,1)} 百萬人次 · ${n(d.n)} 站</span></div><div class="vr-g"><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">成長最多</h3><ul class="list">${li(d.up)}</ul></div><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">減少最多</h3><ul class="list">${li(d.down)}</ul></div></div>`;
     setMeta("p-metro",{...d,label:(d.month||"")+" 月資料"},24*40);},
+  ledger(d){const S=d.stats||{},pc=x=>x!=null?Math.round(x*100)+"%":"—";
+    const rules=Object.entries(S).map(([k,v])=>`<tr><td class="name">${esc(v.desc)}<span class="sub">${esc(v.cat)}</span></td><td class="r num">${v.bt_rate!=null&&v.bt_n>=20?`${pc(v.bt_rate)}<span class="sub"> ${v.bt_n} 次</span>`:'<span class="sub">無回測</span>'}</td><td class="r num">${v.done?`${v.hits}/${v.done}`:"—"}</td><td class="r num">${v.open||"—"}</td></tr>`).join("");
+    const op=(d.open||[]).slice(0,14).map(p=>`<li><span class="src">${esc(String(p.due).slice(2).replace("-","/"))}</span><span class="t">${esc(p.text)}</span><span class="m num">${Math.round(p.prob*100)}%</span></li>`).join("");
+    const rc=(d.recent||[]).map(p=>`<li><span class="src ${p.status==="hit"?"up":"down"}">${p.status==="hit"?"✓ 中":"✗ 沒中"}</span><span class="t">${esc(p.text)}<span class="sub">${esc(p.actual||"")}</span></span><span class="m num">${Math.round(p.prob*100)}%</span></li>`).join("");
+    body("p-ledger").innerHTML=`<div class="veg-h">開放中<b>${n(d.n_open)}</b><span>條 · 已揭曉 ${n(d.n_done)} 條${d.n_done?`，中 ${n(d.n_hit)} 條`:""} · 最近一次寫預測 ${esc(String(d.gen_at||"").slice(5).replace("-","/"))}</span></div>
+      <div class="vr-g"><div><table class="vr-t"><tr><th>規則</th><th class="r">歷史回測</th><th class="r">實際</th><th class="r">開放中</th></tr>${rules}</table></div>
+      <div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">等待揭曉 · 依到期日</h3><ul class="list">${op||'<li class="empty">還沒有</li>'}</ul>${rc?`<h3 style="font-size:11px;color:var(--dim);margin:10px 0 4px">最近揭曉</h3><ul class="list">${rc}</ul>`:""}</div></div>`;
+    setMeta("p-ledger",d,24);},
+  tech2(d){const tb=(rows,cols)=>`<table class="vr-t"><tr>${cols.map(c=>`<th${c[2]?' class="r"':""}>${c[0]}</th>`).join("")}</tr>${(rows||[]).map(x=>`<tr>${cols.map(c=>`<td${c[2]?' class="r num"':' class="name"'}>${c[1](x)}</td>`).join("")}</tr>`).join("")}</table>`;
+    const pct=v=>v!=null?`<span class="${cls(n(v))}">${sgn(n(v),0,"%")}</span>`:"—",K=v=>v>=1e6?fmt(v/1e6,1)+"M":v>=1e3?fmt(v/1e3,0)+"k":fmt(v,0);
+    const dl=[["套件",x=>esc(x.name)+mini(x.spark)],["每日",x=>K(n(x.day)),1],["近月",x=>pct(x.chg),1],["三個月",x=>pct(x.chg90),1]];
+    body("p-tech2").innerHTML=`<div class="vr-g"><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">Python 套件（PyPI）· 依三個月排序</h3>${tb(d.pypi,dl)}<h3 style="font-size:11px;color:var(--dim);margin:12px 0 4px">論文主題（OpenAlex）· 近 12 個月比前 12 個月</h3>${tb(d.papers,[["主題",x=>esc(x.name)+`<span class="sub">${esc(x.q)}</span>`],["篇數",x=>fmt(n(x.n12),0),1],["成長",x=>pct(x.chg),1]])}</div>
+      <div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">JavaScript 套件（npm）· 依三個月排序</h3>${tb(d.npm,dl)}<h3 style="font-size:11px;color:var(--dim);margin:12px 0 4px">Steam 最多人玩 · 同時在線高峰</h3>${tb((d.steam||[]).slice(0,10),[["遊戲",x=>`<span class="sub">#${n(x.rank)}</span> ${esc(x.name)}`],["人數",x=>K(n(x.peak)),1],["7 天",x=>pct(x.chg7),1]])}</div></div>`;
+    setMeta("p-tech2",d,48);},
+  imports(d){const R=d.rows||[],up=R.filter(x=>x.chg!=null&&x.chg>0),dn=R.filter(x=>x.chg!=null&&x.chg<0).reverse();
+    const li=a=>a.slice(0,8).map(x=>`<li title="${esc(x.full)}"><span class="t">${esc(x.name)}${mini(x.spark)}<span class="sub">${fmt(n(x.t),0)} 公噸</span></span><span class="m num"><span class="${cls(n(x.chg))}">${sgn(n(x.chg),1,"%")}</span></span></li>`).join("");
+    body("p-imports").innerHTML=`<div class="veg-h">進口量變化<span>${esc(d.window||"")} · 資料到 ${esc(d.month||"")}</span></div><div class="vr-g"><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">進口變多</h3><ul class="list">${li(up)}</ul></div><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">進口變少</h3><ul class="list">${li(dn)}</ul></div></div>`;
+    setMeta("p-imports",{...d,label:"月資料"},24*40);},
   fruit(d){VF.fruit=d;renderVF();},
   meat(d){VF.meat=d;renderVF();},
   veg(d){VF.veg=d;renderVF();},
@@ -2348,7 +2384,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
-  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"intel","p-metro":"live",
+  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"intel","p-ledger":"intel","p-tech2":"intel","p-imports":"macro","p-metro":"live",
   "ib-sig":"intel","ib-soc":"social","p-voice":"intel","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-elect":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
