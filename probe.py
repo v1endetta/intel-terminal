@@ -2,24 +2,28 @@ import os, json, re, io, csv, requests, collections
 os.makedirs("out25", exist_ok=True)
 H = {"User-Agent": "intel-terminal/1.0 (personal research)"}
 rep = {}
-r = requests.get("https://data.gov.tw/datasets/export/csv", headers=H, timeout=180)
-rows = list(csv.reader(io.StringIO(r.content.decode("utf-8-sig", "ignore"))))
-hdr = rows[0]; idx = {h: i for i, h in enumerate(hdr)}
-meta = {row[idx["資料集識別碼"]]: row for row in rows[1:] if len(row) > idx["資料下載網址"]}
-for i in ("40331", "40317", "161861"):
-    m = meta.get(i)
-    rep["raw_" + i] = m[idx["資料下載網址"]][:3000] if m else None
-    rep["fmt_" + i] = m[idx["檔案格式"]] if m else None
-# 也找其他農產品進口相關資料集
-rep["agri_imp"] = [(row[idx["資料集識別碼"]], row[idx["資料集名稱"]][:50], row[idx["更新頻率"]]) for row in rows[1:] if re.search(r"進口.*(貿易|量|值)", row[idx["資料集名稱"]]) and "農" in row[idx["提供機關"]]][:30]
-# 試 MOA API 的不同群組
+u = "https://web02.mof.gov.tw/njswww/webMain.aspx?sys=220&ym=11500&ymt=11512&kind=21&type=6&funid=i0520&cycle=41&outmode=12&compmode=00&outkind=3&fldspc=23;23;&codspc0=0;358;&utf=1"
+try:
+    x = requests.get(u, headers=H, timeout=120)
+    t = x.content.decode("utf-8-sig", "ignore")
+    rep["mof"] = {"status": x.status_code, "len": len(x.content), "head": t[:1500], "lines": t.count("\n"), "tail": t[-800:]}
+except Exception as e:
+    rep["mof_err"] = repr(e)[:200]
 base = "https://data.moa.gov.tw/service/opendata/agrstatUnit.aspx"
-for g1 in ("GA01", "GA02", "GA03", "GA04", "GA05", "GA06", "GA07", "GA08", "GA09", "GA10"):
+allnames = collections.Counter(); latest = collections.Counter()
+for sk in range(0, 200000, 9999):
     try:
-        x = requests.get(base, params={"item_code": "GA0410", "dimension_group_code_1": g1, "dimension_group_code_2": "XX32", "IsTransData": "1", "UnitId": "634"}, headers=H, timeout=90)
+        x = requests.get(base, params={"item_code": "GA0410", "dimension_group_code_1": "GA01", "dimension_group_code_2": "XX32", "IsTransData": "1", "UnitId": "634", "$top": "9999", "$skip": str(sk)}, headers=H, timeout=120)
         js = x.json() if x.ok and x.content[:1] == b"[" else []
-        names = collections.Counter(j["dname1"] for j in js)
-        rep["g_" + g1] = {"status": x.status_code, "n": len(js), "names": list(names)[:12], "dates": sorted(set(j["date"] for j in js))[-4:] if js else None}
     except Exception as e:
-        rep["g_" + g1] = {"err": repr(e)[:150]}
+        rep["moa_err"] = repr(e)[:200]; break
+    if not js: break
+    for j in js:
+        allnames[j["dname1"]] += 1
+        if j["date"] >= "11501": latest[j["dname1"]] += j["value"] or 0
+    rep.setdefault("pages", []).append((sk, len(js), js[0]["dname1"][:20], js[-1]["dname1"][:20]))
+    if len(js) < 9999: break
+rep["moa_nnames"] = len(allnames)
+rep["moa_hits"] = [n for n in allnames if re.search(r"狗|犬|貓|寵物|咖啡|茶|酪梨|燕麥|乳|起司|乾酪|巧克力|可可|堅果|藍莓|草莓|牛肉|鮭|葡萄酒|啤酒|威士忌|蜂蜜|奇亞|藜麥|蛋", n)][:120]
+rep["moa_top2026"] = latest.most_common(40)
 json.dump(rep, open("out25/probe.json", "w"), ensure_ascii=False, indent=1)
