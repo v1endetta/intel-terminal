@@ -431,6 +431,98 @@ POLY_TOPICS = [("Fed／利率", "fed-rates", 3), ("經濟／通膨", "economy", 
 POLY_NOISE = re.compile(r"\bon (January|February|March|April|May|June|July|August|September|October|November|December) \d|\d+\s*-\s*(January|February|March|April|May|June|July|August|September|October|November|December)? ?\d+\?|bankruptcy|aliens|Millennium Prize", re.I)
 
 
+# ---------- 2026 五都選戰：Polymarket 機率（只看不押；台灣下注選舉違法）＋ 新聞聲量 ＋ 手動民調 ----------
+ELECT_DAY = "2026-11-28"
+ELECT_CITIES = [("台北", "taipei-mayor-election-winner-20260813125857100"), ("新北", "new-taipei-mayor-election-winner-20260813125857200"),
+                ("台中", "taichung-mayor-election-winner-20260813125857400"), ("台南", "tainan-mayor-election-winner-20260813125857500"),
+                ("高雄", "kaohsiung-mayor-election-winner-20260813125857600")]
+ELECT_NAMES = {"Chiang Wan-an": ("蔣萬安", "國民黨"), "Puma Shen": ("沈伯洋", "民進黨"), "Lee Shu-chuan": ("李四川", "國民黨"),
+               "Su Chiao-hui": ("蘇巧慧", "民進黨"), "Johnny Chiang": ("江啟臣", "國民黨"), "Ho Hsin-chun": ("何欣純", "民進黨"),
+               "Hsieh Lung-chieh": ("謝龍介", "國民黨"), "Chen Ting-fei": ("陳亭妃", "民進黨"), "Lin Yi-feng": ("林義豐", ""),
+               "Ko Chih-en": ("柯志恩", "國民黨"), "Lai Jui-lung": ("賴瑞隆", "民進黨"), "Huang Kuo-chang": ("黃國昌", "民眾黨")}
+ELECT_MENTIONS = DATA / "elect_mentions.json"
+
+
+def p_elect():
+    errs, today = [], TODAY_TPE.isoformat()
+    # 1) 新聞聲量：每輪把看到的標題記下來（依日期去重），算每位候選人每天被提到幾次
+    titles = []
+    nw = RESULTS.get("news") or {}
+    titles += [x.get("title") or "" for x in (nw.get("tw") or [])]
+    for v in ((RESULTS.get("localnews") or {}).get("counties") or {}).values():
+        titles += [x.get("title") or "" for x in (v if isinstance(v, list) else [])]
+    titles += [x.get("title") or "" for x in ((RESULTS.get("ptt") or {}).get("items") or [])]
+    try:
+        store = json.loads(ELECT_MENTIONS.read_text(encoding="utf-8")) if ELECT_MENTIONS.exists() else {}
+    except Exception:  # noqa: BLE001
+        store = {}
+    day = store.setdefault(today, {})
+    zh_names = [v[0] for v in ELECT_NAMES.values()]
+    for t in set(titles):
+        for nm in zh_names:
+            if nm in t:
+                lst = day.setdefault(nm, [])
+                h = t[:40]
+                if h not in lst:
+                    lst.append(h)
+    cut = (TODAY_TPE - timedelta(days=21)).isoformat()
+    store = {d: v for d, v in store.items() if d >= cut}
+    write_json(ELECT_MENTIONS, store, separators=(",", ":"))
+    days7 = [(TODAY_TPE - timedelta(days=i)).isoformat() for i in range(6, -1, -1)]
+    # 2) 手動民調（ops/polls.json，說「更新民調」時由 Claude 填，附出處）
+    try:
+        polls = json.loads((ROOT / "ops" / "polls.json").read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        polls = {}
+    # 3) 預測市場
+    cities = []
+    for city, slug in ELECT_CITIES:
+        try:
+            evs = gjson("https://gamma-api.polymarket.com/events", params={"slug": slug}, timeout=30)
+            ev = evs[0] if isinstance(evs, list) and evs else {}
+            cands = []
+            for m in ev.get("markets") or []:
+                en = m.get("groupItemTitle") or ""
+                if en not in ELECT_NAMES:
+                    continue
+                try:
+                    p = float(json.loads(m.get("outcomePrices") or "[]")[0]) * 100
+                except Exception:  # noqa: BLE001
+                    continue
+                if p < 1.5:
+                    continue
+                zh, party = ELECT_NAMES[en]
+                key = f"{city}:{zh}"
+                hist = HISTORY.get("elect", {}).get(key) or []
+                if len(hist) < 5:  # 第一次：用 Polymarket 公開歷史價格回補開盤以來的日線
+                    try:
+                        tok = json.loads(m.get("clobTokenIds") or "[]")[0]
+                        ph = gjson("https://clob.polymarket.com/prices-history", params={"market": tok, "interval": "max", "fidelity": "1440"}, timeout=30)
+                        for pt in ph.get("history") or []:
+                            d = datetime.fromtimestamp(int(pt["t"]), TPE).date().isoformat()
+                            hist_put("elect", key, d, round(float(pt["p"]) * 100, 1))
+                        time.sleep(0.3)
+                    except Exception as e:  # noqa: BLE001
+                        errs.append(f"{city} 回補: {safe_err(e)}")
+                hist_put("elect", key, today, round(p, 1))
+                h = HISTORY.get("elect", {}).get(key) or []
+                prev7 = next((v for d, v in reversed(h) if d <= (TODAY_TPE - timedelta(days=7)).isoformat()), None)
+                cands.append({"name": zh, "party": party, "p": round(p, 1), "d7": round(p - prev7, 1) if prev7 is not None else None,
+                              "spark": [v for _, v in h[-45:]], "news": [len(store.get(d, {}).get(zh, [])) for d in days7]})
+            cands.sort(key=lambda c: -c["p"])
+            vol, v24 = float(ev.get("volume") or 0), float(ev.get("volume24hr") or 0)
+            rel = "可信" if vol >= 300000 else "普通" if vol >= 50000 and v24 >= 1000 else "偏弱" if vol >= 10000 else "幾乎沒交易"
+            cities.append({"city": city, "cands": cands[:3], "vol": round(vol), "vol24": round(v24), "rel": rel,
+                           "url": f"https://polymarket.com/event/{slug}", "polls": (polls.get(city) or [])[:3]})
+            time.sleep(0.3)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{city}: {safe_err(e)}")
+    if not cities:
+        raise RuntimeError(f"elect: nothing {errs[:2]}")
+    return {"day": ELECT_DAY, "cities": cities, "days": days7, "pollsAt": polls.get("_updated"), "errs": errs[:5],
+            "src": "Polymarket 公開報價（只看不押）＋ 情報站收進來的新聞與 PTT 標題 ＋ 手動整理民調"}
+
+
 def p_poly():
     groups, seen, flat = {}, set(), []
     for label, tag, k in POLY_TOPICS:
@@ -1136,7 +1228,7 @@ def p_policy():
                 who = (b.get("提案單位/提案委員") or "").replace("本院委員", "")
                 bills.append({"id": b.get("議案編號"), "title": nm[:80], "who": who[:24], "src": b.get("提案來源") or "",
                               "st": b.get("議案狀態") or "", "d": d, "topic": _pol_topic(nm + " " + laws),
-                              "new": "草案" in nm and not re.search(r"修正|增訂|廢止|刪除|條文", nm),
+                              "new": "草案" in nm and not re.search(r"修正|增訂|廢止|刪除|條文|併案|^報告", nm),
                               "url": b.get("url") or f"https://ppg.ly.gov.tw/ppg/bills/{b.get('議案編號')}/details"})
             if not got or (got[-1].get("最新進度日期") or "") < c45:
                 break
@@ -1152,7 +1244,10 @@ def p_policy():
     for b in sorted(bills, key=lambda b: b["d"], reverse=True):
         if "三讀" in b["st"] and b["title"] not in seen3:
             seen3.add(b["title"]); third.append(b)
-    newlaw = [b for b in b30 if b["new"]]
+    newlaw, seenn = [], set()
+    for b in sorted(b30, key=lambda b: b["d"], reverse=True):  # 同一部新法常有好幾位委員各提一版，只留最新一筆
+        if b["new"] and b["title"] not in seenn and b["title"] not in seen3:
+            seenn.add(b["title"]); newlaw.append(b)
     bpick = sorted(sorted(newlaw, key=lambda b: b["d"], reverse=True), key=lambda b: b["topic"] not in POL_CONSUMER)[:8]
     if not drafts and not ideas and not bills:
         raise RuntimeError(f"policy: nothing {errs[:2]}")
@@ -3850,7 +3945,7 @@ def p_fish():
 
 # ---------- 美國企業在談什麼（SEC EDGAR 全文檢索：10-K / 10-Q / 8-K 提到的次數，比去年同期） ----------
 # SEC 存取規範：每秒不超過 10 次、User-Agent 要寫聯絡信箱。信箱放在 GitHub secret（SEC_CONTACT），不寫進公開程式碼。
-SEC_WORDS = [("GLP-1", "GLP-1 減重藥"), ("tariffs", "關稅"), ("agentic", "AI agent"), ("generative AI", "生成式 AI"),
+SEC_WORDS = [("GLP-1", "GLP-1"), ("tariffs", "關稅"), ("agentic", "AI 代理"), ("generative AI", "生成式 AI"),
              ("data center", "資料中心"), ("humanoid", "人形機器人"), ("small modular reactor", "小型核電"), ("stablecoin", "穩定幣"),
              ("Taiwan", "台灣"), ("private label", "自有品牌"), ("trade down", "消費降級"), ("Gen Z", "Z 世代"),
              ("loyalty program", "會員經濟"), ("resale", "二手轉售"), ("influencer", "網紅行銷"), ("pet food", "寵物食品"),
@@ -3870,10 +3965,14 @@ def p_secwords():
     start = end - timedelta(days=89)
     ly = lambda d: d.replace(year=d.year - 1)  # noqa: E731
     def q(word, a, b):
-        r = S.get("https://efts.sec.gov/LATEST/search-index", headers=hdr, timeout=40,
-                  params={"q": f'"{word}"', "dateRange": "custom", "startdt": a.isoformat(), "enddt": b.isoformat(), "forms": "10-K,10-Q,8-K"})
-        r.raise_for_status(); time.sleep(0.3)
-        return r.json()
+        for k in range(3):  # 全文檢索偶爾回 500，稍等重試
+            r = S.get("https://efts.sec.gov/LATEST/search-index", headers=hdr, timeout=40,
+                      params={"q": f'"{word}"', "dateRange": "custom", "startdt": a.isoformat(), "enddt": b.isoformat(), "forms": "10-K,10-Q,8-K"})
+            time.sleep(0.4)
+            if r.status_code < 500 or k == 2:
+                r.raise_for_status()
+                return r.json()
+            time.sleep(3 * (k + 1))
     rows, errs = [], []
     for word, label in SEC_WORDS:
         try:
@@ -7014,6 +7113,7 @@ run("airport", p_airport, keep_if_fresh_hours=0.25)
 run("alerts", p_alerts, keep_if_fresh_hours=0.15)
 run("oil", p_oil, keep_if_fresh_hours=12)
 run("localnews", p_localnews, keep_if_fresh_hours=1)
+run("elect", p_elect, keep_if_fresh_hours=0.5)  # 要在新聞、地方新聞、PTT 之後
 run("culture", p_culture, keep_if_fresh_hours=6)
 run("veg", p_veg, keep_if_fresh_hours=6)
 run("fish", p_fish, keep_if_fresh_hours=6)
