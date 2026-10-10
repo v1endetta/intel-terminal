@@ -1,6 +1,19 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610110725001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "南投縣"
+   ],
+   "text": "天氣高溫炎熱，今(11)日中午前後南投縣為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-10T23:25:58Z",
+   "exp": "2026-10-11T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610110725.cap"
+  },
+  {
    "id": "CWA-Weather_strong-wind_202610110430001",
    "cat": "強風",
    "lvl": 2,
@@ -89,12 +102,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610101027.cap"
   }
  ],
- "n_total": 5,
+ "n_total": 6,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/11 07:11:24"
+  "updated": "2026/10/11 07:29:42"
  },
  "errs": [],
- "updatedAt": "2026-10-10T23:17:47Z"
+ "updatedAt": "2026-10-10T23:36:04Z"
 }
