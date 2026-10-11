@@ -265,6 +265,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .tr-t tr.grp td{color:var(--dim);font:500 10.5px var(--mono);letter-spacing:.06em;padding-top:14px;border-bottom:0}.tr-t tr.grp .sub{letter-spacing:0;font-family:var(--sans,inherit)}.tr-t td.sp svg{display:block}
 @media (max-width:760px){.tr-t thead{display:none}.tr-t,.tr-t tbody{display:block}.tr-t tr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--line)}.tr-t tr.grp{display:block;border:0;padding:12px 0 0}.tr-t td{border:0;padding:0}.tr-t td.sp{display:none}
 .tr-t td.r{display:flex;justify-content:space-between;grid-column:1/-1;font-size:12px}.tr-t td.r::before{content:attr(data-l);color:var(--dim)}.tr-t td.vd{text-align:right}}
+.plain{font-size:13px;line-height:1.6;color:var(--text);padding:0 0 10px;margin-bottom:8px;border-bottom:1px dashed var(--line)}.plain em{font-style:normal}.plain em.up{color:var(--up)}.plain em.down{color:var(--down)}
 .ch-mv{display:block;font-size:10.5px;color:var(--dim);margin-top:2px}.ch-moves{font-size:12px;color:var(--muted);margin:-2px 0 8px}.ch-moves b{color:var(--text);font-weight:500}
 .ch-t{width:100%;border-collapse:collapse;font-size:12.5px}.ch-t th{font:500 10.5px var(--mono);color:var(--dim);text-align:center;padding:4px 2px;border-bottom:1px solid var(--line)}.ch-t th:first-child{text-align:left}
 .ch-t td{padding:6px 2px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle}.ch-t td.k{text-align:left;white-space:nowrap}.ch-t td.k .sub{display:block}
@@ -1338,6 +1339,29 @@ function errNote(errs){const nm=[...new Set((errs||[]).map(e=>String(e).split(/[
 function cofTxt(t){t=String(t||"").trim();const m=t.match(/^https?:\/\/(?:www\.|m\.)?([^\/\s?]+)\S*\s*(.*)$/);if(!m)return t;const h=m[1],rest=m[2]||"";
   const k=/facebook|fb\./.test(h)?"Facebook 貼文":/youtu/.test(h)?"YouTube 影片":/instagram/.test(h)?"IG 貼文":/tiktok/.test(h)?"TikTok 影片":/threads/.test(h)?"Threads 貼文":/line\.me|lin\.ee/.test(h)?"LINE 連結":"網站 "+h;
   return`（只轉傳連結）${k}${rest?"："+rest:""}`;}
+/* ---------- 白話結論：專業面板最上面加一句「這代表什麼」（規則產生，不用 AI） ---------- */
+function PLAIN(P){const put=(id,html)=>{const b=document.querySelector(`#${id} .pb`);if(!b||!html)return;let el=b.querySelector(":scope>.plain");if(!el){el=document.createElement("div");el.className="plain";b.prepend(el);}el.innerHTML=html;};
+  const g=(v,d=1)=>isFinite(v)?(v>0?"+":"")+Number(v).toFixed(d):"—",U=v=>`<em class="${v>0?"up":v<0?"down":""}">`,E_="</em>";
+  try{const T=P.taiex||{},M=P.tw_market||{},I=((M.institutions||{}).items)||[],tot=(I.find(x=>x.name==="合計")||{}).net,fx=(I.find(x=>x.name==="外資")||{}).net,B=M.breadth||{};
+    const pct=T.index&&T.change!=null?T.change/(T.index-T.change)*100:null;
+    put("p-taiex",T.index?`台股收 ${fmt(T.index,0)}，${U(pct)}${g(pct,2)}%${E_}。${tot!=null?`三大法人合計${tot>=0?"買":"賣"}超 ${fmt(Math.abs(tot),0)} 億（外資 ${U(fx)}${g(fx,0)} 億${E_}）`:""}${B.up!=null?`；上漲 ${B.up} 家、下跌 ${B.down} 家，${B.up>B.down*1.15?"多數股票在漲":B.down>B.up*1.15?"多數股票在跌":"漲跌家數差不多"}`:""}。`:"");}catch(e){}
+  try{const u=(((P.fx||{}).items)||[]).find(x=>x.code==="USD");if(u){const c=n(u.chg_pct);put("p-fx",`1 美元換 ${fmt(n(u.mid),3)} 台幣，${Math.abs(c)<0.1?"台幣幾乎沒動":c<0?"台幣<em class=\"up\">升值</em>":"台幣<em class=\"down\">貶值</em>"}（${g(c,2)}%）。`);}}catch(e){}
+  try{const F=P.taifex||{},fo=(((F.fut||{})["台指期"]||{})["外資"])||{},pc=((F.pcr||[])[0]||{}).oi;
+    if(fo.oi!=null)put("p-taifex",`外資在台指期是淨${fo.oi<0?"空":"多"}單 ${fmt(Math.abs(fo.oi)/1e4,1)} 萬口，比前一天${(fo.chg<0)===(fo.oi<0)?"再加碼":"減碼"} ${fmt(Math.abs(fo.chg||0),0)} 口${fo.oi<0?"：外資在看空或替現股避險":"：外資偏多"}。${pc!=null?`選擇權 Put/Call ${fmt(pc,0)}%，${pc>100?"高於 100，市場在買保護":"低於 100，避險需求不高"}。`:""}`);}catch(e){}
+  try{const W=((P.world||{}).items||[]).filter(x=>isFinite(n(x.chg_pct)));if(W.length){const up=W.filter(x=>n(x.chg_pct)>0).length,s=W.slice().sort((a,b)=>n(b.chg_pct)-n(a.chg_pct));
+    put("p-world",`主要股市 ${up} 個漲、${W.length-up} 個跌；最強 ${esc(s[0].name)} ${U(1)}${g(n(s[0].chg_pct),2)}%${E_}，最弱 ${esc(s[s.length-1].name)} ${U(-1)}${g(n(s[s.length-1].chg_pct),2)}%${E_}。`);}}catch(e){}
+  try{const S=((P.sectors||{}).items||[]).filter(x=>isFinite(n(x.chg5_pct))),R=(P.sectors||{}).risk_ratio||[];if(S.length){const s=S.slice().sort((a,b)=>n(b.chg5_pct)-n(a.chg5_pct));const def=["公用","必需","醫療"].includes(s[0].name),rr=R.length>20?(R[R.length-1]/R[R.length-21]-1)*100:null;
+    put("p-sectors",`近 5 天美股最強是${esc(s[0].name)}（${g(n(s[0].chg5_pct),1)}%）、最弱是${esc(s[s.length-1].name)}（${g(n(s[s.length-1].chg5_pct),1)}%）。${def?"領漲的是防禦型類股，資金在找避風港":"領漲的是景氣循環或成長類股，資金敢冒險"}${rr!=null?`；非必需／必需比值一個月 ${g(rr,1)}%，${rr<0?"消費信心偏保守":"消費信心偏積極"}`:""}。`);}}catch(e){}
+  try{const C=((P.commodities||{}).items||[]).filter(x=>isFinite(n(x.chg_pct)));if(C.length){const o=C.find(x=>/WTI/.test(x.name)),s=C.slice().sort((a,b)=>Math.abs(n(b.chg_pct))-Math.abs(n(a.chg_pct)))[0];
+    put("p-cmdty",`${o?`WTI 油價 ${fmt(n(o.price),2)} 美元（${g(n(o.chg_pct),2)}%）。`:""}今天動最大的是${esc(s.name)} ${U(n(s.chg_pct))}${g(n(s.chg_pct),2)}%${E_}。${o&&n(o.price)>=90?"油價在 90 美元以上，運輸和塑化成本壓力大。":""}`);}}catch(e){}
+  try{const L=P.liquidity||{},nt=L.net||{},si=L.sofr_iorb;if(nt.value!=null)put("p-liq",`美元流動性近 4 週${(nt.chg4w||0)>=0?"增加":"減少"} ${fmt(Math.abs((nt.chg4w||0)*10),0)} 億美元，${(nt.chg4w||0)>=0?"資金面偏寬鬆":"資金在收緊"}。${si!=null?`銀行間借錢的利率${si>0?"高於":"低於"}聯準會付給銀行的利率，${si>0?"代表開始有人缺錢":"代表市場不缺錢"}。`:""}`);}catch(e){}
+  try{const it={};(((P.macro||{}).items)||[]).forEach(x=>it[x.label]=x);const c=it["CPI 年增"],u=it["失業率"],l=it["景氣燈號"],cc=it["消費者信心指數"],dn=x=>x&&x.prev?parseFloat(x.value)-parseFloat(x.prev):null;
+    put("p-macro",`${l?`景氣${esc(l.value)}${l.score?` ${l.score} 分`:""}${/紅/.test(l.value)?"（過熱）":/黃紅/.test(l.value)?"（偏熱）":/綠/.test(l.value)?"（穩定）":/藍/.test(l.value)?"（低迷）":""}；`:""}${c?`物價年漲 ${esc(c.value)}，比上期${dn(c)<0?"降溫":"升溫"}；`:""}${u?`失業率 ${esc(u.value)}；`:""}${cc?`消費者信心 ${esc(cc.value)}（100 以下代表悲觀的人比樂觀多）`:""}。`);}catch(e){}
+  try{const it={};(((P.gmacro||{}).items)||[]).filter(x=>x.group==="美國").forEach(x=>it[x.label]=x);const c=it["CPI 年增"],u=it["失業率"],t=it["10 年公債"],f=it["聯邦資金利率"];
+    put("p-gmacro",`美國：${c?`通膨 ${esc(c.value)}（${n(c.delta)>0?"再升溫":"降溫"}）`:""}${u?`、失業率 ${esc(u.value)}`:""}${f?`、政策利率 ${esc(f.value)}`:""}${t?`、10 年債 ${esc(t.value)}`:""}。${c&&n(c.raw)>3?"通膨還在 3% 以上，降息空間小，借錢成本會維持高檔。":""}`);}catch(e){}
+  try{const T2=P.tech2||{},top=a=>(a||[]).filter(x=>isFinite(n(x.rel90))).sort((a,b)=>n(b.rel90)-n(a.rel90))[0];const a=top(T2.pypi),b=top(T2.npm),pp=(T2.papers||[])[0];
+    put("p-tech2",`「比同組」＝這個套件三個月的成長，減掉同類套件的中位數，正的代表比同類長得快。${a?`Python 長最快：${esc(a.name)}（${g(n(a.rel90),0)}）`:""}${b?`；JavaScript：${esc(b.name)}（${g(n(b.rel90),0)}）`:""}${pp?`；論文成長最快的題目：${esc(pp.name)}（${g(n(pp.chg),0)}%）`:""}。`);}catch(e){}
+}
 const renderers={
   taiex(d){twm.taiex=d;renderTaiex();},
   tw_market(d){twm.market=d;renderTaiex();},
@@ -1705,7 +1729,7 @@ setInterval(countdown,1000);
 setInterval(()=>{if(genTime)$("#db-age").textContent="最近抓取 "+ago(new Date(genTime).toISOString());Object.entries(metaDocs).forEach(([id,[doc,h]])=>{if(id==="p-pulse")renderers.pulse(doc);else setMeta(id,doc,h);});},60e3);
 function inSession(){const h=new Date().getUTCHours(),d=new Date().getUTCDay();if(d===0||d===6)return false;return (h>=1&&h<6)||(h>=13&&h<21);}
 function renderAll(P,all){
-    window.LASTP=P;try{V2.before();}catch(e){console.warn("v2",e);}    Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});try{IB.render(P);}catch(e){console.warn("ib",e);}
+    window.LASTP=P;try{V2.before();}catch(e){console.warn("v2",e);}    Object.keys(renderers).forEach(k=>{if(P[k]){try{renderers[k](P[k]);}catch(e){console.warn("render",k,e);}}});try{PLAIN(P);}catch(e){console.warn("plain",e);}try{IB.render(P);}catch(e){console.warn("ib",e);}
     genTime=new Date(all.generatedAt).getTime();$("#db-age").textContent=(window.TT_ON?"時光機 ":"最近抓取 ")+ago(all.generatedAt);$(".k.db").classList.remove("stale");
     try{panelCharts(P);}catch(e){console.warn("pcx",e);}
     movers(P);tape(P);try{brief(P);}catch(e){console.warn("brief",e);}try{V2.after(P,all);}catch(e){console.warn("v2",e);}}
@@ -2278,7 +2302,7 @@ function render(P){
   /* 稅籍：細類行業新開家數（相對全體的年增） */
   const TX=P.taxreg||{};
   if((TX.up||[]).length){const up=TX.up.slice(0,8),dn=(TX.down||[]).filter(x=>n(x.yoy)<0&&!up.includes(x)).slice(0,5).reverse();
-    brandsChart("ib1x",[...up,...dn].map(x=>({cat:String(x.name).replace(/（.*?）|\(.*?\)/g,"").slice(0,8),chg:n(x.yoy)})));
+    brandsChart("ib1x",[...up,...dn].map(x=>({cat:String(x.name).replace(/（.*?）|\(.*?\)/g,"").replace(/^其他/,""),chg:n(x.yoy)})));
     const w=(TX.win||[]).map(m=>String(m).replace("-","/")).join("–");
     $("#ib1xh").innerHTML=`稅籍新開店 · 哪類小店在變多<span class="n">消費與生活服務類 · ${esc(w)} 新開家數，比去年同期、已扣掉全體 ${TX.raw_yoy>0?"+":""}${TX.raw_yoy}%</span>`;
     const nw=(TX.new||[])[0];
