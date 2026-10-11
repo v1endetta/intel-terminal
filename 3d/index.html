@@ -217,8 +217,8 @@ function applySun() {
   const day = el > -0.05;
   const e = Math.max(el, 0.18);
   sun.position.set(Math.sin(az) * Math.cos(e) * 1000, Math.sin(e) * 1000, -Math.cos(az) * Math.cos(e) * 1000);
-  if (day) { sun.color.set(el < 0.2 ? 0xffd2a1 : 0xffffff); sun.intensity = 2.4; amb.intensity = 0.35; if (terrainMat) terrainMat.envMapIntensity = 1.1; }
-  else { sun.position.set(-500, 700, -300); sun.color.set(0x9db4ff); sun.intensity = 0.9; amb.intensity = 0.18; if (terrainMat) terrainMat.envMapIntensity = 0.5; }
+  if (day) { sun.color.set(el < 0.2 ? 0xffd2a1 : 0xffffff); sun.intensity = 2.6; amb.intensity = 0.35; if (terrainMat) terrainMat.envMapIntensity = 1.3; }
+  else { sun.position.set(-700, 380, -260); sun.color.set(0xaec2ff); sun.intensity = 1.8; amb.intensity = 0.2; if (terrainMat) terrainMat.envMapIntensity = 0.75; }
   const t = new Date().toLocaleTimeString("zh-TW", { timeZone: "Asia/Taipei", hour: "2-digit", minute: "2-digit", hour12: false });
   $("clock").textContent = t + " 台北";
   $("when").textContent = (day ? (el < 0.2 ? "晨昏" : "白天") : "夜間") + " · " + t + " 台北 · 光線依實際太陽位置";
@@ -270,7 +270,7 @@ function buildTerrain() {
   g.setAttribute("aElev", new THREE.BufferAttribute(el, 1));
   g.setAttribute("aLL", new THREE.BufferAttribute(ll, 2));
   g.setIndex(idx); g.computeVertexNormals();
-  terrainMat = new THREE.MeshStandardMaterial({ color: 0xc7cad1, metalness: 0.82, roughness: 0.38, envMapIntensity: 1.1 });
+  terrainMat = new THREE.MeshStandardMaterial({ color: 0xdfe3ea, metalness: 0.78, roughness: 0.3, envMapIntensity: 1.3 });
   terrainMat.onBeforeCompile = sh => {
     Object.assign(sh.uniforms, uni);
     sh.vertexShader = sh.vertexShader
@@ -563,7 +563,7 @@ function setupFlow() {
 }
 
 /* ---------- 鏡頭 ---------- */
-const HOME = { pos: new THREE.Vector3(260, 420, 560), tgt: new THREE.Vector3(0, 0, 10) };
+const HOME = { pos: new THREE.Vector3(MOBILE ? 220 : 170, MOBILE ? 520 : 330, MOBILE ? 620 : 430), tgt: new THREE.Vector3(0, 10, 10) };
 let fly = null;
 function flyTo(pos, tgt, dur = 2.2) { fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: pos.clone(), t1: tgt.clone(), k: 0, dur }; }
 const ease = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
@@ -642,6 +642,7 @@ function loop() {
   controls.update(); renderer.render(scene, camera); placeLabels();
   requestAnimationFrame(loop);
 }
+window.__intel3d = { camera, controls, flyTo, setLayer, start: () => start() };
 addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
 
 (async () => {
@@ -651,7 +652,7 @@ addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; cam
     applySun(); setInterval(applySun, 60000);
     setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow();
     camera.position.set(-200, 1300, 1100); controls.target.set(0, 0, 0);
-    flyTo(new THREE.Vector3(180, 520, 700), new THREE.Vector3(0, 0, 30), 3.2);
+    flyTo(new THREE.Vector3(MOBILE ? 240 : 200, MOBILE ? 560 : 360, MOBILE ? 700 : 470), new THREE.Vector3(0, 10, MOBILE ? 60 : 70), 3.2);
     $("load").classList.add("done");
     loop();
     setInterval(async () => {   // 每 5 分鐘更新資料：重建圖層
