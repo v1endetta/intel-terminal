@@ -219,13 +219,15 @@ const FORCE = new URLSearchParams(location.search).get("time");   // ?time=day /
 function applySun() {
   let { el, az } = sunPos();
   if (FORCE === "day") { el = 0.9; az = 2.4; } else if (FORCE === "night") el = -0.6;
+  uni.uNight.value = el > -0.05 ? 0 : 1;
+  renderer.toneMappingExposure = el > -0.05 ? 1.0 : 0.85;
   const day = el > -0.05;
   const e = Math.max(el, 0.18);
   sun.position.set(Math.sin(az) * Math.cos(e) * 1000, Math.sin(e) * 1000, -Math.cos(az) * Math.cos(e) * 1000);
   IS_DAY = day;
   const real = !!DAY;
   if (day) { sun.color.set(el < 0.2 ? 0xffd2a1 : 0xffffff); sun.intensity = real ? 2.3 : 2.6; amb.intensity = real ? 0.55 : 0.35; if (terrainMat) { terrainMat.envMapIntensity = real ? 0.35 : 1.3; terrainMat.emissiveIntensity = 0; } }
-  else { sun.position.set(-700, 380, -260); sun.color.set(0xaec2ff); sun.intensity = real ? 0.55 : 1.8; amb.intensity = real ? 0.14 : 0.2; if (terrainMat) { terrainMat.envMapIntensity = real ? 0.15 : 0.75; terrainMat.emissiveIntensity = real ? 1 : 0; } }
+  else { sun.position.set(-700, 380, -260); sun.color.set(0xaec2ff); sun.intensity = real ? 0.35 : 1.8; amb.intensity = real ? 0.08 : 0.2; if (terrainMat) { terrainMat.envMapIntensity = real ? 0.15 : 0.75; terrainMat.emissiveIntensity = real ? 1 : 0; } }
   const t = new Date().toLocaleTimeString("zh-TW", { timeZone: "Asia/Taipei", hour: "2-digit", minute: "2-digit", hour12: false });
   $("clock").textContent = t + " 台北";
   $("when").textContent = (day ? (el < 0.2 ? "晨昏" : "白天") : "夜間") + " · " + t + " 台北 · 光線依實際太陽位置";
@@ -234,7 +236,7 @@ function applySun() {
 
 /* ---------- 地形 ---------- */
 let DEM, META, terrain, terrainMat, radarTex = null, DAY = null, NIGHT = null, IS_DAY = true;
-const uni = { uRadar: { value: 0 }, uRadarTex: { value: null }, uRadarB: { value: new THREE.Vector4(0, 0, 1, 1) }, uTime: { value: 0 }, uDim: { value: 0 } };
+const uni = { uRadar: { value: 0 }, uRadarTex: { value: null }, uRadarB: { value: new THREE.Vector4(0, 0, 1, 1) }, uTime: { value: 0 }, uDim: { value: 0 }, uNight: { value: 0 } };
 let dimTo = 0;
 
 function hAt(lon, lat) {   // 地表高度（場景單位）
@@ -285,7 +287,7 @@ function buildTerrain() {
   g.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
   g.setIndex(idx); g.computeVertexNormals();
   terrainMat = DAY
-    ? new THREE.MeshStandardMaterial({ map: DAY, emissiveMap: NIGHT, emissive: 0xffe2b8, emissiveIntensity: 0, metalness: 0, roughness: 0.88, envMapIntensity: 0.35 })
+    ? new THREE.MeshStandardMaterial({ map: DAY, emissiveMap: NIGHT, emissive: 0xffc68a, emissiveIntensity: 0, metalness: 0, roughness: 0.88, envMapIntensity: 0.35 })
     : new THREE.MeshStandardMaterial({ color: 0x80858f, metalness: 0.86, roughness: 0.32, envMapIntensity: 1.25 });
   terrainMat.onBeforeCompile = sh => {
     Object.assign(sh.uniforms, uni);
@@ -293,11 +295,11 @@ function buildTerrain() {
       .replace("#include <common>", "#include <common>\nattribute float aElev; attribute vec2 aLL; varying float vElev; varying vec2 vLL;")
       .replace("#include <begin_vertex>", "#include <begin_vertex>\nvElev = aElev; vLL = aLL;");
     sh.fragmentShader = sh.fragmentShader
-      .replace("#include <common>", "#include <common>\nvarying float vElev; varying vec2 vLL; uniform float uRadar; uniform sampler2D uRadarTex; uniform vec4 uRadarB; uniform float uTime; uniform float uDim;")
-      .replace("#include <color_fragment>", "#include <color_fragment>\nfloat lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));\ndiffuseColor.rgb = mix(vec3(lum), diffuseColor.rgb, 0.8) * 1.3;\ndiffuseColor.rgb *= mix(1.0, 0.42, uDim);")
+      .replace("#include <common>", "#include <common>\nvarying float vElev; varying vec2 vLL; uniform float uRadar; uniform sampler2D uRadarTex; uniform vec4 uRadarB; uniform float uTime; uniform float uDim; uniform float uNight;")
+      .replace("#include <color_fragment>", "#include <color_fragment>\nfloat lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));\ndiffuseColor.rgb = mix(vec3(lum), diffuseColor.rgb, 0.8) * 1.3;\ndiffuseColor.rgb *= mix(1.0, 0.42, uDim);\ndiffuseColor.rgb *= mix(vec3(1.0), vec3(0.16, 0.19, 0.27), uNight);")
       .replace("#include <clipping_planes_fragment>", "#include <clipping_planes_fragment>\nif (vElev < 0.0) discard;")
       .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
-        totalEmissiveRadiance = pow(totalEmissiveRadiance, vec3(2.4)) * 1.25;   // 夜光：只留城市核心，郊區壓暗
+        totalEmissiveRadiance = pow(totalEmissiveRadiance, vec3(3.6)) * 0.95;   // 夜光：只留城市核心，郊區壓暗
         // 高度帶：極淡的等高線，讓山形更清楚
         float band = abs(fract(vElev / 500.0) - 0.5);
         totalEmissiveRadiance += vec3(0.55, 0.62, 0.75) * smoothstep(0.03, 0.0, band) * 0.03 * step(80.0, vElev);
