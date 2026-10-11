@@ -479,7 +479,7 @@ canvas.o-fx{display:block;width:100%}
 #p-pulse{display:none!important}
 #p-taiex{order:1}#p-fx{order:2}#p-fear{order:3}#p-taifex{order:4}#p-world{order:5}#p-tw-stocks{order:6}#p-lux{order:7}#p-mops{order:8}#p-usbig{order:9}@media (min-width:1101px){#p-taiex{grid-row:span 2}}#p-sectors{order:10}#p-cmdty{order:11}#p-revenue{order:12}
 #p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-cards{order:7}#p-lead{order:7}#p-housefc{order:7}#p-imports{order:7}#p-house{order:8}#p-poly{order:9}#p-jobs{order:10}
-#p-weekly{order:-1}#ib-soc{order:0}#p-chain{order:2}#p-ledger{order:2}#p-voice{order:2}#p-wiki{order:3}#p-tech2{order:4}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
+#p-weekly{order:0}#ib-soc{order:0}#p-chain{order:1}#p-ledger{order:2}#p-voice{order:3}#p-wiki{order:4}#p-tech2{order:5}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
 .grid{align-items:start}
 /* 桃機翻牌看板：只有變動的字會翻 */
 .fids{display:grid;gap:3px;align-content:start}
@@ -2434,10 +2434,10 @@ root.classList.toggle("still",!motion);
 const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",String(motion));mbtn.textContent=motion?"動畫：開":"動畫：關";};syncBtn();
 
 /* ---------- tabs ---------- */
-const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
+const TABS=[["overview","總覽"],["trend","走向"],["intel","訊號"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
-  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"intel","p-ledger":"intel","p-chain":"intel","p-weekly":"intel","p-tech2":"intel","p-imports":"macro","p-housefc":"macro","p-metro":"live",
-  "ib-sig":"intel","ib-soc":"social","p-voice":"intel","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
+  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"trend","p-ledger":"trend","p-chain":"trend","p-weekly":"trend","p-tech2":"trend","p-imports":"macro","p-housefc":"macro","p-metro":"live",
+  "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-elect":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
   "brief":"overview","ov":"overview","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
@@ -2512,7 +2512,7 @@ function snap(P){
 function layout(){
   $("#ov").innerHTML=`
   <section class="w12 o-tks" id="ov-tks" aria-label="主要行情"></section>
-  <section class="o-card w12" id="ov-c-opp">${H("Opportunities","本週機會 · 需求在長、媒體和新店還沒跟上 · 民生消費 · 小店在開","intel")}<div class="o-opp" id="ov-opp"></div></section>
+  <section class="o-card w12" id="ov-c-opp">${H("Opportunities","本週機會 · 需求在長、媒體和新店還沒跟上 · 民生消費 · 小店在開","trend")}<div class="o-opp" id="ov-opp"></div></section>
   <section class="o-card w4" id="ov-c-tw">${H("TAIEX","加權 · 法人 · 家數","market")}
     <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><div class="o-odo" id="ov-odo"></div><span class="num" id="ov-twchg"></span></div>
     <svg class="o-tw-spark" id="ov-twspark" viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%;height:46px;display:block" aria-hidden="true"></svg>
@@ -2638,7 +2638,7 @@ function opp(){const el=E("ov-opp");if(!el)return;const O=S.opp,pc=v=>`${v>0?"+"
   const c2=fo.length?fo.map(x=>`<li><span class="o-tag">年增</span><span class="tt">${esc(String(x.name).replace(/業$/,""))}</span><span class="num ${n(x.yoy)>=0?"up":"down"}">${pc(x.yoy)}</span><span class="num sc">${x.mom!=null?"月 "+pc(x.mom):""}</span></li>`).join(""):'<li class="o-emp">消費資料還沒進來</li>';
   const tu=(O.tx.up||[]).slice(0,4),w=(O.tx.win||[]).map(m=>String(m).slice(2).replace("-","/")).join("–");
   const c3=(tu.length?tu.map(x=>`<li><span class="o-tag">新開</span><span class="tt">${esc(String(x.name).replace(/（.*?）|\(.*?\)/g,""))}</span><span class="num up">${pc(x.yoy)}</span><span class="num sc">${n(x.n6).toLocaleString()} 家</span></li>`).join(""):'<li class="o-emp">稅籍資料還沒進來</li>')+(O.tx.n6?`<li class="o-foot"><span class="sc">${esc(w)} 全體新開 ${n(O.tx.n6).toLocaleString()} 家 · 比去年 <span class="${O.tx.raw_yoy<0?"down":"up"}">${pc(O.tx.raw_yoy)}</span> · 已校正</span></li>`:"");
-  el.innerHTML=`<div><div class="o-colh">趨勢雷達 · 搜尋 vs 媒體 vs 新店 <a data-go="intel" href="#">看全部 →</a></div><ul class="o-ls op tr">${c1}</ul></div>
+  el.innerHTML=`<div><div class="o-colh">趨勢雷達 · 搜尋 vs 媒體 vs 新店 <a data-go="trend" href="#">看全部 →</a></div><ul class="o-ls op tr">${c1}</ul></div>
     <div><div class="o-colh">民生消費 · ${esc(O.cu.month||"")} 電子發票營業額年增 <a data-go="macro" href="#">看全部 →</a></div><ul class="o-ls op">${c2}</ul></div>
     <div><div class="o-colh">小店在開 · 稅籍新開家數年增 <a data-go="intel" href="#">看全部 →</a></div><ul class="o-ls op">${c3}</ul></div>`;}
 function fill(anim){const parts=[["tk",()=>tickers(anim)],["opp",opp],["tw",tw],["macro",macro],["risk",risk],["lists",()=>lists(anim)],["hot",()=>hot(anim)],["mood",mood],["ptt",ptt],["cof",()=>cof(anim)],["fund",fund],["flaps",flaps],["deps",deps],["poly",poly],["us",()=>heat("ov-ussec",S.ussec)],["tw2",()=>heat("ov-twsec",S.twsec)],["gov",gov]];
