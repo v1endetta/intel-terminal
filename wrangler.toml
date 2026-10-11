@@ -8,7 +8,7 @@ preview_urls = false
 [assets]
 directory = "./site"
 binding = "ASSETS"
-run_worker_first = ["/data/*", "/feed/*"]
+run_worker_first = ["/data/*", "/feed/*", "/s/*"]
 
 [[routes]]
 pattern = "intel.daltatw.com"
@@ -18,3 +18,7 @@ custom_domain = true
 [[kv_namespaces]]
 binding = "DATA"
 id = "__KV_ID__"
+
+# 分享連結版本：改成 "2" 再部署，舊連結立刻失效（新連結由 FEED_KEY 推算）；改成 "off" 關閉分享
+[vars]
+SHARE_VER = "1"

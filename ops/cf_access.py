@@ -1,4 +1,4 @@
-"""建立 Cloudflare Access：intel.daltatw.com 只讓名單上的人登入（第一次建立時只有帳號本人，之後在後台加人）；/feed 路徑放行給排程。
+"""建立 Cloudflare Access：intel.daltatw.com 只讓名單上的人登入（第一次建立時只有帳號本人，之後在後台加人）；/feed（晨報）與 /s（分享連結）放行，由 Worker 檢查網址裡的金鑰。
 冪等：已存在就更新，不會重複建立。只用環境變數裡的權杖，不印出任何秘密或信箱。"""
 import sys
 
@@ -14,6 +14,7 @@ try:
     want = [
         {"name": "intel-terminal", "domain": DOMAIN, "decision": "allow", "include": [{"email": {"email": e}} for e in emails]},
         {"name": "intel-terminal-feed", "domain": f"{DOMAIN}/feed", "decision": "bypass", "include": [{"everyone": {}}]},
+        {"name": "intel-terminal-share", "domain": f"{DOMAIN}/s", "decision": "bypass", "include": [{"everyone": {}}]},
     ]
     for w in want:
         body = {"name": w["name"], "domain": w["domain"], "type": "self_hosted", "session_duration": "720h",
