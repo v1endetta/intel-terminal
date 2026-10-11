@@ -1,0 +1,30 @@
+name: bake-tex
+
+# 一次性：抓 NASA 公有領域的台灣白天衛星圖與夜間燈光圖，寫進 main 的 3d/ 資料夾。
+on:
+  push:
+    branches: [main]
+    paths: [ops/bake_tex.py, .github/workflows/bake-tex.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - run: python ops/bake_tex.py
+      - name: Commit
+        run: |
+          git config user.name "intel-bot"
+          git config user.email "intel-bot@users.noreply.github.com"
+          git add 3d/day.jpg 3d/night.jpg 3d/dem.json
+          git diff --cached --quiet && exit 0
+          git commit -qm "3d：台灣白天衛星圖與夜間燈光圖（NASA GIBS）"
+          for i in 1 2 3; do git push -q origin HEAD:main && exit 0; git pull -q --rebase origin main; done; exit 1
