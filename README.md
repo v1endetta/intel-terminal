@@ -7,7 +7,9 @@
 ```
 main 分支（程式碼，改動才觸發 Pages 部署）
   fetch.py               抓取腳本；每個來源獨立失敗、失敗保留舊值
-  index.html             終端機頁面，從 data 分支的 raw 網址讀 all.json
+  index.html             首頁：3D 台灣（素材在 3d/，用 <base href="/3d/"> 讀）
+  terminal/index.html    完整終端機，從 data 分支的 raw 網址讀 all.json
+  3d/                    地形、材質、建築等素材；3d/index.html 只轉址回首頁
   .github/workflows/fetch.yml   長跑迴圈：每 5／15 分鐘抓一次並 commit 到 data 分支
 
 data 分支（資料，每次抓取一個 commit；超過 2000 個 commit 自動壓平重來）
