@@ -1,11 +1,11 @@
-import os, json, requests, time
+import os, json, requests
 os.makedirs("out25", exist_ok=True)
+H = {"User-Agent": "intel-terminal/1.0 (personal research; https://github.com/v1endetta/intel-terminal)"}
 rep = {}
-for u in ("https://rss.marketingtools.apple.com/api/v2/tw/podcasts/top/25/podcasts.json", "https://rss.applemarketingtools.com/api/v2/tw/podcasts/top/25/podcasts.json", "https://itunes.apple.com/tw/rss/toppodcasts/limit=25/json"):
-    t = time.time()
-    try:
-        r = requests.get(u, timeout=60, headers={"User-Agent": "intel-terminal/1.0"})
-        rep[u] = {"st": r.status_code, "sec": round(time.time() - t, 1), "len": len(r.content), "head": r.text[:200]}
-    except Exception as e:
-        rep[u] = {"err": str(e)[:150], "sec": round(time.time() - t, 1)}
+for ds in (9347, 29237):
+    m = requests.get(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", headers=H, timeout=40).json()["result"]
+    rep[ds] = [{k: x.get(k) for k in ("resourceDescription", "resourceModified", "resourceDownloadUrl", "resourceFormat")} for x in m.get("distribution") or []]
+u = rep[9347][0]["resourceDownloadUrl"]
+t = requests.get(u, headers=H, timeout=40).content.decode("utf-8-sig", "replace").splitlines()
+rep["9347rows"] = t[:25]
 json.dump(rep, open("out25/probe.json", "w"), ensure_ascii=False, indent=1)
