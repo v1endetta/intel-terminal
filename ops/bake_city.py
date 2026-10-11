@@ -168,9 +168,10 @@ for key, c in CITIES.items():
         for x, z in pts:
             a += struct.pack("<HH", q(x), q(z))
     (OUT / f"a_{key}.bin").write_bytes(bytes(a))
-    CITIES[key].update({"pn": len(B), "pbytes": len(out), "rn": len(c["R"]), "rbytes": len(r), "an": len(c["A"]), "abytes": len(a)})
+    nr, na = len(c["R"]), len(c["A"])
     for f in ("B", "R", "A"):
         CITIES[key].pop(f, None)
-    print(key, "buildings", len(B), len(out) // 1024, "KB | roads", len(c["R"]), len(r) // 1024, "KB | areas", len(c["A"]), len(a) // 1024, "KB")
+    CITIES[key].update({"pn": len(B), "pbytes": len(out), "rn": nr, "rbytes": len(r), "an": na, "abytes": len(a)})
+    print(key, "buildings", len(B), len(out) // 1024, "KB | roads", nr, len(r) // 1024, "KB | areas", na, len(a) // 1024, "KB")
 META["detail"] = 1
 (OUT / "buildings.json").write_text(json.dumps(META, ensure_ascii=False), encoding="utf-8")
