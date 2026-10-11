@@ -5859,13 +5859,22 @@ def p_news():
     intl = _dedupe_sort(intl, 12)
 
     groups = []
+    # 40 多個 Google News 查詢：以前一個接一個（每輪約 150 秒），改成 3 條並行先抓好（每條之間仍間隔 0.8 秒）
+    from concurrent.futures import ThreadPoolExecutor
+    def _kwfetch(q):
+        lang = "en" if q.startswith("en:") else "zh"
+        out = _try("kw " + q, _gnews, q[3:] if lang == "en" else q, "", 100, lang)
+        time.sleep(0.8)
+        return out
+    allq = list(dict.fromkeys(q for _, qs in NEWS_GROUPS for q in qs))
+    with ThreadPoolExecutor(max_workers=3) as ex:
+        KW = dict(zip(allq, ex.map(_kwfetch, allq)))
     for name, qs in NEWS_GROUPS:
         got, all7 = [], []
         for q in qs:
-            lang = "en" if q.startswith("en:") else "zh"
             must = WATCH_MUST.get(q)
             lim = 8 if must else 4
-            full = _try("kw " + q, _gnews, q[3:] if lang == "en" else q, "", 100, lang)
+            full = KW.get(q) or []
             for i, it in enumerate(full):
                 if WATCH_SRC_BLOCK.search(it.get("source") or "") or WATCH_NOISE.search(it.get("title") or ""):
                     continue
@@ -5874,7 +5883,6 @@ def p_news():
                 it["kw"] = q; all7.append(it)
                 if i < lim:
                     got.append(it)
-            time.sleep(0.8)
         # 每組 4 則：關鍵字輪流各出一則（避免單一話題洗版），標題前 14 字相同視為同一則
         fresh_cut = (NOW - timedelta(days=21)).isoformat()
         got = [g for g in got if (g.get("at") or "") >= fresh_cut]  # 三週以上的舊聞不進 Watchlist
