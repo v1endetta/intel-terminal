@@ -44,7 +44,7 @@ body.exploring #hero{opacity:0;transform:translateY(-24px)}
 body.exploring #hero .ctas{pointer-events:none}
 
 /* 圖層說明 */
-#caption{position:fixed;left:max(24px,env(safe-area-inset-left));top:72px;z-index:10;max-width:420px;opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease;pointer-events:none}
+#caption{position:fixed;left:max(16px,env(safe-area-inset-left));top:64px;z-index:10;max-width:440px;padding:12px 16px 14px;border-radius:18px;background:rgba(10,10,12,.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease;pointer-events:none}
 body.exploring #caption{opacity:1;transform:none}
 #caption .eyebrow{font-size:12px;color:var(--fg3);letter-spacing:.08em}
 #caption h2{font-size:32px;font-weight:600;letter-spacing:-.01em;margin-top:4px}
@@ -295,8 +295,8 @@ function buildTerrain() {
   terrainMat.onBeforeCompile = sh => {
     Object.assign(sh.uniforms, uni);
     sh.vertexShader = sh.vertexShader
-      .replace("#include <common>", "#include <common>\nattribute float aElev; attribute vec2 aLL; varying float vElev; varying vec2 vLL;")
-      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvElev = aElev; vLL = aLL;");
+      .replace("#include <common>", "#include <common>\nattribute float aElev; attribute vec2 aLL; varying float vElev; varying vec2 vLL; uniform float uClose;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvElev = aElev; vLL = aLL; transformed.y *= mix(1.0, 0.42, uClose);");
     sh.fragmentShader = sh.fragmentShader
       .replace("#include <common>", "#include <common>\nvarying float vElev; varying vec2 vLL; uniform float uRadar; uniform sampler2D uRadarTex; uniform vec4 uRadarB; uniform float uTime; uniform float uDim; uniform float uNight; uniform sampler2D uLights; uniform float uHasLights; uniform float uClose;")
       .replace("#include <color_fragment>", "#include <color_fragment>\nfloat lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));\ndiffuseColor.rgb = mix(vec3(lum), diffuseColor.rgb, 0.8) * 1.3;\ndiffuseColor.rgb *= mix(1.0, 0.42, uDim);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.24, 0.25, 0.27) + diffuseColor.rgb * 0.18, uClose * 0.8);\ndiffuseColor.rgb *= mix(vec3(1.0), vec3(0.16, 0.19, 0.27), uNight);")
@@ -416,7 +416,7 @@ async function loadCity(key) {
       const x = dv.getUint16(o, true) / 2, z = dv.getUint16(o + 2, true) / 2, w = dv.getUint16(o + 4, true) / 10, d = dv.getUint16(o + 6, true) / 10;
       const a = dv.getUint8(o + 8) / 255 * Math.PI, h = dv.getUint16(o + 9, true) / 10;
       const lon = c.bbox[0] + x / c.kx, lat = c.bbox[1] + z / c.ky, [sx, sz] = toXZ(lon, lat);
-      p.set(sx, hAt(lon, lat) - 0.02, sz); q.setFromAxisAngle(up, a); sc.set(Math.max(w, 4) / 1000, h / 1000 * BEX, Math.max(d, 4) / 1000);
+      p.set(sx, hAt(lon, lat) * 0.42 - 0.01, sz); q.setFromAxisAngle(up, a); sc.set(Math.max(w, 4) / 1000, h / 1000 * BEX, Math.max(d, 4) / 1000);
       m.compose(p, q, sc); mesh.setMatrixAt(i, m);
     }
     mesh.instanceMatrix.needsUpdate = true; mesh.computeBoundingSphere();
