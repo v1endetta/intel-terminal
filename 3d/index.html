@@ -158,7 +158,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const RAW = "https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/";
-const ASSET_V = 4;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
+const ASSET_V = 5;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
 const MOBILE = matchMedia("(max-width:760px)").matches || /Mobi|Android/i.test(navigator.userAgent);
 const EX = 6;                 // 高度誇張倍數
 const LONC = 120.95, LATC = 23.65;
@@ -423,6 +423,137 @@ async function loadCity(key) {
     scene.add(mesh); CITY[key] = { state: "ready", mesh };
   } catch (e) { CITY[key] = { state: "error" }; }
 }
+
+// ---- 精細模型：真實建物外形＋道路＋水域綠地（電腦版；手機用上面的方塊版）----
+const WORKER_SRC = `
+import { ShapeUtils, Vector2 } from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+let DEM, DM;
+const hAt = (lon, lat) => { const i = Math.round((lon - DM.lon0) / (DM.lon1 - DM.lon0) * (DM.w - 1)), j = Math.round((DM.lat1 - lat) / (DM.lat1 - DM.lat0) * (DM.h - 1));
+  if (i < 0 || j < 0 || i >= DM.w || j >= DM.h) return 0; return Math.max(DEM[j * DM.w + i], 0) / 1000 * DM.ex * 0.42; };
+onmessage = async e => {
+  const m = e.data;
+  if (m.dem) { DEM = m.dem; DM = m.meta; return; }
+  const { key, c, base, T, BEX } = m;
+  const toS = (x, z) => [T.ox + x / c.kx * T.kxs, T.oz - z / c.ky * T.ky];
+  const g = (x, z) => hAt(c.bbox[0] + x / c.kx, c.bbox[1] + z / c.ky);
+  const get = async f => { const r = await fetch(base + f); if (!r.ok) throw new Error(f); return new DataView(await r.arrayBuffer()); };
+  // 建物
+  const dv = await get("p_" + key + ".bin?v=" + T.v);
+  const P = [], N = [], I = [];
+  let o = 0, nb = 0;
+  while (o + 9 <= dv.byteLength) {
+    const cx = dv.getUint16(o, true) / 2, cz = dv.getUint16(o + 2, true) / 2, h = dv.getUint16(o + 4, true) / 10, bs = dv.getUint16(o + 6, true) / 10, n = dv.getUint8(o + 8); o += 9;
+    const pts = [];
+    for (let k = 0; k < n; k++) { pts.push(toS(cx + dv.getInt16(o, true) / 4, cz + dv.getInt16(o + 2, true) / 4)); o += 4; }
+    if (pts.length < 3) continue;
+    const gy = g(cx, cz), y0 = gy + bs / 1000 * BEX - (bs ? 0 : 0.004), y1 = gy + h / 1000 * BEX, rnd = Math.random();
+    let mx = 0, mz = 0; for (const p of pts) { mx += p[0]; mz += p[1]; } mx /= pts.length; mz /= pts.length;
+    for (let k = 0; k < pts.length; k++) {
+      const a = pts[k], b = pts[(k + 1) % pts.length];
+      let nx = b[1] - a[1], nz = -(b[0] - a[0]); const L = Math.hypot(nx, nz) || 1; nx /= L; nz /= L;
+      if (nx * ((a[0] + b[0]) / 2 - mx) + nz * ((a[1] + b[1]) / 2 - mz) < 0) { nx = -nx; nz = -nz; }
+      P.push(a[0], y0, a[1], b[0], y0, b[1], b[0], y1, b[1], a[0], y0, a[1], b[0], y1, b[1], a[0], y1, a[1]);
+      for (let q = 0; q < 6; q++) { N.push(nx, 0, nz); I.push(gy, rnd); }
+    }
+    const tri = ShapeUtils.triangulateShape(pts.map(p => new Vector2(p[0], p[1])), []);
+    for (const t of tri) for (const ix of t) { P.push(pts[ix][0], y1, pts[ix][1]); N.push(0, 1, 0); I.push(gy, rnd); }
+    nb++;
+  }
+  // 道路
+  const W = [0, 24, 19, 15, 11, 8, 5.5, 3.6];
+  const rv = await get("r_" + key + ".bin?v=" + T.v);
+  const RP = [], RC = [];
+  o = 0;
+  while (o + 2 <= rv.byteLength) {
+    const cls = rv.getUint8(o), n = rv.getUint8(o + 1); o += 2;
+    const pts = []; for (let k = 0; k < n; k++) { const x = rv.getUint16(o, true) / 2, z = rv.getUint16(o + 2, true) / 2; o += 4; pts.push([...toS(x, z), g(x, z)]); }
+    const w = W[cls] / 2000;
+    for (let k = 0; k + 1 < pts.length; k++) {
+      const a = pts[k], b = pts[k + 1]; let dx = b[0] - a[0], dz = b[1] - a[1]; const L = Math.hypot(dx, dz) || 1; const px = -dz / L * w, pz = dx / L * w;
+      const ya = a[2] + 0.0035, yb = b[2] + 0.0035;
+      RP.push(a[0] + px, ya, a[1] + pz, b[0] + px, yb, b[1] + pz, b[0] - px, yb, b[1] - pz, a[0] + px, ya, a[1] + pz, b[0] - px, yb, b[1] - pz, a[0] - px, ya, a[1] - pz);
+      for (let q = 0; q < 6; q++) RC.push(cls);
+    }
+  }
+  // 水域、綠地
+  const av = await get("a_" + key + ".bin?v=" + T.v);
+  const AP = [], AK = [];
+  o = 0;
+  while (o + 3 <= av.byteLength) {
+    const kind = av.getUint8(o), n = av.getUint16(o + 1, true); o += 3;
+    const pts = []; for (let k = 0; k < n; k++) { const x = av.getUint16(o, true) / 2, z = av.getUint16(o + 2, true) / 2; o += 4; pts.push([...toS(x, z), g(x, z)]); }
+    if (pts.length < 3) continue;
+    let tri; try { tri = ShapeUtils.triangulateShape(pts.map(p => new Vector2(p[0], p[1])), []); } catch (err) { continue; }
+    const y = kind === 1 ? 0.0015 : 0.0025;
+    for (const t of tri) for (const ix of t) { AP.push(pts[ix][0], pts[ix][2] + y, pts[ix][1]); AK.push(kind); }
+  }
+  const f = a => new Float32Array(a);
+  const out = { key, nb, P: f(P), N: f(N), I: f(I), RP: f(RP), RC: f(RC), AP: f(AP), AK: f(AK) };
+  postMessage(out, [out.P.buffer, out.N.buffer, out.I.buffer, out.RP.buffer, out.RC.buffer, out.AP.buffer, out.AK.buffer]);
+};`;
+let WORKER = null;
+function cityWorker() {
+  if (WORKER) return WORKER;
+  WORKER = new Worker(URL.createObjectURL(new Blob([WORKER_SRC], { type: "text/javascript" })), { type: "module" });
+  WORKER.postMessage({ dem: DEM.slice(), meta: { ...META, ex: EX } });
+  WORKER.onmessage = e => buildDetail(e.data);
+  WORKER.onerror = () => { for (const [k, v] of Object.entries(CITY)) if (v.state === "detail") { delete CITY[k]; CITY_NODETAIL.add(k); } };
+  return WORKER;
+}
+const CITY_NODETAIL = new Set();
+const pMat = new THREE.MeshStandardMaterial({ color: 0xeceae4, roughness: 0.85, metalness: 0, emissive: 0xffc98f, emissiveIntensity: 1, side: THREE.DoubleSide });
+pMat.onBeforeCompile = sh => {
+  sh.uniforms.uNight = uni.uNight;
+  sh.vertexShader = sh.vertexShader
+    .replace("#include <common>", "#include <common>\nattribute vec2 aInfo; varying vec2 vInfo; varying float vY; varying float vSide;")
+    .replace("#include <begin_vertex>", "#include <begin_vertex>\nvInfo = aInfo; vY = position.y; vSide = 1.0 - step(0.9, abs(normal.y));");
+  sh.fragmentShader = sh.fragmentShader
+    .replace("#include <common>", "#include <common>\nuniform float uNight; varying vec2 vInfo; varying float vY; varying float vSide;")
+    .replace("#include <color_fragment>", "#include <color_fragment>\nfloat hh = vY - vInfo.x;\ndiffuseColor.rgb *= mix(0.55, 1.0, clamp(hh * 90.0 + (1.0 - vSide), 0.0, 1.0));\ndiffuseColor.rgb *= mix(1.0, 0.035, uNight);")
+    .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
+      float fl = hh / (3.3 / 1000.0 * ${BEX.toFixed(1)});
+      float win = step(0.35, fract(fl)) * step(fract(fl), 0.8) * step(0.8, fl);
+      float lit = step(0.42, fract(sin(floor(fl) * 7.13 + vInfo.y * 91.7) * 43758.5453));
+      totalEmissiveRadiance *= vSide * win * lit * (0.45 + 0.75 * vInfo.y) * uNight * 1.25;`);
+};
+const rMat = new THREE.MeshLambertMaterial({ color: 0xd2d0ca, emissive: 0xffb15c, emissiveIntensity: 1, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+rMat.onBeforeCompile = sh => {
+  sh.uniforms.uNight = uni.uNight;
+  sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nattribute float aCls; varying float vCls;").replace("#include <begin_vertex>", "#include <begin_vertex>\nvCls = aCls;");
+  sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nuniform float uNight; varying float vCls;")
+    .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb *= mix(1.0, 0.06, uNight);")
+    .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance *= uNight * mix(0.95, 0.12, clamp((vCls - 1.0) / 5.0, 0.0, 1.0));");
+};
+const aMat = new THREE.MeshLambertMaterial({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+aMat.onBeforeCompile = sh => {
+  sh.uniforms.uNight = uni.uNight;
+  sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nuniform float uNight;")
+    .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb *= mix(1.0, 0.12, uNight);");
+};
+function loadDetail(key) {
+  const c = BMETA.cities[key]; CITY[key] = { state: "detail" };
+  const T = { ox: (c.bbox[0] - LONC) * KX, oz: -(c.bbox[1] - LATC) * KY, kxs: KX, ky: KY, v: ASSET_V };
+  cityWorker().postMessage({ key, c, base: new URL(".", location.href).href, T, BEX });
+}
+function buildDetail(d) {
+  const grp = new THREE.Group();
+  const bg = new THREE.BufferGeometry();
+  bg.setAttribute("position", new THREE.BufferAttribute(d.P, 3)); bg.setAttribute("normal", new THREE.BufferAttribute(d.N, 3)); bg.setAttribute("aInfo", new THREE.BufferAttribute(d.I, 2));
+  grp.add(new THREE.Mesh(bg, pMat));
+  if (d.RP.length) {
+    const rg = new THREE.BufferGeometry(); rg.setAttribute("position", new THREE.BufferAttribute(d.RP, 3)); rg.setAttribute("aCls", new THREE.BufferAttribute(d.RC, 1)); rg.computeVertexNormals();
+    grp.add(new THREE.Mesh(rg, rMat));
+  }
+  if (d.AP.length) {
+    const col = new Float32Array(d.AK.length * 3);
+    for (let i = 0; i < d.AK.length; i++) { const w = d.AK[i] === 1; col[i * 3] = w ? 0.52 : 0.58; col[i * 3 + 1] = w ? 0.62 : 0.66; col[i * 3 + 2] = w ? 0.72 : 0.52; }
+    const ag = new THREE.BufferGeometry(); ag.setAttribute("position", new THREE.BufferAttribute(d.AP, 3)); ag.setAttribute("color", new THREE.BufferAttribute(col, 3)); ag.computeVertexNormals();
+    grp.add(new THREE.Mesh(ag, aMat));
+  }
+  scene.add(grp);
+  CITY[d.key] = { state: "ready", mesh: grp, nb: d.nb };
+}
+
 function cityAtTarget() {
   if (!BMETA) return null;
   const t = controls.target, dist = camera.position.distanceTo(t);
@@ -438,7 +569,7 @@ let lodT = 0;
 function lodTick(dt) {
   lodT += dt; if (lodT < 0.4) return; lodT = 0;
   const near = cityAtTarget(); if (near === null) return;
-  for (const k of near) if (!CITY[k]) loadCity(k);
+  for (const k of near) if (!CITY[k]) (!MOBILE && BMETA.detail && !CITY_NODETAIL.has(k) && typeof Worker !== "undefined") ? loadDetail(k) : loadCity(k);
   for (const [k, v] of Object.entries(CITY)) if (v.mesh) v.mesh.visible = near.includes(k);
 }
 function flyCity(key) {
