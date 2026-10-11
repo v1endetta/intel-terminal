@@ -1,7 +1,7 @@
 name: deploy-site
 
 # 把網站部署到 Cloudflare（intel.daltatw.com），並確保 Cloudflare Access 只讓帳號本人進來。
-# 需要的 Secrets：CLOUDFLARE_API_TOKEN；FEED_KEY 選填（沒設時晨報通道關著）（帳號 ID、KV 空間、登入信箱都用權杖自己查）
+# 需要的 Secrets：只有 CLOUDFLARE_API_TOKEN（晨報／分享金鑰只以雜湊放在 wrangler.toml；帳號 ID、KV 空間、登入信箱都用權杖自己查）
 # 還沒設好時整個流程直接略過，不會報錯。這個 repo 是公開的，log 裡不印任何 ID 或信箱。
 
 on:
@@ -22,7 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      FEED_KEY: ${{ secrets.FEED_KEY }}
       ACCESS_EMAIL: ${{ secrets.ACCESS_EMAIL }}
     steps:
       - name: Check secrets
@@ -68,5 +67,3 @@ jobs:
         run: |
           set -o pipefail
           npx --yes wrangler@4 deploy 2>&1 | grep -vi "account"
-          if [ -n "$FEED_KEY" ]; then printf '%s' "$FEED_KEY" | npx --yes wrangler@4 secret put FEED_KEY >/dev/null && echo "FEED_KEY set"
-          else echo "::notice::FEED_KEY 還沒設定：網站照常，晨報通道 /feed 先關著"; fi

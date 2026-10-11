@@ -19,6 +19,8 @@ custom_domain = true
 binding = "DATA"
 id = "__KV_ID__"
 
-# 分享連結版本：改成 "2" 再部署，舊連結立刻失效（新連結由 FEED_KEY 推算）；改成 "off" 關閉分享
+# 晨報通道與分享連結的金鑰只放「雜湊值」：公開也推不回金鑰（金鑰本身不在任何地方的程式碼裡）
+# 要作廢分享連結：換一組新金鑰、把 SHARE_HASH 換成新雜湊再部署；設成 "off" 則關閉
 [vars]
-SHARE_VER = "1"
+FEED_HASH = "69db21d64495635cd81fd4dd6fce4a6bf790a897d9dba0e9a789543071ebda87"
+SHARE_HASH = "cbabf037a380b521d6e23cf3cfef77c9e97f4873f606296b0ed0ffe2827d73fd"
