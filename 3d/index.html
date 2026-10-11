@@ -518,7 +518,7 @@ pMat.onBeforeCompile = sh => {
       float lit = step(0.42, fract(sin(floor(fl) * 7.13 + vInfo.y * 91.7) * 43758.5453));
       totalEmissiveRadiance *= vSide * win * lit * (0.45 + 0.75 * vInfo.y) * uNight * 1.25;`);
 };
-const rMat = new THREE.MeshLambertMaterial({ color: 0xd2d0ca, emissive: 0xffb15c, emissiveIntensity: 1, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+const rMat = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, color: 0xd2d0ca, emissive: 0xffb15c, emissiveIntensity: 1, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
 rMat.onBeforeCompile = sh => {
   sh.uniforms.uNight = uni.uNight;
   sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nattribute float aCls; varying float vCls;").replace("#include <begin_vertex>", "#include <begin_vertex>\nvCls = aCls;");
@@ -526,7 +526,7 @@ rMat.onBeforeCompile = sh => {
     .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb *= mix(1.0, 0.06, uNight);")
     .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance *= uNight * mix(0.95, 0.12, clamp((vCls - 1.0) / 5.0, 0.0, 1.0));");
 };
-const aMat = new THREE.MeshLambertMaterial({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+const aMat = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
 aMat.onBeforeCompile = sh => {
   sh.uniforms.uNight = uni.uNight;
   sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nuniform float uNight;")
@@ -537,19 +537,20 @@ function loadDetail(key) {
   const T = { ox: (c.bbox[0] - LONC) * KX, oz: -(c.bbox[1] - LATC) * KY, kxs: KX, ky: KY, v: ASSET_V };
   cityWorker().postMessage({ key, c, base: new URL(".", location.href).href, T, BEX });
 }
+function upNormals(n) { const a = new Float32Array(n); for (let i = 1; i < n; i += 3) a[i] = 1; return a; }
 function buildDetail(d) {
   const grp = new THREE.Group();
   const bg = new THREE.BufferGeometry();
   bg.setAttribute("position", new THREE.BufferAttribute(d.P, 3)); bg.setAttribute("normal", new THREE.BufferAttribute(d.N, 3)); bg.setAttribute("aInfo", new THREE.BufferAttribute(d.I, 2));
   grp.add(new THREE.Mesh(bg, pMat));
   if (d.RP.length) {
-    const rg = new THREE.BufferGeometry(); rg.setAttribute("position", new THREE.BufferAttribute(d.RP, 3)); rg.setAttribute("aCls", new THREE.BufferAttribute(d.RC, 1)); rg.computeVertexNormals();
+    const rg = new THREE.BufferGeometry(); rg.setAttribute("position", new THREE.BufferAttribute(d.RP, 3)); rg.setAttribute("aCls", new THREE.BufferAttribute(d.RC, 1)); rg.setAttribute("normal", new THREE.BufferAttribute(upNormals(d.RP.length), 3));
     grp.add(new THREE.Mesh(rg, rMat));
   }
   if (d.AP.length) {
     const col = new Float32Array(d.AK.length * 3);
     for (let i = 0; i < d.AK.length; i++) { const w = d.AK[i] === 1; col[i * 3] = w ? 0.52 : 0.58; col[i * 3 + 1] = w ? 0.62 : 0.66; col[i * 3 + 2] = w ? 0.72 : 0.52; }
-    const ag = new THREE.BufferGeometry(); ag.setAttribute("position", new THREE.BufferAttribute(d.AP, 3)); ag.setAttribute("color", new THREE.BufferAttribute(col, 3)); ag.computeVertexNormals();
+    const ag = new THREE.BufferGeometry(); ag.setAttribute("position", new THREE.BufferAttribute(d.AP, 3)); ag.setAttribute("color", new THREE.BufferAttribute(col, 3)); ag.setAttribute("normal", new THREE.BufferAttribute(upNormals(d.AP.length), 3));
     grp.add(new THREE.Mesh(ag, aMat));
   }
   scene.add(grp);
