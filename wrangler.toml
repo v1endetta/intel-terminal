@@ -1,0 +1,15 @@
+# 情報站網站：intel.daltatw.com（Cloudflare Worker＋靜態檔，前面有 Cloudflare Access）
+name = "intel-terminal"
+main = "worker/worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = false
+preview_urls = false
+
+[assets]
+directory = "./site"
+binding = "ASSETS"
+run_worker_first = ["/data/*", "/feed/*"]
+
+[[routes]]
+pattern = "intel.daltatw.com"
+custom_domain = true

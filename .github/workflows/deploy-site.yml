@@ -1,0 +1,51 @@
+name: deploy-site
+
+# 把網站部署到 Cloudflare（intel.daltatw.com），並確保 Cloudflare Access 只讓 Vin 進來。
+# 需要的 Secrets：CLOUDFLARE_API_TOKEN、CLOUDFLARE_ACCOUNT_ID、DATA_RO_TOKEN、FEED_KEY、ACCESS_EMAIL
+# 還沒設好時整個流程直接略過，不會報錯。
+
+on:
+  push:
+    branches: [main]
+    paths: [index.html, worker/**, wrangler.toml, .github/workflows/deploy-site.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      DATA_RO_TOKEN: ${{ secrets.DATA_RO_TOKEN }}
+      FEED_KEY: ${{ secrets.FEED_KEY }}
+      ACCESS_EMAIL: ${{ secrets.ACCESS_EMAIL }}
+    steps:
+      - name: Check secrets
+        id: chk
+        run: |
+          ok=1
+          for v in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID DATA_RO_TOKEN FEED_KEY ACCESS_EMAIL; do
+            [ -n "${!v}" ] || { echo "::notice::$v 還沒設定，略過部署"; ok=0; }
+          done
+          echo "ok=$ok" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        if: steps.chk.outputs.ok == '1'
+      - name: Access（先設好門，再開店）
+        if: steps.chk.outputs.ok == '1'
+        run: python3 ops/cf_access.py
+      - name: Build site
+        if: steps.chk.outputs.ok == '1'
+        run: mkdir -p site && cp index.html site/ && printf 'User-agent: *\nDisallow: /\n' > site/robots.txt
+      - name: Deploy worker
+        if: steps.chk.outputs.ok == '1'
+        run: |
+          npx --yes wrangler@4 deploy
+          printf '%s' "$DATA_RO_TOKEN" | npx --yes wrangler@4 secret put DATA_RO_TOKEN
+          printf '%s' "$FEED_KEY" | npx --yes wrangler@4 secret put FEED_KEY
