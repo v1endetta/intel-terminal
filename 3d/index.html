@@ -158,6 +158,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const RAW = "https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/";
+const ASSET_V = 3;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
 const MOBILE = matchMedia("(max-width:760px)").matches || /Mobi|Android/i.test(navigator.userAgent);
 const EX = 6;                 // 高度誇張倍數
 const LONC = 120.95, LATC = 23.65;
@@ -248,8 +249,8 @@ function hAt(lon, lat) {   // 地表高度（場景單位）
 }
 
 async function loadDEM() {
-  META = await (await fetch("dem.json")).json();
-  const blob = await (await fetch("dem.png")).blob();
+  META = await (await fetch("dem.json?v=" + ASSET_V)).json();
+  const blob = await (await fetch("dem.png?v=" + ASSET_V)).blob();
   const bmp = await createImageBitmap(blob, { colorSpaceConversion: "none", premultiplyAlpha: "none" });
   const cv = document.createElement("canvas"); cv.width = bmp.width; cv.height = bmp.height;
   const cx = cv.getContext("2d", { willReadFrequently: true }); cx.drawImage(bmp, 0, 0);
@@ -258,7 +259,7 @@ async function loadDEM() {
   for (let k = 0; k < DEM.length; k++) DEM[k] = (px[k * 4] * 256 + px[k * 4 + 1]) * META.scale + META.offset;
   if (META.tex) {   // 真實地面：NASA 白天衛星合成圖＋夜間燈光圖
     const L = new THREE.TextureLoader(), ld = u => new Promise(r => L.load(u, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); r(t); }, undefined, () => r(null)));
-    [DAY, NIGHT, LIGHTS] = await Promise.all([ld("day.jpg?v=2"), ld("night.jpg?v=2"), META.tex.lights ? ld("lights.png?v=1") : null]);
+    [DAY, NIGHT, LIGHTS] = await Promise.all([ld("day.jpg?v=" + ASSET_V), ld("night.jpg?v=" + ASSET_V), META.tex.lights ? ld("lights.png?v=" + ASSET_V) : null]);
     if (LIGHTS) LIGHTS.colorSpace = THREE.NoColorSpace;
     uni.uLights.value = LIGHTS; uni.uHasLights.value = LIGHTS ? 1 : 0;
   }
