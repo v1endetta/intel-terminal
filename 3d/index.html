@@ -83,11 +83,11 @@ body.exploring #dock{opacity:1;transform:translate(-50%,0)}
 
 /* 地圖上的標籤 */
 #labels{position:fixed;inset:0;pointer-events:none;z-index:5}
-.lbl{position:absolute;transform:translate(-50%,-100%);white-space:nowrap;font-size:12px;color:var(--fg);text-shadow:0 1px 6px rgba(0,0,0,.9);transition:opacity .4s;text-align:center;line-height:1.3}
+.lbl{position:absolute;transform:translate(-50%,-100%);white-space:nowrap;font-size:12px;color:var(--fg);transition:opacity .4s;text-align:center;line-height:1.3;padding:3px 8px;border-radius:9px;background:rgba(20,20,22,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.08)}
 .lbl .n{font-size:11px;color:var(--fg2)}
 .lbl.big{font-size:14px;font-weight:600}
 .lbl.pillv{font-size:13px;font-weight:600}
-.lbl.flow{font-size:13px;padding:6px 10px;border-radius:12px;background:rgba(29,29,31,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);text-shadow:none}
+.lbl.flow{font-size:13px;padding:6px 10px;border-radius:12px}
 .lbl.flow .n{display:block}
 .up{color:var(--up)!important}.down{color:var(--down)!important}
 
@@ -270,7 +270,7 @@ function buildTerrain() {
   g.setAttribute("aElev", new THREE.BufferAttribute(el, 1));
   g.setAttribute("aLL", new THREE.BufferAttribute(ll, 2));
   g.setIndex(idx); g.computeVertexNormals();
-  terrainMat = new THREE.MeshStandardMaterial({ color: 0xdfe3ea, metalness: 0.78, roughness: 0.3, envMapIntensity: 1.3 });
+  terrainMat = new THREE.MeshStandardMaterial({ color: 0x80858f, metalness: 0.86, roughness: 0.32, envMapIntensity: 1.25 });
   terrainMat.onBeforeCompile = sh => {
     Object.assign(sh.uniforms, uni);
     sh.vertexShader = sh.vertexShader
@@ -318,7 +318,7 @@ function ringLine(r, mat, lift = 0.25) {
 }
 async function loadCounties() {
   const j = await (await fetch("../tw_counties.json")).json();
-  const mat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.22 });
+  const mat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
   for (const f of j.features) {
     const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
     const rings = []; let best = null, bestA = 0, bb = [999, 999, -999, -999];
@@ -652,7 +652,7 @@ addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; cam
     applySun(); setInterval(applySun, 60000);
     setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow();
     camera.position.set(-200, 1300, 1100); controls.target.set(0, 0, 0);
-    flyTo(new THREE.Vector3(MOBILE ? 240 : 200, MOBILE ? 600 : 400, MOBILE ? 700 : 470), new THREE.Vector3(0, MOBILE ? 150 : 110, MOBILE ? -20 : 0), 3.2);
+    flyTo(new THREE.Vector3(MOBILE ? 240 : 200, MOBILE ? 600 : 400, MOBILE ? 700 : 470), new THREE.Vector3(0, MOBILE ? 90 : 60, 0), 3.2);
     $("load").classList.add("done");
     loop();
     setInterval(async () => {   // 每 5 分鐘更新資料：重建圖層
