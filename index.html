@@ -1587,7 +1587,7 @@ const renderers={
   weekly(d){const ar={up:"▲",down:"▼",mixed:"◆"},src=a=>(a||[]).map(x=>`<span class="wk-s">${esc(x)}</span>`).join("");
     const card=(x,c)=>`<div class="wk-c ${c}"><b>${c in ar?`<span class="ar">${ar[c]}</span>`:""}${esc(x.t||"")}${x.conf?`<span class="wk-cf">信心 ${esc(x.conf)}</span>`:""}</b><p>${esc(x.why||x.check||"")}</p>${src(x.src)}</div>`;
     const dirs=(d.dirs||[]).map(x=>card(x,x.tone||"")).join(""),gaps=(d.gaps||[]).map(x=>card(x,"gap")).join(""),risks=(d.risks||[]).map(x=>card(x,"risk")).join("");
-    const watch=(d.watch||[]).map(x=>`<div class="wk-c"><b>${esc(x.t||"")}</b><p>${esc(x.check||"")}</p></div>`).join("");
+    const watch=(d.watch||[]).map(x=>`<div class="wk-c"><b>${esc(x.t||"")}</b><p>${esc(x.check||x.why||"")}</p></div>`).join("");
     const past=(d.past||[]).length?`<details class="wk-past"><summary>前幾週的判斷</summary><ul>${d.past.map(p=>`<li><span class="wk-s">${esc(p.week)}</span>${esc(p.headline||"")}</li>`).join("")}</ul></details>`:"";
     body("p-weekly").innerHTML=`<div class="wk-h">${esc(d.headline||"")}</div>${d.vs_last?`<div class="wk-vs">比上週：${esc(d.vs_last)}</div>`:""}<div class="wk-g"><div><h3>方向</h3>${dirs}</div><div><h3>缺口</h3>${gaps}<h3 style="margin-top:10px">風險</h3>${risks}<h3 style="margin-top:10px">下週盯什麼</h3>${watch}</div></div>${past}`;
     setMeta("p-weekly",{...d,updatedAt:d.made||d.updatedAt,label:`${d.week||""} · ${(d.model||"").replace("gemini-","Gemini ")}`},24*8);},

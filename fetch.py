@@ -6764,8 +6764,9 @@ def _wk_material():
             B["糧價與菜價"].append(f"台北{nm}批發 {x.get('date')} 籃子比近兩週均價 {f(x.get('index'))}%")
     cd = R("cards"); rows = [r for r in (cd.get("rows") or []) if r.get("rel") is not None]
     tot = next((r for r in (cd.get("rows") or []) if r["cat"] == "總計"), {})
-    B["消費"] = [f"信用卡 {cd.get('month')} 總刷卡年增 {f(tot.get('yoy3'))}%；比整體熱：" + "、".join(f"{r['cat']} {f(r['rel'])}" for r in sorted(rows, key=lambda r: -r["rel"])[:3])
-                 + "；比整體冷：" + "、".join(f"{r['cat']} {f(r['rel'])}" for r in sorted(rows, key=lambda r: r["rel"])[:3])]
+    B["消費"] = [f"信用卡 {cd.get('month')} 總刷卡年增 {f(tot.get('yoy3'))}%（近 3 月中位數）。以下是各類年增「減掉整體年增」的差距（單位：百分點，負的代表成長比整體慢，不代表衰退）："
+                 + "比整體快：" + "、".join(f"{r['cat']} {f(r['rel'])}" for r in sorted(rows, key=lambda r: -r["rel"])[:3])
+                 + "；比整體慢：" + "、".join(f"{r['cat']} {f(r['rel'])}" for r in sorted(rows, key=lambda r: r["rel"])[:3])]
     cs = R("consume")
     if cs.get("up"):
         B["消費"].append(f"發票營業額 {cs.get('month')} 年增最多：" + "、".join(f"{r['name']} {f(r.get('yoy'))}%" for r in cs["up"][:5]))
@@ -6785,7 +6786,7 @@ def _wk_material():
     B["主題鏈（需求 vs 供給）"] = [f"{r['k']}：{r['verdict']}，{r['why']}；" + "、".join(f"{s['k']} {f(s['v'],0)}" for s in r["stages"] if s.get("v") is not None and s["k"] != "政策")
                              for r in ch if r["verdict"] != "觀察中"][:14]
     wk = [r for r in (R("wiki").get("rows") or []) if r.get("kind") != "資料不足" and r.get("rel3") is not None]
-    B["維基關注度（比其他主題）"] = ["升溫：" + "、".join(f"{r['q']} {f(r['rel3'],0)}" for r in sorted(wk, key=lambda r: -r["rel3"])[:6]),
+    B["維基關注度（比其他主題）"] = ["（數字＝近 3 月年增減掉所有主題中位數，單位百分點）升溫：" + "、".join(f"{r['q']} {f(r['rel3'],0)}" for r in sorted(wk, key=lambda r: -r["rel3"])[:6]),
                             "退燒：" + "、".join(f"{r['q']} {f(r['rel3'],0)}" for r in sorted(wk, key=lambda r: r["rel3"])[:5]),
                             "國外在漲台灣還沒：" + ("、".join(r["q"] for r in wk if r.get("abroad")) or "無")]
     sw = [r for r in (R("secwords").get("rows") or []) if r.get("chg") is not None]
@@ -6845,8 +6846,9 @@ def p_weekly(force=False, timeout=240):
 2. 把不同面板串起來看，例如景氣強但消費冷、國外先熱台灣還沒、需求在長但供給沒跟上。單一面板的單一數字不夠格當「方向」。
 3. 數據互相矛盾就直接說矛盾，信心標「低」。資料月份不同時要注意時間差。
 4. 繁體中文、台灣用語。句子短。不要用「不是…而是…」「不僅…更…」句型，不要用「賦能、打造、旅程、極致、質感、溫度、療癒、沉浸式」這些詞，不要空泛形容。
-5. 「下週盯什麼」要寫成可以檢查的事：哪個數字、多少算對、多少算錯。
+5. 「下週盯什麼」要寫成可以檢查的事：哪個數字、多少算對、多少算錯。只挑下週或下個月真的會公布新數字的指標。
 6. 有上週判斷時，說清楚這週哪些被數據支持、哪些被推翻。
+7. 「比整體」「比其他主題」的數字是相對差距，不是漲跌本身，不要寫成「跌了」「減少」。
 
 輸出 JSON：
 {{
@@ -6854,7 +6856,7 @@ def p_weekly(force=False, timeout=240):
   "dirs": [{{"t": "方向，15 字內", "why": "70 字內，帶數字的依據", "src": ["面板名"], "conf": "高｜中｜低", "tone": "up｜down｜mixed"}}],   // 3 到 5 個
   "gaps": [{{"t": "缺口，15 字內", "why": "70 字內：需求證據和供給還沒跟上的證據", "src": ["面板名"]}}],   // 2 到 3 個
   "risks": [{{"t": "風險，15 字內", "why": "60 字內", "src": ["面板名"]}}],   // 1 到 3 個
-  "watch": [{{"t": "下週盯什麼，30 字內", "check": "怎樣算對、怎樣算錯，40 字內"}}],   // 2 到 4 個
+  "watch": [{{"t": "下週盯什麼，30 字內", "check": "怎樣算對、怎樣算錯，40 字內（欄位名稱一定叫 check）"}}],   // 2 到 4 個
   "vs_last": "40 字內：跟上週比，什麼被證實、什麼被推翻、什麼變了；沒有上週就給空字串"
 }}
 
