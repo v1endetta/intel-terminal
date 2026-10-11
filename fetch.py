@@ -3355,12 +3355,25 @@ def p_pop():
         out["netflix"] = nf
     except Exception as e:  # noqa: BLE001
         errs.append("Netflix: " + safe_err(e))
-    try:  # Apple Podcast 台灣熱門
-        j = gjson("https://rss.applemarketingtools.com/api/v2/tw/podcasts/top/25/podcasts.json")
+    try:  # Apple Podcast 台灣熱門（蘋果這台主機常常很慢：直接打轉址後的網址、45 秒、重試一次；還是失敗就沿用上一份榜單）
+        j, last = None, None
+        for _ in range(2):
+            try:
+                j = gjson("https://rss.marketingtools.apple.com/api/v2/tw/podcasts/top/25/podcasts.json", timeout=45); break
+            except Exception as e:  # noqa: BLE001
+                last = e; time.sleep(3)
+        if j is None:
+            raise last
         out["podcast"] = [{"rank": i + 1, "title": x.get("name", ""), "artist": x.get("artistName", ""), "url": x.get("url", ""),
                            "genre": ((x.get("genres") or [{}])[0] or {}).get("name", "")} for i, x in enumerate(j["feed"]["results"][:20])]
+        out["podcast_at"] = NOW_ISO
     except Exception as e:  # noqa: BLE001
-        errs.append("Podcast: " + safe_err(e))
+        old = load_prev("pop") or {}
+        if old.get("podcast"):
+            out["podcast"], out["podcast_at"] = old["podcast"], old.get("podcast_at") or old.get("updatedAt")
+            out["podcast_stale"] = True
+        else:
+            errs.append("Podcast: " + safe_err(e))
     try:  # KKBOX 每日單曲（華語）
         j = gjson("https://kma.kkbox.com/charts/api/v1/daily", params={"category": "297", "lang": "tc", "limit": "20", "terr": "tw", "type": "song"})
         songs = (((j.get("data") or {}).get("charts") or {}).get("song") or [])
