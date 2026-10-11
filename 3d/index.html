@@ -883,7 +883,7 @@ renderer.domElement.addEventListener("pointerup", e => {
   if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6 || !document.body.classList.contains("exploring")) return;
   mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
   const oh = OBJ.pick.length ? ray.intersectObjects(OBJ.pick, false)[0] : null;
-  if (oh) { openObjCard(oh.object.userData.info); return; }
+  if (oh) { oh.object.userData.info.tower ? openTower() : openObjCard(oh.object.userData.info); return; }
   const hit = ray.intersectObject(terrain)[0]; if (!hit) return;
   const lon = hit.point.x / KX + LONC, lat = -hit.point.z / KY + LATC, c = countyAt(lon, lat);
   if (c) openCard(c);
@@ -989,6 +989,124 @@ function setupObjects() {
     }
   }
 }
+
+const PNAMES = {"pulse": "台股大盤", "taiex": "台股大盤", "fx": "匯率", "taifex": "台指期籌碼", "world": "主要經濟體大盤", "usbig": "美股巨頭、期貨與美債", "fear": "恐慌三層 ＋ 期限結構", "sectors": "美股板塊輪動（代理指標）", "cmdty": "原物料與運價", "lux": "精品與快時尚", "poly": "世界在賭什麼", "mops": "上市櫃重大訊息", "revenue": "通路與供應鏈", "supply": "零售分業", "veg": "菜價", "cards": "消費溫度", "demo": "人口結構", "bizlife": "公司開關", "housefc": "房市動能", "lead": "景氣轉向", "imports": "農產品進口量", "jobs": "職缺溫度", "consume": "消費溫度計", "calendar": "接下來三週", "liq": "美元流動性", "macro": "台灣總經", "gmacro": "全球總經", "think": "智庫觀點", "news": "時事", "watch": "關注領域", "tenders": "政府標案", "design": "設計與廣告媒體", "radar": "公司雷達", "brands": "新品牌雷達", "crowd": "集資雷達", "aiwire": "AI 快線", "weekly": "本週市場往哪走", "chain": "主題鏈", "ledger": "預測帳本", "voice": "趨勢雷達", "wiki": "主題溫度計", "tech2": "科技前沿", "pop": "流行排行", "devpulse": "開發者論壇熱串", "awards": "決標公告", "tech": "GitHub", "oss": "GitHub Trending", "lyst": "全球最熱品牌與單品", "youtube": "台灣發燒榜", "media": "時尚媒體", "attention": "注意力流向", "mood": "台灣情緒", "cofacts": "真的假的", "ptt": "台灣大眾情緒", "geo": "全台現場", "elect": "2026 五都選戰", "twnow": "各地現況", "twpulse": "台灣脈搏", "roads": "全台路況", "metro": "台北捷運各站人流", "weather": "主要縣市", "quake": "顯著有感地震", "power": "台電備轉容量", "house": "實價登錄", "vauth": "歷史資料庫", "vsearch": "全文搜尋", "vtime": "時光機", "vseries": "走勢", "airport": "桃機今日航班", "commodities": "原物料與運價", "luxury": "精品與快時尚", "liquidity": "美元流動性", "tw_market": "台股籌碼", "tw_stocks": "台股個股", "tw_pulse": "台灣脈搏", "radar_wx": "雷達回波", "typhoon": "颱風", "alerts": "災害示警", "localnews": "地方新聞", "culture": "藝文活動", "corp": "企業動態", "policy": "政策", "ipr": "商標與專利", "taxreg": "稅籍新開店", "etfholders": "ETF 存股", "social": "Bluesky 聲量", "trends": "Google 熱搜", "fish": "魚價", "fruit": "果價", "meat": "肉價", "oil": "中油牌價", "secwords": "美國企業用詞", "flights": "航班", "lightning": "閃電", "mapfeed": "地圖事件"};
+function setupObjects2() {
+  const g0 = OBJ.g;
+  const add = o => { g0.add(o); return o; };
+  // 6) 西門町屋頂看板 ＝ Google 熱搜前幾名（輪播）
+  {
+    const items = ((P.trends || {}).items || []).slice(0, 5);
+    if (items.length) {
+      const cv = document.createElement("canvas"); cv.width = 512; cv.height = 256; const cx = cv.getContext("2d");
+      const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+      let idx = 0;
+      const draw = () => { const it = items[idx % items.length]; cx.fillStyle = "#0b0b0d"; cx.fillRect(0, 0, 512, 256); cx.fillStyle = "#ff375f"; cx.fillRect(0, 0, 512, 46);
+        cx.fillStyle = "#fff"; cx.font = "600 28px -apple-system, 'PingFang TC', 'Noto Sans TC', sans-serif"; cx.fillText(`熱搜 #${idx % items.length + 1}`, 18, 33);
+        cx.font = "700 54px -apple-system, 'PingFang TC', 'Noto Sans TC', sans-serif"; const t = it.title.length > 9 ? it.title.slice(0, 9) + "…" : it.title; cx.fillText(t, 18, 140);
+        cx.fillStyle = "#a1a1a6"; cx.font = "400 30px -apple-system, sans-serif"; cx.fillText(`搜尋 ${it.traffic || ""}`, 18, 210); tex.needsUpdate = true; };
+      draw();
+      const p = at(121.507, 25.043, 0.3), g = new THREE.Group(); g.position.copy(p);
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 4, 8), mat(0x3a3a3c)); pole.position.y = 2; g.add(pole);
+      const board = new THREE.Mesh(new THREE.PlaneGeometry(6, 3), new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })); board.position.y = 5.5; g.add(board);
+      add(g);
+      objInfo(g, { t: "西門町看板・Google 熱搜", v: items.slice(0, 3).map(x => x.title).join("、"), d: `台灣此刻的 Google 熱搜，看板每 6 秒換一則。<br>${items.map((x, i) => `${i + 1}. ${esc(x.title)}（${esc(x.traffic || "")}）`).join("<br>")}`, src: "Google Trends 台灣" });
+      OBJ.tick.push(t => { const k = Math.floor(t / 6); if (k !== idx) { idx = k; draw(); } board.lookAt(camera.position.x, board.getWorldPosition(new THREE.Vector3()).y, camera.position.z); });
+    }
+  }
+  // 7) 五都上空熱氣球 ＝ 選舉預測市場（高度＝領先者勝選機率）
+  {
+    const POS = { "台北": [121.56, 25.06], "新北": [121.45, 24.99], "桃園": [121.3, 24.98], "台中": [120.68, 24.15], "台南": [120.22, 23.0], "高雄": [120.32, 22.64] };
+    for (const c of ((P.elect || {}).cities || [])) {
+      const pos = POS[c.city]; if (!pos) continue;
+      const cs = [...(c.cands || [])].sort((a, b) => b.p - a.p), top = cs[0]; if (!top) continue;
+      const g = new THREE.Group(), base = at(pos[0], pos[1], 0), hgt = 8 + top.p / 100 * 30;
+      const bal = new THREE.Mesh(new THREE.SphereGeometry(2.2, 20, 14), mat(0xf5f5f7, 0x000000, 0)); bal.scale.y = 1.2; g.add(bal);
+      const band = new THREE.Mesh(new THREE.CylinderGeometry(2.25, 2.25, 0.6, 20, 1, true), new THREE.MeshBasicMaterial({ color: top.d7 >= 0 ? 0x30d158 : 0xff453a })); g.add(band);
+      const bk = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.6, 0.8), mat(0x8e6b4a)); bk.position.y = -3.4; g.add(bk);
+      const rope = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, hgt, 4), new THREE.MeshBasicMaterial({ color: 0x9a9a9e, transparent: true, opacity: 0.5 })); rope.position.y = -hgt / 2 - 3.4; g.add(rope);
+      g.position.copy(base).add(new THREE.Vector3(0, hgt + 3.4, 0)); add(g);
+      objInfo(g, { t: `${c.city}市長選舉・熱氣球`, v: `${top.name} ${fmt(top.p, 0)}%（7 天 ${sgn(top.d7)}${fmt(top.d7, 1)}）`, d: `飛得越高＝領先者勝選機率越高；腰帶綠色＝這 7 天機率上升、紅色＝下降。這是預測市場價格，不是民調。<br>${cs.slice(0, 3).map(x => `${esc(x.name)}（${esc(x.party || "")}）${fmt(x.p, 0)}%`).join("<br>")}`, src: "預測市場 · 投票日 " + ((P.elect || {}).day || "") });
+      const ph = pos[0] * 3;
+      OBJ.tick.push(t => { g.position.y = base.y + hgt + 3.4 + Math.sin(t * 0.8 + ph) * 0.6; });
+    }
+  }
+  // 8) 夜市攤位 ＝ 餐飲業營業額年增（亮的攤位數）
+  {
+    const fd = (((P.consume || {}).focus) || []).find(x => x.name === "餐飲業") || {}, yy = fd.yoy ?? 0, litK = Math.max(0.1, Math.min(1, 0.4 + yy / 25));
+    const sites = [["士林夜市", 121.524, 25.088], ["逢甲夜市", 120.646, 24.18], ["花園夜市", 120.205, 23.012], ["六合夜市", 120.3, 22.631]];
+    for (const [nm, lo, la] of sites) {
+      const g = new THREE.Group(); g.position.copy(at(lo, la, 0.2)); const lamps = [];
+      for (let i = 0; i < 10; i++) {
+        const st = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.5, 0.7), mat(0xe8e2d6)); st.position.set((i % 5) * 0.9 - 1.8, 0.25, Math.floor(i / 5) * 1.4 - 0.7); g.add(st);
+        const on = (i + 0.5) / 10 < litK;
+        const lp = new THREE.Mesh(new THREE.SphereGeometry(0.16, 8, 6), new THREE.MeshBasicMaterial({ color: on ? 0xffb340 : 0x3a3a3c })); lp.position.set(st.position.x, 0.75, st.position.z); g.add(lp); if (on) lamps.push(lp);
+      }
+      add(g);
+      objInfo(g, { t: nm, v: `餐飲業營業額年增 ${sgn(yy)}${fmt(yy, 1)}%`, d: `亮燈的攤位越多代表餐飲業成長越快（全台電子發票，${(P.consume || {}).month || ""}）。`, src: "財政部電子發票" });
+      OBJ.tick.push(t => { lamps.forEach((l, i) => l.scale.setScalar(1 + 0.25 * Math.sin(t * 4 + i))); });
+    }
+  }
+  // 9) 工地吊車 ＝ 稅籍新開店（半年對去年同期）
+  {
+    const tx = P.taxreg || {}, yy = tx.raw_yoy ?? 0;
+    const sites = [[121.3, 25.0], [120.66, 24.17], [120.33, 22.66], [121.45, 25.03]];
+    for (const [lo, la] of sites) {
+      const g = new THREE.Group(); g.position.copy(at(lo, la, 0));
+      const mast = new THREE.Mesh(new THREE.BoxGeometry(0.3, 7, 0.3), mat(0xffcc00)); mast.position.y = 3.5; g.add(mast);
+      const jib = new THREE.Group(); jib.position.y = 7;
+      const arm = new THREE.Mesh(new THREE.BoxGeometry(6, 0.25, 0.25), mat(0xffcc00)); arm.position.x = 2; jib.add(arm);
+      const hook = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), mat(0x636366)); hook.position.set(4.2, -1.5, 0); jib.add(hook);
+      g.add(jib); add(g);
+      objInfo(g, { t: "工地吊車・新開店", v: `稅籍新開店 ${sgn(yy)}${fmt(yy, 1)}%（半年 vs 去年同期）`, d: `吊車轉得越快＝新開店越多；負成長時吊車停住。近半年新開 ${fmt(tx.n6, 0)} 家，去年同期 ${fmt(tx.ly6, 0)} 家。`, src: "財政部稅籍登記 · " + (tx.win || []).join("～") });
+      const sp = yy > 0 ? 0.15 + yy / 40 : 0, ph = lo;
+      OBJ.tick.push(t => { jib.rotation.y = sp ? t * sp + ph : ph; });
+    }
+  }
+  // 10) 電廠煙囪 ＝ 台電備轉容量燈號
+  {
+    const pw = P.power || {}, lv = pw.level || "", col = /紅|黑/.test(lv) ? 0xff453a : /橘/.test(lv) ? 0xff9f0a : /黃/.test(lv) ? 0xffd60a : 0x30d158;
+    for (const [nm, lo, la] of [["台中電廠", 120.48, 24.21], ["興達電廠", 120.2, 22.86], ["林口電廠", 121.3, 25.12]]) {
+      const g = new THREE.Group(); g.position.copy(at(lo, la, 0));
+      const st = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.55, 9, 12), mat(0xd8d8dc)); st.position.y = 4.5; g.add(st);
+      const lt = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 8), new THREE.MeshBasicMaterial({ color: col })); lt.position.y = 9.3; g.add(lt);
+      const puffs = []; for (let i = 0; i < 4; i++) { const pf = new THREE.Mesh(new THREE.SphereGeometry(0.7, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.35, depthWrite: false })); g.add(pf); puffs.push(pf); }
+      add(g);
+      objInfo(g, { t: nm + "・用電", v: `備轉容量率 ${fmt(pw.reserve_pct, 1)}%（${esc(lv)}燈）`, d: `煙囪頂燈＝台電燈號；煙越多＝用電越滿（目前使用率 ${fmt(pw.util_pct, 0)}%）。`, src: "台電 · " + esc(pw.asof || "") });
+      const u = Math.max(0.2, Math.min(1, (pw.util_pct || 50) / 100));
+      OBJ.tick.push(t => { puffs.forEach((pf, i) => { const k = (t * 0.25 * u + i / 4) % 1; pf.position.set(k * 2, 9.5 + k * 6, 0); pf.scale.setScalar(0.6 + k * 1.6); pf.material.opacity = 0.4 * (1 - k) * u; }); });
+    }
+  }
+  // 11) 燈塔 ＝ 災害示警與顯著地震（有事件才轉）
+  {
+    const al = (P.alerts || {}), nAl = al.n_total || 0, qk = ((P.quake || {}).items || [])[0], fresh = qk && (Date.now() - new Date(qk.at)) < 864e5;
+    const active = nAl > 0 || fresh;
+    for (const [nm, lo, la] of [["富貴角燈塔", 121.536, 25.297], ["鵝鑾鼻燈塔", 120.857, 21.903]]) {
+      const g = new THREE.Group(); g.position.copy(at(lo, la, 0));
+      const tw = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.7, 5, 12), mat(0xf5f5f7)); tw.position.y = 2.5; g.add(tw);
+      const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 8), new THREE.MeshBasicMaterial({ color: active ? 0xffd60a : 0x48484a })); lamp.position.y = 5.3; g.add(lamp);
+      const beam = new THREE.Mesh(new THREE.ConeGeometry(2.2, 14, 16, 1, true), new THREE.MeshBasicMaterial({ color: 0xfff3b0, transparent: true, opacity: active ? 0.22 : 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+      beam.rotation.z = Math.PI / 2; beam.position.set(7, 0, 0); const piv = new THREE.Group(); piv.position.y = 5.3; piv.add(beam); g.add(piv);
+      add(g);
+      objInfo(g, { t: nm, v: active ? `示警 ${nAl} 則${fresh ? `・24 小時內 M${fmt(qk.mag)} 地震` : ""}` : "目前沒有示警", d: "有災害示警或 24 小時內有顯著有感地震時，燈塔會亮起並旋轉。", src: "國家災害示警 · 氣象署地震" });
+      if (active) OBJ.tick.push(t => { piv.rotation.y = t * 1.2; });
+    }
+  }
+  // 12) 資料塔 ＝ 其餘所有面板
+  {
+    const g = new THREE.Group(); g.position.copy(at(121.517, 25.048, 0));
+    const n = Object.keys(P).length;
+    for (let i = 0; i < Math.min(n, 40); i++) { const fl = new THREE.Mesh(new THREE.BoxGeometry(1.4 - i * 0.012, 0.32, 1.4 - i * 0.012), new THREE.MeshStandardMaterial({ color: 0x1c1c1e, emissive: 0x2997ff, emissiveIntensity: 0.15 + (i % 3) * 0.12 })); fl.position.y = 0.2 + i * 0.36; g.add(fl); }
+    add(g);
+    g.traverse(m => { if (m.isMesh) { m.userData.info = { t: "資料塔", v: `${n} 個面板`, d: "", src: "", tower: true }; OBJ.pick.push(m); } });
+  }
+}
+function openTower() {
+  const keys = Object.keys(P).filter(k => P[k] && typeof P[k] === "object").sort((a, b) => (PNAMES[a] || a).localeCompare(PNAMES[b] || b, "zh-Hant"));
+  $("cardBody").innerHTML = `<h3>資料塔</h3><div class="sub">一層一個面板 · 共 ${keys.length} 個 · 點名稱到完整終端機</div><ul style="margin-top:12px">${keys.map(k => `<li><a href="../#p-${esc(k)}">${esc(PNAMES[k] || k)}</a><span class="m">${esc(k)} · ${P[k].updatedAt ? ago(P[k].updatedAt) + "更新" : ""}${P[k].error || (P[k].errs || []).length ? " · ⚠ 部分來源失敗" : ""}</span></li>`).join("")}</ul>`;
+  $("card").classList.add("show");
+}
+
 const tip = document.createElement("div"); tip.id = "tip"; document.body.appendChild(tip);
 let tipT = 0;
 renderer.domElement.addEventListener("pointermove", e => {
@@ -1039,7 +1157,7 @@ addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; cam
     await Promise.all([loadDEM(), loadData(), loadRoads(), loadBMeta()]);
     buildTerrain(); await loadCounties(); addLandmarks();
     applySun(); setInterval(applySun, 60000);
-    setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow(); setupObjects();
+    setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow(); setupObjects(); setupObjects2();
     camera.position.set(-200, 1300, 1100); controls.target.set(0, 0, 0);
     flyTo(new THREE.Vector3(MOBILE ? 240 : 200, MOBILE ? 600 : 400, MOBILE ? 700 : 470), new THREE.Vector3(0, MOBILE ? 90 : 60, 0), 3.2);
     $("load").classList.add("done");
@@ -1050,7 +1168,7 @@ addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; cam
         const was = cur; if (cur) { layers[cur].off && layers[cur].off(); }
         for (const k in layers) { scene.remove(layers[k].g); }
         for (const k in layers) delete layers[k];
-        setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow(); setupObjects();
+        setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow(); setupObjects(); setupObjects2();
         cur = null; if (was && document.body.classList.contains("exploring")) setLayer(was);
       } catch (e) { }
     }, 300000);
