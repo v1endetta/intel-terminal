@@ -6662,7 +6662,7 @@ def _gemini_call(prompt, model, json_mode=True, tools=None, max_tokens=6000, tim
         body["tools"] = tools
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
     r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=timeout)
-    if r.status_code == 400 and "thinking" in r.text.lower():  # 這個模型不接受 thinkingBudget（例如只支援 thinkingLevel）
+    if r.status_code == 400:  # 這個模型不接受 thinkingBudget（例如只支援 thinkingLevel，或 Lite 不收思考設定；錯誤訊息不一定寫 thinking）
         body["generationConfig"].pop("thinkingConfig", None)
         body["generationConfig"]["thinkingConfig"] = {"thinkingLevel": "LOW"}
         r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=timeout)
@@ -6686,7 +6686,7 @@ def _gemini_json(prompt, schema_hint=None, tools=None, max_tokens=6000, timeout=
                     r = _gemini_call(prompt, model, tools=tools, max_tokens=max_tokens, timeout=timeout)
             except requests.exceptions.Timeout:  # 這個模型太慢：換下一個
                 last = RuntimeError(f"{model} timeout {timeout}s"); continue
-            if r.status_code in (404, 429, 503):  # 還是不行 → 換下一個模型
+            if r.status_code in (400, 404, 429, 503):  # 還是不行 → 換下一個模型
                 try:
                     msg = (r.json().get("error") or {}).get("message", "")[:90]
                 except ValueError:
