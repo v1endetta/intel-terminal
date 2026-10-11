@@ -778,7 +778,7 @@ function loop() {
   controls.update(); renderer.render(scene, camera); placeLabels();
   requestAnimationFrame(loop);
 }
-window.__intel3d = { camera, controls, flyTo, setLayer, start: () => start(), flyCity: k => flyCity(k) };
+window.__intel3d = { camera, controls, flyTo, setLayer, start: () => start(), flyCity: k => flyCity(k), lod: () => { lodT = 1; lodTick(0); }, cities: CITY };
 addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
 
 (async () => {
