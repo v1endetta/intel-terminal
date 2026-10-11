@@ -296,10 +296,10 @@ function buildTerrain() {
   // 海面：深色，經緯網格
   const cv = document.createElement("canvas"); cv.width = cv.height = 1024;
   const c = cv.getContext("2d"); c.fillStyle = "#040507"; c.fillRect(0, 0, 1024, 1024);
-  c.strokeStyle = "rgba(160,175,200,.10)"; c.lineWidth = 1.2;
+  c.strokeStyle = "rgba(160,175,200,.16)"; c.lineWidth = 1.2;
   for (let k = 0; k <= 16; k++) { const p = k * 64; c.beginPath(); c.moveTo(p, 0); c.lineTo(p, 1024); c.stroke(); c.beginPath(); c.moveTo(0, p); c.lineTo(1024, p); c.stroke(); }
   const tex = new THREE.CanvasTexture(cv); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(6, 6); tex.colorSpace = THREE.SRGBColorSpace;
-  const sea = new THREE.Mesh(new THREE.CircleGeometry(1700, 96), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.55, metalness: 0.2, transparent: true, opacity: 0.95 }));
+  const sea = new THREE.Mesh(new THREE.CircleGeometry(1700, 96), new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.95, fog: true }));
   sea.rotation.x = -Math.PI / 2; sea.position.y = -0.4;
   // 每格約 0.5 度：對齊經緯度
   sea.material.map.offset.set(0, 0);
@@ -652,7 +652,7 @@ addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; cam
     applySun(); setInterval(applySun, 60000);
     setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow();
     camera.position.set(-200, 1300, 1100); controls.target.set(0, 0, 0);
-    flyTo(new THREE.Vector3(MOBILE ? 240 : 200, MOBILE ? 560 : 360, MOBILE ? 700 : 470), new THREE.Vector3(0, 10, MOBILE ? 60 : 70), 3.2);
+    flyTo(new THREE.Vector3(MOBILE ? 240 : 200, MOBILE ? 600 : 400, MOBILE ? 700 : 470), new THREE.Vector3(0, MOBILE ? 150 : 110, MOBILE ? -20 : 0), 3.2);
     $("load").classList.add("done");
     loop();
     setInterval(async () => {   // 每 5 分鐘更新資料：重建圖層
