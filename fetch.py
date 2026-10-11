@@ -572,6 +572,38 @@ def p_elect():
             "src": "Polymarket 公開報價（只看不押）＋ 情報站收進來的新聞與 PTT 標題 ＋ 手動整理民調"}
 
 
+ZH_CACHE = DATA / "zh_cache.json"
+
+
+def _zh_translate(texts, kind="預測市場題目"):
+    """英文短句翻成台灣繁中，結果存在 data/zh_cache.json，翻過就不再翻（用 Flash-Lite，省額度）。失敗就回空，前端顯示原文。"""
+    try:
+        cache = json.loads(ZH_CACHE.read_text(encoding="utf-8")) if ZH_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    todo = [t for t in dict.fromkeys(texts) if t and t not in cache and re.search(r"[A-Za-z]", t)]
+    if todo and GEMINI_KEY:
+        for i in range(0, len(todo), 60):
+            chunk = todo[i:i + 60]
+            prompt = (f"把下面每一行{kind}翻成台灣繁體中文，口語、簡短，保留數字、日期、百分比與專有名詞的通用中文譯名"
+                      "（例如 Fed＝聯準會、bps＝基點、Kuomintang＝國民黨、DPP＝民進黨）。不要加解釋。\n"
+                      '輸出 JSON：{"items": [{"en": "原文", "zh": "譯文"}]}，順序與原文相同。\n\n' + "\n".join(chunk))
+            try:
+                js, _m = _gemini_json(prompt, lite_first=True, max_tokens=6000, timeout=45, max_models=2)
+                for it in js.get("items") or []:
+                    if it.get("en") in chunk and it.get("zh"):
+                        cache[it["en"]] = it["zh"].strip()
+            except Exception as e:  # noqa: BLE001
+                log("zh translate", e); break
+        try:
+            if len(cache) > 3000:
+                cache = dict(list(cache.items())[-3000:])
+            write_json(ZH_CACHE, cache, separators=(",", ":"))
+        except Exception as e:  # noqa: BLE001
+            log("zh cache write", e)
+    return {t: cache.get(t) for t in texts if cache.get(t)}
+
+
 def p_poly():
     groups, seen, flat = {}, set(), []
     for label, tag, k in POLY_TOPICS:
@@ -618,6 +650,19 @@ def p_poly():
     for label, _, _ in POLY_TOPICS:
         if label in groups and label not in order:
             order.append(label)
+    texts = [e["title"] for g in groups.values() for e in g] + [o["name"] for g in groups.values() for e in g for o in e["outs"] if o["name"] != "Yes"] \
+        + [x["question"] for x in flat]
+    zh = _zh_translate(texts)
+    for g in groups.values():
+        for e in g:
+            if zh.get(e["title"]):
+                e["zh"] = zh[e["title"]]
+            for o in e["outs"]:
+                if zh.get(o["name"]):
+                    o["zh"] = zh[o["name"]]
+    for x in flat:
+        if zh.get(x["question"]):
+            x["zh"] = zh[x["question"]]
     return {"groups": [{"topic": t, "events": groups[t]} for t in order], "items": sorted(flat, key=lambda x: -(x["vol24h"] or 0))}
 
 
@@ -2527,7 +2572,7 @@ def _ptt_page(sess, board, idx=None):
             push = -10 if push_raw == "XX" else -int(num(push_raw[1:]) or 1)
         else:
             push = int(num(push_raw) or 0)
-        rows.append({"board": board, "title": t.group(2).strip(), "push": push, "url": "https://www.ptt.cc" + t.group(1), "date": (d.group(1) if d else "").strip()})
+        rows.append({"board": board, "title": html_mod.unescape(t.group(2)).strip(), "push": push, "url": "https://www.ptt.cc" + t.group(1), "date": (d.group(1) if d else "").strip()})
     return rows, (int(prev.group(1)) if prev else None)
 
 
@@ -4283,6 +4328,23 @@ def _corr(a, b):
     return sum((x - ma) * (y - mb) for x, y in zip(a, b)) / (va * vb) if va and vb else None
 
 
+_TWCC = None
+
+
+def _tw(t):
+    """簡體轉台灣繁體用語（維基條目標題常是簡體）。"""
+    global _TWCC
+    if not t:
+        return t
+    try:
+        if _TWCC is None:
+            from opencc import OpenCC
+            _TWCC = OpenCC("s2twp")
+        return _TWCC.convert(t)
+    except Exception:  # noqa: BLE001
+        return t
+
+
 def p_wiki():
     cfg = json.loads((ROOT / "ops" / "wiki_topics.json").read_text(encoding="utf-8"))["topics"]
     try:
@@ -4387,7 +4449,7 @@ def p_wiki():
             if best and best[0] >= 2 and best[1] >= .6 and (lead is None or best[1] > lead["r"]):
                 lead = {"lang": lang, "lag": best[0], "r": best[1]}
         abroad = False
-        rows.append({"q": q, "title": mp[q]["zh"], "grp": grp, "spiked": spiked, "young": young, "g12p": g12p, "yoy3": y3, "g12": g12,
+        rows.append({"q": q, "title": _tw(mp[q]["zh"]), "grp": grp, "spiked": spiked, "young": young, "g12p": g12p, "yoy3": y3, "g12": g12,
                      "peak": zh[pk][0], "ratio": round(ratio, 2), "spark": v[-60:], "foreign": foreign, "lead": lead, "abroad": abroad,
                      "last": zh[-1][0]})
     if not rows:
@@ -6704,11 +6766,13 @@ def _gemini_call(prompt, model, json_mode=True, tools=None, max_tokens=6000, tim
     return r
 
 
-def _gemini_json(prompt, schema_hint=None, tools=None, max_tokens=6000, timeout=90, lite_first=False):
+def _gemini_json(prompt, schema_hint=None, tools=None, max_tokens=6000, timeout=90, lite_first=False, max_models=None):
     last = None
     models = _gemini_models() or GEMINI_MODELS
     if lite_first:  # 簡單任務先用 Flash-Lite（免費額度一天約 500 次），把 Flash（約 20 次）留給每週摘要
         models = sorted(models, key=lambda m: "lite" not in m)
+    if max_models:  # 主迴圈裡的小任務：最多試幾個模型，免得一個面板卡太久
+        models = models[:max_models]
     for model in models:
         try:
             try:
