@@ -528,7 +528,7 @@ function setupFlow() {
     const stuck = tw != null && Math.sign(s.chg) !== Math.sign(tw) && Math.abs(s.chg) > 0.15;
     const color = s.chg >= 0 ? 0x30d158 : 0xff453a;
     const pts = curve.getPoints(80);
-    g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 96, 2.2, 8, false), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.5, depthWrite: false, fog: false })));
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 96, 2.2, 8, false), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.75, depthWrite: false, fog: false })));
     const N = 46, pg = new THREE.BufferGeometry(), arr = new Float32Array(N * 3); pg.setAttribute("position", new THREE.BufferAttribute(arr, 3));
     const pm = new THREE.PointsMaterial({ color, size: MOBILE ? 6 : 5, sizeAttenuation: false, transparent: true, opacity: 1, depthWrite: false, blending: THREE.AdditiveBlending, fog: false });
     g.add(new THREE.Points(pg, pm));
