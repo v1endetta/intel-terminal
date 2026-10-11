@@ -1,11 +1,21 @@
-import os, json, requests
-os.makedirs("out25", exist_ok=True)
-H = {"User-Agent": "intel-terminal/1.0 (personal research; https://github.com/v1endetta/intel-terminal)"}
+import os, json, traceback, requests
+os.makedirs("out25/d/panels", exist_ok=True)
+os.environ["INTEL_DATA_DIR"] = os.path.abspath("out25/d")
+# 帶入領先指標序列（回測 biz_net 用）
+r = requests.get("https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/lead_series.json", timeout=60)
+open("out25/d/lead_series.json", "wb").write(r.content)
+src = open("fetch_test.py", encoding="utf-8").read(); src = src[:src.index("\nrun(")]
+g = {"__name__": "x", "__file__": os.path.abspath("fetch_test.py")}
+exec(compile(src, "fetch_test", "exec"), g)
 rep = {}
-for ds in (9347, 29237):
-    m = requests.get(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", headers=H, timeout=40).json()["result"]
-    rep[ds] = [{k: x.get(k) for k in ("resourceDescription", "resourceModified", "resourceDownloadUrl", "resourceFormat")} for x in m.get("distribution") or []]
-u = rep[9347][0]["resourceDownloadUrl"]
-t = requests.get(u, headers=H, timeout=40).content.decode("utf-8-sig", "replace").splitlines()
-rep["9347rows"] = t[:25]
-json.dump(rep, open("out25/probe.json", "w"), ensure_ascii=False, indent=1)
+for nm in ("p_demo", "p_bizlife", "p_housefc"):
+    try:
+        d = g[nm](); g["RESULTS"][nm[2:]] = d
+        rep[nm] = {k: v for k, v in d.items() if "spark" not in k and k not in ("cities",)}
+    except Exception:
+        rep[nm] = traceback.format_exc()[-1200:]
+try:
+    bt = g["_backtests"](); rep["bt"] = {k: v for k, v in bt.items() if k in ("mort_rate", "biz_net", "house_mom")}
+except Exception:
+    rep["bt"] = traceback.format_exc()[-800:]
+json.dump(rep, open("out25/probe.json", "w"), ensure_ascii=False, indent=1, default=str)
