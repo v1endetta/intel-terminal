@@ -1,77 +1,86 @@
 {
- "hf": {
-  "vol_month": "202608",
-  "vol": 20270,
-  "vol_yoy3": 2.6,
-  "cities": [
-   {
-    "city": "新北市",
-    "n3": 13193,
-    "yoy3": 6.0
-   },
-   {
-    "city": "桃園市",
-    "n3": 10964,
-    "yoy3": -1.0
-   },
-   {
-    "city": "臺中市",
-    "n3": 10080,
-    "yoy3": -4.2
-   },
-   {
-    "city": "高雄市",
-    "n3": 9252,
-    "yoy3": 10.9
-   },
-   {
-    "city": "臺北市",
-    "n3": 6105,
-    "yoy3": 5.0
-   },
-   {
-    "city": "臺南市",
-    "n3": 4941,
-    "yoy3": -8.7
-   },
-   {
-    "city": "新竹縣",
-    "n3": 2457,
-    "yoy3": 10.1
-   },
-   {
-    "city": "新竹市",
-    "n3": 1316,
-    "yoy3": 22.1
-   }
-  ],
-  "tpe_month": "202606",
-  "tpe": 131.03,
-  "tpe_6m": 4.12,
-  "tpe_12m": 2.71,
-  "src": "內政部 建物所有權登記（買賣，月）· 臺北市地政局 住宅價格月指數（全市）"
- },
- "bt": {
-  "house_mom": [
-   77,
-   111
-  ],
-  "house_vol": [
-   35,
-   85
-  ]
- },
- "n": {
-  "vol": 176,
-  "city": 8,
-  "tpe": 167
- },
- "tpe_first": [
-  "201208",
-  "201209"
+ "flash": [
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-preview-tts",
+  "gemini-flash-latest",
+  "gemini-flash-lite-latest",
+  "gemini-2.5-flash-lite",
+  "gemini-2.5-flash-image",
+  "gemini-3-flash-preview",
+  "gemini-3.1-flash-lite-preview",
+  "gemini-3.1-flash-lite",
+  "gemini-3.1-flash-image-preview",
+  "gemini-3.1-flash-image",
+  "gemini-3.1-flash-lite-image",
+  "gemini-3.5-flash",
+  "gemini-3.5-flash-lite",
+  "gemini-omni-flash-preview",
+  "gemini-omni-1.1-flash",
+  "gemini-3.6-flash",
+  "gemini-3.7-flash",
+  "gemini-3.8-flash",
+  "gemini-3.1-flash-tts-preview",
+  "gemini-3.8-flash-tts",
+  "gemini-3.8-flash-lite-tts"
  ],
- "vol_first": [
-  "201201",
-  "201202"
+ "gemini-flash-lite-latest:plain": [
+  200,
+  ""
+ ],
+ "gemini-flash-lite-latest:json": [
+  200,
+  ""
+ ],
+ "gemini-flash-lite-latest:budget0": [
+  400,
+  "Request contains an invalid argument."
+ ],
+ "gemini-flash-lite-latest:levelLow": [
+  200,
+  ""
+ ],
+ "gemini-flash-lite-latest:big": [
+  200,
+  ""
+ ],
+ "gemini-2.5-flash-lite:plain": [
+  404,
+  "This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to u"
+ ],
+ "gemini-2.5-flash-lite:json": [
+  404,
+  "This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to u"
+ ],
+ "gemini-2.5-flash-lite:budget0": [
+  404,
+  "This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to u"
+ ],
+ "gemini-2.5-flash-lite:levelLow": [
+  404,
+  "This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to u"
+ ],
+ "gemini-2.5-flash-lite:big": [
+  404,
+  "This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to u"
+ ],
+ "gemini-3.1-flash-lite-preview:plain": [
+  200,
+  ""
+ ],
+ "gemini-3.1-flash-lite-preview:json": [
+  200,
+  ""
+ ],
+ "gemini-3.1-flash-lite-preview:budget0": [
+  200,
+  ""
+ ],
+ "gemini-3.1-flash-lite-preview:levelLow": [
+  200,
+  ""
+ ],
+ "gemini-3.1-flash-lite-preview:big": [
+  200,
+  ""
  ]
 }
