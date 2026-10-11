@@ -14,8 +14,6 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python -m playwright install --with-deps chromium
       - run: python probe.py 2> log.txt || true
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       - run: mkdir -p out25 && cp log.txt out25/
       - run: |
           git config user.name intel-bot; git config user.email intel-bot@users.noreply.github.com
