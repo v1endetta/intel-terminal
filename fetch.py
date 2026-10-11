@@ -4670,6 +4670,8 @@ LEDGER_RULES = {
     "elect_fav": ("事件機率", "預測市場看好的候選人當選"),
     "house_mom": ("房市", "台北房價近半年漲跌超過 1%，再半年會同方向"),
     "house_vol": ("房市", "全台買賣棟數近 3 個月年增減超過 10%，台北房價下一個半年的漲幅跟著變快或變慢"),
+    "mort_rate": ("房市", "購屋貸款利率 3 個月內升（降）0.05 個百分點以上，半年後全台買賣棟數的年增會比現在低（高）"),
+    "biz_net": ("景氣轉向", "公司淨新設（新設減解散）近 3 個月比去年同期少（多）一成以上，3 個月後同時指標比現在低（高）"),
     "chain_gap": ("缺口會不會被填", "主題鏈判「缺口窗口」的主題，6 個月內新設店家年增比現在高（供給跟上）"),
     "chain_hot": ("缺口會不會被填", "主題鏈判「供給過熱」的主題，6 個月內新設店家年增比現在低（開始收）"),
 }
@@ -4816,8 +4818,39 @@ def _backtests():
                 elif v >= 10:
                     hv[1] += 1; hv[0] += d1 > d0
         bt["house_mom"], bt["house_vol"] = hm, hv
+        mort = hs.get("mort") or {}
+        mr = [0, 0]
+        def vy3(t):
+            x = [vol.get(_ym_add(t, -i)) for i in range(3)]; y = [vol.get(_ym_add(t, -12 - i)) for i in range(3)]
+            return 100 * (sum(x) / sum(y) - 1) if all(x) and all(y) else None
+        for t in sorted(mort):
+            p3 = mort.get(_ym_add(t, -3)); v0, v6 = vy3(t), vy3(_ym_add(t, 6))
+            if not p3 or v0 is None or v6 is None:
+                continue
+            dr = mort[t]["rate"] - p3["rate"]
+            if dr >= .05:
+                mr[1] += 1; mr[0] += v6 < v0
+            elif dr <= -.05:
+                mr[1] += 1; mr[0] += v6 > v0
+        bt["mort_rate"] = mr
     except Exception as e:  # noqa: BLE001
         log("ledger bt house", e)
+    try:
+        bz = json.loads(BIZ_SERIES.read_text(encoding="utf-8")); coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"])
+        bn = [0, 0]
+        net3 = lambda t: sum((bz.get(_ym_add(t, -i)) or {}).get("new", 0) - (bz.get(_ym_add(t, -i)) or {}).get("close", 0) for i in range(3)) if all(bz.get(_ym_add(t, -i)) for i in range(3)) else None  # noqa: E731
+        for t in sorted(bz):
+            a, b = net3(t), net3(_ym_add(t, -12))
+            if a is None or not b or t not in coin or _ym_add(t, 3) not in coin:
+                continue
+            ch = a / b - 1
+            if ch <= -.1:
+                bn[1] += 1; bn[0] += coin[_ym_add(t, 3)] < coin[t]
+            elif ch >= .1:
+                bn[1] += 1; bn[0] += coin[_ym_add(t, 3)] > coin[t]
+        bt["biz_net"] = bn
+    except Exception as e:  # noqa: BLE001
+        log("ledger bt biz", e)
     return bt
 
 
@@ -4882,6 +4915,18 @@ def p_ledger():
                     d1 = tpe[due] / p["base"] - 1
                     ok = (d1 > 0) == (p["dir"] > 0) if r == "house_mom" else (d1 < p["base_chg"]) == (p["dir"] < 0)
                     p.update(status="hit" if ok else "miss", actual=f"指數 {p['base']:.2f} → {tpe[due]:.2f}（半年 {100 * d1:+.1f}%）", resolved=today)
+            elif r == "mort_rate":
+                hs = json.loads(HOUSE_SERIES.read_text(encoding="utf-8")); vol = hs["vol"]; due = p["due"].replace("-", "")
+                x = [vol.get(_ym_add(due, -i)) for i in range(3)]; y = [vol.get(_ym_add(due, -12 - i)) for i in range(3)]
+                if all(x) and all(y):
+                    v = 100 * (sum(x) / sum(y) - 1)
+                    ok = v < p["base"] if p["dir"] > 0 else v > p["base"]
+                    p.update(status="hit" if ok else "miss", actual=f"買賣棟數近 3 月年增 {p['base']:+.1f}% → {v:+.1f}%", resolved=today)
+            elif r == "biz_net":
+                coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); due = p["due"].replace("-", "")
+                if due in coin:
+                    ok = coin[due] < p["base"] if p["dir"] < 0 else coin[due] > p["base"]
+                    p.update(status="hit" if ok else "miss", actual=f"同時指標 {p['base']:.2f} → {coin[due]:.2f}", resolved=today)
             elif r in ("chain_gap", "chain_hot") and today >= p["due"]:
                 kw = next((x for x in ((RESULTS.get("voice") or {}).get("kw") or []) if x.get("k") == p["subject"]), {})
                 v = (kw.get("supply") or {}).get("yoy")
@@ -4948,6 +4993,21 @@ def p_ledger():
             if vy is not None and abs(vy) >= 10 and prob("house_vol") >= .5:  # 回測不到五成就不寫（量領先價在台北不成立時，帳本只留統計）
                 add("house_vol", "台北房價", f"全台買賣棟數近 3 月 {vy:+.0f}%：台北房價到 {dus} 的半年漲幅{'低於' if vy < 0 else '高於'}前半年（{d0:+.1f}%）",
                     f"{du[:4]}-{du[4:]}", base=HF["tpe"], base_chg=d0 / 100, dir=vy)
+        if HF.get("mort_month") and HF.get("mort_rate_d3") is not None and abs(HF["mort_rate_d3"]) >= .05 and HF.get("vol_yoy3") is not None and prob("mort_rate") >= .55:
+            du = _ym_add(HF["vol_month"], 6); up = HF["mort_rate_d3"] > 0
+            add("mort_rate", "買賣棟數", f"房貸利率 3 個月{'升' if up else '降'} {abs(HF['mort_rate_d3']):.2f} 個百分點：全台買賣棟數到 {du[:4]}/{du[4:]} 的年增{'低於' if up else '高於'}現在（{HF['vol_yoy3']:+.1f}%）",
+                f"{du[:4]}-{du[4:]}", base=HF["vol_yoy3"], dir=HF["mort_rate_d3"])
+        BZ = RESULTS.get("bizlife") or {}
+        if BZ.get("net3_ly") and prob("biz_net") >= .55:
+            ch = BZ["net3"] / BZ["net3_ly"] - 1
+            try:
+                coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); cm = max(coin)
+                if abs(ch) >= .1:
+                    du = _ym_add(cm, 3)
+                    add("biz_net", "景氣", f"公司淨新設近 3 月比去年{'少' if ch < 0 else '多'} {abs(ch) * 100:.0f}%：同時指標到 {du[:4]}/{du[4:]} {'低於' if ch < 0 else '高於'}現在（{coin[cm]:.2f}）",
+                        f"{du[:4]}-{du[4:]}", base=coin[cm], dir=ch)
+            except Exception as e:  # noqa: BLE001
+                log("ledger biz gen", e)
         d6 = (TODAY_TPE + timedelta(days=182)).isoformat()
         for r in ((RESULTS.get("chain") or {}).get("rows") or []):  # 還沒有歷史可回測：機率先給 50%，等對完答案再說
             sv = next((x.get("v") for x in r.get("stages") or [] if x.get("k") == "新店"), None)
@@ -4978,9 +5038,156 @@ def p_ledger():
             "n_open": len(opn), "n_done": len(done), "n_hit": sum(1 for p in done if p["status"] == "hit"), "gen_at": L.get("gen_at"), "bt_at": L.get("bt_at")}
 
 
+# ---------- 人口結構：內政部統計（出生、死亡、三段年齡、戶數，月） ----------
+DEMO_SERIES = DATA / "demo_series.json"
+
+
+def _moi_csv(funid, y0=101):
+    """內政部統計查詢網 CSV（UTF-8）：回傳 {欄名: {YYYYMM: 值}}，只取「區域別總計」的欄。"""
+    y1 = TODAY_TPE.year - 1911
+    url = (f"https://statis.moi.gov.tw/micst/webMain.aspx?sys=220&kind=21&type=1&funid={funid}&cycle=41&outmode=12&utf=1"
+           f"&compmode=0&outkind=1&ym={y0}01&ymt={y1}12&fldspc=0,30,")
+    rows = list(csv.reader(io.StringIO(get(url, timeout=90).content.decode("utf-8-sig", "replace"))))
+    head = rows[0]
+    out = {h: {} for h in head[1:] if "區域別總計" in h}
+    for r in rows[1:]:
+        m = re.match(r"(\d+)年\s*(\d+)月", r[0] if r else "")
+        if not m:
+            continue
+        ym = f"{int(m.group(1)) + 1911}{int(m.group(2)):02d}"
+        for h, v in zip(head[1:], r[1:]):
+            if h in out:
+                try:
+                    out[h][ym] = float(v.replace(",", ""))
+                except ValueError:
+                    pass
+    return out
+
+
+def p_demo():
+    b = _moi_csv("c0120103"); d = _moi_csv("c0120201"); a = _moi_csv("c0110201"); hh = _moi_csv("c0110101")
+    pick = lambda D, key: next((v for k, v in D.items() if k.startswith(key)), {})  # noqa: E731
+    births, deaths = pick(b, "出生人數/"), pick(d, "死亡人數/")
+    pop, old, young = pick(a, "人口數/"), pick(a, "老年人口"), pick(a, "幼年人口")
+    hhs, hsz = pick(hh, "戶數"), pick(hh, "戶量")
+    if len(births) < 24 or len(pop) < 24:
+        raise RuntimeError(f"demo: 資料太短 births={len(births)} pop={len(pop)}")
+    write_json(DEMO_SERIES, {"births": births, "deaths": deaths, "pop": pop, "old": old, "young": young, "hh": hhs, "hsz": hsz}, separators=(",", ":"))
+    m = max(births)
+    def y3(s, t=m):
+        a_ = [s.get(_ym_add(t, -i)) for i in range(3)]; b_ = [s.get(_ym_add(t, -12 - i)) for i in range(3)]
+        return round(100 * (sum(a_) / sum(b_) - 1), 1) if all(a_) and all(b_) else None
+    share = lambda t: round(100 * old[t] / pop[t], 2) if old.get(t) and pop.get(t) else None  # noqa: E731
+    ks = sorted(births)[-36:]
+    return {"month": m, "births": births[m], "births_y3": y3(births), "deaths": deaths.get(m), "deaths_y3": y3(deaths),
+            "natural": (births[m] - deaths[m]) if deaths.get(m) else None,
+            "natural_12": round(sum(births.get(_ym_add(m, -i), 0) - deaths.get(_ym_add(m, -i), 0) for i in range(12))),
+            "pop": pop.get(m), "pop_chg12": round(pop[m] - pop[_ym_add(m, -12)]) if pop.get(m) and pop.get(_ym_add(m, -12)) else None,
+            "old_share": share(m), "old_share_12": share(_ym_add(m, -12)), "young_share": round(100 * young[m] / pop[m], 2) if young.get(m) and pop.get(m) else None,
+            "hh": hhs.get(m), "hh_y": round(100 * (hhs[m] / hhs[_ym_add(m, -12)] - 1), 2) if hhs.get(m) and hhs.get(_ym_add(m, -12)) else None, "hsz": hsz.get(m),
+            "births_spark": [births[k] for k in ks], "deaths_spark": [deaths.get(k) for k in ks],
+            "src": "內政部統計查詢網（出生、死亡、三段年齡人口、戶數，月）"}
+
+
+# ---------- 公司開關：經濟部商工（公司新設與解散撤銷廢止，月；分行業只給最近兩個月，逐月累積） ----------
+BIZ_IND = DATA / "biz_industry.json"
+BIZ_SERIES = DATA / "biz_series.json"
+
+
+def _gcis_dist(ds):
+    meta = gjson(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", timeout=40)["result"]
+    return [(x.get("resourceDescription") or "", x.get("resourceDownloadUrl")) for x in meta.get("distribution") or [] if x.get("resourceDownloadUrl")]
+
+
+def _gcis_get(url):
+    for k in range(3):  # 商工主機偶爾 504
+        try:
+            return get(url, timeout=60).content.decode("utf-8-sig", "replace")
+        except Exception:  # noqa: BLE001
+            if k == 2:
+                raise
+            time.sleep(5 * (k + 1))
+
+
+def p_bizlife():
+    tot = {}
+    for _, u in _gcis_dist(29237)[:1]:
+        for r in csv.DictReader(io.StringIO(_gcis_get(u))):
+            ym = str(r.get("年月別") or "").strip()
+            if re.fullmatch(r"\d{5}", ym):
+                try:
+                    tot[f"{int(ym[:3]) + 1911}{ym[3:]}"] = {"new": int(r["新設立家數"]), "close": int(r["解撤廢家數"]), "stock": int(r["本月底現有家數"])}
+                except (KeyError, ValueError):
+                    pass
+    if len(tot) < 36:
+        raise RuntimeError(f"bizlife: 只有 {len(tot)} 個月")
+    write_json(BIZ_SERIES, tot, separators=(",", ":"))
+    try:
+        ind = json.loads(BIZ_IND.read_text(encoding="utf-8")) if BIZ_IND.exists() else {}
+    except Exception:  # noqa: BLE001
+        ind = {}
+    errs = []
+    try:
+        for desc, u in _gcis_dist(9347):
+            m = re.search(r"(\d{4})年(\d{2})月", desc)
+            if not m:
+                continue
+            ym = m.group(1) + m.group(2)
+            rows = {}
+            for r in csv.reader(io.StringIO(_gcis_get(u))):
+                if len(r) < 7 or r[0] == "行業別":
+                    continue
+                name = r[0]; lvl = (len(name) - len(name.lstrip())) // 2
+                try:
+                    rows[name.strip()] = {"lvl": lvl, "new": int(r[3]), "close": int(r[5]), "stock": int(r[15]) if len(r) > 15 else None}
+                except ValueError:
+                    pass
+            if rows:
+                ind[ym] = rows
+        write_json(BIZ_IND, dict(sorted(ind.items())[-36:]), separators=(",", ":"))
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"分行業：{safe_err(e)}")
+    m = max(tot)
+    def s3(key, t=m):
+        return sum(tot.get(_ym_add(t, -i), {}).get(key, 0) for i in range(3))
+    def y3(key):
+        a, b = s3(key), s3(key, _ym_add(m, -12))
+        return round(100 * (a / b - 1), 1) if b else None
+    im = max(ind) if ind else None
+    inds = []
+    if im:
+        for nm, r in ind[im].items():
+            if nm == "總計" or r["lvl"] < 2:
+                continue  # lvl 2＝大類（農林漁牧、製造業…），lvl 3＝中類
+            p = ind.get(_ym_add(im, -1), {}).get(nm) or {}
+            inds.append({"name": nm, "lvl": r["lvl"], "new": r["new"], "close": r["close"], "net": r["new"] - r["close"],
+                         "stock": r.get("stock"), "net_prev": (p.get("new", 0) - p.get("close", 0)) if p else None})
+    ks = sorted(tot)[-36:]
+    return {"month": m, "new": tot[m]["new"], "close": tot[m]["close"], "stock": tot[m]["stock"],
+            "new_y3": y3("new"), "close_y3": y3("close"), "net3": s3("new") - s3("close"), "net3_ly": s3("new", _ym_add(m, -12)) - s3("close", _ym_add(m, -12)),
+            "new_spark": [tot[k]["new"] for k in ks], "close_spark": [tot[k]["close"] for k in ks], "ind_month": im,
+            "ind_major": sorted([x for x in inds if x["lvl"] == 2 and x["name"] not in ("未分類",) and (x["new"] or x["close"])], key=lambda x: -x["net"]),
+            "ind_mfg": sorted([x for x in inds if x["lvl"] >= 3], key=lambda x: -x["net"]),  # 只有製造業有拆中類
+            "errs": errs, "src": "經濟部商工行政資料開放平臺（公司登記統計表、按行業別異動）"}
+
+
 # ---------- 房市動能：全台建物買賣移轉棟數（內政部，月）＋ 台北市住宅價格月指數（北市地政局）——給預測帳本回測用 ----------
 HOUSE_SERIES = DATA / "house_series.json"
 HOUSE_CITIES = ["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市", "新竹縣", "新竹市"]
+
+
+def _mort_summary(mort, mbal):
+    if not mort:
+        return {}
+    mm = max(mort)
+    a3 = sum(mort.get(_ym_add(mm, -i), {}).get("amt", 0) for i in range(3)); b3 = sum(mort.get(_ym_add(mm, -12 - i), {}).get("amt", 0) for i in range(3))
+    r3 = mort.get(_ym_add(mm, -3), {}).get("rate")
+    bm = max(mbal) if mbal else None
+    ks = sorted(mort)[-36:]
+    return {"mort_month": mm, "mort_amt": mort[mm]["amt"], "mort_amt_y3": round(100 * (a3 / b3 - 1), 1) if b3 else None,
+            "mort_rate": mort[mm]["rate"], "mort_rate_d3": round(mort[mm]["rate"] - r3, 3) if r3 else None,
+            "mort_spark": [mort[k]["amt"] for k in ks], "rate_spark": [mort[k]["rate"] for k in ks],
+            "mbal_month": bm, "mbal": mbal[bm]["bal"] if bm else None, "mbal_yoy": mbal[bm]["yoy"] if bm else None}
 
 
 def p_housefc():
@@ -5008,7 +5215,26 @@ def p_housefc():
                 tpe[f"{int(yy) + 1911}{int(mm):02d}"] = float(row[2])
             except ValueError:
                 pass
-    write_json(HOUSE_SERIES, {"vol": vol, "city": city, "tpe": tpe}, separators=(",", ":"))
+    # 房貸（央行）：五大銀行新承做購屋貸款金額與利率（1997 起）、購置住宅貸款餘額年增率（1988 起）
+    mort, mbal, merr = {}, {}, None
+    try:
+        for r in csv.DictReader(io.StringIO(get("https://www.cbc.gov.tw/public/data/OpenData/經研處/EH45M01.csv", timeout=60).content.decode("utf-8-sig", "replace"))):
+            m_ = re.fullmatch(r"(\d{4})M(\d{2})", (r.get("期間") or "").strip())
+            if m_:
+                try:
+                    mort[m_.group(1) + m_.group(2)] = {"amt": float(r["購屋貸款-金額"]), "rate": float(r["購屋貸款-利率"])}
+                except (KeyError, ValueError):
+                    pass
+        for r in csv.DictReader(io.StringIO(get("https://www.cbc.gov.tw/public/data/OpenData/經研處/EF99M01.csv", timeout=60).content.decode("utf-8-sig", "replace"))):
+            m_ = re.fullmatch(r"(\d{4})M(\d{2})", (r.get("期間") or "").strip())
+            if m_:
+                try:
+                    mbal[m_.group(1) + m_.group(2)] = {"bal": float(r["消費者貸款-購置住宅貸款-原始值"]), "yoy": float(r["消費者貸款-購置住宅貸款-年增率"])}
+                except (KeyError, ValueError):
+                    pass
+    except Exception as e:  # noqa: BLE001
+        merr = safe_err(e)
+    write_json(HOUSE_SERIES, {"vol": vol, "city": city, "tpe": tpe, "mort": mort, "mbal": mbal}, separators=(",", ":"))
     def y3(s, t):  # 近 3 個月合計比去年同期
         a = [s.get(_ym_add(t, -i)) for i in range(3)]; b = [s.get(_ym_add(t, -12 - i)) for i in range(3)]
         return round(100 * (sum(a) / sum(b) - 1), 1) if all(a) and all(b) else None
@@ -5017,7 +5243,8 @@ def p_housefc():
     cities = sorted([{"city": c, "n3": sum(s.get(_ym_add(vm, -i), 0) for i in range(3)), "yoy3": y3(s, vm)} for c, s in city.items()], key=lambda r: -r["n3"])
     return {"vol_month": vm, "vol": vol[vm], "vol_yoy3": y3(vol, vm), "vol_spark": [vol[k] for k in sorted(vol)[-24:]],
             "cities": cities, "tpe_month": tm, "tpe": tpe.get(tm), "tpe_6m": ch(6), "tpe_12m": ch(12), "tpe_spark": [tpe[k] for k in sorted(tpe)[-36:]],
-            "src": "內政部 建物所有權登記（買賣，月）· 臺北市地政局 住宅價格月指數（全市）"}
+            **_mort_summary(mort, mbal), "mort_err": merr,
+            "src": "內政部 建物所有權登記（買賣，月）· 臺北市地政局 住宅價格月指數（全市）· 中央銀行 五大銀行新承做購屋貸款、購置住宅貸款餘額"}
 
 
 # ---------- 主題鏈：同一個主題，從國外、搜尋、媒體一路看到商標、新店、消費、政策，標出走到哪一站 ----------
@@ -6899,6 +7126,15 @@ def _wk_material():
     if tx:
         B["消費"].append(f"稅籍新設近 6 個月 {tx.get('n6')} 家（去年同期 {tx.get('ly6')}）；新設增最多：" + "、".join(f"{r['name']} {r.get('yoy')}%" for r in (tx.get("up") or [])[:5])
                          + "；全新冒出的行業：" + "、".join(f"{r['name']}（{r.get('n6')} 家）" for r in (tx.get("new") or [])[:3]))
+    dm = R("demo")
+    if dm.get("births"):
+        B["消費"].append(f"人口 {dm.get('month')}：出生近 3 月年增 {f(dm.get('births_y3'))}%、死亡 {f(dm.get('deaths_y3'))}%，近 12 個月自然減少 {abs(dm.get('natural_12') or 0):,} 人；65 歲以上占 {dm.get('old_share')}%（去年 {dm.get('old_share_12')}%）；戶數年增 {f(dm.get('hh_y'),2)}%、平均每戶 {dm.get('hsz')} 人")
+    bz = R("bizlife")
+    if bz.get("new"):
+        B["消費"].append(f"公司新設與解散 {bz.get('month')}：新設近 3 月年增 {f(bz.get('new_y3'))}%、解散撤銷近 3 月年增 {f(bz.get('close_y3'))}%，淨新設 {bz.get('net3')} 家（去年同期 {bz.get('net3_ly')}）；{bz.get('ind_month')} 淨增最多：" + "、".join(f"{x['name']} {x['net']:+d}" for x in (bz.get('ind_major') or [])[:3]) + "；淨減最多：" + "、".join(f"{x['name']} {x['net']:+d}" for x in (bz.get('ind_major') or [])[-3:]))
+    hf = R("housefc")
+    if hf.get("mort_month"):
+        B["消費"].append(f"房市 {hf.get('vol_month')}：全台買賣棟數近 3 月年增 {f(hf.get('vol_yoy3'))}%；台北房價半年 {f(hf.get('tpe_6m'))}%；新承做購屋貸款近 3 月年增 {f(hf.get('mort_amt_y3'))}%、利率 {hf.get('mort_rate')}%（3 個月變化 {f(hf.get('mort_rate_d3'),3)}）；購屋貸款餘額年增 {f(hf.get('mbal_yoy'),2)}%")
     mt = R("metro")
     if mt:
         B["消費"].append(f"台北捷運 {mt.get('month')} 總運量年增 {f(mt.get('total_chg'))}%；成長最多站：" + "、".join(f"{r['st']} {f(r['chg'])}%" for r in (mt.get("up") or [])[:4]))
@@ -8460,6 +8696,8 @@ run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 run("housefc", p_housefc, keep_if_fresh_hours=24)
+run("demo", p_demo, keep_if_fresh_hours=24)
+run("bizlife", p_bizlife, keep_if_fresh_hours=24)
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 if load_prev("weekly"):  # 每週走向摘要由 weekly.yml 另外寫（Gemini 慢，不佔主迴圈時間），這裡只帶進 all.json

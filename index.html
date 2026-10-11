@@ -486,7 +486,7 @@ canvas.o-fx{display:block;width:100%}
 /* 分頁內固定順序：台灣先、國際後；快的先、月更的後；結論先、原文後 */
 #p-pulse{display:none!important}
 #p-taiex{order:1}#p-fx{order:2}#p-fear{order:3}#p-taifex{order:4}#p-world{order:5}#p-tw-stocks{order:6}#p-lux{order:7}#p-mops{order:8}#p-usbig{order:9}@media (min-width:1101px){#p-taiex{grid-row:span 2}}#p-sectors{order:10}#p-cmdty{order:11}#p-revenue{order:12}
-#p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-cards{order:7}#p-lead{order:7}#p-housefc{order:7}#p-imports{order:7}#p-house{order:8}#p-poly{order:9}#p-jobs{order:10}
+#p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-cards{order:7}#p-lead{order:7}#p-housefc{order:7}#p-demo{order:7}#p-bizlife{order:7}#p-imports{order:7}#p-house{order:8}#p-poly{order:9}#p-jobs{order:10}
 #p-weekly{order:0}#ib-soc{order:0}#p-chain{order:1}#p-ledger{order:2}#p-voice{order:3}#p-wiki{order:4}#p-tech2{order:5}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
 .grid{align-items:start}
 /* 桃機翻牌看板：只有變動的字會翻 */
@@ -798,10 +798,22 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><a href="https://www.nccc.com.tw/" target="_blank" rel="noopener">聯合信用卡處理中心</a><span>金管會開放資料 · 每月 · 年增＝比去年同月 · 「比整體」＝扣掉刷卡本身每年成長後，這一類是不是真的變熱 · 近 3 月取中位數，避開單月大額異常</span></div>
   </section>
 
+  <section class="panel w6 cap" id="p-demo">
+    <div class="ph"><h2>Population</h2><span class="zh">人口結構 · 出生、死亡、高齡、戶數</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://statis.moi.gov.tw/micst/" target="_blank" rel="noopener">內政部統計查詢網</a><span>每月 · 約晚 1 個月 · 人口是最確定的長期走向：長照、獨居、寵物、小宅這幾條主題鏈的底層需求都從這裡來</span></div>
+  </section>
+
+  <section class="panel w6 cap" id="p-bizlife">
+    <div class="ph"><h2>Company Births &amp; Deaths</h2><span class="zh">公司開關 · 新設與解散撤銷廢止</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://data.gcis.nat.gov.tw/" target="_blank" rel="noopener">經濟部商工行政資料開放平臺</a><span>公司登記（不含行號）· 每月 · 約晚 1 個月 · 分行業只有大類，製造業另有中類 · 稅籍「新店」看的是開，這裡補上「關」</span></div>
+  </section>
+
   <section class="panel w6 cap" id="p-housefc">
     <div class="ph"><h2>Housing Momentum</h2><span class="zh">房市動能 · 買賣棟數、台北房價月指數</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://statis.moi.gov.tw/micst/" target="_blank" rel="noopener">內政部統計查詢網</a><a href="https://data.taipei/" target="_blank" rel="noopener">臺北市資料大平臺</a><span>買賣棟數＝建物所有權買賣移轉登記（全台、月）· 台北住宅價格月指數（全市）約晚 2 個月公布 · 回測（2012 起）：房價半年方向延續 69%；「買賣量先動、房價跟著變」只有 41%，在台北不成立，帳本只留統計不寫預測</span></div>
+    <div class="pf"><a href="https://statis.moi.gov.tw/micst/" target="_blank" rel="noopener">內政部統計查詢網</a><a href="https://data.taipei/" target="_blank" rel="noopener">臺北市資料大平臺</a><span>買賣棟數＝建物所有權買賣移轉登記（全台、月）· 台北住宅價格月指數（全市）約晚 2 個月公布 · 房貸＝中央銀行五大銀行新承做購屋貸款與購置住宅貸款餘額 · 回測（2012 起）：房價半年方向延續 69%；「買賣量先動、房價跟著變」只有 41%，在台北不成立，帳本只留統計不寫預測</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-lead">
@@ -1597,11 +1609,28 @@ const renderers={
     const hot=(d.rows||[]).filter(x=>x.rel!=null).sort((a,b)=>b.rel-a.rel);
     body("p-cards").innerHTML=`<div class="veg-h">${hot[0]?`最熱<b class="up">${esc(hot[0].cat)}</b><span>比整體多長 ${sgn(n(hot[0].rel),1)} 個百分點 · 最冷 ${esc(hot[hot.length-1].cat)}（${sgn(n(hot[hot.length-1].rel),1)}）· ${esc(d.month||"")}</span>`:""}</div><table><tr><th>類別（線＝年增 24 個月）</th><th class="r">億元</th><th class="r">年增</th><th class="r">近 3 月</th><th class="r">比整體</th></tr>${tr}</table>`;
     setMeta("p-cards",{...d,label:(d.month||"")+" 月資料"},24*40);},
+  demo(d){const ym=x=>x?`${String(x).slice(0,4)}/${String(x).slice(4)}`:"",pp=v=>v==null?"—":`${v>0?"+":""}${fmt(v,1)}%`;
+    const os=d.old_share,o12=d.old_share_12;
+    body("p-demo").innerHTML=`<div class="plain">近 12 個月台灣人口自然減少 <b>${fmt(Math.abs(n(d.natural_12)),0)}</b> 人（死比生多）；65 歲以上已占 <b>${fmt(n(os),1)}%</b>，一年多了 ${fmt(n(os)-n(o12),1)} 個百分點。人口在縮，但戶數還在增加（${pp(d.hh_y)}），每戶只剩 ${fmt(n(d.hsz),2)} 人：小家庭和獨居一直在變多。</div>
+      <div class="veg-h">出生<b class="${cls(n(d.births_y3))}">${pp(d.births_y3)}</b><span>近 3 個月比去年同期 · ${ym(d.month)} 單月 ${fmt(n(d.births),0)} 人</span></div>
+      <div style="display:flex;gap:14px;align-items:center;font-size:11.5px;color:var(--muted);margin:2px 0 10px">${mini(d.births_spark)}<span>出生（近 36 月）</span>${mini(d.deaths_spark)}<span>死亡</span></div>
+      <ul class="list"><li><span class="t">死亡（近 3 月年增）</span><span class="v">${pp(d.deaths_y3)}</span></li><li><span class="t">總人口（一年變化）</span><span class="v">${fmt(n(d.pop)/1e4,0)} 萬（${n(d.pop_chg12)>0?"+":""}${fmt(n(d.pop_chg12),0)}）</span></li>
+      <li><span class="t">65 歲以上占比</span><span class="v">${fmt(n(os),2)}%（去年 ${fmt(n(o12),2)}%）</span></li><li><span class="t">0–14 歲占比</span><span class="v">${fmt(n(d.young_share),2)}%</span></li>
+      <li><span class="t">戶數（年增）</span><span class="v">${fmt(n(d.hh)/1e4,0)} 萬戶（${pp(d.hh_y)}）</span></li><li><span class="t">平均每戶人數</span><span class="v">${fmt(n(d.hsz),2)}</span></li></ul>`;
+    setMeta("p-demo",{...d,label:"月資料"},24*40);},
+  bizlife(d){const ym=x=>x?`${String(x).slice(0,4)}/${String(x).slice(4)}`:"",pp=v=>v==null?"—":`${v>0?"+":""}${fmt(v,1)}%`;
+    const M=d.ind_major||[],li=a=>a.map(x=>`<li><span class="t">${esc(x.name)}<span class="sub"> 新設 ${x.new} · 解散 ${x.close}</span></span><span class="v ${x.net>0?"up":x.net<0?"down":""}">${x.net>0?"+":""}${x.net}</span></li>`).join("");
+    const up=M.filter(x=>x.net>0).slice(0,6),dn=M.filter(x=>x.net<0).sort((a,b)=>a.net-b.net).slice(0,6);
+    body("p-bizlife").innerHTML=`<div class="plain">近 3 個月新設公司 ${pp(d.new_y3)}、解散撤銷 ${pp(d.close_y3)}（都跟去年同期比）；淨增 <b>${fmt(n(d.net3),0)}</b> 家，去年同期是 ${fmt(n(d.net3_ly),0)} 家。${n(d.net3)<n(d.net3_ly)*0.9?"開公司的速度在變慢、收掉的在變多。":n(d.net3)>n(d.net3_ly)*1.1?"開公司的速度在變快。":"跟去年差不多。"}</div>
+      <div style="display:flex;gap:14px;align-items:center;font-size:11.5px;color:var(--muted);margin:2px 0 10px">${mini(d.new_spark)}<span>新設（近 36 月）</span>${mini(d.close_spark)}<span>解散撤銷</span></div>
+      <div class="vr-g"><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">${ym(d.ind_month)} 淨增最多</h3><ul class="list">${li(up)}</ul></div><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">淨減最多</h3><ul class="list">${li(dn)}</ul></div></div>${(d.errs||[]).length?`<div class="empty" style="font-size:10.5px">${errNote(d.errs)}</div>`:""}`;
+    setMeta("p-bizlife",{...d,label:"月資料"},24*40);},
   housefc(d){const ym=x=>x?`${String(x).slice(0,4)}/${String(x).slice(4)}`:"";
     const cs=(d.cities||[]).map(c=>`<li><span class="t">${esc(c.city.replace("臺","台"))}</span><span class="v">${fmt(n(c.n3),0)} 棟</span><span class="v ${cls(n(c.yoy3))}">${c.yoy3!=null?sgn(n(c.yoy3),1,"%"):"—"}</span></li>`).join("");
     body("p-housefc").innerHTML=`<div class="veg-h">全台買賣棟數<b class="${cls(n(d.vol_yoy3))}">${sgn(n(d.vol_yoy3),1,"%")}</b><span>近 3 個月比去年同期 · ${ym(d.vol_month)} 單月 ${fmt(n(d.vol),0)} 棟</span></div>
       <div style="display:flex;gap:10px;align-items:center;font-size:11.5px;color:var(--muted);margin:2px 0 10px">${mini(d.vol_spark)}<span>每月棟數 · 近 24 月</span></div>
       ${d.tpe!=null?`<div class="veg-h">台北房價月指數<b class="${cls(n(d.tpe_6m))}">${sgn(n(d.tpe_6m),1,"%")}</b><span>近半年 · ${ym(d.tpe_month)} 指數 ${fmt(n(d.tpe),2)} · 一年 ${sgn(n(d.tpe_12m),1,"%")}</span></div><div style="display:flex;gap:10px;align-items:center;font-size:11.5px;color:var(--muted);margin:2px 0 10px">${mini(d.tpe_spark)}<span>近 36 月</span></div>`:""}
+      ${d.mort_month?`<div class="veg-h">新承做購屋貸款<b class="${cls(n(d.mort_amt_y3))}">${sgn(n(d.mort_amt_y3),1,"%")}</b><span>近 3 個月比去年同期 · ${ym(d.mort_month)} 利率 ${fmt(n(d.mort_rate),3)}%（3 個月 ${n(d.mort_rate_d3)>0?"+":""}${fmt(n(d.mort_rate_d3),3)}）· 房貸餘額年增 ${fmt(n(d.mbal_yoy),2)}%</span></div><div style="display:flex;gap:10px;align-items:center;font-size:11.5px;color:var(--muted);margin:2px 0 10px">${mini(d.mort_spark)}<span>每月新承做金額（五大銀行）</span>${mini(d.rate_spark)}<span>利率</span></div>`:""}
       <h3 style="font-size:11px;color:var(--dim);margin:4px 0">各縣市近 3 個月買賣棟數（比去年同期）</h3><ul class="list">${cs}</ul>`;
     setMeta("p-housefc",{...d,label:"月資料"},24*40);},
   lead(d){const L=d.lead||{},O=d.orders||{};const st=n(L.streak);
@@ -2478,7 +2507,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["trend","走向"],["intel","訊號"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
-  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"trend","p-ledger":"trend","p-chain":"trend","p-weekly":"trend","p-tech2":"trend","p-imports":"macro","p-housefc":"macro","p-metro":"live",
+  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"trend","p-ledger":"trend","p-chain":"trend","p-weekly":"trend","p-tech2":"trend","p-imports":"macro","p-housefc":"macro","p-demo":"macro","p-bizlife":"macro","p-metro":"live",
   "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-elect":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
