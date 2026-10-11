@@ -314,7 +314,7 @@ function buildTerrain() {
           float n = fract(sin(dot(cell, vec2(12.9898, 78.233))) * 43758.5453);
           float spark = step(1.0 - I * 0.9, n);
           vec3 lc = mix(vec3(1.0, 0.5, 0.16), vec3(1.0, 0.9, 0.74), I);
-          totalEmissiveRadiance = lc * (spark * (0.12 + 1.9 * I) + pow(I, 2.0) * 1.1) * uNight * (1.0 - uClose * 0.94);   // 拉近時交給建物窗戶發光
+          totalEmissiveRadiance = lc * (spark * (0.12 + 1.9 * I) + pow(I, 2.0) * 1.1) * uNight * (1.0 - smoothstep(0.25, 0.85, uClose));   // 拉近時交給建物窗戶發光
         }
         // 高度帶：極淡的等高線，讓山形更清楚
         float band = abs(fract(vElev / 500.0) - 0.5);
@@ -773,7 +773,7 @@ function loop() {
   for (const k in layers) if (layers[k].g && layers[k].g.visible && layers[k].tick) layers[k].tick(T, dt);
   lodTick(dt);
   { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); }
-  lmMat.emissiveIntensity = uni.uNight.value * 0.32;
+  lmMat.emissiveIntensity = uni.uNight.value * 0.28; lmMat.color.setScalar(1 - uni.uNight.value * 0.72);
   outlineGroup.visible = camera.position.distanceTo(controls.target) > 40;
   controls.update(); renderer.render(scene, camera); placeLabels();
   requestAnimationFrame(loop);
