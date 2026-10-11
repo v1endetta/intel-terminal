@@ -67,8 +67,9 @@ body.exploring #dock{opacity:1;transform:translate(-50%,0)}
   background:var(--glass);backdrop-filter:saturate(180%) blur(28px);-webkit-backdrop-filter:saturate(180%) blur(28px);border:1px solid var(--line);
   opacity:0;transform:translateX(16px);pointer-events:none;transition:opacity .35s ease,transform .35s ease}
 #card.show{opacity:1;transform:none;pointer-events:auto}
-#card .x{position:absolute;right:14px;top:12px;all:unset;cursor:pointer;color:var(--fg3);font-size:20px;line-height:1;padding:6px;position:absolute}
-#card h3{font-size:24px;font-weight:600}
+#card .x{all:unset;position:absolute;right:12px;top:10px;z-index:2;cursor:pointer;color:var(--fg2);font-size:22px;line-height:1;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.08)}
+#card .x:hover{color:var(--fg);background:rgba(255,255,255,.16)}
+#card h3{font-size:24px;font-weight:600;padding-right:40px}
 #card .sub{font-size:13px;color:var(--fg2);margin-top:2px}
 #card .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 #card .kv{background:var(--glass2);border-radius:14px;padding:10px 12px}
@@ -162,7 +163,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const RAW = "https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/";
-const ASSET_V = 7;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
+const ASSET_V = 8;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
 const MOBILE = matchMedia("(max-width:760px)").matches || /Mobi|Android/i.test(navigator.userAgent);
 const EX = 6;                 // 高度誇張倍數
 const LONC = 120.95, LATC = 23.65;
@@ -673,7 +674,7 @@ function setupWx() {
       if (!c) continue;
       const [x, z] = toXZ(c.c[0], c.c[1]);
       const nm = c.name.replace(/[縣市]$/, "");
-      addLabel(`${fmt(it.temp, 0)}°<span class="n"> ${esc(nm)} ${esc(it.weather || "")}</span>`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "", "wx", /^(臺北|台北|新北|桃園|臺中|台中|臺南|台南|高雄)/.test(nm) ? 1 : 0);
+      addLabel(`${fmt(it.temp, 0)}°<span class="n"> ${esc(nm)} ${esc(it.weather || "")}</span>`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "", "wx", /^(臺北|台北|高雄)/.test(nm) ? 1.5 : /^(新北|桃園|臺中|台中|臺南|台南)/.test(nm) ? 1 : 0);
     }
     const R = P.radar_wx || {};
     const ws = [...new Set(warn.map(w => w.what))];
@@ -1119,6 +1120,31 @@ function setupObjects2() {
     add(g);
     g.traverse(m => { if (m.isMesh) { m.userData.info = { t: "資料塔", v: `${n} 個面板`, d: "", src: "", tower: true }; OBJ.pick.push(m); } });
   }
+  wrapObjects();
+}
+// 物件是給「整座島」的比例做的；拉近到市區時跟著縮小，不擋住建築（以物件落地點為中心縮放）
+const _bb = new THREE.Box3();
+function wrapObjects() {
+  OBJ.wrap = []; OBJ.free = [];
+  const kids = [...OBJ.g.children];
+  // 先試跑兩個時間點：會自己移動的（船、飛機、熱氣球）直接縮自己，靜止的包一層、以落地點為中心縮
+  const p0 = kids.map(o => o.position.clone());
+  for (const f of OBJ.tick) f(0.37);
+  const p1 = kids.map(o => o.position.clone());
+  for (const f of OBJ.tick) f(5.91);
+  kids.forEach((o, i) => {
+    if (o.position.distanceTo(p1[i]) > 1e-4 || p0[i].distanceTo(p1[i]) > 1e-4) { o.userData.s0 = o.scale.x; OBJ.free.push(o); return; }
+    _bb.setFromObject(o); if (_bb.isEmpty()) return;
+    const a = new THREE.Vector3((_bb.min.x + _bb.max.x) / 2, _bb.min.y, (_bb.min.z + _bb.max.z) / 2);
+    const w = new THREE.Group(); w.position.copy(a); OBJ.g.add(w);
+    o.position.sub(a); w.add(o); OBJ.wrap.push(w);
+  });
+}
+function scaleObjects() {
+  if (!OBJ.wrap) return;
+  const k = d => Math.min(1, Math.max(0.035, d / 160));
+  for (const w of OBJ.wrap) w.scale.setScalar(k(camera.position.distanceTo(w.position)));
+  for (const o of OBJ.free) o.scale.setScalar(o.userData.s0 * k(camera.position.distanceTo(o.position)));
 }
 function openTower() {
   const keys = Object.keys(P).filter(k => P[k] && typeof P[k] === "object").sort((a, b) => (PNAMES[a] || a).localeCompare(PNAMES[b] || b, "zh-Hant"));
@@ -1162,6 +1188,7 @@ function loop() {
   for (const k in layers) if (layers[k].g && layers[k].g.visible && layers[k].tick) layers[k].tick(T, dt);
   lodTick(dt);
   for (const f of OBJ.tick) f(T);
+  scaleObjects();
   { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); renderer.toneMappingExposure = (uni.uNight.value ? 0.85 : 1.0) * (1 - 0.2 * uni.uClose.value); }
   lmMat.emissiveIntensity = uni.uNight.value * 0.16; lmMat.color.setScalar(1 - uni.uNight.value * 0.88);
   outlineGroup.visible = camera.position.distanceTo(controls.target) > 40;
