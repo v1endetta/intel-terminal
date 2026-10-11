@@ -1,7 +1,7 @@
 name: deploy-site
 
 # 把網站部署到 Cloudflare（intel.daltatw.com），並確保 Cloudflare Access 只讓帳號本人進來。
-# 需要的 Secrets：CLOUDFLARE_API_TOKEN、FEED_KEY（帳號 ID、KV 空間、登入信箱都用權杖自己查）
+# 需要的 Secrets：CLOUDFLARE_API_TOKEN；FEED_KEY 選填（沒設時晨報通道關著）（帳號 ID、KV 空間、登入信箱都用權杖自己查）
 # 還沒設好時整個流程直接略過，不會報錯。這個 repo 是公開的，log 裡不印任何 ID 或信箱。
 
 on:
@@ -29,7 +29,7 @@ jobs:
         id: chk
         run: |
           ok=1
-          for v in CLOUDFLARE_API_TOKEN FEED_KEY; do
+          for v in CLOUDFLARE_API_TOKEN; do
             [ -n "${!v}" ] || { echo "::notice::$v 還沒設定，略過部署"; ok=0; }
           done
           echo "ok=$ok" >> "$GITHUB_OUTPUT"
@@ -68,4 +68,5 @@ jobs:
         run: |
           set -o pipefail
           npx --yes wrangler@4 deploy 2>&1 | grep -vi "account"
-          printf '%s' "$FEED_KEY" | npx --yes wrangler@4 secret put FEED_KEY >/dev/null && echo "FEED_KEY set"
+          if [ -n "$FEED_KEY" ]; then printf '%s' "$FEED_KEY" | npx --yes wrangler@4 secret put FEED_KEY >/dev/null && echo "FEED_KEY set"
+          else echo "::notice::FEED_KEY 還沒設定：網站照常，晨報通道 /feed 先關著"; fi
