@@ -308,12 +308,12 @@ function buildTerrain() {
           #else
           float dens = nl;
           #endif
-          float I = clamp(0.25 * nl + 0.9 * dens, 0.0, 1.0) * step(0.04, nl + dens);
+          float I = clamp(pow(dens, 0.9) + 0.1 * nl * nl, 0.0, 1.0);
           vec2 cell = floor(vLL * 300.0);
           float n = fract(sin(dot(cell, vec2(12.9898, 78.233))) * 43758.5453);
-          float spark = step(1.0 - pow(I, 1.15) * 0.92, n);
+          float spark = step(1.0 - I * 0.9, n);
           vec3 lc = mix(vec3(1.0, 0.5, 0.16), vec3(1.0, 0.9, 0.74), I);
-          totalEmissiveRadiance = lc * (spark * (0.25 + 1.7 * I) + pow(I, 2.4) * 0.95) * uNight;
+          totalEmissiveRadiance = lc * (spark * (0.12 + 1.9 * I) + pow(I, 2.0) * 1.1) * uNight;
         }
         // 高度帶：極淡的等高線，讓山形更清楚
         float band = abs(fract(vElev / 500.0) - 0.5);
