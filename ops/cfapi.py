@@ -22,7 +22,11 @@ def call(method, path, body=None, raw=None, ctype="application/json", timeout=60
         with urllib.request.urlopen(req, timeout=timeout) as r:
             return json.loads(r.read())
     except urllib.error.HTTPError as e:
-        msg = e.read().decode(errors="replace")[:300]
+        txt = e.read().decode(errors="replace")
+        try:
+            msg = "; ".join(f'{x.get("code")} {x.get("message")}' for x in json.loads(txt).get("errors") or [])
+        except Exception:  # noqa: BLE001
+            msg = " ".join(txt.split())[:300]
         raise CFError(f"{method} {path.split('?')[0]} → {e.code} {msg}") from None
 
 
