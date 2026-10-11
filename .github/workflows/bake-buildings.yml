@@ -1,0 +1,31 @@
+name: bake-buildings
+
+# 一次性：從 OpenStreetMap 做六都白模建築資料。
+on:
+  push:
+    branches: [main]
+    paths: [ops/bake_buildings.py, .github/workflows/bake-buildings.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install osmium
+      - run: python ops/bake_buildings.py
+      - name: Commit
+        run: |
+          git config user.name "intel-bot"
+          git config user.email "intel-bot@users.noreply.github.com"
+          git add 3d/b_*.bin 3d/buildings.json
+          git diff --cached --quiet && exit 0
+          git commit -qm "3d：六都白模建築（OSM）"
+          for i in 1 2 3; do git push -q origin HEAD:main && exit 0; git pull -q --rebase origin main; done; exit 1
