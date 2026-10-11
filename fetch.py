@@ -117,7 +117,7 @@ def load_prev(pid):
 RESULTS: dict[str, dict] = {}
 TIMES: dict[str, float] = {}  # 每個面板本輪花的秒數（效能檢查用）
 START_TS = time.time()
-PANEL_CAP = {"voice": 280, "pop": 150, "house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200, "weekly": 280}
+PANEL_CAP = {"voice": 280, "pop": 150, "house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -6667,11 +6667,11 @@ def _gemini_json(prompt, schema_hint=None, tools=None, max_tokens=6000, timeout=
         try:
             try:
                 r = _gemini_call(prompt, model, tools=tools, max_tokens=max_tokens, timeout=timeout)
-            except requests.exceptions.Timeout as e:  # 這個模型太慢：換下一個
-                last = RuntimeError(f"{model} timeout"); continue
-            if r.status_code in (429, 503):  # 每分鐘額度或過載：等 20 秒再試同一個模型一次
-                time.sleep(20)
-                r = _gemini_call(prompt, model, tools=tools, max_tokens=max_tokens, timeout=timeout)
+                if r.status_code in (429, 503):  # 每分鐘額度或過載：等 20 秒再試同一個模型一次
+                    time.sleep(20)
+                    r = _gemini_call(prompt, model, tools=tools, max_tokens=max_tokens, timeout=timeout)
+            except requests.exceptions.Timeout:  # 這個模型太慢：換下一個
+                last = RuntimeError(f"{model} timeout {timeout}s"); continue
             if r.status_code in (404, 429, 503):  # 還是不行 → 換下一個模型
                 try:
                     msg = (r.json().get("error") or {}).get("message", "")[:90]
@@ -6816,13 +6816,14 @@ def _wk_material():
     return txt, list(B)
 
 
-def p_weekly():
+def p_weekly(force=False, timeout=240):
+    """在獨立的 weekly 工作流程跑（不佔主迴圈時間）；主迴圈只讀它寫好的檔。"""
     if not GEMINI_KEY:
         raise RuntimeError("未設定 GEMINI_API_KEY")
     y, w, _ = TODAY_TPE.isocalendar()
     week = f"{y}-W{w:02d}"
     prev = load_prev("weekly") or {}
-    if prev.get("week") == week and prev.get("dirs") and not prev.get("error"):
+    if not force and prev.get("week") == week and prev.get("dirs") and not prev.get("error"):
         return {k: v for k, v in prev.items() if k not in ("updatedAt", "error")}
     arch = []
     if WEEKLY_ARCH.exists():
@@ -6831,8 +6832,6 @@ def p_weekly():
         except Exception:  # noqa: BLE001
             arch = []
     last = next((a for a in reversed(arch) if a.get("week") != week), None)
-    if time.time() > START_TS + 560:  # 整輪 900 秒硬上限：剩不到 5 分鐘就留給下一輪，免得整輪被丟掉
-        raise RuntimeError("本輪時間不夠，下一輪再寫")
     material, secs = _wk_material()
     last_txt = ""
     if last:
@@ -6860,7 +6859,7 @@ def p_weekly():
 }}
 
 {material}{last_txt}"""
-    js, model = _gemini_json(prompt, None, max_tokens=8000, timeout=120)
+    js, model = _gemini_json(prompt, None, max_tokens=4000, timeout=timeout)
     js.pop("_grounding", None)
     if not js.get("dirs"):
         raise RuntimeError("weekly: 模型沒給方向")
@@ -8335,7 +8334,8 @@ run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 run("housefc", p_housefc, keep_if_fresh_hours=24)
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
-run("weekly", p_weekly)  # 每週走向摘要：每週一換一次（同一週沿用），吃本輪所有面板
+if load_prev("weekly"):  # 每週走向摘要由 weekly.yml 另外寫（Gemini 慢，不佔主迴圈時間），這裡只帶進 all.json
+    RESULTS["weekly"] = load_prev("weekly")
 FINISHED_ISO = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 try:
     write_json(HIST_PATH, HISTORY, separators=(",", ":"))

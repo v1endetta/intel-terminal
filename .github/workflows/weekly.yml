@@ -1,0 +1,60 @@
+name: weekly
+
+# 每週走向摘要（Gemini）。每天台灣 08:40 檢查一次：這週已經寫過就不重寫（GitHub 排程常延遲，週一沒跑到週二會補）。
+# 手動執行時可勾 force 重寫本週。只動 data/panels/weekly.json 和 data/weekly_archive.json，主迴圈不會碰這兩個檔。
+
+on:
+  schedule:
+    - cron: "40 0 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "重寫本週摘要"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly
+  cancel-in-progress: false
+
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: data
+          path: out
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Write weekly summary
+        env:
+          INTEL_DATA_DIR: ${{ github.workspace }}/out/data
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FORCE: ${{ inputs.force }}
+        run: python weekly.py
+      - name: Commit to data branch
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          cd out
+          [ -n "$GEMINI_API_KEY" ] && grep -rqF -- "$GEMINI_API_KEY" data && { echo "::error::secret found in output"; exit 1; }
+          git config user.name "intel-bot"
+          git config user.email "intel-bot@users.noreply.github.com"
+          git add data/panels/weekly.json data/weekly_archive.json 2>/dev/null || true
+          git diff --cached --quiet && { echo "no change"; exit 0; }
+          git commit -qm "weekly: $(date -u +'%Y-%m-%d %H:%M') UTC"
+          for i in 1 2 3 4 5 6; do
+            git push -q origin HEAD:data && exit 0
+            sleep 10; git pull -q --rebase origin data || { git rebase --abort; exit 1; }
+          done
+          exit 1
