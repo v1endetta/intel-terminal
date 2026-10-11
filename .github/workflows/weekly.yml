@@ -1,11 +1,12 @@
 name: weekly
 
-# 每週走向摘要（Gemini）。每天台灣 08:40 檢查一次：這週已經寫過就不重寫（GitHub 排程常延遲，週一沒跑到週二會補）。
+# 每週走向摘要（Gemini）。每天台灣 16:40 檢查一次：這週已經寫過就不重寫（GitHub 排程常延遲，週一沒跑到週二會補）。
+# 排在 16:40 是因為 Gemini 免費額度在美西午夜重置（台灣 15:00，冬令 16:00），這時 Flash 的額度是滿的。
 # 手動執行時可勾 force 重寫本週。只動 data/panels/weekly.json 和 data/weekly_archive.json，主迴圈不會碰這兩個檔。
 
 on:
   schedule:
-    - cron: "40 0 * * *"
+    - cron: "40 8 * * *"
   workflow_dispatch:
     inputs:
       force:

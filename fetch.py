@@ -761,7 +761,7 @@ def p_oss():
 {lines}"""
         bad = re.compile(r"專為|一款|打造|賦能|極致|實用的|強大的")
         try:
-            js, _model = _gemini_json(prompt)
+            js, _model = _gemini_json(prompt, lite_first=True)
             for it in (js.get("items") or []):
                 nm, zh = (it.get("name") or "").strip(), (it.get("zh") or "").strip().rstrip("。")
                 if not (nm and zh):
@@ -6647,7 +6647,8 @@ def _gemini_models():
         flash = [n for n in names if "flash" in n and "image" not in n and "tts" not in n and "live" not in n and "audio" not in n and "exp" not in n]
         # 版本號大的優先；lite 放後面
         flash.sort(key=lambda n: (("lite" in n), -float(re.search(r"(\d+(?:\.\d+)?)", n).group(1)) if re.search(r"\d", n) else 0, n))
-        return flash[:4] or names[:3]
+        full, lite = [n for n in flash if "lite" not in n], [n for n in flash if "lite" in n]
+        return (full[:3] + lite[:2]) or names[:3]  # 確保清單裡一定有 Lite（簡單任務先用它）
     except Exception as e:  # noqa: BLE001
         log("gemini models", e); return []
 
@@ -6671,9 +6672,12 @@ def _gemini_call(prompt, model, json_mode=True, tools=None, max_tokens=6000, tim
     return r
 
 
-def _gemini_json(prompt, schema_hint=None, tools=None, max_tokens=6000, timeout=90):
+def _gemini_json(prompt, schema_hint=None, tools=None, max_tokens=6000, timeout=90, lite_first=False):
     last = None
-    for model in (_gemini_models() or GEMINI_MODELS):
+    models = _gemini_models() or GEMINI_MODELS
+    if lite_first:  # 簡單任務先用 Flash-Lite（免費額度一天約 500 次），把 Flash（約 20 次）留給每週摘要
+        models = sorted(models, key=lambda m: "lite" not in m)
+    for model in models:
         try:
             try:
                 r = _gemini_call(prompt, model, tools=tools, max_tokens=max_tokens, timeout=timeout)
@@ -6742,7 +6746,7 @@ def p_mood():
 來源沒有資料就把該來源 score 設為 null。
 
 {material}"""
-    js, model = _gemini_json(prompt, None)
+    js, model = _gemini_json(prompt, None, lite_first=True)
     tw = js.get("taiwan") or {}
     hist_put("mood", "taiwan", NOW_ISO[:13], tw.get("score"))
     hist_put("mood", "overseas", NOW_ISO[:13], (js.get("overseas") or {}).get("score"))
