@@ -1162,7 +1162,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 
 <script>
 /* 資料位置：舊網址（GitHub Pages）讀公開資料分支；新網址（intel.daltatw.com）經 Worker 讀私人 repo */
-var DATA_BASE=/github\.io$/.test(location.hostname)?"https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/":location.pathname.replace(/[^/]*$/,"")+"data/";  // 分享連結 /s/<key>/ 底下讀 /s/<key>/data/
+var DATA_BASE=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?"data/":"https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/";
 
 (function(){
 "use strict";

@@ -1,0 +1,26 @@
+name: cf-teardown
+
+# 一次性：拆掉 Cloudflare 上的情報站網站，把 intel.daltatw.com 指到 GitHub Pages（免費、不計費）。
+# 冪等，可重跑。完成後這個檔和 ops/cf_*.py 會一起刪掉。
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/cf-teardown.yml, ops/cf_teardown.py]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  teardown:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Teardown
+        working-directory: ops
+        run: |
+          [ -n "$CLOUDFLARE_API_TOKEN" ] || { echo "::error::沒有 CLOUDFLARE_API_TOKEN"; exit 1; }
+          python3 cf_teardown.py
