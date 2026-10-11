@@ -115,6 +115,7 @@ def load_prev(pid):
 
 
 RESULTS: dict[str, dict] = {}
+TIMES: dict[str, float] = {}  # 每個面板本輪花的秒數（效能檢查用）
 START_TS = time.time()
 PANEL_CAP = {"voice": 280, "pop": 150, "house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200, "weekly": 280}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
@@ -153,11 +154,11 @@ def safe_err(e) -> str:
     return f"{type(e).__name__}: {msg[:160]}"[:180]
 
 
-def run(pid: str, fn, keep_if_fresh_hours: float = 0):
+def run(pid: str, fn, keep_if_fresh_hours: float = 0, cheap: bool = False):
     """Run one panel fetcher. keep_if_fresh_hours>0 skips re-fetch when the
     previous file is newer than that (for daily/weekly sources)."""
     prev = load_prev(pid)
-    if time.time() > SOFT_DEADLINE:  # 本輪時間快用完：後面的面板沿用上一輪，保證有 commit
+    if time.time() > SOFT_DEADLINE and not cheap:  # 本輪時間快用完（cheap＝只吃本輪結果、不打外部 API 的面板照跑）：後面的面板沿用上一輪，保證有 commit
         if prev:
             RESULTS[pid] = prev
         log(f"[{pid}] over soft deadline, keep previous")
@@ -195,11 +196,13 @@ def run(pid: str, fn, keep_if_fresh_hours: float = 0):
         RESULTS[pid] = doc
         write_json(PANELS / f"{pid}.json", doc, indent=1)
         log(f"[{pid}] ok {time.time() - t0:.1f}s")
+        TIMES[pid] = round(time.time() - t0, 1)
     except BaseException as e:  # noqa: BLE001
         signal.alarm(0)
         if isinstance(e, (KeyboardInterrupt, SystemExit)):
             raise
         log(f"[{pid}] FAIL {type(e).__name__}: {e}")
+        TIMES[pid] = round(time.time() - t0, 1)
         if prev:
             prev["error"] = f"{NOW_ISO} {safe_err(e)}"
             RESULTS[pid] = prev
@@ -4590,6 +4593,8 @@ LEDGER_RULES = {
     "lead_down": ("景氣轉向", "領先指標連降 3 個月以上，3 個月後同時指標更低"),
     "veg_revert": ("生活成本", "兩週內漲超過 20% 的菜，再兩週會回落"),
     "elect_fav": ("事件機率", "預測市場看好的候選人當選"),
+    "chain_gap": ("缺口會不會被填", "主題鏈判「缺口窗口」的主題，6 個月內新設店家年增比現在高（供給跟上）"),
+    "chain_hot": ("缺口會不會被填", "主題鏈判「供給過熱」的主題，6 個月內新設店家年增比現在低（開始收）"),
 }
 
 
@@ -4771,6 +4776,12 @@ def p_ledger():
                 if later and (date_from(later[0]) - date_from(p["due"])).days <= 4:
                     v = h[later[0]]
                     p.update(status="hit" if v < p["base"] else "miss", actual=f"{p['base']} → {v} 元/公斤", resolved=today)
+            elif r in ("chain_gap", "chain_hot") and today >= p["due"]:
+                kw = next((x for x in ((RESULTS.get("voice") or {}).get("kw") or []) if x.get("k") == p["subject"]), {})
+                v = (kw.get("supply") or {}).get("yoy")
+                if v is not None:
+                    ok = v > max(p["base"], 0) if r == "chain_gap" else v < p["base"]
+                    p.update(status="hit" if ok else "miss", actual=f"新店年增 {p['base']:+.0f}% → {v:+.0f}%", resolved=today)
             elif r == "elect_fav" and today >= p["due"]:
                 ev = gjson("https://gamma-api.polymarket.com/events", params={"slug": p["slug"]}, timeout=30)
                 ms = (ev[0] if ev else {}).get("markets") or []
@@ -4780,7 +4791,8 @@ def p_ledger():
         except Exception as e:  # noqa: BLE001
             log("ledger resolve", p.get("id"), e)
     # 3) 每週寫新預測（同一規則同一對象還沒到期就不重寫）
-    if not L.get("gen_at") or (date_from(today) - date_from(L["gen_at"])).days >= 7:
+    new_rules = set(LEDGER_RULES) - set(L.get("gen_rules") or [])  # 新加的規則不用等滿一週
+    if not L.get("gen_at") or (date_from(today) - date_from(L["gen_at"])).days >= 7 or new_rules:
         open_keys = {(p["rule"], p["subject"]) for p in preds if p["status"] == "open"}
         new = []
         def add(rule, subject, text, due, **kw):
@@ -4821,8 +4833,19 @@ def p_ledger():
                 en = next((k for k, v in ELECT_NAMES.items() if v[0] == f["name"]), f["name"])
                 slug = dict(ELECT_CITIES).get(c["city"])
                 add("elect_fav", c["city"], f"{c['city']}市長：{f['name']} 當選", "2026-11-29", prob=round(f["p"] / 100, 2), en=en, slug=slug)
+        d6 = (TODAY_TPE + timedelta(days=182)).isoformat()
+        for r in ((RESULTS.get("chain") or {}).get("rows") or []):  # 還沒有歷史可回測：機率先給 50%，等對完答案再說
+            sv = next((x.get("v") for x in r.get("stages") or [] if x.get("k") == "新店"), None)
+            if sv is None:
+                continue
+            if r["verdict"] == "缺口窗口":
+                add("chain_gap", r["k"], f"「{r['k']}」相關新店到 {d6[:7].replace('-', '/')} 年增高於現在（{sv:+.0f}%），供給會跟上", d6, base=sv, prob=0.5)
+            elif r["verdict"] == "供給過熱":
+                add("chain_hot", r["k"], f"「{r['k']}」相關新店到 {d6[:7].replace('-', '/')} 年增低於現在（{sv:+.0f}%），開始收", d6, base=sv, prob=0.5)
         preds += new
-        L["gen_at"] = today
+        if not new_rules or not L.get("gen_at") or (date_from(today) - date_from(L["gen_at"])).days >= 7:
+            L["gen_at"] = today
+        L["gen_rules"] = sorted(LEDGER_RULES)
     L["preds"] = preds[-600:]
     write_json(LEDGER, L)
     # 4) 統計
@@ -8224,16 +8247,17 @@ run("think", p_think, keep_if_fresh_hours=2)
 run("voice", p_voice, keep_if_fresh_hours=6)
 run("pop", p_pop, keep_if_fresh_hours=3)
 run("roads", p_roads)
-run("mapfeed", p_mapfeed)  # 吃本輪其他面板的結果，不打外部 API
+run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
-run("chain", p_chain)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
-run("ledger", p_ledger)  # 預測帳本：放最後，吃本輪其他面板的結果
+run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
+run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 run("weekly", p_weekly)  # 每週走向摘要：每週一換一次（同一週沿用），吃本輪所有面板
 FINISHED_ISO = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 try:
     write_json(HIST_PATH, HISTORY, separators=(",", ":"))
     write_json(DATA / "all.json", {"generatedAt": NOW_ISO, "finishedAt": FINISHED_ISO, "panels": RESULTS}, separators=(",", ":"))
+    write_json(DATA / "timings.json", {"at": NOW_ISO, "total": round(time.time() - START_TS, 1), "panels": dict(sorted(TIMES.items(), key=lambda kv: -kv[1]))}, indent=0)
 except ValueError as e:
     log("NaN in output, not writing:", e)
     sys.exit(1)
