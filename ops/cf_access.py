@@ -1,4 +1,4 @@
-"""建立或更新 Cloudflare Access：intel.daltatw.com 只讓帳號本人登入（一次性信箱驗證碼）；/feed 路徑放行給排程。
+"""建立 Cloudflare Access：intel.daltatw.com 只讓名單上的人登入（第一次建立時只有帳號本人，之後在後台加人）；/feed 路徑放行給排程。
 冪等：已存在就更新，不會重複建立。只用環境變數裡的權杖，不印出任何秘密或信箱。"""
 import sys
 
@@ -20,7 +20,10 @@ try:
                 "app_launcher_visible": False, "auto_redirect_to_identity": False,
                 "policies": [{"name": f'{w["name"]}-policy', "decision": w["decision"], "include": w["include"], "precedence": 1}]}
         cur = next((a for a in apps if a.get("domain") == w["domain"]), None)
-        if cur:
+        if cur and w["decision"] == "allow":
+            # 主站已存在就不動：看的人名單在 Cloudflare 後台管理（Access → 應用程式 → intel-terminal → 原則），部署不會蓋掉
+            print(f'Access 已存在：{w["domain"]}（名單沿用後台設定）')
+        elif cur:
             call("PUT", f'{base}/apps/{cur["id"]}', body)
             print(f'更新 Access：{w["domain"]}（{w["decision"]}，{len(w["include"])} 條規則）')
         else:
