@@ -478,7 +478,7 @@ canvas.o-fx{display:block;width:100%}
 /* 分頁內固定順序：台灣先、國際後；快的先、月更的後；結論先、原文後 */
 #p-pulse{display:none!important}
 #p-taiex{order:1}#p-fx{order:2}#p-fear{order:3}#p-taifex{order:4}#p-world{order:5}#p-tw-stocks{order:6}#p-lux{order:7}#p-mops{order:8}#p-usbig{order:9}@media (min-width:1101px){#p-taiex{grid-row:span 2}}#p-sectors{order:10}#p-cmdty{order:11}#p-revenue{order:12}
-#p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-cards{order:7}#p-lead{order:7}#p-imports{order:7}#p-house{order:8}#p-poly{order:9}#p-jobs{order:10}
+#p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-cards{order:7}#p-lead{order:7}#p-housefc{order:7}#p-imports{order:7}#p-house{order:8}#p-poly{order:9}#p-jobs{order:10}
 #p-weekly{order:-1}#ib-soc{order:0}#p-chain{order:2}#p-ledger{order:2}#p-voice{order:2}#p-wiki{order:3}#p-tech2{order:4}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
 .grid{align-items:start}
 /* 桃機翻牌看板：只有變動的字會翻 */
@@ -788,6 +788,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ph"><h2>Card Spend</h2><span class="zh">消費溫度 · 信用卡各類簽帳</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.nccc.com.tw/" target="_blank" rel="noopener">聯合信用卡處理中心</a><span>金管會開放資料 · 每月 · 年增＝比去年同月 · 「比整體」＝扣掉刷卡本身每年成長後，這一類是不是真的變熱 · 近 3 月取中位數，避開單月大額異常</span></div>
+  </section>
+
+  <section class="panel w6 cap" id="p-housefc">
+    <div class="ph"><h2>Housing Momentum</h2><span class="zh">房市動能 · 買賣棟數、台北房價月指數</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://statis.moi.gov.tw/micst/" target="_blank" rel="noopener">內政部統計查詢網</a><a href="https://data.taipei/" target="_blank" rel="noopener">臺北市資料大平臺</a><span>買賣棟數＝建物所有權買賣移轉登記（全台、月）· 量通常比價先動 · 台北住宅價格月指數（全市）約晚 2 個月公布 · 兩條都進預測帳本回測</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-lead">
@@ -1557,6 +1563,13 @@ const renderers={
     const hot=(d.rows||[]).filter(x=>x.rel!=null).sort((a,b)=>b.rel-a.rel);
     body("p-cards").innerHTML=`<div class="veg-h">${hot[0]?`最熱<b class="up">${esc(hot[0].cat)}</b><span>比整體多長 ${sgn(n(hot[0].rel),1)} 個百分點 · 最冷 ${esc(hot[hot.length-1].cat)}（${sgn(n(hot[hot.length-1].rel),1)}）· ${esc(d.month||"")}</span>`:""}</div><table><tr><th>類別（線＝年增 24 個月）</th><th class="r">億元</th><th class="r">年增</th><th class="r">近 3 月</th><th class="r">比整體</th></tr>${tr}</table>`;
     setMeta("p-cards",{...d,label:(d.month||"")+" 月資料"},24*40);},
+  housefc(d){const ym=x=>x?`${String(x).slice(0,4)}/${String(x).slice(4)}`:"";
+    const cs=(d.cities||[]).map(c=>`<li><span class="t">${esc(c.city.replace("臺","台"))}</span><span class="v">${fmt(n(c.n3),0)} 棟</span><span class="v ${cls(n(c.yoy3))}">${c.yoy3!=null?sgn(n(c.yoy3),1,"%"):"—"}</span></li>`).join("");
+    body("p-housefc").innerHTML=`<div class="veg-h">全台買賣棟數<b class="${cls(n(d.vol_yoy3))}">${sgn(n(d.vol_yoy3),1,"%")}</b><span>近 3 個月比去年同期 · ${ym(d.vol_month)} 單月 ${fmt(n(d.vol),0)} 棟</span></div>
+      <div style="display:flex;gap:10px;align-items:center;font-size:11.5px;color:var(--muted);margin:2px 0 10px">${mini(d.vol_spark)}<span>每月棟數 · 近 24 月</span></div>
+      ${d.tpe!=null?`<div class="veg-h">台北房價月指數<b class="${cls(n(d.tpe_6m))}">${sgn(n(d.tpe_6m),1,"%")}</b><span>近半年 · ${ym(d.tpe_month)} 指數 ${fmt(n(d.tpe),2)} · 一年 ${sgn(n(d.tpe_12m),1,"%")}</span></div><div style="display:flex;gap:10px;align-items:center;font-size:11.5px;color:var(--muted);margin:2px 0 10px">${mini(d.tpe_spark)}<span>近 36 月</span></div>`:""}
+      <h3 style="font-size:11px;color:var(--dim);margin:4px 0">各縣市近 3 個月買賣棟數（比去年同期）</h3><ul class="list">${cs}</ul>`;
+    setMeta("p-housefc",{...d,label:"月資料"},24*40);},
   lead(d){const L=d.lead||{},O=d.orders||{};const st=n(L.streak);
     body("p-lead").innerHTML=`${L.value!=null?`<div class="veg-h">領先指標<b class="${cls(n(L.chg))}">${fmt(n(L.value),2)}</b><span>${esc(String(L.month||"").slice(0,4))}/${esc(String(L.month||"").slice(4))} · 比上月 ${sgn(n(L.chg),2)} · <b class="${st>0?"up":"down"}" style="font-size:12px">連續 ${Math.abs(st)} 個月${st>0?"上升":"下滑"}</b>${L.signal?` · 燈號 ${esc(L.signal)}（${fmt(n(L.score),0)} 分）`:""}</span></div>
       <div style="display:flex;gap:14px;align-items:center;font-size:11.5px;color:var(--muted);margin:2px 0 10px">${mini(L.spark)}<span>領先（近 36 月）</span>${mini(L.coin)}<span>同時</span></div>`:""}
@@ -2423,7 +2436,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
-  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"intel","p-ledger":"intel","p-chain":"intel","p-weekly":"intel","p-tech2":"intel","p-imports":"macro","p-metro":"live",
+  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"intel","p-ledger":"intel","p-chain":"intel","p-weekly":"intel","p-tech2":"intel","p-imports":"macro","p-housefc":"macro","p-metro":"live",
   "ib-sig":"intel","ib-soc":"social","p-voice":"intel","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-elect":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",

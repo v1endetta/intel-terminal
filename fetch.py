@@ -4593,6 +4593,8 @@ LEDGER_RULES = {
     "lead_down": ("景氣轉向", "領先指標連降 3 個月以上，3 個月後同時指標更低"),
     "veg_revert": ("生活成本", "兩週內漲超過 20% 的菜，再兩週會回落"),
     "elect_fav": ("事件機率", "預測市場看好的候選人當選"),
+    "house_mom": ("房市", "台北房價近半年漲跌超過 1%，再半年會同方向"),
+    "house_vol": ("房市", "全台買賣棟數近 3 個月年增減超過 10%，台北房價下一個半年的漲幅跟著變快或變慢"),
     "chain_gap": ("缺口會不會被填", "主題鏈判「缺口窗口」的主題，6 個月內新設店家年增比現在高（供給跟上）"),
     "chain_hot": ("缺口會不會被填", "主題鏈判「供給過熱」的主題，6 個月內新設店家年增比現在低（開始收）"),
 }
@@ -4720,6 +4722,27 @@ def _backtests():
             if p0 and p1 and dd[t] / p0 - 1 >= .2 and (date_from(next(k for k in ks if k >= t1)) - date_from(t)).days <= 18:
                 vr[1] += 1; vr[0] += p1 < dd[t]
     bt["veg_revert"] = vr
+    # 房市：台北房價動能延續、買賣棟數領先房價
+    try:
+        hs = json.loads(HOUSE_SERIES.read_text(encoding="utf-8")); tpe, vol = hs["tpe"], hs["vol"]
+        hm, hv = [0, 0], [0, 0]
+        for t in sorted(tpe):
+            a, b = tpe.get(_ym_add(t, -6)), tpe.get(_ym_add(t, 6))
+            if not (a and b):
+                continue
+            d0 = tpe[t] / a - 1; d1 = b / tpe[t] - 1
+            if abs(d0) >= .01:
+                hm[1] += 1; hm[0] += (d1 > 0) == (d0 > 0)
+            x = [vol.get(_ym_add(t, -i)) for i in range(3)]; y = [vol.get(_ym_add(t, -12 - i)) for i in range(3)]
+            if all(x) and all(y):
+                v = 100 * (sum(x) / sum(y) - 1)
+                if v <= -10:
+                    hv[1] += 1; hv[0] += d1 < d0
+                elif v >= 10:
+                    hv[1] += 1; hv[0] += d1 > d0
+        bt["house_mom"], bt["house_vol"] = hm, hv
+    except Exception as e:  # noqa: BLE001
+        log("ledger bt house", e)
     return bt
 
 
@@ -4731,7 +4754,9 @@ def p_ledger():
     preds = L.get("preds", [])
     today = TODAY_TPE.isoformat()
     # 1) 回測（每週一次）
-    if not L.get("bt_at") or (date_from(today) - date_from(L["bt_at"])).days >= 7:
+    missing_bt = set(LEDGER_RULES) - {"elect_fav", "chain_gap", "chain_hot"} - set(L.get("bt") or {})  # 新規則立刻補回測
+    if not L.get("bt_at") or (date_from(today) - date_from(L["bt_at"])).days >= 7 or (missing_bt and L.get("bt_try") != today):
+        L["bt_try"] = today
         L["bt"] = _backtests(); L["bt_at"] = today
     bt = L.get("bt", {})
     def prob(rule, default=.6):
@@ -4776,6 +4801,12 @@ def p_ledger():
                 if later and (date_from(later[0]) - date_from(p["due"])).days <= 4:
                     v = h[later[0]]
                     p.update(status="hit" if v < p["base"] else "miss", actual=f"{p['base']} → {v} 元/公斤", resolved=today)
+            elif r in ("house_mom", "house_vol"):
+                tpe = json.loads(HOUSE_SERIES.read_text(encoding="utf-8"))["tpe"]; due = p["due"].replace("-", "")
+                if due in tpe:
+                    d1 = tpe[due] / p["base"] - 1
+                    ok = (d1 > 0) == (p["dir"] > 0) if r == "house_mom" else (d1 < p["base_chg"]) == (p["dir"] < 0)
+                    p.update(status="hit" if ok else "miss", actual=f"指數 {p['base']:.2f} → {tpe[due]:.2f}（半年 {100 * d1:+.1f}%）", resolved=today)
             elif r in ("chain_gap", "chain_hot") and today >= p["due"]:
                 kw = next((x for x in ((RESULTS.get("voice") or {}).get("kw") or []) if x.get("k") == p["subject"]), {})
                 v = (kw.get("supply") or {}).get("yoy")
@@ -4833,6 +4864,15 @@ def p_ledger():
                 en = next((k for k, v in ELECT_NAMES.items() if v[0] == f["name"]), f["name"])
                 slug = dict(ELECT_CITIES).get(c["city"])
                 add("elect_fav", c["city"], f"{c['city']}市長：{f['name']} 當選", "2026-11-29", prob=round(f["p"] / 100, 2), en=en, slug=slug)
+        HF = RESULTS.get("housefc") or {}
+        if HF.get("tpe_month") and HF.get("tpe_6m") is not None:
+            tm, d0 = HF["tpe_month"], HF["tpe_6m"]; du = _ym_add(tm, 6); dus = f"{du[:4]}/{du[4:]}"
+            if abs(d0) >= 1:
+                add("house_mom", "台北房價", f"台北房價指數到 {dus} {'高於' if d0 > 0 else '低於'}現在（{HF['tpe']:.2f}，近半年 {d0:+.1f}%）", f"{du[:4]}-{du[4:]}", base=HF["tpe"], dir=d0)
+            vy = HF.get("vol_yoy3")
+            if vy is not None and abs(vy) >= 10 and prob("house_vol") >= .5:  # 回測不到五成就不寫（量領先價在台北不成立時，帳本只留統計）
+                add("house_vol", "台北房價", f"全台買賣棟數近 3 月 {vy:+.0f}%：台北房價到 {dus} 的半年漲幅{'低於' if vy < 0 else '高於'}前半年（{d0:+.1f}%）",
+                    f"{du[:4]}-{du[4:]}", base=HF["tpe"], base_chg=d0 / 100, dir=vy)
         d6 = (TODAY_TPE + timedelta(days=182)).isoformat()
         for r in ((RESULTS.get("chain") or {}).get("rows") or []):  # 還沒有歷史可回測：機率先給 50%，等對完答案再說
             sv = next((x.get("v") for x in r.get("stages") or [] if x.get("k") == "新店"), None)
@@ -4861,6 +4901,48 @@ def p_ledger():
     opn = sorted([p for p in preds if p["status"] == "open"], key=lambda p: p["due"])
     return {"stats": stats, "open": opn[:40], "recent": sorted(done, key=lambda p: p.get("resolved", ""), reverse=True)[:12],
             "n_open": len(opn), "n_done": len(done), "n_hit": sum(1 for p in done if p["status"] == "hit"), "gen_at": L.get("gen_at"), "bt_at": L.get("bt_at")}
+
+
+# ---------- 房市動能：全台建物買賣移轉棟數（內政部，月）＋ 台北市住宅價格月指數（北市地政局）——給預測帳本回測用 ----------
+HOUSE_SERIES = DATA / "house_series.json"
+HOUSE_CITIES = ["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市", "新竹縣", "新竹市"]
+
+
+def p_housefc():
+    y0 = TODAY_TPE.year - 1911
+    url = ("https://statis.moi.gov.tw/micst/webMain.aspx?sys=220&kind=21&type=1&funid=c0510302&cycle=41&outmode=12&utf=1&compmode=0&outkind=3&fldlst=11"
+           f"&codspc0=0,2,3,2,6,1,9,1,12,1,15,16,&codspc1=0,14,&ym=10101&ymt={y0}12")
+    txt = get(url, timeout=120).content.decode("utf-8-sig", "replace")
+    vol, city = {}, {}
+    for m in re.finditer(r'"(\d+)年\s*(\d+)月/\s*([^/]+?)/\s*買賣",(-|\d+),', txt):
+        ym = f"{int(m.group(1)) + 1911}{int(m.group(2)):02d}"; area = m.group(3).strip(); v = m.group(4)
+        if not v.isdigit():
+            continue
+        if area == "區域別總計":
+            vol[ym] = int(v)
+        elif area in HOUSE_CITIES:
+            city.setdefault(area, {})[ym] = int(v)
+    if len(vol) < 60:
+        raise RuntimeError(f"housefc: 買賣棟數只有 {len(vol)} 個月")
+    raw = get("https://data.taipei/api/dataset/ce4ea2c6-6334-44f8-945a-5705492b187d/resource/02c7bb70-2113-4daf-81d3-5c14b9ae26df/download", timeout=60).content.decode("utf-8-sig", "replace")
+    tpe = {}
+    for row in csv.reader(io.StringIO(raw)):
+        if len(row) > 2 and row[0] == "全市" and re.match(r"\d+/\d+$", row[1]):
+            yy, mm = row[1].split("/")
+            try:
+                tpe[f"{int(yy) + 1911}{int(mm):02d}"] = float(row[2])
+            except ValueError:
+                pass
+    write_json(HOUSE_SERIES, {"vol": vol, "city": city, "tpe": tpe}, separators=(",", ":"))
+    def y3(s, t):  # 近 3 個月合計比去年同期
+        a = [s.get(_ym_add(t, -i)) for i in range(3)]; b = [s.get(_ym_add(t, -12 - i)) for i in range(3)]
+        return round(100 * (sum(a) / sum(b) - 1), 1) if all(a) and all(b) else None
+    vm = max(vol); tm = max(tpe) if tpe else None
+    ch = lambda k: round(100 * (tpe[tm] / tpe[_ym_add(tm, -k)] - 1), 2) if tm and tpe.get(_ym_add(tm, -k)) else None  # noqa: E731
+    cities = sorted([{"city": c, "n3": sum(s.get(_ym_add(vm, -i), 0) for i in range(3)), "yoy3": y3(s, vm)} for c, s in city.items()], key=lambda r: -r["n3"])
+    return {"vol_month": vm, "vol": vol[vm], "vol_yoy3": y3(vol, vm), "vol_spark": [vol[k] for k in sorted(vol)[-24:]],
+            "cities": cities, "tpe_month": tm, "tpe": tpe.get(tm), "tpe_6m": ch(6), "tpe_12m": ch(12), "tpe_spark": [tpe[k] for k in sorted(tpe)[-36:]],
+            "src": "內政部 建物所有權登記（買賣，月）· 臺北市地政局 住宅價格月指數（全市）"}
 
 
 # ---------- 主題鏈：同一個主題，從國外、搜尋、媒體一路看到商標、新店、消費、政策，標出走到哪一站 ----------
@@ -8250,6 +8332,7 @@ run("roads", p_roads)
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
+run("housefc", p_housefc, keep_if_fresh_hours=24)
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 run("weekly", p_weekly)  # 每週走向摘要：每週一換一次（同一週沿用），吃本輪所有面板
