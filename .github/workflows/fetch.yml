@@ -60,6 +60,7 @@ jobs:
           GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SEC_CONTACT: ${{ secrets.SEC_CONTACT }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           cd out
           git config user.name "intel-bot"
@@ -82,11 +83,15 @@ jobs:
             if (cd .. && timeout 900 python fetch.py); then
               # 金鑰防線：任何 secret 的實際值若出現在要 commit 的資料裡，整輪丟棄
               leak=0
-              for v in "$FRED_API_KEY" "$FINMIND_TOKEN" "$REDDIT_CLIENT_ID" "$REDDIT_CLIENT_SECRET" "$CWA_API_KEY" "$GUARDIAN_API_KEY" "$YOUTUBE_API_KEY" "$GOOGLE_CSE_KEY" "$GEMINI_API_KEY"; do
+              for v in "$FRED_API_KEY" "$FINMIND_TOKEN" "$REDDIT_CLIENT_ID" "$REDDIT_CLIENT_SECRET" "$CWA_API_KEY" "$GUARDIAN_API_KEY" "$YOUTUBE_API_KEY" "$GOOGLE_CSE_KEY" "$GEMINI_API_KEY" "$CLOUDFLARE_API_TOKEN"; do
                 [ -n "$v" ] && grep -rqF -- "$v" data && leak=1
               done
               if [ "$leak" = 1 ]; then echo "::error::secret value found in data output; round discarded"; git checkout -q -- data; git clean -fdq data
-              else git add data; fi
+              else
+                # 新網站 intel.daltatw.com：把網站要讀的檔推到 Cloudflare KV（失敗不影響這輪）
+                (cd .. && python ops/publish_kv.py) || true
+                git add data
+              fi
             else
               echo "fetch.py failed or timed out; discarding this round"
               git checkout -q -- data; git clean -fdq data
@@ -95,6 +100,8 @@ jobs:
               git commit -qm "data: $(date -u +'%Y-%m-%d %H:%M') UTC"
               git push -q origin data || { echo "push rejected, dropping this round"; git reset -q --hard origin/data; }
             fi
+            # 狀態備份到私有的 Google Cloud Storage（搬家期間與 data 分支並行）
+            (cd .. && python ops/state.py push) || true
             h=$(date -u +%H); d=$(date -u +%u)
             if [ "$d" -le 5 ] && { [ "$h" -ge 1 -a "$h" -lt 6 ] || [ "$h" -ge 13 -a "$h" -lt 21 ]; }; then s=300; else s=900; fi
             [ $(( $(date +%s) + s - start )) -lt "$budget" ] || break

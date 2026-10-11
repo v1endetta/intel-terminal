@@ -13,3 +13,8 @@ run_worker_first = ["/data/*", "/feed/*"]
 [[routes]]
 pattern = "intel.daltatw.com"
 custom_domain = true
+
+# 資料放在 Workers KV；id 由 deploy-site 部署時自動填入（查不到就建立）
+[[kv_namespaces]]
+binding = "DATA"
+id = "__KV_ID__"

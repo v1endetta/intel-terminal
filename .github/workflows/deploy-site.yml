@@ -1,13 +1,13 @@
 name: deploy-site
 
-# 把網站部署到 Cloudflare（intel.daltatw.com），並確保 Cloudflare Access 只讓 Vin 進來。
-# 需要的 Secrets：CLOUDFLARE_API_TOKEN、CLOUDFLARE_ACCOUNT_ID、DATA_RO_TOKEN、FEED_KEY、ACCESS_EMAIL
-# 還沒設好時整個流程直接略過，不會報錯。
+# 把網站部署到 Cloudflare（intel.daltatw.com），並確保 Cloudflare Access 只讓帳號本人進來。
+# 需要的 Secrets：CLOUDFLARE_API_TOKEN、FEED_KEY（帳號 ID、KV 空間、登入信箱都用權杖自己查）
+# 還沒設好時整個流程直接略過，不會報錯。這個 repo 是公開的，log 裡不印任何 ID 或信箱。
 
 on:
   push:
     branches: [main]
-    paths: [index.html, worker/**, wrangler.toml, .github/workflows/deploy-site.yml]
+    paths: [index.html, worker/**, wrangler.toml, ops/cf*.py, ops/publish_kv.py, .github/workflows/deploy-site.yml]
   workflow_dispatch:
 
 permissions:
@@ -22,8 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      DATA_RO_TOKEN: ${{ secrets.DATA_RO_TOKEN }}
       FEED_KEY: ${{ secrets.FEED_KEY }}
       ACCESS_EMAIL: ${{ secrets.ACCESS_EMAIL }}
     steps:
@@ -31,23 +29,43 @@ jobs:
         id: chk
         run: |
           ok=1
-          for v in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID DATA_RO_TOKEN FEED_KEY ACCESS_EMAIL; do
+          for v in CLOUDFLARE_API_TOKEN FEED_KEY; do
             [ -n "${!v}" ] || { echo "::notice::$v 還沒設定，略過部署"; ok=0; }
           done
           echo "ok=$ok" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         if: steps.chk.outputs.ok == '1'
+      - name: Account 與 KV
+        if: steps.chk.outputs.ok == '1'
+        working-directory: ops
+        run: |
+          python3 - <<'PY'
+          import os
+          from cfapi import account_id, kv_namespace
+          acc = account_id(); ns = kv_namespace(acc, create=True)
+          print(f"::add-mask::{acc}"); print(f"::add-mask::{ns}")
+          with open(os.environ["GITHUB_ENV"], "a") as f:
+              f.write(f"CLOUDFLARE_ACCOUNT_ID={acc}\nCF_KV_ID={ns}\n")
+          print("account / KV ok")
+          PY
       - name: Access（先設好門，再開店）
         if: steps.chk.outputs.ok == '1'
         run: python3 ops/cf_access.py
+      # 第一次部署時 KV 是空的：先從現有資料塞一份（之後由主迴圈每輪更新）
+      - name: Seed KV
+        if: steps.chk.outputs.ok == '1'
+        run: |
+          git fetch -q --depth 1 origin data && mkdir -p seed && git archive FETCH_HEAD data | tar -x -C seed || exit 0
+          INTEL_DATA_DIR=seed/data python3 ops/publish_kv.py
       - name: Build site
         if: steps.chk.outputs.ok == '1'
         run: |
           mkdir -p site && cp index.html site/
           printf 'User-agent: *\nDisallow: /\n' > site/robots.txt
+          sed -i "s/__KV_ID__/$CF_KV_ID/" wrangler.toml
       - name: Deploy worker
         if: steps.chk.outputs.ok == '1'
         run: |
-          npx --yes wrangler@4 deploy
-          printf '%s' "$DATA_RO_TOKEN" | npx --yes wrangler@4 secret put DATA_RO_TOKEN
-          printf '%s' "$FEED_KEY" | npx --yes wrangler@4 secret put FEED_KEY
+          set -o pipefail
+          npx --yes wrangler@4 deploy 2>&1 | grep -vi "account"
+          printf '%s' "$FEED_KEY" | npx --yes wrangler@4 secret put FEED_KEY >/dev/null && echo "FEED_KEY set"
