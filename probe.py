@@ -2,28 +2,17 @@ import os, json, requests, re
 os.makedirs("out25", exist_ok=True)
 H = {"User-Agent": "intel-terminal/1.0 (personal research; https://github.com/v1endetta/intel-terminal)"}
 rep = {}
-for ds in (121969, 121381, 132984, 132593, 23854, 89668, 134490, 168540, 13897, 13898, 134492):
+u = ("https://statis.moi.gov.tw/micst/webMain.aspx?sys=220&kind=21&type=1&funid=c0510302&cycle=41&outmode=12&utf=1&compmode=0&outkind=3&fldlst=11"
+     "&codspc0=0,2,3,2,6,1,9,1,12,1,15,16,&codspc1=0,14,&ym={a}&ymt={b}")
+for a, b in (("10101", "11508"), ("11401", "11509")):
     try:
-        m = requests.get(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", headers=H, timeout=40).json()["result"]
-        out = {"title": m.get("title"), "pub": m.get("publisher"), "freq": m.get("updateFrequency"), "dist": []}
-        for d in (m.get("distribution") or [])[:3]:
-            u = d.get("resourceDownloadUrl"); fmt = d.get("resourceFormat")
-            rec = {"fmt": fmt, "url": u, "desc": (d.get("resourceDescription") or "")[:60]}
-            try:
-                r = requests.get(u, headers=H, timeout=40)
-                txt = r.content.decode("utf-8-sig", "replace")
-                lines = txt.strip().splitlines()
-                rec.update(st=r.status_code, n=len(lines), head=[l[:220] for l in lines[:3]], tail=[l[:220] for l in lines[-2:]])
-            except Exception as e:
-                rec["err"] = str(e)[:120]
-            out["dist"].append(rec)
-        rep[ds] = out
+        r = requests.get(u.format(a=a, b=b), headers=H, timeout=90)
+        t = r.content.decode("utf-8-sig", "replace"); L = t.strip().splitlines()
+        tot = [l for l in L if "區域別總計" in l and ("買賣" in l)]
+        rep[a] = {"st": r.status_code, "n": len(L), "tot_n": len(tot), "tot_head": tot[:4], "tot_tail": tot[-3:], "items": sorted(set(re.findall(r"總計/ ([^\"]+)\"", t)))[:20]}
     except Exception as e:
-        rep[ds] = f"ERR {e}"[:200]
-try:
-    raw = requests.get("https://www.sinyinews.com.tw/quarterly", headers=H, timeout=40).text
-    qs = re.findall(r"(20\d\d)年第([一二三四])季", raw)
-    rep["sinyi"] = {"len": len(raw), "quarters": len(set(qs)), "sample": sorted(set(qs))[:5], "area_n": raw.count('"area"'), "snip": raw[raw.find('"area"')-300: raw.find('"area"')+400] if '"area"' in raw else ""}
-except Exception as e:
-    rep["sinyi"] = str(e)[:200]
+        rep[a] = str(e)[:200]
+r = requests.get("https://data.taipei/api/dataset/ce4ea2c6-6334-44f8-945a-5705492b187d/resource/02c7bb70-2113-4daf-81d3-5c14b9ae26df/download", headers=H, timeout=60)
+L = r.content.decode("utf-8-sig", "replace").splitlines()
+rep["tpe"] = {"cats": sorted(set(l.split(",")[0] for l in L[1:])), "n": len(L)}
 json.dump(rep, open("out25/probe.json", "w"), ensure_ascii=False, indent=1)
