@@ -259,6 +259,13 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .wk-s{display:inline-block;font:10px var(--mono);color:var(--dim);border:1px solid var(--line);border-radius:2px;padding:0 4px;margin:3px 4px 0 0}.wk-cf{font:10px var(--mono);color:var(--dim);margin-left:6px;font-weight:400}
 .wk-past{margin-top:10px;font-size:12px;color:var(--muted)}.wk-past summary{cursor:pointer;color:var(--dim);font:11px var(--mono)}.wk-past li{margin:3px 0}
 @media (max-width:760px){.wk-g{grid-template-columns:1fr}.wk-h{font-size:17px}}
+.tr-t{width:100%;border-collapse:collapse;font-size:12.5px}.tr-t th{font:500 10.5px var(--mono);color:var(--dim);text-align:left;padding:4px 6px;border-bottom:1px solid var(--line);white-space:nowrap}.tr-t th.r,.tr-t td.r{text-align:right}
+.tr-t td{padding:6px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}.tr-t td.nm b{font-size:13px}.tr-t td.nm .sub,.tr-t td.vd .sub{display:block;font-size:10.5px;color:var(--dim)}
+.tr-t td.vd b{font-weight:600;color:var(--muted)}.tr-t td.vd b.gap{color:var(--up)}.tr-t td.vd b.hot{color:var(--warn)}.tr-t td.vd b.x{color:var(--down)}.tr-t .na{color:var(--dim)}.tr-t tr.ref td{opacity:.55}
+.tr-t tr.grp td{color:var(--dim);font:500 10.5px var(--mono);letter-spacing:.06em;padding-top:14px;border-bottom:0}.tr-t tr.grp .sub{letter-spacing:0;font-family:var(--sans,inherit)}.tr-t td.sp svg{display:block}
+@media (max-width:760px){.tr-t thead{display:none}.tr-t,.tr-t tbody{display:block}.tr-t tr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--line)}.tr-t tr.grp{display:block;border:0;padding:12px 0 0}.tr-t td{border:0;padding:0}.tr-t td.sp{display:none}
+.tr-t td.r{display:flex;justify-content:space-between;grid-column:1/-1;font-size:12px}.tr-t td.r::before{content:attr(data-l);color:var(--dim)}.tr-t td.vd{text-align:right}}
+.ch-mv{display:block;font-size:10.5px;color:var(--dim);margin-top:2px}.ch-moves{font-size:12px;color:var(--muted);margin:-2px 0 8px}.ch-moves b{color:var(--text);font-weight:500}
 .ch-t{width:100%;border-collapse:collapse;font-size:12.5px}.ch-t th{font:500 10.5px var(--mono);color:var(--dim);text-align:center;padding:4px 2px;border-bottom:1px solid var(--line)}.ch-t th:first-child{text-align:left}
 .ch-t td{padding:6px 2px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle}.ch-t td.k{text-align:left;white-space:nowrap}.ch-t td.k .sub{display:block}
 .ch-c{display:inline-block;min-width:38px;padding:1px 4px;border-radius:3px;font:11px var(--mono)}.ch-c.up{background:color-mix(in srgb,var(--up) 22%,transparent);color:var(--up)}.ch-c.down{background:color-mix(in srgb,var(--down) 22%,transparent);color:var(--down)}.ch-c.flat{color:var(--muted);background:var(--line)}.ch-c.info{color:var(--dim)}.ch-c.na{color:var(--line2)}
@@ -389,7 +396,7 @@ svg.o-gauge{width:100%;max-width:200px;height:auto;display:block;margin:0 auto}
 /* lists */
 .o-cols2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
 @media (max-width:760px){.o-cols2{grid-template-columns:minmax(0,1fr)}}
-.o-opp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}@media (max-width:1100px){.o-opp{grid-template-columns:minmax(0,1fr)}}.o-opp .o-colh a{color:var(--dim);margin-left:6px;letter-spacing:0}.o-opp .o-colh a:hover{color:var(--blue)}.o-ls.op li{grid-template-columns:38px minmax(0,1fr) auto auto;gap:10px;align-items:center}.o-ls.op.tr li{grid-template-columns:38px minmax(0,1fr) auto auto auto}#ov-deps li{grid-template-columns:44px minmax(0,1fr) auto;align-items:center}.o-ls.op .num{font-family:var(--mono);font-size:11.5px;text-align:right}.o-tag{font:500 10px var(--mono);color:var(--muted);border:1px solid var(--line2);border-radius:2px;text-align:center;padding:0 2px}.o-tag.w{color:var(--up);border-color:var(--up)}.o-ls.op .o-emp,.o-ls.op .o-foot{display:block;color:var(--dim);font-size:11.5px}
+.o-opp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}@media (max-width:1100px){.o-opp{grid-template-columns:minmax(0,1fr)}}.o-opp .o-colh a{color:var(--dim);margin-left:6px;letter-spacing:0}.o-opp .o-colh a:hover{color:var(--blue)}.o-ls.op li{grid-template-columns:38px minmax(0,1fr) auto auto;gap:10px;align-items:center}.o-ls.op.tr li{grid-template-columns:38px minmax(0,1fr) auto auto auto}#ov-deps li{grid-template-columns:44px minmax(0,1fr) auto;align-items:center}.o-ls.op .num{font-family:var(--mono);font-size:11.5px;text-align:right}.o-tag{font:500 10px var(--mono);color:var(--muted);border:1px solid var(--line2);border-radius:2px;text-align:center;padding:0 2px}.o-tag.w{color:var(--up);border-color:var(--up)}.o-tag.x{color:var(--down);border-color:var(--down)}.o-wk{display:flex;flex-direction:column;gap:4px;margin:2px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}.o-wk b{font-size:16px;line-height:1.45}.o-wk span{font-size:12.5px;color:var(--muted)}.o-wk em{font-style:normal}.o-wk em.up{color:var(--up)}.o-wk em.down{color:var(--down)}.o-ls.op .o-emp,.o-ls.op .o-foot{display:block;color:var(--dim);font-size:11.5px}
 .o-ls{list-style:none;margin:0;padding:0;display:grid}
 .o-ls li{display:grid;grid-template-columns:38px minmax(0,1fr);gap:8px;padding:4px 0;border-top:1px solid var(--line);font-size:12.5px;align-items:baseline}
 .o-ls li:first-child{border-top:0}
@@ -953,7 +960,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <section class="panel w12" id="p-voice">
     <div class="ph"><h2>Trend Radar</h2><span class="zh">趨勢雷達 · 台灣正在發生的大轉變，哪裡有機會</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><span>搜尋熱度：Google 趨勢台灣近 5 年每週（各關鍵字自己的 5 年最高點＝100，每 6 小時更新）；年增＝近 4 週比去年同期，扣掉季節性；近一月＝近 4 週比前 12 週；近兩年超過 20 週是 0 的字視為量太低· 討論：Google 收錄的 Dcard／PTT／Mobile01／痞客邦近 90 天 · 新聞：Google 新聞近 30 天（兩個來源最多都只回 100 則，大字會頂到上限）· 媒體＝Google 新聞近 7 天 vs 去年同 7 天（舊文章會掉出索引，百分比已用全部關鍵字的中位數校正；一次最多 100 則，頂到就標「量太大」）· 機會窗口＝搜尋年增 20% 以上、最近沒在掉，而且媒體年增不到搜尋的一半 · 關鍵字在 ops/voice_keywords.json</span></div>
+    <div class="pf"><span>搜尋：Google 趨勢台灣近 5 年每週，年增＝近 4 週比去年同期、近一月＝比前 12 週 · 媒體：Google 新聞近 7 天比去年同期（量太大＝一次最多 100 則，頂到上限無法比） · 新店：財政部稅籍近 6 個月新開家數年增，已扣掉全體倒店與登錄延遲 · 討論：Dcard／PTT／Mobile01／痞客邦近 90 天篇數 · 判讀來自上面的主題鏈 · 關鍵字在 ops/voice_keywords.json</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-wiki">
@@ -1357,25 +1364,24 @@ const renderers={
     const col=g=>`<div class="th-c"><h3>${esc(g.name)} <span class="sub">${(g.items||[]).length} 篇</span></h3><ul class="list">${(g.items||[]).slice(0,10).map(x=>`<li><span class="src" ${fresh(x)?'style="color:var(--up)"':""}>${md(x)}</span><span class="t"><a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title)}</a><span class="sub">${esc((x.cats||[]).filter(c=>!/^Insights on|Insights$/.test(c)).slice(0,3).join(" · "))}${x.desc?" — "+esc(x.desc.slice(0,90))+(x.desc.length>90?"…":""):""}</span></span></li>`).join("")||'<li class="empty">近期沒有</li>'}</ul></div>`;
     const pod=(d.podcast||[]).length?`<div class="th-pod"><span>🎧 Podcast</span>${d.podcast.slice(0,4).map(x=>`<a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title.slice(0,48))}</a>`).join("")}</div>`:"";
     body("p-think").innerHTML=`<div class="rd">${(d.groups||[]).map(col).join("")}</div>${pod}`;setMeta("p-think",{...d,label:`${d.label} · 近 7 天 ${d.week||0} 篇`},4);},
-  voice(d){const K=d.kw||[],G=d.groups||{},SC={"Dcard":"#5BC0EB","PTT":"#8B93A7","Mobile01":"#F2C14E","痞客邦":"#C9A3FF"};
-    const spark=(a,w=150,h=24)=>{const v=(a||[]).filter(isFinite);if(v.length<2)return"";const mx=Math.max(...v,1);return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${v.map((x,i)=>`${(i/(v.length-1)*w).toFixed(1)},${(h-2-x/mx*(h-4)).toFixed(1)}`).join(" ")}" vector-effect="non-scaling-stroke" style="fill:none;stroke:var(--blue);stroke-width:1.5"/></svg>`;};
-    const bars=(a,w=120,h=20)=>{const v=a||[];const mx=Math.max(1,...v),bw=w/Math.max(1,v.length);return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${v.map((x,i)=>x?`<rect x="${(i*bw).toFixed(1)}" y="${(h-x/mx*(h-2)).toFixed(1)}" width="${Math.max(1,bw-1).toFixed(1)}" height="${(x/mx*(h-2)).toFixed(1)}" style="fill:var(--warn);opacity:.85"><title>${x} 則</title></rect>`:"").join("")}</svg>`;};
-    const stack=(o,w=120,h=8)=>{const tot=Object.values(o||{}).reduce((a,b)=>a+b,0);if(!tot)return"";let x=0;return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${Object.entries(o).map(([k,v])=>{if(!v)return"";const ww=w*v/tot;const r=`<rect x="${x.toFixed(1)}" y="0" width="${Math.max(1,ww-1).toFixed(1)}" height="${h}" style="fill:${SC[k]}"><title>${k} ${v} 篇</title></rect>`;x+=ww;return r;}).join("")}</svg>`;};
-    const hot=t=>/機會窗口/.test(t)?"vr-hot":/發燒|在升/.test(t)?"vr-up":/降溫|追高/.test(t)?"vr-down":"";
-    const row=k=>{const c=k.trend_chg,y=k.trend_yoy;return`<tr class="${k.ref?"vr-ref":""}"><td class="name"><b>${esc(k.k)}</b></td>
-        <td title="${k.trend_peak?"5 年高點："+esc(k.trend_peak):""}">${spark(k.trend)}<span class="sub">${y!=null||c!=null?`${y!=null?`<span class="${y>=15?"up":y<=-15?"down":""}">年增 ${y>0?"+":""}${y}%</span>`:""}${c!=null?` · 近一月 <span class="${c>=15?"up":c<=-15?"down":""}">${c>0?"+":""}${c}%</span>`:""}`:k.trend_sparse?"量太低":k.trend&&k.trend.length?"":"抓取中"}</span></td>
-        <td>${stack(k.disc90)}<span class="sub">討論 ${k.disc_total||0}</span></td>
-        <td>${bars(k.news_daily)}<span class="sub">${k.media7!=null?`媒體 7 天 ${k.media7}${k.media_capped?"+":""} · 去年 ${k.media7_ly}${k.media_yoy!=null?` <span class="${k.media_yoy>=15?"up":k.media_yoy<=-15?"down":""}">${k.media_yoy>0?"+":""}${k.media_yoy}%</span>`:k.media_capped?" · 量太大":""}`:`新聞 30 天 ${k.news30||0}`}</span></td>
-        <td title="${k.supply?esc("稅籍細類："+k.supply.codes.join("、")+(k.supply.n_codes>3?` 等 ${k.supply.n_codes} 類`:"")):"沒有合理對應的行業"}">${k.supply?`<span class="sub">新店 ${n(k.supply.n6).toLocaleString()} 家${k.supply.yoy!=null?` <span class="${k.supply.yoy>=15?"up":k.supply.yoy<=-15?"down":""}">${k.supply.yoy>0?"+":""}${k.supply.yoy}%</span>`:""}</span><span class="sub" style="display:block;color:var(--dim);overflow:hidden;text-overflow:ellipsis">${esc(k.supply.codes[0]||"")}</span>`:`<span class="sub" style="color:var(--dim)">—</span>`}</td>
-        <td class="tag ${hot(k.tag||"")}">${esc(k.tag||"")}</td></tr>`;};
+  voice(d){const K=d.kw||[],G=d.groups||{};
+    const CH={};(((window.LASTP||{}).chain||{}).rows||[]).forEach(r=>CH[r.k]=r);
+    const V={缺口窗口:"gap",擴張中:"hot",觀察中:"",供給過熱:"x",退潮:"x"};
+    const spark=(a,w=110,h=22)=>{const v=(a||[]).filter(isFinite);if(v.length<2)return"";const mx=Math.max(...v,1);return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${v.map((x,i)=>`${(i/(v.length-1)*w).toFixed(1)},${(h-2-x/mx*(h-4)).toFixed(1)}`).join(" ")}" vector-effect="non-scaling-stroke" style="fill:none;stroke:var(--blue);stroke-width:1.3"/></svg>`;};
+    const pc=(v,th=15)=>v==null?'<span class="na">—</span>':`<span class="${v>=th?"up":v<=-th?"down":""}">${v>0?"+":""}${v}%</span>`;
+    const row=k=>{const c=CH[k.k],sy=(k.supply||{}).yoy;return`<tr class="${k.ref?"ref":""}"><td class="nm"><b>${esc(k.k)}</b>${k.ref?'<span class="sub">對照組</span>':""}</td>
+      <td class="vd">${c?`<b class="${V[c.verdict]||""}">${esc(c.verdict)}</b>${c.prev?`<span class="sub">上週 ${esc(c.prev)}</span>`:""}`:'<span class="na">—</span>'}</td>
+      <td class="sp" title="${k.trend_peak?"5 年高點："+esc(k.trend_peak):""}">${spark(k.trend)}</td>
+      <td class="r" data-l="搜尋年增">${k.trend_sparse?'<span class="na">量太低</span>':pc(k.trend_yoy)}</td>
+      <td class="r" data-l="近一月">${pc(k.trend_chg)}</td>
+      <td class="r" data-l="媒體年增">${k.media_capped&&k.media_yoy==null?'<span class="na">量太大</span>':pc(k.media_yoy)}</td>
+      <td class="r" data-l="新店" title="${k.supply?esc("稅籍細類："+k.supply.codes.join("、")):"沒有合理對應的行業"}">${k.supply?`${n(k.supply.n6).toLocaleString()} 家 ${pc(sy)}`:'<span class="na">—</span>'}</td>
+      <td class="r" data-l="討論">${k.disc_total||0}</td></tr>`;};
     const order=[...new Set(K.map(k=>k.group))];
-    const tbl=g=>{const ks=K.filter(k=>k.group===g).sort((a,b)=>((b.trend_yoy??b.trend_chg)??-999)-((a.trend_yoy??a.trend_chg)??-999));return`<table class="vr-t"><colgroup><col style="width:13%"><col style="width:22%"><col style="width:15%"><col style="width:18%"><col style="width:13%"><col></colgroup><tr class="grp"><td colspan="6">${esc(g)}<span class="sub" style="letter-spacing:0;font-weight:400"> · ${esc(G[g]||"")}</span></td></tr>${ks.map(row).join("")}</table>`;};
-    const half=Math.ceil(order.length/2),colA=order.slice(0,half),colB=order.slice(half);
-    const G2=k=>k.trend_yoy??k.trend_chg,live=K.filter(k=>!k.ref&&G2(k)!=null),win=K.filter(k=>/機會窗口/.test(k.tag||"")),up=live.filter(k=>G2(k)>=15).sort((a,b)=>G2(b)-G2(a)),dn=live.filter(k=>G2(k)<=-15).sort((a,b)=>G2(a)-G2(b));
-    const nm=a=>a.slice(0,3).map(k=>`<b>${esc(k.k)}</b> ${G2(k)>0?"+":""}${G2(k)}%`).join("、");
-    const crowd=K.filter(k=>/湧入/.test(k.tag||""));
-    const head=`${win.length?`🎯 機會窗口：${win.map(k=>`<b>${esc(k.k)}</b>`).join("、")}（需求在長，媒體和新開店都還沒跟上）。`:""}${crowd.length?`⚠️ 新店湧入：${crowd.map(k=>`<b>${esc(k.k)}</b> ${k.supply.yoy>0?"+":""}${k.supply.yoy}%`).join("、")}。`:""}${up.length?`比去年同期升溫：${nm(up)}。`:"沒有關鍵字比去年同期明顯升溫。"}${dn.length?`降溫：${nm(dn)}。`:""}<span class="sub">　新店＝財政部稅籍近 6 個月新開家數，年增已校正倒店與登錄延遲 · 討論色塊 <span style="color:#5BC0EB">■Dcard</span> <span style="color:#8B93A7">■PTT</span> <span style="color:#F2C14E">■Mobile01</span> <span style="color:#C9A3FF">■痞客邦</span></span>`;
-    body("p-voice").innerHTML=`<div class="pcx-h" style="padding:2px 0 6px">${head}</div><div class="vr-g"><div>${colA.map(tbl).join("")}</div><div>${colB.map(tbl).join("")}</div></div><button type="button" class="vr-mmore" onclick="this.closest('.panel').classList.add('mopen')">看全部 ${K.length} 個關鍵字 ▾</button>${(d.errs||[]).length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${esc(d.errs.slice(0,3).join(" · ").slice(0,220))}</div>`:""}`;
+    const body_=order.map(g=>{const ks=K.filter(k=>k.group===g).sort((a,b)=>((b.trend_yoy??b.trend_chg)??-999)-((a.trend_yoy??a.trend_chg)??-999));return`<tr class="grp"><td colspan="8">${esc(g)}<span class="sub"> · ${esc(G[g]||"")}</span></td></tr>${ks.map(row).join("")}`;}).join("");
+    const CR=Object.values(CH),nm=v=>CR.filter(r=>r.verdict===v).map(r=>`<b>${esc(r.k)}</b>`).join("、");
+    const head=`${nm("缺口窗口")?`缺口窗口：${nm("缺口窗口")}。`:""}${nm("擴張中")?`擴張中：${nm("擴張中")}。`:""}${nm("供給過熱")?`供給過熱：${nm("供給過熱")}。`:""}${nm("退潮")?`退潮：${nm("退潮")}。`:""}<span class="sub">　判讀和上面的主題鏈同一套；這裡看細節數字</span>`;
+    body("p-voice").innerHTML=`<div class="pcx-h" style="padding:2px 0 8px">${head}</div><table class="tr-t"><thead><tr><th>主題</th><th>判讀</th><th>搜尋 5 年</th><th class="r">搜尋年增</th><th class="r">近一月</th><th class="r">媒體年增</th><th class="r">新店（近 6 月）</th><th class="r">討論</th></tr></thead><tbody>${body_}</tbody></table><button type="button" class="vr-mmore" onclick="this.closest('.panel').classList.add('mopen')">看全部 ${K.length} 個主題 ▾</button>${(d.errs||[]).length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">部分來源這輪沒抓到</div>`:""}`;
     setMeta("p-voice",d,8);},
   pop(d){const L=(arr,f)=>(arr||[]).slice(0,10).map(f).join("")||'<li class="empty">抓不到</li>';
     const li=(r,t,sub,u,m)=>`<li><span class="src">${r}</span><span class="t">${u?`<a href="${esc(safe(u))}" target="_blank" rel="noopener">${esc(t)}</a>`:esc(t)}${sub?`<span class="sub"> ${esc(sub)}</span>`:""}</span>${m?`<span class="m">${m}</span>`:""}</li>`;
@@ -1593,9 +1599,10 @@ const renderers={
     setMeta("p-weekly",{...d,updatedAt:d.made||d.updatedAt,label:`${d.week||""} · ${(d.model||"").replace("gemini-","Gemini ")}`},24*8);},
   chain(d){const SG=d.stages||[],V={缺口窗口:"gap",擴張中:"hot",觀察中:"",供給過熱:"hot",退潮:"ebb"};
     const cell=x=>{if(!x||x.s==null)return'<span class="ch-c na">·</span>';const t=x.s==="info"?`${n(x.v)} 件`:x.k==="消費"?sgn(n(x.v),1):sgn(n(x.v),0,"%");return`<span class="ch-c ${x.s}" title="${esc(x.note||"")}">${x.s==="up"?"▲":x.s==="down"?"▼":x.s==="flat"?"–":""}${x.s==="info"?t:" "+t}</span>`;};
-    const tr=(d.rows||[]).map(r=>`<tr><td class="k">${esc(r.k)}<span class="sub">${esc(r.group)}</span></td>${SG.map(g=>`<td data-l="${g}">${cell((r.stages||[]).find(s=>s.k===g))}</td>`).join("")}<td class="ch-v"><b class="${V[r.verdict]||""}">${esc(r.verdict)}</b>${esc(r.why)}</td></tr>`).join("");
+    const tr=(d.rows||[]).map(r=>`<tr><td class="k">${esc(r.k)}<span class="sub">${esc(r.group)}</span></td>${SG.map(g=>`<td data-l="${g}">${cell((r.stages||[]).find(s=>s.k===g))}</td>`).join("")}<td class="ch-v"><b class="${V[r.verdict]||""}">${esc(r.verdict)}</b>${esc(r.why)}${r.prev?`<span class="ch-mv">上週：${esc(r.prev)}</span>`:r.weeks>1?`<span class="ch-mv">已維持 ${r.weeks} 週</span>`:""}</td></tr>`).join("");
+    const mv=(d.moves||[]);
     const gaps=(d.rows||[]).filter(r=>r.verdict==="缺口窗口").map(r=>r.k),hot=(d.rows||[]).filter(r=>r.verdict==="供給過熱").map(r=>r.k);
-    body("p-chain").innerHTML=`<div class="veg-h">缺口窗口<b class="up" style="font-size:14px">${gaps.slice(0,5).map(esc).join("、")||"目前沒有"}</b><span>${hot.length?`供給過熱：${hot.map(esc).join("、")} · `:""}${(d.rows||[]).length} 個主題</span></div><table class="ch-t"><thead><tr><th>主題</th>${SG.map(g=>`<th>${g}</th>`).join("")}<th style="text-align:left">判讀</th></tr></thead><tbody>${tr}</tbody></table>`;
+    body("p-chain").innerHTML=`<div class="veg-h">缺口窗口<b class="up" style="font-size:14px">${gaps.slice(0,5).map(esc).join("、")||"目前沒有"}</b><span>${hot.length?`供給過熱：${hot.map(esc).join("、")} · `:""}${(d.rows||[]).length} 個主題</span></div><div class="ch-moves">${mv.length?`本週判讀變化：${mv.map(m=>`<b>${esc(m.k)}</b> ${esc(m.from)} → ${esc(m.to)}`).join("、")}`:d.prev_week?"跟上週比，沒有主題換判讀":"判讀變化從下週開始比（本週是第一份快照）"}</div><table class="ch-t"><thead><tr><th>主題</th>${SG.map(g=>`<th>${g}</th>`).join("")}<th style="text-align:left">判讀</th></tr></thead><tbody>${tr}</tbody></table>`;
     setMeta("p-chain",d,2);},
   ledger(d){const S=d.stats||{},pc=x=>x!=null?Math.round(x*100)+"%":"—";
     const rules=Object.entries(S).map(([k,v])=>`<tr><td class="name">${esc(v.desc)}<span class="sub">${esc(v.cat)}</span></td><td class="r num">${v.bt_rate!=null&&v.bt_n>=20?`${pc(v.bt_rate)}<span class="sub"> ${v.bt_n} 次</span>`:'<span class="sub">無回測</span>'}</td><td class="r num">${v.done?`${v.hits}/${v.done}`:"—"}</td><td class="r num">${v.open||"—"}</td></tr>`).join("");
@@ -2504,7 +2511,7 @@ function snap(P){
     radar:((P.radar||{}).watch)||[],fund:(((P.radar||{}).funding)||[]).slice(0,3),
     air:P.airport||{},poly:((P.poly||{}).items||[]).filter(polyOK).slice(0,4),power:P.power||{},quake:((P.quake||{}).items||[])[0],
     wx:((P.weather||{}).items)||[],ussec:((P.sectors||{}).items||[]).map(s=>[s.name,n(s.chg_pct)]),twsec:(tm.sectors||[]).map(s=>[s.name,n(s.pct)]),
-    opp:{kw:((P.voice||{}).kw)||[],cu:P.consume||{},tx:P.taxreg||{}},
+    opp:{kw:((P.voice||{}).kw)||[],cu:P.consume||{},tx:P.taxreg||{},chain:P.chain||{},wk:P.weekly||{}},
     gov:[...(((P.tenders||{}).items)||[]).slice(0,2).map(t=>["招標",t.title,t.unit,t.budget,t.url]),...(((P.awards||{}).items)||[]).slice(0,2).map(a=>["決標",a.title,a.winner,a.amount,a.url])]};
 }
 
@@ -2512,7 +2519,7 @@ function snap(P){
 function layout(){
   $("#ov").innerHTML=`
   <section class="w12 o-tks" id="ov-tks" aria-label="主要行情"></section>
-  <section class="o-card w12" id="ov-c-opp">${H("Opportunities","本週機會 · 需求在長、媒體和新店還沒跟上 · 民生消費 · 小店在開","trend")}<div class="o-opp" id="ov-opp"></div></section>
+  <section class="o-card w12" id="ov-c-opp">${H("This Week","本週走向與機會 · 主題鏈判讀 · 民生消費 · 小店在開","trend")}<div id="ov-wk"></div><div class="o-opp" id="ov-opp"></div></section>
   <section class="o-card w4" id="ov-c-tw">${H("TAIEX","加權 · 法人 · 家數","market")}
     <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><div class="o-odo" id="ov-odo"></div><span class="num" id="ov-twchg"></span></div>
     <svg class="o-tw-spark" id="ov-twspark" viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%;height:46px;display:block" aria-hidden="true"></svg>
@@ -2631,14 +2638,17 @@ function heat(id,rows){const el=E(id),before={};el.querySelectorAll("[data-k]").
 function gov(){E("ov-gov").innerHTML=S.gov.map(r=>`<li><span class="ag" style="color:${r[0]==="招標"?"var(--accent)":"var(--muted)"}">${r[0]}</span><span class="tt"><a href="${safe(r[4])}" target="_blank" rel="noopener">${esc(r[1])}</a><br><span class="sc">${esc((r[2]||"").slice(0,24))} · ${r[3]?F(n(r[3])/1e4,0)+" 萬":"金額待補"}</span></span></li>`).join("")||'<li><span></span><span class="o-sub">今天沒有新標案</span></li>';}
 
 function opp(){const el=E("ov-opp");if(!el)return;const O=S.opp,pc=v=>`${v>0?"+":""}${v}%`,cl=v=>v==null?"":v>=15?"up":v<=-15?"down":"";
-  const K=O.kw.filter(k=>!k.ref),win=K.filter(k=>/機會窗口/.test(k.tag||"")),hot=K.filter(k=>!win.includes(k)&&(k.trend_yoy??-999)>=15).sort((a,b)=>b.trend_yoy-a.trend_yoy);
-  const tr=[...win.map(k=>[k,"窗口"]),...hot.map(k=>[k,/湧入/.test(k.tag||"")?"擁擠":"升溫"])].slice(0,4);
-  const c1=tr.length?tr.map(([k,t])=>{const sy=(k.supply||{}).yoy;return`<li><span class="o-tag ${t==="窗口"?"w":""}">${t}</span><span class="tt"><b>${esc(k.k)}</b> <span class="sc">${esc(k.group)}</span></span><span class="num up">搜尋 ${pc(k.trend_yoy??k.trend_chg)}</span><span class="num ${cl(k.media_yoy)}">${k.media_capped?"媒體 量大":k.media_yoy!=null?"媒體 "+pc(k.media_yoy):""}</span><span class="num ${cl(sy)}">${sy!=null?"新店 "+pc(sy):""}</span></li>`;}).join(""):'<li class="o-emp">趨勢雷達這輪沒有明顯升溫的字</li>';
+  const CR=(O.chain.rows||[]),TG={缺口窗口:["缺口","w"],擴張中:["擴張",""],供給過熱:["過熱","x"],退潮:["退潮","x"]};
+  const sv=(r,k)=>((r.stages||[]).find(s=>s.k===k)||{}).v;
+  const pick=[...CR.filter(r=>r.verdict==="缺口窗口"),...CR.filter(r=>r.verdict==="擴張中")].slice(0,4);
+  const c1=pick.length?pick.map(r=>{const t=TG[r.verdict]||["",""],a=sv(r,"搜尋"),b=sv(r,"媒體"),c=sv(r,"新店");return`<li><span class="o-tag ${t[1]}">${t[0]}</span><span class="tt"><b>${esc(r.k)}</b> <span class="sc">${r.prev?`上週${esc(r.prev)}`:esc(r.group)}</span></span><span class="num ${cl(a)}">${a!=null?"搜尋 "+pc(a):""}</span><span class="num ${cl(b)}">${b!=null?"媒體 "+pc(b):""}</span><span class="num ${cl(c)}">${c!=null?"新店 "+pc(c):""}</span></li>`;}).join(""):'<li class="o-emp">主題鏈這輪沒有缺口或擴張中的主題</li>';
+  const W=O.wk||{},mv=(O.chain.moves||[]);
+  const wkEl=E("ov-wk");if(wkEl)wkEl.innerHTML=W.headline?`<div class="o-wk"><b>${esc(W.headline)}</b>${(W.gaps||[]).length?`<span>缺口：${W.gaps.map(g=>esc(g.t)).join("、")}</span>`:""}${mv.length?`<span>本週判讀變化：${mv.slice(0,4).map(m=>`${esc(m.k)} ${esc(m.from)} → <em class="${m.to==="缺口窗口"||m.to==="擴張中"?"up":m.to==="觀察中"?"":"down"}">${esc(m.to)}</em>`).join("、")}</span>`:""}</div>`:"";
   const fo=(O.cu.focus||[]).filter(x=>isFinite(n(x.yoy))&&/零售|餐飲|住宿|旅行|運動|娛樂|休閒|創作|藝術|個人|家庭|教育|美容|理髮|洗衣|寵物/.test(x.name||"")&&!/航空|不動產|資訊|電腦|營造|租賃|批發|金融|保險/.test(x.name||"")).sort((a,b)=>n(b.yoy)-n(a.yoy)).slice(0,4);
   const c2=fo.length?fo.map(x=>`<li><span class="o-tag">年增</span><span class="tt">${esc(String(x.name).replace(/業$/,""))}</span><span class="num ${n(x.yoy)>=0?"up":"down"}">${pc(x.yoy)}</span><span class="num sc">${x.mom!=null?"月 "+pc(x.mom):""}</span></li>`).join(""):'<li class="o-emp">消費資料還沒進來</li>';
   const tu=(O.tx.up||[]).slice(0,4),w=(O.tx.win||[]).map(m=>String(m).slice(2).replace("-","/")).join("–");
   const c3=(tu.length?tu.map(x=>`<li><span class="o-tag">新開</span><span class="tt">${esc(String(x.name).replace(/（.*?）|\(.*?\)/g,""))}</span><span class="num up">${pc(x.yoy)}</span><span class="num sc">${n(x.n6).toLocaleString()} 家</span></li>`).join(""):'<li class="o-emp">稅籍資料還沒進來</li>')+(O.tx.n6?`<li class="o-foot"><span class="sc">${esc(w)} 全體新開 ${n(O.tx.n6).toLocaleString()} 家 · 比去年 <span class="${O.tx.raw_yoy<0?"down":"up"}">${pc(O.tx.raw_yoy)}</span> · 已校正</span></li>`:"");
-  el.innerHTML=`<div><div class="o-colh">趨勢雷達 · 搜尋 vs 媒體 vs 新店 <a data-go="trend" href="#">看全部 →</a></div><ul class="o-ls op tr">${c1}</ul></div>
+  el.innerHTML=`<div><div class="o-colh">主題鏈 · 缺口與擴張中 <a data-go="trend" href="#">看全部 →</a></div><ul class="o-ls op tr">${c1}</ul></div>
     <div><div class="o-colh">民生消費 · ${esc(O.cu.month||"")} 電子發票營業額年增 <a data-go="macro" href="#">看全部 →</a></div><ul class="o-ls op">${c2}</ul></div>
     <div><div class="o-colh">小店在開 · 稅籍新開家數年增 <a data-go="intel" href="#">看全部 →</a></div><ul class="o-ls op">${c3}</ul></div>`;}
 function fill(anim){const parts=[["tk",()=>tickers(anim)],["opp",opp],["tw",tw],["macro",macro],["risk",risk],["lists",()=>lists(anim)],["hot",()=>hot(anim)],["mood",mood],["ptt",ptt],["cof",()=>cof(anim)],["fund",fund],["flaps",flaps],["deps",deps],["poly",poly],["us",()=>heat("ov-ussec",S.ussec)],["tw2",()=>heat("ov-twsec",S.twsec)],["gov",gov]];

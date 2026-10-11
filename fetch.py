@@ -4946,6 +4946,9 @@ def p_housefc():
 
 
 # ---------- 主題鏈：同一個主題，從國外、搜尋、媒體一路看到商標、新店、消費、政策，標出走到哪一站 ----------
+CHAIN_HIST = DATA / "chain_hist.json"
+
+
 def p_chain():
     cfg = json.loads((ROOT / "ops" / "themes.json").read_text(encoding="utf-8"))["themes"]
     V = {x["k"]: x for x in ((RESULTS.get("voice") or {}).get("kw") or [])}
@@ -5003,7 +5006,36 @@ def p_chain():
     rows.sort(key=lambda r: (order[r["verdict"]], -r["score"]))
     if not rows:
         raise RuntimeError("chain: nothing")
-    return {"rows": rows, "stages": ["國外", "搜尋", "維基", "媒體", "商標", "新店", "消費", "政策"]}
+    # 判讀變化：每週存一份快照（本週內每輪覆蓋），跟上一週比，誰剛進缺口、誰剛轉過熱
+    y, w, _ = TODAY_TPE.isocalendar()
+    week = f"{y}-W{w:02d}"
+    hist = {}
+    if CHAIN_HIST.exists():
+        try:
+            hist = json.loads(CHAIN_HIST.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            hist = {}
+    hist[week] = {r["k"]: r["verdict"] for r in rows}
+    hist = dict(sorted(hist.items())[-60:])
+    write_json(CHAIN_HIST, hist, separators=(",", ":"))
+    prev_w = max((k for k in hist if k < week), default=None)
+    moves = []
+    if prev_w:
+        for r in rows:
+            pv = hist[prev_w].get(r["k"])
+            if pv and pv != r["verdict"]:
+                r["prev"] = pv
+                moves.append({"k": r["k"], "from": pv, "to": r["verdict"]})
+    # 連續幾週維持同一個判讀
+    for r in rows:
+        n_ = 0
+        for wk in sorted(hist, reverse=True):
+            if hist[wk].get(r["k"]) == r["verdict"]:
+                n_ += 1
+            else:
+                break
+        r["weeks"] = n_
+    return {"rows": rows, "stages": ["國外", "搜尋", "維基", "媒體", "商標", "新店", "消費", "政策"], "week": week, "prev_week": prev_w, "moves": moves}
 
 
 # ---------- 美國企業在談什麼（SEC EDGAR 全文檢索：10-K / 10-Q / 8-K 提到的次數，比去年同期） ----------
@@ -6797,7 +6829,7 @@ def _wk_material():
     if jb:
         B["消費"].append(f"104 職缺總數 {jb.get('total')}，7 天變化 {f(jb.get('chg7'))}%")
     ch = R("chain").get("rows") or []
-    B["主題鏈（需求 vs 供給）"] = [f"{r['k']}：{r['verdict']}，{r['why']}；" + "、".join(f"{s['k']} {f(s['v'],0)}" for s in r["stages"] if s.get("v") is not None and s["k"] != "政策")
+    B["主題鏈（需求 vs 供給）"] = [f"{r['k']}：{r['verdict']}" + (f"（上週是{r['prev']}）" if r.get("prev") else "") + f"，{r['why']}；" + "、".join(f"{s['k']} {f(s['v'],0)}" for s in r["stages"] if s.get("v") is not None and s["k"] != "政策")
                              for r in ch if r["verdict"] != "觀察中"][:14]
     wk = [r for r in (R("wiki").get("rows") or []) if r.get("kind") != "資料不足" and r.get("rel3") is not None]
     B["維基關注度（比其他主題）"] = ["（數字＝近 3 月年增減掉所有主題中位數，單位百分點）升溫：" + "、".join(f"{r['q']} {f(r['rel3'],0)}" for r in sorted(wk, key=lambda r: -r["rel3"])[:6]),
