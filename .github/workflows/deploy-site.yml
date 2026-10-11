@@ -42,7 +42,9 @@ jobs:
         run: python3 ops/cf_access.py
       - name: Build site
         if: steps.chk.outputs.ok == '1'
-        run: mkdir -p site && cp index.html site/ && printf 'User-agent: *\nDisallow: /\n' > site/robots.txt
+        run: |
+          mkdir -p site && cp index.html site/
+          printf 'User-agent: *\nDisallow: /\n' > site/robots.txt
       - name: Deploy worker
         if: steps.chk.outputs.ok == '1'
         run: |
