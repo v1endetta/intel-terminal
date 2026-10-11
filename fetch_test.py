@@ -4914,8 +4914,8 @@ def p_housefc():
            f"&codspc0=0,2,3,2,6,1,9,1,12,1,15,16,&codspc1=0,14,&ym=10101&ymt={y0}12")
     txt = get(url, timeout=120).content.decode("utf-8-sig", "replace")
     vol, city = {}, {}
-    for m in re.finditer(r'"(\d+)年\s*(\d+)月/\s*([^/]+?)/\s*買賣",([\d,-]+)', txt):
-        ym = f"{int(m.group(1)) + 1911}{int(m.group(2)):02d}"; area = m.group(3).strip(); v = m.group(4).replace(",", "")
+    for m in re.finditer(r'"(\d+)年\s*(\d+)月/\s*([^/]+?)/\s*買賣",(-|\d+),', txt):
+        ym = f"{int(m.group(1)) + 1911}{int(m.group(2)):02d}"; area = m.group(3).strip(); v = m.group(4)
         if not v.isdigit():
             continue
         if area == "區域別總計":
