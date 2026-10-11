@@ -305,7 +305,7 @@ function buildTerrain() {
           float n = fract(sin(dot(cell, vec2(12.9898, 78.233))) * 43758.5453);
           float spark = step(1.0 - L * L * 0.85, n);
           vec3 lc = mix(vec3(1.0, 0.52, 0.18), vec3(1.0, 0.88, 0.7), L);
-          totalEmissiveRadiance = lc * (spark * (0.35 + L) * 1.15 + pow(L, 4.0) * 0.18);
+          totalEmissiveRadiance = lc * (spark * (0.4 + L) * 1.5 + pow(L, 2.6) * 0.55);
         }
         // 高度帶：極淡的等高線，讓山形更清楚
         float band = abs(fract(vElev / 500.0) - 0.5);
