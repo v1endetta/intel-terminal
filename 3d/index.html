@@ -93,6 +93,8 @@ body.exploring #dock{opacity:1;transform:translate(-50%,0)}
 
 #hint{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);font-size:12px;color:var(--fg3);z-index:9;opacity:0;transition:opacity .6s ease 1s;pointer-events:none;white-space:nowrap}
 body.exploring #hint{opacity:1}
+#tip{position:fixed;z-index:25;pointer-events:none;padding:8px 12px;border-radius:12px;background:rgba(20,20,22,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);font-size:13px;line-height:1.4;opacity:0;transition:opacity .15s;max-width:260px}
+#tip.show{opacity:1}#tip b{display:block;font-weight:600}#tip span{color:var(--fg2)}
 #credit{position:fixed;right:12px;bottom:8px;font-size:10px;color:var(--fg3);z-index:9;opacity:.7;pointer-events:none}
 @media (max-width:760px){#credit{display:none}}
 #load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;background:#000;transition:opacity .8s ease;font-size:13px;color:var(--fg3);letter-spacing:.08em}
@@ -880,10 +882,126 @@ renderer.domElement.addEventListener("pointerdown", e => { downAt = [e.clientX, 
 renderer.domElement.addEventListener("pointerup", e => {
   if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6 || !document.body.classList.contains("exploring")) return;
   mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
+  const oh = OBJ.pick.length ? ray.intersectObjects(OBJ.pick, false)[0] : null;
+  if (oh) { openObjCard(oh.object.userData.info); return; }
   const hit = ray.intersectObject(terrain)[0]; if (!hit) return;
   const lon = hit.point.x / KX + LONC, lat = -hit.point.z / KY + LATC, c = countyAt(lon, lat);
   if (c) openCard(c);
 });
+
+
+/* ---------- 資訊物件：每個物件用一個看得到的屬性代表一個真實數字 ---------- */
+const OBJ = { g: null, pick: [], tick: [] };
+const UPC = new THREE.Color(0x30d158), DNC = new THREE.Color(0xff453a);
+function objInfo(mesh, info) { mesh.traverse(m => { if (m.isMesh) { m.userData.info = info; OBJ.pick.push(m); } }); }
+function at(lon, lat, lift = 0) { const [x, z] = toXZ(lon, lat); return new THREE.Vector3(x, hAt(lon, lat) + lift, z); }
+const mat = (c, e = 0, ei = 0) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.6, metalness: 0.05, emissive: e, emissiveIntensity: ei });
+function shipMesh(L, cols) {
+  const g = new THREE.Group();
+  const hull = new THREE.Mesh(new THREE.BoxGeometry(L, L * 0.12, L * 0.22), mat(0x2b2f36)); hull.position.y = L * 0.06; g.add(hull);
+  const bow = new THREE.Mesh(new THREE.ConeGeometry(L * 0.11, L * 0.2, 4), mat(0x2b2f36)); bow.rotation.z = -Math.PI / 2; bow.rotation.x = Math.PI / 4; bow.position.set(L * 0.6, L * 0.06, 0); g.add(bow);
+  const n = cols.length;
+  cols.forEach((c, i) => { const b = new THREE.Mesh(new THREE.BoxGeometry(L * 0.7 / n * 0.9, L * 0.1, L * 0.18), mat(c)); b.position.set(-L * 0.3 + (i + 0.5) * L * 0.7 / n, L * 0.17, 0); g.add(b); });
+  const br = new THREE.Mesh(new THREE.BoxGeometry(L * 0.1, L * 0.2, L * 0.18), mat(0xf2f2f2)); br.position.set(-L * 0.42, L * 0.2, 0); g.add(br);
+  return g;
+}
+function planeMesh(L, c = 0xf4f4f6) {
+  const g = new THREE.Group();
+  const f = new THREE.Mesh(new THREE.CylinderGeometry(L * 0.06, L * 0.04, L, 10), mat(c)); f.rotation.z = Math.PI / 2; g.add(f);
+  const w = new THREE.Mesh(new THREE.BoxGeometry(L * 0.22, L * 0.02, L * 0.9), mat(c)); g.add(w);
+  const t = new THREE.Mesh(new THREE.BoxGeometry(L * 0.12, L * 0.18, L * 0.02), mat(c)); t.position.set(-L * 0.45, L * 0.09, 0); g.add(t);
+  return g;
+}
+function setupObjects() {
+  if (OBJ.g) scene.remove(OBJ.g);
+  OBJ.g = new THREE.Group(); OBJ.pick = []; OBJ.tick = []; scene.add(OBJ.g);
+  const pul = ((P.pulse || {}).items || []).find(x => x.sym === "^TWII") || {};
+  const inst = (((P.tw_market || {}).institutions || {}).items || []).find(x => x.name === "外資") || {};
+  const semi = (((P.revenue || {}).inds) || []).find(x => x.name === "半導體業") || {};
+  const orders = (P.lead || {}).orders || {};
+  const wci = (((P.commodities || {}).shipping) || [])[0] || {};
+  const ap = (P.airport || {}).dep || {};
+  // 1) 台北 101 燈柱 ＝ 台股加權漲跌
+  {
+    const ch = pul.chg_pct ?? 0, col = ch >= 0 ? UPC : DNC, k = Math.min(Math.abs(ch) / 2, 1);
+    const p = at(121.5645, 25.034, 1.4);
+    const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 40, 16, 1, true), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.18 + 0.4 * k, blending: THREE.AdditiveBlending, depthWrite: false }));
+    beam.position.copy(p).add(new THREE.Vector3(0, 20, 0)); OBJ.g.add(beam);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.18, 8, 40), new THREE.MeshBasicMaterial({ color: col })); ring.rotation.x = Math.PI / 2; ring.position.copy(p); OBJ.g.add(ring);
+    const info = { t: "台北 101 光柱", v: `台股加權 ${sgn(ch)}${fmt(ch, 2)}%`, d: `綠色＝上漲、紅色＝下跌，越亮代表漲跌越大。收盤 ${fmt(pul.price, 0)}`, src: "台股加權指數" };
+    objInfo(beam, info); objInfo(ring, info);
+    OBJ.tick.push(t => { beam.material.opacity = (0.16 + 0.4 * k) * (0.8 + 0.2 * Math.sin(t * 2)); ring.scale.setScalar(1 + 0.12 * Math.sin(t * 2)); });
+  }
+  // 2) 晶圓廠發光 ＝ 半導體業營收年增
+  {
+    const y = semi.yoy ?? 0, k = Math.max(0.1, Math.min(y / 80, 1));
+    const sites = [["新竹科學園區", 120.995, 24.776], ["台中科學園區", 120.615, 24.21], ["南部科學園區", 120.272, 23.1]];
+    for (const [nm, lo, la] of sites) {
+      const g = new THREE.Group(); g.position.copy(at(lo, la));
+      const body = new THREE.Mesh(new THREE.BoxGeometry(5, 1.4, 3), mat(0xe8e8ea)); body.position.y = 0.7; g.add(body);
+      const roof = new THREE.Mesh(new THREE.BoxGeometry(4.4, 0.12, 2.4), new THREE.MeshBasicMaterial({ color: new THREE.Color(0x64d2ff).lerp(new THREE.Color(0xffffff), 0.2) })); roof.position.y = 1.46; g.add(roof);
+      for (const dx of [-1.6, 1.6]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.22, 1.6, 10), mat(0xd0d0d4)); c.position.set(dx, 2.2, -1); g.add(c); }
+      OBJ.g.add(g);
+      objInfo(g, { t: nm + "・晶圓廠", v: `半導體業營收年增 ${sgn(y)}${fmt(y, 1)}%`, d: `屋頂越亮代表年增越高。領頭：${(semi.lead || []).map(x => esc(x.name) + " " + sgn(x.yoy) + fmt(x.yoy, 0) + "%").join("、")}`, src: "上市櫃月營收" + ((P.revenue || {}).ind_period ? " · " + P.revenue.ind_period : "") });
+      OBJ.tick.push(t => { roof.material.color.setRGB(0.39 + 0.6 * k * (0.75 + 0.25 * Math.sin(t * 3 + lo)), 0.82, 1); });
+    }
+  }
+  // 3) 貨櫃輪 ＝ 外銷訂單年增（船數）＋運價週變化（船速）
+  {
+    const yy = orders.yoy ?? 0, n = Math.max(2, Math.min(14, Math.round(4 + yy / 8))), sp = 0.025 * (1 + Math.max(-0.6, Math.min(0.6, (wci.chg_pct || 0) / 10)));
+    const lanes = [[at(120.26, 22.6, 0), at(119.4, 22.2, 0)], [at(120.49, 24.29, 0), at(119.6, 24.6, 0)]];
+    const palette = [0xff9f0a, 0x0a84ff, 0x30d158, 0xff375f, 0xffd60a, 0x64d2ff];
+    for (let i = 0; i < n; i++) {
+      const [a, b] = lanes[i % 2]; const ship = shipMesh(3.2, [palette[i % 6], palette[(i + 2) % 6], palette[(i + 4) % 6]]); OBJ.g.add(ship);
+      const ph = i / n, dir = b.clone().sub(a); ship.rotation.y = -Math.atan2(dir.z, dir.x);
+      objInfo(ship, { t: "貨櫃輪", v: `外銷訂單年增 ${sgn(yy)}${fmt(yy, 1)}%（${orders.month || ""}）`, d: `船越多代表訂單成長越快（目前 ${n} 艘）；船速跟著貨櫃運價週變化 ${sgn(wci.chg_pct)}${fmt(wci.chg_pct, 1)}%。`, src: "經濟部外銷訂單 · Drewry WCI" });
+      OBJ.tick.push(t => { const u = (t * sp + ph) % 1; ship.position.lerpVectors(a, b, u); ship.position.y = 0.05 + 0.04 * Math.sin(t * 2 + i); });
+    }
+  }
+  // 4) 桃園機場飛機 ＝ 今日離境航班；延誤的在空中盤旋
+  {
+    const tot = ap.total || 0, dl = ap.delayed || 0, cx = ap.cancelled || 0;
+    const base = at(121.232, 25.077, 0.3), n = Math.max(2, Math.min(9, Math.round(tot / 45)));
+    for (let i = 0; i < n; i++) {
+      const pl = planeMesh(2.2); OBJ.g.add(pl);
+      objInfo(pl, { t: "桃園機場", v: `今日離境 ${tot} 班`, d: `延誤 ${dl} 班、取消 ${cx} 班。起飛的飛機數跟著航班量，延誤的在機場上空盤旋。`, src: "桃園機場航班" });
+      const ph = i / n, ang = -0.6 + (i % 3) * 0.5;
+      OBJ.tick.push(t => { const u = (t * 0.05 + ph) % 1; pl.position.set(base.x + Math.cos(ang) * u * 60, base.y + Math.pow(u, 1.4) * 22, base.z - Math.sin(ang) * u * 60); pl.rotation.set(0, ang, 0.12 + u * 0.1); });
+    }
+    for (let i = 0; i < Math.min(dl, 6); i++) {
+      const pl = planeMesh(2.0, 0xffd60a); OBJ.g.add(pl);
+      objInfo(pl, { t: "延誤航班", v: `延誤 ${dl} 班`, d: "黃色飛機在機場上空盤旋，數量＝延誤班次（最多顯示 6 架）。", src: "桃園機場航班" });
+      OBJ.tick.push(t => { const a = t * 0.4 + i * 1.05; pl.position.set(base.x + Math.cos(a) * 7, base.y + 9 + i * 0.6, base.z + Math.sin(a) * 7); pl.rotation.set(0, -a - Math.PI / 2, -0.3); });
+    }
+  }
+  // 5) 海峽外的船隊 ＝ 外資買賣超
+  {
+    const net = inst.net ?? 0, n = Math.max(1, Math.min(12, Math.round(Math.abs(net) / 100))), buy = net > 0, col = buy ? UPC : DNC;
+    const shore = at(120.9, 24.95, 0), sea = at(119.75, 25.15, 0);
+    for (let i = 0; i < n; i++) {
+      const g = new THREE.Group();
+      const hull = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.4, 0.8), mat(0x8e9299)); hull.position.y = 0.2; g.add(hull);
+      const flag = new THREE.Mesh(new THREE.ConeGeometry(0.35, 1.1, 8), new THREE.MeshBasicMaterial({ color: col })); flag.position.y = 1.0; g.add(flag);
+      OBJ.g.add(g);
+      objInfo(g, { t: "外資船隊", v: `外資${buy ? "買超" : "賣超"} ${fmt(Math.abs(net), 0)} 億`, d: `船往台灣開＝買超、往外海開＝賣超；船數＝金額（每 100 億一艘，目前 ${n} 艘）。`, src: "證交所三大法人 · " + (((P.tw_market || {}).institutions || {}).date || "") });
+      const off = new THREE.Vector3((i % 4) * 3 - 4.5, 0, Math.floor(i / 4) * 3 - 3), ph = i / n;
+      OBJ.tick.push(t => { let u = (t * 0.03 + ph) % 1; if (buy) u = 1 - u; g.position.lerpVectors(shore, sea, 0.15 + u * 0.75).add(off); g.position.y = 0.05; g.rotation.y = buy ? Math.PI * 0.95 : -Math.PI * 0.05; });
+    }
+  }
+}
+const tip = document.createElement("div"); tip.id = "tip"; document.body.appendChild(tip);
+let tipT = 0;
+renderer.domElement.addEventListener("pointermove", e => {
+  const now = performance.now(); if (now - tipT < 60 || !OBJ.pick.length) return; tipT = now;
+  mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
+  const hit = ray.intersectObjects(OBJ.pick, false)[0];
+  if (hit) { const i = hit.object.userData.info; tip.innerHTML = `<b>${esc(i.t)}</b><span>${esc(i.v)}</span>`; tip.style.left = e.clientX + 14 + "px"; tip.style.top = e.clientY + 14 + "px"; tip.classList.add("show"); renderer.domElement.style.cursor = "pointer"; }
+  else { tip.classList.remove("show"); renderer.domElement.style.cursor = ""; }
+});
+function openObjCard(i) {
+  $("cardBody").innerHTML = `<h3>${esc(i.t)}</h3><div class="sub">${esc(i.src || "")}</div><div class="kv" style="margin-top:14px"><div class="k">現在</div><div class="v" style="font-size:22px">${esc(i.v)}</div></div><div class="sec">怎麼看</div><div style="font-size:14px;line-height:1.6;color:var(--fg2)">${i.d}</div><a class="more" href="../">在完整終端機看更多 ›</a>`;
+  $("card").classList.add("show");
+}
 
 /* ---------- 啟動 ---------- */
 function start() {
@@ -906,6 +1024,7 @@ function loop() {
   }
   for (const k in layers) if (layers[k].g && layers[k].g.visible && layers[k].tick) layers[k].tick(T, dt);
   lodTick(dt);
+  for (const f of OBJ.tick) f(T);
   { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); renderer.toneMappingExposure = (uni.uNight.value ? 0.85 : 1.0) * (1 - 0.2 * uni.uClose.value); }
   lmMat.emissiveIntensity = uni.uNight.value * 0.16; lmMat.color.setScalar(1 - uni.uNight.value * 0.88);
   outlineGroup.visible = camera.position.distanceTo(controls.target) > 40;
@@ -920,7 +1039,7 @@ addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; cam
     await Promise.all([loadDEM(), loadData(), loadRoads(), loadBMeta()]);
     buildTerrain(); await loadCounties(); addLandmarks();
     applySun(); setInterval(applySun, 60000);
-    setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow();
+    setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow(); setupObjects();
     camera.position.set(-200, 1300, 1100); controls.target.set(0, 0, 0);
     flyTo(new THREE.Vector3(MOBILE ? 240 : 200, MOBILE ? 600 : 400, MOBILE ? 700 : 470), new THREE.Vector3(0, MOBILE ? 90 : 60, 0), 3.2);
     $("load").classList.add("done");
@@ -931,7 +1050,7 @@ addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; cam
         const was = cur; if (cur) { layers[cur].off && layers[cur].off(); }
         for (const k in layers) { scene.remove(layers[k].g); }
         for (const k in layers) delete layers[k];
-        setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow();
+        setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow(); setupObjects();
         cur = null; if (was && document.body.classList.contains("exploring")) setLayer(was);
       } catch (e) { }
     }, 300000);
