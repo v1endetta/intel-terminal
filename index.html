@@ -251,6 +251,14 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .el-wr{display:grid;grid-template-columns:110px minmax(60px,180px) minmax(0,1fr);gap:10px;align-items:center;font-size:12px;padding:2px 0}.el-wr .b{height:8px;background:var(--line);border-radius:2px;overflow:hidden}.el-wr .b i{display:block;height:100%;background:var(--blue)}.el-wr .c{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media (max-width:640px){.el-wr{grid-template-columns:96px minmax(50px,1fr)}.el-wr .c{grid-column:1/-1;white-space:normal}}
 #p-ledger .vr-t td.name{white-space:normal;max-width:none}#p-ledger .vr-t{table-layout:auto}
+.wk-h{font-size:19px;line-height:1.45;font-weight:600;margin:2px 0 4px}.wk-vs{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.wk-g{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}.wk-g h3{font:500 11px var(--mono);color:var(--dim);margin:0 0 6px;letter-spacing:.04em}
+.wk-c{border-left:2px solid var(--line2);padding:6px 0 6px 10px;margin-bottom:8px}.wk-c b{display:block;font-size:13.5px;margin-bottom:2px}.wk-c p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55}
+.wk-c.up{border-color:var(--up)}.wk-c.down{border-color:var(--down)}.wk-c.mixed{border-color:var(--warn)}.wk-c.gap{border-color:var(--blue)}.wk-c.risk{border-color:var(--down)}
+.wk-c .ar{font-size:11px;margin-right:4px}.wk-c.up .ar{color:var(--up)}.wk-c.down .ar{color:var(--down)}.wk-c.mixed .ar{color:var(--warn)}
+.wk-s{display:inline-block;font:10px var(--mono);color:var(--dim);border:1px solid var(--line);border-radius:2px;padding:0 4px;margin:3px 4px 0 0}.wk-cf{font:10px var(--mono);color:var(--dim);margin-left:6px;font-weight:400}
+.wk-past{margin-top:10px;font-size:12px;color:var(--muted)}.wk-past summary{cursor:pointer;color:var(--dim);font:11px var(--mono)}.wk-past li{margin:3px 0}
+@media (max-width:760px){.wk-g{grid-template-columns:1fr}.wk-h{font-size:17px}}
 .ch-t{width:100%;border-collapse:collapse;font-size:12.5px}.ch-t th{font:500 10.5px var(--mono);color:var(--dim);text-align:center;padding:4px 2px;border-bottom:1px solid var(--line)}.ch-t th:first-child{text-align:left}
 .ch-t td{padding:6px 2px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle}.ch-t td.k{text-align:left;white-space:nowrap}.ch-t td.k .sub{display:block}
 .ch-c{display:inline-block;min-width:38px;padding:1px 4px;border-radius:3px;font:11px var(--mono)}.ch-c.up{background:color-mix(in srgb,var(--up) 22%,transparent);color:var(--up)}.ch-c.down{background:color-mix(in srgb,var(--down) 22%,transparent);color:var(--down)}.ch-c.flat{color:var(--muted);background:var(--line)}.ch-c.info{color:var(--dim)}.ch-c.na{color:var(--line2)}
@@ -471,7 +479,7 @@ canvas.o-fx{display:block;width:100%}
 #p-pulse{display:none!important}
 #p-taiex{order:1}#p-fx{order:2}#p-fear{order:3}#p-taifex{order:4}#p-world{order:5}#p-tw-stocks{order:6}#p-lux{order:7}#p-mops{order:8}#p-usbig{order:9}@media (min-width:1101px){#p-taiex{grid-row:span 2}}#p-sectors{order:10}#p-cmdty{order:11}#p-revenue{order:12}
 #p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-cards{order:7}#p-lead{order:7}#p-imports{order:7}#p-house{order:8}#p-poly{order:9}#p-jobs{order:10}
-#ib-soc{order:0}#p-chain{order:2}#p-ledger{order:2}#p-voice{order:2}#p-wiki{order:3}#p-tech2{order:4}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
+#p-weekly{order:-1}#ib-soc{order:0}#p-chain{order:2}#p-ledger{order:2}#p-voice{order:2}#p-wiki{order:3}#p-tech2{order:4}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
 .grid{align-items:start}
 /* 桃機翻牌看板：只有變動的字會翻 */
 .fids{display:grid;gap:3px;align-content:start}
@@ -913,6 +921,12 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ph"><h2>AI Wire</h2><span class="zh">AI 快線 · 官方部落格與科技媒體第一手</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>OpenAI · Anthropic · Google AI／Gemini · DeepSeek · xAI 官方頁面 · The Verge AI · TechCrunch AI · 「發布」= 官方標題含 launch／introduce，或 GitHub／HF 偵測到新 repo／新模型</span></div>
+  </section>
+
+  <section class="panel w12 cap" id="p-weekly">
+    <div class="ph"><h2>Weekly Direction</h2><span class="zh">本週市場往哪走 · 每週一由模型讀完所有面板寫一次</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Gemini 只讀情報站本週的數據摘要（景氣、物價、消費、主題鏈、維基、美國財報、科技、進口、政策、選舉、預測帳本），不加自己的時事知識 · 每條判斷都附來源面板 · 下週會拿上週的判斷對答案 · 舊週存在 weekly_archive.json</span></div>
   </section>
 
   <section class="ibx ib-band" id="ib-soc"><div class="ib-q"><span class="no">輿情 · 一眼看</span><h2>大家在吵什麼？</h2><p class="ans" id="ibsa">等待排程寫入</p></div>
@@ -1557,6 +1571,13 @@ const renderers={
   metro(d){const li=(a)=>(a||[]).map(x=>`<li><span class="t">${esc(x.st)}<span class="sub">${fmt(n(x.n)/1e4,0)} 萬人次</span></span><span class="m num"><span class="${cls(n(x.chg))}">${sgn(n(x.chg),1,"%")}</span></span></li>`).join("");
     body("p-metro").innerHTML=`<div class="veg-h">全系統<b class="${cls(n(d.total_chg))}">${sgn(n(d.total_chg),1,"%")}</b><span>${esc(d.month||"")} 比去年同月 · ${fmt(n(d.total)/1e6,1)} 百萬人次 · ${n(d.n)} 站</span></div><div class="vr-g"><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">成長最多</h3><ul class="list">${li(d.up)}</ul></div><div><h3 style="font-size:11px;color:var(--dim);margin:4px 0">減少最多</h3><ul class="list">${li(d.down)}</ul></div></div>`;
     setMeta("p-metro",{...d,label:(d.month||"")+" 月資料"},24*40);},
+  weekly(d){const ar={up:"▲",down:"▼",mixed:"◆"},src=a=>(a||[]).map(x=>`<span class="wk-s">${esc(x)}</span>`).join("");
+    const card=(x,c)=>`<div class="wk-c ${c}"><b>${c in ar?`<span class="ar">${ar[c]}</span>`:""}${esc(x.t||"")}${x.conf?`<span class="wk-cf">信心 ${esc(x.conf)}</span>`:""}</b><p>${esc(x.why||x.check||"")}</p>${src(x.src)}</div>`;
+    const dirs=(d.dirs||[]).map(x=>card(x,x.tone||"")).join(""),gaps=(d.gaps||[]).map(x=>card(x,"gap")).join(""),risks=(d.risks||[]).map(x=>card(x,"risk")).join("");
+    const watch=(d.watch||[]).map(x=>`<div class="wk-c"><b>${esc(x.t||"")}</b><p>${esc(x.check||"")}</p></div>`).join("");
+    const past=(d.past||[]).length?`<details class="wk-past"><summary>前幾週的判斷</summary><ul>${d.past.map(p=>`<li><span class="wk-s">${esc(p.week)}</span>${esc(p.headline||"")}</li>`).join("")}</ul></details>`:"";
+    body("p-weekly").innerHTML=`<div class="wk-h">${esc(d.headline||"")}</div>${d.vs_last?`<div class="wk-vs">比上週：${esc(d.vs_last)}</div>`:""}<div class="wk-g"><div><h3>方向</h3>${dirs}</div><div><h3>缺口</h3>${gaps}<h3 style="margin-top:10px">風險</h3>${risks}<h3 style="margin-top:10px">下週盯什麼</h3>${watch}</div></div>${past}`;
+    setMeta("p-weekly",{...d,updatedAt:d.made||d.updatedAt,label:`${d.week||""} · ${(d.model||"").replace("gemini-","Gemini ")}`},24*8);},
   chain(d){const SG=d.stages||[],V={缺口窗口:"gap",擴張中:"hot",觀察中:"",供給過熱:"hot",退潮:"ebb"};
     const cell=x=>{if(!x||x.s==null)return'<span class="ch-c na">·</span>';const t=x.s==="info"?`${n(x.v)} 件`:x.k==="消費"?sgn(n(x.v),1):sgn(n(x.v),0,"%");return`<span class="ch-c ${x.s}" title="${esc(x.note||"")}">${x.s==="up"?"▲":x.s==="down"?"▼":x.s==="flat"?"–":""}${x.s==="info"?t:" "+t}</span>`;};
     const tr=(d.rows||[]).map(r=>`<tr><td class="k">${esc(r.k)}<span class="sub">${esc(r.group)}</span></td>${SG.map(g=>`<td data-l="${g}">${cell((r.stages||[]).find(s=>s.k===g))}</td>`).join("")}<td class="ch-v"><b class="${V[r.verdict]||""}">${esc(r.verdict)}</b>${esc(r.why)}</td></tr>`).join("");
@@ -2402,7 +2423,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["intel","情報"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
-  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"intel","p-ledger":"intel","p-chain":"intel","p-tech2":"intel","p-imports":"macro","p-metro":"live",
+  "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"intel","p-ledger":"intel","p-chain":"intel","p-weekly":"intel","p-tech2":"intel","p-imports":"macro","p-metro":"live",
   "ib-sig":"intel","ib-soc":"social","p-voice":"intel","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-elect":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",

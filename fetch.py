@@ -116,7 +116,7 @@ def load_prev(pid):
 
 RESULTS: dict[str, dict] = {}
 START_TS = time.time()
-PANEL_CAP = {"voice": 280, "pop": 150, "house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"voice": 280, "pop": 150, "house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200, "weekly": 280}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -6537,7 +6537,7 @@ def _gemini_models():
         log("gemini models", e); return []
 
 
-def _gemini_call(prompt, model, json_mode=True, tools=None, max_tokens=6000):
+def _gemini_call(prompt, model, json_mode=True, tools=None, max_tokens=6000, timeout=90):
     # maxOutputTokens 含「思考」token：預設思考會把輸出吃光而截斷 JSON，所以關掉思考、放大上限
     body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.2, "maxOutputTokens": max_tokens, "thinkingConfig": {"thinkingBudget": 0}}}
     if json_mode and not tools:  # 開了搜尋工具就不能強制 JSON，改由 prompt 要求
@@ -6545,25 +6545,28 @@ def _gemini_call(prompt, model, json_mode=True, tools=None, max_tokens=6000):
     if tools:
         body["tools"] = tools
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-    r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=90)
+    r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=timeout)
     if r.status_code == 400 and "thinking" in r.text.lower():  # 這個模型不接受 thinkingBudget（例如只支援 thinkingLevel）
         body["generationConfig"].pop("thinkingConfig", None)
         body["generationConfig"]["thinkingConfig"] = {"thinkingLevel": "LOW"}
-        r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=90)
+        r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=timeout)
         if r.status_code == 400:
             body["generationConfig"].pop("thinkingConfig", None)
-            r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=90)
+            r = S.post(url, params={"key": GEMINI_KEY}, json=body, timeout=timeout)
     return r
 
 
-def _gemini_json(prompt, schema_hint=None, tools=None):
+def _gemini_json(prompt, schema_hint=None, tools=None, max_tokens=6000, timeout=90):
     last = None
     for model in (_gemini_models() or GEMINI_MODELS):
         try:
-            r = _gemini_call(prompt, model, tools=tools)
+            try:
+                r = _gemini_call(prompt, model, tools=tools, max_tokens=max_tokens, timeout=timeout)
+            except requests.exceptions.Timeout as e:  # 這個模型太慢：換下一個
+                last = RuntimeError(f"{model} timeout"); continue
             if r.status_code in (429, 503):  # 每分鐘額度或過載：等 20 秒再試同一個模型一次
                 time.sleep(20)
-                r = _gemini_call(prompt, model, tools=tools)
+                r = _gemini_call(prompt, model, tools=tools, max_tokens=max_tokens, timeout=timeout)
             if r.status_code in (404, 429, 503):  # 還是不行 → 換下一個模型
                 try:
                     msg = (r.json().get("error") or {}).get("message", "")[:90]
@@ -6631,6 +6634,137 @@ def p_mood():
     return {**js, "model": model, "spark_tw": hist_get("mood", "taiwan", 72), "spark_os": hist_get("mood", "overseas", 72),
             "n_inputs": {k: len(v) for k, v in blocks.items()}}
 
+
+
+# ---------- 每週走向摘要（Gemini）：每週一次，讀主題鏈、預測帳本、景氣、消費、國外訊號，寫「本週市場往哪走」 ----------
+WEEKLY_ARCH = DATA / "weekly_archive.json"
+
+
+def _wk_material():
+    R = lambda k: RESULTS.get(k) or {}  # noqa: E731
+    f = lambda v, d=1: "—" if v is None else f"{v:+.{d}f}" if isinstance(v, (int, float)) else str(v)  # noqa: E731
+    B = {}
+    L = R("lead"); ld = L.get("lead") or {}; od = L.get("orders") or {}
+    mac = [f"{i['label']} {i['value']}（{i.get('period','')}，前期 {i.get('prev','—')}）" for i in (R("macro").get("items") or [])[:8]]
+    B["景氣"] = [f"領先指標 {ld.get('month')} = {ld.get('value')}，月變 {f(ld.get('chg'),2)}%，連續 {ld.get('streak')} 個月同方向；景氣燈號 {ld.get('signal')} {ld.get('score')} 分",
+                f"外銷訂單 {od.get('month')} 年增 {f(od.get('yoy'))}%"] + mac
+    pmi = (R("supply").get("pmi") or {})
+    if pmi:
+        B["景氣"].append(f"製造業 PMI {pmi.get('period')} = {pmi.get('value')}（月變 {f(pmi.get('chg'))}），新訂單 {pmi.get('orders')}")
+    fao = (L.get("fao") or {})
+    B["糧價與菜價"] = [f"FAO 全球糧價 {fao.get('month')}：" + "、".join(f"{i['name']} {i['value']}（年增 {f(i.get('yoy'))}%）" for i in (fao.get("items") or [])[:6])]
+    for k, nm in (("veg", "蔬菜"), ("fruit", "水果"), ("fish", "漁產")):
+        x = R(k)
+        if x.get("index") is not None:
+            B["糧價與菜價"].append(f"台北{nm}批發 {x.get('date')} 籃子比近兩週均價 {f(x.get('index'))}%")
+    cd = R("cards"); rows = [r for r in (cd.get("rows") or []) if r.get("rel") is not None]
+    tot = next((r for r in (cd.get("rows") or []) if r["cat"] == "總計"), {})
+    B["消費"] = [f"信用卡 {cd.get('month')} 總刷卡年增 {f(tot.get('yoy3'))}%；比整體熱：" + "、".join(f"{r['cat']} {f(r['rel'])}" for r in sorted(rows, key=lambda r: -r["rel"])[:3])
+                 + "；比整體冷：" + "、".join(f"{r['cat']} {f(r['rel'])}" for r in sorted(rows, key=lambda r: r["rel"])[:3])]
+    cs = R("consume")
+    if cs.get("up"):
+        B["消費"].append(f"發票營業額 {cs.get('month')} 年增最多：" + "、".join(f"{r['name']} {f(r.get('yoy'))}%" for r in cs["up"][:5]))
+    if cs.get("down"):
+        B["消費"].append("年增最少：" + "、".join(f"{r['name']} {f(r.get('yoy'))}%" for r in cs["down"][:5]))
+    tx = R("taxreg")
+    if tx:
+        B["消費"].append(f"稅籍新設近 6 個月 {tx.get('n6')} 家（去年同期 {tx.get('ly6')}）；新設增最多：" + "、".join(f"{r['name']} {r.get('yoy')}%" for r in (tx.get("up") or [])[:5])
+                         + "；全新冒出的行業：" + "、".join(f"{r['name']}（{r.get('n6')} 家）" for r in (tx.get("new") or [])[:3]))
+    mt = R("metro")
+    if mt:
+        B["消費"].append(f"台北捷運 {mt.get('month')} 總運量年增 {f(mt.get('total_chg'))}%；成長最多站：" + "、".join(f"{r['st']} {f(r['chg'])}%" for r in (mt.get("up") or [])[:4]))
+    jb = R("jobs")
+    if jb:
+        B["消費"].append(f"104 職缺總數 {jb.get('total')}，7 天變化 {f(jb.get('chg7'))}%")
+    ch = R("chain").get("rows") or []
+    B["主題鏈（需求 vs 供給）"] = [f"{r['k']}：{r['verdict']}，{r['why']}；" + "、".join(f"{s['k']} {f(s['v'],0)}" for s in r["stages"] if s.get("v") is not None and s["k"] != "政策")
+                             for r in ch if r["verdict"] != "觀察中"][:14]
+    wk = [r for r in (R("wiki").get("rows") or []) if r.get("kind") != "資料不足" and r.get("rel3") is not None]
+    B["維基關注度（比其他主題）"] = ["升溫：" + "、".join(f"{r['q']} {f(r['rel3'],0)}" for r in sorted(wk, key=lambda r: -r["rel3"])[:6]),
+                            "退燒：" + "、".join(f"{r['q']} {f(r['rel3'],0)}" for r in sorted(wk, key=lambda r: r["rel3"])[:5]),
+                            "國外在漲台灣還沒：" + ("、".join(r["q"] for r in wk if r.get("abroad")) or "無")]
+    sw = [r for r in (R("secwords").get("rows") or []) if r.get("chg") is not None]
+    B["美國企業財報用語（90 天比去年）"] = ["、".join(f"{r['label']} {f(r['chg'],0)}%" for r in sw[:6]) + "；減少：" + "、".join(f"{r['label']} {f(r['chg'],0)}%" for r in sw[-3:])]
+    t2 = R("tech2")
+    B["科技前沿"] = ["開發者套件比同組（90 天）：" + "、".join(f"{r['name']} {f(r.get('rel90'),0)}" for r in sorted([r for r in (t2.get('pypi') or []) + (t2.get('npm') or []) if r.get('rel90') is not None], key=lambda r: -r["rel90"])[:6]),
+                 "論文量 12 個月比前 12 個月：" + "、".join(f"{r['name']} {f(r.get('chg'),0)}%" for r in (t2.get("papers") or [])[:6])]
+    im = [r for r in (R("imports").get("rows") or []) if r.get("chg") is not None]
+    B["農產品進口（近 3 月比去年）"] = ["增：" + "、".join(f"{r['name']} {f(r['chg'],0)}%" for r in sorted(im, key=lambda r: -r["chg"])[:5]) + "；減：" + "、".join(f"{r['name']} {f(r['chg'],0)}%" for r in sorted(im, key=lambda r: r["chg"])[:4])]
+    rv = R("revenue")
+    if rv.get("inds"):
+        B["上市櫃營收"] = [f"{rv.get('ind_period')} 產業營收年增：" + "、".join(f"{r['name']} {f(r.get('yoy'))}%" for r in rv["inds"][:6])]
+    po = R("policy")
+    B["政策"] = [f"立法院近 60 天法案主題：" + "、".join(f"{k} {n}" for k, n in (po.get("b_topics") or [])[:6]),
+               "新法草案：" + "、".join(b["title"] for b in (po.get("b_new") or [])[:6]),
+               "近期三讀：" + "、".join(b["title"] for b in (po.get("b_third") or [])[:5])]
+    el = R("elect")
+    if el.get("cities"):
+        B["選舉（11/28，Polymarket）"] = [f"{c['city']}：" + "、".join(f"{x['name']}（{x['party']}）{x.get('p')}%，7 天 {f(x.get('d7'))}" for x in c["cands"][:2]) for c in el["cities"]] + \
+            ["各市議題熱度：" + "、".join(f"{w['topic']} {w['score']}" for w in (el.get("wind") or [])[:5])]
+    fr, mo = R("fear"), R("mood")
+    B["市場與情緒"] = [f"美股風險：{fr.get('regime')}，{fr.get('why')}",
+                   f"台灣網路情緒：{(mo.get('taiwan') or {}).get('label')}，{(mo.get('taiwan') or {}).get('line')}"]
+    lg = R("ledger")
+    B["預測帳本"] = [f"{v['desc']}：回測命中 {round(100*v['bt_rate'])}%（{v['bt_n']} 次）" for v in (lg.get("stats") or {}).values() if v.get("bt_rate") is not None] + \
+        ["目前開著的預測：" + "；".join(f"{o['text']}（{round(100*o['prob'])}%，到期 {o['due']}）" for o in (lg.get("open") or [])[:12])]
+    txt = "\n\n".join(f"## {k}\n" + "\n".join(f"- {x}" for x in v if x) for k, v in B.items() if v)
+    return txt, list(B)
+
+
+def p_weekly():
+    if not GEMINI_KEY:
+        raise RuntimeError("未設定 GEMINI_API_KEY")
+    y, w, _ = TODAY_TPE.isocalendar()
+    week = f"{y}-W{w:02d}"
+    prev = load_prev("weekly") or {}
+    if prev.get("week") == week and prev.get("dirs") and not prev.get("error"):
+        return {k: v for k, v in prev.items() if k not in ("updatedAt", "error")}
+    arch = []
+    if WEEKLY_ARCH.exists():
+        try:
+            arch = json.loads(WEEKLY_ARCH.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            arch = []
+    last = next((a for a in reversed(arch) if a.get("week") != week), None)
+    if time.time() > START_TS + 560:  # 整輪 900 秒硬上限：剩不到 5 分鐘就留給下一輪，免得整輪被丟掉
+        raise RuntimeError("本輪時間不夠，下一輪再寫")
+    material, secs = _wk_material()
+    last_txt = ""
+    if last:
+        last_txt = f"\n\n## 上週（{last['week']}）你的判斷\n標題：{last.get('headline')}\n" + "\n".join(f"- {d.get('t')}：{d.get('why')}" for d in last.get("dirs") or [])
+    mon = TODAY_TPE - timedelta(days=TODAY_TPE.weekday())
+    prompt = f"""你是台灣一間創意策略公司的市場分析夥伴。下面是個人情報站本週（{mon.isoformat()} 起）各面板的數據摘要，涵蓋景氣、物價、消費、主題熱度、供給（商標、新店）、國外訊號、政策、選舉、預測帳本。
+目標：讀完後知道「台灣市場整體往哪走、哪裡有還沒被填的缺口、哪裡要小心」，並且能被下週的資料驗證。
+
+規則：
+1. 只根據下面的數據下判斷，不加入你自己的時事知識。每個判斷都要引用至少一個具體數字，並標出來源面板名稱（用下面的段落標題，例如「景氣」「主題鏈（需求 vs 供給）」）。
+2. 把不同面板串起來看，例如景氣強但消費冷、國外先熱台灣還沒、需求在長但供給沒跟上。單一面板的單一數字不夠格當「方向」。
+3. 數據互相矛盾就直接說矛盾，信心標「低」。資料月份不同時要注意時間差。
+4. 繁體中文、台灣用語。句子短。不要用「不是…而是…」「不僅…更…」句型，不要用「賦能、打造、旅程、極致、質感、溫度、療癒、沉浸式」這些詞，不要空泛形容。
+5. 「下週盯什麼」要寫成可以檢查的事：哪個數字、多少算對、多少算錯。
+6. 有上週判斷時，說清楚這週哪些被數據支持、哪些被推翻。
+
+輸出 JSON：
+{{
+  "headline": "一句 40 字內：本週台灣市場往哪走",
+  "dirs": [{{"t": "方向，15 字內", "why": "70 字內，帶數字的依據", "src": ["面板名"], "conf": "高｜中｜低", "tone": "up｜down｜mixed"}}],   // 3 到 5 個
+  "gaps": [{{"t": "缺口，15 字內", "why": "70 字內：需求證據和供給還沒跟上的證據", "src": ["面板名"]}}],   // 2 到 3 個
+  "risks": [{{"t": "風險，15 字內", "why": "60 字內", "src": ["面板名"]}}],   // 1 到 3 個
+  "watch": [{{"t": "下週盯什麼，30 字內", "check": "怎樣算對、怎樣算錯，40 字內"}}],   // 2 到 4 個
+  "vs_last": "40 字內：跟上週比，什麼被證實、什麼被推翻、什麼變了；沒有上週就給空字串"
+}}
+
+{material}{last_txt}"""
+    js, model = _gemini_json(prompt, None, max_tokens=8000, timeout=120)
+    js.pop("_grounding", None)
+    if not js.get("dirs"):
+        raise RuntimeError("weekly: 模型沒給方向")
+    out = {"week": week, "from": mon.isoformat(), "made": NOW_ISO, "model": model, "secs": secs,
+           **{k: js.get(k) for k in ("headline", "dirs", "gaps", "risks", "watch", "vs_last")}}
+    arch = [a for a in arch if a.get("week") != week] + [{k: out[k] for k in ("week", "made", "headline", "dirs", "gaps", "risks", "watch", "vs_last")}]
+    WEEKLY_ARCH.write_text(json.dumps(arch[-60:], ensure_ascii=False, indent=0), encoding="utf-8")
+    out["past"] = [{"week": a["week"], "headline": a.get("headline")} for a in arch[-9:-1]][::-1]
+    return out
 
 
 # ---------- 公司雷達：盯梢層（固定 5 家）＋ 雷達層（自動發現新募資、Show HN、Product Hunt） ----------
@@ -8095,6 +8229,7 @@ run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 run("chain", p_chain)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
 run("ledger", p_ledger)  # 預測帳本：放最後，吃本輪其他面板的結果
+run("weekly", p_weekly)  # 每週走向摘要：每週一換一次（同一週沿用），吃本輪所有面板
 FINISHED_ISO = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 try:
     write_json(HIST_PATH, HISTORY, separators=(",", ":"))
