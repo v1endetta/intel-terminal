@@ -4983,6 +4983,8 @@ def p_chain():
         sc = lambda ks: sum((1 if s["s"] == "up" else -1 if s["s"] == "down" else 0) for s in stages if s["k"] in ks)  # noqa: E731
         dem, sup, abroad = sc({"搜尋", "維基", "媒體"}), sc({"商標", "新店"}), stages[0]["s"] == "up"
         known = sum(1 for s in stages if s["s"] in ("up", "down", "flat"))
+        if dem == 1 and stages[1]["s"] != "up":  # 只有媒體或維基一站在漲、搜尋沒動：可能只是新聞事件，不算需求成形
+            dem = 0
         if dem > 0 and sup <= 0:
             verdict, why = "缺口窗口", "需求在長，商標和新店還沒跟上"
         elif dem > 0 and sup > 0:
