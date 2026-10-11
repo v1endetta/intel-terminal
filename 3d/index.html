@@ -483,6 +483,8 @@ onmessage = async e => {
     const kind = av.getUint8(o), n = av.getUint16(o + 1, true); o += 3;
     const pts = []; for (let k = 0; k < n; k++) { const x = av.getUint16(o, true) / 2, z = av.getUint16(o + 2, true) / 2; o += 4; pts.push([...toS(x, z), g(x, z)]); }
     if (pts.length < 3) continue;
+    let lo = 1e9, hi = -1e9; for (const p of pts) { lo = Math.min(lo, p[2]); hi = Math.max(hi, p[2]); }
+    if (hi - lo > 0.012) continue;   // 山坡上的大塊綠地會插進地形，略過
     let tri; try { tri = ShapeUtils.triangulateShape(pts.map(p => new Vector2(p[0], p[1])), []); } catch (err) { continue; }
     const y = kind === 1 ? 0.0015 : 0.0025;
     for (const t of tri) for (const ix of t) { AP.push(pts[ix][0], pts[ix][2] + y, pts[ix][1]); AK.push(kind); }
@@ -501,7 +503,7 @@ function cityWorker() {
   return WORKER;
 }
 const CITY_NODETAIL = new Set();
-const pMat = new THREE.MeshStandardMaterial({ color: 0xeceae4, roughness: 0.85, metalness: 0, emissive: 0xffc98f, emissiveIntensity: 1, side: THREE.DoubleSide });
+const pMat = new THREE.MeshStandardMaterial({ color: 0xdfddd7, roughness: 0.85, metalness: 0, emissive: 0xffc98f, emissiveIntensity: 1, side: THREE.DoubleSide });
 pMat.onBeforeCompile = sh => {
   sh.uniforms.uNight = uni.uNight;
   sh.vertexShader = sh.vertexShader
@@ -903,7 +905,7 @@ function loop() {
   }
   for (const k in layers) if (layers[k].g && layers[k].g.visible && layers[k].tick) layers[k].tick(T, dt);
   lodTick(dt);
-  { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); }
+  { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); renderer.toneMappingExposure = (uni.uNight.value ? 0.85 : 1.0) * (1 - 0.2 * uni.uClose.value); }
   lmMat.emissiveIntensity = uni.uNight.value * 0.28; lmMat.color.setScalar(1 - uni.uNight.value * 0.72);
   outlineGroup.visible = camera.position.distanceTo(controls.target) > 40;
   controls.update(); renderer.render(scene, camera); placeLabels();
