@@ -1,25 +1,29 @@
-import os, json, requests, re, io, csv
+import os, json, requests, re
 os.makedirs("out25", exist_ok=True)
 H = {"User-Agent": "intel-terminal/1.0 (personal research; https://github.com/v1endetta/intel-terminal)"}
 rep = {}
-def t(name, fn):
-    try: rep[name] = fn()
-    except Exception as e: rep[name] = f"ERR {type(e).__name__}: {str(e)[:200]}"
-for sid in ("QTWN628BIS", "QTWR628BIS"):
-    def f(sid=sid):
-        r = requests.get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}", headers=H, timeout=40)
-        lines = r.text.strip().splitlines()
-        return {"st": r.status_code, "n": len(lines), "head": lines[:3], "tail": lines[-4:]}
-    t(sid, f)
-# data.gov.tw search
-for q in ("消費者物價指數", "建物買賣移轉", "住宅價格指數", "建物所有權第一次登記"):
-    def f(q=q):
-        r = requests.get("https://data.gov.tw/api/v2/rest/dataset", params={"q": q, "limit": 8}, headers=H, timeout=40)
-        js = r.json()
-        res = js.get("result") or js
-        out = []
-        for d in (res.get("datasets") if isinstance(res, dict) else res) or []:
-            out.append({k: d.get(k) for k in ("identifier", "title", "publisher", "updateFrequency")})
-        return {"st": r.status_code, "keys": list(js.keys())[:5], "rows": out[:8], "raw": json.dumps(js, ensure_ascii=False)[:600] if not out else ""}
-    t("search:" + q, f)
+for ds in (121969, 121381, 132984, 132593, 23854, 89668, 134490, 168540, 13897, 13898, 134492):
+    try:
+        m = requests.get(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", headers=H, timeout=40).json()["result"]
+        out = {"title": m.get("title"), "pub": m.get("publisher"), "freq": m.get("updateFrequency"), "dist": []}
+        for d in (m.get("distribution") or [])[:3]:
+            u = d.get("resourceDownloadUrl"); fmt = d.get("resourceFormat")
+            rec = {"fmt": fmt, "url": u, "desc": (d.get("resourceDescription") or "")[:60]}
+            try:
+                r = requests.get(u, headers=H, timeout=40)
+                txt = r.content.decode("utf-8-sig", "replace")
+                lines = txt.strip().splitlines()
+                rec.update(st=r.status_code, n=len(lines), head=[l[:220] for l in lines[:3]], tail=[l[:220] for l in lines[-2:]])
+            except Exception as e:
+                rec["err"] = str(e)[:120]
+            out["dist"].append(rec)
+        rep[ds] = out
+    except Exception as e:
+        rep[ds] = f"ERR {e}"[:200]
+try:
+    raw = requests.get("https://www.sinyinews.com.tw/quarterly", headers=H, timeout=40).text
+    qs = re.findall(r"(20\d\d)年第([一二三四])季", raw)
+    rep["sinyi"] = {"len": len(raw), "quarters": len(set(qs)), "sample": sorted(set(qs))[:5], "area_n": raw.count('"area"'), "snip": raw[raw.find('"area"')-300: raw.find('"area"')+400] if '"area"' in raw else ""}
+except Exception as e:
+    rep["sinyi"] = str(e)[:200]
 json.dump(rep, open("out25/probe.json", "w"), ensure_ascii=False, indent=1)
