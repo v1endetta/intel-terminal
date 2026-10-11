@@ -81,3 +81,4 @@ def point_dns():
 results = [step("Worker 網域", drop_domain), step("Worker", drop_script), step("KV", drop_kv),
            step("Access", drop_access), step("DNS", point_dns)]
 sys.exit(0 if all(results) else 1)
+# rerun

@@ -20,7 +20,8 @@ def call(method, path, body=None, raw=None, ctype="application/json", timeout=60
                                  headers={"Authorization": f"Bearer {os.environ['CLOUDFLARE_API_TOKEN']}", "Content-Type": ctype})
     try:
         with urllib.request.urlopen(req, timeout=timeout) as r:
-            return json.loads(r.read())
+            raw = r.read()
+            return json.loads(raw) if raw.strip() else {"success": True, "result": None}
     except urllib.error.HTTPError as e:
         txt = e.read().decode(errors="replace")
         try:
