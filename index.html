@@ -103,7 +103,8 @@ body.exploring #hint{opacity:1}
 #fallback{display:none;position:fixed;inset:0;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:24px;z-index:40;background:#000}
 
 @media (max-width:760px){
-  #hero{top:72px}
+  #hero{top:72px;padding:0 20px}
+  #hero p{font-size:15px;text-wrap:balance}
   #caption{left:16px;right:16px;max-width:none;top:56px}
   #caption h2{font-size:24px}
   #caption .stat{font-size:13px}
@@ -161,7 +162,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const RAW = "https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/";
-const ASSET_V = 6;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
+const ASSET_V = 7;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
 const MOBILE = matchMedia("(max-width:760px)").matches || /Mobi|Android/i.test(navigator.userAgent);
 const EX = 6;                 // 高度誇張倍數
 const LONC = 120.95, LATC = 23.65;
@@ -197,7 +198,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; controls.dampingFactor = 0.06;
 controls.minDistance = 3; controls.maxDistance = 1600;
 controls.maxPolarAngle = Math.PI * 0.46;
-controls.autoRotate = true; controls.autoRotateSpeed = 0.35;
+controls.autoRotate = !MOBILE; controls.autoRotateSpeed = 0.35;   // 手機直式畫面轉了會歪，開場不自轉
 controls.enablePan = !MOBILE;
 
 const sun = new THREE.DirectionalLight(0xffffff, 2.4);
@@ -605,18 +606,33 @@ function addLandmarks() {
 
 /* ---------- 標籤 ---------- */
 const LBL = [];
-function addLabel(html, pos, cls = "", group = "base") {
+function addLabel(html, pos, cls = "", group = "base", prio = 0) {
   const el = document.createElement("div"); el.className = "lbl " + cls; el.innerHTML = html; $("labels").appendChild(el);
-  const L = { el, pos, group }; LBL.push(L); return L;
+  const L = { el, pos, group, prio: prio + (/big|flow/.test(cls) ? 2 : 0) }; LBL.push(L); return L;
 }
 function clearLabels(group) { for (let k = LBL.length - 1; k >= 0; k--) if (LBL[k].group === group) { LBL[k].el.remove(); LBL.splice(k, 1); } }
 const _v = new THREE.Vector3();
+// 標籤互相重疊時，重要的留下（直轄市、最大地震、資金流），其他先藏起來；拉近就會分開再出現
+const _shown = [];
 function placeLabels() {
+  const vis = [];
   for (const L of LBL) {
     _v.copy(L.pos).project(camera);
-    const vis = _v.z < 1 && Math.abs(_v.x) < 1.1 && Math.abs(_v.y) < 1.1;
-    L.el.style.opacity = vis ? (L.op ?? 1) : 0;
-    if (vis) L.el.style.left = ((_v.x + 1) / 2 * innerWidth) + "px", L.el.style.top = ((1 - _v.y) / 2 * innerHeight) + "px";
+    L.on = _v.z < 1 && Math.abs(_v.x) < 1.1 && Math.abs(_v.y) < 1.1;
+    if (!L.on) { L.el.style.opacity = 0; continue; }
+    L.sx = (_v.x + 1) / 2 * innerWidth; L.sy = (1 - _v.y) / 2 * innerHeight;
+    L.el.style.left = L.sx + "px"; L.el.style.top = L.sy + "px";
+    if (!L.w) { L.w = L.el.offsetWidth; L.h = L.el.offsetHeight; }
+    vis.push(L);
+  }
+  vis.sort((a, b) => b.prio - a.prio);
+  _shown.length = 0;
+  for (const L of vis) {
+    const x0 = L.sx - L.w / 2 - 3, x1 = L.sx + L.w / 2 + 3, y0 = L.sy - L.h - 3, y1 = L.sy + 3;
+    let hit = false;
+    for (const S of _shown) if (x0 < S[2] && x1 > S[0] && y0 < S[3] && y1 > S[1]) { hit = true; break; }
+    L.el.style.opacity = hit ? 0 : (L.op ?? 1);
+    if (!hit) _shown.push([x0, y0, x1, y1]);
   }
 }
 
@@ -656,7 +672,8 @@ function setupWx() {
       const c = COUNTIES.find(c => norm(c.name).startsWith(norm(it.city)));
       if (!c) continue;
       const [x, z] = toXZ(c.c[0], c.c[1]);
-      addLabel(`${fmt(it.temp, 0)}°<span class="n"> ${esc(it.weather || "")}</span>`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "", "wx");
+      const nm = c.name.replace(/[縣市]$/, "");
+      addLabel(`${fmt(it.temp, 0)}°<span class="n"> ${esc(nm)} ${esc(it.weather || "")}</span>`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "", "wx", /^(臺北|台北|新北|桃園|臺中|台中|臺南|台南|高雄)/.test(nm) ? 1 : 0);
     }
     const R = P.radar_wx || {};
     const ws = [...new Set(warn.map(w => w.what))];
@@ -829,7 +846,8 @@ function setupFlow() {
 }
 
 /* ---------- 鏡頭 ---------- */
-const HOME = { pos: new THREE.Vector3(MOBILE ? 220 : 170, MOBILE ? 520 : 330, MOBILE ? 620 : 430), tgt: new THREE.Vector3(0, 10, 10) };
+// 手機是直的畫面：從南往北看，讓島的長軸剛好直立、填滿螢幕
+const HOME = MOBILE ? { pos: new THREE.Vector3(36, 520, 470), tgt: new THREE.Vector3(0, 0, -40) } : { pos: new THREE.Vector3(170, 330, 430), tgt: new THREE.Vector3(0, 10, 10) };
 let fly = null;
 function flyTo(pos, tgt, dur = 2.2) { fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: pos.clone(), t1: tgt.clone(), k: 0, dur }; }
 const ease = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
@@ -1160,7 +1178,8 @@ addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; cam
     applySun(); setInterval(applySun, 60000);
     setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow(); setupObjects(); setupObjects2();
     camera.position.set(-200, 1300, 1100); controls.target.set(0, 0, 0);
-    flyTo(new THREE.Vector3(MOBILE ? 240 : 200, MOBILE ? 600 : 400, MOBILE ? 700 : 470), new THREE.Vector3(0, MOBILE ? 90 : 60, 0), 3.2);
+    if (MOBILE) flyTo(new THREE.Vector3(40, 560, 560), new THREE.Vector3(0, 0, -90), 3.2);
+    else flyTo(new THREE.Vector3(200, 400, 470), new THREE.Vector3(0, 60, 0), 3.2);
     $("load").classList.add("done");
     loop();
     setInterval(async () => {   // 每 5 分鐘更新資料：重建圖層
