@@ -907,7 +907,7 @@ function loop() {
   for (const k in layers) if (layers[k].g && layers[k].g.visible && layers[k].tick) layers[k].tick(T, dt);
   lodTick(dt);
   { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); renderer.toneMappingExposure = (uni.uNight.value ? 0.85 : 1.0) * (1 - 0.2 * uni.uClose.value); }
-  lmMat.emissiveIntensity = uni.uNight.value * 0.28; lmMat.color.setScalar(1 - uni.uNight.value * 0.72);
+  lmMat.emissiveIntensity = uni.uNight.value * 0.16; lmMat.color.setScalar(1 - uni.uNight.value * 0.88);
   outlineGroup.visible = camera.position.distanceTo(controls.target) > 40;
   controls.update(); renderer.render(scene, camera); placeLabels();
   requestAnimationFrame(loop);
