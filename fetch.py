@@ -4840,6 +4840,65 @@ def p_ledger():
             "n_open": len(opn), "n_done": len(done), "n_hit": sum(1 for p in done if p["status"] == "hit"), "gen_at": L.get("gen_at"), "bt_at": L.get("bt_at")}
 
 
+# ---------- 主題鏈：同一個主題，從國外、搜尋、媒體一路看到商標、新店、消費、政策，標出走到哪一站 ----------
+def p_chain():
+    cfg = json.loads((ROOT / "ops" / "themes.json").read_text(encoding="utf-8"))["themes"]
+    V = {x["k"]: x for x in ((RESULTS.get("voice") or {}).get("kw") or [])}
+    W = {x["q"]: x for x in ((RESULTS.get("wiki") or {}).get("rows") or [])}
+    TM = {r["cls"]: r for r in (((RESULTS.get("ipr") or {}).get("tm") or {}).get("rows") or [])}
+    CD = {r["cat"]: r for r in ((RESULTS.get("cards") or {}).get("rows") or [])}
+    SW = {r["w"]: r for r in ((RESULTS.get("secwords") or {}).get("rows") or [])}
+    PO = RESULTS.get("policy") or {}
+    bt, it = dict(PO.get("b_topics") or []), dict(PO.get("i_topics") or [])
+    def st(v, th=10):
+        return None if v is None else "up" if v >= th else "down" if v <= -th else "flat"
+    rows = []
+    for k, m in cfg.items():
+        v = V.get(k) or {}
+        stages = []
+        sec = [SW[w]["chg"] for w in m.get("sec", []) if w in SW and SW[w].get("chg") is not None]
+        fw = [f.get("rel3") for f in (W.get(m.get("wiki"), {}).get("foreign") or []) if f.get("rel3") is not None]
+        fv = round(sum(sec + fw) / len(sec + fw)) if (sec + fw) else None
+        stages.append({"k": "國外", "v": fv, "s": st(fv, 15), "note": "美國財報、英日文維基"})
+        stages.append({"k": "搜尋", "v": v.get("trend_yoy"), "s": st(v.get("trend_yoy")), "note": "Google 搜尋年增"})
+        wr = W.get(m.get("wiki")) or {}
+        wv = wr.get("rel3") if wr.get("kind") != "資料不足" else None
+        stages.append({"k": "維基", "v": wv, "s": st(wv), "note": "比其他主題"})
+        stages.append({"k": "媒體", "v": v.get("media_yoy"), "s": st(v.get("media_yoy")), "note": "新聞量年增"})
+        tm = [TM[c]["chg"] for c in m.get("nice", []) if c in TM and TM[c].get("chg") is not None]
+        tv = round(sum(tm) / len(tm)) if tm else None
+        stages.append({"k": "商標", "v": tv, "s": st(tv), "note": "相關類別申請量"})
+        sv = (v.get("supply") or {}).get("yoy")
+        stages.append({"k": "新店", "v": sv, "s": st(sv), "note": "稅籍新設年增"})
+        cr = (CD.get(m.get("cards")) or {}).get("rel")
+        stages.append({"k": "消費", "v": cr, "s": st(cr, 2), "note": f"刷卡「{m.get('cards')}」比整體" if m.get("cards") else ""})
+        pt = m.get("pol")
+        pn = (bt.get(pt) or 0) + (it.get(pt) or 0) if pt else None
+        stages.append({"k": "政策", "v": pn, "s": None if pn is None else "info", "note": f"「{pt}」近期法案＋民眾提案件數（只當背景，不算升降）" if pt else ""})
+        sc = lambda ks: sum((1 if s["s"] == "up" else -1 if s["s"] == "down" else 0) for s in stages if s["k"] in ks)  # noqa: E731
+        dem, sup, abroad = sc({"搜尋", "維基", "媒體"}), sc({"商標", "新店"}), stages[0]["s"] == "up"
+        known = sum(1 for s in stages if s["s"] in ("up", "down", "flat"))
+        if dem > 0 and sup <= 0:
+            verdict, why = "缺口窗口", "需求在長，商標和新店還沒跟上"
+        elif dem > 0 and sup > 0:
+            verdict, why = "擴張中", "需求和供給都在長，競爭會變多"
+        elif dem <= 0 and sup > 0:
+            verdict, why = "供給過熱", "店和品牌在增加，但熱度沒有跟上"
+        elif dem < 0 and sup < 0:
+            verdict, why = "退潮", "需求和供給都在縮"
+        else:
+            verdict, why = "觀察中", "訊號分歧或還不明顯"
+        if abroad and dem <= 0:
+            why += "；國外已經先熱"
+        rows.append({"k": k, "group": v.get("group") or "", "stages": stages, "verdict": verdict, "why": why, "known": known,
+                     "score": dem - sup + (1 if abroad else 0)})
+    order = {"缺口窗口": 0, "擴張中": 1, "觀察中": 2, "供給過熱": 3, "退潮": 4}
+    rows.sort(key=lambda r: (order[r["verdict"]], -r["score"]))
+    if not rows:
+        raise RuntimeError("chain: nothing")
+    return {"rows": rows, "stages": ["國外", "搜尋", "維基", "媒體", "商標", "新店", "消費", "政策"]}
+
+
 # ---------- 美國企業在談什麼（SEC EDGAR 全文檢索：10-K / 10-Q / 8-K 提到的次數，比去年同期） ----------
 # SEC 存取規範：每秒不超過 10 次、User-Agent 要寫聯絡信箱。信箱放在 GitHub secret（SEC_CONTACT），不寫進公開程式碼。
 SEC_WORDS = [("GLP-1", "GLP-1"), ("tariffs", "關稅"), ("agentic", "AI 代理"), ("generative AI", "生成式 AI"),
@@ -8034,6 +8093,7 @@ run("roads", p_roads)
 run("mapfeed", p_mapfeed)  # 吃本輪其他面板的結果，不打外部 API
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
+run("chain", p_chain)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
 run("ledger", p_ledger)  # 預測帳本：放最後，吃本輪其他面板的結果
 FINISHED_ISO = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 try:

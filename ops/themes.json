@@ -1,0 +1,29 @@
+{
+  "_note": "主題鏈對照表：主題名稱＝趨勢雷達關鍵字（ops/voice_keywords.json 的 k）。每個欄位可留空。wiki＝主題溫度計的主題名；nice＝商標尼斯類別；cards＝信用卡類別（食、衣、住、行、文教康樂、百貨）；sec＝SEC 關鍵字（英文原詞）；pol＝政策主題。",
+  "themes": {
+    "銀髮族": {"nice": [10, 44], "pol": "健康與照護", "sec": ["longevity"]},
+    "長照": {"wiki": "長期照顧", "nice": [10, 44], "pol": "健康與照護", "sec": ["longevity"]},
+    "獨居": {"nice": [43], "pol": "居住與不動產"},
+    "毛孩": {"wiki": "寵物", "nice": [31], "pol": "寵物與動物", "sec": ["pet food"]},
+    "平替": {"nice": [3, 35], "pol": "消費與食品", "sec": ["private label", "trade down"]},
+    "二手精品": {"wiki": "古著", "nice": [18, 14], "cards": "百貨", "sec": ["resale"]},
+    "副業": {"nice": [35, 41], "pol": "教育與勞動", "sec": ["influencer"]},
+    "ETF": {"nice": [36], "pol": "金融與支付"},
+    "瘦瘦針": {"wiki": "司美格魯肽", "nice": [5], "pol": "健康與照護", "sec": ["GLP-1"]},
+    "睡眠": {"nice": [20, 24], "cards": "住"},
+    "匹克球": {"wiki": "匹克球", "nice": [28], "cards": "文教康樂", "pol": "觀光與文化"},
+    "抗老": {"wiki": "醫學美容", "nice": [3, 5, 44], "pol": "健康與照護", "sec": ["longevity"]},
+    "情緒價值": {"cards": "文教康樂"},
+    "潮玩": {"wiki": "盲盒", "nice": [28], "cards": "百貨"},
+    "演唱會": {"wiki": "韓國偶像", "nice": [41], "cards": "文教康樂", "pol": "觀光與文化"},
+    "日本旅遊": {"nice": [43], "cards": "行", "pol": "觀光與文化"},
+    "老屋翻新": {"nice": [20], "cards": "住", "pol": "居住與不動產"},
+    "小宅": {"nice": [20, 21], "cards": "住", "pol": "居住與不動產"},
+    "二手家具": {"nice": [20], "cards": "住", "sec": ["resale"]},
+    "斷捨離": {"wiki": "斷捨離", "nice": [21], "cards": "住"},
+    "ChatGPT": {"wiki": "ChatGPT", "nice": [9, 42], "pol": "數位與 AI", "sec": ["generative AI", "agentic"]},
+    "AI 生圖": {"wiki": "生成式人工智慧", "nice": [9, 42], "pol": "數位與 AI", "sec": ["generative AI"]},
+    "露營": {"wiki": "露營", "nice": [22, 28], "cards": "文教康樂", "pol": "觀光與文化"},
+    "北歐風": {"nice": [20, 21], "cards": "住"}
+  }
+}
