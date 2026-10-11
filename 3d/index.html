@@ -528,13 +528,13 @@ function setupFlow() {
     const stuck = tw != null && Math.sign(s.chg) !== Math.sign(tw) && Math.abs(s.chg) > 0.15;
     const color = s.chg >= 0 ? 0x30d158 : 0xff453a;
     const pts = curve.getPoints(80);
-    g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 96, 0.9, 8, false), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.32, depthWrite: false })));
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 96, 2.2, 8, false), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.5, depthWrite: false, fog: false })));
     const N = 46, pg = new THREE.BufferGeometry(), arr = new Float32Array(N * 3); pg.setAttribute("position", new THREE.BufferAttribute(arr, 3));
-    const pm = new THREE.PointsMaterial({ color, size: MOBILE ? 9 : 7, sizeAttenuation: true, transparent: true, opacity: 0.95, depthWrite: false, blending: THREE.AdditiveBlending });
+    const pm = new THREE.PointsMaterial({ color, size: MOBILE ? 6 : 5, sizeAttenuation: false, transparent: true, opacity: 1, depthWrite: false, blending: THREE.AdditiveBlending, fog: false });
     g.add(new THREE.Points(pg, pm));
-    const dot = new THREE.Mesh(new THREE.SphereGeometry(5, 24, 16), new THREE.MeshBasicMaterial({ color })); dot.position.copy(o); g.add(dot);
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(9, 24, 16), new THREE.MeshBasicMaterial({ color, fog: false })); dot.position.copy(o); g.add(dot);
     let block = null;
-    if (stuck) { block = new THREE.Mesh(new THREE.TorusGeometry(7, 1.2, 12, 40), new THREE.MeshBasicMaterial({ color: 0xff453a })); block.position.copy(curve.getPoint(0.82)); block.lookAt(curve.getPoint(0.84)); g.add(block); }
+    if (stuck) { block = new THREE.Mesh(new THREE.TorusGeometry(12, 2.4, 12, 40), new THREE.MeshBasicMaterial({ color: 0xff453a, fog: false })); block.position.copy(curve.getPoint(0.82)); block.lookAt(curve.getPoint(0.84)); g.add(block); }
     flows.push({ s, curve, arr, pg, stuck, o, block, speed: 0.12 + Math.min(Math.abs(s.chg), 2) * 0.08 });
   }
   const glow = new THREE.Mesh(new THREE.SphereGeometry(6, 24, 16), new THREE.MeshBasicMaterial({ color: tw >= 0 ? 0x30d158 : 0xff453a, transparent: true, opacity: 0.9 }));
