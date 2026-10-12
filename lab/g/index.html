@@ -2144,7 +2144,7 @@ function hudTick(t, placed) {
 }
 
 /* ---- 航班：桃園今天飛去哪 ----
-   平常：所有航線都很淡，只看得出「線往哪些方向散出去」；光點＝依起飛時間推估、此刻在空中的班機；黃色小三角＝台灣周邊即時飛機。
+   平常：所有航線都很淡，只看得出「線往哪些方向散出去」；光點＝依起飛時間推估、此刻在空中的班機；飛機圖示＝台灣周邊即時飛機（跟終端機同樣式）。
    點一下（地圖上的目的地、飛機，或右邊清單）才亮出那一條：飛去哪、幾班、此刻幾架在空中。 */
 const FL = window.__FL = { g: null, built: false, AP: null, legs: [], live: [], R: {}, sel: null, lbl: null };
 const TPE_LL = [121.233, 25.077];
@@ -2185,12 +2185,14 @@ async function buildFlights() {
   }).filter(Boolean);
   FL.dots = dotsObj(FL.legs.length, MOBILE ? 7 : 8, 0.55); FL.hot = dotsObj(FL.legs.length, MOBILE ? 14 : 16, 1); g.add(FL.dots, FL.hot);
   // 台灣周邊的即時飛機（目的地虛線平常不畫，點了才出現）
-  const tri = new THREE.ConeGeometry(8, 24, 3); tri.rotateX(Math.PI / 2);
-  const planeM = fm(new THREE.MeshBasicMaterial({ color: 0xffd60a, depthTest: false }), 0.85);
+  // 飛機圖示：跟終端機同一個剪影，平貼在地球表面、機頭朝航向；低空（一萬呎以下）琥珀色，高空淡藍
+  const sh = new THREE.Shape(); [[16, 2], [19, 13], [30, 19], [30, 22], [19, 19], [18.5, 26], [22, 29], [22, 30.5], [16, 29], [10, 30.5], [10, 29], [13.5, 26], [13, 19], [2, 22], [2, 19], [13, 13]].forEach((q, i) => i ? sh.lineTo((q[0] - 16), (16 - q[1])) : sh.moveTo((q[0] - 16), (16 - q[1])));
+  const planeGeo = new THREE.ShapeGeometry(sh); planeGeo.rotateX(Math.PI / 2); planeGeo.scale(MOBILE ? 2.2 : 1.7, 1, MOBILE ? 2.2 : 1.7);
+  const planeLow = fm(new THREE.MeshBasicMaterial({ color: 0xe0a23a, side: THREE.DoubleSide, depthTest: false }), 0.95), planeHigh = fm(new THREE.MeshBasicMaterial({ color: 0x9fb4ff, side: THREE.DoubleSide, depthTest: false }), 0.95);
   FL.live = [];
   for (const it of ((P.flights || {}).items || [])) {
-    const m = new THREE.Mesh(tri, planeM), p0 = GLOBE.G(it[0], it[1], 40), a = it[2] * Math.PI / 180;
-    m.position.copy(p0); m.lookAt(GLOBE.G(it[0] + Math.sin(a) * 0.2, it[1] + Math.cos(a) * 0.2, 40)); g.add(m);
+    const m = new THREE.Mesh(planeGeo, it[3] < 10000 ? planeLow : planeHigh), p0 = GLOBE.G(it[0], it[1], 40), a = it[2] * Math.PI / 180;
+    m.position.copy(p0); m.up.copy(p0).sub(V(0, -6371, 0)).normalize(); m.lookAt(GLOBE.G(it[0] + Math.sin(a) * 0.2, it[1] + Math.cos(a) * 0.2, 40)); m.renderOrder = 6; g.add(m);
     const dst = liveDest(it); let ln = null;
     if (dst) { const b = AP[dst.to]; ln = new THREE.Line(new THREE.BufferGeometry().setFromPoints(GLOBE.arc([it[0], it[1]], [b[0], b[1]], 0.06, 60).map(v => v.add(V(0, 8, 0)))), fm(new THREE.LineDashedMaterial({ color: 0xffd60a, dashSize: 50, gapSize: 40, blending: THREE.AdditiveBlending, depthTest: true }), 0.9));
       ln.computeLineDistances(); ln.visible = false; g.add(ln); }
@@ -2215,7 +2217,7 @@ function flightsSide() {
   const ap = P.airport || {}, dep = ap.dep || {}, routes = ((ap.routes || {}).dep || []).filter(r => FL.R[r[0]]);
   const rows = routes.slice(0, 12).map(r => `<li data-fl="${esc(r[0])}" style="cursor:pointer">${esc(flName(r[0], r[4]))}<span>${r[1]} 班${r[2] ? `・延誤 ${r[2]}` : ""}${r[3] ? `・取消 ${r[3]}` : ""}</span></li>`).join("");
   return sideHTML({ eyebrow: "現場 · 桃園機場 · ADS-B", title: "今天飛去哪裡", big: `${routes.length} 個航點`, color: "#64d2ff",
-    body: `<p class="why">今天 ${dep.total || 0} 班離境，此刻約 ${FL.inAir || 0} 架在空中。點一個城市、地圖上的光點或黃色飛機，看它飛去哪。</p><ul class="lst">${rows}</ul>` });
+    body: `<p class="why">今天 ${dep.total || 0} 班離境，此刻約 ${FL.inAir || 0} 架在空中。點一個城市、地圖上的光點或飛機，看它飛去哪。</p><ul class="lst">${rows}</ul>` });
 }
 // 光點沿航線移動；選到的那條另外畫一層亮的；被地球擋住的標籤藏起來
 const _fc = new THREE.Vector3(), _fn = new THREE.Vector3();
