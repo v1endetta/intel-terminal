@@ -3678,6 +3678,8 @@ def p_airport():
     today = now_tpe.strftime("%Y/%m/%d")
     out = {k: {"total": 0, "delayed": 0, "cancelled": 0, "upcoming": []} for k in ("dep", "arr")}
     seen = set()
+    routes = {"dep": {}, "arr": {}}   # 今日各航點班次（航線圖用）
+    legs = []                         # 前後十幾小時的班次（地圖推估哪些班機正在空中）
     for line in txt.splitlines():
         f = [x.strip() for x in line.split(",")]
         if len(f) < 14 or f[1] not in ("A", "D"):
@@ -3702,6 +3704,21 @@ def p_airport():
                 o["cancelled"] += 1
             elif "DELAY" in status or late:
                 o["delayed"] += 1
+            code = f[10].upper()
+            if re.fullmatch(r"[A-Z0-9]{3}", code):
+                rt = routes[kind].setdefault(code, [code, 0, 0, 0, "", ""])
+                rt[1] += 1
+                rt[2] += 1 if ("DELAY" in status or late) and "CANCEL" not in status else 0
+                rt[3] += 1 if "CANCEL" in status else 0
+                if len(f) > 12 and re.search(r"[\u4e00-\u9fff]", f[12]) and not rt[4]:
+                    rt[4] = f[12][:8]
+                if len(f) > 11 and not rt[5]:
+                    rt[5] = f[11][:24]
+        code = f[10].upper()
+        win = (now_tpe - timedelta(hours=17) <= sched <= now_tpe + timedelta(hours=1)) if kind == "dep" else (now_tpe - timedelta(hours=1) <= sched <= now_tpe + timedelta(hours=17))
+        if win and re.fullmatch(r"[A-Z0-9]{3}", code):
+            st = "X" if "CANCEL" in status else "D" if "DEPART" in status else "L" if ("ARRIV" in status or "LAND" in status) else ""
+            legs.append([f[1], f"{f[2]}{f[4].lstrip()}", code, int(sched.timestamp() // 60), int(est.timestamp() // 60) if est else 0, st])
         if (kind == "dep" and sched >= now_tpe - timedelta(minutes=5) and sched <= now_tpe + timedelta(hours=12)
                 and not any(w in status for w in ("CANCEL", "DEPARTED"))):
             out["dep"]["upcoming"].append({"flight": f"{f[2]}{f[4].lstrip()}", "to": f[10], "sched": sched.strftime("%H:%M"),
@@ -3712,6 +3729,8 @@ def p_airport():
     out["dep"]["upcoming"] = up
     if not out["dep"]["total"] and not out["arr"]["total"]:
         raise RuntimeError("airport: empty")
+    out["routes"] = {k: sorted(v.values(), key=lambda r: -r[1]) for k, v in routes.items()}
+    out["legs"] = legs
     out["label"] = "桃園機場"
     return out
 
@@ -5498,6 +5517,28 @@ def p_mapfeed():
 ADSB_URL = "https://api.adsb.lol/v2/point/23.7/121/250"
 
 
+VRS_ROUTES = "https://raw.githubusercontent.com/vradarserver/standing-data/main/routes/schema-01/{c}/{code}-all.csv"
+
+
+def vrs_routes(codes):
+    """班號 → 航線（ICAO 機場代碼串，如 VHHH-RCTP）。資料：vradarserver/standing-data（GitHub）。
+    同一個 runner 的長跑迴圈會重複跑，所以每家航空公司的表在 /tmp 快取 12 小時。"""
+    out = {}
+    cache = Path("/tmp/vrs_routes"); cache.mkdir(exist_ok=True)
+    for code in sorted(codes):
+        fp = cache / f"{code}.csv"
+        try:
+            if not fp.exists() or time.time() - fp.stat().st_mtime > 12 * 3600:
+                r = requests.get(VRS_ROUTES.format(c=code[0], code=code), timeout=20)
+                fp.write_text(r.text if r.status_code == 200 else "", encoding="utf-8")
+            for row in csv.reader(io.StringIO(fp.read_text(encoding="utf-8").lstrip("\ufeff"))):
+                if len(row) >= 5 and row[0] and row[0] != "Callsign":
+                    out[row[0]] = row[4]
+        except Exception:  # noqa: BLE001
+            continue
+    return out
+
+
 def p_flights():
     j = gjson(ADSB_URL, timeout=20)
     out = []
@@ -5509,6 +5550,12 @@ def p_flights():
         out.append([round(lon, 3), round(lat, 3), num(a.get("track")) or 0, num(alt) or 0, (a.get("flight") or "").strip(), a.get("t") or "", a.get("r") or "", num(a.get("gs")) or 0])
     if not out:
         raise RuntimeError("adsb: no aircraft")
+    try:   # 第 9 欄：這個班號的航線（地圖用來畫飛去哪裡）
+        rt = vrs_routes({it[4][:3] for it in out if re.fullmatch(r"[A-Z]{3}\d[\dA-Z]*", it[4])})
+        for it in out:
+            it.append(rt.get(it[4], ""))
+    except Exception:  # noqa: BLE001
+        pass
     return {"items": out, "src": "adsb.lol（ODbL）"}
 
 
