@@ -7653,14 +7653,18 @@ def _pcc_day(d: str):
     r.raise_for_status()
     try:
         recs = (r.json() or {}).get("records") or []
-    except ValueError:      # 假日沒有公告時回傳空白
-        if len(r.content) < 200:
-            return {"total": 0, "c": {}, "t": {}}
-        raise
-    C, T = {}, {}
+    except ValueError:      # 假日沒有公告時不是 JSON（連假、週末）
+        return {"total": 0, "c": {}, "t": {}, "empty": len(r.content), "v": 2}
+    C, T, per_unit = {}, {}, {}
     for x in recs:
         b = x.get("brief") or {}
         typ = b.get("type") or ""
+        un0 = x.get("unit_name") or ""
+        if "合作社" in un0:            # 員工消費合作社一天上千筆進貨，不是公共工程或採購訊號
+            continue
+        per_unit[un0] = per_unit.get(un0, 0) + 1
+        if per_unit[un0] > 40:          # 單一機關一天最多算 40 件，避免批次上架灌爆
+            continue
         if any(k in typ for k in ("更正", "撤銷", "無法決標", "定期彙送", "公開閱覽", "資訊公告")):
             continue
         kind = "a" if "決標" in typ else "n" if any(k in typ for k in ("招標", "公開取得", "公開評選", "公開徵求")) else ""
@@ -7686,7 +7690,7 @@ def _pcc_day(d: str):
             if kind == "n" and len(f["r"]) < 3:
                 f["r"].append([(b.get("title") or "")[:50], (x.get("unit_name") or "")[:20],
                                f'https://openfunltd.github.io/pcc-viewer/tender.html?unit_id={x.get("unit_id")}&job_number={x.get("job_number")}'])
-    return {"total": len(recs), "c": C, "t": T}
+    return {"total": len(recs), "c": C, "t": T, "v": 2}
 
 
 def p_tendermap():
@@ -7695,7 +7699,7 @@ def p_tendermap():
         cache = json.loads(PCC_DAYS.read_text(encoding="utf-8")) if PCC_DAYS.exists() else {}
     except Exception:  # noqa: BLE001
         cache = {}
-    cache = {d: v for d, v in cache.items() if not v.get("c") or all("u" in e for e in v["c"].values())}   # 舊格式（沒有機關統計）重抓
+    cache = {d: v for d, v in cache.items() if v.get("v") == 2}   # 舊格式（沒排除合作社、沒有機關統計）重抓
     today = NOW.astimezone(TPE).date()
     days = [(today - timedelta(days=i)).strftime("%Y%m%d") for i in range(1, 16)]
     errs, fetched = [], 0
