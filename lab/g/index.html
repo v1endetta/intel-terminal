@@ -2179,11 +2179,13 @@ function storyTick(dt) {
     document.querySelectorAll("#dots button").forEach((b, k) => b.classList.toggle("on", k === act));
     CH.forEach((ch, k) => ch.el.classList.toggle("act", k === act)); }
   // 鏡頭：目標線性移動，距離用對數內插，方向平滑轉，停留時慢慢晃
-  let cm = camBlend(CH[Math.floor(c)].cam, CH[Math.min(N - 1, Math.floor(c) + 1)].cam, c - Math.floor(c));
+  const _ca = CH[Math.floor(c)], _cb = CH[Math.min(N - 1, Math.floor(c) + 1)], _ce = c - Math.floor(c);
+  let cm = camBlend(_ca.cam, _cb.cam, _ce, (!!_ca.globe) !== (!!_cb.globe) ? (_cb.globe ? 1 : -1) : 0);   // 進出地球：先拉高再轉過去，不要穿過地底
   const ik = easeIO(introTick()); if (ik < 1) cm = camBlend(INTRO_CAM, cm, ik);
   if (INTRO.on && INTRO.ek != null && INTRO.ek < 1) cm = camBlend(earthCam(), INTRO_CAM, easeIO(INTRO.ek));   // 開場：從太空縮到台灣
   const tgt = cm.tgt, dir = cm.dir.applyAxisAngle(V(0, 1, 0), Math.sin(T * 0.12) * 0.035), dist = cm.dist;
   controls.target.copy(tgt); camera.position.copy(tgt).addScaledVector(dir, dist);
+  { const lim = gw > 0.05 ? -1e9 : 2 + dist * 0.05; if (camera.position.y < lim) { const dy = lim - camera.position.y; camera.position.y += dy; controls.target.y += dy; } }   // 換章時鏡頭不能鑽到地底（會看到一片咖啡色）
   { const nr = Math.min(40, Math.max(0.5, dist * 0.0012)); if (Math.abs(nr - camera.near) > 0.01) { camera.near = nr; camera.updateProjectionMatrix(); } }
   // 文字在左、圖表在右、台灣在中間；手機：圖表在上、文字在下
   if (MOBILE) camera.setViewOffset(innerWidth, VH(), 0, VH() * (act === 0 ? 0.04 : 0.1), innerWidth, VH());   // 手機：主體放在上方圖表條和下方文字之間
@@ -2192,9 +2194,10 @@ function storyTick(dt) {
   leader(Math.abs(c - act) < 0.15 ? ST.sideGeo : null);
 }
 // 兩個鏡頭之間：目標線性移動，距離用對數內插，方向平滑轉
-function camBlend(a, b, e) {
-  const tgt = a.tgt.clone().lerp(b.tgt, e), d0 = a.dir ? a.dir.clone().multiplyScalar(a.dist) : a.pos.clone().sub(a.tgt), d1 = b.dir ? b.dir.clone().multiplyScalar(b.dist) : b.pos.clone().sub(b.tgt);
-  const L0 = d0.length(), L1 = d1.length(), dist = Math.exp(Math.log(L0) + (Math.log(L1) - Math.log(L0)) * e);
+function camBlend(a, b, e, g = 0) {
+  const et = g > 0 ? e * e * e : g < 0 ? 1 - Math.pow(1 - e, 3) : e, ed = g > 0 ? Math.sqrt(e) : g < 0 ? 1 - Math.sqrt(1 - e) : e;
+  const tgt = a.tgt.clone().lerp(b.tgt, et), d0 = a.dir ? a.dir.clone().multiplyScalar(a.dist) : a.pos.clone().sub(a.tgt), d1 = b.dir ? b.dir.clone().multiplyScalar(b.dist) : b.pos.clone().sub(b.tgt);
+  const L0 = d0.length(), L1 = d1.length(), dist = Math.exp(Math.log(L0) + (Math.log(L1) - Math.log(L0)) * (typeof ed === 'number' ? ed : e));
   const dir = d0.normalize().lerp(d1.normalize(), e).normalize();
   return { tgt, dir, dist, pos: tgt.clone().addScaledVector(dir, dist) };
 }
@@ -2588,6 +2591,10 @@ function cityLife(grp, d) {
   if (d.RD && d.RD.length && d.RP.length) {
     const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(d.RP, 3)); g.setAttribute("aCls", new THREE.BufferAttribute(d.RC, 1));
     g.setAttribute("aD", new THREE.BufferAttribute(d.RD, 1)); g.setAttribute("aV", new THREE.BufferAttribute(d.RV, 1));
+    // 國道、快速道路：載入城市時查一次高公局即時車速，寫進每一段路（之後每格不用再算）
+    const RP = d.RP, RC = d.RC, SP = new Float32Array(RC.length);
+    for (let i = 0; i < RC.length; i += 6) if (RC[i] <= 2) { const v = liveSpeed(RP[i * 3], RP[i * 3 + 2]); if (v != null) SP.fill(v, i, i + 6); }
+    g.setAttribute("aSp", new THREE.BufferAttribute(SP, 1));
     const m = new THREE.Mesh(g, carMat()); m.renderOrder = 3; m.frustumCulled = false; m.userData.cars = 1; grp.add(m);
   }
 }
@@ -2596,20 +2603,22 @@ const CARU = { uTime: uni.uTime, uNight: uni.uNight, uVis: { value: 0 }, uDens: 
 function carMat() {
   if (_carMat) return _carMat;
   _carMat = new THREE.ShaderMaterial({ uniforms: CARU, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8,
-    vertexShader: `attribute float aCls; attribute float aD; attribute float aV; varying float vC; varying float vD; varying float vV;
-      void main(){ vC = aCls; vD = aD; vV = aV; vec3 p = position; p.y += 0.0006; gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }`,
-    fragmentShader: `uniform float uTime; uniform float uNight; uniform float uVis; uniform float uDens; uniform float uSlow; varying float vC; varying float vD; varying float vV;
+    vertexShader: `attribute float aCls; attribute float aD; attribute float aV; attribute float aSp; varying float vC; varying float vD; varying float vV; varying float vSp;
+      void main(){ vC = aCls; vD = aD; vV = aV; vSp = aSp; vec3 p = position; p.y += 0.0006; gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }`,
+    fragmentShader: `uniform float uTime; uniform float uNight; uniform float uVis; uniform float uDens; uniform float uSlow; varying float vC; varying float vD; varying float vV; varying float vSp;
       float h1(float x){ return fract(sin(x * 127.1) * 43758.5453); }
       void main(){
         if (vC > 5.5 || uVis < 0.01) discard;
         float lane = step(0.0, vV), dir = lane * 2.0 - 1.0, av = abs(vV);
         if (av < 0.18 || av > 0.82) discard;                                  // 車道中間才有車
         float kmh = vC < 1.5 ? 85.0 : vC < 2.5 ? 60.0 : vC < 3.5 ? 40.0 : 32.0;
-        float spd = kmh / 3600.0 * uSlow;                                       // 公里／秒
-        float spacing = 0.016 + vC * 0.004;                                     // 一格放一台的長度
+        float live = step(1.0, vSp); kmh = mix(kmh, vSp, live);
+        float spd = kmh / 3600.0 * mix(uSlow, 1.0, live);                       // 公里／秒；有即時車速就照實際
+        float jam = live * (1.0 - smoothstep(30.0, 70.0, vSp));                 // 塞車：車距縮短、車變多
+        float spacing = (0.016 + vC * 0.004) * mix(1.0, 0.45, jam);            // 一格放一台的長度
         float s = vD - dir * uTime * spd, cell = floor(s / spacing), f = fract(s / spacing);
         float hh = h1(cell * 1.31 + lane * 17.0 + floor(vD * 0.05) * 3.7);
-        float dens = clamp((vC < 2.5 ? 0.75 : 0.5) * uDens, 0.0, 0.95);
+        float dens = clamp((vC < 2.5 ? 0.75 : 0.5) * mix(uDens, 1.3, live), 0.0, 0.95);
         if (hh > dens) discard;
         float L = 0.0045 / spacing; float f0 = 0.5 - L * 0.5, fc = (f - f0) / L;
         if (fc < 0.0 || fc > 1.0) discard;
@@ -2637,6 +2646,19 @@ function lifeTick(dt) {
   const hr = +new Date().toLocaleString("en-US", { timeZone: "Asia/Taipei", hour: "numeric", hour12: false }) % 24, rush = (hr >= 7 && hr < 10) || (hr >= 17 && hr < 20);
   CARU.uDens.value = rush ? 1.25 : hr < 6 ? 0.3 : hr >= 22 ? 0.65 : 1; CARU.uSlow.value = rush ? 0.55 : 1;
 }
+// 高公局即時車速：國道路段的點放進格子，查最近的那一段（每座城市載入時用一次）
+function lifeLive() {
+  if (LIFE.live || !ROADS_GEO || !ROADS_LIVE) return LIFE.live;
+  const H = new Map(), fw = ROADS_GEO.fw, sp = ROADS_LIVE.fw || [];
+  (fw.c || []).forEach((flat, i) => { const v = sp[i]; if (v == null || v < 0) return;
+    for (let k = 0; k + 1 < flat.length; k += 2) { const [x, z] = toXZ(flat[k] / 1e4, flat[k + 1] / 1e4), key = Math.floor(x / 0.3) + "," + Math.floor(z / 0.3); if (!H.has(key)) H.set(key, []); H.get(key).push([x, z, v]); } });
+  return (LIFE.live = H);
+}
+function liveSpeed(x, z) {
+  const H = lifeLive(); if (!H) return null; let best = null, bd = 0.12;
+  for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) for (const q of H.get((Math.floor(x / 0.3) + i) + "," + (Math.floor(z / 0.3) + j)) || []) { const d = Math.hypot(q[0] - x, q[1] - z); if (d < bd) { bd = d; best = q[2]; } }
+  return best;
+}
 
 /* ---- 光影 ---- */
 // 天空：一顆跟著鏡頭的大球，白天藍天到地平線泛白、太陽周圍一圈暖光；晚上深藍，地平線帶一點城市的暖光
@@ -2650,13 +2672,15 @@ const SKY = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), new THREE.Shader
       vec3 nightC = mix(vec3(0.2, 0.12, 0.07), vec3(0.012, 0.018, 0.045), pow(max(h, 0.0), 0.32));   // 地平線上一圈城市光害的橘光，往上漸漸變深藍
       vec3 c = mix(dayC, nightC, uNight); if (h < 0.0) c = mix(c, c * 0.7, -h * 5.0);
       gl_FragColor = vec4(c, uVis); }` }));
-SKY.renderOrder = -100; SKY.frustumCulled = false; scene.add(SKY);
+SKY.renderOrder = -100; SKY.frustumCulled = false; scene.add(SKY); window.__SKY = SKY;
 const HAZE_DAY = new THREE.Color(0.74, 0.8, 0.87), HAZE_NIGHT = new THREE.Color(0.13, 0.085, 0.06), _hz = new THREE.Color(), _blk = new THREE.Color(0, 0, 0);
 window.__sun = sun; window.__rend = renderer; let _shT = 0; const _shLast = new THREE.Vector3(1e9, 0, 0);
 function lightTick(dt) {
   const close = uni.uClose.value, t = controls.target, cd = camera.position.distanceTo(t), globe = !!ST.globeForce;
   // 天空與霧：拉近才出現（遠景維持原本的黑色宇宙感）
-  const k = globe ? 0 : Math.min(1, Math.max(0, (close - 0.25) / 0.45));
+  // 捲動劇本換章時鏡頭會穿過地底、飛向地球，這段不能開天空和霧（不然整個畫面會被霧色蓋成一片咖啡色）；只有停在城市章節或自己逛時才開
+  const stable = ST.explore ? 1 : (ST.on ? Math.max(0, 1 - Math.abs(ST.c - Math.round(ST.c)) / 0.12) : 1);
+  const k = (globe || ST.earthOn || (scene.fog !== FOG)) ? 0 : Math.min(1, Math.max(0, (close - 0.25) / 0.45)) * stable;
   SKY.visible = k > 0.01; SKY.material.uniforms.uVis.value = k; SKY.position.copy(camera.position); SKY.scale.setScalar(camera.far * 0.9);
   if (scene.fog === FOG) { _hz.copy(HAZE_DAY).lerp(HAZE_NIGHT, uni.uNight.value);
     FOG.color.copy(_blk).lerp(_hz, k); FOG.near = 1100 + (cd * 1.6 + 1.5 - 1100) * k; FOG.far = 2800 + (cd * 7 + 14 - 2800) * k; }
