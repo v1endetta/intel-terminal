@@ -2412,14 +2412,14 @@ function cityLife(grp, d) {
     const n = Math.min(20000, sh.length / 7), geo = new THREE.BoxGeometry(1, 1, 1); geo.translate(0, 0.5, 0);
     const m = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ roughness: 0.5, metalness: 0.35 }), n), PAL = [0x5f7486, 0x8e9396, 0xbfc1bd, 0x7a5646];   // 藍灰、灰、米白、鏽色（壓低彩度）
     for (let i = 0; i < n; i++) { const o = i * 7; p.set(sh[o], sh[o + 1], sh[o + 2]); q.setFromAxisAngle(up, -sh[o + 5]); s.set(sh[o + 3], 3.0 * K, sh[o + 4]); M.compose(p, q, s); m.setMatrixAt(i, M); m.setColorAt(i, C.setHex(PAL[sh[o + 6] | 0])); }
-    m.castShadow = m.receiveShadow = true; grp.add(m); LIFE_MATS.push(m.material);
+    m.receiveShadow = true; grp.add(m); LIFE_MATS.push(m.material);
   }
   // 水塔：不鏽鋼或藍色塑膠桶
   const tk = d.TK; if (tk && tk.length) {
     const n = Math.min(25000, tk.length / 4), geo = new THREE.BoxGeometry(1, 1, 1); geo.translate(0, 0.5, 0);   // 方桶就好，省三角形
     const m = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ roughness: 0.35, metalness: 0.6 }), n);
     for (let i = 0; i < n; i++) { const o = i * 4; p.set(tk[o], tk[o + 1], tk[o + 2]); s.set(0.0019, 1.7 * K, 0.0019); M.compose(p, q.identity(), s); m.setMatrixAt(i, M); m.setColorAt(i, C.setHex(tk[o + 3] ? 0x3f6ea6 : 0xc8ccd0)); }
-    m.castShadow = true; grp.add(m); LIFE_MATS.push(m.material);
+    grp.add(m); LIFE_MATS.push(m.material); m.userData.life = 1;
   }
   // 車子走的路：主要道路的中心線，先算好每段累積長度
   const P = d.LP, O = d.LO, LC = d.LC, roads = [];
@@ -2448,7 +2448,7 @@ function lifeSpawn(L, t, R) {
   const rush = (hr >= 7 && hr < 10) || (hr >= 17 && hr < 20), tod = rush ? 1.6 : hr < 6 ? 0.25 : hr >= 22 ? 0.6 : 1;
   const DEN = [0, 40, 30, 24, 16, 8], BASE = [0, 75, 55, 38, 32, 25];
   const cand = L.roads.filter(r => Math.hypot(r.mx - t.x, r.mz - t.z) < R);
-  let want = cand.reduce((n, r) => n + r.len * DEN[r.cls] * tod, 0); const scale = Math.min(1, 2600 / Math.max(1, want));
+  let want = cand.reduce((n, r) => n + r.len * DEN[r.cls] * tod, 0); const scale = Math.min(1, 1500 / Math.max(1, want));
   const cars = [];
   for (const r of cand) {
     let n = r.len * DEN[r.cls] * tod * scale; n = Math.floor(n) + (Math.random() < n % 1 ? 1 : 0); if (!n) continue;
@@ -2465,7 +2465,8 @@ function lifeTick(dt) {
   for (const m of LIFE_MATS) m.color.setScalar(1 - 0.93 * uni.uNight.value);   // 晚上頂樓和車身跟建物一樣變暗
   if (MOBILE) return;
   let city = null; for (const v of Object.values(CITY)) if (v.life && v.mesh && v.mesh.visible) { city = v; break; }
-  const show = !!city && close > 0.4 && !ST.globeForce;
+  const show = QUAL.life && !!city && close > 0.4 && !ST.globeForce;
+  for (const v of Object.values(CITY)) if (v.mesh) for (const o of v.mesh.children) if (o.isInstancedMesh) o.visible = QUAL.life;
   if (LIFE.body) { LIFE.body.visible = show; LIFE.lights.visible = show && uni.uNight.value > 0.5; }
   if (!show) return;
   LIFE.t -= dt; const R = Math.min(5, Math.max(1.5, cd * 1.6));
@@ -2525,14 +2526,15 @@ function lightTick(dt) {
     FOG.color.copy(_blk).lerp(_hz, k); FOG.near = 1100 + (cd * 1.6 + 1.5 - 1100) * k; FOG.far = 2800 + (cd * 7 + 14 - 2800) * k; }
   // 太陽陰影：白天、拉近時開；陰影範圍跟著鏡頭，鏡頭移動才重算
   if (!SHADOWS) return;
-  const on = close > 0.35 && !uni.uNight.value && !globe;
+  const on = QUAL.sh && close > 0.35 && !uni.uNight.value && !globe;
   if (sun.castShadow !== on) { sun.castShadow = on; renderer.shadowMap.needsUpdate = true; }
   amb.intensity = AMB0 * (on ? 0.45 : 1); sun.intensity = SUN0 * (on ? 1.3 : 1);   // 陰影開著時，直射光比環境光強，影子才看得出來
   if (on) {
     const S = Math.min(7, Math.max(0.7, cd * 0.85)), R = 30;
     sun.position.copy(t).addScaledVector(SUNDIR, R); sun.target.position.copy(t); sun.target.updateMatrixWorld();
     const sc = sun.shadow.camera; if (Math.abs(sc.right - S) > S * 0.15) { sc.left = -S; sc.right = S; sc.top = S; sc.bottom = -S; sc.near = 1; sc.far = R * 2; sc.updateProjectionMatrix(); renderer.shadowMap.needsUpdate = true; }
-    _shT += dt; if (_shLast.distanceTo(t) > S * 0.02 || _shT > 2) { _shLast.copy(t); _shT = 0; renderer.shadowMap.needsUpdate = true; }
+    const mv = _shLast.distanceTo(t) + (lightTick.cp ? lightTick.cp.distanceTo(camera.position) : 1); lightTick.cp = (lightTick.cp || camera.position.clone()).copy(camera.position); _shLast.copy(t);
+    _shT = mv > 1e-4 ? 0 : _shT + dt; if (_shT > 0.4 && !lightTick.done) { renderer.shadowMap.needsUpdate = true; lightTick.done = true; } if (mv > 1e-4) lightTick.done = false;
     for (const v of Object.values(CITY)) if (v.mesh && !v.mesh.userData.sh) { v.mesh.userData.sh = 1; v.mesh.traverse(o => { if (o.isMesh) { o.receiveShadow = true; o.castShadow = o === v.mesh.children[0]; } }); renderer.shadowMap.needsUpdate = true; }
     for (const m of ORTHO.patches.values()) if (!m.receiveShadow) { m.receiveShadow = true; m.material.needsUpdate = true; }
     if (terrain && !terrain.receiveShadow) { terrain.receiveShadow = true; terrain.material.needsUpdate = true; }
@@ -2549,6 +2551,7 @@ if ($("go")) $("go").onclick = start;
 document.querySelectorAll("#dock button").forEach(b => b.onclick = () => { setLayer(b.dataset.l); });
 
 const clock = new THREE.Clock(); let T = 0;
+const QUAL = { sh: true, life: true };
 const PERF = { on: new URLSearchParams(location.search).has("perf"), fr: [], js: [], dpr: renderer.getPixelRatio(), maxDpr: renderer.getPixelRatio(), auto: true, noOrtho: false, noCity: false, last: 0, good: 0, log: [] };
 function perfSetDpr(d) { d = Math.max(1, Math.min(PERF.maxDpr, Math.round(d * 4) / 4)); if (d === PERF.dpr) return; PERF.dpr = d; renderer.setPixelRatio(d); renderer.setSize(innerWidth, VH()); if (composer) { composer.setPixelRatio(d); composer.setSize(innerWidth, VH()); } PERF.log.unshift("解析度 → " + d); }
 function perfTick(now, jsMs) {
@@ -2556,12 +2559,21 @@ function perfTick(now, jsMs) {
   if (P.fr.length > 90) { P.fr.shift(); P.js.shift(); }
   if (now - P.last < 1500 || P.fr.length < 8) return; P.last = now;
   const avg = P.fr.reduce((a, b) => a + b, 0) / P.fr.length, fps = 1000 / avg;
+  if (P.auto && !MOBILE && !document.hidden) {
+    if (fps < 28) { P.good = 0; let msg = "";
+      if (QUAL.sh && SHADOWS) { QUAL.sh = false; msg = "關掉影子"; } else if (QUAL.life) { QUAL.life = false; msg = "收起車流與頂樓"; }
+      else if (P.dpr > 1) { perfSetDpr(P.dpr - 0.25); msg = "降低解析度"; } else if (FX.on) { FX.on = false; msg = "關掉光暈"; }
+      if (msg) { P.log.unshift(msg); qualToast("畫面有點吃力，已自動" + msg); } }
+  }
   if (P.auto && MOBILE && !document.hidden) {
     if (fps < 42) { P.good = 0; if (P.dpr > 1) perfSetDpr(P.dpr - 0.25); else if (FX.on) { FX.on = false; P.log.unshift("關光暈"); } }
     else if (fps > 57) { if (++P.good >= 4 && P.dpr < P.maxDpr) { P.good = 0; perfSetDpr(P.dpr + 0.25); } }
   }
   if (P.on) perfHud(fps);
 }
+function qualToast(t) { let el = document.getElementById("qualToast"); if (!el) { el = document.createElement("div"); el.id = "qualToast";
+  el.style.cssText = "position:fixed;left:16px;bottom:16px;z-index:60;font:12px/1.4 -apple-system,sans-serif;color:#e5e5ea;background:rgba(28,28,30,.86);padding:7px 12px;border-radius:10px;transition:opacity .5s;pointer-events:none"; document.body.appendChild(el); }
+  el.textContent = t; el.style.opacity = 1; clearTimeout(qualToast.t); qualToast.t = setTimeout(() => el.style.opacity = 0, 4000); }
 function perfHud(fps) {
   const P = PERF; let el = document.getElementById("perfHud");
   if (!el) { el = document.createElement("div"); el.id = "perfHud";
