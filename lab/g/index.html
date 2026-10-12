@@ -1396,19 +1396,20 @@ function sideHTML(o) {
 /* ---- 候選：整個情報站，每一條有歷史的數字都參賽 ---- */
 const CATW = { "市場": 1, "總經": 1, "走向": 0.9, "訊號": 0.9, "輿情": 0.8, "現場": 0.7 };
 // 同一個分類裡也有輕重：台股、外資比棉花重要；每天跳很大的計數型資料打折
-const GW = { taiex: 1.1, inst: 1.1, tpex: 0.9, world: 0.9, fx: 0.9, fear: 0.9, cmdty: 0.8, lux: 0.7, stock: 0.75, veg: 0.5, fish: 0.5, fruit: 0.5, meat: 0.5, liq: 0.7, jobs: 0.8, voice: 0.6, mood: 0.8, cofacts: 0.6, ptt: 0.55, elect: 0.8 };
+const GW = { taiex: 1.1, inst: 1.1, tpex: 0.9, world: 0.9, fx: 0.9, fear: 0.9, cmdty: 0.8, lux: 0.7, stock: 0.75, veg: 0.5, fish: 0.5, fruit: 0.5, meat: 0.5, liq: 0.7, jobs: 0.8, voice: 0.45, mood: 0.8, cofacts: 0.6, ptt: 0.4, elect: 0.8 };
 const WCITY = { 紐約: [-74.0, 40.71], 倫敦: [-0.13, 51.5], 東京: [139.69, 35.69], 新加坡: [103.82, 1.35], 首爾: [126.98, 37.57], 香港: [114.17, 22.32], 上海: [121.47, 31.23], 法蘭克福: [8.68, 50.11], 巴黎: [2.35, 48.86], 孟買: [72.88, 19.07], 華盛頓: [-77.04, 38.9] };
 const MKT = { "^GSPC": "紐約", "^IXIC": "紐約", "^DJI": "紐約", "^N225": "東京", "^HSI": "香港", "000001.SS": "上海", "^KS11": "首爾", "^NSEI": "孟買", "^GDAXI": "法蘭克福", "^STOXX50E": "法蘭克福", USD: "紐約", EUR: "法蘭克福", JPY: "東京", CNY: "上海" };
 function candidates() {
   const out = [], add = (o, fn) => { try { const r = fn(); if (r) out.push(Object.assign(o, r)); } catch (e) { console.warn("story", o.grp, e); } };
   const series = (o, vals, name, unit, extra = {}) => add(Object.assign({}, o), () => {
     let v = clean(vals); if (o.partial) v = v.slice(0, -1);   // 今天還沒過完的計數，拿最後一個完整的日子比
+    if (o.week) { const w = []; for (let i = 6; i < v.length; i++) w.push(v.slice(i - 6, i + 1).reduce((a, b) => a + b, 0)); v = w; }   // 每天的量有週末效應，改比「近 7 天合計」
     if (o.minMean && v.reduce((a, b) => a + b, 0) / Math.max(1, v.length) < o.minMean) return null;   // 量太小，跳一下就是好幾倍
     const s = surprise(v); if (!s) return null; const last = v[v.length - 1], up = s.last >= 0;
-    if (s.pct != null && Math.abs(s.pct) > 50 && !o.partial) return null;   // 一天差一半以上，多半是抓取出錯
+    if (s.pct != null && Math.abs(s.pct) > 50) return null;   // 一次差一半以上，多半是抓取出錯
     const chg = s.pct != null ? pct(s.pct) : (up ? "+" : "−") + nf(Math.abs(s.last));
     return Object.assign({ score: s.x * (o.w ?? GW[o.grp] ?? CATW[o.cat]), x: s.x, name, big: `${name} ${chg}`, value: last, chgTxt: chg, color: tone(s.last), vals: v.slice(-40), unit,
-      say: `${name}最新是 ${nf(last)}${unit ? " " + unit : ""}，比前一筆${up ? "上升" : "下降"} ${chg.replace(/^[+−]/, "")}。`,
+      say: o.week ? `${name}近 7 天合計 ${nf(last)}${unit ? " " + unit : ""}，比前一天算的 7 天合計${up ? "多" : "少"} ${chg.replace(/^[+−]/, "")}。` : `${name}最新是 ${nf(last)}${unit ? " " + unit : ""}，比前一筆${up ? "上升" : "下降"} ${chg.replace(/^[+−]/, "")}。`,
       why: `這次的變動是過去 ${s.n} 筆平均的 ${s.x.toFixed(1)} 倍。` }, extra);
   });
   // 市場
@@ -1436,11 +1437,11 @@ function candidates() {
   { const J = P.jobs || {}; series({ cat: "訊號", grp: "jobs", link: "jobs", src: "人力銀行職缺" }, J.spark, "全台職缺數", "個");
     for (const c of (J.cats || [])) series({ cat: "訊號", grp: "jobs", link: "jobs", src: "人力銀行職缺" }, c.spark, c.name + "職缺", "個"); }
   // 走向
-  for (const k of (((P.voice || {}).kw) || [])) series({ cat: "走向", grp: "voice", link: "voice", src: "Google 新聞收錄", partial: true, minMean: 6 }, k.news_daily, `「${k.k}」新聞量`, "則");
+  for (const k of (((P.voice || {}).kw) || [])) series({ cat: "走向", grp: "voice", link: "voice", src: "Google 新聞收錄", partial: true, week: true, minMean: 40 }, k.news_daily, `「${k.k}」新聞量`, "則");
   // 輿情
   series({ cat: "輿情", grp: "mood", link: "mood", src: "社群情緒" }, hist("mood", "taiwan"), "台灣情緒分數", "");
   series({ cat: "輿情", grp: "cofacts", link: "cofacts", src: "Cofacts", minMean: 5 }, hist("cofacts", "requests"), "可疑訊息回報量", "則");
-  for (const b of (((P.ptt || {}).boards) || [])) series({ cat: "輿情", grp: "ptt", link: "ptt", src: "PTT", partial: true, minMean: 40 }, b.spark, `PTT ${b.zh || b.board}版熱度`, "");
+  for (const b of (((P.ptt || {}).boards) || [])) series({ cat: "輿情", grp: "ptt", link: "ptt", src: "PTT", partial: true, week: true, minMean: 280 }, b.spark, `PTT ${b.zh || b.board}版熱度`, "");
   // 現場：選戰、電力、機場，加上會插隊的事件
   for (const c of (((P.elect || {}).cities) || [])) { const top = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0]; if (top) series({ cat: "現場", grp: "elect", link: "elect", src: "預測市場" }, top.spark, `${c.city}・${top.name}當選機率`, "%", { scene: "elect", city: c.city, p: top.p / 100 }); }
   add({ cat: "現場", grp: "power", link: "power", src: "台電" }, () => { const pw = P.power || {}, r = pw.reserve_pct; if (r == null) return null;
