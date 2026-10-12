@@ -39,7 +39,7 @@ STATIC = {
     "thb_etagpair": THB + "etag/info/ETagPairList.xml",
     "thb_etaginfo": THB + "etag/info/ETagList.xml",
     "fw_cctv": FW + "CCTV.xml",                   # 國道攝影機（位置、即時影像網址）
-    "thb_cctv": THB + "cctv/info/CCTVList.xml",   # 省道攝影機
+    "thb_cctv2": "https://cctv-maintain.thb.gov.tw/opendataCCTVs.xml",   # 省道攝影機（公路局）
 }
 
 TPE = timezone(timedelta(hours=8))

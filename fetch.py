@@ -5603,7 +5603,7 @@ def p_cctv():
     """公路攝影機清單（國道、省道；台灣抓取站一天抓一次）→ data/cctv.json：[[經度, 緯度, 種類, 名稱, 影像網址]]。
     影像本身不經過我們，由看的人的瀏覽器直接向高公局、公路局載入。"""
     out, info, errs = [], {}, []
-    for key, kind in (("static/fw_cctv", "fw"), ("static/thb_cctv", "thb")):
+    for key, kind in (("static/fw_cctv", "fw"), ("static/thb_cctv2", "thb")):
         try:
             d = relay_get(key)
         except Exception as e:  # noqa: BLE001
