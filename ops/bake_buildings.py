@@ -1,4 +1,4 @@
-"""一次性：從 OpenStreetMap 台灣建物，做六都（台北＋新北核心、桃園、台中、台南、高雄）的白模資料給 3D 頁面。
+"""一次性：從 OpenStreetMap 台灣建物，做六都與其他 12 個縣市市中心的白模資料給 3D 頁面。
 每棟建物存成「最小外接矩形」：中心、長、寬、角度、高度。輸出 3d/b_<城市>.bin 與 3d/buildings.json。
 格式（小端序）：每棟 11 bytes = x(u16, 0.5m) z(u16, 0.5m) w(u16, 0.1m) d(u16, 0.1m) a(u8, 0~180°) h(u16, 0.1m)
 資料：© OpenStreetMap contributors（ODbL），經 Geofabrik 下載。"""
@@ -17,6 +17,19 @@ CITIES = {
     "taichung":  {"name": "台中", "bbox": [120.58, 24.08, 120.76, 24.23]},
     "tainan":    {"name": "台南", "bbox": [120.15, 22.94, 120.27, 23.04]},
     "kaohsiung": {"name": "高雄", "bbox": [120.26, 22.56, 120.38, 22.71]},
+    # 其他縣市市中心（範圍與 ops/bake_ortho.py 一致）
+    "keelung":   {"name": "基隆", "bbox": [121.70, 25.10, 121.79, 25.16]},
+    "hsinchu":   {"name": "新竹", "bbox": [120.93, 24.77, 121.03, 24.85]},
+    "miaoli":    {"name": "苗栗", "bbox": [120.79, 24.54, 120.85, 24.59]},
+    "changhua":  {"name": "彰化", "bbox": [120.51, 24.05, 120.58, 24.11]},
+    "nantou":    {"name": "南投", "bbox": [120.66, 23.89, 120.71, 23.93]},
+    "douliu":    {"name": "斗六", "bbox": [120.51, 23.69, 120.57, 23.73]},
+    "chiayi":    {"name": "嘉義", "bbox": [120.41, 23.45, 120.49, 23.50]},
+    "pingtung":  {"name": "屏東", "bbox": [120.46, 22.64, 120.52, 22.70]},
+    "yilan":     {"name": "宜蘭", "bbox": [121.72, 24.66, 121.79, 24.78]},
+    "hualien":   {"name": "花蓮", "bbox": [121.58, 23.95, 121.63, 24.01]},
+    "taitung":   {"name": "台東", "bbox": [121.11, 22.73, 121.17, 22.79]},
+    "penghu":    {"name": "馬公", "bbox": [119.55, 23.55, 119.61, 23.59]},
 }
 LANDMARKS = [(121.5645, 25.0340), (120.3007, 22.6116)]   # 台北 101、高雄 85 大樓：另外手做模型
 MAX_PER_CITY = 260000
@@ -96,8 +109,9 @@ class H(osmium.SimpleHandler):
                 return
 
 
+import os
 print("downloading…")
-urllib.request.urlretrieve("https://download.geofabrik.de/asia/taiwan-latest.osm.pbf", "/tmp/tw.pbf")
+os.path.exists("/tmp/tw.pbf") or urllib.request.urlretrieve("https://download.geofabrik.de/asia/taiwan-latest.osm.pbf", "/tmp/tw.pbf")
 H().apply_file("/tmp/tw.pbf", locations=True)
 meta = {"credit": "© OpenStreetMap contributors", "format": "x z w d a h", "cities": {}}
 for key, c in CITIES.items():

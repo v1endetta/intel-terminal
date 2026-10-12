@@ -384,7 +384,7 @@ function countyAt(lon, lat) { return COUNTIES.find(c => lon >= c.bbox[0] && lon 
 /* ---------- 六都白模建築（OpenStreetMap）＋地標 ---------- */
 const BEX = 2.5;   // 建物高度誇張倍數（地形是 6 倍，建物太高會像針）
 let BMETA = null; const CITY = {};
-const CITY_OF = { "台北市": "taipei", "新北市": "taipei", "桃園市": "taoyuan", "台中市": "taichung", "台南市": "tainan", "高雄市": "kaohsiung" };
+const CITY_OF = { "台北市": "taipei", "新北市": "taipei", "桃園市": "taoyuan", "台中市": "taichung", "台南市": "tainan", "高雄市": "kaohsiung", "基隆市": "keelung", "新竹市": "hsinchu", "新竹縣": "hsinchu", "苗栗縣": "miaoli", "彰化縣": "changhua", "南投縣": "nantou", "雲林縣": "douliu", "嘉義市": "chiayi", "嘉義縣": "chiayi", "屏東縣": "pingtung", "宜蘭縣": "yilan", "花蓮縣": "hualien", "台東縣": "taitung", "澎湖縣": "penghu" };
 async function loadBMeta() { try { BMETA = await (await fetch("buildings.json?v=" + ASSET_V)).json(); } catch (e) { BMETA = null; } }
 const bMat = new THREE.MeshStandardMaterial({ color: 0xeceae4, roughness: 0.85, metalness: 0, emissive: 0xffc98f, emissiveIntensity: 1 });
 bMat.onBeforeCompile = sh => {

@@ -141,8 +141,9 @@ class H(osmium.SimpleHandler):
             c["R"].append((cls, pts[i:i + 251]))
 
 
+import os
 print("downloading…")
-urllib.request.urlretrieve("https://download.geofabrik.de/asia/taiwan-latest.osm.pbf", "/tmp/tw.pbf")
+os.path.exists("/tmp/tw.pbf") or urllib.request.urlretrieve("https://download.geofabrik.de/asia/taiwan-latest.osm.pbf", "/tmp/tw.pbf")
 H().apply_file("/tmp/tw.pbf", locations=True)
 q = lambda v: max(0, min(65535, round(v * 2)))
 for key, c in CITIES.items():
