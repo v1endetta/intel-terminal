@@ -2883,7 +2883,7 @@ function navTick(dt) {
   document.body.classList.toggle("nav-on", on);
   if (!on) { if (NAV.level !== -1) { NAV.level = -1; NAV.key = ""; navClear(); } return; }
   NAV.t -= dt; if (NAV.t > 0) return; NAV.t = 0.35;
-  if (!NAV.towns) { navTowns(); return; }
+  if (!NAV.towns) { navTowns(); navBiz(); return; }   // 新公司的鄉鎮統計順便先載，切過去時不用等
   const t = controls.target, cd = camera.position.distanceTo(t), lon = t.x / KX + LONC, lat = -t.z / KY + LATC;
   const L = NAV.level, up = [230, 28], lv = cd > up[0] * (L === 0 ? 0.9 : 1.1) ? 0 : cd > up[1] * (L === 2 ? 1.25 : 0.85) ? 1 : 2;
   const C = lv >= 1 ? countyAt(lon, lat) : null, T = lv >= 2 ? townAt(lon, lat) : null;
