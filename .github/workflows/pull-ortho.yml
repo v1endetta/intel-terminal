@@ -26,10 +26,17 @@ jobs:
         run: |
           mkdir -p 3d
           rm -rf 3d/ortho
-          gcloud storage cp -r gs://intel-vault-510704-vault/bake/ortho 3d/
-          ls 3d/ortho; du -sh 3d/ortho
+          gcloud storage cp -r gs://intel-vault-510704-vault/bake/ortho 3d/ || { echo "::error::Cloud Storage 裡沒有 bake/ortho（還沒上傳完？）"; exit 1; }
+          du -sh 3d/ortho
           # 確認這次是完整的新版（有全島底圖、17 個城市）才繼續
-          python3 -c "import json;d=json.load(open('3d/ortho/index.json'));b=d.get('base',{}).get('chunks',[]);c=d['cities'];print('base',len(b),'cities',len(c),{k:len(v) for k,v in c.items()});assert len(b)>30 and len(c)>=17"
+          python3 - <<'PY'
+          import json, sys
+          d = json.load(open("3d/ortho/index.json")); b = d.get("base", {}).get("chunks", []); c = d["cities"]
+          msg = f"全島 {len(b)} 塊，城市 {len(c)} 個：" + "、".join(f"{k}{len(v)}" for k, v in c.items())
+          ok = len(b) > 30 and len(c) >= 17
+          print(("::notice::" if ok else "::error::還是舊版或不完整 → ") + msg)
+          sys.exit(0 if ok else 1)
+          PY
       - name: Commit
         run: |
           git config user.name "intel-bot"
