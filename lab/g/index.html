@@ -2957,7 +2957,8 @@ function vdDraw(segs, lift) {
   const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
   const l = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.95, depthTest: false })); l.renderOrder = 8; NAV.g.add(l);
 }
-const camHTML = list => list.length ? `<div class="nvh">附近的公路攝影機（${list.length}）</div><ul class="lst nvl cams">${list.slice(0, 6).map(({ c, d }) => `<li><button class="cam" data-cam="${esc(c[4])}" data-camn="${esc(c[3])}">▶ ${esc(c[3] || (c[2] === "fw" ? "國道" : "省道"))}</button><span>${c[2] === "fw" ? "國道" : "省道"}・${dist(d)}</span></li>`).join("")}</ul><div id="camView"></div>` : "";
+const camName = c => String(c[3] || (c[2] === "fw" ? "國道" : "省道")).replace(/ S /, " 南向 ").replace(/ N /, " 北向 ").replace(/ E /, " 東向 ").replace(/ W /, " 西向 ");
+const camHTML = list => list.length ? `<div class="nvh">附近的公路攝影機（${list.length}）</div><ul class="lst nvl cams">${list.slice(0, 6).map(({ c, d }) => `<li><button class="cam" data-cam="${esc(c[4])}" data-camn="${esc(camName(c))}">▶ ${esc(camName(c))}</button><span>${c[2] === "fw" ? "國道" : "省道"}・${dist(d)}</span></li>`).join("")}</ul><div id="camView"></div>` : "";
 document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("#side [data-cam]"); if (!b) return;
   const u = b.dataset.cam, v = $("camView"); if (!v) return;
   const hls = /\.m3u8/i.test(u), insecure = location.protocol === "https:" && u.startsWith("http:");
@@ -3175,7 +3176,10 @@ const CITY_VIEW = {
     return { eyebrow: `${norm(C.name)} · 即時車流 · ${trAt()}`, title: "哪幾條路在塞？", big: slow.length ? `${slow.length} 段在塞` : "目前順暢", chg: st.fwAvg ? `國道平均 ${st.fwAvg} km/h` : "", color: LENS.traffic.c,
       body: `<p class="why">線條依車速上色（綠順、黃車多、紅塞），國道是流動的光點。${vd.length ? `台北市區 ${vd.length} 段路口偵測器車速也畫上了。` : st.thbN ? `省道有車速的 ${st.thbN} 段。` : "這裡沒有省道即時車速。"}</p>`
         + (slow.length ? `<div class="nvh">最慢的路段</div>` + listHTML(slow.slice(0, 8).map(x => trRow({ ...x, d: null }))) : "")
-        + (E.length ? `<div class="nvh">路況事件（${E.length}）</div>` + listHTML(E.slice(0, 6).map(e => ({ t: e.title || `${e.road || ""} ${e.kind || ""}`, s: e.impact || "" }))) : "") };
+        + (E.length ? `<div class="nvh">路況事件（${E.length}）</div>` + listHTML(E.slice(0, 6).map(e => ({ t: e.title || `${e.road || ""} ${e.kind || ""}`, s: e.impact || "" }))) : "")
+        + (() => { const seen = new Set(), near = [];   // 塞的地方（或事件）旁邊最近的攝影機，直接點來看
+          for (const x of [...slow.slice(0, 4), ...E.slice(0, 3)]) { const c = camsNear(x.ll, 1.5)[0]; if (c && !seen.has(c.c[4])) { seen.add(c.c[4]); near.push(c); } }
+          return near.length ? camHTML(near).replace("附近的公路攝影機", "塞車點旁的攝影機") : ""; })() };
   },
   jobs(C) {
     const ts = navOutline(C), R = jobTowns(C.name), a = jobArea(C.name), L = jobLatest(C.name), view = NAV.viewD || 60;
@@ -3264,7 +3268,7 @@ const STREET_VIEW = {
     vdDraw(vd.map(o => o.x), 0.1);
     const vdRows = vd.sort((a, b) => a.x[4] - b.x[4]).map(({ x, d }) => ({ k: "vd", n: x[6], s: x[4], d, ll: [(x[0] + x[2]) / 2, (x[1] + x[3]) / 2] }));
     const cams = camsNear(here, R);
-    cams.slice(0, 12).forEach(({ c }) => addLabel(`<span class="nvcam" title="${esc(c[3])}">◉</span>`, gp(c[0], c[1], 0.08), "nv", "nav", 0));
+    cams.slice(0, 12).forEach(({ c }) => addLabel(`<span class="nvcam" title="${esc(camName(c))}">◉</span>`, gp(c[0], c[1], 0.08), "nv", "nav", 0));
     const withS = [...S.filter(x => x.s != null), ...vdRows.filter(x => x.s < 25)], slow = withS.filter(x => x.k === "vd" ? x.s < 15 : trSlow(x));
     slow.slice(0, 8).forEach(x => pin({ c: "#ff453a", ll: x.ll, t: `${x.s} km/h` }, 4));
     E.forEach(e => pin({ c: "#ff9f0a", ll: e.ll, t: `${e.road || ""} ${e.kind || ""}` }, 3));
