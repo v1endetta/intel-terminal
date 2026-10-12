@@ -290,6 +290,10 @@ body.intro::before{opacity:.4}
   #dock2 .seg{background:rgba(36,36,38,.92)!important}
   #intro .ic.halo{background:rgba(22,22,24,.82)!important}
 }
+/* 航班標籤 */
+#labels .lbl.flt{font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(10,14,20,.72);color:#dff6ff;border:1px solid rgba(100,210,255,.35);white-space:nowrap;transition:opacity .3s}
+#labels .lbl.flt b{font-weight:600;color:#fff;margin-right:2px}
+#labels .lbl.flt.live{color:#ffe27a;border-color:rgba(255,214,10,.45);font-size:10px}
 </style>
 <script type="importmap">
 {"imports":{
@@ -1009,7 +1013,7 @@ function placeLabels() {
   for (const L of LBL) {
     _v.copy(L.pos).project(camera);
     L.on = _v.z < 1 && Math.abs(_v.x) < 1.1 && Math.abs(_v.y) < 1.1;
-    if (!L.on) { L.el.style.opacity = 0; continue; }
+    if (!L.on || L.hide) { L.el.style.opacity = 0; continue; }
     L.sx = (_v.x + 1) / 2 * innerWidth; L.sy = (1 - _v.y) / 2 * VH();
     L.el.style.left = L.sx + "px"; L.el.style.top = L.sy + "px";
     if (!L.w) { L.w = L.el.offsetWidth; L.h = L.el.offsetHeight; }
@@ -1883,7 +1887,7 @@ function EXPLORE() {
       { n: "車流", f: layer("traffic", "國道與市區車速", "現場 · 地圖") },
       { n: "選戰", f: barsOf("五都領先者當選機率", () => (((P.elect || {}).cities) || []).map(c => { const t = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0] || {}; return { name: `${c.city} ${t.name || ""}`, v: t.p, txt: nf(t.p || 0) + "%" }; }), "現場 · 預測市場", "elect", { signed: false }) },
       { n: "電力", f: () => { const pw = P.power || {}; return lineOf("備轉容量率", pw.spark, (pw.reserve_pct || 0) < 10 ? "#ff9f0a" : UPH, "現場 · 台電", "power", nf(pw.reserve_pct || 0) + "%", "燈號" + (pw.level || ""))(); } },
-      { n: "機場", f: listOf("桃機接下來的離境", () => (((P.airport || {}).dep || {}).upcoming || []).slice(0, 7).map(f => ({ t: `${f.flight} → ${f.to}`, s: `${f.sched} ${f.remark || ""}` })), "現場 · 今日 " + ((((P.airport || {}).dep) || {}).total || "") + " 班", "airport") },
+      { n: "航班", f: () => ({ layer: "flights", html: FL.built ? flightsSide() : sideHTML({ eyebrow: "現場 · 桃園機場 · ADS-B", title: "今天飛去哪裡", body: '<p class="empty">航線載入中…</p>' }) }) },
     ] },
   ];
 }
@@ -1965,7 +1969,7 @@ function storyTick(dt) {
     const w = Math.max(0, 1 - Math.abs(c - k) * 2.2), ch = CH[k];
     ch.g.visible = w > 0.01; ch.g.traverse(o => { if (o.material && o.material.userData.op != null) o.material.opacity = o.material.userData.op * w; });
   }
-  const gw = CH.reduce((m, ch, k) => ch.globe ? Math.max(m, 1 - Math.abs(c - k) * 1.2) : m, 0);
+  const gw = ST.globeForce ? 1 : CH.reduce((m, ch, k) => ch.globe ? Math.max(m, 1 - Math.abs(c - k) * 1.2) : m, 0);
   GLOBE.g.visible = gw > 0.01; GLOBE.g.traverse(o => { if (o.material && o.material.userData.op != null) { o.material.opacity = o.material.userData.op * Math.min(1, gw * 1.6); if (o.material.uniforms && o.material.uniforms.k) o.material.uniforms.k.value = Math.min(1, gw * 1.6); } });
   scene.fog = gw > 0.05 ? null : FOG; SEA = SEA || scene.children.find(o => o.geometry && o.geometry.type === "CircleGeometry"); if (SEA) SEA.visible = gw < 0.05;
   uni.uLightK.value = 1 - 0.55 * CH.reduce((m, ch, k) => (ch.g.children.length && !ch.globe) ? Math.max(m, 1 - Math.abs(c - k) * 1.5) : m, 0);
@@ -2131,6 +2135,109 @@ function hudTick(t, placed) {
   $("ihudTxt").style.opacity = fade;
   $("ihudTxt").innerHTML = `<div class="r1">SCANNING TAIWAN</div><div class="r2">${Math.min(25.3, Math.max(21.9, lat)).toFixed(2)}°N · 120.95°E</div><div class="r3">${String(n).padStart(3, "0")} / ${String(INTRO.chips.length).padStart(3, "0")} 筆即時資料</div><div class="bar"><i style="width:${(n / INTRO.chips.length * 100).toFixed(1)}%"></i></div>`;
 }
+
+/* ---- 航班：桃園今天飛去哪（地球上的航線）＋ 推估此刻在空中的班機 ＋ 台灣周邊即時飛機 ----
+   航線粗細＝今天的班次；航線上的光點＝依起飛時間推估、此刻正在飛的班機；
+   黃色小三角＝ADS-B 即時位置，虛線指向它的目的地。 */
+const FL = window.__FL = { g: null, built: false, AP: null, dots: null, legs: [], live: [], lbls: [], camBack: null };
+const TPE_LL = [121.233, 25.077];
+const gcKm = (a, b) => { const D = Math.PI / 180, s = Math.sin((b[1] - a[1]) * D / 2) ** 2 + Math.cos(a[1] * D) * Math.cos(b[1] * D) * Math.sin((b[0] - a[0]) * D / 2) ** 2; return 12742 * Math.asin(Math.min(1, Math.sqrt(s))); };
+async function flAirports() { if (!FL.AP) { try { FL.AP = await (await fetch("airports.json?v=" + ASSET_V)).json(); } catch (e) { FL.AP = { A: {}, I: {} }; } } return FL.AP; }
+const flName = (code, fallback) => { const a = FL.AP.A[code]; return (a && a[3]) || fallback || (a && a[2]) || code; };
+// 沿著弧線取第 u 段的位置（弧線點已經是場景座標）
+const arcAt = (pts, u) => { const f = Math.min(pts.length - 1.001, Math.max(0, u * (pts.length - 1))), i = Math.floor(f); return pts[i].clone().lerp(pts[i + 1], f - i); };
+// 即時飛機：從航線（ICAO 串）找出它現在這一段要飛去的機場
+function liveDest(it) {
+  const codes = (it[8] || "").split("-").map(c => FL.AP.I[c]).filter(Boolean); if (codes.length < 2) return null;
+  let best = null;
+  for (let k = 0; k + 1 < codes.length; k++) { const a = FL.AP.A[codes[k]], b = FL.AP.A[codes[k + 1]]; if (!a || !b) continue;
+    const here = [it[0], it[1]], ex = gcKm(a, here) + gcKm(here, b) - gcKm(a, b);   // 偏離這段航線多遠
+    if (!best || ex < best.ex) best = { ex, to: codes[k + 1], from: codes[k] }; }
+  return best && best.ex < 900 ? best : null;
+}
+async function buildFlights() {
+  await flAirports(); const AP = FL.AP.A, ap = P.airport || {}, g = new THREE.Group(); FL.g = g; SG.add(g); g.visible = false;
+  const o = AP.TPE ? [AP.TPE[0], AP.TPE[1]] : TPE_LL, routes = ((ap.routes || {}).dep || []).filter(r => AP[r[0]]);
+  const maxN = Math.max(1, ...routes.map(r => r[1]));
+  FL.arcs = {};
+  // 航線：班次越多越粗、越亮
+  routes.forEach((r, i) => {
+    const d = AP[r[0]], pts = GLOBE.arc(o, [d[0], d[1]], 0.1, 80); FL.arcs[r[0]] = pts;
+    const k = r[1] / maxN, rad = 4 + Math.sqrt(k) * 16;
+    const tube = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 80, rad, 5, false), fm(new THREE.MeshBasicMaterial({ color: new THREE.Color(0x64d2ff).lerp(WH, 0.15 + 0.6 * k), blending: THREE.AdditiveBlending, depthTest: true, depthWrite: false }), 0.1 + 0.4 * Math.sqrt(k)));
+    g.add(tube);
+    const node = new THREE.Mesh(new THREE.SphereGeometry(14 + 18 * Math.sqrt(k), 12, 8), fm(new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: true }), 0.9)); node.position.copy(GLOBE.G(d[0], d[1], 25)); g.add(node);
+    if (i < 28) { const L = addLabel(`<b>${esc(flName(r[0], r[4]))}</b> ${r[1]}`, GLOBE.G(d[0], d[1], 60), "flt", "flights", 6 - i / 6); L.gp = d; FL.lbls.push(L); }
+  });
+  // 此刻在空中的班機（依表訂／預計時間推估）
+  FL.legs = (ap.legs || []).map(l => {
+    const d = AP[l[2]]; if (!d || l[5] === "X") return null;
+    const km = gcKm(o, d), dur = (km / 800 + 0.5) * 60, key = (l[0] === "A" ? "A:" : "") + l[2];
+    if (!FL.arcs[key]) FL.arcs[key] = l[0] === "A" ? GLOBE.arc([d[0], d[1]], o, 0.1, 80) : GLOBE.arc(o, [d[0], d[1]], 0.1, 80);
+    return { kind: l[0], code: l[2], t: l[4] || l[3], st: l[5], dur, pts: FL.arcs[key] };
+  }).filter(Boolean);
+  const N = Math.max(1, FL.legs.length), pos = new Float32Array(N * 3);
+  const pg = new THREE.BufferGeometry(); pg.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  const dc = document.createElement("canvas"); dc.width = dc.height = 64; { const x = dc.getContext("2d"), gr = x.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(0.25, "rgba(255,250,235,0.95)"); gr.addColorStop(0.5, "rgba(120,220,255,0.35)"); gr.addColorStop(1, "rgba(0,0,0,0)"); x.fillStyle = gr; x.fillRect(0, 0, 64, 64); }
+  FL.dots = new THREE.Points(pg, fm(new THREE.PointsMaterial({ map: new THREE.CanvasTexture(dc), size: MOBILE ? 11 : 13, sizeAttenuation: false, blending: THREE.AdditiveBlending, depthTest: true }), 1));
+  FL.dots.frustumCulled = false; FL.dots.renderOrder = 5; g.add(FL.dots);
+  // 台灣周邊的即時飛機
+  const tri = new THREE.ConeGeometry(9, 26, 3); tri.rotateX(Math.PI / 2);
+  const planeM = fm(new THREE.MeshBasicMaterial({ color: 0xffd60a, depthTest: false }), 1);
+  FL.live = [];
+  for (const it of ((P.flights || {}).items || [])) {
+    const m = new THREE.Mesh(tri, planeM), p0 = GLOBE.G(it[0], it[1], 40), ahead = GLOBE.G(it[0] + Math.sin(it[2] * Math.PI / 180) * 0.2, it[1] + Math.cos(it[2] * Math.PI / 180) * 0.2, 40);
+    m.position.copy(p0); m.lookAt(ahead); g.add(m);
+    const dst = liveDest(it);
+    if (dst) { const b = AP[dst.to], pts = GLOBE.arc([it[0], it[1]], [b[0], b[1]], 0.06, 60).map(v => v.add(V(0, 8, 0)));
+      const ln = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), fm(new THREE.LineDashedMaterial({ color: 0xffd60a, dashSize: 60, gapSize: 50, blending: THREE.AdditiveBlending, depthTest: true }), 0.55));
+      ln.computeLineDistances(); g.add(ln);
+      if (FL.live.length < 14) { const L = addLabel(`${esc(it[4])} → ${esc(flName(dst.to))}`, p0.clone().add(V(0, 30, 0)), "flt live", "flights", 1); L.gp = [it[0], it[1]]; FL.lbls.push(L); }
+    }
+    FL.live.push({ it, dst });
+  }
+  FL.lbls.forEach(L => L.hide = true);
+  FL.built = true; flightsTick(true);
+}
+function flightsSide() {
+  const ap = P.airport || {}, dep = ap.dep || {}, routes = ((ap.routes || {}).dep || []), live = FL.live || [];
+  const air = FL.inAir || 0, known = live.filter(x => x.dst).length;
+  const rows = routes.slice(0, 8).map(r => ({ t: `${flName(r[0], r[4])}`, s: `${r[1]} 班${r[2] ? ` · 延誤 ${r[2]}` : ""}${r[3] ? ` · 取消 ${r[3]}` : ""}` }));
+  return sideHTML({ eyebrow: "現場 · 桃園機場 · ADS-B", title: "今天飛去哪裡", big: `${routes.length} 個航點`, color: "#64d2ff",
+    body: `<p class="why">今天 ${dep.total || 0} 班離境；依起飛時間推估，此刻約 ${air} 架桃園航班在空中。黃色三角是台灣周邊 ${live.length} 架即時飛機${known ? `（${known} 架查得到目的地）` : ""}。</p>` + listHTML(rows) });
+}
+// 地球上：被地球擋住的標籤藏起來；光點沿航線移動
+const _fc = new THREE.Vector3(), _fn = new THREE.Vector3();
+function flightsTick(force) {
+  if (!FL.built || (!FL.g.visible && !force)) return;
+  const now = Date.now() / 60000, pos = FL.dots.geometry.attributes.position.array; let n = 0;
+  for (const l of FL.legs) {
+    let u;
+    if (l.kind === "D") { if (l.st !== "D" && l.t > now) continue; u = (now - l.t) / l.dur; }
+    else { if (l.st === "L") continue; u = 1 - (l.t - now) / l.dur; }
+    if (!(u > 0 && u < 1) || !l.pts) continue;
+    const p = arcAt(l.pts, u); pos[n * 3] = p.x; pos[n * 3 + 1] = p.y + 6; pos[n * 3 + 2] = p.z; n++;
+  }
+  FL.inAir = n; FL.dots.geometry.setDrawRange(0, n); FL.dots.geometry.attributes.position.needsUpdate = true;
+  const C = V(0, -6371, 0); _fc.copy(camera.position).sub(C).normalize();
+  for (const L of FL.lbls) { _fn.copy(L.pos).sub(C).normalize(); L.hide = _fn.dot(_fc) < 0.12; }
+}
+layers.flights = {
+  get g() { return FL.g || new THREE.Group(); },
+  on() {
+    ST.globeForce = true; controls.maxDistance = 40000;
+    const t = GLOBE.G(MOBILE ? 123 : 131, MOBILE ? 23 : 26, 0), up = t.clone().sub(V(0, -6371, 0)).normalize(), south = GLOBE.G(127, 18, 0).sub(t).normalize();
+    const d = MOBILE ? 9000 : 7600, pos = t.clone().addScaledVector(up, d).addScaledVector(south, d * 0.55);
+    camera.near = 20; camera.updateProjectionMatrix(); flyTo(pos, t, 2.2);
+    const show = () => { FL.g.visible = true; FL.lbls.forEach(L => L.el.classList.add("on")); };
+    if (FL.built) show(); else buildFlights().then(() => { if (cur === "flights") { show(); if (EXITEM >= 0) showSide(flightsSide(), null); } });
+  },
+  off() {
+    ST.globeForce = false; if (FL.g) FL.g.visible = false; FL.lbls.forEach(L => { L.hide = true; L.el.classList.remove("on"); });
+    if (ST.explore) { controls.maxDistance = 1600; camera.near = 1; camera.updateProjectionMatrix(); flyTo(ISLAND.pos, ISLAND.tgt, 1.8); }
+  },
+  tick() { flightsTick(); },
+};
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" };
