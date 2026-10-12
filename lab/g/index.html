@@ -366,6 +366,7 @@ body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-event
 #crumb .dt button.on{background:rgba(255,255,255,.9);color:#000;font-weight:600}
 @media (max-width:760px){#crumb .dt button{padding:4px 8px;font-size:11px}}
 #side .lst li span.sdot{display:inline-block;margin-top:0}
+@media (max-width:760px){#side:not(.open) .prov{display:none}body:has(#side.open) #crumb{opacity:0;pointer-events:none}}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2644,7 +2645,7 @@ layers.flights = {
     const C = V(0, -6371, 0), look = GLOBE.G(MOBILE ? 122 : 129, MOBILE ? 21 : 25, 0).sub(C).normalize();
     controls.enabled = false; controls.autoRotate = false; GD.on = true; GD.vx = GD.vy = 0;
     controls.minDistance = 0; controls.maxDistance = Infinity; controls.minPolarAngle = 0; controls.maxPolarAngle = Math.PI;
-    camera.up.copy(gdAxis()); camera.near = 20; camera.updateProjectionMatrix(); flyTo(C.clone().addScaledVector(look, 6371 + (MOBILE ? 10500 : 8000)), C, 2.2);
+    camera.up.copy(gdAxis()); camera.near = 20; camera.far = 300000; camera.updateProjectionMatrix(); flyTo(C.clone().addScaledVector(look, 6371 + (MOBILE ? 10500 : 8000)), C, 2.2);
     const show = () => { FL.g.visible = true; flSelect(null); };
     if (FL.built) show(); else buildFlights().then(() => { if (cur === "flights") { show(); showSide(flightsSide(), null); } });
   },
@@ -2765,7 +2766,7 @@ layers.gx = {
     look.normalize();
     controls.enabled = false; controls.autoRotate = false; GD.on = true; GD.vx = GD.vy = 0;
     controls.minDistance = 0; controls.maxDistance = Infinity; controls.minPolarAngle = 0; controls.maxPolarAngle = Math.PI;
-    camera.up.copy(gdAxis()); camera.near = 20; camera.updateProjectionMatrix();
+    camera.up.copy(gdAxis()); camera.near = 20; camera.far = 300000; camera.updateProjectionMatrix();
     flyTo(C.clone().addScaledVector(look, 6371 + ((GX.spec && GX.spec.alt) || 12000) * (MOBILE ? 1.5 : 1.15)), C, 2.2);
     gxBuild(); GX.g.visible = true;
   },
