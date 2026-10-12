@@ -299,6 +299,38 @@ body.fl-on .ch .card{opacity:0!important;pointer-events:none!important;transitio
 #labels .lbl.flt.sel span{font-size:11px;color:#9fdcf0}
 #side [data-fl].on{color:#64d2ff}
 #side [data-fl].on span{color:#9fdcf0}
+/* ===== 分層地圖：麵包屑、搜尋、標籤 ===== */
+#crumb{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:16;display:none;align-items:center;gap:6px;padding:5px;border-radius:999px;background:rgba(28,28,30,.72);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border:1px solid rgba(255,255,255,.1);font-size:13px}
+body.nav-on #crumb{display:flex}
+#crumb .path{display:flex;align-items:center;gap:2px}
+#crumb button{all:unset;cursor:pointer;padding:6px 12px;border-radius:999px;color:#c7c7cc;transition:background .2s,color .2s}
+#crumb button:hover{color:#fff}
+#crumb .path button.on{background:rgba(255,255,255,.14);color:#fff;font-weight:600}
+#crumb .sep{color:#636366;font-size:12px}
+#crumb .sbtn{font-size:16px;padding:4px 10px;color:#e5e5ea}
+#crumb .srch{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);width:min(340px,86vw);background:rgba(28,28,30,.94);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:8px;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+#crumb.searching .srch{display:block}
+#crumb input{all:unset;box-sizing:border-box;width:100%;padding:9px 12px;border-radius:10px;background:rgba(118,118,128,.24);color:#fff;font-size:15px}
+#crumb .res{margin-top:6px;display:flex;flex-direction:column}
+#crumb .res button{display:flex;justify-content:space-between;padding:9px 12px;border-radius:9px;color:#f2f2f7;font-size:14px}
+#crumb .res button:hover{background:rgba(255,255,255,.08)}
+#crumb .res span{color:#8e8e93;font-size:12px}
+#crumb .res p{margin:8px 12px;color:#8e8e93;font-size:13px}
+#labels .lbl.nv{background:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0;border:0}
+.nvp{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(28,28,30,.78);border:1px solid rgba(255,255,255,.12);font-size:12px;color:#f2f2f7;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.nvp i{width:7px;height:7px;border-radius:50%;flex:none}
+.nvp b{font-weight:600}
+.nvp em{font-style:normal;color:#aeaeb2;font-size:11px}
+.lbl.nv.dim .nvp{background:rgba(28,28,30,.45);color:#aeaeb2;font-size:11px;padding:2px 8px}
+.nvpin{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#f2f2f7;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.nvpin i{width:11px;height:11px;border-radius:50%;background:var(--c);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.nvpin b{font-weight:500;background:rgba(28,28,30,.7);padding:2px 7px;border-radius:7px}
+#side .nvh{margin:14px 0 4px;font-size:11px;letter-spacing:.06em;color:#8e8e93}
+#side .nvl li{display:flex;flex-direction:column}
+#side .sdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}
+@media (max-width:760px){#crumb{top:112px;font-size:12px;backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(28,28,30,.92)}#crumb button{padding:5px 10px}}
+#crumb{width:max-content;max-width:calc(100vw - 32px)}
+body.nav-on .ch.last .card{opacity:0;pointer-events:none;transition:opacity .4s}
 </style>
 <script type="importmap">
 {"imports":{
@@ -925,14 +957,14 @@ function orthoGroundMat(tex, city) {   // 晚上：照片壓成冷色月光（�
           float sat = max(_photo.r, max(_photo.g, _photo.b)) - min(_photo.r, min(_photo.g, _photo.b));
           vec3 moon = vec3(0.07, 0.095, 0.15) * pow(lum, 1.15) * 1.6;                    // 月光底：冷色、保留明暗
           float urban = smoothstep(0.38, 0.68, lum) * (1.0 - clamp(sat * 3.0, 0.0, 1.0)); // 水泥、柏油：城市的輪廓
-          vec3 wash = vec3(1.0, 0.62, 0.3) * urban * mix(0.03, 0.09, uClose);            // 路燈打在地面的暖光
+          vec3 wash = vec3(1.0, 0.62, 0.3) * urban * mix(0.0, 0.09, smoothstep(0.6, 1.0, uClose));            // 路燈打在地面的暖光
           float dens = uHasLights > 0.5 ? texture2D(uLights, vTUV).r : 0.0;
           float I = clamp(pow(dens, 0.9), 0.0, 1.0);
-          vec2 cell = floor(vLL2 * 300.0);
+          vec2 cell = floor(vLL2 * 1200.0);
           float n = fract(sin(dot(cell, vec2(12.9898, 78.233))) * 43758.5453);
           float spark = step(1.0 - I * 0.9, n);
           vec3 lc = mix(vec3(1.0, 0.5, 0.16), vec3(1.0, 0.9, 0.74), I);
-          vec3 lights = lc * (spark * (0.12 + 1.9 * I) + pow(I, 2.0) * 1.1) * (1.0 - smoothstep(0.25, 0.85, uClose)) * uLightK;
+          vec3 lights = lc * (spark * (0.12 + 1.9 * I) + pow(I, 2.0) * 1.1) * (1.0 - smoothstep(0.1, 0.55, uClose)) * uLightK;
           totalEmissiveRadiance = (moon + wash * (0.4 + I) + lights) * uNight;
         }`); };
   m.customProgramCacheKey = () => "orthoG2";
@@ -1549,7 +1581,7 @@ renderer.domElement.addEventListener("pointerup", e => {
   if (oh) { oh.object.userData.info.tower ? openTower() : openObjCard(oh.object.userData.info); return; }
   const hit = ray.intersectObject(terrain)[0]; if (!hit) return;
   const lon = hit.point.x / KX + LONC, lat = -hit.point.z / KY + LATC, c = countyAt(lon, lat);
-  if (c) openCard(c);
+  if (c) { if (ST.explore && typeof navClickAt === "function" && (!cur || cur === "wx")) navClickAt(lon, lat, c); else openCard(c); }
 });
 
 
@@ -2605,6 +2637,163 @@ function earthTick() {
 }
 window.__scene = scene;
 
+/* ---- 分層地圖（自己逛）：台灣 → 城市 → 街道，每一層只回答一個問題 ----
+   台灣：今天哪裡不對勁？（縣市依示警、地震、路況事件上色）
+   城市：這座城市哪一區在動？（各區實價登錄，用光柱高度表示）
+   街道：這裡此刻怎樣？（附近的路況事件、新設立公司、藝文活動、房價）
+   拉近拉遠就自動換層；上方麵包屑可以一鍵回到上一層；也可以搜尋縣市、行政區、地標。 */
+const NAV = { level: -1, key: "", county: null, town: null, towns: null, g: new THREE.Group(), t: 0, lock: 0 };
+scene.add(NAV.g);
+const LVL_NAME = ["台灣", "城市", "街道"];
+const SEV_C = [new THREE.Color(0x8e8e93), new THREE.Color(0xffd60a), new THREE.Color(0xff9f0a), new THREE.Color(0xff453a)];
+async function navTowns() {
+  if (NAV.towns) return NAV.towns;
+  try { const j = await (await fetch("towns.json?v=" + ASSET_V)).json();
+    NAV.towns = j.towns.map(t => { let bb = [999, 999, -999, -999], cx = 0, cy = 0, n = 0;
+      for (const r of t.r) for (const [x, y] of r) { bb = [Math.min(bb[0], x), Math.min(bb[1], y), Math.max(bb[2], x), Math.max(bb[3], y)]; cx += x; cy += y; n++; }
+      return { county: t.c, name: t.t, rings: t.r, bbox: bb, c: [cx / n, cy / n] }; });
+  } catch (e) { NAV.towns = []; }
+  return NAV.towns;
+}
+const townAt = (lon, lat) => (NAV.towns || []).find(t => lon >= t.bbox[0] && lon <= t.bbox[2] && lat >= t.bbox[1] && lat <= t.bbox[3] && t.rings.some(r => inRing(lon, lat, r)));
+const sameC = (a, b) => norm(a) === norm(b) || norm(a).startsWith(norm(b)) || norm(b).startsWith(norm(a));
+const kmBetween = (a, b) => Math.hypot((a[0] - b[0]) * KX, (a[1] - b[1]) * KY);
+// 各縣市今天的「異常」：示警、近 48 小時地震、路況事件
+function countySeverity() {
+  const S = {}, add = (c, pts, why) => { if (!c) return; const k = c.name; (S[k] = S[k] || { s: 0, why: [] }).s += pts; if (!S[k].why.includes(why)) S[k].why.push(why); };
+  for (const w of ((P.weather || {}).warnings || [])) add(COUNTIES.find(c => sameC(c.name, w.where)), 2, w.what);
+  for (const a of ((P.alerts || {}).alerts || [])) for (const c of COUNTIES) if ((a.where || a.area || a.areaDesc || "").includes(norm(c.name).slice(0, 2))) add(c, 2, a.event || a.title || "示警");
+  const now = Date.now();
+  for (const q of ((P.quake || {}).items || [])) if (q.mag >= 4 && now - new Date(q.at) < 48 * 3600e3) add(countyAt(q.lon, q.lat) || COUNTIES.slice().sort((a, b) => kmBetween(a.c, [q.lon, q.lat]) - kmBetween(b.c, [q.lon, q.lat]))[0], q.mag >= 5 ? 3 : 1, "地震 M" + q.mag);
+  const ev = {}; for (const e of (((P.roads || {}).events) || [])) if (e.ll) { const c = countyAt(e.ll[0], e.ll[1]); if (c) ev[c.name] = (ev[c.name] || 0) + 1; }
+  for (const [k, n] of Object.entries(ev)) add(COUNTIES.find(c => c.name === k), Math.min(2, n * 0.5), `路況事件 ${n} 起`);
+  return S;
+}
+function navClear() { while (NAV.g.children.length) { const o = NAV.g.children.pop(); o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); } clearLabels("nav"); }
+function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo, la, lift)); const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: op, depthTest: false })); l.renderOrder = 8; NAV.g.add(l); return l; }
+const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="background:${dot}"></i>` : ""}<b>${esc(name)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`;
+// ---- 第 0 層：台灣 ----
+function navTaiwan() {
+  const S = countySeverity(), list = Object.entries(S).sort((a, b) => b[1].s - a[1].s);
+  for (const c of COUNTIES) {
+    const sv = S[c.name], lv = sv ? (sv.s >= 3 ? 3 : sv.s >= 2 ? 2 : 1) : 0, col = SEV_C[lv];
+    for (const r of c.rings) if (r.length > 30) navLine(r, col, lv ? 0.9 : 0.25, 1.2);
+    addLabel(pill(norm(c.name), sv ? sv.why[0] : "", lv ? "#" + col.getHexString() : null), gp(c.c[0], c.c[1], 2.5), "nv", "nav", lv * 3 + (/[市]$/.test(c.name) ? 1 : 0));
+  }
+  const rows = list.slice(0, 6).map(([k, v]) => `<li data-nc="${esc(k)}" style="cursor:pointer"><span class="sdot" style="background:#${SEV_C[v.s >= 3 ? 3 : v.s >= 2 ? 2 : 1].getHexString()}"></span>${esc(norm(k))}<span>${esc(v.why.join("・"))}</span></li>`).join("");
+  showSide(sideHTML({ eyebrow: "台灣 · 今天", title: "今天哪裡不對勁？", big: list.length ? `${list.length} 個縣市` : "全台平靜", color: list.length ? "#ff9f0a" : UPH,
+    body: list.length ? `<p class="why">依示警、近兩天地震、路況事件排序。點縣市或拉近，看哪一區在動。</p><ul class="lst nvl">${rows}</ul>` : `<p class="why">目前沒有示警、明顯地震或路況事件。拉近任一縣市，看各區的房價與動態。</p>` }), null);
+}
+// ---- 第 1 層：城市 ----
+function navCity(C) {
+  const towns = (NAV.towns || []).filter(t => sameC(t.county, C.name));
+  for (const r of C.rings) if (r.length > 30) navLine(r, 0xffffff, 0.55, 1.2);
+  for (const t of towns) for (const r of t.rings) navLine(r, 0x64d2ff, 0.28, 1.0);
+  const H = ((P.house || {}).towns || []).filter(h => sameC(h[2], C.name)).sort((a, b) => b[4] - a[4]);
+  const mx = Math.max(1, ...H.map(h => h[4])), mn = Math.min(...H.map(h => h[4]), mx), view = NAV.viewD || 60;
+  H.forEach((h, i) => {
+    const k = (h[4] - mn) / Math.max(1e-6, mx - mn), hh = view * (0.03 + 0.22 * k), base = gp(h[0], h[1], 0.2), col = new THREE.Color().setHSL(0.55 - 0.55 * k, 0.85, 0.6);
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(view * 0.006, view * 0.006, hh, 12), new THREE.MeshBasicMaterial({ color: col }));
+    m.position.copy(base).add(V(0, hh / 2, 0)); m.renderOrder = 9; NAV.g.add(m);
+    const ring = new THREE.Mesh(new THREE.RingGeometry(view * 0.008, view * 0.016, 32), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false }));
+    ring.rotation.x = -Math.PI / 2; ring.position.copy(base); ring.renderOrder = 9; NAV.g.add(ring);
+    addLabel(pill(h[3], `${nf(h[4])} 萬`, "#" + col.getHexString()), base.clone().add(V(0, hh + view * 0.01, 0)), "nv", "nav", 6 - i * 0.2);
+  });
+  for (const t of towns) if (!H.some(h => h[3] === t.name)) addLabel(pill(t.name), gp(t.c[0], t.c[1], 1.5), "nv dim", "nav", -2);
+  const W = ((P.weather || {}).items || []).find(w => norm(C.name).startsWith(norm(w.city)));
+  const warn = ((P.weather || {}).warnings || []).filter(w => sameC(w.where, C.name)).map(w => w.what);
+  const news = (((P.localnews || {}).counties || {})[Object.keys((P.localnews || {}).counties || {}).find(k => sameC(k, C.name))] || []).slice(0, 3);
+  const rows = H.slice(0, 8).map((h, i) => `<li data-nt="${esc(h[3])}" style="cursor:pointer">${i + 1}. ${esc(h[3])}<span>${nf(h[4])} 萬／坪・${h[5]} 筆</span></li>`).join("");
+  showSide(sideHTML({ eyebrow: `${norm(C.name)} · 實價登錄 ${((P.house || {}).season) || ""}`, title: "這座城市哪一區在動？", big: H.length ? `${nf(((P.house || {}).city || {})[Object.keys((P.house || {}).city || {}).find(k => sameC(k, C.name))] || H[0][4])} 萬／坪` : norm(C.name), color: "#64d2ff",
+    body: (W || warn.length ? `<p class="why">${W ? `${esc(W.weather)} ${nf(W.temp)}°C` : ""}${warn.length ? `・<b style="color:#ff9f0a">${esc(warn.join("、"))}</b>` : ""}</p>` : "")
+      + (H.length ? `<div class="nvh">各區成交均價（光柱越高越貴）</div><ul class="lst nvl">${rows}</ul>` : "")
+      + (news.length ? `<div class="nvh">地方新聞</div>` + listHTML(news.map(n => ({ t: n.title, s: n.source, url: n.url }))) : "") }), null);
+}
+// ---- 第 2 層：街道 ----
+function navStreet(T, C) {
+  for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
+  const here = [controls.target.x / KX + LONC, -controls.target.z / KY + LATC], R = 2.2, items = [];
+  for (const e of (((P.roads || {}).events) || [])) if (e.ll && kmBetween(e.ll, here) < R * 2) items.push({ k: "路況", c: "#ff9f0a", ll: e.ll, t: `${e.road || ""} ${e.kind || ""}`, s: e.impact || e.dir || "" });
+  for (const b of (((P.mapfeed || {}).brands) || [])) if (b.ll && (kmBetween(b.ll, here) < R || (b.place || "").includes(T.name))) items.push({ k: "新公司", c: "#64d2ff", ll: b.ll, t: b.t, s: `${b.cat || ""}${b.cap ? `・資本 ${nf(b.cap / 1e4)} 萬` : ""}` });
+  for (const p of (((P.culture || {}).points) || [])) if (kmBetween([p[0], p[1]], here) < R) items.push({ k: "藝文", c: "#bf5af2", ll: [p[0], p[1]], t: p[2], s: `${p[3]}・${p[4]}` });
+  items.forEach(it => { it.d = kmBetween(it.ll, here); });
+  items.sort((a, b) => a.d - b.d);
+  for (const it of items.slice(0, 24)) addLabel(`<span class="nvpin" style="--c:${it.c}"><i></i><b>${esc(it.t.slice(0, 16))}</b></span>`, gp(it.ll[0], it.ll[1], 0.05), "nv", "nav", 3 - it.d);
+  const hp = ((P.house || {}).towns || []).find(h => h[3] === T.name && sameC(h[2], T.county));
+  const by = k => items.filter(i => i.k === k);
+  const sec = (k, arr) => arr.length ? `<div class="nvh">${k}（${arr.length}）</div>` + listHTML(arr.slice(0, 4).map(i => ({ t: i.t, s: `${i.s}${i.s ? "・" : ""}${i.d < 1 ? Math.round(i.d * 1000) + " 公尺" : i.d.toFixed(1) + " 公里"}` }))) : "";
+  showSide(sideHTML({ eyebrow: `${norm(T.county)} › ${T.name}`, title: "這裡此刻怎樣？", big: hp ? `${nf(hp[4])} 萬／坪` : T.name, color: "#64d2ff",
+    body: (hp ? `<p class="why">實價登錄 ${hp[5]} 筆成交均價。附近 ${R} 公里內：</p>` : `<p class="why">附近 ${R} 公里內：</p>`)
+      + (items.length ? sec("路況", by("路況")) + sec("新設立公司", by("新公司")) + sec("藝文活動", by("藝文")) : `<p class="empty">這附近目前沒有路況事件、新公司或藝文活動。</p>`) }), null);
+}
+// ---- 層級切換：依鏡頭距離自動判斷；中間留一段緩衝，避免在邊界來回跳 ----
+function navTick(dt) {
+  const on = ST.explore && !ST.globeForce && (!cur || cur === "wx");
+  document.body.classList.toggle("nav-on", on);
+  if (!on) { if (NAV.level !== -1) { NAV.level = -1; NAV.key = ""; navClear(); } return; }
+  NAV.t -= dt; if (NAV.t > 0) return; NAV.t = 0.35;
+  if (!NAV.towns) { navTowns(); return; }
+  const t = controls.target, cd = camera.position.distanceTo(t), lon = t.x / KX + LONC, lat = -t.z / KY + LATC;
+  const L = NAV.level, up = [230, 28], lv = cd > up[0] * (L === 0 ? 0.9 : 1.1) ? 0 : cd > up[1] * (L === 2 ? 1.25 : 0.85) ? 1 : 2;
+  const C = lv >= 1 ? countyAt(lon, lat) : null, T = lv >= 2 ? townAt(lon, lat) : null;
+  const level = lv >= 1 && !C ? 0 : lv === 2 && !T ? 1 : lv;
+  const key = level + "|" + (C ? C.name : "") + "|" + (T ? T.name : "");
+  if (key === NAV.key) return;
+  NAV.key = key; NAV.level = level; NAV.county = C; NAV.town = T; NAV.viewD = cd;
+  document.querySelectorAll("#chips button").forEach(b => b.setAttribute("aria-selected", "false"));   // 地圖卡片接手時，下方分類不再標示選取
+  navClear(); if (level === 0) navTaiwan(); else if (level === 1) navCity(C); else navStreet(T, C);
+  navCrumb();
+}
+// 飛到某一層：縣市或行政區整個放進畫面
+function navFlyBox(bb, minD, ctr) {
+  const cx = ctr ? ctr[0] : (bb[0] + bb[2]) / 2, cy = ctr ? ctr[1] : (bb[1] + bb[3]) / 2, size = Math.max((bb[2] - bb[0]) * KX, (bb[3] - bb[1]) * KY), d = Math.max(minD, size * (MOBILE ? 1.6 : 1.15));
+  const tgt = gp(cx, cy, 0); flyTo(tgt.clone().add(V(0, d * 0.78, d * 0.62)), tgt, 1.6);
+}
+const navGoTaiwan = () => flyTo(ISLAND.pos, ISLAND.tgt, 1.6);
+const navGoCounty = c => c && navFlyBox(c.bbox, 40);
+const navGoTown = t => t && navFlyBox(t.bbox, 9, t.c);
+function navClickAt(lon, lat, c) {
+  if (NAV.level <= 0) return navGoCounty(c);
+  if (NAV.level === 1) { const t = townAt(lon, lat); return t ? navGoTown(t) : navGoCounty(c); }
+  const t = townAt(lon, lat); if (t && NAV.town && t.name !== NAV.town.name) navGoTown(t);
+}
+// ---- 麵包屑＋搜尋 ----
+function navCrumb() {
+  let el = $("crumb");
+  if (!el) { el = document.createElement("nav"); el.id = "crumb"; el.setAttribute("aria-label", "地圖層級"); document.body.appendChild(el);
+    el.addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (!b) return; const g = b.dataset.go;
+      if (g === "tw") navGoTaiwan(); else if (g === "c") navGoCounty(NAV.county); else if (g === "s") { el.classList.toggle("searching"); const i = el.querySelector("input"); if (i) { i.value = ""; i.focus(); navSearch(""); } } });
+    el.addEventListener("input", e => navSearch(e.target.value));
+    el.addEventListener("keydown", e => { if (e.key === "Escape") el.classList.remove("searching"); if (e.key === "Enter") { const f = el.querySelector(".res [data-r]"); f && f.click(); } });
+    el.addEventListener("pointerdown", e => e.stopPropagation());
+    addEventListener("keydown", e => { if (e.key === "Escape" && ST.explore && !el.classList.contains("searching")) { if (NAV.level === 2) navGoCounty(NAV.county); else if (NAV.level === 1) navGoTaiwan(); } });
+  }
+  const parts = [`<button data-go="tw" class="${NAV.level === 0 ? "on" : ""}">台灣</button>`];
+  if (NAV.county) parts.push(`<button data-go="c" class="${NAV.level === 1 ? "on" : ""}">${esc(norm(NAV.county.name))}</button>`);
+  if (NAV.town && NAV.level === 2) parts.push(`<button class="on">${esc(NAV.town.name)}</button>`);
+  const srch = el.querySelector(".srch");
+  el.innerHTML = `<div class="path">${parts.join('<span class="sep">›</span>')}</div><button data-go="s" class="sbtn" aria-label="搜尋">⌕</button><div class="srch"><input type="search" placeholder="搜尋縣市、行政區、地標" aria-label="搜尋地點"><div class="res"></div></div>`;
+  if (srch && el.classList.contains("searching")) { const i = el.querySelector("input"); i.value = srch.querySelector("input").value; navSearch(i.value); }
+}
+const NAV_LM = [["台北 101", 121.5645, 25.034], ["高雄 85 大樓", 120.3007, 22.6116], ["圓山大飯店", 121.5262, 25.0785], ["台中國家歌劇院", 120.6406, 24.1627], ["赤崁樓", 120.2025, 22.9975]];
+function navSearch(q) {
+  const box = document.querySelector("#crumb .res"); if (!box) return; q = norm(q.trim());
+  if (!q) { box.innerHTML = ""; return; }
+  const out = [];
+  for (const c of COUNTIES) if (norm(c.name).includes(q)) out.push({ t: norm(c.name), s: "縣市", go: () => navGoCounty(c) });
+  for (const t of (NAV.towns || [])) if (t.name.includes(q) || (norm(t.county) + t.name).includes(q)) out.push({ t: t.name, s: norm(t.county), go: () => navGoTown(t) });
+  for (const [n, lo, la] of NAV_LM) if (norm(n).replace(/\s/g, "").includes(q.replace(/\s/g, ""))) out.push({ t: n, s: "地標", go: () => { const g = gp(lo, la, 0); flyTo(g.clone().add(V(0.9, 0.8, 1.3)), g.clone().add(V(0, 0.3, 0)), 1.8); } });
+  NAV.res = out.slice(0, 8);
+  box.innerHTML = NAV.res.length ? NAV.res.map((r, i) => `<button data-r="${i}">${esc(r.t)}<span>${esc(r.s)}</span></button>`).join("") : `<p>找不到「${esc(q)}」</p>`;
+  box.onclick = e => { const b = e.target.closest("[data-r]"); if (!b) return; NAV.res[+b.dataset.r].go(); $("crumb").classList.remove("searching"); };
+}
+// 卡片裡的清單也可以點：縣市 → 飛過去；行政區 → 飛過去
+document.addEventListener("click", e => {
+  const c = e.target.closest && e.target.closest("#side [data-nc]"); if (c) { navGoCounty(COUNTIES.find(x => x.name === c.dataset.nc)); return; }
+  const t = e.target.closest && e.target.closest("#side [data-nt]"); if (t && NAV.county) navGoTown((NAV.towns || []).find(x => x.name === t.dataset.nt && sameC(x.county, NAV.county.name)));
+});
+window.__nav = { NAV, navGoCounty, navGoTown, townAt, COUNTIES: () => COUNTIES };
+
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
 let composer = null, bloom = null;
@@ -2813,7 +3002,7 @@ function loop() {
     if (fly.k >= 1) fly = null;
   }
   for (const k in layers) if (layers[k].g && layers[k].g.visible && layers[k].tick) layers[k].tick(T, dt);
-  lodTick(dt); orthoTick(dt); lightTick(dt); lifeTick(dt); earthTick();
+  lodTick(dt); orthoTick(dt); lightTick(dt); lifeTick(dt); earthTick(); navTick(dt);
   for (const f of OBJ.tick) f(T);
   scaleObjects();
   { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); renderer.toneMappingExposure = (uni.uNight.value ? 0.85 : 1.0) * (1 - 0.2 * uni.uClose.value); }
