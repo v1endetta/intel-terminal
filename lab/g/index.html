@@ -1130,53 +1130,106 @@ const mallMat = new THREE.MeshStandardMaterial({ color: 0x8fa3a6, roughness: 0.2
 const spireMat = new THREE.MeshStandardMaterial({ color: 0x9aa1a6, roughness: 0.35, metalness: 0.8 });
 const ruyiMat = new THREE.MeshStandardMaterial({ color: 0xc9a24a, roughness: 0.3, metalness: 0.9, emissive: 0xffc35a, emissiveIntensity: 0 });
 const box = (w, h, d, x, y, z, ry = 0) => { const g = new THREE.BoxGeometry(w / 1000, h, d / 1000); if (ry) g.rotateY(ry); g.translate(x / 1000, y + h / 2, z / 1000); return g; };
-// 歇山／廡殿式屋頂：四坡、屋脊兩端微翹（簡化成四角錐台＋屋脊）
-function hipRoof(w, d, h, x, y, z) { const g = new THREE.CylinderGeometry(0.5, 0.5 * 1.0, 1, 4, 1); g.rotateY(Math.PI / 4); const a = g.attributes.position;
-  for (let i = 0; i < a.count; i++) { const top = a.getY(i) > 0; a.setX(i, a.getX(i) * Math.SQRT2 * (top ? 0.62 : 1)); a.setZ(i, a.getZ(i) * Math.SQRT2 * (top ? 0.08 : 1)); }
-  g.computeVertexNormals(); g.scale(w / 1000, h, d / 1000); g.translate(x / 1000, y + h / 2, z / 1000); return g; }
-const lmRed = new THREE.MeshStandardMaterial({ color: 0xa4281c, roughness: 0.55 }), lmGold = new THREE.MeshStandardMaterial({ color: 0xd8a227, roughness: 0.35, metalness: 0.45 }),
-  lmWhite = new THREE.MeshStandardMaterial({ color: 0xeeece6, roughness: 0.6 }), lmDark = new THREE.MeshStandardMaterial({ color: 0x1d2024, roughness: 0.8 }),
-  lmTile = new THREE.MeshStandardMaterial({ color: 0x8a3f22, roughness: 0.6 }), lmStone = new THREE.MeshStandardMaterial({ color: 0xb9b3a6, roughness: 0.85 });
-const LM_MATS = [[lmRed, 0xa4281c], [lmGold, 0xd8a227], [lmWhite, 0xeeece6], [lmDark, 0x1d2024], [lmTile, 0x8a3f22], [lmStone, 0xb9b3a6]];
-// 高雄 85 大樓：「高」字造型——兩支腳（約 35 層、150 m）中間挖空，上面合成一棟往上收，最上面細塔與天線到 378 m
+// 中式屋頂：四坡（廡殿／歇山簡化），屋簷四角往上翹、正脊兩端燕尾
+function cnRoof(w, d, h, x, y, z, flare = 0.18, swallow = true) {
+  const g = new THREE.BufferGeometry(), W = w / 2000, D = d / 2000, rw = W * (d > w ? 0.12 : 0.62), rd = D * (d > w ? 0.62 : 0.12), N = 6, pos = [], idx = [];
+  // 屋簷是一圈向下彎的曲面：從屋脊（高 h）往外到屋簷（高 0），中間下凹，四角上翹
+  for (let s = 0; s <= N; s++) { const u = s / N, k = u * u;   // 下凹的屋面
+    for (const [cx, cz] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+      const ex = cx * W * (1 + 0.02), ez = cz * D * (1 + 0.02), rx = cx * rw, rz = cz * rd;
+      pos.push(rx + (ex - rx) * u, h * (1 - k) + (u > 0.85 ? flare * h * (u - 0.85) / 0.15 : 0), rz + (ez - rz) * u); } }
+  for (let s = 0; s < N; s++) for (let c = 0; c < 4; c++) { const a = s * 4 + c, b = s * 4 + (c + 1) % 4, a2 = a + 4, b2 = b + 4; idx.push(a, a2, b, b, a2, b2); }
+  idx.push(0, 1, 2, 0, 2, 3);
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals(); g.translate(x / 1000, y, z / 1000);
+  const parts = [g];
+  if (swallow) { const L = (d > w ? rd : rw) * 2 + 0.0004, ridge = new THREE.BoxGeometry(d > w ? 0.0006 : L, h * 0.12, d > w ? L : 0.0006); ridge.translate(x / 1000, y + h * 1.05, z / 1000); parts.push(ridge);
+    for (const s of [-1, 1]) { const t = new THREE.BoxGeometry(0.0006, h * 0.32, 0.0006); t.rotateZ(s * (d > w ? 0 : 0.7)); t.rotateX(s * (d > w ? 0.7 : 0)); t.translate(x / 1000 + (d > w ? 0 : s * L / 2), y + h * 1.2, z / 1000 + (d > w ? s * L / 2 : 0)); parts.push(t); } }
+  return parts;
+}
+// 共用的立面著色：依世界座標畫樓層、柱、窗、陽台；晚上窗戶亮燈
+function facadeMat(o) {
+  const m = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: o.rough ?? 0.6, metalness: o.metal ?? 0.05 }); m.userData.y0 = { value: 0 };
+  m.onBeforeCompile = sh => {
+    Object.assign(sh.uniforms, { uNight: uni.uNight, uFH: { value: o.fh * BEX / 1000 }, uBW: { value: o.bw / 1000 }, uWall: { value: new THREE.Color(o.wall) }, uCol: { value: new THREE.Color(o.col) }, uWin: { value: new THREE.Color(o.win) }, uBand: { value: new THREE.Color(o.band) }, uY0: m.userData.y0, uLit: { value: o.lit ?? 0.5 } });
+    m.userData.sh = sh;
+    sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying vec3 vWPf; varying vec3 vNf;").replace("#include <worldpos_vertex>", "#include <worldpos_vertex>\nvWPf = (modelMatrix * vec4(transformed, 1.0)).xyz; vNf = normalize(mat3(modelMatrix) * objectNormal);");
+    sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nvarying vec3 vWPf; varying vec3 vNf; uniform float uNight, uFH, uBW, uY0, uLit; uniform vec3 uWall, uCol, uWin, uBand; float _fwin;")
+      .replace("#include <color_fragment>", `#include <color_fragment>
+        { float side = 1.0 - step(0.7, abs(vNf.y));
+          float hz = abs(vNf.z) > abs(vNf.x) ? vWPf.x : vWPf.z, fl = (vWPf.y - uY0) / uFH, ff = fract(fl), bf = fract(hz / uBW);
+          float colm = step(0.86, bf), band = step(0.84, ff), win = (1.0 - colm) * step(0.12, ff) * step(ff, 0.8);
+          vec3 c = mix(uWall, uWin, win); c = mix(c, uBand, band); c = mix(c, uCol, colm * (1.0 - band));
+          float far = smoothstep(0.25, 0.6, fwidth(fl)); c = mix(c, mix(uWall, uWin, 0.4) * 0.5 + uCol * 0.3 + uBand * 0.2, far);
+          diffuseColor.rgb = mix(diffuseColor.rgb, c, side) * (1.0 - 0.88 * uNight);
+          _fwin = win * side * (1.0 - far) * step(1.0 - uLit, fract(sin(floor(fl) * 12.9 + floor(hz / uBW) * 78.2) * 43758.5)) + side * far * uLit * 0.15; }`)
+      .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(1.0, 0.82, 0.55) * _fwin * uNight * 0.38;");
+  };
+  m.customProgramCacheKey = () => "fac" + o.key;
+  return m;
+}
+const lmGold = new THREE.MeshStandardMaterial({ color: 0xd9a531, roughness: 0.32, metalness: 0.35, emissive: 0xffb84a, emissiveIntensity: 0 }),
+  lmRoofT = new THREE.MeshStandardMaterial({ color: 0x9a4a2a, roughness: 0.55, side: THREE.DoubleSide }), lmWhite = new THREE.MeshStandardMaterial({ color: 0xe9e6de, roughness: 0.7 }),
+  lmStone = new THREE.MeshStandardMaterial({ color: 0xb7b0a2, roughness: 0.85 }), lmBrick = new THREE.MeshStandardMaterial({ color: 0x9c4b36, roughness: 0.9 });
+lmGold.side = THREE.DoubleSide;
+const lmRed = new THREE.MeshStandardMaterial({ color: 0xa5291d, roughness: 0.6 });
+const LM_MATS = [[lmGold, 0xd9a531], [lmRoofT, 0x9a4a2a], [lmWhite, 0xe9e6de], [lmStone, 0xb7b0a2], [lmBrick, 0x9c4b36], [lmRed, 0xa5291d]];
+const GH_FAC = facadeMat({ key: "gh", fh: 3.6, bw: 4.2, wall: 0xa5291d, col: 0xb8301f, win: 0x2b2a2a, band: 0xd8cfbf, lit: 0.6 });   // 圓山：紅柱、米白陽台欄杆
+const K85_FAC = facadeMat({ key: "85", fh: 3.9, bw: 1.6, wall: 0x2e4552, col: 0x7d9aa6, win: 0x23384a, band: 0x5b7482, rough: 0.2, metal: 0.5, lit: 0.45 });   // 85：深藍綠玻璃、淺色直向鋁框
+const PV_FAC = facadeMat({ key: "pv", fh: 4.5, bw: 2.4, wall: 0xa8301f, col: 0x7a1c12, win: 0x5a2a1c, band: 0x7a1c12, lit: 0.3 });   // 赤崁樓：紅牆紅柱、木格窗
+// 高雄 85：「高」字——兩支腳到 35 樓（約 150 m），中間挖空 26 m；上面合成主體逐段收進；頂部塔冠與天線到 378 m。腳與主體正面有斜切
 function build85(K) {
-  const P = [], M = 1 / 1000, seg = (w, d, h0, h1, x = 0) => P.push([loft(notchSq(1, 0.06).map(p => [p[0] * w / 2 / d * 2, p[1]]), d / 2 * M, d / 2 * M, h0 * K, h1 * K).translate(x * M, 0, 0), 0]);
-  seg(32, 48, 0, 150, -31); seg(32, 48, 0, 150, 31);              // 兩支腳，中間 30 m 空出來
-  seg(94, 50, 150, 205); seg(84, 46, 205, 255); seg(66, 40, 255, 290); seg(46, 34, 290, 322); seg(30, 26, 322, 347);
-  const sp = new THREE.CylinderGeometry(0.8 * M, 2.4 * M, 31 * K, 8); sp.translate(0, 362 * K, 0); P.push([sp, 0, spireMat]);
+  const P = [], M = 1 / 1000, rect = (w, d) => [[-w / 2, -d / 2], [w / 2, -d / 2], [w / 2, d / 2], [-w / 2, d / 2]];
+  const seg = (w, d, w1, d1, h0, h1, x = 0) => { const g = loft(rect(w, d), M, M, h0 * K, h1 * K); const a = g.attributes.position;   // 上下不同寬度
+    for (let i = 0; i < a.count; i++) if (Math.abs(a.getY(i) - h1 * K) < 1e-6) { a.setX(i, a.getX(i) * w1 / w); a.setZ(i, a.getZ(i) * d1 / d); } g.computeVertexNormals(); g.translate(x * M, 0, 0); P.push([g, 0, K85_FAC]); };
+  seg(30, 50, 26, 46, 0, 150, -28); seg(30, 50, 26, 46, 0, 150, 28);        // 兩支腳（往上微收）
+  seg(86, 50, 80, 46, 150, 190); seg(80, 46, 70, 42, 190, 240); seg(62, 40, 54, 36, 240, 280);
+  seg(46, 34, 40, 30, 280, 315); seg(34, 28, 26, 22, 315, 347);
+  const sp = new THREE.CylinderGeometry(0.6 * M, 2.4 * M, 31 * K, 8); sp.translate(0, 362.5 * K, 0); P.push([sp, 0, spireMat]);
   return P;
 }
-// 圓山大飯店：14 層宮殿式，紅柱紅牆、金黃琉璃瓦，主樓東西長約 160 m，兩翼較低
+// 圓山大飯店：主樓 14 層（含屋頂約 87 m）、東西長約 150 m；金黃琉璃瓦重簷屋頂；兩翼較低；正面紅柱一整排、每層米白欄杆
 function buildGrandHotel(K) {
-  const P = [], R = (g, m) => P.push([g, 0, m]);
-  R(box(170, 8 * K, 60, 0, 0, 0), lmStone);                        // 台基
-  R(box(150, 52 * K, 36, 0, 8 * K, 0), lmRed);                     // 主樓
-  R(hipRoof(168, 54, 14 * K, 0, 60 * K, 0), lmGold);
-  R(box(70, 10 * K, 24, 0, 74 * K, 0), lmRed); R(hipRoof(84, 34, 9 * K, 0, 84 * K, 0), lmGold);   // 頂樓與重簷
-  for (const s of [-1, 1]) { R(box(36, 34 * K, 46, s * 95, 8 * K, 4), lmRed); R(hipRoof(46, 56, 10 * K, s * 95, 42 * K, 4), lmGold); }   // 兩翼
-  for (let i = -6; i <= 6; i++) R(box(2.2, 50 * K, 2.2, i * 11.5, 8 * K, 19), lmRed);              // 正面紅柱
+  const P = [], R = (g, m) => P.push([g, 0, m]), RS = (gs, m) => gs.forEach(g => R(g, m));
+  R(box(176, 26 * K, 54, 0, -20 * K, 0), lmStone);                          // 台基（往下延伸，山坡上不會浮空）
+  R(box(150, 44 * K, 28, 0, 6 * K, 0), GH_FAC);                             // 主樓 12 層
+  RS(cnRoof(162, 40, 9 * K, 0, 50 * K, 0), lmGold);                         // 下簷
+  R(box(118, 7 * K, 20, 0, 55 * K, 0), GH_FAC);                             // 重簷之間的樓層
+  RS(cnRoof(132, 30, 12 * K, 0, 62 * K, 0, 0.25), lmGold);                  // 上簷（主脊）
+  for (const s of [-1, 1]) { R(box(30, 30 * K, 40, s * 88, 6 * K, 4), GH_FAC); RS(cnRoof(40, 50, 8 * K, s * 88, 36 * K, 4, 0.2, false), lmGold); }   // 兩翼
+  R(box(46, 14 * K, 14, 0, 6 * K, 21), GH_FAC); RS(cnRoof(54, 20, 5 * K, 0, 20 * K, 21, 0.2, false), lmGold);   // 正門門廊
   return P;
 }
-// 台中國家歌劇院：白色曲牆量體，四面挖出大型曲面洞（「美聲涵洞」），約 36 m 高
+// 台中國家歌劇院（伊東豊雄）：約 110 × 60 m、高 36 m 的量體，四面都是從地面拱起的大型曲面洞口（洞裡是玻璃），牆是白灰色
+const OPERA_MAT = new THREE.MeshStandardMaterial({ color: 0xe6e3dc, roughness: 0.75 });
+OPERA_MAT.onBeforeCompile = sh => { sh.uniforms.uNight = uni.uNight;
+  sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying vec3 vLP; varying vec3 vLN;").replace("#include <begin_vertex>", "#include <begin_vertex>\nvLP = position; vLN = normal;");
+  sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nvarying vec3 vLP; varying vec3 vLN; uniform float uNight; float _hole;")
+    .replace("#include <color_fragment>", `#include <color_fragment>
+      { float side = 1.0 - step(0.7, abs(vLN.y)); float u = (abs(vLN.z) > 0.5 ? vLP.x / 0.055 : vLP.z / 0.03) + (vLN.x + vLN.z) * 0.37, v = vLP.y;
+        float H = 0.09;                                                 // 36 m × 2.5
+        float a1 = abs(fract(u * 1.6 + 0.2) - 0.5) * 2.0, a2 = abs(fract(u * 2.3 + 0.55) - 0.5) * 2.0;
+        float top1 = H * (0.82 - 0.55 * a1 * a1), top2 = H * (0.55 - 0.5 * a2 * a2) + H * 0.32;   // 從地面拱起的洞，第二排從中段開
+        float hole = max(step(v, top1) * step(0.12, 1.0 - a1), step(H * 0.35, v) * step(v, top2) * step(0.3, 1.0 - a2) * step(0.5, fract(u * 0.8)));
+        _hole = hole * side;
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.16, 0.2, 0.24), _hole) * (1.0 - 0.85 * uNight); }`)
+    .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(1.0, 0.85, 0.6) * _hole * uNight * 0.75;");
+};
 function buildOpera(K) {
-  const P = [], R = (g, m) => P.push([g, 0, m]);
-  R(box(112, 36 * K, 62, 0, 0, 0), lmWhite);
-  for (const [x, z, w, rx] of [[-30, 31.2, 22, 0], [5, 31.2, 30, 0], [36, 31.2, 18, 0], [-22, -31.2, 26, 0], [24, -31.2, 24, 0]]) {   // 正背面的洞：深色橢圓凹面
-    const g = new THREE.CylinderGeometry(w / 2000, w / 2000, 0.0012, 28); g.rotateX(Math.PI / 2); g.scale(1, 36 * K / (w / 1000) * 0.62, 1); g.translate(x / 1000, 15 * K + (Math.abs(x) % 7) * K, z / 1000); R(g, lmDark); }
-  for (const s of [-1, 1]) { const g = new THREE.CylinderGeometry(0.009, 0.009, 0.0012, 28); g.rotateZ(Math.PI / 2); g.scale(1, 1.4 * K * 1000 * 0.012, 1); g.translate(s * 0.0562, 16 * K, 0); R(g, lmDark); }
-  R(box(118, 1.2 * K, 68, 0, 36 * K, 0), lmWhite);   // 屋頂花園邊
+  const P = [], g = new THREE.BoxGeometry(0.11, 36 * K, 0.06); g.translate(0, 18 * K, 0); P.push([g, 0, OPERA_MAT]);
+  const r = new THREE.BoxGeometry(0.114, 0.6 * K, 0.064); r.translate(0, 36 * K, 0); P.push([r, 0, lmWhite]);
   return P;
 }
-// 台南赤崁樓：紅磚台基上兩座樓閣（海神廟、文昌閣），重簷歇山頂、燕尾
+// 赤崁樓：紅磚台基（普羅民遮城遺構，正面有拱門）上兩座二層樓閣：前方海神廟、後方文昌閣，都是重簷歇山、燕尾脊
 function buildChihkan(K) {
-  const P = [], R = (g, m) => P.push([g, 0, m]);
-  R(box(70, 5 * K, 44, 0, 0, 0), lmTile);
-  for (const x of [-17, 17]) {
-    R(box(18, 6 * K, 14, x, 5 * K, 0), lmRed); R(hipRoof(26, 22, 3.2 * K, x, 11 * K, 0), lmTile);
-    R(box(12, 5 * K, 9, x, 14.2 * K, 0), lmRed); R(hipRoof(19, 15, 3.6 * K, x, 19.2 * K, 0), lmTile);
+  const P = [], R = (g, m) => P.push([g, 0, m]), RS = (gs, m) => gs.forEach(g => R(g, m));
+  R(box(62, 12 * K, 40, 0, -6 * K, 0), lmBrick);
+  for (const [x, z, s] of [[-13, 6, 1], [14, -6, 0.92]]) {
+    R(box(15 * s, 5 * K, 11 * s, x, 6 * K, z), PV_FAC); RS(cnRoof(22 * s, 17 * s, 2.6 * K, x, 11 * K, z, 0.3, false), lmRoofT);
+    R(box(10 * s, 4 * K, 7.5 * s, x, 13.6 * K, z), PV_FAC); RS(cnRoof(16 * s, 12.5 * s, 3.2 * K, x, 17.6 * K, z, 0.35), lmRoofT);
   }
   return P;
 }
+
 function terrH(lon, lat) { const S = MOBILE ? 3 : 2, dl = (META.lon1 - META.lon0) / (META.w - 1) * S, dt = (META.lat1 - META.lat0) / (META.h - 1) * S;
   const fi = (lon - META.lon0) / dl, fj = (META.lat1 - lat) / dt, i = Math.floor(fi), j = Math.floor(fj), u = fi - i, v = fj - j, e = (ii, jj) => Math.max(DEM[(jj * S) * META.w + ii * S], 0) / 1000 * EX;
   const a = e(i, j), b = e(i + 1, j), c = e(i, j + 1), d = e(i + 1, j + 1); return u + v <= 1 ? a + u * (b - a) + v * (c - a) : d + (1 - u) * (c - d) + (1 - v) * (b - d); }
@@ -1184,6 +1237,7 @@ function addLandmarks() {
   const mk = (lon, lat, parts) => {
     const g = new THREE.Group(), [x, z] = toXZ(lon, lat); g.position.set(x, terrH(lon, lat) * 0.42 - 0.002, z);
     for (const [geo, y, mat] of parts) { const m = new THREE.Mesh(geo, mat || lmMat); m.position.y = y; m.castShadow = m.receiveShadow = true; g.add(m); }
+    g.children.forEach(m => { if (m.material.userData.y0) m.material.userData.y0.value = g.position.y; });
     scene.add(g); (window.__LMG = window.__LMG || []).push(g); return g;
   };
   const K = BEX / 1000, sq = (rt, rb, h) => { const g = new THREE.CylinderGeometry(rt * Math.SQRT2 / 2, rb * Math.SQRT2 / 2, h, 4); g.rotateY(Math.PI / 4); return g; };
@@ -2763,7 +2817,7 @@ function loop() {
   for (const f of OBJ.tick) f(T);
   scaleObjects();
   { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); renderer.toneMappingExposure = (uni.uNight.value ? 0.85 : 1.0) * (1 - 0.2 * uni.uClose.value); }
-  lmMat.emissiveIntensity = 0; for (const [m, c] of LM_MATS) m.color.setHex(c).multiplyScalar(1 - uni.uNight.value * 0.85); ruyiMat.emissiveIntensity = uni.uNight.value * 0.9; mallMat.color.setHex(0x8fa3a6).multiplyScalar(1 - uni.uNight.value * 0.85); spireMat.emissive.setHex(0xffffff); spireMat.emissiveIntensity = uni.uNight.value * 0.25; lmMat.color.setRGB(0.42, 0.52, 0.51).multiplyScalar(1 - uni.uNight.value * 0.88); lmMat.envMapIntensity = 1 - 0.85 * uni.uNight.value;
+  lmMat.emissiveIntensity = 0; lmGold.emissiveIntensity = uni.uNight.value * 0.1; for (const [m, c] of LM_MATS) m.color.setHex(c).multiplyScalar(1 - uni.uNight.value * 0.85); ruyiMat.emissiveIntensity = uni.uNight.value * 0.9; mallMat.color.setHex(0x8fa3a6).multiplyScalar(1 - uni.uNight.value * 0.85); spireMat.emissive.setHex(0xffffff); spireMat.emissiveIntensity = uni.uNight.value * 0.25; lmMat.color.setRGB(0.42, 0.52, 0.51).multiplyScalar(1 - uni.uNight.value * 0.88); lmMat.envMapIntensity = 1 - 0.85 * uni.uNight.value;
   outlineGroup.visible = camera.position.distanceTo(controls.target) > 40;
   if (ST.on) storyTick(dt);
   if (!ST.on || ST.explore) controls.update(); else camera.lookAt(controls.target);
