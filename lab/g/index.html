@@ -359,6 +359,13 @@ body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-event
 .gxl b{font-weight:600}.gxl em{font-style:normal;font-size:11px;color:#aeaeb2}.gxl.tw{background:rgba(255,255,255,.9);color:#000}
 
 .lbl.nv .nvp.big{font-size:15px;padding:8px 16px}.lbl.nv .nvp.big i{width:10px;height:10px}
+
+/* 時間開關 */
+#crumb .dt{display:inline-flex;padding:2px;border-radius:999px;background:rgba(118,118,128,.24)}
+#crumb .dt button{padding:4px 10px;font-size:12px}
+#crumb .dt button.on{background:rgba(255,255,255,.9);color:#000;font-weight:600}
+@media (max-width:760px){#crumb .dt button{padding:4px 8px;font-size:11px}}
+#side .lst li span.sdot{display:inline-block;margin-top:0}
 </style>
 <script type="importmap">
 {"imports":{
@@ -3305,6 +3312,46 @@ const STREET_VIEW = {
         + `<div class="nvh">${esc(norm(C.name))}</div>` + listHTML(cty.slice(0, 5).map(x => ({ t: x.t, s: `${x.s || ""}・${navAgo(x.at)}`, url: x.u }))) };
   },
 };
+// ---- 時間開關：「現況」看量，「變化」看跟上一期比（房價上季、新公司上月、標案前一週、職缺 7 天前） ----
+NAV.delta = false; NAV.hd = {};
+const DELTA_OK = { house: "比上季", biz: "比上月", tender: "比前一週", jobs: "比 7 天前" };
+function houseDetail(cname) { const k = norm(cname).replace(/^台/, "臺"); if (NAV.hd[k] !== undefined) return NAV.hd[k]; NAV.hd[k] = null;
+  fetch(RAW + "house/" + encodeURIComponent(k) + ".json?d=" + Math.floor(Date.now() / 864e5), { cache: "no-store" }).then(r => r.ok ? r.json() : false).then(j => { NAV.hd[k] = j || false; NAV.key = ""; }).catch(() => { NAV.hd[k] = false; });
+  return null; }
+const dPct = v => v == null ? "—" : `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(1)}%`;
+// 一組「地點＋變化％」畫成光柱：高度＝變化幅度，綠漲紅跌
+function deltaCols(rows, view, prio) { const mx = Math.max(1, ...rows.map(r => Math.abs(r.v)));
+  rows.forEach((r, i) => navCol(r.ll[0], r.ll[1], Math.abs(r.v) / mx, view, r.name, dPct(r.v), (prio || 6) - i * 0.2, r.v >= 0 ? UPH : DNH)); }
+const deltaList = (rows, attr, sub) => `<ul class="lst nvl">${rows.map(r => `<li data-${attr}="${esc(r.key || r.name)}" style="cursor:pointer"><span class="sdot" style="background:${r.v >= 0 ? UPH : DNH}"></span>${esc(norm(r.name))}<span>${dPct(r.v)}${sub ? "・" + sub(r) : ""}</span></li>`).join("")}</ul>`;
+const DELTA_TW = {
+  house() { navCounties(() => ({ op: 0.25 })); return { eyebrow: "台灣 · 實價登錄 · 比上季", title: "哪裡在漲？", big: "選一個縣市", color: LENS.house.c, body: `<p class="why">各區的季變化在縣市層：點一個縣市或拉近，就看得到哪一區比上季漲、哪一區在跌。</p>` }; },
+  biz() { const C = (NAV.bt || {}).counties || {}, rows = Object.entries(C).filter(([, v]) => v.p >= 20).map(([k, v]) => ({ key: k, name: k, v: (v.n / v.p - 1) * 100, n: v.n })).sort((a, b) => b.v - a.v);
+    navCounties(c => { const r = rows.find(r => sameC(r.key, c.name)); return r ? { col: new THREE.Color(r.v >= 0 ? UPH : DNH), op: 0.3 + 0.6 * Math.min(1, Math.abs(r.v) / 30), sub: dPct(r.v), dot: r.v >= 0 ? UPH : DNH, prio: 2 + Math.abs(r.v) / 10 } : { dim: true, op: 0.12 }; });
+    return { eyebrow: `台灣 · 新設立 · ${(NAV.bt || {}).month || ""} 比上月`, title: "哪裡開公司變熱、變冷？", big: rows[0] ? `${norm(rows[0].name)} ${dPct(rows[0].v)}` : "—", color: LENS.biz.c, body: `<p class="why">上月少於 20 家的縣市不比，避免小數字放大。</p>` + deltaList(rows, "nc", r => `${r.n} 家`) }; },
+  tender() { const C = TM().counties || {}, rows = Object.entries(C).filter(([k, v]) => k !== "中央" && v.np >= 10).map(([k, v]) => ({ key: k, name: k, v: (v.n / v.np - 1) * 100, n: v.n })).sort((a, b) => b.v - a.v);
+    navCounties(c => { const r = rows.find(r => sameC(r.key, c.name)); return r ? { col: new THREE.Color(r.v >= 0 ? UPH : DNH), op: 0.3 + 0.6 * Math.min(1, Math.abs(r.v) / 40), sub: dPct(r.v), dot: r.v >= 0 ? UPH : DNH, prio: 2 } : { dim: true, op: 0.12 }; });
+    return { eyebrow: `台灣 · 政府標案 · 比前一週`, title: "哪裡發包變多？", big: rows.length ? `${norm(rows[0].name)} ${dPct(rows[0].v)}` : "資料累積中", color: LENS.tender.c, body: rows.length ? deltaList(rows, "nc", r => `${r.n} 件`) : `<p class="empty">前一週的資料還在補，一兩天內就能比。</p>` }; },
+  jobs() { const A = ((P.jobs || {}).areas) || [], rows = A.filter(a => a.chg7 != null).map(a => ({ key: a.counties[0], name: a.name, v: a.chg7, n: a.n })).sort((a, b) => b.v - a.v);
+    navCounties(c => { const a = jobArea(c.name); return a && a.chg7 != null ? { col: new THREE.Color(a.chg7 >= 0 ? UPH : DNH), op: 0.3 + 0.6 * Math.min(1, Math.abs(a.chg7) / 3), sub: dPct(a.chg7), dot: a.chg7 >= 0 ? UPH : DNH, prio: 2 } : { dim: true, op: 0.12 }; });
+    return { eyebrow: "台灣 · 104 職缺 · 比 7 天前", title: "哪裡開始搶人、哪裡收手？", big: rows[0] ? `${rows[0].name} ${dPct(rows[0].v)}` : "—", color: LENS.jobs.c, body: deltaList(rows, "nc", r => `${r.n.toLocaleString("en-US")} 個`) }; },
+};
+const DELTA_CITY = {
+  house(C) { const ts = navOutline(C), hd = houseDetail(C.name), view = NAV.viewD || 60;
+    if (!hd) return { eyebrow: `${norm(C.name)} · 實價登錄 · 比上季`, title: "哪一區在漲？", big: hd === false ? "沒有資料" : "載入中…", color: LENS.house.c, body: "" };
+    const rows = hd.towns.filter(t => t.chg != null && t.n >= 10).map(t => { const T = ts.find(x => x.name === t.town); return T ? { name: t.town, ll: T.c, v: t.chg, med: t.med, n: t.n } : null; }).filter(Boolean).sort((a, b) => b.v - a.v);
+    deltaCols(rows, view); townPills(ts, new Set(rows.map(r => r.name)));
+    return { eyebrow: `${norm(C.name)} · 實價登錄 ${hd.season} · 比上季`, title: "哪一區在漲？", big: rows[0] ? `${rows[0].name} ${dPct(rows[0].v)}` : "—", color: LENS.house.c,
+      body: `<p class="why">光柱高度＝每坪均價比上一季的變化幅度，綠漲紅跌；成交少於 10 筆的區不比。</p>` + deltaList(rows.slice(0, 12), "nt", r => `${p1(r.med)} 萬／坪・${r.n} 筆`) }; },
+  biz(C) { const ts = navOutline(C), view = NAV.viewD || 60, rows = btTowns(C).filter(r => r[3] >= 5).map(r => { const T = ts.find(t => t.name === r[1]); return T ? { name: r[1], ll: T.c, v: (r[2] / r[3] - 1) * 100, n: r[2] } : null; }).filter(Boolean).sort((a, b) => b.v - a.v);
+    deltaCols(rows, view); townPills(ts, new Set(rows.map(r => r.name)));
+    return { eyebrow: `${norm(C.name)} · 新設立 · 比上月`, title: "哪一區開公司變熱？", big: rows[0] ? `${rows[0].name} ${dPct(rows[0].v)}` : "—", color: LENS.biz.c, body: `<p class="why">上月少於 5 家的區不比。</p>` + deltaList(rows.slice(0, 12), "nt", r => `${r.n} 家`) }; },
+  tender(C) { const ts = navOutline(C), view = NAV.viewD || 60, rows = tmTowns(C.name).filter(r => r[4] >= 3).map(r => { const T = ts.find(t => t.name === r[1]); return T ? { name: r[1], ll: T.c, v: (r[2] / r[4] - 1) * 100, n: r[2] } : null; }).filter(Boolean).sort((a, b) => b.v - a.v);
+    deltaCols(rows, view); townPills(ts, new Set(rows.map(r => r.name)));
+    return { eyebrow: `${norm(C.name)} · 政府標案 · 比前一週`, title: "哪一區發包變多？", big: rows[0] ? `${rows[0].name} ${dPct(rows[0].v)}` : "資料累積中", color: LENS.tender.c, body: rows.length ? deltaList(rows.slice(0, 12), "nt", r => `${r.n} 件`) : `<p class="empty">前一週的分區資料還不夠，一兩天內就能比。</p>` }; },
+  jobs(C) { const ts = navOutline(C), view = NAV.viewD || 60, rows = jobTowns(C.name).filter(r => r[3] != null).map(r => { const T = ts.find(t => t.name === r[1]); return T ? { name: r[1], ll: T.c, v: r[3], n: r[2] } : null; }).filter(Boolean).sort((a, b) => b.v - a.v);
+    deltaCols(rows, view); townPills(ts, new Set(rows.map(r => r.name)));
+    return { eyebrow: `${norm(C.name)} · 104 職缺 · 比 7 天前`, title: "哪一區開始搶人？", big: rows[0] ? `${rows[0].name} ${dPct(rows[0].v)}` : "資料累積中", color: LENS.jobs.c, body: rows.length ? deltaList(rows.slice(0, 12), "nt", r => `${r.n.toLocaleString("en-US")} 個`) : `<p class="empty">分區職缺從今天開始記錄，要滿 7 天才能比（六都＋新竹）。</p>` }; },
+};
 // ---- 層級切換：依鏡頭距離自動判斷；中間留一段緩衝，避免在邊界來回跳 ----
 function navTick(dt) {
   const on = ST.explore && !ST.globeForce && (!cur || cur === "wx" || (cur === "traffic" && NAV.lens === "traffic"));
@@ -3317,7 +3364,7 @@ function navTick(dt) {
   const L = NAV.level, up = [230, 28], lv = cd > up[0] * (L === 0 ? 0.9 : 1.1) ? 0 : cd > up[1] * (L === 2 ? 1.25 : 0.85) ? 1 : 2;
   const C = lv >= 1 ? countyAt(lon, lat) : null, T = lv >= 2 ? townAt(lon, lat) : null;
   const level = lv >= 1 && !C ? 0 : lv === 2 && !T ? 1 : lv;
-  const pk = level + "|" + (C ? C.name : "") + "|" + (T ? T.name : ""), key = pk + "|" + NAV.lens;
+  const pk = level + "|" + (C ? C.name : "") + "|" + (T ? T.name : ""), key = pk + "|" + NAV.lens + (NAV.delta ? "|d" : "");
   if (key === NAV.key) return;
   if (NAV.quiet === true) NAV.quiet = pk;                 // 剛選了沒有地點的資訊：這一次只換地圖、不蓋掉它的卡片；換層或換地方才換卡片
   const quiet = NAV.quiet === pk; if (!quiet) NAV.quiet = null;
@@ -3328,6 +3375,7 @@ function navTick(dt) {
   const TWONLY = { macro: 1, mood: 1, power: 1 }, lz = NAV.lens, at = [[], [C], [T, C]];
   let fn, args;
   if (TWONLY[lz]) { fn = TW_VIEW[lz]; args = []; }
+  else if (NAV.delta && DELTA_OK[lz] && (level === 0 ? DELTA_TW[lz] : DELTA_CITY[lz])) { fn = level === 0 ? DELTA_TW[lz] : DELTA_CITY[lz]; args = level === 0 ? [] : [C]; }
   else { const VW = [TW_VIEW, CITY_VIEW, STREET_VIEW][level];
     if (VW[lz]) { fn = VW[lz]; args = at[level]; } else if (level === 2 && CITY_VIEW[lz]) { fn = CITY_VIEW[lz]; args = [C]; } else { fn = VW.now; args = at[level]; } }
   let o = null; try { o = fn(...args); } catch (e) { console.warn("nav", e); }
@@ -3356,7 +3404,7 @@ function navCrumb() {
   let el = $("crumb");
   if (!el) { el = document.createElement("nav"); el.id = "crumb"; el.setAttribute("aria-label", "地圖層級"); document.body.appendChild(el);
     el.addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (!b) return; const g = b.dataset.go;
-      if (g === "lz") { navSetLens("now"); document.querySelectorAll("#chips button").forEach(b => b.setAttribute("aria-selected", "false")); } else if (g === "tw") navGoTaiwan(); else if (g === "c") navGoCounty(NAV.county); else if (g === "s") { el.classList.toggle("searching"); const i = el.querySelector("input"); if (i) { i.value = ""; i.focus(); navSearch(""); } } });
+      if (g === "d0" || g === "d1") { NAV.delta = g === "d1"; NAV.key = ""; NAV.t = 0; } else if (g === "lz") { navSetLens("now"); document.querySelectorAll("#chips button").forEach(b => b.setAttribute("aria-selected", "false")); } else if (g === "tw") navGoTaiwan(); else if (g === "c") navGoCounty(NAV.county); else if (g === "s") { el.classList.toggle("searching"); const i = el.querySelector("input"); if (i) { i.value = ""; i.focus(); navSearch(""); } } });
     el.addEventListener("input", e => navSearch(e.target.value));
     el.addEventListener("keydown", e => { if (e.key === "Escape") el.classList.remove("searching"); if (e.key === "Enter") { const f = el.querySelector(".res [data-r]"); f && f.click(); } });
     el.addEventListener("pointerdown", e => e.stopPropagation());
@@ -3367,7 +3415,8 @@ function navCrumb() {
   if (NAV.town && NAV.level === 2) parts.push(`<button class="on">${esc(NAV.town.name)}</button>`);
   const srch = el.querySelector(".srch"), LZ = LENS[NAV.lens];
   const badge = NAV.lens !== "now" ? `<button data-go="lz" class="lz" style="--c:${LZ.c}" aria-label="地圖視角：${LZ.n}，點一下回到現場"><i></i>${LZ.n}<span>×</span></button>` : NAV.quiet ? `<span class="lz q" title="這類資訊沒有地點，地圖顯示現場">地圖：現場</span>` : "";
-  el.innerHTML = `<div class="path">${parts.join('<span class="sep">›</span>')}</div>${badge}<button data-go="s" class="sbtn" aria-label="搜尋">⌕</button><div class="srch"><input type="search" placeholder="搜尋縣市、行政區、地標" aria-label="搜尋地點"><div class="res"></div></div>`;
+  const dt = DELTA_OK[NAV.lens] ? `<span class="dt"><button data-go="d0" class="${NAV.delta ? "" : "on"}">現況</button><button data-go="d1" class="${NAV.delta ? "on" : ""}">${DELTA_OK[NAV.lens]}</button></span>` : "";
+  el.innerHTML = `<div class="path">${parts.join('<span class="sep">›</span>')}</div>${badge}${dt}<button data-go="s" class="sbtn" aria-label="搜尋">⌕</button><div class="srch"><input type="search" placeholder="搜尋縣市、行政區、地標" aria-label="搜尋地點"><div class="res"></div></div>`;
   if (srch && el.classList.contains("searching")) { const i = el.querySelector("input"); i.value = srch.querySelector("input").value; navSearch(i.value); }
 }
 const NAV_LM = [["台北 101", 121.5645, 25.034], ["高雄 85 大樓", 120.3007, 22.6116], ["圓山大飯店", 121.5262, 25.0785], ["台中國家歌劇院", 120.6406, 24.1627], ["赤崁樓", 120.2025, 22.9975]];
