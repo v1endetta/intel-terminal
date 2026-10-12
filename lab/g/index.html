@@ -114,53 +114,111 @@ body.exploring #hint{opacity:1}
   #hint{display:none}
   nav .right .hide-s{display:none}
 }
-/* 捲動劇本 */
+/* 捲動劇本：文字在左、台灣在中間、圖表在右 */
 html,body{height:auto;overflow:visible}
 html{overflow-x:clip}
-#hero{display:none}
+#hero,#dock,#caption,#hint{display:none!important}
 #story{position:relative;z-index:12;pointer-events:none}
-.ch{height:160vh;position:relative}
+.ch{height:135vh;position:relative}
 .ch.last{height:100vh}
-.ch .card{position:sticky;top:24vh;margin-left:max(24px,6vw);width:min(460px,calc(100vw - 48px));pointer-events:auto;display:flex;flex-direction:column;gap:12px;text-shadow:0 1px 18px rgba(0,0,0,.6)}
-body.storying::before{content:"";position:fixed;inset:0;z-index:11;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.45) 32%,rgba(0,0,0,0) 58%)}
-.ch .eyebrow{font-size:12px;color:var(--fg3);letter-spacing:.08em}
-.ch h1{font-size:clamp(44px,7vw,84px);font-weight:700;letter-spacing:-.015em;line-height:1.05}
-.ch h2{word-break:keep-all;text-wrap:pretty;font-size:clamp(32px,3.8vw,52px);font-weight:700;letter-spacing:-.01em;line-height:1.15;text-wrap:balance}
+.ch .card{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.ch.act .card{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.ch .card{transition:none}}
+.ch .card{position:sticky;top:24vh;margin-left:max(24px,5vw);width:min(440px,calc(100vw - 48px));pointer-events:auto;display:flex;flex-direction:column;gap:12px;text-shadow:0 1px 18px rgba(0,0,0,.55)}
+body.storying::before{content:"";position:fixed;inset:0;z-index:11;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.74) 0%,rgba(0,0,0,.42) 28%,rgba(0,0,0,0) 52%)}
+.ch .eyebrow{font-size:12px;color:#8e8e93;letter-spacing:.08em}
+.ch h1{font-size:clamp(46px,6.6vw,88px);font-weight:700;letter-spacing:-.02em;line-height:1.02}
+.ch h2{word-break:keep-all;font-size:clamp(32px,3.6vw,50px);font-weight:700;letter-spacing:-.015em;line-height:1.12}
 .ch p{font-size:17px;line-height:1.65;color:#c7c7cc}
-.ch .lede{font-size:clamp(18px,2vw,22px);color:var(--fg)}
-.ch .why{font-size:13.5px;color:#8e8e93;border-top:1px solid rgba(255,255,255,.18);padding-top:12px}
-.ch .why b{display:block;color:var(--fg2);font-weight:500;margin-bottom:2px}
-.ch .meta{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--fg3);flex-wrap:wrap}
-.ch .meta a{font-size:13px}
-.ch .spark{display:block;max-width:100%;height:auto;margin:2px 0}
-.ch.hero .card{top:13vh;width:min(560px,calc(100vw - 48px))}
-.ch .toc{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:6px}
-.ch .toc li{display:flex;gap:12px;align-items:baseline;font-size:clamp(17px,1.8vw,20px);font-weight:600}
-.ch .toc .n{font-size:12px;color:var(--fg3);font-weight:400;font-variant-numeric:tabular-nums}
-.ch .scrollhint{font-size:12px;color:var(--fg3);letter-spacing:.1em;margin-top:18px;animation:hint 2.4s ease-in-out infinite}
-@keyframes hint{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(6px);opacity:1}}
-@media (prefers-reduced-motion:reduce){.ch .scrollhint{animation:none}}
+.ch .lede{font-size:clamp(19px,1.9vw,23px);color:#f5f5f7;font-weight:500}
+.ch .why{font-size:13.5px;color:#8e8e93;border-top:1px solid rgba(255,255,255,.16);padding-top:12px}
+.ch .why b{display:block;color:#c7c7cc;font-weight:500;margin-bottom:2px}
+.ch.hero .card{top:12vh;width:min(600px,calc(100vw - 48px))}
+.ch .toc{list-style:none;display:flex;flex-direction:column;margin-top:10px;border-top:1px solid rgba(255,255,255,.14)}
+.ch .toc li{display:grid;grid-template-columns:28px 44px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:16px}
+.ch .toc .n{font-size:12px;color:#6e6e73;font-variant-numeric:tabular-nums}
+.ch .toc .c{font-size:12px;color:#8e8e93}
+.ch .toc .t{font-weight:600;color:#f5f5f7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ch .toc .v{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ch .scrollhint{font-size:12px;color:#8e8e93;letter-spacing:.12em;margin-top:16px;animation:hint 2.4s ease-in-out infinite}
+@keyframes hint{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(6px);opacity:1}}
 .ch .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
-.ch.last .card{top:auto;position:absolute;bottom:110px}
-body.exploring .ch.last .card{opacity:.92}
-#dots{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:14;display:flex;flex-direction:column;gap:12px}
+.ch.last .card{top:auto;position:absolute;bottom:170px}
+
+/* 圖表面板 */
+#side{position:fixed;z-index:13;right:max(24px,4vw);top:50%;width:min(360px,30vw);transform:translate(16px,-50%);opacity:0;pointer-events:none;
+  padding:20px 20px 16px;border-radius:24px;background:rgba(22,22,24,.62);backdrop-filter:saturate(170%) blur(26px);-webkit-backdrop-filter:saturate(170%) blur(26px);
+  border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 60px rgba(0,0,0,.45);transition:opacity .45s ease,transform .6s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;gap:14px;max-height:72vh;overflow:auto}
+#side.on{opacity:1;transform:translate(0,-50%);pointer-events:auto}
+#side .se{font-size:11px;color:#8e8e93;letter-spacing:.08em}
+#side .st{font-size:17px;font-weight:600;color:#f5f5f7;margin-top:3px;line-height:1.35}
+#side .sb{font-size:34px;font-weight:700;letter-spacing:-.01em;margin-top:4px;font-variant-numeric:tabular-nums;line-height:1.1}
+#side .sb small{font-size:14px;font-weight:500;color:#8e8e93;margin-left:8px}
+#side .chart{width:100%;height:auto;display:block;overflow:visible}
+#side .chart .grid{stroke:rgba(255,255,255,.08);stroke-dasharray:2 4}
+#side .chart .ax{fill:#6e6e73;font-size:10px;font-family:var(--font);font-variant-numeric:tabular-nums}
+#side .chart .dot{animation:pop .5s .9s both cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
+#side .chart .dot{transform-box:fill-box;transform-origin:center}
+#side .bars{display:flex;flex-direction:column;gap:7px}
+#side .bar{display:grid;grid-template-columns:minmax(0,7.5em) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13px}
+#side .bn{color:#c7c7cc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#side .bt{height:6px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden}
+#side .bt i{display:block;height:100%;border-radius:3px;transform-origin:left;animation:grow .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+#side .bv{font-variant-numeric:tabular-nums;font-weight:600;text-align:right;white-space:nowrap}
+#side .lst{list-style:none;display:flex;flex-direction:column}
+#side .lst li{font-size:13.5px;line-height:1.45;color:#f5f5f7;padding:8px 0;border-top:1px solid rgba(255,255,255,.07)}
+#side .lst li:first-child{border-top:0}
+#side .lst li span{display:block;font-size:11.5px;color:#8e8e93;margin-top:2px}
+#side .lst a{color:#f5f5f7}
+#side .sf{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;color:#6e6e73;border-top:1px solid rgba(255,255,255,.08);padding-top:10px}
+#side .empty{font-size:13px;color:#8e8e93}
+@media (prefers-reduced-motion:reduce){#side .bt i,#side .chart .dot,.ch .scrollhint{animation:none}}
+#leaderSvg{position:fixed;inset:0;width:100%;height:100%;z-index:12;pointer-events:none}
+#leaderG{transition:opacity .4s}
+#leader{stroke:rgba(255,255,255,.55);stroke-width:1}
+#leaderDot{fill:#fff}
+
+/* 自己逛：分類＋項目（像 iOS 的分段控制） */
+#dock2{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translate(-50%,24px);z-index:15;display:flex;flex-direction:column;align-items:center;gap:10px;
+  opacity:0;pointer-events:none;transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1);width:min(760px,calc(100vw - 24px))}
+body.exploring #dock2{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#dock2 .seg{position:relative;display:flex;gap:0;padding:4px;border-radius:980px;background:rgba(36,36,38,.66);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border:1px solid rgba(255,255,255,.1);max-width:100%;overflow-x:auto;scrollbar-width:none}
+#dock2 .seg::-webkit-scrollbar,#dock2 .chips::-webkit-scrollbar{display:none}
+#dock2 .seg button{all:unset;position:relative;z-index:1;cursor:pointer;font-size:14px;font-weight:500;color:#a1a1a6;padding:9px 18px;border-radius:980px;white-space:nowrap;transition:color .3s}
+#dock2 .seg button[aria-selected="true"]{color:#1d1d1f}
+#dock2 .seg .hl{position:absolute;left:4px;top:4px;bottom:4px;border-radius:980px;background:#f5f5f7;transition:transform .45s cubic-bezier(.3,.9,.3,1),width .45s cubic-bezier(.3,.9,.3,1);box-shadow:0 2px 8px rgba(0,0,0,.25)}
+#dock2 .chips{display:flex;gap:8px;max-width:100%;overflow-x:auto;padding:2px 6px;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 14px),transparent)}
+#dock2 .chips.in button{animation:chip .5s cubic-bezier(.2,.8,.2,1) both}
+#dock2 .chips.in button:nth-child(2){animation-delay:.03s}#dock2 .chips.in button:nth-child(3){animation-delay:.06s}#dock2 .chips.in button:nth-child(4){animation-delay:.09s}#dock2 .chips.in button:nth-child(5){animation-delay:.12s}#dock2 .chips.in button:nth-child(6){animation-delay:.15s}#dock2 .chips.in button:nth-child(n+7){animation-delay:.18s}
+@keyframes chip{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#dock2 .chips button{all:unset;cursor:pointer;font-size:13px;color:#e8e8ed;padding:7px 14px;border-radius:980px;white-space:nowrap;background:rgba(36,36,38,.6);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.1);transition:background .25s,color .25s,border-color .25s}
+#dock2 .chips button:hover{background:rgba(60,60,64,.7)}
+#dock2 .chips button[aria-selected="true"]{background:rgba(41,151,255,.22);border-color:rgba(41,151,255,.6);color:#fff}
+#dock2 button:focus-visible{outline:2px solid #2997ff;outline-offset:2px}
+
+#dots{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:14;display:flex;flex-direction:column;gap:12px}
 #dots button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:10px;height:14px}
-#dots button::after{content:"";width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);transition:transform .25s,background .25s}
-#dots button span{font-size:12px;color:var(--fg3);opacity:0;transition:opacity .25s}
-#dots button:hover span,#dots button.on span{opacity:1}
-#dots button.on::after{background:#fff;transform:scale(1.4)}
-#dots button:focus-visible::after{outline:2px solid var(--blue2);outline-offset:3px}
-body.exploring #dots{opacity:.4}
+#dots button::after{content:"";width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.28);transition:transform .25s,background .25s}
+#dots button span{font-size:11px;color:#8e8e93;opacity:0;transition:opacity .25s}
+#dots button:hover span{opacity:1}
+#dots button.on::after{background:#fff;transform:scale(1.5)}
+body.exploring #dots{opacity:0;pointer-events:none}
+@media (max-width:1100px) and (min-width:761px){#side{width:min(320px,34vw)}.ch .card{width:min(380px,40vw)}}
 @media (max-width:760px){
-  .ch .card{top:58vh;max-height:40vh;overflow:auto;margin-left:20px;width:calc(100vw - 40px);gap:8px}
-  body.storying::before{background:linear-gradient(0deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.6) 34%,rgba(0,0,0,0) 55%)}
-  .ch.hero .card{top:10vh}
-  .ch h2{font-size:30px}
+  .ch{height:125vh}
+  .ch .card{top:62vh;max-height:36vh;overflow:auto;margin-left:20px;width:calc(100vw - 40px);gap:8px}
+  body.storying::before{background:linear-gradient(0deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.62) 32%,rgba(0,0,0,0) 50%)}
+  .ch.hero .card{top:9vh;max-height:none}
+  .ch h2{font-size:28px}
   .ch p{font-size:14.5px}
-  .ch.hero .card{max-height:none}
-  .ch.last .card{bottom:92px;padding:12px 16px;gap:6px}
-  .ch.last .card p{display:none}
-  .ch.last .card h2{font-size:20px}
+  .ch .toc li{font-size:14px;grid-template-columns:22px 34px minmax(0,1fr) auto;padding:8px 0}
+  #side{left:12px;right:12px;top:56px;width:auto;transform:translateY(-10px);max-height:30vh;padding:14px 16px 12px;gap:10px;border-radius:20px}
+  #side.on{transform:none}
+  #side .sb{font-size:26px}
+  #side .chart{max-height:90px}
+  .ch.last .card{display:none}
   #dots{display:none}
 }
 </style>
@@ -191,6 +249,9 @@ body.exploring #dots{opacity:.4}
 </section>
 
 <main id="story" aria-label="今天的台灣"></main>
+<aside id="side" aria-live="polite"></aside>
+<svg id="leaderSvg" aria-hidden="true"><g id="leaderG" style="opacity:0"><line id="leader"/><circle id="leaderDot" r="3.5"/></g></svg>
+<div id="dock2" aria-label="情報站分類"></div>
 
 <div id="caption"><div class="eyebrow" id="cEye"></div><h2 id="cTitle"></h2><div class="stat" id="cStat"></div><div class="src" id="cSrc"></div></div>
 
@@ -726,7 +787,7 @@ function setupWx() {
       if (!c) continue;
       const [x, z] = toXZ(c.c[0], c.c[1]);
       const nm = c.name.replace(/[縣市]$/, "");
-      addLabel(`${fmt(it.temp, 0)}°<span class="n"> ${esc(nm)} ${esc(it.weather || "")}</span>`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "", "wx", /^(臺北|台北|高雄)/.test(nm) ? 1.5 : /^(新北|桃園|臺中|台中|臺南|台南)/.test(nm) ? 1 : 0);
+      addLabel(`${fmt(it.temp, 0)}°<span class="n"> ${esc(nm)} ${esc(it.weather && it.weather !== "-99" ? it.weather : "")}</span>`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "", "wx", /^(臺北|台北|高雄)/.test(nm) ? 1.5 : /^(新北|桃園|臺中|台中|臺南|台南)/.test(nm) ? 1 : 0);
     }
     const R = P.radar_wx || {};
     const ws = [...new Set(warn.map(w => w.what))];
@@ -1289,187 +1350,333 @@ async function buildGlobe() {
   return GLOBE;
 }
 
-/* ---- 排名：每個指標跟自己的過去比 ---- */
+
+/* ---- 數字與圖表 ---- */
 const meanAbs = a => a.reduce((s, v) => s + Math.abs(v), 0) / Math.max(1, a.length);
 const diffs = a => a.slice(1).map((v, i) => v - a[i]);
-const series = (k, s) => (((ST.H || {})[k] || {})[s] || []).map(x => x[1]).filter(v => v != null && isFinite(v));
-const spark = (vals, color) => {
-  if (!vals || vals.length < 3) return "";
-  const W = 220, Hh = 44, mn = Math.min(...vals), mx = Math.max(...vals), sx = W / (vals.length - 1), sy = v => Hh - 4 - (v - mn) / ((mx - mn) || 1) * (Hh - 8);
-  const pts = vals.map((v, i) => `${(i * sx).toFixed(1)},${sy(v).toFixed(1)}`).join(" ");
-  return `<svg class="spark" viewBox="0 0 ${W} ${Hh}" width="${W}" height="${Hh}" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6" stroke-linejoin="round"/><circle cx="${((vals.length - 1) * sx).toFixed(1)}" cy="${sy(vals[vals.length - 1]).toFixed(1)}" r="3" fill="${color}"/></svg>`;
-};
-
-function candidates() {
-  const out = [];
-  // 台股
-  try { const v = series("taiex", "TAIEX");
-    if (v.length >= 6) { const r = v[v.length - 1] / v[v.length - 2] - 1, past = diffs(v.slice(0, -1)).map((d, i) => d / v[i]), x = Math.abs(r) / (meanAbs(past) || 1e-9);
-      const up = r >= 0, col = up ? UPC2 : DNC2;
-      out.push({ key: "taiex", cat: "台股", score: x, color: col, big: `台股 ${up ? "+" : "−"}${Math.abs(r * 100).toFixed(2)}%`,
-        say: `加權指數收在 ${fmt(v[v.length - 1], 0)}，${up ? "漲" : "跌"}了 ${fmt(Math.abs(v[v.length - 1] - v[v.length - 2]), 0)} 點。`,
-        why: `這個漲跌幅是過去 ${past.length} 個交易日平均波動的 ${x.toFixed(1)} 倍。`, spark: v.slice(-20), link: "taiex", src: "證交所 · 加權指數",
-        build: storyTaiex(r) }); } } catch (e) { console.warn('story', e); }
-  // 外資
-  try { const raw = ((ST.H || {}).institutions || {})["外資"] || [], v = raw.map(x => x[1]);
-    if (v.length >= 5) { const last = v[v.length - 1], past = v.slice(0, -1), x = Math.abs(last) / (meanAbs(past) || 1e-9), buy = last > 0;
-      const isMax = Math.abs(last) >= Math.max(...past.map(Math.abs)), d = String(raw[raw.length - 1][0]);
-      out.push({ key: "foreign", cat: "資金", score: x, color: buy ? UPC2 : DNC2, big: `外資${buy ? "買超" : "賣超"} ${fmt(Math.abs(last), 0)} 億`,
-        say: `${+d.slice(4, 6)}/${+d.slice(6, 8)} 外資在台股${buy ? "淨買進" : "淨賣出"} ${fmt(Math.abs(last), 0)} 億元${isMax ? `，是近 ${v.length} 個交易日最大的一筆` : ""}。線從紐約、倫敦、東京、新加坡連回台北，亮的那一端是錢流去的方向。`,
-        why: `金額是過去 ${past.length} 個交易日平均的 ${x.toFixed(1)} 倍。`, spark: v, link: "taiex", src: "證交所 · 三大法人",
-        build: storyForeign(buy) }); } } catch (e) { console.warn('story', e); }
-  // 半導體營收
-  try { const s = (((P.revenue || {}).inds) || []).find(x => x.name === "半導體業");
-    if (s && s.yoy != null) { const x = Math.abs(s.yoy) / 25, up = s.yoy >= 0;
-      out.push({ key: "semi", cat: "產業", score: x, color: up ? UPC2 : DNC2, big: `半導體營收 ${up ? "+" : "−"}${Math.abs(s.yoy).toFixed(0)}%`,
-        say: `${(P.revenue || {}).ind_period || ""} 上市櫃半導體業營收，比去年同月${up ? "多" : "少"} ${Math.abs(s.yoy).toFixed(0)}%。${(s.lead || []).length ? "帶頭的是" + s.lead.slice(0, 3).map(l => l.name).join("、") + "。" : ""}`,
-        why: `年增超過 25% 就會上榜，這個月是 ${s.yoy.toFixed(0)}%。`, spark: null, link: "revenue", src: "公開資訊觀測站 · 上市櫃月營收",
-        build: storySemi(up) }); } } catch (e) { console.warn('story', e); }
-  // 天氣示警（插隊）
-  try { const w = ((P.radar_wx || {}).warnings) || [];
-    if (w.length) { const what = w[0].what, lvl = w[0].level || "", where = [...new Set(w.filter(x => x.what === what).map(x => x.where))];
-      const sev = /颱風/.test(what) ? 5 : /豪雨/.test(what) ? 3 : /大雨/.test(what) ? 2.2 : /強風/.test(what) ? 1.6 : /低溫|高溫/.test(what) ? 1.3 : 1;
-      out.push({ key: "warn", cat: "天氣", score: sev + where.length / 14, color: "#ffd60a", big: what + lvl,
-        say: `${where.length} 個縣市：${where.map(s => s.replace(/[縣市]$/, "")).join("、")}。`,
-        why: "災害示警會直接插隊，嚴重度越高排越前面。", spark: null, link: "weather", src: "中央氣象署",
-        build: storyWarn(where) }); } } catch (e) { console.warn('story', e); }
-  // 地震（48 小時內、規模 4.5 以上）
-  try { const q = (((P.quake || {}).items) || []).find(x => x.mag >= 4.5 && Date.now() - new Date(x.at) < 48 * 3600e3);
-    if (q) out.push({ key: "quake", cat: "地震", score: (q.mag - 3) * 1.5, color: "#ffd60a", big: `規模 ${q.mag} 地震`,
-      say: `${q.loc.replace(/\s+/g, " ")}，深度 ${fmt(q.depth, 0)} 公里，最大震度 ${q.intensity || "—"}。`, why: "48 小時內規模 4.5 以上的地震會直接插隊。", spark: null, link: "quake", src: "中央氣象署",
-      build: storyQuake(q) }); } catch (e) { console.warn('story', e); }
-  // 備轉容量
-  try { const pw = P.power || {}, r = pw.reserve_pct;
-    if (r != null) out.push({ key: "power", cat: "電力", score: r < 10 ? 1 + (10 - r) / 2 : r < 15 ? 0.6 : 0.2, color: r < 6 ? DNC2 : r < 10 ? "#ffb340" : UPC2,
-      big: `備轉容量 ${fmt(r, 1)}%`, say: `今天尖峰時段（${pw.peak_hours || ""}）預估備轉 ${fmt(r, 1)}%，燈號${pw.level || ""}。`, why: "備轉低於 10% 才會排進前面。",
-      spark: pw.spark, link: "power", src: "台電", build: storyPower(r) }); } catch (e) { console.warn('story', e); }
-  // 選戰：一天內變化最大的城市
-  try { const E = (ST.H || {}).elect || {}; let best = null;
-    for (const k in E) { const v = E[k].map(x => x[1]); if (v.length < 8) continue; const d = diffs(v), last = d[d.length - 1], x = Math.abs(last) / (meanAbs(d.slice(0, -1)) || 1e-9);
-      if (v[v.length - 1] < 50) continue; if (!best || x > best.x) best = { k, v, last, x }; }
-    if (best) { const [city, who] = best.k.split(":"), up = best.last >= 0;
-      out.push({ key: "elect", cat: "選戰", score: Math.min(best.x, 4) * 0.7, color: "#ffffff", big: `${city}：${who} ${fmt(best.v[best.v.length - 1], 0)}%`,
-        say: `預測市場上，${who}當選機率一天${up ? "上升" : "下降"} ${fmt(Math.abs(best.last), 1)} 個百分點。`, why: `這個變化是過去 ${best.v.length - 2} 天平均的 ${best.x.toFixed(1)} 倍。`,
-        spark: best.v.slice(-30), link: "elect", src: "預測市場", build: storyElect(city, best.v[best.v.length - 1] / 100) }); } } catch (e) { console.warn('story', e); }
-  return out.sort((a, b) => b.score - a.score);
+const clean = a => (a || []).map(Number).filter(v => isFinite(v));
+const hist = (k, s) => clean((((ST.H || {})[k] || {})[s] || []).map(x => x[1]));
+const nf = v => { const a = Math.abs(v); return a >= 10000 ? Math.round(v).toLocaleString("en-US") : a >= 1000 ? v.toLocaleString("en-US", { maximumFractionDigits: 0 }) : a >= 100 ? v.toFixed(1) : a >= 10 ? v.toFixed(2) : v.toFixed(a >= 1 ? 2 : 3); };
+const pct = (v, d = 2) => `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(d)}%`;
+const UPH = "#30d158", DNH = "#ff453a", NEU = "#f5f5f7", YLH = "#ffd60a";
+const tone = v => v > 0 ? UPH : v < 0 ? DNH : NEU;
+// 跟自己過去比：最新一次變化是過去平均變化的幾倍
+function surprise(vals) {
+  vals = clean(vals); if (vals.length < 8) return null;
+  const d = diffs(vals), last = d[d.length - 1], m = meanAbs(d.slice(0, -1));
+  if (!m || !isFinite(last)) return null;
+  const prev = vals[vals.length - 2];
+  return { x: Math.min(8, Math.abs(last) / m), last, n: d.length - 1, pct: prev ? last / Math.abs(prev) * 100 : null };
+}
+let SVGID = 0;
+function lineSVG(vals, color, w = 320, h = 120) {
+  vals = clean(vals); if (vals.length < 2) return "";
+  const id = "g" + (++SVGID), mn = Math.min(...vals), mx = Math.max(...vals), pad = 8, sx = (w - pad * 2) / (vals.length - 1), sy = v => h - pad - (v - mn) / ((mx - mn) || 1) * (h - pad * 2);
+  const pts = vals.map((v, i) => [pad + i * sx, sy(v)]), d = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+  const last = pts[pts.length - 1], iMx = vals.indexOf(mx), iMn = vals.indexOf(mn);
+  return `<svg class="chart" viewBox="0 0 ${w} ${h + 18}" preserveAspectRatio="none" aria-hidden="true">
+  <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".32"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+  <line x1="${pad}" x2="${w - pad}" y1="${sy(mx).toFixed(1)}" y2="${sy(mx).toFixed(1)}" class="grid"/><line x1="${pad}" x2="${w - pad}" y1="${sy(mn).toFixed(1)}" y2="${sy(mn).toFixed(1)}" class="grid"/>
+  <path d="${d} L${last[0].toFixed(1)} ${h} L${pad} ${h} Z" fill="url(#${id})" class="area"/>
+  <path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" class="ln"/>
+  <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="7" fill="${color}" opacity=".22" class="dot"/><circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="3.2" fill="${color}" class="dot"/>
+  <text x="${w - pad}" y="${(sy(mx) - 4).toFixed(1)}" text-anchor="end" class="ax">${nf(mx)}</text><text x="${w - pad}" y="${(sy(mn) + 12).toFixed(1)}" text-anchor="end" class="ax">${nf(mn)}</text>
+  <text x="${pad}" y="${h + 15}" class="ax">${vals.length} 筆前</text><text x="${w - pad}" y="${h + 15}" text-anchor="end" class="ax">最新</text></svg>`;
+}
+function barsHTML(rows, opt = {}) {
+  rows = rows.filter(r => r && isFinite(r.v)); if (!rows.length) return "";
+  const mx = Math.max(...rows.map(r => Math.abs(r.v))) || 1;
+  return `<div class="bars">${rows.map(r => `<div class="bar"><span class="bn">${esc(r.name)}</span><span class="bt"><i style="width:${(Math.abs(r.v) / mx * 100).toFixed(1)}%;background:${r.color || (opt.signed === false ? "#64d2ff" : tone(r.v))}"></i></span><span class="bv" style="color:${r.color || (opt.signed === false ? NEU : tone(r.v))}">${esc(r.txt ?? nf(r.v))}</span></div>`).join("")}</div>`;
+}
+function listHTML(rows) { return `<ul class="lst">${rows.filter(Boolean).map(r => `<li>${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.t)}</a>` : esc(r.t)}${r.s ? `<span>${esc(r.s)}</span>` : ""}</li>`).join("")}</ul>`; }
+function sideHTML(o) {
+  return `<div class="sh"><div class="se">${esc(o.eyebrow || "")}</div><div class="st">${esc(o.title || "")}</div>${o.big ? `<div class="sb" style="color:${o.color || NEU}">${esc(o.big)}${o.chg ? `<small>${esc(o.chg)}</small>` : ""}</div>` : ""}</div>${o.body || ""}${o.foot ? `<div class="sf">${o.foot}</div>` : ""}`;
 }
 
-/* ---- 各類故事的畫面 ---- */
-const P101 = [121.5645, 25.034];
-function storyTaiex(r) { return () => {
-  const g = new THREE.Group(), c = new THREE.Color(r >= 0 ? 0x30d158 : 0xff453a), cam = camAt(...P101, MOBILE ? V(5.5, 9, 13) : V(7, 6.5, 10.5), 0.2);
-  for (let i = 0; i < 5; i++) flatRing(g, ...P101, 0.3 + i * 0.5, 0.36 + i * 0.5, c, 0.95 - i * 0.16, 0.05);
-  groundText(g, [`${r >= 0 ? "+" : "−"}${Math.abs(r * 100).toFixed(2)}%`], P101[0] - 0.012, P101[1] + 0.022, 3.2, yawOf(cam), { color: r >= 0 ? UPC2 : DNC2, lift: 0.05 });
-  return { g, cam }; }; }
-function storyForeign(buy) { return () => {
-  const g = new THREE.Group(), c = new THREE.Color(buy ? 0x30d158 : 0xff453a), Gm = GLOBE;
-  if (Gm) { const TPE = [121.52, 25.04];
-    for (const p of [[-74.0, 40.71], [-0.13, 51.5], [139.69, 35.69], [103.82, 1.35]]) { const pts = Gm.arc(p, TPE, 0.28); sGrad(g, buy ? pts : pts.reverse(), c, 1, true); Gm.node(...p); } }
-  return { g, cam: { tgt: V(0, -2600, -2200), pos: MOBILE ? V(0, 12500, 9000) : V(0, 9800, 7000) }, globe: true }; }; }
-function storySemi(up) { return () => {
-  const g = new THREE.Group(), cam = MOBILE ? { tgt: V(-25, 0, -60), pos: V(-5, 470, 360) } : { tgt: V(-35, 0, -60), pos: V(135, 270, 250) };
-  for (const [lo, la] of [[120.995, 24.776], [120.615, 24.21], [120.272, 23.1]]) {
-    const c = gp(lo, la, 0.35), hex = r => { const p = []; for (let i = 0; i <= 6; i++) { const a = i / 6 * Math.PI * 2 + Math.PI / 6; p.push(V(c.x + Math.cos(a) * r, c.y, c.z + Math.sin(a) * r)); } return p; };
-    const fill = new THREE.Mesh(new THREE.CircleGeometry(11, 6, Math.PI / 6), addM(CY, 0.22)); fill.rotation.x = -Math.PI / 2; fill.position.copy(c); g.add(fill);
-    sLine(g, hex(11), CY, 1); sLine(g, hex(16), CY, 0.35);
+/* ---- 候選：整個情報站，每一條有歷史的數字都參賽 ---- */
+const CATW = { "市場": 1, "總經": 1, "走向": 0.9, "訊號": 0.9, "輿情": 0.8, "現場": 0.7 };
+// 同一個分類裡也有輕重：台股、外資比棉花重要；每天跳很大的計數型資料打折
+const GW = { taiex: 1.1, inst: 1.1, tpex: 0.9, world: 0.9, fx: 0.9, fear: 0.9, cmdty: 0.8, lux: 0.7, stock: 0.75, veg: 0.5, fish: 0.5, fruit: 0.5, meat: 0.5, liq: 0.7, jobs: 0.8, voice: 0.6, mood: 0.8, cofacts: 0.6, ptt: 0.55, elect: 0.8 };
+const WCITY = { 紐約: [-74.0, 40.71], 倫敦: [-0.13, 51.5], 東京: [139.69, 35.69], 新加坡: [103.82, 1.35], 首爾: [126.98, 37.57], 香港: [114.17, 22.32], 上海: [121.47, 31.23], 法蘭克福: [8.68, 50.11], 巴黎: [2.35, 48.86], 孟買: [72.88, 19.07], 華盛頓: [-77.04, 38.9] };
+const MKT = { "^GSPC": "紐約", "^IXIC": "紐約", "^DJI": "紐約", "^N225": "東京", "^HSI": "香港", "000001.SS": "上海", "^KS11": "首爾", "^NSEI": "孟買", "^GDAXI": "法蘭克福", "^STOXX50E": "法蘭克福", USD: "紐約", EUR: "法蘭克福", JPY: "東京", CNY: "上海" };
+function candidates() {
+  const out = [], add = (o, fn) => { try { const r = fn(); if (r) out.push(Object.assign(o, r)); } catch (e) { console.warn("story", o.grp, e); } };
+  const series = (o, vals, name, unit, extra = {}) => add(Object.assign({}, o), () => {
+    let v = clean(vals); if (o.partial) v = v.slice(0, -1);   // 今天還沒過完的計數，拿最後一個完整的日子比
+    if (o.minMean && v.reduce((a, b) => a + b, 0) / Math.max(1, v.length) < o.minMean) return null;   // 量太小，跳一下就是好幾倍
+    const s = surprise(v); if (!s) return null; const last = v[v.length - 1], up = s.last >= 0;
+    if (s.pct != null && Math.abs(s.pct) > 50 && !o.partial) return null;   // 一天差一半以上，多半是抓取出錯
+    const chg = s.pct != null ? pct(s.pct) : (up ? "+" : "−") + nf(Math.abs(s.last));
+    return Object.assign({ score: s.x * (o.w ?? GW[o.grp] ?? CATW[o.cat]), x: s.x, name, big: `${name} ${chg}`, value: last, chgTxt: chg, color: tone(s.last), vals: v.slice(-40), unit,
+      say: `${name}最新是 ${nf(last)}${unit ? " " + unit : ""}，比前一筆${up ? "上升" : "下降"} ${chg.replace(/^[+−]/, "")}。`,
+      why: `這次的變動是過去 ${s.n} 筆平均的 ${s.x.toFixed(1)} 倍。` }, extra);
+  });
+  // 市場
+  series({ cat: "市場", grp: "taiex", link: "taiex", src: "證交所" }, hist("taiex", "TAIEX"), "台股加權", "點", { scene: "city101" });
+  add({ cat: "市場", grp: "inst", link: "taiex", src: "證交所 · 三大法人" }, () => {
+    const raw = (((ST.H || {}).institutions || {})["外資"]) || [], v = clean(raw.map(x => x[1])); if (v.length < 5) return null;
+    const last = v[v.length - 1], past = v.slice(0, -1), x = Math.abs(last) / (meanAbs(past) || 1), buy = last > 0, d = String(raw[raw.length - 1][0]);
+    const isMax = Math.abs(last) >= Math.max(...past.map(Math.abs));
+    return { score: x * GW.inst, x, name: "外資", big: `外資${buy ? "買超" : "賣超"} ${nf(Math.abs(last))} 億`, chgTxt: `${buy ? "買超" : "賣超"} ${nf(Math.abs(last))} 億`, color: tone(last), vals: v, unit: "億",
+      say: `${+d.slice(4, 6)}/${+d.slice(6, 8)} 外資在台股${buy ? "淨買進" : "淨賣出"} ${nf(Math.abs(last))} 億元${isMax ? `，是近 ${v.length} 個交易日最大的一筆` : ""}。`,
+      why: `金額是過去 ${past.length} 個交易日平均的 ${x.toFixed(1)} 倍。`, scene: "globe", from: ["紐約", "倫敦", "東京", "新加坡"], bars: true };
+  });
+  series({ cat: "市場", grp: "tpex", link: "taiex", src: "櫃買中心" }, hist("tpex", "OTC"), "櫃買指數", "點");
+  for (const it of ((P.world || {}).items || [])) series({ cat: "市場", grp: "world", link: "world", src: "Yahoo Finance · " + (it.asOf || "") }, it.spark, it.name, "", { scene: "globe", from: [MKT[it.sym] || "紐約"] });
+  for (const it of ((P.fx || {}).items || [])) series({ cat: "市場", grp: "fx", link: "fx", src: "Yahoo 中價" }, it.spark, it.name + "兌台幣", "", { scene: "globe", from: [MKT[it.code] || "紐約"] });
+  for (const it of ((P.fear || {}).items || [])) if (!/\//.test(it.sym)) series({ cat: "市場", grp: "fear", link: "fear", src: "CBOE" }, it.spark, it.name + " 恐慌指數", "", { scene: "globe", from: ["紐約"] });
+  for (const it of ((P.commodities || {}).items || [])) series({ cat: "市場", grp: "cmdty", link: "cmdty", src: "期貨近月" }, it.spark, it.name, it.unit || "");
+  for (const it of ((P.luxury || {}).items || [])) series({ cat: "市場", grp: "lux", link: "lux", src: "最近收盤" }, it.spark, it.name, it.ccy || "", { scene: "globe", from: ["巴黎"] });
+  for (const it of ((P.tw_stocks || {}).items || [])) series({ cat: "市場", grp: "stock", link: "taiex", src: "證交所" }, it.spark, it.name, "元");
+  // 總經
+  for (const it of ((P.veg || {}).items || [])) series({ cat: "總經", grp: "veg", link: "veg", src: "農產品批發 · " + ((P.veg || {}).market || "") }, it.spark, it.name + "價格", "元/公斤");
+  for (const g of ["fish", "fruit", "meat"]) { const H = (ST.H || {})[g] || {}; for (const k in H) series({ cat: "總經", grp: g, link: "veg", src: "農漁產批發" }, hist(g, k), k + "價格", "元/公斤"); }
+  series({ cat: "總經", grp: "liq", link: "liq", src: "紐約聯準銀行" }, ((P.liquidity || {}).rrp || {}).spark, "逆回購餘額", "十億美元", { scene: "globe", from: ["紐約"] });
+  // 訊號
+  { const J = P.jobs || {}; series({ cat: "訊號", grp: "jobs", link: "jobs", src: "人力銀行職缺" }, J.spark, "全台職缺數", "個");
+    for (const c of (J.cats || [])) series({ cat: "訊號", grp: "jobs", link: "jobs", src: "人力銀行職缺" }, c.spark, c.name + "職缺", "個"); }
+  // 走向
+  for (const k of (((P.voice || {}).kw) || [])) series({ cat: "走向", grp: "voice", link: "voice", src: "Google 新聞收錄", partial: true, minMean: 6 }, k.news_daily, `「${k.k}」新聞量`, "則");
+  // 輿情
+  series({ cat: "輿情", grp: "mood", link: "mood", src: "社群情緒" }, hist("mood", "taiwan"), "台灣情緒分數", "");
+  series({ cat: "輿情", grp: "cofacts", link: "cofacts", src: "Cofacts", minMean: 5 }, hist("cofacts", "requests"), "可疑訊息回報量", "則");
+  for (const b of (((P.ptt || {}).boards) || [])) series({ cat: "輿情", grp: "ptt", link: "ptt", src: "PTT", partial: true, minMean: 40 }, b.spark, `PTT ${b.zh || b.board}版熱度`, "");
+  // 現場：選戰、電力、機場，加上會插隊的事件
+  for (const c of (((P.elect || {}).cities) || [])) { const top = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0]; if (top) series({ cat: "現場", grp: "elect", link: "elect", src: "預測市場" }, top.spark, `${c.city}・${top.name}當選機率`, "%", { scene: "elect", city: c.city, p: top.p / 100 }); }
+  add({ cat: "現場", grp: "power", link: "power", src: "台電" }, () => { const pw = P.power || {}, r = pw.reserve_pct; if (r == null) return null;
+    return { score: r < 6 ? 5 : r < 10 ? 2.5 : 0.2, x: 0, name: "備轉容量", big: `備轉容量 ${nf(r)}%`, chgTxt: "燈號" + (pw.level || ""), color: r < 6 ? DNH : r < 10 ? "#ff9f0a" : UPH, vals: pw.spark, unit: "%",
+      say: `今天尖峰時段（${pw.peak_hours || ""}）預估備轉 ${nf(r)}%，燈號${pw.level || ""}。`, why: "備轉低於 10% 才會排進來，低於 6% 直接插隊。", scene: "power", pr: r }; });
+  add({ cat: "現場", grp: "airport", link: "airport", src: "桃園機場" }, () => { const d = (P.airport || {}).dep || {}; if (!d.total) return null; const bad = (d.delayed || 0) + (d.cancelled || 0), r = bad / d.total;
+    return { score: r > 0.25 ? 3 : r > 0.15 ? 1.2 : 0.1, x: 0, name: "桃機離境", big: `${bad} 班延誤或取消`, chgTxt: `共 ${d.total} 班`, color: r > 0.15 ? "#ff9f0a" : NEU, vals: null, unit: "",
+      say: `今天桃園機場 ${d.total} 班離境，${d.delayed || 0} 班延誤、${d.cancelled || 0} 班取消。`, why: "延誤加取消超過 15% 才會排進來。", scene: "airport" }; });
+  add({ cat: "現場", grp: "warn", link: "weather", src: "中央氣象署" }, () => { const w = ((P.radar_wx || {}).warnings) || []; if (!w.length) return null;
+    const what = w[0].what, where = [...new Set(w.filter(x => x.what === what).map(x => x.where))];
+    const sev = /颱風/.test(what) ? 6 : /豪雨/.test(what) ? 3.5 : /大雨/.test(what) ? 2.6 : /強風/.test(what) ? 2 : /低溫|高溫/.test(what) ? 1.6 : 1.2;
+    return { score: sev + where.length / 14, x: 0, name: what + (w[0].level || ""), big: what + (w[0].level || ""), chgTxt: `${where.length} 縣市`, color: YLH, vals: null,
+      say: `${where.length} 個縣市：${where.map(s => s.replace(/[縣市]$/, "")).join("、")}。`, why: "天氣示警直接插隊，嚴重度越高排越前面。", scene: "warn", where }; });
+  add({ cat: "現場", grp: "quake", link: "quake", src: "中央氣象署" }, () => { const q = (((P.quake || {}).items) || []).find(x => x.mag >= 4.5 && Date.now() - new Date(x.at) < 48 * 3600e3); if (!q) return null;
+    return { score: (q.mag - 3) * 1.6, x: 0, name: "地震", big: `規模 ${q.mag} 地震`, chgTxt: "震度 " + (q.intensity || ""), color: YLH, vals: null,
+      say: `${q.loc.replace(/\s+/g, " ")}，深度 ${nf(q.depth)} 公里，最大震度 ${q.intensity || "—"}。`, why: "48 小時內規模 4.5 以上的地震直接插隊。", scene: "quake", q }; });
+  return out.filter(o => isFinite(o.score));
+}
+function pickTop(all, n = 5) {
+  const top = [], usedG = new Set(), perCat = {};
+  for (const c of all.sort((a, b) => b.score - a.score)) {
+    if (usedG.has(c.grp) || (perCat[c.cat] || 0) >= (c.cat === "市場" ? 3 : 2)) continue;   // 市場最多三則，其他分類最多兩則
+    top.push(c); usedG.add(c.grp); perCat[c.cat] = (perCat[c.cat] || 0) + 1; if (top.length >= n) break;
   }
-  return { g, cam }; }; }
-function storyWarn(where) { return () => {
-  const g = new THREE.Group(), cam = MOBILE ? { tgt: V(0, 0, -40), pos: V(36, 520, 470) } : { tgt: V(-10, 0, -10), pos: V(150, 330, 400) };
-  for (const C of COUNTIES) if (where.some(w => norm(C.name).startsWith(norm(w)) || norm(w).startsWith(norm(C.name)))) for (const r of C.rings) { const pts = r.map(([lo, la]) => gp(lo, la, 0.6)); sLine(g, pts, YL, 1); }
-  return { g, cam, layer: "wx" }; }; }
-function storyQuake(q) { return () => {
-  const g = new THREE.Group(), cam = camAt(q.lon, q.lat, MOBILE ? V(30, 260, 230) : V(90, 150, 200));
-  for (let i = 0; i < 5; i++) flatRing(g, q.lon, q.lat, 4 + i * 7, 4.6 + i * 7, YL, 0.95 - i * 0.17, 0.3);
-  return { g, cam }; }; }
-function storyPower(r) { return () => {
-  const g = new THREE.Group(), c = new THREE.Color(r < 6 ? 0xff453a : r < 10 ? 0xffb340 : 0x30d158), cam = MOBILE ? { tgt: V(0, 0, -40), pos: V(36, 520, 470) } : { tgt: V(-10, 0, -10), pos: V(150, 330, 400) };
-  for (const [lo, la] of [[120.48, 24.21], [120.2, 22.85], [121.37, 25.12], [121.13, 25.05], [120.75, 22.05]]) { flatRing(g, lo, la, 5, 6, c, 0.95); flatRing(g, lo, la, 9, 9.5, c, 0.45); }
-  return { g, cam }; }; }
-function storyElect(city, p) { return () => {
-  const POS = { "台北": [121.56, 25.06], "新北": [121.45, 24.99], "桃園": [121.3, 24.98], "台中": [120.68, 24.15], "台南": [120.22, 23.0], "高雄": [120.32, 22.64] }, ll = POS[city] || [121, 24];
-  const g = new THREE.Group(), cam = camAt(...ll, MOBILE ? V(5, 10, 14) : V(7, 6.5, 10.5), 0.2), c = gp(...ll, 0.05);
-  for (const o of [0, 0.03, 0.06]) sLine(g, circlePts(c, 2.4 + o, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2, 160), WH, 1); sLine(g, circlePts(c, 2.4, 0, Math.PI * 2, 160), WH, 0.3);
-  flatRing(g, ...ll, 0, 0.12, WH, 1, 0.05);
-  return { g, cam }; }; }
+  return top;
+}
+
+/* ---- 3D 場景：每種故事一個鏡頭 ---- */
+const P101 = [121.5645, 25.034];
+const ISLAND = MOBILE ? { tgt: V(0, 0, -60), pos: V(30, 600, 520) } : { tgt: V(0, 30, -10), pos: V(170, 400, 470) };
+const spin = (cam, a) => { const d = cam.pos.clone().sub(cam.tgt).applyAxisAngle(V(0, 1, 0), a); return { tgt: cam.tgt.clone(), pos: cam.tgt.clone().add(d) }; };
+function sceneFor(t, i) {
+  const g = new THREE.Group(), col = new THREE.Color(t.color);
+  if (t.scene === "city101") {
+    const cam = camAt(...P101, MOBILE ? V(5.5, 9, 13) : V(7, 6.5, 10.5), 0.2);
+    for (let k = 0; k < 5; k++) flatRing(g, ...P101, 0.3 + k * 0.5, 0.36 + k * 0.5, col, 0.95 - k * 0.16, 0.05);
+    return { g, cam, geo: P101 };
+  }
+  if (t.scene === "globe" && GLOBE) {
+    const TPE = [121.52, 25.04], up = (t.chgTxt || "").startsWith("+") || /買超/.test(t.chgTxt || "");
+    for (const k of (t.from || ["紐約"])) { const p = WCITY[k]; if (!p) continue; const pts = GLOBE.arc(p, TPE, 0.28); sGrad(g, up ? pts : pts.reverse(), col, 1, true); GLOBE.node(...p); }
+    return { g, cam: { tgt: V(0, -2600, -2200), pos: MOBILE ? V(0, 12500, 9000) : V(0, 9800, 7000) }, globe: true };
+  }
+  if (t.scene === "elect") {
+    const POS = { "台北": [121.56, 25.06], "新北": [121.45, 24.99], "桃園": [121.3, 24.98], "台中": [120.68, 24.15], "台南": [120.22, 23.0], "高雄": [120.32, 22.64] }, ll = POS[t.city] || [121, 24];
+    const c = gp(...ll, 0.05), cam = camAt(...ll, MOBILE ? V(5, 10, 14) : V(7, 6.5, 10.5), 0.2);
+    for (const o of [0, 0.03, 0.06]) sLine(g, circlePts(c, 2.4 + o, -Math.PI / 2, -Math.PI / 2 + t.p * Math.PI * 2, 160), WH, 1);
+    sLine(g, circlePts(c, 2.4, 0, Math.PI * 2, 160), WH, 0.3); flatRing(g, ...ll, 0, 0.12, WH, 1, 0.05);
+    return { g, cam, geo: ll };
+  }
+  if (t.scene === "warn") {
+    for (const C of COUNTIES) if (t.where.some(w => norm(C.name).startsWith(norm(w)) || norm(w).startsWith(norm(C.name)))) for (const r of C.rings) sLine(g, r.map(([lo, la]) => gp(lo, la, 0.6)), YL, 1);
+    return { g, cam: ISLAND, layer: "wx" };
+  }
+  if (t.scene === "quake") { const q = t.q; for (let k = 0; k < 5; k++) flatRing(g, q.lon, q.lat, 4 + k * 7, 4.6 + k * 7, YL, 0.95 - k * 0.17, 0.3);
+    return { g, cam: camAt(q.lon, q.lat, MOBILE ? V(30, 300, 260) : V(90, 170, 220)), geo: [q.lon, q.lat] }; }
+  if (t.scene === "power") { const c = new THREE.Color(t.pr < 6 ? 0xff453a : t.pr < 10 ? 0xff9f0a : 0x30d158);
+    for (const [lo, la] of [[120.48, 24.21], [120.2, 22.85], [121.37, 25.12], [121.13, 25.05], [120.75, 22.05]]) { flatRing(g, lo, la, 5, 6, c, 0.95); flatRing(g, lo, la, 9, 9.5, c, 0.45); }
+    return { g, cam: spin(ISLAND, 0.2) }; }
+  if (t.scene === "airport") { const o = gp(121.233, 25.077, 0.3); for (let k = 0; k < 16; k++) { const a = -2.75 + k * 0.13, b = o.clone().add(V(Math.cos(a) * 90, 0, Math.sin(a) * 90)); b.y = 0.1; sGrad(g, [b, o], WH, 0.7); }
+    return { g, cam: camAt(121.233, 25.077, MOBILE ? V(20, 260, 220) : V(70, 150, 190)), geo: [121.233, 25.077] }; }
+  return { g, cam: spin(ISLAND, [-0.42, 0.3, -0.18, 0.5, -0.6][i % 5]) };
+}
+
+/* ---- 右側圖表面板（電腦在台灣右邊，手機在上面）---- */
+function storySide(t, i) {
+  const body = t.bars && t.grp === "inst" ? barsHTML(((((P.tw_market || {}).institutions) || {}).items || []).map(x => ({ name: x.name, v: x.net, txt: (x.net > 0 ? "+" : "−") + nf(Math.abs(x.net)) + " 億" }))) + lineSVG(t.vals, t.color)
+    : t.scene === "warn" ? listHTML(t.where.map(w => ({ t: w, s: t.name })))
+    : t.scene === "airport" ? listHTML((((P.airport || {}).dep || {}).upcoming || []).slice(0, 5).map(f => ({ t: `${f.flight} → ${f.to}`, s: `${f.sched} ${f.remark || ""}` })))
+    : t.scene === "quake" ? listHTML([{ t: t.q.loc.replace(/\s+/g, " "), s: `深度 ${nf(t.q.depth)} 公里` }])
+    : lineSVG(t.vals, t.color);
+  return sideHTML({ eyebrow: `0${i + 1} · ${t.cat}`, title: t.name, big: t.chgTxt, color: t.color, body, foot: `<span>${esc(t.src || "")}</span><a href="/terminal/#p-${t.link}">終端機 ›</a>` });
+}
+
+/* ---- 自己逛：照情報站的分類，兩層選單 ---- */
+const items = k => ((P[k] || {}).items || []);
+function EXPLORE() {
+  const lineOf = (title, vals, color, sub, link, big, chg) => () => ({ html: sideHTML({ eyebrow: sub, title, big, chg, color, body: lineSVG(vals, color), foot: `<a href="/terminal/#p-${link}">終端機 ›</a>` }) });
+  const barsOf = (title, rows, sub, link, opt) => () => ({ html: sideHTML({ eyebrow: sub, title, body: barsHTML(rows(), opt), foot: `<a href="/terminal/#p-${link}">終端機 ›</a>` }) });
+  const listOf = (title, rows, sub, link) => () => ({ html: sideHTML({ eyebrow: sub, title, body: listHTML(rows()), foot: `<a href="/terminal/#p-${link}">終端機 ›</a>` }) });
+  const layer = (L, title, sub, extra) => () => ({ layer: L, html: sideHTML({ eyebrow: sub, title, body: extra ? extra() : "" }) });
+  const tx = hist("taiex", "TAIEX");
+  return [
+    { cat: "市場", items: [
+      { n: "台股", f: () => { const v = tx, s = surprise(v); return lineOf("台股加權", v, s ? tone(s.last) : NEU, "市場 · 證交所", "taiex", v.length ? nf(v[v.length - 1]) : "", s && s.pct != null ? pct(s.pct) : "")(); } },
+      { n: "法人", f: barsOf("三大法人買賣超", () => ((((P.tw_market || {}).institutions) || {}).items || []).map(x => ({ name: x.name, v: x.net, txt: (x.net > 0 ? "+" : "−") + nf(Math.abs(x.net)) + " 億" })), "市場 · 億元", "taiex") },
+      { n: "個股", f: barsOf("關注個股漲跌", () => items("tw_stocks").slice(0, 10).map(x => ({ name: x.name, v: x.pct, txt: pct(x.pct) })), "市場 · 今日", "taiex") },
+      { n: "全球股市", f: barsOf("全球股市", () => items("world").map(x => ({ name: x.name, v: x.chg_pct, txt: pct(x.chg_pct) })), "市場 · 最近收盤", "world") },
+      { n: "匯率", f: barsOf("台幣匯率", () => items("fx").map(x => ({ name: x.name, v: x.chg_pct, txt: `${nf(x.mid)}  ${pct(x.chg_pct)}` })), "市場 · 漲＝外幣變貴", "fx") },
+      { n: "恐慌", f: () => { const v = items("fear").find(x => x.sym === "^VIX") || {}; return lineOf("VIX 恐慌指數", v.spark, v.value > 25 ? DNH : v.value > 15 ? "#ff9f0a" : UPH, "市場 · 15 以下平靜、25 以上緊張", "fear", nf(v.value || 0), pct(v.chg_pct || 0))(); } },
+      { n: "原物料", f: barsOf("原物料期貨", () => items("commodities").map(x => ({ name: x.name, v: x.chg_pct, txt: pct(x.chg_pct) })), "市場 · 近月期貨", "cmdty") },
+      { n: "精品", f: barsOf("精品與快時尚股價", () => items("luxury").map(x => ({ name: x.name, v: x.chg_pct, txt: pct(x.chg_pct) })), "市場 · 最近收盤", "lux") },
+      { n: "資金流向", f: layer("flow", "資金流向", "市場 · 地圖") },
+    ] },
+    { cat: "總經", items: [
+      { n: "房價", f: layer("house", "實價登錄房價", "總經 · 地圖 · 每坪萬元") },
+      { n: "菜價", f: barsOf("菜價兩週變化", () => items("veg").slice(0, 10).map(x => ({ name: x.name, v: x.chg14, txt: pct(x.chg14, 0) })), "總經 · " + ((P.veg || {}).market || ""), "veg") },
+      { n: "油價", f: barsOf("中油牌價", () => items("oil").map(x => ({ name: x.name, v: x.price, txt: nf(x.price) + " 元" })), "總經 · " + ((P.oil || {}).effective || ""), "macro", { signed: false }) },
+      { n: "景氣指標", f: listOf("台灣總經", () => items("macro").map(x => ({ t: `${x.label}  ${x.value}`, s: `${x.period} · 前期 ${x.prev}` })), "總經", "macro") },
+      { n: "美元流動性", f: lineOf("逆回購餘額", ((P.liquidity || {}).rrp || {}).spark, "#64d2ff", "總經 · 十億美元", "liq") },
+    ] },
+    { cat: "走向", items: [
+      { n: "本週走向", f: listOf(((P.weekly || {}).headline) || "本週走向", () => (((P.weekly || {}).dirs) || []).map(d => ({ t: d.t, s: d.why })), "走向 · " + (((P.weekly || {}).week) || ""), "weekly") },
+      { n: "趨勢雷達", f: barsOf("新聞量最多的主題", () => (((P.voice || {}).kw) || []).slice().sort((a, b) => b.news7 - a.news7).slice(0, 10).map(k => ({ name: k.k, v: k.news7, txt: k.news7 + " 則" })), "走向 · 近 7 天", "voice", { signed: false }) },
+      { n: "主題鏈", f: listOf("缺口與機會", () => (((P.chain || {}).rows) || []).slice(0, 8).map(r => ({ t: `${r.k}・${r.verdict || ""}`, s: r.why })), "走向", "chain") },
+      { n: "主題熱度", f: listOf("升溫中的主題", () => (((P.wiki || {}).rows) || []).filter(r => r.spiked).slice(0, 8).map(r => ({ t: r.title, s: r.grp })), "走向 · 維基瀏覽", "wiki") },
+    ] },
+    { cat: "訊號", items: [
+      { n: "職缺", f: barsOf("各類職缺 7 天變化", () => (((P.jobs || {}).cats) || []).slice(0, 10).map(c => ({ name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) })), "訊號 · 全台 " + nf((P.jobs || {}).total || 0) + " 個職缺", "jobs") },
+      { n: "AI 快線", f: listOf("AI 公司最新動作", () => items("aiwire").slice(0, 7).map(x => ({ t: x.title, s: x.source, url: x.url })), "訊號", "aiwire") },
+      { n: "標案", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },
+      { n: "公司雷達", f: listOf("盯梢中的公司", () => (((P.radar || {}).watch) || []).slice(0, 7).map(x => ({ t: x.name, s: x.desc })), "訊號", "radar") },
+    ] },
+    { cat: "輿情", items: [
+      { n: "台灣情緒", f: () => { const m = (P.mood || {}).taiwan || {}; return { html: sideHTML({ eyebrow: "輿情 · 社群情緒", title: "台灣人今天的心情", big: m.label || "", color: (m.score || 0) < 0 ? DNH : UPH, body: lineSVG(hist("mood", "taiwan"), (m.score || 0) < 0 ? DNH : UPH) + listHTML([{ t: m.line || "" }, ...(m.themes || []).map(t => ({ t: "· " + t }))]), foot: '<a href="/terminal/#p-mood">終端機 ›</a>' }) }; } },
+      { n: "PTT", f: barsOf("PTT 各版熱度", () => (((P.ptt || {}).boards) || []).slice(0, 10).map(b => ({ name: b.zh || b.board, v: b.heat, txt: String(b.heat) })), "輿情", "ptt", { signed: false }) },
+      { n: "熱搜", f: listOf("Google 熱搜", () => items("trends").slice(0, 8).map(x => ({ t: x.title, s: x.traffic })), "輿情", "trends") },
+      { n: "謠言", f: listOf("最多人查證的訊息", () => (((P.cofacts || {}).hot) || []).slice(0, 6).map(x => ({ t: x.text.slice(0, 42) + "…", s: `${x.verdict || "查證中"} · ${x.requests} 人回報`, url: x.url })), "輿情 · Cofacts", "cofacts") },
+    ] },
+    { cat: "現場", items: [
+      { n: "天氣", f: layer("wx", "天氣與雷達", "現場 · 地圖") },
+      { n: "地震", f: layer("quake", "顯著地震", "現場 · 地圖") },
+      { n: "車流", f: layer("traffic", "國道與市區車速", "現場 · 地圖") },
+      { n: "選戰", f: barsOf("五都領先者當選機率", () => (((P.elect || {}).cities) || []).map(c => { const t = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0] || {}; return { name: `${c.city} ${t.name || ""}`, v: t.p, txt: nf(t.p || 0) + "%" }; }), "現場 · 預測市場", "elect", { signed: false }) },
+      { n: "電力", f: () => { const pw = P.power || {}; return lineOf("備轉容量率", pw.spark, (pw.reserve_pct || 0) < 10 ? "#ff9f0a" : UPH, "現場 · 台電", "power", nf(pw.reserve_pct || 0) + "%", "燈號" + (pw.level || ""))(); } },
+      { n: "機場", f: listOf("桃機接下來的離境", () => (((P.airport || {}).dep || {}).upcoming || []).slice(0, 7).map(f => ({ t: `${f.flight} → ${f.to}`, s: `${f.sched} ${f.remark || ""}` })), "現場 · 今日 " + ((((P.airport || {}).dep) || {}).total || "") + " 班", "airport") },
+    ] },
+  ];
+}
+let EXCAT = 0, EXITEM = -1;
+function buildDock() {
+  const E = EXPLORE(), d = $("dock2");
+  d.innerHTML = `<div class="chips" id="chips" role="tablist" aria-label="項目"></div><div class="seg" role="tablist" aria-label="分類"><span class="hl" id="segHL"></span>${E.map((c, i) => `<button type="button" role="tab" data-c="${i}">${c.cat}</button>`).join("")}</div>`;
+  const seg = d.querySelector(".seg");
+  const moveHL = () => { const b = seg.querySelector(`[data-c="${EXCAT}"]`), hl = $("segHL"); if (b) { hl.style.width = b.offsetWidth + "px"; hl.style.transform = `translateX(${b.offsetLeft - 4}px)`; } seg.querySelectorAll("button").forEach(x => x.setAttribute("aria-selected", +x.dataset.c === EXCAT)); };
+  const showCat = (ci, pick = 0) => { EXCAT = ci; moveHL(); const c = E[ci];
+    $("chips").innerHTML = c.items.map((it, j) => `<button type="button" role="tab" data-j="${j}">${esc(it.n)}</button>`).join("");
+    $("chips").classList.remove("in"); void $("chips").offsetWidth; $("chips").classList.add("in"); pickItem(pick); };
+  const pickItem = j => { EXITEM = j; const it = E[EXCAT].items[j]; $("chips").querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", +b.dataset.j === j));
+    let r = null; try { r = it.f(); } catch (e) { console.warn(e); r = { html: sideHTML({ title: it.n, body: '<p class="empty">資料暫時讀不到</p>' }) }; }
+    if (r.layer) setLayer(r.layer); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; document.querySelectorAll("#labels .lbl").forEach(x => x.style.opacity = 0); }
+    dimTo = r.layer && r.layer !== "wx" ? 1 : 0; showSide(r.html, null); };
+  seg.onclick = e => { const b = e.target.closest("button"); if (b) showCat(+b.dataset.c); };
+  $("chips").onclick = e => { const b = e.target.closest("button"); if (b) pickItem(+b.dataset.j); };
+  addEventListener("resize", moveHL);
+  ST.openExplore = () => { showCat(EXCAT, Math.max(0, EXITEM)); requestAnimationFrame(moveHL); };
+}
+
+/* ---- 側邊面板切換（淡入、線條畫出來）---- */
+let SIDE_KEY = null;
+function showSide(html, geo) {
+  const s = $("side"); ST.sideGeo = geo || null;
+  s.classList.remove("on"); clearTimeout(showSide.t);
+  showSide.t = setTimeout(() => { s.innerHTML = html; s.classList.add("on");
+    s.querySelectorAll(".ln").forEach(p => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; p.getBoundingClientRect(); p.style.transition = "stroke-dashoffset 1.1s cubic-bezier(.3,.7,.2,1)"; p.style.strokeDashoffset = 0; });
+  }, html ? 180 : 0);
+  if (!html) s.classList.remove("on");
+}
+function hideSide() { SIDE_KEY = null; $("side").classList.remove("on"); ST.sideGeo = null; }
 
 /* ---- 章節與 DOM ---- */
-function chapterDom(i, n, html, cls = "") {
-  const s = document.createElement("section"); s.className = "ch " + cls; s.dataset.i = i;
-  s.innerHTML = `<div class="card">${html}</div>`; $("story").appendChild(s); return s;
-}
+function chapterDom(i, html, cls = "") { const s = document.createElement("section"); s.className = "ch " + cls; s.dataset.i = i; s.innerHTML = `<div class="card">${html}</div>`; $("story").appendChild(s); return s; }
 async function buildStory() {
   try { ST.H = await (await fetch(RAW + "history.json?t=" + Date.now(), { cache: "no-store" })).json(); } catch (e) { ST.H = {}; }
   await buildGlobe(); GLOBE.g.visible = false; SG.add(GLOBE.g);
-  const cands = candidates(), top = cands.slice(0, 3);
+  const all = candidates(), top = pickTop(all, 5); ST.top = top; ST.all = all;
   const now = new Date(), d = `${now.getMonth() + 1} 月 ${now.getDate()} 日 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-  const islandCam = MOBILE ? { tgt: V(0, 0, -90), pos: V(40, 560, 560) } : { tgt: V(0, 60, 0), pos: V(200, 400, 470) };
   const CH = [];
-  // 00 開場
-  CH.push({ name: "開場", g: new THREE.Group(), cam: islandCam, dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">今天有三件事值得注意。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span style="color:${t.color}">${esc(t.big)}</span></li>`).join("")}</ol><div class="scrollhint">往下捲</div>`, cls: "hero" });
-  // 01–03 三件事
-  top.forEach((t, i) => { const b = t.build();
-    CH.push({ name: t.cat, g: b.g, cam: b.cam, globe: b.globe, layer: b.layer,
-      dom: `<div class="eyebrow">0${i + 1} / 今天第 ${["一", "二", "三"][i]}件事 · ${esc(t.cat)}</div><h2 style="color:${t.color}">${esc(t.big)}</h2><p>${esc(t.say)}</p>${spark(t.spark, t.color)}<p class="why"><b>為什麼排這裡</b>${esc(t.why)}</p><div class="meta"><span>${esc(t.src)}</span><a href="/terminal/#p-${t.link}">在終端機看 ›</a></div>` }); });
-  // 04 此刻的台灣：真正的地理資料
+  CH.push({ name: "開場", g: new THREE.Group(), cam: ISLAND, cls: "hero",
+    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">情報站今天最重要的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.color}">${esc(t.chgTxt || "")}</span></li>`).join("")}</ol><div class="scrollhint">往下捲</div>` });
+  top.forEach((t, i) => { const sc = sceneFor(t, i);
+    CH.push({ name: t.cat, g: sc.g, cam: sc.cam, globe: sc.globe, layer: sc.layer, geo: sc.geo, side: storySide(t, i),
+      dom: `<div class="eyebrow">0${i + 1} / 五件事 · ${esc(t.cat)}</div><h2 style="color:${t.color}">${esc(t.big)}</h2><p>${esc(t.say)}</p><p class="why"><b>為什麼排這裡</b>${esc(t.why)}</p>` }); });
   { const W = (P.weather || {}).items || [], hot = W.reduce((a, b) => (b.temp > (a ? a.temp : -99) ? b : a), null), cold = W.reduce((a, b) => (b.temp < (a ? a.temp : 99) ? b : a), null);
     const rain = W.filter(x => (x.rain1h || 0) > 0).map(x => x.city), warn = ((P.radar_wx || {}).warnings || []);
-    CH.push({ name: "此刻", g: new THREE.Group(), cam: islandCam, layer: "wx",
-      dom: `<div class="eyebrow">04 / 現場</div><h2>此刻的台灣</h2><p>${hot ? `最熱的是${esc(hot.city)} ${fmt(hot.temp, 1)}°，最涼的是${esc(cold.city)} ${fmt(cold.temp, 1)}°。` : ""}${rain.length ? `${esc(rain.join("、"))}正在下雨。` : "這一小時全台沒有測站下雨。"}${warn.length ? `${esc(warn[0].what)}${esc(warn[0].level || "")}影響 ${warn.length} 個縣市。` : ""}</p><p class="why">雷達回波、各地氣溫都是即時的；底下的選單還有地震、房價、車流。</p>` }); }
-  // 05 自己逛
-  CH.push({ name: "自己逛", g: new THREE.Group(), cam: MOBILE ? { tgt: V(36, 0, 0), pos: V(36 + 36, 520, 470) } : { tgt: V(0, 10, 10), pos: V(170, 330, 430) }, explore: true,
-    dom: `<div class="eyebrow">05 / 自己逛</div><h2>換你操作</h2><p>拖曳旋轉，捲動或雙指縮放，點縣市看細節。</p><div class="btns"><a class="pill primary" href="/terminal/">完整終端機</a><button class="pill ghost" id="toTop" type="button">回到開頭</button></div>`, cls: "last" });
-  CH.forEach((c, i) => { c.g.visible = false; if (c.g !== GLOBE.g) SG.add(c.g); c.el = chapterDom(i, CH.length, c.dom, c.cls || "");
-    c.g.traverse(o => { if (o.material) o.material.opacity = 0; }); });
-  // 章節小圓點
+    CH.push({ name: "此刻", g: new THREE.Group(), cam: ISLAND, layer: "wx",
+      dom: `<div class="eyebrow">06 / 現場</div><h2>此刻的台灣</h2><p>${hot ? `最熱的是${esc(hot.city)} ${nf(hot.temp)}°，最涼的是${esc(cold.city)} ${nf(cold.temp)}°。` : ""}${rain.length ? `${esc(rain.join("、"))}正在下雨。` : "這一小時全台沒有測站下雨。"}${warn.length ? `${esc(warn[0].what)}${esc(warn[0].level || "")}影響 ${warn.length} 個縣市。` : ""}</p>` }); }
+  CH.push({ name: "自己逛", g: new THREE.Group(), cam: ISLAND, explore: true, cls: "last",
+    dom: `<div class="eyebrow">07 / 自己逛</div><h2>情報站的全部，都在這裡</h2><p>選分類，再選項目。圖表會出現在台灣旁邊，有地點的會直接畫在地圖上。</p><div class="btns"><a class="pill primary" href="/terminal/">完整終端機</a><button class="pill ghost" id="toTop" type="button">回到開頭</button></div>` });
+  CH.forEach((c, i) => { c.g.visible = false; SG.add(c.g); c.el = chapterDom(i, c.dom, c.cls || ""); c.g.traverse(o => { if (o.material) o.material.opacity = 0; }); });
   const dots = document.createElement("div"); dots.id = "dots"; dots.setAttribute("role", "navigation"); dots.setAttribute("aria-label", "章節");
   dots.innerHTML = CH.map((c, i) => `<button type="button" data-i="${i}" aria-label="${esc(c.name)}"><span>${esc(c.name)}</span></button>`).join(""); document.body.appendChild(dots);
   dots.onclick = e => { const b = e.target.closest("button"); if (b) scrollTo({ top: +b.dataset.i * secH(), behavior: "smooth" }); };
   $("toTop").onclick = () => scrollTo({ top: 0, behavior: "smooth" });
-  ST.chapters = CH;
+  ST.chapters = CH; buildDock(); window.__story = ST;
 }
-const secH = () => innerHeight * 1.6;
+const secH = () => (ST.chapters[0] && ST.chapters[0].el.offsetHeight) || innerHeight * 1.35;
 const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 function setExplore(on) {
   if (ST.explore === on) return; ST.explore = on;
-  controls.enabled = on; document.body.classList.toggle("exploring", on); document.body.classList.toggle("storying", !on);
-  if (on) { camera.clearViewOffset(); setLayer(cur || "wx"); } else { $("card").classList.remove("show"); }
+  controls.enabled = on; controls.maxDistance = on ? 1600 : Infinity;
+  document.body.classList.toggle("exploring", on); document.body.classList.toggle("storying", !on);
+  if (on) { camera.clearViewOffset(); camera.near = 1; camera.updateProjectionMatrix(); if (camera.position.distanceTo(ISLAND.pos) > 5) flyTo(ISLAND.pos, ISLAND.tgt, 1.4); ST.openExplore && ST.openExplore(); ST.chapters.forEach((ch, k) => ch.el.classList.toggle("act", k === ST.chapters.length - 1)); } else { $("card").classList.remove("show"); ST.active = -1; }
 }
-const _d0 = new THREE.Vector3(), _d1 = new THREE.Vector3();
+const _d0 = new THREE.Vector3(), _d1 = new THREE.Vector3(), _sp = new THREE.Vector3();
 function storyTick(dt) {
   const CH = ST.chapters; if (!CH.length) return;
-  const N = CH.length, y = scrollY / secH(), i = Math.min(N - 1, Math.floor(y)), f = y - i, c = Math.min(N - 1, i + smooth(0.45, 0.95, f));
-  ST.c = c;
-  const atEnd = c >= N - 1.001; setExplore(atEnd);
-  // 章節權重：淡入淡出
+  const N = CH.length, y = scrollY / secH(), i = Math.min(N - 1, Math.floor(y)), f = y - i, c = Math.min(N - 1, i + smooth(0.4, 0.92, f));
+  ST.c = c; setExplore(c >= N - 1.001);
   for (let k = 0; k < N; k++) {
     const w = Math.max(0, 1 - Math.abs(c - k) * 2.2), ch = CH[k];
-    ch.g.visible = w > 0.01 || (ch.globe && GLOBE.g.visible);
-    ch.g.traverse(o => { if (o.material && o.material.userData.op != null) o.material.opacity = o.material.userData.op * w; });
-    if (ch.globe) { GLOBE.g.visible = w > 0.01; GLOBE.g.traverse(o => { if (o.material && o.material.userData.op != null) { o.material.opacity = o.material.userData.op * w; if (o.material.uniforms && o.material.uniforms.k) o.material.uniforms.k.value = w; } }); }
+    ch.g.visible = w > 0.01; ch.g.traverse(o => { if (o.material && o.material.userData.op != null) o.material.opacity = o.material.userData.op * w; });
   }
-  uni.uLightK.value = 1 - 0.55 * CH.reduce((m, ch, k) => (ch.g.children.length && !ch.globe) ? Math.max(m, 1 - Math.abs(c - k) * 1.5) : m, 0);
   const gw = CH.reduce((m, ch, k) => ch.globe ? Math.max(m, 1 - Math.abs(c - k) * 1.2) : m, 0);
+  GLOBE.g.visible = gw > 0.01; GLOBE.g.traverse(o => { if (o.material && o.material.userData.op != null) { o.material.opacity = o.material.userData.op * Math.min(1, gw * 1.6); if (o.material.uniforms && o.material.uniforms.k) o.material.uniforms.k.value = Math.min(1, gw * 1.6); } });
   scene.fog = gw > 0.05 ? null : FOG; SEA = SEA || scene.children.find(o => o.geometry && o.geometry.type === "CircleGeometry"); if (SEA) SEA.visible = gw < 0.05;
-  if (!ST.explore) { const ca = CH[Math.round(c)]; dimTo = (ca.g.children.length && !ca.globe) ? 1 : 0; }
-  const act = Math.round(c); if (act !== ST.active) { ST.active = act; const L = CH[act].layer;
-    if (!ST.explore) { if (L) setLayer(L); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; } }
-    document.querySelectorAll("#dots button").forEach((b, k) => b.classList.toggle("on", k === act)); }
-  if (ST.explore) return;
-  // 鏡頭：目標線性移動，距離用對數內插，方向平滑轉
+  uni.uLightK.value = 1 - 0.55 * CH.reduce((m, ch, k) => (ch.g.children.length && !ch.globe) ? Math.max(m, 1 - Math.abs(c - k) * 1.5) : m, 0);
+  if (ST.explore) { leader(null); return; }
+  const act = Math.round(c), ca = CH[act]; dimTo = (ca.g.children.length && !ca.globe) || ca.side ? 1 : 0;
+  if (act !== ST.active) { ST.active = act;
+    if (ca.layer) setLayer(ca.layer); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; }
+    if (ca.side) showSide(ca.side, ca.geo); else hideSide();
+    document.querySelectorAll("#dots button").forEach((b, k) => b.classList.toggle("on", k === act));
+    CH.forEach((ch, k) => ch.el.classList.toggle("act", k === act)); }
+  // 鏡頭：目標線性移動，距離用對數內插，方向平滑轉，停留時慢慢晃
   const a = CH[Math.floor(c)].cam, b = CH[Math.min(N - 1, Math.floor(c) + 1)].cam, e = c - Math.floor(c);
   const tgt = a.tgt.clone().lerp(b.tgt, e);
   _d0.copy(a.pos).sub(a.tgt); _d1.copy(b.pos).sub(b.tgt);
   const L0 = _d0.length(), L1 = _d1.length(), dist = Math.exp(Math.log(L0) + (Math.log(L1) - Math.log(L0)) * e);
-  const dir = _d0.normalize().lerp(_d1.normalize(), e).normalize();
-  const sway = Math.sin(T * 0.12) * 0.035;   // 停留時慢慢晃一點，畫面才是活的
-  dir.applyAxisAngle(new THREE.Vector3(0, 1, 0), sway);
+  const dir = _d0.normalize().lerp(_d1.normalize(), e).normalize().applyAxisAngle(V(0, 1, 0), Math.sin(T * 0.12) * 0.035);
   controls.target.copy(tgt); camera.position.copy(tgt).addScaledVector(dir, dist);
   { const nr = Math.min(40, Math.max(0.5, dist * 0.0012)); if (Math.abs(nr - camera.near) > 0.01) { camera.near = nr; camera.updateProjectionMatrix(); } }
-  // 文字卡占掉的位置：桌機往右讓、手機往上讓
-  if (MOBILE) camera.setViewOffset(innerWidth, innerHeight, 0, innerHeight * 0.16, innerWidth, innerHeight);
-  else camera.setViewOffset(innerWidth, innerHeight, -innerWidth * 0.14, 0, innerWidth, innerHeight);
+  // 文字在左、圖表在右、台灣在中間；手機：圖表在上、文字在下
+  if (MOBILE) camera.setViewOffset(innerWidth, innerHeight, 0, innerHeight * 0.04, innerWidth, innerHeight);
+  else camera.setViewOffset(innerWidth, innerHeight, -innerWidth * 0.03, 0, innerWidth, innerHeight);
   fly = null;
+  leader(Math.abs(c - act) < 0.15 ? ST.sideGeo : null);
+}
+// 圖表連回地點的細線
+function leader(geo) {
+  const ln = $("leader"), lg = $("leaderG"); if (!geo || !$("side").classList.contains("on")) { lg.style.opacity = 0; return; }
+  _sp.copy(gp(geo[0], geo[1], 0.3)).project(camera);
+  const x = (_sp.x + 1) / 2 * innerWidth, y = (1 - _sp.y) / 2 * innerHeight, r = $("side").getBoundingClientRect();
+  const sx = MOBILE ? r.left + r.width / 2 : r.left, sy = MOBILE ? r.bottom : r.top + 28;
+  ln.setAttribute("x1", sx); ln.setAttribute("y1", sy); ln.setAttribute("x2", x); ln.setAttribute("y2", y);
+  $("leaderDot").setAttribute("cx", x); $("leaderDot").setAttribute("cy", y); lg.style.opacity = 1;
 }
 
 /* ---------- 啟動 ---------- */
