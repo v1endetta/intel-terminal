@@ -221,6 +221,26 @@ body.exploring #dots{opacity:0;pointer-events:none}
   .ch.last .card{display:none}
   #dots{display:none}
 }
+
+/* 開場：數字從地圖冒出來 */
+#intro{position:fixed;inset:0;z-index:13;pointer-events:none;overflow:hidden}
+#intro .ic{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;gap:1px;opacity:0;white-space:nowrap;will-change:transform,opacity;text-shadow:0 1px 10px rgba(0,0,0,.7)}
+#intro .ic b{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+#intro .ic b i{font-style:normal;font-weight:500;font-size:.72em;opacity:.85}
+#intro .ic small{font-size:10.5px;color:#a1a1a6}
+#intro .ic small em{font-style:normal;font-weight:600}
+#intro .ic.halo{padding:5px 10px 6px;border-radius:12px;background:rgba(22,22,24,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08)}
+#intro .ic.halo b{font-size:16px}
+#intro .ic.top{z-index:2;background:rgba(22,22,24,.72);border-color:rgba(255,255,255,.22)}
+#intro .ic.top b{font-size:22px}
+body.intro .ch.hero .card{opacity:0!important;transform:translateY(14px)!important}
+body.intro::before{opacity:.4}
+.ch .herofoot{display:flex;align-items:center;gap:16px;margin-top:16px}
+.ch .herofoot .scrollhint{margin-top:0}
+.ch .replay{all:unset;cursor:pointer;font-size:12px;color:#2997ff}
+.ch .replay:hover{text-decoration:underline}
+.ch .replay:focus-visible{outline:2px solid #2997ff;outline-offset:3px;border-radius:4px}
+@media (max-width:760px){#intro .ic b{font-size:12px}#intro .ic small{font-size:9.5px}#intro .ic.halo b{font-size:13px}#intro .ic.top b{font-size:17px}}
 </style>
 <script type="importmap">
 {"imports":{
@@ -252,6 +272,7 @@ body.exploring #dots{opacity:0;pointer-events:none}
 <aside id="side" aria-live="polite"></aside>
 <svg id="leaderSvg" aria-hidden="true"><g id="leaderG" style="opacity:0"><line id="leader"/><circle id="leaderDot" r="3.5"/></g></svg>
 <div id="dock2" aria-label="情報站分類"></div>
+<div id="intro" aria-hidden="true"></div>
 
 <div id="caption"><div class="eyebrow" id="cEye"></div><h2 id="cTitle"></h2><div class="stat" id="cStat"></div><div class="src" id="cSrc"></div></div>
 
@@ -1418,7 +1439,7 @@ function candidates() {
     const raw = (((ST.H || {}).institutions || {})["外資"]) || [], v = clean(raw.map(x => x[1])); if (v.length < 5) return null;
     const last = v[v.length - 1], past = v.slice(0, -1), x = Math.abs(last) / (meanAbs(past) || 1), buy = last > 0, d = String(raw[raw.length - 1][0]);
     const isMax = Math.abs(last) >= Math.max(...past.map(Math.abs));
-    return { score: x * GW.inst, x, name: "外資", big: `外資${buy ? "買超" : "賣超"} ${nf(Math.abs(last))} 億`, chgTxt: `${buy ? "買超" : "賣超"} ${nf(Math.abs(last))} 億`, color: tone(last), vals: v, unit: "億",
+    return { score: x * GW.inst, x, value: last, name: "外資", big: `外資${buy ? "買超" : "賣超"} ${nf(Math.abs(last))} 億`, chgTxt: `${buy ? "買超" : "賣超"} ${nf(Math.abs(last))} 億`, color: tone(last), vals: v, unit: "億",
       say: `${+d.slice(4, 6)}/${+d.slice(6, 8)} 外資在台股${buy ? "淨買進" : "淨賣出"} ${nf(Math.abs(last))} 億元${isMax ? `，是近 ${v.length} 個交易日最大的一筆` : ""}。`,
       why: `金額是過去 ${past.length} 個交易日平均的 ${x.toFixed(1)} 倍。`, scene: "globe", from: ["紐約", "倫敦", "東京", "新加坡"], bars: true };
   });
@@ -1460,11 +1481,12 @@ function candidates() {
       say: `${q.loc.replace(/\s+/g, " ")}，深度 ${nf(q.depth)} 公里，最大震度 ${q.intensity || "—"}。`, why: "48 小時內規模 4.5 以上的地震直接插隊。", scene: "quake", q }; });
   return out.filter(o => isFinite(o.score));
 }
+// 五件事只從市場和總經挑：比自己平常動得最多的前五名，同一組資料只上一則
 function pickTop(all, n = 5) {
-  const top = [], usedG = new Set(), perCat = {};
-  for (const c of all.sort((a, b) => b.score - a.score)) {
-    if (usedG.has(c.grp) || (perCat[c.cat] || 0) >= (c.cat === "市場" ? 3 : 2)) continue;   // 市場最多三則，其他分類最多兩則
-    top.push(c); usedG.add(c.grp); perCat[c.cat] = (perCat[c.cat] || 0) + 1; if (top.length >= n) break;
+  const top = [], usedG = new Set();
+  for (const c of all.slice().sort((a, b) => b.score - a.score)) {
+    if (!(c.cat === "市場" || c.cat === "總經") || usedG.has(c.grp)) continue;
+    top.push(c); usedG.add(c.grp); if (top.length >= n) break;
   }
   return top;
 }
@@ -1611,7 +1633,7 @@ async function buildStory() {
   const now = new Date(), d = `${now.getMonth() + 1} 月 ${now.getDate()} 日 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
   const CH = [];
   CH.push({ name: "開場", g: new THREE.Group(), cam: ISLAND, cls: "hero",
-    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">情報站今天最重要的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.color}">${esc(t.chgTxt || "")}</span></li>`).join("")}</ol><div class="scrollhint">往下捲</div>` });
+    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">市場與總經，今天動得最多的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.color}">${esc(t.chgTxt || "")}</span></li>`).join("")}</ol><div class="herofoot"><span class="scrollhint">往下捲</span><button type="button" class="replay" id="replay">重播開場</button></div>` });
   top.forEach((t, i) => { const sc = sceneFor(t, i);
     CH.push({ name: t.cat, g: sc.g, cam: sc.cam, globe: sc.globe, layer: sc.layer, geo: sc.geo, side: storySide(t, i),
       dom: `<div class="eyebrow">0${i + 1} / 五件事 · ${esc(t.cat)}</div><h2 style="color:${t.color}">${esc(t.big)}</h2><p>${esc(t.say)}</p><p class="why"><b>為什麼排這裡</b>${esc(t.why)}</p>` }); });
@@ -1627,6 +1649,8 @@ async function buildStory() {
   dots.onclick = e => { const b = e.target.closest("button"); if (b) scrollTo({ top: +b.dataset.i * secH(), behavior: "smooth" }); };
   $("toTop").onclick = () => scrollTo({ top: 0, behavior: "smooth" });
   ST.chapters = CH; buildDock(); window.__story = ST;
+  $("replay").onclick = () => ST.replay && ST.replay();
+  buildIntro();
 }
 const secH = () => (ST.chapters[0] && ST.chapters[0].el.offsetHeight) || innerHeight * 1.35;
 const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
@@ -1657,11 +1681,9 @@ function storyTick(dt) {
     document.querySelectorAll("#dots button").forEach((b, k) => b.classList.toggle("on", k === act));
     CH.forEach((ch, k) => ch.el.classList.toggle("act", k === act)); }
   // 鏡頭：目標線性移動，距離用對數內插，方向平滑轉，停留時慢慢晃
-  const a = CH[Math.floor(c)].cam, b = CH[Math.min(N - 1, Math.floor(c) + 1)].cam, e = c - Math.floor(c);
-  const tgt = a.tgt.clone().lerp(b.tgt, e);
-  _d0.copy(a.pos).sub(a.tgt); _d1.copy(b.pos).sub(b.tgt);
-  const L0 = _d0.length(), L1 = _d1.length(), dist = Math.exp(Math.log(L0) + (Math.log(L1) - Math.log(L0)) * e);
-  const dir = _d0.normalize().lerp(_d1.normalize(), e).normalize().applyAxisAngle(V(0, 1, 0), Math.sin(T * 0.12) * 0.035);
+  let cm = camBlend(CH[Math.floor(c)].cam, CH[Math.min(N - 1, Math.floor(c) + 1)].cam, c - Math.floor(c));
+  const ik = easeIO(introTick()); if (ik < 1) cm = camBlend(INTRO_CAM, cm, ik);
+  const tgt = cm.tgt, dir = cm.dir.applyAxisAngle(V(0, 1, 0), Math.sin(T * 0.12) * 0.035), dist = cm.dist;
   controls.target.copy(tgt); camera.position.copy(tgt).addScaledVector(dir, dist);
   { const nr = Math.min(40, Math.max(0.5, dist * 0.0012)); if (Math.abs(nr - camera.near) > 0.01) { camera.near = nr; camera.updateProjectionMatrix(); } }
   // 文字在左、圖表在右、台灣在中間；手機：圖表在上、文字在下
@@ -1669,6 +1691,13 @@ function storyTick(dt) {
   else camera.setViewOffset(innerWidth, innerHeight, -innerWidth * 0.03, 0, innerWidth, innerHeight);
   fly = null;
   leader(Math.abs(c - act) < 0.15 ? ST.sideGeo : null);
+}
+// 兩個鏡頭之間：目標線性移動，距離用對數內插，方向平滑轉
+function camBlend(a, b, e) {
+  const tgt = a.tgt.clone().lerp(b.tgt, e), d0 = a.dir ? a.dir.clone().multiplyScalar(a.dist) : a.pos.clone().sub(a.tgt), d1 = b.dir ? b.dir.clone().multiplyScalar(b.dist) : b.pos.clone().sub(b.tgt);
+  const L0 = d0.length(), L1 = d1.length(), dist = Math.exp(Math.log(L0) + (Math.log(L1) - Math.log(L0)) * e);
+  const dir = d0.normalize().lerp(d1.normalize(), e).normalize();
+  return { tgt, dir, dist, pos: tgt.clone().addScaledVector(dir, dist) };
 }
 // 圖表連回地點的細線
 function leader(geo) {
@@ -1678,6 +1707,92 @@ function leader(geo) {
   const sx = MOBILE ? r.left + r.width / 2 : r.left, sy = MOBILE ? r.bottom : r.top + 28;
   ln.setAttribute("x1", sx); ln.setAttribute("y1", sy); ln.setAttribute("x2", x); ln.setAttribute("y2", y);
   $("leaderDot").setAttribute("cx", x); $("leaderDot").setAttribute("cy", y); lg.style.opacity = 1;
+}
+
+/* ---- 開場動畫：整座島冒出情報站的數字，最後收成五件事 ----
+   有地點的數字長在它的地點上（各縣市氣溫、鄉鎮房價、選戰、機場、電力）；
+   沒有地點的數字（台股、匯率、原物料⋯）浮在島外圍的一圈軌道上，不假裝屬於某個地方。 */
+const INTRO = { on: false, t0: 0, chips: [], g: null, done: false, T: { cam: 2.2, pop0: 0.5, pop1: 3.4, hold: 4.6, fly: 5.6 } };
+const INTRO_SLOW = +(new URLSearchParams(location.search).get("slow") || 1);   // 測試用：放慢開場
+const INTRO_CAM = { tgt: V(0, 0, -20), pos: MOBILE ? V(0, 2300, 900) : V(-120, 1900, 1300) };
+const easeIO = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+function introChips() {
+  const L = [], add = (o) => L.push(o);
+  // 有地點的
+  for (const it of ((P.weather || {}).items || [])) { const c = COUNTIES.find(c => norm(c.name).startsWith(norm(it.city))); if (c && isFinite(it.temp)) add({ geo: c.c, v: it.temp, dec: 0, unit: "°", lab: it.city, color: NEU }); }
+  const perCity = {}, towns = (((P.house || {}).towns) || []).filter(t => t[4] > 0 && t[5] >= 20).sort((a, b) => b[5] - a[5]).filter(t => (perCity[t[2]] = (perCity[t[2]] || 0) + 1) <= 2).slice(0, 18);   // 每個縣市最多兩個鄉鎮，免得全擠在台北
+  for (const t of towns) add({ geo: [t[0], t[1]], v: t[4], dec: 0, unit: " 萬/坪", lab: t[3], color: "#bfe6ff" });
+  for (const c of (((P.elect || {}).cities) || [])) { const POS = { "台北": [121.56, 25.06], "新北": [121.45, 24.99], "桃園": [121.3, 24.98], "台中": [120.68, 24.15], "台南": [120.22, 23.0], "高雄": [120.32, 22.64] }, top = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0];
+    if (top && POS[c.city]) add({ geo: [POS[c.city][0] + 0.05, POS[c.city][1] + 0.05], v: top.p, dec: 0, unit: "%", lab: top.name, color: NEU }); }
+  { const d = (P.airport || {}).dep || {}; if (d.total) add({ geo: [121.233, 25.077], v: d.total, dec: 0, unit: " 班", lab: "桃機離境", color: NEU }); }
+  { const r = (P.power || {}).reserve_pct; if (r != null) add({ geo: [120.48, 24.21], v: r, dec: 1, unit: "%", lab: "備轉", color: r < 10 ? "#ff9f0a" : UPH }); }
+  const q = (((P.quake || {}).items) || [])[0]; if (q && isFinite(q.mag)) add({ geo: [q.lon, q.lat], v: q.mag, dec: 1, unit: "", pre: "M", lab: "地震", color: YLH });
+  // 沒有地點的：繞在島外圍
+  const pool = (ST.all || []).slice().sort((a, b) => b.score - a.score), seen = new Set(), halo = [];
+  for (const t of ST.top || []) { halo.push(t); seen.add(t); }
+  for (const t of pool) { if (halo.length >= (MOBILE ? 16 : 26)) break; if (seen.has(t) || !isFinite(t.value)) continue; if (halo.filter(h => h.grp === t.grp).length >= 2) continue; halo.push(t); seen.add(t); }
+  halo.forEach((t, k) => {
+    const a = -Math.PI * 0.62 + k / halo.length * Math.PI * 2, R = (MOBILE ? 150 : 205) + (k % 3) * 24;
+    const isTop = (ST.top || []).includes(t);
+    add({ pos: V(Math.sin(a) * R * 0.78, 18 + (k % 4) * 10, -20 - Math.cos(a) * R), v: t.grp === "inst" ? Math.abs(t.value) : t.value, dec: Math.abs(t.value) >= 1000 ? 0 : Math.abs(t.value) >= 100 ? 1 : Math.abs(t.value) >= 1 ? 2 : 3,
+      unit: t.grp === "inst" ? " 億" : "", lab: t.name, chg: t.chgTxt, color: t.color, top: isTop ? (ST.top || []).indexOf(t) : -1, halo: true });
+  });
+  return L;
+}
+function buildIntro() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const box = $("intro"), list = introChips(); INTRO.g = new THREE.Group(); SG.add(INTRO.g);
+  const N = list.length;
+  list.forEach((o, k) => {
+    o.anchor = o.pos || gp(o.geo[0], o.geo[1], 0.3);
+    if (o.geo) { const top = o.anchor.clone().add(V(0, 9, 0)), l = new THREE.Line(new THREE.BufferGeometry().setFromPoints([o.anchor, top]), lineM(new THREE.Color(o.color), 0.8)); l.material.opacity = 0; INTRO.g.add(l); o.line = l; o.anchor = top; }
+    const el = document.createElement("div"); el.className = "ic" + (o.halo ? " halo" : "") + (o.top >= 0 ? " top" : "");
+    el.innerHTML = `<b style="color:${o.color}"><i>${o.pre || ""}</i><span class="num">0</span><i>${esc(o.unit || "")}</i></b><small>${esc(o.lab)}${o.chg ? ` <em style="color:${o.color}">${esc(o.chg)}</em>` : ""}</small>`;
+    box.appendChild(el); o.el = el; o.num = el.querySelector(".num");
+    // 先跑地圖上的，再跑外圍的；前五名最後出現
+    o.at = INTRO.T.pop0 + (o.top >= 0 ? 2.4 + o.top * 0.12 : (o.halo ? 1.2 : 0) + (k / N) * 1.6 + Math.random() * 0.25);
+  });
+  INTRO.chips = list; INTRO.on = true; INTRO.t0 = performance.now();
+  document.body.classList.add("intro");
+  const skip = () => { if (INTRO.on) endIntro(true); };
+  ["wheel", "touchstart", "keydown", "pointerdown"].forEach(ev => addEventListener(ev, skip, { once: true, passive: true }));
+  ST.replay = () => { scrollTo(0, 0); box.innerHTML = ""; if (INTRO.g) { SG.remove(INTRO.g); } INTRO.done = false; buildIntro(); };
+}
+function endIntro(skipped) {
+  INTRO.on = false; INTRO.done = true; document.body.classList.remove("intro");
+  const box = $("intro");
+  if (skipped) { box.innerHTML = ""; if (INTRO.g) SG.remove(INTRO.g); return; }
+  // 前五名飛進開場清單
+  const rows = document.querySelectorAll(".ch.hero .toc li .v");
+  INTRO.chips.forEach(o => {
+    if (o.top >= 0 && rows[o.top]) {
+      const a = o.el.getBoundingClientRect(), b = rows[o.top].getBoundingClientRect();
+      o.el.animate([{ transform: o.el.style.transform, opacity: 1 }, { transform: `translate(${b.left + b.width / 2}px, ${b.top + b.height / 2}px) translate(-50%,-50%) scale(.55)`, opacity: 0 }], { duration: 900, easing: "cubic-bezier(.5,0,.2,1)", fill: "forwards" });
+    } else o.el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, fill: "forwards" });
+  });
+  setTimeout(() => { box.innerHTML = ""; if (INTRO.g) SG.remove(INTRO.g); }, 1000);
+}
+const _ip = new THREE.Vector3();
+function introTick() {
+  if (!INTRO.on) return 1;
+  const t = (performance.now() - INTRO.t0) / 1000 / INTRO_SLOW, T = INTRO.T;
+  const placed = [];
+  for (const o of INTRO.order || (INTRO.order = INTRO.chips.slice().sort((a, b) => (b.top >= 0) - (a.top >= 0) || (b.halo === true) - (a.halo === true)))) {
+    const k = Math.min(1, Math.max(0, (t - o.at) / 0.9)), e = 1 - Math.pow(1 - k, 3);
+    _ip.copy(o.anchor).project(camera);
+    const x = (_ip.x + 1) / 2 * innerWidth, y = (1 - _ip.y) / 2 * innerHeight;
+    if (!o.w) { o.w = o.el.offsetWidth || 60; o.h = o.el.offsetHeight || 30; }
+    const r = [x - o.w / 2 - 2, y - o.h - 2, x + o.w / 2 + 2, y + 2], hit = k > 0 && placed.some(p => r[0] < p[2] && r[2] > p[0] && r[1] < p[3] && r[3] > p[1]);
+    if (k > 0 && !hit) placed.push(r);
+    const vis = _ip.z < 1 && k > 0 && !hit;
+    const fade = o.top >= 0 ? 1 : 1 - Math.min(1, Math.max(0, (t - T.hold) / 0.7));
+    o.el.style.opacity = vis ? (e * fade).toFixed(3) : 0;
+    o.el.style.transform = `translate(${x.toFixed(1)}px, ${(y + (1 - e) * 14).toFixed(1)}px) translate(-50%,-100%) scale(${(0.7 + 0.3 * e).toFixed(3)})`;
+    if (k > 0 && !o.fin) { const v = o.v * (1 - Math.pow(1 - Math.min(1, (t - o.at) / 1.4), 4)); o.num.textContent = v.toLocaleString("en-US", { minimumFractionDigits: o.dec, maximumFractionDigits: o.dec }); if (t - o.at >= 1.4) o.fin = true; }
+    if (o.line) o.line.material.opacity = 0.8 * e * fade;
+  }
+  if (t >= T.fly) endIntro(false);
+  return Math.min(1, t / T.cam);
 }
 
 /* ---------- 啟動 ---------- */
