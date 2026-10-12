@@ -2159,9 +2159,9 @@ function EXPLORE() {
     ] },
     { cat: "訊號", items: [
       { n: "新公司", lens: "biz" },
-      { n: "職缺", f: barsOf("各類職缺 7 天變化", () => (((P.jobs || {}).cats) || []).slice(0, 10).map(c => ({ name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) })), "訊號 · 全台 " + nf((P.jobs || {}).total || 0) + " 個職缺", "jobs") },
+      { n: "職缺", lens: "jobs", f: barsOf("各類職缺 7 天變化", () => (((P.jobs || {}).cats) || []).slice(0, 10).map(c => ({ name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) })), "訊號 · 全台 " + nf((P.jobs || {}).total || 0) + " 個職缺", "jobs") },
       { n: "AI 快線", f: listOf("AI 公司最新動作", () => items("aiwire").slice(0, 7).map(x => ({ t: x.title, s: x.source, url: x.url })), "訊號", "aiwire") },
-      { n: "標案", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },
+      { n: "標案", lens: "tender", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },
       { n: "公司雷達", f: listOf("盯梢中的公司", () => (((P.radar || {}).watch) || []).slice(0, 7).map(x => ({ t: x.name, s: x.desc })), "訊號", "radar") },
     ] },
     { cat: "輿情", items: [
@@ -2685,7 +2685,7 @@ function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo
 const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="background:${dot}"></i>` : ""}<b>${esc(name)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`;
 // ---- 視角：下方選的分類決定地圖「看什麼」，拉近拉遠決定「看多細」 ----
 // 現場（預設）／房價／新公司／地方新聞；市場、走向這類沒有地點的資訊，地圖維持現場、只換卡片
-const LENS = { now: { n: "現場", c: "#ff9f0a" }, house: { n: "房價", c: "#64d2ff" }, biz: { n: "新公司", c: "#30d158" }, news: { n: "地方新聞", c: "#bf5af2" } };
+const LENS = { now: { n: "現場", c: "#ff9f0a" }, house: { n: "房價", c: "#64d2ff" }, biz: { n: "新公司", c: "#30d158" }, news: { n: "地方新聞", c: "#bf5af2" }, jobs: { n: "職缺", c: "#5e9cff" }, tender: { n: "標案", c: "#ffd60a" } };
 NAV.lens = "now"; NAV.quiet = null;
 function navSetLens(lens, keepCard) { NAV.lens = LENS[lens] ? lens : "now"; NAV.quiet = keepCard ? true : null; NAV.key = ""; NAV.t = 0; }
 const p1 = v => (+v).toFixed(1);
@@ -2728,6 +2728,19 @@ const chgCol = (n, p) => !p ? "#8e8e93" : n >= p ? UPH : DNH;   // 漲綠跌紅
 const capTxt = c => c >= 1e8 ? `${(c / 1e8).toFixed(c >= 1e9 ? 0 : 1)} 億` : `${Math.round(c / 1e4).toLocaleString("en-US")} 萬`;
 const btTowns = C => ((NAV.bt || {}).towns || []).filter(r => sameC(r[0], C.name || C));
 const btLine = r => `${r[2].toLocaleString("en-US")} 家${r[3] ? `・比上月 ${chgTxt(r[2], r[3])}` : ""}${r[4].length ? `・${r[4].map(c => c[0]).slice(0, 2).join("、")}` : ""}`;
+// 職缺（104）：縣市來自 jobs.areas（新竹、嘉義縣市合計），六都＋新竹有分區（jobtowns）
+const pctTxt = v => v == null ? "" : `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(1)}%`;
+const pctCol = v => v == null ? "#8e8e93" : v >= 0 ? UPH : DNH;
+const jobArea = name => (((P.jobs || {}).areas) || []).find(a => (a.counties || []).some(c => sameC(c, name)));
+const jobTowns = name => (((P.jobtowns || {}).towns) || []).filter(r => sameC(r[0], name));
+const jobLatest = (C, T) => (((P.jobs || {}).latest) || []).filter(x => norm(x.place).startsWith(norm(C).slice(0, 3)) && (!T || String(x.place).includes(T)));
+const jobRow = x => ({ t: `${x.t}`, s: `${x.co}・${x.place}${x.sal && x.sal[0] ? `・${Math.round(x.sal[0] / 1000)}K${x.sal[1] ? "–" + Math.round(x.sal[1] / 1000) + "K" : "+"}` : ""}`, url: x.u });
+// 標案：近 7 天各縣市新招標／決標（tendermap，依發包機關歸類）
+const TM = () => P.tendermap || {};
+const tmC = name => { const C = TM().counties || {}, k = Object.keys(C).find(x => sameC(x, name)); return k ? C[k] : null; };
+const tmTowns = name => (TM().towns || []).filter(r => sameC(r[0], name));
+const tmDays = () => { const d = TM().days || []; return d.length ? `${d[0].slice(4, 6)}/${d[0].slice(6)}–${d[1].slice(4, 6)}/${d[1].slice(6)}` : ""; };
+const tmRecent = arr => listHTML((arr || []).map(r => ({ t: r[0], s: r[1], url: r[2] })));
 const bizSub = b => `${b.cat || ""}${b.cap ? `・資本 ${Math.round(b.cap / 1e4).toLocaleString("en-US")} 萬` : ""}${b.date ? `・${b.date.slice(5).replace("-", "/")} 登記` : ""}`;
 
 // ---- 第 0 層：台灣 ----
@@ -2761,6 +2774,23 @@ const TW_VIEW = {
     navCounties(c => n[c.name] ? { col: G, op: 0.35 + 0.6 * n[c.name] / mx, sub: `${n[c.name]} 家`, dot: LENS.biz.c, prio: 2 + n[c.name] / mx * 4 } : { dim: true, op: 0.15 });
     return { eyebrow: "台灣 · 新設立公司", title: "新公司開在哪裡？", big: `${B.length} 家`, color: LENS.biz.c,
       body: `<p class="why">完整的鄉鎮統計載入中；先顯示找得到地址的 ${B.length} 家。</p><ul class="lst nvl">${rankRows(list.map(([k, v]) => [k, `${v} 家`]), "nc")}</ul>` };
+  },
+  jobs() {
+    const A = ((P.jobs || {}).areas) || [], mx = Math.max(1, ...A.map(a => a.n)), B = new THREE.Color(LENS.jobs.c);
+    navCounties(c => { const a = jobArea(c.name); if (!a) return { dim: true, op: 0.15 };
+      return { col: B, op: 0.25 + 0.7 * Math.sqrt(a.n / mx), sub: `${(a.n / 1e3).toFixed(a.n >= 1e4 ? 0 : 1)}K ${pctTxt(a.chg7)}`, dot: pctCol(a.chg7), prio: 2 + a.n / mx * 4 }; });
+    const j = P.jobs || {};
+    return { eyebrow: "台灣 · 104 刊登中職缺", title: "哪裡在找人？", big: `${(j.total || 0).toLocaleString("en-US")} 個`, chg: j.chg7 != null ? `7 天 ${pctTxt(j.chg7)}` : "", color: LENS.jobs.c,
+      body: `<p class="why">各縣市刊登中的職缺數，綠＝7 天內變多、紅＝變少。新竹、嘉義的縣和市在 104 是合併計算。</p><ul class="lst nvl">${A.slice().sort((a, b) => b.n - a.n).map(a => `<li data-nc="${esc(a.counties[0])}" style="cursor:pointer"><span class="sdot" style="background:${pctCol(a.chg7)}"></span>${esc(a.name)}<span>${a.n.toLocaleString("en-US")} 個・7 天 ${pctTxt(a.chg7) || "—"}</span></li>`).join("")}</ul>` };
+  },
+  tender() {
+    const C = TM().counties || {}, ks = Object.keys(C).filter(k => k !== "中央").sort((a, b) => (C[b].n + C[b].a) - (C[a].n + C[a].a)), mx = Math.max(1, ...ks.map(k => C[k].n)), Y = new THREE.Color(LENS.tender.c);
+    navCounties(c => { const v = tmC(c.name); if (!v) return { dim: true, op: 0.15 };
+      return { col: Y, op: 0.25 + 0.7 * Math.sqrt(v.n / mx), sub: `${v.n} 件 ${chgTxt(v.n, v.np)}`, dot: chgCol(v.n, v.np), prio: 2 + v.n / mx * 4 }; });
+    const cen = C["中央"], tot = ks.reduce((a, k) => a + C[k].n, 0), totp = ks.reduce((a, k) => a + C[k].np, 0);
+    if (!ks.length) return { eyebrow: "台灣 · 政府標案", title: "哪裡在發包？", big: "整理中", color: LENS.tender.c, body: `<p class="empty">各縣市的標案統計第一次產生需要一輪資料更新，稍後再看。</p>` };
+    return { eyebrow: `台灣 · 政府標案 · ${tmDays()}`, title: "哪裡在發包？", big: `${tot.toLocaleString("en-US")} 件新招標`, chg: totp ? `比前一週 ${chgTxt(tot, totp)}` : "", color: LENS.tender.c,
+      body: `<p class="why">近 7 個工作天各縣市機關（縣市政府、公所、市立學校等）的新招標，依發包機關歸類，不是工程地點。${cen ? `部會、國營事業等中央機關另有 ${cen.n.toLocaleString("en-US")} 件，沒有放上地圖。` : ""}</p><ul class="lst nvl">${ks.map(k => `<li data-nc="${esc(k)}" style="cursor:pointer"><span class="sdot" style="background:${chgCol(C[k].n, C[k].np)}"></span>${esc(norm(k))}<span>${C[k].n} 件招標・${C[k].a} 件決標・比前一週 ${chgTxt(C[k].n, C[k].np) || "—"}</span></li>`).join("")}</ul>` };
   },
   news() {
     const N = NEWS(), top = {}; for (const x of N) { const c = COUNTIES.find(k => sameC(k.name, String(x.place).slice(0, 3))); if (c && !top[c.name]) top[c.name] = x; }
@@ -2818,6 +2848,28 @@ const CITY_VIEW = {
     return { eyebrow: `${norm(C.name)} · 新設立公司`, title: "新公司開在哪一區？", big: `${B.length} 家`, color: LENS.biz.c,
       body: rank.length ? `<ul class="lst nvl">${rankRows(rank.slice(0, 6).map(x => [x.t.name, `${x.n} 家`]), "nt")}</ul>` : `<p class="empty">完整的鄉鎮統計載入中。</p>` };
   },
+  jobs(C) {
+    const ts = navOutline(C), R = jobTowns(C.name), a = jobArea(C.name), L = jobLatest(C.name), view = NAV.viewD || 60;
+    const mx = Math.max(1, ...R.map(r => r[2]));
+    R.forEach((r, i) => { const t = ts.find(t => t.name === r[1]); if (t) navCol(t.c[0], t.c[1], r[2] / mx, view, r[1], `${r[2].toLocaleString("en-US")} ${pctTxt(r[3])}`, 6 - i * 0.2, r[3] == null ? LENS.jobs.c : pctCol(r[3])); });
+    townPills(ts, new Set(R.map(r => r[1])));
+    return { eyebrow: `${norm(C.name)} · 104 刊登中職缺`, title: "哪一區在找人？", big: a ? `${a.n.toLocaleString("en-US")} 個` : norm(C.name), chg: a && a.chg7 != null ? `7 天 ${pctTxt(a.chg7)}` : "", color: LENS.jobs.c,
+      body: (a && a.counties.length > 1 ? `<p class="why">104 把${esc(a.name)}合併計算。</p>` : "")
+        + (R.length ? `<p class="why">光柱越高職缺越多；綠＝7 天內變多、紅＝變少。</p><ul class="lst nvl">${rankRows(R.slice(0, 10).map(r => [r[1], `${r[2].toLocaleString("en-US")} 個・7 天 ${pctTxt(r[3]) || "—"}`]), "nt")}</ul>` : `<p class="why">分區統計只做六都和新竹。</p>`)
+        + (L.length ? `<div class="nvh">剛刊登的</div>` + listHTML(L.slice(0, 5).map(jobRow)) : "") };
+  },
+  tender(C) {
+    const ts = navOutline(C), v = tmC(C.name), R = tmTowns(C.name), mx = Math.max(1, ...R.map(r => r[2] + r[3])), view = NAV.viewD || 60;
+    R.forEach((r, i) => { const t = ts.find(t => t.name === r[1]); if (t) navCol(t.c[0], t.c[1], (r[2] + r[3]) / mx, view, r[1], `${r[2] + r[3]} 件`, 6 - i * 0.2, r[4] ? chgCol(r[2], r[4]) : LENS.tender.c); });
+    townPills(ts, new Set(R.map(r => r[1])));
+    if (!v) return { eyebrow: `${norm(C.name)} · 政府標案`, title: "這裡在發包什麼？", big: norm(C.name), color: LENS.tender.c, body: `<p class="empty">最近一週沒有歸到這個縣市的標案，或統計還在整理中。</p>` };
+    return { eyebrow: `${norm(C.name)} · 政府標案 · ${tmDays()}`, title: "這裡在發包什麼？", big: `${v.n} 件招標`, chg: v.np ? `比前一週 ${chgTxt(v.n, v.np)}` : "", color: LENS.tender.c,
+      body: `<p class="why">另有 ${v.a} 件決標。看得出區的（公所、區立或市立學校）才分區，縣市政府本身不分區。</p>`
+        + ((v.units || []).length ? `<div class="nvh">發包最多的機關</div><ul class="lst nvl">${v.units.slice(0, 4).map(([n, c]) => `<li>${esc(n)}<span>${c} 件</span></li>`).join("")}</ul>` : "")
+        + (v.win.length ? `<div class="nvh">得標最多的廠商</div><ul class="lst nvl">${v.win.map(([n, c]) => `<li>${esc(n)}<span>${c} 件</span></li>`).join("")}</ul>` : "")
+        + (R.length ? `<div class="nvh">哪一區發包最多</div><ul class="lst nvl">${rankRows(R.slice(0, 6).map(r => [r[1], `${r[2]} 件招標・${r[3]} 件決標`]), "nt")}</ul>` : "")
+        + (v.recent.length ? `<div class="nvh">最新招標</div>` + tmRecent(v.recent) : "") };
+  },
   news(C) {
     const ts = navOutline(C), N = NEWS().filter(x => inC(x.place, C)), T = N.filter(x => x.lvl === "town" && x.ll);
     const tc = {}; for (const x of T) { const k = String(x.place).slice(3); tc[k] = (tc[k] || 0) + 1; }
@@ -2867,6 +2919,24 @@ const STREET_VIEW = {
       body: `<p class="why">在${esc(norm(T.county))}排第 ${rk}／${R.length}。${me[4].length ? "主要是" + esc(me[4].map(c => `${c[0]} ${c[1]} 家`).join("、")) + "。" : ""}${me[5] ? `設計創意類 ${me[5]} 家。` : ""}</p>`
         + (me[6].length ? `<div class="nvh">資本額最大的幾家</div>` + listHTML(me[6].map(x => ({ t: x[0], s: `${x[2]}・資本 ${capTxt(x[1] || 0)}・${(x[3] || "").slice(5).replace("-", "/")} 登記` }))) : "")
         + (near.length ? `<div class="nvh">隔壁幾區</div><ul class="lst nvl">${rankRows(near.map(([r]) => [r[1], btLine(r)]), "nt")}</ul>` : "") };
+  },
+  jobs(T, C) {
+    for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
+    const R = jobTowns(T.county), me = R.find(r => r[1] === T.name), L = jobLatest(T.county, T.name), view = NAV.viewD || 10, towns = NAV.towns || [];
+    const near = R.filter(r => r !== me).map(r => [r, towns.find(t => t.name === r[1] && sameC(t.county, T.county))]).filter(([, t]) => t && kmBetween(t.c, T.c) < 9).sort((a, b) => kmBetween(a[1].c, T.c) - kmBetween(b[1].c, T.c)).slice(0, 5);
+    const grp = [...(me ? [[me, T]] : []), ...near], mx = Math.max(1, ...grp.map(([r]) => r[2]));
+    grp.forEach(([r, t]) => navCol(t.c[0], t.c[1], r[2] / mx, view, r[1], `${r[2].toLocaleString("en-US")} ${pctTxt(r[3])}`, r === me ? 9 : 4, r[3] == null ? LENS.jobs.c : pctCol(r[3])));
+    return { eyebrow: `${norm(T.county)} › ${T.name} · 104 職缺`, title: "這一區在找什麼人？", big: me ? `${me[2].toLocaleString("en-US")} 個` : T.name, chg: me && me[3] != null ? `7 天 ${pctTxt(me[3])}` : "", color: LENS.jobs.c,
+      body: (me ? `<p class="why">在${esc(norm(T.county))}排第 ${R.indexOf(me) + 1}／${R.length}。</p>` : `<p class="why">分區職缺數只做六都和新竹。</p>`)
+        + (L.length ? `<div class="nvh">剛刊登的</div>` + listHTML(L.slice(0, 6).map(jobRow)) : "")
+        + (near.length ? `<div class="nvh">隔壁幾區</div><ul class="lst nvl">${rankRows(near.map(([r]) => [r[1], `${r[2].toLocaleString("en-US")} 個・7 天 ${pctTxt(r[3]) || "—"}`]), "nt")}</ul>` : "") };
+  },
+  tender(T, C) {
+    for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
+    const R = tmTowns(T.county), me = R.find(r => r[1] === T.name), v = tmC(T.county);
+    return { eyebrow: `${norm(T.county)} › ${T.name} · 政府標案 · ${tmDays()}`, title: "這一區在發包什麼？", big: me ? `${me[2]} 件招標` : T.name, chg: me && me[4] ? `比前一週 ${chgTxt(me[2], me[4])}` : "", color: LENS.tender.c,
+      body: (me ? `<p class="why">公所、學校等看得出在這一區的機關：${me[2]} 件招標、${me[3]} 件決標。</p>` + (me[5].length ? tmRecent(me[5]) : "") : `<p class="why">最近一週沒有看得出在這一區的機關發包。</p>`)
+        + (v && v.recent.length ? `<div class="nvh">${esc(norm(T.county))}最新招標</div>` + tmRecent(v.recent.slice(0, 4)) : "") };
   },
   news(T, C) {
     for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
