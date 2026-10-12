@@ -1712,7 +1712,7 @@ async function buildStory() {
   const all = candidates(), top = fixedFive(); ST.top = top; ST.all = all;
   const now = new Date(), d = `${now.getMonth() + 1} 月 ${now.getDate()} 日 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
   const CH = [];
-  CH.push({ name: "開場", g: new THREE.Group(), cam: ISLAND, cls: "hero",
+  CH.push({ name: "開場", g: new THREE.Group(), cam: MOBILE ? { tgt: V(5, 0, -175), pos: V(35, 700, 420) } : ISLAND, cls: "hero",   // 手機：島往下放，讓出上面給五件事
     dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">每天固定看的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.color}">${esc(t.toc || t.chgTxt || "")}</span></li>`).join("")}</ol><div class="herofoot"><span class="scrollhint">往下捲</span><button type="button" class="replay" id="replay">重播開場</button></div>` });
   top.forEach((t, i) => { const sc = sceneFor(t, i);
     CH.push({ name: t.cat, g: sc.g, cam: sc.cam, globe: sc.globe, layer: sc.layer, geo: sc.geo, side: storySide(t, i),
