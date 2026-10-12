@@ -294,6 +294,7 @@ body.intro::before{opacity:.4}
 #labels .lbl.flt{font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(10,14,20,.72);color:#dff6ff;border:1px solid rgba(100,210,255,.35);white-space:nowrap;transition:opacity .3s}
 #labels .lbl.flt b{font-weight:600;color:#fff;margin-right:2px}
 #labels .lbl.flt.live{color:#ffe27a;border-color:rgba(255,214,10,.45);font-size:10px}
+body.fl-on .ch .card{opacity:0!important;pointer-events:none!important;transition:opacity .4s}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2164,7 +2165,10 @@ async function buildFlights() {
   routes.forEach((r, i) => {
     const d = AP[r[0]], pts = GLOBE.arc(o, [d[0], d[1]], 0.1, 80); FL.arcs[r[0]] = pts;
     const k = r[1] / maxN, rad = 4 + Math.sqrt(k) * 16;
-    const tube = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 80, rad, 5, false), fm(new THREE.MeshBasicMaterial({ color: new THREE.Color(0x64d2ff).lerp(WH, 0.15 + 0.6 * k), blending: THREE.AdditiveBlending, depthTest: true, depthWrite: false }), 0.1 + 0.4 * Math.sqrt(k)));
+    const tg = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 80, rad, 5, false), base = new THREE.Color(0x64d2ff).lerp(WH, 0.15 + 0.6 * k), cols = [];
+    for (let s2 = 0; s2 <= 80; s2++) { const u = s2 / 80, f = 0.12 + 0.88 * Math.min(1, u * 2.2); for (let r2 = 0; r2 <= 5; r2++) cols.push(base.r * f, base.g * f, base.b * f); }   // 靠近桃園的那端調暗，不然八十條線疊在一起會糊成一團白
+    tg.setAttribute("color", new THREE.Float32BufferAttribute(cols, 3));
+    const tube = new THREE.Mesh(tg, fm(new THREE.MeshBasicMaterial({ vertexColors: true, blending: THREE.AdditiveBlending, depthTest: true, depthWrite: false }), 0.1 + 0.4 * Math.sqrt(k)));
     g.add(tube);
     const node = new THREE.Mesh(new THREE.SphereGeometry(14 + 18 * Math.sqrt(k), 12, 8), fm(new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: true }), 0.9)); node.position.copy(GLOBE.G(d[0], d[1], 25)); g.add(node);
     if (i < 28) { const L = addLabel(`<b>${esc(flName(r[0], r[4]))}</b> ${r[1]}`, GLOBE.G(d[0], d[1], 60), "flt", "flights", 6 - i / 6); L.gp = d; FL.lbls.push(L); }
@@ -2225,7 +2229,7 @@ function flightsTick(force) {
 layers.flights = {
   get g() { return FL.g || new THREE.Group(); },
   on() {
-    ST.globeForce = true; controls.maxDistance = 40000;
+    ST.globeForce = true; controls.maxDistance = 40000; document.body.classList.add("fl-on");
     const t = GLOBE.G(MOBILE ? 123 : 131, MOBILE ? 23 : 26, 0), up = t.clone().sub(V(0, -6371, 0)).normalize(), south = GLOBE.G(127, 18, 0).sub(t).normalize();
     const d = MOBILE ? 9000 : 7600, pos = t.clone().addScaledVector(up, d).addScaledVector(south, d * 0.55);
     camera.near = 20; camera.updateProjectionMatrix(); flyTo(pos, t, 2.2);
@@ -2233,7 +2237,7 @@ layers.flights = {
     if (FL.built) show(); else buildFlights().then(() => { if (cur === "flights") { show(); if (EXITEM >= 0) showSide(flightsSide(), null); } });
   },
   off() {
-    ST.globeForce = false; if (FL.g) FL.g.visible = false; FL.lbls.forEach(L => { L.hide = true; L.el.classList.remove("on"); });
+    ST.globeForce = false; document.body.classList.remove("fl-on"); if (FL.g) FL.g.visible = false; FL.lbls.forEach(L => { L.hide = true; L.el.classList.remove("on"); });
     if (ST.explore) { controls.maxDistance = 1600; camera.near = 1; camera.updateProjectionMatrix(); flyTo(ISLAND.pos, ISLAND.tgt, 1.8); }
   },
   tick() { flightsTick(); },
@@ -2251,7 +2255,7 @@ try {
 
 function present() {
   if (FX.on && composer && !(MOBILE && !uni.uNight.value && !uni.uScanOn.value)) {
-    const nt = uni.uNight.value; bloom.threshold = nt ? 0.78 : 0.99; bloom.strength = (nt ? 0.85 : 0.08) + 0.22 * uni.uScanOn.value + 0.25 * uni.uClose.value * nt;
+    const nt = uni.uNight.value; bloom.threshold = nt ? 0.78 : 0.99; bloom.strength = (nt ? (ST.globeForce ? 0.32 : 0.85) : 0.08) + 0.22 * uni.uScanOn.value + 0.25 * uni.uClose.value * nt;
     composer.render();
   } else renderer.render(scene, camera);
 }
