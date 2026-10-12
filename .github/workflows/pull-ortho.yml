@@ -25,13 +25,18 @@ jobs:
       - name: Download
         run: |
           mkdir -p 3d
+          rm -rf 3d/ortho
           gcloud storage cp -r gs://intel-vault-510704-vault/bake/ortho 3d/
-          ls 3d/ortho | head; du -sh 3d/ortho
+          ls 3d/ortho; du -sh 3d/ortho
+          # 確認這次是完整的新版（有全島底圖、17 個城市）才繼續
+          python3 -c "import json;d=json.load(open('3d/ortho/index.json'));b=d.get('base',{}).get('chunks',[]);c=d['cities'];print('base',len(b),'cities',len(c),{k:len(v) for k,v in c.items()});assert len(b)>30 and len(c)>=17"
       - name: Commit
         run: |
           git config user.name "intel-bot"
           git config user.email "intel-bot@users.noreply.github.com"
           git add 3d/ortho
           git diff --cached --quiet && exit 0
-          git commit -qm "3d：預先烘焙的航空正射影像（國土測繪中心，五都市中心）"
-          for i in 1 2 3; do git push -q origin HEAD:main && exit 0; git pull -q --rebase origin main; done; exit 1
+          git commit -qm "3d：航空正射影像（國土測繪中心）：17 個市中心 z16＋全島 z14 底圖"
+          ok=0; for i in 1 2 3; do git push -q origin HEAD:main && { ok=1; break; }; git pull -q --rebase origin main; done; [ $ok = 1 ]
+      - name: Clean up bucket
+        run: gcloud storage rm -r -q gs://intel-vault-510704-vault/bake/ortho || echo "暫存刪除失敗，請手動刪"
