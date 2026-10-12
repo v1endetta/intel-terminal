@@ -3878,6 +3878,60 @@ def p_localnews():
     return {"counties": out, "errs": errs[:6]}
 
 
+def _town_terms():
+    """每個縣市要查的鄉鎮寫法：全台唯一的簡稱（板橋、竹北）優先，其他用全名；同名鄉鎮（信義區、東區…）標題要同時提到縣市才算。"""
+    out = {}
+    for k, (_, _, c, t) in TOWNS.items():
+        stem = t[:-1] if len(t) >= 3 else ""
+        term = stem if stem and len(_TOWN_BY_NAME.get(stem, [])) == 1 else t
+        amb = len({x[0] for x in _TOWN_BY_NAME.get(term, [])}) > 1 or len(term) <= 2 and term == t   # 東區、北區這種太常見，要連縣市
+        out.setdefault(c, []).append((term, t, amb))
+    return out
+
+
+def p_townnews():
+    """地方新聞到鄉鎮：每個縣市把鄉鎮名分批丟 Google News（OR 查詢，近 1 天），標題真的提到該鄉鎮才收。"""
+    items, errs, seen = [], [], set()
+    for c, terms in _town_terms().items():
+        keys = TW_COUNTIES.get(c, (0, 0, ()))[2]
+        per_c = 0
+        for i in range(0, len(terms), 10):
+            chunk = terms[i:i + 10]
+            q = " OR ".join(f'"{t[0]}"' for t in chunk) + " when:1d"
+            try:
+                got = _gnews(q, limit=25)
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{c}: {safe_err(e)}"); break
+            for it in got:
+                title = it["title"]
+                if WATCH_SRC_BLOCK.search(it.get("source", "")) or CROWD_SRC_BLOCK.search(it.get("source", "")):
+                    continue
+                k = re.sub(r"\W+", "", title)[:30]
+                if k in seen:
+                    continue
+                hit = next((t for t in chunk if t[0] in title and (not t[2] or any(x in title for x in keys))), None)
+                if not hit:
+                    continue
+                seen.add(k)
+                items.append({"title": title[:80], "url": it["url"], "source": it["source"], "at": it["at"], "county": c, "town": hit[1]})
+                per_c += 1
+            time.sleep(0.35)
+    if not items:
+        raise RuntimeError("townnews: nothing " + "; ".join(errs)[:160])
+    # 每個鄉鎮最多 2 則、全部最多 260 則（新的優先）
+    items.sort(key=lambda x: x.get("at") or "", reverse=True)
+    cnt, out = {}, []
+    for it in items:
+        k = it["county"] + it["town"]
+        if cnt.get(k, 0) >= 2:
+            continue
+        cnt[k] = cnt.get(k, 0) + 1
+        out.append(it)
+        if len(out) >= 260:
+            break
+    return {"items": out, "n_towns": len(cnt), "errs": errs[:6]}
+
+
 # ---------- 藝文活動（文化部藝文資訊平台，不用金鑰）：地圖點位、各縣市、本週值得看 ----------
 CULTURE_URL = "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do"
 CULTURE_CATS = {"6": "展覽", "1": "音樂", "2": "戲劇", "17": "演唱會", "7": "講座", "3": "舞蹈"}
@@ -5438,6 +5492,19 @@ for _st, _lst in _stems.items():
         _TOWN_BY_NAME[_st] = _lst
 
 
+def _addr_town(addr: str):
+    """登記地址 → tw_towns 的鍵（縣市＋鄉鎮），找不到回傳空字串。地址開頭可能有郵遞區號。"""
+    a = re.sub(r"^[\d\s]+", "", str(addr or "")).replace("台", "臺")
+    c = a[:3]
+    if c not in TW_COUNTIES:
+        return ""
+    for n in (2, 3, 4):
+        t = a[3:3 + n]
+        if t and t[-1] in "鄉鎮市區" and (c + t) in TOWNS:
+            return c + t
+    return ""
+
+
 def _jitter(key: str, r: float = 0.05):
     import hashlib
     h = hashlib.md5(key.encode("utf-8")).digest()
@@ -5477,6 +5544,16 @@ def p_mapfeed():
             return
         seen.add(title)
         pts.append({"ll": pl[:2], "place": pl[2], "lvl": pl[3], "t": title[:80], "u": url or "", "s": (source or "")[:12], "at": at or "", "k": kind})
+    for it in (RESULTS.get("townnews") or {}).get("items") or []:
+        k = (it.get("county") or "") + (it.get("town") or "")
+        title = it.get("title")
+        if k not in TOWNS or not title or title in seen:
+            continue
+        lo, la, c, t = TOWNS[k]
+        dx, dy = _jitter(title, 0.012)
+        seen.add(title)
+        pts.append({"ll": [round(lo + dx, 4), round(la + dy, 4)], "place": c.replace("臺", "台") + t, "lvl": "town", "t": title[:80], "u": it.get("url") or "",
+                    "s": (it.get("source") or "")[:12], "at": it.get("at") or "", "k": "town"})
     for c, items in ((RESULTS.get("localnews") or {}).get("counties") or {}).items():
         for it in items:
             add(it.get("title"), it.get("url"), it.get("source"), it.get("at"), "local", c)
@@ -8326,6 +8403,40 @@ BRAND_CATS = [
 ]
 
 
+BIZ_TOWNS_PATH = DATA / "biz_towns.json"
+
+
+def biz_towns(month, cur, prv):
+    """地圖「新公司」視角：每個鄉鎮這個月新設立幾家、比上個月、主要產業、資本額最大的幾家（只用登記地址，不另外查 API）。"""
+    T, C = {}, {}
+    for which, lst in (("n", cur), ("p", prv)):
+        for x in lst:
+            k = x.get("town") or ""
+            c = (x.get("city") or "")[:3]
+            if c in TW_COUNTIES:
+                C.setdefault(c, {"n": 0, "p": 0})[which] += 1
+            if not k:
+                continue
+            t = T.setdefault(k, {"n": 0, "p": 0, "cats": {}, "top": []})
+            t[which] += 1
+            if which == "n":
+                t["cats"][x["cat"]] = t["cats"].get(x["cat"], 0) + 1
+                if x["kind"] == "公司":
+                    t["top"].append(x)
+    rows = []
+    for k, t in T.items():
+        lo, la, c, tn = TOWNS[k]
+        cats = sorted([kv for kv in t["cats"].items() if kv[0] != "名稱看不出產業"], key=lambda kv: -kv[1])[:3]
+        top = sorted(t["top"], key=lambda x: -(x["cap"] or 0))[:5]
+        rows.append([c, tn, t["n"], t["p"], cats, t["cats"].get("設計創意", 0), [[x["name"], x["cap"], x["cat"], x["date"]] for x in top]])
+    rows.sort(key=lambda r: -r[2])
+    located = sum(1 for x in cur if x.get("town"))
+    write_json(BIZ_TOWNS_PATH, {"month": month, "total": len(cur), "located": located, "counties": C, "towns": rows,
+                                "src": "經濟部商業司 公司／商業登記（data.gov.tw），依登記地址歸到鄉鎮市區", "updatedAt": NOW.isoformat()},
+               separators=(",", ":"))
+    return located
+
+
 def _brand_cat(name):
     if re.search(r"消防|機電|水電|空調|冷凍|結構|土木|測量|環境工程", name or ""):
         return "不動產營建"
@@ -8387,7 +8498,8 @@ def p_brands():
                     if not nm:
                         continue
                     months.setdefault(key, []).append({"name": nm, "kind": kind, "cap": num(r.get("資本額")), "date": _roc_date(r.get(date_k)),
-                                                       "city": ((r.get("縣市名稱") or r.get(addr_k) or "")[:3]).replace("台", "臺"), "cat": _brand_cat(nm)})
+                                                       "city": ((r.get("縣市名稱") or r.get(addr_k) or "")[:3]).replace("台", "臺"), "cat": _brand_cat(nm),
+                                                       "town": _addr_town(r.get(addr_k))})
                 time.sleep(0.5)
         except Exception as e:  # noqa: BLE001
             errs.append(f"{kind}: {safe_err(e)}")
@@ -8409,6 +8521,10 @@ def p_brands():
         if prv_k:
             hist_put("brands", c, prv_k, p_)
         cats.append({"cat": c, "n": n_, "prev": p_, "chg": round((n_ - p_) / p_ * 100, 1) if p_ else None, "spark": hist_get("brands", c, 12)})
+    try:
+        biz_towns(cur_k, cur, prv)
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"biz_towns: {safe_err(e)}")
     peers = sorted([x for x in cur if x["cat"] == "設計創意"], key=lambda x: (-(x["cap"] or 0), x["date"]))[:30]
     big = sorted([x for x in cur if x["kind"] == "公司" and (x["cap"] or 0) >= 5e7], key=lambda x: -(x["cap"] or 0))[:12]
     # 得標排行：累積決標紀錄（滾動 180 天）＋ 決標金額快取
@@ -8719,6 +8835,7 @@ run("airport", p_airport, keep_if_fresh_hours=0.25)
 run("alerts", p_alerts, keep_if_fresh_hours=0.15)
 run("oil", p_oil, keep_if_fresh_hours=12)
 run("localnews", p_localnews, keep_if_fresh_hours=1)
+run("townnews", p_townnews, keep_if_fresh_hours=3)  # 地方新聞到鄉鎮，約 40 次 Google News 查詢，所以 3 小時一次
 run("elect", p_elect, keep_if_fresh_hours=0.5)  # 要在新聞、地方新聞、PTT 之後
 run("culture", p_culture, keep_if_fresh_hours=6)
 run("veg", p_veg, keep_if_fresh_hours=6)
