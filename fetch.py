@@ -5865,6 +5865,77 @@ J104_IND = {"1001": "電子資訊／半導體", "1002": "一般製造", "1003": 
             "1015": "礦業", "1016": "住宿餐飲"}
 
 
+J104_AREA_JSON = DATA / "j104_area.json"
+J104_TOWN_SCOPE = {"臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市", "新竹市", "新竹縣"}
+
+
+def _j104_districts():
+    """104 地區代碼 → 鄉鎮（六都＋新竹）。代碼表一週更新一次。"""
+    tab = None
+    if J104_AREA_JSON.exists() and time.time() - J104_AREA_JSON.stat().st_mtime < 7 * 86400:
+        try:
+            tab = json.loads(J104_AREA_JSON.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            tab = None
+    if not tab:
+        raw = gjson("https://static.104.com.tw/category-tool/json/Area.json", timeout=30)
+        pairs = []
+        def walk(o):
+            if isinstance(o, dict):
+                no, des = str(o.get("no") or ""), o.get("des") or ""
+                if re.fullmatch(r"6001\d{6}", no) and des:
+                    pairs.append((no, des))
+                for v in o.values():
+                    walk(v)
+            elif isinstance(o, list):
+                for v in o:
+                    walk(v)
+        walk(raw)
+        par = {code: counties for code, _, counties in J104_AREA}
+        tab = {}
+        for no, des in pairs:
+            if no.endswith("000"):
+                continue
+            cs = par.get(no[:7] + "000") or []
+            d = des.replace("台", "臺")
+            for c in cs:
+                if c not in J104_TOWN_SCOPE:
+                    continue
+                k = d if d.startswith(c) else c + d
+                if k in TOWNS:
+                    tab[no] = k; break
+        if len(tab) < 50:
+            raise RuntimeError(f"104 area: only {len(tab)} districts matched")
+        write_json(J104_AREA_JSON, tab, separators=(",", ":"))
+    return tab
+
+
+def p_jobtowns():
+    """六都＋新竹各區刊登中的職缺數（每天一次），和 7 天前比。"""
+    today = NOW.astimezone(TPE).date().isoformat()
+    tab = _j104_districts()
+    rows, errs = [], []
+    for no, k in tab.items():
+        try:
+            _, n = _j104(area=no)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{k}: {safe_err(e)}")
+            if len(errs) > 8:
+                break
+            continue
+        hist_put("jobs", "town:" + k, today, n)
+        h = HISTORY.get("jobs", {}).get("town:" + k, [])
+        del h[:-30]   # 只需要一週前的值，各區的序列不用留太長
+        old = next((x for d, x in reversed(h) if d <= (NOW.astimezone(TPE).date() - timedelta(days=7)).isoformat()), None)
+        lo, la, c, t = TOWNS[k]
+        rows.append([c, t, n, round(100 * (n / old - 1), 1) if old else None])
+        time.sleep(0.6)
+    if not rows:
+        raise RuntimeError("jobtowns: nothing " + "; ".join(errs)[:160])
+    rows.sort(key=lambda r: -r[2])
+    return {"date": today, "towns": rows, "scope": sorted(J104_TOWN_SCOPE), "errs": errs[:4]}
+
+
 def _j104(**params):
     j = gjson(J104, params={"page": 1, "pagesize": 30, **params}, headers=J104_H, timeout=30)
     return j, int(((j.get("metadata") or {}).get("pagination") or {}).get("total") or 0)
@@ -7550,6 +7621,116 @@ def p_tenders():
     return {"items": items, "keywords": PCC_KW, "errs": errs[:4]}
 
 
+# ---------- 地圖「標案」視角：每天所有採購公告，依發包機關歸到縣市、鄉鎮 ----------
+PCC_DAYS = DATA / "pcc_days.json"
+_UNIT_SKIP_KEYS = {"北市", "中市", "南市", "竹市", "嘉市", "桃市", "竹縣", "嘉縣"}
+
+
+def _unit_place(name: str):
+    """機關名稱 → (縣市, 鄉鎮)。縣市政府、區公所、市立學校看得出來；部會、國營事業等中央機關回傳 ("", "")。"""
+    n = str(name or "").replace("台", "臺")
+    c = next((k for k in TW_COUNTIES if k in n), "")
+    if not c:
+        for k, (_, _, keys) in TW_COUNTIES.items():
+            if any(len(x) >= 2 and x not in _UNIT_SKIP_KEYS and x.replace("台", "臺") in n for x in keys):
+                c = k; break
+    if not c:
+        return "", ""
+    if c not in n:          # 只看得出縣市（國立臺東大學這類），不猜鄉鎮
+        return c, ""
+    rest = n.split(c, 1)[1]
+    towns = [t for (lo, la, cc, t) in TOWNS.values() if cc == c]
+    t = next((t for t in towns if t in rest), "")
+    if not t:
+        t = next((t for t in towns if len(t) >= 3 and t[:-1] in rest and len(t[:-1]) >= 2), "")
+    return c, t
+
+
+def _pcc_day(d: str):
+    """一天的公告 → 各縣市、各鄉鎮的新招標／決標件數、得標廠商、幾筆最新案名。"""
+    from curl_cffi import requests as cffi
+    r = cffi.get("https://pcc-api.openfun.app/api/listbydate", params={"date": d}, impersonate="chrome", timeout=120)
+    r.raise_for_status()
+    recs = (r.json() or {}).get("records") or []
+    C, T = {}, {}
+    for x in recs:
+        b = x.get("brief") or {}
+        typ = b.get("type") or ""
+        if any(k in typ for k in ("更正", "撤銷", "無法決標", "定期彙送", "公開閱覽", "資訊公告")):
+            continue
+        kind = "a" if "決標" in typ else "n" if any(k in typ for k in ("招標", "公開取得", "公開評選", "公開徵求")) else ""
+        if not kind:
+            continue
+        c, t = _unit_place(x.get("unit_name"))
+        k = c or "中央"
+        e = C.setdefault(k, {"n": 0, "a": 0, "w": {}, "r": []})
+        e[kind] += 1
+        if kind == "a":
+            nk = (b.get("companies") or {}).get("name_key") or {}
+            for nm, keys in (nk.items() if isinstance(nk, dict) else []):
+                if any("得標廠商" in str(z) and "未得標" not in str(z) for z in (keys or [])):
+                    e["w"][nm] = e["w"].get(nm, 0) + 1
+        elif len(e["r"]) < 6:
+            e["r"].append([(b.get("title") or "")[:50], (x.get("unit_name") or "")[:20],
+                           f'https://openfunltd.github.io/pcc-viewer/tender.html?unit_id={x.get("unit_id")}&job_number={x.get("job_number")}'])
+        if c and t:
+            f = T.setdefault(c + t, {"n": 0, "a": 0, "r": []})
+            f[kind] += 1
+            if kind == "n" and len(f["r"]) < 3:
+                f["r"].append([(b.get("title") or "")[:50], (x.get("unit_name") or "")[:20],
+                               f'https://openfunltd.github.io/pcc-viewer/tender.html?unit_id={x.get("unit_id")}&job_number={x.get("job_number")}'])
+    return {"total": len(recs), "c": C, "t": T}
+
+
+def p_tendermap():
+    """近 7 天 vs 前 7 天。每天的結果快取（已過去的日子不會再變），只重抓最近兩天。"""
+    try:
+        cache = json.loads(PCC_DAYS.read_text(encoding="utf-8")) if PCC_DAYS.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    today = NOW.astimezone(TPE).date()
+    days = [(today - timedelta(days=i)).strftime("%Y%m%d") for i in range(1, 16)]
+    errs, fetched = [], 0
+    for i, d in enumerate(days):
+        if d in cache and i >= 2:
+            continue
+        if fetched >= 8:      # 第一次跑最多補 8 天，其他的下輪再補
+            break
+        try:
+            cache[d] = _pcc_day(d); fetched += 1
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{d}: {safe_err(e)}")
+        time.sleep(1.5)
+    cache = {d: cache[d] for d in days if d in cache}
+    write_json(PCC_DAYS, cache, separators=(",", ":"))
+    have = [d for d in days if d in cache and (cache[d].get("total") or 0) > 0]
+    if not have:
+        raise RuntimeError("tendermap: nothing " + "; ".join(errs)[:160])
+    wk, prev = have[:7], have[7:14]
+    def agg(ds, key):
+        out = {}
+        for d in ds:
+            for k, v in (cache[d].get(key) or {}).items():
+                o = out.setdefault(k, {"n": 0, "a": 0, "w": {}, "r": []})
+                o["n"] += v.get("n", 0); o["a"] += v.get("a", 0)
+                for nm, c in (v.get("w") or {}).items():
+                    o["w"][nm] = o["w"].get(nm, 0) + c
+                if len(o["r"]) < 6:
+                    o["r"].extend(v.get("r", [])[:6 - len(o["r"])])
+        return out
+    cw, cp, tw, tp = agg(wk, "c"), agg(prev, "c"), agg(wk, "t"), agg(prev, "t")
+    counties = {k: {"n": v["n"], "a": v["a"], "np": (cp.get(k) or {}).get("n", 0), "ap": (cp.get(k) or {}).get("a", 0),
+                    "win": sorted(v["w"].items(), key=lambda kv: -kv[1])[:5], "recent": v["r"][:6]} for k, v in cw.items()}
+    towns = []
+    for k, v in tw.items():
+        if k in TOWNS:
+            lo, la, c, t = TOWNS[k]
+            towns.append([c, t, v["n"], v["a"], (tp.get(k) or {}).get("n", 0), v["r"][:3]])
+    towns.sort(key=lambda r: -(r[2] + r[3]))
+    return {"days": [wk[-1], wk[0]], "prev_days": [prev[-1], prev[0]] if prev else [], "counties": counties, "towns": towns,
+            "src": "政府電子採購網（g0v pcc-api 鏡像），依發包機關名稱歸到縣市與鄉鎮", "errs": errs[:4]}
+
+
 DESIGN_FEEDS = [("https://www.dezeen.com/feed/", "Dezeen", "site:dezeen.com"),
                 (("https://www.itsnicethat.com/rss", "https://www.itsnicethat.com/feed", "https://www.itsnicethat.com/articles.rss"), "INT", "site:itsnicethat.com"),
                 ("https://campaignbriefasia.com/feed/", "CB Asia", "site:campaignbriefasia.com"),
@@ -8823,12 +9004,14 @@ run("cofacts", p_cofacts, keep_if_fresh_hours=0.5)
 # run("threads_g", p_threads_g, keep_if_fresh_hours=3)  # Custom Search JSON API 不收新客戶、Gemini grounding 免費層無額度（429）；Threads 暫無免費路徑
 run("mood", p_mood, keep_if_fresh_hours=1)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
+run("tendermap", p_tendermap, keep_if_fresh_hours=6)   # 每天所有採購公告，依機關歸到縣市（地圖用）
 run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
 run("flights", p_flights)
 run("lightning", p_lightning, keep_if_fresh_hours=0.15)
 run("house", p_house, keep_if_fresh_hours=24 * 5)
 run("jobs", p_jobs, keep_if_fresh_hours=6)
+run("jobtowns", p_jobtowns, keep_if_fresh_hours=20)   # 六都＋新竹各區職缺，約 170 次 104 查詢，一天一次
 run("mops", p_mops, keep_if_fresh_hours=0.5)
 run("power", p_power, keep_if_fresh_hours=0.25)
 run("airport", p_airport, keep_if_fresh_hours=0.25)
