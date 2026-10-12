@@ -1732,7 +1732,7 @@ function introChips() {
   for (const t of ST.top || []) { halo.push(t); seen.add(t); }
   for (const t of pool) { if (halo.length >= (MOBILE ? 16 : 26)) break; if (seen.has(t) || !isFinite(t.value)) continue; if (halo.filter(h => h.grp === t.grp).length >= 2) continue; halo.push(t); seen.add(t); }
   halo.forEach((t, k) => {
-    const a = -Math.PI * 0.62 + k / halo.length * Math.PI * 2, R = (MOBILE ? 150 : 205) + (k % 3) * 24;
+    const a = -Math.PI * 0.62 + k / halo.length * Math.PI * 2, R = (MOBILE ? 118 : 205) + (k % 3) * (MOBILE ? 16 : 24);
     const isTop = (ST.top || []).includes(t);
     add({ pos: V(Math.sin(a) * R * 0.78, 18 + (k % 4) * 10, -20 - Math.cos(a) * R), v: t.grp === "inst" ? Math.abs(t.value) : t.value, dec: Math.abs(t.value) >= 1000 ? 0 : Math.abs(t.value) >= 100 ? 1 : Math.abs(t.value) >= 1 ? 2 : 3,
       unit: t.grp === "inst" ? " 億" : "", lab: t.name, chg: t.chgTxt, color: t.color, top: isTop ? (ST.top || []).indexOf(t) : -1, halo: true });
