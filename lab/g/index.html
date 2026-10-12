@@ -1094,17 +1094,47 @@ lmMat.onBeforeCompile = sh => {
       totalEmissiveRadiance = (mix(vec3(1.0, 0.88, 0.62), uWeek, _lm101) * (0.16 + 0.75 * _lmMull) + vec3(1.0, 0.92, 0.78) * _lmWin * 0.35) * uNight;`);
 };
 lmMat.customProgramCacheKey = () => "lm101";
+// 四角雙層退縮的方形平面（半寬 a，每階退 d）
+function notchSq(a, d) { const q = [[a, -a + 2 * d], [a, a - 2 * d], [a - d, a - 2 * d], [a - d, a - d], [a - 2 * d, a - d], [a - 2 * d, a]], pts = [];
+  for (let r = 0; r < 4; r++) { const c = Math.cos(r * Math.PI / 2), s = Math.sin(r * Math.PI / 2); for (const [x, y] of q) pts.push([x * c - y * s, x * s + y * c]); } return pts; }
+// 把平面從 y0（縮放 s0）拉到 y1（縮放 s1）：側面是平的四邊形，上下封蓋
+function loft(prof, s0, s1, y0, y1) {
+  const n = prof.length, pos = [], idx = [], P = (k, s, y) => [prof[k][0] * s, y, prof[k][1] * s];
+  for (let k = 0; k < n; k++) { const a = P(k, s0, y0), b = P((k + 1) % n, s0, y0), c = P((k + 1) % n, s1, y1), d = P(k, s1, y1), v = pos.length / 3; pos.push(...a, ...b, ...c, ...d); idx.push(v, v + 1, v + 2, v, v + 2, v + 3); }
+  const tri = THREE.ShapeUtils.triangulateShape(prof.map(p => new THREE.Vector2(p[0], p[1])), []);
+  for (const [y, s, flip] of [[y1, s1, false], [y0, s0, true]]) { const v = pos.length / 3; for (const p of prof) pos.push(p[0] * s, y, p[1] * s); for (const t of tri) idx.push(...(flip ? [v + t[0], v + t[1], v + t[2]] : [v + t[0], v + t[2], v + t[1]])); }
+  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals(); return g;
+}
+function build101(K) {
+  const M = 1 / 1000, prof = notchSq(1, 0.11), parts = [];
+  const seg = (a0, a1, h0, h1) => parts.push([loft(prof, a0 * M, a1 * M, h0 * K, h1 * K), 0]);
+  // 裙樓商場（偏東、兩段高度）
+  const mall = new THREE.BoxGeometry(0.15, 58 * K, 0.095); mall.translate(0.05, 29 * K, 0.012); parts.push([mall, 0, mallMat]);
+  const mall2 = new THREE.BoxGeometry(0.06, 40 * K, 0.12); mall2.translate(0.1, 20 * K, 0.0); parts.push([mall2, 0, mallMat]);
+  // 斗狀基座：地面半寬 35 m，往上收到 27 m（約 1～26 樓）
+  seg(35, 27, 0, 101);
+  // 8 節竹節：每節 8 層（33.6 m），下窄上寬，節與節之間一圈深色腰帶
+  for (let i = 0; i < 8; i++) { const y0 = 101 + i * 33.6; seg(25.5, 31, y0, y0 + 32.4); seg(24.5, 24.5, y0 + 32.4, y0 + 33.6); }
+  // 頂部 91～101 樓三階收窄，再接尖塔
+  const yT = 101 + 8 * 33.6; seg(21, 21, yT, yT + 22); seg(16.5, 16.5, yT + 22, yT + 44); seg(11, 10, yT + 44, yT + 62);
+  const spire = new THREE.CylinderGeometry(0.5 * M, 3.2 * M, (508 - yT - 62) * K, 8); spire.translate(0, (yT + 62 + (508 - yT - 62) / 2) * K, 0); parts.push([spire, 0, spireMat]);
+  for (let k = 0; k < 5; k++) { const r = new THREE.TorusGeometry((3.4 - k * 0.5) * M, 0.35 * M, 6, 16); r.rotateX(Math.PI / 2); r.translate(0, (yT + 70 + k * 9) * K, 0); parts.push([r, 0, spireMat]); }
+  // 如意：基座頂端四面各一個金色圓形
+  for (let r = 0; r < 4; r++) { const g = new THREE.TorusGeometry(7 * M, 1.6 * M, 8, 28), c = Math.cos(r * Math.PI / 2), s = Math.sin(r * Math.PI / 2);
+    g.rotateY(r * Math.PI / 2 + Math.PI / 2); g.translate(c * 28.5 * M, 92 * K, s * 28.5 * M); parts.push([g, 0, ruyiMat]); }
+  return parts;
+}
+const mallMat = new THREE.MeshStandardMaterial({ color: 0x8fa3a6, roughness: 0.25, metalness: 0.45 });
+const spireMat = new THREE.MeshStandardMaterial({ color: 0x9aa1a6, roughness: 0.35, metalness: 0.8 });
+const ruyiMat = new THREE.MeshStandardMaterial({ color: 0xc9a24a, roughness: 0.3, metalness: 0.9, emissive: 0xffc35a, emissiveIntensity: 0 });
 function addLandmarks() {
   const mk = (lon, lat, parts) => {
-    const g = new THREE.Group(), [x, z] = toXZ(lon, lat); g.position.set(x, hAt(lon, lat), z);
-    for (const [geo, y] of parts) { const m = new THREE.Mesh(geo, lmMat); m.position.y = y; g.add(m); }
+    const g = new THREE.Group(), [x, z] = toXZ(lon, lat); g.position.set(x, hAt(lon, lat) * 0.42, z);
+    for (const [geo, y, mat] of parts) { const m = new THREE.Mesh(geo, mat || lmMat); m.position.y = y; m.castShadow = m.receiveShadow = true; g.add(m); }
     scene.add(g); return g;
   };
   const K = BEX / 1000, sq = (rt, rb, h) => { const g = new THREE.CylinderGeometry(rt * Math.SQRT2 / 2, rb * Math.SQRT2 / 2, h, 4); g.rotateY(Math.PI / 4); return g; };
-  const t101 = [[new THREE.BoxGeometry(0.16, 60 * K, 0.1), 30 * K], [sq(0.05, 0.05, 90 * K), 45 * K]];
-  for (let i = 0; i < 8; i++) { const y0 = 90 + i * 33; t101.push([sq(0.047, 0.036, 33 * K), (y0 + 16.5) * K]); }
-  t101.push([sq(0.024, 0.03, 54 * K), (354 + 27) * K], [new THREE.CylinderGeometry(0.0015, 0.004, 100 * K, 6), (408 + 50) * K]);
-  mk(121.5645, 25.0340, t101);
+  mk(121.5645, 25.0340, build101(K));
   const t85 = [[new THREE.BoxGeometry(0.03, 150 * K, 0.045), 75 * K], [new THREE.BoxGeometry(0.03, 150 * K, 0.045), 75 * K],
     [new THREE.BoxGeometry(0.095, 110 * K, 0.05), 205 * K], [new THREE.BoxGeometry(0.035, 87 * K, 0.035), (260 + 43.5) * K], [new THREE.CylinderGeometry(0.002, 0.004, 31 * K, 6), (347 + 15.5) * K]];
   const g85 = mk(120.3007, 22.6116, t85); g85.children[0].position.x = -0.03; g85.children[1].position.x = 0.03;
@@ -2625,7 +2655,7 @@ function loop() {
   for (const f of OBJ.tick) f(T);
   scaleObjects();
   { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); renderer.toneMappingExposure = (uni.uNight.value ? 0.85 : 1.0) * (1 - 0.2 * uni.uClose.value); }
-  lmMat.emissiveIntensity = 0; lmMat.color.setRGB(0.42, 0.52, 0.51).multiplyScalar(1 - uni.uNight.value * 0.88); lmMat.envMapIntensity = 1 - 0.85 * uni.uNight.value;
+  lmMat.emissiveIntensity = 0; ruyiMat.emissiveIntensity = uni.uNight.value * 0.9; mallMat.color.setHex(0x8fa3a6).multiplyScalar(1 - uni.uNight.value * 0.85); spireMat.emissive.setHex(0xffffff); spireMat.emissiveIntensity = uni.uNight.value * 0.25; lmMat.color.setRGB(0.42, 0.52, 0.51).multiplyScalar(1 - uni.uNight.value * 0.88); lmMat.envMapIntensity = 1 - 0.85 * uni.uNight.value;
   outlineGroup.visible = camera.position.distanceTo(controls.target) > 40;
   if (ST.on) storyTick(dt);
   if (!ST.on || ST.explore) controls.update(); else camera.lookAt(controls.target);
