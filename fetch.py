@@ -7651,7 +7651,12 @@ def _pcc_day(d: str):
     from curl_cffi import requests as cffi
     r = cffi.get("https://pcc-api.openfun.app/api/listbydate", params={"date": d}, impersonate="chrome", timeout=120)
     r.raise_for_status()
-    recs = (r.json() or {}).get("records") or []
+    try:
+        recs = (r.json() or {}).get("records") or []
+    except ValueError:      # 假日沒有公告時回傳空白
+        if len(r.content) < 200:
+            return {"total": 0, "c": {}, "t": {}}
+        raise
     C, T = {}, {}
     for x in recs:
         b = x.get("brief") or {}
@@ -7663,8 +7668,10 @@ def _pcc_day(d: str):
             continue
         c, t = _unit_place(x.get("unit_name"))
         k = c or "中央"
-        e = C.setdefault(k, {"n": 0, "a": 0, "w": {}, "r": []})
+        e = C.setdefault(k, {"n": 0, "a": 0, "w": {}, "r": [], "u": {}})
         e[kind] += 1
+        un = (x.get("unit_name") or "")[:24]
+        e["u"][un] = e["u"].get(un, 0) + 1
         if kind == "a":
             nk = (b.get("companies") or {}).get("name_key") or {}
             for nm, keys in (nk.items() if isinstance(nk, dict) else []):
@@ -7706,13 +7713,17 @@ def p_tendermap():
     have = [d for d in days if d in cache and (cache[d].get("total") or 0) > 0]
     if not have:
         raise RuntimeError("tendermap: nothing " + "; ".join(errs)[:160])
-    wk, prev = have[:7], have[7:14]
+    wk, prev = have[:7], have[7:14]      # 7 個有公告的日子（假日沒有）
+    if len(prev) < 3:
+        prev = []
     def agg(ds, key):
         out = {}
         for d in ds:
             for k, v in (cache[d].get(key) or {}).items():
-                o = out.setdefault(k, {"n": 0, "a": 0, "w": {}, "r": []})
+                o = out.setdefault(k, {"n": 0, "a": 0, "w": {}, "r": [], "u": {}})
                 o["n"] += v.get("n", 0); o["a"] += v.get("a", 0)
+                for nm, c in (v.get("u") or {}).items():
+                    o["u"][nm] = o["u"].get(nm, 0) + c
                 for nm, c in (v.get("w") or {}).items():
                     o["w"][nm] = o["w"].get(nm, 0) + c
                 if len(o["r"]) < 6:
@@ -7720,7 +7731,8 @@ def p_tendermap():
         return out
     cw, cp, tw, tp = agg(wk, "c"), agg(prev, "c"), agg(wk, "t"), agg(prev, "t")
     counties = {k: {"n": v["n"], "a": v["a"], "np": (cp.get(k) or {}).get("n", 0), "ap": (cp.get(k) or {}).get("a", 0),
-                    "win": sorted(v["w"].items(), key=lambda kv: -kv[1])[:5], "recent": v["r"][:6]} for k, v in cw.items()}
+                    "win": sorted(v["w"].items(), key=lambda kv: -kv[1])[:5], "recent": v["r"][:6],
+                    "units": sorted(v["u"].items(), key=lambda kv: -kv[1])[:5]} for k, v in cw.items()}
     towns = []
     for k, v in tw.items():
         if k in TOWNS:
