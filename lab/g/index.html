@@ -800,26 +800,45 @@ function orthoBMat(city, ci) {
   return m;
 }
 // 地面航照：貼著地形的網格，跟地形一樣拉近時壓扁；白天用照片，晚上壓暗交給路燈和窗戶。市區那層蓋在全島那層上面
-function orthoGroundMat(tex, city) {
-  const m = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.96, metalness: 0, transparent: true, opacity: 0, depthWrite: true, polygonOffset: true, polygonOffsetFactor: city ? -3 : -2, polygonOffsetUnits: city ? -12 : -6 });
-  m.onBeforeCompile = sh => { sh.uniforms.uClose = uni.uClose; sh.uniforms.uNight = uni.uNight;
-    sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nuniform float uClose;").replace("#include <begin_vertex>", "#include <begin_vertex>\ntransformed.y *= mix(1.0, 0.42, uClose);");
-    sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nuniform float uNight;").replace("#include <color_fragment>", "#include <color_fragment>\nif (vMapUv.x < 0.0 || vMapUv.x > 1.0 || vMapUv.y < 0.0 || vMapUv.y > 1.0) discard;\ndiffuseColor.rgb *= mix(vec3(1.0), vec3(0.05, 0.06, 0.09), uNight);"); };
-  m.customProgramCacheKey = () => "orthoG";
+function orthoGroundMat(tex, city) {   // 晚上：照片壓成冷色月光（看得到街廓、河、山），再疊上跟地形一樣的夜光
+  const m = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.96, metalness: 0, emissive: 0xffffff, transparent: true, opacity: 0, depthWrite: true, polygonOffset: true, polygonOffsetFactor: city ? -3 : -2, polygonOffsetUnits: city ? -12 : -6 });
+  m.onBeforeCompile = sh => { for (const k of ["uClose", "uNight", "uLights", "uHasLights", "uLightK"]) sh.uniforms[k] = uni[k];
+    sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nuniform float uClose; attribute vec2 aTUV; attribute vec2 aLL; varying vec2 vTUV; varying vec2 vLL2;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\ntransformed.y *= mix(1.0, 0.42, uClose); vTUV = aTUV; vLL2 = aLL;");
+    sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nuniform float uNight; uniform float uClose; uniform sampler2D uLights; uniform float uHasLights; uniform float uLightK; varying vec2 vTUV; varying vec2 vLL2; vec3 _photo;")
+      .replace("#include <color_fragment>", "#include <color_fragment>\nif (vMapUv.x < 0.0 || vMapUv.x > 1.0 || vMapUv.y < 0.0 || vMapUv.y > 1.0) discard;\n_photo = diffuseColor.rgb;\ndiffuseColor.rgb *= 1.0 - 0.94 * uNight;")
+      .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
+        {
+          float lum = dot(_photo, vec3(0.3, 0.59, 0.11));
+          float sat = max(_photo.r, max(_photo.g, _photo.b)) - min(_photo.r, min(_photo.g, _photo.b));
+          vec3 moon = vec3(0.07, 0.095, 0.15) * pow(lum, 1.15) * 1.6;                    // 月光底：冷色、保留明暗
+          float urban = smoothstep(0.38, 0.68, lum) * (1.0 - clamp(sat * 3.0, 0.0, 1.0)); // 水泥、柏油：城市的輪廓
+          vec3 wash = vec3(1.0, 0.62, 0.3) * urban * mix(0.03, 0.09, uClose);            // 路燈打在地面的暖光
+          float dens = uHasLights > 0.5 ? texture2D(uLights, vTUV).r : 0.0;
+          float I = clamp(pow(dens, 0.9), 0.0, 1.0);
+          vec2 cell = floor(vLL2 * 300.0);
+          float n = fract(sin(dot(cell, vec2(12.9898, 78.233))) * 43758.5453);
+          float spark = step(1.0 - I * 0.9, n);
+          vec3 lc = mix(vec3(1.0, 0.5, 0.16), vec3(1.0, 0.9, 0.74), I);
+          vec3 lights = lc * (spark * (0.12 + 1.9 * I) + pow(I, 2.0) * 1.1) * (1.0 - smoothstep(0.25, 0.85, uClose)) * uLightK;
+          totalEmissiveRadiance = (moon + wash * (0.4 + I) + lights) * uNight;
+        }`); };
+  m.customProgramCacheKey = () => "orthoG2";
   return m;
 }
 const _mY = la => Math.log(Math.tan(Math.PI / 4 + la * Math.PI / 360));
 function orthoPatch(key) {   // 直接沿用地形網格的點和三角形，所以跟地形完全貼合；照片範圍外的部分在著色器裡丟掉
   const q = orthoQ(key), city = !key.startsWith("base:"), S = MOBILE ? 3 : 2, dl = (META.lon1 - META.lon0) / (META.w - 1) * S, dt = (META.lat1 - META.lat0) / (META.h - 1) * S;
   const i0 = Math.max(0, Math.floor((q.w - META.lon0) / dl)), i1 = Math.min(Math.floor((META.w - 1) / S), Math.ceil((q.e - META.lon0) / dl)), j0 = Math.max(0, Math.floor((META.lat1 - q.n) / dt)), j1 = Math.min(Math.floor((META.h - 1) / S), Math.ceil((META.lat1 - q.s) / dt));
-  const W = i1 - i0 + 1, pos = [], uv = [], el = [], idx = [], my0 = _mY(q.s), my1 = _mY(q.n);
+  const W = i1 - i0 + 1, pos = [], uv = [], el = [], idx = [], tuv = [], ll = [], my0 = _mY(q.s), my1 = _mY(q.n);
   for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
     const lon = META.lon0 + i * dl, lat = META.lat1 - j * dt, e = DEM[(j * S) * META.w + i * S], [x, z] = toXZ(lon, lat);
     pos.push(x, Math.max(e, 0) / 1000 * EX, z); uv.push((lon - q.w) / (q.e - q.w), (_mY(lat) - my0) / (my1 - my0)); el.push(e);
+    tuv.push((lon - META.lon0) / (META.lon1 - META.lon0), (lat - META.lat0) / (META.lat1 - META.lat0)); ll.push(lon, lat);
   }
   for (let j = 0; j < j1 - j0; j++) for (let i = 0; i < W - 1; i++) { const a = j * W + i, b = a + 1, c2 = a + W, d2 = c2 + 1;   // 跟地形一樣：全是海的三角形不畫
     if (el[a] > 0 || el[b] > 0 || el[c2] > 0) idx.push(a, c2, b); if (el[b] > 0 || el[c2] > 0 || el[d2] > 0) idx.push(b, c2, d2); }
-  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx); g.computeVertexNormals();
+  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2)); g.setAttribute("aTUV", new THREE.Float32BufferAttribute(tuv, 2)); g.setAttribute("aLL", new THREE.Float32BufferAttribute(ll, 2)); g.setIndex(idx); g.computeVertexNormals();
   const mesh = new THREE.Mesh(g, orthoGroundMat(ORTHO.hi.get(key) || orthoLo(key), city)); mesh.renderOrder = city ? 2 : 1; mesh.userData.city = city; scene.add(mesh); return mesh;
 }
 function orthoDrop(key) {   // 離開太遠：拆掉地面網格，全島那層連照片一起釋放（市區照片屋頂還在用就留著）
@@ -836,7 +855,7 @@ function orthoTick(dt) {
   if (_otT <= 0) { _otT = 0.5;
     const want = new Set(), hi = new Set();
     // 全島底圖：拉到縣市尺度才出現，只載鏡頭附近幾塊
-    if (ORTHO.idx.base && cd < 240 && uni.uNight.value < 0.5) {
+    if (ORTHO.idx.base && cd < 240) {
       ORTHO.idx.base.chunks.map((q, i) => ({ k: "base:" + i, d: dist(q) })).filter(o => o.d < Math.max(45, cd * 0.7)).sort((a, b) => a.d - b.d).slice(0, MOBILE ? 4 : 9).forEach(o => want.add(o.k));
     }
     // 市區：z16，鏡頭最近的 4 塊在電腦上換成 4096 版
@@ -851,7 +870,7 @@ function orthoTick(dt) {
     for (const k of hi) orthoSetHi(k, true);
   }
   const op = Math.min(1, Math.max(0, (close - 0.12) / 0.35));
-  _baseOp = Math.min(1, Math.max(0, (240 - cd) / 80)) * (1 - uni.uNight.value);
+  _baseOp = Math.min(1, Math.max(0, (240 - cd) / 80));
   for (const m of ORTHO.patches.values()) { const o = m.userData.city ? op : _baseOp; m.material.opacity = o; m.visible = o > 0.01; }
   const day = uni.uNight.value < 0.5, has = [...ORTHO.patches.values()].some(m => m.userData.city) && op > 0.5;
   rMat.visible = !(day && has); aMat.visible = !(day && has);   // 白天照片裡已經有路和公園
@@ -2130,7 +2149,7 @@ function loop() {
   for (const f of OBJ.tick) f(T);
   scaleObjects();
   { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); renderer.toneMappingExposure = (uni.uNight.value ? 0.85 : 1.0) * (1 - 0.2 * uni.uClose.value); }
-  lmMat.emissiveIntensity = uni.uNight.value * 0.16; lmMat.color.setRGB(0.42, 0.52, 0.51).multiplyScalar(1 - uni.uNight.value * 0.88);
+  lmMat.emissiveIntensity = uni.uNight.value * 0.16; lmMat.color.setRGB(0.42, 0.52, 0.51).multiplyScalar(1 - uni.uNight.value * 0.88); lmMat.envMapIntensity = 1 - 0.85 * uni.uNight.value;
   outlineGroup.visible = camera.position.distanceTo(controls.target) > 40;
   if (ST.on) storyTick(dt);
   if (!ST.on || ST.explore) controls.update(); else camera.lookAt(controls.target);
