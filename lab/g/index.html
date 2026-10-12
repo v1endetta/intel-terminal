@@ -314,6 +314,10 @@ body.intro::before{opacity:.4}
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 const RAW = "https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/";
 const ASSET_V = 8;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
@@ -457,8 +461,8 @@ function buildTerrain() {
       .replace("#include <begin_vertex>", "#include <begin_vertex>\nvElev = aElev; vLL = aLL; transformed.y *= mix(1.0, 0.42, uClose);");
     sh.fragmentShader = sh.fragmentShader
       .replace("#include <common>", "#include <common>\nvarying float vElev; varying vec2 vLL; uniform float uRadar; uniform sampler2D uRadarTex; uniform vec4 uRadarB; uniform float uTime; uniform float uDim; uniform float uNight; uniform sampler2D uLights; uniform float uHasLights; uniform float uClose; uniform float uLightK; uniform float uScan; uniform float uScanOn;")
-      .replace("#include <color_fragment>", "#include <color_fragment>\nfloat lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));\ndiffuseColor.rgb = mix(vec3(lum), diffuseColor.rgb, 0.8) * 1.3;\ndiffuseColor.rgb *= mix(1.0, 0.42, uDim);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.24, 0.25, 0.27) + diffuseColor.rgb * 0.18, uClose * 0.8);\ndiffuseColor.rgb *= mix(vec3(1.0), vec3(0.16, 0.19, 0.27), uNight);")
-      .replace("#include <clipping_planes_fragment>", "#include <clipping_planes_fragment>\nif (vElev < 0.0) discard;")
+      .replace("#include <color_fragment>", "#include <color_fragment>\nfloat lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));\ndiffuseColor.rgb = mix(vec3(lum), diffuseColor.rgb, 0.8) * 1.3;\ndiffuseColor.rgb *= mix(1.0, 0.42, uDim);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.13, 0.14, 0.16) + diffuseColor.rgb * 0.12, uClose * 0.85);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.2, 0.27, 0.35), (1.0 - smoothstep(0.0, 2.0, vElev)) * 0.85 * uClose);\ndiffuseColor.rgb *= mix(vec3(1.0), vec3(0.16, 0.19, 0.27), uNight);")
+      .replace("#include <clipping_planes_fragment>", "#include <clipping_planes_fragment>\nif (vElev < mix(0.0, -4.0, step(0.3, uClose))) discard;")
       .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
         {   // 夜光：NASA 夜光的形狀 × OSM 樓地板密度（大城市核心更亮）
           float nl = clamp(dot(totalEmissiveRadiance, vec3(0.3333)), 0.0, 1.0);
@@ -489,7 +493,7 @@ function buildTerrain() {
           vec2 gq = abs(fract(vLL * 12.0) - 0.5); float gline = smoothstep(0.035, 0.0, min(gq.x, gq.y));
           float cline = smoothstep(0.06, 0.0, abs(fract(vElev / 300.0) - 0.5)) * step(30.0, vElev);
           totalEmissiveRadiance += vec3(0.22, 0.7, 1.0) * (gline * 0.22 + cline * 0.55) * hid;
-          totalEmissiveRadiance += vec3(0.45, 0.9, 1.0) * (exp(-pow(sd / 0.02, 2.0)) * 2.4 + exp(min(sd, 0.0) / 0.25) * step(sd, 0.0) * 0.12) * uScanOn;
+          totalEmissiveRadiance += vec3(0.45, 0.9, 1.0) * (exp(-pow(sd / 0.015, 2.0)) * 1.25 + exp(min(sd, 0.0) / 0.25) * step(sd, 0.0) * 0.12) * uScanOn;
         }`);
   };
   terrain = new THREE.Mesh(g, terrainMat);
@@ -669,7 +673,7 @@ function cityWorker() {
   return WORKER;
 }
 const CITY_NODETAIL = new Set();
-const pMat = new THREE.MeshStandardMaterial({ color: 0xdfddd7, roughness: 0.85, metalness: 0, emissive: 0xffc98f, emissiveIntensity: 1, side: THREE.DoubleSide });
+const pMat = new THREE.MeshStandardMaterial({ color: 0xdfddd7, roughness: 0.72, metalness: 0.04, envMapIntensity: 0.7, emissive: 0xffc98f, emissiveIntensity: 1, side: THREE.DoubleSide });
 pMat.onBeforeCompile = sh => {
   sh.uniforms.uNight = uni.uNight;
   sh.vertexShader = sh.vertexShader
@@ -677,7 +681,7 @@ pMat.onBeforeCompile = sh => {
     .replace("#include <begin_vertex>", "#include <begin_vertex>\nvInfo = aInfo; vY = position.y; vSide = 1.0 - step(0.9, abs(normal.y));");
   sh.fragmentShader = sh.fragmentShader
     .replace("#include <common>", "#include <common>\nuniform float uNight; varying vec2 vInfo; varying float vY; varying float vSide;")
-    .replace("#include <color_fragment>", "#include <color_fragment>\nfloat hh = vY - vInfo.x;\ndiffuseColor.rgb *= mix(0.55, 1.0, clamp(hh * 90.0 + (1.0 - vSide), 0.0, 1.0));\ndiffuseColor.rgb *= mix(1.0, 0.035, uNight);")
+    .replace("#include <color_fragment>", "#include <color_fragment>\nfloat hh = vY - vInfo.x;\nfloat flc = hh / (3.3 / 1000.0 * 2.5);\nfloat gband = step(0.35, fract(flc)) * step(fract(flc), 0.8) * step(0.8, flc) * vSide;\ndiffuseColor.rgb *= mix(0.42, 1.0, clamp(hh * 60.0 + (1.0 - vSide), 0.0, 1.0));\ndiffuseColor.rgb *= 1.0 - gband * 0.2;\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.84, 0.89, 0.97), clamp(hh * 3.0, 0.0, 0.4) * vSide);\ndiffuseColor.rgb *= 1.0 + (1.0 - vSide) * 0.1;\ndiffuseColor.rgb *= mix(1.0, 0.035, uNight);")
     .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
       float fl = hh / (3.3 / 1000.0 * ${BEX.toFixed(1)});
       float win = step(0.35, fract(fl)) * step(fract(fl), 0.8) * step(0.8, fl);
@@ -692,11 +696,21 @@ rMat.onBeforeCompile = sh => {
     .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb *= mix(1.0, 0.06, uNight);")
     .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance *= uNight * mix(0.95, 0.12, clamp((vCls - 1.0) / 5.0, 0.0, 1.0));");
 };
-const aMat = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
-aMat.onBeforeCompile = sh => {
-  sh.uniforms.uNight = uni.uNight;
-  sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nuniform float uNight;")
-    .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb *= mix(1.0, 0.12, uNight);");
+const aMat = new THREE.MeshStandardMaterial({ roughness: 0.92, metalness: 0, envMapIntensity: 0.8, side: THREE.DoubleSide, vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+aMat.onBeforeCompile = sh => {   // 水面：白天反天空，晚上倒映城市燈光的碎光
+  sh.uniforms.uNight = uni.uNight; sh.uniforms.uTime = uni.uTime;
+  sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying vec3 vWP;").replace("#include <project_vertex>", "#include <project_vertex>\nvWP = (modelMatrix * vec4(transformed, 1.0)).xyz;");
+  sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nuniform float uNight; uniform float uTime; varying vec3 vWP;")
+    .replace("#include <color_fragment>", "#include <color_fragment>\nfloat isW = step(diffuseColor.r + 0.05, diffuseColor.b);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.42, 0.52, 0.62), isW * 0.7);\\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.3, 0.46, 0.28), (1.0 - isW) * 0.6);\ndiffuseColor.rgb *= mix(1.0, 0.12, uNight);")
+    .replace("#include <roughnessmap_fragment>", "#include <roughnessmap_fragment>\nroughnessFactor = mix(roughnessFactor, 0.25, step(diffuseColor.r + 0.03, diffuseColor.b));")
+    .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
+      {
+        vec3 vd = normalize(vViewPosition);
+        float fr = pow(1.0 - clamp(abs(vd.z), 0.0, 1.0), 2.0);
+        float rip = sin(vWP.x * 900.0 + uTime * 1.4) * sin(vWP.z * 760.0 - uTime * 1.1);
+        float glint = pow(max(rip, 0.0), 10.0);
+        totalEmissiveRadiance += isW * ((1.0 - uNight) * (vec3(0.1, 0.16, 0.24) + vec3(0.5, 0.62, 0.78) * fr) * 0.6 + uNight * vec3(1.0, 0.72, 0.42) * glint * 0.9);
+      }`);
 };
 function loadDetail(key) {
   const c = BMETA.cities[key]; CITY[key] = { state: "detail" };
@@ -1902,6 +1916,22 @@ function hudTick(t, placed) {
   $("ihudTxt").innerHTML = `<div class="r1">SCANNING TAIWAN</div><div class="r2">${Math.min(25.3, Math.max(21.9, lat)).toFixed(2)}°N · 120.95°E</div><div class="r3">${String(n).padStart(3, "0")} / ${String(INTRO.chips.length).padStart(3, "0")} 筆即時資料</div><div class="bar"><i style="width:${(n / INTRO.chips.length * 100).toFixed(1)}%"></i></div>`;
 }
 
+/* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
+const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" };
+let composer = null, bloom = null;
+try {
+  composer = new EffectComposer(renderer); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(innerWidth, innerHeight);
+  composer.addPass(new RenderPass(scene, camera));
+  bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth * (MOBILE ? 0.5 : 1), innerHeight * (MOBILE ? 0.5 : 1)), 0.5, 0.55, 0.82);
+  composer.addPass(bloom); composer.addPass(new OutputPass());
+} catch (e) { FX.on = false; }
+addEventListener("resize", () => { if (composer) { composer.setSize(innerWidth, innerHeight); bloom.resolution.set(innerWidth * (MOBILE ? 0.5 : 1), innerHeight * (MOBILE ? 0.5 : 1)); } });
+function present() {
+  if (FX.on && composer) {
+    const nt = uni.uNight.value; bloom.threshold = nt ? 0.78 : 0.97; bloom.strength = (nt ? 0.85 : 0.18) + 0.22 * uni.uScanOn.value + 0.25 * uni.uClose.value * nt;
+    composer.render();
+  } else renderer.render(scene, camera);
+}
 /* ---------- 啟動 ---------- */
 function start() {
   document.body.classList.add("exploring");
@@ -1930,7 +1960,7 @@ function loop() {
   outlineGroup.visible = camera.position.distanceTo(controls.target) > 40;
   if (ST.on) storyTick(dt);
   if (!ST.on || ST.explore) controls.update(); else camera.lookAt(controls.target);
-  renderer.render(scene, camera); placeLabels();
+  present(); placeLabels();
   requestAnimationFrame(loop);
 }
 window.__intel3d = { camera, controls, flyTo, setLayer, start: () => start(), flyCity: k => flyCity(k), lod: () => { lodT = 1; lodTick(0); }, cities: CITY };
