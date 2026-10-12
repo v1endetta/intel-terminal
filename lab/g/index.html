@@ -243,6 +243,22 @@ body.intro::before{opacity:.4}
 @media (max-width:760px){#intro .ic b{font-size:12px}#intro .ic small{font-size:9.5px}#intro .ic.halo b{font-size:13px}#intro .ic.top b{font-size:17px}}
 
 #side .note{font-size:11px;color:#6e6e73}
+
+/* 開場：HUD 與解碼數字 */
+#ihud{position:fixed;inset:0;width:100%;height:100%;z-index:12;pointer-events:none}
+#ihudTxt{position:fixed;left:44px;bottom:44px;z-index:14;pointer-events:none;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em;color:rgba(160,235,255,.85);line-height:1.7;text-shadow:0 0 12px rgba(100,210,255,.45)}
+#ihudTxt .r1{color:#fff;letter-spacing:.24em}
+#ihudTxt .bar{width:180px;height:2px;background:rgba(100,210,255,.18);margin-top:8px}
+#ihudTxt .bar i{display:block;height:100%;background:#64d2ff;box-shadow:0 0 8px #64d2ff}
+#intro .ic b{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;letter-spacing:-.02em}
+#intro .ic.halo{border-radius:3px;background:rgba(6,14,20,.55);border:1px solid rgba(100,210,255,.22)}
+#intro .ic.halo::before,#intro .ic.halo::after{content:"";position:absolute;width:7px;height:7px;border:1px solid #64d2ff}
+#intro .ic.halo::before{left:-1px;top:-1px;border-right:0;border-bottom:0}
+#intro .ic.halo::after{right:-1px;bottom:-1px;border-left:0;border-top:0}
+#intro .ic.lock b{animation:lockflash .5s ease-out}
+@keyframes lockflash{0%{text-shadow:0 0 14px currentColor,0 0 2px #fff}100%{text-shadow:0 1px 10px rgba(0,0,0,.7)}}
+#intro .ic.top{border-color:rgba(255,255,255,.5);background:rgba(10,18,24,.75)}
+@media (max-width:760px){#ihudTxt{left:22px;bottom:30px;font-size:9.5px}#ihudTxt .bar{width:130px}}
 </style>
 <script type="importmap">
 {"imports":{
@@ -275,6 +291,7 @@ body.intro::before{opacity:.4}
 <svg id="leaderSvg" aria-hidden="true"><g id="leaderG" style="opacity:0"><line id="leader"/><circle id="leaderDot" r="3.5"/></g></svg>
 <div id="dock2" aria-label="情報站分類"></div>
 <div id="intro" aria-hidden="true"></div>
+<canvas id="ihud" aria-hidden="true"></canvas><div id="ihudTxt" aria-hidden="true"></div>
 
 <div id="caption"><div class="eyebrow" id="cEye"></div><h2 id="cTitle"></h2><div class="stat" id="cStat"></div><div class="src" id="cSrc"></div></div>
 
@@ -378,7 +395,7 @@ function applySun() {
 
 /* ---------- 地形 ---------- */
 let DEM, META, terrain, terrainMat, radarTex = null, DAY = null, NIGHT = null, LIGHTS = null, IS_DAY = true;
-const uni = { uRadar: { value: 0 }, uRadarTex: { value: null }, uRadarB: { value: new THREE.Vector4(0, 0, 1, 1) }, uTime: { value: 0 }, uDim: { value: 0 }, uNight: { value: 0 }, uLights: { value: null }, uHasLights: { value: 0 }, uClose: { value: 0 }, uLightK: { value: 1 } };
+const uni = { uRadar: { value: 0 }, uRadarTex: { value: null }, uRadarB: { value: new THREE.Vector4(0, 0, 1, 1) }, uTime: { value: 0 }, uDim: { value: 0 }, uNight: { value: 0 }, uLights: { value: null }, uHasLights: { value: 0 }, uClose: { value: 0 }, uLightK: { value: 1 }, uScan: { value: 99 }, uScanOn: { value: 0 } };
 let dimTo = 0;
 
 function hAt(lon, lat) {   // 地表高度（場景單位）
@@ -439,7 +456,7 @@ function buildTerrain() {
       .replace("#include <common>", "#include <common>\nattribute float aElev; attribute vec2 aLL; varying float vElev; varying vec2 vLL; uniform float uClose;")
       .replace("#include <begin_vertex>", "#include <begin_vertex>\nvElev = aElev; vLL = aLL; transformed.y *= mix(1.0, 0.42, uClose);");
     sh.fragmentShader = sh.fragmentShader
-      .replace("#include <common>", "#include <common>\nvarying float vElev; varying vec2 vLL; uniform float uRadar; uniform sampler2D uRadarTex; uniform vec4 uRadarB; uniform float uTime; uniform float uDim; uniform float uNight; uniform sampler2D uLights; uniform float uHasLights; uniform float uClose; uniform float uLightK;")
+      .replace("#include <common>", "#include <common>\nvarying float vElev; varying vec2 vLL; uniform float uRadar; uniform sampler2D uRadarTex; uniform vec4 uRadarB; uniform float uTime; uniform float uDim; uniform float uNight; uniform sampler2D uLights; uniform float uHasLights; uniform float uClose; uniform float uLightK; uniform float uScan; uniform float uScanOn;")
       .replace("#include <color_fragment>", "#include <color_fragment>\nfloat lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));\ndiffuseColor.rgb = mix(vec3(lum), diffuseColor.rgb, 0.8) * 1.3;\ndiffuseColor.rgb *= mix(1.0, 0.42, uDim);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.24, 0.25, 0.27) + diffuseColor.rgb * 0.18, uClose * 0.8);\ndiffuseColor.rgb *= mix(vec3(1.0), vec3(0.16, 0.19, 0.27), uNight);")
       .replace("#include <clipping_planes_fragment>", "#include <clipping_planes_fragment>\nif (vElev < 0.0) discard;")
       .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
@@ -465,6 +482,14 @@ function buildTerrain() {
           vec4 rc = texture2D(uRadarTex, ruv);
           totalEmissiveRadiance += rc.rgb * rc.a * 1.6 * uRadar;
           diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.55, rc.a * uRadar);
+        }
+        if (uScanOn > 0.001) {
+          float sd = vLL.y - uScan, hid = smoothstep(-0.01, 0.06, sd) * uScanOn;
+          diffuseColor.rgb *= 1.0 - hid * 0.94; totalEmissiveRadiance *= 1.0 - hid;
+          vec2 gq = abs(fract(vLL * 12.0) - 0.5); float gline = smoothstep(0.035, 0.0, min(gq.x, gq.y));
+          float cline = smoothstep(0.06, 0.0, abs(fract(vElev / 300.0) - 0.5)) * step(30.0, vElev);
+          totalEmissiveRadiance += vec3(0.22, 0.7, 1.0) * (gline * 0.22 + cline * 0.55) * hid;
+          totalEmissiveRadiance += vec3(0.45, 0.9, 1.0) * (exp(-pow(sd / 0.02, 2.0)) * 2.4 + exp(min(sd, 0.0) / 0.25) * step(sd, 0.0) * 0.12) * uScanOn;
         }`);
   };
   terrain = new THREE.Mesh(g, terrainMat);
@@ -1753,7 +1778,8 @@ function leader(geo) {
 /* ---- 開場動畫：整座島冒出情報站的數字，最後收成五件事 ----
    有地點的數字長在它的地點上（各縣市氣溫、鄉鎮房價、選戰、機場、電力）；
    沒有地點的數字（台股、匯率、原物料⋯）浮在島外圍的一圈軌道上，不假裝屬於某個地方。 */
-const INTRO = { on: false, t0: 0, chips: [], g: null, done: false, T: { cam: 2.2, pop0: 0.5, pop1: 3.4, hold: 4.6, fly: 5.6 } };
+const INTRO = { on: false, t0: 0, chips: [], g: null, done: false, T: { cam: 2.6, scan0: 0.3, scan1: 2.9, hold: 5.4, fly: 6.4 } };
+const SCAN_LAT = [21.6, 25.6];
 const INTRO_SLOW = +(new URLSearchParams(location.search).get("slow") || 1);   // 測試用：放慢開場
 const INTRO_CAM = { tgt: V(0, 0, -20), pos: MOBILE ? V(0, 2300, 900) : V(-120, 1900, 1300) };
 const easeIO = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
@@ -1791,7 +1817,8 @@ function buildIntro() {
     el.innerHTML = `<b style="color:${o.color}"><i>${o.pre || ""}</i><span class="num">0</span><i>${esc(o.unit || "")}</i></b><small>${esc(o.lab)}${o.chg ? ` <em style="color:${o.color}">${esc(o.chg)}</em>` : ""}</small>`;
     box.appendChild(el); o.el = el; o.num = el.querySelector(".num");
     // 先跑地圖上的，再跑外圍的；前五名最後出現
-    o.at = INTRO.T.pop0 + (o.top >= 0 ? 2.4 + o.top * 0.12 : (o.halo ? 1.2 : 0) + (k / N) * 1.6 + Math.random() * 0.25);
+    const T = INTRO.T, lat = o.geo ? o.geo[1] : null;
+    o.at = o.top >= 0 ? 3.9 + o.top * 0.14 : lat != null ? T.scan0 + (lat - SCAN_LAT[0]) / (SCAN_LAT[1] - SCAN_LAT[0]) * (T.scan1 - T.scan0) + 0.05 : 2.4 + (k / N) * 1.3 + Math.random() * 0.2;
   });
   INTRO.chips = list; INTRO.on = true; INTRO.t0 = performance.now();
   document.body.classList.add("intro");
@@ -1801,6 +1828,7 @@ function buildIntro() {
 }
 function endIntro(skipped) {
   INTRO.on = false; INTRO.done = true; document.body.classList.remove("intro");
+  uni.uScanOn.value = 0; const cv = $("ihud"); if (cv) cv.getContext("2d").clearRect(0, 0, cv.width, cv.height); $("ihudTxt").innerHTML = "";
   const box = $("intro");
   if (skipped) { box.innerHTML = ""; if (INTRO.g) SG.remove(INTRO.g); return; }
   // 前五名飛進開場清單
@@ -1825,15 +1853,53 @@ function introTick() {
     if (!o.w) { o.w = o.el.offsetWidth || 60; o.h = o.el.offsetHeight || 30; }
     const r = [x - o.w / 2 - 2, y - o.h - 2, x + o.w / 2 + 2, y + 2], hit = k > 0 && placed.some(p => r[0] < p[2] && r[2] > p[0] && r[1] < p[3] && r[3] > p[1]);
     if (k > 0 && !hit) placed.push(r);
+    o.sx = x; o.sy = y; o.shown = k > 0 && !hit && _ip.z < 1; if (o.ph == null) o.ph = Math.random();
     const vis = _ip.z < 1 && k > 0 && !hit;
     const fade = o.top >= 0 ? 1 : 1 - Math.min(1, Math.max(0, (t - T.hold) / 0.7));
     o.el.style.opacity = vis ? (e * fade).toFixed(3) : 0;
     o.el.style.transform = `translate(${x.toFixed(1)}px, ${(y + (1 - e) * 14).toFixed(1)}px) translate(-50%,-100%) scale(${(0.7 + 0.3 * e).toFixed(3)})`;
-    if (k > 0 && !o.fin) { const v = o.v * (1 - Math.pow(1 - Math.min(1, (t - o.at) / 1.4), 4)); o.num.textContent = v.toLocaleString("en-US", { minimumFractionDigits: o.dec, maximumFractionDigits: o.dec }); if (t - o.at >= 1.4) o.fin = true; }
+    if (k > 0 && !o.fin) {
+      const fin = (o.ftxt = o.ftxt || o.v.toLocaleString("en-US", { minimumFractionDigits: o.dec, maximumFractionDigits: o.dec })), p = Math.min(1, (t - o.at) / 0.9);
+      const lock = Math.floor(p * fin.length);   // 由左往右一位一位鎖定
+      o.num.textContent = fin.split("").map((ch, j) => j < lock || !/[0-9]/.test(ch) ? ch : "0123456789"[(Math.random() * 10) | 0]).join("");
+      if (p >= 1) { o.num.textContent = fin; o.fin = true; o.el.classList.add("lock"); }
+    }
     if (o.line) o.line.material.opacity = 0.8 * e * fade;
   }
+  hudTick(t, placed);
   if (t >= T.fly) endIntro(false);
   return Math.min(1, t / T.cam);
+}
+
+/* ---- 科技感：掃描線、HUD 讀數、資料連線 ---- */
+const HUD = { cv: null, cx: null };
+function hudTick(t, placed) {
+  const T = INTRO.T, sp = Math.min(1, Math.max(0, (t - T.scan0) / (T.scan1 - T.scan0)));
+  const fade = 1 - Math.min(1, Math.max(0, (t - T.hold) / 0.8));
+  uni.uScanOn.value = fade; uni.uScan.value = SCAN_LAT[0] + (SCAN_LAT[1] - SCAN_LAT[0]) * easeIO(sp);
+  const cv = HUD.cv || (HUD.cv = $("ihud")), cx = HUD.cx || (HUD.cx = cv.getContext("2d")), dpr = Math.min(2, devicePixelRatio || 1);
+  if (cv.width !== innerWidth * dpr) { cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; }
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, innerWidth, innerHeight);
+  // 從島的中心拉線到外圍的數字，上面跑一個光點
+  _ip.copy(gp(120.95, 23.7, 2)).project(camera);
+  const ox = (_ip.x + 1) / 2 * innerWidth, oy = (1 - _ip.y) / 2 * innerHeight;
+  cx.lineWidth = 1;
+  for (const o of INTRO.chips) {
+    if (!o.halo || !o.shown) continue;
+    const k = Math.min(1, (t - o.at) / 0.6), x = o.sx, y = o.sy - o.h / 2;
+    cx.strokeStyle = `rgba(100,210,255,${0.22 * k * fade})`; cx.beginPath(); cx.moveTo(ox, oy); cx.lineTo(ox + (x - ox) * k, oy + (y - oy) * k); cx.stroke();
+    const u = ((t * 0.7 + o.ph) % 1), px = ox + (x - ox) * u, py = oy + (y - oy) * u;
+    cx.fillStyle = `rgba(160,235,255,${0.9 * k * fade})`; cx.beginPath(); cx.arc(px, py, 1.6, 0, 7); cx.fill();
+  }
+  // 畫面四角的取景框
+  const m = 22, L = 26, a = 0.55 * fade * Math.min(1, t / 0.4);
+  cx.strokeStyle = `rgba(255,255,255,${a})`; cx.lineWidth = 1.2; cx.beginPath();
+  for (const [x, y, sx, sy] of [[m, m + 44, 1, 1], [innerWidth - m, m + 44, -1, 1], [m, innerHeight - m, 1, -1], [innerWidth - m, innerHeight - m, -1, -1]]) { cx.moveTo(x + sx * L, y); cx.lineTo(x, y); cx.lineTo(x, y + sy * L); }
+  cx.stroke();
+  // 讀數
+  const n = INTRO.chips.filter(o => o.fin).length, lat = uni.uScan.value;
+  $("ihudTxt").style.opacity = fade;
+  $("ihudTxt").innerHTML = `<div class="r1">SCANNING TAIWAN</div><div class="r2">${Math.min(25.3, Math.max(21.9, lat)).toFixed(2)}°N · 120.95°E</div><div class="r3">${String(n).padStart(3, "0")} / ${String(INTRO.chips.length).padStart(3, "0")} 筆即時資料</div><div class="bar"><i style="width:${(n / INTRO.chips.length * 100).toFixed(1)}%"></i></div>`;
 }
 
 /* ---------- 啟動 ---------- */
