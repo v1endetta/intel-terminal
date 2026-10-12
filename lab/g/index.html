@@ -295,6 +295,10 @@ body.intro::before{opacity:.4}
 #labels .lbl.flt b{font-weight:600;color:#fff;margin-right:2px}
 #labels .lbl.flt.live{color:#ffe27a;border-color:rgba(255,214,10,.45);font-size:10px}
 body.fl-on .ch .card{opacity:0!important;pointer-events:none!important;transition:opacity .4s}
+#labels .lbl.flt.sel{font-size:12px;line-height:1.45;padding:7px 11px;border-radius:12px;text-align:left;background:rgba(10,14,20,.86);border-color:rgba(160,230,255,.6);pointer-events:none}
+#labels .lbl.flt.sel span{font-size:11px;color:#9fdcf0}
+#side [data-fl].on{color:#64d2ff}
+#side [data-fl].on span{color:#9fdcf0}
 </style>
 <script type="importmap">
 {"imports":{
@@ -1927,6 +1931,7 @@ function hideSide() { SIDE_KEY = null; $("side").classList.remove("on"); ST.side
 /* ---- 章節與 DOM ---- */
 function chapterDom(i, html, cls = "") { const s = document.createElement("section"); s.className = "ch " + cls; s.dataset.i = i; s.innerHTML = `<div class="card">${html}</div>`; $("story").appendChild(s); return s; }
 async function buildStory() {
+  renderer.domElement.style.touchAction = "pan-y";
   try { ST.H = await (await fetch(RAW + "history.json?t=" + Date.now(), { cache: "no-store" })).json(); } catch (e) { ST.H = {}; }
   await buildGlobe(); GLOBE.g.visible = false; SG.add(GLOBE.g);
   const all = candidates(), top = fixedFive(); ST.top = top; ST.all = all;
@@ -1957,6 +1962,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
 function setExplore(on) {
   if (ST.explore === on) return; ST.explore = on;
   controls.enabled = on; controls.maxDistance = on ? 1600 : Infinity;
+  renderer.domElement.style.touchAction = on ? "none" : "pan-y";   // 劇本模式要讓手指的上下滑動交給頁面捲動（OrbitControls 預設把整張畫布設成不能捲）
   document.body.classList.toggle("exploring", on); document.body.classList.toggle("storying", !on);
   if (on) { camera.clearViewOffset(); camera.near = 1; camera.updateProjectionMatrix(); if (camera.position.distanceTo(ISLAND.pos) > 5) flyTo(ISLAND.pos, ISLAND.tgt, 1.4); ST.openExplore && ST.openExplore(); ST.chapters.forEach((ch, k) => ch.el.classList.toggle("act", k === ST.chapters.length - 1)); } else { $("card").classList.remove("show"); ST.active = -1; }
 }
@@ -2137,95 +2143,120 @@ function hudTick(t, placed) {
   $("ihudTxt").innerHTML = `<div class="r1">SCANNING TAIWAN</div><div class="r2">${Math.min(25.3, Math.max(21.9, lat)).toFixed(2)}°N · 120.95°E</div><div class="r3">${String(n).padStart(3, "0")} / ${String(INTRO.chips.length).padStart(3, "0")} 筆即時資料</div><div class="bar"><i style="width:${(n / INTRO.chips.length * 100).toFixed(1)}%"></i></div>`;
 }
 
-/* ---- 航班：桃園今天飛去哪（地球上的航線）＋ 推估此刻在空中的班機 ＋ 台灣周邊即時飛機 ----
-   航線粗細＝今天的班次；航線上的光點＝依起飛時間推估、此刻正在飛的班機；
-   黃色小三角＝ADS-B 即時位置，虛線指向它的目的地。 */
-const FL = window.__FL = { g: null, built: false, AP: null, dots: null, legs: [], live: [], lbls: [], camBack: null };
+/* ---- 航班：桃園今天飛去哪 ----
+   平常：所有航線都很淡，只看得出「線往哪些方向散出去」；光點＝依起飛時間推估、此刻在空中的班機；黃色小三角＝台灣周邊即時飛機。
+   點一下（地圖上的目的地、飛機，或右邊清單）才亮出那一條：飛去哪、幾班、此刻幾架在空中。 */
+const FL = window.__FL = { g: null, built: false, AP: null, legs: [], live: [], R: {}, sel: null, lbl: null };
 const TPE_LL = [121.233, 25.077];
 const gcKm = (a, b) => { const D = Math.PI / 180, s = Math.sin((b[1] - a[1]) * D / 2) ** 2 + Math.cos(a[1] * D) * Math.cos(b[1] * D) * Math.sin((b[0] - a[0]) * D / 2) ** 2; return 12742 * Math.asin(Math.min(1, Math.sqrt(s))); };
 async function flAirports() { if (!FL.AP) { try { FL.AP = await (await fetch("airports.json?v=" + ASSET_V)).json(); } catch (e) { FL.AP = { A: {}, I: {} }; } } return FL.AP; }
 const flName = (code, fallback) => { const a = FL.AP.A[code]; return (a && a[3]) || fallback || (a && a[2]) || code; };
-// 沿著弧線取第 u 段的位置（弧線點已經是場景座標）
 const arcAt = (pts, u) => { const f = Math.min(pts.length - 1.001, Math.max(0, u * (pts.length - 1))), i = Math.floor(f); return pts[i].clone().lerp(pts[i + 1], f - i); };
-// 即時飛機：從航線（ICAO 串）找出它現在這一段要飛去的機場
-function liveDest(it) {
+function liveDest(it) {   // 即時飛機：從航線（ICAO 串）找出它這一段要飛去的機場
   const codes = (it[8] || "").split("-").map(c => FL.AP.I[c]).filter(Boolean); if (codes.length < 2) return null;
   let best = null;
   for (let k = 0; k + 1 < codes.length; k++) { const a = FL.AP.A[codes[k]], b = FL.AP.A[codes[k + 1]]; if (!a || !b) continue;
-    const here = [it[0], it[1]], ex = gcKm(a, here) + gcKm(here, b) - gcKm(a, b);   // 偏離這段航線多遠
+    const here = [it[0], it[1]], ex = gcKm(a, here) + gcKm(here, b) - gcKm(a, b);
     if (!best || ex < best.ex) best = { ex, to: codes[k + 1], from: codes[k] }; }
   return best && best.ex < 900 ? best : null;
 }
+const dotTex = (() => { let t = null; return () => { if (t) return t; const c = document.createElement("canvas"); c.width = c.height = 64; const x = c.getContext("2d"), gr = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(0.3, "rgba(255,250,235,0.9)"); gr.addColorStop(0.55, "rgba(120,220,255,0.3)"); gr.addColorStop(1, "rgba(0,0,0,0)"); x.fillStyle = gr; x.fillRect(0, 0, 64, 64); return (t = new THREE.CanvasTexture(c)); }; })();
+function dotsObj(n, size, op) { const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(Math.max(1, n) * 3), 3));
+  const p = new THREE.Points(g, fm(new THREE.PointsMaterial({ map: dotTex(), size, sizeAttenuation: false, blending: THREE.AdditiveBlending, depthTest: true }), op)); p.frustumCulled = false; p.renderOrder = 5; return p; }
 async function buildFlights() {
   await flAirports(); const AP = FL.AP.A, ap = P.airport || {}, g = new THREE.Group(); FL.g = g; SG.add(g); g.visible = false;
   const o = AP.TPE ? [AP.TPE[0], AP.TPE[1]] : TPE_LL, routes = ((ap.routes || {}).dep || []).filter(r => AP[r[0]]);
   const maxN = Math.max(1, ...routes.map(r => r[1]));
-  FL.arcs = {};
-  // 航線：班次越多越粗、越亮
-  routes.forEach((r, i) => {
-    const d = AP[r[0]], pts = GLOBE.arc(o, [d[0], d[1]], 0.1, 80); FL.arcs[r[0]] = pts;
-    const k = r[1] / maxN, rad = 4 + Math.sqrt(k) * 16;
-    const tg = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 80, rad, 5, false), base = new THREE.Color(0x64d2ff).lerp(WH, 0.15 + 0.6 * k), cols = [];
-    for (let s2 = 0; s2 <= 80; s2++) { const u = s2 / 80, f = 0.12 + 0.88 * Math.min(1, u * 2.2); for (let r2 = 0; r2 <= 5; r2++) cols.push(base.r * f, base.g * f, base.b * f); }   // 靠近桃園的那端調暗，不然八十條線疊在一起會糊成一團白
-    tg.setAttribute("color", new THREE.Float32BufferAttribute(cols, 3));
-    const tube = new THREE.Mesh(tg, fm(new THREE.MeshBasicMaterial({ vertexColors: true, blending: THREE.AdditiveBlending, depthTest: true, depthWrite: false }), 0.1 + 0.4 * Math.sqrt(k)));
-    g.add(tube);
-    const node = new THREE.Mesh(new THREE.SphereGeometry(14 + 18 * Math.sqrt(k), 12, 8), fm(new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: true }), 0.9)); node.position.copy(GLOBE.G(d[0], d[1], 25)); g.add(node);
-    if (i < 28) { const L = addLabel(`<b>${esc(flName(r[0], r[4]))}</b> ${r[1]}`, GLOBE.G(d[0], d[1], 60), "flt", "flights", 6 - i / 6); L.gp = d; FL.lbls.push(L); }
-  });
+  for (const r of routes) {   // 每條航線兩種樣子：平常一條很淡的細線；選到時換成發亮的粗管
+    const d = AP[r[0]], pts = GLOBE.arc(o, [d[0], d[1]], 0.1, 80), k = r[1] / maxN;
+    const faint = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), fm(new THREE.LineBasicMaterial({ color: 0x64d2ff, blending: THREE.AdditiveBlending, depthTest: true }), 0.07 + 0.2 * Math.sqrt(k)));
+    const tube = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 80, 8 + Math.sqrt(k) * 14, 6, false), fm(new THREE.MeshBasicMaterial({ color: 0xbff0ff, blending: THREE.AdditiveBlending, depthTest: true, depthWrite: false }), 0.75));
+    tube.visible = false;
+    const node = new THREE.Mesh(new THREE.SphereGeometry(10 + 14 * Math.sqrt(k), 10, 8), fm(new THREE.MeshBasicMaterial({ color: 0x9fe6ff, depthTest: true }), 0.55)); node.position.copy(GLOBE.G(d[0], d[1], 25));
+    g.add(faint, tube, node);
+    FL.R[r[0]] = { code: r[0], n: r[1], late: r[2], cx: r[3], zh: r[4], pts, faint, tube, node, ll: [d[0], d[1]] };
+  }
   // 此刻在空中的班機（依表訂／預計時間推估）
   FL.legs = (ap.legs || []).map(l => {
     const d = AP[l[2]]; if (!d || l[5] === "X") return null;
-    const km = gcKm(o, d), dur = (km / 800 + 0.5) * 60, key = (l[0] === "A" ? "A:" : "") + l[2];
-    if (!FL.arcs[key]) FL.arcs[key] = l[0] === "A" ? GLOBE.arc([d[0], d[1]], o, 0.1, 80) : GLOBE.arc(o, [d[0], d[1]], 0.1, 80);
-    return { kind: l[0], code: l[2], t: l[4] || l[3], st: l[5], dur, pts: FL.arcs[key] };
+    const dur = (gcKm(o, d) / 800 + 0.5) * 60, pts = l[0] === "D" ? (FL.R[l[2]] || {}).pts || GLOBE.arc(o, [d[0], d[1]], 0.1, 80) : GLOBE.arc([d[0], d[1]], o, 0.1, 80);
+    return { kind: l[0], code: l[2], fl: l[1], t: l[4] || l[3], st: l[5], dur, pts };
   }).filter(Boolean);
-  const N = Math.max(1, FL.legs.length), pos = new Float32Array(N * 3);
-  const pg = new THREE.BufferGeometry(); pg.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-  const dc = document.createElement("canvas"); dc.width = dc.height = 64; { const x = dc.getContext("2d"), gr = x.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(0.25, "rgba(255,250,235,0.95)"); gr.addColorStop(0.5, "rgba(120,220,255,0.35)"); gr.addColorStop(1, "rgba(0,0,0,0)"); x.fillStyle = gr; x.fillRect(0, 0, 64, 64); }
-  FL.dots = new THREE.Points(pg, fm(new THREE.PointsMaterial({ map: new THREE.CanvasTexture(dc), size: MOBILE ? 11 : 13, sizeAttenuation: false, blending: THREE.AdditiveBlending, depthTest: true }), 1));
-  FL.dots.frustumCulled = false; FL.dots.renderOrder = 5; g.add(FL.dots);
-  // 台灣周邊的即時飛機
-  const tri = new THREE.ConeGeometry(9, 26, 3); tri.rotateX(Math.PI / 2);
-  const planeM = fm(new THREE.MeshBasicMaterial({ color: 0xffd60a, depthTest: false }), 1);
+  FL.dots = dotsObj(FL.legs.length, MOBILE ? 7 : 8, 0.55); FL.hot = dotsObj(FL.legs.length, MOBILE ? 14 : 16, 1); g.add(FL.dots, FL.hot);
+  // 台灣周邊的即時飛機（目的地虛線平常不畫，點了才出現）
+  const tri = new THREE.ConeGeometry(8, 24, 3); tri.rotateX(Math.PI / 2);
+  const planeM = fm(new THREE.MeshBasicMaterial({ color: 0xffd60a, depthTest: false }), 0.85);
   FL.live = [];
   for (const it of ((P.flights || {}).items || [])) {
-    const m = new THREE.Mesh(tri, planeM), p0 = GLOBE.G(it[0], it[1], 40), ahead = GLOBE.G(it[0] + Math.sin(it[2] * Math.PI / 180) * 0.2, it[1] + Math.cos(it[2] * Math.PI / 180) * 0.2, 40);
-    m.position.copy(p0); m.lookAt(ahead); g.add(m);
-    const dst = liveDest(it);
-    if (dst) { const b = AP[dst.to], pts = GLOBE.arc([it[0], it[1]], [b[0], b[1]], 0.06, 60).map(v => v.add(V(0, 8, 0)));
-      const ln = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), fm(new THREE.LineDashedMaterial({ color: 0xffd60a, dashSize: 60, gapSize: 50, blending: THREE.AdditiveBlending, depthTest: true }), 0.55));
-      ln.computeLineDistances(); g.add(ln);
-      if (FL.live.length < 14) { const L = addLabel(`${esc(it[4])} → ${esc(flName(dst.to))}`, p0.clone().add(V(0, 30, 0)), "flt live", "flights", 1); L.gp = [it[0], it[1]]; FL.lbls.push(L); }
-    }
-    FL.live.push({ it, dst });
+    const m = new THREE.Mesh(tri, planeM), p0 = GLOBE.G(it[0], it[1], 40), a = it[2] * Math.PI / 180;
+    m.position.copy(p0); m.lookAt(GLOBE.G(it[0] + Math.sin(a) * 0.2, it[1] + Math.cos(a) * 0.2, 40)); g.add(m);
+    const dst = liveDest(it); let ln = null;
+    if (dst) { const b = AP[dst.to]; ln = new THREE.Line(new THREE.BufferGeometry().setFromPoints(GLOBE.arc([it[0], it[1]], [b[0], b[1]], 0.06, 60).map(v => v.add(V(0, 8, 0)))), fm(new THREE.LineDashedMaterial({ color: 0xffd60a, dashSize: 50, gapSize: 40, blending: THREE.AdditiveBlending, depthTest: true }), 0.9));
+      ln.computeLineDistances(); ln.visible = false; g.add(ln); }
+    FL.live.push({ it, dst, m, ln, p0 });
   }
-  FL.lbls.forEach(L => L.hide = true);
+  FL.lbl = addLabel("", V(0, 0, 0), "flt sel", "flights", 50); FL.lbl.hide = true;
   FL.built = true; flightsTick(true);
 }
-function flightsSide() {
-  const ap = P.airport || {}, dep = ap.dep || {}, routes = ((ap.routes || {}).dep || []), live = FL.live || [];
-  const air = FL.inAir || 0, known = live.filter(x => x.dst).length;
-  const rows = routes.slice(0, 8).map(r => ({ t: `${flName(r[0], r[4])}`, s: `${r[1]} 班${r[2] ? ` · 延誤 ${r[2]}` : ""}${r[3] ? ` · 取消 ${r[3]}` : ""}` }));
-  return sideHTML({ eyebrow: "現場 · 桃園機場 · ADS-B", title: "今天飛去哪裡", big: `${routes.length} 個航點`, color: "#64d2ff",
-    body: `<p class="why">今天 ${dep.total || 0} 班離境；依起飛時間推估，此刻約 ${air} 架桃園航班在空中。黃色三角是台灣周邊 ${live.length} 架即時飛機${known ? `（${known} 架查得到目的地）` : ""}。</p>` + listHTML(rows) });
+// 選取：一條航線（代碼）或一架即時飛機（物件）；null＝全部回到淡淡的樣子
+function flSelect(s) {
+  FL.sel = s;
+  for (const R of Object.values(FL.R)) { const on = !!(s && s.code === R.code); R.tube.visible = on; R.faint.material.userData.op = s ? (on ? 0 : 0.035) : 0.07 + 0.2 * Math.sqrt(R.n / Math.max(...Object.values(FL.R).map(x => x.n))); R.node.material.userData.op = on ? 1 : s ? 0.25 : 0.55; }
+  for (const L of FL.live) { if (L.ln) L.ln.visible = !!(s && s.live === L); }
+  if (!s) { FL.lbl.hide = true; } else if (s.code) { const R = FL.R[s.code], air = FL.legs.filter(l => l.code === s.code && l.inAir).length;
+    FL.lbl.el.innerHTML = `<b>${esc(flName(R.code, R.zh))}</b> 今天 ${R.n} 班${R.late ? `・延誤 ${R.late}` : ""}<br><span>此刻約 ${air} 架在空中</span>`; FL.lbl.pos = GLOBE.G(...R.ll, 80); FL.lbl.w = 0; }
+  else { const it = s.live.it, ft = Math.round(it[3] / 100) * 100;
+    FL.lbl.el.innerHTML = `<b>${esc(it[4] || it[6] || "飛機")}</b> → ${esc(s.live.dst ? flName(s.live.dst.to) : "目的地不明")}<br><span>${esc(it[5] || "")}${it[5] ? "・" : ""}高度 ${nf(ft)} 呎・${Math.round(it[7] * 1.852)} 公里/時</span>`; FL.lbl.pos = s.live.p0.clone().add(V(0, 40, 0)); FL.lbl.w = 0; }
+  // 右邊清單同步標示
+  document.querySelectorAll("#side [data-fl]").forEach(li => li.classList.toggle("on", !!(s && s.code === li.dataset.fl)));
 }
-// 地球上：被地球擋住的標籤藏起來；光點沿航線移動
+function flightsSide() {
+  const ap = P.airport || {}, dep = ap.dep || {}, routes = ((ap.routes || {}).dep || []).filter(r => FL.R[r[0]]);
+  const rows = routes.slice(0, 12).map(r => `<li data-fl="${esc(r[0])}" style="cursor:pointer">${esc(flName(r[0], r[4]))}<span>${r[1]} 班${r[2] ? `・延誤 ${r[2]}` : ""}${r[3] ? `・取消 ${r[3]}` : ""}</span></li>`).join("");
+  return sideHTML({ eyebrow: "現場 · 桃園機場 · ADS-B", title: "今天飛去哪裡", big: `${routes.length} 個航點`, color: "#64d2ff",
+    body: `<p class="why">今天 ${dep.total || 0} 班離境，此刻約 ${FL.inAir || 0} 架在空中。點一個城市、地圖上的光點或黃色飛機，看它飛去哪。</p><ul class="lst">${rows}</ul>` });
+}
+// 光點沿航線移動；選到的那條另外畫一層亮的；被地球擋住的標籤藏起來
 const _fc = new THREE.Vector3(), _fn = new THREE.Vector3();
 function flightsTick(force) {
   if (!FL.built || (!FL.g.visible && !force)) return;
-  const now = Date.now() / 60000, pos = FL.dots.geometry.attributes.position.array; let n = 0;
+  const now = Date.now() / 60000, A = FL.dots.geometry.attributes.position.array, B = FL.hot.geometry.attributes.position.array; let n = 0, h = 0;
   for (const l of FL.legs) {
-    let u;
+    let u; l.inAir = false;
     if (l.kind === "D") { if (l.st !== "D" && l.t > now) continue; u = (now - l.t) / l.dur; }
     else { if (l.st === "L") continue; u = 1 - (l.t - now) / l.dur; }
-    if (!(u > 0 && u < 1) || !l.pts) continue;
-    const p = arcAt(l.pts, u); pos[n * 3] = p.x; pos[n * 3 + 1] = p.y + 6; pos[n * 3 + 2] = p.z; n++;
+    if (!(u > 0 && u < 1)) continue;
+    l.inAir = true; const p = arcAt(l.pts, u);
+    if (FL.sel && FL.sel.code === l.code) { B[h * 3] = p.x; B[h * 3 + 1] = p.y + 6; B[h * 3 + 2] = p.z; h++; }
+    else { A[n * 3] = p.x; A[n * 3 + 1] = p.y + 6; A[n * 3 + 2] = p.z; n++; }
   }
-  FL.inAir = n; FL.dots.geometry.setDrawRange(0, n); FL.dots.geometry.attributes.position.needsUpdate = true;
-  const C = V(0, -6371, 0); _fc.copy(camera.position).sub(C).normalize();
-  for (const L of FL.lbls) { _fn.copy(L.pos).sub(C).normalize(); L.hide = _fn.dot(_fc) < 0.12; }
+  FL.inAir = n + h; FL.dots.geometry.setDrawRange(0, n); FL.hot.geometry.setDrawRange(0, h);
+  FL.dots.geometry.attributes.position.needsUpdate = true; FL.hot.geometry.attributes.position.needsUpdate = true;
+  FL.dots.material.userData.op = FL.sel ? 0.2 : 0.55;
+  if (FL.sel) { const C = V(0, -6371, 0); _fc.copy(camera.position).sub(C).normalize(); _fn.copy(FL.lbl.pos).sub(C).normalize(); FL.lbl.hide = _fn.dot(_fc) < 0.1; }
+  // 材質透明度（fm 記住的值）直接套用；地球圖層不經過章節淡入淡出
+  FL.g.traverse(o => { if (o.material && o.material.userData.op != null) o.material.opacity = o.material.userData.op; });
 }
+// 點地圖：找螢幕上最近的目的地或飛機（手指不用點很準）
+const _fp = new THREE.Vector3();
+function flPick(x, y) {
+  let best = null, bd = MOBILE ? 36 : 24;
+  const C = V(0, -6371, 0); _fc.copy(camera.position).sub(C).normalize();
+  const test = (p, s) => { _fn.copy(p).sub(C).normalize(); if (_fn.dot(_fc) < 0.05) return; _fp.copy(p).project(camera); if (_fp.z > 1) return;
+    const sx = (_fp.x + 1) / 2 * innerWidth, sy = (1 - _fp.y) / 2 * VH(), d = Math.hypot(sx - x, sy - y); if (d < bd) { bd = d; best = s; } };
+  for (const R of Object.values(FL.R)) test(R.node.position, { code: R.code });
+  for (const L of FL.live) test(L.p0, { live: L });
+  for (const l of FL.legs) if (l.inAir) test(arcAt(l.pts, Math.min(0.999, Math.max(0, l.kind === "D" ? (Date.now() / 60000 - l.t) / l.dur : 1 - (l.t - Date.now() / 60000) / l.dur))), { code: l.code });
+  return best;
+}
+let _flDown = null;
+renderer.domElement.addEventListener("pointerdown", e => { _flDown = [e.clientX, e.clientY]; });
+renderer.domElement.addEventListener("pointerup", e => {
+  if (cur !== "flights" || !FL.built || !_flDown || Math.hypot(e.clientX - _flDown[0], e.clientY - _flDown[1]) > 8) return;
+  const s = flPick(e.clientX, e.clientY); flSelect(s && FL.sel && ((s.code && s.code === FL.sel.code) || (s.live && s.live === FL.sel.live)) ? null : s);
+});
+document.addEventListener("click", e => { const li = e.target.closest && e.target.closest("#side [data-fl]"); if (!li || cur !== "flights") return; e.stopPropagation(); flSelect(FL.sel && FL.sel.code === li.dataset.fl ? null : { code: li.dataset.fl }); }, true);
 layers.flights = {
   get g() { return FL.g || new THREE.Group(); },
   on() {
@@ -2233,11 +2264,11 @@ layers.flights = {
     const t = GLOBE.G(MOBILE ? 123 : 131, MOBILE ? 23 : 26, 0), up = t.clone().sub(V(0, -6371, 0)).normalize(), south = GLOBE.G(127, 18, 0).sub(t).normalize();
     const d = MOBILE ? 9000 : 7600, pos = t.clone().addScaledVector(up, d).addScaledVector(south, d * 0.55);
     camera.near = 20; camera.updateProjectionMatrix(); flyTo(pos, t, 2.2);
-    const show = () => { FL.g.visible = true; FL.lbls.forEach(L => L.el.classList.add("on")); };
-    if (FL.built) show(); else buildFlights().then(() => { if (cur === "flights") { show(); if (EXITEM >= 0) showSide(flightsSide(), null); } });
+    const show = () => { FL.g.visible = true; flSelect(null); };
+    if (FL.built) show(); else buildFlights().then(() => { if (cur === "flights") { show(); showSide(flightsSide(), null); } });
   },
   off() {
-    ST.globeForce = false; document.body.classList.remove("fl-on"); if (FL.g) FL.g.visible = false; FL.lbls.forEach(L => { L.hide = true; L.el.classList.remove("on"); });
+    ST.globeForce = false; document.body.classList.remove("fl-on"); if (FL.g) FL.g.visible = false; if (FL.lbl) FL.lbl.hide = true;
     if (ST.explore) { controls.maxDistance = 1600; camera.near = 1; camera.updateProjectionMatrix(); flyTo(ISLAND.pos, ISLAND.tgt, 1.8); }
   },
   tick() { flightsTick(); },
