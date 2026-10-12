@@ -19,6 +19,7 @@
 html,body{height:100%;background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow:hidden}
 a{color:var(--blue2);text-decoration:none}
 a:hover{text-decoration:underline}
+@media (max-width:760px){#stage,#ihud,#leaderSvg{bottom:auto!important;height:100lvh!important}}
 #stage{position:fixed;inset:0;background:radial-gradient(120% 90% at 50% 35%,#101216 0%,#050506 55%,#000 100%)}
 canvas{display:block}
 
@@ -282,6 +283,13 @@ body.intro::before{opacity:.4}
   body.storying::before{background:linear-gradient(0deg,rgba(0,0,0,.86) 0%,rgba(0,0,0,.5) 20%,rgba(0,0,0,0) 32%)}
 }
 @media (max-width:760px){.ch .card p.why{display:none!important}}
+/* 手機：毛玻璃模糊在捲動時很吃效能，改成較不透明的底色 */
+@media (max-width:760px){
+  #side,#dock2 .seg,#dock2 .chips button,#intro .ic.halo{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  #side{background:rgba(22,22,24,.9)!important}
+  #dock2 .seg{background:rgba(36,36,38,.92)!important}
+  #intro .ic.halo{background:rgba(22,22,24,.82)!important}
+}
 </style>
 <script type="importmap">
 {"imports":{
@@ -345,6 +353,9 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 const RAW = "https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/";
 const ASSET_V = 8;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
 const MOBILE = matchMedia("(max-width:760px)").matches || /Mobi|Android/i.test(navigator.userAgent);
+const _lvhEl = document.createElement("div"); _lvhEl.style.cssText = "position:fixed;top:0;left:0;width:0;height:100lvh;visibility:hidden;pointer-events:none"; document.body.appendChild(_lvhEl);
+let _VH = 0; const _measureVH = () => { _VH = MOBILE ? Math.max(innerHeight, _lvhEl.offsetHeight || 0) : innerHeight; }; _measureVH();
+const VH = () => _VH;
 const EX = 6;                 // 高度誇張倍數
 const LONC = 120.95, LATC = 23.65;
 const KX = 111.32 * Math.cos(LATC * Math.PI / 180), KY = 110.57;   // 1 單位 = 1 公里
@@ -362,7 +373,7 @@ try {
   renderer = new THREE.WebGLRenderer({ antialias: !MOBILE, alpha: true, powerPreference: "high-performance" });
 } catch (e) { $("fallback").style.display = "flex"; $("load").remove(); throw e; }
 renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.5 : 2));
-renderer.setSize(innerWidth, innerHeight);
+renderer.setSize(innerWidth, VH());
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
@@ -373,7 +384,7 @@ scene.fog = new THREE.Fog(0x000000, 1100, 2800);
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
 
-const camera = new THREE.PerspectiveCamera(MOBILE ? 50 : 38, innerWidth / innerHeight, 1, 6000);
+const camera = new THREE.PerspectiveCamera(MOBILE ? 50 : 38, innerWidth / VH(), 1, 6000);
 camera.position.set(0, 1400, 900);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; controls.dampingFactor = 0.06;
@@ -770,14 +781,22 @@ const BSTYLE = +(new URLSearchParams(location.search).get("bs") ?? 1);
 const ORTHO = { idx: null, lo: new Map(), hi: new Map(), u: new Map(), patches: new Map() };
 fetch("ortho/index.json?v=" + ASSET_V).then(r => r.ok ? r.json() : null).then(j => { ORTHO.idx = j; }).catch(() => {});
 const OTEX_LOADER = new THREE.TextureLoader();
-function _otex(url) { const t = OTEX_LOADER.load(url); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); return t; }
+const OBMP = typeof createImageBitmap !== "undefined" ? new THREE.ImageBitmapLoader().setOptions({ imageOrientation: "none", premultiplyAlpha: "none" }) : null;
+const OBMP_S = OBMP && new THREE.ImageBitmapLoader().setOptions({ imageOrientation: "none", premultiplyAlpha: "none", resizeWidth: 1024, resizeHeight: 1024, resizeQuality: "high" });   // 手機的全島底圖縮成 1024，顯示記憶體少 3/4
+function _otex(url, small) {   // 一律不翻轉影像，改在貼圖座標翻；兩種載入方式結果一致
+  let t; const done = () => { t.userData.ready = true; (t.userData.cbs || []).forEach(f => f(t)); };
+  if (OBMP) { t = new THREE.Texture(); (small ? OBMP_S : OBMP).load(url, bmp => { t.image = bmp; t.needsUpdate = true; done(); }); }
+  else t = OTEX_LOADER.load(url, done);
+  t.flipY = false; t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = Math.min(MOBILE ? 2 : 8, renderer.capabilities.getMaxAnisotropy());
+  t.repeat.set(1, -1); t.offset.set(0, 1); return t;
+}
 // 每塊照片兩種解析度：2048（常駐，屋頂和手機用）、4096（電腦版只給鏡頭附近幾塊，離開就釋放）
 function orthoQ(key) { const [tier, i] = key.split(":"); return tier === "base" ? ORTHO.idx.base.chunks[+i] : ORTHO.idx.cities[tier][+i]; }
 function orthoDir(key) { const [tier] = key.split(":"); return tier; }
-function orthoLo(key) { if (!ORTHO.lo.has(key)) ORTHO.lo.set(key, _otex(`ortho/${orthoDir(key)}/${orthoQ(key).id}_m.jpg?v=${ASSET_V}`)); return ORTHO.lo.get(key); }
+function orthoLo(key) { if (!ORTHO.lo.has(key)) ORTHO.lo.set(key, _otex(`ortho/${orthoDir(key)}/${orthoQ(key).id}_m.jpg?v=${ASSET_V}`, MOBILE && key.startsWith("base:"))); return ORTHO.lo.get(key); }
 function orthoUni(key) { if (!ORTHO.u.has(key)) ORTHO.u.set(key, { value: ORTHO.hi.get(key) || orthoLo(key) }); return ORTHO.u.get(key); }
 function orthoSetHi(key, on) {
-  if (on && !ORTHO.hi.has(key)) { const t = _otex(`ortho/${orthoDir(key)}/${orthoQ(key).id}.jpg?v=${ASSET_V}`); ORTHO.hi.set(key, t); orthoUni(key).value = t; const p = ORTHO.patches.get(key); if (p) p.material.map = t; }
+  if (on && !ORTHO.hi.has(key)) { const t = _otex(`ortho/${orthoDir(key)}/${orthoQ(key).id}.jpg?v=${ASSET_V}`); ORTHO.hi.set(key, t); (t.userData.cbs = t.userData.cbs || []).push(() => { if (ORTHO.hi.get(key) !== t) return; orthoUni(key).value = t; const p = ORTHO.patches.get(key); if (p) p.material.map = t; }); }
   if (!on && ORTHO.hi.has(key)) { const t = ORTHO.hi.get(key); ORTHO.hi.delete(key); orthoUni(key).value = orthoLo(key); const p = ORTHO.patches.get(key); if (p) p.material.map = orthoLo(key); t.dispose(); }
 }
 function orthoBMat(city, ci) {
@@ -786,8 +805,8 @@ function orthoBMat(city, ci) {
     sh.vertexShader = sh.vertexShader.replace("varying float vSide;", "varying float vSide; attribute vec2 aRUV; attribute vec2 aCUV; varying vec2 vRUV; varying vec2 vCUV;").replace("#include <begin_vertex>", "#include <begin_vertex>\nvRUV = aRUV; vCUV = aCUV;");
     sh.fragmentShader = sh.fragmentShader.replace("uniform float uNight;", "uniform float uNight; uniform sampler2D uOrtho; varying vec2 vRUV; varying vec2 vCUV;")
       .replace("diffuseColor.rgb *= mix(1.0, 0.035, uNight);", `
-        { vec3 roofC = texture2D(uOrtho, vRUV).rgb;
-          vec3 bodyC = texture2D(uOrtho, vCUV, 3.0).rgb;   // 整棟的主色：取建物中心附近、稍微糊掉的屋頂色
+        { vec3 roofC = texture2D(uOrtho, vec2(vRUV.x, 1.0 - vRUV.y)).rgb;
+          vec3 bodyC = texture2D(uOrtho, vec2(vCUV.x, 1.0 - vCUV.y), 3.0).rgb;   // 整棟的主色：取建物中心附近、稍微糊掉的屋頂色
           float lum2 = dot(bodyC, vec3(0.3, 0.59, 0.11));
           vec3 fac = mix(vec3(lum2), bodyC, 0.5) * 0.9 + vec3(0.07, 0.07, 0.075);
           float hh2 = vY - vInfo.x, fl2 = hh2 / (3.3 / 1000.0 * 2.5), band2 = step(0.35, fract(fl2)) * step(fract(fl2), 0.8) * step(0.8, fl2);
@@ -846,14 +865,14 @@ function orthoDrop(key) {   // 離開太遠：拆掉地面網格，全島那層�
   orthoSetHi(key, false);
   if (key.startsWith("base:") && ORTHO.lo.has(key)) { ORTHO.lo.get(key).dispose(); ORTHO.lo.delete(key); ORTHO.u.delete(key); }
 }
-let _otT = 0, _baseOp = 0;
+let _otT = 0, _baseOp = 0; window.__ortho = ORTHO;
 function orthoTick(dt) {
   if (!ORTHO.idx) return;
   const close = uni.uClose.value, t = controls.target, lon = t.x / KX + LONC, lat = -t.z / KY + LATC, cd = camera.position.distanceTo(t);
   const dist = q => Math.hypot(((q.w + q.e) / 2 - lon) * KX, ((q.s + q.n) / 2 - lat) * KY);
   _otT -= dt;
   if (_otT <= 0) { _otT = 0.5;
-    const want = new Set(), hi = new Set();
+    const want = new Set(), hi = new Set(); ORTHO.want = want;
     // 全島底圖：拉到縣市尺度才出現，只載鏡頭附近幾塊
     if (ORTHO.idx.base && cd < 240) {
       ORTHO.idx.base.chunks.map((q, i) => ({ k: "base:" + i, d: dist(q) })).filter(o => o.d < Math.max(45, cd * 0.7)).sort((a, b) => a.d - b.d).slice(0, MOBILE ? 4 : 9).forEach(o => want.add(o.k));
@@ -861,18 +880,20 @@ function orthoTick(dt) {
     // 市區：z16，鏡頭最近的 4 塊在電腦上換成 4096 版
     if (close > 0.05) {
       let city = null; for (const k in ORTHO.idx.cities) { const b = (BMETA && BMETA.cities[k] && BMETA.cities[k].bbox) || (() => { const c = ORTHO.idx.cities[k]; return c.length ? [Math.min(...c.map(q => q.w)), Math.min(...c.map(q => q.s)), Math.max(...c.map(q => q.e)), Math.max(...c.map(q => q.n))] : null; })(); if (b && lon > b[0] - 0.08 && lon < b[2] + 0.08 && lat > b[1] - 0.08 && lat < b[3] + 0.08) city = k; }
-      if (city) ORTHO.idx.cities[city].map((q, i) => ({ k: city + ":" + i, d: dist(q) })).filter(o => o.d < 14).sort((a, b) => a.d - b.d).slice(0, MOBILE ? 4 : 9)
+      if (city) ORTHO.idx.cities[city].map((q, i) => ({ k: city + ":" + i, d: dist(q) })).filter(o => o.d < 14).sort((a, b) => a.d - b.d).slice(0, MOBILE ? 3 : 9)
         .forEach((o, n) => { want.add(o.k); if (!MOBILE && n < 4 && cd < 40) hi.add(o.k); });
     }
-    for (const k of want) if (!ORTHO.patches.has(k)) ORTHO.patches.set(k, orthoPatch(k));
-    for (const k of [...ORTHO.patches.keys()]) if (!want.has(k)) orthoDrop(k);
+    for (const k of want) if (!ORTHO.patches.has(k)) ORTHO.patches.set(k, orthoPatch(k));   // 照片在背景解碼，抵達時間自然錯開
+    const cap = want.size + (MOBILE ? 2 : 6), old = [...ORTHO.patches.keys()].filter(k => !want.has(k));
+    old.sort((a, b) => dist(orthoQ(b)) - dist(orthoQ(a)));   // 超過上限才丟，先丟最遠的
+    while (ORTHO.patches.size > cap && old.length) orthoDrop(old.shift());
     for (const k of [...ORTHO.hi.keys()]) if (!hi.has(k)) orthoSetHi(k, false);
     for (const k of hi) orthoSetHi(k, true);
   }
   const op = Math.min(1, Math.max(0, (close - 0.12) / 0.35));
   _baseOp = Math.min(1, Math.max(0, (240 - cd) / 80));
-  for (const m of ORTHO.patches.values()) { const o = m.userData.city ? op : _baseOp; m.material.opacity = o; m.visible = o > 0.01; }
-  const day = uni.uNight.value < 0.5, has = [...ORTHO.patches.values()].some(m => m.userData.city) && op > 0.5;
+  for (const [k, m] of ORTHO.patches) { const o = m.userData.city ? op : _baseOp; m.material.opacity = o; m.visible = o > 0.01 && (!ORTHO.want || ORTHO.want.has(k)) && !!(m.material.map && m.material.map.userData.ready); }
+  const day = uni.uNight.value < 0.5, has = [...ORTHO.patches].some(([k, m]) => m.userData.city && m.visible) && op > 0.5;
   rMat.visible = !(day && has); aMat.visible = !(day && has);   // 白天照片裡已經有路和公園
 }
 const rMat = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, color: 0xd2d0ca, emissive: 0xffb15c, emissiveIntensity: 1, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
@@ -988,7 +1009,7 @@ function placeLabels() {
     _v.copy(L.pos).project(camera);
     L.on = _v.z < 1 && Math.abs(_v.x) < 1.1 && Math.abs(_v.y) < 1.1;
     if (!L.on) { L.el.style.opacity = 0; continue; }
-    L.sx = (_v.x + 1) / 2 * innerWidth; L.sy = (1 - _v.y) / 2 * innerHeight;
+    L.sx = (_v.x + 1) / 2 * innerWidth; L.sy = (1 - _v.y) / 2 * VH();
     L.el.style.left = L.sx + "px"; L.el.style.top = L.sy + "px";
     if (!L.w) { L.w = L.el.offsetWidth; L.h = L.el.offsetHeight; }
     vis.push(L);
@@ -1268,7 +1289,7 @@ const ray = new THREE.Raycaster(), mouse = new THREE.Vector2(); let downAt = nul
 renderer.domElement.addEventListener("pointerdown", e => { downAt = [e.clientX, e.clientY]; controls.autoRotate = false; });
 renderer.domElement.addEventListener("pointerup", e => {
   if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6 || !document.body.classList.contains("exploring")) return;
-  mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
+  mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / VH() * 2 + 1); ray.setFromCamera(mouse, camera);
   const oh = OBJ.pick.length ? ray.intersectObjects(OBJ.pick, false)[0] : null;
   if (oh) { oh.object.userData.info.tower ? openTower() : openObjCard(oh.object.userData.info); return; }
   const hit = ray.intersectObject(terrain)[0]; if (!hit) return;
@@ -1523,7 +1544,7 @@ const tip = document.createElement("div"); tip.id = "tip"; document.body.appendC
 let tipT = 0;
 renderer.domElement.addEventListener("pointermove", e => {
   const now = performance.now(); if (now - tipT < 60 || !OBJ.pick.length) return; tipT = now;
-  mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
+  mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / VH() * 2 + 1); ray.setFromCamera(mouse, camera);
   const hit = ray.intersectObjects(OBJ.pick, false)[0];
   if (hit) { const i = hit.object.userData.info; tip.innerHTML = `<b>${esc(i.t)}</b><span>${esc(i.v)}</span>`; tip.style.left = e.clientX + 14 + "px"; tip.style.top = e.clientY + 14 + "px"; tip.classList.add("show"); renderer.domElement.style.cursor = "pointer"; }
   else { tip.classList.remove("show"); renderer.domElement.style.cursor = ""; }
@@ -1925,7 +1946,7 @@ async function buildStory() {
   $("replay").onclick = () => ST.replay && ST.replay();
   buildIntro();
 }
-const secH = () => (ST.chapters[0] && ST.chapters[0].el.offsetHeight) || innerHeight * 1.35;
+const secH = () => (ST.chapters[0] && ST.chapters[0].el.offsetHeight) || VH() * 1.35;
 const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 function setExplore(on) {
   if (ST.explore === on) return; ST.explore = on;
@@ -1936,7 +1957,8 @@ function setExplore(on) {
 const _d0 = new THREE.Vector3(), _d1 = new THREE.Vector3(), _sp = new THREE.Vector3();
 function storyTick(dt) {
   const CH = ST.chapters; if (!CH.length) return;
-  const N = CH.length, y = scrollY / secH(), i = Math.min(N - 1, Math.floor(y)), f = y - i, c = Math.min(N - 1, i + smooth(0.4, 0.92, f));
+  const yRaw = scrollY / secH(); ST.ys = (ST.ys == null || Math.abs(yRaw - ST.ys) > 1.5) ? yRaw : ST.ys + (yRaw - ST.ys) * Math.min(1, dt * (MOBILE ? 7 : 10));
+  const N = CH.length, y = ST.ys, i = Math.min(N - 1, Math.floor(y)), f = y - i, c = Math.min(N - 1, i + smooth(0.4, 0.92, f));
   ST.c = c; setExplore(c >= N - 1.001);
   for (let k = 0; k < N; k++) {
     const w = Math.max(0, 1 - Math.abs(c - k) * 2.2), ch = CH[k];
@@ -1960,8 +1982,8 @@ function storyTick(dt) {
   controls.target.copy(tgt); camera.position.copy(tgt).addScaledVector(dir, dist);
   { const nr = Math.min(40, Math.max(0.5, dist * 0.0012)); if (Math.abs(nr - camera.near) > 0.01) { camera.near = nr; camera.updateProjectionMatrix(); } }
   // 文字在左、圖表在右、台灣在中間；手機：圖表在上、文字在下
-  if (MOBILE) camera.setViewOffset(innerWidth, innerHeight, 0, innerHeight * (act === 0 ? 0.04 : 0.1), innerWidth, innerHeight);   // 手機：主體放在上方圖表條和下方文字之間
-  else camera.setViewOffset(innerWidth, innerHeight, -innerWidth * 0.03, 0, innerWidth, innerHeight);
+  if (MOBILE) camera.setViewOffset(innerWidth, VH(), 0, VH() * (act === 0 ? 0.04 : 0.1), innerWidth, VH());   // 手機：主體放在上方圖表條和下方文字之間
+  else camera.setViewOffset(innerWidth, VH(), -innerWidth * 0.03, 0, innerWidth, VH());
   fly = null;
   leader(Math.abs(c - act) < 0.15 ? ST.sideGeo : null);
 }
@@ -1976,7 +1998,7 @@ function camBlend(a, b, e) {
 function leader(geo) {
   const ln = $("leader"), lg = $("leaderG"); if (!geo || !$("side").classList.contains("on")) { lg.style.opacity = 0; return; }
   _sp.copy(gp(geo[0], geo[1], 0.3)).project(camera);
-  const x = (_sp.x + 1) / 2 * innerWidth, y = (1 - _sp.y) / 2 * innerHeight, r = $("side").getBoundingClientRect();
+  const x = (_sp.x + 1) / 2 * innerWidth, y = (1 - _sp.y) / 2 * VH(), r = (performance.now() - (leader._t || 0) < 300 && leader._r) || (leader._t = performance.now(), leader._r = $("side").getBoundingClientRect());
   const sx = MOBILE ? r.left + r.width / 2 : r.left, sy = MOBILE ? r.bottom : r.top + 28;
   ln.setAttribute("x1", sx); ln.setAttribute("y1", sy); ln.setAttribute("x2", x); ln.setAttribute("y2", y);
   $("leaderDot").setAttribute("cx", x); $("leaderDot").setAttribute("cy", y); lg.style.opacity = 1;
@@ -2056,7 +2078,7 @@ function introTick() {
   for (const o of INTRO.order || (INTRO.order = INTRO.chips.slice().sort((a, b) => (b.top >= 0) - (a.top >= 0) || (b.halo === true) - (a.halo === true)))) {
     const k = Math.min(1, Math.max(0, (t - o.at) / 0.9)), e = 1 - Math.pow(1 - k, 3);
     _ip.copy(o.anchor).project(camera);
-    const x = (_ip.x + 1) / 2 * innerWidth, y = (1 - _ip.y) / 2 * innerHeight;
+    const x = (_ip.x + 1) / 2 * innerWidth, y = (1 - _ip.y) / 2 * VH();
     if (!o.w) { o.w = o.el.offsetWidth || 60; o.h = o.el.offsetHeight || 30; }
     const r = [x - o.w / 2 - 2, y - o.h - 2, x + o.w / 2 + 2, y + 2], hit = k > 0 && placed.some(p => r[0] < p[2] && r[2] > p[0] && r[1] < p[3] && r[3] > p[1]);
     if (k > 0 && !hit) placed.push(r);
@@ -2085,11 +2107,11 @@ function hudTick(t, placed) {
   const fade = 1 - Math.min(1, Math.max(0, (t - T.hold) / 0.8));
   uni.uScanOn.value = fade; uni.uScan.value = SCAN_LAT[0] + (SCAN_LAT[1] - SCAN_LAT[0]) * easeIO(sp);
   const cv = HUD.cv || (HUD.cv = $("ihud")), cx = HUD.cx || (HUD.cx = cv.getContext("2d")), dpr = Math.min(2, devicePixelRatio || 1);
-  if (cv.width !== innerWidth * dpr) { cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; }
-  cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, innerWidth, innerHeight);
+  if (cv.width !== innerWidth * dpr) { cv.width = innerWidth * dpr; cv.height = VH() * dpr; }
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, innerWidth, VH());
   // 從島的中心拉線到外圍的數字，上面跑一個光點
   _ip.copy(gp(120.95, 23.7, 2)).project(camera);
-  const ox = (_ip.x + 1) / 2 * innerWidth, oy = (1 - _ip.y) / 2 * innerHeight;
+  const ox = (_ip.x + 1) / 2 * innerWidth, oy = (1 - _ip.y) / 2 * VH();
   cx.lineWidth = 1;
   for (const o of INTRO.chips) {
     if (!o.halo || !o.shown) continue;
@@ -2101,7 +2123,7 @@ function hudTick(t, placed) {
   // 畫面四角的取景框
   const m = 22, L = 26, a = 0.55 * fade * Math.min(1, t / 0.4);
   cx.strokeStyle = `rgba(255,255,255,${a})`; cx.lineWidth = 1.2; cx.beginPath();
-  for (const [x, y, sx, sy] of [[m, m + 44, 1, 1], [innerWidth - m, m + 44, -1, 1], [m, innerHeight - m, 1, -1], [innerWidth - m, innerHeight - m, -1, -1]]) { cx.moveTo(x + sx * L, y); cx.lineTo(x, y); cx.lineTo(x, y + sy * L); }
+  for (const [x, y, sx, sy] of [[m, m + 44, 1, 1], [innerWidth - m, m + 44, -1, 1], [m, VH() - m, 1, -1], [innerWidth - m, VH() - m, -1, -1]]) { cx.moveTo(x + sx * L, y); cx.lineTo(x, y); cx.lineTo(x, y + sy * L); }
   cx.stroke();
   // 讀數
   const n = INTRO.chips.filter(o => o.fin).length, lat = uni.uScan.value;
@@ -2113,14 +2135,14 @@ function hudTick(t, placed) {
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" };
 let composer = null, bloom = null;
 try {
-  composer = new EffectComposer(renderer); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(innerWidth, innerHeight);
+  composer = new EffectComposer(renderer); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(innerWidth, VH());
   composer.addPass(new RenderPass(scene, camera));
-  bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth * (MOBILE ? 0.5 : 1), innerHeight * (MOBILE ? 0.5 : 1)), 0.5, 0.55, 0.82);
+  bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth * (MOBILE ? 0.5 : 1), VH() * (MOBILE ? 0.5 : 1)), 0.5, 0.55, 0.82);
   composer.addPass(bloom); composer.addPass(new OutputPass());
 } catch (e) { FX.on = false; }
-addEventListener("resize", () => { if (composer) { composer.setSize(innerWidth, innerHeight); bloom.resolution.set(innerWidth * (MOBILE ? 0.5 : 1), innerHeight * (MOBILE ? 0.5 : 1)); } });
+
 function present() {
-  if (FX.on && composer) {
+  if (FX.on && composer && !(MOBILE && !uni.uNight.value && !uni.uScanOn.value)) {
     const nt = uni.uNight.value; bloom.threshold = nt ? 0.78 : 0.99; bloom.strength = (nt ? 0.85 : 0.08) + 0.22 * uni.uScanOn.value + 0.25 * uni.uClose.value * nt;
     composer.render();
   } else renderer.render(scene, camera);
@@ -2157,7 +2179,10 @@ function loop() {
   requestAnimationFrame(loop);
 }
 window.__intel3d = { camera, controls, flyTo, setLayer, start: () => start(), flyCity: k => flyCity(k), lod: () => { lodT = 1; lodTick(0); }, cities: CITY };
-addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+let _rsW = innerWidth, _rsH = VH();
+addEventListener("resize", () => { _measureVH(); const w = innerWidth, h = VH(); if (w === _rsW && h === _rsH) return; _rsW = w; _rsH = h;
+  camera.aspect = w / h; camera.updateProjectionMatrix(); renderer.setSize(w, h);
+  if (composer) { composer.setSize(w, h); bloom.resolution.set(w * (MOBILE ? 0.5 : 1), h * (MOBILE ? 0.5 : 1)); } });
 
 (async () => {
   try {
