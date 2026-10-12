@@ -365,6 +365,7 @@ const MOBILE = matchMedia("(max-width:760px)").matches || /Mobi|Android/i.test(n
 const _lvhEl = document.createElement("div"); _lvhEl.style.cssText = "position:fixed;top:0;left:0;width:0;height:100lvh;visibility:hidden;pointer-events:none"; document.body.appendChild(_lvhEl);
 let _VH = 0; const _measureVH = () => { _VH = MOBILE ? Math.max(innerHeight, _lvhEl.offsetHeight || 0) : innerHeight; }; _measureVH();
 const VH = () => _VH;
+const LITE = new URLSearchParams(location.search).has("lite");
 const EX = 6;                 // 高度誇張倍數
 const LONC = 120.95, LATC = 23.65;
 const KX = 111.32 * Math.cos(LATC * Math.PI / 180), KY = 110.57;   // 1 單位 = 1 公里
@@ -387,6 +388,9 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
 $("stage").appendChild(renderer.domElement);
+renderer.domElement.addEventListener("webglcontextlost", e => { e.preventDefault(); const d = document.createElement("div");
+  d.style.cssText = "position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.82);color:#fff;font:15px/1.6 -apple-system,sans-serif;text-align:center;padding:24px";
+  d.innerHTML = "顯示記憶體不夠，3D 畫面先暫停了<br><button style='margin-top:14px;padding:8px 18px;border-radius:999px;border:0;background:#0a84ff;color:#fff;font-size:15px' onclick='location.reload()'>重新載入</button><br><small style='opacity:.6'>網址加上 ?lite=1 可以用輕量版</small>"; document.body.appendChild(d); });
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0x000000, 1100, 2800);
@@ -404,7 +408,7 @@ controls.enablePan = !MOBILE;
 
 const sun = new THREE.DirectionalLight(0xffffff, 2.4);
 scene.add(sun); scene.add(sun.target);
-const SHADOWS = !MOBILE && new URLSearchParams(location.search).get("sh") !== "0";
+const SHADOWS = !MOBILE && !LITE && new URLSearchParams(location.search).get("sh") !== "0";
 if (SHADOWS) { renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
   sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.00002; sun.shadow.normalBias = 0.0006; sun.shadow.radius = 2; }
 const amb = new THREE.HemisphereLight(0x8fa6c9, 0x0b0d10, 0.35);
@@ -962,16 +966,16 @@ function orthoTick(dt) {
     const want = new Set(), hi = new Set(); ORTHO.want = want;
     // 全島底圖：拉到縣市尺度才出現，只載鏡頭附近幾塊
     if (ORTHO.idx.base && cd < 240) {
-      ORTHO.idx.base.chunks.map((q, i) => ({ k: "base:" + i, d: dist(q) })).filter(o => o.d < Math.max(45, cd * 0.7)).sort((a, b) => a.d - b.d).slice(0, MOBILE ? 4 : 9).forEach(o => want.add(o.k));
+      ORTHO.idx.base.chunks.map((q, i) => ({ k: "base:" + i, d: dist(q) })).filter(o => o.d < Math.max(45, cd * 0.7)).sort((a, b) => a.d - b.d).slice(0, MOBILE ? 4 : 6).forEach(o => want.add(o.k));
     }
     // 市區：z16，鏡頭最近的 4 塊在電腦上換成 4096 版
     if (close > 0.05) {
       let city = null; for (const k in ORTHO.idx.cities) { const b = (BMETA && BMETA.cities[k] && BMETA.cities[k].bbox) || (() => { const c = ORTHO.idx.cities[k]; return c.length ? [Math.min(...c.map(q => q.w)), Math.min(...c.map(q => q.s)), Math.max(...c.map(q => q.e)), Math.max(...c.map(q => q.n))] : null; })(); if (b && lon > b[0] - 0.08 && lon < b[2] + 0.08 && lat > b[1] - 0.08 && lat < b[3] + 0.08) city = k; }
-      if (city) ORTHO.idx.cities[city].map((q, i) => ({ k: city + ":" + i, d: dist(q) })).filter(o => o.d < 14).sort((a, b) => a.d - b.d).slice(0, MOBILE ? 3 : 9)
-        .forEach((o, n) => { want.add(o.k); if (!MOBILE && n < 4 && cd < 40) hi.add(o.k); });
+      if (city) ORTHO.idx.cities[city].map((q, i) => ({ k: city + ":" + i, d: dist(q) })).filter(o => o.d < 14).sort((a, b) => a.d - b.d).slice(0, MOBILE ? 3 : 6)
+        .forEach((o, n) => { want.add(o.k); if (!MOBILE && !LITE && n < 1 && cd < 20) hi.add(o.k); });
     }
     for (const k of want) if (!ORTHO.patches.has(k)) ORTHO.patches.set(k, orthoPatch(k));   // 照片在背景解碼，抵達時間自然錯開
-    const cap = want.size + (MOBILE ? 2 : 6), old = [...ORTHO.patches.keys()].filter(k => !want.has(k));
+    const cap = want.size + (MOBILE ? 2 : 3), old = [...ORTHO.patches.keys()].filter(k => !want.has(k));
     old.sort((a, b) => dist(orthoQ(b)) - dist(orthoQ(a)));   // 超過上限才丟，先丟最遠的
     while (ORTHO.patches.size > cap && old.length) orthoDrop(old.shift());
     for (const k of [...ORTHO.hi.keys()]) if (!hi.has(k)) orthoSetHi(k, false);
@@ -1054,9 +1058,10 @@ let lodT = 0;
 function lodTick(dt) {
   lodT += dt; if (lodT < 0.4) return; lodT = 0;
   let near = cityAtTarget(); if (near === null) return;
-  if (MOBILE && near.length > 1) { const t = controls.target, dc = k => { const b = BMETA.cities[k].bbox, [x, z] = toXZ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2); return Math.hypot(x - t.x, z - t.z); }; near = [near.sort((a, b) => dc(a) - dc(b))[0]]; }
+  if (near.length > 1) { const t = controls.target, dc = k => { const b = BMETA.cities[k].bbox, [x, z] = toXZ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2); return Math.hypot(x - t.x, z - t.z); }; near = [near.sort((a, b) => dc(a) - dc(b))[0]]; }
   for (const k of near) if (!CITY[k]) (!MOBILE && BMETA.detail && !CITY_NODETAIL.has(k) && typeof Worker !== "undefined") ? loadDetail(k) : loadCity(k);
-  for (const [k, v] of Object.entries(CITY)) if (v.mesh) v.mesh.visible = near.includes(k);
+  for (const [k, v] of Object.entries(CITY)) if (v.mesh) { const on = near.includes(k); v.mesh.visible = on; v.away = on ? 0 : (v.away || performance.now());
+    if (!on && performance.now() - v.away > 40000) { scene.remove(v.mesh); v.mesh.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.isInstancedMesh) o.dispose(); }); if (LIFE.city === v) { LIFE.city = null; LIFE.cars = []; } delete CITY[k]; } }
 }
 function flyCity(key) {
   const c = BMETA && BMETA.cities[key]; if (!c) return;
@@ -2381,7 +2386,7 @@ layers.flights = {
 };
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
-const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" };
+const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
 let composer = null, bloom = null;
 try {
   composer = new EffectComposer(renderer); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(innerWidth, VH());
@@ -2400,20 +2405,20 @@ function present() {
 const LIFE_MATS = [];
 const LIFE = window.__life = { cars: [], body: null, lights: null, at: new THREE.Vector3(1e9, 0, 0), city: null, live: null, t: 0 };
 function cityLife(grp, d) {
-  if (MOBILE) return;
+  if (MOBILE || LITE) return;
   const K = BEX / 1000, up = new THREE.Vector3(0, 1, 0), M = new THREE.Matrix4(), q = new THREE.Quaternion(), p = new THREE.Vector3(), s = new THREE.Vector3(), C = new THREE.Color();
   // 鐵皮加蓋：藍、灰、白、鏽色
   const sh = d.SH; if (sh && sh.length) {
-    const n = sh.length / 7, geo = new THREE.BoxGeometry(1, 1, 1); geo.translate(0, 0.5, 0);
+    const n = Math.min(20000, sh.length / 7), geo = new THREE.BoxGeometry(1, 1, 1); geo.translate(0, 0.5, 0);
     const m = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ roughness: 0.5, metalness: 0.35 }), n), PAL = [0x5f7486, 0x8e9396, 0xbfc1bd, 0x7a5646];   // 藍灰、灰、米白、鏽色（壓低彩度）
     for (let i = 0; i < n; i++) { const o = i * 7; p.set(sh[o], sh[o + 1], sh[o + 2]); q.setFromAxisAngle(up, -sh[o + 5]); s.set(sh[o + 3], 3.0 * K, sh[o + 4]); M.compose(p, q, s); m.setMatrixAt(i, M); m.setColorAt(i, C.setHex(PAL[sh[o + 6] | 0])); }
     m.castShadow = m.receiveShadow = true; grp.add(m); LIFE_MATS.push(m.material);
   }
   // 水塔：不鏽鋼或藍色塑膠桶
   const tk = d.TK; if (tk && tk.length) {
-    const n = tk.length / 4, geo = new THREE.CylinderGeometry(1, 1, 1, 8); geo.translate(0, 0.5, 0);
+    const n = Math.min(25000, tk.length / 4), geo = new THREE.BoxGeometry(1, 1, 1); geo.translate(0, 0.5, 0);   // 方桶就好，省三角形
     const m = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ roughness: 0.35, metalness: 0.6 }), n);
-    for (let i = 0; i < n; i++) { const o = i * 4; p.set(tk[o], tk[o + 1], tk[o + 2]); s.set(0.0011, 1.7 * K, 0.0011); M.compose(p, q.identity(), s); m.setMatrixAt(i, M); m.setColorAt(i, C.setHex(tk[o + 3] ? 0x3f6ea6 : 0xc8ccd0)); }
+    for (let i = 0; i < n; i++) { const o = i * 4; p.set(tk[o], tk[o + 1], tk[o + 2]); s.set(0.0019, 1.7 * K, 0.0019); M.compose(p, q.identity(), s); m.setMatrixAt(i, M); m.setColorAt(i, C.setHex(tk[o + 3] ? 0x3f6ea6 : 0xc8ccd0)); }
     m.castShadow = true; grp.add(m); LIFE_MATS.push(m.material);
   }
   // 車子走的路：主要道路的中心線，先算好每段累積長度
