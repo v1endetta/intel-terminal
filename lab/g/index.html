@@ -2259,21 +2259,45 @@ renderer.domElement.addEventListener("pointerup", e => {
   const s = flPick(e.clientX, e.clientY); flSelect(s && FL.sel && ((s.code && s.code === FL.sel.code) || (s.live && s.live === FL.sel.live)) ? null : s);
 });
 document.addEventListener("click", e => { const li = e.target.closest && e.target.closest("#side [data-fl]"); if (!li || cur !== "flights") return; e.stopPropagation(); flSelect(FL.sel && FL.sel.code === li.dataset.fl ? null : { code: li.dataset.fl }); }, true);
+// 地球拖曳：像轉地球儀一樣——左右拖＝沿經度轉、上下拖＝往南北看，北方永遠朝上；放手有慣性；滾輪／雙指縮放
+const GD = { on: false, ptrs: new Map(), vx: 0, vy: 0, pinch: 0 };
+const _gC = new THREE.Vector3(0, -6371, 0), _gN = new THREE.Vector3(), _gv = new THREE.Vector3(), _gA = new THREE.Vector3(), _gq = new THREE.Quaternion();
+function gdAxis() { if (!_gN.lengthSq()) _gN.copy(GLOBE.G(0, 90, 0)).sub(_gC).normalize(); return _gN; }
+function gdRotate(dx, dy) {
+  const N = gdAxis(); _gv.copy(camera.position).sub(_gC); const dist = _gv.length(), k = Math.max(0.0004, (dist - 6371) / 6371) * 0.0016;
+  _gq.setFromAxisAngle(N, -dx * k); _gv.applyQuaternion(_gq);
+  _gA.crossVectors(_gv, N).normalize(); const lat0 = Math.PI / 2 - _gv.angleTo(N), dLat = dy * k, lat1 = Math.max(-1.2, Math.min(1.25, lat0 + dLat));
+  _gq.setFromAxisAngle(_gA, lat1 - lat0); _gv.applyQuaternion(_gq);
+  camera.position.copy(_gC).add(_gv); camera.up.copy(N); camera.lookAt(_gC);
+}
+function gdZoom(f) { _gv.copy(camera.position).sub(_gC); const d = Math.max(6371 + 500, Math.min(6371 + 42000, 6371 + (_gv.length() - 6371) * f)); _gv.setLength(d); camera.position.copy(_gC).add(_gv); camera.lookAt(_gC); }
+const gdEl = renderer.domElement;
+gdEl.addEventListener("pointerdown", e => { if (!GD.on) return; GD.ptrs.set(e.pointerId, [e.clientX, e.clientY]); GD.vx = GD.vy = 0; GD.pinch = 0; gdEl.setPointerCapture && gdEl.setPointerCapture(e.pointerId); fly = null; });
+gdEl.addEventListener("pointermove", e => { if (!GD.on || !GD.ptrs.has(e.pointerId)) return; const p = GD.ptrs.get(e.pointerId), dx = e.clientX - p[0], dy = e.clientY - p[1]; GD.ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+  if (GD.ptrs.size >= 2) { const [a, b] = [...GD.ptrs.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (GD.pinch) gdZoom(GD.pinch / d); GD.pinch = d; return; }
+  gdRotate(dx, dy); GD.vx = Math.max(-30, Math.min(30, dx)); GD.vy = Math.max(-30, Math.min(30, dy)); GD.t = performance.now(); });
+const gdUp = e => { if (!GD.ptrs.has(e.pointerId)) return; GD.ptrs.delete(e.pointerId); GD.pinch = 0; if (GD.ptrs.size || performance.now() - (GD.t || 0) > 80) GD.vx = GD.vy = 0; };   // 停住再放手就不滑
+gdEl.addEventListener("pointerup", gdUp); gdEl.addEventListener("pointercancel", gdUp);
+gdEl.addEventListener("wheel", e => { if (!GD.on) return; e.preventDefault(); gdZoom(Math.exp(e.deltaY * 0.0012)); }, { passive: false });
+function gdTick(dt) { if (!GD.on || GD.ptrs.size || (Math.abs(GD.vx) < 0.05 && Math.abs(GD.vy) < 0.05)) return; const f = Math.min(3, (dt || 0.016) * 60); gdRotate(GD.vx * f, GD.vy * f); const d = Math.pow(0.88, f); GD.vx *= d; GD.vy *= d; }   // 放手後的慣性，跟畫面格數無關
 layers.flights = {
   get g() { return FL.g || new THREE.Group(); },
   on() {
-    ST.globeForce = true; controls.maxDistance = 40000; document.body.classList.add("fl-on");
-    const t = GLOBE.G(MOBILE ? 123 : 131, MOBILE ? 23 : 26, 0), up = t.clone().sub(V(0, -6371, 0)).normalize(), south = GLOBE.G(127, 18, 0).sub(t).normalize();
-    const d = MOBILE ? 9000 : 7600, pos = t.clone().addScaledVector(up, d).addScaledVector(south, d * 0.55);
-    camera.near = 20; camera.updateProjectionMatrix(); flyTo(pos, t, 2.2);
+    ST.globeForce = true; document.body.classList.add("fl-on");
+    // 地球模式：鏡頭繞著地心轉，手指拖到哪地球就轉到哪，雙指／滾輪縮放
+    const C = V(0, -6371, 0), look = GLOBE.G(MOBILE ? 122 : 129, MOBILE ? 21 : 25, 0).sub(C).normalize();
+    controls.enabled = false; controls.autoRotate = false; GD.on = true; GD.vx = GD.vy = 0;
+    controls.minDistance = 0; controls.maxDistance = Infinity; controls.minPolarAngle = 0; controls.maxPolarAngle = Math.PI;
+    camera.up.copy(gdAxis()); camera.near = 20; camera.updateProjectionMatrix(); flyTo(C.clone().addScaledVector(look, 6371 + (MOBILE ? 10500 : 8000)), C, 2.2);
     const show = () => { FL.g.visible = true; flSelect(null); };
     if (FL.built) show(); else buildFlights().then(() => { if (cur === "flights") { show(); showSide(flightsSide(), null); } });
   },
   off() {
     ST.globeForce = false; document.body.classList.remove("fl-on"); if (FL.g) FL.g.visible = false; if (FL.lbl) FL.lbl.hide = true;
+    GD.on = false; GD.ptrs.clear(); camera.up.set(0, 1, 0); controls.enabled = ST.explore; controls.minDistance = 3; controls.maxPolarAngle = Math.PI * 0.46;
     if (ST.explore) { controls.maxDistance = 1600; camera.near = 1; camera.updateProjectionMatrix(); flyTo(ISLAND.pos, ISLAND.tgt, 1.8); }
   },
-  tick() { flightsTick(); },
+  tick(T, dt) { gdTick(dt); flightsTick(); },
 };
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
