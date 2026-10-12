@@ -2,9 +2,6 @@ name: pull-ortho
 
 # 一次性：把 Cloud Shell 烤好、放在 Google Cloud 儲存空間的航照，搬進網站（3d/ortho/）。
 on:
-  push:
-    branches: [main]
-    paths: [.github/workflows/pull-ortho.yml]
   workflow_dispatch:
 
 permissions:
@@ -24,19 +21,22 @@ jobs:
       - uses: google-github-actions/setup-gcloud@v2
       - name: Download
         run: |
-          mkdir -p 3d
-          rm -rf 3d/ortho
-          gcloud storage cp -r gs://intel-vault-510704-vault/bake/ortho 3d/ || { echo "::error::Cloud Storage 裡沒有 bake/ortho（還沒上傳完？）"; exit 1; }
-          du -sh 3d/ortho
-          # 確認這次是完整的新版（有全島底圖、17 個城市）才繼續
+          mkdir -p /tmp/dl
+          gcloud storage cp -r gs://intel-vault-510704-vault/bake/ortho /tmp/dl/ || { echo "::error::Cloud Storage 裡沒有 bake/ortho（還沒上傳完？）"; exit 1; }
+          du -sh /tmp/dl/ortho
+          # 索引裡列的每一塊（電腦版＋手機版）都要在，才算上傳完整；不完整就什麼都不動
           python3 - <<'PY'
-          import json, sys
-          d = json.load(open("3d/ortho/index.json")); b = d.get("base", {}).get("chunks", []); c = d["cities"]
-          msg = f"全島 {len(b)} 塊，城市 {len(c)} 個：" + "、".join(f"{k}{len(v)}" for k, v in c.items())
-          ok = len(b) > 30 and len(c) >= 17
-          print(("::notice::" if ok else "::error::還是舊版或不完整 → ") + msg)
+          import json, os, sys
+          R = "/tmp/dl/ortho"; d = json.load(open(f"{R}/index.json"))
+          b = d.get("base", {}).get("chunks", []); c = d["cities"]
+          need = [f"{R}/base/{q['id']}{v}.jpg" for q in b for v in ("", "_m")] + [f"{R}/{k}/{q['id']}{v}.jpg" for k, qs in c.items() for q in qs for v in ("", "_m")]
+          miss = [p for p in need if not os.path.exists(p) or os.path.getsize(p) == 0]
+          msg = f"全島 {len(b)} 塊，城市 {len(c)} 個，檔案 {len(need) - len(miss)}/{len(need)}"
+          ok = not miss and len(b) > 30 and len(c) >= 17
+          print(("::notice::" if ok else "::error::不完整，沒有動網站 → ") + msg)
           sys.exit(0 if ok else 1)
           PY
+          rm -rf 3d/ortho && mv /tmp/dl/ortho 3d/ortho
       - name: Commit
         run: |
           git config user.name "intel-bot"
