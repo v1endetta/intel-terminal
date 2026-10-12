@@ -357,6 +357,8 @@ body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-event
 #chips button[data-globe]::before{content:"";display:inline-block;width:9px;height:9px;margin-right:5px;vertical-align:-1px;border-radius:50%;border:1.5px solid currentColor;box-shadow:inset -3px 0 0 -1.5px currentColor;opacity:.75}
 .gxl{display:inline-flex;gap:6px;align-items:baseline;padding:3px 9px;border-radius:999px;background:rgba(28,28,30,.8);border:1px solid rgba(255,255,255,.12);font-size:12px;color:#f2f2f7;white-space:nowrap}
 .gxl b{font-weight:600}.gxl em{font-style:normal;font-size:11px;color:#aeaeb2}.gxl.tw{background:rgba(255,255,255,.9);color:#000}
+
+.lbl.nv .nvp.big{font-size:15px;padding:8px 16px}.lbl.nv .nvp.big i{width:10px;height:10px}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2156,7 +2158,7 @@ function EXPLORE() {
     { cat: "市場", items: [
       { n: "台股", f: () => { const v = tx, s = surprise(v); return lineOf("台股加權", v, s ? tone(s.last) : NEU, "市場 · 證交所", "taiex", v.length ? nf(v[v.length - 1]) : "", s && s.pct != null ? pct(s.pct) : "")(); } },
       { n: "法人", globe: 1, f: () => gxCard("inst") },
-      { n: "個股", f: barsOf("關注個股漲跌", () => items("tw_stocks").slice(0, 10).map(x => { const v = x.pct != null ? x.pct : (x.price && x.chg != null ? x.chg / (x.price - x.chg) * 100 : 0); return { name: x.name, v, txt: pct(v) }; }), "市場 · 最近收盤", "taiex") },
+      { n: "個股", lens: "stock", f: barsOf("關注個股漲跌", () => items("tw_stocks").slice(0, 10).map(x => { const v = x.pct != null ? x.pct : (x.price && x.chg != null ? x.chg / (x.price - x.chg) * 100 : 0); return { name: x.name, v, txt: pct(v) }; }), "市場 · 最近收盤", "taiex") },
       { n: "全球股市", globe: 1, f: () => gxCard("world") },
       { n: "匯率", globe: 1, f: () => gxCard("fx") },
       { n: "恐慌", f: () => { const v = items("fear").find(x => x.sym === "^VIX") || {}; return lineOf("VIX 恐慌指數", v.spark, v.value > 25 ? DNH : v.value > 15 ? "#ff9f0a" : UPH, "市場 · 15 以下平靜、25 以上緊張", "fear", nf(v.value || 0), pct(v.chg_pct || 0))(); } },
@@ -2170,7 +2172,7 @@ function EXPLORE() {
       { n: "房價", lens: "house" },
       { n: "菜價", f: barsOf("菜價兩週變化", () => items("veg").slice(0, 10).map(x => ({ name: x.name, v: x.chg14, txt: pct(x.chg14, 0) })), "總經 · " + ((P.veg || {}).market || ""), "veg") },
       { n: "油價", f: barsOf("中油牌價", () => items("oil").map(x => ({ name: x.name, v: x.price, txt: nf(x.price) + " 元" })), "總經 · " + ((P.oil || {}).effective || ""), "macro", { signed: false }) },
-      { n: "景氣指標", f: listOf("台灣總經", () => items("macro").map(x => ({ t: `${x.label}  ${x.value}`, s: `${x.period} · 前期 ${x.prev}` })), "總經", "macro") },
+      { n: "景氣指標", lens: "macro", f: listOf("台灣總經", () => items("macro").map(x => ({ t: `${x.label}  ${x.value}`, s: `${x.period} · 前期 ${x.prev}` })), "總經", "macro") },
       { n: "美元流動性", globe: 1, f: () => gxCard("liq") },
     ] },
     { cat: "走向", items: [
@@ -2188,7 +2190,7 @@ function EXPLORE() {
     ] },
     { cat: "輿情", items: [
       { n: "地方新聞", lens: "news" },
-      { n: "台灣情緒", f: () => { const m = (P.mood || {}).taiwan || {}; return { html: sideHTML({ eyebrow: "輿情 · 社群情緒", title: "台灣人今天的心情", big: m.label || "", color: (m.score || 0) < 0 ? DNH : UPH, body: lineSVG(hist("mood", "taiwan"), (m.score || 0) < 0 ? DNH : UPH) + listHTML([{ t: m.line || "" }, ...(m.themes || []).map(t => ({ t: "· " + t }))]), foot: '<a href="/terminal/#p-mood">終端機 ›</a>' }) }; } },
+      { n: "台灣情緒", lens: "mood", f: () => { const m = (P.mood || {}).taiwan || {}; return { html: sideHTML({ eyebrow: "輿情 · 社群情緒", title: "台灣人今天的心情", big: m.label || "", color: (m.score || 0) < 0 ? DNH : UPH, body: lineSVG(hist("mood", "taiwan"), (m.score || 0) < 0 ? DNH : UPH) + listHTML([{ t: m.line || "" }, ...(m.themes || []).map(t => ({ t: "· " + t }))]), foot: '<a href="/terminal/#p-mood">終端機 ›</a>' }) }; } },
       { n: "PTT", f: barsOf("PTT 各版熱度", () => (((P.ptt || {}).boards) || []).slice(0, 10).map(b => ({ name: b.zh || b.board, v: b.heat, txt: String(b.heat) })), "輿情", "ptt", { signed: false }) },
       { n: "熱搜", f: listOf("Google 熱搜", () => items("trends").slice(0, 8).map(x => ({ t: x.title, s: x.traffic })), "輿情", "trends") },
       { n: "謠言", f: listOf("最多人查證的訊息", () => (((P.cofacts || {}).hot) || []).slice(0, 6).map(x => ({ t: x.text.slice(0, 42) + "…", s: `${x.verdict || "查證中"} · ${x.requests} 人回報`, url: x.url })), "輿情 · Cofacts", "cofacts") },
@@ -2200,8 +2202,8 @@ function EXPLORE() {
           + listHTML((W.items || []).map(w => ({ t: `${w.city}　${(+w.temp).toFixed(1)}°C　${w.weather || ""}`, s: `${w.forecast && w.forecast[0] ? `接下來 ${w.forecast[0].wx}・降雨 ${w.forecast[0].pop}%` : ""}${w.rain24h ? `・24 小時雨量 ${w.rain24h} mm` : ""}` }))); }) },
       { n: "地震", f: layer("quake", "顯著地震", "現場 · 氣象署", () => listHTML((((P.quake || {}).items) || []).slice(0, 8).map(q => ({ t: `M${q.mag}　${(q.loc || "").replace(/\s+/g, " ").replace(/\s*\(.*\)/, "")}`, s: `${q.intensity ? "最大震度 " + q.intensity + "・" : ""}深 ${q.depth} 公里・${new Date(q.at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })}`, url: q.url })))) },
       { n: "車流", lens: "traffic" },
-      { n: "選戰", f: barsOf("五都領先者當選機率", () => (((P.elect || {}).cities) || []).map(c => { const t = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0] || {}; return { name: `${c.city} ${t.name || ""}`, v: t.p, txt: nf(t.p || 0) + "%" }; }), "現場 · 預測市場", "elect", { signed: false }) },
-      { n: "電力", f: () => { const pw = P.power || {}; return lineOf("備轉容量率", pw.spark, (pw.reserve_pct || 0) < 10 ? "#ff9f0a" : UPH, "現場 · 台電", "power", nf(pw.reserve_pct || 0) + "%", "燈號" + (pw.level || ""))(); } },
+      { n: "選戰", lens: "elect", f: barsOf("五都領先者當選機率", () => (((P.elect || {}).cities) || []).map(c => { const t = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0] || {}; return { name: `${c.city} ${t.name || ""}`, v: t.p, txt: nf(t.p || 0) + "%" }; }), "現場 · 預測市場", "elect", { signed: false }) },
+      { n: "電力", lens: "power", f: () => { const pw = P.power || {}; return lineOf("備轉容量率", pw.spark, (pw.reserve_pct || 0) < 10 ? "#ff9f0a" : UPH, "現場 · 台電", "power", nf(pw.reserve_pct || 0) + "%", "燈號" + (pw.level || ""))(); } },
       { n: "航班", f: () => ({ layer: "flights", html: FL.built ? flightsSide() : sideHTML({ eyebrow: "現場 · 桃園機場 · ADS-B", title: "今天飛去哪裡", body: '<p class="empty">航線載入中…</p>' }) }) },
     ] },
   ];
@@ -2222,6 +2224,7 @@ const PROV = {
   "lens:now": ["weather", "氣象署・高公局・公路局・文化部藝文資訊", "即時", 60], "lens:house": ["house", "內政部實價登錄", "每季", 129600, p => p.season],
   "lens:biz": ["brands", "經濟部公司與商業登記，依地址歸到鄉鎮", "每月", 43200, p => p.month], "lens:jobs": ["jobs", "104 人力銀行刊登數", "每日", 1440],
   "lens:tender": ["tendermap", "政府電子採購網（依發包機關歸類，不是工程地點）", "每日", 1440], "lens:news": ["mapfeed", "Google 新聞，依標題地名歸到鄉鎮", "彙整", 180],
+  "lens:stock": ["mops", "證交所・櫃買中心重大訊息；總部位置依登記地址", "每日", 1440], "lens:elect": ["elect", "Polymarket 報價（只看不押）＋新聞", "彙整", 120], "lens:macro": ["macro", "國發會・主計總處・央行", "每月", 43200], "lens:mood": ["mood", "PTT・LINE 查證・新聞標題（AI 判讀）", "彙整", 180], "lens:power": ["power", "台電", "即時", 30, p => p.asof],
   "lens:traffic": ["roads", "高公局・公路局即時車速；街上的小車是依時段模擬", "即時", 20, p => p.asOf && p.asOf.slice(11, 16)],
 };
 const PROV_K = { "即時": "live", "收盤": "close", "每日": "stat", "每週": "stat", "每月": "stat", "每季": "stat", "彙整": "agg", "推算": "est" };
@@ -2858,7 +2861,7 @@ function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo
 const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="background:${dot}"></i>` : ""}<b>${esc(name)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`;
 // ---- 視角：下方選的分類決定地圖「看什麼」，拉近拉遠決定「看多細」 ----
 // 現場（預設）／房價／新公司／地方新聞；市場、走向這類沒有地點的資訊，地圖維持現場、只換卡片
-const LENS = { now: { n: "現場", c: "#ff9f0a" }, house: { n: "房價", c: "#64d2ff" }, biz: { n: "新公司", c: "#30d158" }, news: { n: "地方新聞", c: "#bf5af2" }, traffic: { n: "車流", c: "#ff9f0a" }, jobs: { n: "職缺", c: "#5e9cff" }, tender: { n: "標案", c: "#ffd60a" } };
+const LENS = { now: { n: "現場", c: "#ff9f0a" }, house: { n: "房價", c: "#64d2ff" }, biz: { n: "新公司", c: "#30d158" }, news: { n: "地方新聞", c: "#bf5af2" }, traffic: { n: "車流", c: "#ff9f0a" }, stock: { n: "個股", c: "#64d2ff" }, elect: { n: "選戰", c: "#bf5af2" }, macro: { n: "景氣", c: "#ff453a" }, mood: { n: "情緒", c: "#ffd60a" }, power: { n: "電力", c: "#30d158" }, jobs: { n: "職缺", c: "#5e9cff" }, tender: { n: "標案", c: "#ffd60a" } };
 NAV.lens = "now"; NAV.quiet = null;
 function navSetLens(lens, keepCard) { NAV.lens = LENS[lens] ? lens : "now"; NAV.quiet = keepCard ? true : null; NAV.key = ""; NAV.t = 0; }
 const p1 = v => (+v).toFixed(1);
@@ -2942,7 +2945,7 @@ const trStats = segs => { const f = segs.filter(x => x.k === "fw" && x.s != null
 const trRow = x => ({ t: x.k === "vd" ? x.n : trName(x), s: `${x.k === "fw" ? "國道" : x.k === "vd" ? "市區" : "省道"}・${x.s} km/h${x.d != null ? `・${dist(x.d)}` : ""}` });
 // 公路攝影機（data/cctv.json）與台北市區 VD 路段（data/tpe_vd.json），需要時才載
 const lazyJSON = (key, file, ttlMin) => { if (NAV[key] !== undefined) return NAV[key]; NAV[key] = null;
-  fetch(RAW + file + "?t=" + Math.floor(Date.now() / (ttlMin * 6e4)), { cache: "no-store" }).then(r => r.ok ? r.json() : false).then(j => { NAV[key] = j || false; if (NAV.lens === "traffic") NAV.key = ""; }).catch(() => { NAV[key] = false; });
+  fetch(RAW + file + "?t=" + Math.floor(Date.now() / (ttlMin * 6e4)), { cache: "no-store" }).then(r => r.ok ? r.json() : false).then(j => { NAV[key] = j || false; NAV.key = ""; }).catch(() => { NAV[key] = false; });
   return null; };
 const camsNear = (ll, km) => (((lazyJSON("cam", "cctv.json", 720) || {}).cams) || []).map(c => ({ c, d: kmBetween([c[0], c[1]], ll) })).filter(x => x.d < km).sort((a, b) => a.d - b.d);
 function vdSegs() { const j = lazyJSON("vd", "tpe_vd.json", 5); return j && j.s ? j.s : []; }
@@ -2961,6 +2964,29 @@ document.addEventListener("click", e => { const b = e.target.closest && e.target
   v.innerHTML = hls || insecure ? `<p class="why">這支攝影機的畫面要在新視窗開：<a href="${esc(u)}" target="_blank" rel="noopener">開啟即時影像 ›</a></p>`
     : `<figure class="camfig"><img src="${esc(u)}" alt="${esc(b.dataset.camn)} 即時影像" referrerpolicy="no-referrer" onerror="this.parentNode.innerHTML='<p class=&quot;why&quot;>畫面載不到（攝影機離線，或人在海外時被擋）。<a href=&quot;${esc(u)}&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>直接開啟 ›</a></p>'"><figcaption>${esc(b.dataset.camn)}・即時</figcaption></figure>`; });
 const trAt = () => ROADS_LIVE && ROADS_LIVE.at ? ROADS_LIVE.at.slice(11, 16) : "";
+// 個股：總部地址（listed_basic.json）→ 鄉鎮中心；重大訊息（mops）本來就有座標
+function stockPts() {
+  const lb = lazyJSON("lb", "listed_basic.json", 1440), map = (lb && lb.map) || {}, out = [];
+  for (const x of items("tw_stocks")) { const a = map[x.code]; if (!a || /^00/.test(x.code)) continue;
+    const addr = norm(a[0]).replace(/^\d+/, ""), C = COUNTIES.find(c => addr.startsWith(norm(c.name))); if (!C) continue;
+    const T = (NAV.towns || []).find(t => sameC(t.county, C.name) && addr.includes(t.name)), base = T ? T.c : C.c, j = (parseInt(x.code, 10) % 7 - 3) * 0.004;
+    const v = x.pct != null ? x.pct : (x.price && x.chg != null ? x.chg / (x.price - x.chg) * 100 : 0);
+    out.push({ ll: [base[0] + j, base[1] - j], name: x.name, v, C, T, addr: a[0] }); }
+  return out;
+}
+const MOPS = () => (((P.mops || {}).items) || []).filter(x => x.ll);
+// 全島動畫：景氣燈號、台灣情緒、電力，把整座島染成那個狀態，線條的呼吸快慢＝緊張程度
+NAV.anim = null;
+function islandTint(hex, speed, label, sub) {
+  const col = new THREE.Color(hex), mats = [], fills = [];
+  for (const c of COUNTIES) for (const r of c.rings) if (r.length > 30) {
+    mats.push(navLine(r, col, 0.9, 1.2).material);
+    const sh = new THREE.Shape(r.map(([lo, la]) => { const [x, z] = toXZ(lo, la); return new THREE.Vector2(x, -z); }));
+    const m = new THREE.Mesh(new THREE.ShapeGeometry(sh), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.18, depthTest: false, depthWrite: false, side: THREE.DoubleSide }));
+    m.rotation.x = -Math.PI / 2; m.position.y = 0.5; m.renderOrder = 7; NAV.g.add(m); fills.push(m.material); }
+  addLabel(`<span class="nvp big"><i style="background:${hex}"></i><b>${esc(label)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`, gp(121.0, 23.7, 4), "nv", "nav", 9);
+  NAV.anim = t => { const w = 0.5 + 0.5 * Math.sin(t * speed); for (const m of mats) m.opacity = 0.45 + 0.5 * w; for (const m of fills) m.opacity = 0.08 + 0.16 * w; };
+}
 const bizSub = b => `${b.cat || ""}${b.cap ? `・資本 ${Math.round(b.cap / 1e4).toLocaleString("en-US")} 萬` : ""}${b.date ? `・${b.date.slice(5).replace("-", "/")} 登記` : ""}`;
 
 // ---- 第 0 層：台灣 ----
@@ -2994,6 +3020,45 @@ const TW_VIEW = {
     navCounties(c => n[c.name] ? { col: G, op: 0.35 + 0.6 * n[c.name] / mx, sub: `${n[c.name]} 家`, dot: LENS.biz.c, prio: 2 + n[c.name] / mx * 4 } : { dim: true, op: 0.15 });
     return { eyebrow: "台灣 · 新設立公司", title: "新公司開在哪裡？", big: `${B.length} 家`, color: LENS.biz.c,
       body: `<p class="why">完整的鄉鎮統計載入中；先顯示找得到地址的 ${B.length} 家。</p><ul class="lst nvl">${rankRows(list.map(([k, v]) => [k, `${v} 家`]), "nc")}</ul>` };
+  },
+  stock() {
+    const S = stockPts(), M = MOPS(), byC = {};
+    for (const m of M) { const c = countyAt(m.ll[0], m.ll[1]); if (c) byC[c.name] = (byC[c.name] || 0) + 1; }
+    const mx = Math.max(1, ...Object.values(byC)), B = new THREE.Color(LENS.stock.c);
+    navCounties(c => byC[c.name] ? { col: B, op: 0.25 + 0.7 * Math.sqrt(byC[c.name] / mx), sub: `重大訊息 ${byC[c.name]}`, dot: LENS.stock.c, prio: 1 + byC[c.name] / mx * 3 } : { dim: true, op: 0.15 });
+    S.forEach(x => addLabel(pill(x.name, pct(x.v), x.v >= 0 ? UPH : DNH), gp(x.ll[0], x.ll[1], 2), "nv", "nav", 5 + Math.abs(x.v)));
+    const cats = {}; for (const m of M) cats[m.cat] = (cats[m.cat] || 0) + 1;
+    return { eyebrow: "台灣 · 上市櫃公司", title: "公司在哪裡、發生了什麼？", big: `${M.length} 則重大訊息`, color: LENS.stock.c,
+      body: `<p class="why">標籤是關注個股的總部位置與最近收盤漲跌；縣市越亮，那裡的上市櫃公司最近發的重大訊息越多（${esc(Object.entries(cats).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, v]) => `${k} ${v}`).join("・"))}）。</p>`
+        + barsHTML(S.slice().sort((a, b) => b.v - a.v).map(x => ({ name: x.name, v: x.v, txt: pct(x.v) })))
+        + `<div class="nvh">值得注意的重大訊息</div>` + listHTML(M.filter(m => /事故|併購|澄清|法律|營運/.test(m.cat)).slice(0, 5).map(m => ({ t: `${m.short || m.name}：${m.t}`, s: `${m.cat}・${m.place || ""}・${m.d}`, url: m.u }))) };
+  },
+  elect() {
+    const E = ((P.elect || {}).cities) || [], PC = { 國民黨: "#4f8cff", 民進黨: "#30d158", 民眾黨: "#64d2ff" };
+    const lead = c => (c.cands || []).slice().sort((a, b) => b.p - a.p)[0] || {};
+    navCounties(c => { const e = E.find(e => norm(c.name).startsWith(e.city)); if (!e) return { dim: true, op: 0.12 }; const L = lead(e), col = PC[L.party] || "#aeaeb2";
+      return { col: new THREE.Color(col), op: 0.35 + 0.6 * Math.min(1, Math.abs(L.p - 50) / 40), sub: `${L.name} ${Math.round(L.p)}%`, dot: col, prio: 6 }; });
+    return { eyebrow: "現場 · 2026 五都市長", title: "誰領先？", big: `${E.length} 都`, color: LENS.elect.c,
+      body: `<p class="why">預測市場報價換算的當選機率；縣市越亮，領先越穩。點縣市看候選人和最近被討論的議題。</p><ul class="lst nvl">${E.map(e => { const L = lead(e); return `<li data-nc="${esc(COUNTIES.find(c => norm(c.name).startsWith(e.city))?.name || "")}" style="cursor:pointer"><span class="sdot" style="background:${PC[L.party] || "#aeaeb2"}"></span>${esc(e.city)}　${esc(L.name || "")}<span>${esc(L.party || "")}・${Math.round(L.p || 0)}%${L.d7 != null ? `・7 天 ${L.d7 >= 0 ? "+" : "−"}${Math.abs(L.d7)}` : ""}</span></li>`; }).join("")}</ul>` };
+  },
+  macro() {
+    const M = items("macro"), sig = (M.find(x => /景氣燈號/.test(x.label)) || {}).value || "", hex = /紅/.test(sig) ? "#ff453a" : /黃紅/.test(sig) ? "#ff9f0a" : /綠/.test(sig) ? "#30d158" : /黃藍/.test(sig) ? "#64d2ff" : /藍/.test(sig) ? "#0a84ff" : "#aeaeb2";
+    islandTint(hex, /紅|藍/.test(sig) ? 2.2 : 1.2, `景氣${sig}`, "國發會景氣對策信號");
+    return { eyebrow: "總經 · 國發會・主計總處・央行", title: "台灣景氣現在幾度？", big: sig || "—", color: hex,
+      body: `<p class="why">整座島染成景氣燈號的顏色：紅＝過熱、黃紅＝轉熱、綠＝穩定、黃藍＝轉冷、藍＝低迷。呼吸越快代表越偏離穩定。</p>` + listHTML(M.map(x => ({ t: `${x.label}　${x.value}`, s: `${x.period || ""}${x.prev ? ` · 前期 ${x.prev}` : ""}` }))) };
+  },
+  mood() {
+    const m = (P.mood || {}).taiwan || {}, sc = m.score || 0, hex = sc <= -0.25 ? "#ff453a" : sc < -0.05 ? "#ff9f0a" : sc < 0.1 ? "#ffd60a" : "#30d158";
+    islandTint(hex, 1 + Math.abs(sc) * 4, m.label || "情緒", (m.themes || []).slice(0, 2).join("・"));
+    return { eyebrow: "輿情 · 社群與新聞標題", title: "台灣人今天的心情", big: m.label || "—", color: hex,
+      body: `<p class="why">${esc(m.line || "")}</p>` + listHTML((m.themes || []).map(t => ({ t: "· " + t }))) + (P.mood && P.mood.watch ? `<p class="why">${esc(P.mood.watch)}</p>` : "") };
+  },
+  power() {
+    const pw = P.power || {}, r = pw.reserve_pct || 0, hex = { 綠: "#30d158", 黃: "#ffd60a", 橘: "#ff9f0a", 紅: "#ff453a", 黑: "#8e8e93" }[pw.level] || (r < 6 ? "#ff453a" : r < 10 ? "#ffd60a" : "#30d158");
+    islandTint(hex, 0.8 + Math.max(0, 15 - r) * 0.5, `備轉 ${nf(r)}%`, `供電${pw.level || ""}燈`);
+    return { eyebrow: "現場 · 台電", title: "今天電夠不夠？", big: `${nf(r)}%`, chg: pw.yday_reserve_pct != null ? `昨天 ${nf(pw.yday_reserve_pct)}%` : "", color: hex,
+      body: `<p class="why">備轉容量率 10% 以上算充裕（綠燈），6% 以下就要限電警戒。島的呼吸越急，電越吃緊。</p>`
+        + listHTML([{ t: `目前用電 ${nf(pw.curr_mw / 10)} 萬瓩`, s: `使用率 ${nf(pw.util_pct || 0)}%` }, { t: `今天尖峰預估 ${nf(pw.peak_mw / 10)} 萬瓩`, s: `尖峰時段 ${pw.peak_hours || ""}` }]) + lineSVG(pw.spark, hex) };
   },
   traffic() {
     const S = trSegs(), by = {};
@@ -3080,6 +3145,22 @@ const CITY_VIEW = {
     townPills(ts, new Set(rank.map(x => x.t.name)));
     return { eyebrow: `${norm(C.name)} · 新設立公司`, title: "新公司開在哪一區？", big: `${B.length} 家`, color: LENS.biz.c,
       body: rank.length ? `<ul class="lst nvl">${rankRows(rank.slice(0, 6).map(x => [x.t.name, `${x.n} 家`]), "nt")}</ul>` : `<p class="empty">完整的鄉鎮統計載入中。</p>` };
+  },
+  stock(C) {
+    navOutline(C);
+    const S = stockPts().filter(x => x.C === C), M = MOPS().filter(m => countyAt(m.ll[0], m.ll[1]) === C);
+    S.forEach(x => addLabel(pill(x.name, pct(x.v), x.v >= 0 ? UPH : DNH), gp(x.ll[0], x.ll[1], 1), "nv", "nav", 6));
+    M.slice(0, 30).forEach(m => pin({ c: LENS.stock.c, ll: m.ll, t: `${m.short || m.name}・${m.cat}` }, 1));
+    return { eyebrow: `${norm(C.name)} · 上市櫃公司`, title: "這裡的公司發生了什麼？", big: `${M.length} 則重大訊息`, color: LENS.stock.c,
+      body: (S.length ? barsHTML(S.map(x => ({ name: x.name, v: x.v, txt: pct(x.v) }))) : "") + listHTML(M.slice(0, 8).map(m => ({ t: `${m.short || m.name}：${m.t}`, s: `${m.cat}・${m.place || ""}・${m.d}`, url: m.u }))) };
+  },
+  elect(C) {
+    navOutline(C);
+    const e = (((P.elect || {}).cities) || []).find(e => norm(C.name).startsWith(e.city));
+    if (!e) return { eyebrow: `${norm(C.name)} · 選戰`, title: "這裡不在五都預測範圍", big: norm(C.name), color: LENS.elect.c, body: `<p class="why">預測市場只有五都市長的盤口。</p>` };
+    const cs = (e.cands || []).slice().sort((a, b) => b.p - a.p);
+    return { eyebrow: `${norm(C.name)} · 市長選戰`, title: `${cs[0] ? cs[0].name : ""} 領先`, big: cs[0] ? `${Math.round(cs[0].p)}%` : "—", color: LENS.elect.c,
+      body: cs.map(c => `<div class="nvh">${esc(c.name)}・${esc(c.party || "")}・${Math.round(c.p)}%${c.d7 != null ? `（7 天 ${c.d7 >= 0 ? "+" : "−"}${Math.abs(c.d7)}）` : ""}</div>` + (c.spark ? lineSVG(c.spark, c.d7 >= 0 ? UPH : DNH) : "") + (c.topics && c.topics.length ? `<p class="why">被討論最多：${esc(c.topics.slice(0, 4).map(t => t[0]).join("、"))}</p>` : "")).join("") };
   },
   traffic(C) {
     const ts = navOutline(C), S = trSegs().filter(x => x.c === C.name), st = trStats(S), E = trEvents(e => countyAt(e.ll[0], e.ll[1]) === C);
@@ -3168,6 +3249,13 @@ const STREET_VIEW = {
         + (me[6].length ? `<div class="nvh">資本額最大的幾家</div>` + listHTML(me[6].map(x => ({ t: x[0], s: `${x[2]}・資本 ${capTxt(x[1] || 0)}・${(x[3] || "").slice(5).replace("-", "/")} 登記` }))) : "")
         + (near.length ? `<div class="nvh">隔壁幾區</div><ul class="lst nvl">${rankRows(near.map(([r]) => [r[1], btLine(r)]), "nt")}</ul>` : "") };
   },
+  stock(T, C) {
+    for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
+    const here = tw(), M = MOPS().map(m => ({ m, d: kmBetween(m.ll, here) })).filter(o => o.d < 3).sort((a, b) => a.d - b.d);
+    M.slice(0, 20).forEach(({ m }) => pin({ c: LENS.stock.c, ll: m.ll, t: m.short || m.name }, 2));
+    return { eyebrow: `${norm(T.county)} › ${T.name} · 上市櫃公司`, title: "附近的公司發生了什麼？", big: `${M.length} 則`, color: LENS.stock.c,
+      body: M.length ? listHTML(M.slice(0, 8).map(({ m, d }) => ({ t: `${m.short || m.name}：${m.t}`, s: `${m.cat}・${dist(d)}・${m.d}`, url: m.u }))) : `<p class="empty">附近 3 公里沒有上市櫃公司發重大訊息。</p>` };
+  },
   traffic(T, C) {
     for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
     const here = tw(), R = 4, S = trSegs().filter(x => (x.d = kmBetween(x.ll, here)) < R).sort((a, b) => a.d - b.d), E = trEvents(e => kmBetween(e.ll, here) < R);
@@ -3218,6 +3306,7 @@ function navTick(dt) {
   const on = ST.explore && !ST.globeForce && (!cur || cur === "wx" || (cur === "traffic" && NAV.lens === "traffic"));
   document.body.classList.toggle("nav-on", on);
   if (!on) { if (NAV.level !== -1) { NAV.level = -1; NAV.key = ""; navClear(); } return; }
+  if (NAV.anim) NAV.anim(performance.now() / 1000);
   NAV.t -= dt; if (NAV.t > 0) return; NAV.t = 0.35;
   if (!NAV.towns) { navTowns(); navBiz(); return; }   // 新公司的鄉鎮統計順便先載，切過去時不用等
   const t = controls.target, cd = camera.position.distanceTo(t), lon = t.x / KX + LONC, lat = -t.z / KY + LATC;
@@ -3230,8 +3319,14 @@ function navTick(dt) {
   const quiet = NAV.quiet === pk; if (!quiet) NAV.quiet = null;
   NAV.key = key; NAV.level = level; NAV.county = C; NAV.town = T; NAV.viewD = cd;
   navClear();
-  const VW = [TW_VIEW, CITY_VIEW, STREET_VIEW][level], f = VW[NAV.lens] || VW.now;
-  let o = null; try { o = level === 0 ? f() : level === 1 ? f(C) : f(T, C); } catch (e) { console.warn("nav", e); }
+  NAV.anim = null;
+  // 全島型的視角（景氣、情緒、電力）每一層都一樣；選戰沒有街道層，就用城市層
+  const TWONLY = { macro: 1, mood: 1, power: 1 }, lz = NAV.lens, at = [[], [C], [T, C]];
+  let fn, args;
+  if (TWONLY[lz]) { fn = TW_VIEW[lz]; args = []; }
+  else { const VW = [TW_VIEW, CITY_VIEW, STREET_VIEW][level];
+    if (VW[lz]) { fn = VW[lz]; args = at[level]; } else if (level === 2 && CITY_VIEW[lz]) { fn = CITY_VIEW[lz]; args = [C]; } else { fn = VW.now; args = at[level]; } }
+  let o = null; try { o = fn(...args); } catch (e) { console.warn("nav", e); }
   if (!quiet && o) {
     const sel = document.querySelector("#chips button[aria-selected=true]");
     if (sel && sel.dataset.lens !== NAV.lens) document.querySelectorAll("#chips button").forEach(b => b.setAttribute("aria-selected", "false"));   // 地圖卡片接手時，不相干的分類不再標示選取
