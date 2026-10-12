@@ -38,6 +38,8 @@ STATIC = {
     "fw_etaginfo": FW + "ETag.xml",
     "thb_etagpair": THB + "etag/info/ETagPairList.xml",
     "thb_etaginfo": THB + "etag/info/ETagList.xml",
+    "fw_cctv": FW + "CCTV.xml",                   # 國道攝影機（位置、即時影像網址）
+    "thb_cctv": THB + "cctv/info/CCTVList.xml",   # 省道攝影機
 }
 
 TPE = timezone(timedelta(hours=8))
@@ -272,6 +274,7 @@ def main():
             static_at[k] = time.time()
         except Exception as e:  # noqa: BLE001
             errs[k] = repr(e)[:200]
+            static_at[k] = time.time() - 86400 + 6 * 3600   # 失敗的 6 小時後再試，不要每 5 分鐘白打
 
     try:
         gtrends(state)

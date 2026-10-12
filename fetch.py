@@ -3049,6 +3049,11 @@ def p_tw_pulse():
     roads, jams = [], []
     try:
         secs = _tpe_vd()
+        try:   # 地圖車流視角用的台北市區路段（每一段的起訖點與車速）
+            write_json(DATA / "tpe_vd.json", {"at": NOW.isoformat(), "src": "臺北市政府交通局 VD", "s": [[*x["a"], *x["b"], round(x["spd"]), x["vol"], x["name"][:24]] for x in secs]},
+                       separators=(",", ":"))
+        except Exception as e:  # noqa: BLE001
+            errs.append("台北 VD 檔: " + safe_err(e))
         agg = {}
         for s in secs:
             a = agg.setdefault(s["road"], [0.0, 0.0, 0])
@@ -5589,6 +5594,38 @@ def p_mapfeed():
         brands.append({"ll": ll, "place": place, "t": it.get("name"), "cat": it.get("cat"), "cap": it.get("cap"), "date": it.get("date"), "city": c,
                        "addr": re.sub(r"\d+樓.*$", "", g.get("addr", "")), "boss": g.get("boss", ""), "ban": g.get("ban", "")})
     return {"news": pts, "alerts": alerts, "brands": brands, "n_town": sum(1 for p in pts if p["lvl"] == "town"), "n": len(pts)}
+
+
+CCTV_PATH = DATA / "cctv.json"
+
+
+def p_cctv():
+    """公路攝影機清單（國道、省道；台灣抓取站一天抓一次）→ data/cctv.json：[[經度, 緯度, 種類, 名稱, 影像網址]]。
+    影像本身不經過我們，由看的人的瀏覽器直接向高公局、公路局載入。"""
+    out, info, errs = [], {}, []
+    for key, kind in (("static/fw_cctv", "fw"), ("static/thb_cctv", "thb")):
+        try:
+            d = relay_get(key)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{kind}: {safe_err(e)}"); continue
+        cols = d.get("cols") or []
+        ci = lambda *keys: next((i for i, c in enumerate(cols) if any(k.lower() in c.lower() for k in keys)), None)
+        ilo, ila = ci("PositionLon", "Lon", "px"), ci("PositionLat", "Lat", "py")
+        iu = ci("VideoStreamURL", "VideoImageURL", "ImageURL", "URL", "Url")
+        inm = [i for i in (ci("RoadName"), ci("RoadDirection"), ci("LocationMile", "Mileage"), ci("SurveillanceDescription", "Description", "Name")) if i is not None]
+        info[kind] = {"n": len(d.get("rows") or []), "cols": cols[:30], "at": d.get("at")}
+        if ilo is None or ila is None or iu is None:
+            errs.append(f"{kind}: 欄位對不上 {cols[:12]}"); continue
+        for r in d.get("rows") or []:
+            lo, la, u = num(r[ilo]), num(r[ila]), str(r[iu] or "")
+            if not lo or not la or not (118 < lo < 123 and 21 < la < 27) or not u.startswith("http"):
+                continue
+            nm = " ".join(dict.fromkeys(str(r[i]) for i in inm if r[i] not in (None, "")))[:40]
+            out.append([round(lo, 5), round(la, 5), kind, nm, u])
+    if not out:
+        raise RuntimeError("cctv: nothing " + "; ".join(errs)[:200])
+    write_json(CCTV_PATH, {"at": NOW.isoformat(), "cams": out, "src": "交通部高速公路局、公路局 開放資料"}, separators=(",", ":"))
+    return {"n": len(out), "info": info, "errs": errs[:4]}
 
 
 ADSB_URL = "https://api.adsb.lol/v2/point/23.7/121/250"
@@ -9056,6 +9093,7 @@ run("think", p_think, keep_if_fresh_hours=2)
 run("voice", p_voice, keep_if_fresh_hours=6)
 run("pop", p_pop, keep_if_fresh_hours=3)
 run("roads", p_roads)
+run("cctv", p_cctv, keep_if_fresh_hours=12)   # 攝影機清單（地圖車流視角）
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
