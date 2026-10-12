@@ -713,18 +713,18 @@ onmessage = async e => {
   // 道路
   const W = [0, 24, 19, 15, 11, 8, 5.5, 3.6];
   const rv = await get("r_" + key + ".bin?v=" + T.v);
-  const RP = [], RC = [], LP = [], LO = [], LC = [];
+  const RP = [], RC = [], RD = [], RV = [];
   o = 0;
   while (o + 2 <= rv.byteLength) {
     const cls = rv.getUint8(o), n = rv.getUint8(o + 1); o += 2;
     const pts = []; for (let k = 0; k < n; k++) { const x = rv.getUint16(o, true) / 2, z = rv.getUint16(o + 2, true) / 2; o += 4; pts.push([...toS(x, z), g(x, z)]); }
-    const w = W[cls] / 2000;
-    if (cls <= 5 && pts.length > 1) { LO.push(LP.length / 3); LC.push(cls); for (const p of pts) LP.push(p[0], p[2] + 0.0045, p[1]); }
+    const w = W[cls] / 2000; let dd = Math.random();
     for (let k = 0; k + 1 < pts.length; k++) {
       const a = pts[k], b = pts[k + 1]; let dx = b[0] - a[0], dz = b[1] - a[1]; const L = Math.hypot(dx, dz) || 1; const px = -dz / L * w, pz = dx / L * w;
       const ya = a[2] + 0.0035, yb = b[2] + 0.0035;
       RP.push(a[0] + px, ya, a[1] + pz, b[0] + px, yb, b[1] + pz, b[0] - px, yb, b[1] - pz, a[0] + px, ya, a[1] + pz, b[0] - px, yb, b[1] - pz, a[0] - px, ya, a[1] - pz);
       for (let q = 0; q < 6; q++) RC.push(cls);
+      RD.push(dd, dd + L, dd + L, dd, dd + L, dd); RV.push(1, 1, -1, 1, -1, -1); dd += L;
     }
   }
   // 水域、綠地
@@ -747,8 +747,8 @@ onmessage = async e => {
   const PP = new Float32Array(nvAll * 3), NN = new Float32Array(nvAll * 3), II = new Float32Array(nvAll * 2), RR = new Float32Array(nvAll * 2), CC = new Float32Array(nvAll * 2), BB = new Float32Array(nvAll); let v0 = 0;
   for (const k of keys) { const b = BK.get(k), nv = b.P.length / 3; G.push([v0, nv, k]);
     PP.set(b.P, v0 * 3); NN.set(b.N, v0 * 3); II.set(b.I, v0 * 2); RR.set(b.R, v0 * 2); CC.set(b.C, v0 * 2); BB.set(b.B, v0); v0 += nv; }
-  const out = { key, nb, G, P: PP, N: NN, I: II, RU: RR, CU: CC, BH: BB, LP: f(LP), LO: new Int32Array([...LO, LP.length / 3]), LC: new Uint8Array(LC), TK: f(TK), SH: f(SH), RP: f(RP), RC: f(RC), AP: f(AP), AK: f(AK) };
-  postMessage(out, [out.P.buffer, out.N.buffer, out.I.buffer, out.RU.buffer, out.CU.buffer, out.BH.buffer, out.RP.buffer, out.RC.buffer, out.AP.buffer, out.AK.buffer]);
+  const out = { key, nb, G, P: PP, N: NN, I: II, RU: RR, CU: CC, BH: BB, RD: f(RD), RV: f(RV), TK: f(TK), SH: f(SH), RP: f(RP), RC: f(RC), AP: f(AP), AK: f(AK) };
+  postMessage(out, [out.P.buffer, out.N.buffer, out.I.buffer, out.RU.buffer, out.CU.buffer, out.BH.buffer, out.RP.buffer, out.RC.buffer, out.RD.buffer, out.RV.buffer, out.AP.buffer, out.AK.buffer]);
 };`;
 let WORKER = null;
 function cityWorker() {
@@ -2473,85 +2473,58 @@ function cityLife(grp, d) {
     for (let i = 0; i < n; i++) { const o = i * 4; p.set(tk[o], tk[o + 1], tk[o + 2]); s.set(0.0019, 1.7 * K, 0.0019); M.compose(p, q.identity(), s); m.setMatrixAt(i, M); m.setColorAt(i, C.setHex(tk[o + 3] ? 0x3f6ea6 : 0xc8ccd0)); }
     grp.add(m); LIFE_MATS.push(m.material); m.userData.life = 1;
   }
-  // 車子走的路：主要道路的中心線，先算好每段累積長度
-  const P = d.LP, O = d.LO, LC = d.LC, roads = [];
-  if (P && O) for (let r = 0; r + 1 < O.length; r++) { const a = O[r], b = O[r + 1]; if (b - a < 2) continue;
-    const cum = [0]; for (let i = a + 1; i < b; i++) cum.push(cum[cum.length - 1] + Math.hypot(P[i * 3] - P[(i - 1) * 3], P[i * 3 + 2] - P[(i - 1) * 3 + 2]));
-    const mi = (a + b) >> 1; roads.push({ a, cum, len: cum[cum.length - 1], cls: LC[r], mx: P[mi * 3], mz: P[mi * 3 + 2] }); }
-  grp.userData.life = { roads, P };
-}
-// 高公局即時車速：把國道路段的點放進格子，查最近的那一段
-function lifeLive() {
-  if (LIFE.live || !ROADS_GEO || !ROADS_LIVE) return LIFE.live;
-  const H = new Map(), fw = ROADS_GEO.fw, sp = ROADS_LIVE.fw || [];
-  (fw.c || []).forEach((flat, i) => { const v = sp[i]; if (v == null || v < 0) return;
-    for (let k = 0; k + 1 < flat.length; k += 2) { const [x, z] = toXZ(flat[k] / 1e4, flat[k + 1] / 1e4), key = Math.floor(x / 0.3) + "," + Math.floor(z / 0.3); if (!H.has(key)) H.set(key, []); H.get(key).push([x, z, v]); } });
-  return (LIFE.live = H);
-}
-function liveSpeed(x, z) {
-  const H = lifeLive(); if (!H) return null; let best = null, bd = 0.25;
-  for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) for (const q of H.get((Math.floor(x / 0.3) + i) + "," + (Math.floor(z / 0.3) + j)) || []) { const d = Math.hypot(q[0] - x, q[1] - z); if (d < bd) { bd = d; best = q[2]; } }
-  return best;
-}
-const CAR_COL = [[0xf2f2ef, 35], [0x1b1c1f, 18], [0xa9adb1, 25], [0xb3221c, 6], [0x23477a, 6], [0xf2c21b, 10]];   // 白、黑、銀灰、紅、藍、計程車黃
-function pickCarColor() { let r = Math.random() * 100; for (const [c, w] of CAR_COL) { if ((r -= w) < 0) return c; } return 0xf2f2ef; }
-function lifeSpawn(L, t, R) {
-  const hr = +new Date().toLocaleString("en-US", { timeZone: "Asia/Taipei", hour: "numeric", hour12: false }) % 24;
-  const rush = (hr >= 7 && hr < 10) || (hr >= 17 && hr < 20), tod = rush ? 1.6 : hr < 6 ? 0.25 : hr >= 22 ? 0.6 : 1;
-  const DEN = [0, 40, 30, 24, 16, 8], BASE = [0, 75, 55, 38, 32, 25];
-  const cand = L.roads.filter(r => Math.hypot(r.mx - t.x, r.mz - t.z) < R);
-  let want = cand.reduce((n, r) => n + r.len * DEN[r.cls] * tod, 0); const scale = Math.min(1, 1500 / Math.max(1, want));
-  const cars = [];
-  for (const r of cand) {
-    let n = r.len * DEN[r.cls] * tod * scale; n = Math.floor(n) + (Math.random() < n % 1 ? 1 : 0); if (!n) continue;
-    const lv = r.cls <= 2 ? liveSpeed(r.mx, r.mz) : null, kmh = lv != null ? lv : BASE[r.cls] * (rush ? 0.65 : 1);
-    for (let i = 0; i < n; i++) cars.push({ r, s: Math.random() * r.len, dir: Math.random() < 0.5 ? 1 : -1, v: Math.max(5, kmh * (0.8 + Math.random() * 0.4)) / 3600, k: 0, col: pickCarColor() });
+  // 車流：直接畫在路面上的移動圖案（顯示晶片算，不用每一格在程式裡移動每一台車）
+  if (d.RD && d.RD.length && d.RP.length) {
+    const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(d.RP, 3)); g.setAttribute("aCls", new THREE.BufferAttribute(d.RC, 1));
+    g.setAttribute("aD", new THREE.BufferAttribute(d.RD, 1)); g.setAttribute("aV", new THREE.BufferAttribute(d.RV, 1));
+    const m = new THREE.Mesh(g, carMat()); m.renderOrder = 3; m.frustumCulled = false; m.userData.cars = 1; grp.add(m);
   }
-  return cars;
 }
+let _carMat = null;
+const CARU = { uTime: uni.uTime, uNight: uni.uNight, uVis: { value: 0 }, uDens: { value: 1 }, uSlow: { value: 1 } };
+function carMat() {
+  if (_carMat) return _carMat;
+  _carMat = new THREE.ShaderMaterial({ uniforms: CARU, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -8,
+    vertexShader: `attribute float aCls; attribute float aD; attribute float aV; varying float vC; varying float vD; varying float vV;
+      void main(){ vC = aCls; vD = aD; vV = aV; vec3 p = position; p.y += 0.0006; gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }`,
+    fragmentShader: `uniform float uTime; uniform float uNight; uniform float uVis; uniform float uDens; uniform float uSlow; varying float vC; varying float vD; varying float vV;
+      float h1(float x){ return fract(sin(x * 127.1) * 43758.5453); }
+      void main(){
+        if (vC > 5.5 || uVis < 0.01) discard;
+        float lane = step(0.0, vV), dir = lane * 2.0 - 1.0, av = abs(vV);
+        if (av < 0.18 || av > 0.82) discard;                                  // 車道中間才有車
+        float kmh = vC < 1.5 ? 85.0 : vC < 2.5 ? 60.0 : vC < 3.5 ? 40.0 : 32.0;
+        float spd = kmh / 3600.0 * uSlow;                                       // 公里／秒
+        float spacing = 0.016 + vC * 0.004;                                     // 一格放一台的長度
+        float s = vD - dir * uTime * spd, cell = floor(s / spacing), f = fract(s / spacing);
+        float hh = h1(cell * 1.31 + lane * 17.0 + floor(vD * 0.05) * 3.7);
+        float dens = clamp((vC < 2.5 ? 0.75 : 0.5) * uDens, 0.0, 0.95);
+        if (hh > dens) discard;
+        float L = 0.0045 / spacing; float f0 = 0.5 - L * 0.5, fc = (f - f0) / L;
+        if (fc < 0.0 || fc > 1.0) discard;
+        float far = smoothstep(0.35, 0.8, fwidth(f) / L); if (far > 0.98) discard;   // 太遠一台車不到一個像素就不畫，免得閃
+        float hc = h1(cell * 3.17 + lane * 5.0);
+        vec3 body = hc < 0.35 ? vec3(0.92) : hc < 0.53 ? vec3(0.08) : hc < 0.78 ? vec3(0.62, 0.64, 0.66) : hc < 0.84 ? vec3(0.65, 0.12, 0.1) : hc < 0.9 ? vec3(0.13, 0.25, 0.48) : vec3(0.95, 0.75, 0.1);
+        float front = dir > 0.0 ? fc : 1.0 - fc;                               // 1 = 車頭
+        float ac = (av - 0.18) / 0.64, pair = max(step(0.08, ac) * step(ac, 0.32), step(0.68, ac) * step(ac, 0.92));   // 左右兩顆燈
+        vec3 lights = mix(vec3(1.0, 0.1, 0.04) * 1.6 * step(front, 0.14), vec3(1.0, 0.95, 0.82) * 2.4 * step(0.88, front), step(0.5, front)) * pair;
+        vec3 c = mix(body * 0.85 + vec3(0.05) * (1.0 - abs(fc - 0.5) * 2.0), body * 0.05 + lights, uNight);
+        gl_FragColor = vec4(c, uVis * (1.0 - far));
+      }` });
+  return _carMat;
+}
+// 每一格只更新幾個數字：拉近才顯示、白天晚上、尖峰車多又慢、深夜變少
 function lifeTick(dt) {
   const t = controls.target, close = uni.uClose.value, cd = camera.position.distanceTo(t);
-  // 自己逛的時候可以拉到街道高度：近平面、遠平面跟著距離調，深度才不會打架
   if (ST.explore && !ST.globeForce) { const nr = Math.min(1, Math.max(0.002, cd * 0.004)), fr = Math.min(90000, Math.max(400, cd * 150));
     if (Math.abs(nr - camera.near) > camera.near * 0.05 || Math.abs(fr - camera.far) > camera.far * 0.05) { camera.near = nr; camera.far = fr; camera.updateProjectionMatrix(); } }
-  for (const m of LIFE_MATS) m.color.setScalar(1 - 0.93 * uni.uNight.value);   // 晚上頂樓和車身跟建物一樣變暗
-  if (MOBILE) return;
-  let city = null; for (const v of Object.values(CITY)) if (v.life && v.mesh && v.mesh.visible) { city = v; break; }
-  const show = QUAL.life && !!city && close > 0.4 && !ST.globeForce;
-  for (const v of Object.values(CITY)) if (v.mesh) for (const o of v.mesh.children) if (o.isInstancedMesh) o.visible = QUAL.life;
-  if (LIFE.body) { LIFE.body.visible = show; LIFE.lights.visible = show && uni.uNight.value > 0.5; }
-  if (!show) return;
-  LIFE.t -= dt; const R = Math.min(5, Math.max(1.5, cd * 1.6));
-  if (LIFE.city !== city || (LIFE.t <= 0 && LIFE.at.distanceTo(t) > R * 0.45)) {   // 換城市或鏡頭移太遠：在鏡頭附近重新放車
-    LIFE.t = 1.5; LIFE.city = city; LIFE.at.copy(t); LIFE.cars = lifeSpawn(city.life, t, R);
-    const n = Math.max(1, LIFE.cars.length);
-    if (!LIFE.body || LIFE.body.instanceMatrix.count < n) {
-      if (LIFE.body) { scene.remove(LIFE.body, LIFE.lights); LIFE.body.dispose(); LIFE.lights.geometry.dispose(); }
-      const cap = Math.max(n, 2600), g = new THREE.BoxGeometry(1, 1, 1); g.translate(0, 0.5, 0);
-      LIFE.body = new THREE.InstancedMesh(g, new THREE.MeshStandardMaterial({ roughness: 0.32, metalness: 0.55 }), cap); LIFE.body.frustumCulled = false; LIFE_MATS.push(LIFE.body.material);
-      const lg = new THREE.BufferGeometry(); lg.setAttribute("position", new THREE.BufferAttribute(new Float32Array(cap * 6), 3)); lg.setAttribute("color", new THREE.BufferAttribute(new Float32Array(cap * 6), 3));
-      LIFE.lights = new THREE.Points(lg, new THREE.PointsMaterial({ size: 0.011, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, map: typeof dotTex === "function" ? dotTex() : null }));
-      LIFE.lights.frustumCulled = false; scene.add(LIFE.body, LIFE.lights);
-    }
-    const C = new THREE.Color(), lc = LIFE.lights.geometry.attributes.color.array;
-    LIFE.cars.forEach((c, i) => { LIFE.body.setColorAt(i, C.setHex(c.col)); lc.set([1, 0.93, 0.8], i * 6); lc.set([1, 0.12, 0.06], i * 6 + 3); });
-    LIFE.body.count = LIFE.cars.length; LIFE.body.instanceColor.needsUpdate = true; LIFE.lights.geometry.attributes.color.needsUpdate = true; LIFE.lights.geometry.setDrawRange(0, LIFE.cars.length * 2);
-  }
-  // 每一格：車沿著路往前開，靠右行駛；車頭白燈、車尾紅燈
-  const P = city.life.P, M = new THREE.Matrix4(), q = new THREE.Quaternion(), p = new THREE.Vector3(), s = new THREE.Vector3(0.0044, 0.0024, 0.0019), up = new THREE.Vector3(0, 1, 0), la = LIFE.lights.geometry.attributes.position.array;
-  for (let i = 0; i < LIFE.cars.length; i++) {
-    const c = LIFE.cars[i], r = c.r, cum = r.cum; c.s += c.dir * c.v * dt;
-    if (c.s > r.len) { c.s -= r.len; c.k = 0; } else if (c.s < 0) { c.s += r.len; c.k = cum.length - 2; }
-    while (c.k < cum.length - 2 && c.s > cum[c.k + 1]) c.k++; while (c.k > 0 && c.s < cum[c.k]) c.k--;
-    const i0 = (r.a + c.k) * 3, i1 = i0 + 3, segL = Math.max(1e-6, cum[c.k + 1] - cum[c.k]), u = (c.s - cum[c.k]) / segL;
-    let hx = (P[i1] - P[i0]) * c.dir, hz = (P[i1 + 2] - P[i0 + 2]) * c.dir; const hl = Math.hypot(hx, hz) || 1; hx /= hl; hz /= hl;
-    const lane = r.cls <= 2 ? 0.0055 : 0.003;
-    p.set(P[i0] + (P[i1] - P[i0]) * u - hz * lane, P[i0 + 1] + (P[i1 + 1] - P[i0 + 1]) * u, P[i0 + 2] + (P[i1 + 2] - P[i0 + 2]) * u + hx * lane);
-    q.setFromAxisAngle(up, -Math.atan2(hz, hx)); M.compose(p, q, s); LIFE.body.setMatrixAt(i, M);
-    la[i * 6] = p.x + hx * 0.0023; la[i * 6 + 1] = p.y + 0.0012; la[i * 6 + 2] = p.z + hz * 0.0023;
-    la[i * 6 + 3] = p.x - hx * 0.0023; la[i * 6 + 4] = p.y + 0.0012; la[i * 6 + 5] = p.z - hz * 0.0023;
-  }
-  LIFE.body.instanceMatrix.needsUpdate = true; LIFE.lights.geometry.attributes.position.needsUpdate = true;
+  for (const m of LIFE_MATS) m.color.setScalar(1 - 0.93 * uni.uNight.value);
+  const on = !MOBILE && QUAL.life && !ST.globeForce;
+  CARU.uVis.value = on ? Math.min(1, Math.max(0, (close - 0.45) / 0.3)) : 0;
+  for (const v of Object.values(CITY)) if (v.mesh) for (const o of v.mesh.children) if (o.isInstancedMesh || o.userData.cars) o.visible = on;
+  LIFE.t -= dt; if (LIFE.t > 0) return; LIFE.t = 30;
+  const hr = +new Date().toLocaleString("en-US", { timeZone: "Asia/Taipei", hour: "numeric", hour12: false }) % 24, rush = (hr >= 7 && hr < 10) || (hr >= 17 && hr < 20);
+  CARU.uDens.value = rush ? 1.25 : hr < 6 ? 0.3 : hr >= 22 ? 0.65 : 1; CARU.uSlow.value = rush ? 0.55 : 1;
 }
 
 /* ---- 光影 ---- */
@@ -2604,7 +2577,7 @@ document.querySelectorAll("#dock button").forEach(b => b.onclick = () => { setLa
 
 const clock = new THREE.Clock(); let T = 0;
 const QUAL = { sh: true, life: true };
-const PERF = { on: new URLSearchParams(location.search).has("perf"), fr: [], js: [], dpr: renderer.getPixelRatio(), maxDpr: renderer.getPixelRatio(), auto: true, noOrtho: false, noCity: false, last: 0, good: 0, log: [] };
+const PERF = { on: new URLSearchParams(location.search).has("perf"), fr: [], js: [], dpr: renderer.getPixelRatio(), maxDpr: renderer.getPixelRatio(), auto: !new URLSearchParams(location.search).has("noauto"), noOrtho: false, noCity: false, last: 0, good: 0, log: [] };
 function perfSetDpr(d) { d = Math.max(1, Math.min(PERF.maxDpr, Math.round(d * 4) / 4)); if (d === PERF.dpr) return; PERF.dpr = d; renderer.setPixelRatio(d); renderer.setSize(innerWidth, VH()); if (composer) { composer.setPixelRatio(d); composer.setSize(innerWidth, VH()); } PERF.log.unshift("解析度 → " + d); }
 function perfTick(now, jsMs) {
   const P = PERF; if (P._t0) P.fr.push(now - P._t0); P._t0 = now; P.js.push(jsMs);
