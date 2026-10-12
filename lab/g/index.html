@@ -121,19 +121,19 @@ html{overflow-x:clip}
 #story{position:relative;z-index:12;pointer-events:none}
 .ch{height:160vh;position:relative}
 .ch.last{height:100vh}
-.ch .card{position:sticky;top:20vh;margin-left:max(24px,6vw);width:min(430px,calc(100vw - 48px));pointer-events:auto;padding:22px 24px 20px;border-radius:22px;
-  background:rgba(14,15,18,.6);backdrop-filter:saturate(160%) blur(20px);-webkit-backdrop-filter:saturate(160%) blur(20px);border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.ch .card{position:sticky;top:24vh;margin-left:max(24px,6vw);width:min(460px,calc(100vw - 48px));pointer-events:auto;display:flex;flex-direction:column;gap:12px;text-shadow:0 1px 18px rgba(0,0,0,.6)}
+body.storying::before{content:"";position:fixed;inset:0;z-index:11;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.45) 32%,rgba(0,0,0,0) 58%)}
 .ch .eyebrow{font-size:12px;color:var(--fg3);letter-spacing:.08em}
 .ch h1{font-size:clamp(44px,7vw,84px);font-weight:700;letter-spacing:-.015em;line-height:1.05}
-.ch h2{font-size:clamp(28px,3.4vw,40px);font-weight:700;letter-spacing:-.01em;line-height:1.15;text-wrap:balance}
-.ch p{font-size:16px;line-height:1.6;color:var(--fg2)}
+.ch h2{word-break:keep-all;text-wrap:pretty;font-size:clamp(32px,3.8vw,52px);font-weight:700;letter-spacing:-.01em;line-height:1.15;text-wrap:balance}
+.ch p{font-size:17px;line-height:1.65;color:#c7c7cc}
 .ch .lede{font-size:clamp(18px,2vw,22px);color:var(--fg)}
-.ch .why{font-size:13.5px;color:var(--fg3);border-top:1px solid var(--line);padding-top:10px}
+.ch .why{font-size:13.5px;color:#8e8e93;border-top:1px solid rgba(255,255,255,.18);padding-top:12px}
 .ch .why b{display:block;color:var(--fg2);font-weight:500;margin-bottom:2px}
 .ch .meta{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--fg3);flex-wrap:wrap}
 .ch .meta a{font-size:13px}
 .ch .spark{display:block;max-width:100%;height:auto;margin:2px 0}
-.ch.hero .card{background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;top:13vh;width:min(560px,calc(100vw - 48px));padding:0}
+.ch.hero .card{top:13vh;width:min(560px,calc(100vw - 48px))}
 .ch .toc{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:6px}
 .ch .toc li{display:flex;gap:12px;align-items:baseline;font-size:clamp(17px,1.8vw,20px);font-weight:600}
 .ch .toc .n{font-size:12px;color:var(--fg3);font-weight:400;font-variant-numeric:tabular-nums}
@@ -152,10 +152,12 @@ body.exploring .ch.last .card{opacity:.92}
 #dots button:focus-visible::after{outline:2px solid var(--blue2);outline-offset:3px}
 body.exploring #dots{opacity:.4}
 @media (max-width:760px){
-  .ch .card{top:56vh;max-height:40vh;overflow:auto;margin-left:12px;width:calc(100vw - 24px);padding:16px 18px;gap:8px}
-  .ch h2{font-size:26px}
+  .ch .card{top:58vh;max-height:40vh;overflow:auto;margin-left:20px;width:calc(100vw - 40px);gap:8px}
+  body.storying::before{background:linear-gradient(0deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.6) 34%,rgba(0,0,0,0) 55%)}
+  .ch.hero .card{top:10vh}
+  .ch h2{font-size:30px}
   .ch p{font-size:14.5px}
-  .ch.hero .card{top:10vh;margin-left:20px;width:calc(100vw - 40px);max-height:none}
+  .ch.hero .card{max-height:none}
   .ch.last .card{bottom:92px;padding:12px 16px;gap:6px}
   .ch.last .card p{display:none}
   .ch.last .card h2{font-size:20px}
@@ -1365,11 +1367,11 @@ function storyForeign(buy) { return () => {
     for (const p of [[-74.0, 40.71], [-0.13, 51.5], [139.69, 35.69], [103.82, 1.35]]) { const pts = Gm.arc(p, TPE, 0.28); sGrad(g, buy ? pts : pts.reverse(), c, 1, true); Gm.node(...p); } }
   return { g, cam: { tgt: V(0, -2600, -2200), pos: MOBILE ? V(0, 12500, 9000) : V(0, 9800, 7000) }, globe: true }; }; }
 function storySemi(up) { return () => {
-  const g = new THREE.Group(), cam = camAt(120.75, 24.35, MOBILE ? V(70, 250, 230) : V(70, 95, 110));
-  for (const [nm, lo, la] of [["竹科", 120.995, 24.776], ["中科", 120.615, 24.21], ["南科", 120.272, 23.1]]) {
-    const c = gp(lo, la, 0.35), hex = []; for (let i = 0; i <= 6; i++) { const a = i / 6 * Math.PI * 2 + Math.PI / 6; hex.push(V(c.x + Math.cos(a) * 8, c.y, c.z + Math.sin(a) * 8)); }
-    sLine(g, hex, CY, 1); const gr = []; for (let k = -4; k <= 4; k++) gr.push(V(c.x - 6, c.y, c.z + k * 1.4), V(c.x + 6, c.y, c.z + k * 1.4)); sSegs(g, gr, CY, 0.55);
-    groundText(g, [nm], lo - 0.5, la + 0.06, 30, yawOf(cam), { fs: 64, color: "#ffffff" });
+  const g = new THREE.Group(), cam = MOBILE ? { tgt: V(-25, 0, -60), pos: V(-5, 470, 360) } : { tgt: V(-35, 0, -60), pos: V(135, 270, 250) };
+  for (const [lo, la] of [[120.995, 24.776], [120.615, 24.21], [120.272, 23.1]]) {
+    const c = gp(lo, la, 0.35), hex = r => { const p = []; for (let i = 0; i <= 6; i++) { const a = i / 6 * Math.PI * 2 + Math.PI / 6; p.push(V(c.x + Math.cos(a) * r, c.y, c.z + Math.sin(a) * r)); } return p; };
+    const fill = new THREE.Mesh(new THREE.CircleGeometry(11, 6, Math.PI / 6), addM(CY, 0.22)); fill.rotation.x = -Math.PI / 2; fill.position.copy(c); g.add(fill);
+    sLine(g, hex(11), CY, 1); sLine(g, hex(16), CY, 0.35);
   }
   return { g, cam }; }; }
 function storyWarn(where) { return () => {
@@ -1386,8 +1388,9 @@ function storyPower(r) { return () => {
   return { g, cam }; }; }
 function storyElect(city, p) { return () => {
   const POS = { "台北": [121.56, 25.06], "新北": [121.45, 24.99], "桃園": [121.3, 24.98], "台中": [120.68, 24.15], "台南": [120.22, 23.0], "高雄": [120.32, 22.64] }, ll = POS[city] || [121, 24];
-  const g = new THREE.Group(), cam = camAt(...ll, MOBILE ? V(22, 115, 100) : V(30, 42, 55)), c = gp(...ll, 0.4);
-  sLine(g, circlePts(c, 11, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2), WH, 1); sLine(g, circlePts(c, 11), WH, 0.25);
+  const g = new THREE.Group(), cam = camAt(...ll, MOBILE ? V(5, 10, 14) : V(7, 6.5, 10.5), 0.2), c = gp(...ll, 0.05);
+  for (const o of [0, 0.03, 0.06]) sLine(g, circlePts(c, 2.4 + o, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2, 160), WH, 1); sLine(g, circlePts(c, 2.4, 0, Math.PI * 2, 160), WH, 0.3);
+  flatRing(g, ...ll, 0, 0.12, WH, 1, 0.05);
   return { g, cam }; }; }
 
 /* ---- 章節與 DOM ---- */
@@ -1448,6 +1451,7 @@ function storyTick(dt) {
   uni.uLightK.value = 1 - 0.55 * CH.reduce((m, ch, k) => (ch.g.children.length && !ch.globe) ? Math.max(m, 1 - Math.abs(c - k) * 1.5) : m, 0);
   const gw = CH.reduce((m, ch, k) => ch.globe ? Math.max(m, 1 - Math.abs(c - k) * 1.2) : m, 0);
   scene.fog = gw > 0.05 ? null : FOG; SEA = SEA || scene.children.find(o => o.geometry && o.geometry.type === "CircleGeometry"); if (SEA) SEA.visible = gw < 0.05;
+  if (!ST.explore) { const ca = CH[Math.round(c)]; dimTo = (ca.g.children.length && !ca.globe) ? 1 : 0; }
   const act = Math.round(c); if (act !== ST.active) { ST.active = act; const L = CH[act].layer;
     if (!ST.explore) { if (L) setLayer(L); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; } }
     document.querySelectorAll("#dots button").forEach((b, k) => b.classList.toggle("on", k === act)); }
