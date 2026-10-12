@@ -1301,54 +1301,54 @@ const spark = (vals, color) => {
 function candidates() {
   const out = [];
   // 台股
-  { const v = series("taiex", "TAIEX");
+  try { const v = series("taiex", "TAIEX");
     if (v.length >= 6) { const r = v[v.length - 1] / v[v.length - 2] - 1, past = diffs(v.slice(0, -1)).map((d, i) => d / v[i]), x = Math.abs(r) / (meanAbs(past) || 1e-9);
       const up = r >= 0, col = up ? UPC2 : DNC2;
       out.push({ key: "taiex", cat: "台股", score: x, color: col, big: `台股 ${up ? "+" : "−"}${Math.abs(r * 100).toFixed(2)}%`,
         say: `加權指數收在 ${fmt(v[v.length - 1], 0)}，${up ? "漲" : "跌"}了 ${fmt(Math.abs(v[v.length - 1] - v[v.length - 2]), 0)} 點。`,
         why: `這個漲跌幅是過去 ${past.length} 個交易日平均波動的 ${x.toFixed(1)} 倍。`, spark: v.slice(-20), link: "taiex", src: "證交所 · 加權指數",
-        build: storyTaiex(r) }); } }
+        build: storyTaiex(r) }); } } catch (e) { console.warn('story', e); }
   // 外資
-  { const raw = ((ST.H || {}).institutions || {})["外資"] || [], v = raw.map(x => x[1]);
+  try { const raw = ((ST.H || {}).institutions || {})["外資"] || [], v = raw.map(x => x[1]);
     if (v.length >= 5) { const last = v[v.length - 1], past = v.slice(0, -1), x = Math.abs(last) / (meanAbs(past) || 1e-9), buy = last > 0;
       const isMax = Math.abs(last) >= Math.max(...past.map(Math.abs)), d = String(raw[raw.length - 1][0]);
       out.push({ key: "foreign", cat: "資金", score: x, color: buy ? UPC2 : DNC2, big: `外資${buy ? "買超" : "賣超"} ${fmt(Math.abs(last), 0)} 億`,
         say: `${+d.slice(4, 6)}/${+d.slice(6, 8)} 外資在台股${buy ? "淨買進" : "淨賣出"} ${fmt(Math.abs(last), 0)} 億元${isMax ? `，是近 ${v.length} 個交易日最大的一筆` : ""}。線從紐約、倫敦、東京、新加坡連回台北，亮的那一端是錢流去的方向。`,
         why: `金額是過去 ${past.length} 個交易日平均的 ${x.toFixed(1)} 倍。`, spark: v, link: "taiex", src: "證交所 · 三大法人",
-        build: storyForeign(buy) }); } }
+        build: storyForeign(buy) }); } } catch (e) { console.warn('story', e); }
   // 半導體營收
-  { const s = (((P.revenue || {}).inds) || []).find(x => x.name === "半導體業");
+  try { const s = (((P.revenue || {}).inds) || []).find(x => x.name === "半導體業");
     if (s && s.yoy != null) { const x = Math.abs(s.yoy) / 25, up = s.yoy >= 0;
       out.push({ key: "semi", cat: "產業", score: x, color: up ? UPC2 : DNC2, big: `半導體營收 ${up ? "+" : "−"}${Math.abs(s.yoy).toFixed(0)}%`,
         say: `${(P.revenue || {}).ind_period || ""} 上市櫃半導體業營收，比去年同月${up ? "多" : "少"} ${Math.abs(s.yoy).toFixed(0)}%。${(s.lead || []).length ? "帶頭的是" + s.lead.slice(0, 3).map(l => l.name).join("、") + "。" : ""}`,
         why: `年增超過 25% 就會上榜，這個月是 ${s.yoy.toFixed(0)}%。`, spark: null, link: "revenue", src: "公開資訊觀測站 · 上市櫃月營收",
-        build: storySemi(up) }); } }
+        build: storySemi(up) }); } } catch (e) { console.warn('story', e); }
   // 天氣示警（插隊）
-  { const w = ((P.radar_wx || {}).warnings) || [];
+  try { const w = ((P.radar_wx || {}).warnings) || [];
     if (w.length) { const what = w[0].what, lvl = w[0].level || "", where = [...new Set(w.filter(x => x.what === what).map(x => x.where))];
       const sev = /颱風/.test(what) ? 5 : /豪雨/.test(what) ? 3 : /大雨/.test(what) ? 2.2 : /強風/.test(what) ? 1.6 : /低溫|高溫/.test(what) ? 1.3 : 1;
       out.push({ key: "warn", cat: "天氣", score: sev + where.length / 14, color: "#ffd60a", big: what + lvl,
         say: `${where.length} 個縣市：${where.map(s => s.replace(/[縣市]$/, "")).join("、")}。`,
         why: "災害示警會直接插隊，嚴重度越高排越前面。", spark: null, link: "weather", src: "中央氣象署",
-        build: storyWarn(where) }); } }
+        build: storyWarn(where) }); } } catch (e) { console.warn('story', e); }
   // 地震（48 小時內、規模 4.5 以上）
-  { const q = (((P.quake || {}).items) || []).find(x => x.mag >= 4.5 && Date.now() - new Date(x.at) < 48 * 3600e3);
+  try { const q = (((P.quake || {}).items) || []).find(x => x.mag >= 4.5 && Date.now() - new Date(x.at) < 48 * 3600e3);
     if (q) out.push({ key: "quake", cat: "地震", score: (q.mag - 3) * 1.5, color: "#ffd60a", big: `規模 ${q.mag} 地震`,
       say: `${q.loc.replace(/\s+/g, " ")}，深度 ${fmt(q.depth, 0)} 公里，最大震度 ${q.intensity || "—"}。`, why: "48 小時內規模 4.5 以上的地震會直接插隊。", spark: null, link: "quake", src: "中央氣象署",
-      build: storyQuake(q) }); }
+      build: storyQuake(q) }); } catch (e) { console.warn('story', e); }
   // 備轉容量
-  { const pw = P.power || {}, r = pw.reserve_pct;
+  try { const pw = P.power || {}, r = pw.reserve_pct;
     if (r != null) out.push({ key: "power", cat: "電力", score: r < 10 ? 1 + (10 - r) / 2 : r < 15 ? 0.6 : 0.2, color: r < 6 ? DNC2 : r < 10 ? "#ffb340" : UPC2,
       big: `備轉容量 ${fmt(r, 1)}%`, say: `今天尖峰時段（${pw.peak_hours || ""}）預估備轉 ${fmt(r, 1)}%，燈號${pw.level || ""}。`, why: "備轉低於 10% 才會排進前面。",
-      spark: pw.spark, link: "power", src: "台電", build: storyPower(r) }); }
+      spark: pw.spark, link: "power", src: "台電", build: storyPower(r) }); } catch (e) { console.warn('story', e); }
   // 選戰：一天內變化最大的城市
-  { const E = (ST.H || {}).elect || {}; let best = null;
+  try { const E = (ST.H || {}).elect || {}; let best = null;
     for (const k in E) { const v = E[k].map(x => x[1]); if (v.length < 8) continue; const d = diffs(v), last = d[d.length - 1], x = Math.abs(last) / (meanAbs(d.slice(0, -1)) || 1e-9);
       if (v[v.length - 1] < 50) continue; if (!best || x > best.x) best = { k, v, last, x }; }
     if (best) { const [city, who] = best.k.split(":"), up = best.last >= 0;
       out.push({ key: "elect", cat: "選戰", score: Math.min(best.x, 4) * 0.7, color: "#ffffff", big: `${city}：${who} ${fmt(best.v[best.v.length - 1], 0)}%`,
         say: `預測市場上，${who}當選機率一天${up ? "上升" : "下降"} ${fmt(Math.abs(best.last), 1)} 個百分點。`, why: `這個變化是過去 ${best.v.length - 2} 天平均的 ${best.x.toFixed(1)} 倍。`,
-        spark: best.v.slice(-30), link: "elect", src: "預測市場", build: storyElect(city, best.v[best.v.length - 1] / 100) }); } }
+        spark: best.v.slice(-30), link: "elect", src: "預測市場", build: storyElect(city, best.v[best.v.length - 1] / 100) }); } } catch (e) { console.warn('story', e); }
   return out.sort((a, b) => b.score - a.score);
 }
 
@@ -1509,7 +1509,7 @@ addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; cam
     applySun(); setInterval(applySun, 60000);
     setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow();
     controls.enabled = false; controls.autoRotate = false; document.body.classList.add("storying");
-    await buildStory();
+    try { await buildStory(); } catch (e) { console.error('story', e); ST.on = false; controls.enabled = true; document.body.classList.remove("storying"); start(); }
     $("load").classList.add("done");
     loop();
     setInterval(async () => {   // 每 5 分鐘更新資料：重建圖層
