@@ -241,6 +241,8 @@ body.intro::before{opacity:.4}
 .ch .replay:hover{text-decoration:underline}
 .ch .replay:focus-visible{outline:2px solid #2997ff;outline-offset:3px;border-radius:4px}
 @media (max-width:760px){#intro .ic b{font-size:12px}#intro .ic small{font-size:9.5px}#intro .ic.halo b{font-size:13px}#intro .ic.top b{font-size:17px}}
+
+#side .note{font-size:11px;color:#6e6e73}
 </style>
 <script type="importmap">
 {"imports":{
@@ -1491,6 +1493,37 @@ function pickTop(all, n = 5) {
   return top;
 }
 
+/* ---- 固定的五件事：每一件回答一個不同的問題 ----
+   1 台股：市場怎麼看台灣　2 外資：國際的錢進還是出　3 景氣：半年後往哪走
+   4 製造業 PMI：工廠接單熱不熱　5 零售與餐飲：大家還願不願意花錢 */
+function fixedFive() {
+  const out = [], add = fn => { try { const r = fn(); if (r) out.push(r); } catch (e) { console.warn("five", e); } };
+  add(() => { const v = hist("taiex", "TAIEX"); if (v.length < 2) return null; const last = v[v.length - 1], prev = v[v.length - 2], r = (last / prev - 1) * 100;
+    return { cat: "市場", grp: "taiex", name: "台股加權", toc: `${nf(last)}　${pct(r)}`, value: last, iunit: "", chgTxt: pct(r), color: tone(r), big: `台股 ${nf(last)}`,
+      say: `加權指數收在 ${nf(last)} 點，${r >= 0 ? "漲" : "跌"}了 ${nf(Math.abs(last - prev))} 點（${pct(r)}）。`,
+      why: "台灣市場的體溫。大家對台灣經濟的看法，最後都會反映在這個數字上。", vals: v.slice(-40), link: "taiex", src: "證交所 · 加權指數", scene: "city101" }; });
+  add(() => { const raw = (((ST.H || {}).institutions || {})["外資"]) || [], v = clean(raw.map(x => x[1])); if (!v.length) return null;
+    const last = v[v.length - 1], buy = last > 0, d = String(raw[raw.length - 1][0]);
+    return { cat: "市場", grp: "inst", name: "外資", value: Math.abs(last), iunit: " 億", chgTxt: `${buy ? "買超" : "賣超"} ${nf(Math.abs(last))} 億`, color: tone(last), big: `外資${buy ? "買超" : "賣超"} ${nf(Math.abs(last))} 億`,
+      say: `${+d.slice(4, 6)}/${+d.slice(6, 8)} 外資在台股${buy ? "淨買進" : "淨賣出"} ${nf(Math.abs(last))} 億元。線從紐約、倫敦、東京、新加坡連回台北，亮的那一端是錢流去的方向。`,
+      why: "外資是台股最大的買家，他們的錢往哪裡走，短線就往哪裡走。", vals: v, link: "taiex", src: "證交所 · 三大法人", scene: "globe", from: ["紐約", "倫敦", "東京", "新加坡"], bars: true }; });
+  add(() => { const L = (P.lead || {}).lead || {}; if (L.value == null) return null; const up = (L.chg || 0) >= 0, m = String(L.month || "");
+    return { cat: "總經", grp: "lead", name: "景氣燈號", toc: `${L.signal || ""}燈 ${Math.round(L.score || 0)} 分`, value: L.value, iunit: "", chgTxt: `${up ? "+" : "−"}${Math.abs(L.chg || 0).toFixed(2)}`, color: tone(L.chg || 0), big: `景氣${L.signal || ""}燈 ${Math.round(L.score || 0)} 分`,
+      say: `${m.slice(0, 4)} 年 ${+m.slice(4, 6)} 月景氣對策信號是${L.signal || ""}燈 ${Math.round(L.score || 0)} 分；領先指標 ${(+L.value).toFixed(2)}，${L.streak > 1 ? `已經連續 ${L.streak} 個月${up ? "上升" : "下降"}` : up ? "比上月上升" : "比上月下降"}。`,
+      why: "領先指標通常比景氣早三到六個月轉向，看它就能先知道半年後的景氣。", vals: L.spark, link: "lead", src: "國發會", scene: "island" }; });
+  add(() => { const S = (P.supply || {}).pmi || {}; if (S.value == null) return null; const up = (S.chg || 0) >= 0;
+    return { cat: "總經", grp: "pmi", name: "製造業 PMI", toc: `${(+S.value).toFixed(1)}　${S.value >= 50 ? "擴張" : "收縮"}`, value: S.value, iunit: "", chgTxt: `${up ? "+" : "−"}${Math.abs(S.chg || 0).toFixed(1)}`, color: S.value >= 50 ? UPH : DNH, big: `製造業 PMI ${(+S.value).toFixed(1)}`,
+      say: `${S.period || ""} 製造業採購經理人指數 ${(+S.value).toFixed(1)}，新增訂單 ${(+(S.orders || 0)).toFixed(1)}。高於 50 代表擴張，低於 50 代表收縮。`,
+      why: "PMI 是問工廠採購經理的問卷，會比營收早一步反映接單冷熱。", link: "supply", src: "中華經濟研究院", scene: "industry",
+      sideBody: barsHTML((S.inds || []).map(x => ({ name: x.name, v: x.value - 50, txt: (+x.value).toFixed(1), color: x.value >= 50 ? UPH : DNH }))) + '<p class="note">長條從 50 算起：往右是擴張、往左是收縮</p>' }; });
+  add(() => { const C = P.consume || {}, F = C.focus || [], r = F.find(x => x.name === "零售業"), f = F.find(x => x.name === "餐飲業"); if (!r) return null;
+    return { cat: "總經", grp: "consume", name: "零售與餐飲", toc: `零售 ${pct(r.yoy, 1)}${f ? "・餐飲 " + pct(f.yoy, 1) : ""}`, value: r.yoy, iunit: "%", chgTxt: `年增 ${pct(r.yoy, 1)}`, color: tone(r.yoy), big: `零售 ${pct(r.yoy, 1)}・餐飲 ${f ? pct(f.yoy, 1) : ""}`,
+      say: `${C.month || ""} 零售業營業額比去年同月${r.yoy >= 0 ? "多" : "少"} ${Math.abs(r.yoy).toFixed(1)}%${f ? `，餐飲業${f.yoy >= 0 ? "多" : "少"} ${Math.abs(f.yoy).toFixed(1)}%` : ""}。`,
+      why: "最貼近品牌的數字：大家還願不願意花錢，花在哪裡。", vals: r.spark, link: "consume", src: "經濟部統計處", scene: "island",
+      sideBody: barsHTML([...F.slice(0, 4), ...(C.up || []).slice(0, 3)].filter((x, k, a) => a.findIndex(y => y.name === x.name) === k).slice(0, 7).map(x => ({ name: x.name.replace(/業$/, ""), v: x.yoy, txt: pct(x.yoy, 1) }))) + lineSVG(r.spark, tone(r.yoy)) }; });
+  return out;
+}
+
 /* ---- 3D 場景：每種故事一個鏡頭 ---- */
 const P101 = [121.5645, 25.034];
 const ISLAND = MOBILE ? { tgt: V(0, 0, -60), pos: V(30, 600, 520) } : { tgt: V(0, 30, -10), pos: V(170, 400, 470) };
@@ -1525,12 +1558,20 @@ function sceneFor(t, i) {
     return { g, cam: spin(ISLAND, 0.2) }; }
   if (t.scene === "airport") { const o = gp(121.233, 25.077, 0.3); for (let k = 0; k < 16; k++) { const a = -2.75 + k * 0.13, b = o.clone().add(V(Math.cos(a) * 90, 0, Math.sin(a) * 90)); b.y = 0.1; sGrad(g, [b, o], WH, 0.7); }
     return { g, cam: camAt(121.233, 25.077, MOBILE ? V(20, 260, 220) : V(70, 150, 190)), geo: [121.233, 25.077] }; }
+  if (t.scene === "industry") {
+    for (const [lo, la] of [[120.995, 24.776], [120.615, 24.21], [120.272, 23.1]]) {
+      const c = gp(lo, la, 0.35), hex = r => { const p = []; for (let k = 0; k <= 6; k++) { const a = k / 6 * Math.PI * 2 + Math.PI / 6; p.push(V(c.x + Math.cos(a) * r, c.y, c.z + Math.sin(a) * r)); } return p; };
+      const fill = new THREE.Mesh(new THREE.CircleGeometry(11, 6, Math.PI / 6), addM(col, 0.22)); fill.rotation.x = -Math.PI / 2; fill.position.copy(c); g.add(fill);
+      sLine(g, hex(11), col, 1); sLine(g, hex(16), col, 0.35);
+    }
+    return { g, cam: MOBILE ? { tgt: V(-25, 0, -60), pos: V(-5, 470, 360) } : { tgt: V(-35, 0, -60), pos: V(135, 270, 250) } };
+  }
   return { g, cam: spin(ISLAND, [-0.42, 0.3, -0.18, 0.5, -0.6][i % 5]) };
 }
 
 /* ---- 右側圖表面板（電腦在台灣右邊，手機在上面）---- */
 function storySide(t, i) {
-  const body = t.bars && t.grp === "inst" ? barsHTML(((((P.tw_market || {}).institutions) || {}).items || []).map(x => ({ name: x.name, v: x.net, txt: (x.net > 0 ? "+" : "−") + nf(Math.abs(x.net)) + " 億" }))) + lineSVG(t.vals, t.color)
+  const body = t.sideBody ? t.sideBody : t.bars && t.grp === "inst" ? barsHTML(((((P.tw_market || {}).institutions) || {}).items || []).map(x => ({ name: x.name, v: x.net, txt: (x.net > 0 ? "+" : "−") + nf(Math.abs(x.net)) + " 億" }))) + lineSVG(t.vals, t.color)
     : t.scene === "warn" ? listHTML(t.where.map(w => ({ t: w, s: t.name })))
     : t.scene === "airport" ? listHTML((((P.airport || {}).dep || {}).upcoming || []).slice(0, 5).map(f => ({ t: `${f.flight} → ${f.to}`, s: `${f.sched} ${f.remark || ""}` })))
     : t.scene === "quake" ? listHTML([{ t: t.q.loc.replace(/\s+/g, " "), s: `深度 ${nf(t.q.depth)} 公里` }])
@@ -1629,14 +1670,14 @@ function chapterDom(i, html, cls = "") { const s = document.createElement("secti
 async function buildStory() {
   try { ST.H = await (await fetch(RAW + "history.json?t=" + Date.now(), { cache: "no-store" })).json(); } catch (e) { ST.H = {}; }
   await buildGlobe(); GLOBE.g.visible = false; SG.add(GLOBE.g);
-  const all = candidates(), top = pickTop(all, 5); ST.top = top; ST.all = all;
+  const all = candidates(), top = fixedFive(); ST.top = top; ST.all = all;
   const now = new Date(), d = `${now.getMonth() + 1} 月 ${now.getDate()} 日 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
   const CH = [];
   CH.push({ name: "開場", g: new THREE.Group(), cam: ISLAND, cls: "hero",
-    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">市場與總經，今天動得最多的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.color}">${esc(t.chgTxt || "")}</span></li>`).join("")}</ol><div class="herofoot"><span class="scrollhint">往下捲</span><button type="button" class="replay" id="replay">重播開場</button></div>` });
+    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">每天固定看的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.color}">${esc(t.toc || t.chgTxt || "")}</span></li>`).join("")}</ol><div class="herofoot"><span class="scrollhint">往下捲</span><button type="button" class="replay" id="replay">重播開場</button></div>` });
   top.forEach((t, i) => { const sc = sceneFor(t, i);
     CH.push({ name: t.cat, g: sc.g, cam: sc.cam, globe: sc.globe, layer: sc.layer, geo: sc.geo, side: storySide(t, i),
-      dom: `<div class="eyebrow">0${i + 1} / 五件事 · ${esc(t.cat)}</div><h2 style="color:${t.color}">${esc(t.big)}</h2><p>${esc(t.say)}</p><p class="why"><b>為什麼排這裡</b>${esc(t.why)}</p>` }); });
+      dom: `<div class="eyebrow">0${i + 1} / 五件事 · ${esc(t.name)}</div><h2 style="color:${t.color}">${esc(t.big)}</h2><p>${esc(t.say)}</p><p class="why"><b>為什麼看這個</b>${esc(t.why)}</p>` }); });
   { const W = (P.weather || {}).items || [], hot = W.reduce((a, b) => (b.temp > (a ? a.temp : -99) ? b : a), null), cold = W.reduce((a, b) => (b.temp < (a ? a.temp : 99) ? b : a), null);
     const rain = W.filter(x => (x.rain1h || 0) > 0).map(x => x.city), warn = ((P.radar_wx || {}).warnings || []);
     CH.push({ name: "此刻", g: new THREE.Group(), cam: ISLAND, layer: "wx",
@@ -1735,7 +1776,7 @@ function introChips() {
     const a = -Math.PI * 0.62 + k / halo.length * Math.PI * 2, R = (MOBILE ? 118 : 205) + (k % 3) * (MOBILE ? 16 : 24);
     const isTop = (ST.top || []).includes(t);
     add({ pos: V(Math.sin(a) * R * 0.78, 18 + (k % 4) * 10, -20 - Math.cos(a) * R), v: t.grp === "inst" ? Math.abs(t.value) : t.value, dec: Math.abs(t.value) >= 1000 ? 0 : Math.abs(t.value) >= 100 ? 1 : Math.abs(t.value) >= 1 ? 2 : 3,
-      unit: t.grp === "inst" ? " 億" : "", lab: t.name, chg: t.chgTxt, color: t.color, top: isTop ? (ST.top || []).indexOf(t) : -1, halo: true });
+      unit: t.iunit != null ? t.iunit : t.grp === "inst" ? " 億" : "", lab: t.name, chg: t.chgTxt, color: t.color, top: isTop ? (ST.top || []).indexOf(t) : -1, halo: true });
   });
   return L;
 }
