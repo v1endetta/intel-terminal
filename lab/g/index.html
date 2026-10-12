@@ -330,7 +330,8 @@ body.nav-on #crumb{display:flex}
 #side .sdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}
 @media (max-width:760px){#crumb{top:112px;font-size:12px;backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(28,28,30,.92)}#crumb button{padding:5px 10px}}
 #crumb{width:max-content;max-width:calc(100vw - 32px)}
-body.nav-on .ch.last .card{opacity:0;pointer-events:none;transition:opacity .4s}
+body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-events:none;transition:opacity .4s}
+#card{display:none!important}   /* 舊版縣市小卡停用：資訊都在右邊的卡片 */
 /* 視角：有地圖視角的分類按鈕前面加一個小地圖記號；麵包屑上顯示目前視角 */
 #chips button[data-lens]::before{content:"";display:inline-block;width:9px;height:9px;margin-right:5px;vertical-align:-1px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:1.5px solid currentColor;opacity:.75}
 #crumb .lz{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:color-mix(in srgb,var(--c) 22%,transparent);color:#fff;font-size:12px;font-weight:600}
@@ -1587,7 +1588,7 @@ renderer.domElement.addEventListener("pointerup", e => {
   if (oh) { oh.object.userData.info.tower ? openTower() : openObjCard(oh.object.userData.info); return; }
   const hit = ray.intersectObject(terrain)[0]; if (!hit) return;
   const lon = hit.point.x / KX + LONC, lat = -hit.point.z / KY + LATC, c = countyAt(lon, lat);
-  if (c) { if (ST.explore && typeof navClickAt === "function" && (!cur || cur === "wx")) navClickAt(lon, lat, c); else openCard(c); }
+  if (c && ST.explore && typeof navClickAt === "function") navClickAt(lon, lat, c);   // 舊的縣市小卡會蓋住右邊的資訊卡，改成點了就飛過去，資訊交給分層地圖
 });
 
 
@@ -2136,13 +2137,15 @@ function EXPLORE() {
     { cat: "市場", items: [
       { n: "台股", f: () => { const v = tx, s = surprise(v); return lineOf("台股加權", v, s ? tone(s.last) : NEU, "市場 · 證交所", "taiex", v.length ? nf(v[v.length - 1]) : "", s && s.pct != null ? pct(s.pct) : "")(); } },
       { n: "法人", f: barsOf("三大法人買賣超", () => ((((P.tw_market || {}).institutions) || {}).items || []).map(x => ({ name: x.name, v: x.net, txt: (x.net > 0 ? "+" : "−") + nf(Math.abs(x.net)) + " 億" })), "市場 · 億元", "taiex") },
-      { n: "個股", f: barsOf("關注個股漲跌", () => items("tw_stocks").slice(0, 10).map(x => ({ name: x.name, v: x.pct, txt: pct(x.pct) })), "市場 · 今日", "taiex") },
+      { n: "個股", f: barsOf("關注個股漲跌", () => items("tw_stocks").slice(0, 10).map(x => { const v = x.pct != null ? x.pct : (x.price && x.chg != null ? x.chg / (x.price - x.chg) * 100 : 0); return { name: x.name, v, txt: pct(v) }; }), "市場 · 最近收盤", "taiex") },
       { n: "全球股市", f: barsOf("全球股市", () => items("world").map(x => ({ name: x.name, v: x.chg_pct, txt: pct(x.chg_pct) })), "市場 · 最近收盤", "world") },
       { n: "匯率", f: barsOf("台幣匯率", () => items("fx").map(x => ({ name: x.name, v: x.chg_pct, txt: `${nf(x.mid)}  ${pct(x.chg_pct)}` })), "市場 · 漲＝外幣變貴", "fx") },
       { n: "恐慌", f: () => { const v = items("fear").find(x => x.sym === "^VIX") || {}; return lineOf("VIX 恐慌指數", v.spark, v.value > 25 ? DNH : v.value > 15 ? "#ff9f0a" : UPH, "市場 · 15 以下平靜、25 以上緊張", "fear", nf(v.value || 0), pct(v.chg_pct || 0))(); } },
       { n: "原物料", f: barsOf("原物料期貨", () => items("commodities").map(x => ({ name: x.name, v: x.chg_pct, txt: pct(x.chg_pct) })), "市場 · 近月期貨", "cmdty") },
       { n: "精品", f: barsOf("精品與快時尚股價", () => items("luxury").map(x => ({ name: x.name, v: x.chg_pct, txt: pct(x.chg_pct) })), "市場 · 最近收盤", "lux") },
-      { n: "資金流向", f: layer("flow", "資金流向", "市場 · 地圖") },
+      { n: "資金流向", f: layer("flow", "資金流向", "市場 · 海外 → 台灣", () => { const W = Object.fromEntries(items("world").map(x => [x.sym || x.name, x])), tx = hist("taiex", "TAIEX"), s = surprise(tx), inst = ((((P.tw_market || {}).institutions) || {}).items || []).find(x => /外資/.test(x.name));
+        return `<p class="why">線條是海外主要市場前一個交易日的漲跌，紅圈＝海外漲、台股卻跌（或反過來），傳導卡住。</p>` + barsHTML(items("world").slice(0, 8).map(x => ({ name: x.name, v: x.chg_pct, txt: pct(x.chg_pct) })))
+          + `<p class="why">台股 ${s && s.pct != null ? pct(s.pct) : "—"}${inst ? `・外資${inst.net > 0 ? "買超" : "賣超"} ${nf(Math.abs(inst.net))} 億` : ""}</p>`; }) },
     ] },
     { cat: "總經", items: [
       { n: "房價", lens: "house" },
@@ -2173,9 +2176,12 @@ function EXPLORE() {
     ] },
     { cat: "現場", items: [
       { n: "此刻", lens: "now" },
-      { n: "天氣", f: layer("wx", "天氣與雷達", "現場 · 地圖") },
-      { n: "地震", f: layer("quake", "顯著地震", "現場 · 地圖") },
-      { n: "車流", f: layer("traffic", "國道與市區車速", "現場 · 地圖") },
+      { n: "天氣", f: layer("wx", "天氣與雷達", "現場 · 氣象署", () => { const W = P.weather || {}, warn = W.warnings || [];
+        return (warn.length ? `<p class="why"><b style="color:#ff9f0a">${esc([...new Set(warn.map(w => w.what))].join("、"))}</b>：${esc(warn.map(w => norm(w.where)).join("、"))}</p>` : `<p class="why">目前沒有天氣特報。</p>`)
+          + listHTML((W.items || []).map(w => ({ t: `${w.city}　${(+w.temp).toFixed(1)}°C　${w.weather || ""}`, s: `${w.forecast && w.forecast[0] ? `接下來 ${w.forecast[0].wx}・降雨 ${w.forecast[0].pop}%` : ""}${w.rain24h ? `・24 小時雨量 ${w.rain24h} mm` : ""}` }))); }) },
+      { n: "地震", f: layer("quake", "顯著地震", "現場 · 氣象署", () => listHTML((((P.quake || {}).items) || []).slice(0, 8).map(q => ({ t: `M${q.mag}　${(q.loc || "").replace(/\s+/g, " ").replace(/\s*\(.*\)/, "")}`, s: `${q.intensity ? "最大震度 " + q.intensity + "・" : ""}深 ${q.depth} 公里・${new Date(q.at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })}`, url: q.url })))) },
+      { n: "車流", f: layer("traffic", "國道與市區車速", "現場 · 高公局・公路局", () => { const ev = (((P.roads || {}).events) || []);
+        return `<p class="why">線的顏色是即時車速，綠＝順、紅＝慢。現在有 ${ev.length} 起事件。</p>` + listHTML(ev.slice(0, 8).map(e => ({ t: e.title || `${e.road || ""} ${e.kind || ""}`, s: `${e.impact || ""}` }))); }) },
       { n: "選戰", f: barsOf("五都領先者當選機率", () => (((P.elect || {}).cities) || []).map(c => { const t = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0] || {}; return { name: `${c.city} ${t.name || ""}`, v: t.p, txt: nf(t.p || 0) + "%" }; }), "現場 · 預測市場", "elect", { signed: false }) },
       { n: "電力", f: () => { const pw = P.power || {}; return lineOf("備轉容量率", pw.spark, (pw.reserve_pct || 0) < 10 ? "#ff9f0a" : UPH, "現場 · 台電", "power", nf(pw.reserve_pct || 0) + "%", "燈號" + (pw.level || ""))(); } },
       { n: "航班", f: () => ({ layer: "flights", html: FL.built ? flightsSide() : sideHTML({ eyebrow: "現場 · 桃園機場 · ADS-B", title: "今天飛去哪裡", body: '<p class="empty">航線載入中…</p>' }) }) },
