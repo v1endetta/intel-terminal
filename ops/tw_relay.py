@@ -273,12 +273,13 @@ def stats_jobs():
 def stats_daily(state, errs):
     at = state.setdefault("stats_at", {})
     summ = state.setdefault("stats_summary", {})
-    changed = False
+    changed, t0, n = False, time.time(), 0
     for k, u in stats_jobs().items():
         if time.time() - at.get(k, 0) < 86400:
             continue
-        if time.time() - T_START > 120:   # Cloud Run 一次最多 240 秒：剩下的留到下一輪（15 分鐘後）
+        if time.time() - t0 > 70 or n >= 3:   # Cloud Run 一次最多 240 秒，即時路況還要時間：每輪最多 3 項、70 秒，其餘下一輪（15 分鐘後）
             break
+        n += 1
         rec = {"at": NOW_ISO, "url": u}
         try:
             b = get(u, 90)
@@ -324,6 +325,11 @@ def main():
     hashes, static_at = state.setdefault("h", {}), state.setdefault("static_at", {})
     docs, errs = {}, {}
 
+    try:   # 官方統計排最前面（自己限時 70 秒），免得被後面的即時路況吃掉時間
+        stats_daily(state, errs)
+    except Exception as e:  # noqa: BLE001
+        errs["stats"] = repr(e)[:200]
+
     try:
         docs["yb"], yb_meta = youbike()
         if time.time() - static_at.get("yb_meta", 0) > 86400:
@@ -347,11 +353,6 @@ def main():
         except Exception as e:  # noqa: BLE001
             errs[k] = repr(e)[:200]
             static_at[k] = time.time() - 86400 + 6 * 3600   # 失敗的 6 小時後再試，不要每 5 分鐘白打
-
-    try:
-        stats_daily(state, errs)
-    except Exception as e:  # noqa: BLE001
-        errs["stats"] = repr(e)[:200]
 
     try:
         gtrends(state)
