@@ -751,8 +751,12 @@ function buildTerrain() {
   };
   if (GLASS) { const tb = terrainMat.onBeforeCompile; terrainMat.onBeforeCompile = sh => { tb(sh);
     sh.fragmentShader = sh.fragmentShader
-      .replace("#include <roughnessmap_fragment>", "#include <roughnessmap_fragment>\n{ float e = smoothstep(0.0, 2600.0, vElev); vec3 g0 = mix(vec3(0.23, 0.27, 0.34), vec3(0.47, 0.52, 0.60), e); diffuseColor.rgb = g0 * mix(1.0, 0.55, uNight) * mix(1.0, 0.75, uDim); }")
-      .replace("#include <lights_fragment_begin>", "totalEmissiveRadiance = vec3(0.0);\n#include <lights_fragment_begin>");
+      .replace("#include <roughnessmap_fragment>", `#include <roughnessmap_fragment>
+        {   // 高度分三段：平地深灰藍 → 丘陵 → 高山接近白，山的高低一眼看得出來
+          float e1 = smoothstep(0.0, 1200.0, vElev), e2 = smoothstep(1000.0, 3300.0, vElev);
+          vec3 g0 = mix(mix(vec3(0.29, 0.33, 0.40), vec3(0.50, 0.55, 0.63), e1), vec3(0.90, 0.92, 0.96), e2);
+          diffuseColor.rgb = g0 * mix(1.0, 0.55, uNight) * mix(1.0, 0.75, uDim); }`)
+      .replace("* uNight * (1.0 - smoothstep(0.25, 0.85, uClose)) * uLightK;", "* 0.0;");   // 玻璃風不畫夜光（雷達、掃描、等高線照常）
     }; terrainMat.customProgramCacheKey = () => "terrainGlass"; terrainMat.roughness = 0.75; terrainMat.metalness = 0.0; }
   terrain = new THREE.Mesh(g, terrainMat);
   scene.add(terrain);
@@ -767,7 +771,7 @@ function buildTerrain() {
   sea.rotation.x = -Math.PI / 2; sea.position.y = -0.4;
   // 每格約 0.5 度：對齊經緯度
   sea.material.map.offset.set(0, 0);
-  if (GLASS) { sea.material.map = null; sea.material.color.set(0x1a2a42); sea.material.opacity = 1; sea.material.fog = true; sea.material.needsUpdate = true; }
+  if (GLASS) { sea.material.map = null; sea.material.color.set(0x0a1424); sea.material.opacity = 1; sea.material.fog = true; sea.material.needsUpdate = true; }
   scene.add(sea);
 }
 
@@ -2080,11 +2084,11 @@ async function buildGlobe() {
       fragmentShader: `uniform sampler2D uDay; uniform sampler2D uNight; uniform float k; uniform float uS; uniform vec3 uC; uniform vec3 uSunN; uniform float uTerm; varying vec2 vUv; varying vec3 vN; varying vec3 vW;
         void main(){
           vec3 d = texture2D(uDay, vUv).rgb, n = texture2D(uNight, vUv).rgb; float l = dot(d, vec3(0.299, 0.587, 0.114));
-          float ocean = smoothstep(1.15, 1.7, d.b / (max(d.r, d.g) + 0.002)) * (1.0 - smoothstep(0.06, 0.16, l));   // 照片在線性色彩空間：海＝偏藍又暗
+          float ocean = 0.0; { vec3 dm = texture2D(uDay, vUv, 1.5).rgb; float lm = dot(dm, vec3(0.299, 0.587, 0.114)); ocean = smoothstep(1.02, 1.18, dm.b / (max(dm.r, dm.g) + 0.002)) * (1.0 - smoothstep(0.30, 0.45, lm)); }   // 用稍微模糊的那層判斷海陸，海岸線不會一格一格   // 照片在線性色彩空間：海＝偏藍又暗
           vec3 v = normalize(cameraPosition - vW); float f = max(dot(v, vN), 0.0), rim = pow(1.0 - f, 2.5);
           vec3 c;
           if (uS < 0.5) { c = mix(vec3(l), d, 1.15) * 0.85; c *= mix(vec3(1.0), vec3(0.86, 0.95, 1.12), 0.6); c += vec3(0.01, 0.05, 0.13) * ocean; c *= 0.55 + 0.45 * pow(f, 0.5); }
-          else if (uS < 1.5) { vec3 land = mix(vec3(0.34, 0.40, 0.50), vec3(0.62, 0.68, 0.78), smoothstep(0.08, 0.55, l)); vec3 sea = mix(vec3(0.05, 0.09, 0.17), vec3(0.10, 0.17, 0.30), f);
+          else if (uS < 1.5) { vec3 land = mix(vec3(0.38, 0.43, 0.52), vec3(0.62, 0.67, 0.76), smoothstep(0.04, 0.45, l)); vec3 sea = mix(vec3(0.02, 0.045, 0.10), vec3(0.05, 0.10, 0.19), f);
             c = mix(land * (0.7 + 0.3 * f), sea, ocean) + vec3(0.6, 0.8, 1.0) * rim * 0.35; }
           else { vec3 land = vec3(0.09, 0.11, 0.15) + d * 0.07, sea = vec3(0.015, 0.03, 0.07); c = mix(land, sea, ocean) + pow(n, vec3(1.5)) * vec3(1.0, 0.78, 0.45) * 1.5 + vec3(0.3, 0.55, 1.0) * rim * 0.25; }
           if (uTerm > 0.0) { float nt = 1.0 - smoothstep(-0.10, 0.06, dot(vN, uSunN)); c = mix(c, c * 0.3 + pow(n, vec3(1.6)) * vec3(1.0, 0.8, 0.5) * 1.7, nt * uTerm); }   // 市場時鐘：晨昏線，夜裡看得到城市燈光
@@ -3148,8 +3152,8 @@ function buildEarth() {
         vec3 v = normalize(cameraPosition - vW); float rim = pow(1.0 - max(dot(v, vN), 0.0), 3.0);
         vec3 c = day * (0.25 + 0.95 * max(d, 0.0)) * dayK + pow(nt, vec3(1.6)) * vec3(1.0, 0.78, 0.5) * 1.6 * (1.0 - dayK);
         if (uGlass > 0.5) {   // 玻璃風：跟資料用的地球同一套顏色（陸地霧面灰藍、海深藍），晨昏線讓夜晚那一半暗一點
-          float l = dot(day, vec3(0.299, 0.587, 0.114)), ocean = smoothstep(1.15, 1.7, day.b / (max(day.r, day.g) + 0.002)) * (1.0 - smoothstep(0.06, 0.16, l));
-          vec3 land = mix(vec3(0.34, 0.40, 0.50), vec3(0.62, 0.68, 0.78), smoothstep(0.08, 0.55, l)), sea = vec3(0.07, 0.12, 0.22);
+          float l = dot(day, vec3(0.299, 0.587, 0.114)), ocean = 0.0; { vec3 dm = texture2D(uDay, vUv, 1.5).rgb; float lm = dot(dm, vec3(0.299, 0.587, 0.114)); ocean = smoothstep(1.02, 1.18, dm.b / (max(dm.r, dm.g) + 0.002)) * (1.0 - smoothstep(0.30, 0.45, lm)); }   // 用稍微模糊的那層判斷海陸，海岸線不會一格一格
+          vec3 land = mix(vec3(0.38, 0.43, 0.52), vec3(0.62, 0.67, 0.76), smoothstep(0.04, 0.45, l)), sea = vec3(0.025, 0.05, 0.11);
           c = mix(land, sea, ocean) * (0.45 + 0.55 * dayK); }
         c += vec3(0.3, 0.55, 1.0) * rim * (0.25 + 0.6 * dayK);                       // 邊緣的大氣
         float spec = pow(max(dot(reflect(-uSun, vN), v), 0.0), 220.0) * dayK * step(day.g * 1.05, day.b) * step(day.r * 1.2, day.b); c += vec3(1.0, 0.95, 0.85) * spec * 0.22;   // 海面反光
@@ -3951,9 +3955,9 @@ if (GLASS) {
     rMat.customProgramCacheKey = () => "glass-road"; rMat.opacity = 0.55; rMat.transparent = true; rMat.needsUpdate = true; }
   // 河與公園：河是深藍、公園只比地面淡一點的灰綠（不跟車流的綠搶）
   { const ob = aMat.onBeforeCompile; aMat.onBeforeCompile = sh => { ob && ob(sh);
-      sh.fragmentShader = sh.fragmentShader.replace("#include <lights_physical_fragment>", "diffuseColor.rgb = mix(vec3(0.44, 0.50, 0.52), vec3(0.11, 0.19, 0.31), isW) * mix(1.0, 0.45, uNight);\n#include <lights_physical_fragment>")
+      sh.fragmentShader = sh.fragmentShader.replace("#include <lights_physical_fragment>", "diffuseColor.rgb = mix(vec3(0.44, 0.50, 0.52), vec3(0.17, 0.27, 0.42), isW) * mix(1.0, 0.45, uNight); roughnessFactor = 0.9;\n#include <lights_physical_fragment>")
         .replace("#include <lights_fragment_begin>", "totalEmissiveRadiance = vec3(0.0);\n#include <lights_fragment_begin>"); };
-    aMat.customProgramCacheKey = () => "glass-area"; aMat.needsUpdate = true; }
+    aMat.customProgramCacheKey = () => "glass-area"; aMat.roughness = 0.9; aMat.needsUpdate = true; }
   // 天空與遠處霧：中性的深灰藍，不再是藍天和橘色光害
   queueMicrotask(() => {   // 天空和霧的程式在這段之後才定義，等整支程式跑完再改
   HAZE_DAY.setRGB(0.20, 0.24, 0.31); HAZE_NIGHT.setRGB(0.06, 0.08, 0.12);
