@@ -367,6 +367,20 @@ body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-event
 @media (max-width:760px){#crumb .dt button{padding:4px 8px;font-size:11px}}
 #side .lst li span.sdot{display:inline-block;margin-top:0}
 @media (max-width:760px){#side:not(.open) .prov{display:none}body:has(#side.open) #crumb{opacity:0;pointer-events:none}}
+
+/* 浮在地圖上的攝影機畫面 */
+#labels .lbl.campin,#labels .lbl.camw{pointer-events:auto}
+#labels .lbl.campin{cursor:pointer}
+.camwin{width:240px;border-radius:12px;overflow:hidden;background:rgba(14,14,16,.92);border:1px solid rgba(100,210,255,.45);box-shadow:0 10px 30px rgba(0,0,0,.55);text-align:left;position:relative;margin-bottom:10px}
+.camwin::after{content:"";position:absolute;left:50%;bottom:-10px;width:2px;height:10px;background:rgba(100,210,255,.7);transform:translateX(-50%)}
+.camwin .cw-h{display:flex;align-items:center;gap:6px;padding:6px 8px;font-size:11px;color:#e5e5ea}
+.camwin .cw-h i{width:7px;height:7px;border-radius:50%;background:#ff453a;box-shadow:0 0 6px #ff453a;flex:none}
+.camwin .cw-h b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.camwin .cw-h button{all:unset;cursor:pointer;color:#aeaeb2;font-size:15px;line-height:1;padding:0 2px}
+.camwin img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#000}
+.camwin p{margin:0;padding:18px 10px;font-size:11px;color:#aeaeb2;white-space:normal}
+.camwin p a{color:#64d2ff}
+@media (max-width:760px){.camwin{width:170px}}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2864,7 +2878,7 @@ function countySeverity() {
   for (const [k, n] of Object.entries(ev)) add(COUNTIES.find(c => c.name === k), Math.min(2, n * 0.5), `路況事件 ${n} 起`);
   return S;
 }
-function navClear() { while (NAV.g.children.length) { const o = NAV.g.children.pop(); o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); } clearLabels("nav"); }
+function navClear() { while (NAV.g.children.length) { const o = NAV.g.children.pop(); o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); } clearLabels("nav"); clearLabels("camwin"); }
 function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo, la, lift)); const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: op, depthTest: false })); l.renderOrder = 8; NAV.g.add(l); return l; }
 const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="background:${dot}"></i>` : ""}<b>${esc(name)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`;
 // ---- 視角：下方選的分類決定地圖「看什麼」，拉近拉遠決定「看多細」 ----
@@ -2966,12 +2980,22 @@ function vdDraw(segs, lift) {
   const l = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.95, depthTest: false })); l.renderOrder = 8; NAV.g.add(l);
 }
 const camName = c => String(c[3] || (c[2] === "fw" ? "國道" : "省道")).replace(/ S /, " 南向 ").replace(/ N /, " 北向 ").replace(/ E /, " 東向 ").replace(/ W /, " 西向 ");
-const camHTML = list => list.length ? `<div class="nvh">附近的公路攝影機（${list.length}）</div><ul class="lst nvl cams">${list.slice(0, 6).map(({ c, d }) => `<li><button class="cam" data-cam="${esc(c[4])}" data-camn="${esc(camName(c))}">▶ ${esc(camName(c))}</button><span>${c[2] === "fw" ? "國道" : "省道"}・${dist(d)}</span></li>`).join("")}</ul><div id="camView"></div>` : "";
-document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("#side [data-cam]"); if (!b) return;
-  const u = b.dataset.cam, v = $("camView"); if (!v) return;
+const camHTML = list => list.length ? `<div class="nvh">附近的公路攝影機（${list.length}）</div><ul class="lst nvl cams">${list.slice(0, 6).map(({ c, d }) => `<li><button class="cam" ${camAttrs(c)}>▶ ${esc(camName(c))}</button><span>${c[2] === "fw" ? "國道" : "省道"}・${dist(d)}</span></li>`).join("")}</ul><p class="why" style="font-size:11px">點一支，畫面會浮在地圖上那個位置；地圖上的藍點也可以直接點。</p>` : "";
+// 攝影機畫面直接浮在地圖上：一次只開一支（省流量），畫面釘在攝影機的位置，跟著地圖移動
+const camAttrs = c => `data-cam="${esc(c[4])}" data-camn="${esc(camName(c))}" data-ll="${c[0]},${c[1]}"`;
+function camOpen(u, name, ll) {
+  clearLabels("camwin");
   const hls = /\.m3u8/i.test(u), insecure = location.protocol === "https:" && u.startsWith("http:");
-  v.innerHTML = hls || insecure ? `<p class="why">這支攝影機的畫面要在新視窗開：<a href="${esc(u)}" target="_blank" rel="noopener">開啟即時影像 ›</a></p>`
-    : `<figure class="camfig"><img src="${esc(u)}" alt="${esc(b.dataset.camn)} 即時影像" referrerpolicy="no-referrer" onerror="this.parentNode.innerHTML='<p class=&quot;why&quot;>畫面載不到（攝影機離線，或人在海外時被擋）。<a href=&quot;${esc(u)}&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>直接開啟 ›</a></p>'"><figcaption>${esc(b.dataset.camn)}・即時</figcaption></figure>`; });
+  const body = hls || insecure ? `<p>這支要在新視窗看：<a href="${esc(u)}" target="_blank" rel="noopener">開啟 ›</a></p>`
+    : `<img src="${esc(u)}" alt="${esc(name)} 即時影像" referrerpolicy="no-referrer" onerror="this.outerHTML='<p>畫面載不到（攝影機離線，或人在海外被擋）</p>'">`;
+  addLabel(`<div class="camwin"><div class="cw-h"><i></i><b>${esc(name)}</b><button data-camx aria-label="關閉">×</button></div>${body}</div>`, gp(ll[0], ll[1], 0.4), "nv camw", "camwin", 50);
+}
+document.addEventListener("click", e => {
+  if (e.target.closest && e.target.closest("[data-camx]")) { clearLabels("camwin"); return; }
+  const b = e.target.closest && e.target.closest("[data-cam]"); if (!b) return;
+  const ll = (b.dataset.ll || "").split(",").map(Number); if (ll.length !== 2) return;
+  camOpen(b.dataset.cam, b.dataset.camn, ll);
+});
 const trAt = () => ROADS_LIVE && ROADS_LIVE.at ? ROADS_LIVE.at.slice(11, 16) : "";
 // 個股：總部地址（listed_basic.json）→ 鄉鎮中心；重大訊息（mops）本來就有座標
 function stockPts() {
@@ -3276,7 +3300,8 @@ const STREET_VIEW = {
     vdDraw(vd.map(o => o.x), 0.1);
     const vdRows = vd.sort((a, b) => a.x[4] - b.x[4]).map(({ x, d }) => ({ k: "vd", n: x[6], s: x[4], d, ll: [(x[0] + x[2]) / 2, (x[1] + x[3]) / 2] }));
     const cams = camsNear(here, R);
-    cams.slice(0, 12).forEach(({ c }) => addLabel(`<span class="nvcam" title="${esc(camName(c))}">◉</span>`, gp(c[0], c[1], 0.08), "nv", "nav", 0));
+    cams.slice(0, 12).forEach(({ c }) => addLabel(`<span class="nvcam" ${camAttrs(c)} title="${esc(camName(c))}">◉</span>`, gp(c[0], c[1], 0.08), "nv campin", "nav", 1));
+    if (cams[0] && NAV.camAuto !== T.name) { NAV.camAuto = T.name; const c = cams[0].c; setTimeout(() => NAV.lens === "traffic" && camOpen(c[4], camName(c), [c[0], c[1]]), 400); }   // 進到一區時自動打開最近的那一支
     const withS = [...S.filter(x => x.s != null), ...vdRows.filter(x => x.s < 25)], slow = withS.filter(x => x.k === "vd" ? x.s < 15 : trSlow(x));
     slow.slice(0, 8).forEach(x => pin({ c: "#ff453a", ll: x.ll, t: `${x.s} km/h` }, 4));
     E.forEach(e => pin({ c: "#ff9f0a", ll: e.ll, t: `${e.road || ""} ${e.kind || ""}` }, 3));
