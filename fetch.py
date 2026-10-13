@@ -5655,7 +5655,7 @@ def _news_value(pts):
                   "k 只能是：" + "、".join(NEWSVAL_K) + "。只回 JSON：{\"items\": [{\"i\": 編號, \"v\": 分數, \"k\": \"分類\"}]}\n\n" + lines)
         try:
             data, _m = _gemini_json(prompt, max_tokens=5000, timeout=45, lite_first=True, max_models=2)
-            for r in (data or {}).get("items") or []:
+            for r in _items_of(data):
                 try:
                     p_ = todo[int(r.get("i"))]; v = max(0, min(3, int(r.get("v"))))
                 except (TypeError, ValueError, IndexError):
@@ -6498,6 +6498,12 @@ WORLD_FEEDS = [("BBC", "https://feeds.bbci.co.uk/news/world/rss.xml"), ("Al Jaze
 WNEWS_CACHE = DATA / "worldnews_cache.json"
 
 
+def _items_of(data):
+    """Gemini 有時回 {"items": [...]}，有時直接回 [...]：兩種都收，只留 dict。"""
+    xs = data.get("items") if isinstance(data, dict) else data if isinstance(data, list) else None
+    return [x for x in (xs or []) if isinstance(x, dict)]
+
+
 def p_worldnews():
     errs, raw = [], []
     for src, url in WORLD_FEEDS:
@@ -6511,7 +6517,17 @@ def p_worldnews():
             raw += [{"source": "Guardian", "title": r["webTitle"][:120], "url": r["webUrl"], "at": r["webPublicationDate"]} for r in js["response"]["results"]]
         except Exception as e:  # noqa: BLE001
             errs.append("Guardian: " + safe_err(e))
-    items = _dedupe_sort(raw, 90)
+    # 每家各留最新 10 則再合併（沒有日期的來源，例如日經亞洲，不會因為排序被擠掉）
+    per, seen_k = {}, set()
+    for it in raw:
+        per.setdefault(it["source"], []).append(it)
+    items = []
+    for src_, xs in per.items():
+        for it in sorted(xs, key=lambda x: x.get("at") or "", reverse=True)[:10]:
+            k_ = re.sub(r"\W+", "", it["title"])[:30]
+            if k_ not in seen_k:
+                seen_k.add(k_); items.append(it)
+    items.sort(key=lambda x: x.get("at") or "", reverse=True)
     if not items:
         raise RuntimeError("worldnews: nothing " + "; ".join(errs)[:160])
     cache = {}
@@ -6521,12 +6537,12 @@ def p_worldnews():
         except Exception:
             cache = {}
     key = lambda it: re.sub(r"\W+", "", it["title"].lower())[:60]
-    WN_VER = 2   # 評分標準改版：舊分數作廢重算一次
+    WN_VER = 3   # 評分標準或譯名規則改版：舊結果作廢重算一次
     todo = [it for it in items if (cache.get(key(it)) or {}).get("v") != WN_VER]
     for b in range(0, len(todo) if GEMINI_KEY else 0, 40):   # 一次 40 則；大多數已在快取，平常每小時只翻新進來的幾則
         part = todo[b:b + 40]
         lines = "\n".join(f'{i}. [{it["source"]}] {it["title"]}' for i, it in enumerate(part))
-        prompt = ("你是台灣的國際新聞編輯。把下面的國際新聞英文標題翻成台灣用語的繁體中文新聞標題（自然、精簡，像台灣媒體會下的標題；人名地名用台灣常見譯名，不要中國用語），"
+        prompt = ("你是台灣的國際新聞編輯。把下面的國際新聞英文標題翻成台灣用語的繁體中文新聞標題（自然、精簡，像台灣媒體會下的標題；人名地名用台灣常見譯名，不要中國用語；國名要譯對，例如 Philippines＝菲律賓、Netherlands＝荷蘭、Czech＝捷克），"
                   "判斷新聞主要發生在哪裡，並評估它對台灣的影響。"
                   "tw 是 0～5 分：0＝跟台灣無關（他國國內社會新聞、地方事故）；1＝間接；2＝值得留意；3＝明顯影響台灣；4＝重大影響；5＝直接衝擊台灣。"
                   "影響要看五個面向而且一樣重：經濟與市場（匯率、利率、股市、出口、關稅）、產業與供應鏈（半導體、電子、製造、能源、原物料）、消費與生活（物價、旅遊、消費趨勢）、科技（AI、平台、法規）、安全與外交（台海、區域衝突）。"
@@ -6536,7 +6552,7 @@ def p_worldnews():
                   "\"lat\": 緯度, \"lon\": 經度, \"cat\": \"政治|戰爭衝突|經濟|科技|災害|社會|其他\", \"tw\": 分數, \"why\": \"跟台灣的關係\"}]}。無法判斷地點時 place 給空字串、lat/lon 給 null。\n\n" + lines)
         try:
             data, _m = _gemini_json(prompt, max_tokens=8000, timeout=90, lite_first=True, max_models=3)
-            for r in (data or {}).get("items") or []:
+            for r in _items_of(data):
                 try:
                     it = part[int(r.get("i"))]
                 except (TypeError, ValueError, IndexError):
@@ -6573,7 +6589,7 @@ def p_worldnews():
         try:
             data, _m = _gemini_json(prompt, max_tokens=3000, timeout=60, lite_first=True, max_models=2)
             used = set()
-            for g in (data or {}).get("groups") or []:
+            for g in (data.get("groups") if isinstance(data, dict) else data if isinstance(data, list) else None) or []:
                 ids = []
                 for v in g if isinstance(g, list) else []:
                     try:
@@ -6654,7 +6670,7 @@ def p_grants():
                   '只回 JSON：{"items": [{"i": 編號, "ok": true, "name": "", "org": "", "who": "", "amt": "", "due": "", "cat": "", "fit": 0}]}\n\n' + lines)
         try:
             data, _m = _gemini_json(prompt, max_tokens=7000, timeout=60, lite_first=True, max_models=2)
-            for r in (data or {}).get("items") or []:
+            for r in _items_of(data):
                 try:
                     it = todo[int(r.get("i"))]
                 except (TypeError, ValueError, IndexError):
