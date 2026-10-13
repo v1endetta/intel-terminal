@@ -368,19 +368,51 @@ body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-event
 #side .lst li span.sdot{display:inline-block;margin-top:0}
 @media (max-width:760px){#side:not(.open) .prov{display:none}body:has(#side.open) #crumb{opacity:0;pointer-events:none}}
 
-/* 浮在地圖上的攝影機畫面 */
-#labels .lbl.campin,#labels .lbl.camw{pointer-events:auto}
-#labels .lbl.campin{cursor:pointer}
-.camwin{width:240px;border-radius:12px;overflow:hidden;background:rgba(14,14,16,.92);border:1px solid rgba(100,210,255,.45);box-shadow:0 10px 30px rgba(0,0,0,.55);text-align:left;position:relative;margin-bottom:10px}
-.camwin::after{content:"";position:absolute;left:50%;bottom:-10px;width:2px;height:10px;background:rgba(100,210,255,.7);transform:translateX(-50%)}
-.camwin .cw-h{display:flex;align-items:center;gap:6px;padding:6px 8px;font-size:11px;color:#e5e5ea}
-.camwin .cw-h i{width:7px;height:7px;border-radius:50%;background:#ff453a;box-shadow:0 0 6px #ff453a;flex:none}
-.camwin .cw-h b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.camwin .cw-h button{all:unset;cursor:pointer;color:#aeaeb2;font-size:15px;line-height:1;padding:0 2px}
-.camwin img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#000}
-.camwin p{margin:0;padding:18px 10px;font-size:11px;color:#aeaeb2;white-space:normal}
-.camwin p a{color:#64d2ff}
-@media (max-width:760px){.camwin{width:170px}}
+
+
+/* 公路攝影機觀看面板：電腦在左側、手機在左下 */
+#camPanel{position:fixed;left:16px;top:116px;z-index:15;display:none;color:#f2f2f7}
+#camPanel.pill,#camPanel.open{display:block}
+#camPanel .cp-pill{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:rgba(28,28,30,.82);border:1px solid rgba(255,255,255,.12);font-size:13px;backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+#camPanel .cp-pill i{width:8px;height:8px;border-radius:50%;background:#ff453a;box-shadow:0 0 8px #ff453a}
+#camPanel .cp-pill:hover{background:rgba(44,44,46,.9)}
+#camPanel.open{width:320px;border-radius:18px;overflow:hidden;background:rgba(22,22,24,.86);border:1px solid rgba(255,255,255,.1);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);box-shadow:0 18px 50px rgba(0,0,0,.45);animation:cpIn .28s ease-out}
+@keyframes cpIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+#camPanel .cp-h{display:flex;align-items:center;gap:8px;padding:10px 12px;font-size:12px}
+#camPanel .cp-live{display:inline-flex;align-items:center;gap:5px;color:#ff453a;font-weight:600}
+#camPanel .cp-live i{width:7px;height:7px;border-radius:50%;background:#ff453a;animation:cpBlink 1.4s infinite}
+@keyframes cpBlink{50%{opacity:.3}}
+#camPanel .cp-k{padding:1px 7px;border-radius:999px;background:rgba(255,255,255,.1);color:#d1d1d6;font-size:11px}
+#camPanel .cp-n{margin-left:auto;color:#8e8e93;font-variant-numeric:tabular-nums}
+#camPanel .cp-h button{all:unset;cursor:pointer;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.1);font-size:15px;color:#d1d1d6}
+#camPanel .cp-v{position:relative;aspect-ratio:4/3;background:#000;display:grid;place-items:center}
+#camPanel .cp-v img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#camPanel .cp-load{color:#8e8e93;font-size:12px;animation:cpBlink 1.2s infinite}
+#camPanel .cp-msg{margin:0;padding:16px;text-align:center;font-size:13px;color:#d1d1d6;line-height:1.7}
+#camPanel .cp-msg small{color:#8e8e93}
+#camPanel .cp-msg a{color:#64d2ff}
+#camPanel .cp-msg button{all:unset;cursor:pointer;color:#64d2ff}
+#camPanel .cp-t{padding:10px 14px 4px}
+#camPanel .cp-t b{display:block;font-size:14px;font-weight:600;line-height:1.35}
+#camPanel .cp-t span{display:block;margin-top:3px;font-size:12px;color:#8e8e93}
+#camPanel .cp-t em{font-style:normal;font-weight:600;margin-right:6px}
+#camPanel .cp-b{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;padding:8px 10px}
+#camPanel .cp-b button{all:unset;cursor:pointer;text-align:center;padding:8px 6px;border-radius:10px;background:rgba(255,255,255,.08);font-size:13px;color:#f2f2f7}
+#camPanel .cp-b button:hover{background:rgba(255,255,255,.14)}
+#camPanel .cp-f{padding:0 14px 12px;font-size:10.5px;color:#636366}
+#labels .lbl.campin{pointer-events:auto;cursor:pointer}
+.nvcam.sel{width:22px;height:22px;background:#ff453a;position:relative}
+.nvcam.sel i{position:absolute;inset:-8px;border-radius:50%;border:2px solid #ff453a;animation:cpRing 1.6s ease-out infinite}
+@keyframes cpRing{from{transform:scale(.6);opacity:1}to{transform:scale(1.6);opacity:0}}
+@media (max-width:760px){
+  #camPanel{top:auto;bottom:150px;left:12px}
+  #camPanel.open{width:min(62vw,250px);border-radius:14px}
+  #camPanel .cp-f,#camPanel .cp-t span{display:none}
+  #camPanel .cp-t{padding:8px 10px 2px}#camPanel .cp-t b{font-size:12px}
+  #camPanel .cp-b{padding:6px 8px}#camPanel .cp-b button{font-size:12px;padding:6px 4px}
+  #camPanel .cp-b button[data-cp="f"]{display:none}#camPanel .cp-b{grid-template-columns:1fr 1fr}
+  body:has(#side.open) #camPanel{display:none}
+}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2878,7 +2910,7 @@ function countySeverity() {
   for (const [k, n] of Object.entries(ev)) add(COUNTIES.find(c => c.name === k), Math.min(2, n * 0.5), `路況事件 ${n} 起`);
   return S;
 }
-function navClear() { while (NAV.g.children.length) { const o = NAV.g.children.pop(); o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); } clearLabels("nav"); clearLabels("camwin"); }
+function navClear() { while (NAV.g.children.length) { const o = NAV.g.children.pop(); o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); } clearLabels("nav"); }
 function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo, la, lift)); const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: op, depthTest: false })); l.renderOrder = 8; NAV.g.add(l); return l; }
 const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="background:${dot}"></i>` : ""}<b>${esc(name)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`;
 // ---- 視角：下方選的分類決定地圖「看什麼」，拉近拉遠決定「看多細」 ----
@@ -2980,22 +3012,8 @@ function vdDraw(segs, lift) {
   const l = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.95, depthTest: false })); l.renderOrder = 8; NAV.g.add(l);
 }
 const camName = c => String(c[3] || (c[2] === "fw" ? "國道" : "省道")).replace(/ S /, " 南向 ").replace(/ N /, " 北向 ").replace(/ E /, " 東向 ").replace(/ W /, " 西向 ");
-const camHTML = list => list.length ? `<div class="nvh">附近的公路攝影機（${list.length}）</div><ul class="lst nvl cams">${list.slice(0, 6).map(({ c, d }) => `<li><button class="cam" ${camAttrs(c)}>▶ ${esc(camName(c))}</button><span>${c[2] === "fw" ? "國道" : "省道"}・${dist(d)}</span></li>`).join("")}</ul><p class="why" style="font-size:11px">點一支，畫面會浮在地圖上那個位置；地圖上的藍點也可以直接點。</p>` : "";
-// 攝影機畫面直接浮在地圖上：一次只開一支（省流量），畫面釘在攝影機的位置，跟著地圖移動
+const camHTML = list => list.length ? `<div class="nvh">附近的公路攝影機（${list.length}）</div><ul class="lst nvl cams">${list.slice(0, 6).map(({ c, d }) => `<li><button class="cam" ${camAttrs(c)}>▶ ${esc(camName(c))}</button><span>${c[2] === "fw" ? "國道" : "省道"}・${dist(d)}</span></li>`).join("")}</ul>` : "";
 const camAttrs = c => `data-cam="${esc(c[4])}" data-camn="${esc(camName(c))}" data-ll="${c[0]},${c[1]}"`;
-function camOpen(u, name, ll) {
-  clearLabels("camwin");
-  const hls = /\.m3u8/i.test(u), insecure = location.protocol === "https:" && u.startsWith("http:");
-  const body = hls || insecure ? `<p>這支要在新視窗看：<a href="${esc(u)}" target="_blank" rel="noopener">開啟 ›</a></p>`
-    : `<img src="${esc(u)}" alt="${esc(name)} 即時影像" referrerpolicy="no-referrer" onerror="this.outerHTML='<p>畫面載不到（攝影機離線，或人在海外被擋）</p>'">`;
-  addLabel(`<div class="camwin"><div class="cw-h"><i></i><b>${esc(name)}</b><button data-camx aria-label="關閉">×</button></div>${body}</div>`, gp(ll[0], ll[1], 0.4), "nv camw", "camwin", 50);
-}
-document.addEventListener("click", e => {
-  if (e.target.closest && e.target.closest("[data-camx]")) { clearLabels("camwin"); return; }
-  const b = e.target.closest && e.target.closest("[data-cam]"); if (!b) return;
-  const ll = (b.dataset.ll || "").split(",").map(Number); if (ll.length !== 2) return;
-  camOpen(b.dataset.cam, b.dataset.camn, ll);
-});
 const trAt = () => ROADS_LIVE && ROADS_LIVE.at ? ROADS_LIVE.at.slice(11, 16) : "";
 // 個股：總部地址（listed_basic.json）→ 鄉鎮中心；重大訊息（mops）本來就有座標
 function stockPts() {
@@ -3211,6 +3229,7 @@ const CITY_VIEW = {
         + (E.length ? `<div class="nvh">路況事件（${E.length}）</div>` + listHTML(E.slice(0, 6).map(e => ({ t: e.title || `${e.road || ""} ${e.kind || ""}`, s: e.impact || "" }))) : "")
         + (() => { const seen = new Set(), near = [];   // 塞的地方（或事件）旁邊最近的攝影機，直接點來看
           for (const x of [...slow.slice(0, 4), ...E.slice(0, 3)]) { const c = camsNear(x.ll, 1.5)[0]; if (c && !seen.has(c.c[4])) { seen.add(c.c[4]); near.push(c); } }
+          camSetList(near.map(x => x.c), { auto: false, where: norm(C.name) + "塞車點" });
           return near.length ? camHTML(near).replace("附近的公路攝影機", "塞車點旁的攝影機") : ""; })() };
   },
   jobs(C) {
@@ -3301,7 +3320,7 @@ const STREET_VIEW = {
     const vdRows = vd.sort((a, b) => a.x[4] - b.x[4]).map(({ x, d }) => ({ k: "vd", n: x[6], s: x[4], d, ll: [(x[0] + x[2]) / 2, (x[1] + x[3]) / 2] }));
     const cams = camsNear(here, R);
     cams.slice(0, 12).forEach(({ c }) => addLabel(`<span class="nvcam" ${camAttrs(c)} title="${esc(camName(c))}">◉</span>`, gp(c[0], c[1], 0.08), "nv campin", "nav", 1));
-    if (cams[0] && NAV.camAuto !== T.name) { NAV.camAuto = T.name; const c = cams[0].c; setTimeout(() => NAV.lens === "traffic" && camOpen(c[4], camName(c), [c[0], c[1]]), 400); }   // 進到一區時自動打開最近的那一支
+    camSetList(cams.map(x => x.c), { auto: !MOBILE, where: T.name });
     const withS = [...S.filter(x => x.s != null), ...vdRows.filter(x => x.s < 25)], slow = withS.filter(x => x.k === "vd" ? x.s < 15 : trSlow(x));
     slow.slice(0, 8).forEach(x => pin({ c: "#ff453a", ll: x.ll, t: `${x.s} km/h` }, 4));
     E.forEach(e => pin({ c: "#ff9f0a", ll: e.ll, t: `${e.road || ""} ${e.kind || ""}` }, 3));
@@ -3382,7 +3401,8 @@ const DELTA_CITY = {
 function navTick(dt) {
   const on = ST.explore && !ST.globeForce && (!cur || cur === "wx" || (cur === "traffic" && NAV.lens === "traffic"));
   document.body.classList.toggle("nav-on", on);
-  if (!on) { if (NAV.level !== -1) { NAV.level = -1; NAV.key = ""; navClear(); } return; }
+  if (!on) { if (NAV.level !== -1) { NAV.level = -1; NAV.key = ""; navClear(); camHide(); } return; }
+  if (NAV.lens !== "traffic" && (CAM.open || CAM.list.length)) { CAM.list = []; camHide(); }
   if (NAV.anim) NAV.anim(performance.now() / 1000);
   NAV.t -= dt; if (NAV.t > 0) return; NAV.t = 0.35;
   if (!NAV.towns) { navTowns(); navBiz(); return; }   // 新公司的鄉鎮統計順便先載，切過去時不用等
@@ -3463,6 +3483,80 @@ document.addEventListener("click", e => {
   const t = e.target.closest && e.target.closest("#side [data-nt]"); if (t && NAV.county) navGoTown((NAV.towns || []).find(x => x.name === t.dataset.nt && sameC(x.county, NAV.county.name)));
 });
 window.__nav = { NAV, navSetLens, navGoCounty, navGoTown, townAt, COUNTIES: () => COUNTIES };
+
+/* ---- 公路攝影機觀看面板 ----
+   電腦：左側一欄（右邊是資訊卡，地圖留在中間）；手機：下方一張小卡，平常收成一顆「攝影機」按鈕。
+   一次只播一支（每支都是持續傳的串流，同時開很多支會吃流量）；可以上一支／下一支、鍵盤左右鍵切換。
+   地圖上正在看的那支會亮起來，旁邊寫這一段的即時車速。 */
+const CAM = { list: [], i: -1, open: false, where: "", user: false };
+function camEl() {
+  let el = $("camPanel"); if (el) return el;
+  el = document.createElement("aside"); el.id = "camPanel"; el.setAttribute("aria-label", "公路即時影像"); document.body.appendChild(el);
+  el.addEventListener("click", e => {
+    const b = e.target.closest("[data-cp]"); if (!b) return; const a = b.dataset.cp;
+    if (a === "x") camClose(); else if (a === "o") { CAM.user = true; camShow(Math.max(0, CAM.i)); } else if (a === "p") camShow(CAM.i - 1); else if (a === "n") camShow(CAM.i + 1);
+    else if (a === "f") { const c = CAM.list[CAM.i]; if (c) { const g = gp(c[0], c[1], 0); flyTo(g.clone().add(V(0.6, 0.9, 1.1)), g, 1.4); } }
+    else if (a === "r") camShow(CAM.i);
+  });
+  el.addEventListener("pointerdown", e => e.stopPropagation());
+  addEventListener("keydown", e => { if (!CAM.open || /input|textarea/i.test((e.target || {}).tagName || "")) return;
+    if (e.key === "ArrowRight") camShow(CAM.i + 1); else if (e.key === "ArrowLeft") camShow(CAM.i - 1); else if (e.key === "Escape") camClose(); });
+  return el;
+}
+// 視角換到新地方時，把附近的攝影機交給面板；正在看的那支會保留在清單最前面
+function camSetList(list, opt = {}) {
+  const cur = CAM.open ? CAM.list[CAM.i] : null;
+  CAM.list = list.slice(0, 20); CAM.where = opt.where || "";
+  if (cur) { const k = CAM.list.findIndex(c => c[4] === cur[4]); if (k < 0) CAM.list.unshift(cur); CAM.i = k < 0 ? 0 : k; }
+  else CAM.i = CAM.list.length ? 0 : -1;
+  if (!CAM.list.length && !CAM.open) return camHide();
+  if (!CAM.open && opt.auto && !CAM.closedByUser) camShow(0); else camRender();
+}
+function camShow(i) {
+  if (!CAM.list.length) return;
+  CAM.i = (i + CAM.list.length) % CAM.list.length; CAM.open = true; camRender(true);
+}
+function camClose() { CAM.open = false; CAM.closedByUser = true; clearLabels("camsel"); camRender(); }
+function camHide() { CAM.open = false; clearLabels("camsel"); const el = $("camPanel"); if (el) el.className = ""; document.body.classList.remove("cam-on"); }
+// 攝影機附近那一段的即時車速（國道、省道、台北市區）
+function camSpeed(c) {
+  let best = null, bd = 0.8;
+  for (const x of trSegs()) if (x.s != null) { const d = kmBetween(x.ll, [c[0], c[1]]); if (d < bd) { bd = d; best = x.s; } }
+  if (best == null && sameC((countyAt(c[0], c[1]) || {}).name || "", "臺北市")) for (const x of vdSegs()) { const d = kmBetween([(x[0] + x[2]) / 2, (x[1] + x[3]) / 2], [c[0], c[1]]); if (d < 0.4 && d < bd) { bd = d; best = x[4]; } }
+  return best;
+}
+function camRender(fresh) {
+  const el = camEl(), n = CAM.list.length;
+  if (!n) { camHide(); return; }
+  document.body.classList.toggle("cam-on", CAM.open);
+  if (!CAM.open) {   // 收起來：一顆按鈕告訴你附近有幾支
+    el.className = "pill"; el.innerHTML = `<button data-cp="o" class="cp-pill"><i></i>${CAM.where ? esc(CAM.where) + " · " : ""}${n} 支公路攝影機</button>`; clearLabels("camsel"); return;
+  }
+  const c = CAM.list[CAM.i], u = c[4], name = camName(c), sp = camSpeed(c), kind = c[2] === "fw" ? "國道" : "省道";
+  const spC = sp == null ? "#8e8e93" : sp >= 60 ? UPH : sp >= 30 ? "#ffd60a" : DNH;
+  const hls = /\.m3u8/i.test(u), insecure = location.protocol === "https:" && u.startsWith("http:");
+  el.className = "open";
+  if (fresh || !el.querySelector(".cp-v")) el.innerHTML = `
+    <div class="cp-h"><span class="cp-live"><i></i>即時</span><span class="cp-k">${kind}</span><span class="cp-n">${CAM.i + 1} / ${n}</span><button data-cp="x" aria-label="關閉攝影機">×</button></div>
+    <div class="cp-v">${hls || insecure ? `<p class="cp-msg">這支要在新視窗看<br><a href="${esc(u)}" target="_blank" rel="noopener">開啟即時影像 ›</a></p>`
+      : `<div class="cp-load">連線中…</div><img src="${esc(u)}" alt="${esc(name)} 即時影像" referrerpolicy="no-referrer">`}</div>
+    <div class="cp-t"><b>${esc(name)}</b><span>${sp != null ? `<em style="color:${spC}">● ${sp} km/h</em>這一段的即時車速` : "這一段沒有即時車速"}</span></div>
+    <div class="cp-b"><button data-cp="p" aria-label="上一支">‹ 上一支</button><button data-cp="f">在地圖上找</button><button data-cp="n" aria-label="下一支">下一支 ›</button></div>
+    <div class="cp-f">${esc(CAM.where)}附近・${c[2] === "fw" ? "高公局" : "公路局"}・點地圖上的藍點也能切換・← → 鍵</div>`;
+  const img = el.querySelector(".cp-v img");
+  if (img) { img.onload = () => el.querySelector(".cp-load") && el.querySelector(".cp-load").remove();
+    img.onerror = () => { const v = el.querySelector(".cp-v"); if (v) v.innerHTML = `<p class="cp-msg">畫面載不到<br><small>攝影機離線，或人在海外被擋</small><br><button data-cp="r">重試</button>　<a href="${esc(u)}" target="_blank" rel="noopener">直接開啟 ›</a></p>`; }; }
+  // 地圖上：正在看的那支亮起來
+  clearLabels("camsel");
+  addLabel(`<span class="nvcam sel"><i></i></span>`, gp(c[0], c[1], 0.1), "nv camsel", "camsel", 40);
+}
+// 地圖上的藍點、卡片裡的清單：點了就換到那一支（沒在清單裡的就加進去）
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("[data-cam]"); if (!b) return;
+  const u = b.dataset.cam; let k = CAM.list.findIndex(c => c[4] === u);
+  if (k < 0) { const ll = (b.dataset.ll || "").split(",").map(Number); CAM.list.unshift([ll[0], ll[1], /thb/.test(u) ? "thb" : "fw", b.dataset.camn || "", u]); k = 0; }
+  CAM.closedByUser = false; camShow(k);
+});
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
