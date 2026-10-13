@@ -6441,7 +6441,11 @@ NEWS_NOISE = re.compile(r"今彩\s*539|威力彩|大樂透|雙贏彩|3星彩|4�
 # ---------- 全球新聞：國際媒體英文標題 → 台灣用語中文＋發生地點（放到地球上） ----------
 # BBC、半島電視台、NPR、衛報（有金鑰時）；翻譯和地點用 Gemini（免費額度），同一則只翻一次（快取），每小時抓一次
 WORLD_FEEDS = [("BBC", "https://feeds.bbci.co.uk/news/world/rss.xml"), ("Al Jazeera", "https://www.aljazeera.com/xml/rss/all.xml"),
-               ("NPR", "https://feeds.npr.org/1004/rss.xml"), ("BBC 商業", "https://feeds.bbci.co.uk/news/business/rss.xml")]
+               ("NPR", "https://feeds.npr.org/1004/rss.xml"), ("BBC 商業", "https://feeds.bbci.co.uk/news/business/rss.xml"),
+               # 亞洲來源：英美媒體只會報亞洲的大事，日韓中東南亞跟台灣最相關的反而最少
+               ("日經亞洲", "https://asia.nikkei.com/rss/feed/nar"), ("南華早報", "https://www.scmp.com/rss/91/feed"),
+               ("韓聯社", "https://en.yna.co.kr/RSS/news.xml"), ("CNA 新加坡", "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6511"),
+               ("日本時報", "https://www.japantimes.co.jp/feed/")]
 WNEWS_CACHE = DATA / "worldnews_cache.json"
 
 
@@ -6458,7 +6462,7 @@ def p_worldnews():
             raw += [{"source": "Guardian", "title": r["webTitle"][:120], "url": r["webUrl"], "at": r["webPublicationDate"]} for r in js["response"]["results"]]
         except Exception as e:  # noqa: BLE001
             errs.append("Guardian: " + safe_err(e))
-    items = _dedupe_sort(raw, 40)
+    items = _dedupe_sort(raw, 90)
     if not items:
         raise RuntimeError("worldnews: nothing " + "; ".join(errs)[:160])
     cache = {}
@@ -6468,34 +6472,55 @@ def p_worldnews():
         except Exception:
             cache = {}
     key = lambda it: re.sub(r"\W+", "", it["title"].lower())[:60]
-    todo = [it for it in items if key(it) not in cache]
-    if todo and GEMINI_KEY:
-        lines = "\n".join(f'{i}. {it["title"]}' for i, it in enumerate(todo))
-        prompt = ("把下面的國際新聞英文標題翻成台灣用語的繁體中文新聞標題（自然、精簡，像台灣媒體會下的標題；人名地名用台灣常見譯名，不要中國用語），"
-                  "並判斷新聞主要發生在哪裡。只回 JSON：{\"items\": [{\"i\": 編號, \"zh\": \"中文標題\", \"place\": \"地點（台灣譯名，國家或城市）\", "
-                  "\"lat\": 緯度, \"lon\": 經度, \"cat\": \"政治|戰爭衝突|經濟|科技|災害|社會|其他\"}]}。無法判斷地點時 place 給空字串、lat/lon 給 null。\n\n" + lines)
+    todo = [it for it in items if key(it) not in cache or "tw" not in cache[key(it)]]
+    for b in range(0, len(todo) if GEMINI_KEY else 0, 40):   # 一次 40 則；大多數已在快取，平常每小時只翻新進來的幾則
+        part = todo[b:b + 40]
+        lines = "\n".join(f'{i}. [{it["source"]}] {it["title"]}' for i, it in enumerate(part))
+        prompt = ("你是台灣的國際新聞編輯。把下面的國際新聞英文標題翻成台灣用語的繁體中文新聞標題（自然、精簡，像台灣媒體會下的標題；人名地名用台灣常見譯名，不要中國用語），"
+                  "判斷新聞主要發生在哪裡，並評估它對台灣的影響。"
+                  "tw 是 0～5 分：0＝跟台灣無關（他國國內社會新聞、地方事故）；1＝間接；2＝值得留意；3＝明顯影響台灣的產業、出口、市場、能源、安全或台灣人的生活與旅遊；"
+                  "4＝重大影響；5＝直接衝擊台灣（台海、晶片管制、對台關稅、重大天災波及）。不要因為新聞很大就給高分，要看跟台灣的關係。"
+                  "why：tw 2 分以上才寫，用一句 25 字內的白話說跟台灣的關係（例如：日圓走弱，台灣出口日本的價格競爭變難），其他給空字串。"
+                  "只回 JSON：{\"items\": [{\"i\": 編號, \"zh\": \"中文標題\", \"place\": \"地點（台灣譯名，國家或城市）\", "
+                  "\"lat\": 緯度, \"lon\": 經度, \"cat\": \"政治|戰爭衝突|經濟|科技|災害|社會|其他\", \"tw\": 分數, \"why\": \"跟台灣的關係\"}]}。無法判斷地點時 place 給空字串、lat/lon 給 null。\n\n" + lines)
         try:
             data, _m = _gemini_json(prompt, max_tokens=8000, timeout=90, lite_first=True, max_models=3)
             for r in (data or {}).get("items") or []:
                 try:
-                    it = todo[int(r.get("i"))]
+                    it = part[int(r.get("i"))]
                 except (TypeError, ValueError, IndexError):
                     continue
                 lat, lon = r.get("lat"), r.get("lon")
                 ok = isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and -90 <= lat <= 90 and -180 <= lon <= 180
-                cache[key(it)] = {"zh": str(r.get("zh") or "")[:60], "place": str(r.get("place") or "")[:16], "ll": [round(lon, 2), round(lat, 2)] if ok else None, "cat": str(r.get("cat") or "")[:6]}
+                try:
+                    tw = max(0, min(5, int(r.get("tw") or 0)))
+                except (TypeError, ValueError):
+                    tw = 0
+                cache[key(it)] = {"zh": str(r.get("zh") or "")[:60], "place": str(r.get("place") or "")[:16], "ll": [round(lon, 2), round(lat, 2)] if ok else None,
+                                  "cat": str(r.get("cat") or "")[:6], "tw": tw, "why": str(r.get("why") or "")[:40] if tw >= 2 else ""}
         except Exception as e:  # noqa: BLE001
-            errs.append("翻譯: " + safe_err(e))
-    elif todo:
+            errs.append("翻譯: " + safe_err(e)); break
+    if todo and not GEMINI_KEY:
         errs.append("翻譯: 沒有設定 GEMINI_API_KEY，先顯示原文")
     out = []
+    now = datetime.now(timezone.utc)
+    def _age_h(at):
+        try:
+            return max(0.0, (now - datetime.fromisoformat(str(at).replace("Z", "+00:00"))).total_seconds() / 3600)
+        except Exception:  # noqa: BLE001
+            return 24.0
     for it in items:
         c = cache.get(key(it)) or {}
-        out.append({"t": c.get("zh") or "", "en": it["title"], "src": it["source"], "url": it["url"], "at": it["at"], "place": c.get("place") or "", "ll": c.get("ll"), "cat": c.get("cat") or ""})
+        out.append({"t": c.get("zh") or "", "en": it["title"], "src": it["source"], "url": it["url"], "at": it["at"], "place": c.get("place") or "", "ll": c.get("ll"), "cat": c.get("cat") or "",
+                    "tw": c.get("tw"), "why": c.get("why") or ""})
+    # 排序：對台灣的影響為主，越舊越往後（每 8 小時大約扣 1 分）；同分新的在前
+    out.sort(key=lambda x: -((x["tw"] if x["tw"] is not None else 1) - _age_h(x["at"]) / 8))
+    out = out[:40]
     keep = {key(it) for it in items}
-    cache = {k: v for k, v in cache.items() if k in keep or len(cache) < 600}
+    cache = {k: v for k, v in cache.items() if k in keep or len(cache) < 800}
     write_json(WNEWS_CACHE, cache)
-    return {"items": out, "n_zh": sum(1 for x in out if x["t"]), "errs": errs[:5], "src": "BBC、半島電視台、NPR、衛報；中文翻譯與地點由 Gemini 產生"}
+    return {"items": out, "n_zh": sum(1 for x in out if x["t"]), "n_tw": sum(1 for x in out if (x["tw"] or 0) >= 3), "errs": errs[:8],
+            "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷"}
 
 
 def p_news():

@@ -584,6 +584,22 @@ body.exploring.fl-on #gcrumb{display:flex}
 body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!important;transition:opacity .3s}
 /* 景氣燈號：燈號本身的顏色點 */
 .toc .v .sig{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px;box-shadow:0 0 8px currentColor}
+/* 全球新聞：跟台灣的關係 */
+.wnl .twt{display:inline-block;font-style:normal;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:5px;margin-right:6px;vertical-align:1px;background:rgba(255,214,10,.16);color:#ffd60a}
+.wnl .twt.t4{background:rgba(255,159,10,.2);color:#ff9f0a}
+.wnl .twt.t2{background:rgba(255,255,255,.1);color:#c7c7cc}
+.wnl .tww{display:block;font-style:normal;font-size:12.5px;color:#ffd60a;margin-top:3px;line-height:1.45}
+/* 氣壓圖：國際天氣圖的 H／L */
+.prc.H,.prc.L{flex-direction:column;align-items:center;gap:0;padding:3px 8px 4px;border-radius:9px;line-height:1}
+.prc.H b,.prc.L b{font-size:21px;font-weight:800;font-family:-apple-system,"Helvetica Neue",Arial,sans-serif;letter-spacing:0}
+.prc.H b{color:#4aa8ff}.prc.L b{color:#ff453a}
+.prc.H,.prc.L{font-size:10.5px;color:#c7c7cc}
+/* 天氣標籤：圖示＋溫度 */
+#labels .lbl.wxl{display:inline-flex;align-items:center;gap:4px;padding:3px 9px 3px 6px}
+#labels .lbl.wxl .wxi{width:19px;height:19px;flex:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+#labels .lbl.wxl .wt{font-size:13.5px;font-weight:700;color:#f5f5f7}
+#labels .lbl.wxl .n{font-size:11px;color:#c7c7cc}
+#labels .lbl.wxl .wxp{font-style:normal;font-size:10.5px;font-weight:600;color:#64d2ff;margin-left:2px}
 </style>
 <script type="importmap">
 {"imports":{
@@ -1629,7 +1645,7 @@ function setupWx() {
       if (!c) continue;
       const [x, z] = toXZ(c.c[0], c.c[1]);
       const nm = c.name.replace(/[縣市]$/, "");
-      addLabel(`${fmt(it.temp, 0)}°<span class="n"> ${esc(nm)} ${esc(it.weather && it.weather !== "-99" ? it.weather : "")}</span>`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "", "wx", /^(臺北|台北|高雄)/.test(nm) ? 1.5 : /^(新北|桃園|臺中|台中|臺南|台南)/.test(nm) ? 1 : 0, () => wxInfo(it, c));
+      addLabel(`${wxIcon(it)}<b class="wt">${fmt(it.temp, 0)}°</b><span class="n">${esc(nm)}</span>${wxRain(it)}`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "wxl", "wx", /^(臺北|台北|高雄)/.test(nm) ? 1.5 : /^(新北|桃園|臺中|台中|臺南|台南)/.test(nm) ? 1 : 0, () => wxInfo(it, c));
     }
     const R = P.radar_wx || {};
     const ws = [...new Set(warn.map(w => w.what))];
@@ -2528,13 +2544,14 @@ function buildDock() {
   const showCat = (ci, pick = 0) => { EXCAT = ci; moveHL(); const c = E[ci];
     $("chips").innerHTML = c.items.map((it, j) => `<button type="button" role="tab" data-j="${j}"${it.lens ? ` data-lens="${it.lens}" title="地圖會跟著換"` : it.globe ? ` data-globe="1" title="在地球上看"` : ""}>${esc(it.n)}</button>`).join("");
     $("chips").classList.remove("in"); void $("chips").offsetWidth; $("chips").classList.add("in"); pickItem(pick); };
-  const pickItem = j => { EXITEM = j; const it = E[EXCAT].items[j]; if (it.globe) ST.lastGlobe = [EXCAT, j]; else if (it.lens) ST.lastMap = [EXCAT, j]; $("chips").querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", +b.dataset.j === j));
+  const wxBoost = on => LBL.forEach(L => { if (L.group === "wx") { if (L.prio0 == null) L.prio0 = L.prio; L.prio = L.prio0 + (on ? 20 : 0); } });   // 選「天氣」時，天氣標籤排在縣市示警前面
+  const pickItem = j => { EXITEM = j; const it = E[EXCAT].items[j]; wxBoost(false); if (it.globe) ST.lastGlobe = [EXCAT, j]; else if (it.lens) ST.lastMap = [EXCAT, j]; $("chips").querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", +b.dataset.j === j));
     // 有地圖視角的分類：地圖換成那個視角，卡片交給分層地圖（依目前層級回答）
     if (it.lens) { if (it.lens === "now") setLayer("wx"); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; } dimTo = 0; navSetLens(it.lens); return; }   // 現場疊天氣圖層；其他視角把圖層收掉，畫面只留那個視角
     let r = null; try { r = it.f(); } catch (e) { console.warn(e); r = { html: sideHTML({ title: it.n, body: '<p class="empty">資料暫時讀不到</p>' }) }; }
     if (r.gx) GX.key = r.gx;
-    if (r.layer) setLayer(r.layer); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; document.querySelectorAll("#labels .lbl").forEach(x => x.style.opacity = 0); }
-    dimTo = r.layer && r.layer !== "wx" && r.layer !== "gx" ? 1 : 0; showSide(r.html + provHTML(it.n), null); navSetLens(it.mapLens || "now", true); };   // mapLens：卡片照舊，地圖換成相關的視角（台股→公司總部漲跌）
+    if (r.layer) { setLayer(r.layer); wxBoost(r.layer === "wx"); } else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; document.querySelectorAll("#labels .lbl").forEach(x => x.style.opacity = 0); }
+    dimTo = r.layer && r.layer !== "wx" && r.layer !== "gx" ? 1 : 0; showSide(r.html + provHTML(it.n), null); navSetLens(it.mapLens || "now", true); NAV.bare = !r.layer && !it.mapLens; };   // bare：沒有地點也沒有自己的圖層（天氣、地震有圖層，不算）   // mapLens：卡片照舊，地圖換成相關的視角（台股→公司總部漲跌）
   // 地球 ↔ 台灣：回到上次看的那個地球場景／地圖視角（沒有就用市場時鐘／現場）
   const at = (cat, n) => { const ci = E.findIndex(c => c.cat === cat); return [ci, Math.max(0, E[ci].items.findIndex(it => it.n === n))]; };
   ST.goEarth = () => { const [c, j] = ST.lastGlobe || at("市場", "行事曆"); showCat(c, j); };
@@ -3142,7 +3159,7 @@ function gxPress() {
   for (const [L, seg] of Object.entries(C)) { let best = null;
     for (let k = 0; k < seg.length; k += 4) { const [x0, y0, x1, y1] = seg.slice(k, k + 4); if ((x0 - 117.5) * (x1 - 117.5) <= 0 && y0 > 8 && y0 < 42) { const y = y0 + (y1 - y0) * ((117.5 - x0) / ((x1 - x0) || 1e-9)); if (!best || Math.abs(y - 24) < Math.abs(best - 24)) best = y; } }
     if (best != null) GX.lbls.push([addLabel(`<span class="prl${+L % 20 === 0 ? " b" : ""}">${L}</span>`, GLOBE.G(117.5, best, 60), "gx", "gx", 1, () => ({ html: `<i class="lp-k">等壓線</i><b>${L} 百帕</b><p>這條線上每個地方的海平面氣壓都是 ${L} 百帕。${+L % 20 === 0 ? "粗線每 20 百帕一條。" : ""}</p><p>線越密，氣壓變化越快、風越大。</p>` })), GLOBE.G(117.5, best, 0)]); }
-  for (const c of prsCenters(G)) GX.lbls.push([addLabel(`<span class="prc ${c.k}"><b>${c.k === "H" ? "高" : "低"}</b>${Math.round(c.v)}</span>`, GLOBE.G(c.ll[0], c.ll[1], 80), "gx", "gx", 6, () => ({ html: `<i class="lp-k" style="color:${c.k === "H" ? "#64d2ff" : "#ff453a"}">${c.k === "H" ? "高氣壓中心" : "低氣壓中心"}</i><b>${Math.round(c.v)} 百帕</b><p>北緯 ${c.ll[1].toFixed(1)}・東經 ${c.ll[0].toFixed(1)}・離台灣約 ${Math.round(kmGC(c.ll, [121, 23.7]))} 公里</p><p>${c.k === "H" ? "高壓附近空氣下沉，天氣通常晴朗穩定；冬天大陸高壓南下就是寒流、東北季風。" : "低壓附近空氣上升，雲多、容易下雨；很強的熱帶低壓就是颱風。"}</p>` })), GLOBE.G(c.ll[0], c.ll[1], 0)]);
+  for (const c of prsCenters(G)) GX.lbls.push([addLabel(`<span class="prc ${c.k}"><b>${c.k}</b>${Math.round(c.v)}</span>`, GLOBE.G(c.ll[0], c.ll[1], 80), "gx", "gx", 6, () => ({ html: `<i class="lp-k" style="color:${c.k === "H" ? "#64d2ff" : "#ff453a"}">${c.k === "H" ? "高氣壓中心" : "低氣壓中心"}</i><b>${Math.round(c.v)} 百帕</b><p>北緯 ${c.ll[1].toFixed(1)}・東經 ${c.ll[0].toFixed(1)}・離台灣約 ${Math.round(kmGC(c.ll, [121, 23.7]))} 公里</p><p>${c.k === "H" ? "高壓附近空氣下沉，天氣通常晴朗穩定；冬天大陸高壓南下就是寒流、東北季風。" : "低壓附近空氣上升，雲多、容易下雨；很強的熱帶低壓就是颱風。"}</p>` })), GLOBE.G(c.ll[0], c.ll[1], 0)]);
   for (const t of (((P.typhoon || {}).items) || [])) { const f = (t.past || [])[t.past.length - 1]; if (!f) continue;
     const dot = new THREE.Mesh(new THREE.SphereGeometry(70, 16, 12), fm(new THREE.MeshBasicMaterial({ color: 0xff453a, depthTest: true }), 1)); dot.position.copy(GLOBE.G(f.ll[0], f.ll[1], 30)); GX.g.add(dot);
     const pts = (t.fc || []).map(x => GLOBE.G(x.ll[0], x.ll[1], 25)); if (pts.length) { const g = new THREE.BufferGeometry().setFromPoints([GLOBE.G(f.ll[0], f.ll[1], 25), ...pts]); GX.g.add(new THREE.Line(g, new THREE.LineDashedMaterial({ color: 0xff453a, dashSize: 60, gapSize: 40 })).computeLineDistances()); }
@@ -3162,7 +3179,7 @@ function prsCard() {
     body: `<div class="mkt">${steps.map(([i, l]) => `<button data-pf="${i}" class="${i === f ? "on" : ""}">${l}</button>`).join("")}</div>`
       + (ty.length ? `<p class="why" style="color:#ff453a">颱風 ${ty.map(t => esc(t.name)).join("、")}：紅點是現在位置，虛線是氣象署的預測路徑。</p>` : "")
       + (near.length ? listHTML(near.map(c => ({ t: `${c.k === "H" ? "高壓" : "低壓"} ${Math.round(c.v)} 百帕`, s: `北緯 ${c.ll[1].toFixed(0)}・東經 ${c.ll[0].toFixed(0)}` }))) : "")
-      + `<p class="why">白線是等壓線，每 4 百帕一條、粗線每 20 百帕；線越密，風越大。高壓附近天氣通常穩定，低壓附近雲雨多，颱風就是很強的低壓。</p>` }) };
+      + `<p class="why">藍色 H 是高壓、紅色 L 是低壓（國際天氣圖的標法）。白線是等壓線，每 4 百帕一條、粗線每 20 百帕；線越密，風越大。高壓附近天氣通常穩定，低壓附近雲雨多，颱風就是很強的低壓。</p>` }) };
 }
 document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("[data-pf]"); if (!b) return; PRS.f = +b.dataset.pf;
   if (GX.key === "press" && GX.g) { GX.g.traverse(o => { o.geometry && o.geometry.dispose(); }); GX.g.clear(); gxPress(); GX.g.visible = true; }
@@ -3175,22 +3192,33 @@ const WN = () => (((P.worldnews || {}).items) || []);
 function wnGroups() {
   const g = new Map();
   for (const x of WN()) { if (!x.ll) continue; const k = x.place || `${x.ll[1]},${x.ll[0]}`; if (!g.has(k)) g.set(k, { place: x.place, ll: x.ll, xs: [] }); g.get(k).xs.push(x); }
-  return [...g.values()].sort((a, b) => b.xs.length - a.xs.length);
+  for (const G of g.values()) G.tw = Math.max(...G.xs.map(x => x.tw || 0));
+  return [...g.values()].sort((a, b) => b.tw - a.tw || b.xs.length - a.xs.length);
 }
+const WN_HAS_TW = () => WN().some(x => x.tw != null);   // 新版資料才有「對台灣的影響」分數
+const twTag = x => (x.tw || 0) >= 4 ? "重大影響" : (x.tw || 0) >= 3 ? "影響台灣" : (x.tw || 0) >= 2 ? "值得留意" : "";
 const wnRow = x => ({ t: x.t || x.en, s: [x.src, x.place, x.at ? navAgo(x.at) : ""].filter(Boolean).join("・"), url: x.url });
 function gxNews() {
   clearLabels("gx"); GX.lbls = []; GX.rings = [];
   for (const G of wnGroups()) {
     const cat = (G.xs.find(x => x.cat === "戰爭衝突") || G.xs[0]).cat, col = WN_C[cat] || "#aeaeb2", n = G.xs.length;
-    const dot = new THREE.Mesh(new THREE.SphereGeometry(40 + 22 * Math.min(4, n), 16, 12), fm(new THREE.MeshBasicMaterial({ color: col, depthTest: true }), 0.95));
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(WN_HAS_TW() ? 34 + 26 * Math.min(5, G.tw) + 8 * Math.min(3, n - 1) : 40 + 22 * Math.min(4, n), 16, 12), fm(new THREE.MeshBasicMaterial({ color: col, depthTest: true }), 0.95));
     dot.position.copy(GLOBE.G(G.ll[0], G.ll[1], 30)); GX.g.add(dot);
-    GX.lbls.push([addLabel(`<span class="gxl"><b>${esc(G.place || "")}</b><em>${n > 1 ? n + " 則" : esc((G.xs[0].t || "").slice(0, 14))}</em></span>`, GLOBE.G(G.ll[0], G.ll[1], 200), "gx", "gx", 2 + n, () => ({
-      html: `<i class="lp-k" style="color:${col}">全球新聞・${esc(G.place || "")}</i>${G.xs.slice(0, 5).map(x => `<p style="margin-top:8px"><b style="font-size:13px">${esc(x.t || x.en)}</b>${x.t ? `<span style="display:block;font-size:11px;color:#8e8e93">${esc(x.en)}</span>` : ""}<span style="display:block;font-size:11px;color:#aeaeb2">${esc(x.src)}・${x.at ? navAgo(x.at) : ""}　<a href="${esc(x.url)}" target="_blank" rel="noopener" style="margin:0">原文 ›</a></span></p>`).join("")}` })), GLOBE.G(G.ll[0], G.ll[1], 0)]);
+    GX.lbls.push([addLabel(`<span class="gxl"><b>${esc(G.place || "")}</b><em>${n > 1 ? n + " 則" : esc((G.xs[0].t || "").slice(0, 14))}</em></span>`, GLOBE.G(G.ll[0], G.ll[1], 200), "gx", "gx", 2 + n + 3 * (G.tw || 0), () => ({
+      html: `<i class="lp-k" style="color:${col}">全球新聞・${esc(G.place || "")}</i>${G.xs.slice(0, 5).map(x => `<p style="margin-top:8px"><b style="font-size:13px">${esc(x.t || x.en)}</b>${x.why ? `<span style="display:block;font-size:12px;color:#ffd60a;margin-top:2px">跟台灣：${esc(x.why)}</span>` : ""}${x.t ? `<span style="display:block;font-size:11px;color:#8e8e93">${esc(x.en)}</span>` : ""}<span style="display:block;font-size:11px;color:#aeaeb2">${esc(x.src)}・${x.at ? navAgo(x.at) : ""}　<a href="${esc(x.url)}" target="_blank" rel="noopener" style="margin:0">原文 ›</a></span></p>`).join("")}` })), GLOBE.G(G.ll[0], G.ll[1], 0)]);
   }
 }
 function wnCard() {
   const xs = WN(), W = P.worldnews || {}, gs = wnGroups();
   if (!xs.length) return { layer: "gx", gx: "wnews", html: sideHTML({ eyebrow: "輿情 · 全球新聞", title: "世界正在發生什麼？", body: '<p class="empty">全球新聞下一輪更新後出現（每小時一次）。</p>' }) };
+  if (WN_HAS_TW()) {   // 依「對台灣的影響」排：標題直接放影響最大的那一則
+    const top = xs[0], hi = xs.filter(x => (x.tw || 0) >= 3).length, head = (top.t || top.en || "");
+    return { layer: "gx", gx: "wnews", html: sideHTML({ eyebrow: `輿情 · 全球新聞 · ${hi ? `${hi} 則影響台灣` : "今天沒有直接影響台灣的大事"}`, title: "今天國外哪件事會影響台灣？", big: head.length > 22 ? head.slice(0, 21) + "…" : head, color: (top.tw || 0) >= 3 ? "#ffd60a" : "#bf5af2",
+      body: (top.why ? `<p class="why" style="color:#ffd60a">跟台灣：${esc(top.why)}</p>` : "")
+        + `<p class="why">英美和亞洲媒體的國際新聞，翻成台灣用語，依跟台灣的關係排序（越舊越往後）。地球上的點越大，對台灣影響越大；紅色是戰爭衝突。</p>`
+        + `<ul class="lst wnl">${xs.slice(0, 18).map(x => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${twTag(x) ? `<i class="twt t${Math.min(4, x.tw)}">${twTag(x)}</i>` : ""}${esc(x.t || x.en)}</a>${x.why ? `<em class="tww">${esc(x.why)}</em>` : ""}<span>${esc([x.src, x.place, x.at ? navAgo(x.at) : ""].filter(Boolean).join("・"))}</span></li>`).join("")}</ul>`
+        + (W.n_zh < xs.length ? `<p class="why">有 ${xs.length - W.n_zh} 則還沒翻譯，先顯示原文。</p>` : "") }) };
+  }
   return { layer: "gx", gx: "wnews", html: sideHTML({ eyebrow: "輿情 · 全球新聞 · 翻成中文", title: "世界正在發生什麼？", big: gs[0] && gs[0].xs.length > 1 ? `${gs[0].place} ${gs[0].xs.length} 則` : `${xs.length} 則國際新聞`, color: "#bf5af2",
     body: `<p class="why">BBC、半島電視台、NPR、衛報最新的國際新聞，翻成台灣用語；地球上的點是發生地點，越大則數越多，紅色是戰爭衝突。</p>` + listHTML(xs.slice(0, 18).map(wnRow))
       + (W.n_zh < xs.length ? `<p class="why">有 ${xs.length - W.n_zh} 則還沒翻譯，先顯示原文。</p>` : "") }) };
@@ -3457,7 +3485,7 @@ const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="backgroun
 // 現場（預設）／房價／新公司／地方新聞；市場、走向這類沒有地點的資訊，地圖維持現場、只換卡片
 const LENS = { now: { n: "現場", c: "#ff9f0a" }, house: { n: "房價", c: "#64d2ff" }, biz: { n: "新公司", c: "#30d158" }, news: { n: "地方新聞", c: "#bf5af2" }, traffic: { n: "車流", c: "#ff9f0a" }, stock: { n: "個股", c: "#64d2ff" }, elect: { n: "選戰", c: "#bf5af2" }, macro: { n: "景氣", c: "#ff453a" }, mood: { n: "情緒", c: "#ffd60a" }, power: { n: "電力", c: "#30d158" }, jobs: { n: "職缺", c: "#5e9cff" }, tender: { n: "標案", c: "#ffd60a" } };
 NAV.lens = "now"; NAV.quiet = null;
-function navSetLens(lens, keepCard) { NAV.lens = LENS[lens] ? lens : "now"; NAV.quiet = keepCard ? true : null; NAV.key = ""; NAV.t = 0; }
+function navSetLens(lens, keepCard) { NAV.lens = LENS[lens] ? lens : "now"; NAV.quiet = keepCard ? true : null; NAV.bare = false; NAV.key = ""; NAV.t = 0; }
 const p1 = v => (+v).toFixed(1);
 const navAgo = at => { const m = (Date.now() - new Date(at)) / 6e4; return !isFinite(m) ? "" : m < 60 ? Math.max(1, Math.round(m)) + " 分鐘前" : m < 1440 ? Math.round(m / 60) + " 小時前" : Math.round(m / 1440) + " 天前"; };
 const dist = d => d < 1 ? Math.round(d * 1000) + " 公尺" : d.toFixed(1) + " 公里";
@@ -3993,7 +4021,7 @@ function navTick(dt) {
   if (key === NAV.key) return;
   if (NAV.quiet === true) NAV.quiet = pk;                 // 剛選了沒有地點的資訊：這一次只換地圖、不蓋掉它的卡片；換層或換地方才換卡片
   const quiet = NAV.quiet === pk; if (!quiet) NAV.quiet = null;
-  document.body.classList.toggle("nav-quiet", quiet && NAV.lens === "now");   // 沒有地點的資訊：地圖只留地形，不放無關的現場標籤
+  document.body.classList.toggle("nav-quiet", quiet && NAV.bare && NAV.lens === "now");   // 沒有地點的資訊：地圖只留地形，不放無關的現場標籤
   NAV.key = key; NAV.level = level; NAV.county = C; NAV.town = T; NAV.viewD = cd;
   navClear();
   NAV.anim = null;
@@ -4043,7 +4071,7 @@ function navCrumb() {
   if (NAV.county) parts.push(`<button data-go="c" class="${NAV.level === 1 ? "on" : ""}">${esc(norm(NAV.county.name))}</button>`);
   if (NAV.town && NAV.level === 2) parts.push(`<button class="on">${esc(NAV.town.name)}</button>`);
   const srch = el.querySelector(".srch"), LZ = LENS[NAV.lens];
-  const badge = NAV.lens !== "now" ? `<button data-go="lz" class="lz" style="--c:${LZ.c}" aria-label="地圖視角：${LZ.n}，點一下回到現場"><i></i>${LZ.n}<span>×</span></button>` : NAV.quiet ? `<span class="lz q" title="這則資訊沒有地點，地圖先只留地形；拉近或點縣市就回到現場">這則沒有地點</span>` : "";
+  const badge = NAV.lens !== "now" ? `<button data-go="lz" class="lz" style="--c:${LZ.c}" aria-label="地圖視角：${LZ.n}，點一下回到現場"><i></i>${LZ.n}<span>×</span></button>` : NAV.quiet && NAV.bare ? `<span class="lz q" title="這則資訊沒有地點，地圖先只留地形；拉近或點縣市就回到現場">這則沒有地點</span>` : "";
   const dt = DELTA_OK[NAV.lens] ? `<span class="dt"><button data-go="d0" class="${NAV.delta ? "" : "on"}">現況</button><button data-go="d1" class="${NAV.delta ? "on" : ""}">${DELTA_OK[NAV.lens]}</button></span>` : "";
   el.innerHTML = `<div class="path">${parts.join('<span class="sep">›</span>')}</div>${badge}${dt}<button data-go="s" class="sbtn" aria-label="搜尋">⌕</button><div class="srch"><input type="search" placeholder="搜尋縣市、行政區、地標" aria-label="搜尋地點"><div class="res"></div></div>`;
   if (srch && el.classList.contains("searching")) { const i = el.querySelector("input"); i.value = srch.querySelector("input").value; navSearch(i.value); }
@@ -4417,6 +4445,35 @@ document.addEventListener("click", e => {
   // 其他：放大顯示＋拉近
   lpop(`<b>${esc(txt)}</b>`, r, GD.on ? null : () => flyNear(L.pos, Math.max(4, camera.position.distanceTo(controls.target) * 0.45)), "拉近看");
 });
+// ---- 天氣狀態圖示：晴／晴時多雲／多雲／陰／雨／雷雨／霧，晚上的晴換成月亮 ----
+const WXI = {
+  sun: '<circle cx="12" cy="12" r="4.6" fill="#ffd60a"/><g stroke="#ffd60a" stroke-width="2" stroke-linecap="round"><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g>',
+  moon: '<path d="M15.5 3.5a8.5 8.5 0 1 0 5 13.6A7 7 0 0 1 15.5 3.5z" fill="#f2e3a0"/>',
+  cloud: '<path d="M7 18.5h10.2a4.3 4.3 0 0 0 .5-8.6A6 6 0 0 0 6.2 11a3.8 3.8 0 0 0 .8 7.5z" fill="#d1d1d6"/>',
+  part: '<circle cx="8.5" cy="8.5" r="3.6" fill="#ffd60a"/><g stroke="#ffd60a" stroke-width="1.7" stroke-linecap="round"><path d="M8.5 1.8v1.6M1.8 8.5h1.6M3.8 3.8l1.1 1.1M13.2 3.8l-1.1 1.1"/></g><path d="M8.6 20h9.2a3.8 3.8 0 0 0 .4-7.6 5.3 5.3 0 0 0-10.1 1.2 3.3 3.3 0 0 0 .5 6.4z" fill="#d1d1d6"/>',
+  partn: '<path d="M10 2.5a6 6 0 1 0 3.6 9.7A5 5 0 0 1 10 2.5z" fill="#f2e3a0"/><path d="M8.6 20h9.2a3.8 3.8 0 0 0 .4-7.6 5.3 5.3 0 0 0-10.1 1.2 3.3 3.3 0 0 0 .5 6.4z" fill="#d1d1d6"/>',
+  rain: '<path d="M7 14.5h10.2a4.1 4.1 0 0 0 .5-8.2A5.8 5.8 0 0 0 6.3 7.3 3.6 3.6 0 0 0 7 14.5z" fill="#aeb4bf"/><g stroke="#64d2ff" stroke-width="2" stroke-linecap="round"><path d="M8.5 17l-1 3M12.5 17l-1 3M16.5 17l-1 3"/></g>',
+  storm: '<path d="M7 14h10.2a4.1 4.1 0 0 0 .5-8.2A5.8 5.8 0 0 0 6.3 6.8 3.6 3.6 0 0 0 7 14z" fill="#8e94a0"/><path d="M12.8 13.5l-3 5h2.6l-1.4 4.3 4.2-6h-2.7l1.6-3.3z" fill="#ffd60a"/>',
+  fog: '<g stroke="#c7c7cc" stroke-width="2" stroke-linecap="round"><path d="M4 8h16M6 12h12M4 16h16"/></g>',
+};
+function wxKind(txt, night) {
+  const s = String(txt || "");
+  if (/雷/.test(s)) return "storm";
+  if (/雨/.test(s)) return "rain";
+  if (/霧/.test(s)) return "fog";
+  if (/陰/.test(s) || /多雲/.test(s) && !/晴/.test(s)) return "cloud";
+  if (/多雲|雲/.test(s)) return night ? "partn" : "part";
+  return night ? "moon" : "sun";
+}
+function wxIcon(it) {
+  const txt = it.weather && it.weather !== "-99" ? it.weather : ((it.forecast || [])[0] || {}).wx, h = +String(it.obsTime || "").slice(11, 13);
+  const night = isFinite(h) ? h >= 18 || h < 6 : false, k = wxKind(txt, night);
+  return `<svg class="wxi" viewBox="0 0 24 24" aria-label="${esc(txt || "")}">${WXI[k]}</svg>`;
+}
+function wxRain(it) {   // 接下來 12 小時的降雨機率，30% 以上才標
+  const pop = Math.max(0, ...(it.forecast || []).slice(0, 2).map(f => +f.pop || 0));
+  return pop >= 30 ? `<i class="wxp">雨 ${pop}%</i>` : "";
+}
 
 /* ---- 手機：順暢＋好操作 ----
    1. 張數：手機動的時候每秒 30 張、靜止 2 秒後降到每秒 12 張（不熱、不降頻）；分頁切到背景本來就停
