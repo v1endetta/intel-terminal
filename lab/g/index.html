@@ -413,6 +413,12 @@ body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-event
   #camPanel .cp-b button[data-cp="f"]{display:none}#camPanel .cp-b{grid-template-columns:1fr 1fr}
   body:has(#side.open) #camPanel{display:none}
 }
+
+/* 聚焦：不是重點的標籤退到後面 */
+#labels .lbl.defocus{opacity:.38!important;filter:blur(.5px);transition:opacity .35s,filter .35s}
+#labels .lbl.defocus2{opacity:.12!important;filter:blur(1.2px);transition:opacity .25s,filter .25s}
+#side [data-nc],#side [data-nt]{transition:background .2s}
+#side [data-nc]:hover,#side [data-nt]:hover{background:rgba(255,255,255,.06);border-radius:8px}
 </style>
 <script type="importmap">
 {"imports":{
@@ -1973,18 +1979,29 @@ async function buildGlobe() {
   const toS = (e, alt = 0) => { const r = R + alt; return V(r * dot(e, E), r * dot(e, U) - R, -r * dot(e, N)); };
   const G = (lon, lat, alt = 0) => toS(ecef(lon, lat), alt);
   const C0 = V(0, -R, 0);
-  const sph = new THREE.Mesh(new THREE.SphereGeometry(R - 3, 96, 64), fm(new THREE.MeshBasicMaterial({ color: 0x03060a, depthTest: true }), 1)); sph.material.depthWrite = true; sph.material.transparent = false; sph.position.copy(C0); g.add(sph);
+  const sph = new THREE.Mesh(new THREE.SphereGeometry(R - 40, 96, 64), fm(new THREE.MeshBasicMaterial({ color: 0x03060a, depthTest: true }), 1)); sph.material.depthWrite = true; sph.material.transparent = false; sph.position.copy(C0); g.add(sph);
+  // 有顏色的地球：NASA Blue Marble 白天照片，調暗一點讓上面的線和光點跳出來；邊緣再暗一些，看起來是立體的球
+  // 鏡頭還在台灣上空（離地 900 公里內）時不畫，等拉到太空才淡入，避免飛行途中在地圖邊緣冒出色塊
+  { const NX = MOBILE ? 128 : 256, NY = MOBILE ? 64 : 128, pos = [], uv = [], idx = [];
+    for (let j = 0; j <= NY; j++) for (let i = 0; i <= NX; i++) { const p = G(-180 + 360 * i / NX, 90 - 180 * j / NY, -1); pos.push(p.x, p.y, p.z); uv.push(i / NX, 1 - j / NY); }
+    for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) { const a = j * (NX + 1) + i, b = a + 1, c = a + NX + 1, d = c + 1; idx.push(a, c, b, b, c, d); }
+    const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(idx);
+    const tex = new THREE.TextureLoader().load(`earth_day${MOBILE ? "_m" : ""}.jpg?v=${ASSET_V}`); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+    const mat = fm(new THREE.ShaderMaterial({ depthTest: true, uniforms: { uDay: { value: tex }, k: { value: 1 }, uC: { value: C0 } },
+      vertexShader: "varying vec2 vUv; varying vec3 vN; varying vec3 vW; uniform vec3 uC; void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vN = normalize(w.xyz - uC); gl_Position = projectionMatrix * viewMatrix * w; }",
+      fragmentShader: "uniform sampler2D uDay; uniform float k; varying vec2 vUv; varying vec3 vN; varying vec3 vW; void main(){ vec3 c = texture2D(uDay, vUv).rgb; float l = dot(c, vec3(0.299, 0.587, 0.114)); c = mix(vec3(l), c, 1.25) * 0.9; c += vec3(0.01, 0.06, 0.15) * clamp(1.0 - l * 5.0, 0.0, 1.0); vec3 v = normalize(cameraPosition - vW); float f = max(dot(v, vN), 0.0); c *= 0.55 + 0.45 * pow(f, 0.5); float alt = length(cameraPosition - uC) - 6371.0; gl_FragColor = vec4(c, k * smoothstep(900.0, 3500.0, alt)); }" }), 1);
+    const earth = new THREE.Mesh(geo, mat); earth.renderOrder = -1; g.add(earth); }
   const atm = new THREE.Mesh(new THREE.SphereGeometry(R * 1.02, 96, 64), fm(new THREE.ShaderMaterial({ side: THREE.BackSide, blending: THREE.AdditiveBlending, uniforms: { k: { value: 1 } },
     vertexShader: "varying vec3 vN; varying vec3 vP; void main(){ vN = normalize(normalMatrix*normal); vec4 mv = modelViewMatrix*vec4(position,1.0); vP = mv.xyz; gl_Position = projectionMatrix*mv; }",
     fragmentShader: "uniform float k; varying vec3 vN; varying vec3 vP; void main(){ float f = pow(1.0 - abs(dot(normalize(-vP), vN)), 3.0); gl_FragColor = vec4(0.25,0.7,1.0,1.0)*f*0.9*k; }" }), 1));
   atm.position.copy(C0); g.add(atm);
   const gr = []; for (let lo = -180; lo < 180; lo += 10) for (let la = -80; la < 80; la += 2) gr.push(G(lo, la, 5), G(lo, la + 2, 5));
   for (let la = -80; la <= 80; la += 10) for (let lo = -180; lo < 180; lo += 2) gr.push(G(lo, la, 5), G(lo + 2, la, 5));
-  sSegs(g, gr, CY, 0.07, true);
+  sSegs(g, gr, CY, 0.035, true);
   try {
     const land = await (await fetch("land110.json?v=" + ASSET_V)).json(), cl = [];
     for (const r of land) for (let i = 0; i < r.length - 1; i++) { if (Math.abs(r[i][0] - r[i + 1][0]) > 90) continue; cl.push(G(r[i][0], r[i][1], 10), G(r[i + 1][0], r[i + 1][1], 10)); }
-    sSegs(g, cl, CY, 0.45, true);
+    sSegs(g, cl, CY, 0.16, true);
   } catch (e) { }
   const arc = (a, b, k = 0.22, n = 96) => { const ea = V(...ecef(...a)), eb = V(...ecef(...b)), ang = ea.angleTo(eb), pts = [];
     for (let i = 0; i <= n; i++) { const u = i / n, s = Math.sin(ang); const v = ea.clone().multiplyScalar(Math.sin((1 - u) * ang) / s).add(eb.clone().multiplyScalar(Math.sin(u * ang) / s)); pts.push(toS([v.x, v.y, v.z], Math.sin(Math.PI * u) * Math.min(ang * R * k, 1500 + ang * 400))); } return pts; };
@@ -2911,7 +2928,7 @@ function countySeverity() {
   return S;
 }
 function navClear() { while (NAV.g.children.length) { const o = NAV.g.children.pop(); o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); } clearLabels("nav"); }
-function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo, la, lift)); const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: op, depthTest: false })); l.renderOrder = 8; NAV.g.add(l); return l; }
+function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo, la, lift)); const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: op, depthTest: false })); l.renderOrder = 8; l.userData.key = NAV._tag || null; l.userData.op = op; NAV.g.add(l); return l; }
 const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="background:${dot}"></i>` : ""}<b>${esc(name)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`;
 // ---- 視角：下方選的分類決定地圖「看什麼」，拉近拉遠決定「看多細」 ----
 // 現場（預設）／房價／新公司／地方新聞；市場、走向這類沒有地點的資訊，地圖維持現場、只換卡片
@@ -2928,20 +2945,21 @@ const pin = (it, prio) => addLabel(`<span class="nvpin" style="--c:${it.c}"><i><
 const tw = () => [controls.target.x / KX + LONC, -controls.target.z / KY + LATC];
 function navCol(lon, lat, k, view, label, sub, prio, hex) {
   const hh = view * (0.03 + 0.22 * k), base = gp(lon, lat, 0.2), col = hex ? new THREE.Color(hex) : new THREE.Color().setHSL(0.55 - 0.55 * k, 0.85, 0.6);
-  const m = new THREE.Mesh(new THREE.CylinderGeometry(view * 0.006, view * 0.006, hh, 12), new THREE.MeshBasicMaterial({ color: col }));
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(view * 0.006, view * 0.006, hh, 12), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 1 }));
+  m.userData.key = norm(label); m.userData.op = 1;
   m.position.copy(base).add(V(0, hh / 2, 0)); m.renderOrder = 9; NAV.g.add(m);
   const ring = new THREE.Mesh(new THREE.RingGeometry(view * 0.008, view * 0.016, 32), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false }));
-  ring.rotation.x = -Math.PI / 2; ring.position.copy(base); ring.renderOrder = 9; NAV.g.add(ring);
+  ring.rotation.x = -Math.PI / 2; ring.position.copy(base); ring.renderOrder = 9; ring.userData.key = norm(label); ring.userData.op = 0.5; NAV.g.add(ring);
   addLabel(pill(label, sub, "#" + col.getHexString()), base.clone().add(V(0, hh + view * 0.01, 0)), "nv", "nav", prio);
 }
 // 縣市外框＋名牌，顏色和副標由各視角決定
 function navCounties(f) {
   for (const c of COUNTIES) { const o = f(c) || {}, col = o.col || SEV_C[0];
-    for (const r of c.rings) if (r.length > 30) navLine(r, col, o.op ?? 0.25, 1.2);
+    NAV._tag = norm(c.name); for (const r of c.rings) if (r.length > 30) navLine(r, col, o.op ?? 0.25, 1.2); NAV._tag = null;
     addLabel(pill(norm(c.name), o.sub || "", o.dot || null), gp(c.c[0], c.c[1], 2.5), o.dim ? "nv dim" : "nv", "nav", o.prio ?? (/[市]$/.test(c.name) ? 1 : 0));
   }
 }
-const navOutline = C => { for (const r of C.rings) if (r.length > 30) navLine(r, 0xffffff, 0.55, 1.2); const ts = (NAV.towns || []).filter(t => sameC(t.county, C.name)); for (const t of ts) for (const r of t.rings) navLine(r, 0x64d2ff, 0.28, 1.0); return ts; };
+const navOutline = C => { for (const r of C.rings) if (r.length > 30) navLine(r, 0xffffff, 0.55, 1.2); const ts = (NAV.towns || []).filter(t => sameC(t.county, C.name)); for (const t of ts) { NAV._tag = t.name; for (const r of t.rings) navLine(r, 0x64d2ff, 0.28, 1.0); } NAV._tag = null; return ts; };
 const townPills = (ts, skip) => { for (const t of ts) if (!skip.has(t.name)) addLabel(pill(t.name), gp(t.c[0], t.c[1], 1.5), "nv dim", "nav", -2); };
 const rankRows = (rows, attr) => rows.map(([k, sub, dot], i) => `<li data-${attr}="${esc(k)}" style="cursor:pointer">${dot ? `<span class="sdot" style="background:${dot}"></span>` : `${i + 1}. `}${esc(norm(k))}<span>${esc(sub)}</span></li>`).join("");
 const wxLine = C => { const W = ((P.weather || {}).items || []).find(w => norm(C.name).startsWith(norm(w.city))), warn = ((P.weather || {}).warnings || []).filter(w => sameC(w.where, C.name)).map(w => w.what);
@@ -3397,10 +3415,40 @@ const DELTA_CITY = {
     deltaCols(rows, view); townPills(ts, new Set(rows.map(r => r.name)));
     return { eyebrow: `${norm(C.name)} · 104 職缺 · 比 7 天前`, title: "哪一區開始搶人？", big: rows[0] ? `${rows[0].name} ${dPct(rows[0].v)}` : "資料累積中", color: LENS.jobs.c, body: rows.length ? deltaList(rows.slice(0, 12), "nt", r => `${r.n.toLocaleString("en-US")} 個`) : `<p class="empty">分區職缺從今天開始記錄，要滿 7 天才能比（六都＋新竹）。</p>` }; },
 };
+// ---- 聚焦（學 Apple）：講重點的時候，其他東西退到後面 ----
+// 1. 底圖蓋一層淡淡的暗幕（衛星照、建築、小車都在幕後），資料的線、光柱、標籤在幕前
+// 2. 卡片清單的前三名在地圖上最清楚，其他縣市、行政區淡一點、微微模糊
+// 3. 滑鼠移到清單某一項：只有那一項是亮的，其他都退到很淡
+const VEIL = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({ transparent: true, depthTest: false, depthWrite: false, uniforms: { uV: { value: 0 } },
+  vertexShader: "varying vec2 vP; void main(){ vP = position.xy; gl_Position = vec4(position.xy, 0.0, 1.0); }",
+  fragmentShader: "uniform float uV; varying vec2 vP; void main(){ float e = smoothstep(0.35, 1.45, length(vP)); gl_FragColor = vec4(0.0, 0.0, 0.0, uV * (0.7 + 0.5 * e)); }" }));
+VEIL.renderOrder = 6; VEIL.frustumCulled = false; scene.add(VEIL); NAV.veil = 0;
+const navKeyOf = L => { const b = L.el.querySelector(".nvp b"); return b ? norm(b.textContent) : null; };
+function navFocus(set, strong) {
+  NAV.fset = set; NAV.fstrong = !!strong;
+  const S = set ? new Set([...set].map(norm)) : null;
+  for (const o of NAV.g.children) { const k = o.userData.key; if (!k || !o.material) continue;
+    o.material.opacity = (o.userData.op ?? 1) * (!S || S.has(k) ? 1 : strong ? 0.12 : 0.4); }
+  for (const L of LBL) if (L.group === "nav") { const k = navKeyOf(L), off = !!S && (!k || !S.has(k)), hit = !!S && !!k && S.has(k);
+    if (L.prio0 == null) L.prio0 = L.prio; L.prio = L.prio0 + (hit ? 100 : off ? -50 : 0);   // 重點的標籤優先占位，不會被旁邊的擋掉
+    L.el.classList.toggle("defocus", off && !strong); L.el.classList.toggle("defocus2", off && !!strong); }
+}
+function navDefaultFocus() {   // 清單有 5 項以上時，預設只讓前三名最清楚
+  const items = [...document.querySelectorAll("#side [data-nc], #side [data-nt]")];
+  NAV.dfset = items.length >= 5 ? new Set(items.slice(0, 3).map(b => b.dataset.nc || b.dataset.nt)) : null;
+  navFocus(NAV.dfset, false);
+}
+document.addEventListener("mouseover", e => { const b = e.target.closest && e.target.closest("#side [data-nc], #side [data-nt]"); if (!b || NAV.level < 0) return; navFocus(new Set([b.dataset.nc || b.dataset.nt]), true); NAV.veilHot = 1; });
+document.addEventListener("mouseout", e => { const b = e.target.closest && e.target.closest("#side [data-nc], #side [data-nt]"); if (!b) return; const to = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest("#side [data-nc], #side [data-nt]"); if (to) return; navFocus(NAV.dfset || null, false); NAV.veilHot = 0; });
+function veilTick(dt, on) {
+  const target = on ? (NAV.veilHot ? 0.55 : 0.32) * (uni.uNight.value ? 0.7 : 1) : 0;
+  NAV.veil += (target - NAV.veil) * Math.min(1, dt * 4); VEIL.material.uniforms.uV.value = NAV.veil; VEIL.visible = NAV.veil > 0.005;
+}
 // ---- 層級切換：依鏡頭距離自動判斷；中間留一段緩衝，避免在邊界來回跳 ----
 function navTick(dt) {
   const on = ST.explore && !ST.globeForce && (!cur || cur === "wx" || (cur === "traffic" && NAV.lens === "traffic"));
   document.body.classList.toggle("nav-on", on);
+  veilTick(dt || 0.016, on && NAV.level >= 0 && !NAV.quiet);
   if (!on) { if (NAV.level !== -1) { NAV.level = -1; NAV.key = ""; navClear(); camHide(); } return; }
   if (NAV.lens !== "traffic" && (CAM.open || CAM.list.length)) { CAM.list = []; camHide(); }
   if (NAV.anim) NAV.anim(performance.now() / 1000);
@@ -3430,6 +3478,7 @@ function navTick(dt) {
     if (sel && sel.dataset.lens !== NAV.lens) document.querySelectorAll("#chips button").forEach(b => b.setAttribute("aria-selected", "false"));   // 地圖卡片接手時，不相干的分類不再標示選取
     showSide(sideHTML(o) + provHTML("lens:" + NAV.lens), null);
   }
+  NAV.veilHot = 0; setTimeout(navDefaultFocus, 60);
   navCrumb();
 }
 // 飛到某一層：縣市或行政區整個放進畫面
