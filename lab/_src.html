@@ -1,0 +1,1229 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<base href="/3d/">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>台灣此刻 · dalta 情報站</title>
+<meta name="description" content="立體的台灣：天氣、地震、房價、車流，和從海外流進來的錢。">
+<meta name="theme-color" content="#000000">
+<style>
+:root{
+  --bg:#000;--fg:#f5f5f7;--fg2:#a1a1a6;--fg3:#6e6e73;--line:rgba(255,255,255,.12);
+  --glass:rgba(29,29,31,.62);--glass2:rgba(44,44,46,.55);--blue:#0071e3;--blue2:#2997ff;
+  --up:#30d158;--down:#ff453a;--warn:#ffd60a;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow:hidden}
+a{color:var(--blue2);text-decoration:none}
+a:hover{text-decoration:underline}
+#stage{position:fixed;inset:0;background:radial-gradient(120% 90% at 50% 35%,#101216 0%,#050506 55%,#000 100%)}
+canvas{display:block}
+
+/* 導覽列 */
+nav{position:fixed;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 max(16px,env(safe-area-inset-left));z-index:20;
+  background:rgba(22,22,23,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(255,255,255,.06);font-size:12px;letter-spacing:.01em}
+nav .brand{font-weight:600;font-size:14px;color:var(--fg)}
+nav .brand span{color:var(--fg2);font-weight:400;margin-left:6px}
+nav .right{display:flex;gap:18px;align-items:center;color:var(--fg2)}
+nav .right a{color:var(--fg2)}
+nav .right a:hover{color:var(--fg);text-decoration:none}
+
+/* 開場 */
+#hero{position:fixed;top:88px;left:0;right:0;text-align:center;z-index:10;transition:opacity .9s ease,transform .9s ease;pointer-events:none}
+#hero h1{font-size:clamp(40px,7vw,80px);font-weight:600;letter-spacing:-.015em;line-height:1.05}
+#hero p{font-size:clamp(17px,2.1vw,24px);color:var(--fg2);margin-top:10px;font-weight:400;letter-spacing:.005em}
+#hero .when{font-size:13px;color:var(--fg3);margin-top:14px;letter-spacing:.04em}
+#hero .ctas{display:flex;gap:14px;justify-content:center;margin-top:22px;pointer-events:auto}
+.pill{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 22px;border-radius:980px;font-size:15px;font-family:var(--font);cursor:pointer;border:1px solid transparent;transition:background .2s,color .2s,border-color .2s}
+.pill.primary{background:var(--blue);color:#fff}
+.pill.primary:hover{background:#0077ed;text-decoration:none}
+.pill.ghost{background:transparent;color:var(--blue2);border-color:var(--blue2)}
+.pill.ghost:hover{background:var(--blue2);color:#fff;text-decoration:none}
+body.exploring #hero{opacity:0;transform:translateY(-24px)}
+body.exploring #hero .ctas{pointer-events:none}
+
+/* 圖層說明 */
+#caption{position:fixed;left:max(16px,env(safe-area-inset-left));top:64px;z-index:10;max-width:440px;padding:12px 16px 14px;border-radius:18px;background:rgba(10,10,12,.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease;pointer-events:none}
+body.exploring #caption{opacity:1;transform:none}
+#caption .eyebrow{font-size:12px;color:var(--fg3);letter-spacing:.08em}
+#caption h2{font-size:32px;font-weight:600;letter-spacing:-.01em;margin-top:4px}
+#caption .stat{font-size:15px;color:var(--fg2);margin-top:8px;line-height:1.55}
+#caption .stat b{color:var(--fg);font-weight:600}
+#caption .src{font-size:11px;color:var(--fg3);margin-top:10px}
+
+/* 底部圖層切換 */
+#dock{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translate(-50%,30px);z-index:15;display:flex;gap:2px;padding:4px;border-radius:980px;
+  background:var(--glass);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border:1px solid var(--line);opacity:0;transition:opacity .6s ease .2s,transform .6s ease .2s;max-width:calc(100vw - 24px);overflow-x:auto;scrollbar-width:none}
+#dock::-webkit-scrollbar{display:none}
+body.exploring #dock{opacity:1;transform:translate(-50%,0)}
+#dock button{all:unset;cursor:pointer;font-size:14px;color:var(--fg2);padding:9px 18px;border-radius:980px;white-space:nowrap;transition:background .25s,color .25s}
+#dock button:hover{color:var(--fg)}
+#dock button.on{background:rgba(255,255,255,.14);color:var(--fg)}
+
+/* 縣市卡片 */
+#card{position:fixed;right:max(24px,env(safe-area-inset-right));top:72px;width:340px;max-height:calc(100vh - 160px);overflow:auto;z-index:16;padding:20px 20px 16px;border-radius:22px;
+  background:var(--glass);backdrop-filter:saturate(180%) blur(28px);-webkit-backdrop-filter:saturate(180%) blur(28px);border:1px solid var(--line);
+  opacity:0;transform:translateX(16px);pointer-events:none;transition:opacity .35s ease,transform .35s ease}
+#card.show{opacity:1;transform:none;pointer-events:auto}
+#card .x{all:unset;position:absolute;right:12px;top:10px;z-index:2;cursor:pointer;color:var(--fg2);font-size:22px;line-height:1;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.08)}
+#card .x:hover{color:var(--fg);background:rgba(255,255,255,.16)}
+#card h3{font-size:24px;font-weight:600;padding-right:40px}
+#card .sub{font-size:13px;color:var(--fg2);margin-top:2px}
+#card .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+#card .kv{background:var(--glass2);border-radius:14px;padding:10px 12px}
+#card .kv .k{font-size:11px;color:var(--fg3);letter-spacing:.04em}
+#card .kv .v{font-size:20px;font-weight:600;margin-top:2px}
+#card .kv .v small{font-size:12px;font-weight:400;color:var(--fg2);margin-left:2px}
+#card .sec{font-size:12px;color:var(--fg3);margin:16px 0 6px;letter-spacing:.06em}
+#card ul{list-style:none}
+#card li{font-size:14px;line-height:1.45;padding:7px 0;border-top:1px solid rgba(255,255,255,.06)}
+#card li .m{display:block;font-size:11px;color:var(--fg3);margin-top:2px}
+#card .tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:980px;background:rgba(255,214,10,.15);color:var(--warn);margin:4px 6px 0 0}
+#card .more{display:block;margin-top:14px;font-size:14px}
+
+/* 地圖上的標籤 */
+#labels{position:fixed;inset:0;pointer-events:none;z-index:5}
+.lbl{position:absolute;transform:translate(-50%,-100%);white-space:nowrap;font-size:12px;color:var(--fg);transition:opacity .4s;text-align:center;line-height:1.3;padding:3px 8px;border-radius:9px;background:rgba(20,20,22,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.08)}
+.lbl .n{font-size:11px;color:var(--fg2)}
+.lbl.big{font-size:14px;font-weight:600}
+.lbl.pillv{font-size:13px;font-weight:600}
+.lbl.flow{font-size:13px;padding:6px 10px;border-radius:12px}
+.lbl.flow .n{display:block}
+.up{color:var(--up)!important}.down{color:var(--down)!important}
+
+#hint{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);font-size:12px;color:var(--fg3);z-index:9;opacity:0;transition:opacity .6s ease 1s;pointer-events:none;white-space:nowrap}
+body.exploring #hint{opacity:1}
+#tip{position:fixed;z-index:25;pointer-events:none;padding:8px 12px;border-radius:12px;background:rgba(20,20,22,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);font-size:13px;line-height:1.4;opacity:0;transition:opacity .15s;max-width:260px}
+#tip.show{opacity:1}#tip b{display:block;font-weight:600}#tip span{color:var(--fg2)}
+#credit{position:fixed;right:12px;bottom:8px;font-size:10px;color:var(--fg3);z-index:9;opacity:.7;pointer-events:none}
+@media (max-width:760px){#credit{display:none}}
+#load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:30;background:#000;transition:opacity .8s ease;font-size:13px;color:var(--fg3);letter-spacing:.08em}
+#load.done{opacity:0;pointer-events:none}
+#fallback{display:none;position:fixed;inset:0;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:24px;z-index:40;background:#000}
+
+@media (max-width:760px){
+  #hero{top:72px;padding:0 20px}
+  #hero p{font-size:15px;text-wrap:balance}
+  #caption{left:16px;right:16px;max-width:none;top:56px}
+  #caption h2{font-size:24px}
+  #caption .stat{font-size:13px}
+  #card{left:8px;right:8px;width:auto;top:auto;bottom:84px;max-height:52vh;border-radius:20px;transform:translateY(16px)}
+  #hint{display:none}
+  nav .right .hide-s{display:none}
+}
+</style>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<div id="labels"></div>
+
+<nav>
+  <div class="brand">dalta 情報站<span>台灣此刻</span></div>
+  <div class="right"><span id="clock"></span><a class="hide-s" href="/terminal/">完整終端機</a></div>
+</nav>
+
+<section id="hero">
+  <h1>台灣，此刻。</h1>
+  <p>天氣、地震、房價、車流，還有從海外流進來的錢。<br>一座島，一次看完。</p>
+  <div class="when" id="when"></div>
+  <div class="ctas">
+    <button class="pill primary" id="go">開始探索</button>
+    <a class="pill ghost" href="/terminal/">完整終端機</a>
+  </div>
+</section>
+
+<div id="caption"><div class="eyebrow" id="cEye"></div><h2 id="cTitle"></h2><div class="stat" id="cStat"></div><div class="src" id="cSrc"></div></div>
+
+<div id="dock">
+  <button data-l="wx" class="on">天氣</button>
+  <button data-l="quake">地震</button>
+  <button data-l="house">房價</button>
+  <button data-l="traffic">車流</button>
+  <button data-l="flow">資金流</button>
+</div>
+<div id="hint">拖曳旋轉　捲動縮放　點縣市看細節</div>
+<div id="credit">地形 Mapzen Terrarium · 衛星與夜光 NASA · 行政區 內政部</div>
+
+<aside id="card"><button class="x" id="cardX" aria-label="關閉">×</button><div id="cardBody"></div></aside>
+
+<div id="load">載入台灣⋯</div>
+<div id="fallback"><div style="font-size:20px;font-weight:600">這台裝置跑不動 3D</div><a class="pill primary" href="/terminal/">打開完整終端機</a></div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+const RAW = "https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/";
+const ASSET_V = 9;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
+const MOBILE = matchMedia("(max-width:760px)").matches || /Mobi|Android/i.test(navigator.userAgent);
+const EX = 6;                 // 高度誇張倍數
+const LONC = 120.95, LATC = 23.65;
+const KX = 111.32 * Math.cos(LATC * Math.PI / 180), KY = 110.57;   // 1 單位 = 1 公里
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmt = (x, d = 1) => (x == null || isNaN(x)) ? "—" : Number(x).toFixed(d);
+const sgn = x => x > 0 ? "+" : "";
+const cls = x => x > 0 ? "up" : x < 0 ? "down" : "";
+const norm = s => String(s || "").replace(/臺/g, "台");
+const toXZ = (lon, lat) => [(lon - LONC) * KX, -(lat - LATC) * KY];
+
+/* ---------- 基本場景 ---------- */
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: !MOBILE, alpha: true, powerPreference: "high-performance" });
+} catch (e) { $("fallback").style.display = "flex"; $("load").remove(); throw e; }
+renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.5 : 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+$("stage").appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0x000000, 1100, 2800);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(MOBILE ? 50 : 38, innerWidth / innerHeight, 1, 6000);
+camera.position.set(0, 1400, 900);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.06;
+controls.minDistance = 3; controls.maxDistance = 1600;
+controls.maxPolarAngle = Math.PI * 0.46;
+controls.autoRotate = !MOBILE; controls.autoRotateSpeed = 0.35;   // 手機直式畫面轉了會歪，開場不自轉
+controls.enablePan = !MOBILE;
+
+const sun = new THREE.DirectionalLight(0xffffff, 2.4);
+scene.add(sun);
+const amb = new THREE.HemisphereLight(0x8fa6c9, 0x0b0d10, 0.35);
+scene.add(amb);
+
+/* ---------- 太陽位置（台北） ---------- */
+function sunPos(d = new Date()) {
+  const rad = Math.PI / 180, lat = 25.04 * rad, lon = 121.56;
+  const jd = d.getTime() / 864e5 + 2440587.5, n = jd - 2451545.0;
+  const L = (280.46 + 0.9856474 * n) % 360, g = ((357.528 + 0.9856003 * n) % 360) * rad;
+  const lam = (L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g)) * rad, eps = 23.439 * rad;
+  const dec = Math.asin(Math.sin(eps) * Math.sin(lam));
+  const ra = Math.atan2(Math.cos(eps) * Math.sin(lam), Math.cos(lam));
+  const gmst = (280.46061837 + 360.98564736629 * n) % 360;
+  const ha = ((gmst + lon) * rad - ra);
+  const el = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec) * Math.cos(ha));
+  const az = Math.atan2(-Math.sin(ha), Math.tan(dec) * Math.cos(lat) - Math.sin(lat) * Math.cos(ha));
+  return { el, az };
+}
+const FORCE = new URLSearchParams(location.search).get("time");   // ?time=day / ?time=night 可強制白天或夜晚
+function applySun() {
+  let { el, az } = sunPos();
+  if (FORCE === "day") { el = 0.9; az = 2.4; } else if (FORCE === "night") el = -0.6;
+  uni.uNight.value = el > -0.05 ? 0 : 1;
+  renderer.toneMappingExposure = el > -0.05 ? 1.0 : 0.85;
+  const day = el > -0.05;
+  const e = Math.max(el, 0.18);
+  sun.position.set(Math.sin(az) * Math.cos(e) * 1000, Math.sin(e) * 1000, -Math.cos(az) * Math.cos(e) * 1000);
+  IS_DAY = day;
+  const real = !!DAY;
+  if (day) { sun.color.set(el < 0.2 ? 0xffd2a1 : 0xffffff); sun.intensity = real ? 2.3 : 2.6; amb.intensity = real ? 0.55 : 0.35; if (terrainMat) { terrainMat.envMapIntensity = real ? 0.35 : 1.3; terrainMat.emissiveIntensity = 0; } }
+  else { sun.position.set(-700, 380, -260); sun.color.set(0xaec2ff); sun.intensity = real ? 0.35 : 1.8; amb.intensity = real ? 0.08 : 0.2; if (terrainMat) { terrainMat.envMapIntensity = real ? 0.15 : 0.75; terrainMat.emissiveIntensity = real ? 1 : 0; } }
+  const t = new Date().toLocaleTimeString("zh-TW", { timeZone: "Asia/Taipei", hour: "2-digit", minute: "2-digit", hour12: false });
+  $("clock").textContent = t + " 台北";
+  $("when").textContent = (day ? (el < 0.2 ? "晨昏" : "白天") : "夜間") + " · " + t + " 台北 · 光線依實際太陽位置";
+  return day;
+}
+
+/* ---------- 地形 ---------- */
+let DEM, META, terrain, terrainMat, radarTex = null, DAY = null, NIGHT = null, LIGHTS = null, IS_DAY = true;
+const uni = { uRadar: { value: 0 }, uRadarTex: { value: null }, uRadarB: { value: new THREE.Vector4(0, 0, 1, 1) }, uTime: { value: 0 }, uDim: { value: 0 }, uNight: { value: 0 }, uLights: { value: null }, uHasLights: { value: 0 }, uClose: { value: 0 } };
+let dimTo = 0;
+
+function hAt(lon, lat) {   // 地表高度（場景單位）
+  if (!DEM) return 0;
+  const i = (lon - META.lon0) / (META.lon1 - META.lon0) * (META.w - 1), j = (META.lat1 - lat) / (META.lat1 - META.lat0) * (META.h - 1);
+  if (i < 0 || j < 0 || i > META.w - 1 || j > META.h - 1) return 0;
+  const e = DEM[Math.round(j) * META.w + Math.round(i)];
+  return Math.max(e, 0) / 1000 * EX;
+}
+
+async function loadDEM() {
+  META = await (await fetch("dem.json?v=" + ASSET_V)).json();
+  const blob = await (await fetch("dem.png?v=" + ASSET_V)).blob();
+  const bmp = await createImageBitmap(blob, { colorSpaceConversion: "none", premultiplyAlpha: "none" });
+  const cv = document.createElement("canvas"); cv.width = bmp.width; cv.height = bmp.height;
+  const cx = cv.getContext("2d", { willReadFrequently: true }); cx.drawImage(bmp, 0, 0);
+  const px = cx.getImageData(0, 0, bmp.width, bmp.height).data;
+  DEM = new Float32Array(META.w * META.h);
+  for (let k = 0; k < DEM.length; k++) DEM[k] = (px[k * 4] * 256 + px[k * 4 + 1]) * META.scale + META.offset;
+  if (META.tex) {   // 真實地面：NASA 白天衛星合成圖＋夜間燈光圖
+    const L = new THREE.TextureLoader(), ld = u => new Promise(r => L.load(u, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); r(t); }, undefined, () => r(null)));
+    [DAY, NIGHT, LIGHTS] = await Promise.all([ld("day.jpg?v=" + ASSET_V), ld("night.jpg?v=" + ASSET_V), META.tex.lights ? ld("lights.png?v=" + ASSET_V) : null]);
+    if (LIGHTS) LIGHTS.colorSpace = THREE.NoColorSpace;
+    uni.uLights.value = LIGHTS; uni.uHasLights.value = LIGHTS ? 1 : 0;
+  }
+}
+
+function buildTerrain() {
+  const S = MOBILE ? 3 : 2, W = Math.floor((META.w - 1) / S) + 1, H = Math.floor((META.h - 1) / S) + 1;
+  const pos = new Float32Array(W * H * 3), el = new Float32Array(W * H), ll = new Float32Array(W * H * 2), uv = new Float32Array(W * H * 2);
+  const dl = (META.lon1 - META.lon0) / (META.w - 1), dt = (META.lat1 - META.lat0) / (META.h - 1);
+  for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+    const k = j * W + i, lon = META.lon0 + i * S * dl, lat = META.lat1 - j * S * dt;
+    let e = DEM[(j * S) * META.w + i * S]; if (lon < 119.95 && lat > 24.0) e = -1;   // 去掉角落的大陸沿岸
+    const [x, z] = toXZ(lon, lat);
+    pos[k * 3] = x; pos[k * 3 + 1] = Math.max(e, 0) / 1000 * EX; pos[k * 3 + 2] = z;
+    el[k] = e; ll[k * 2] = lon; ll[k * 2 + 1] = lat;
+    uv[k * 2] = (lon - META.lon0) / (META.lon1 - META.lon0); uv[k * 2 + 1] = (lat - META.lat0) / (META.lat1 - META.lat0);
+  }
+  const idx = [];
+  for (let j = 0; j < H - 1; j++) for (let i = 0; i < W - 1; i++) {
+    const a = j * W + i, b = a + 1, c = a + W, d = c + 1;
+    if (el[a] > 0 || el[b] > 0 || el[c] > 0) idx.push(a, c, b);
+    if (el[b] > 0 || el[c] > 0 || el[d] > 0) idx.push(b, c, d);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  g.setAttribute("aElev", new THREE.BufferAttribute(el, 1));
+  g.setAttribute("aLL", new THREE.BufferAttribute(ll, 2));
+  g.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
+  g.setIndex(idx); g.computeVertexNormals();
+  terrainMat = DAY
+    ? new THREE.MeshStandardMaterial({ map: DAY, emissiveMap: NIGHT, emissive: 0xffc68a, emissiveIntensity: 0, metalness: 0, roughness: 0.88, envMapIntensity: 0.35 })
+    : new THREE.MeshStandardMaterial({ color: 0x80858f, metalness: 0.86, roughness: 0.32, envMapIntensity: 1.25 });
+  terrainMat.onBeforeCompile = sh => {
+    Object.assign(sh.uniforms, uni);
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nattribute float aElev; attribute vec2 aLL; varying float vElev; varying vec2 vLL; uniform float uClose;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvElev = aElev; vLL = aLL; transformed.y *= mix(1.0, 0.42, uClose);");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nvarying float vElev; varying vec2 vLL; uniform float uRadar; uniform sampler2D uRadarTex; uniform vec4 uRadarB; uniform float uTime; uniform float uDim; uniform float uNight; uniform sampler2D uLights; uniform float uHasLights; uniform float uClose;")
+      .replace("#include <color_fragment>", "#include <color_fragment>\nfloat lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));\ndiffuseColor.rgb = mix(vec3(lum), diffuseColor.rgb, 0.8) * 1.3;\ndiffuseColor.rgb *= mix(1.0, 0.42, uDim);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.24, 0.25, 0.27) + diffuseColor.rgb * 0.18, uClose * 0.8);\ndiffuseColor.rgb *= mix(vec3(1.0), vec3(0.16, 0.19, 0.27), uNight);")
+      .replace("#include <clipping_planes_fragment>", "#include <clipping_planes_fragment>\nif (vElev < 0.0) discard;")
+      .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
+        {   // 夜光：NASA 夜光的形狀 × OSM 樓地板密度（大城市核心更亮）
+          float nl = clamp(dot(totalEmissiveRadiance, vec3(0.3333)), 0.0, 1.0);
+          #ifdef USE_MAP
+          float dens = uHasLights > 0.5 ? texture2D(uLights, vMapUv).r : nl;
+          #else
+          float dens = nl;
+          #endif
+          float I = clamp(pow(dens, 0.9) + 0.1 * nl * nl, 0.0, 1.0);
+          vec2 cell = floor(vLL * 300.0);
+          float n = fract(sin(dot(cell, vec2(12.9898, 78.233))) * 43758.5453);
+          float spark = step(1.0 - I * 0.9, n);
+          vec3 lc = mix(vec3(1.0, 0.5, 0.16), vec3(1.0, 0.9, 0.74), I);
+          totalEmissiveRadiance = lc * (spark * (0.12 + 1.9 * I) + pow(I, 2.0) * 1.1) * uNight * (1.0 - smoothstep(0.25, 0.85, uClose));   // 拉近時交給建物窗戶發光
+        }
+        // 高度帶：極淡的等高線，讓山形更清楚
+        float band = abs(fract(vElev / 500.0) - 0.5);
+        totalEmissiveRadiance += vec3(0.55, 0.62, 0.75) * smoothstep(0.03, 0.0, band) * 0.03 * step(80.0, vElev);
+        if (uRadar > 0.0) {
+          vec2 ruv = vec2((vLL.x - uRadarB.x) / (uRadarB.z - uRadarB.x), (vLL.y - uRadarB.y) / (uRadarB.w - uRadarB.y));
+          vec4 rc = texture2D(uRadarTex, ruv);
+          totalEmissiveRadiance += rc.rgb * rc.a * 1.6 * uRadar;
+          diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.55, rc.a * uRadar);
+        }`);
+  };
+  terrain = new THREE.Mesh(g, terrainMat);
+  scene.add(terrain);
+
+  // 海面：深色，經緯網格
+  const cv = document.createElement("canvas"); cv.width = cv.height = 1024;
+  const c = cv.getContext("2d"); c.fillStyle = "#040507"; c.fillRect(0, 0, 1024, 1024);
+  c.strokeStyle = "rgba(160,175,200,.16)"; c.lineWidth = 1.2;
+  for (let k = 0; k <= 16; k++) { const p = k * 64; c.beginPath(); c.moveTo(p, 0); c.lineTo(p, 1024); c.stroke(); c.beginPath(); c.moveTo(0, p); c.lineTo(1024, p); c.stroke(); }
+  const tex = new THREE.CanvasTexture(cv); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(15, 15); tex.colorSpace = THREE.SRGBColorSpace;
+  const sea = new THREE.Mesh(new THREE.CircleGeometry(4200, 128), new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.95, fog: true }));
+  sea.rotation.x = -Math.PI / 2; sea.position.y = -0.4;
+  // 每格約 0.5 度：對齊經緯度
+  sea.material.map.offset.set(0, 0);
+  scene.add(sea);
+}
+
+/* ---------- 縣市 ---------- */
+let COUNTIES = [];   // {name, rings:[[ [lon,lat],...]], c:[lon,lat], bbox}
+const outlineGroup = new THREE.Group(); scene.add(outlineGroup);
+let hoverLine = null;
+function ringLine(r, mat, lift = 0.25) {
+  const pts = [];
+  for (const [lon, lat] of r) { const [x, z] = toXZ(lon, lat); pts.push(x, hAt(lon, lat) + lift, z); }
+  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
+  return new THREE.Line(g, mat);
+}
+async function loadCounties() {
+  const j = await (await fetch("../tw_counties.json")).json();
+  const mat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
+  for (const f of j.features) {
+    const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
+    const rings = []; let best = null, bestA = 0, bb = [999, 999, -999, -999];
+    for (const p of polys) {
+      const r = p[0]; let a = 0;
+      for (let k = 0; k < r.length - 1; k++) a += r[k][0] * r[k + 1][1] - r[k + 1][0] * r[k][1];
+      a = Math.abs(a); if (a > bestA) { bestA = a; best = r; }
+      rings.push(r);
+      for (const [x, y] of r) { bb[0] = Math.min(bb[0], x); bb[1] = Math.min(bb[1], y); bb[2] = Math.max(bb[2], x); bb[3] = Math.max(bb[3], y); }
+    }
+    let cx = 0, cy = 0; for (const [x, y] of best) { cx += x; cy += y; } cx /= best.length; cy /= best.length;
+    if (cx < META.lon0 || cx > META.lon1 || cy < META.lat0 || cy > META.lat1) continue;   // 金門、馬祖不在地形範圍內
+    const C = { name: f.properties.name, rings, c: [cx, cy], bbox: bb };
+    COUNTIES.push(C);
+    for (const r of rings) outlineGroup.add(ringLine(r, mat));
+  }
+}
+function inRing(x, y, r) { let o = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const [xi, yi] = r[i], [xj, yj] = r[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) o = !o; } return o; }
+function countyAt(lon, lat) { return COUNTIES.find(c => lon >= c.bbox[0] && lon <= c.bbox[2] && lat >= c.bbox[1] && lat <= c.bbox[3] && c.rings.some(r => inRing(lon, lat, r))); }
+
+
+/* ---------- 六都白模建築（OpenStreetMap）＋地標 ---------- */
+const BEX = 2.5;   // 建物高度誇張倍數（地形是 6 倍，建物太高會像針）
+let BMETA = null; const CITY = {};
+const CITY_OF = { "台北市": "taipei", "新北市": "taipei", "桃園市": "taoyuan", "台中市": "taichung", "台南市": "tainan", "高雄市": "kaohsiung", "基隆市": "keelung", "新竹市": "hsinchu", "新竹縣": "hsinchu", "苗栗縣": "miaoli", "彰化縣": "changhua", "南投縣": "nantou", "雲林縣": "douliu", "嘉義市": "chiayi", "嘉義縣": "chiayi", "屏東縣": "pingtung", "宜蘭縣": "yilan", "花蓮縣": "hualien", "台東縣": "taitung", "澎湖縣": "penghu" };
+async function loadBMeta() { try { BMETA = await (await fetch("buildings.json?v=" + ASSET_V)).json(); } catch (e) { BMETA = null; } }
+const bMat = new THREE.MeshStandardMaterial({ color: 0xeceae4, roughness: 0.85, metalness: 0, emissive: 0xffc98f, emissiveIntensity: 1 });
+bMat.onBeforeCompile = sh => {
+  sh.uniforms.uNight = uni.uNight;
+  sh.vertexShader = sh.vertexShader
+    .replace("#include <common>", "#include <common>\nvarying float vRand; varying float vY; varying float vH; varying float vSide;")
+    .replace("#include <begin_vertex>", `#include <begin_vertex>
+      vRand = fract(sin(float(gl_InstanceID) * 12.9898 + 4.1) * 43758.5453);
+      vY = position.y; vSide = 1.0 - step(0.9, abs(normal.y));
+      #ifdef USE_INSTANCING
+      vH = length(vec3(instanceMatrix[1]));
+      #else
+      vH = 0.5;
+      #endif`);
+  sh.fragmentShader = sh.fragmentShader
+    .replace("#include <common>", "#include <common>\nuniform float uNight; varying float vRand; varying float vY; varying float vH; varying float vSide;")
+    .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb *= mix(0.5, 1.0, smoothstep(0.0, 0.45, vY * vH * 40.0 + (1.0 - vSide)));\ndiffuseColor.rgb *= mix(1.0, 0.035, uNight);")
+    .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
+      float fl = vY * vH / (3.3 / 1000.0 * ${BEX.toFixed(1)});          // 第幾層樓
+      float win = step(0.35, fract(fl)) * step(fract(fl), 0.8);
+      float lit = step(0.42, fract(sin(floor(fl) * 7.13 + vRand * 91.7) * 43758.5453));
+      totalEmissiveRadiance *= vSide * win * lit * (0.45 + 0.75 * vRand) * uNight * 1.25;`);
+};
+async function loadCity(key) {
+  const c = BMETA.cities[key]; CITY[key] = { state: "loading" };
+  try {
+    const buf = await (await fetch(`b_${key}.bin?v=${ASSET_V}`)).arrayBuffer();
+    const dv = new DataView(buf); let n = Math.floor(buf.byteLength / 11); if (MOBILE) n = Math.min(n, 60000);
+    const geo = new THREE.BoxGeometry(1, 1, 1); geo.translate(0, 0.5, 0);
+    const mesh = new THREE.InstancedMesh(geo, bMat, n);
+    const m = new THREE.Matrix4(), q = new THREE.Quaternion(), p = new THREE.Vector3(), sc = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
+    for (let i = 0; i < n; i++) {
+      const o = i * 11;
+      const x = dv.getUint16(o, true) / 2, z = dv.getUint16(o + 2, true) / 2, w = dv.getUint16(o + 4, true) / 10, d = dv.getUint16(o + 6, true) / 10;
+      const a = dv.getUint8(o + 8) / 255 * Math.PI, h = dv.getUint16(o + 9, true) / 10;
+      const lon = c.bbox[0] + x / c.kx, lat = c.bbox[1] + z / c.ky, [sx, sz] = toXZ(lon, lat);
+      p.set(sx, hAt(lon, lat) * 0.42 - 0.01, sz); q.setFromAxisAngle(up, a); sc.set(Math.max(w, 4) / 1000, h / 1000 * BEX, Math.max(d, 4) / 1000);
+      m.compose(p, q, sc); mesh.setMatrixAt(i, m);
+    }
+    mesh.instanceMatrix.needsUpdate = true; mesh.computeBoundingSphere();
+    scene.add(mesh); CITY[key] = { state: "ready", mesh };
+  } catch (e) { CITY[key] = { state: "error" }; }
+}
+
+// ---- 精細模型：真實建物外形＋道路＋水域綠地（電腦版；手機用上面的方塊版）----
+const WORKER_SRC = `
+import { ShapeUtils, Vector2 } from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+let DEM, DM;
+const hAt = (lon, lat) => { const i = Math.round((lon - DM.lon0) / (DM.lon1 - DM.lon0) * (DM.w - 1)), j = Math.round((DM.lat1 - lat) / (DM.lat1 - DM.lat0) * (DM.h - 1));
+  if (i < 0 || j < 0 || i >= DM.w || j >= DM.h) return 0; return Math.max(DEM[j * DM.w + i], 0) / 1000 * DM.ex * 0.42; };
+onmessage = async e => {
+  const m = e.data;
+  if (m.dem) { DEM = m.dem; DM = m.meta; return; }
+  const { key, c, base, T, BEX } = m;
+  const toS = (x, z) => [T.ox + x / c.kx * T.kxs, T.oz - z / c.ky * T.ky];
+  const g = (x, z) => hAt(c.bbox[0] + x / c.kx, c.bbox[1] + z / c.ky);
+  const get = async f => { const r = await fetch(base + f); if (!r.ok) throw new Error(f); return new DataView(await r.arrayBuffer()); };
+  // 建物
+  const dv = await get("p_" + key + ".bin?v=" + T.v);
+  const P = [], N = [], I = [];
+  let o = 0, nb = 0;
+  while (o + 9 <= dv.byteLength) {
+    const cx = dv.getUint16(o, true) / 2, cz = dv.getUint16(o + 2, true) / 2, h = dv.getUint16(o + 4, true) / 10, bs = dv.getUint16(o + 6, true) / 10, n = dv.getUint8(o + 8); o += 9;
+    const pts = [];
+    for (let k = 0; k < n; k++) { pts.push(toS(cx + dv.getInt16(o, true) / 4, cz + dv.getInt16(o + 2, true) / 4)); o += 4; }
+    if (pts.length < 3) continue;
+    const gy = g(cx, cz), y0 = gy + bs / 1000 * BEX - (bs ? 0 : 0.004), y1 = gy + h / 1000 * BEX, rnd = Math.random();
+    let mx = 0, mz = 0; for (const p of pts) { mx += p[0]; mz += p[1]; } mx /= pts.length; mz /= pts.length;
+    for (let k = 0; k < pts.length; k++) {
+      const a = pts[k], b = pts[(k + 1) % pts.length];
+      let nx = b[1] - a[1], nz = -(b[0] - a[0]); const L = Math.hypot(nx, nz) || 1; nx /= L; nz /= L;
+      if (nx * ((a[0] + b[0]) / 2 - mx) + nz * ((a[1] + b[1]) / 2 - mz) < 0) { nx = -nx; nz = -nz; }
+      P.push(a[0], y0, a[1], b[0], y0, b[1], b[0], y1, b[1], a[0], y0, a[1], b[0], y1, b[1], a[0], y1, a[1]);
+      for (let q = 0; q < 6; q++) { N.push(nx, 0, nz); I.push(gy, rnd); }
+    }
+    const tri = ShapeUtils.triangulateShape(pts.map(p => new Vector2(p[0], p[1])), []);
+    for (const t of tri) for (const ix of t) { P.push(pts[ix][0], y1, pts[ix][1]); N.push(0, 1, 0); I.push(gy, rnd); }
+    nb++;
+  }
+  // 道路
+  const W = [0, 24, 19, 15, 11, 8, 5.5, 3.6];
+  const rv = await get("r_" + key + ".bin?v=" + T.v);
+  const RP = [], RC = [];
+  o = 0;
+  while (o + 2 <= rv.byteLength) {
+    const cls = rv.getUint8(o), n = rv.getUint8(o + 1); o += 2;
+    const pts = []; for (let k = 0; k < n; k++) { const x = rv.getUint16(o, true) / 2, z = rv.getUint16(o + 2, true) / 2; o += 4; pts.push([...toS(x, z), g(x, z)]); }
+    const w = W[cls] / 2000;
+    for (let k = 0; k + 1 < pts.length; k++) {
+      const a = pts[k], b = pts[k + 1]; let dx = b[0] - a[0], dz = b[1] - a[1]; const L = Math.hypot(dx, dz) || 1; const px = -dz / L * w, pz = dx / L * w;
+      const ya = a[2] + 0.0035, yb = b[2] + 0.0035;
+      RP.push(a[0] + px, ya, a[1] + pz, b[0] + px, yb, b[1] + pz, b[0] - px, yb, b[1] - pz, a[0] + px, ya, a[1] + pz, b[0] - px, yb, b[1] - pz, a[0] - px, ya, a[1] - pz);
+      for (let q = 0; q < 6; q++) RC.push(cls);
+    }
+  }
+  // 水域、綠地
+  const av = await get("a_" + key + ".bin?v=" + T.v);
+  const AP = [], AK = [];
+  o = 0;
+  while (o + 3 <= av.byteLength) {
+    const kind = av.getUint8(o), n = av.getUint16(o + 1, true); o += 3;
+    const pts = []; for (let k = 0; k < n; k++) { const x = av.getUint16(o, true) / 2, z = av.getUint16(o + 2, true) / 2; o += 4; pts.push([...toS(x, z), g(x, z)]); }
+    if (pts.length < 3) continue;
+    let lo = 1e9, hi = -1e9; for (const p of pts) { lo = Math.min(lo, p[2]); hi = Math.max(hi, p[2]); }
+    if (hi - lo > 0.012) continue;   // 山坡上的大塊綠地會插進地形，略過
+    let tri; try { tri = ShapeUtils.triangulateShape(pts.map(p => new Vector2(p[0], p[1])), []); } catch (err) { continue; }
+    const y = kind === 1 ? 0.0015 : 0.0025;
+    for (const t of tri) for (const ix of t) { AP.push(pts[ix][0], pts[ix][2] + y, pts[ix][1]); AK.push(kind); }
+  }
+  const f = a => new Float32Array(a);
+  const out = { key, nb, P: f(P), N: f(N), I: f(I), RP: f(RP), RC: f(RC), AP: f(AP), AK: f(AK) };
+  postMessage(out, [out.P.buffer, out.N.buffer, out.I.buffer, out.RP.buffer, out.RC.buffer, out.AP.buffer, out.AK.buffer]);
+};`;
+let WORKER = null;
+function cityWorker() {
+  if (WORKER) return WORKER;
+  WORKER = new Worker(URL.createObjectURL(new Blob([WORKER_SRC], { type: "text/javascript" })), { type: "module" });
+  WORKER.postMessage({ dem: DEM.slice(), meta: { ...META, ex: EX } });
+  WORKER.onmessage = e => buildDetail(e.data);
+  WORKER.onerror = () => { for (const [k, v] of Object.entries(CITY)) if (v.state === "detail") { delete CITY[k]; CITY_NODETAIL.add(k); } };
+  return WORKER;
+}
+const CITY_NODETAIL = new Set();
+const pMat = new THREE.MeshStandardMaterial({ color: 0xdfddd7, roughness: 0.85, metalness: 0, emissive: 0xffc98f, emissiveIntensity: 1, side: THREE.DoubleSide });
+pMat.onBeforeCompile = sh => {
+  sh.uniforms.uNight = uni.uNight;
+  sh.vertexShader = sh.vertexShader
+    .replace("#include <common>", "#include <common>\nattribute vec2 aInfo; varying vec2 vInfo; varying float vY; varying float vSide;")
+    .replace("#include <begin_vertex>", "#include <begin_vertex>\nvInfo = aInfo; vY = position.y; vSide = 1.0 - step(0.9, abs(normal.y));");
+  sh.fragmentShader = sh.fragmentShader
+    .replace("#include <common>", "#include <common>\nuniform float uNight; varying vec2 vInfo; varying float vY; varying float vSide;")
+    .replace("#include <color_fragment>", "#include <color_fragment>\nfloat hh = vY - vInfo.x;\ndiffuseColor.rgb *= mix(0.55, 1.0, clamp(hh * 90.0 + (1.0 - vSide), 0.0, 1.0));\ndiffuseColor.rgb *= mix(1.0, 0.035, uNight);")
+    .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
+      float fl = hh / (3.3 / 1000.0 * ${BEX.toFixed(1)});
+      float win = step(0.35, fract(fl)) * step(fract(fl), 0.8) * step(0.8, fl);
+      float lit = step(0.42, fract(sin(floor(fl) * 7.13 + vInfo.y * 91.7) * 43758.5453));
+      totalEmissiveRadiance *= vSide * win * lit * (0.45 + 0.75 * vInfo.y) * uNight * 1.25;`);
+};
+const rMat = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, color: 0xd2d0ca, emissive: 0xffb15c, emissiveIntensity: 1, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+rMat.onBeforeCompile = sh => {
+  sh.uniforms.uNight = uni.uNight;
+  sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nattribute float aCls; varying float vCls;").replace("#include <begin_vertex>", "#include <begin_vertex>\nvCls = aCls;");
+  sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nuniform float uNight; varying float vCls;")
+    .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb *= mix(1.0, 0.06, uNight);")
+    .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance *= uNight * mix(0.95, 0.12, clamp((vCls - 1.0) / 5.0, 0.0, 1.0));");
+};
+const aMat = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+aMat.onBeforeCompile = sh => {
+  sh.uniforms.uNight = uni.uNight;
+  sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nuniform float uNight;")
+    .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb *= mix(1.0, 0.12, uNight);");
+};
+function loadDetail(key) {
+  const c = BMETA.cities[key]; CITY[key] = { state: "detail" };
+  const T = { ox: (c.bbox[0] - LONC) * KX, oz: -(c.bbox[1] - LATC) * KY, kxs: KX, ky: KY, v: ASSET_V };
+  cityWorker().postMessage({ key, c, base: document.baseURI, T, BEX });
+}
+function upNormals(n) { const a = new Float32Array(n); for (let i = 1; i < n; i += 3) a[i] = 1; return a; }
+function buildDetail(d) {
+  const grp = new THREE.Group();
+  const bg = new THREE.BufferGeometry();
+  bg.setAttribute("position", new THREE.BufferAttribute(d.P, 3)); bg.setAttribute("normal", new THREE.BufferAttribute(d.N, 3)); bg.setAttribute("aInfo", new THREE.BufferAttribute(d.I, 2));
+  grp.add(new THREE.Mesh(bg, pMat));
+  if (d.RP.length) {
+    const rg = new THREE.BufferGeometry(); rg.setAttribute("position", new THREE.BufferAttribute(d.RP, 3)); rg.setAttribute("aCls", new THREE.BufferAttribute(d.RC, 1)); rg.setAttribute("normal", new THREE.BufferAttribute(upNormals(d.RP.length), 3));
+    grp.add(new THREE.Mesh(rg, rMat));
+  }
+  if (d.AP.length) {
+    const col = new Float32Array(d.AK.length * 3);
+    for (let i = 0; i < d.AK.length; i++) { const w = d.AK[i] === 1; col[i * 3] = w ? 0.52 : 0.58; col[i * 3 + 1] = w ? 0.62 : 0.66; col[i * 3 + 2] = w ? 0.72 : 0.52; }
+    const ag = new THREE.BufferGeometry(); ag.setAttribute("position", new THREE.BufferAttribute(d.AP, 3)); ag.setAttribute("color", new THREE.BufferAttribute(col, 3)); ag.setAttribute("normal", new THREE.BufferAttribute(upNormals(d.AP.length), 3));
+    grp.add(new THREE.Mesh(ag, aMat));
+  }
+  scene.add(grp);
+  CITY[d.key] = { state: "ready", mesh: grp, nb: d.nb };
+}
+
+function cityAtTarget() {
+  if (!BMETA) return null;
+  const t = controls.target, dist = camera.position.distanceTo(t);
+  if (dist > 160) return [];
+  const out = [];
+  for (const [k, c] of Object.entries(BMETA.cities)) {
+    const b = c.bbox, [x0, z1] = toXZ(b[0], b[1]), [x1, z0] = toXZ(b[2], b[3]);
+    if (t.x > x0 - 25 && t.x < x1 + 25 && t.z > z0 - 25 && t.z < z1 + 25) out.push(k);
+  }
+  return out;
+}
+let lodT = 0;
+function lodTick(dt) {
+  lodT += dt; if (lodT < 0.4) return; lodT = 0;
+  const near = cityAtTarget(); if (near === null) return;
+  for (const k of near) if (!CITY[k]) (!MOBILE && BMETA.detail && !CITY_NODETAIL.has(k) && typeof Worker !== "undefined") ? loadDetail(k) : loadCity(k);
+  for (const [k, v] of Object.entries(CITY)) if (v.mesh) v.mesh.visible = near.includes(k);
+}
+function flyCity(key) {
+  const c = BMETA && BMETA.cities[key]; if (!c) return;
+  const lon = key === "taipei" ? 121.545 : (c.bbox[0] + c.bbox[2]) / 2, lat = key === "taipei" ? 25.04 : (c.bbox[1] + c.bbox[3]) / 2;
+  const [x, z] = toXZ(lon, lat);
+  controls.autoRotate = false;
+  flyTo(new THREE.Vector3(x + 3.2, 4.2, z + 5.6), new THREE.Vector3(x, 0.3, z), 2.6);
+}
+// 地標：台北 101、高雄 85 大樓（手做，比例照實際尺寸）
+const lmMat = new THREE.MeshStandardMaterial({ color: 0xf6f5f1, roughness: 0.6, metalness: 0.1, emissive: 0xbfe3ff, emissiveIntensity: 0 });
+function addLandmarks() {
+  const mk = (lon, lat, parts) => {
+    const g = new THREE.Group(), [x, z] = toXZ(lon, lat); g.position.set(x, hAt(lon, lat), z);
+    for (const [geo, y] of parts) { const m = new THREE.Mesh(geo, lmMat); m.position.y = y; g.add(m); }
+    scene.add(g); return g;
+  };
+  const K = BEX / 1000, sq = (rt, rb, h) => { const g = new THREE.CylinderGeometry(rt * Math.SQRT2 / 2, rb * Math.SQRT2 / 2, h, 4); g.rotateY(Math.PI / 4); return g; };
+  const t101 = [[new THREE.BoxGeometry(0.16, 60 * K, 0.1), 30 * K], [sq(0.05, 0.05, 90 * K), 45 * K]];
+  for (let i = 0; i < 8; i++) { const y0 = 90 + i * 33; t101.push([sq(0.047, 0.036, 33 * K), (y0 + 16.5) * K]); }
+  t101.push([sq(0.024, 0.03, 54 * K), (354 + 27) * K], [new THREE.CylinderGeometry(0.0015, 0.004, 100 * K, 6), (408 + 50) * K]);
+  mk(121.5645, 25.0340, t101);
+  const t85 = [[new THREE.BoxGeometry(0.03, 150 * K, 0.045), 75 * K], [new THREE.BoxGeometry(0.03, 150 * K, 0.045), 75 * K],
+    [new THREE.BoxGeometry(0.095, 110 * K, 0.05), 205 * K], [new THREE.BoxGeometry(0.035, 87 * K, 0.035), (260 + 43.5) * K], [new THREE.CylinderGeometry(0.002, 0.004, 31 * K, 6), (347 + 15.5) * K]];
+  const g85 = mk(120.3007, 22.6116, t85); g85.children[0].position.x = -0.03; g85.children[1].position.x = 0.03;
+}
+
+/* ---------- 標籤 ---------- */
+const LBL = [];
+function addLabel(html, pos, cls = "", group = "base", prio = 0) {
+  const el = document.createElement("div"); el.className = "lbl " + cls; el.innerHTML = html; $("labels").appendChild(el);
+  const L = { el, pos, group, prio: prio + (/big|flow/.test(cls) ? 2 : 0) }; LBL.push(L); return L;
+}
+function clearLabels(group) { for (let k = LBL.length - 1; k >= 0; k--) if (LBL[k].group === group) { LBL[k].el.remove(); LBL.splice(k, 1); } }
+const _v = new THREE.Vector3();
+// 標籤互相重疊時，重要的留下（直轄市、最大地震、資金流），其他先藏起來；拉近就會分開再出現
+const _shown = [];
+function placeLabels() {
+  const vis = [];
+  for (const L of LBL) {
+    _v.copy(L.pos).project(camera);
+    L.on = _v.z < 1 && Math.abs(_v.x) < 1.1 && Math.abs(_v.y) < 1.1;
+    if (!L.on) { L.el.style.opacity = 0; continue; }
+    L.sx = (_v.x + 1) / 2 * innerWidth; L.sy = (1 - _v.y) / 2 * innerHeight;
+    L.el.style.left = L.sx + "px"; L.el.style.top = L.sy + "px";
+    if (!L.w) { L.w = L.el.offsetWidth; L.h = L.el.offsetHeight; }
+    vis.push(L);
+  }
+  vis.sort((a, b) => b.prio - a.prio);
+  _shown.length = 0;
+  for (const L of vis) {
+    const x0 = L.sx - L.w / 2 - 3, x1 = L.sx + L.w / 2 + 3, y0 = L.sy - L.h - 3, y1 = L.sy + 3;
+    let hit = false;
+    for (const S of _shown) if (x0 < S[2] && x1 > S[0] && y0 < S[3] && y1 > S[1]) { hit = true; break; }
+    L.el.style.opacity = hit ? 0 : (L.op ?? 1);
+    if (!hit) _shown.push([x0, y0, x1, y1]);
+  }
+}
+
+/* ---------- 資料 ---------- */
+let P = {}, GEN = null, ROADS_GEO = null, ROADS_LIVE = null;
+async function loadData() {
+  const r = await fetch(RAW + "all.json?t=" + Date.now(), { cache: "no-store" });
+  const j = await r.json(); P = j.panels || {}; GEN = j.generatedAt;
+}
+async function loadRoads() {
+  try {
+    const [g, l] = await Promise.all([fetch(RAW + "roads_geo.json").then(r => r.json()), fetch(RAW + "roads_live.json?t=" + Date.now(), { cache: "no-store" }).then(r => r.json())]);
+    ROADS_GEO = g; ROADS_LIVE = l;
+  } catch (e) { }
+}
+const ago = iso => { if (!iso) return ""; const m = (Date.now() - new Date(iso)) / 6e4; return m < 60 ? Math.round(m) + " 分鐘前" : m < 1440 ? Math.round(m / 60) + " 小時前" : Math.round(m / 1440) + " 天前"; };
+
+/* ---------- 圖層 ---------- */
+const layers = {};
+let cur = null;
+function layerGroup(name) { const g = new THREE.Group(); g.visible = false; scene.add(g); layers[name] = layers[name] || {}; layers[name].g = g; return g; }
+function caption(eye, title, stat, src) { $("cEye").textContent = eye; $("cTitle").textContent = title; $("cStat").innerHTML = stat; $("cSrc").textContent = src || ""; }
+
+// 天氣：雷達回波鋪在地形上＋各站氣溫
+function setupWx() {
+  const g = layerGroup("wx");
+  const R = P.radar_wx;
+  if (R && R.img) {
+    const b = R.bounds; const lons = b.map(p => p[0]), lats = b.map(p => p[1]);
+    uni.uRadarB.value.set(Math.min(...lons), Math.min(...lats), Math.max(...lons), Math.max(...lats));
+    new THREE.TextureLoader().load(RAW + R.img + "?t=" + Date.now(), t => { t.colorSpace = THREE.SRGBColorSpace; t.minFilter = THREE.LinearFilter; uni.uRadarTex.value = t; });
+  }
+  layers.wx.on = () => {
+    uni.uRadar.value = uni.uRadarTex.value ? 1 : 0;
+    const W = P.weather || {}, items = W.items || [], warn = W.warnings || [];
+    for (const it of items) {
+      const c = COUNTIES.find(c => norm(c.name).startsWith(norm(it.city)));
+      if (!c) continue;
+      const [x, z] = toXZ(c.c[0], c.c[1]);
+      const nm = c.name.replace(/[縣市]$/, "");
+      addLabel(`${fmt(it.temp, 0)}°<span class="n"> ${esc(nm)} ${esc(it.weather || "")}</span>`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "", "wx", /^(臺北|台北|高雄)/.test(nm) ? 1.5 : /^(新北|桃園|臺中|台中|臺南|台南)/.test(nm) ? 1 : 0);
+    }
+    const R = P.radar_wx || {};
+    const ws = [...new Set(warn.map(w => w.what))];
+    caption("天氣 · 即時", R.echoPct > 1 ? "雨帶正在移動" : (warn.length ? ws.join("、") + "特報中" : "全島天氣平穩"),
+      `雷達回波覆蓋 <b>${fmt(R.echoPct)}%</b>，最強 <b>${fmt(R.maxDbz, 0)} dBZ</b>` + (warn.length ? `<br>特報：<b>${ws.map(esc).join("、")}</b>，${new Set(warn.map(w => w.where)).size} 個縣市` : ""),
+      "中央氣象署 · 雷達 " + (R.time ? R.time.slice(11, 16) : ""));
+  };
+  layers.wx.off = () => { uni.uRadar.value = 0; clearLabels("wx"); };
+}
+
+// 地震：震央漣漪＋震源深度
+function setupQuake() {
+  const g = layerGroup("quake"); const rings = [];
+  const Q = ((P.quake || {}).items || []).slice(0, 8);
+  Q.forEach((q, i) => {
+    const [x, z] = toXZ(q.lon, q.lat), y = hAt(q.lon, q.lat) + 0.6;
+    const col = q.mag >= 6 ? 0xff453a : q.mag >= 5 ? 0xff9f0a : 0xffd60a;
+    for (let k = 0; k < 3; k++) {
+      const m = new THREE.Mesh(new THREE.RingGeometry(0.92, 1, 64), new THREE.MeshBasicMaterial({ color: col, transparent: true, side: THREE.DoubleSide, depthWrite: false }));
+      m.rotation.x = -Math.PI / 2; m.position.set(x, y, z); g.add(m);
+      rings.push({ m, ph: k / 3 + i * 0.13, R: 8 + q.mag * 6 * (i === 0 ? 1.4 : 1) });
+    }
+    const d = q.depth || 10;
+    const lg = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x, y, z), new THREE.Vector3(x, -d * 0.8, z)]);
+    g.add(new THREE.Line(lg, new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.5 })));
+    const s = new THREE.Mesh(new THREE.SphereGeometry(1 + q.mag * 0.5, 20, 12), new THREE.MeshBasicMaterial({ color: col }));
+    s.position.set(x, -d * 0.8, z); g.add(s);
+    q._pos = new THREE.Vector3(x, y + 4, z);
+  });
+  layers.quake.tick = t => { for (const r of rings) { const p = (t * 0.35 + r.ph) % 1; r.m.scale.setScalar(1 + p * r.R); r.m.material.opacity = (1 - p) * 0.85; } };
+  layers.quake.on = () => {
+    Q.slice(0, 4).forEach((q, i) => addLabel(`M${fmt(q.mag)}<span class="n"> ${ago(q.at)} · 深 ${fmt(q.depth, 0)} km</span>`, q._pos, i === 0 ? "big" : "", "quake"));
+    const q = Q[0];
+    caption("地震 · 最近 " + Q.length + " 筆", q ? `最近一次 M${fmt(q.mag)}` : "近期無有感地震",
+      q ? `${esc(q.loc.replace(/\s+/g, " "))}<br>${ago(q.at)}，深度 <b>${fmt(q.depth, 0)} 公里</b>，最大震度 <b>${esc(q.intensity)}</b>` : "", "中央氣象署 · 地表下的球是震源");
+  };
+  layers.quake.off = () => clearLabels("quake");
+}
+
+// 房價：各縣市中位數光柱
+function setupHouse() {
+  const g = layerGroup("house"); const H = (P.house || {}).city || {}; const bars = [];
+  const vals = Object.values(H).filter(v => v > 0), mx = Math.max(...vals, 1);
+  for (const c of COUNTIES) {
+    const key = Object.keys(H).find(k => norm(k) === norm(c.name)); if (!key) continue;
+    const v = H[key], h = 8 + v / mx * 120, [x, z] = toXZ(c.c[0], c.c[1]), y0 = hAt(c.c[0], c.c[1]);
+    const t = v / mx;
+    const col = new THREE.Color(0x64d2ff).lerp(new THREE.Color(0xff375f), Math.pow(t, 0.8));
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(3, 3, 1, 32, 1, true),
+      new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.9 }));
+    m.position.set(x, y0, z); g.add(m);
+    const cap = new THREE.Mesh(new THREE.CircleGeometry(3, 32), new THREE.MeshBasicMaterial({ color: col.clone().lerp(new THREE.Color(0xffffff), 0.35) }));
+    cap.rotation.x = -Math.PI / 2; g.add(cap);
+    bars.push({ m, cap, h, y0, x, z, v, name: c.name, k: 0 });
+  }
+  layers.house.tick = (t, dt) => { for (const b of bars) { b.k = Math.min(1, b.k + dt * 1.2); const e = 1 - Math.pow(1 - b.k, 3), hh = b.h * e; b.m.scale.y = hh; b.m.position.y = b.y0 + hh / 2; b.cap.position.set(b.x, b.y0 + hh + 0.05, b.z); } };
+  layers.house.on = () => {
+    const rank = [...bars].sort((a, b) => b.v - a.v), show = new Set([...rank.slice(0, 6), ...rank.slice(-2)]);
+    for (const b of bars) { b.k = 0; if (!show.has(b)) continue; addLabel(`${fmt(b.v)}<span class="n"> ${esc(b.name.replace(/[縣市]$/, ""))}</span>`, new THREE.Vector3(b.x, b.y0 + b.h + 5, b.z), "pillv", "house"); }
+    const s = [...bars].sort((a, b) => b.v - a.v), hi = s[0], lo = s[s.length - 1];
+    caption("房價 · 實價登錄中位數", hi ? `${hi.name.replace(/[縣市]$/, "")}是${lo.name.replace(/[縣市]$/, "")}的 ${fmt(hi.v / lo.v)} 倍` : "房價",
+      hi ? `最高 <b>${esc(hi.name)} ${fmt(hi.v)} 萬／坪</b>，最低 <b>${esc(lo.name)} ${fmt(lo.v)} 萬／坪</b><br>柱子越高越貴，點縣市看完整數字` : "", "內政部實價登錄 · " + ((P.house || {}).season || ""));
+  };
+  layers.house.off = () => clearLabels("house");
+}
+
+// 車流：國道路段，流速＝車速
+function setupTraffic() {
+  const g = layerGroup("traffic");
+  if (!ROADS_GEO || !ROADS_LIVE) { layers.traffic.on = () => caption("車流", "路況資料暫時讀不到", "", ""); layers.traffic.off = () => { }; return; }
+  const fw = ROADS_GEO.fw, sp = ROADS_LIVE.fw || [];
+  const pos = [], col = [], dist = [], spd = [];
+  let slow = 0, sum = 0, n = 0; const jams = [];
+  const C = new THREE.Color();
+  fw.c.forEach((flat, i) => {
+    const s = sp[i]; if (s == null || s < 0) return;
+    sum += s; n++; if (s < 40) { slow++; jams.push([fw.n[i], s, flat]); }
+    C.setHex(s >= 80 ? 0x30d158 : s >= 50 ? 0xffd60a : 0xff453a);
+    let d = 0;
+    for (let k = 0; k + 3 < flat.length; k += 2) {
+      const a = [flat[k] / 1e4, flat[k + 1] / 1e4], b = [flat[k + 2] / 1e4, flat[k + 3] / 1e4];
+      const [ax, az] = toXZ(...a), [bx, bz] = toXZ(...b), ay = hAt(...a) + 1.6, by = hAt(...b) + 1.6;
+      const seg = Math.hypot(bx - ax, bz - az);
+      pos.push(ax, ay, az, bx, by, bz); col.push(C.r, C.g, C.b, C.r, C.g, C.b); dist.push(d, d + seg); spd.push(s, s); d += seg;
+    }
+  });
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  geo.setAttribute("aDist", new THREE.Float32BufferAttribute(dist, 1));
+  geo.setAttribute("aSpd", new THREE.Float32BufferAttribute(spd, 1));
+  const mat = new THREE.ShaderMaterial({
+    uniforms: { uTime: uni.uTime }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    vertexShader: `attribute float aDist; attribute float aSpd; attribute vec3 color; varying float vD; varying float vS; varying vec3 vC;
+      void main(){ vD=aDist; vS=aSpd; vC=color; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader: `uniform float uTime; varying float vD; varying float vS; varying vec3 vC;
+      void main(){ float f=fract(vD*0.45 - uTime*vS*0.02); float a=0.25+0.75*smoothstep(0.55,0.95,f); gl_FragColor=vec4(vC*2.2,a); }`
+  });
+  g.add(new THREE.LineSegments(geo, mat));
+  layers.traffic.on = () => {
+    jams.sort((a, b) => a[1] - b[1]).slice(0, 3).forEach(([nm, s, flat]) => {
+      const lon = flat[0] / 1e4, lat = flat[1] / 1e4, [x, z] = toXZ(lon, lat);
+      addLabel(`${s} km/h<span class="n"> ${esc(nm.replace(/^國道/, "國"))}</span>`, new THREE.Vector3(x, hAt(lon, lat) + 4, z), "", "traffic");
+    });
+    caption("車流 · 國道即時", slow ? `${slow} 段在塞` : "國道一路順暢",
+      `${n} 個路段平均 <b>${fmt(sum / Math.max(n, 1), 0)} km/h</b>，低於 40 的有 <b>${slow}</b> 段<br>光點流得越快，車開得越快`, "交通部高公局 · " + (ROADS_LIVE.at ? ROADS_LIVE.at.slice(11, 16) : ""));
+  };
+  layers.traffic.off = () => clearLabels("traffic");
+}
+
+// 資金流：海外市場 → 台灣，看傳導卡在哪
+function setupFlow() {
+  const g = layerGroup("flow");
+  const W = Object.fromEntries(((P.world || {}).items || []).map(x => [x.sym, x]));
+  const T = ((P.pulse || {}).items || []).find(x => x.sym === "^TWII") || {};
+  const usd = ((P.fx || {}).items || []).find(x => x.code === "USD") || {};
+  const inst = (((P.tw_market || {}).institutions || {}).items || []).find(x => x.name === "外資") || {};
+  const tw = T.chg_pct;
+  const [tx, tz] = toXZ(121.56, 25.04); const target = new THREE.Vector3(tx, hAt(121.56, 25.04) + 2, tz);
+  const SRC = [
+    { k: "^GSPC", label: "美股 S&P 500", bearing: 80, dist: 640 },
+    { k: "^N225", label: "日經 225", bearing: 35, dist: 560 },
+    { k: "000001.SS", label: "上證", bearing: 320, dist: 520 },
+    { k: "^STOXX50E", label: "歐股 STOXX 50", bearing: 275, dist: 620 },
+  ].map(s => ({ ...s, chg: (W[s.k] || {}).chg_pct })).filter(s => s.chg != null);
+  const flows = [];
+  for (const s of SRC) {
+    const b = s.bearing * Math.PI / 180, o = new THREE.Vector3(tx + Math.sin(b) * s.dist, 0, tz - Math.cos(b) * s.dist);
+    const mid = o.clone().lerp(target, 0.5); mid.y = s.dist * 0.32;
+    const curve = new THREE.QuadraticBezierCurve3(o, mid, target);
+    const stuck = tw != null && Math.sign(s.chg) !== Math.sign(tw) && Math.abs(s.chg) > 0.15;
+    const color = s.chg >= 0 ? 0x30d158 : 0xff453a;
+    const pts = curve.getPoints(80);
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 96, 2.2, 8, false), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.75, depthWrite: false, fog: false })));
+    const N = 46, pg = new THREE.BufferGeometry(), arr = new Float32Array(N * 3); pg.setAttribute("position", new THREE.BufferAttribute(arr, 3));
+    const pm = new THREE.PointsMaterial({ color, size: MOBILE ? 6 : 5, sizeAttenuation: false, transparent: true, opacity: 1, depthWrite: false, blending: THREE.AdditiveBlending, fog: false });
+    g.add(new THREE.Points(pg, pm));
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(9, 24, 16), new THREE.MeshBasicMaterial({ color, fog: false })); dot.position.copy(o); g.add(dot);
+    let block = null;
+    if (stuck) { block = new THREE.Mesh(new THREE.TorusGeometry(12, 2.4, 12, 40), new THREE.MeshBasicMaterial({ color: 0xff453a, fog: false })); block.position.copy(curve.getPoint(0.82)); block.lookAt(curve.getPoint(0.84)); g.add(block); }
+    flows.push({ s, curve, arr, pg, stuck, o, block, speed: 0.12 + Math.min(Math.abs(s.chg), 2) * 0.08 });
+  }
+  const glow = new THREE.Mesh(new THREE.SphereGeometry(6, 24, 16), new THREE.MeshBasicMaterial({ color: tw >= 0 ? 0x30d158 : 0xff453a, transparent: true, opacity: 0.9 }));
+  glow.position.copy(target); g.add(glow);
+  layers.flow.tick = t => {
+    for (const f of flows) {
+      const N = f.arr.length / 3;
+      for (let i = 0; i < N; i++) {
+        let p = (i / N + t * f.speed) % 1;
+        if (f.stuck) p *= 0.82;   // 卡住：粒子到這裡就停
+        const v = f.curve.getPoint(p); f.arr[i * 3] = v.x; f.arr[i * 3 + 1] = v.y; f.arr[i * 3 + 2] = v.z;
+      }
+      f.pg.attributes.position.needsUpdate = true;
+      if (f.block) f.block.scale.setScalar(1 + 0.15 * Math.sin(t * 5));
+    }
+    glow.scale.setScalar(1 + 0.25 * Math.sin(t * 3));
+  };
+  layers.flow.on = () => {
+    for (const f of flows) addLabel(`${esc(f.s.label)}<span class="n ${cls(f.s.chg)}">${sgn(f.s.chg)}${fmt(f.s.chg, 2)}%</span>`, f.o.clone().add(new THREE.Vector3(0, 14, 0)), "flow", "flow");
+    addLabel(`台股加權<span class="n ${cls(tw)}">${sgn(tw)}${fmt(tw, 2)}%</span><span class="n">外資 ${inst.net != null ? (inst.net > 0 ? "買超 " : "賣超 ") + fmt(Math.abs(inst.net), 0) + " 億" : "—"}</span>`, target.clone().add(new THREE.Vector3(0, 16, 0)), "flow", "flow");
+    const st = flows.filter(f => f.stuck);
+    caption("資金流 · 海外 → 台灣", st.length ? `卡在台灣這一端` : "海外的方向，台股跟上了",
+      st.length ? `${st.map(f => esc(f.s.label.split(" ")[0]) + ` <span class="${cls(f.s.chg)}">${sgn(f.s.chg)}${fmt(f.s.chg, 2)}%</span>`).join("、")}，台股卻 <b class="${cls(tw)}">${sgn(tw)}${fmt(tw, 2)}%</b>` +
+        (inst.net != null ? `<br>外資${inst.net > 0 ? "買超" : "賣超"} <b>${fmt(Math.abs(inst.net), 0)} 億</b>，美元兌台幣 <b>${fmt(usd.mid, 2)}</b>` : "") + `<br>紅圈＝傳導斷在這裡`
+        : `台股 <b class="${cls(tw)}">${sgn(tw)}${fmt(tw, 2)}%</b>，與主要海外市場同方向` + (inst.net != null ? `<br>外資${inst.net > 0 ? "買超" : "賣超"} <b>${fmt(Math.abs(inst.net), 0)} 億</b>` : ""),
+      "收盤資料 · 線條顏色＝該市場漲跌");
+    flyTo(new THREE.Vector3(tx + 120, MOBILE ? 1100 : 760, tz + (MOBILE ? 1150 : 900)), new THREE.Vector3(tx + 20, 40, tz - 120));
+  };
+  layers.flow.off = () => { clearLabels("flow"); flyTo(HOME.pos, HOME.tgt); };
+}
+
+/* ---------- 鏡頭 ---------- */
+// 手機是直的畫面：從南往北看，讓島的長軸剛好直立、填滿螢幕
+const HOME = MOBILE ? { pos: new THREE.Vector3(36, 520, 470), tgt: new THREE.Vector3(0, 0, -40) } : { pos: new THREE.Vector3(170, 330, 430), tgt: new THREE.Vector3(0, 10, 10) };
+let fly = null;
+function flyTo(pos, tgt, dur = 2.2) { fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: pos.clone(), t1: tgt.clone(), k: 0, dur }; }
+const ease = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+
+function setLayer(name) {
+  if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); }
+  cur = name; const L = layers[name]; if (!L) return;
+  L.g.visible = true; L.on && L.on();
+  dimTo = name === "wx" ? 0 : 1;
+  document.querySelectorAll("#dock button").forEach(b => b.classList.toggle("on", b.dataset.l === name));
+}
+
+/* ---------- 縣市卡片 ---------- */
+function openCard(c) {
+  const nm = c.name, short = norm(nm).replace(/[縣市]$/, "");
+  const W = P.weather || {}, wi = (W.items || []).find(x => norm(nm).startsWith(norm(x.city)));
+  const warn = (W.warnings || []).filter(w => norm(w.where) === norm(nm));
+  const hk = Object.keys((P.house || {}).city || {}).find(k => norm(k) === norm(nm)), hv = hk ? P.house.city[hk] : null;
+  const news = (((P.localnews || {}).counties || {})[Object.keys((P.localnews || {}).counties || {}).find(k => norm(k) === norm(nm))] || []).slice(0, 4);
+  const al = ((P.alerts || {}).alerts || []).filter(a => (a.area || []).some(x => norm(x).includes(short)));
+  const stop = (((P.alerts || {}).stopwork || {}).items || []).filter(s => norm(s.county || s.city || "").includes(short));
+  const fc = wi && wi.forecast && wi.forecast[0];
+  $("cardBody").innerHTML = `
+    <h3>${esc(nm)}</h3>
+    <div class="sub">${wi ? esc(wi.weather || "") + (wi.obsTime ? " · " + wi.obsTime.slice(11, 16) + " 觀測" : "") : "　"}</div>
+    ${warn.map(w => `<span class="tag">${esc(w.what)}${esc(w.level)}</span>`).join("")}${al.map(a => `<span class="tag">${esc(a.title || a.event || "示警")}</span>`).join("")}${stop.map(s => `<span class="tag">${esc(s.status || "停班停課")}</span>`).join("")}
+    <div class="grid">
+      <div class="kv"><div class="k">氣溫</div><div class="v">${wi ? fmt(wi.temp, 1) + "<small>°C</small>" : "—"}</div></div>
+      <div class="kv"><div class="k">降雨機率</div><div class="v">${fc ? esc(fc.pop) + "<small>%</small>" : "—"}</div></div>
+      <div class="kv"><div class="k">房價中位數</div><div class="v">${hv ? fmt(hv) + "<small>萬／坪</small>" : "—"}</div></div>
+      <div class="kv"><div class="k">24 小時雨量</div><div class="v">${wi ? fmt(wi.rain24h, 1) + "<small>mm</small>" : "—"}</div></div>
+    </div>
+    <div class="sec">在地新聞</div>
+    <ul>${news.length ? news.map(n => `<li><a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a><span class="m">${esc(n.source || "")} · ${ago(n.at)}</span></li>`).join("") : `<li style="color:var(--fg3)">目前沒有</li>`}</ul>
+    ${CITY_OF[norm(nm)] && BMETA ? `<button class="pill primary" style="margin-top:14px;width:100%" onclick="window.__intel3d.flyCity('${CITY_OF[norm(nm)]}')">進入市區看建築</button>` : ""}
+    <a class="more" href="/terminal/" >在完整終端機看更多 ›</a>`;
+  $("card").classList.add("show");
+  if (hoverLine) { scene.remove(hoverLine); hoverLine = null; }
+  hoverLine = new THREE.Group();
+  const m = new THREE.LineBasicMaterial({ color: 0x2997ff, transparent: true, opacity: 0.95 });
+  for (const r of c.rings) hoverLine.add(ringLine(r, m, 0.5));
+  scene.add(hoverLine);
+  const [x, z] = toXZ(c.c[0], c.c[1]);
+  if (cur !== "flow") flyTo(new THREE.Vector3(x + 90, 230, z + 210), new THREE.Vector3(x, hAt(c.c[0], c.c[1]) * 0.5, z), 1.6);
+  controls.autoRotate = false;
+}
+$("cardX").onclick = () => { $("card").classList.remove("show"); if (hoverLine) { scene.remove(hoverLine); hoverLine = null; } };
+
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2(); let downAt = null;
+renderer.domElement.addEventListener("pointerdown", e => { downAt = [e.clientX, e.clientY]; controls.autoRotate = false; });
+renderer.domElement.addEventListener("pointerup", e => {
+  if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6 || !document.body.classList.contains("exploring")) return;
+  mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
+  const oh = OBJ.pick.length ? ray.intersectObjects(OBJ.pick, false)[0] : null;
+  if (oh) { oh.object.userData.info.tower ? openTower() : openObjCard(oh.object.userData.info); return; }
+  const hit = ray.intersectObject(terrain)[0]; if (!hit) return;
+  const lon = hit.point.x / KX + LONC, lat = -hit.point.z / KY + LATC, c = countyAt(lon, lat);
+  if (c) openCard(c);
+});
+
+
+/* ---------- 資訊物件：每個物件用一個看得到的屬性代表一個真實數字 ---------- */
+const OBJ = { g: null, pick: [], tick: [] };
+const UPC = new THREE.Color(0x30d158), DNC = new THREE.Color(0xff453a);
+function objInfo(mesh, info) { mesh.traverse(m => { if (m.isMesh) { m.userData.info = info; OBJ.pick.push(m); } }); }
+function at(lon, lat, lift = 0) { const [x, z] = toXZ(lon, lat); return new THREE.Vector3(x, hAt(lon, lat) + lift, z); }
+const mat = (c, e = 0, ei = 0) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.6, metalness: 0.05, emissive: e, emissiveIntensity: ei });
+function shipMesh(L, cols) {
+  const g = new THREE.Group();
+  const hull = new THREE.Mesh(new THREE.BoxGeometry(L, L * 0.12, L * 0.22), mat(0x2b2f36)); hull.position.y = L * 0.06; g.add(hull);
+  const bow = new THREE.Mesh(new THREE.ConeGeometry(L * 0.11, L * 0.2, 4), mat(0x2b2f36)); bow.rotation.z = -Math.PI / 2; bow.rotation.x = Math.PI / 4; bow.position.set(L * 0.6, L * 0.06, 0); g.add(bow);
+  const n = cols.length;
+  cols.forEach((c, i) => { const b = new THREE.Mesh(new THREE.BoxGeometry(L * 0.7 / n * 0.9, L * 0.1, L * 0.18), mat(c)); b.position.set(-L * 0.3 + (i + 0.5) * L * 0.7 / n, L * 0.17, 0); g.add(b); });
+  const br = new THREE.Mesh(new THREE.BoxGeometry(L * 0.1, L * 0.2, L * 0.18), mat(0xf2f2f2)); br.position.set(-L * 0.42, L * 0.2, 0); g.add(br);
+  return g;
+}
+function planeMesh(L, c = 0xf4f4f6) {
+  const g = new THREE.Group();
+  const f = new THREE.Mesh(new THREE.CylinderGeometry(L * 0.06, L * 0.04, L, 10), mat(c)); f.rotation.z = Math.PI / 2; g.add(f);
+  const w = new THREE.Mesh(new THREE.BoxGeometry(L * 0.22, L * 0.02, L * 0.9), mat(c)); g.add(w);
+  const t = new THREE.Mesh(new THREE.BoxGeometry(L * 0.12, L * 0.18, L * 0.02), mat(c)); t.position.set(-L * 0.45, L * 0.09, 0); g.add(t);
+  return g;
+}
+function setupObjects() {
+  if (OBJ.g) scene.remove(OBJ.g);
+  OBJ.g = new THREE.Group(); OBJ.pick = []; OBJ.tick = []; scene.add(OBJ.g);
+  const pul = ((P.pulse || {}).items || []).find(x => x.sym === "^TWII") || {};
+  const inst = (((P.tw_market || {}).institutions || {}).items || []).find(x => x.name === "外資") || {};
+  const semi = (((P.revenue || {}).inds) || []).find(x => x.name === "半導體業") || {};
+  const orders = (P.lead || {}).orders || {};
+  const wci = (((P.commodities || {}).shipping) || [])[0] || {};
+  const ap = (P.airport || {}).dep || {};
+  // 1) 台北 101 燈柱 ＝ 台股加權漲跌
+  {
+    const ch = pul.chg_pct ?? 0, col = ch >= 0 ? UPC : DNC, k = Math.min(Math.abs(ch) / 2, 1);
+    const p = at(121.5645, 25.034, 1.4);
+    const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 40, 16, 1, true), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.18 + 0.4 * k, blending: THREE.AdditiveBlending, depthWrite: false }));
+    beam.position.copy(p).add(new THREE.Vector3(0, 20, 0)); OBJ.g.add(beam);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.18, 8, 40), new THREE.MeshBasicMaterial({ color: col })); ring.rotation.x = Math.PI / 2; ring.position.copy(p); OBJ.g.add(ring);
+    const info = { t: "台北 101 光柱", v: `台股加權 ${sgn(ch)}${fmt(ch, 2)}%`, d: `綠色＝上漲、紅色＝下跌，越亮代表漲跌越大。收盤 ${fmt(pul.price, 0)}`, src: "台股加權指數" };
+    objInfo(beam, info); objInfo(ring, info);
+    OBJ.tick.push(t => { beam.material.opacity = (0.16 + 0.4 * k) * (0.8 + 0.2 * Math.sin(t * 2)); ring.scale.setScalar(1 + 0.12 * Math.sin(t * 2)); });
+  }
+  // 2) 晶圓廠發光 ＝ 半導體業營收年增
+  {
+    const y = semi.yoy ?? 0, k = Math.max(0.1, Math.min(y / 80, 1));
+    const sites = [["新竹科學園區", 120.995, 24.776], ["台中科學園區", 120.615, 24.21], ["南部科學園區", 120.272, 23.1]];
+    for (const [nm, lo, la] of sites) {
+      const g = new THREE.Group(); g.position.copy(at(lo, la));
+      const body = new THREE.Mesh(new THREE.BoxGeometry(5, 1.4, 3), mat(0xe8e8ea)); body.position.y = 0.7; g.add(body);
+      const roof = new THREE.Mesh(new THREE.BoxGeometry(4.4, 0.12, 2.4), new THREE.MeshBasicMaterial({ color: new THREE.Color(0x64d2ff).lerp(new THREE.Color(0xffffff), 0.2) })); roof.position.y = 1.46; g.add(roof);
+      for (const dx of [-1.6, 1.6]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.22, 1.6, 10), mat(0xd0d0d4)); c.position.set(dx, 2.2, -1); g.add(c); }
+      OBJ.g.add(g);
+      objInfo(g, { t: nm + "・晶圓廠", v: `半導體業營收年增 ${sgn(y)}${fmt(y, 1)}%`, d: `屋頂越亮代表年增越高。領頭：${(semi.lead || []).map(x => esc(x.name) + " " + sgn(x.yoy) + fmt(x.yoy, 0) + "%").join("、")}`, src: "上市櫃月營收" + ((P.revenue || {}).ind_period ? " · " + P.revenue.ind_period : "") });
+      OBJ.tick.push(t => { roof.material.color.setRGB(0.39 + 0.6 * k * (0.75 + 0.25 * Math.sin(t * 3 + lo)), 0.82, 1); });
+    }
+  }
+  // 3) 貨櫃輪 ＝ 外銷訂單年增（船數）＋運價週變化（船速）
+  {
+    const yy = orders.yoy ?? 0, n = Math.max(2, Math.min(14, Math.round(4 + yy / 8))), sp = 0.025 * (1 + Math.max(-0.6, Math.min(0.6, (wci.chg_pct || 0) / 10)));
+    const lanes = [[at(120.26, 22.6, 0), at(119.4, 22.2, 0)], [at(120.49, 24.29, 0), at(119.6, 24.6, 0)]];
+    const palette = [0xff9f0a, 0x0a84ff, 0x30d158, 0xff375f, 0xffd60a, 0x64d2ff];
+    for (let i = 0; i < n; i++) {
+      const [a, b] = lanes[i % 2]; const ship = shipMesh(3.2, [palette[i % 6], palette[(i + 2) % 6], palette[(i + 4) % 6]]); OBJ.g.add(ship);
+      const ph = i / n, dir = b.clone().sub(a); ship.rotation.y = -Math.atan2(dir.z, dir.x);
+      objInfo(ship, { t: "貨櫃輪", v: `外銷訂單年增 ${sgn(yy)}${fmt(yy, 1)}%（${orders.month || ""}）`, d: `船越多代表訂單成長越快（目前 ${n} 艘）；船速跟著貨櫃運價週變化 ${sgn(wci.chg_pct)}${fmt(wci.chg_pct, 1)}%。`, src: "經濟部外銷訂單 · Drewry WCI" });
+      OBJ.tick.push(t => { const u = (t * sp + ph) % 1; ship.position.lerpVectors(a, b, u); ship.position.y = 0.05 + 0.04 * Math.sin(t * 2 + i); });
+    }
+  }
+  // 4) 桃園機場飛機 ＝ 今日離境航班；延誤的在空中盤旋
+  {
+    const tot = ap.total || 0, dl = ap.delayed || 0, cx = ap.cancelled || 0;
+    const base = at(121.232, 25.077, 0.3), n = Math.max(2, Math.min(9, Math.round(tot / 45)));
+    for (let i = 0; i < n; i++) {
+      const pl = planeMesh(2.2); OBJ.g.add(pl);
+      objInfo(pl, { t: "桃園機場", v: `今日離境 ${tot} 班`, d: `延誤 ${dl} 班、取消 ${cx} 班。起飛的飛機數跟著航班量，延誤的在機場上空盤旋。`, src: "桃園機場航班" });
+      const ph = i / n, ang = -0.6 + (i % 3) * 0.5;
+      OBJ.tick.push(t => { const u = (t * 0.05 + ph) % 1; pl.position.set(base.x + Math.cos(ang) * u * 60, base.y + Math.pow(u, 1.4) * 22, base.z - Math.sin(ang) * u * 60); pl.rotation.set(0, ang, 0.12 + u * 0.1); });
+    }
+    for (let i = 0; i < Math.min(dl, 6); i++) {
+      const pl = planeMesh(2.0, 0xffd60a); OBJ.g.add(pl);
+      objInfo(pl, { t: "延誤航班", v: `延誤 ${dl} 班`, d: "黃色飛機在機場上空盤旋，數量＝延誤班次（最多顯示 6 架）。", src: "桃園機場航班" });
+      OBJ.tick.push(t => { const a = t * 0.4 + i * 1.05; pl.position.set(base.x + Math.cos(a) * 7, base.y + 9 + i * 0.6, base.z + Math.sin(a) * 7); pl.rotation.set(0, -a - Math.PI / 2, -0.3); });
+    }
+  }
+  // 5) 海峽外的船隊 ＝ 外資買賣超
+  {
+    const net = inst.net ?? 0, n = Math.max(1, Math.min(12, Math.round(Math.abs(net) / 100))), buy = net > 0, col = buy ? UPC : DNC;
+    const shore = at(120.9, 24.95, 0), sea = at(119.75, 25.15, 0);
+    for (let i = 0; i < n; i++) {
+      const g = new THREE.Group();
+      const hull = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.4, 0.8), mat(0x8e9299)); hull.position.y = 0.2; g.add(hull);
+      const flag = new THREE.Mesh(new THREE.ConeGeometry(0.35, 1.1, 8), new THREE.MeshBasicMaterial({ color: col })); flag.position.y = 1.0; g.add(flag);
+      OBJ.g.add(g);
+      objInfo(g, { t: "外資船隊", v: `外資${buy ? "買超" : "賣超"} ${fmt(Math.abs(net), 0)} 億`, d: `船往台灣開＝買超、往外海開＝賣超；船數＝金額（每 100 億一艘，目前 ${n} 艘）。`, src: "證交所三大法人 · " + (((P.tw_market || {}).institutions || {}).date || "") });
+      const off = new THREE.Vector3((i % 4) * 3 - 4.5, 0, Math.floor(i / 4) * 3 - 3), ph = i / n;
+      OBJ.tick.push(t => { let u = (t * 0.03 + ph) % 1; if (buy) u = 1 - u; g.position.lerpVectors(shore, sea, 0.15 + u * 0.75).add(off); g.position.y = 0.05; g.rotation.y = buy ? Math.PI * 0.95 : -Math.PI * 0.05; });
+    }
+  }
+}
+
+const PNAMES = {"pulse": "台股大盤", "taiex": "台股大盤", "fx": "匯率", "taifex": "台指期籌碼", "world": "主要經濟體大盤", "usbig": "美股巨頭、期貨與美債", "fear": "恐慌三層 ＋ 期限結構", "sectors": "美股板塊輪動（代理指標）", "cmdty": "原物料與運價", "lux": "精品與快時尚", "poly": "世界在賭什麼", "mops": "上市櫃重大訊息", "revenue": "通路與供應鏈", "supply": "零售分業", "veg": "菜價", "cards": "消費溫度", "demo": "人口結構", "bizlife": "公司開關", "housefc": "房市動能", "lead": "景氣轉向", "imports": "農產品進口量", "jobs": "職缺溫度", "consume": "消費溫度計", "calendar": "接下來三週", "liq": "美元流動性", "macro": "台灣總經", "gmacro": "全球總經", "think": "智庫觀點", "news": "時事", "watch": "關注領域", "tenders": "政府標案", "design": "設計與廣告媒體", "radar": "公司雷達", "brands": "新品牌雷達", "crowd": "集資雷達", "aiwire": "AI 快線", "weekly": "本週市場往哪走", "chain": "主題鏈", "ledger": "預測帳本", "voice": "趨勢雷達", "wiki": "主題溫度計", "tech2": "科技前沿", "pop": "流行排行", "devpulse": "開發者論壇熱串", "awards": "決標公告", "tech": "GitHub", "oss": "GitHub Trending", "lyst": "全球最熱品牌與單品", "youtube": "台灣發燒榜", "media": "時尚媒體", "attention": "注意力流向", "mood": "台灣情緒", "cofacts": "真的假的", "ptt": "台灣大眾情緒", "geo": "全台現場", "elect": "2026 五都選戰", "twnow": "各地現況", "twpulse": "台灣脈搏", "roads": "全台路況", "metro": "台北捷運各站人流", "weather": "主要縣市", "quake": "顯著有感地震", "power": "台電備轉容量", "house": "實價登錄", "vauth": "歷史資料庫", "vsearch": "全文搜尋", "vtime": "時光機", "vseries": "走勢", "airport": "桃機今日航班", "commodities": "原物料與運價", "luxury": "精品與快時尚", "liquidity": "美元流動性", "tw_market": "台股籌碼", "tw_stocks": "台股個股", "tw_pulse": "台灣脈搏", "radar_wx": "雷達回波", "typhoon": "颱風", "alerts": "災害示警", "localnews": "地方新聞", "culture": "藝文活動", "corp": "企業動態", "policy": "政策", "ipr": "商標與專利", "taxreg": "稅籍新開店", "etfholders": "ETF 存股", "social": "Bluesky 聲量", "trends": "Google 熱搜", "fish": "魚價", "fruit": "果價", "meat": "肉價", "oil": "中油牌價", "secwords": "美國企業用詞", "flights": "航班", "lightning": "閃電", "mapfeed": "地圖事件"};
+function setupObjects2() {
+  const g0 = OBJ.g;
+  const add = o => { g0.add(o); return o; };
+  // 6) 西門町屋頂看板 ＝ Google 熱搜前幾名（輪播）
+  {
+    const items = ((P.trends || {}).items || []).slice(0, 5);
+    if (items.length) {
+      const cv = document.createElement("canvas"); cv.width = 512; cv.height = 256; const cx = cv.getContext("2d");
+      const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+      let idx = 0;
+      const draw = () => { const it = items[idx % items.length]; cx.fillStyle = "#0b0b0d"; cx.fillRect(0, 0, 512, 256); cx.fillStyle = "#ff375f"; cx.fillRect(0, 0, 512, 46);
+        cx.fillStyle = "#fff"; cx.font = "600 28px -apple-system, 'PingFang TC', 'Noto Sans TC', sans-serif"; cx.fillText(`熱搜 #${idx % items.length + 1}`, 18, 33);
+        cx.font = "700 54px -apple-system, 'PingFang TC', 'Noto Sans TC', sans-serif"; const t = it.title.length > 9 ? it.title.slice(0, 9) + "…" : it.title; cx.fillText(t, 18, 140);
+        cx.fillStyle = "#a1a1a6"; cx.font = "400 30px -apple-system, sans-serif"; cx.fillText(`搜尋 ${it.traffic || ""}`, 18, 210); tex.needsUpdate = true; };
+      draw();
+      const p = at(121.507, 25.043, 0.3), g = new THREE.Group(); g.position.copy(p);
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 4, 8), mat(0x3a3a3c)); pole.position.y = 2; g.add(pole);
+      const board = new THREE.Mesh(new THREE.PlaneGeometry(6, 3), new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })); board.position.y = 5.5; g.add(board);
+      add(g);
+      objInfo(g, { t: "西門町看板・Google 熱搜", v: items.slice(0, 3).map(x => x.title).join("、"), d: `台灣此刻的 Google 熱搜，看板每 6 秒換一則。<br>${items.map((x, i) => `${i + 1}. ${esc(x.title)}（${esc(x.traffic || "")}）`).join("<br>")}`, src: "Google Trends 台灣" });
+      OBJ.tick.push(t => { const k = Math.floor(t / 6); if (k !== idx) { idx = k; draw(); } board.lookAt(camera.position.x, board.getWorldPosition(new THREE.Vector3()).y, camera.position.z); });
+    }
+  }
+  // 7) 五都上空熱氣球 ＝ 選舉預測市場（高度＝領先者勝選機率）
+  {
+    const POS = { "台北": [121.56, 25.06], "新北": [121.45, 24.99], "桃園": [121.3, 24.98], "台中": [120.68, 24.15], "台南": [120.22, 23.0], "高雄": [120.32, 22.64] };
+    for (const c of ((P.elect || {}).cities || [])) {
+      const pos = POS[c.city]; if (!pos) continue;
+      const cs = [...(c.cands || [])].sort((a, b) => b.p - a.p), top = cs[0]; if (!top) continue;
+      const g = new THREE.Group(), base = at(pos[0], pos[1], 0), hgt = 8 + top.p / 100 * 30;
+      const bal = new THREE.Mesh(new THREE.SphereGeometry(2.2, 20, 14), mat(0xf5f5f7, 0x000000, 0)); bal.scale.y = 1.2; g.add(bal);
+      const band = new THREE.Mesh(new THREE.CylinderGeometry(2.25, 2.25, 0.6, 20, 1, true), new THREE.MeshBasicMaterial({ color: top.d7 >= 0 ? 0x30d158 : 0xff453a })); g.add(band);
+      const bk = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.6, 0.8), mat(0x8e6b4a)); bk.position.y = -3.4; g.add(bk);
+      const rope = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, hgt, 4), new THREE.MeshBasicMaterial({ color: 0x9a9a9e, transparent: true, opacity: 0.5 })); rope.position.y = -hgt / 2 - 3.4; g.add(rope);
+      g.position.copy(base).add(new THREE.Vector3(0, hgt + 3.4, 0)); add(g);
+      objInfo(g, { t: `${c.city}市長選舉・熱氣球`, v: `${top.name} ${fmt(top.p, 0)}%（7 天 ${sgn(top.d7)}${fmt(top.d7, 1)}）`, d: `飛得越高＝領先者勝選機率越高；腰帶綠色＝這 7 天機率上升、紅色＝下降。這是預測市場價格，不是民調。<br>${cs.slice(0, 3).map(x => `${esc(x.name)}（${esc(x.party || "")}）${fmt(x.p, 0)}%`).join("<br>")}`, src: "預測市場 · 投票日 " + ((P.elect || {}).day || "") });
+      const ph = pos[0] * 3;
+      OBJ.tick.push(t => { g.position.y = base.y + hgt + 3.4 + Math.sin(t * 0.8 + ph) * 0.6; });
+    }
+  }
+  // 8) 夜市攤位 ＝ 餐飲業營業額年增（亮的攤位數）
+  {
+    const fd = (((P.consume || {}).focus) || []).find(x => x.name === "餐飲業") || {}, yy = fd.yoy ?? 0, litK = Math.max(0.1, Math.min(1, 0.4 + yy / 25));
+    const sites = [["士林夜市", 121.524, 25.088], ["逢甲夜市", 120.646, 24.18], ["花園夜市", 120.205, 23.012], ["六合夜市", 120.3, 22.631]];
+    for (const [nm, lo, la] of sites) {
+      const g = new THREE.Group(); g.position.copy(at(lo, la, 0.2)); const lamps = [];
+      for (let i = 0; i < 10; i++) {
+        const st = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.5, 0.7), mat(0xe8e2d6)); st.position.set((i % 5) * 0.9 - 1.8, 0.25, Math.floor(i / 5) * 1.4 - 0.7); g.add(st);
+        const on = (i + 0.5) / 10 < litK;
+        const lp = new THREE.Mesh(new THREE.SphereGeometry(0.16, 8, 6), new THREE.MeshBasicMaterial({ color: on ? 0xffb340 : 0x3a3a3c })); lp.position.set(st.position.x, 0.75, st.position.z); g.add(lp); if (on) lamps.push(lp);
+      }
+      add(g);
+      objInfo(g, { t: nm, v: `餐飲業營業額年增 ${sgn(yy)}${fmt(yy, 1)}%`, d: `亮燈的攤位越多代表餐飲業成長越快（全台電子發票，${(P.consume || {}).month || ""}）。`, src: "財政部電子發票" });
+      OBJ.tick.push(t => { lamps.forEach((l, i) => l.scale.setScalar(1 + 0.25 * Math.sin(t * 4 + i))); });
+    }
+  }
+  // 9) 工地吊車 ＝ 稅籍新開店（半年對去年同期）
+  {
+    const tx = P.taxreg || {}, yy = tx.raw_yoy ?? 0;
+    const sites = [[121.3, 25.0], [120.66, 24.17], [120.33, 22.66], [121.45, 25.03]];
+    for (const [lo, la] of sites) {
+      const g = new THREE.Group(); g.position.copy(at(lo, la, 0));
+      const mast = new THREE.Mesh(new THREE.BoxGeometry(0.3, 7, 0.3), mat(0xffcc00)); mast.position.y = 3.5; g.add(mast);
+      const jib = new THREE.Group(); jib.position.y = 7;
+      const arm = new THREE.Mesh(new THREE.BoxGeometry(6, 0.25, 0.25), mat(0xffcc00)); arm.position.x = 2; jib.add(arm);
+      const hook = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), mat(0x636366)); hook.position.set(4.2, -1.5, 0); jib.add(hook);
+      g.add(jib); add(g);
+      objInfo(g, { t: "工地吊車・新開店", v: `稅籍新開店 ${sgn(yy)}${fmt(yy, 1)}%（半年 vs 去年同期）`, d: `吊車轉得越快＝新開店越多；負成長時吊車停住。近半年新開 ${fmt(tx.n6, 0)} 家，去年同期 ${fmt(tx.ly6, 0)} 家。`, src: "財政部稅籍登記 · " + (tx.win || []).join("～") });
+      const sp = yy > 0 ? 0.15 + yy / 40 : 0, ph = lo;
+      OBJ.tick.push(t => { jib.rotation.y = sp ? t * sp + ph : ph; });
+    }
+  }
+  // 10) 電廠煙囪 ＝ 台電備轉容量燈號
+  {
+    const pw = P.power || {}, lv = pw.level || "", col = /紅|黑/.test(lv) ? 0xff453a : /橘/.test(lv) ? 0xff9f0a : /黃/.test(lv) ? 0xffd60a : 0x30d158;
+    for (const [nm, lo, la] of [["台中電廠", 120.48, 24.21], ["興達電廠", 120.2, 22.86], ["林口電廠", 121.3, 25.12]]) {
+      const g = new THREE.Group(); g.position.copy(at(lo, la, 0));
+      const st = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.55, 9, 12), mat(0xd8d8dc)); st.position.y = 4.5; g.add(st);
+      const lt = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 8), new THREE.MeshBasicMaterial({ color: col })); lt.position.y = 9.3; g.add(lt);
+      const puffs = []; for (let i = 0; i < 4; i++) { const pf = new THREE.Mesh(new THREE.SphereGeometry(0.7, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.35, depthWrite: false })); g.add(pf); puffs.push(pf); }
+      add(g);
+      objInfo(g, { t: nm + "・用電", v: `備轉容量率 ${fmt(pw.reserve_pct, 1)}%（${esc(lv)}燈）`, d: `煙囪頂燈＝台電燈號；煙越多＝用電越滿（目前使用率 ${fmt(pw.util_pct, 0)}%）。`, src: "台電 · " + esc(pw.asof || "") });
+      const u = Math.max(0.2, Math.min(1, (pw.util_pct || 50) / 100));
+      OBJ.tick.push(t => { puffs.forEach((pf, i) => { const k = (t * 0.25 * u + i / 4) % 1; pf.position.set(k * 2, 9.5 + k * 6, 0); pf.scale.setScalar(0.6 + k * 1.6); pf.material.opacity = 0.4 * (1 - k) * u; }); });
+    }
+  }
+  // 11) 燈塔 ＝ 災害示警與顯著地震（有事件才轉）
+  {
+    const al = (P.alerts || {}), nAl = al.n_total || 0, qk = ((P.quake || {}).items || [])[0], fresh = qk && (Date.now() - new Date(qk.at)) < 864e5;
+    const active = nAl > 0 || fresh;
+    for (const [nm, lo, la] of [["富貴角燈塔", 121.536, 25.297], ["鵝鑾鼻燈塔", 120.857, 21.903]]) {
+      const g = new THREE.Group(); g.position.copy(at(lo, la, 0));
+      const tw = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.7, 5, 12), mat(0xf5f5f7)); tw.position.y = 2.5; g.add(tw);
+      const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.5, 12, 8), new THREE.MeshBasicMaterial({ color: active ? 0xffd60a : 0x48484a })); lamp.position.y = 5.3; g.add(lamp);
+      const beam = new THREE.Mesh(new THREE.ConeGeometry(2.2, 14, 16, 1, true), new THREE.MeshBasicMaterial({ color: 0xfff3b0, transparent: true, opacity: active ? 0.22 : 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+      beam.rotation.z = Math.PI / 2; beam.position.set(7, 0, 0); const piv = new THREE.Group(); piv.position.y = 5.3; piv.add(beam); g.add(piv);
+      add(g);
+      objInfo(g, { t: nm, v: active ? `示警 ${nAl} 則${fresh ? `・24 小時內 M${fmt(qk.mag)} 地震` : ""}` : "目前沒有示警", d: "有災害示警或 24 小時內有顯著有感地震時，燈塔會亮起並旋轉。", src: "國家災害示警 · 氣象署地震" });
+      if (active) OBJ.tick.push(t => { piv.rotation.y = t * 1.2; });
+    }
+  }
+  // 12) 資料塔 ＝ 其餘所有面板
+  {
+    const g = new THREE.Group(); g.position.copy(at(121.517, 25.048, 0));
+    const n = Object.keys(P).length;
+    for (let i = 0; i < Math.min(n, 40); i++) { const fl = new THREE.Mesh(new THREE.BoxGeometry(1.4 - i * 0.012, 0.32, 1.4 - i * 0.012), new THREE.MeshStandardMaterial({ color: 0x1c1c1e, emissive: 0x2997ff, emissiveIntensity: 0.15 + (i % 3) * 0.12 })); fl.position.y = 0.2 + i * 0.36; g.add(fl); }
+    add(g);
+    g.traverse(m => { if (m.isMesh) { m.userData.info = { t: "資料塔", v: `${n} 個面板`, d: "", src: "", tower: true }; OBJ.pick.push(m); } });
+  }
+  wrapObjects();
+}
+// 物件是給「整座島」的比例做的；拉近到市區時跟著縮小，不擋住建築（以物件落地點為中心縮放）
+const _bb = new THREE.Box3();
+function wrapObjects() {
+  OBJ.wrap = []; OBJ.free = [];
+  const kids = [...OBJ.g.children];
+  // 先試跑兩個時間點：會自己移動的（船、飛機、熱氣球）直接縮自己，靜止的包一層、以落地點為中心縮
+  const p0 = kids.map(o => o.position.clone());
+  for (const f of OBJ.tick) f(0.37);
+  const p1 = kids.map(o => o.position.clone());
+  for (const f of OBJ.tick) f(5.91);
+  kids.forEach((o, i) => {
+    if (o.position.distanceTo(p1[i]) > 1e-4 || p0[i].distanceTo(p1[i]) > 1e-4) { o.userData.s0 = o.scale.x; OBJ.free.push(o); return; }
+    _bb.setFromObject(o); if (_bb.isEmpty()) return;
+    const a = new THREE.Vector3((_bb.min.x + _bb.max.x) / 2, _bb.min.y, (_bb.min.z + _bb.max.z) / 2);
+    const w = new THREE.Group(); w.position.copy(a); OBJ.g.add(w);
+    o.position.sub(a); w.add(o); OBJ.wrap.push(w);
+  });
+}
+function scaleObjects() {
+  if (!OBJ.wrap) return;
+  const k = d => Math.min(1, Math.max(0.035, d / 160));
+  for (const w of OBJ.wrap) w.scale.setScalar(k(camera.position.distanceTo(w.position)));
+  for (const o of OBJ.free) o.scale.setScalar(o.userData.s0 * k(camera.position.distanceTo(o.position)));
+}
+function openTower() {
+  const keys = Object.keys(P).filter(k => P[k] && typeof P[k] === "object").sort((a, b) => (PNAMES[a] || a).localeCompare(PNAMES[b] || b, "zh-Hant"));
+  $("cardBody").innerHTML = `<h3>資料塔</h3><div class="sub">一層一個面板 · 共 ${keys.length} 個 · 點名稱到完整終端機</div><ul style="margin-top:12px">${keys.map(k => `<li><a href="/terminal/#p-${esc(k)}">${esc(PNAMES[k] || k)}</a><span class="m">${esc(k)} · ${P[k].updatedAt ? ago(P[k].updatedAt) + "更新" : ""}${P[k].error || (P[k].errs || []).length ? " · ⚠ 部分來源失敗" : ""}</span></li>`).join("")}</ul>`;
+  $("card").classList.add("show");
+}
+
+const tip = document.createElement("div"); tip.id = "tip"; document.body.appendChild(tip);
+let tipT = 0;
+renderer.domElement.addEventListener("pointermove", e => {
+  const now = performance.now(); if (now - tipT < 60 || !OBJ.pick.length) return; tipT = now;
+  mouse.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(mouse, camera);
+  const hit = ray.intersectObjects(OBJ.pick, false)[0];
+  if (hit) { const i = hit.object.userData.info; tip.innerHTML = `<b>${esc(i.t)}</b><span>${esc(i.v)}</span>`; tip.style.left = e.clientX + 14 + "px"; tip.style.top = e.clientY + 14 + "px"; tip.classList.add("show"); renderer.domElement.style.cursor = "pointer"; }
+  else { tip.classList.remove("show"); renderer.domElement.style.cursor = ""; }
+});
+function openObjCard(i) {
+  $("cardBody").innerHTML = `<h3>${esc(i.t)}</h3><div class="sub">${esc(i.src || "")}</div><div class="kv" style="margin-top:14px"><div class="k">現在</div><div class="v" style="font-size:22px">${esc(i.v)}</div></div><div class="sec">怎麼看</div><div style="font-size:14px;line-height:1.6;color:var(--fg2)">${i.d}</div><a class="more" href="/terminal/">在完整終端機看更多 ›</a>`;
+  $("card").classList.add("show");
+}
+
+/* ---------- 啟動 ---------- */
+function start() {
+  document.body.classList.add("exploring");
+  controls.autoRotate = false;
+  flyTo(HOME.pos, HOME.tgt, 2.4);
+  setLayer("wx");
+}
+$("go").onclick = start;
+document.querySelectorAll("#dock button").forEach(b => b.onclick = () => { setLayer(b.dataset.l); });
+
+const clock = new THREE.Clock(); let T = 0;
+function loop() {
+  const dt = Math.min(clock.getDelta(), 0.05); T += dt; uni.uTime.value = T;
+  uni.uDim.value += (dimTo - uni.uDim.value) * Math.min(1, dt * 3);
+  if (fly) {
+    fly.k = Math.min(1, fly.k + dt / fly.dur); const e = ease(fly.k);
+    camera.position.lerpVectors(fly.p0, fly.p1, e); controls.target.lerpVectors(fly.t0, fly.t1, e);
+    if (fly.k >= 1) fly = null;
+  }
+  for (const k in layers) if (layers[k].g && layers[k].g.visible && layers[k].tick) layers[k].tick(T, dt);
+  lodTick(dt);
+  for (const f of OBJ.tick) f(T);
+  scaleObjects();
+  { const cd = camera.position.distanceTo(controls.target); uni.uClose.value = Math.min(1, Math.max(0, (90 - cd) / 70)); renderer.toneMappingExposure = (uni.uNight.value ? 0.85 : 1.0) * (1 - 0.2 * uni.uClose.value); }
+  lmMat.emissiveIntensity = uni.uNight.value * 0.16; lmMat.color.setScalar(1 - uni.uNight.value * 0.88);
+  outlineGroup.visible = camera.position.distanceTo(controls.target) > 40;
+  controls.update(); renderer.render(scene, camera); placeLabels();
+  requestAnimationFrame(loop);
+}
+window.__intel3d = { camera, controls, flyTo, setLayer, start: () => start(), flyCity: k => flyCity(k), lod: () => { lodT = 1; lodTick(0); }, cities: CITY };
+addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+
+(async () => {
+  try {
+    await Promise.all([loadDEM(), loadData(), loadRoads(), loadBMeta()]);
+    buildTerrain(); await loadCounties(); addLandmarks();
+    applySun(); setInterval(applySun, 60000);
+    setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow(); setupObjects(); setupObjects2();
+    camera.position.set(-200, 1300, 1100); controls.target.set(0, 0, 0);
+    if (MOBILE) flyTo(new THREE.Vector3(40, 560, 560), new THREE.Vector3(0, 0, -90), 3.2);
+    else flyTo(new THREE.Vector3(200, 400, 470), new THREE.Vector3(0, 60, 0), 3.2);
+    $("load").classList.add("done");
+    loop();
+    setInterval(async () => {   // 每 5 分鐘更新資料：重建圖層
+      try {
+        await Promise.all([loadData(), loadRoads()]);
+        const was = cur; if (cur) { layers[cur].off && layers[cur].off(); }
+        for (const k in layers) { scene.remove(layers[k].g); }
+        for (const k in layers) delete layers[k];
+        setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow(); setupObjects(); setupObjects2();
+        cur = null; if (was && document.body.classList.contains("exploring")) setLayer(was);
+      } catch (e) { }
+    }, 300000);
+  } catch (e) {
+    console.error(e);
+    $("load").textContent = "載入失敗，請重新整理";
+  }
+})();
+</script>
+</body>
+</html>
