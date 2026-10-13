@@ -493,6 +493,17 @@ body.exploring.fl-on #gcrumb{display:flex}
 #crumb .path button.earth{color:#8e8e93}
 @media (max-width:760px){#gcrumb{top:112px;font-size:12px;backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(28,28,30,.92)}}
 #gcrumb{width:max-content;max-width:calc(100vw - 32px)}
+/* 地圖上的標籤都能點 */
+#labels .lbl{pointer-events:auto;cursor:pointer}
+#labels .lbl:hover{filter:brightness(1.25)}
+#labels .lbl.flt.sel{pointer-events:none}
+#lpop{position:fixed;z-index:15;max-width:300px;min-width:160px;padding:12px 30px 12px 14px;border-radius:14px;background:rgba(28,28,30,.94);border:1px solid rgba(255,255,255,.14);box-shadow:0 14px 40px rgba(0,0,0,.45);color:#f5f5f7;font-size:13px;line-height:1.45;opacity:0;transform:translateY(4px);pointer-events:none;transition:opacity .18s,transform .18s}
+#lpop.on{opacity:1;transform:none;pointer-events:auto}
+#lpop b{display:block;font-size:14px;font-weight:600}
+#lpop p{margin:4px 0 0;color:#c7c7cc;font-size:12.5px}
+#lpop .lp-k{display:block;font-style:normal;font-size:11px;font-weight:600;margin-bottom:2px}
+#lpop a{display:inline-block;margin-top:8px;color:#64d2ff;font-size:12.5px}
+#lpop [data-lp=x]{all:unset;position:absolute;top:6px;right:8px;cursor:pointer;color:#8e8e93;font-size:16px;line-height:1;padding:2px 4px}
 </style>
 <script type="importmap">
 {"imports":{
@@ -3072,7 +3083,7 @@ function gxBuild() {
     P0.material.color = new THREE.Color(col);
     GX.g.add(tube, dot, P0);
     GX.flows.push({ pts, P: P0, sp: 0.06 + 0.12 * mag, off: i * 0.13 });
-    GX.lbls.push([addLabel(`<span class="gxl"><b>${esc(n.name)}</b>${n.chg != null ? `<em style="color:#${new THREE.Color(col).getHexString()}">${s.key === "liq" || s.key === "inst" ? "" : gxPct(n.chg)}</em>` : n.w ? `<em>${n.w} 則</em>` : ""}</span>`, GLOBE.G(n.ll[0], n.ll[1], 260), "gx", "gx", 2 + mag * 3), GLOBE.G(n.ll[0], n.ll[1], 0)]);
+    GX.lbls.push([addLabel(`<span class="gxl" data-gx="${i}"><b>${esc(n.name)}</b>${n.chg != null ? `<em style="color:#${new THREE.Color(col).getHexString()}">${s.key === "liq" || s.key === "inst" ? "" : gxPct(n.chg)}</em>` : n.w ? `<em>${n.w} 則</em>` : ""}</span>`, GLOBE.G(n.ll[0], n.ll[1], 260), "gx", "gx", 2 + mag * 3), GLOBE.G(n.ll[0], n.ll[1], 0)]);
   });
   const tw = new THREE.Mesh(new THREE.SphereGeometry(55, 16, 12), fm(new THREE.MeshBasicMaterial({ color: 0xffffff }), 1)); tw.position.copy(GLOBE.G(TW_LL[0], TW_LL[1], 40)); GX.g.add(tw);
   addLabel(`<span class="gxl tw"><b>台灣</b></span>`, GLOBE.G(TW_LL[0], TW_LL[1], 300), "gx", "gx", 9);
@@ -3091,7 +3102,7 @@ function gxClock() {
     }
     const lt = `${String(Math.floor(st.loc.m / 60)).padStart(2, "0")}:${String(st.loc.m % 60).padStart(2, "0")}`;
     const sub = st.st === "open" ? `剩 ${inTxt(st.until - now)}` : st.until ? `${whenTxt(st.until).replace(/^今天 /, "")} 開` : "";
-    GX.lbls.push([addLabel(`<span class="gxl mkg ${st.st}"><b>${esc(x.n)}</b><em style="color:${MK_ST[st.st][0]}">${MK_ST[st.st][1]}${st.why ? "・" + esc(st.why).slice(0, 8) : ""}</em><small>${esc(x.c)} ${lt}${sub ? "・台北 " + sub : ""}</small></span>`, GLOBE.G(x.ll[0], x.ll[1], 300), "gx", "gx", on ? 6 : 3), GLOBE.G(x.ll[0], x.ll[1], 0)]);
+    GX.lbls.push([addLabel(`<span class="gxl mkg ${st.st}" data-mx="${x.k}"><b>${esc(x.n)}</b><em style="color:${MK_ST[st.st][0]}">${MK_ST[st.st][1]}${st.why ? "・" + esc(st.why).slice(0, 8) : ""}</em><small>${esc(x.c)} ${lt}${sub ? "・台北 " + sub : ""}</small></span>`, GLOBE.G(x.ll[0], x.ll[1], 300), "gx", "gx", on ? 6 : 3), GLOBE.G(x.ll[0], x.ll[1], 0)]);
   }
   GX.clockAt = now;
 }
@@ -3160,6 +3171,10 @@ function buildEarth() {
         if (uGlass > 0.5) {   // 玻璃風：跟資料用的地球同一套顏色（陸地霧面灰藍、海深藍），晨昏線讓夜晚那一半暗一點
           float l = dot(day, vec3(0.299, 0.587, 0.114)), ocean = 0.0; { vec3 dm = texture2D(uDay, vUv, 1.5).rgb; float lm = dot(dm, vec3(0.299, 0.587, 0.114)); ocean = smoothstep(0.85, 1.0, (dm.b + 0.003) / (max(dm.r, dm.g) + 0.003)) * (1.0 - smoothstep(0.30, 0.45, lm));   /* 深海在照片裡幾乎是全黑，要算成海（之前被當成陸地，台灣看起來跟大陸連在一起） */ }   // 用稍微模糊的那層判斷海陸，海岸線不會一格一格
           vec3 land = mix(vec3(0.38, 0.43, 0.52), vec3(0.62, 0.67, 0.76), smoothstep(0.04, 0.45, l)), sea = vec3(0.025, 0.05, 0.11);
+          // 台灣本島、澎湖由立體地形來畫：拉近時把照片裡的台灣換成海，不然照片的陸地比真正的海岸線胖一圈，看起來陸地伸到海裡
+          { float lon = vUv.x * 360.0 - 180.0, lat = vUv.y * 180.0 - 90.0, alt = length(cameraPosition - vec3(0.0, -6371.0, 0.0)) - 6371.0;
+            float tw = step(119.25, lon) * step(lon, 122.15) * step(21.85, lat) * step(lat, 25.35);
+            ocean = max(ocean, tw * (1.0 - smoothstep(2500.0, 7000.0, alt))); }
           c = mix(land, sea, ocean) * (0.45 + 0.55 * dayK); }
         c += vec3(0.3, 0.55, 1.0) * rim * (0.25 + 0.6 * dayK);                       // 邊緣的大氣
         float spec = pow(max(dot(reflect(-uSun, vN), v), 0.0), 220.0) * dayK * step(day.g * 1.05, day.b) * step(day.r * 1.2, day.b); c += vec3(1.0, 0.95, 0.85) * spec * 0.22;   // 海面反光
@@ -3222,7 +3237,7 @@ function countySeverity() {
   for (const [k, n] of Object.entries(ev)) add(COUNTIES.find(c => c.name === k), Math.min(2, n * 0.5), `路況事件 ${n} 起`);
   return S;
 }
-function navClear() { FATM.length = 0; while (NAV.g.children.length) { const o = NAV.g.children.pop(); o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); } clearLabels("nav"); }
+function navClear() { FATM.length = 0; NAV.pins = []; while (NAV.g.children.length) { const o = NAV.g.children.pop(); o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); } clearLabels("nav"); }
 function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo, la, lift)); const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: op, depthTest: false })); l.renderOrder = 8; l.userData.key = NAV._tag || null; l.userData.op = op; NAV.g.add(l); return l; }
 const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="background:${dot}"></i>` : ""}<b>${esc(name)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`;
 // ---- 視角：下方選的分類決定地圖「看什麼」，拉近拉遠決定「看多細」 ----
@@ -3236,7 +3251,7 @@ const dist = d => d < 1 ? Math.round(d * 1000) + " 公尺" : d.toFixed(1) + " �
 const inT = (place, T) => norm(place).startsWith(norm(T.county)) && String(place).includes(T.name);   // 同名行政區很多（信義區、中正區…），要連縣市一起比
 const inC = (place, C) => sameC(String(place || "").slice(0, 3), C.name);
 const cOf = k => { const o = k || {}, key = Object.keys(o).find(x => sameC(x, NAV.county ? NAV.county.name : "")); return key ? o[key] : null; };
-const pin = (it, prio) => addLabel(`<span class="nvpin" style="--c:${it.c}"><i></i><b>${esc(String(it.t).slice(0, 16))}</b></span>`, gp(it.ll[0], it.ll[1], 0.05), "nv", "nav", prio);
+const pin = (it, prio) => addLabel(`<span class="nvpin" data-pin="${(NAV.pins = NAV.pins || []).push(it) - 1}" style="--c:${it.c}"><i></i><b>${esc(String(it.t).slice(0, 16))}</b></span>`, gp(it.ll[0], it.ll[1], 0.05), "nv", "nav", prio);
 const tw = () => [controls.target.x / KX + LONC, -controls.target.z / KY + LATC];
 function navCol(lon, lat, k, view, label, sub, prio, hex) {
   const hh = view * (0.03 + 0.22 * k), base = gp(lon, lat, 0.2), col = hex ? new THREE.Color(hex) : new THREE.Color().setHSL(0.55 - 0.55 * k, 0.85, 0.6);
@@ -4055,6 +4070,66 @@ lodTick = function (dt) {
     if (!on && now - v.away > 30000) tbDrop(id, v);
   }
 };
+
+/* ---- 地圖上看得到的東西都能點 ----
+   資料點（路況、新聞、藝文、重大訊息…）：跳出小卡（標題、來源、距離、原文連結），鏡頭拉近到那裡。
+   縣市、行政區的名稱：直接進到那一層。地球上的節點、交易所：跳出那一個的數字。
+   其他（天氣、地震、航班…）：拉近到那裡，並把標籤上的字放大顯示。 */
+function lpopEl() {
+  let el = $("lpop"); if (el) return el;
+  el = document.createElement("div"); el.id = "lpop"; el.setAttribute("role", "dialog"); document.body.appendChild(el);
+  el.addEventListener("click", e => { if (e.target.closest("[data-lp=x]")) lpopClose(); });
+  el.addEventListener("pointerdown", e => e.stopPropagation());
+  return el;
+}
+function lpop(html, r) {
+  const el = lpopEl(); el.innerHTML = `<button data-lp="x" aria-label="關閉">×</button>${html}`; el.classList.add("on");
+  const w = el.offsetWidth, h = el.offsetHeight, x = Math.min(innerWidth - w - 12, Math.max(12, r.left + r.width / 2 - w / 2)), y = r.top - h - 10 > 56 ? r.top - h - 10 : Math.min(VH() - h - 12, r.bottom + 10);
+  el.style.left = x + "px"; el.style.top = y + "px";
+}
+function lpopClose() { const el = $("lpop"); if (el) el.classList.remove("on"); }
+renderer.domElement.addEventListener("pointerdown", lpopClose);
+addEventListener("keydown", e => { if (e.key === "Escape") lpopClose(); });
+document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#chips, #dock2 .seg, #crumb, #gcrumb")) lpopClose(); });
+function flyNear(pos, d) {   // 拉近到那個位置（已經夠近就不動距離，只把它移到中間）
+  if (GD.on || !ST.explore) return;
+  const cur = camera.position.distanceTo(controls.target), D = Math.min(cur, d), tgt = pos.clone(); tgt.y = 0;
+  flyTo(tgt.clone().add(V(0, D * 0.78, D * 0.62)), tgt, 1.3);
+}
+const lpLink = u => u ? `<a href="${esc(u)}" target="_blank" rel="noopener">看原文 ›</a>` : "";
+document.addEventListener("click", e => {
+  const el = e.target.closest && e.target.closest("#labels .lbl"); if (!el || el.classList.contains("lhid")) return;
+  if (e.target.closest("[data-cam]")) return;   // 攝影機：由攝影機面板處理
+  const L = LBL.find(l => l.el === el); if (!L) return;
+  const r = el.getBoundingClientRect(), txt = el.textContent.replace(/\s+/g, " ").trim();
+  // 資料點
+  const pe = el.querySelector("[data-pin]"), it = pe && (NAV.pins || [])[+pe.dataset.pin];
+  if (it) {
+    lpop(`${it.k ? `<i class="lp-k" style="color:${it.c}">${esc(it.k)}</i>` : ""}<b>${esc(it.t)}</b>${it.s ? `<p>${esc(it.s)}</p>` : ""}${it.d != null ? `<p>距離鏡頭中心 ${dist(it.d)}</p>` : ""}${lpLink(it.url)}`, r);
+    flyNear(gp(it.ll[0], it.ll[1], 0), 3); return;
+  }
+  // 交易所（市場時鐘）
+  const mx = el.querySelector("[data-mx]");
+  if (mx) { const x = MKX.find(m => m.k === mx.dataset.mx), s = x && mkStatus(x), now = Date.now();
+    if (x) { const H = Object.entries(mkHol()[x.k] || {}).filter(([d]) => d >= tpeDay(now)).slice(0, 3);
+      lpop(`<b>${esc(x.n)}・${esc(x.c)}</b><p style="color:${MK_ST[s.st][0]}">${MK_ST[s.st][1]}${s.why ? "・" + esc(s.why) : ""}</p><p>交易時間（當地）${x.s.map(a => a.join("–")).join("、")}</p>${s.until ? `<p>${s.st === "open" ? "收盤" : "下次開盤"}：台北 ${whenTxt(s.until)}（${inTxt(s.until - now)}後）</p>` : ""}${H.length ? `<p>接下來休市：${H.map(([d, n]) => `${mdW(d)} ${esc(n)}`).join("、")}</p>` : ""}`, r); }
+    return; }
+  // 地球上的節點
+  const gx = el.querySelector("[data-gx]"), n = gx && GX.spec && GX.spec.nodes[+gx.dataset.gx];
+  if (n) { lpop(`<b>${esc(n.name)}</b>${n.chg != null ? `<p style="color:${n.chg >= 0 ? UPH : DNH}">${gxPct(n.chg)}</p>` : ""}${n.sub ? `<p>${esc(n.sub)}</p>` : ""}`, r); return; }
+  // 縣市、行政區名稱：進到那一層
+  const nm = ((el.querySelector(".nvp b") || {}).textContent || "").trim();
+  if (nm && ST.explore && !GD.on) {
+    const T = NAV.county && (NAV.towns || []).find(t => t.name === nm && sameC(t.county, NAV.county.name));
+    if (T && NAV.level >= 1) { lpopClose(); navGoTown(T); return; }
+    const C = COUNTIES.find(c => norm(c.name) === norm(nm));
+    if (C) { lpopClose(); navGoCounty(C); return; }
+    if (T) { lpopClose(); navGoTown(T); return; }
+  }
+  // 其他：放大顯示＋拉近
+  lpop(`<b>${esc(txt)}</b>`, r);
+  if (!GD.on) flyNear(L.pos, Math.max(4, camera.position.distanceTo(controls.target) * 0.45));
+});
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
