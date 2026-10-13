@@ -259,6 +259,9 @@ def stats_jobs():
     jobs = {
         "dg_cpi_basic": DG + f"A030101015/{cats}.M&startTime={y - 2}-01&endTime={y}-12",
         "dg_cpi_basic_m": DG + f"A030101015/{cats}.M&startTime={y - 2}-M1&endTime={y}-M12",   # 文件裡兩種時間寫法都有，兩種都試
+        "dg_cpi_enc": DG + f"A030101015/{cats.replace('+', '%2B')}.M&startTime={y - 2}-01&endTime={y}-12",   # 「+」編碼過的版本
+        "dg_cpi_full": DG + "A030101015/",          # 文件第六節：只給表號＝整張表（含數值）
+        "dg_core_full": DG + "A030103015/",         # 核心物價等特殊分類
         "dg_menu": "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sys=100&funid=dgmaine",
         "motc_menu": "https://stat.motc.gov.tw/mocdb/stmain.jsp?sys=100",
     }
@@ -286,7 +289,8 @@ def stats_daily(state, errs):
                 rec["kind"] = "json"
                 st = (js.get("data") or {}).get("structure") or js.get("structure") or {}
                 dims = st.get("dimensions") or {}
-                rec["dims"] = [[d.get("id"), d.get("name"), len(d.get("values") or []), [v.get("name") for v in (d.get("values") or [])][:12]]
+                rec["dims"] = [[d.get("id"), d.get("name"), len(d.get("values") or []), [v.get("name") for v in (d.get("values") or [])][:12],
+                                [v.get("id") for v in (d.get("values") or [])][:4] + [v.get("id") for v in (d.get("values") or [])][-3:]]
                                for grp in ("series", "observation") for d in (dims.get(grp) or [])]
                 ser = (((js.get("data") or {}).get("dataSets") or [{}])[0].get("series")) or {}
                 rec["n_series"] = len(ser)
@@ -296,7 +300,8 @@ def stats_daily(state, errs):
             except ValueError:
                 rec["kind"] = "html"
                 rec["title"] = (re.search(r"<title>(.*?)</title>", txt, re.S) or [None, ""])[1].strip()[:80]
-                rec["head"] = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", txt))[:300]
+                body = re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", txt)
+                rec["head"] = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", body)).strip()[:600]
                 if k.endswith("_menu"):   # 目錄頁：留下所有功能代碼和名稱，之後找表號用
                     rec["funids"] = sorted(set(re.findall(r"funid=([A-Za-z0-9_]+)", txt)))[:600]
                     gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "html": txt[:600000]}))

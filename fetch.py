@@ -6787,7 +6787,7 @@ def p_tourism():
 # ---------- 物價細項：台北市主計處「消費者物價基本分類指數」月資料（全國的主計總處資料庫擋 GitHub IP；台北市的比全國早一個月出） ----------
 def _dg_cpi_national():
     """台灣抓取站存的主計總處 SDMX（A030101015 消費者物價基本分類指數）→ 同 p_prices 格式；年增率自己用指數算。"""
-    for k in ("static/dg_cpi_basic", "static/dg_cpi_basic_m"):
+    for k in ("static/dg_cpi_basic", "static/dg_cpi_basic_m", "static/dg_cpi_enc", "static/dg_cpi_full"):
         try:
             d = relay_get(k)
         except Exception:  # noqa: BLE001
