@@ -2084,7 +2084,7 @@ async function buildGlobe() {
       fragmentShader: `uniform sampler2D uDay; uniform sampler2D uNight; uniform float k; uniform float uS; uniform vec3 uC; uniform vec3 uSunN; uniform float uTerm; varying vec2 vUv; varying vec3 vN; varying vec3 vW;
         void main(){
           vec3 d = texture2D(uDay, vUv).rgb, n = texture2D(uNight, vUv).rgb; float l = dot(d, vec3(0.299, 0.587, 0.114));
-          float ocean = 0.0; { vec3 dm = texture2D(uDay, vUv, 1.5).rgb; float lm = dot(dm, vec3(0.299, 0.587, 0.114)); ocean = smoothstep(1.02, 1.18, dm.b / (max(dm.r, dm.g) + 0.002)) * (1.0 - smoothstep(0.30, 0.45, lm)); }   // 用稍微模糊的那層判斷海陸，海岸線不會一格一格   // 照片在線性色彩空間：海＝偏藍又暗
+          float ocean = 0.0; { vec3 dm = texture2D(uDay, vUv, 1.5).rgb; float lm = dot(dm, vec3(0.299, 0.587, 0.114)); ocean = smoothstep(0.85, 1.0, (dm.b + 0.003) / (max(dm.r, dm.g) + 0.003)) * (1.0 - smoothstep(0.30, 0.45, lm));   /* 深海在照片裡幾乎是全黑，要算成海（之前被當成陸地，台灣看起來跟大陸連在一起） */ }   // 用稍微模糊的那層判斷海陸，海岸線不會一格一格   // 照片在線性色彩空間：海＝偏藍又暗
           vec3 v = normalize(cameraPosition - vW); float f = max(dot(v, vN), 0.0), rim = pow(1.0 - f, 2.5);
           vec3 c;
           if (uS < 0.5) { c = mix(vec3(l), d, 1.15) * 0.85; c *= mix(vec3(1.0), vec3(0.86, 0.95, 1.12), 0.6); c += vec3(0.01, 0.05, 0.13) * ocean; c *= 0.55 + 0.45 * pow(f, 0.5); }
@@ -3152,7 +3152,7 @@ function buildEarth() {
         vec3 v = normalize(cameraPosition - vW); float rim = pow(1.0 - max(dot(v, vN), 0.0), 3.0);
         vec3 c = day * (0.25 + 0.95 * max(d, 0.0)) * dayK + pow(nt, vec3(1.6)) * vec3(1.0, 0.78, 0.5) * 1.6 * (1.0 - dayK);
         if (uGlass > 0.5) {   // 玻璃風：跟資料用的地球同一套顏色（陸地霧面灰藍、海深藍），晨昏線讓夜晚那一半暗一點
-          float l = dot(day, vec3(0.299, 0.587, 0.114)), ocean = 0.0; { vec3 dm = texture2D(uDay, vUv, 1.5).rgb; float lm = dot(dm, vec3(0.299, 0.587, 0.114)); ocean = smoothstep(1.02, 1.18, dm.b / (max(dm.r, dm.g) + 0.002)) * (1.0 - smoothstep(0.30, 0.45, lm)); }   // 用稍微模糊的那層判斷海陸，海岸線不會一格一格
+          float l = dot(day, vec3(0.299, 0.587, 0.114)), ocean = 0.0; { vec3 dm = texture2D(uDay, vUv, 1.5).rgb; float lm = dot(dm, vec3(0.299, 0.587, 0.114)); ocean = smoothstep(0.85, 1.0, (dm.b + 0.003) / (max(dm.r, dm.g) + 0.003)) * (1.0 - smoothstep(0.30, 0.45, lm));   /* 深海在照片裡幾乎是全黑，要算成海（之前被當成陸地，台灣看起來跟大陸連在一起） */ }   // 用稍微模糊的那層判斷海陸，海岸線不會一格一格
           vec3 land = mix(vec3(0.38, 0.43, 0.52), vec3(0.62, 0.67, 0.76), smoothstep(0.04, 0.45, l)), sea = vec3(0.025, 0.05, 0.11);
           c = mix(land, sea, ocean) * (0.45 + 0.55 * dayK); }
         c += vec3(0.3, 0.55, 1.0) * rim * (0.25 + 0.6 * dayK);                       // 邊緣的大氣
