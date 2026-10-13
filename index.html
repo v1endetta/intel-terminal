@@ -510,6 +510,14 @@ body.exploring.fl-on #gcrumb{display:flex}
 .prc{display:inline-flex;align-items:baseline;gap:4px;padding:3px 9px;border-radius:999px;background:rgba(10,14,22,.82);font-size:12px;color:#f5f5f7;border:1px solid rgba(255,255,255,.14)}
 .prc b{font-size:15px;font-weight:700}
 .prc.H b{color:#64d2ff}.prc.L b{color:#ff453a}.prc.T{border-color:#ff453a}.prc.T b{color:#ff453a;font-size:13px}
+#lpop .lp-go{all:unset;display:inline-block;margin-top:10px;padding:6px 12px;border-radius:999px;background:#f5f5f7;color:#1d1d1f;font-size:12.5px;font-weight:600;cursor:pointer}
+#lpop .lp-desc{font-size:11.5px;color:#aeaeb2}
+#lpop .up{color:#30d158}#lpop .dn{color:#ff453a}
+#lpop a+.lp-go{margin-left:10px}
+/* 有連結的項目：標題後面一個小箭頭，一看就知道可以點進去 */
+#side .lst a{color:#f5f5f7;text-decoration:none}
+#side .lst a::after{content:" ↗";color:#64d2ff;font-size:11px;font-weight:600}
+#side .lst a:hover{color:#64d2ff}
 </style>
 <script type="importmap">
 {"imports":{
@@ -1550,7 +1558,7 @@ function setupWx() {
       if (!c) continue;
       const [x, z] = toXZ(c.c[0], c.c[1]);
       const nm = c.name.replace(/[縣市]$/, "");
-      addLabel(`${fmt(it.temp, 0)}°<span class="n"> ${esc(nm)} ${esc(it.weather && it.weather !== "-99" ? it.weather : "")}</span>`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "", "wx", /^(臺北|台北|高雄)/.test(nm) ? 1.5 : /^(新北|桃園|臺中|台中|臺南|台南)/.test(nm) ? 1 : 0);
+      addLabel(`${fmt(it.temp, 0)}°<span class="n"> ${esc(nm)} ${esc(it.weather && it.weather !== "-99" ? it.weather : "")}</span>`, new THREE.Vector3(x, hAt(c.c[0], c.c[1]) + 6, z), "", "wx", /^(臺北|台北|高雄)/.test(nm) ? 1.5 : /^(新北|桃園|臺中|台中|臺南|台南)/.test(nm) ? 1 : 0, () => wxInfo(it, c));
     }
     const R = P.radar_wx || {};
     const ws = [...new Set(warn.map(w => w.what))];
@@ -1582,7 +1590,7 @@ function setupQuake() {
   });
   layers.quake.tick = t => { for (const r of rings) { const p = (t * 0.35 + r.ph) % 1; r.m.scale.setScalar(1 + p * r.R); r.m.material.opacity = (1 - p) * 0.85; } };
   layers.quake.on = () => {
-    Q.slice(0, 4).forEach((q, i) => addLabel(`M${fmt(q.mag)}<span class="n"> ${ago(q.at)} · 深 ${fmt(q.depth, 0)} km</span>`, q._pos, i === 0 ? "big" : "", "quake"));
+    Q.slice(0, 4).forEach((q, i) => addLabel(`M${fmt(q.mag)}<span class="n"> ${ago(q.at)} · 深 ${fmt(q.depth, 0)} km</span>`, q._pos, i === 0 ? "big" : "", "quake", 0, () => quakeInfo(q)));
     const q = Q[0];
     caption("地震 · 最近 " + Q.length + " 筆", q ? `最近一次 M${fmt(q.mag)}` : "近期無有感地震",
       q ? `${esc(q.loc.replace(/\s+/g, " "))}<br>${ago(q.at)}，深度 <b>${fmt(q.depth, 0)} 公里</b>，最大震度 <b>${esc(q.intensity)}</b>` : "", "中央氣象署 · 地表下的球是震源");
@@ -1609,7 +1617,7 @@ function setupHouse() {
   layers.house.tick = (t, dt) => { for (const b of bars) { b.k = Math.min(1, b.k + dt * 1.2); const e = 1 - Math.pow(1 - b.k, 3), hh = b.h * e; b.m.scale.y = hh; b.m.position.y = b.y0 + hh / 2; b.cap.position.set(b.x, b.y0 + hh + 0.05, b.z); } };
   layers.house.on = () => {
     const rank = [...bars].sort((a, b) => b.v - a.v), show = new Set([...rank.slice(0, 6), ...rank.slice(-2)]);
-    for (const b of bars) { b.k = 0; if (!show.has(b)) continue; addLabel(`${fmt(b.v)}<span class="n"> ${esc(b.name.replace(/[縣市]$/, ""))}</span>`, new THREE.Vector3(b.x, b.y0 + b.h + 5, b.z), "pillv", "house"); }
+    for (const b of bars) { b.k = 0; if (!show.has(b)) continue; addLabel(`${fmt(b.v)}<span class="n"> ${esc(b.name.replace(/[縣市]$/, ""))}</span>`, new THREE.Vector3(b.x, b.y0 + b.h + 5, b.z), "pillv", "house", 0, () => ({ html: `<b>${esc(b.name)}</b><p>實價登錄平均 ${fmt(b.v)} 萬／坪</p>`, go: () => navGoCounty(COUNTIES.find(c => c.name === b.name)), goTxt: "看各區房價" })); }
     const s = [...bars].sort((a, b) => b.v - a.v), hi = s[0], lo = s[s.length - 1];
     caption("房價 · 實價登錄中位數", hi ? `${hi.name.replace(/[縣市]$/, "")}是${lo.name.replace(/[縣市]$/, "")}的 ${fmt(hi.v / lo.v)} 倍` : "房價",
       hi ? `最高 <b>${esc(hi.name)} ${fmt(hi.v)} 萬／坪</b>，最低 <b>${esc(lo.name)} ${fmt(lo.v)} 萬／坪</b><br>柱子越高越貴，點縣市看完整數字` : "", "內政部實價登錄 · " + ((P.house || {}).season || ""));
@@ -1653,7 +1661,7 @@ function setupTraffic() {
   layers.traffic.on = () => {
     jams.sort((a, b) => a[1] - b[1]).slice(0, 3).forEach(([nm, s, flat]) => {
       const lon = flat[0] / 1e4, lat = flat[1] / 1e4, [x, z] = toXZ(lon, lat);
-      addLabel(`${s} km/h<span class="n"> ${esc(nm.replace(/^國道/, "國"))}</span>`, new THREE.Vector3(x, hAt(lon, lat) + 4, z), "", "traffic");
+      addLabel(`${s} km/h<span class="n"> ${esc(nm.replace(/^國道/, "國"))}</span>`, new THREE.Vector3(x, hAt(lon, lat) + 4, z), "", "traffic", 0, () => ({ html: `<i class="lp-k" style="color:#ff453a">國道壅塞</i><b>${esc(nm)}</b><p>現在平均 ${s} km/h（低於 40 算壅塞）</p><p>高公局即時車速</p>`, go: () => flyNear(gp(lon, lat, 0), 6) }));
     });
     caption("車流 · 國道即時", slow ? `${slow} 段在塞` : "國道一路順暢",
       `${n} 個路段平均 <b>${fmt(sum / Math.max(n, 1), 0)} km/h</b>，低於 40 的有 <b>${slow}</b> 段<br>光點流得越快，車開得越快`, "交通部高公局 · " + (ROADS_LIVE.at ? ROADS_LIVE.at.slice(11, 16) : ""));
@@ -1709,8 +1717,8 @@ function setupFlow() {
     glow.scale.setScalar(1 + 0.25 * Math.sin(t * 3));
   };
   layers.flow.on = () => {
-    for (const f of flows) addLabel(`${esc(f.s.label)}<span class="n ${cls(f.s.chg)}">${sgn(f.s.chg)}${fmt(f.s.chg, 2)}%</span>`, f.o.clone().add(new THREE.Vector3(0, 14, 0)), "flow", "flow");
-    addLabel(`台股加權<span class="n ${cls(tw)}">${sgn(tw)}${fmt(tw, 2)}%</span><span class="n">外資 ${inst.net != null ? (inst.net > 0 ? "買超 " : "賣超 ") + fmt(Math.abs(inst.net), 0) + " 億" : "—"}</span>`, target.clone().add(new THREE.Vector3(0, 16, 0)), "flow", "flow");
+    for (const f of flows) addLabel(`${esc(f.s.label)}<span class="n ${cls(f.s.chg)}">${sgn(f.s.chg)}${fmt(f.s.chg, 2)}%</span>`, f.o.clone().add(new THREE.Vector3(0, 14, 0)), "flow", "flow", 0, () => ({ html: `<i class="lp-k">海外市場</i><b>${esc(f.s.label)}</b><p class="${f.s.chg >= 0 ? "up" : "dn"}">前一個交易日 ${sgn(f.s.chg)}${fmt(f.s.chg, 2)}%</p>${f.stuck ? "<p>⚠️ 這條線跟台股方向相反：海外漲、台股跌（或反過來），傳導卡住</p>" : ""}` }));
+    addLabel(`台股加權<span class="n ${cls(tw)}">${sgn(tw)}${fmt(tw, 2)}%</span><span class="n">外資 ${inst.net != null ? (inst.net > 0 ? "買超 " : "賣超 ") + fmt(Math.abs(inst.net), 0) + " 億" : "—"}</span>`, target.clone().add(new THREE.Vector3(0, 16, 0)), "flow", "flow", 0, () => ({ html: `<b>台股加權</b><p class="${tw >= 0 ? "up" : "dn"}">${sgn(tw)}${fmt(tw, 2)}%</p><p>外資 ${inst.net != null ? (inst.net > 0 ? "買超 " : "賣超 ") + fmt(Math.abs(inst.net), 0) + " 億" : "—"}</p><p>每條線是一個海外市場前一個交易日的漲跌，光點往台灣流；紅圈代表那個市場跟台股方向相反。</p>${(((P.tw_market || {}).institutions || {}).items || []).filter(x => x.name !== "合計").map(x => `<p>${esc(x.name)} ${x.net >= 0 ? "買超" : "賣超"} ${fmt(Math.abs(x.net), 0)} 億</p>`).join("")}` }));
     const st = flows.filter(f => f.stuck);
     caption("資金流 · 海外 → 台灣", st.length ? `卡在台灣這一端` : "海外的方向，台股跟上了",
       st.length ? `${st.map(f => esc(f.s.label.split(" ")[0]) + ` <span class="${cls(f.s.chg)}">${sgn(f.s.chg)}${fmt(f.s.chg, 2)}%</span>`).join("、")}，台股卻 <b class="${cls(tw)}">${sgn(tw)}${fmt(tw, 2)}%</b>` +
@@ -2111,7 +2119,7 @@ async function buildGlobe() {
           vec3 v = normalize(cameraPosition - vW); float f = max(dot(v, vN), 0.0), rim = pow(1.0 - f, 2.5);
           vec3 c;
           if (uS < 0.5) { c = mix(vec3(l), d, 1.15) * 0.85; c *= mix(vec3(1.0), vec3(0.86, 0.95, 1.12), 0.6); c += vec3(0.01, 0.05, 0.13) * ocean; c *= 0.55 + 0.45 * pow(f, 0.5); }
-          else if (uS < 1.5) { vec3 land = mix(vec3(0.38, 0.43, 0.52), vec3(0.62, 0.67, 0.76), smoothstep(0.04, 0.45, l)); vec3 sea = mix(vec3(0.02, 0.045, 0.10), vec3(0.05, 0.10, 0.19), f);
+          else if (uS < 1.5) { float lonT = vUv.x * 360.0 - 180.0, latT = vUv.y * 180.0 - 90.0; float twm = step(119.3, lonT) * step(lonT, 122.15) * step(21.85, latT) * step(latT, 25.35) * (1.0 - step(24.75, latT) * step(lonT, 120.6)); ocean = max(ocean, twm);   /* 台灣由立體地形畫，照片裡的台灣比海岸線胖一圈，換成海 */ vec3 land = mix(vec3(0.38, 0.43, 0.52), vec3(0.62, 0.67, 0.76), smoothstep(0.04, 0.45, l)); vec3 sea = mix(vec3(0.02, 0.045, 0.10), vec3(0.05, 0.10, 0.19), f);
             c = mix(land * (0.7 + 0.3 * f), sea, ocean) + vec3(0.6, 0.8, 1.0) * rim * 0.35; }
           else { vec3 land = vec3(0.09, 0.11, 0.15) + d * 0.07, sea = vec3(0.015, 0.03, 0.07); c = mix(land, sea, ocean) + pow(n, vec3(1.5)) * vec3(1.0, 0.78, 0.45) * 1.5 + vec3(0.3, 0.55, 1.0) * rim * 0.25; }
           if (uTerm > 0.0) { float nt = 1.0 - smoothstep(-0.10, 0.06, dot(vN, uSunN)); c = mix(c, c * 0.3 + pow(n, vec3(1.6)) * vec3(1.0, 0.8, 0.5) * 1.7, nt * uTerm); }   // 市場時鐘：晨昏線，夜裡看得到城市燈光
@@ -2338,7 +2346,7 @@ function storySide(t, i) {
   const body = t.sideBody ? t.sideBody : t.bars && t.grp === "inst" ? barsHTML(((((P.tw_market || {}).institutions) || {}).items || []).map(x => ({ name: x.name, v: x.net, txt: (x.net > 0 ? "+" : "−") + nf(Math.abs(x.net)) + " 億" }))) + lineSVG(t.vals, t.color)
     : t.scene === "warn" ? listHTML(t.where.map(w => ({ t: w, s: t.name })))
     : t.scene === "airport" ? listHTML((((P.airport || {}).dep || {}).upcoming || []).slice(0, 5).map(f => ({ t: `${f.flight} → ${f.to}`, s: `${f.sched} ${f.remark || ""}` })))
-    : t.scene === "quake" ? listHTML([{ t: t.q.loc.replace(/\s+/g, " "), s: `深度 ${nf(t.q.depth)} 公里` }])
+    : t.scene === "quake" ? listHTML([{ t: t.q.loc.replace(/\s+/g, " "), s: `深度 ${nf(t.q.depth)} 公里`, url: t.q.url }])
     : lineSVG(t.vals, t.color);
   return sideHTML({ eyebrow: `0${i + 1} · ${t.cat}`, title: t.name, big: t.chgTxt, color: t.color, body, foot: `<span>${esc(t.src || "")}</span><a href="/terminal/#p-${t.link}">終端機 ›</a>` });
 }
@@ -2388,6 +2396,7 @@ function EXPLORE() {
     ] },
     { cat: "輿情", items: [
       { n: "地方新聞", lens: "news" },
+      { n: "全球新聞", globe: 1, f: () => gxCard("wnews") },
       { n: "台灣情緒", lens: "mood", f: () => { const m = (P.mood || {}).taiwan || {}; return { html: sideHTML({ eyebrow: "輿情 · 社群情緒", title: "台灣人今天的心情", big: m.label || "", color: (m.score || 0) < 0 ? DNH : UPH, body: lineSVG(hist("mood", "taiwan"), (m.score || 0) < 0 ? DNH : UPH) + listHTML([{ t: m.line || "" }, ...(m.themes || []).map(t => ({ t: "· " + t }))]), foot: '<a href="/terminal/#p-mood">終端機 ›</a>' }) }; } },
       { n: "PTT", f: barsOf("PTT 各版熱度", () => (((P.ptt || {}).boards) || []).slice(0, 10).map(b => ({ name: b.zh || b.board, v: b.heat, txt: String(b.heat) })), "輿情", "ptt", { signed: false }) },
       { n: "熱搜", f: listOf("Google 熱搜", () => items("trends").slice(0, 8).map(x => ({ t: x.title, s: x.traffic })), "輿情", "trends") },
@@ -2426,6 +2435,7 @@ const PROV = {
   "lens:biz": ["brands", "經濟部公司與商業登記，依地址歸到鄉鎮", "每月", 43200, p => p.month], "lens:jobs": ["jobs", "104 人力銀行刊登數", "每日", 1440],
   "lens:tender": ["tendermap", "政府電子採購網（依發包機關歸類，不是工程地點）", "每日", 1440], "lens:news": ["mapfeed", "Google 新聞，依標題地名歸到鄉鎮", "彙整", 180],
   "lens:stock": ["mops", "證交所・櫃買中心重大訊息；總部位置依登記地址", "每日", 1440], "lens:elect": ["elect", "Polymarket 報價（只看不押）＋新聞", "彙整", 120], "lens:macro": ["macro", "國發會・主計總處・央行", "每月", 43200], "lens:mood": ["mood", "PTT・LINE 查證・新聞標題（AI 判讀）", "彙整", 180], "lens:power": ["power", "台電", "即時", 30, p => p.asof],
+  "全球新聞": ["worldnews", "BBC・半島電視台・NPR・衛報（Gemini 翻譯）", "彙整", 60],
   "lens:stop": ["alerts", "行政院人事行政總處 天然災害停止上班及上課情形", "即時", 30, p => (p.stopwork || {}).updated],
   "氣壓圖": ["pressure", "Open-Meteo（各國氣象模式）海平面氣壓", "預報", 360],
   "lens:traffic": ["roads", "高公局・公路局即時車速；街上的小車是依時段模擬", "即時", 20, p => p.asOf && p.asOf.slice(11, 16)],
@@ -3003,6 +3013,7 @@ setTimeout(mkBar, 1500); setInterval(mkBar, 60000);
 /* ---- 地面氣壓圖：東亞海平面氣壓 → 等壓線（每 4 百帕一條，每 20 一條粗線）＋ 高低壓中心＋颱風 ----
    資料 Open-Meteo 2.5 度網格，前端先內插成 0.5 度再畫線；卡片可以切換現在到 72 小時後。 */
 const PRS = { f: 0 };
+const kmGC = (a, b) => { const r = Math.PI / 180, s1 = Math.sin((b[1] - a[1]) * r / 2), s2 = Math.sin((b[0] - a[0]) * r / 2); return 12742 * Math.asin(Math.sqrt(s1 * s1 + Math.cos(a[1] * r) * Math.cos(b[1] * r) * s2 * s2)); };
 function prsGrid(fi) {   // 內插成 0.5 度
   const PR = P.pressure, F = PR.frames[fi], W = PR.lon.length, H = PR.lat.length, K = 5, w = (W - 1) * K + 1, h = (H - 1) * K + 1, g = new Float32Array(w * h);
   const v = (i, j) => { i = Math.max(0, Math.min(W - 1, i)); j = Math.max(0, Math.min(H - 1, j)); const x = F.p[j * W + i]; return x == null ? 1012 : x; };
@@ -3056,14 +3067,15 @@ function gxPress() {
   // 數字：等壓線穿過東經 117.5 度的地方（台灣西邊）標上氣壓值
   for (const [L, seg] of Object.entries(C)) { let best = null;
     for (let k = 0; k < seg.length; k += 4) { const [x0, y0, x1, y1] = seg.slice(k, k + 4); if ((x0 - 117.5) * (x1 - 117.5) <= 0 && y0 > 8 && y0 < 42) { const y = y0 + (y1 - y0) * ((117.5 - x0) / ((x1 - x0) || 1e-9)); if (!best || Math.abs(y - 24) < Math.abs(best - 24)) best = y; } }
-    if (best != null) GX.lbls.push([addLabel(`<span class="prl${+L % 20 === 0 ? " b" : ""}">${L}</span>`, GLOBE.G(117.5, best, 60), "gx", "gx", 1), GLOBE.G(117.5, best, 0)]); }
-  for (const c of prsCenters(G)) GX.lbls.push([addLabel(`<span class="prc ${c.k}"><b>${c.k === "H" ? "高" : "低"}</b>${Math.round(c.v)}</span>`, GLOBE.G(c.ll[0], c.ll[1], 80), "gx", "gx", 6), GLOBE.G(c.ll[0], c.ll[1], 0)]);
+    if (best != null) GX.lbls.push([addLabel(`<span class="prl${+L % 20 === 0 ? " b" : ""}">${L}</span>`, GLOBE.G(117.5, best, 60), "gx", "gx", 1, () => ({ html: `<i class="lp-k">等壓線</i><b>${L} 百帕</b><p>這條線上每個地方的海平面氣壓都是 ${L} 百帕。${+L % 20 === 0 ? "粗線每 20 百帕一條。" : ""}</p><p>線越密，氣壓變化越快、風越大。</p>` })), GLOBE.G(117.5, best, 0)]); }
+  for (const c of prsCenters(G)) GX.lbls.push([addLabel(`<span class="prc ${c.k}"><b>${c.k === "H" ? "高" : "低"}</b>${Math.round(c.v)}</span>`, GLOBE.G(c.ll[0], c.ll[1], 80), "gx", "gx", 6, () => ({ html: `<i class="lp-k" style="color:${c.k === "H" ? "#64d2ff" : "#ff453a"}">${c.k === "H" ? "高氣壓中心" : "低氣壓中心"}</i><b>${Math.round(c.v)} 百帕</b><p>北緯 ${c.ll[1].toFixed(1)}・東經 ${c.ll[0].toFixed(1)}・離台灣約 ${Math.round(kmGC(c.ll, [121, 23.7]))} 公里</p><p>${c.k === "H" ? "高壓附近空氣下沉，天氣通常晴朗穩定；冬天大陸高壓南下就是寒流、東北季風。" : "低壓附近空氣上升，雲多、容易下雨；很強的熱帶低壓就是颱風。"}</p>` })), GLOBE.G(c.ll[0], c.ll[1], 0)]);
   for (const t of (((P.typhoon || {}).items) || [])) { const f = (t.past || [])[t.past.length - 1]; if (!f) continue;
     const dot = new THREE.Mesh(new THREE.SphereGeometry(70, 16, 12), fm(new THREE.MeshBasicMaterial({ color: 0xff453a, depthTest: true }), 1)); dot.position.copy(GLOBE.G(f.ll[0], f.ll[1], 30)); GX.g.add(dot);
     const pts = (t.fc || []).map(x => GLOBE.G(x.ll[0], x.ll[1], 25)); if (pts.length) { const g = new THREE.BufferGeometry().setFromPoints([GLOBE.G(f.ll[0], f.ll[1], 25), ...pts]); GX.g.add(new THREE.Line(g, new THREE.LineDashedMaterial({ color: 0xff453a, dashSize: 60, gapSize: 40 })).computeLineDistances()); }
-    GX.lbls.push([addLabel(`<span class="prc T"><b>颱風 ${esc(t.name || "")}</b>${f.p ? f.p + " hPa" : ""}</span>`, GLOBE.G(f.ll[0], f.ll[1], 120), "gx", "gx", 9), GLOBE.G(f.ll[0], f.ll[1], 0)]); }
+    GX.lbls.push([addLabel(`<span class="prc T"><b>颱風 ${esc(t.name || "")}</b>${f.p ? f.p + " hPa" : ""}</span>`, GLOBE.G(f.ll[0], f.ll[1], 120), "gx", "gx", 9, () => ({ html: `<i class="lp-k" style="color:#ff453a">颱風・氣象署</i><b>${esc(t.name || "")}${t.en ? " " + esc(t.en) : ""}</b><p>${f.t ? f.t.slice(5, 16).replace("T", " ") + " 的位置" : ""}・中心氣壓 ${f.p ?? "—"} 百帕</p><p>最大風速 ${f.wind ?? "—"} m/s・陣風 ${f.gust ?? "—"} m/s</p><p>${f.mv ? `往 ${esc(f.dir)} 移動，時速 ${f.mv} 公里` : ""}${f.r15 ? `・七級風暴風半徑 ${f.r15} 公里` : ""}</p><p>離台灣約 ${Math.round(kmGC(f.ll, [121, 23.7]))} 公里</p><a href="https://www.cwa.gov.tw/V8/C/P/Typhoon/TY_NEWS.html" target="_blank" rel="noopener">氣象署颱風消息 ›</a>` })), GLOBE.G(f.ll[0], f.ll[1], 0)]); }
   const tw = new THREE.Mesh(new THREE.SphereGeometry(45, 16, 12), fm(new THREE.MeshBasicMaterial({ color: 0x64d2ff }), 1)); tw.position.copy(GLOBE.G(TW_LL[0], TW_LL[1], 30)); GX.g.add(tw);
-  GX.lbls.push([addLabel(`<span class="gxl tw"><b>台灣 ${Math.round(prsAt(G, 121, 23.7))}</b></span>`, GLOBE.G(TW_LL[0], TW_LL[1], 160), "gx", "gx", 9), GLOBE.G(TW_LL[0], TW_LL[1], 0)]);
+  GX.lbls.push([addLabel(`<span class="gxl tw"><b>台灣 ${Math.round(prsAt(G, 121, 23.7))}</b></span>`, GLOBE.G(TW_LL[0], TW_LL[1], 160), "gx", "gx", 9, () => { const PR = P.pressure, seq = PR.frames.map((_, i) => [PR.frames[i].t, prsAt(prsGrid(i), 121, 23.7)]).filter((_, i) => i % 2 === 0).slice(0, 7);
+    return { html: `<b>台灣附近的氣壓</b><p>${seq.map(([t, v]) => `${t.slice(8, 10)}日${t.slice(11, 13)}時 ${Math.round(v)}`).join("　")}</p><p>氣壓一路往下掉，通常代表低壓或颱風在靠近；往上升，代表高壓（例如東北季風）南下。</p>` }; }), GLOBE.G(TW_LL[0], TW_LL[1], 0)]);
 }
 function prsCard() {
   const PR = P.pressure;
@@ -3081,6 +3093,34 @@ function prsCard() {
 document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("[data-pf]"); if (!b) return; PRS.f = +b.dataset.pf;
   if (GX.key === "press" && GX.g) { GX.g.traverse(o => { o.geometry && o.geometry.dispose(); }); GX.g.clear(); gxPress(); GX.g.visible = true; }
   const r = prsCard(); showSide(r.html + provHTML("氣壓圖"), null); });
+
+/* ---- 全球新聞：國際媒體標題翻成台灣用語中文，依發生地點放到地球上 ----
+   點的大小＝那個地方的新聞則數，顏色＝類別；點標籤看那裡的每一則（中文＋原文＋連結）。 */
+const WN_C = { 戰爭衝突: "#ff453a", 政治: "#bf5af2", 經濟: "#30d158", 科技: "#64d2ff", 災害: "#ff9f0a", 社會: "#aeaeb2", 其他: "#aeaeb2" };
+const WN = () => (((P.worldnews || {}).items) || []);
+function wnGroups() {
+  const g = new Map();
+  for (const x of WN()) { if (!x.ll) continue; const k = x.place || `${x.ll[1]},${x.ll[0]}`; if (!g.has(k)) g.set(k, { place: x.place, ll: x.ll, xs: [] }); g.get(k).xs.push(x); }
+  return [...g.values()].sort((a, b) => b.xs.length - a.xs.length);
+}
+const wnRow = x => ({ t: x.t || x.en, s: [x.src, x.place, x.at ? navAgo(x.at) : ""].filter(Boolean).join("・"), url: x.url });
+function gxNews() {
+  clearLabels("gx"); GX.lbls = []; GX.rings = [];
+  for (const G of wnGroups()) {
+    const cat = (G.xs.find(x => x.cat === "戰爭衝突") || G.xs[0]).cat, col = WN_C[cat] || "#aeaeb2", n = G.xs.length;
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(40 + 22 * Math.min(4, n), 16, 12), fm(new THREE.MeshBasicMaterial({ color: col, depthTest: true }), 0.95));
+    dot.position.copy(GLOBE.G(G.ll[0], G.ll[1], 30)); GX.g.add(dot);
+    GX.lbls.push([addLabel(`<span class="gxl"><b>${esc(G.place || "")}</b><em>${n > 1 ? n + " 則" : esc((G.xs[0].t || "").slice(0, 14))}</em></span>`, GLOBE.G(G.ll[0], G.ll[1], 200), "gx", "gx", 2 + n, () => ({
+      html: `<i class="lp-k" style="color:${col}">全球新聞・${esc(G.place || "")}</i>${G.xs.slice(0, 5).map(x => `<p style="margin-top:8px"><b style="font-size:13px">${esc(x.t || x.en)}</b>${x.t ? `<span style="display:block;font-size:11px;color:#8e8e93">${esc(x.en)}</span>` : ""}<span style="display:block;font-size:11px;color:#aeaeb2">${esc(x.src)}・${x.at ? navAgo(x.at) : ""}　<a href="${esc(x.url)}" target="_blank" rel="noopener" style="margin:0">原文 ›</a></span></p>`).join("")}` })), GLOBE.G(G.ll[0], G.ll[1], 0)]);
+  }
+}
+function wnCard() {
+  const xs = WN(), W = P.worldnews || {}, gs = wnGroups();
+  if (!xs.length) return { layer: "gx", gx: "wnews", html: sideHTML({ eyebrow: "輿情 · 全球新聞", title: "世界正在發生什麼？", body: '<p class="empty">全球新聞下一輪更新後出現（每小時一次）。</p>' }) };
+  return { layer: "gx", gx: "wnews", html: sideHTML({ eyebrow: "輿情 · 全球新聞 · 翻成中文", title: "世界正在發生什麼？", big: gs[0] && gs[0].xs.length > 1 ? `${gs[0].place} ${gs[0].xs.length} 則` : `${xs.length} 則國際新聞`, color: "#bf5af2",
+    body: `<p class="why">BBC、半島電視台、NPR、衛報最新的國際新聞，翻成台灣用語；地球上的點是發生地點，越大則數越多，紅色是戰爭衝突。</p>` + listHTML(xs.slice(0, 18).map(wnRow))
+      + (W.n_zh < xs.length ? `<p class="why">有 ${xs.length - W.n_zh} 則還沒翻譯，先顯示原文。</p>` : "") }) };
+}
 
 /* ---- 地球場景：在台灣沒有地點、但在世界上有地點的資訊 ----
    全球股市、匯率、原物料、精品、美元流動性、AI 快線、法人：從各地拉一條弧線到台灣。
@@ -3139,6 +3179,7 @@ const GX_SPEC = {
       why: "近期有動作的 AI 公司總部；線連回台灣，因為它們的晶片和伺服器大多在台灣做。",
       extra: listHTML(Object.values(by).flatMap(({ c, xs }) => xs.slice(0, 2).map(x => ({ t: x.title, s: `${c[0]}・${x.source}`, url: x.url }))).slice(0, 8)) };
   },
+  wnews() { return { mode: "news", lookLL: [60, 25], alt: 17000, title: "全球新聞", eyebrow: "輿情 · 全球", nodes: [], why: "" }; },
   press() { return { mode: "press", lookLL: [124, 24], alt: 8500, title: "地面氣壓圖", eyebrow: "現場 · 氣壓", nodes: [], why: "" }; },
   clock() {
     const now = Date.now();
@@ -3156,6 +3197,7 @@ const GX_SPEC = {
 function gxCard(key) {
   if (key === "clock") return mkCard();
   if (key === "press") return prsCard();
+  if (key === "wnews") return wnCard();
   let s = null; try { s = GX_SPEC[key](); } catch (e) { console.warn(e); }
   if (!s) return { html: sideHTML({ title: "地球", body: '<p class="empty">資料暫時讀不到</p>' }) };
   const rows = s.nodes.slice().sort((a, b) => Math.abs(b.chg ?? 0) - Math.abs(a.chg ?? 0));
@@ -3167,6 +3209,7 @@ function gxBuild() {
   const s = GX.spec; if (!s || !GLOBE) return;
   if (s.mode === "clock") { gxClock(); return; }
   if (s.mode === "press") { gxPress(); return; }
+  if (s.mode === "news") { gxNews(); return; }
   s.nodes.forEach((n, i) => {
     if (!n.ll) return;
     const pts = s.dir === "out" ? GLOBE.arc(TW_LL, n.ll, 0.05, 90) : GLOBE.arc(n.ll, TW_LL, 0.05, 90), col = gxCol(n.chg);
@@ -3181,7 +3224,7 @@ function gxBuild() {
     GX.lbls.push([addLabel(`<span class="gxl" data-gx="${i}"><b>${esc(n.name)}</b>${n.chg != null ? `<em style="color:#${new THREE.Color(col).getHexString()}">${s.key === "liq" || s.key === "inst" ? "" : gxPct(n.chg)}</em>` : n.w ? `<em>${n.w} 則</em>` : ""}</span>`, GLOBE.G(n.ll[0], n.ll[1], 260), "gx", "gx", 2 + mag * 3), GLOBE.G(n.ll[0], n.ll[1], 0)]);
   });
   const tw = new THREE.Mesh(new THREE.SphereGeometry(55, 16, 12), fm(new THREE.MeshBasicMaterial({ color: 0xffffff }), 1)); tw.position.copy(GLOBE.G(TW_LL[0], TW_LL[1], 40)); GX.g.add(tw);
-  addLabel(`<span class="gxl tw"><b>台灣</b></span>`, GLOBE.G(TW_LL[0], TW_LL[1], 300), "gx", "gx", 9);
+  addLabel(`<span class="gxl tw"><b>台灣</b></span>`, GLOBE.G(TW_LL[0], TW_LL[1], 300), "gx", "gx", 9, () => ({ html: `<b>${esc(s.title || "台灣")}</b><p>${esc(s.why || "")}</p>${s.nodes.length ? `<p>${s.nodes.slice(0, 6).map(n => `${esc(n.name)} ${n.chg != null ? gxPct(n.chg) : ""}`).join("　")}</p>` : ""}` }));
 }
 function gxClock() {
   clearLabels("gx"); GX.lbls = []; GX.rings = [];
@@ -3268,8 +3311,8 @@ function buildEarth() {
           vec3 land = mix(vec3(0.38, 0.43, 0.52), vec3(0.62, 0.67, 0.76), smoothstep(0.04, 0.45, l)), sea = vec3(0.025, 0.05, 0.11);
           // 台灣本島、澎湖由立體地形來畫：拉近時把照片裡的台灣換成海，不然照片的陸地比真正的海岸線胖一圈，看起來陸地伸到海裡
           { float lon = vUv.x * 360.0 - 180.0, lat = vUv.y * 180.0 - 90.0, alt = length(cameraPosition - vec3(0.0, -6371.0, 0.0)) - 6371.0;
-            float tw = step(119.25, lon) * step(lon, 122.15) * step(21.85, lat) * step(lat, 25.35);
-            ocean = max(ocean, tw * (1.0 - smoothstep(2500.0, 7000.0, alt))); }
+            float tw = step(119.3, lon) * step(lon, 122.15) * step(21.85, lat) * step(lat, 25.35) * (1.0 - step(24.75, lat) * step(lon, 120.6));
+            ocean = max(ocean, tw); }
           c = mix(land, sea, ocean) * (0.45 + 0.55 * dayK); }
         c += vec3(0.3, 0.55, 1.0) * rim * (0.25 + 0.6 * dayK);                       // 邊緣的大氣
         float spec = pow(max(dot(reflect(-uSun, vN), v), 0.0), 220.0) * dayK * step(day.g * 1.05, day.b) * step(day.r * 1.2, day.b); c += vec3(1.0, 0.95, 0.85) * spec * 0.22;   // 海面反光
@@ -3370,7 +3413,8 @@ const rankRows = (rows, attr) => rows.map(([k, sub, dot], i) => `<li data-${attr
 const wxLine = C => { const W = ((P.weather || {}).items || []).find(w => norm(C.name).startsWith(norm(w.city))), warn = ((P.weather || {}).warnings || []).filter(w => sameC(w.where, C.name)).map(w => w.what);
   return W || warn.length ? `<p class="why">${W ? `${esc(W.weather)} ${(+W.temp).toFixed(1)}°C` : ""}${warn.length ? `・<b style="color:#ff9f0a">${esc(warn.join("、"))}</b>` : ""}</p>` : ""; };
 const BRANDS = () => ((P.mapfeed || {}).brands) || [];
-const NEWS = () => (((P.mapfeed || {}).news) || []).slice().sort((a, b) => new Date(b.at) - new Date(a.at));
+const NEWS_AG = /俄新社|中新社|法新社|新華社|共同社|路透社?|美聯社|韓聯社|塔斯社|德新社/;   // 「據俄新社」被誤認成台中新社區之類的國際新聞，不放在地圖上
+const NEWS = () => (((P.mapfeed || {}).news) || []).filter(x => !(x.lvl === "town" && NEWS_AG.test(x.t || ""))).sort((a, b) => new Date(b.at) - new Date(a.at));
 // 新公司：每月登記資料依地址歸到鄉鎮（biz_towns.json，資料分支）；還沒產生前退回只有幾十家的舊點位
 NAV.bt = undefined;
 function navBiz() { if (NAV.bt !== undefined) return NAV.bt; NAV.bt = null;
@@ -3443,7 +3487,7 @@ function stockPts() {
     const addr = norm(a[0]).replace(/^\d+/, ""), C = COUNTIES.find(c => addr.startsWith(norm(c.name))); if (!C) continue;
     const T = (NAV.towns || []).find(t => sameC(t.county, C.name) && addr.includes(t.name)), base = T ? T.c : C.c, j = (parseInt(x.code, 10) % 7 - 3) * 0.004;
     const v = x.pct != null ? x.pct : (x.price && x.chg != null ? x.chg / (x.price - x.chg) * 100 : 0);
-    out.push({ ll: [base[0] + j, base[1] - j], name: x.name, v, C, T, addr: a[0] }); }
+    out.push({ ll: [base[0] + j, base[1] - j], name: x.name, v, C, T, addr: a[0], x }); }
   return out;
 }
 const MOPS = () => (((P.mops || {}).items) || []).filter(x => x.ll);
@@ -3498,7 +3542,7 @@ const TW_VIEW = {
     for (const m of M) { const c = countyAt(m.ll[0], m.ll[1]); if (c) byC[c.name] = (byC[c.name] || 0) + 1; }
     const mx = Math.max(1, ...Object.values(byC)), B = new THREE.Color(LENS.stock.c);
     navCounties(c => byC[c.name] ? { col: B, op: 0.25 + 0.7 * Math.sqrt(byC[c.name] / mx), sub: `重大訊息 ${byC[c.name]}`, dot: LENS.stock.c, prio: 1 + byC[c.name] / mx * 3 } : { dim: true, op: 0.15 });
-    S.forEach(x => addLabel(pill(x.name, pct(x.v), x.v >= 0 ? UPH : DNH), gp(x.ll[0], x.ll[1], 2), "nv", "nav", 5 + Math.abs(x.v)));
+    S.forEach(x => addLabel(pill(x.name, pct(x.v), x.v >= 0 ? UPH : DNH), gp(x.ll[0], x.ll[1], 2), "nv", "nav", 5 + Math.abs(x.v), () => stockInfo(x)));
     const cats = {}; for (const m of M) cats[m.cat] = (cats[m.cat] || 0) + 1;
     return { eyebrow: "台灣 · 上市櫃公司", title: "公司在哪裡、發生了什麼？", big: `${M.length} 則重大訊息`, color: LENS.stock.c,
       body: `<p class="why">標籤是關注個股的總部位置與最近收盤漲跌；縣市越亮，那裡的上市櫃公司最近發的重大訊息越多（${esc(Object.entries(cats).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, v]) => `${k} ${v}`).join("・"))}）。</p>`
@@ -3609,7 +3653,7 @@ const CITY_VIEW = {
       const top = R.flatMap(r => r[6].map(x => [...x, r[1]])).sort((a, b) => (b[1] || 0) - (a[1] || 0)).slice(0, 6);
       return { eyebrow: `${norm(C.name)} · 新設立 · ${BT.month}`, title: "新公司開在哪一區？", big: `${v.n.toLocaleString("en-US")} 家`, chg: v.p ? `比上月 ${chgTxt(v.n, v.p)}` : "", color: LENS.biz.c,
         body: `<p class="why">光柱越高開越多；綠＝比上月多、紅＝比上月少。其中設計創意類 ${des} 家。</p><ul class="lst nvl">${rankRows(R.slice(0, 8).map(r => [r[1], btLine(r)]), "nt")}</ul>`
-          + (top.length ? `<div class="nvh">資本額最大的幾家</div>` + listHTML(top.map(x => ({ t: x[0], s: `${x[4]}・${x[2]}・資本 ${capTxt(x[1] || 0)}` }))) : "") };
+          + (top.length ? `<div class="nvh">資本額最大的幾家</div>` + listHTML(top.map(x => ({ t: x[0], s: `${x[4]}・${x[2]}・資本 ${capTxt(x[1] || 0)}`, url: `https://www.google.com/search?q=${encodeURIComponent(x[0])}` }))) : "") };
     }
     const B = BRANDS().filter(b => sameC(b.city || "", C.name) || inC(b.place, C)), cnt = {};
     for (const b of B) { const t = ts.find(t => String(b.place || "").includes(t.name)) || (b.ll && townAt(b.ll[0], b.ll[1])); if (t) (cnt[t.name] = cnt[t.name] || { n: 0, t }).n++; }
@@ -3622,8 +3666,8 @@ const CITY_VIEW = {
   stock(C) {
     navOutline(C);
     const S = stockPts().filter(x => x.C === C), M = MOPS().filter(m => countyAt(m.ll[0], m.ll[1]) === C);
-    S.forEach(x => addLabel(pill(x.name, pct(x.v), x.v >= 0 ? UPH : DNH), gp(x.ll[0], x.ll[1], 1), "nv", "nav", 6));
-    M.slice(0, 30).forEach(m => pin({ c: LENS.stock.c, ll: m.ll, t: `${m.short || m.name}・${m.cat}` }, 1));
+    S.forEach(x => addLabel(pill(x.name, pct(x.v), x.v >= 0 ? UPH : DNH), gp(x.ll[0], x.ll[1], 1), "nv", "nav", 6, () => stockInfo(x)));
+    M.slice(0, 30).forEach(m => pin({ c: LENS.stock.c, ll: m.ll, t: `${m.short || m.name}・${m.cat}`, k: "重大訊息", s: `${m.name}（${m.code}）・${m.mk || ""}・${m.d || ""}`, d2: m.t, desc: m.desc, url: m.code ? `https://mops.twse.com.tw/mops/#/web/t05st01?companyId=${m.code}` : "" }, 1));
     return { eyebrow: `${norm(C.name)} · 上市櫃公司`, title: "這裡的公司發生了什麼？", big: `${M.length} 則重大訊息`, color: LENS.stock.c,
       body: (S.length ? barsHTML(S.map(x => ({ name: x.name, v: x.v, txt: pct(x.v) }))) : "") + listHTML(M.slice(0, 8).map(m => ({ t: `${m.short || m.name}：${m.t}`, s: `${m.cat}・${m.place || ""}・${m.d}`, url: m.u }))) };
   },
@@ -3642,13 +3686,13 @@ const CITY_VIEW = {
     vdDraw(vd, 0.4);
     const vdSlow = vd.filter(x => x[4] < 15 && x[5] >= 10).map(x => ({ k: "vd", n: x[6], s: x[4], ll: [(x[0] + x[2]) / 2, (x[1] + x[3]) / 2] }));
     const slow = [...st.fwSlow, ...st.thbSlow, ...vdSlow].sort((a, b) => a.s - b.s);
-    slow.slice(0, 10).forEach(x => pin({ c: "#ff453a", ll: x.ll, t: `${x.s} km/h ${trName(x)}` }, 4));
-    E.forEach(e => pin({ c: "#ff9f0a", ll: e.ll, t: `${e.road || ""} ${e.kind || ""}` }, 2));
+    slow.slice(0, 10).forEach(x => pin({ c: "#ff453a", ll: x.ll, t: `${x.s} km/h ${trName(x)}`, k: "塞車路段", s: `${x.n}・現在 ${x.s} km/h`, cam: 1 }, 4));
+    E.forEach(e => pin({ c: "#ff9f0a", ll: e.ll, t: `${e.road || ""} ${e.kind || ""}`, k: "路況事件", s: [e.title, e.impact && e.impact !== "無影響" ? "影響：" + e.impact : "", e.at ? navAgo(e.at) : ""].filter(Boolean).join("・"), cam: 1 }, 2));
     townPills(ts, new Set());
     return { eyebrow: `${norm(C.name)} · 即時車流 · ${trAt()}`, title: "哪幾條路在塞？", big: slow.length ? `${slow.length} 段在塞` : "目前順暢", chg: st.fwAvg ? `國道平均 ${st.fwAvg} km/h` : "", color: LENS.traffic.c,
       body: `<p class="why">線條依車速上色（綠順、黃車多、紅塞），國道是流動的光點。${vd.length ? `台北市區 ${vd.length} 段路口偵測器車速也畫上了。` : st.thbN ? `省道有車速的 ${st.thbN} 段。` : "這裡沒有省道即時車速。"}</p>`
         + (slow.length ? `<div class="nvh">最慢的路段</div>` + listHTML(slow.slice(0, 8).map(x => trRow({ ...x, d: null }))) : "")
-        + (E.length ? `<div class="nvh">路況事件（${E.length}）</div>` + listHTML(E.slice(0, 6).map(e => ({ t: e.title || `${e.road || ""} ${e.kind || ""}`, s: e.impact || "" }))) : "")
+        + (E.length ? `<div class="nvh">路況事件（${E.length}）</div>` + listHTML(E.slice(0, 6).map(e => ({ t: e.title || `${e.road || ""} ${e.kind || ""}`, s: e.impact || "", url: /^國道/.test(e.road || "") ? "https://1968.freeway.gov.tw/" : "" }))) : "")
         + (() => { const seen = new Set(), near = [];   // 塞的地方（或事件）旁邊最近的攝影機，直接點來看
           for (const x of [...slow.slice(0, 4), ...E.slice(0, 3)]) { const c = camsNear(x.ll, 1.5)[0]; if (c && !seen.has(c.c[4])) { seen.add(c.c[4]); near.push(c); } }
           camSetList(near.map(x => x.c), { auto: false, where: norm(C.name) + "塞車點" });
@@ -3679,7 +3723,7 @@ const CITY_VIEW = {
   news(C) {
     const ts = navOutline(C), N = NEWS().filter(x => inC(x.place, C)), T = N.filter(x => x.lvl === "town" && x.ll);
     const tc = {}; for (const x of T) { const k = String(x.place).slice(3); tc[k] = (tc[k] || 0) + 1; }
-    T.slice(0, 16).forEach(x => pin({ c: LENS.news.c, ll: x.ll, t: x.t }, 1));
+    T.slice(0, 16).forEach(x => pin({ c: LENS.news.c, ll: x.ll, t: x.t, k: "地方新聞", s: [String(x.place || "").slice(0, 6), x.s, x.at ? navAgo(x.at) : ""].filter(Boolean).join("・"), url: x.u }, 1));
     for (const t of ts) if (tc[t.name]) addLabel(pill(t.name, `${tc[t.name]} 則`, LENS.news.c), gp(t.c[0], t.c[1], 1.5), "nv", "nav", 3 + tc[t.name]);
     const tn = new Set(Object.keys(tc)); townPills(ts, tn);
     const more = ((cOf((P.localnews || {}).counties)) || []).filter(n => !N.some(x => x.t === n.title));
@@ -3693,8 +3737,8 @@ const STREET_VIEW = {
   now(T, C) {
     for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
     const here = tw(), R = 2.2, items = [];
-    for (const e of (((P.roads || {}).events) || [])) if (e.ll && kmBetween(e.ll, here) < R * 2) items.push({ k: "路況", c: "#ff9f0a", ll: e.ll, t: `${e.road || ""} ${e.kind || ""}`, s: e.impact || e.dir || "" });
-    for (const p of (((P.culture || {}).points) || [])) if (kmBetween([p[0], p[1]], here) < R) items.push({ k: "藝文", c: "#bf5af2", ll: [p[0], p[1]], t: p[2], s: `${p[3]}・${p[4]}` });
+    for (const e of (((P.roads || {}).events) || [])) if (e.ll && kmBetween(e.ll, here) < R * 2) items.push({ k: "路況", c: "#ff9f0a", ll: e.ll, t: `${e.road || ""} ${e.kind || ""}`, s: [e.title, e.impact && e.impact !== "無影響" ? "影響：" + e.impact : "", e.at ? navAgo(e.at) : ""].filter(Boolean).join("・"), cam: 1 });
+    for (const p of (((P.culture || {}).points) || [])) if (kmBetween([p[0], p[1]], here) < R) items.push({ k: "藝文", c: "#bf5af2", ll: [p[0], p[1]], t: p[2], s: [p[3], p[4], p[5]].filter(Boolean).join("・"), url: [p[6], p[7]].find(u => /^https?:/.test(u || "")) || "" });
     for (const x of NEWS()) if (x.lvl === "town" && x.ll && (kmBetween(x.ll, here) < R || inT(x.place, T))) items.push({ k: "新聞", c: "#bf5af2", ll: x.ll, t: x.t, s: x.s || "", url: x.u });
     items.forEach(it => { it.d = kmBetween(it.ll, here); }); items.sort((a, b) => a.d - b.d);
     for (const it of items.slice(0, 24)) pin(it, 3 - it.d);
@@ -3723,13 +3767,13 @@ const STREET_VIEW = {
     const rk = R.indexOf(me) + 1;
     return { eyebrow: `${norm(T.county)} › ${T.name} · 新設立 · ${BT.month}`, title: "這一區開了什麼公司？", big: `${me[2]} 家`, chg: me[3] ? `比上月 ${chgTxt(me[2], me[3])}` : "", color: LENS.biz.c,
       body: `<p class="why">在${esc(norm(T.county))}排第 ${rk}／${R.length}。${me[4].length ? "主要是" + esc(me[4].map(c => `${c[0]} ${c[1]} 家`).join("、")) + "。" : ""}${me[5] ? `設計創意類 ${me[5]} 家。` : ""}</p>`
-        + (me[6].length ? `<div class="nvh">資本額最大的幾家</div>` + listHTML(me[6].map(x => ({ t: x[0], s: `${x[2]}・資本 ${capTxt(x[1] || 0)}・${(x[3] || "").slice(5).replace("-", "/")} 登記` }))) : "")
+        + (me[6].length ? `<div class="nvh">資本額最大的幾家</div>` + listHTML(me[6].map(x => ({ t: x[0], s: `${x[2]}・資本 ${capTxt(x[1] || 0)}・${(x[3] || "").slice(5).replace("-", "/")} 登記`, url: `https://www.google.com/search?q=${encodeURIComponent(x[0])}` }))) : "")
         + (near.length ? `<div class="nvh">隔壁幾區</div><ul class="lst nvl">${rankRows(near.map(([r]) => [r[1], btLine(r)]), "nt")}</ul>` : "") };
   },
   stock(T, C) {
     for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
     const here = tw(), M = MOPS().map(m => ({ m, d: kmBetween(m.ll, here) })).filter(o => o.d < 3).sort((a, b) => a.d - b.d);
-    M.slice(0, 20).forEach(({ m }) => pin({ c: LENS.stock.c, ll: m.ll, t: m.short || m.name }, 2));
+    M.slice(0, 20).forEach(({ m }) => pin({ c: LENS.stock.c, ll: m.ll, t: m.short || m.name, k: "重大訊息", s: `${m.name}（${m.code}）・${m.mk || ""}・${m.d || ""}`, d2: m.t, desc: m.desc, url: m.code ? `https://mops.twse.com.tw/mops/#/web/t05st01?companyId=${m.code}` : "" }, 2));
     return { eyebrow: `${norm(T.county)} › ${T.name} · 上市櫃公司`, title: "附近的公司發生了什麼？", big: `${M.length} 則`, color: LENS.stock.c,
       body: M.length ? listHTML(M.slice(0, 8).map(({ m, d }) => ({ t: `${m.short || m.name}：${m.t}`, s: `${m.cat}・${dist(d)}・${m.d}`, url: m.u }))) : `<p class="empty">附近 3 公里沒有上市櫃公司發重大訊息。</p>` };
   },
@@ -3744,13 +3788,13 @@ const STREET_VIEW = {
     cams.slice(0, 12).forEach(({ c }) => addLabel(`<span class="nvcam" ${camAttrs(c)} title="${esc(camName(c))}">◉</span>`, gp(c[0], c[1], 0.08), "nv campin", "nav", 1));
     camSetList(cams.map(x => x.c), { auto: !MOBILE, where: T.name });
     const withS = [...S.filter(x => x.s != null), ...vdRows.filter(x => x.s < 25)], slow = withS.filter(x => x.k === "vd" ? x.s < 15 : trSlow(x));
-    slow.slice(0, 8).forEach(x => pin({ c: "#ff453a", ll: x.ll, t: `${x.s} km/h` }, 4));
-    E.forEach(e => pin({ c: "#ff9f0a", ll: e.ll, t: `${e.road || ""} ${e.kind || ""}` }, 3));
+    slow.slice(0, 8).forEach(x => pin({ c: "#ff453a", ll: x.ll, t: `${x.s} km/h`, k: "塞車路段", s: `${x.n}・現在 ${x.s} km/h`, cam: 1 }, 4));
+    E.forEach(e => pin({ c: "#ff9f0a", ll: e.ll, t: `${e.road || ""} ${e.kind || ""}`, k: "路況事件", s: [e.title, e.impact && e.impact !== "無影響" ? "影響：" + e.impact : "", e.at ? navAgo(e.at) : ""].filter(Boolean).join("・"), cam: 1 }, 3));
     return { eyebrow: `${norm(T.county)} › ${T.name} · 即時車流 · ${trAt()}`, title: "這附近順不順？", big: !withS.length ? T.name : slow.length ? `${slow.length} 段在塞` : "順暢", color: LENS.traffic.c,
       body: `<p class="why">附近 ${R} 公里內的國道、省道路段${vd.length ? `，加上台北市區 ${vd.length} 段路口偵測器` : "；市區一般道路只有台北有公開即時車速"}。</p>`
         + (withS.length ? listHTML(withS.sort((a, b) => a.s - b.s).slice(0, 8).map(trRow)) : `<p class="empty">附近沒有即時車速。</p>`)
         + camHTML(cams)
-        + (E.length ? `<div class="nvh">路況事件</div>` + listHTML(E.slice(0, 5).map(e => ({ t: e.title || `${e.road || ""} ${e.kind || ""}`, s: `${e.impact || ""}・${dist(kmBetween(e.ll, here))}` }))) : "") };
+        + (E.length ? `<div class="nvh">路況事件</div>` + listHTML(E.slice(0, 5).map(e => ({ t: e.title || `${e.road || ""} ${e.kind || ""}`, s: `${e.impact || ""}・${dist(kmBetween(e.ll, here))}`, url: /^國道/.test(e.road || "") ? "https://1968.freeway.gov.tw/" : "" }))) : "") };
   },
   jobs(T, C) {
     for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
@@ -3773,7 +3817,7 @@ const STREET_VIEW = {
   news(T, C) {
     for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
     const N = NEWS(), mine = N.filter(x => inT(x.place, T) || (x.lvl === "town" && x.ll && kmBetween(x.ll, tw()) < 3)), cty = N.filter(x => x.lvl !== "town" && inC(x.place, C));
-    mine.forEach(x => x.ll && pin({ c: LENS.news.c, ll: x.ll, t: x.t }, 3));
+    mine.forEach(x => x.ll && pin({ c: LENS.news.c, ll: x.ll, t: x.t, k: "地方新聞", s: [String(x.place || "").slice(0, 6), x.s, x.at ? navAgo(x.at) : ""].filter(Boolean).join("・"), url: x.u }, 3));
     return { eyebrow: `${norm(T.county)} › ${T.name} · 地方新聞`, title: "這裡在發生什麼？", big: mine.length ? `${mine.length} 則在地` : T.name, color: LENS.news.c,
       body: (mine.length ? `<div class="nvh">${esc(T.name)}</div>` + listHTML(mine.slice(0, 5).map(x => ({ t: x.t, s: `${x.s || ""}・${navAgo(x.at)}`, url: x.u }))) : `<p class="why">這一區最近沒有標得出地點的新聞，先看全縣市的：</p>`)
         + `<div class="nvh">${esc(norm(C.name))}</div>` + listHTML(cty.slice(0, 5).map(x => ({ t: x.t, s: `${x.s || ""}・${navAgo(x.at)}`, url: x.u }))) };
@@ -3982,8 +4026,8 @@ TW_VIEW.stop = function () {
     const l = Math.max(...its.map(x => stopLevel(x.text))); return { col: new THREE.Color(STOP_C(l)), op: 0.4 + 0.15 * l, sub: stopShort(its.map(x => x.text).join(" ")), dot: STOP_C(l), prio: 5 + l }; });
   const n = new Set(items.filter(x => stopLevel(x.text) > 0).map(x => norm(x.area))).size;
   return { eyebrow: `現場 · 人事總處${S.updated ? " · " + S.updated.slice(5, 16) + " 更新" : ""}`, title: "要不要上班上課？", big: items.length ? (n ? `${n} 個縣市停班或停課` : "各縣市照常") : "全台照常上班上課", color: n ? LENS.stop.c : "#30d158",
-    body: items.length ? `<ul class="lst nvl">${items.map(x => `<li data-nc="${esc((COUNTIES.find(c => sameC(c.name, x.area)) || {}).name || x.area)}" style="cursor:pointer"><span class="sdot" style="background:${STOP_C(stopLevel(x.text))}"></span>${esc(norm(x.area))}<span>${esc(x.text)}</span></li>`).join("")}</ul><p class="why">紅＝停班停課、橘＝停課或停班、黃＝部分地區。以人事總處公告為準，颱風期間通常晚上 8 點前後公布隔天的決定。</p>`
-      : `<p class="why">人事總處目前沒有任何停班停課公告。颱風或豪雨期間，各縣市通常在晚上 8 點前後公布隔天是否停班停課，這裡會自動更新、地圖上會標出來。</p>` };
+    body: items.length ? `<ul class="lst nvl">${items.map(x => `<li data-nc="${esc((COUNTIES.find(c => sameC(c.name, x.area)) || {}).name || x.area)}" style="cursor:pointer"><span class="sdot" style="background:${STOP_C(stopLevel(x.text))}"></span>${esc(norm(x.area))}<span>${esc(x.text)}</span></li>`).join("")}</ul><p class="why">紅＝停班停課、橘＝停課或停班、黃＝部分地區。以人事總處公告為準，颱風期間通常晚上 8 點前後公布隔天的決定。</p><p><a href="https://www.dgpa.gov.tw/typh/daily/nds.html" target="_blank" rel="noopener">人事總處公告原文 ›</a></p>`
+      : `<p class="why">人事總處目前沒有任何停班停課公告。颱風或豪雨期間，各縣市通常在晚上 8 點前後公布隔天是否停班停課，這裡會自動更新、地圖上會標出來。</p><p><a href="https://www.dgpa.gov.tw/typh/daily/nds.html" target="_blank" rel="noopener">人事總處公告原文 ›</a></p>` };
 };
 CITY_VIEW.stop = function (C) {
   const ts = navOutline(C), its = stopOf(C.name), txt = its.map(x => x.text).join(" "), l = its.length ? Math.max(...its.map(x => stopLevel(x.text))) : 0;
@@ -3991,8 +4035,16 @@ CITY_VIEW.stop = function (C) {
   for (const t of hit) addLabel(pill(t.name, stopShort(txt), STOP_C(l)), gp(t.c[0], t.c[1], 1.5), "nv", "nav", 5);
   townPills(ts, new Set(hit.map(t => t.name)));
   return { eyebrow: `${norm(C.name)} · 停班停課 · 人事總處`, title: "要不要上班上課？", big: its.length ? stopShort(txt) : "照常上班上課", color: STOP_C(l),
-    body: its.length ? listHTML(its.map(x => ({ t: x.text, s: x.area }))) + (hit.length ? `<p class="why">地圖上標出公告裡提到的行政區。</p>` : "") : `<p class="why">人事總處目前沒有${esc(norm(C.name))}的停班停課公告。</p>` };
+    body: its.length ? listHTML(its.map(x => ({ t: x.text, s: x.area, url: "https://www.dgpa.gov.tw/typh/daily/nds.html" }))) + (hit.length ? `<p class="why">地圖上標出公告裡提到的行政區。</p>` : "") : `<p class="why">人事總處目前沒有${esc(norm(C.name))}的停班停課公告。</p>` };
 };
+
+// 個股：價格、漲跌、成交量、總部地址、最近一則重大訊息
+function stockInfo(s) {
+  const x = s.x || {}, m = MOPS().filter(m => m.name === x.name || m.code === x.code).sort((a, b) => String(b.d).localeCompare(String(a.d)))[0];
+  return { html: `<i class="lp-k" style="color:${LENS.stock.c}">個股・${esc(x.code || "")}</i><b>${esc(s.name)}</b><p class="${s.v >= 0 ? "up" : "dn"}">${x.price != null ? x.price + " 元　" : ""}${pct(s.v)}</p>`
+    + `<p>${[x.sec, x.value ? "成交金額 " + (x.value / 1e8).toFixed(1) + " 億" : "", x.date ? x.date.slice(5).replace("-", "/") + " 收盤" : ""].filter(Boolean).map(esc).join("・")}</p><p>總部：${esc(s.addr || "")}</p>`
+    + (m ? `<p>最近重大訊息（${esc(m.d || "")}）：${esc(m.t || "")}</p>` : ""), go: () => flyNear(gp(s.ll[0], s.ll[1], 0), 4), goTxt: "拉近到總部" };
+}
 
 /* ---- 公路攝影機觀看面板 ----
    電腦：左側一欄（右邊是資訊卡，地圖留在中間）；手機：下方一張小卡，平常收成一顆「攝影機」按鈕。
@@ -4204,12 +4256,14 @@ lodTick = function (dt) {
 function lpopEl() {
   let el = $("lpop"); if (el) return el;
   el = document.createElement("div"); el.id = "lpop"; el.setAttribute("role", "dialog"); document.body.appendChild(el);
-  el.addEventListener("click", e => { if (e.target.closest("[data-lp=x]")) lpopClose(); });
+  el.addEventListener("click", e => { if (e.target.closest("[data-lp=x]")) lpopClose(); else if (e.target.closest("[data-lp=go]") && LPGO.fn) { const f = LPGO.fn; lpopClose(); f(); } });
   el.addEventListener("pointerdown", e => e.stopPropagation());
   return el;
 }
-function lpop(html, r) {
-  const el = lpopEl(); el.innerHTML = `<button data-lp="x" aria-label="關閉">×</button>${html}`; el.classList.add("on");
+const LPGO = { fn: null };
+function lpop(html, r, go, goTxt) {
+  LPGO.fn = go || null;
+  const el = lpopEl(); el.innerHTML = `<button data-lp="x" aria-label="關閉">×</button>${html}${go ? `<button data-lp="go" class="lp-go">${esc(goTxt || "拉近看")} ›</button>` : ""}`; el.classList.add("on");
   const w = el.offsetWidth, h = el.offsetHeight, x = Math.min(innerWidth - w - 12, Math.max(12, r.left + r.width / 2 - w / 2)), y = r.top - h - 10 > 56 ? r.top - h - 10 : Math.min(VH() - h - 12, r.bottom + 10);
   el.style.left = x + "px"; el.style.top = y + "px";
 }
@@ -4223,16 +4277,46 @@ function flyNear(pos, d) {   // 拉近到那個位置（已經夠近就不動距
   flyTo(tgt.clone().add(V(0, D * 0.78, D * 0.62)), tgt, 1.3);
 }
 const lpLink = u => u ? `<a href="${esc(u)}" target="_blank" rel="noopener">看原文 ›</a>` : "";
+// 每個標籤可以帶第 6 個參數：點的時候要顯示什麼（函式，點了才算，資料永遠是最新的）
+const _addLabel0 = addLabel;
+addLabel = function (html, pos, cls, group, prio, info) { const L = _addLabel0(html, pos, cls, group, prio); if (info) L.info = info; return L; };
+// 天氣：氣象署測站＋縣市預報＋警特報
+function wxInfo(it, c) {
+  const f = (it.forecast || []).slice(0, 2), warn = (((P.weather || {}).warnings) || []).filter(w => norm(w.where) === norm(c.name));
+  return { html: `<i class="lp-k" style="color:#64d2ff">天氣・氣象署 ${esc(it.station || "")}站</i><b>${esc(norm(c.name))} ${(+it.temp).toFixed(1)}°C ${esc(it.weather && it.weather !== "-99" ? it.weather : "")}</b>`
+    + `<p>濕度 ${it.rh ?? "—"}%・風 ${it.wind ?? "—"} m/s・今天雨量 ${it.rain24h ?? 0} mm${it.uv != null ? "・紫外線 " + it.uv : ""}</p>`
+    + f.map(x => `<p>${esc(x.start)} 起：${esc(x.wx)}，${esc(x.minT)}–${esc(x.maxT)}°C，降雨機率 ${esc(x.pop)}%</p>`).join("")
+    + (warn.length ? `<p style="color:#ff9f0a">${warn.map(w => esc(w.what + (w.level || ""))).join("、")}</p>` : "")
+    + (it.obsTime ? `<p>觀測時間 ${esc(String(it.obsTime).slice(11, 16))}</p>` : "") + lpLink("https://www.cwa.gov.tw/V8/C/W/County/index.html").replace("看原文", "氣象署縣市預報"), go: () => navGoCounty(c), goTxt: "看這個縣市" };
+}
+// 地震：氣象署地震報告
+function quakeInfo(q) {
+  return { html: `<i class="lp-k" style="color:#ff9f0a">地震・氣象署第 ${esc(String(q.no || ""))} 號</i><b>規模 ${q.mag}・深度 ${q.depth} 公里</b><p>${esc(q.loc || "")}</p><p>${new Date(q.at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })}（${ago(q.at)}）・最大震度 ${esc(q.intensity || "—")}</p>${lpLink(q.url)}`,
+    go: () => flyNear(gp(q.lon, q.lat, 0), 30), goTxt: "看震央" };
+}
+// 縣市、行政區的小標籤：數字＋右邊清單裡同一列的細節，按鈕進到那一層
+function pillInfo(nm, sub, el) {
+  const T = NAV.county && (NAV.towns || []).find(t => t.name === nm && sameC(t.county, NAV.county.name)), C = !T && COUNTIES.find(c => norm(c.name) === norm(nm));
+  const li = [...document.querySelectorAll("#side [data-nt], #side [data-nc]")].find(b => norm(b.dataset.nt || b.dataset.nc) === norm(nm));
+  const det = li ? [...li.querySelectorAll("span")].filter(x => !x.classList.contains("sdot")).map(x => x.textContent).join("・") : "";
+  const LZ = LENS[NAV.lens] || LENS.now, here = (T && NAV.town && NAV.town.name === T.name && NAV.level === 2) || (C && NAV.county && sameC(NAV.county.name, C.name) && NAV.level === 1);
+  const big = el.querySelector(".nvp.big");
+  return { html: `<i class="lp-k" style="color:${LZ.c}">${esc(LZ.n)}${T ? "・" + esc(norm(T.county)) : ""}</i><b>${esc(nm)}</b>${sub ? `<p>${esc(sub)}</p>` : ""}${det && det !== sub ? `<p>${esc(det)}</p>` : ""}${big ? "<p>完整數字在右邊的卡片。</p>" : ""}`,
+    go: here || big ? null : T ? () => navGoTown(T) : C ? () => navGoCounty(C) : null, goTxt: T ? "進入這一區" : "進入這個縣市" };
+}
 document.addEventListener("click", e => {
   const el = e.target.closest && e.target.closest("#labels .lbl"); if (!el || el.classList.contains("lhid")) return;
   if (e.target.closest("[data-cam]")) return;   // 攝影機：由攝影機面板處理
   const L = LBL.find(l => l.el === el); if (!L) return;
   const r = el.getBoundingClientRect(), txt = el.textContent.replace(/\s+/g, " ").trim();
+  if (L.info) { let o = null; try { o = L.info(); } catch (err) { console.warn(err); } if (o) { lpop(o.html, r, o.go, o.goTxt); return; } }
   // 資料點
   const pe = el.querySelector("[data-pin]"), it = pe && (NAV.pins || [])[+pe.dataset.pin];
   if (it) {
-    lpop(`${it.k ? `<i class="lp-k" style="color:${it.c}">${esc(it.k)}</i>` : ""}<b>${esc(it.t)}</b>${it.s ? `<p>${esc(it.s)}</p>` : ""}${it.d != null ? `<p>距離鏡頭中心 ${dist(it.d)}</p>` : ""}${lpLink(it.url)}`, r);
-    flyNear(gp(it.ll[0], it.ll[1], 0), 3); return;
+    const cams = it.cam && camsNear(it.ll, 2);
+    lpop(`${it.k ? `<i class="lp-k" style="color:${it.c}">${esc(it.k)}</i>` : ""}<b>${esc(it.t)}</b>${it.s ? `<p>${esc(it.s)}</p>` : ""}${it.d2 ? `<p>${esc(it.d2)}</p>` : ""}${it.desc ? `<p class="lp-desc">${esc(String(it.desc).slice(0, 220))}…</p>` : ""}${it.d != null ? `<p>距離鏡頭中心 ${dist(it.d)}</p>` : ""}${lpLink(it.url)}`, r,
+      cams && cams.length ? () => { camSetList(cams.map(x => x.c), { where: "這裡" }); CAM.closedByUser = false; camShow(0); } : () => flyNear(gp(it.ll[0], it.ll[1], 0), 3), cams && cams.length ? `看附近的攝影機（${cams.length}）` : "拉近到這裡");
+    return;
   }
   // 交易所（市場時鐘）
   const mx = el.querySelector("[data-mx]");
@@ -4242,19 +4326,12 @@ document.addEventListener("click", e => {
     return; }
   // 地球上的節點
   const gx = el.querySelector("[data-gx]"), n = gx && GX.spec && GX.spec.nodes[+gx.dataset.gx];
-  if (n) { lpop(`<b>${esc(n.name)}</b>${n.chg != null ? `<p style="color:${n.chg >= 0 ? UPH : DNH}">${gxPct(n.chg)}</p>` : ""}${n.sub ? `<p>${esc(n.sub)}</p>` : ""}`, r); return; }
-  // 縣市、行政區名稱：進到那一層
+  if (n) { lpop(`<i class="lp-k">${esc(GX.spec.title || "")}</i><b>${esc(n.name)}</b>${n.chg != null ? `<p style="color:${n.chg >= 0 ? UPH : DNH}">${gxPct(n.chg)}</p>` : n.w ? `<p>最近 ${n.w} 則動態</p>` : ""}${n.sub ? `<p>${esc(n.sub)}</p>` : ""}`, r); return; }
+  // 縣市、行政區名稱
   const nm = ((el.querySelector(".nvp b") || {}).textContent || "").trim();
-  if (nm && ST.explore && !GD.on) {
-    const T = NAV.county && (NAV.towns || []).find(t => t.name === nm && sameC(t.county, NAV.county.name));
-    if (T && NAV.level >= 1) { lpopClose(); navGoTown(T); return; }
-    const C = COUNTIES.find(c => norm(c.name) === norm(nm));
-    if (C) { lpopClose(); navGoCounty(C); return; }
-    if (T) { lpopClose(); navGoTown(T); return; }
-  }
+  if (nm && ST.explore && !GD.on) { const o = pillInfo(nm, ((el.querySelector(".nvp em") || {}).textContent || "").trim(), el); lpop(o.html, r, o.go, o.goTxt); return; }
   // 其他：放大顯示＋拉近
-  lpop(`<b>${esc(txt)}</b>`, r);
-  if (!GD.on) flyNear(L.pos, Math.max(4, camera.position.distanceTo(controls.target) * 0.45));
+  lpop(`<b>${esc(txt)}</b>`, r, GD.on ? null : () => flyNear(L.pos, Math.max(4, camera.position.distanceTo(controls.target) * 0.45)), "拉近看");
 });
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */

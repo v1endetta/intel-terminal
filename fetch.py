@@ -3910,6 +3910,11 @@ def p_localnews():
     return {"counties": out, "errs": errs[:6]}
 
 
+TOWN_COMMON = {"新社", "光復", "成功", "和平", "復興", "太平", "永安", "安定", "大樹", "清水", "大同", "民生", "新興", "三民", "福興", "東山", "大安", "中正", "中山",
+               "信義", "仁愛", "和美", "新城", "新市", "長治", "水上", "大社", "大城", "大村", "萬里", "金山", "富里", "玉里", "瑞穗", "壽豐", "吉安"}   # 一般用語也會出現的鄉鎮簡稱
+NEWS_AGENCY = re.compile(r"俄新社|中新社|法新社|美聯社|路透社?|共同社|新華社|韓聯社|塔斯社|朝中社|德新社|安莎社|俄羅斯衛星通訊社")
+
+
 def _town_terms():
     """每個縣市要查的鄉鎮寫法：全台唯一的簡稱（板橋、竹北）優先，其他用全名；同名鄉鎮（信義區、東區…）標題要同時提到縣市才算。"""
     out = {}
@@ -3941,7 +3946,9 @@ def p_townnews():
                 k = re.sub(r"\W+", "", title)[:30]
                 if k in seen:
                     continue
-                hit = next((t for t in chunk if t[0] in title and (not t[2] or any(x in title for x in keys))), None)
+                t2 = NEWS_AGENCY.sub("", title)   # 「據俄新社」不是台中新社區
+                hit = next((t for t in chunk if t[0] in t2 and (not t[2] or any(x in t2 for x in keys))
+                            and (t[0] == t[1] or t[0] not in TOWN_COMMON or t[1] in t2 or any(x in t2 for x in keys))), None)   # 光復、成功這類常用詞：要有全名或縣市才算
                 if not hit:
                     continue
                 seen.add(k)
@@ -6429,6 +6436,66 @@ def _wiki_top(lang, limit=5):
 
 # 開獎、樂透這類每天固定發的稿件不是新聞訊號，會擠掉真的頭條
 NEWS_NOISE = re.compile(r"今彩\s*539|威力彩|大樂透|雙贏彩|3星彩|4星彩|賓果賓果|樂透|統一發票.*(?:中獎號碼|開獎)|頭獎.*(?:槓龜|中獎)")
+
+
+# ---------- 全球新聞：國際媒體英文標題 → 台灣用語中文＋發生地點（放到地球上） ----------
+# BBC、半島電視台、NPR、衛報（有金鑰時）；翻譯和地點用 Gemini（免費額度），同一則只翻一次（快取），每小時抓一次
+WORLD_FEEDS = [("BBC", "https://feeds.bbci.co.uk/news/world/rss.xml"), ("Al Jazeera", "https://www.aljazeera.com/xml/rss/all.xml"),
+               ("NPR", "https://feeds.npr.org/1004/rss.xml"), ("BBC 商業", "https://feeds.bbci.co.uk/news/business/rss.xml")]
+WNEWS_CACHE = DATA / "worldnews_cache.json"
+
+
+def p_worldnews():
+    errs, raw = [], []
+    for src, url in WORLD_FEEDS:
+        try:
+            raw += _rss(url, src, 12)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{src}: {safe_err(e)}")
+    if GUARDIAN_KEY:
+        try:
+            js = gjson("https://content.guardianapis.com/search", params={"section": "world", "order-by": "newest", "page-size": 12, "api-key": GUARDIAN_KEY})
+            raw += [{"source": "Guardian", "title": r["webTitle"][:120], "url": r["webUrl"], "at": r["webPublicationDate"]} for r in js["response"]["results"]]
+        except Exception as e:  # noqa: BLE001
+            errs.append("Guardian: " + safe_err(e))
+    items = _dedupe_sort(raw, 40)
+    if not items:
+        raise RuntimeError("worldnews: nothing " + "; ".join(errs)[:160])
+    cache = {}
+    if WNEWS_CACHE.exists():
+        try:
+            cache = json.loads(WNEWS_CACHE.read_text(encoding="utf-8"))
+        except Exception:
+            cache = {}
+    key = lambda it: re.sub(r"\W+", "", it["title"].lower())[:60]
+    todo = [it for it in items if key(it) not in cache]
+    if todo and GEMINI_KEY:
+        lines = "\n".join(f'{i}. {it["title"]}' for i, it in enumerate(todo))
+        prompt = ("把下面的國際新聞英文標題翻成台灣用語的繁體中文新聞標題（自然、精簡，像台灣媒體會下的標題；人名地名用台灣常見譯名，不要中國用語），"
+                  "並判斷新聞主要發生在哪裡。只回 JSON：{\"items\": [{\"i\": 編號, \"zh\": \"中文標題\", \"place\": \"地點（台灣譯名，國家或城市）\", "
+                  "\"lat\": 緯度, \"lon\": 經度, \"cat\": \"政治|戰爭衝突|經濟|科技|災害|社會|其他\"}]}。無法判斷地點時 place 給空字串、lat/lon 給 null。\n\n" + lines)
+        try:
+            data = _gemini_json(prompt, max_tokens=8000, timeout=90, lite_first=True, max_models=3)
+            for r in (data or {}).get("items") or []:
+                try:
+                    it = todo[int(r.get("i"))]
+                except (TypeError, ValueError, IndexError):
+                    continue
+                lat, lon = r.get("lat"), r.get("lon")
+                ok = isinstance(lat, (int, float)) and isinstance(lon, (int, float)) and -90 <= lat <= 90 and -180 <= lon <= 180
+                cache[key(it)] = {"zh": str(r.get("zh") or "")[:60], "place": str(r.get("place") or "")[:16], "ll": [round(lon, 2), round(lat, 2)] if ok else None, "cat": str(r.get("cat") or "")[:6]}
+        except Exception as e:  # noqa: BLE001
+            errs.append("翻譯: " + safe_err(e))
+    elif todo:
+        errs.append("翻譯: 沒有設定 GEMINI_API_KEY，先顯示原文")
+    out = []
+    for it in items:
+        c = cache.get(key(it)) or {}
+        out.append({"t": c.get("zh") or "", "en": it["title"], "src": it["source"], "url": it["url"], "at": it["at"], "place": c.get("place") or "", "ll": c.get("ll"), "cat": c.get("cat") or ""})
+    keep = {key(it) for it in items}
+    cache = {k: v for k, v in cache.items() if k in keep or len(cache) < 600}
+    write_json(WNEWS_CACHE, cache)
+    return {"items": out, "n_zh": sum(1 for x in out if x["t"]), "errs": errs[:5], "src": "BBC、半島電視台、NPR、衛報；中文翻譯與地點由 Gemini 產生"}
 
 
 def p_news():
@@ -9326,6 +9393,7 @@ run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
+run("worldnews", p_worldnews, keep_if_fresh_hours=1)
 run("social", p_social, keep_if_fresh_hours=0.5)
 run("radar", p_radar, keep_if_fresh_hours=2)
 run("cofacts", p_cofacts, keep_if_fresh_hours=0.5)
