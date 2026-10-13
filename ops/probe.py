@@ -1,49 +1,35 @@
-"""臨時探測（第二輪）：CPI 細項 SDMX、觀光統計、日經日期格式。跑完就刪。"""
+"""臨時探測（第三輪）：觀光署 opendata 編號、主計總處 SDMX 寫法。跑完就刪。"""
 import json, re, requests
+from concurrent.futures import ThreadPoolExecutor
 H = {"User-Agent": "Mozilla/5.0 (intel-terminal probe)"}
-out = {}
-def get(u, n=1500, **kw):
+out = {"stat": {}, "sdmx": {}}
+def one(i):
     try:
-        r = requests.get(u, headers=H, timeout=40, **kw)
-        return {"code": r.status_code, "ct": r.headers.get("content-type", ""), "len": len(r.content), "head": r.content[:n].decode("utf-8", "replace")}
+        r = requests.get(f"https://stat.taiwan.net.tw/data/opendata/{i}", headers=H, timeout=30)
+        t = r.content[:400].decode("utf-8", "replace")
+        return i, {"code": r.status_code, "len": len(r.content), "head": t.split("\n")[0][:200], "row2": (t.split("\n") + ["", ""])[1][:160]}
     except Exception as e:
-        return {"err": str(e)[:200]}
-B = "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sdmx/"
-for name, u in [("cpi15_1", B + "A030101015/1..M&startTime=2025-M1&endTime=2026-M12"), ("cpi15_meta", B + "A030101015/"),
-                ("cpi25_1", B + "A030101025/1..M&startTime=2026-M1&endTime=2026-M12"), ("cpi_dash", B + "A030101015/1.1.M&startTime=2026-01&endTime=2026-12")]:
-    r = get(u, 200)
+        return i, {"err": str(e)[:100]}
+with ThreadPoolExecutor(6) as ex:
+    for i, r in ex.map(one, range(1, 121)):
+        out["stat"][i] = r
+B1, B2 = "https://nstatdb.dgbas.gov.tw/dgbasall/webMain.aspx?sdmx/", "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sdmx/"
+for name, u in [("a", B1 + "A030101015/1..M&startTime=2026-M1&endTime=2026-M8"), ("b", B1 + "A030101015/1.1.M&startTime=2026-M1&endTime=2026-M8"),
+                ("c", B1 + "A030101015/1.1+2+3.M&startTime=2025-M1&endTime=2026-M8"), ("d", B1 + "A030101015/"), ("e", B1 + "A030101015/all"),
+                ("f", B2 + "A030101015/1.1.M&startTime=2026-M1&endTime=2026-M8"), ("g", "https://nstatdb.dgbas.gov.tw/dgbasall/webMain.aspx?sys=210&funid=A030101015")]:
     try:
-        js = requests.get(u, headers={**H, "Accept": "application/json"}, timeout=60).json()
-        st = js.get("structure") or (js.get("data") or {}).get("structure") or {}
-        dims = (st.get("dimensions") or {})
-        r["dims"] = {k: [[x.get("id"), x.get("name")] for x in (d.get("values") or [])][:80] for k in ("series", "observation") for d in (dims.get(k) or [])[:4] for _ in [0]} if dims else None
-        r["dims_raw"] = json.dumps(dims, ensure_ascii=False)[:6000]
-        ds = ((js.get("data") or js).get("dataSets") or [{}])[0].get("series") or {}
-        r["n_series"] = len(ds); r["sample"] = json.dumps(dict(list(ds.items())[:2]), ensure_ascii=False)[:800]
+        r = requests.get(u, headers={**H, "Accept": "application/json"}, timeout=60)
+        t = r.text
+        rec = {"code": r.status_code, "ct": r.headers.get("content-type"), "len": len(t), "head": t[:300], "title": (re.search(r"<title>(.*?)</title>", t, re.S) or [None, ""])[1][:100]}
+        try:
+            js = r.json(); st = js.get("structure") or {}
+            rec["dims"] = json.dumps(st.get("dimensions"), ensure_ascii=False)[:5000]
+            ser = ((js.get("data") or {}).get("dataSets") or [{}])[0].get("series") or {}
+            rec["n"] = len(ser); rec["sample"] = json.dumps(dict(list(ser.items())[:2]), ensure_ascii=False)[:600]
+        except Exception as e:
+            rec["perr"] = str(e)[:80]
+        out["sdmx"][name] = rec
     except Exception as e:
-        r["perr"] = str(e)[:200]
-    out[name] = r
-for ds in ["15453", "15450", "45512", "15432", "41898"]:
-    m = get(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", 8000)
-    try:
-        res = json.loads(requests.get(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", headers=H, timeout=30).text).get("result") or {}
-        out["ds" + ds] = {"title": res.get("title"), "freq": res.get("updateFrequency") or res.get("accrualPeriodicity"), "dist": [(d.get("resourceFormat"), d.get("resourceDownloadUrl"), d.get("resourceDescription")) for d in (res.get("distribution") or [])][:4]}
-        out["ds" + ds]["sample"] = [get(d[1], 900) for d in out["ds" + ds]["dist"][:2] if d[1]]
-    except Exception as e:
-        out["ds" + ds] = {"err": str(e)[:200], "m": m}
-st = get("https://stat.taiwan.net.tw/", 200000)
-out["stat_links"] = sorted(set(re.findall(r'(?:src|href)="([^"]+\.js[^"]*)"', st.get("head", ""))))[:20]
-out["stat_api_guess"] = {u: get(u, 600) for u in ["https://stat.taiwan.net.tw/api/inbound", "https://stat.taiwan.net.tw/inboundSearch", "https://stat.taiwan.net.tw/data/api/inbound/residence?year=2026"]}
-js_urls = [l if l.startswith("http") else "https://stat.taiwan.net.tw" + l for l in out["stat_links"] if "js" in l][:6]
-apis = set()
-for u in js_urls:
-    try:
-        t = requests.get(u, headers=H, timeout=30).text
-        apis.update(re.findall(r'["\'](/(?:api|data|stat)[^"\']{3,80})["\']', t))
-    except Exception:
-        pass
-out["stat_js_apis"] = sorted(apis)[:60]
-t = requests.get("https://asia.nikkei.com/rss/feed/nar", headers=H, timeout=30).text
-out["nikkei_item"] = (re.search(r"<item>.*?</item>", t, re.S) or [""])[0][:1200]
+        out["sdmx"][name] = {"err": str(e)[:150]}
 json.dump(out, open("probe.json", "w"), ensure_ascii=False, indent=1)
 print("ok")
