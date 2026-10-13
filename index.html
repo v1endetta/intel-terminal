@@ -602,6 +602,9 @@ body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!im
 #labels .lbl.wxl .wxp{font-style:normal;font-size:10.5px;font-weight:600;color:#64d2ff;margin-left:2px}
 .wnl .srcn{display:inline-block;font-style:normal;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:5px;margin-right:6px;vertical-align:1px;background:rgba(100,210,255,.14);color:#64d2ff}
 .wnl .srcn.big{background:rgba(100,210,255,.26);color:#9ee3ff}
+/* 補助與徵件 */
+.gl .gtag{display:inline-block;font-style:normal;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:5px;margin-right:6px;vertical-align:1px;background:rgba(48,209,88,.15);color:#30d158}
+.gl .gdue{font-weight:600;color:#c7c7cc}.gl .gdue.hot{color:#ff9f0a}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2467,6 +2470,8 @@ function EXPLORE() {
       { n: "房價", lens: "house" },
       { n: "菜價", f: barsOf("菜價兩週變化", () => items("veg").slice(0, 10).map(x => ({ name: x.name, v: x.chg14, txt: pct(x.chg14, 0) })), "總經 · " + ((P.veg || {}).market || ""), "veg") },
       { n: "油價", f: barsOf("中油牌價", () => items("oil").map(x => ({ name: x.name, v: x.price, txt: nf(x.price) + " 元" })), "總經 · " + ((P.oil || {}).effective || ""), "macro", { signed: false }) },
+      { n: "物價細項", f: () => pricesCard() },
+      { n: "觀光", f: () => tourismCard() },
       { n: "景氣指標", lens: "macro", f: listOf("台灣總經", () => items("macro").map(x => ({ t: `${x.label}  ${x.value}`, s: `${x.period} · 前期 ${x.prev}` })), "總經", "macro") },
       { n: "美元流動性", globe: 1, f: () => gxCard("liq") },
     ] },
@@ -2480,6 +2485,7 @@ function EXPLORE() {
       { n: "新公司", lens: "biz" },
       { n: "職缺", lens: "jobs", f: barsOf("各類職缺 7 天變化", () => (((P.jobs || {}).cats) || []).slice(0, 10).map(c => ({ name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) })), "訊號 · 全台 " + nf((P.jobs || {}).total || 0) + " 個職缺", "jobs") },
       { n: "AI 快線", globe: 1, f: () => gxCard("ai") },
+      { n: "補助徵件", f: () => grantsCard() },
       { n: "標案", lens: "tender", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },
       { n: "公司雷達", f: listOf("盯梢中的公司", () => (((P.radar || {}).watch) || []).slice(0, 7).map(x => ({ t: x.name, s: x.desc })), "訊號", "radar") },
     ] },
@@ -2524,7 +2530,10 @@ const PROV = {
   "lens:biz": ["brands", "經濟部公司與商業登記，依地址歸到鄉鎮", "每月", 43200, p => p.month], "lens:jobs": ["jobs", "104 人力銀行刊登數", "每日", 1440],
   "lens:tender": ["tendermap", "政府電子採購網（依發包機關歸類，不是工程地點）", "每日", 1440], "lens:news": ["mapfeed", "Google 新聞，依標題地名歸到鄉鎮", "彙整", 180],
   "lens:stock": ["mops", "證交所・櫃買中心重大訊息；總部位置依登記地址", "每日", 1440], "lens:elect": ["elect", "Polymarket 報價（只看不押）＋新聞", "彙整", 120], "lens:macro": ["macro", "國發會・主計總處・央行", "每月", 43200], "lens:mood": ["mood", "PTT・LINE 查證・新聞標題（AI 判讀）", "彙整", 180], "lens:power": ["power", "台電", "即時", 30, p => p.asof],
-  "全球新聞": ["worldnews", "BBC・半島電視台・NPR・衛報（Gemini 翻譯）", "彙整", 60],
+  "全球新聞": ["worldnews", "BBC・半島電視台・NPR・衛報・日經亞洲・南華早報・韓聯社・CNA・日本時報（Gemini 翻譯與判讀）", "彙整", 60],
+  "物價細項": ["prices", "臺北市政府主計處 消費者物價基本分類指數", "月資料", 1440],
+  "觀光": ["tourism", "交通部觀光署 觀光統計資料庫・臺北市一般旅館營運報表", "年／月資料", 1440],
+  "補助徵件": ["grants", "Google 新聞的補助、徵件公告（Gemini 判讀，以原公告為準）", "彙整", 360],
   "lens:stop": ["alerts", "行政院人事行政總處 天然災害停止上班及上課情形", "即時", 30, p => (p.stopwork || {}).updated],
   "氣壓圖": ["pressure", "Open-Meteo（各國氣象模式）海平面氣壓", "預報", 360],
   "lens:traffic": ["roads", "高公局・公路局即時車速；街上的小車是依時段模擬", "即時", 20, p => p.asOf && p.asOf.slice(11, 16)],
@@ -3519,7 +3528,10 @@ const wxLine = C => { const W = ((P.weather || {}).items || []).find(w => norm(C
   return W || warn.length ? `<p class="why">${W ? `${esc(W.weather)} ${(+W.temp).toFixed(1)}°C` : ""}${warn.length ? `・<b style="color:#ff9f0a">${esc(warn.join("、"))}</b>` : ""}</p>` : ""; };
 const BRANDS = () => ((P.mapfeed || {}).brands) || [];
 const NEWS_AG = /俄新社|中新社|法新社|新華社|共同社|路透社?|美聯社|韓聯社|塔斯社|德新社/;   // 「據俄新社」被誤認成台中新社區之類的國際新聞，不放在地圖上
-const NEWS = () => (((P.mapfeed || {}).news) || []).filter(x => !(x.lvl === "town" && NEWS_AG.test(x.t || ""))).sort((a, b) => new Date(b.at) - new Date(a.at));
+// 地方新聞排序：「值不值得知道」（開店、建設、交通、活動、政策、災害 3 分；政治口水 1 分；社會案件 0 分）為主，越舊越後面（每 12 小時約扣 1 分）
+const newsScore = x => (x.v != null ? x.v : 1.5) - Math.max(0, (Date.now() - new Date(x.at)) / 432e5);
+const NEWS = () => (NAV._nw && NAV._nw.src === (P.mapfeed || {}).news ? NAV._nw.out : (NAV._nw = { src: (P.mapfeed || {}).news, out: (((P.mapfeed || {}).news) || [])
+  .filter(x => !(x.lvl === "town" && NEWS_AG.test(x.t || ""))).map(x => x.kc && !x._k ? { ...x, _k: 1, s: `${x.kc}｜${x.s || ""}` } : x).sort((a, b) => newsScore(b) - newsScore(a)) }).out);
 // 新公司：每月登記資料依地址歸到鄉鎮（biz_towns.json，資料分支）；還沒產生前退回只有幾十家的舊點位
 NAV.bt = undefined;
 function navBiz() { if (NAV.bt !== undefined) return NAV.bt; NAV.bt = null;
@@ -3724,9 +3736,9 @@ const TW_VIEW = {
     const Pu = new THREE.Color(LENS.news.c);
     navCounties(c => { const x = top[c.name]; if (!x) return { dim: true }; const h = (Date.now() - new Date(x.at)) / 36e5, fresh = h < 6;
       return { col: Pu, op: fresh ? 0.9 : 0.35, sub: x.t.slice(0, 12) + (x.t.length > 12 ? "…" : ""), dot: fresh ? LENS.news.c : "#8e8e93", prio: 2 + Math.max(0, 6 - h) }; });
-    const list = Object.entries(top).sort((a, b) => new Date(b[1].at) - new Date(a[1].at));
+    const list = Object.entries(top).sort((a, b) => newsScore(b[1]) - newsScore(a[1]));
     return { eyebrow: "台灣 · 地方新聞", title: "各地在發生什麼？", big: `${list.length} 個縣市`, color: LENS.news.c,
-      body: `<p class="why">每個縣市最新一則地方新聞，紫點＝6 小時內。點縣市看那裡的新聞。</p><ul class="lst nvl">${list.map(([k, x]) => `<li data-nc="${esc(k)}" style="cursor:pointer"><b style="font-weight:600">${esc(norm(k))}</b>　${esc(x.t)}<span>${esc(x.s || "")}・${navAgo(x.at)}</span></li>`).join("")}</ul>` };
+      body: `<p class="why">每個縣市最值得知道的一則：開店、建設、交通、活動、政策優先，政治口水和社會新聞往後放。紫點＝6 小時內。點縣市看那裡的新聞。</p><ul class="lst nvl">${list.map(([k, x]) => `<li data-nc="${esc(k)}" style="cursor:pointer"><b style="font-weight:600">${esc(norm(k))}</b>　${esc(x.t)}<span>${esc(x.s || "")}・${navAgo(x.at)}</span></li>`).join("")}</ul>` };
   },
 };
 // ---- 第 1 層：城市 ----
@@ -4526,6 +4538,52 @@ function chipEdges() {
   f(); return true;
 }
 { const _ce = setInterval(() => { if (chipEdges()) clearInterval(_ce); }, 400); }
+
+/* ---- 政府補助與徵件：近兩週新聞裡「現在還能申請」的補助、獎勵、徵件；依適不適合小型創意公司／個人工作室排序，再看截止日 ---- */
+function grantsCard() {
+  const G = P.grants || {}, xs = G.items || [];
+  if (!xs.length) return { html: sideHTML({ eyebrow: "訊號 · 補助與徵件", title: "現在可以申請什麼？", body: '<p class="empty">補助與徵件下一輪更新後出現（每 6 小時一次）。</p>' }) };
+  const now = Date.now(), left = x => x.due ? Math.ceil((new Date(x.due + "T23:59:59+08:00") - now) / 864e5) : null;
+  const row = x => { const d = left(x), due = x.due ? `截止 ${+x.due.slice(5, 7)}/${+x.due.slice(8, 10)}${d != null ? `（${d <= 0 ? "今天" : `還有 ${d} 天`}）` : ""}` : "";
+    return `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${x.cat ? `<i class="gtag">${esc(x.cat)}</i>` : ""}${esc(x.name || x.t)}</a>`
+      + `<span>${esc([x.org, x.who, x.amt ? "最高 " + x.amt.replace(/^最高/, "") : ""].filter(Boolean).join("・"))}${due ? `　<b class="gdue${d != null && d <= 7 ? " hot" : ""}">${esc(due)}</b>` : ""}</span></li>`; };
+  const fit = xs.filter(x => (x.fit || 0) >= 2), rest = xs.filter(x => (x.fit || 0) < 2), soon = xs.filter(x => { const d = left(x); return d != null && d <= 7; }).length;
+  return { html: sideHTML({ eyebrow: `訊號 · 補助與徵件${soon ? ` · ${soon} 個一週內截止` : ""}`, title: "現在可以申請什麼？", big: fit.length ? `${fit.length} 個適合你` : `${xs.length} 個徵件中`, color: "#30d158",
+    body: `<p class="why">近兩週新聞裡還能申請的補助、獎勵、徵件與計畫徵求。先排小型創意設計公司或個人工作室有機會申請的，再看截止日。內容是從新聞標題判讀的，申請前請看原公告。</p>`
+      + (fit.length ? `<div class="nvh">適合你（${fit.length}）</div><ul class="lst gl">${fit.slice(0, 10).map(row).join("")}</ul>` : "")
+      + (rest.length ? `<div class="nvh">其他徵件（${rest.length}）</div><ul class="lst gl">${rest.slice(0, 8).map(row).join("")}</ul>` : "") }) };
+}
+
+/* ---- 物價細項：CPI 基本分類年增率。哪一類東西漲最兇，就是大家最痛、最可能有替代方案的地方 ---- */
+function pricesCard() {
+  const D = P.prices || {}, xs = (D.items || []).filter(x => x.yoy != null);
+  if (!xs.length) return { html: sideHTML({ eyebrow: "總經 · 物價細項", title: "哪些東西變貴了？", body: '<p class="empty">物價細項下一輪更新後出現（每天一次）。</p>' }) };
+  const leaf = xs.filter(x => x.lvl >= 2), big = xs.filter(x => x.lvl === 1), tot = xs.find(x => x.lvl === 0);
+  const up = leaf.slice().sort((a, b) => b.yoy - a.yoy), top = up[0], m = String(D.month || "");
+  const row = x => ({ name: x.name, v: x.yoy, txt: pct(x.yoy, 1) });
+  return { html: sideHTML({ eyebrow: `總經 · 物價細項 · ${m.slice(0, 4)} 年 ${+m.slice(5, 7)} 月${D.area ? " · " + D.area : ""}`, title: "哪些東西變貴了？", big: top ? `${top.name} ${pct(top.yoy, 1)}` : "", color: top ? tone(top.yoy) : NEU,
+    body: `<p class="why">跟去年同月比的價格變化${tot ? `（整體 ${pct(tot.yoy, 1)}）` : ""}。漲最兇的類別，是大家最有感、也最可能出現替代方案的地方。</p>`
+      + `<div class="nvh">漲最多</div>` + barsHTML(up.slice(0, 8).map(row))
+      + `<div class="nvh">跌最多</div>` + barsHTML(up.slice(-4).reverse().map(row))
+      + (big.length ? `<div class="nvh">七大類</div>` + barsHTML(big.map(row)) : "") }) };
+}
+
+/* ---- 觀光：誰來台灣、台灣人去哪裡（觀光署年資料）＋台北旅館每月住用率 ---- */
+function tourismCard() {
+  const T = P.tourism || {}, I = T.inbound, O = T.outbound, H = T.tpe_hotel;
+  if (!I && !O && !H) return { html: sideHTML({ eyebrow: "總經 · 觀光", title: "誰來台灣、台灣人去哪裡？", body: '<p class="empty">觀光資料下一輪更新後出現（每天一次）。</p>' }) };
+  const wan = v => v >= 1e4 ? `${(v / 1e4).toFixed(v >= 1e6 ? 0 : 1)} 萬` : nf(v);
+  const bars = rows => barsHTML(rows.map(r => ({ name: r.name, v: r.n, txt: `${wan(r.n)}${r.yoy != null ? `　${pct(r.yoy, 0)}` : ""}`, color: r.yoy == null ? "#64d2ff" : tone(r.yoy) })), { signed: false });
+  let body = "";
+  if (I) body += `<div class="nvh">來台旅客 ${I.year} 年：${wan(I.total)} 人次${I.yoy != null ? `（${pct(I.yoy, 1)}）` : ""}${I.vs2019 ? `，恢復到疫情前的 ${I.vs2019}%` : ""}</div>` + bars(I.top.slice(0, 8))
+    + (I.rise && I.rise.length ? `<p class="why">成長最快：${I.rise.slice(0, 4).map(r => `${esc(r.name)} ${pct(r.yoy, 0)}`).join("、")}</p>` : "");
+  if (O) body += `<div class="nvh">國人出國 ${O.year} 年：${wan(O.total)} 人次${O.yoy != null ? `（${pct(O.yoy, 1)}）` : ""}</div>` + bars(O.top.slice(0, 8));
+  if (H && H.last) body += `<div class="nvh">台北一般旅館 ${+H.last.m.slice(5)} 月</div><p class="why">住用率 <b>${H.last.occ.toFixed(1)}%</b>${H.occ_yoy_pp != null ? `（比去年同月 ${H.occ_yoy_pp >= 0 ? "+" : "−"}${Math.abs(H.occ_yoy_pp)} 個百分點）` : ""}，平均房價 <b>${nf(H.last.price)} 元</b>${H.price_yoy != null ? `（${pct(H.price_yoy, 1)}）` : ""}</p>`
+    + lineSVG(H.rows.map(r => r.occ), "#64d2ff");
+  const big = I ? `來台 ${wan(I.total)}` : H ? `住用率 ${H.last.occ.toFixed(0)}%` : "";
+  return { html: sideHTML({ eyebrow: "總經 · 觀光", title: "誰來台灣、台灣人去哪裡？", big, color: I && I.yoy != null ? tone(I.yoy) : "#64d2ff",
+    body: `<p class="why">來台和出國是觀光署的年資料（每年更新一次）；台北旅館是每月資料，看得出旺季和淡季。</p>` + body }) };
+}
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };

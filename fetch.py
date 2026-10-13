@@ -5627,7 +5627,52 @@ def p_mapfeed():
             continue
         brands.append({"ll": ll, "place": place, "t": it.get("name"), "cat": it.get("cat"), "cap": it.get("cap"), "date": it.get("date"), "city": c,
                        "addr": re.sub(r"\d+樓.*$", "", g.get("addr", "")), "boss": g.get("boss", ""), "ban": g.get("ban", "")})
-    return {"news": pts, "alerts": alerts, "brands": brands, "n_town": sum(1 for p in pts if p["lvl"] == "town"), "n": len(pts)}
+    nv_errs = _news_value(pts)
+    return {"news": pts, "alerts": alerts, "brands": brands, "n_town": sum(1 for p in pts if p["lvl"] == "town"), "n": len(pts), "n_scored": sum(1 for p in pts if "v" in p), "errs": nv_errs}
+
+
+NEWSVAL_CACHE = DATA / "newsval_cache.json"
+NEWSVAL_K = ("商業", "建設", "交通", "活動", "政策", "災害", "政治", "社會", "其他")
+
+
+def _news_value(pts):
+    """地方新聞「值不值得知道」：這個地方正在發生什麼變化（開店、建案、交通、活動、政策、災害）放前面，
+    政治口水、社會案件往後（不刪）。標題快取，一輪最多打一次 Gemini（最多 120 則新標題）。"""
+    errs = []
+    try:
+        cache = json.loads(NEWSVAL_CACHE.read_text(encoding="utf-8")) if NEWSVAL_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    k = lambda t: re.sub(r"\W+", "", t or "")[:40]
+    todo = [p for p in sorted(pts, key=lambda x: x.get("at") or "", reverse=True) if k(p["t"]) not in cache][:120]
+    if todo and GEMINI_KEY:
+        lines = "\n".join(f'{i}. [{p["place"]}] {p["t"]}' for i, p in enumerate(todo))
+        prompt = ("你是台灣的地方新聞編輯，要幫一個關心「各地正在發生什麼變化、哪裡有新機會」的讀者排序。替每則地方新聞打分（v，0～3）並分類（k）。\n"
+                  "3＝這個地方正在改變：開店展店、商場、建案與都更、交通建設與通車、產業投資與設廠、大型活動與展演、政策補助與新制、停水停電與災害。\n"
+                  "2＝有用的地方資訊：市政服務、在地活動、觀光、農產、教育。\n"
+                  "1＝政治口水、人事、選舉造勢、議員質詢、公關稿、頒獎表揚。\n"
+                  "0＝社會案件（車禍、犯罪、工安）、八卦、跟地方無關的內容。\n"
+                  "k 只能是：" + "、".join(NEWSVAL_K) + "。只回 JSON：{\"items\": [{\"i\": 編號, \"v\": 分數, \"k\": \"分類\"}]}\n\n" + lines)
+        try:
+            data, _m = _gemini_json(prompt, max_tokens=5000, timeout=45, lite_first=True, max_models=2)
+            for r in (data or {}).get("items") or []:
+                try:
+                    p_ = todo[int(r.get("i"))]; v = max(0, min(3, int(r.get("v"))))
+                except (TypeError, ValueError, IndexError):
+                    continue
+                kk = str(r.get("k") or "")
+                cache[k(p_["t"])] = [v, kk if kk in NEWSVAL_K else "其他"]
+        except Exception as e:  # noqa: BLE001
+            errs.append("地方新聞評分: " + safe_err(e))
+    for p_ in pts:
+        c = cache.get(k(p_["t"]))
+        if c:
+            p_["v"], p_["kc"] = c[0], c[1]
+    keep = {k(p_["t"]) for p_ in pts}
+    if len(cache) > 4000:
+        cache = {a: b for a, b in cache.items() if a in keep}
+    write_json(NEWSVAL_CACHE, cache)
+    return errs
 
 
 CCTV_PATH = DATA / "cctv.json"
@@ -6308,7 +6353,10 @@ def _rss_date(d: str) -> str:
             return dt.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
         except Exception:
             continue
-    return ""
+    try:   # ISO 8601（dc:date，例如 2026-10-14T03:12:00+09:00）
+        return datetime.fromisoformat(d.replace("Z", "+00:00")).astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    except Exception:  # noqa: BLE001
+        return ""
 
 
 def _rss(url, source, limit=8, strip_source=False, **params):
@@ -6322,15 +6370,16 @@ def _rss(url, source, limit=8, strip_source=False, **params):
             raise
     root = ET.fromstring(raw.lstrip(b"\xef\xbb\xbf \r\n\t"))
     out = []
-    for it in root.iter("item"):
-        title = (it.findtext("title") or "").strip()
+    for it in (e for e in root.iter() if isinstance(e.tag, str) and (e.tag == "item" or e.tag.endswith("}item"))):   # RSS 1.0（日經亞洲）的 item 有命名空間
+        title = (it.findtext("title") or it.findtext("{*}title") or "").strip()
         src = source
         if strip_source and " - " in title:  # Google News：標題 - 來源
             title, tail = title.rsplit(" - ", 1)
             src = source or tail
         if not title:
             continue
-        out.append({"source": src[:12], "title": title[:90], "url": (it.findtext("link") or "").strip(), "at": _rss_date(it.findtext("pubDate") or "")})
+        out.append({"source": src[:12], "title": title[:90], "url": (it.findtext("link") or it.findtext("{*}link") or "").strip(),
+                    "at": _rss_date(it.findtext("pubDate") or it.findtext("{*}date") or it.findtext("{*}pubDate") or "")})
         if len(out) >= limit:
             break
     return out
@@ -6472,14 +6521,16 @@ def p_worldnews():
         except Exception:
             cache = {}
     key = lambda it: re.sub(r"\W+", "", it["title"].lower())[:60]
-    todo = [it for it in items if key(it) not in cache or "tw" not in cache[key(it)]]
+    WN_VER = 2   # 評分標準改版：舊分數作廢重算一次
+    todo = [it for it in items if (cache.get(key(it)) or {}).get("v") != WN_VER]
     for b in range(0, len(todo) if GEMINI_KEY else 0, 40):   # 一次 40 則；大多數已在快取，平常每小時只翻新進來的幾則
         part = todo[b:b + 40]
         lines = "\n".join(f'{i}. [{it["source"]}] {it["title"]}' for i, it in enumerate(part))
         prompt = ("你是台灣的國際新聞編輯。把下面的國際新聞英文標題翻成台灣用語的繁體中文新聞標題（自然、精簡，像台灣媒體會下的標題；人名地名用台灣常見譯名，不要中國用語），"
                   "判斷新聞主要發生在哪裡，並評估它對台灣的影響。"
-                  "tw 是 0～5 分：0＝跟台灣無關（他國國內社會新聞、地方事故）；1＝間接；2＝值得留意；3＝明顯影響台灣的產業、出口、市場、能源、安全或台灣人的生活與旅遊；"
-                  "4＝重大影響；5＝直接衝擊台灣（台海、晶片管制、對台關稅、重大天災波及）。不要因為新聞很大就給高分，要看跟台灣的關係。"
+                  "tw 是 0～5 分：0＝跟台灣無關（他國國內社會新聞、地方事故）；1＝間接；2＝值得留意；3＝明顯影響台灣；4＝重大影響；5＝直接衝擊台灣。"
+                  "影響要看五個面向而且一樣重：經濟與市場（匯率、利率、股市、出口、關稅）、產業與供應鏈（半導體、電子、製造、能源、原物料）、消費與生活（物價、旅遊、消費趨勢）、科技（AI、平台、法規）、安全與外交（台海、區域衝突）。"
+                  "不要只因為跟軍事或政治有關就給高分；評論、專欄、分析、專家意見（標題是問句或「某某說」）最多 2 分，要有實際發生的事件、政策或數據才給 3 分以上。不要因為新聞很大就給高分，要看跟台灣的關係。"
                   "why：tw 2 分以上才寫，用一句 25 字內的白話說跟台灣的關係（例如：日圓走弱，台灣出口日本的價格競爭變難），其他給空字串。"
                   "只回 JSON：{\"items\": [{\"i\": 編號, \"zh\": \"中文標題\", \"place\": \"地點（台灣譯名，國家或城市）\", "
                   "\"lat\": 緯度, \"lon\": 經度, \"cat\": \"政治|戰爭衝突|經濟|科技|災害|社會|其他\", \"tw\": 分數, \"why\": \"跟台灣的關係\"}]}。無法判斷地點時 place 給空字串、lat/lon 給 null。\n\n" + lines)
@@ -6497,7 +6548,7 @@ def p_worldnews():
                 except (TypeError, ValueError):
                     tw = 0
                 cache[key(it)] = {"zh": str(r.get("zh") or "")[:60], "place": str(r.get("place") or "")[:16], "ll": [round(lon, 2), round(lat, 2)] if ok else None,
-                                  "cat": str(r.get("cat") or "")[:6], "tw": tw, "why": str(r.get("why") or "")[:40] if tw >= 2 else ""}
+                                  "cat": str(r.get("cat") or "")[:6], "tw": tw, "why": str(r.get("why") or "")[:40] if tw >= 2 else "", "v": WN_VER}
         except Exception as e:  # noqa: BLE001
             errs.append("翻譯: " + safe_err(e)); break
     if todo and not GEMINI_KEY:
@@ -6567,6 +6618,197 @@ def p_worldnews():
     write_json(WNEWS_CACHE, cache)
     return {"items": out, "n_zh": sum(1 for x in out if x["t"]), "n_tw": sum(1 for x in out if (x["tw"] or 0) >= 3), "n_big": sum(1 for x in out if x["n_src"] >= 3), "errs": errs[:8],
             "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷"}
+
+
+# ---------- 政府補助與徵件：Google 新聞找公告 → Gemini 判斷是不是「現在還能申請」並抽出主辦、對象、金額、截止日 ----------
+GRANT_Q = ["補助 徵件", "補助計畫 受理申請", "徵件 獎金 新創", "計畫 徵求 提案 補助", "SBIR 受理申請", "文化部 補助 徵件", "經濟部 補助 申請",
+           "青年 創業 補助 申請", "設計 獎勵 徵件", "數位轉型 補助 中小企業"]
+GRANTS_CACHE = DATA / "grants_cache.json"
+GRANT_CATS = ("新創與產業", "數位與 AI", "文化藝術與設計", "地方與社區", "青年與就業", "農業與環境", "其他")
+
+
+def p_grants():
+    raw, errs = [], []
+    for q in GRANT_Q:
+        try:
+            raw += _gnews(q + " when:14d", limit=15)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{q}: {safe_err(e)}")
+        time.sleep(0.5)
+    items = _dedupe_sort(raw, 120)
+    if not items:
+        raise RuntimeError("grants: nothing " + "; ".join(errs)[:160])
+    try:
+        cache = json.loads(GRANTS_CACHE.read_text(encoding="utf-8")) if GRANTS_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    key = lambda it: re.sub(r"\W+", "", it["title"])[:50]
+    todo = [it for it in items if key(it) not in cache][:80]
+    if todo and GEMINI_KEY:
+        lines = "\n".join(f'{i}. [{it["source"]}] {it["title"]}' for i, it in enumerate(todo))
+        prompt = (f"今天是 {TODAY_TPE:%Y-%m-%d}。下面是台灣的新聞標題。判斷每則是不是「現在還可以申請或報名」的補助、獎勵、徵件、競賽、計畫徵求"
+                  "（ok=true）；得獎名單、成果發表、已經結束、單純政策宣示、個人福利（老人、育兒、早療、租屋、節能家電退稅這類給一般民眾的補貼）都是 ok=false。\n"
+                  "ok=true 的再抽出：name 計畫名稱（精簡，30 字內）、org 主辦單位、who 申請對象（例如 中小企業、新創、個人創作者、藝文團體、社區、學生）、"
+                  "amt 最高金額或獎金（原文寫法，沒有就空字串）、due 截止日 YYYY-MM-DD（標題沒寫就空字串）、"
+                  "cat 分類（只能是：" + "、".join(GRANT_CATS) + "）、fit 0～3（對「小型創意設計公司或個人工作室」有沒有機會申請：3 很適合、0 不可能）。\n"
+                  '只回 JSON：{"items": [{"i": 編號, "ok": true, "name": "", "org": "", "who": "", "amt": "", "due": "", "cat": "", "fit": 0}]}\n\n' + lines)
+        try:
+            data, _m = _gemini_json(prompt, max_tokens=7000, timeout=60, lite_first=True, max_models=2)
+            for r in (data or {}).get("items") or []:
+                try:
+                    it = todo[int(r.get("i"))]
+                except (TypeError, ValueError, IndexError):
+                    continue
+                if not r.get("ok"):
+                    cache[key(it)] = {"ok": 0}; continue
+                due = str(r.get("due") or "")
+                try:
+                    fit = max(0, min(3, int(r.get("fit") or 0)))
+                except (TypeError, ValueError):
+                    fit = 0
+                cache[key(it)] = {"ok": 1, "name": str(r.get("name") or it["title"])[:40], "org": str(r.get("org") or "")[:20], "who": str(r.get("who") or "")[:20],
+                                  "amt": str(r.get("amt") or "")[:20], "due": due if re.match(r"^\d{4}-\d{2}-\d{2}$", due) else "",
+                                  "cat": r.get("cat") if r.get("cat") in GRANT_CATS else "其他", "fit": fit}
+        except Exception as e:  # noqa: BLE001
+            errs.append("判讀: " + safe_err(e))
+    elif todo:
+        errs.append("沒有設定 GEMINI_API_KEY")
+    today = TODAY_TPE.strftime("%Y-%m-%d")
+    out, seen = [], set()
+    for it in items:
+        c = cache.get(key(it)) or {}
+        if not c.get("ok") or (c.get("due") and c["due"] < today):
+            continue
+        nk = re.sub(r"\W+", "", c["name"])[:16]   # 同一個計畫被好幾家報導：留一則
+        if nk in seen:
+            continue
+        seen.add(nk)
+        out.append({**{k: c.get(k) for k in ("name", "org", "who", "amt", "due", "cat", "fit")}, "t": it["title"], "url": it["url"], "src": it["source"], "at": it["at"]})
+    # 排序：適合程度 → 有截止日的越近越前面 → 越新越前面
+    out.sort(key=lambda x: (-(x["fit"] or 0), x["due"] or "9999", -(datetime.fromisoformat(x["at"].replace("Z", "+00:00")).timestamp() if x.get("at") else 0)))
+    keep = {key(it) for it in items}
+    cache = {k: v for k, v in cache.items() if k in keep or len(cache) < 1500}
+    write_json(GRANTS_CACHE, cache)
+    return {"items": out[:40], "n": len(out), "errs": errs[:6], "src": "Google 新聞（近兩週的補助、徵件、計畫徵求公告）；是否還能申請、對象、金額、截止日由 Gemini 從標題判讀，申請前請看原公告"}
+
+
+# ---------- 觀光：觀光署統計資料庫（來台旅客、國人出國，年資料）＋台北市一般旅館營運（月資料） ----------
+TOUR_IN, TOUR_OUT = "https://stat.taiwan.net.tw/data/opendata/7", "https://stat.taiwan.net.tw/data/opendata/1"
+TPE_HOTEL = "https://data.taipei/api/dataset/bc56b492-1d11-4638-966a-0aeaaca0fc46/resource/ca04a980-91a4-40f6-9d3e-51803eec8fef/download"
+
+
+def _tour_years(url):
+    """觀光署「歷年」表：第一欄地區、第二欄國家（中英文），後面每欄一年。回傳 (年份清單, {國家: [每年人數]}, 總計)"""
+    import csv, io
+    txt = get(url).content.decode("utf-8-sig", "replace")
+    rows = list(csv.reader(io.StringIO(txt)))
+    head = rows[0]
+    yi = [i for i, h in enumerate(head) if re.match(r"^\d{4}$", h.strip())]
+    years = [int(head[i]) for i in yi]
+    num = lambda v: float(re.sub(r"[^\d.]", "", v) or 0)
+    data, total = {}, None
+    for r in rows[1:]:
+        if len(r) < max(yi) + 1:
+            continue
+        name = re.sub(r"\s*[A-Za-z(].*$", "", (r[1] or r[0]).strip()).replace("．", "・").replace(".", "・")
+        vals = [num(r[i]) for i in yi]
+        if re.search(r"總計", r[0] + r[1]) or r[0].strip() in ("合計", "總計", "Total"):
+            total = vals; continue
+        if not name or re.search(r"小計|合計|其他|地區$|未列明", name):
+            continue
+        data[name] = vals
+    if total is None:
+        total = [sum(v[i] for v in data.values()) for i in range(len(years))]
+    return years, data, total
+
+
+def p_tourism():
+    out, errs = {}, []
+    for key, url in (("inbound", TOUR_IN), ("outbound", TOUR_OUT)):
+        try:
+            years, data, total = _tour_years(url)
+            j = max(i for i in range(len(years)) if total[i] > 0)
+            yoy = lambda a, b: round((a - b) / b * 100, 1) if b else None
+            rows = [{"name": k, "n": int(v[j]), "prev": int(v[j - 1]), "yoy": yoy(v[j], v[j - 1]), "pre": int(v[years.index(2019)]) if 2019 in years else None,
+                     "spark": [int(x) for x in v[max(0, j - 9):j + 1]]} for k, v in data.items() if v[j] > 0]
+            rows.sort(key=lambda x: -x["n"])
+            big = [r for r in rows if r["n"] >= 50000 and r["yoy"] is not None]
+            out[key] = {"year": years[j], "total": int(total[j]), "yoy": yoy(total[j], total[j - 1]),
+                        "vs2019": round(total[j] / total[years.index(2019)] * 100, 1) if 2019 in years and total[years.index(2019)] else None,
+                        "spark": [int(x) for x in total[max(0, j - 9):j + 1]], "spark_years": years[max(0, j - 9):j + 1],
+                        "top": rows[:12], "rise": sorted(big, key=lambda x: -x["yoy"])[:6], "fall": sorted(big, key=lambda x: x["yoy"])[:4]}
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{key}: {safe_err(e)}")
+    try:
+        import csv, io
+        raw = get(TPE_HOTEL).content
+        txt = None
+        for enc in ("utf-8-sig", "big5", "cp950"):
+            try:
+                txt = raw.decode(enc); break
+            except UnicodeDecodeError:
+                continue
+        rows = list(csv.reader(io.StringIO(txt or "")))
+        num = lambda v: float(re.sub(r"[^\d.]", "", v) or 0)
+        hm = []
+        for r in rows[1:]:
+            m = re.match(r"^(\d{2,3})/(\d{1,2})$", (r[0] or "").strip()) if r else None
+            if not m or len(r) < 6:
+                continue
+            hm.append({"m": f"{int(m.group(1)) + 1911}-{int(m.group(2)):02d}", "rooms": int(num(r[2])), "occ": num(r[3]), "price": int(num(r[4])), "rev": int(num(r[5]))})
+        hm.sort(key=lambda x: x["m"])
+        if hm:
+            last = hm[-1]; ly = next((x for x in hm if x["m"] == f"{int(last['m'][:4]) - 1}{last['m'][4:]}"), None)
+            out["tpe_hotel"] = {"rows": hm[-25:], "last": last, "occ_yoy_pp": round(last["occ"] - ly["occ"], 1) if ly else None,
+                                "price_yoy": round((last["price"] - ly["price"]) / ly["price"] * 100, 1) if ly and ly["price"] else None}
+    except Exception as e:  # noqa: BLE001
+        errs.append("台北旅館: " + safe_err(e))
+    if not out:
+        raise RuntimeError("tourism: nothing " + "; ".join(errs)[:160])
+    return {**out, "errs": errs, "src": "交通部觀光署觀光統計資料庫（來台旅客居住地、國人出國首站，年資料）・臺北市一般旅館營運報表（月資料）"}
+
+
+# ---------- 物價細項：台北市主計處「消費者物價基本分類指數」月資料（全國的主計總處資料庫擋 GitHub IP；台北市的比全國早一個月出） ----------
+def p_prices():
+    import csv, io
+    roc = TODAY_TPE.year - 1911
+    url = ("https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&kind=21&type=0&outmode=12&compmode=00&outkind=3&deflst=2"
+           f"&ymf={roc - 1}01&ymt={roc}12&funid=A21000102&cycle=1")
+    txt = get(url, timeout=90).content.decode("utf-8-sig", "replace")
+    rows = list(csv.reader(io.StringIO(txt)))
+    if not rows or "統計期" not in rows[0][0]:
+        raise RuntimeError("prices: unexpected " + txt[:80])
+    by = {}
+    for r in rows[1:]:
+        if len(r) < 4:
+            continue
+        m = re.match(r"^(\d{2,3})年\s*(\d{1,2})月$", r[0].strip())
+        if not m:
+            continue
+        per = f"{int(m.group(1)) + 1911}-{int(m.group(2)):02d}"
+        raw = r[1].strip()
+        lvl = 0 if raw == "總指數" else 1 if re.match(r"^[一二三四五六七八九十]+[.．、]", raw) else 2
+        name = re.sub(r"^[一二三四五六七八九十]+[.．、]|^[(（][一二三四五六七八九十]+[)）]", "", raw).strip()
+        try:
+            idx = float(r[2])
+        except ValueError:
+            idx = None
+        try:
+            yoy = float(r[3])
+        except ValueError:
+            yoy = None
+        by.setdefault(per, []).append({"name": name, "lvl": lvl, "idx": idx, "yoy": yoy})
+    if not by:
+        raise RuntimeError("prices: no rows")
+    months = sorted(by)
+    last = months[-1]
+    hist = {}
+    for per in months[-13:]:
+        for x in by[per]:
+            hist.setdefault(x["name"], []).append(x["yoy"])
+    items = [{**x, "spark": hist.get(x["name"], [])} for x in by[last]]
+    return {"month": last, "area": "台北市", "items": items, "n": len(items),
+            "src": "臺北市政府主計處 消費者物價基本分類指數（月）；全國資料（主計總處）擋 GitHub 連線，先用台北市"}
 
 
 def p_news():
@@ -9440,6 +9682,9 @@ run("revenue", p_revenue, keep_if_fresh_hours=20)
 run("etfholders", p_etfholders, keep_if_fresh_hours=12)
 run("corp", p_corp, keep_if_fresh_hours=6)
 run("policy", p_policy, keep_if_fresh_hours=6)
+run("grants", p_grants, keep_if_fresh_hours=6)  # 政府補助與徵件：一天約 4 次，只判讀新標題
+run("prices", p_prices, keep_if_fresh_hours=24)  # 物價細項：月資料，一天抓一次
+run("tourism", p_tourism, keep_if_fresh_hours=24)  # 觀光：年資料＋台北旅館月資料，一天抓一次
 run("ipr", p_ipr, keep_if_fresh_hours=72)
 run("media", p_media, keep_if_fresh_hours=2)
 # run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
