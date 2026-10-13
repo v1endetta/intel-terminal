@@ -518,6 +518,35 @@ body.exploring.fl-on #gcrumb{display:flex}
 #side .lst a{color:#f5f5f7;text-decoration:none}
 #side .lst a::after{content:" ↗";color:#64d2ff;font-size:11px;font-weight:600}
 #side .lst a:hover{color:#64d2ff}
+/* ===== 手機：底部抽屜＋上方路徑＋分類列不擠 ===== */
+@media (max-width:760px){
+  body.exploring #side{top:auto!important;bottom:calc(118px + env(safe-area-inset-bottom));left:8px;right:8px;max-height:none;border-radius:18px 18px 16px 16px;padding:18px 16px 12px;transform:translateY(12px)}
+  body.exploring #side::before{content:"";position:absolute;top:6px;left:50%;width:36px;height:4px;margin-left:-18px;border-radius:2px;background:rgba(255,255,255,.28)}
+  body.exploring #side.on{transform:none}
+  body.exploring #side.open{max-height:62vh;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  body.exploring #side .sh::after{content:"⌃";font-size:13px;color:#8e8e93}
+  body.exploring #side.open .sh::after{content:"⌄"}
+  #side .st{font-size:13.5px;color:#c7c7cc}
+  #side .sb{font-size:21px}
+  #crumb,#gcrumb{top:52px!important}
+  body:has(#side.open) #crumb{opacity:1;pointer-events:auto}
+  #crumb{max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
+  #crumb::-webkit-scrollbar{display:none}
+  #crumb .path{flex:none}#crumb .path button{white-space:nowrap;padding:5px 9px}
+  #crumb .lz,#crumb .dt{flex:none;white-space:nowrap}
+  #crumb .path button.earth{padding:5px 7px}
+  #dock2{gap:8px;bottom:max(12px,env(safe-area-inset-bottom))}
+  #dock2 .seg{width:100%;justify-content:space-between}
+  #dock2 .seg button{padding:8px 0;flex:1;text-align:center;font-size:13.5px}
+  #dock2 .chips button{font-size:13.5px;padding:7px 13px}
+  #camPanel{top:96px!important;bottom:auto!important;left:8px}
+  body:has(#side.open) #camPanel{display:none}
+  #lpop{max-width:calc(100vw - 24px)}
+  #crumb,#gcrumb,#lpop,#labels .lbl,.nvp,.gxl{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .nvp{box-shadow:none}
+  .gxl.mkg small{display:none}
+  .gxl{font-size:11px;padding:2px 7px}
+}
 </style>
 <script type="importmap">
 {"imports":{
@@ -1499,23 +1528,28 @@ function clearLabels(group) { for (let k = LBL.length - 1; k >= 0; k--) if (LBL[
 const _v = new THREE.Vector3();
 // 標籤互相重疊時，重要的留下（直轄市、最大地震、資金流），其他先藏起來；拉近就會分開再出現
 const _shown = [];
+const _lbKey = { k: "", n: 0 };
 function placeLabels() {
+  // 鏡頭、畫面大小、標籤數量都沒變：不用重算（每 12 格還是算一次，接住內容變寬之類的變化）
+  { const e = camera.matrixWorld.elements, p = camera.projectionMatrix.elements, k = `${e[12].toFixed(4)},${e[13].toFixed(4)},${e[14].toFixed(4)},${e[0].toFixed(5)},${e[2].toFixed(5)},${e[9].toFixed(5)},${p[0].toFixed(5)},${p[9].toFixed(5)},${LBL.length},${innerWidth},${VH()}`;
+    if (k === _lbKey.k && ++_lbKey.n % 12) return; _lbKey.k = k; }
   const vis = [];
   for (const L of LBL) {
     _v.copy(L.pos).project(camera);
     L.on = _v.z < 1 && Math.abs(_v.x) < 1.1 && Math.abs(_v.y) < 1.1;
     if (!L.on || L.hide) { L.el.style.opacity = 0; if (L._h !== true) { L._h = true; L.el.classList.add("lhid"); } continue; }
     L.sx = (_v.x + 1) / 2 * innerWidth; L.sy = (1 - _v.y) / 2 * VH();
-    L.el.style.left = L.sx + "px"; L.el.style.top = L.sy + "px";
+    { const tx = Math.round(L.sx), ty = Math.round(L.sy); if (tx !== L.tx || ty !== L.ty) { L.tx = tx; L.ty = ty; L.el.style.transform = `translate3d(${tx}px,${ty}px,0) translate(-50%,-100%)`; } }
     if (!L.w) { L.w = L.el.offsetWidth; L.h = L.el.offsetHeight; }
     vis.push(L);
   }
   vis.sort((a, b) => b.prio - a.prio);
-  _shown.length = 0;
+  _shown.length = 0; let _cnt = 0; const _cap = MOBILE ? 22 : 999;
   for (const L of vis) {
     const x0 = L.sx - L.w / 2 - 3, x1 = L.sx + L.w / 2 + 3, y0 = L.sy - L.h - 3, y1 = L.sy + 3;
     let hit = false;
     for (const S of _shown) if (x0 < S[2] && x1 > S[0] && y0 < S[3] && y1 > S[1]) { hit = true; break; }
+    if (!hit && ++_cnt > _cap) hit = true;
     L.el.style.opacity = hit ? 0 : (L.op ?? 1); if (L._h !== hit) { L._h = hit; L.el.classList.toggle("lhid", hit); }
     if (!hit) _shown.push([x0, y0, x1, y1]);
   }
@@ -2484,7 +2518,10 @@ function showSide(html, geo) {
   }, html ? 180 : 0);
   if (!html) s.classList.remove("on");
 }
-if (MOBILE) addEventListener("DOMContentLoaded", () => {}); document.addEventListener("click", e => { const sd = e.target.closest && e.target.closest("#side"); if (sd && MOBILE && !e.target.closest("a")) sd.classList.toggle("open"); });
+if (MOBILE) addEventListener("DOMContentLoaded", () => {}); document.addEventListener("click", e => { const sd = e.target.closest && e.target.closest("#side"); if (!sd || !MOBILE || e.target.closest("a")) return;
+  if (window.__swipedAt && performance.now() - window.__swipedAt() < 400) return;   // 剛用滑的開關過
+  if (sd.classList.contains("open") && e.target.closest("button,li,input,label,[data-mkt],[data-pf],[data-nc],[data-nt]")) return;   // 展開時點裡面的東西，不要收起來
+  sd.classList.toggle("open"); });
 function hideSide() { SIDE_KEY = null; $("side").classList.remove("on"); ST.sideGeo = null; }
 
 /* ---- 章節與 DOM ---- */
@@ -4333,6 +4370,33 @@ document.addEventListener("click", e => {
   // 其他：放大顯示＋拉近
   lpop(`<b>${esc(txt)}</b>`, r, GD.on ? null : () => flyNear(L.pos, Math.max(4, camera.position.distanceTo(controls.target) * 0.45)), "拉近看");
 });
+
+/* ---- 手機：順暢＋好操作 ----
+   1. 張數：手機動的時候每秒 30 張、靜止 2 秒後降到每秒 12 張（不熱、不降頻）；分頁切到背景本來就停
+   2. 卡片改成底部抽屜（像 Apple 地圖）：平常只露標題和大數字，點一下或往上滑展開，往下滑收起
+   3. 地圖主體往上移，不被抽屜擋住 */
+if (MOBILE) {
+  const FR = { last: 0, still: 0, cam: "" };
+  const _loopM = loop;
+  loop = function () {
+    const now = performance.now(), e = camera.matrixWorld.elements, k = `${e[12].toFixed(3)},${e[13].toFixed(3)},${e[14].toFixed(3)},${e[2].toFixed(4)}`;
+    const moving = k !== FR.cam || fly || GD.ptrs.size || Math.abs(GD.vx) > 0.05 || ST.on && !ST.explore || INTRO.on;
+    if (moving) FR.still = now; FR.cam = k;
+    const gap = now - FR.still > 2000 ? 80 : 30;
+    if (now - FR.last < gap) { requestAnimationFrame(loop); return; }
+    FR.last = now; _loopM();
+  };
+  // 自己逛的時候，地圖的中心往上移一點（下方是抽屜和分類列）
+  setInterval(() => { if (!ST.explore || ST.globeForce) return; const oy = Math.round(VH() * 0.09);
+    if (!camera.view || camera.view.offsetY !== oy || camera.view.fullHeight !== VH()) camera.setViewOffset(innerWidth, VH(), 0, oy, innerWidth, VH()); }, 500);
+  // 抽屜：往上滑展開、往下滑收起
+  const SW = { y: 0, t: 0 };
+  document.addEventListener("touchstart", e => { if (e.target.closest && e.target.closest("#side")) { SW.y = e.touches[0].clientY; SW.t = performance.now(); SW.top = $("side").scrollTop; } }, { passive: true });
+  document.addEventListener("touchend", e => { const sd = e.target.closest && e.target.closest("#side"); if (!sd || !SW.t) return; const dy = e.changedTouches[0].clientY - SW.y; SW.t = 0;
+    if (dy < -30 && !sd.classList.contains("open")) { sd.classList.add("open"); SW.swiped = performance.now(); }
+    else if (dy > 40 && sd.classList.contains("open") && (SW.top || 0) <= 2) { sd.classList.remove("open"); SW.swiped = performance.now(); } }, { passive: true });
+  window.__swipedAt = () => SW.swiped || 0;
+}
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
