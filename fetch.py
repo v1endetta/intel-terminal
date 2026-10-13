@@ -8320,6 +8320,251 @@ def p_calendar():
     return {"items": out, "from": today.isoformat(), "to": horizon.isoformat(), "errs": errs[:3]}
 
 
+# ---------- 市場行事曆（像彭博的 ECO／休市表）：數據公布時間＋前值／預測、各交易所休市、結算日、法說會、新股 ----------
+# 免費、不用金鑰：Forex Factory 週行事曆 JSON（本週＋下週，有台北時間、重要性、前值、預測）
+# 休市：python holidays 套件的交易所行事曆（紐約、東京、香港、上海、首爾、倫敦、法蘭克福、新加坡）＋證交所官方休市表
+FF_WEEKS = ("https://nfs.faireconomy.media/ff_calendar_thisweek.json", "https://nfs.faireconomy.media/ff_calendar_nextweek.json")
+FF_CUR = {"USD": "美", "EUR": "歐", "GBP": "英", "JPY": "日", "CNY": "中", "AUD": "澳", "CAD": "加", "CHF": "瑞士", "NZD": "紐"}
+FF_BASE = {
+    "CPI": "CPI", "Core CPI": "核心 CPI", "PPI": "PPI", "Core PPI": "核心 PPI", "CPI Flash Estimate": "CPI 快報", "Core CPI Flash Estimate": "核心 CPI 快報",
+    "Non-Farm Employment Change": "非農就業人數", "Unemployment Rate": "失業率", "Average Hourly Earnings": "平均時薪", "Unemployment Claims": "初領失業救濟金",
+    "ADP Non-Farm Employment Change": "ADP 就業人數", "JOLTS Job Openings": "JOLTS 職缺", "Employment Change": "就業人數", "Claimant Count Change": "失業金申請人數",
+    "Average Earnings Index": "平均薪資", "Wage Price Index": "薪資物價指數",
+    "Retail Sales": "零售銷售", "Core Retail Sales": "核心零售銷售", "GDP": "GDP", "Core PCE Price Index": "核心 PCE 物價", "PCE Price Index": "PCE 物價",
+    "Personal Spending": "個人消費支出", "Personal Income": "個人所得",
+    "ISM Manufacturing PMI": "ISM 製造業 PMI", "ISM Services PMI": "ISM 服務業 PMI", "Manufacturing PMI": "製造業 PMI", "Services PMI": "服務業 PMI",
+    "Non-Manufacturing PMI": "非製造業 PMI", "Caixin Manufacturing PMI": "財新製造業 PMI", "Caixin Services PMI": "財新服務業 PMI",
+    "UoM Consumer Sentiment": "密大消費信心", "UoM Inflation Expectations": "密大通膨預期", "CB Consumer Confidence": "經濟諮商局消費信心",
+    "Crude Oil Inventories": "EIA 原油庫存", "Natural Gas Storage": "天然氣庫存",
+    "Building Permits": "建築許可", "Housing Starts": "新屋開工", "Existing Home Sales": "成屋銷售", "New Home Sales": "新屋銷售", "Pending Home Sales": "成屋待完成銷售",
+    "Durable Goods Orders": "耐久財訂單", "Core Durable Goods Orders": "核心耐久財訂單", "Industrial Production": "工業生產", "Factory Orders": "工廠訂單",
+    "Empire State Manufacturing Index": "紐約州製造業指數", "Philly Fed Manufacturing Index": "費城聯儲製造業指數", "Richmond Manufacturing Index": "里奇蒙製造業指數",
+    "Trade Balance": "貿易收支", "Import Prices": "進口物價", "Federal Budget Balance": "聯邦預算收支", "Beige Book": "褐皮書", "Treasury Currency Report": "美國匯率報告",
+    "Federal Funds Rate": "聯準會利率決議", "FOMC Statement": "FOMC 聲明", "FOMC Press Conference": "FOMC 記者會", "FOMC Meeting Minutes": "FOMC 會議紀要", "FOMC Economic Projections": "FOMC 經濟預測",
+    "Main Refinancing Rate": "歐洲央行利率決議", "ECB Press Conference": "歐洲央行記者會", "Monetary Policy Statement": "貨幣政策聲明", "Monetary Policy Meeting Accounts": "歐洲央行會議紀要",
+    "BOJ Policy Rate": "日銀利率決議", "BOJ Press Conference": "日銀記者會", "BOJ Outlook Report": "日銀展望報告", "Monetary Policy Meeting Minutes": "貨幣政策會議紀要",
+    "Official Bank Rate": "英國央行利率決議", "MPC Official Bank Rate Votes": "英國央行投票結果", "Monetary Policy Summary": "英國央行政策摘要",
+    "Cash Rate": "澳洲央行利率決議", "RBA Rate Statement": "澳洲央行聲明", "Overnight Rate": "加拿大央行利率決議", "BOC Rate Statement": "加拿大央行聲明",
+    "SNB Policy Rate": "瑞士央行利率決議", "Official Cash Rate": "紐西蘭央行利率決議",
+    "Tokyo Core CPI": "東京核心 CPI", "National Core CPI": "全國核心 CPI", "Bank Holiday": "銀行假日", "Ifo Business Climate": "ifo 商業景氣", "ZEW Economic Sentiment": "ZEW 經濟景氣",
+    "Fixed Asset Investment": "固定資產投資", "New Loans": "新增貸款", "M2 Money Supply": "M2 貨幣供給", "Tankan Manufacturing Index": "短觀製造業指數",
+    "Current Account": "經常帳", "Consumer Confidence": "消費者信心", "Prelim Industrial Production": "工業生產 初值",
+}
+FF_CTY = {"German": "德國", "French": "法國", "Italian": "義大利", "Spanish": "西班牙", "Tokyo": "東京"}
+FF_WHO = [("Fed Chair", "聯準會主席"), ("FOMC Member", "聯準會官員"), ("Fed Vice Chair", "聯準會副主席"), ("ECB President", "歐洲央行總裁"), ("BOJ Gov", "日銀總裁"),
+          ("BOE Gov", "英國央行總裁"), ("RBA Gov", "澳洲央行總裁"), ("BOC Gov", "加拿大央行總裁"), ("President", "總統"), ("Treasury Secretary", "美國財長")]
+
+
+def ff_zh(t: str) -> str:
+    """Forex Factory 英文標題 → 台灣用語。翻不出來就留英文。"""
+    s = t.strip()
+    m = re.match(r"^(.*?) Speaks$", s)
+    if m:
+        who = m.group(1)
+        for a, b in FF_WHO:
+            if who.startswith(a):
+                return f"{b} {who[len(a):].strip()} 談話".replace("  ", " ")
+        return who + " 談話"
+    m = re.match(r"^(\d+)-y (Bond|Note) Auction$", s)
+    if m:
+        return f"{m.group(1)} 年期公債標售"
+    suf = ""
+    m = re.search(r"\s+(m/m|y/y|q/q|ytd/y|3m/y|q/y|w/e)$", s)
+    if m:
+        suf = {"m/m": "月增", "y/y": "年增", "q/q": "季增", "ytd/y": "年初至今", "3m/y": "三個月年增", "q/y": "年增", "w/e": "週"}[m.group(1)]
+        s = s[:m.start()]
+    pre = ""
+    for a, b in FF_CTY.items():
+        if s.startswith(a + " "):
+            pre, s = b + " ", s[len(a) + 1:]
+            break
+    tag = ""
+    for a, b in (("Prelim ", "初值"), ("Flash ", "快報"), ("Final ", "終值"), ("Revised ", "修正值"), ("Advance ", "初值")):
+        if s.startswith(a):
+            tag, s = b, s[len(a):]
+            break
+    base = FF_BASE.get(s)
+    if not base:
+        return t
+    return " ".join(x for x in (pre + base, tag, suf) if x).replace("  ", " ")
+
+
+MKT_EX = [("TWSE", "台股", "台"), ("XNYS", "美股", "美"), ("XJPX", "日股", "日"), ("XHKG", "港股", "港"), ("XSHG", "陸股", "中"),
+          ("XKRX", "韓股", "韓"), ("XLON", "英股", "英"), ("XETR", "德股", "德"), ("XSES", "新加坡股", "星"), ("XNSE", "印度股", "印")]
+HOL_ZH = {"New Year's Day": "元旦", "Christmas Day": "聖誕節", "Christmas Eve": "平安夜", "Boxing Day": "節禮日", "Good Friday": "耶穌受難日", "Easter Monday": "復活節翌日",
+          "Thanksgiving Day": "感恩節", "Labor Day": "勞動節", "Labour Day": "勞動節", "Memorial Day": "陣亡將士紀念日", "Independence Day": "獨立紀念日",
+          "Juneteenth National Independence Day": "六月節", "Martin Luther King Jr. Day": "金恩紀念日", "Washington's Birthday": "總統日", "Culture Day": "文化之日",
+          "Labor Thanksgiving Day": "勤勞感謝日", "Coming of Age Day": "成人之日", "Bank Holiday": "年末年初休市", "National Day": "國慶", "Diwali": "排燈節",
+          "End of Year Holiday": "年末休市", "New Year's Eve": "除夕（跨年）", "Second Day of Christmas": "聖誕節次日", "Spring Festival": "春節", "Chinese New Year": "春節",
+          "Lunar New Year": "農曆新年", "Mid-Autumn Festival": "中秋節", "Dragon Boat Festival": "端午節", "Tomb-Sweeping Day": "清明節", "Ching Ming Festival": "清明節",
+          "Double Ninth Festival": "重陽節", "Hangul Day": "韓文日", "National Foundation Day": "開天節", "Buddha's Birthday": "佛誕", "Chuseok": "中秋節",
+          "Early May Bank Holiday": "五月初銀行假日", "Deepavali": "排燈節", "Hari Raya Puasa": "開齋節", "Hari Raya Haji": "哈芝節", "Vesak Day": "衛塞節", "Labor Day Holiday": "勞動節", "Children's Day": "兒童節", "Constitution Memorial Day": "憲法紀念日", "Greenery Day": "綠之日", "Marine Day": "海之日", "Mountain Day": "山之日", "Respect for the Aged Day": "敬老之日", "Autumnal Equinox Day": "秋分", "Vernal Equinox Day": "春分", "Showa Day": "昭和之日", "Emperor's Birthday": "天皇誕生日", "National Foundation Day (Japan)": "建國紀念日", "Sports Day": "體育之日", "German Unity Day": "德國統一日", "Whit Monday": "聖靈降臨節翌日", "Day of Christmas": "聖誕節", "Chinese New Year's Eve": "除夕", "Korean New Year": "春節", "The day preceding Chuseok": "中秋連假", "The second day of Chuseok": "中秋連假", "The second day of Korean New Year": "春節連假", "Independence Movement Day": "三一節", "Liberation Day": "光復節", "Constitution Day": "憲法紀念日", "Foundation Day": "建國紀念日", "Substitute Holiday": "補假", "Spring Bank Holiday": "春季銀行假日", "Summer Bank Holiday": "夏季銀行假日"}
+
+
+def hol_zh(name: str) -> str:
+    out = []
+    for part in name.split("; "):
+        obs = " (observed)" in part or "(Adjusted" in part or "The day following" in part or part.startswith("Alternative holiday for ")
+        p0 = re.sub(r"\s*\((observed|Adjusted Holiday)\)", "", part).replace("The day following ", "").replace("Alternative holiday for ", "").strip()
+        z = HOL_ZH.get(p0) or next((v for k, v in HOL_ZH.items() if k in p0), None) or p0
+        out.append(z + ("（補假）" if obs else ""))
+    return "；".join(dict.fromkeys(out))
+
+
+def _nth_weekday(y, m, wd, n):
+    """某月第 n 個星期幾（wd：週一＝0）。"""
+    d1 = datetime(y, m, 1).weekday()
+    return datetime(y, m, 1 + (wd - d1) % 7 + 7 * (n - 1)).date()
+
+
+def p_mktcal():
+    from zoneinfo import ZoneInfo
+    tz_tpe, tz_ny = ZoneInfo("Asia/Taipei"), ZoneInfo("America/New_York")
+    today = TODAY_TPE
+    horizon, hol_to = today + timedelta(days=28), today + timedelta(days=120)
+    ev, errs, keys = [], [], set()
+
+    def add(d, name, r, k, imp=1, t=None, ts=None, ap=False, **x):
+        if isinstance(d, str):
+            d = datetime.fromisoformat(d[:10]).date()
+        if not (today - timedelta(days=1) <= d <= horizon):
+            return
+        key = (d.isoformat(), name)
+        if key in keys:
+            return
+        keys.add(key)
+        ev.append({"d": d.isoformat(), "t": t, "ts": ts, "r": r, "n": name, "k": k, "imp": imp, "ap": ap, **{a: b for a, b in x.items() if b not in (None, "")}})
+
+    def at_tpe(dt):
+        z = dt.astimezone(tz_tpe)
+        return z.date(), z.strftime("%H:%M"), int(z.timestamp() * 1000)
+
+    # 1) 全球數據與央行：Forex Factory（本週＋下週）
+    ff_until = None
+    for u in FF_WEEKS:
+        try:
+            rows = gjson(u, timeout=40, headers={"User-Agent": "Mozilla/5.0 (personal dashboard)"})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"FF {u.rsplit('_', 1)[-1]}: {safe_err(e)}"); continue
+        for r in rows if isinstance(rows, list) else []:
+            cur, imp = r.get("country") or "", (r.get("impact") or "").lower()
+            if cur not in FF_CUR or imp not in ("high", "medium", "holiday"):
+                continue
+            try:
+                dt = datetime.fromisoformat(r["date"])
+            except Exception:
+                continue
+            title = (r.get("title") or "").strip()
+            if imp == "holiday":
+                add(dt.date(), f"{FF_CUR[cur]} 銀行假日（外匯清算）", FF_CUR[cur], "bank", 1, cur=cur)
+                continue
+            d, t, ts = at_tpe(dt)
+            k = "cb" if re.search(r"Rate$|Rate Statement|Policy|FOMC|Press Conference|Monetary|Beige|Minutes|Votes|Outlook Report", title) else "speech" if title.endswith("Speaks") else "auction" if "Auction" in title else "data"
+            add(d, ff_zh(title), FF_CUR[cur], k, 3 if imp == "high" else 2, t, ts, en=title, cur=cur, fc=r.get("forecast"), pv=r.get("previous"))
+            ff_until = max(ff_until or d, d)
+    # 2) 美國：FRED 官方發布日（Forex Factory 涵蓋不到的週），時間用美東慣例換成台北時間
+    US_T = {"美國 CPI": "08:30", "美國非農就業": "08:30", "美國 GDP": "08:30", "美國 PCE": "08:30", "美國 PPI": "08:30", "美國零售銷售": "08:30", "密大消費信心": "10:00", "美國 JOLTS": "10:00"}
+    if FRED_KEY:
+        try:
+            j = gjson("https://api.stlouisfed.org/fred/releases/dates", params={"api_key": FRED_KEY, "file_type": "json", "realtime_start": today.isoformat(),
+                      "realtime_end": horizon.isoformat(), "include_release_dates_with_no_data": "true", "limit": 1000, "sort_order": "asc"})
+            for r in j.get("release_dates", []):
+                lab = FRED_RELEASES.get((r.get("release_name") or "").strip())
+                if not lab:
+                    continue
+                d0 = datetime.fromisoformat(r["date"]).date()
+                if ff_until and d0 <= ff_until:
+                    continue
+                hh, mm = map(int, US_T.get(lab, "08:30").split(":"))
+                d, t, ts = at_tpe(datetime(d0.year, d0.month, d0.day, hh, mm, tzinfo=tz_ny))
+                add(d, lab.replace("美國 ", ""), "美", "data", 3 if lab in ("美國 CPI", "美國非農就業") else 2, t, ts, src="FRED")
+        except Exception as e:  # noqa: BLE001
+            errs.append("FRED: " + safe_err(e))
+    for d0 in FOMC_2026:
+        d0 = datetime.fromisoformat(d0).date()
+        if ff_until and d0 <= ff_until:
+            continue
+        d, t, ts = at_tpe(datetime(d0.year, d0.month, d0.day, 14, 0, tzinfo=tz_ny))
+        add(d, "聯準會利率決議", "美", "cb", 3, t, ts)
+    # 3) 台灣：固定時程（官方行事曆不開放抓取，日期標「約」）
+    from calendar import monthrange
+    for i in range(2):
+        y, mo = (today.year + (today.month + i - 1) // 12), (today.month + i - 1) % 12 + 1
+        last = monthrange(y, mo)[1]
+        add(datetime(y, mo, 1).date(), "PMI／NMI（中經院）", "台", "data", 2, ap=True)
+        add(datetime(y, mo, 6).date(), "CPI／PPI（主計總處）", "台", "data", 3, ap=True)
+        add(datetime(y, mo, 20).date(), "外銷訂單（經濟部）", "台", "data", 2, ap=True)
+        add(datetime(y, mo, 22).date(), "失業率（主計總處）", "台", "data", 1, ap=True)
+        add(datetime(y, mo, 27).date(), "景氣燈號（國發會）", "台", "data", 2, ap=True)
+        if mo in (1, 4, 7, 10):
+            add(datetime(y, mo, last).date(), "GDP 概估（主計總處）", "台", "data", 3, ap=True)
+        if mo in (3, 6, 9, 12):
+            add(_third_thursday(y, mo), "央行理監事會", "台", "cb", 3, "16:00", ap=True)
+    # 4) 休市：證交所官方＋各交易所行事曆
+    hol = []
+    tw_off = set()
+    try:
+        for r in gjson("https://openapi.twse.com.tw/v1/holidaySchedule/holidaySchedule"):
+            raw = str(r.get("Date") or r.get("日期") or "")
+            d = roc_to_iso(raw) if raw and not raw.startswith("20") else raw[:10]
+            nm = str(r.get("Name") or r.get("名稱") or "").strip()
+            if d and re.match(r"\d{4}-\d\d-\d\d$", d) and not re.search(r"開始交易|最後交易|結算", nm):
+                dd = datetime.fromisoformat(d).date()
+                if dd.weekday() < 5 and today <= dd <= hol_to:
+                    tw_off.add(dd); hol.append({"d": d, "ex": "TWSE", "m": "台股", "r": "台", "n": nm[:16]})
+    except Exception as e:  # noqa: BLE001
+        errs.append("證交所休市: " + safe_err(e))
+    try:
+        import holidays as _hol
+        for ex, mk, r in MKT_EX:
+            try:
+                h = _hol.financial_holidays(ex, years=sorted({today.year, hol_to.year}), **({} if ex in ("TWSE", "XHKG") else {"language": "en_US"}))
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{ex}: {safe_err(e)}"); continue
+            for d, nm in sorted(h.items()):
+                if today <= d <= hol_to and d.weekday() < 5 and not (ex == "TWSE" and tw_off):
+                    hol.append({"d": d.isoformat(), "ex": ex, "m": mk, "r": r, "n": hol_zh(nm)})
+                    if ex == "TWSE":
+                        tw_off.add(d)
+    except ImportError:
+        errs.append("holidays 套件沒裝")
+    hol.sort(key=lambda x: (x["d"], x["ex"]))
+    for x in hol:
+        add(x["d"], f"{x['m']}休市：{x['n']}", x["r"], "holiday", 2 if x["ex"] in ("TWSE", "XNYS") else 1, ex=x["ex"])
+    # 5) 結算日：台指期（每月第三個週三，遇休市順延）、美股月選擇權（第三個週五，遇休市提前）、日股 SQ（第二個週五）
+    ny_off = {datetime.fromisoformat(x["d"]).date() for x in hol if x["ex"] == "XNYS"}
+    for i in range(3):
+        y, mo = (today.year + (today.month + i - 1) // 12), (today.month + i - 1) % 12 + 1
+        d = _nth_weekday(y, mo, 2, 3)
+        while d in tw_off or d.weekday() >= 5:
+            d += timedelta(days=1)
+        add(d, "台指期／台指選擇權 月結算", "台", "expiry", 2, "13:30")
+        d = _nth_weekday(y, mo, 4, 3)
+        while d in ny_off:
+            d -= timedelta(days=1)
+        quad = mo in (3, 6, 9, 12)
+        dt = datetime(d.year, d.month, d.day, 16, 0, tzinfo=tz_ny)
+        dd, t, ts = at_tpe(dt)
+        add(d, "美股四巫日（期貨、選擇權同時到期）" if quad else "美股月選擇權到期", "美", "expiry", 3 if quad else 2, t, ts)
+        add(_nth_weekday(y, mo, 4, 2), "日股 SQ 結算" + ("（大 SQ）" if quad else ""), "日", "expiry", 2 if quad else 1, "08:00")
+    # 6) 台股公司：法說會（排除受邀參加論壇的例行行程）、新股上市與抽籤
+    corp = RESULTS.get("corp") or load_prev("corp") or {}
+    for c in corp.get("conf") or []:
+        if c.get("routine"):
+            continue
+        add(c["date"], f"{c['name']}（{c['code']}）法說會", "台", "conf", 1, (c.get("time") or None), code=c["code"], ind=c.get("ind"), s=(c.get("summary") or "")[:60])
+    for c in corp.get("ipo") or []:
+        if c.get("list"):
+            add(c["list"], f"{c['name']}（{c['code']}）{c.get('mk', '')}掛牌", "台", "ipo", 1, "09:00", code=c["code"], ind=c.get("ind"), px=c.get("price"))
+        if c.get("draw"):
+            add(c["draw"], f"{c['name']}（{c['code']}）公開申購抽籤", "台", "ipo", 1, code=c["code"])
+    ev.sort(key=lambda x: (x["d"], x["t"] or "99:99", -x["imp"]))
+    if not ev:
+        raise RuntimeError(f"mktcal: nothing {errs[:3]}")
+    return {"items": ev, "hol": hol, "from": today.isoformat(), "to": horizon.isoformat(), "ff_until": ff_until.isoformat() if ff_until else None,
+            "n": len(ev), "errs": errs[:6], "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站"}
+
+
 AWARD_CACHE = DATA / "award_cache.json"
 
 
@@ -9038,6 +9283,7 @@ run("macro", p_macro, keep_if_fresh_hours=6)
 run("gmacro", p_gmacro, keep_if_fresh_hours=6)
 run("liquidity", p_liquidity, keep_if_fresh_hours=3)
 run("calendar", p_calendar, keep_if_fresh_hours=6)
+run("mktcal", p_mktcal, keep_if_fresh_hours=3)  # Forex Factory 每 5 分鐘最多兩次，3 小時一次很安全
 run("awards", p_awards, keep_if_fresh_hours=1)
 run("brands", p_brands, keep_if_fresh_hours=12 if BIZ_TOWNS_PATH.exists() else 0)  # 地圖的鄉鎮統計檔還沒有時，這輪就重抓一次
 run("taxreg", p_taxreg, keep_if_fresh_hours=72)

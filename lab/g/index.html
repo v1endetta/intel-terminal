@@ -419,6 +419,71 @@ body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-event
 #labels .lbl.defocus2{opacity:.12!important;filter:blur(1.2px);transition:opacity .25s,filter .25s}
 #side [data-nc],#side [data-nt]{transition:background .2s}
 #side [data-nc]:hover,#side [data-nt]:hover{background:rgba(255,255,255,.06);border-radius:8px}
+/* ===== 清楚：按鈕、標籤、清單的層次（Apple 風：選中的是實心白、其他是深色、間距拉開） ===== */
+#labels .lbl.lhid{opacity:0!important;pointer-events:none!important}
+#dock2 .chips{gap:10px}
+#dock2 .chips button{font-size:14px;font-weight:500;color:#f5f5f7;padding:8px 16px;background:rgba(44,44,46,.86);border:1px solid rgba(255,255,255,.16);box-shadow:0 4px 14px rgba(0,0,0,.28)}
+#dock2 .chips button:hover{background:rgba(72,72,74,.92)}
+#dock2 .chips button[aria-selected="true"]{background:#f5f5f7;border-color:#f5f5f7;color:#1d1d1f;font-weight:600}
+#dock2 .seg{background:rgba(36,36,38,.88)}
+#dock2 .seg button{color:#c7c7cc}
+.nvp{font-size:12.5px;padding:5px 11px;background:rgba(22,22,24,.86);border-color:rgba(255,255,255,.16);box-shadow:0 4px 16px rgba(0,0,0,.42)}
+.nvp em{color:#c7c7cc}
+.nvp b{color:#fff}
+#side .lst li{padding:12px 0;border-top-color:rgba(255,255,255,.09)}
+#side .lst li span{margin-top:4px;font-size:12px}
+#side .nvh{margin:20px 0 6px;font-size:12px;font-weight:600;color:#aeaeb2;letter-spacing:.02em}
+/* ===== 市場行事曆 ===== */
+#side .mkn{margin:2px 0 14px;font-size:15px;color:#f5f5f7;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+#side .mkn em{font-style:normal;color:#64d2ff;font-weight:600}
+#side .mkn span{width:100%;font-size:12.5px;color:#aeaeb2}
+#side .mkx{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin:4px 0 14px}
+#side .mkx1{display:grid;grid-template-columns:auto 1fr auto;align-items:center;column-gap:7px;row-gap:1px;padding:6px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07)}
+#side .mkx1 i{width:8px;height:8px;border-radius:50%;grid-row:span 2}
+#side .mkx1 b{font-size:13px;font-weight:600;color:#f5f5f7}
+#side .mkx1 span{font-size:12px;color:#c7c7cc;text-align:right}
+#side .mkx1 em{grid-column:2/4;font-style:normal;font-size:11px;color:#8e8e93}
+#side .mkx1.open{background:rgba(48,209,88,.10);border-color:rgba(48,209,88,.28)}
+#side .mkx1.open span{color:#30d158;font-weight:600}
+#side .mkx1.hol span{color:#ff9f0a;font-weight:600}
+#side .mkx1.open i{box-shadow:0 0 0 3px rgba(48,209,88,.25);animation:mkp 1.6s ease-in-out infinite}
+@keyframes mkp{50%{box-shadow:0 0 0 6px rgba(48,209,88,0)}}
+#side .mkt{display:flex;gap:4px;padding:3px;border-radius:999px;background:rgba(118,118,128,.2);margin:0 0 8px}
+#side .mkt button{all:unset;flex:1;text-align:center;cursor:pointer;font-size:13px;padding:6px 0;border-radius:999px;color:#c7c7cc}
+#side .mkt button.on{background:#f5f5f7;color:#1d1d1f;font-weight:600}
+#side .mka{display:flex;align-items:center;gap:6px;font-size:12px;color:#8e8e93;margin:0 0 4px;cursor:pointer}
+#side .mkl{list-style:none;margin:0;padding:0}
+#side .mkl .mkd{font-size:12px;font-weight:600;color:#aeaeb2;margin:16px 0 4px;letter-spacing:.02em;position:sticky;top:-1px;background:inherit}
+#side .mkl .mkd.now{color:#64d2ff}
+#side .mkl .mk{display:grid;grid-template-columns:44px 30px 1fr 26px;align-items:start;column-gap:8px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08)}
+#side .mkl .mkd+.mk{border-top:0}
+#side .mk .mt{font-size:13px;font-weight:600;color:#f5f5f7;font-variant-numeric:tabular-nums;padding-top:1px}
+#side .mk .mr{font-size:11px;font-weight:600;color:var(--c);border:1px solid var(--c);border-radius:6px;text-align:center;padding:1px 0;margin-top:1px;white-space:nowrap;overflow:hidden}
+#side .mk .mn b{font-size:14px;font-weight:500;color:#f5f5f7;line-height:1.35}
+#side .mk.i3 .mn b{font-weight:700}
+#side .mk .mn small{display:block;font-size:12px;color:#8e8e93;margin-top:3px}
+#side .mk .mn small em{font-style:normal;color:#64d2ff;font-weight:600}
+#side .mk .mn i{font-style:normal;font-size:10.5px;padding:1px 5px;border-radius:5px;margin-left:6px;vertical-align:1px;background:rgba(255,255,255,.1);color:#c7c7cc}
+#side .mk .mn i.t-holiday{background:rgba(255,159,10,.18);color:#ff9f0a}
+#side .mk .mn i.t-cb{background:rgba(100,210,255,.16);color:#64d2ff}
+#side .mk .mn i.t-expiry{background:rgba(191,90,242,.18);color:#d39cf8}
+#side .mk .mi{display:flex;gap:2px;justify-content:flex-end;padding-top:6px}
+#side .mk .mi b,#side .mk .mi s{width:6px;height:6px;border-radius:50%;background:#ff9f0a}
+#side .mk .mi s{background:rgba(255,255,255,.14)}
+#side .mk.past{opacity:.42}
+#side .mk.soon{background:linear-gradient(90deg,rgba(100,210,255,.08),transparent);border-radius:8px}
+.gxl.mkg{display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.2}
+.gxl.mkg small{font-size:10.5px;color:#c7c7cc;font-weight:400}
+.gxl.mkg.closed,.gxl.mkg.wknd{opacity:.78}
+@media (max-width:760px){#side .mkx{grid-template-columns:repeat(2,minmax(0,1fr))}#side .mkl .mk{grid-template-columns:40px 28px 1fr 22px}}
+.gxl.mkg{border-radius:12px;padding:5px 10px}
+#mkbar{all:unset;cursor:pointer;display:inline-flex;gap:9px;margin-right:14px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.06);font-size:12px;color:#8e8e93;vertical-align:middle}
+#mkbar:hover{background:rgba(255,255,255,.12)}
+#mkbar span{display:inline-flex;align-items:center;gap:4px}
+#mkbar span.open{color:#f5f5f7;font-weight:600}
+#mkbar i{width:6px;height:6px;border-radius:50%}
+@media (max-width:760px){#mkbar{display:none}}
+#labels .lbl.gx{background:none;border:0;padding:0;backdrop-filter:none;-webkit-backdrop-filter:none}
 </style>
 <script type="importmap">
 {"imports":{
@@ -473,6 +538,9 @@ body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-event
 <script type="module">
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { LineSegments2 } from "three/addons/lines/LineSegments2.js";
+import { LineSegmentsGeometry } from "three/addons/lines/LineSegmentsGeometry.js";
+import { LineMaterial } from "three/addons/lines/LineMaterial.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
@@ -574,6 +642,8 @@ function applySun() {
 let DEM, META, terrain, terrainMat, radarTex = null, DAY = null, NIGHT = null, LIGHTS = null, IS_DAY = true;
 const uni = { uRadar: { value: 0 }, uRadarTex: { value: null }, uRadarB: { value: new THREE.Vector4(0, 0, 1, 1) }, uTime: { value: 0 }, uDim: { value: 0 }, uNight: { value: 0 }, uLights: { value: null }, uHasLights: { value: 0 }, uClose: { value: 0 }, uLightK: { value: 1 }, uScan: { value: 99 }, uScanOn: { value: 0 } };
 let dimTo = 0;
+const GLASS = (() => { const q = new URLSearchParams(location.search).get("style"); return q ? q === "glass" : true; })();   // 預設玻璃風；?style=photo 看舊的衛星照片風
+if (GLASS) document.documentElement.classList.add("glass");
 
 function hAt(lon, lat) {   // 地表高度（場景單位）
   if (!DEM) return 0;
@@ -669,6 +739,11 @@ function buildTerrain() {
           totalEmissiveRadiance += vec3(0.45, 0.9, 1.0) * (exp(-pow(sd / 0.015, 2.0)) * 1.25 + exp(min(sd, 0.0) / 0.25) * step(sd, 0.0) * 0.12) * uScanOn;
         }`);
   };
+  if (GLASS) { const tb = terrainMat.onBeforeCompile; terrainMat.onBeforeCompile = sh => { tb(sh);
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <roughnessmap_fragment>", "#include <roughnessmap_fragment>\n{ float e = smoothstep(0.0, 2600.0, vElev); vec3 g0 = mix(vec3(0.23, 0.27, 0.34), vec3(0.47, 0.52, 0.60), e); diffuseColor.rgb = g0 * mix(1.0, 0.55, uNight) * mix(1.0, 0.75, uDim); }")
+      .replace("#include <lights_fragment_begin>", "totalEmissiveRadiance = vec3(0.0);\n#include <lights_fragment_begin>");
+    }; terrainMat.customProgramCacheKey = () => "terrainGlass"; terrainMat.roughness = 0.75; terrainMat.metalness = 0.0; }
   terrain = new THREE.Mesh(g, terrainMat);
   scene.add(terrain);
 
@@ -682,6 +757,7 @@ function buildTerrain() {
   sea.rotation.x = -Math.PI / 2; sea.position.y = -0.4;
   // 每格約 0.5 度：對齊經緯度
   sea.material.map.offset.set(0, 0);
+  if (GLASS) { sea.material.map = null; sea.material.color.set(0x1a2a42); sea.material.opacity = 1; sea.material.fog = true; sea.material.needsUpdate = true; }
   scene.add(sea);
 }
 
@@ -1080,7 +1156,7 @@ function orthoDrop(key) {   // 離開太遠：拆掉地面網格，全島那層�
 }
 let _otT = 0, _baseOp = 0; window.__ortho = ORTHO;
 function orthoTick(dt) {
-  if (!ORTHO.idx) return;
+  if (GLASS || !ORTHO.idx) return;
   const close = uni.uClose.value, t = controls.target, lon = t.x / KX + LONC, lat = -t.z / KY + LATC, cd = camera.position.distanceTo(t);
   const dist = q => Math.hypot(((q.w + q.e) / 2 - lon) * KX, ((q.s + q.n) / 2 - lat) * KY);
   _otT -= dt;
@@ -1383,7 +1459,7 @@ function placeLabels() {
   for (const L of LBL) {
     _v.copy(L.pos).project(camera);
     L.on = _v.z < 1 && Math.abs(_v.x) < 1.1 && Math.abs(_v.y) < 1.1;
-    if (!L.on || L.hide) { L.el.style.opacity = 0; continue; }
+    if (!L.on || L.hide) { L.el.style.opacity = 0; if (L._h !== true) { L._h = true; L.el.classList.add("lhid"); } continue; }
     L.sx = (_v.x + 1) / 2 * innerWidth; L.sy = (1 - _v.y) / 2 * VH();
     L.el.style.left = L.sx + "px"; L.el.style.top = L.sy + "px";
     if (!L.w) { L.w = L.el.offsetWidth; L.h = L.el.offsetHeight; }
@@ -1395,7 +1471,7 @@ function placeLabels() {
     const x0 = L.sx - L.w / 2 - 3, x1 = L.sx + L.w / 2 + 3, y0 = L.sy - L.h - 3, y1 = L.sy + 3;
     let hit = false;
     for (const S of _shown) if (x0 < S[2] && x1 > S[0] && y0 < S[3] && y1 > S[1]) { hit = true; break; }
-    L.el.style.opacity = hit ? 0 : (L.op ?? 1);
+    L.el.style.opacity = hit ? 0 : (L.op ?? 1); if (L._h !== hit) { L._h = hit; L.el.classList.toggle("lhid", hit); }
     if (!hit) _shown.push([x0, y0, x1, y1]);
   }
 }
@@ -1982,15 +2058,28 @@ async function buildGlobe() {
   const sph = new THREE.Mesh(new THREE.SphereGeometry(R - 40, 96, 64), fm(new THREE.MeshBasicMaterial({ color: 0x03060a, depthTest: true }), 1)); sph.material.depthWrite = true; sph.material.transparent = false; sph.position.copy(C0); g.add(sph);
   // 有顏色的地球：NASA Blue Marble 白天照片，調暗一點讓上面的線和光點跳出來；邊緣再暗一些，看起來是立體的球
   // 鏡頭還在台灣上空（離地 900 公里內）時不畫，等拉到太空才淡入，避免飛行途中在地圖邊緣冒出色塊
+  let GMAT = null;
   { const NX = MOBILE ? 128 : 256, NY = MOBILE ? 64 : 128, pos = [], uv = [], idx = [];
     for (let j = 0; j <= NY; j++) for (let i = 0; i <= NX; i++) { const p = G(-180 + 360 * i / NX, 90 - 180 * j / NY, -1); pos.push(p.x, p.y, p.z); uv.push(i / NX, 1 - j / NY); }
     for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) { const a = j * (NX + 1) + i, b = a + 1, c = a + NX + 1, d = c + 1; idx.push(a, c, b, b, c, d); }
     const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(idx);
-    const tex = new THREE.TextureLoader().load(`earth_day${MOBILE ? "_m" : ""}.jpg?v=${ASSET_V}`); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
-    const mat = fm(new THREE.ShaderMaterial({ depthTest: true, uniforms: { uDay: { value: tex }, k: { value: 1 }, uC: { value: C0 } },
+    const TL = new THREE.TextureLoader(), sfx = MOBILE ? "_m" : "", ld = n => { const t = TL.load(`earth_${n}${sfx}.jpg?v=${ASSET_V}`); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; };
+    const GS = { a: 0, b: 1, c: 2 }[new URLSearchParams(location.search).get("gs")] ?? (GLASS ? 1 : 0);   // 地球風格（試看用）：a 衛星統一調色、b 玻璃、c 夜晚光點
+    const mat = fm(new THREE.ShaderMaterial({ depthTest: true, uniforms: { uDay: { value: ld("day") }, uNight: { value: ld("night") }, k: { value: 1 }, uC: { value: C0 }, uS: { value: GS }, uSunN: { value: V(0, 1, 0) }, uTerm: { value: 0 } },
       vertexShader: "varying vec2 vUv; varying vec3 vN; varying vec3 vW; uniform vec3 uC; void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vN = normalize(w.xyz - uC); gl_Position = projectionMatrix * viewMatrix * w; }",
-      fragmentShader: "uniform sampler2D uDay; uniform float k; varying vec2 vUv; varying vec3 vN; varying vec3 vW; void main(){ vec3 c = texture2D(uDay, vUv).rgb; float l = dot(c, vec3(0.299, 0.587, 0.114)); c = mix(vec3(l), c, 1.25) * 0.9; c += vec3(0.01, 0.06, 0.15) * clamp(1.0 - l * 5.0, 0.0, 1.0); vec3 v = normalize(cameraPosition - vW); float f = max(dot(v, vN), 0.0); c *= 0.55 + 0.45 * pow(f, 0.5); float alt = length(cameraPosition - uC) - 6371.0; gl_FragColor = vec4(c, k * smoothstep(900.0, 3500.0, alt)); }" }), 1);
-    const earth = new THREE.Mesh(geo, mat); earth.renderOrder = -1; g.add(earth); }
+      fragmentShader: `uniform sampler2D uDay; uniform sampler2D uNight; uniform float k; uniform float uS; uniform vec3 uC; uniform vec3 uSunN; uniform float uTerm; varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+        void main(){
+          vec3 d = texture2D(uDay, vUv).rgb, n = texture2D(uNight, vUv).rgb; float l = dot(d, vec3(0.299, 0.587, 0.114));
+          float ocean = smoothstep(1.15, 1.7, d.b / (max(d.r, d.g) + 0.002)) * (1.0 - smoothstep(0.06, 0.16, l));   // 照片在線性色彩空間：海＝偏藍又暗
+          vec3 v = normalize(cameraPosition - vW); float f = max(dot(v, vN), 0.0), rim = pow(1.0 - f, 2.5);
+          vec3 c;
+          if (uS < 0.5) { c = mix(vec3(l), d, 1.15) * 0.85; c *= mix(vec3(1.0), vec3(0.86, 0.95, 1.12), 0.6); c += vec3(0.01, 0.05, 0.13) * ocean; c *= 0.55 + 0.45 * pow(f, 0.5); }
+          else if (uS < 1.5) { vec3 land = mix(vec3(0.34, 0.40, 0.50), vec3(0.62, 0.68, 0.78), smoothstep(0.08, 0.55, l)); vec3 sea = mix(vec3(0.05, 0.09, 0.17), vec3(0.10, 0.17, 0.30), f);
+            c = mix(land * (0.7 + 0.3 * f), sea, ocean) + vec3(0.6, 0.8, 1.0) * rim * 0.35; }
+          else { vec3 land = vec3(0.09, 0.11, 0.15) + d * 0.07, sea = vec3(0.015, 0.03, 0.07); c = mix(land, sea, ocean) + pow(n, vec3(1.5)) * vec3(1.0, 0.78, 0.45) * 1.5 + vec3(0.3, 0.55, 1.0) * rim * 0.25; }
+          if (uTerm > 0.0) { float nt = 1.0 - smoothstep(-0.10, 0.06, dot(vN, uSunN)); c = mix(c, c * 0.3 + pow(n, vec3(1.6)) * vec3(1.0, 0.8, 0.5) * 1.7, nt * uTerm); }   // 市場時鐘：晨昏線，夜裡看得到城市燈光
+          float alt = length(cameraPosition - uC) - 6371.0; gl_FragColor = vec4(c, k * smoothstep(900.0, 3500.0, alt)); }` }), 1);
+    const earth = new THREE.Mesh(geo, mat); earth.renderOrder = -1; g.add(earth); GMAT = mat; }
   const atm = new THREE.Mesh(new THREE.SphereGeometry(R * 1.02, 96, 64), fm(new THREE.ShaderMaterial({ side: THREE.BackSide, blending: THREE.AdditiveBlending, uniforms: { k: { value: 1 } },
     vertexShader: "varying vec3 vN; varying vec3 vP; void main(){ vN = normalize(normalMatrix*normal); vec4 mv = modelViewMatrix*vec4(position,1.0); vP = mv.xyz; gl_Position = projectionMatrix*mv; }",
     fragmentShader: "uniform float k; varying vec3 vN; varying vec3 vP; void main(){ float f = pow(1.0 - abs(dot(normalize(-vP), vN)), 3.0); gl_FragColor = vec4(0.25,0.7,1.0,1.0)*f*0.9*k; }" }), 1));
@@ -2007,7 +2096,7 @@ async function buildGlobe() {
     for (let i = 0; i <= n; i++) { const u = i / n, s = Math.sin(ang); const v = ea.clone().multiplyScalar(Math.sin((1 - u) * ang) / s).add(eb.clone().multiplyScalar(Math.sin(u * ang) / s)); pts.push(toS([v.x, v.y, v.z], Math.sin(Math.PI * u) * Math.min(ang * R * k, 1500 + ang * 400))); } return pts; };
   const node = (lon, lat) => { const m = new THREE.Mesh(new THREE.SphereGeometry(16, 10, 8), fm(new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: true }), 1)); m.position.copy(G(lon, lat, 20)); g.add(m); };
   for (let i = 0; i < 3; i++) { const r = new THREE.Mesh(new THREE.RingGeometry(240 + i * 130, 248 + i * 130, 96), addM(CY, 0.8 - i * 0.25)); r.rotation.x = -Math.PI / 2; r.position.y = 3; g.add(r); }
-  GLOBE = { g, G, arc, node };
+  GLOBE = { g, G, arc, node, mat: GMAT };
   return GLOBE;
 }
 
@@ -2228,6 +2317,7 @@ function EXPLORE() {
   return [
     { cat: "市場", items: [
       { n: "台股", f: () => { const v = tx, s = surprise(v); return lineOf("台股加權", v, s ? tone(s.last) : NEU, "市場 · 證交所", "taiex", v.length ? nf(v[v.length - 1]) : "", s && s.pct != null ? pct(s.pct) : "")(); } },
+      { n: "行事曆", globe: 1, f: () => gxCard("clock") },
       { n: "法人", globe: 1, f: () => gxCard("inst") },
       { n: "個股", lens: "stock", f: barsOf("關注個股漲跌", () => items("tw_stocks").slice(0, 10).map(x => { const v = x.pct != null ? x.pct : (x.price && x.chg != null ? x.chg / (x.price - x.chg) * 100 : 0); return { name: x.name, v, txt: pct(v) }; }), "市場 · 最近收盤", "taiex") },
       { n: "全球股市", globe: 1, f: () => gxCard("world") },
@@ -2282,6 +2372,7 @@ function EXPLORE() {
 /* ---- 資料身分標籤（學 God's Eye View）：每張卡片都說清楚「哪裡來、什麼時候、是觀測還是推算」 ----
    類型：即時＝幾分鐘內的觀測；收盤＝最近一個交易日；每日／每週／每月／每季＝官方定期公布的統計；彙整＝情報站整理的新聞或社群；推算＝模型或時刻表推估 */
 const PROV = {
+  "行事曆": ["mktcal", "Forex Factory 週行事曆・FRED・證交所・各交易所行事曆・公開資訊觀測站", "彙整", 180],
   "台股": ["taiex", "證交所", "收盤", 1440, p => p.date], "法人": ["tw_market", "證交所", "收盤", 1440], "個股": ["tw_stocks", "證交所", "收盤", 1440, p => p.date],
   "全球股市": ["world", "各國交易所（Yahoo Finance）", "收盤", 1440], "匯率": ["fx", "Yahoo 中價", "即時", 90], "恐慌": ["fear", "CBOE", "收盤", 1440],
   "原物料": ["commodities", "期貨近月", "收盤", 1440, p => p.asOf], "精品": ["luxury", "各交易所", "收盤", 1440, p => p.asOf], "資金流向": ["world", "海外交易所＋證交所", "收盤", 1440],
@@ -2317,7 +2408,7 @@ function buildDock() {
     $("chips").classList.remove("in"); void $("chips").offsetWidth; $("chips").classList.add("in"); pickItem(pick); };
   const pickItem = j => { EXITEM = j; const it = E[EXCAT].items[j]; $("chips").querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", +b.dataset.j === j));
     // 有地圖視角的分類：地圖換成那個視角，卡片交給分層地圖（依目前層級回答）
-    if (it.lens) { if (it.lens === "now") setLayer("wx"); else if (it.lens === "traffic") { setLayer("traffic"); clearLabels("traffic"); } else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; } dimTo = 0; navSetLens(it.lens); return; }   // 現場疊天氣圖層；其他視角把圖層收掉，畫面只留那個視角
+    if (it.lens) { if (it.lens === "now") setLayer("wx"); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; } dimTo = 0; navSetLens(it.lens); return; }   // 現場疊天氣圖層；其他視角把圖層收掉，畫面只留那個視角
     let r = null; try { r = it.f(); } catch (e) { console.warn(e); r = { html: sideHTML({ title: it.n, body: '<p class="empty">資料暫時讀不到</p>' }) }; }
     if (r.gx) GX.key = r.gx;
     if (r.layer) setLayer(r.layer); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; document.querySelectorAll("#labels .lbl").forEach(x => x.style.opacity = 0); }
@@ -2720,6 +2811,150 @@ layers.flights = {
   tick(T, dt) { gdTick(dt); flightsTick(); },
 };
 
+/* ---- 市場行事曆＋市場時鐘（像彭博的 ECO 和 WEI 開收盤）----
+   卡片：下一個重要數據倒數、各交易所現在開還是關、今天／本週／下週的公布時間（台北時間、前值、預測）、休市、台股法說會與新股。
+   地球：各交易所一個點（綠＝開盤、黃＝午休或盤前盤後、灰＝收盤、橘＝休市），晨昏線＋夜裡的城市燈光，看得出世界哪裡醒著。 */
+const MKX = [
+  { k: "TWSE", n: "台股", c: "台北", ll: [121.52, 25.04], tz: "Asia/Taipei", s: [["09:00", "13:30"]] },
+  { k: "XJPX", n: "日股", c: "東京", ll: [139.77, 35.68], tz: "Asia/Tokyo", s: [["09:00", "11:30"], ["12:30", "15:30"]] },
+  { k: "XKRX", n: "韓股", c: "首爾", ll: [126.98, 37.57], tz: "Asia/Seoul", s: [["09:00", "15:30"]] },
+  { k: "XSHG", n: "陸股", c: "上海", ll: [121.47, 31.23], tz: "Asia/Shanghai", s: [["09:30", "11:30"], ["13:00", "15:00"]] },
+  { k: "XHKG", n: "港股", c: "香港", ll: [114.17, 22.28], tz: "Asia/Hong_Kong", s: [["09:30", "12:00"], ["13:00", "16:00"]] },
+  { k: "XSES", n: "新加坡", c: "新加坡", ll: [103.85, 1.29], tz: "Asia/Singapore", s: [["09:00", "12:00"], ["13:00", "17:00"]] },
+  { k: "XNSE", n: "印度", c: "孟買", ll: [72.88, 19.07], tz: "Asia/Kolkata", s: [["09:15", "15:30"]] },
+  { k: "XETR", n: "德股", c: "法蘭克福", ll: [8.68, 50.11], tz: "Europe/Berlin", s: [["09:00", "17:30"]] },
+  { k: "XLON", n: "英股", c: "倫敦", ll: [-0.09, 51.51], tz: "Europe/London", s: [["08:00", "16:30"]] },
+  { k: "XNYS", n: "美股", c: "紐約", ll: [-74.01, 40.71], tz: "America/New_York", s: [["09:30", "16:00"]], pre: "04:00", post: "20:00" },
+];
+const MK_ST = { open: ["#30d158", "開盤中"], lunch: ["#ffd60a", "午休"], pre: ["#ffd60a", "盤前"], post: ["#ffd60a", "盤後"], closed: ["#8e8e93", "收盤"], hol: ["#ff9f0a", "休市"], wknd: ["#8e8e93", "週末"] };
+const MK_R = { 台: "#64d2ff", 美: "#0a84ff", 歐: "#bf5af2", 英: "#5e5ce6", 日: "#ff375f", 中: "#ff453a", 港: "#ff9f0a", 韓: "#30b0c7", 德: "#ac8e68", 澳: "#32d74b", 加: "#ff6961", 紐: "#66d4cf", 瑞士: "#a2845e", 星: "#ff9f0a", 印: "#ffb340" };
+const _mkF = {};
+function tzParts(tz, t) {
+  const f = _mkF[tz] || (_mkF[tz] = new Intl.DateTimeFormat("en-US", { timeZone: tz, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", weekday: "short" }));
+  const o = {}; for (const p of f.formatToParts(new Date(t))) o[p.type] = p.value;
+  return { d: `${o.year}-${o.month}-${o.day}`, wd: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(o.weekday), m: (+o.hour % 24) * 60 + +o.minute };
+}
+function wallTs(tz, d, min) {   // 某時區的「某天幾點」→ 時間戳
+  const [y, mo, dd] = d.split("-").map(Number), g = Date.UTC(y, mo - 1, dd, Math.floor(min / 60), min % 60), p = tzParts(tz, g), [y2, m2, d2] = p.d.split("-").map(Number);
+  return g - (Date.UTC(y2, m2 - 1, d2, Math.floor(p.m / 60), p.m % 60) - g);
+}
+const hm = s => +s.slice(0, 2) * 60 + +s.slice(3, 5);
+const MK = () => P.mktcal || null;
+function mkHol() { const M = MK(); if (!M) return {}; if (M._h) return M._h; const h = {}; for (const x of M.hol || []) (h[x.ex] = h[x.ex] || {})[x.d] = x.n; return (M._h = h); }
+function mkStatus(x, now = Date.now()) {
+  const H = mkHol()[x.k] || {}, p = tzParts(x.tz, now), S = x.s.map(([a, b]) => [hm(a), hm(b)]), hol = H[p.d], wk = p.wd >= 1 && p.wd <= 5;
+  let nextOpen = null;
+  for (let i = 0; i < 12 && !nextOpen; i++) { const q = tzParts(x.tz, now + i * 864e5); if (q.wd < 1 || q.wd > 5 || H[q.d]) continue; const o = wallTs(x.tz, q.d, S[0][0]); if (o > now) nextOpen = o; }
+  if (wk && !hol) {
+    for (const [a, b] of S) if (p.m >= a && p.m < b) return { st: "open", until: wallTs(x.tz, p.d, b), nx: "收盤", loc: p };
+    if (p.m >= S[0][0] && p.m < S[S.length - 1][1]) { const n = S.find(([a]) => a > p.m); return { st: "lunch", until: wallTs(x.tz, p.d, n[0]), nx: "下午開盤", loc: p }; }
+    if (x.pre && p.m >= hm(x.pre) && p.m < S[0][0]) return { st: "pre", until: nextOpen, nx: "開盤", loc: p };
+    if (x.post && p.m >= S[S.length - 1][1] && p.m < hm(x.post)) return { st: "post", until: nextOpen, nx: "開盤", loc: p };
+  }
+  return { st: hol ? "hol" : wk ? "closed" : "wknd", why: hol || "", until: nextOpen, nx: "開盤", loc: p };
+}
+const tpeHM = ts => new Date(ts).toLocaleTimeString("zh-TW", { timeZone: "Asia/Taipei", hour: "2-digit", minute: "2-digit", hour12: false });
+const tpeDay = ts => tzParts("Asia/Taipei", ts).d;
+function inTxt(ms) { if (ms == null) return ""; const m = Math.max(0, Math.round(ms / 6e4)); return m < 60 ? `${m} 分` : m < 1440 ? `${Math.floor(m / 60)} 小時 ${m % 60} 分` : `${Math.floor(m / 1440)} 天 ${Math.floor((m % 1440) / 60)} 小時`; }
+function whenTxt(ts) {   // 「今晚 20:30」「明天 09:00」「週五 04:00」
+  const d = tpeDay(ts), today = tpeDay(Date.now()), tm = tpeDay(Date.now() + 864e5), h = tpeHM(ts), hh = +h.slice(0, 2);
+  if (d === today) return (hh >= 18 ? "今晚 " : hh < 6 ? "今天凌晨 " : "今天 ") + h;
+  if (d === tm) return (hh < 6 ? "明天凌晨 " : hh >= 18 ? "明晚 " : "明天 ") + h;
+  return `${WD[new Date(d + "T12:00:00+08:00").getDay()]} ${h}`;
+}
+const WD = ["週日", "週一", "週二", "週三", "週四", "週五", "週六"];
+const mdW = d => { const x = new Date(d + "T12:00:00+08:00"); return `${WD[x.getDay()]} ${x.getMonth() + 1}/${x.getDate()}`; };
+function mkItems() {
+  const M = MK();
+  if (M && M.items) return M.items;
+  return (((P.calendar || {}).items) || []).map(x => ({ d: x.date, t: null, r: x.region, n: x.label.replace(/^美國 /, ""), k: x.kind === "holiday" ? "holiday" : x.kind || "data", imp: x.kind === "holiday" ? 2 : 2, ap: x.approx }));
+}
+const mkPast = (x, now) => x.ts ? x.ts < now - 6e4 : x.d < tpeDay(now);
+function mkStrip(now) {
+  const rank = { open: 0, lunch: 1, pre: 1, post: 2, hol: 3, closed: 4, wknd: 4 };
+  const L = MKX.map(x => ({ x, s: mkStatus(x, now) })).sort((a, b) => rank[a.s.st] - rank[b.s.st] || (a.s.until || 0) - (b.s.until || 0));
+  return `<div class="mkx">${L.map(({ x, s }) => { const [c, l] = MK_ST[s.st];
+    const sub = s.st === "open" ? `剩 ${inTxt(s.until - now)}` : s.st === "lunch" ? `${tpeHM(s.until)} 開` : s.until ? (tpeDay(s.until) === tpeDay(now) ? `${tpeHM(s.until)} 開` : `${whenTxt(s.until).replace(/ \d\d:\d\d$/, "")} ${tpeHM(s.until)} 開`) : "";
+    return `<div class="mkx1 ${s.st}" title="${esc(x.c)}當地 ${String(Math.floor(s.loc.m / 60)).padStart(2, "0")}:${String(s.loc.m % 60).padStart(2, "0")}${s.why ? "・" + esc(s.why) : ""}"><i style="background:${c}"></i><b>${x.n}</b><span>${l}</span><em>${sub}</em></div>`; }).join("")}</div>`;
+}
+function mkRow(x, now) {
+  const past = mkPast(x, now), soon = x.ts && !past && x.ts - now < 6 * 36e5;
+  const meta = [];
+  if (x.k === "holiday") meta.push("交易所休市"); else if (x.k === "bank") meta.push("外匯市場清淡");
+  if (x.pv || x.fc) meta.push(`前值 ${esc(String(x.pv || "—").split("|")[0])}`, `預測 ${esc(x.fc || "—")}`);
+  if (x.k === "conf" && x.ind) meta.push(esc(x.ind));
+  if (x.k === "ipo" && x.px) meta.push(`承銷價 ${x.px}`);
+  if (x.k === "expiry") meta.push("結算日：留意尾盤波動");
+  if (soon) meta.push(`<em data-ts="${x.ts}">${inTxt(x.ts - now)}後</em>`);
+  const tag = x.k === "holiday" ? "休市" : x.k === "cb" ? "央行" : x.k === "expiry" ? "結算" : x.k === "conf" ? "法說" : x.k === "ipo" ? "新股" : x.k === "speech" ? "談話" : x.k === "auction" ? "標售" : "";
+  return `<li class="mk${past ? " past" : ""}${soon ? " soon" : ""} i${x.imp}"><span class="mt">${x.t || "全天"}</span><span class="mr" style="--c:${MK_R[x.r] || "#8e8e93"}">${esc(x.r)}</span><span class="mn"><b>${esc(x.n)}</b>${x.ap ? `<i class="ap">約</i>` : ""}${tag ? `<i class="tg t-${x.k}">${tag}</i>` : ""}${meta.length ? `<small>${meta.join("　")}</small>` : ""}</span><span class="mi" aria-label="重要性 ${x.imp}">${"<b></b>".repeat(x.imp)}${"<s></s>".repeat(3 - x.imp)}</span></li>`;
+}
+const MKS = { tab: null, all: false };
+function mkList(now = Date.now()) {
+  const today = tpeDay(now), wd = new Date(today + "T12:00:00+08:00").getDay(), toSun = (7 - wd) % 7;
+  const addD = (d, n) => tpeDay(new Date(d + "T12:00:00+08:00").getTime() + n * 864e5);
+  const wkEnd = addD(today, toSun), nwS = addD(wkEnd, 1), nwE = addD(wkEnd, 7);
+  let xs = mkItems();
+  const T = MKS.tab;
+  if (T === "today") xs = xs.filter(x => x.d === today);
+  else if (T === "week") xs = xs.filter(x => x.d >= today && x.d <= wkEnd);
+  else if (T === "next") xs = xs.filter(x => x.d >= nwS && x.d <= nwE);
+  else if (T === "hol") xs = xs.filter(x => x.k === "holiday" || x.k === "bank");
+  else if (T === "tw") xs = xs.filter(x => x.r === "台");
+  if (!MKS.all && T !== "hol" && T !== "tw") xs = xs.filter(x => x.imp >= 2 || x.k === "holiday");
+  if (T === "hol") { const H = (MK() || {}).hol || []; xs = H.map(h => ({ d: h.d, t: null, r: h.r, n: `${h.m}休市：${h.n}`, k: "holiday", imp: h.ex === "TWSE" || h.ex === "XNYS" ? 2 : 1 })); }
+  if (!xs.length) return `<p class="empty">${T === "today" ? "今天沒有重要的公布，看看「本週」。" : "這段時間沒有排定的項目。"}</p>`;
+  let out = "", last = "";
+  for (const x of xs.slice(0, 80)) { if (x.d !== last) { last = x.d; out += `<li class="mkd${x.d === today ? " now" : ""}">${x.d === today ? "今天　" : ""}${mdW(x.d)}</li>`; } out += mkRow(x, now); }
+  return `<ul class="mkl">${out}</ul>`;
+}
+function mkCardBody(now = Date.now()) {
+  const tabs = [["today", "今天"], ["week", "本週"], ["next", "下週"], ["hol", "休市"], ["tw", "台股"]];
+  return `${mkStrip(now)}<div class="mkt" role="tablist">${tabs.map(([k, l]) => `<button data-mkt="${k}" class="${MKS.tab === k ? "on" : ""}">${l}</button>`).join("")}</div>
+    <label class="mka"><input type="checkbox" data-mka ${MKS.all ? "checked" : ""}> 顯示次要項目</label><div id="mkList">${mkList(now)}</div>
+    <p class="why">時間都是台北時間。●●● 是對市場的影響程度（高／中／低）；「約」是依往例推估的日期，以官方公告為準。</p>`;
+}
+function mkNext(now) {
+  const xs = mkItems().filter(x => x.ts && x.ts > now && x.k !== "holiday");
+  return xs.find(x => x.imp >= 3) || xs.find(x => x.imp >= 2) || null;
+}
+function mkCard() {
+  const now = Date.now(), M = MK(), nx = mkNext(now);
+  if (!MKS.tab) { const t = tpeDay(now); MKS.tab = mkItems().filter(x => x.d === t && x.imp >= 2 && !mkPast(x, now)).length >= 2 ? "today" : "week"; }
+  return { layer: "gx", gx: "clock", html: sideHTML({ eyebrow: `市場 · 行事曆 · 台北 ${tpeHM(now)}`, title: "接下來市場要等什麼？",
+    big: nx ? `${nx.r === "台" ? "" : nx.r + " "}${nx.n}` : "這週沒有排定的重點", color: "#64d2ff",
+    body: (nx ? `<p class="mkn">${whenTxt(nx.ts)}<em data-ts="${nx.ts}">還有 ${inTxt(nx.ts - now)}</em>${nx.fc ? `<span>預測 ${esc(nx.fc)}・前值 ${esc(String(nx.pv || "—").split("|")[0])}</span>` : ""}</p>` : "") +
+      `<div id="mkBody">${mkCardBody(now)}</div>` + (M ? "" : `<p class="empty">完整行事曆（時間、前值、預測、各國休市）下一輪資料更新後出現；目前先列主要日期。</p>`) }) };
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("[data-mkt]"); if (!b) return;
+  MKS.tab = b.dataset.mkt; const box = $("mkBody"); if (box) box.innerHTML = mkCardBody();
+});
+document.addEventListener("change", e => { if (!e.target.matches || !e.target.matches("[data-mka]")) return; MKS.all = e.target.checked; const l = $("mkList"); if (l) l.innerHTML = mkList(); });
+// 倒數每 20 秒更新一次；交易所狀態每分鐘重畫
+setInterval(() => {
+  const now = Date.now();
+  document.querySelectorAll("#side [data-ts]").forEach(el => { const ts = +el.dataset.ts, pre = /^還有/.test(el.textContent) ? "還有 " : "", suf = /後$/.test(el.textContent) ? "後" : ""; el.textContent = ts > now ? pre + inTxt(ts - now) + suf : "已公布"; });
+  const sx = document.querySelector("#side .mkx"); if (sx && (!mkCard.t || now - mkCard.t > 6e4)) { mkCard.t = now; sx.outerHTML = mkStrip(now); }
+}, 20000);
+// 地球：太陽直射點（晨昏線）
+function sunLL(t = Date.now()) {
+  const d = new Date(t), N = (Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()) - Date.UTC(d.getUTCFullYear(), 0, 0)) / 864e5;
+  const dec = -23.44 * Math.cos(2 * Math.PI / 365 * (N + 10)), h = d.getUTCHours() + d.getUTCMinutes() / 60;
+  return [((12 - h) * 15 + 540) % 360 - 180, dec];
+}
+// 上方列：主要市場開收盤一眼看（點了打開行事曆）
+function mkBar() {
+  let el = $("mkbar"); const ck = $("clock"); if (!ck) return;
+  if (!el) { el = document.createElement("button"); el.id = "mkbar"; el.type = "button"; el.setAttribute("aria-label", "主要市場開收盤，點開市場行事曆"); ck.parentNode.insertBefore(el, ck);
+    el.addEventListener("click", () => { const seg = [...document.querySelectorAll("#dock2 .seg button")].find(b => b.textContent === "市場"); if (seg) seg.click();
+      setTimeout(() => { const c = [...document.querySelectorAll("#chips button")].find(b => b.textContent.trim() === "行事曆"); if (c) c.click(); }, 80); }); }
+  const now = Date.now();
+  el.innerHTML = ["TWSE", "XJPX", "XHKG", "XLON", "XNYS"].map(k => { const x = MKX.find(m => m.k === k), s = mkStatus(x, now);
+    return `<span class="${s.st}" title="${x.n} ${MK_ST[s.st][1]}${s.why ? "・" + esc(s.why) : ""}"><i style="background:${MK_ST[s.st][0]}"></i>${x.n.slice(0, 1)}</span>`; }).join("");
+}
+setTimeout(mkBar, 1500); setInterval(mkBar, 60000);
+
 /* ---- 地球場景：在台灣沒有地點、但在世界上有地點的資訊 ----
    全球股市、匯率、原物料、精品、美元流動性、AI 快線、法人：從各地拉一條弧線到台灣。
    顏色＝漲跌（綠漲紅跌），粗細＝幅度，光點流動的方向＝錢或貨往哪裡走。 */
@@ -2777,6 +3012,11 @@ const GX_SPEC = {
       why: "近期有動作的 AI 公司總部；線連回台灣，因為它們的晶片和伺服器大多在台灣做。",
       extra: listHTML(Object.values(by).flatMap(({ c, xs }) => xs.slice(0, 2).map(x => ({ t: x.title, s: `${c[0]}・${x.source}`, url: x.url }))).slice(0, 8)) };
   },
+  clock() {
+    const now = Date.now();
+    return { mode: "clock", lookLL: [112, 26], alt: 21000, title: "市場時鐘", eyebrow: "市場 · 各交易所",
+      nodes: MKX.map(x => { const s = mkStatus(x, now); return { name: x.c, ll: x.ll, x, s }; }), why: "" };
+  },
   inst() {
     const I = ((((P.tw_market || {}).institutions) || {}).items || []), f = I.find(x => /外資/.test(x.name)) || {};
     return { look: [170, 35], alt: 15000, dir: (f.net || 0) >= 0 ? "in" : "out", title: "三大法人買賣超", eyebrow: "市場 · 外資的錢流進還是流出",
@@ -2786,6 +3026,7 @@ const GX_SPEC = {
   },
 };
 function gxCard(key) {
+  if (key === "clock") return mkCard();
   let s = null; try { s = GX_SPEC[key](); } catch (e) { console.warn(e); }
   if (!s) return { html: sideHTML({ title: "地球", body: '<p class="empty">資料暫時讀不到</p>' }) };
   const rows = s.nodes.slice().sort((a, b) => Math.abs(b.chg ?? 0) - Math.abs(a.chg ?? 0));
@@ -2795,6 +3036,7 @@ function gxBuild() {
   if (GX.g) { SG.remove(GX.g); GX.g.traverse(o => { o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); }); }
   GX.g = new THREE.Group(); GX.flows = []; GX.lbls = []; SG.add(GX.g);
   const s = GX.spec; if (!s || !GLOBE) return;
+  if (s.mode === "clock") { gxClock(); return; }
   s.nodes.forEach((n, i) => {
     if (!n.ll) return;
     const pts = s.dir === "out" ? GLOBE.arc(TW_LL, n.ll, 0.05, 90) : GLOBE.arc(n.ll, TW_LL, 0.05, 90), col = gxCol(n.chg);
@@ -2811,8 +3053,31 @@ function gxBuild() {
   const tw = new THREE.Mesh(new THREE.SphereGeometry(55, 16, 12), fm(new THREE.MeshBasicMaterial({ color: 0xffffff }), 1)); tw.position.copy(GLOBE.G(TW_LL[0], TW_LL[1], 40)); GX.g.add(tw);
   addLabel(`<span class="gxl tw"><b>台灣</b></span>`, GLOBE.G(TW_LL[0], TW_LL[1], 300), "gx", "gx", 9);
 }
+function gxClock() {
+  clearLabels("gx"); GX.lbls = []; GX.rings = [];
+  const now = Date.now();
+  for (const x of MKX) {
+    const st = mkStatus(x, now), col = new THREE.Color(MK_ST[st.st][0]), on = st.st === "open";
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(on ? 70 : 48, 16, 12), fm(new THREE.MeshBasicMaterial({ color: col, depthTest: true }), 1));
+    dot.position.copy(GLOBE.G(x.ll[0], x.ll[1], 30)); GX.g.add(dot);
+    if (on || st.st === "lunch" || st.st === "pre" || st.st === "post") {   // 開著的市場：一圈一圈往外擴散的光環
+      const n = GLOBE.G(x.ll[0], x.ll[1], 0).sub(_gxC).normalize();
+      for (let i = 0; i < 2; i++) { const r = new THREE.Mesh(new THREE.RingGeometry(0.82, 1, 48), fm(new THREE.MeshBasicMaterial({ color: col, transparent: true, depthTest: true, depthWrite: false, side: THREE.DoubleSide }), 0.6));
+        r.position.copy(GLOBE.G(x.ll[0], x.ll[1], 35)); r.lookAt(r.position.clone().add(n)); GX.g.add(r); GX.rings.push({ r, ph: i * 0.5, sp: on ? 0.5 : 0.25 }); }
+    }
+    const lt = `${String(Math.floor(st.loc.m / 60)).padStart(2, "0")}:${String(st.loc.m % 60).padStart(2, "0")}`;
+    const sub = st.st === "open" ? `剩 ${inTxt(st.until - now)}` : st.until ? `${whenTxt(st.until).replace(/^今天 /, "")} 開` : "";
+    GX.lbls.push([addLabel(`<span class="gxl mkg ${st.st}"><b>${esc(x.n)}</b><em style="color:${MK_ST[st.st][0]}">${MK_ST[st.st][1]}${st.why ? "・" + esc(st.why).slice(0, 8) : ""}</em><small>${esc(x.c)} ${lt}${sub ? "・台北 " + sub : ""}</small></span>`, GLOBE.G(x.ll[0], x.ll[1], 300), "gx", "gx", on ? 6 : 3), GLOBE.G(x.ll[0], x.ll[1], 0)]);
+  }
+  GX.clockAt = now;
+}
 const _gxC = V(0, -6371, 0), _gxA = V(0, 0, 0), _gxB = V(0, 0, 0);
 function gxTick(T) {
+  if (GX.spec && GX.spec.mode === "clock") {
+    for (const o of GX.rings || []) { const u = (T * o.sp + o.ph) % 1; o.r.scale.setScalar(90 + 520 * u); o.r.material.opacity = 0.55 * (1 - u); }
+    if (GLOBE.mat) { const [lo, la] = sunLL(); GLOBE.mat.uniforms.uSunN.value.copy(GLOBE.G(lo, la, 0).sub(_gxC).normalize()); }
+    if (Date.now() - (GX.clockAt || 0) > 30000) { GX.g.traverse(o => { o.geometry && o.geometry.dispose(); }); GX.g.clear(); gxClock(); }   // 每 30 秒重新判斷開收盤
+  }
   for (const [L, p] of GX.lbls || []) { _gxA.copy(p).sub(_gxC); _gxB.copy(camera.position).sub(p); L.hide = _gxA.dot(_gxB) < 0; }   // 在地球背面的標籤先藏起來
   for (const f of GX.flows) { const a = f.P.geometry.attributes.position, N = a.count;
     for (let i = 0; i < N; i++) { const u = (i / N + T * f.sp + f.off) % 1, v = arcAt(f.pts, u); a.setXYZ(i, v.x, v.y, v.z); }
@@ -2825,8 +3090,10 @@ layers.gx = {
     ST.globeForce = true; document.body.classList.add("fl-on");
     // 鏡頭對準「台灣＋各節點」的中間，讓弧線大多在畫面裡
     const C = V(0, -6371, 0), look = GLOBE.G(TW_LL[0], TW_LL[1], 0).sub(C).normalize().multiplyScalar(2.5);
-    for (const n of (GX.spec && GX.spec.nodes) || []) if (n.ll) look.add(GLOBE.G(n.ll[0], n.ll[1], 0).sub(C).normalize());
+    if (GX.spec && GX.spec.lookLL) look.copy(GLOBE.G(GX.spec.lookLL[0], GX.spec.lookLL[1], 0).sub(C));
+    else for (const n of (GX.spec && GX.spec.nodes) || []) if (n.ll) look.add(GLOBE.G(n.ll[0], n.ll[1], 0).sub(C).normalize());
     look.normalize();
+    if (GLOBE.mat) GLOBE.mat.uniforms.uTerm.value = GX.spec && GX.spec.mode === "clock" ? 1 : 0;
     controls.enabled = false; controls.autoRotate = false; GD.on = true; GD.vx = GD.vy = 0;
     controls.minDistance = 0; controls.maxDistance = Infinity; controls.minPolarAngle = 0; controls.maxPolarAngle = Math.PI;
     camera.up.copy(gdAxis()); camera.near = 20; camera.far = 300000; camera.updateProjectionMatrix();
@@ -2834,7 +3101,7 @@ layers.gx = {
     gxBuild(); GX.g.visible = true;
   },
   off() {
-    clearLabels("gx"); if (GX.g) GX.g.visible = false;
+    clearLabels("gx"); if (GX.g) GX.g.visible = false; if (GLOBE && GLOBE.mat) GLOBE.mat.uniforms.uTerm.value = 0;
     ST.globeForce = false; document.body.classList.remove("fl-on");
     GD.on = false; GD.ptrs.clear(); camera.up.set(0, 1, 0); controls.enabled = ST.explore; controls.minDistance = 0.25; controls.maxPolarAngle = Math.PI * 0.46;
     if (ST.explore) { controls.maxDistance = 1600; camera.near = 1; camera.updateProjectionMatrix(); flyTo(ISLAND.pos, ISLAND.tgt, 1.8); }
@@ -2859,13 +3126,17 @@ function buildEarth() {
   for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) { const a = j * (NX + 1) + i, b = a + 1, c = a + NX + 1, d = c + 1; idx.push(a, c, b, b, c, d); }
   const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(idx);
   const L = new THREE.TextureLoader(), sfx = MOBILE ? "_m" : "", tex = n => { const t = L.load(`earth_${n}${sfx}.jpg?v=${ASSET_V}`); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; };
-  EARTH.mat = new THREE.ShaderMaterial({ transparent: true, uniforms: { uDay: { value: tex("day") }, uNightT: { value: tex("night") }, uSun: { value: earthSunDir() }, uC: { value: V(0, -6371, 0) }, uOp: { value: 1 } },
+  EARTH.mat = new THREE.ShaderMaterial({ transparent: true, uniforms: { uDay: { value: tex("day") }, uNightT: { value: tex("night") }, uSun: { value: earthSunDir() }, uC: { value: V(0, -6371, 0) }, uOp: { value: 1 }, uGlass: { value: GLASS ? 1 : 0 } },
     vertexShader: "varying vec2 vUv; varying vec3 vN; varying vec3 vW; uniform vec3 uC; void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vN = normalize(w.xyz - uC); gl_Position = projectionMatrix * viewMatrix * w; }",
-    fragmentShader: `uniform sampler2D uDay; uniform sampler2D uNightT; uniform vec3 uSun; uniform float uOp; varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+    fragmentShader: `uniform sampler2D uDay; uniform sampler2D uNightT; uniform vec3 uSun; uniform float uOp; uniform float uGlass; varying vec2 vUv; varying vec3 vN; varying vec3 vW;
       void main(){ float d = dot(vN, uSun), dayK = smoothstep(-0.12, 0.18, d);
         vec3 day = texture2D(uDay, vUv).rgb, nt = texture2D(uNightT, vUv).rgb;
         vec3 v = normalize(cameraPosition - vW); float rim = pow(1.0 - max(dot(v, vN), 0.0), 3.0);
         vec3 c = day * (0.25 + 0.95 * max(d, 0.0)) * dayK + pow(nt, vec3(1.6)) * vec3(1.0, 0.78, 0.5) * 1.6 * (1.0 - dayK);
+        if (uGlass > 0.5) {   // 玻璃風：跟資料用的地球同一套顏色（陸地霧面灰藍、海深藍），晨昏線讓夜晚那一半暗一點
+          float l = dot(day, vec3(0.299, 0.587, 0.114)), ocean = smoothstep(1.15, 1.7, day.b / (max(day.r, day.g) + 0.002)) * (1.0 - smoothstep(0.06, 0.16, l));
+          vec3 land = mix(vec3(0.34, 0.40, 0.50), vec3(0.62, 0.68, 0.78), smoothstep(0.08, 0.55, l)), sea = vec3(0.07, 0.12, 0.22);
+          c = mix(land, sea, ocean) * (0.45 + 0.55 * dayK); }
         c += vec3(0.3, 0.55, 1.0) * rim * (0.25 + 0.6 * dayK);                       // 邊緣的大氣
         float spec = pow(max(dot(reflect(-uSun, vN), v), 0.0), 220.0) * dayK * step(day.g * 1.05, day.b) * step(day.r * 1.2, day.b); c += vec3(1.0, 0.95, 0.85) * spec * 0.22;   // 海面反光
         gl_FragColor = vec4(c, uOp); }` });
@@ -2927,7 +3198,7 @@ function countySeverity() {
   for (const [k, n] of Object.entries(ev)) add(COUNTIES.find(c => c.name === k), Math.min(2, n * 0.5), `路況事件 ${n} 起`);
   return S;
 }
-function navClear() { while (NAV.g.children.length) { const o = NAV.g.children.pop(); o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); } clearLabels("nav"); }
+function navClear() { FATM.length = 0; while (NAV.g.children.length) { const o = NAV.g.children.pop(); o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); } clearLabels("nav"); }
 function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo, la, lift)); const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: op, depthTest: false })); l.renderOrder = 8; l.userData.key = NAV._tag || null; l.userData.op = op; NAV.g.add(l); return l; }
 const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="background:${dot}"></i>` : ""}<b>${esc(name)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`;
 // ---- 視角：下方選的分類決定地圖「看什麼」，拉近拉遠決定「看多細」 ----
@@ -3004,13 +3275,13 @@ const trSlow = x => x.s != null && (x.k === "fw" ? x.s < 40 : x.s < 20);   // �
 const trCol = x => x.s == null ? 0x636366 : x.k === "fw" ? (x.s >= 80 ? 0x30d158 : x.s >= 50 ? 0xffd60a : 0xff453a) : (x.s >= 50 ? 0x30d158 : x.s >= 25 ? 0xffd60a : 0xff453a);
 const trName = x => x.n.replace(/^國道/, "國").replace(/\s+/g, " ");
 const trEvents = f => (((P.roads || {}).events) || []).filter(e => e.ll && f(e));
-function trDraw(segs, lift) {   // 省道依車速上色（國道由車流圖層的流動光點負責）
-  const pos = [], col = [], C = new THREE.Color();
-  for (const x of segs) { if (x.k !== "thb") continue; C.setHex(trCol(x));
-    for (let k = 0; k + 3 < x.flat.length; k += 2) { const a = gp(x.flat[k] / 1e4, x.flat[k + 1] / 1e4, lift), b = gp(x.flat[k + 2] / 1e4, x.flat[k + 3] / 1e4, lift); pos.push(a.x, a.y, a.z, b.x, b.y, b.z); col.push(C.r, C.g, C.b, C.r, C.g, C.b); } }
-  if (!pos.length) return;
-  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
-  const l = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.9, depthTest: false })); l.renderOrder = 8; NAV.g.add(l);
+function trDraw(segs, lift) {   // 國道（粗）、省道（細）依車速上色：綠順、黃車多、紅塞；粗線遠看近看都清楚
+  for (const kind of ["thb", "fw"]) {
+    const pos = [], col = [], C = new THREE.Color();
+    for (const x of segs) { if (x.k !== kind || x.s == null) continue; C.setHex(trCol(x));
+      for (let k = 0; k + 3 < x.flat.length; k += 2) { const a = gp(x.flat[k] / 1e4, x.flat[k + 1] / 1e4, lift), b = gp(x.flat[k + 2] / 1e4, x.flat[k + 3] / 1e4, lift); pos.push(a.x, a.y, a.z, b.x, b.y, b.z); col.push(C.r, C.g, C.b, C.r, C.g, C.b); } }
+    if (pos.length) NAV.g.add(fatSegs(pos, col, kind === "fw" ? (MOBILE ? 4 : 5) : (MOBILE ? 2.5 : 3), 0.95));
+  }
 }
 const trStats = segs => { const f = segs.filter(x => x.k === "fw" && x.s != null), t = segs.filter(x => x.k === "thb" && x.s != null);
   return { fwN: f.length, fwAvg: f.length ? Math.round(f.reduce((a, x) => a + x.s, 0) / f.length) : null, fwSlow: f.filter(trSlow), thbN: t.length, thbSlow: t.filter(trSlow) }; };
@@ -3025,9 +3296,7 @@ const vdCol = v => v >= 40 ? 0x30d158 : v >= 20 ? 0xffd60a : 0xff453a;
 function vdDraw(segs, lift) {
   const pos = [], col = [], C = new THREE.Color();
   for (const x of segs) { C.setHex(vdCol(x[4])); const a = gp(x[0], x[1], lift), b = gp(x[2], x[3], lift); pos.push(a.x, a.y, a.z, b.x, b.y, b.z); col.push(C.r, C.g, C.b, C.r, C.g, C.b); }
-  if (!pos.length) return;
-  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
-  const l = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.95, depthTest: false })); l.renderOrder = 8; NAV.g.add(l);
+  if (pos.length) NAV.g.add(fatSegs(pos, col, MOBILE ? 2.5 : 3.5, 0.95));
 }
 const camName = c => String(c[3] || (c[2] === "fw" ? "國道" : "省道")).replace(/ S /, " 南向 ").replace(/ N /, " 北向 ").replace(/ E /, " 東向 ").replace(/ W /, " 西向 ");
 const camHTML = list => list.length ? `<div class="nvh">附近的公路攝影機（${list.length}）</div><ul class="lst nvl cams">${list.slice(0, 6).map(({ c, d }) => `<li><button class="cam" ${camAttrs(c)}>▶ ${esc(camName(c))}</button><span>${c[2] === "fw" ? "國道" : "省道"}・${dist(d)}</span></li>`).join("")}</ul>` : "";
@@ -3131,6 +3400,7 @@ const TW_VIEW = {
   },
   traffic() {
     const S = trSegs(), by = {};
+    trDraw(S.filter(x => x.k === "fw"), 1.2);   // 全台看國道：粗線依車速上色
     for (const x of S) if (x.c) (by[x.c] = by[x.c] || []).push(x);
     const ev = {}; for (const e of trEvents(() => true)) { const c = countyAt(e.ll[0], e.ll[1]); if (c) ev[c.name] = (ev[c.name] || 0) + 1; }
     const rows = COUNTIES.map(c => { const st = trStats(by[c.name] || []), sc = st.fwSlow.length * 2 + st.thbSlow.length + (ev[c.name] || 0); return { c, st, ev: ev[c.name] || 0, sc }; }).sort((a, b) => b.sc - a.sc);
@@ -3479,6 +3749,8 @@ function navTick(dt) {
     showSide(sideHTML(o) + provHTML("lens:" + NAV.lens), null);
   }
   NAV.veilHot = 0; setTimeout(navDefaultFocus, 60);
+  if (!NAV.mo) { NAV.mo = new MutationObserver(() => { clearTimeout(NAV._dfT); NAV._dfT = setTimeout(() => { if (!NAV.veilHot && NAV.level >= 0) navDefaultFocus(); }, 40); });
+    NAV.mo.observe($("side"), { childList: true, subtree: true }); }   // 卡片換完內容才決定前三名（卡片有淡入動畫，60ms 時可能還是舊清單）
   navCrumb();
 }
 // 飛到某一層：縣市或行政區整個放進畫面
@@ -3623,6 +3895,46 @@ CAM.timer = setInterval(() => {
   back.src = camURL(c[4]);
 }, 6000);
 
+/* ---- 玻璃風（B）：整套地圖一致的霧面灰藍，資料用系統色疊在上面 ----
+   地形：依高度由霧灰藍到淺灰藍；海：深藍；建物：霧面白玻璃量體（屋頂最亮、牆面隨日照）；道路：淡淡的淺灰線。
+   沒有衛星照片、窗戶貼圖、招牌、夜光，小車也收起來，讓畫面只剩「地形＋資料」。 */
+if (GLASS) {
+  const glassBuild = mat => { const ob = mat.onBeforeCompile; mat.onBeforeCompile = sh => { ob && ob(sh);
+    const side = /varying float vSide;/.test(sh.fragmentShader);
+    // 要在光照材質讀取 diffuseColor 之前改（lights_physical_fragment 會先把顏色存起來）
+    sh.fragmentShader = sh.fragmentShader.replace("#include <lights_physical_fragment>",
+      `diffuseColor.rgb = ${side ? "mix(vec3(0.84, 0.87, 0.92), vec3(0.62, 0.67, 0.75), vSide)" : "vec3(0.80, 0.84, 0.90)"} * mix(1.0, 0.42, uNight);\n#include <lights_physical_fragment>`)
+      .replace("#include <lights_fragment_begin>", "totalEmissiveRadiance = vec3(0.0);\n#include <lights_fragment_begin>"); };
+    const ck = mat.customProgramCacheKey && mat.customProgramCacheKey.bind(mat); mat.customProgramCacheKey = () => "glass-" + (ck ? ck() : mat.uuid); mat.needsUpdate = true; };
+  glassBuild(pMat); glassBuild(bMat);
+  // 道路：淺灰細線，晚上不發光
+  { const ob = rMat.onBeforeCompile; rMat.onBeforeCompile = sh => { ob && ob(sh);
+      sh.fragmentShader = sh.fragmentShader.replace("#include <lights_lambert_fragment>", "diffuseColor.rgb = vec3(0.80, 0.83, 0.88) * mix(1.0, 0.5, uNight);\n#include <lights_lambert_fragment>").replace("#include <lights_fragment_begin>", "totalEmissiveRadiance = vec3(0.0);\n#include <lights_fragment_begin>"); };
+    rMat.customProgramCacheKey = () => "glass-road"; rMat.opacity = 0.55; rMat.transparent = true; rMat.needsUpdate = true; }
+  // 河與公園：河是深藍、公園只比地面淡一點的灰綠（不跟車流的綠搶）
+  { const ob = aMat.onBeforeCompile; aMat.onBeforeCompile = sh => { ob && ob(sh);
+      sh.fragmentShader = sh.fragmentShader.replace("#include <lights_physical_fragment>", "diffuseColor.rgb = mix(vec3(0.44, 0.50, 0.52), vec3(0.11, 0.19, 0.31), isW) * mix(1.0, 0.45, uNight);\n#include <lights_physical_fragment>")
+        .replace("#include <lights_fragment_begin>", "totalEmissiveRadiance = vec3(0.0);\n#include <lights_fragment_begin>"); };
+    aMat.customProgramCacheKey = () => "glass-area"; aMat.needsUpdate = true; }
+  // 天空與遠處霧：中性的深灰藍，不再是藍天和橘色光害
+  queueMicrotask(() => {   // 天空和霧的程式在這段之後才定義，等整支程式跑完再改
+  HAZE_DAY.setRGB(0.20, 0.24, 0.31); HAZE_NIGHT.setRGB(0.06, 0.08, 0.12);
+  SKY.material.fragmentShader = `uniform vec3 uSun; uniform float uNight; uniform float uVis; varying vec3 vD;
+    void main(){ vec3 d = normalize(vD); float h = clamp(d.y, 0.0, 1.0);
+      vec3 c = mix(mix(vec3(0.24, 0.28, 0.36), vec3(0.07, 0.09, 0.13), pow(h, 0.5)), mix(vec3(0.08, 0.10, 0.15), vec3(0.015, 0.02, 0.035), pow(h, 0.5)), uNight);
+      gl_FragColor = vec4(c, uVis); }`;
+  SKY.material.needsUpdate = true; });
+}
+// 粗線：螢幕上固定幾個像素寬，遠看近看都清楚（取代 1 像素的細線）
+const FATM = [];
+function fatSegs(pos, col, px, op = 1) {
+  const g = new LineSegmentsGeometry(); g.setPositions(pos); g.setColors(col);
+  const m = new LineMaterial({ vertexColors: true, linewidth: px, transparent: true, opacity: op, depthTest: false, worldUnits: false });
+  m.resolution.set(innerWidth, VH()); FATM.push(m);
+  const l = new LineSegments2(g, m); l.renderOrder = 8; l.frustumCulled = false; return l;
+}
+addEventListener("resize", () => { for (let i = FATM.length - 1; i >= 0; i--) { if (!FATM[i].userData.gone) FATM[i].resolution.set(innerWidth, VH()); } });
+
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
 let composer = null, bloom = null;
@@ -3745,7 +4057,7 @@ const SKY = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), new THREE.Shader
       vec3 c = mix(dayC, nightC, uNight); if (h < 0.0) c = mix(c, c * 0.7, -h * 5.0);
       gl_FragColor = vec4(c, uVis); }` }));
 SKY.renderOrder = -100; SKY.frustumCulled = false; scene.add(SKY); window.__SKY = SKY;
-const HAZE_DAY = new THREE.Color(0.74, 0.8, 0.87), HAZE_NIGHT = new THREE.Color(0.13, 0.085, 0.06), _hz = new THREE.Color(), _blk = new THREE.Color(0, 0, 0);
+const _gcl = new THREE.Color(), HAZE_DAY = new THREE.Color(0.74, 0.8, 0.87), HAZE_NIGHT = new THREE.Color(0.13, 0.085, 0.06), _hz = new THREE.Color(), _blk = new THREE.Color(0, 0, 0);
 window.__sun = sun; window.__rend = renderer; let _shT = 0; const _shLast = new THREE.Vector3(1e9, 0, 0);
 function lightTick(dt) {
   const close = uni.uClose.value, t = controls.target, cd = camera.position.distanceTo(t), globe = !!ST.globeForce;
@@ -3755,7 +4067,9 @@ function lightTick(dt) {
   const k = (globe || ST.earthOn || (scene.fog !== FOG)) ? 0 : Math.min(1, Math.max(0, (close - 0.25) / 0.45)) * stable;
   SKY.visible = k > 0.01; SKY.material.uniforms.uVis.value = k; SKY.position.copy(camera.position); SKY.scale.setScalar(camera.far * 0.9);
   if (scene.fog === FOG) { _hz.copy(HAZE_DAY).lerp(HAZE_NIGHT, uni.uNight.value);
-    FOG.color.copy(_blk).lerp(_hz, k); FOG.near = 1100 + (cd * 1.6 + 1.5 - 1100) * k; FOG.far = 2800 + (cd * 7 + 14 - 2800) * k; }
+    FOG.color.copy(_blk).lerp(_hz, k); FOG.near = 1100 + (cd * 1.6 + 1.5 - 1100) * k; FOG.far = 2800 + (cd * 7 + 14 - 2800) * k;
+    if (GLASS) { FOG.near = 1100 + (cd * 3.2 + 3 - 1100) * k; FOG.far = 2800 + (cd * 16 + 30 - 2800) * k; } }
+  if (GLASS) { const kk = (globe || ST.earthOn) ? 0 : Math.min(1, Math.max(0, (close - 0.04) / 0.3)); _hz.copy(HAZE_DAY).lerp(HAZE_NIGHT, uni.uNight.value); renderer.setClearColor(_gcl.copy(_blk).lerp(_hz, kk), 1); }
   // 太陽陰影：白天、拉近時開；陰影範圍跟著鏡頭，鏡頭移動才重算
   if (!SHADOWS) return;
   const on = QUAL.sh && close > 0.35 && !uni.uNight.value && !globe;
