@@ -42,6 +42,7 @@ STATIC = {
     "thb_cctv2": "https://cctv-maintain.thb.gov.tw/opendataCCTVs.xml",   # 省道攝影機（公路局）
 }
 
+T_START = time.time()
 TPE = timezone(timedelta(hours=8))
 NOW = datetime.now(TPE)
 NOW_ISO = NOW.replace(microsecond=0).isoformat()
@@ -246,6 +247,72 @@ def gtrends(state):
     log("gtrends", len(todo), "tried", ok, "ok", len(kwd), "have")
 
 
+# ---------- 官方統計（主計總處、交通部）：這些網站擋 GitHub／海外 IP，改在台灣抓。一天一次，失敗 6 小時後再試 ----------
+DG = "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sdmx/"
+DG_META = ["A030101015", "A030102015", "A030103015", "A030201015", "A030202015", "A030301015", "A040101010", "A040101020", "A040102010",
+           "A018101010", "A018102010", "A018102080", "A018201010"]
+
+
+def stats_jobs():
+    y = NOW.year
+    cats = "+".join(str(i) for i in range(1, 82))
+    jobs = {
+        "dg_cpi_basic": DG + f"A030101015/{cats}.M&startTime={y - 2}-01&endTime={y}-12",
+        "dg_cpi_basic_m": DG + f"A030101015/{cats}.M&startTime={y - 2}-M1&endTime={y}-M12",   # 文件裡兩種時間寫法都有，兩種都試
+        "dg_menu": "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sys=100&funid=dgmaine",
+        "motc_menu": "https://stat.motc.gov.tw/mocdb/stmain.jsp?sys=100",
+    }
+    for f in DG_META:
+        jobs["dg_meta_" + f] = DG + f + "/all"
+    return jobs
+
+
+def stats_daily(state, errs):
+    at = state.setdefault("stats_at", {})
+    summ = state.setdefault("stats_summary", {})
+    changed = False
+    for k, u in stats_jobs().items():
+        if time.time() - at.get(k, 0) < 86400:
+            continue
+        if time.time() - T_START > 120:   # Cloud Run 一次最多 240 秒：剩下的留到下一輪（15 分鐘後）
+            break
+        rec = {"at": NOW_ISO, "url": u}
+        try:
+            b = get(u, 90)
+            txt = b.decode("utf-8-sig", "replace")
+            rec["len"] = len(b)
+            try:
+                js = json.loads(txt)
+                rec["kind"] = "json"
+                st = (js.get("data") or {}).get("structure") or js.get("structure") or {}
+                dims = st.get("dimensions") or {}
+                rec["dims"] = [[d.get("id"), d.get("name"), len(d.get("values") or []), [v.get("name") for v in (d.get("values") or [])][:12]]
+                               for grp in ("series", "observation") for d in (dims.get(grp) or [])]
+                ser = (((js.get("data") or {}).get("dataSets") or [{}])[0].get("series")) or {}
+                rec["n_series"] = len(ser)
+                rec["n_obs"] = sum(len((v or {}).get("observations") or {}) for v in ser.values())
+                gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "json": js}))
+                at[k] = time.time() if rec["n_obs"] or k.startswith("dg_meta_") else time.time() - 86400 + 6 * 3600
+            except ValueError:
+                rec["kind"] = "html"
+                rec["title"] = (re.search(r"<title>(.*?)</title>", txt, re.S) or [None, ""])[1].strip()[:80]
+                rec["head"] = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", txt))[:300]
+                if k.endswith("_menu"):   # 目錄頁：留下所有功能代碼和名稱，之後找表號用
+                    rec["funids"] = sorted(set(re.findall(r"funid=([A-Za-z0-9_]+)", txt)))[:600]
+                    gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "html": txt[:600000]}))
+                    at[k] = time.time()
+                else:
+                    at[k] = time.time() - 86400 + 6 * 3600
+        except Exception as e:  # noqa: BLE001
+            rec["err"] = repr(e)[:200]
+            errs["stats:" + k] = rec["err"]
+            at[k] = time.time() - 86400 + 6 * 3600
+        summ[k] = rec
+        changed = True
+    if changed:
+        gcs_put("relay/static/stats_summary.json.gz", gz({"at": NOW_ISO, "jobs": summ}))
+
+
 def main():
     t0 = time.time()
     state = json.loads(gcs_get("relay/state.json") or b"{}")
@@ -275,6 +342,11 @@ def main():
         except Exception as e:  # noqa: BLE001
             errs[k] = repr(e)[:200]
             static_at[k] = time.time() - 86400 + 6 * 3600   # 失敗的 6 小時後再試，不要每 5 分鐘白打
+
+    try:
+        stats_daily(state, errs)
+    except Exception as e:  # noqa: BLE001
+        errs["stats"] = repr(e)[:200]
 
     try:
         gtrends(state)

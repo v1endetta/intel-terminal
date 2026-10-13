@@ -2531,7 +2531,7 @@ const PROV = {
   "lens:tender": ["tendermap", "政府電子採購網（依發包機關歸類，不是工程地點）", "每日", 1440], "lens:news": ["mapfeed", "Google 新聞，依標題地名歸到鄉鎮", "彙整", 180],
   "lens:stock": ["mops", "證交所・櫃買中心重大訊息；總部位置依登記地址", "每日", 1440], "lens:elect": ["elect", "Polymarket 報價（只看不押）＋新聞", "彙整", 120], "lens:macro": ["macro", "國發會・主計總處・央行", "每月", 43200], "lens:mood": ["mood", "PTT・LINE 查證・新聞標題（AI 判讀）", "彙整", 180], "lens:power": ["power", "台電", "即時", 30, p => p.asof],
   "全球新聞": ["worldnews", "BBC・半島電視台・NPR・衛報・日經亞洲・南華早報・韓聯社・CNA・日本時報（Gemini 翻譯與判讀）", "彙整", 60],
-  "物價細項": ["prices", "臺北市政府主計處 消費者物價基本分類指數", "月資料", 1440],
+  "物價細項": ["prices", "行政院主計總處（全國）／臺北市政府主計處 消費者物價基本分類指數", "月資料", 1440],
   "觀光": ["tourism", "交通部觀光署 觀光統計資料庫・臺北市一般旅館營運報表", "年／月資料", 1440],
   "補助徵件": ["grants", "Google 新聞的補助、徵件公告（Gemini 判讀，以原公告為準）", "彙整", 360],
   "lens:stop": ["alerts", "行政院人事行政總處 天然災害停止上班及上課情形", "即時", 30, p => (p.stopwork || {}).updated],
@@ -4558,7 +4558,7 @@ function grantsCard() {
 function pricesCard() {
   const D = P.prices || {}, xs = (D.items || []).filter(x => x.yoy != null);
   if (!xs.length) return { html: sideHTML({ eyebrow: "總經 · 物價細項", title: "哪些東西變貴了？", body: '<p class="empty">物價細項下一輪更新後出現（每天一次）。</p>' }) };
-  const leaf = xs.filter(x => x.lvl >= 2), big = xs.filter(x => x.lvl === 1), tot = xs.find(x => x.lvl === 0);
+  const leaf = xs.filter(x => x.lvl === 2), big = xs.filter(x => x.lvl === 1), tot = xs.find(x => x.lvl === 0);
   const up = leaf.slice().sort((a, b) => b.yoy - a.yoy), top = up[0], m = String(D.month || "");
   const row = x => ({ name: x.name, v: x.yoy, txt: pct(x.yoy, 1) });
   return { html: sideHTML({ eyebrow: `總經 · 物價細項 · ${m.slice(0, 4)} 年 ${+m.slice(5, 7)} 月${D.area ? " · " + D.area : ""}`, title: "哪些東西變貴了？", big: top ? `${top.name} ${pct(top.yoy, 1)}` : "", color: top ? tone(top.yoy) : NEU,

@@ -6785,7 +6785,76 @@ def p_tourism():
 
 
 # ---------- 物價細項：台北市主計處「消費者物價基本分類指數」月資料（全國的主計總處資料庫擋 GitHub IP；台北市的比全國早一個月出） ----------
+def _dg_cpi_national():
+    """台灣抓取站存的主計總處 SDMX（A030101015 消費者物價基本分類指數）→ 同 p_prices 格式；年增率自己用指數算。"""
+    for k in ("static/dg_cpi_basic", "static/dg_cpi_basic_m"):
+        try:
+            d = relay_get(k)
+        except Exception:  # noqa: BLE001
+            continue
+        js = d.get("json") or {}
+        data = js.get("data") or {}
+        st = data.get("structure") or js.get("structure") or {}
+        dims = st.get("dimensions") or {}
+        sdim = (dims.get("series") or [{}])[0].get("values") or []
+        odim = (dims.get("observation") or [{}])[0].get("values") or []
+        per = []
+        for v in odim:
+            m = re.search(r"(\d{4})\D*?(\d{1,2})$", str(v.get("id") or ""))
+            per.append(f"{m.group(1)}-{int(m.group(2)):02d}" if m else None)
+        ser = ((data.get("dataSets") or [{}])[0].get("series")) or {}
+        if not ser or not per:
+            continue
+        rows = {}
+        for key, sv in ser.items():
+            i = int(str(key).split(":")[0])
+            if i >= len(sdim):
+                continue
+            raw = str(sdim[i].get("name") or "").strip()
+            vals = {}
+            for oi, ov in ((sv or {}).get("observations") or {}).items():
+                try:
+                    pp, val = per[int(oi)], float((ov or [None])[0])
+                except (TypeError, ValueError, IndexError):
+                    continue
+                if pp:
+                    vals[pp] = val
+            rows[raw] = vals
+        months = sorted({pp for v in rows.values() for pp in v})
+        if len(months) < 13:
+            continue
+        last = months[-1]
+        ly = f"{int(last[:4]) - 1}{last[4:]}"
+        items = []
+        for raw, vals in rows.items():
+            if last not in vals:
+                continue
+            lvl = 0 if raw == "總指數" else 1 if re.match(r"^[一二三四五六七八九十]+[.．、]", raw) else 3 if re.match(r"^[(（]", raw) else 2
+            name = re.sub(r"^[一二三四五六七八九十]+[.．、]|^\d+[.．、]|^[(（]\d+[)）]", "", raw).strip()
+            yoy = round((vals[last] - vals[ly]) / vals[ly] * 100, 2) if vals.get(ly) else None
+            spark = []
+            for mm in months[-13:]:
+                y_ = f"{int(mm[:4]) - 1}{mm[4:]}"
+                spark.append(round((vals[mm] - vals[y_]) / vals[y_] * 100, 2) if vals.get(mm) and vals.get(y_) else None)
+            items.append({"name": name, "lvl": lvl, "idx": vals[last], "yoy": yoy, "spark": spark})
+        if items:
+            return {"month": last, "area": "全國", "items": items, "n": len(items), "src": "行政院主計總處 消費者物價基本分類指數（台灣抓取站代抓）"}
+    return None
+
+
+def p_relay_stats():
+    """台灣抓取站「官方統計」那一段的狀態摘要：哪些抓到、哪些被擋（給除錯和找表號用）。"""
+    d = relay_get("static/stats_summary")
+    return {"at": d.get("at"), "jobs": d.get("jobs")}
+
+
 def p_prices():
+    try:
+        nat = _dg_cpi_national()
+        if nat:
+            return nat
+    except Exception as e:  # noqa: BLE001
+        log("prices national", e)
     import csv, io
     roc = TODAY_TPE.year - 1911
     url = ("https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&kind=21&type=0&outmode=12&compmode=00&outkind=3&deflst=2"
@@ -9699,7 +9768,8 @@ run("etfholders", p_etfholders, keep_if_fresh_hours=12)
 run("corp", p_corp, keep_if_fresh_hours=6)
 run("policy", p_policy, keep_if_fresh_hours=6)
 run("grants", p_grants, keep_if_fresh_hours=6)  # 政府補助與徵件：一天約 4 次，只判讀新標題
-run("prices", p_prices, keep_if_fresh_hours=24)  # 物價細項：月資料，一天抓一次
+run("relay_stats", p_relay_stats, keep_if_fresh_hours=0.5)
+run("prices", p_prices, keep_if_fresh_hours=3)  # 物價細項：月資料；全國版由台灣抓取站代抓，台北市版當備援
 run("tourism", p_tourism, keep_if_fresh_hours=24)  # 觀光：年資料＋台北旅館月資料，一天抓一次
 run("ipr", p_ipr, keep_if_fresh_hours=72)
 run("media", p_media, keep_if_fresh_hours=2)
