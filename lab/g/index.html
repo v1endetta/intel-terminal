@@ -558,7 +558,7 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 const RAW = "https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/";
-const ASSET_V = 8;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
+const ASSET_V = 9;   // 地形與材質檔有更新時加一，避免瀏覽器拿到舊檔
 const MOBILE = matchMedia("(max-width:760px)").matches || /Mobi|Android/i.test(navigator.userAgent);
 const _lvhEl = document.createElement("div"); _lvhEl.style.cssText = "position:fixed;top:0;left:0;width:0;height:100lvh;visibility:hidden;pointer-events:none"; document.body.appendChild(_lvhEl);
 let _VH = 0; const _measureVH = () => { _VH = MOBILE ? Math.max(innerHeight, _lvhEl.offsetHeight || 0) : innerHeight; }; _measureVH();
