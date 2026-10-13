@@ -7738,7 +7738,7 @@ def p_tendermap():
         cache = {}
     cache = {d: v for d, v in cache.items() if v.get("v") == 2}   # 舊格式（沒排除合作社、沒有機關統計）重抓
     today = NOW.astimezone(TPE).date()
-    days = [(today - timedelta(days=i)).strftime("%Y%m%d") for i in range(1, 16)]
+    days = [(today - timedelta(days=i)).strftime("%Y%m%d") for i in range(1, 24)]   # 連假多時，前一週也要湊得到 7 個有公告的日子
     errs, fetched = [], 0
     for i, d in enumerate(days):
         if d in cache and i >= 2:
@@ -9058,7 +9058,7 @@ run("cofacts", p_cofacts, keep_if_fresh_hours=0.5)
 # run("threads_g", p_threads_g, keep_if_fresh_hours=3)  # Custom Search JSON API 不收新客戶、Gemini grounding 免費層無額度（429）；Threads 暫無免費路徑
 run("mood", p_mood, keep_if_fresh_hours=1)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
-run("tendermap", p_tendermap, keep_if_fresh_hours=2 if PCC_DAYS.exists() and len(json.loads(PCC_DAYS.read_text(encoding="utf-8") or "{}")) >= 12 else 0)   # 每天所有採購公告，依機關歸到縣市（地圖用）
+run("tendermap", p_tendermap, keep_if_fresh_hours=2 if PCC_DAYS.exists() and len(json.loads(PCC_DAYS.read_text(encoding="utf-8") or "{}")) >= 20 else 0)   # 每天所有採購公告，依機關歸到縣市（地圖用）
 run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
 run("flights", p_flights)
