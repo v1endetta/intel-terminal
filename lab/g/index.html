@@ -2643,7 +2643,7 @@ function introChips() {
   const L = [], add = (o) => L.push(o);
   // 有地點的
   for (const it of ((P.weather || {}).items || [])) { const c = COUNTIES.find(c => norm(c.name).startsWith(norm(it.city))); if (c && isFinite(it.temp)) add({ geo: c.c, v: it.temp, dec: 0, unit: "°", lab: it.city, color: NEU }); }
-  const perCity = {}, towns = (((P.house || {}).towns) || []).filter(t => t[4] > 0 && t[5] >= 20).sort((a, b) => b[5] - a[5]).filter(t => (perCity[t[2]] = (perCity[t[2]] || 0) + 1) <= 2).slice(0, 18);   // 每個縣市最多兩個鄉鎮，免得全擠在台北
+  const perCity = {}, towns = (((P.house || {}).towns) || []).filter(t => t[4] > 0 && t[5] >= 20).sort((a, b) => b[5] - a[5]).filter(t => (perCity[t[2]] = (perCity[t[2]] || 0) + 1) <= 2).slice(0, MOBILE ? 6 : 18);   // 每個縣市最多兩個鄉鎮，免得全擠在台北
   for (const t of towns) add({ geo: [t[0], t[1]], v: t[4], dec: 0, unit: " 萬/坪", lab: t[3], color: "#bfe6ff" });
   for (const c of (((P.elect || {}).cities) || [])) { const POS = { "台北": [121.56, 25.06], "新北": [121.45, 24.99], "桃園": [121.3, 24.98], "台中": [120.68, 24.15], "台南": [120.22, 23.0], "高雄": [120.32, 22.64] }, top = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0];
     if (top && POS[c.city]) add({ geo: [POS[c.city][0] + 0.05, POS[c.city][1] + 0.05], v: top.p, dec: 0, unit: "%", lab: top.name, color: NEU }); }
@@ -4412,6 +4412,19 @@ if (MOBILE) {
     else if (dy > 40 && sd.classList.contains("open") && (SW.top || 0) <= 2) { sd.classList.remove("open"); SW.swiped = performance.now(); } }, { passive: true });
   window.__swipedAt = () => SW.swiped || 0;
 }
+// 開場暖機：地球照片先傳到顯示卡、所有材質先編譯，開場動畫就不會在中途卡一下（手機最明顯）
+async function warmUp() {
+  if (typeof buildEarth === "function") buildEarth();
+  const texs = [];
+  if (EARTH.mat) texs.push(EARTH.mat.uniforms.uDay.value, EARTH.mat.uniforms.uNightT.value);
+  if (GLOBE && GLOBE.mat) texs.push(GLOBE.mat.uniforms.uDay.value, GLOBE.mat.uniforms.uNight.value);
+  const t0 = performance.now();
+  while (texs.some(t => !t || !t.image || (t.image.complete === false)) && performance.now() - t0 < 6000) await new Promise(r => setTimeout(r, 80));
+  for (const t of texs) if (t && t.image) renderer.initTexture(t);
+  const show = [EARTH.g, GLOBE && GLOBE.g].filter(Boolean).map(g => [g, g.visible]); show.forEach(([g]) => { g.visible = true; });
+  try { if (renderer.compileAsync) await Promise.race([renderer.compileAsync(scene, camera), new Promise(r => setTimeout(r, 4000))]); else renderer.compile(scene, camera); } catch (e) { }
+  show.forEach(([g, v]) => { g.visible = v; });
+}
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
@@ -4651,6 +4664,7 @@ addEventListener("resize", () => { _measureVH(); const w = innerWidth, h = VH();
     setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow();
     controls.enabled = false; controls.autoRotate = false; document.body.classList.add("storying");
     try { await buildStory(); } catch (e) { console.error('story', e); ST.on = false; controls.enabled = true; document.body.classList.remove("storying"); start(); }
+    try { await warmUp(); } catch (e) { console.warn("warmUp", e); }
     $("load").classList.add("done");
     loop();
     setInterval(async () => {   // 每 5 分鐘更新資料：重建圖層
