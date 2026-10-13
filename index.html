@@ -561,6 +561,29 @@ body.exploring.fl-on #gcrumb{display:flex}
   nav .right a[href="/terminal/"]{display:inline-flex!important;align-items:center;font-size:0;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.12);text-decoration:none}
   nav .right a[href="/terminal/"]::after{content:"終端機 ›";font-size:12.5px;font-weight:600;color:#f5f5f7}
 }
+/* ---- 體驗修正 10/14 ---- */
+/* 底部項目：兩側淡出只在「還有東西」的那一邊出現 */
+#dock2 .chips{-webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 36px),transparent)}
+#dock2 .chips.at0{-webkit-mask-image:linear-gradient(90deg,#000,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000,#000 calc(100% - 36px),transparent)}
+#dock2 .chips.at1{-webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,#000);mask-image:linear-gradient(90deg,transparent,#000 18px,#000)}
+#dock2 .chips.at0.at1{-webkit-mask-image:none;mask-image:none}
+/* 電腦版：螢幕夠寬，項目全部攤開，放不下就排第二行，不再被切掉 */
+@media (min-width:761px){
+  #dock2{width:max-content;max-width:calc(100vw - 48px)}
+  #dock2 .chips{flex-wrap:wrap;justify-content:center;overflow:visible;row-gap:8px;-webkit-mask-image:none!important;mask-image:none!important;padding:2px 0}
+  #dock2 .seg{align-self:center}
+}
+/* 手機：按鈕加大，手指比較不會按錯 */
+@media (max-width:760px){
+  #dock2 .chips button{padding:10px 14px;font-size:14px}
+  #dock2 .seg button{padding:11px 0}
+  nav .right a[href="/terminal/"]{padding:9px 13px}
+  #crumb .path button,#gcrumb button{min-height:34px}
+}
+/* 沒有地點的資訊：地圖收起標籤，只留地形 */
+body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!important;transition:opacity .3s}
+/* 景氣燈號：燈號本身的顏色點 */
+.toc .v .sig{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px;box-shadow:0 0 8px currentColor}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2328,7 +2351,7 @@ function fixedFive() {
       say: `${+d.slice(4, 6)}/${+d.slice(6, 8)} 外資在台股${buy ? "淨買進" : "淨賣出"} ${nf(Math.abs(last))} 億元。線從紐約、倫敦、東京、新加坡連回台北，亮的那一端是錢流去的方向。`,
       why: "外資是台股最大的買家，他們的錢往哪裡走，短線就往哪裡走。", vals: v, link: "taiex", src: "證交所 · 三大法人", scene: "globe", from: ["紐約", "倫敦", "東京", "新加坡"], bars: true }; });
   add(() => { const L = (P.lead || {}).lead || {}; if (L.value == null) return null; const up = (L.chg || 0) >= 0, m = String(L.month || "");
-    return { cat: "總經", grp: "lead", name: "景氣燈號", toc: `${L.signal || ""}燈 ${Math.round(L.score || 0)} 分`, value: L.value, iunit: "", chgTxt: `${up ? "+" : "−"}${Math.abs(L.chg || 0).toFixed(2)}`, color: tone(L.chg || 0), big: `景氣${L.signal || ""}燈 ${Math.round(L.score || 0)} 分`,
+    return { cat: "總經", grp: "lead", name: "景氣燈號", toc: `${L.signal || ""}燈 ${Math.round(L.score || 0)} 分`, value: L.value, tocC: "#f5f5f7", tocDot: ({ "紅": "#ff453a", "黃紅": "#ff9f0a", "綠": "#30d158", "黃藍": "#ffd60a", "藍": "#0a84ff" })[L.signal] || null, iunit: "", chgTxt: `${up ? "+" : "−"}${Math.abs(L.chg || 0).toFixed(2)}`, color: tone(L.chg || 0), big: `景氣${L.signal || ""}燈 ${Math.round(L.score || 0)} 分`,
       say: `${m.slice(0, 4)} 年 ${+m.slice(4, 6)} 月景氣對策信號是${L.signal || ""}燈 ${Math.round(L.score || 0)} 分；領先指標 ${(+L.value).toFixed(2)}，${L.streak > 1 ? `已經連續 ${L.streak} 個月${up ? "上升" : "下降"}` : up ? "比上月上升" : "比上月下降"}。`,
       why: "領先指標通常比景氣早三到六個月轉向，看它就能先知道半年後的景氣。", vals: L.spark, link: "lead", src: "國發會", scene: "island" }; });
   add(() => { const S = (P.supply || {}).pmi || {}; if (S.value == null) return null; const up = (S.chg || 0) >= 0;
@@ -2409,7 +2432,7 @@ function EXPLORE() {
   const tx = hist("taiex", "TAIEX");
   return [
     { cat: "市場", items: [
-      { n: "台股", f: () => { const v = tx, s = surprise(v); return lineOf("台股加權", v, s ? tone(s.last) : NEU, "市場 · 證交所", "taiex", v.length ? nf(v[v.length - 1]) : "", s && s.pct != null ? pct(s.pct) : "")(); } },
+      { n: "台股", mapLens: "stock", f: () => { const v = tx, s = surprise(v); return lineOf("台股加權", v, s ? tone(s.last) : NEU, "市場 · 證交所", "taiex", v.length ? nf(v[v.length - 1]) : "", s && s.pct != null ? pct(s.pct) : "")(); } },
       { n: "行事曆", globe: 1, f: () => gxCard("clock") },
       { n: "法人", globe: 1, f: () => gxCard("inst") },
       { n: "個股", lens: "stock", f: barsOf("關注個股漲跌", () => items("tw_stocks").slice(0, 10).map(x => { const v = x.pct != null ? x.pct : (x.price && x.chg != null ? x.chg / (x.price - x.chg) * 100 : 0); return { name: x.name, v, txt: pct(v) }; }), "市場 · 最近收盤", "taiex") },
@@ -2511,7 +2534,7 @@ function buildDock() {
     let r = null; try { r = it.f(); } catch (e) { console.warn(e); r = { html: sideHTML({ title: it.n, body: '<p class="empty">資料暫時讀不到</p>' }) }; }
     if (r.gx) GX.key = r.gx;
     if (r.layer) setLayer(r.layer); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; document.querySelectorAll("#labels .lbl").forEach(x => x.style.opacity = 0); }
-    dimTo = r.layer && r.layer !== "wx" && r.layer !== "gx" ? 1 : 0; showSide(r.html + provHTML(it.n), null); navSetLens("now", true); };
+    dimTo = r.layer && r.layer !== "wx" && r.layer !== "gx" ? 1 : 0; showSide(r.html + provHTML(it.n), null); navSetLens(it.mapLens || "now", true); };   // mapLens：卡片照舊，地圖換成相關的視角（台股→公司總部漲跌）
   // 地球 ↔ 台灣：回到上次看的那個地球場景／地圖視角（沒有就用市場時鐘／現場）
   const at = (cat, n) => { const ci = E.findIndex(c => c.cat === cat); return [ci, Math.max(0, E[ci].items.findIndex(it => it.n === n))]; };
   ST.goEarth = () => { const [c, j] = ST.lastGlobe || at("市場", "行事曆"); showCat(c, j); };
@@ -2548,7 +2571,7 @@ async function buildStory() {
   const now = new Date(), d = `${now.getMonth() + 1} 月 ${now.getDate()} 日 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
   const CH = [];
   CH.push({ name: "開場", g: new THREE.Group(), cam: MOBILE ? { tgt: V(5, 0, -175), pos: V(35, 700, 420) } : ISLAND, cls: "hero",   // 手機：島往下放，讓出上面給五件事
-    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">每天固定看的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.color}">${esc(t.toc || t.chgTxt || "")}</span></li>`).join("")}</ol><div class="herofoot"><span class="scrollhint">往下捲</span><button type="button" class="replay" id="replay">重播開場</button></div>` });
+    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">每天固定看的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.tocC || t.color}">${t.tocDot ? `<i class="sig" style="background:${t.tocDot};color:${t.tocDot}"></i>` : ""}${esc(t.toc || t.chgTxt || "")}</span></li>`).join("")}</ol><div class="herofoot"><span class="scrollhint">往下捲</span><button type="button" class="replay" id="replay">重播開場</button></div>` });
   top.forEach((t, i) => { const sc = sceneFor(t, i);
     CH.push({ name: t.cat, g: sc.g, cam: sc.cam, globe: sc.globe, layer: sc.layer, geo: sc.geo, side: storySide(t, i),
       dom: `<div class="eyebrow">0${i + 1} / 五件事 · ${esc(t.name)}</div><h2 style="color:${t.color}">${esc(t.big)}</h2><p>${esc(t.say)}</p><p class="why"><b>為什麼看這個</b>${esc(t.why)}</p>` }); });
@@ -3418,8 +3441,9 @@ const kmBetween = (a, b) => Math.hypot((a[0] - b[0]) * KX, (a[1] - b[1]) * KY);
 // 各縣市今天的「異常」：示警、近 48 小時地震、路況事件
 function countySeverity() {
   const S = {}, add = (c, pts, why) => { if (!c) return; const k = c.name; (S[k] = S[k] || { s: 0, why: [] }).s += pts; if (!S[k].why.includes(why)) S[k].why.push(why); };
-  for (const w of ((P.weather || {}).warnings || [])) add(COUNTIES.find(c => sameC(c.name, w.where)), 2, w.what);
-  for (const a of ((P.alerts || {}).alerts || [])) for (const c of COUNTIES) if ((a.where || a.area || a.areaDesc || "").includes(norm(c.name).slice(0, 2))) add(c, 2, a.event || a.title || "示警");
+  for (const w of ((P.weather || {}).warnings || [])) add(COUNTIES.find(c => sameC(c.name, w.where)), 2, w.what + (w.level || ""));
+  for (const a of ((P.alerts || {}).alerts || [])) { const area = [].concat(a.where || a.area || a.areaDesc || "").join(" "), what = a.cat || a.event || a.title || "示警";
+    for (const c of COUNTIES) if (area.includes(norm(c.name).slice(0, 2)) && !((S[c.name] || {}).why || []).some(w => w.includes(what) || what.includes(w))) add(c, 2, what + "特報"); }
   const now = Date.now();
   for (const q of ((P.quake || {}).items || [])) if (q.mag >= 4 && now - new Date(q.at) < 48 * 3600e3) add(countyAt(q.lon, q.lat) || COUNTIES.slice().sort((a, b) => kmBetween(a.c, [q.lon, q.lat]) - kmBetween(b.c, [q.lon, q.lat]))[0], q.mag >= 5 ? 3 : 1, "地震 M" + q.mag);
   const ev = {}; for (const e of (((P.roads || {}).events) || [])) if (e.ll) { const c = countyAt(e.ll[0], e.ll[1]); if (c) ev[c.name] = (ev[c.name] || 0) + 1; }
@@ -3562,8 +3586,15 @@ const TW_VIEW = {
     const S = countySeverity(), list = Object.entries(S).sort((a, b) => b[1].s - a[1].s);
     navCounties(c => { const sv = S[c.name], lv = sv ? (sv.s >= 3 ? 3 : sv.s >= 2 ? 2 : 1) : 0; return { col: SEV_C[lv], op: lv ? 0.9 : 0.25, sub: sv ? sv.why[0] : "", dot: lv ? "#" + SEV_C[lv].getHexString() : null, prio: lv * 3 + (/[市]$/.test(c.name) ? 1 : 0) }; });
     const rows = rankRows(list.slice(0, 6).map(([k, v]) => [k, v.why.join("・"), "#" + SEV_C[v.s >= 3 ? 3 : v.s >= 2 ? 2 : 1].getHexString()]), "nc");
-    return { eyebrow: "台灣 · 今天", title: "今天哪裡不對勁？", big: list.length ? `${list.length} 個縣市` : "全台平靜", color: list.length ? "#ff9f0a" : UPH,
-      body: list.length ? `<p class="why">依示警、近兩天地震、路況事件排序。點縣市或拉近，看那裡此刻怎樣。</p><ul class="lst nvl">${rows}</ul>` : `<p class="why">目前沒有示警、明顯地震或路況事件。拉近任一縣市，看那裡此刻怎樣。</p>` };
+    // 標題放「最值得注意的那一件事」：大地震 > 影響最多縣市的特報 > 路況最多的縣市；縣市數放到副標
+    const ev = {}; for (const [k, v] of list) for (const w of v.why) if (!/^路況/.test(w)) (ev[w] = ev[w] || []).push(k);
+    const qm = w => { const m = /^地震 M([\d.]+)/.exec(w); return m ? +m[1] : 0; };
+    const top = Object.entries(ev).sort((a, b) => ((qm(b[0]) >= 5) - (qm(a[0]) >= 5)) || b[1].length - a[1].length || qm(b[0]) - qm(a[0]))[0];
+    const nm = ks => ks.slice(0, 4).map(norm).join("、") + (ks.length > 4 ? " 等" : "");
+    const big = top ? top[0] : list.length ? `${norm(list[0][0])}路況最多` : "全台平靜";
+    const lead = top ? `${top[1].length} 個縣市：${nm(top[1])}。` : list.length ? `${list[0][1].why.join("・")}。` : "";
+    return { eyebrow: "台灣 · 今天", title: "今天哪裡不對勁？", big, color: list.length ? "#ff9f0a" : UPH,
+      body: list.length ? `<p class="why">${esc(lead)}下面依示警、近兩天地震、路況事件排序，點縣市或拉近看那裡此刻怎樣。</p><ul class="lst nvl">${rows}</ul>` : `<p class="why">目前沒有示警、明顯地震或路況事件。拉近任一縣市，看那裡此刻怎樣。</p>` };
   },
   house() {
     const H = (P.house || {}).city || {}, N = (P.house || {}).cityN || {}, ks = Object.keys(H).sort((a, b) => H[b] - H[a]), rk = k => ks.length > 1 ? 1 - ks.indexOf(k) / (ks.length - 1) : 0.5;
@@ -3948,6 +3979,7 @@ function navTick(dt) {
   const on = ST.explore && !ST.globeForce && (!cur || cur === "wx" || (cur === "traffic" && NAV.lens === "traffic"));
   document.body.classList.toggle("nav-on", on);
   veilTick(dt || 0.016, on && NAV.level >= 0 && !NAV.quiet);
+  if (!on) document.body.classList.remove("nav-quiet");
   if (!on) { if (NAV.level !== -1) { NAV.level = -1; NAV.key = ""; navClear(); camHide(); } return; }
   if (NAV.lens !== "traffic" && (CAM.open || CAM.list.length)) { CAM.list = []; camHide(); }
   if (NAV.anim) NAV.anim(performance.now() / 1000);
@@ -3961,6 +3993,7 @@ function navTick(dt) {
   if (key === NAV.key) return;
   if (NAV.quiet === true) NAV.quiet = pk;                 // 剛選了沒有地點的資訊：這一次只換地圖、不蓋掉它的卡片；換層或換地方才換卡片
   const quiet = NAV.quiet === pk; if (!quiet) NAV.quiet = null;
+  document.body.classList.toggle("nav-quiet", quiet && NAV.lens === "now");   // 沒有地點的資訊：地圖只留地形，不放無關的現場標籤
   NAV.key = key; NAV.level = level; NAV.county = C; NAV.town = T; NAV.viewD = cd;
   navClear();
   NAV.anim = null;
@@ -4010,7 +4043,7 @@ function navCrumb() {
   if (NAV.county) parts.push(`<button data-go="c" class="${NAV.level === 1 ? "on" : ""}">${esc(norm(NAV.county.name))}</button>`);
   if (NAV.town && NAV.level === 2) parts.push(`<button class="on">${esc(NAV.town.name)}</button>`);
   const srch = el.querySelector(".srch"), LZ = LENS[NAV.lens];
-  const badge = NAV.lens !== "now" ? `<button data-go="lz" class="lz" style="--c:${LZ.c}" aria-label="地圖視角：${LZ.n}，點一下回到現場"><i></i>${LZ.n}<span>×</span></button>` : NAV.quiet ? `<span class="lz q" title="這類資訊沒有地點，地圖顯示現場">地圖：現場</span>` : "";
+  const badge = NAV.lens !== "now" ? `<button data-go="lz" class="lz" style="--c:${LZ.c}" aria-label="地圖視角：${LZ.n}，點一下回到現場"><i></i>${LZ.n}<span>×</span></button>` : NAV.quiet ? `<span class="lz q" title="這則資訊沒有地點，地圖先只留地形；拉近或點縣市就回到現場">這則沒有地點</span>` : "";
   const dt = DELTA_OK[NAV.lens] ? `<span class="dt"><button data-go="d0" class="${NAV.delta ? "" : "on"}">現況</button><button data-go="d1" class="${NAV.delta ? "on" : ""}">${DELTA_OK[NAV.lens]}</button></span>` : "";
   el.innerHTML = `<div class="path">${parts.join('<span class="sep">›</span>')}</div>${badge}${dt}<button data-go="s" class="sbtn" aria-label="搜尋">⌕</button><div class="srch"><input type="search" placeholder="搜尋縣市、行政區、地標" aria-label="搜尋地點"><div class="res"></div></div>`;
   if (srch && el.classList.contains("searching")) { const i = el.querySelector("input"); i.value = srch.querySelector("input").value; navSearch(i.value); }
@@ -4315,13 +4348,13 @@ const LPGO = { fn: null };
 function lpop(html, r, go, goTxt) {
   LPGO.fn = go || null;
   const el = lpopEl(); el.innerHTML = `<button data-lp="x" aria-label="關閉">×</button>${html}${go ? `<button data-lp="go" class="lp-go">${esc(goTxt || "拉近看")} ›</button>` : ""}`; el.classList.add("on");
-  const w = el.offsetWidth, h = el.offsetHeight, x = Math.min(innerWidth - w - 12, Math.max(12, r.left + r.width / 2 - w / 2)), y = r.top - h - 10 > 56 ? r.top - h - 10 : Math.min(VH() - h - 12, r.bottom + 10);
+  const w = el.offsetWidth, h = el.offsetHeight, x = Math.min(innerWidth - w - 12, Math.max(12, r.left + r.width / 2 - w / 2)), top0 = 104, y = r.top - h - 10 > top0 ? r.top - h - 10 : Math.max(top0, Math.min(VH() - h - 12, r.bottom + 10));   // 不蓋住上方的「地球／台灣」切換
   el.style.left = x + "px"; el.style.top = y + "px";
 }
 function lpopClose() { const el = $("lpop"); if (el) el.classList.remove("on"); }
 renderer.domElement.addEventListener("pointerdown", lpopClose);
 addEventListener("keydown", e => { if (e.key === "Escape") lpopClose(); });
-document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#chips, #dock2 .seg, #crumb, #gcrumb")) lpopClose(); });
+document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#chips, #dock2 .seg, #crumb, #gcrumb, #side")) lpopClose(); });
 function flyNear(pos, d) {   // 拉近到那個位置（已經夠近就不動距離，只把它移到中間）
   if (GD.on || !ST.explore) return;
   const cur = camera.position.distanceTo(controls.target), D = Math.min(cur, d), tgt = pos.clone(); tgt.y = 0;
@@ -4405,7 +4438,7 @@ if (MOBILE) {
     if (!camera.view || camera.view.offsetY !== oy || camera.view.fullHeight !== VH()) camera.setViewOffset(innerWidth, VH(), 0, oy, innerWidth, VH()); }, 500);
   // 抽屜：往上滑展開、往下滑收起
   const SW = { y: 0, t: 0 };
-  document.addEventListener("touchstart", e => { if (e.target.closest && e.target.closest("#side")) { SW.y = e.touches[0].clientY; SW.t = performance.now(); SW.top = $("side").scrollTop; } }, { passive: true });
+  document.addEventListener("touchstart", e => { if (e.target.closest && e.target.closest("#side")) { if (typeof lpopClose === "function") lpopClose(); SW.y = e.touches[0].clientY; SW.t = performance.now(); SW.top = $("side").scrollTop; } }, { passive: true });
   document.addEventListener("touchend", e => { const sd = e.target.closest && e.target.closest("#side"); if (!sd || !SW.t) return; const dy = e.changedTouches[0].clientY - SW.y; SW.t = 0;
     if (dy < -30 && !sd.classList.contains("open")) { sd.classList.add("open"); SW.swiped = performance.now(); }
     else if (dy > 40 && sd.classList.contains("open") && (SW.top || 0) <= 2) { sd.classList.remove("open"); SW.swiped = performance.now(); } }, { passive: true });
@@ -4424,6 +4457,16 @@ async function warmUp() {
   try { if (renderer.compileAsync) await Promise.race([renderer.compileAsync(scene, camera), new Promise(r => setTimeout(r, 4000))]); else renderer.compile(scene, camera); } catch (e) { }
   show.forEach(([g, v]) => { g.visible = v; });
 }
+
+// 底部項目列：只在還有東西可以滑的那一邊淡出（第一顆不會被切一半，最後面還有東西時看得出來）
+function chipEdges() {
+  const c = $("chips"); if (!c) return false;
+  const f = () => { c.classList.toggle("at0", c.scrollLeft < 4); c.classList.toggle("at1", c.scrollLeft + c.clientWidth > c.scrollWidth - 4); };
+  c.addEventListener("scroll", f, { passive: true }); addEventListener("resize", f);
+  new MutationObserver(() => requestAnimationFrame(f)).observe(c, { childList: true });
+  f(); return true;
+}
+{ const _ce = setInterval(() => { if (chipEdges()) clearInterval(_ce); }, 400); }
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
@@ -4627,10 +4670,10 @@ function perfHud(fps) {
 }
 function loop() {
   const _t0 = performance.now();
-  const dt = Math.min(clock.getDelta(), 0.05); T += dt; uni.uTime.value = T;
+  const rawDt = clock.getDelta(), dt = Math.min(rawDt, 0.05); T += dt; uni.uTime.value = T;
   uni.uDim.value += (dimTo - uni.uDim.value) * Math.min(1, dt * 3);
   if (fly) {
-    fly.k = Math.min(1, fly.k + dt / fly.dur); const e = ease(fly.k);
+    fly.k = Math.min(1, fly.k + Math.min(rawDt, 0.25) / fly.dur); const e = ease(fly.k);
     camera.position.lerpVectors(fly.p0, fly.p1, e); controls.target.lerpVectors(fly.t0, fly.t1, e);
     if (fly.k >= 1) fly = null;
   }
