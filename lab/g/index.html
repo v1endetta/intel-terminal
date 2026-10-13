@@ -386,7 +386,7 @@ body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-event
 #camPanel .cp-n{margin-left:auto;color:#8e8e93;font-variant-numeric:tabular-nums}
 #camPanel .cp-h button{all:unset;cursor:pointer;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.1);font-size:15px;color:#d1d1d6}
 #camPanel .cp-v{position:relative;aspect-ratio:4/3;background:#000;display:grid;place-items:center}
-#camPanel .cp-v img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#camPanel .cp-v img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s}#camPanel .cp-v img.on{opacity:1}
 #camPanel .cp-load{color:#8e8e93;font-size:12px;animation:cpBlink 1.2s infinite}
 #camPanel .cp-msg{margin:0;padding:16px;text-align:center;font-size:13px;color:#d1d1d6;line-height:1.7}
 #camPanel .cp-msg small{color:#8e8e93}
@@ -3539,13 +3539,13 @@ function camRender(fresh) {
   if (fresh || !el.querySelector(".cp-v")) el.innerHTML = `
     <div class="cp-h"><span class="cp-live"><i></i>即時</span><span class="cp-k">${kind}</span><span class="cp-n">${CAM.i + 1} / ${n}</span><button data-cp="x" aria-label="關閉攝影機">×</button></div>
     <div class="cp-v">${hls || insecure ? `<p class="cp-msg">這支要在新視窗看<br><a href="${esc(u)}" target="_blank" rel="noopener">開啟即時影像 ›</a></p>`
-      : `<div class="cp-load">連線中…</div><img src="${esc(u)}" alt="${esc(name)} 即時影像" referrerpolicy="no-referrer">`}</div>
+      : `<div class="cp-load">連線中…</div><img class="on" src="${esc(u)}" alt="${esc(name)} 即時影像" referrerpolicy="no-referrer">`}</div>
     <div class="cp-t"><b>${esc(name)}</b><span>${sp != null ? `<em style="color:${spC}">● ${sp} km/h</em>這一段的即時車速` : "這一段沒有即時車速"}</span></div>
     <div class="cp-b"><button data-cp="p" aria-label="上一支">‹ 上一支</button><button data-cp="f">在地圖上找</button><button data-cp="n" aria-label="下一支">下一支 ›</button></div>
     <div class="cp-f">${esc(CAM.where)}附近・${c[2] === "fw" ? "高公局" : "公路局"}・點地圖上的藍點也能切換・← → 鍵</div>`;
   const img = el.querySelector(".cp-v img");
-  if (img) { img.onload = () => el.querySelector(".cp-load") && el.querySelector(".cp-load").remove();
-    img.onerror = () => { const v = el.querySelector(".cp-v"); if (v) v.innerHTML = `<p class="cp-msg">畫面載不到<br><small>攝影機離線，或人在海外被擋</small><br><button data-cp="r">重試</button>　<a href="${esc(u)}" target="_blank" rel="noopener">直接開啟 ›</a></p>`; }; }
+  if (img && fresh) { CAM.ok = false; img.onload = () => { CAM.ok = true; el.querySelector(".cp-load") && el.querySelector(".cp-load").remove(); };
+    img.onerror = () => { if (CAM.ok) return;   /* 播過之後的斷線交給接力處理，不要跳錯誤 */ const v = el.querySelector(".cp-v"); if (v) v.innerHTML = `<p class="cp-msg">畫面載不到<br><small>攝影機離線，或人在海外被擋</small><br><button data-cp="r">重試</button>　<a href="${esc(u)}" target="_blank" rel="noopener">直接開啟 ›</a></p>`; }; }
   // 地圖上：正在看的那支亮起來
   clearLabels("camsel");
   addLabel(`<span class="nvcam sel"><i></i></span>`, gp(c[0], c[1], 0.1), "nv camsel", "camsel", 40);
@@ -3558,22 +3558,20 @@ document.addEventListener("click", e => {
   CAM.closedByUser = false; camShow(k);
 });
 
-// 高公局、公路局的串流連上後幾秒就會被對方切斷（畫面停在最後一格）。
-// 所以每 6 秒在背景偷偷重連一次：新的那條收到第一格畫面才換上去，看起來就像一直在播；分頁切到背景時暫停，不浪費流量。
-CAM.noQ = new Set();
+// 實測（2026-10-13，用你的 Chrome）：高公局、公路局的串流每秒約 5 格，連上約 9 秒（45 格）就被對方切斷，畫面會停住或變黑。
+// 對方允許同時開兩條，所以用兩層畫面輪流接力：每 6 秒在下面那層開一條新的，收到第一格就淡入蓋上，再關掉舊的那條。
+// 分頁切到背景、面板收起來時就暫停，不浪費流量。
+const camURL = u => u + (u.includes("?") ? "&" : "?") + "_=" + Date.now();
 CAM.timer = setInterval(() => {
   if (!CAM.open || document.hidden) return;
-  const v = document.querySelector("#camPanel .cp-v"), old = v && v.querySelector("img"), c = CAM.list[CAM.i];
-  if (!old || !c || CAM.swapping) return;
-  const u = c[4], im = new Image(); CAM.swapping = true;
-  im.referrerPolicy = "no-referrer"; im.alt = old.alt;
-  let tries = 0;
-  const done = ok => { clearInterval(chk); CAM.swapping = false;
-    if (ok && old.isConnected && CAM.list[CAM.i] === c) { old.replaceWith(im); old.removeAttribute("src"); } else im.removeAttribute("src"); };
-  const chk = setInterval(() => { if (im.naturalWidth > 0) done(true); else if (++tries > 20) done(false); }, 250);   // 5 秒內沒畫面就放棄這次，留著舊的
-  const plain = CAM.noQ.has(u);   // 有些攝影機不接受多加的網址參數，失敗過一次就改用原網址重連
-  im.onerror = () => { if (!plain) CAM.noQ.add(u); done(false); };
-  im.src = plain ? u : u + (u.includes("?") ? "&" : "?") + "_=" + Date.now();
+  const v = document.querySelector("#camPanel .cp-v"), c = CAM.list[CAM.i]; if (!v || !c) return;
+  const imgs = [...v.querySelectorAll("img")]; if (!imgs.length) return;
+  const front = imgs.find(i => i.classList.contains("on")) || imgs[0];
+  let back = imgs.find(i => i !== front);
+  if (!back) { back = document.createElement("img"); back.referrerPolicy = "no-referrer"; back.alt = front.alt; v.appendChild(back); }
+  back.onerror = null;
+  back.onload = () => { if (CAM.list[CAM.i] !== c) return; back.classList.add("on"); front.classList.remove("on"); setTimeout(() => { if (!front.classList.contains("on")) front.removeAttribute("src"); }, 450); };
+  back.src = camURL(c[4]);
 }, 6000);
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
