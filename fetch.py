@@ -6475,7 +6475,7 @@ def p_worldnews():
                   "並判斷新聞主要發生在哪裡。只回 JSON：{\"items\": [{\"i\": 編號, \"zh\": \"中文標題\", \"place\": \"地點（台灣譯名，國家或城市）\", "
                   "\"lat\": 緯度, \"lon\": 經度, \"cat\": \"政治|戰爭衝突|經濟|科技|災害|社會|其他\"}]}。無法判斷地點時 place 給空字串、lat/lon 給 null。\n\n" + lines)
         try:
-            data = _gemini_json(prompt, max_tokens=8000, timeout=90, lite_first=True, max_models=3)
+            data, _m = _gemini_json(prompt, max_tokens=8000, timeout=90, lite_first=True, max_models=3)
             for r in (data or {}).get("items") or []:
                 try:
                     it = todo[int(r.get("i"))]
@@ -8439,13 +8439,13 @@ FF_BASE = {
     "BOJ Policy Rate": "日銀利率決議", "BOJ Press Conference": "日銀記者會", "BOJ Outlook Report": "日銀展望報告", "Monetary Policy Meeting Minutes": "貨幣政策會議紀要",
     "Official Bank Rate": "英國央行利率決議", "MPC Official Bank Rate Votes": "英國央行投票結果", "Monetary Policy Summary": "英國央行政策摘要",
     "Cash Rate": "澳洲央行利率決議", "RBA Rate Statement": "澳洲央行聲明", "Overnight Rate": "加拿大央行利率決議", "BOC Rate Statement": "加拿大央行聲明",
-    "SNB Policy Rate": "瑞士央行利率決議", "Official Cash Rate": "紐西蘭央行利率決議",
+    "SNB Policy Rate": "瑞士央行利率決議", "EU Economic Summit": "歐盟經濟峰會", "G7 Meetings": "G7 會議", "G20 Meetings": "G20 會議", "OPEC Meetings": "OPEC 會議", "IMF Meetings": "IMF 年會", "Official Cash Rate": "紐西蘭央行利率決議",
     "Tokyo Core CPI": "東京核心 CPI", "National Core CPI": "全國核心 CPI", "Bank Holiday": "銀行假日", "Ifo Business Climate": "ifo 商業景氣", "ZEW Economic Sentiment": "ZEW 經濟景氣",
     "Fixed Asset Investment": "固定資產投資", "New Loans": "新增貸款", "M2 Money Supply": "M2 貨幣供給", "Tankan Manufacturing Index": "短觀製造業指數",
     "Current Account": "經常帳", "Consumer Confidence": "消費者信心", "Prelim Industrial Production": "工業生產 初值",
 }
 FF_CTY = {"German": "德國", "French": "法國", "Italian": "義大利", "Spanish": "西班牙", "Tokyo": "東京"}
-FF_WHO = [("Fed Chair", "聯準會主席"), ("FOMC Member", "聯準會官員"), ("Fed Vice Chair", "聯準會副主席"), ("ECB President", "歐洲央行總裁"), ("BOJ Gov", "日銀總裁"),
+FF_WHO = [("Fed Chairman", "聯準會主席"), ("Fed Vice Chairman", "聯準會副主席"), ("SNB Chairman", "瑞士央行總裁"), ("RBNZ Gov", "紐西蘭央行總裁"), ("ECB Vice President", "歐洲央行副總裁"), ("BOJ Deputy Gov", "日銀副總裁"), ("Fed Chair", "聯準會主席"), ("FOMC Member", "聯準會官員"), ("Fed Vice Chair", "聯準會副主席"), ("ECB President", "歐洲央行總裁"), ("BOJ Gov", "日銀總裁"),
           ("BOE Gov", "英國央行總裁"), ("RBA Gov", "澳洲央行總裁"), ("BOC Gov", "加拿大央行總裁"), ("President", "總統"), ("Treasury Secretary", "美國財長")]
 
 
@@ -8455,7 +8455,7 @@ def ff_zh(t: str) -> str:
     m = re.match(r"^(.*?) Speaks$", s)
     if m:
         who = m.group(1)
-        for a, b in FF_WHO:
+        for a, b in sorted(FF_WHO, key=lambda x: -len(x[0])):
             if who.startswith(a):
                 return f"{b} {who[len(a):].strip()} 談話".replace("  ", " ")
         return who + " 談話"
