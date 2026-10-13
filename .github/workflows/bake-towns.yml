@@ -1,0 +1,32 @@
+name: bake-towns
+
+# 一次性：全台建物依行政區分檔（OpenStreetMap）。烤完就刪掉這個流程。
+on:
+  push:
+    branches: [main]
+    paths: [ops/bake_towns.py, .github/workflows/bake-towns.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install osmium shapely numpy
+      - run: python ops/bake_towns.py
+      - run: du -sh 3d/tb && ls 3d/tb | wc -l
+      - name: Commit
+        run: |
+          git config user.name "intel-bot"
+          git config user.email "intel-bot@users.noreply.github.com"
+          git add 3d/tb
+          git diff --cached --quiet && exit 0
+          git commit -qm "3d：全台建物依行政區分檔（OSM）"
+          for i in 1 2 3; do git push -q origin HEAD:main && exit 0; git pull -q --rebase origin main; done; exit 1
