@@ -250,7 +250,9 @@ def gtrends(state):
 # ---------- 官方統計（主計總處、交通部）：這些網站擋 GitHub／海外 IP，改在台灣抓。一天一次，失敗 6 小時後再試 ----------
 DG = "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sdmx/"
 DG_META = ["A030101015", "A030102015", "A030103015", "A030201015", "A030202015", "A030301015", "A040101010", "A040101020", "A040102010",
-           "A018101010", "A018102010", "A018102080", "A018201010"]
+           "A018101010", "A018102010", "A018102080", "A018201010", "A030401015", "A030402015", "A030501015", "A030601015", "A030201010", "A030301010"]
+# 跟台北市主計處同一套系統的「匯出 CSV」寫法（SDMX 只給結構不給數值）
+DGW = "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sys=220&kind=21&type=0&outmode=12&compmode=00&outkind=3&deflst=2"
 
 
 def stats_jobs():
@@ -262,6 +264,11 @@ def stats_jobs():
         "dg_cpi_enc": DG + f"A030101015/{cats.replace('+', '%2B')}.M&startTime={y - 2}-01&endTime={y}-12",   # 「+」編碼過的版本
         "dg_cpi_full": DG + "A030101015/",          # 文件第六節：只給表號＝整張表（含數值）
         "dg_core_full": DG + "A030103015/",         # 核心物價等特殊分類
+        "dgc_cpi_basic": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A030101015&cycle=1",
+        "dgc_cpi_special": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A030103015&cycle=1",
+        "dgc_cpi_nature": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A030102015&cycle=1",
+        "dgc_labor": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A040101020&cycle=1",
+        "dgc_gdp": DGW + f"&ymf={y - 1916}1&ymt={y - 1911}4&funid=A018101010&cycle=2",
         "dg_menu": "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sys=100&funid=dgmaine",
         "motc_menu": "https://stat.motc.gov.tw/mocdb/stmain.jsp?sys=100",
     }
@@ -299,6 +306,12 @@ def stats_daily(state, errs):
                 gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "json": js}))
                 at[k] = time.time() if rec["n_obs"] or k.startswith("dg_meta_") else time.time() - 86400 + 6 * 3600
             except ValueError:
+                if "統計期" in txt[:300] and "<html" not in txt[:300].lower():   # 匯出的 CSV
+                    rec["kind"] = "csv"; rec["head"] = txt[:400]; rec["n_lines"] = txt.count("\n")
+                    gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "csv": txt}))
+                    at[k] = time.time()
+                    summ[k] = rec; changed = True
+                    continue
                 rec["kind"] = "html"
                 rec["title"] = (re.search(r"<title>(.*?)</title>", txt, re.S) or [None, ""])[1].strip()[:80]
                 body = re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", txt)

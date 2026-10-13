@@ -6848,52 +6848,68 @@ def p_relay_stats():
     return {"at": d.get("at"), "jobs": d.get("jobs")}
 
 
-def p_prices():
-    try:
-        nat = _dg_cpi_national()
-        if nat:
-            return nat
-    except Exception as e:  # noqa: BLE001
-        log("prices national", e)
+def _cpi_csv(txt, area, src):
+    """主計處統計資料庫「匯出 CSV」（台北市、主計總處同一套系統）→ {month, items:[{name,lvl,idx,yoy,spark}]}"""
     import csv, io
-    roc = TODAY_TPE.year - 1911
-    url = ("https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&kind=21&type=0&outmode=12&compmode=00&outkind=3&deflst=2"
-           f"&ymf={roc - 1}01&ymt={roc}12&funid=A21000102&cycle=1")
-    txt = get(url, timeout=90).content.decode("utf-8-sig", "replace")
-    rows = list(csv.reader(io.StringIO(txt)))
+    rows = list(csv.reader(io.StringIO(txt.lstrip("\ufeff"))))
     if not rows or "統計期" not in rows[0][0]:
-        raise RuntimeError("prices: unexpected " + txt[:80])
+        raise RuntimeError("cpi csv: unexpected " + txt[:80])
+    head = rows[0]
+    yi = next((i for i, h in enumerate(head) if "年增率" in h), None)
     by = {}
     for r in rows[1:]:
-        if len(r) < 4:
+        if len(r) < 3:
             continue
         m = re.match(r"^(\d{2,3})年\s*(\d{1,2})月$", r[0].strip())
         if not m:
             continue
         per = f"{int(m.group(1)) + 1911}-{int(m.group(2)):02d}"
         raw = r[1].strip()
-        lvl = 0 if raw == "總指數" else 1 if re.match(r"^[一二三四五六七八九十]+[.．、]", raw) else 2
-        name = re.sub(r"^[一二三四五六七八九十]+[.．、]|^[(（][一二三四五六七八九十]+[)）]", "", raw).strip()
+        lvl = 0 if raw.startswith("總指數") else 1 if re.match(r"^[一二三四五六七八九十]+[.．、]", raw) else 3 if re.match(r"^[(（]\d", raw) else 2
+        name = re.sub(r"^[一二三四五六七八九十]+[.．、]|^\d+[.．、]|^[(（][一二三四五六七八九十\d]+[)）]", "", raw).strip()
         try:
             idx = float(r[2])
         except ValueError:
             idx = None
-        try:
-            yoy = float(r[3])
-        except ValueError:
-            yoy = None
-        by.setdefault(per, []).append({"name": name, "lvl": lvl, "idx": idx, "yoy": yoy})
+        yoy = None
+        if yi is not None and yi < len(r):
+            try:
+                yoy = float(r[yi])
+            except ValueError:
+                yoy = None
+        by.setdefault(per, {})[name] = {"name": name, "lvl": lvl, "idx": idx, "yoy": yoy}
     if not by:
-        raise RuntimeError("prices: no rows")
+        raise RuntimeError("cpi csv: no rows")
     months = sorted(by)
     last = months[-1]
-    hist = {}
-    for per in months[-13:]:
-        for x in by[per]:
-            hist.setdefault(x["name"], []).append(x["yoy"])
-    items = [{**x, "spark": hist.get(x["name"], [])} for x in by[last]]
-    return {"month": last, "area": "台北市", "items": items, "n": len(items),
-            "src": "臺北市政府主計處 消費者物價基本分類指數（月）；全國資料（主計總處）擋 GitHub 連線，先用台北市"}
+    for name, x in by[last].items():   # CSV 沒有年增率欄位時，用去年同月的指數自己算
+        if x["yoy"] is None and x["idx"]:
+            ly = (by.get(f"{int(last[:4]) - 1}{last[4:]}") or {}).get(name) or {}
+            if ly.get("idx"):
+                x["yoy"] = round((x["idx"] - ly["idx"]) / ly["idx"] * 100, 2)
+    items = [{**x, "spark": [((by.get(mm) or {}).get(n_) or {}).get("yoy") for mm in months[-13:]]} for n_, x in by[last].items()]
+    return {"month": last, "area": area, "items": items, "n": len(items), "src": src}
+
+
+def p_prices():
+    # 1) 全國：台灣抓取站代抓的主計總處 CSV　2) 全國：SDMX（目前只給結構）　3) 台北市主計處（GitHub 直接抓得到）
+    try:
+        d = relay_get("static/dgc_cpi_basic")
+        if d.get("csv"):
+            return _cpi_csv(d["csv"], "全國", "行政院主計總處 消費者物價基本分類指數（台灣抓取站代抓）")
+    except Exception as e:  # noqa: BLE001
+        log("prices national csv", e)
+    try:
+        nat = _dg_cpi_national()
+        if nat:
+            return nat
+    except Exception as e:  # noqa: BLE001
+        log("prices national", e)
+    roc = TODAY_TPE.year - 1911
+    url = ("https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&kind=21&type=0&outmode=12&compmode=00&outkind=3&deflst=2"
+           f"&ymf={roc - 1}01&ymt={roc}12&funid=A21000102&cycle=1")
+    txt = get(url, timeout=90).content.decode("utf-8-sig", "replace")
+    return _cpi_csv(txt, "台北市", "臺北市政府主計處 消費者物價基本分類指數（月）；全國資料還沒抓到時先用台北市")
 
 
 def p_news():
