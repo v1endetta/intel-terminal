@@ -749,12 +749,19 @@ function buildTerrain() {
           totalEmissiveRadiance += vec3(0.45, 0.9, 1.0) * (exp(-pow(sd / 0.015, 2.0)) * 1.25 + exp(min(sd, 0.0) / 0.25) * step(sd, 0.0) * 0.12) * uScanOn;
         }`);
   };
-  if (GLASS) { const tb = terrainMat.onBeforeCompile; terrainMat.onBeforeCompile = sh => { tb(sh);
+  if (GLASS) { const tb = terrainMat.onBeforeCompile;
+    // 城市範圍：全台 OSM 建物每 100 公尺一格的覆蓋率（3d/urban.png），拉遠時看得到城市的形狀
+    const UB = { uUrban: { value: null }, uHasUrban: { value: 0 }, uUrbanB: { value: new THREE.Vector4(119.25, 21.85, 122.10, 25.35) } };
+    new THREE.TextureLoader().load("urban.png?v=" + ASSET_V, t => { t.anisotropy = 4; UB.uUrban.value = t; UB.uHasUrban.value = 1; });
+    terrainMat.onBeforeCompile = sh => { tb(sh); Object.assign(sh.uniforms, UB);
     sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nuniform sampler2D uUrban; uniform float uHasUrban; uniform vec4 uUrbanB;")
       .replace("#include <roughnessmap_fragment>", `#include <roughnessmap_fragment>
         {   // 高度分三段：平地深灰藍 → 丘陵 → 高山接近白，山的高低一眼看得出來
           float e1 = smoothstep(0.0, 1200.0, vElev), e2 = smoothstep(1000.0, 3300.0, vElev);
           vec3 g0 = mix(mix(vec3(0.29, 0.33, 0.40), vec3(0.50, 0.55, 0.63), e1), vec3(0.90, 0.92, 0.96), e2);
+          if (uHasUrban > 0.5) { vec2 uu = vec2((vLL.x - uUrbanB.x) / (uUrbanB.z - uUrbanB.x), (vLL.y - uUrbanB.y) / (uUrbanB.w - uUrbanB.y));
+            float ub = texture2D(uUrban, uu).r; g0 = mix(g0, vec3(0.72, 0.76, 0.83), smoothstep(0.06, 0.55, ub) * 0.8 * (1.0 - e1)); }
           diffuseColor.rgb = g0 * mix(1.0, 0.55, uNight) * mix(1.0, 0.75, uDim); }`)
       .replace("* uNight * (1.0 - smoothstep(0.25, 0.85, uClose)) * uLightK;", "* 0.0;");   // 玻璃風不畫夜光（雷達、掃描、等高線照常）
     }; terrainMat.customProgramCacheKey = () => "terrainGlass"; terrainMat.roughness = 0.75; terrainMat.metalness = 0.0; }
@@ -3976,6 +3983,79 @@ function fatSegs(pos, col, px, op = 1) {
   const l = new LineSegments2(g, m); l.renderOrder = 8; l.frustumCulled = false; return l;
 }
 addEventListener("resize", () => { for (let i = FATM.length - 1; i >= 0; i--) { if (!FATM[i].userData.gone) FATM[i].resolution.set(innerWidth, VH()); } });
+
+/* ---- 全台建物（依行政區分檔，ops/bake_towns.py）----
+   台灣層：不放建物，只看地形和資料。
+   縣市層：鏡頭附近一整片的簡化方塊，拉遠看得到城市的輪廓和密度。
+   行政區／街道層：所在行政區＋相鄰幾區的真實外形、道路、河川公園（電腦版；手機一律用方塊，比較省）。
+   有 tb/index.json 就用這套；還沒烤好的時候沿用原本的六都＋市中心。 */
+const TB = { meta: null, keys: [], geo: null };
+fetch(`tb/index.json?v=${ASSET_V}`).then(r => r.ok ? r.json() : null).then(j => {
+  if (!j || !j.towns) return;
+  for (const c of Object.values(j.towns)) { const [a, b] = toXZ(c.rect[0], c.rect[3]), [d, e] = toXZ(c.rect[2], c.rect[1]); c.box = [Math.min(a, d), Math.min(b, e), Math.max(a, d), Math.max(b, e)]; }
+  TB.meta = j; TB.keys = Object.keys(j.towns);
+}).catch(() => {});
+const tbDist = (c, t) => Math.hypot(Math.max(c.box[0] - t.x, 0, t.x - c.box[2]), Math.max(c.box[1] - t.z, 0, t.z - c.box[3]));
+const TB_SKIP = [[121.5262, 25.0787, 140], [120.6406, 24.1627, 100], [120.2025, 22.9975, 70]];   // 手做地標的位置，方塊版不重複畫
+async function tbBoxes(k) {
+  const id = "b:" + k, c = TB.meta.towns[k]; CITY[id] = { state: "loading" };
+  try {
+    const buf = await (await fetch(`tb/b_${k}.bin?v=${ASSET_V}`)).arrayBuffer();
+    const dv = new DataView(buf), n = Math.floor(buf.byteLength / 11);
+    if (!TB.geo) { TB.geo = new THREE.BoxGeometry(1, 1, 1); TB.geo.translate(0, 0.5, 0); }
+    const mesh = new THREE.InstancedMesh(TB.geo, bMat, Math.max(1, n));
+    const m = new THREE.Matrix4(), q = new THREE.Quaternion(), p = new THREE.Vector3(), sc = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0), Z = new THREE.Matrix4().makeScale(0, 0, 0);
+    if (!n) mesh.setMatrixAt(0, Z);
+    for (let i = 0; i < n; i++) {
+      const o = i * 11, x = dv.getUint16(o, true) / 2, z = dv.getUint16(o + 2, true) / 2, w = dv.getUint16(o + 4, true) / 10, d = dv.getUint16(o + 6, true) / 10;
+      const a = dv.getUint8(o + 8) / 255 * Math.PI, h = dv.getUint16(o + 9, true) / 10, lon = c.bbox[0] + x / c.kx, lat = c.bbox[1] + z / c.ky;
+      if (TB_SKIP.some(s => Math.hypot((lon - s[0]) * c.kx, (lat - s[1]) * c.ky) < s[2])) { mesh.setMatrixAt(i, Z); continue; }
+      const [sx, sz] = toXZ(lon, lat);
+      p.set(sx, hAt(lon, lat) * 0.42 - 0.01, sz); q.setFromAxisAngle(up, a); sc.set(Math.max(w, 4) / 1000, h / 1000 * BEX, Math.max(d, 4) / 1000);
+      m.compose(p, q, sc); mesh.setMatrixAt(i, m);
+    }
+    mesh.instanceMatrix.needsUpdate = true; mesh.computeBoundingSphere(); mesh.visible = false;
+    scene.add(mesh); CITY[id] = { state: "ready", mesh };
+  } catch (e) { CITY[id] = { state: "error" }; }
+}
+function tbDetail(k) {
+  const c = TB.meta.towns[k]; CITY[k] = { state: "detail" };
+  const T = { ox: (c.bbox[0] - LONC) * KX, oz: -(c.bbox[1] - LATC) * KY, kxs: KX, ky: KY, v: ASSET_V };
+  cityWorker().postMessage({ key: k, c, base: document.baseURI + "tb/", T, BEX, chunks: [] });
+}
+function tbDrop(id, v) {
+  scene.remove(v.mesh); v.mesh.traverse(o => { if (o.geometry && o.geometry !== TB.geo) o.geometry.dispose(); if (o.isInstancedMesh) o.dispose(); });
+  if (LIFE.city === v) { LIFE.city = null; LIFE.cars = []; }
+  delete CITY[id];
+}
+const _lodCity = lodTick;
+lodTick = function (dt) {
+  if (!TB.meta) return _lodCity(dt);
+  lodT += dt; if (lodT < 0.5) return; lodT = 0;
+  const t = controls.target, dist = camera.position.distanceTo(t), now = performance.now(), want = new Map();
+  if (dist <= 170 && !ST.globeForce && !ST.earthOn) {
+    const det = dist <= 45 && !MOBILE && typeof Worker !== "undefined" && !LITE;
+    const R = det ? Math.max(3, dist * 0.7) : Math.max(12, dist * 0.9);
+    let budget = det ? 200000 : (MOBILE ? 80000 : 360000), cnt = 0;
+    for (const [k, d] of TB.keys.map(k => [k, tbDist(TB.meta.towns[k], t)]).filter(x => x[1] <= R).sort((a, b) => a[1] - b[1])) {
+      const c = TB.meta.towns[k], n = det ? c.pn : c.n;
+      if (cnt && budget < n) break;
+      budget -= n; cnt++; want.set(k, det && !CITY_NODETAIL.has(k) ? "d" : "b");
+    }
+  }
+  const ready = k => CITY[k] && CITY[k].state === "ready";
+  for (const [k, m] of want) {
+    if (m === "d" && !CITY[k]) tbDetail(k);
+    if (!CITY["b:" + k] && (m === "b" || !ready(k))) tbBoxes(k);   // 真實外形還在組的時候，先用方塊頂著
+  }
+  for (const [id, v] of Object.entries(CITY)) {
+    if (!v.mesh) continue;
+    const isB = id.startsWith("b:"), k = isB ? id.slice(2) : id, m = want.get(k);
+    const on = isB ? (m === "b" || (m === "d" && !ready(k))) : m === "d";
+    v.mesh.visible = on; v.away = on ? 0 : (v.away || now);
+    if (!on && now - v.away > 30000) tbDrop(id, v);
+  }
+};
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };

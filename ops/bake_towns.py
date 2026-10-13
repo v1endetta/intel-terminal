@@ -303,3 +303,24 @@ print("pieces written", len(meta["towns"]), "total MB", round(tot / 1e6, 1))
 top = sorted(meta["towns"].values(), key=lambda v: -v["pn"])[:12]
 for v in top:
     print(v["c"], v["t"], v["pn"], v["kb"], "KB")
+
+# ---- 拉遠時的城市形狀：全台每 100 公尺一格的建物覆蓋率（3d/urban.png；縣市層的地形顏色用它） ----
+# 這段在 2026-10-13 是在本機用烤好的 b_ 檔產生的；之後重烤時一起跑。
+try:
+    from PIL import Image, ImageFilter
+    LON0, LON1, LAT0, LAT1, RES = 119.25, 122.10, 21.85, 25.35, 100.0
+    W, H = int((LON1 - LON0) * 101500 / RES), int((LAT1 - LAT0) * 110570 / RES)
+    acc = np.zeros((H, W), dtype=np.float32)
+    for k, c in meta["towns"].items():
+        raw = (OUT / f"b_{k}.bin").read_bytes(); cnt = len(raw) // 11
+        if not cnt:
+            continue
+        arr = np.frombuffer(raw[:cnt * 11], dtype=np.dtype([("x", "<u2"), ("z", "<u2"), ("w", "<u2"), ("d", "<u2"), ("a", "u1"), ("h", "<u2")]))
+        lon = c["bbox"][0] + arr["x"] / 2 / c["kx"]; lat = c["bbox"][1] + arr["z"] / 2 / c["ky"]
+        ix = ((lon - LON0) / (LON1 - LON0) * W).astype(int); iy = ((LAT1 - lat) / (LAT1 - LAT0) * H).astype(int)
+        ok = (ix >= 0) & (ix < W) & (iy >= 0) & (iy < H)
+        np.add.at(acc, (iy[ok], ix[ok]), ((arr["w"] / 10.0) * (arr["d"] / 10.0))[ok])
+    img = Image.fromarray(np.clip(np.sqrt(np.clip(acc / (RES * RES) * 2.5, 0, 1)) * 255, 0, 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(0.8))
+    img.save(ROOT / "3d" / "urban.png", optimize=True)
+except ImportError:
+    print("PIL 沒裝，略過 urban.png")
