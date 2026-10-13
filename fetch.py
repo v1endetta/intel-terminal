@@ -6513,13 +6513,59 @@ def p_worldnews():
         c = cache.get(key(it)) or {}
         out.append({"t": c.get("zh") or "", "en": it["title"], "src": it["source"], "url": it["url"], "at": it["at"], "place": c.get("place") or "", "ll": c.get("ll"), "cat": c.get("cat") or "",
                     "tw": c.get("tw"), "why": c.get("why") or ""})
-    # 排序：對台灣的影響為主，越舊越往後（每 8 小時大約扣 1 分）；同分新的在前
-    out.sort(key=lambda x: -((x["tw"] if x["tw"] is not None else 1) - _age_h(x["at"]) / 8))
-    out = out[:40]
+    # 同一件事有幾家媒體在報：跟台灣沒直接關係、但全世界都在報的大事，也要排得上來
+    groups = []
+    if GEMINI_KEY and len(out) > 3:
+        lines = "\n".join(f'{i}. [{x["src"]}] {x["en"]}' for i, x in enumerate(out))
+        prompt = ("下面是不同媒體的國際新聞英文標題。找出在報導同一個事件的標題（同一件事的不同報導、後續發展也算；只是同一個國家或同一類主題不算）。"
+                  "只回 JSON：{\"groups\": [[編號, 編號, ...], ...]}，只列 2 則以上的群組，每則最多出現在一個群組。\n\n" + lines)
+        try:
+            data, _m = _gemini_json(prompt, max_tokens=3000, timeout=60, lite_first=True, max_models=2)
+            used = set()
+            for g in (data or {}).get("groups") or []:
+                ids = []
+                for v in g if isinstance(g, list) else []:
+                    try:
+                        v = int(v)
+                    except (TypeError, ValueError):
+                        continue
+                    if 0 <= v < len(out) and v not in used:
+                        ids.append(v); used.add(v)
+                if len(ids) >= 2:
+                    groups.append(ids)
+        except Exception as e:  # noqa: BLE001
+            errs.append("同事件比對: " + safe_err(e))
+    outlet = lambda src: re.sub(r"\s*商業$", "", src)   # BBC 和 BBC 商業算同一家
+    gid = {}
+    for k, ids in enumerate(groups):
+        for i in ids:
+            gid[i] = k
+    merged, done = [], set()
+    for i, x in enumerate(out):
+        if i in done:
+            continue
+        ids = groups[gid[i]] if i in gid else [i]
+        done.update(ids)
+        xs = [out[j] for j in ids]
+        # 代表那一則：有中文翻譯的優先，再看跟台灣的關係、越新越前面
+        rep_ = max(xs, key=lambda y: (bool(y["t"]), y["tw"] or 0, y["at"] or ""))
+        srcs = list(dict.fromkeys(outlet(y["src"]) for y in xs))
+        r = dict(rep_)
+        r["tw"] = max((y["tw"] or 0) for y in xs) if any(y["tw"] is not None for y in xs) else None
+        r["why"] = next((y["why"] for y in sorted(xs, key=lambda y: -(y["tw"] or 0)) if y["why"]), "")
+        r["n_src"] = len(srcs)
+        r["srcs"] = srcs
+        r["also"] = [{"src": y["src"], "url": y["url"], "en": y["en"]} for y in xs if y is not rep_][:5]
+        r["at"] = max((y["at"] or "") for y in xs)
+        merged.append(r)
+    # 排序分數＝跟台灣的關係＋幾家在報（多一家約加 0.8 分），越舊越往後（每 8 小時大約扣 1 分）
+    score = lambda x: (x["tw"] if x["tw"] is not None else 1) + 0.8 * (x["n_src"] - 1) - _age_h(x["at"]) / 8
+    merged.sort(key=lambda x: -score(x))
+    out = merged[:40]
     keep = {key(it) for it in items}
     cache = {k: v for k, v in cache.items() if k in keep or len(cache) < 800}
     write_json(WNEWS_CACHE, cache)
-    return {"items": out, "n_zh": sum(1 for x in out if x["t"]), "n_tw": sum(1 for x in out if (x["tw"] or 0) >= 3), "errs": errs[:8],
+    return {"items": out, "n_zh": sum(1 for x in out if x["t"]), "n_tw": sum(1 for x in out if (x["tw"] or 0) >= 3), "n_big": sum(1 for x in out if x["n_src"] >= 3), "errs": errs[:8],
             "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷"}
 
 
