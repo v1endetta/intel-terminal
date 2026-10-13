@@ -2443,6 +2443,33 @@ def _radius(v):
     return num(v)
 
 
+# ---------- 氣壓圖：東亞地面氣壓（海平面氣壓）網格，前端畫等壓線、高低壓中心 ----------
+# Open-Meteo（免費、免金鑰、個人非商業使用）；一次查 425 個點、每 6 小時一次（模式本來就 6 小時更新），每天約 1,700 次，遠低於免費上限
+PRESS_LON = [95 + 2.5 * i for i in range(25)]   # 95E ~ 155E
+PRESS_LAT = [5 + 2.5 * j for j in range(17)]    # 5N ~ 45N
+
+
+def p_pressure():
+    lats, lons = [], []
+    for la in PRESS_LAT:
+        for lo in PRESS_LON:
+            lats.append(la); lons.append(lo)
+    j = gjson("https://api.open-meteo.com/v1/forecast", timeout=90, params={
+        "latitude": ",".join(f"{v:g}" for v in lats), "longitude": ",".join(f"{v:g}" for v in lons),
+        "hourly": "pressure_msl", "forecast_days": 4, "timezone": "Asia/Taipei"})
+    rows = j if isinstance(j, list) else [j]
+    if len(rows) != len(lats):
+        raise RuntimeError(f"pressure: got {len(rows)} points")
+    times = rows[0]["hourly"]["time"]
+    now = NOW.astimezone(TPE).strftime("%Y-%m-%dT%H:00")
+    i0 = max(0, next((i for i, t in enumerate(times) if t >= now), 0))
+    idx = [i for i in range(i0, len(times), 6)][:13]   # 現在起每 6 小時一張，共 72 小時
+    frames = []
+    for i in idx:
+        frames.append({"t": times[i], "p": [round(r["hourly"]["pressure_msl"][i], 1) if r["hourly"]["pressure_msl"][i] is not None else None for r in rows]})
+    return {"lon": PRESS_LON, "lat": PRESS_LAT, "frames": frames, "src": "Open-Meteo（各國氣象模式）海平面氣壓", "unit": "hPa"}
+
+
 def p_typhoon():
     rec = cwa("W-C0034-005")
     tcs = []
@@ -9294,6 +9321,7 @@ run("supply", p_supply, keep_if_fresh_hours=1 if TODAY_TPE.isoformat() >= _sp_ne
 run("weather", p_weather)
 run("radar_wx", p_radar_wx, keep_if_fresh_hours=0.15)
 run("typhoon", p_typhoon, keep_if_fresh_hours=0.5)
+run("pressure", p_pressure, keep_if_fresh_hours=6)
 run("ptt", p_ptt, keep_if_fresh_hours=0.5)
 run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("devpulse", p_devpulse, keep_if_fresh_hours=1)

@@ -505,6 +505,12 @@ body.exploring.fl-on #gcrumb{display:flex}
 #lpop .lp-k{display:block;font-style:normal;font-size:11px;font-weight:600;margin-bottom:2px}
 #lpop a{display:inline-block;margin-top:8px;color:#64d2ff;font-size:12.5px}
 #lpop [data-lp=x]{all:unset;position:absolute;top:6px;right:8px;cursor:pointer;color:#8e8e93;font-size:16px;line-height:1;padding:2px 4px}
+/* 氣壓圖 */
+.prl{font-size:10.5px;color:#c7c7cc;background:rgba(10,14,22,.7);padding:1px 5px;border-radius:5px}
+.prl.b{color:#fff;font-weight:600}
+.prc{display:inline-flex;align-items:baseline;gap:4px;padding:3px 9px;border-radius:999px;background:rgba(10,14,22,.82);font-size:12px;color:#f5f5f7;border:1px solid rgba(255,255,255,.14)}
+.prc b{font-size:15px;font-weight:700}
+.prc.H b{color:#64d2ff}.prc.L b{color:#ff453a}.prc.T{border-color:#ff453a}.prc.T b{color:#ff453a;font-size:13px}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2395,6 +2401,8 @@ function EXPLORE() {
           + listHTML((W.items || []).map(w => ({ t: `${w.city}　${(+w.temp).toFixed(1)}°C　${w.weather || ""}`, s: `${w.forecast && w.forecast[0] ? `接下來 ${w.forecast[0].wx}・降雨 ${w.forecast[0].pop}%` : ""}${w.rain24h ? `・24 小時雨量 ${w.rain24h} mm` : ""}` }))); }) },
       { n: "地震", f: layer("quake", "顯著地震", "現場 · 氣象署", () => listHTML((((P.quake || {}).items) || []).slice(0, 8).map(q => ({ t: `M${q.mag}　${(q.loc || "").replace(/\s+/g, " ").replace(/\s*\(.*\)/, "")}`, s: `${q.intensity ? "最大震度 " + q.intensity + "・" : ""}深 ${q.depth} 公里・${new Date(q.at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })}`, url: q.url })))) },
       { n: "車流", lens: "traffic" },
+      { n: "停班停課", lens: "stop" },
+      { n: "氣壓圖", globe: 1, f: () => gxCard("press") },
       { n: "選戰", lens: "elect", f: barsOf("五都領先者當選機率", () => (((P.elect || {}).cities) || []).map(c => { const t = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0] || {}; return { name: `${c.city} ${t.name || ""}`, v: t.p, txt: nf(t.p || 0) + "%" }; }), "現場 · 預測市場", "elect", { signed: false }) },
       { n: "電力", lens: "power", f: () => { const pw = P.power || {}; return lineOf("備轉容量率", pw.spark, (pw.reserve_pct || 0) < 10 ? "#ff9f0a" : UPH, "現場 · 台電", "power", nf(pw.reserve_pct || 0) + "%", "燈號" + (pw.level || ""))(); } },
       { n: "航班", f: () => ({ layer: "flights", html: FL.built ? flightsSide() : sideHTML({ eyebrow: "現場 · 桃園機場 · ADS-B", title: "今天飛去哪裡", body: '<p class="empty">航線載入中…</p>' }) }) },
@@ -2419,9 +2427,11 @@ const PROV = {
   "lens:biz": ["brands", "經濟部公司與商業登記，依地址歸到鄉鎮", "每月", 43200, p => p.month], "lens:jobs": ["jobs", "104 人力銀行刊登數", "每日", 1440],
   "lens:tender": ["tendermap", "政府電子採購網（依發包機關歸類，不是工程地點）", "每日", 1440], "lens:news": ["mapfeed", "Google 新聞，依標題地名歸到鄉鎮", "彙整", 180],
   "lens:stock": ["mops", "證交所・櫃買中心重大訊息；總部位置依登記地址", "每日", 1440], "lens:elect": ["elect", "Polymarket 報價（只看不押）＋新聞", "彙整", 120], "lens:macro": ["macro", "國發會・主計總處・央行", "每月", 43200], "lens:mood": ["mood", "PTT・LINE 查證・新聞標題（AI 判讀）", "彙整", 180], "lens:power": ["power", "台電", "即時", 30, p => p.asof],
+  "lens:stop": ["alerts", "行政院人事行政總處 天然災害停止上班及上課情形", "即時", 30, p => (p.stopwork || {}).updated],
+  "氣壓圖": ["pressure", "Open-Meteo（各國氣象模式）海平面氣壓", "預報", 360],
   "lens:traffic": ["roads", "高公局・公路局即時車速；街上的小車是依時段模擬", "即時", 20, p => p.asOf && p.asOf.slice(11, 16)],
 };
-const PROV_K = { "即時": "live", "收盤": "close", "每日": "stat", "每週": "stat", "每月": "stat", "每季": "stat", "彙整": "agg", "推算": "est" };
+const PROV_K = { "預報": "est", "即時": "live", "收盤": "close", "每日": "stat", "每週": "stat", "每月": "stat", "每季": "stat", "彙整": "agg", "推算": "est" };
 function provHTML(key) {
   const d = PROV[key]; if (!d) return "";
   const [pk, src, kind, ttl, st] = d, p = P[pk] || {}, up = p.updatedAt ? new Date(p.updatedAt) : null, age = up ? (Date.now() - up) / 6e4 : null;
@@ -2991,6 +3001,88 @@ function mkBar() {
 }
 setTimeout(mkBar, 1500); setInterval(mkBar, 60000);
 
+/* ---- 地面氣壓圖：東亞海平面氣壓 → 等壓線（每 4 百帕一條，每 20 一條粗線）＋ 高低壓中心＋颱風 ----
+   資料 Open-Meteo 2.5 度網格，前端先內插成 0.5 度再畫線；卡片可以切換現在到 72 小時後。 */
+const PRS = { f: 0 };
+function prsGrid(fi) {   // 內插成 0.5 度
+  const PR = P.pressure, F = PR.frames[fi], W = PR.lon.length, H = PR.lat.length, K = 5, w = (W - 1) * K + 1, h = (H - 1) * K + 1, g = new Float32Array(w * h);
+  const v = (i, j) => { i = Math.max(0, Math.min(W - 1, i)); j = Math.max(0, Math.min(H - 1, j)); const x = F.p[j * W + i]; return x == null ? 1012 : x; };
+  const cr = (a, b, c, d, t) => b + 0.5 * t * (c - a + t * (2 * a - 5 * b + 4 * c - d + t * (3 * (b - c) + d - a)));   // Catmull-Rom：曲線平滑，不會出現菱形
+  for (let J = 0; J < h; J++) for (let I = 0; I < w; I++) {
+    const i = Math.min(W - 2, Math.floor(I / K)), j = Math.min(H - 2, Math.floor(J / K)), u = I / K - i, t = J / K - j, row = [];
+    for (let y = -1; y <= 2; y++) row.push(cr(v(i - 1, j + y), v(i, j + y), v(i + 1, j + y), v(i + 2, j + y), u));
+    g[J * w + I] = cr(row[0], row[1], row[2], row[3], t);
+  }
+  return { g, w, h, lon0: PR.lon[0], lat0: PR.lat[0], d: (PR.lon[1] - PR.lon[0]) / K };
+}
+function prsAt(G, lon, lat) { const x = (lon - G.lon0) / G.d, y = (lat - G.lat0) / G.d, i = Math.max(0, Math.min(G.w - 2, Math.floor(x))), j = Math.max(0, Math.min(G.h - 2, Math.floor(y))), u = x - i, t = y - j, a = G.g;
+  return a[j * G.w + i] * (1 - u) * (1 - t) + a[j * G.w + i + 1] * u * (1 - t) + a[(j + 1) * G.w + i] * (1 - u) * t + a[(j + 1) * G.w + i + 1] * u * t; }
+function prsContours(G) {   // 等壓線：marching squares，回傳 { level: [lon,lat, lon,lat, ...] }
+  let lo = 1e9, hi = -1e9; for (const x of G.g) { lo = Math.min(lo, x); hi = Math.max(hi, x); }
+  const out = {}, P2 = (I, J) => [G.lon0 + I * G.d, G.lat0 + J * G.d];
+  for (let L = Math.ceil(lo / 4) * 4; L <= hi; L += 4) {
+    const seg = [];
+    for (let J = 0; J < G.h - 1; J++) for (let I = 0; I < G.w - 1; I++) {
+      const a = G.g[J * G.w + I], b = G.g[J * G.w + I + 1], c = G.g[(J + 1) * G.w + I + 1], d = G.g[(J + 1) * G.w + I];
+      const pts = [], e = (v0, v1, p0, p1) => { const t = (L - v0) / (v1 - v0); pts.push([p0[0] + (p1[0] - p0[0]) * t, p0[1] + (p1[1] - p0[1]) * t]); };
+      const A = P2(I, J), B = P2(I + 1, J), C = P2(I + 1, J + 1), D = P2(I, J + 1);
+      if ((a < L) !== (b < L)) e(a, b, A, B); if ((b < L) !== (c < L)) e(b, c, B, C); if ((c < L) !== (d < L)) e(c, d, C, D); if ((d < L) !== (a < L)) e(d, a, D, A);
+      if (pts.length >= 2) seg.push(...pts[0], ...pts[1]); if (pts.length === 4) seg.push(...pts[2], ...pts[3]);
+    }
+    if (seg.length) out[L] = seg;
+  }
+  return out;
+}
+function prsCenters(G) {   // 高低壓中心：周圍 4 度內最高／最低，而且跟周圍差 2 百帕以上
+  const R = Math.round(4 / G.d), out = [];
+  for (let J = R; J < G.h - R; J++) for (let I = R; I < G.w - R; I++) {
+    const v = G.g[J * G.w + I]; let mx = true, mn = true, sum = 0, n = 0;
+    for (let y = -R; y <= R && (mx || mn); y++) for (let x = -R; x <= R; x++) { if (!x && !y) continue; const u = G.g[(J + y) * G.w + I + x]; if (u > v) mx = false; if (u < v) mn = false; if (x * x + y * y >= R * R - 2) { sum += u; n++; } }
+    const ring = sum / Math.max(1, n);
+    if (mx && v - ring > 2) out.push({ k: "H", v, ll: [G.lon0 + I * G.d, G.lat0 + J * G.d] });
+    if (mn && ring - v > 2) out.push({ k: "L", v, ll: [G.lon0 + I * G.d, G.lat0 + J * G.d] });
+  }
+  return out;
+}
+function gxPress() {
+  clearLabels("gx"); GX.lbls = []; GX.rings = [];
+  const PR = P.pressure; if (!PR || !PR.frames || !PR.frames.length || !GLOBE) return;
+  const G = prsGrid(Math.min(PRS.f, PR.frames.length - 1)), C = prsContours(G), thin = [], bold = [];
+  for (const [L, seg] of Object.entries(C)) { const arr = +L % 20 === 0 ? bold : thin;
+    for (let k = 0; k < seg.length; k += 2) { const p = GLOBE.G(seg[k], seg[k + 1], 14); arr.push(p.x, p.y, p.z); } }
+  const mk = (pos, px, op) => { if (!pos.length) return; const g = new LineSegmentsGeometry(); g.setPositions(pos);
+    const m = new LineMaterial({ color: 0xffffff, linewidth: px, transparent: true, opacity: op, depthTest: true, worldUnits: false }); m.resolution.set(innerWidth, VH()); FATM.push(m);
+    const l = new LineSegments2(g, m); l.renderOrder = 3; l.frustumCulled = false; GX.g.add(l); };
+  mk(thin, 1.2, 0.55); mk(bold, 2.2, 0.9);
+  // 數字：等壓線穿過東經 117.5 度的地方（台灣西邊）標上氣壓值
+  for (const [L, seg] of Object.entries(C)) { let best = null;
+    for (let k = 0; k < seg.length; k += 4) { const [x0, y0, x1, y1] = seg.slice(k, k + 4); if ((x0 - 117.5) * (x1 - 117.5) <= 0 && y0 > 8 && y0 < 42) { const y = y0 + (y1 - y0) * ((117.5 - x0) / ((x1 - x0) || 1e-9)); if (!best || Math.abs(y - 24) < Math.abs(best - 24)) best = y; } }
+    if (best != null) GX.lbls.push([addLabel(`<span class="prl${+L % 20 === 0 ? " b" : ""}">${L}</span>`, GLOBE.G(117.5, best, 60), "gx", "gx", 1), GLOBE.G(117.5, best, 0)]); }
+  for (const c of prsCenters(G)) GX.lbls.push([addLabel(`<span class="prc ${c.k}"><b>${c.k === "H" ? "高" : "低"}</b>${Math.round(c.v)}</span>`, GLOBE.G(c.ll[0], c.ll[1], 80), "gx", "gx", 6), GLOBE.G(c.ll[0], c.ll[1], 0)]);
+  for (const t of (((P.typhoon || {}).items) || [])) { const f = (t.past || [])[t.past.length - 1]; if (!f) continue;
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(70, 16, 12), fm(new THREE.MeshBasicMaterial({ color: 0xff453a, depthTest: true }), 1)); dot.position.copy(GLOBE.G(f.ll[0], f.ll[1], 30)); GX.g.add(dot);
+    const pts = (t.fc || []).map(x => GLOBE.G(x.ll[0], x.ll[1], 25)); if (pts.length) { const g = new THREE.BufferGeometry().setFromPoints([GLOBE.G(f.ll[0], f.ll[1], 25), ...pts]); GX.g.add(new THREE.Line(g, new THREE.LineDashedMaterial({ color: 0xff453a, dashSize: 60, gapSize: 40 })).computeLineDistances()); }
+    GX.lbls.push([addLabel(`<span class="prc T"><b>颱風 ${esc(t.name || "")}</b>${f.p ? f.p + " hPa" : ""}</span>`, GLOBE.G(f.ll[0], f.ll[1], 120), "gx", "gx", 9), GLOBE.G(f.ll[0], f.ll[1], 0)]); }
+  const tw = new THREE.Mesh(new THREE.SphereGeometry(45, 16, 12), fm(new THREE.MeshBasicMaterial({ color: 0x64d2ff }), 1)); tw.position.copy(GLOBE.G(TW_LL[0], TW_LL[1], 30)); GX.g.add(tw);
+  GX.lbls.push([addLabel(`<span class="gxl tw"><b>台灣 ${Math.round(prsAt(G, 121, 23.7))}</b></span>`, GLOBE.G(TW_LL[0], TW_LL[1], 160), "gx", "gx", 9), GLOBE.G(TW_LL[0], TW_LL[1], 0)]);
+}
+function prsCard() {
+  const PR = P.pressure;
+  if (!PR || !PR.frames || !PR.frames.length) return { layer: "gx", gx: "press", html: sideHTML({ eyebrow: "現場 · 氣壓圖", title: "地面氣壓圖", body: '<p class="empty">氣壓資料下一輪更新後出現（每 6 小時一次）。</p>' }) };
+  const f = Math.min(PRS.f, PR.frames.length - 1), G = prsGrid(f), tp = prsAt(G, 121, 23.7), cs = prsCenters(G), T = PR.frames[f].t;
+  const steps = [[0, "現在"], [2, "12 小時"], [4, "24 小時"], [8, "48 小時"], [12, "72 小時"]].filter(([i]) => i < PR.frames.length);
+  const ty = (((P.typhoon || {}).items) || []).filter(t => (t.past || []).length);
+  const near = cs.filter(c => Math.hypot(c.ll[0] - 121, c.ll[1] - 23.7) < 18).sort((a, b) => Math.hypot(a.ll[0] - 121, a.ll[1] - 23.7) - Math.hypot(b.ll[0] - 121, b.ll[1] - 23.7)).slice(0, 4);
+  return { layer: "gx", gx: "press", html: sideHTML({ eyebrow: `現場 · 地面氣壓 · ${T.slice(5, 10).replace("-", "/")} ${T.slice(11, 16)}`, title: "地面氣壓圖", big: `台灣 ${Math.round(tp)} 百帕`, color: tp < 1005 ? "#ff9f0a" : "#64d2ff",
+    body: `<div class="mkt">${steps.map(([i, l]) => `<button data-pf="${i}" class="${i === f ? "on" : ""}">${l}</button>`).join("")}</div>`
+      + (ty.length ? `<p class="why" style="color:#ff453a">颱風 ${ty.map(t => esc(t.name)).join("、")}：紅點是現在位置，虛線是氣象署的預測路徑。</p>` : "")
+      + (near.length ? listHTML(near.map(c => ({ t: `${c.k === "H" ? "高壓" : "低壓"} ${Math.round(c.v)} 百帕`, s: `北緯 ${c.ll[1].toFixed(0)}・東經 ${c.ll[0].toFixed(0)}` }))) : "")
+      + `<p class="why">白線是等壓線，每 4 百帕一條、粗線每 20 百帕；線越密，風越大。高壓附近天氣通常穩定，低壓附近雲雨多，颱風就是很強的低壓。</p>` }) };
+}
+document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("[data-pf]"); if (!b) return; PRS.f = +b.dataset.pf;
+  if (GX.key === "press" && GX.g) { GX.g.traverse(o => { o.geometry && o.geometry.dispose(); }); GX.g.clear(); gxPress(); GX.g.visible = true; }
+  const r = prsCard(); showSide(r.html + provHTML("氣壓圖"), null); });
+
 /* ---- 地球場景：在台灣沒有地點、但在世界上有地點的資訊 ----
    全球股市、匯率、原物料、精品、美元流動性、AI 快線、法人：從各地拉一條弧線到台灣。
    顏色＝漲跌（綠漲紅跌），粗細＝幅度，光點流動的方向＝錢或貨往哪裡走。 */
@@ -3048,6 +3140,7 @@ const GX_SPEC = {
       why: "近期有動作的 AI 公司總部；線連回台灣，因為它們的晶片和伺服器大多在台灣做。",
       extra: listHTML(Object.values(by).flatMap(({ c, xs }) => xs.slice(0, 2).map(x => ({ t: x.title, s: `${c[0]}・${x.source}`, url: x.url }))).slice(0, 8)) };
   },
+  press() { return { mode: "press", lookLL: [124, 24], alt: 8500, title: "地面氣壓圖", eyebrow: "現場 · 氣壓", nodes: [], why: "" }; },
   clock() {
     const now = Date.now();
     return { mode: "clock", lookLL: [112, 26], alt: 21000, title: "市場時鐘", eyebrow: "市場 · 各交易所",
@@ -3063,6 +3156,7 @@ const GX_SPEC = {
 };
 function gxCard(key) {
   if (key === "clock") return mkCard();
+  if (key === "press") return prsCard();
   let s = null; try { s = GX_SPEC[key](); } catch (e) { console.warn(e); }
   if (!s) return { html: sideHTML({ title: "地球", body: '<p class="empty">資料暫時讀不到</p>' }) };
   const rows = s.nodes.slice().sort((a, b) => Math.abs(b.chg ?? 0) - Math.abs(a.chg ?? 0));
@@ -3073,6 +3167,7 @@ function gxBuild() {
   GX.g = new THREE.Group(); GX.flows = []; GX.lbls = []; SG.add(GX.g);
   const s = GX.spec; if (!s || !GLOBE) return;
   if (s.mode === "clock") { gxClock(); return; }
+  if (s.mode === "press") { gxPress(); return; }
   s.nodes.forEach((n, i) => {
     if (!n.ll) return;
     const pts = s.dir === "out" ? GLOBE.arc(TW_LL, n.ll, 0.05, 90) : GLOBE.arc(n.ll, TW_LL, 0.05, 90), col = gxCol(n.chg);
@@ -3868,6 +3963,37 @@ renderer.domElement.addEventListener("wheel", e => {
 }, { passive: true });
 addEventListener("keydown", e => { if (e.key === "Escape" && GD.on && ST.explore && !/input|textarea/i.test((e.target || {}).tagName || "")) ST.goMap && ST.goMap(); });
 gNav();
+
+// ---- 停班停課（人事總處）：縣市依停班停課程度上色，點縣市看哪幾區、什麼時候 ----
+LENS.stop = { n: "停班停課", c: "#ff453a" };
+const STOP = () => (((P.alerts || {}).stopwork) || {});
+function stopLevel(txt) {   // 3 全停、2 停課（照常上班）、1 部分地區、0 照常
+  const t = String(txt || ""), part = /部分|[鄉鎮區里]|山區|離島|地區/.test(t.replace(/全[縣市]/g, ""));
+  if (/停止上班/.test(t) && /停止上課/.test(t)) return part ? 1.5 : 3;
+  if (/停止上課/.test(t)) return part ? 1 : 2;
+  if (/停止上班/.test(t)) return part ? 1 : 2;
+  return 0;
+}
+const STOP_C = l => l >= 3 ? "#ff453a" : l >= 2 ? "#ff9f0a" : l >= 1 ? "#ffd60a" : "#30d158";
+const stopShort = t => (/明天|明日/.test(t) ? "明天" : /今天|今日/.test(t) ? "今天" : "") + (/停止上班/.test(t) && /停止上課/.test(t) ? "停班停課" : /停止上課/.test(t) ? "停課" : /停止上班/.test(t) ? "停班" : "照常");
+const stopOf = name => (STOP().items || []).filter(x => sameC(x.area, name));
+TW_VIEW.stop = function () {
+  const S = STOP(), items = S.items || [];
+  navCounties(c => { const its = stopOf(c.name); if (!its.length) return { dim: true, op: 0.1 };
+    const l = Math.max(...its.map(x => stopLevel(x.text))); return { col: new THREE.Color(STOP_C(l)), op: 0.4 + 0.15 * l, sub: stopShort(its.map(x => x.text).join(" ")), dot: STOP_C(l), prio: 5 + l }; });
+  const n = new Set(items.filter(x => stopLevel(x.text) > 0).map(x => norm(x.area))).size;
+  return { eyebrow: `現場 · 人事總處${S.updated ? " · " + S.updated.slice(5, 16) + " 更新" : ""}`, title: "要不要上班上課？", big: items.length ? (n ? `${n} 個縣市停班或停課` : "各縣市照常") : "全台照常上班上課", color: n ? LENS.stop.c : "#30d158",
+    body: items.length ? `<ul class="lst nvl">${items.map(x => `<li data-nc="${esc((COUNTIES.find(c => sameC(c.name, x.area)) || {}).name || x.area)}" style="cursor:pointer"><span class="sdot" style="background:${STOP_C(stopLevel(x.text))}"></span>${esc(norm(x.area))}<span>${esc(x.text)}</span></li>`).join("")}</ul><p class="why">紅＝停班停課、橘＝停課或停班、黃＝部分地區。以人事總處公告為準，颱風期間通常晚上 8 點前後公布隔天的決定。</p>`
+      : `<p class="why">人事總處目前沒有任何停班停課公告。颱風或豪雨期間，各縣市通常在晚上 8 點前後公布隔天是否停班停課，這裡會自動更新、地圖上會標出來。</p>` };
+};
+CITY_VIEW.stop = function (C) {
+  const ts = navOutline(C), its = stopOf(C.name), txt = its.map(x => x.text).join(" "), l = its.length ? Math.max(...its.map(x => stopLevel(x.text))) : 0;
+  const hit = ts.filter(t => txt.includes(t.name.replace(/[區鄉鎮市]$/, "")));
+  for (const t of hit) addLabel(pill(t.name, stopShort(txt), STOP_C(l)), gp(t.c[0], t.c[1], 1.5), "nv", "nav", 5);
+  townPills(ts, new Set(hit.map(t => t.name)));
+  return { eyebrow: `${norm(C.name)} · 停班停課 · 人事總處`, title: "要不要上班上課？", big: its.length ? stopShort(txt) : "照常上班上課", color: STOP_C(l),
+    body: its.length ? listHTML(its.map(x => ({ t: x.text, s: x.area }))) + (hit.length ? `<p class="why">地圖上標出公告裡提到的行政區。</p>` : "") : `<p class="why">人事總處目前沒有${esc(norm(C.name))}的停班停課公告。</p>` };
+};
 
 /* ---- 公路攝影機觀看面板 ----
    電腦：左側一欄（右邊是資訊卡，地圖留在中間）；手機：下方一張小卡，平常收成一顆「攝影機」按鈕。
