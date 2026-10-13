@@ -2099,6 +2099,33 @@ def p_macro():
                                    "tone": "up" if yoy > yoy_prev else "down" if yoy < yoy_prev else ""}
     except Exception as e:  # noqa: BLE001
         log("dgbas sdmx", e)
+    # 主計總處（台灣抓取站代抓的 CSV）：CPI 年增、核心 CPI 年增、失業率，比手動值新就覆蓋
+    def _put(label, val, prev_val, period, unit="%"):
+        old = items.get(label) or {}
+        if old.get("period") and old["period"] > period:
+            return
+        items[label] = {"label": label, "value": f"{val:.2f}{unit}", "period": period, "prev": f"{prev_val:.2f}{unit}" if prev_val is not None else "",
+                        "tone": "up" if prev_val is not None and val > prev_val else "down" if prev_val is not None and val < prev_val else "", "src": "主計總處（自動）"}
+    for key, col_pat, label in (("dgc2_cpi_basic", r"^總指數$", "CPI 年增"), ("dgc2_cpi_special", r"核心物價", "核心 CPI 年增")):
+        try:
+            cols, rows = _dgc_wide(relay_get("static/" + key).get("csv") or "")
+            j = next(i for i, c in enumerate(cols) if re.search(col_pat, c))
+            ser = {per: v[j] for per, extra, v in rows if not extra and j < len(v) and v[j]}
+            ms = sorted(ser)
+            yoy = lambda mm: (ser[mm] - ser[f"{int(mm[:4]) - 1}{mm[4:]}"]) / ser[f"{int(mm[:4]) - 1}{mm[4:]}"] * 100 if f"{int(mm[:4]) - 1}{mm[4:]}" in ser else None
+            if len(ms) >= 14 and yoy(ms[-1]) is not None:
+                _put(label, yoy(ms[-1]), yoy(ms[-2]), ms[-1])
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{label}（主計總處 CSV）: {safe_err(e)}")
+    try:
+        cols, rows = _dgc_wide(relay_get("static/dgc2_labor").get("csv") or "")
+        ie, iu = cols.index("就業者"), cols.index("失業者")
+        rate = {per: v[iu] / (v[ie] + v[iu]) * 100 for per, extra, v in rows if re.fullmatch(r"合計\s*/\s*合計", extra or "") and v[ie] and v[iu] is not None}
+        ms = sorted(rate)
+        if len(ms) >= 2:
+            _put("失業率", rate[ms[-1]], rate[ms[-2]], ms[-1])
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"失業率（主計總處 CSV）: {safe_err(e)}")
     # 自動項目：這輪沒抓到就沿用上一版
     old_auto = {it["label"]: it for it in prev.get("items", []) if it.get("auto")}
     order = ["light", "rate", "M1B", "M2", "house"]
@@ -2108,7 +2135,7 @@ def p_macro():
     if not items and not auto_items:
         raise RuntimeError("no macro items; edit data/panels/macro.json by hand")
     note = ("自動：景氣燈號（國發會）· 重貼現率、M1B、M2（央行）· 房價指數（信義）。"
-            "手動：CPI、核心 CPI、PPI、失業率、GDP、CCI（主計總處 SDMX 擋 GitHub IP，公布日跟我說一聲就更新）")
+            "CPI、核心 CPI、失業率：主計總處（台灣抓取站代抓，自動）。手動：PPI、GDP、CCI")
     return {"items": list(items.values()) + auto_items, "note": note, "auto_errors": errs}
 
 
@@ -6848,6 +6875,50 @@ def p_relay_stats():
     return {"at": d.get("at"), "jobs": d.get("jobs")}
 
 
+def _dgc_wide(txt):
+    """主計總處統計資料庫匯出的「寬表」CSV：第一列是分類名稱，之後一列一期（「113年1月」或「113年1月/ 合計/ 合計」）。
+    回傳 (欄名清單, [(期別YYYY-MM, 複分類字串, [數值...])])"""
+    import csv, io
+    rows = list(csv.reader(io.StringIO(txt.lstrip("\ufeff"))))
+    if not rows:
+        return [], []
+    cols = [c.strip() for c in rows[0][1:]]
+    out = []
+    for r in rows[1:]:
+        if not r:
+            continue
+        m = re.match(r"^\s*(\d{2,3})年\s*(\d{1,2})月\s*(.*)$", r[0])
+        if not m:
+            continue
+        vals = []
+        for v in r[1:]:
+            try:
+                vals.append(float(v.replace(",", "").strip()))
+            except ValueError:
+                vals.append(None)
+        out.append((f"{int(m.group(1)) + 1911}-{int(m.group(2)):02d}", m.group(3).strip(" /"), vals))
+    return cols, out
+
+
+def _cpi_wide(txt, area, src):
+    cols, rows = _dgc_wide(txt)
+    by = {per: vals for per, extra, vals in rows if not extra}
+    months = sorted(p_ for p_, v in by.items() if any(x is not None for x in v))
+    if len(months) < 13:
+        raise RuntimeError("cpi wide: too few months")
+    last = months[-1]
+    yo = lambda mm, j: (round((by[mm][j] - by[f"{int(mm[:4]) - 1}{mm[4:]}"][j]) / by[f"{int(mm[:4]) - 1}{mm[4:]}"][j] * 100, 2)
+                        if by.get(mm) and by.get(f"{int(mm[:4]) - 1}{mm[4:]}") and by[mm][j] and by[f"{int(mm[:4]) - 1}{mm[4:]}"][j] else None)
+    items = []
+    for j, raw in enumerate(cols):
+        if j >= len(by[last]) or by[last][j] is None:
+            continue
+        lvl = 0 if raw.startswith("總指數") else 1 if re.match(r"^[一二三四五六七八九十]+[.．、]", raw) else 3 if re.match(r"^[(（]\d", raw) else 2
+        name = re.sub(r"^[一二三四五六七八九十]+[.．、]|^\d+[.．、]|^[(（][一二三四五六七八九十\d]+[)）]", "", raw).strip()
+        items.append({"name": name, "lvl": lvl, "idx": by[last][j], "yoy": yo(last, j), "spark": [yo(mm, j) for mm in months[-13:]]})
+    return {"month": last, "area": area, "items": items, "n": len(items), "src": src}
+
+
 def _cpi_csv(txt, area, src):
     """主計處統計資料庫「匯出 CSV」（台北市、主計總處同一套系統）→ {month, items:[{name,lvl,idx,yoy,spark}]}"""
     import csv, io
@@ -6894,9 +6965,9 @@ def _cpi_csv(txt, area, src):
 def p_prices():
     # 1) 全國：台灣抓取站代抓的主計總處 CSV　2) 全國：SDMX（目前只給結構）　3) 台北市主計處（GitHub 直接抓得到）
     try:
-        d = relay_get("static/dgc_cpi_basic")
+        d = relay_get("static/dgc2_cpi_basic")
         if d.get("csv"):
-            return _cpi_csv(d["csv"], "全國", "行政院主計總處 消費者物價基本分類指數（台灣抓取站代抓）")
+            return _cpi_wide(d["csv"], "全國", "行政院主計總處 消費者物價基本分類指數（台灣抓取站代抓）")
     except Exception as e:  # noqa: BLE001
         log("prices national csv", e)
     try:
@@ -9785,7 +9856,7 @@ run("corp", p_corp, keep_if_fresh_hours=6)
 run("policy", p_policy, keep_if_fresh_hours=6)
 run("grants", p_grants, keep_if_fresh_hours=6)  # 政府補助與徵件：一天約 4 次，只判讀新標題
 run("relay_stats", p_relay_stats, keep_if_fresh_hours=0.5)
-run("prices", p_prices, keep_if_fresh_hours=3)  # 物價細項：月資料；全國版由台灣抓取站代抓，台北市版當備援
+run("prices", p_prices, keep_if_fresh_hours=1)  # 物價細項：月資料；全國版由台灣抓取站代抓，台北市版當備援
 run("tourism", p_tourism, keep_if_fresh_hours=24)  # 觀光：年資料＋台北旅館月資料，一天抓一次
 run("ipr", p_ipr, keep_if_fresh_hours=72)
 run("media", p_media, keep_if_fresh_hours=2)

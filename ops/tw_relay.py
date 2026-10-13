@@ -264,11 +264,13 @@ def stats_jobs():
         "dg_cpi_enc": DG + f"A030101015/{cats.replace('+', '%2B')}.M&startTime={y - 2}-01&endTime={y}-12",   # 「+」編碼過的版本
         "dg_cpi_full": DG + "A030101015/",          # 文件第六節：只給表號＝整張表（含數值）
         "dg_core_full": DG + "A030103015/",         # 核心物價等特殊分類
-        "dgc_cpi_basic": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A030101015&cycle=1",
-        "dgc_cpi_special": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A030103015&cycle=1",
-        "dgc_cpi_nature": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A030102015&cycle=1",
-        "dgc_labor": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A040101020&cycle=1",
-        "dgc_gdp": DGW + f"&ymf={y - 1916}1&ymt={y - 1911}4&funid=A018101010&cycle=2",
+        "dgc2_cpi_basic": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A030101015&cycle=1",
+        "dgc2_cpi_special": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A030103015&cycle=1",
+        "dgc2_cpi_nature": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A030102015&cycle=1",
+        "dgc2_labor": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A040101020&cycle=1",
+        "dgc2_sa": DGW + f"&ymf={y - 1913}01&ymt={y - 1911}12&funid=A030601015&cycle=1",   # 季調表：可能有 PPI、進口物價
+        "dgc2_gdp_q": DGW + f"&ymf={y - 1916}1&ymt={y - 1911}4&funid=A018101010&cycle=3",
+        "dgc2_gdp_q2": DGW + f"&ymf={y - 1916}01&ymt={y - 1911}04&funid=A018101010&cycle=2",
         "dg_menu": "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sys=100&funid=dgmaine",
         "motc_menu": "https://stat.motc.gov.tw/mocdb/stmain.jsp?sys=100",
     }
@@ -306,7 +308,7 @@ def stats_daily(state, errs):
                 gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "json": js}))
                 at[k] = time.time() if rec["n_obs"] or k.startswith("dg_meta_") else time.time() - 86400 + 6 * 3600
             except ValueError:
-                if "統計期" in txt[:300] and "<html" not in txt[:300].lower():   # 匯出的 CSV
+                if txt.lstrip()[:1] == '"' and "<html" not in txt[:500].lower():   # 匯出的 CSV（第一列是分類名稱、之後一列一個月份）
                     rec["kind"] = "csv"; rec["head"] = txt[:400]; rec["n_lines"] = txt.count("\n")
                     gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "csv": txt}))
                     at[k] = time.time()
