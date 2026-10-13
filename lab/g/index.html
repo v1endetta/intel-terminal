@@ -3558,6 +3558,24 @@ document.addEventListener("click", e => {
   CAM.closedByUser = false; camShow(k);
 });
 
+// 高公局、公路局的串流連上後幾秒就會被對方切斷（畫面停在最後一格）。
+// 所以每 6 秒在背景偷偷重連一次：新的那條收到第一格畫面才換上去，看起來就像一直在播；分頁切到背景時暫停，不浪費流量。
+CAM.noQ = new Set();
+CAM.timer = setInterval(() => {
+  if (!CAM.open || document.hidden) return;
+  const v = document.querySelector("#camPanel .cp-v"), old = v && v.querySelector("img"), c = CAM.list[CAM.i];
+  if (!old || !c || CAM.swapping) return;
+  const u = c[4], im = new Image(); CAM.swapping = true;
+  im.referrerPolicy = "no-referrer"; im.alt = old.alt;
+  let tries = 0;
+  const done = ok => { clearInterval(chk); CAM.swapping = false;
+    if (ok && old.isConnected && CAM.list[CAM.i] === c) { old.replaceWith(im); old.removeAttribute("src"); } else im.removeAttribute("src"); };
+  const chk = setInterval(() => { if (im.naturalWidth > 0) done(true); else if (++tries > 20) done(false); }, 250);   // 5 秒內沒畫面就放棄這次，留著舊的
+  const plain = CAM.noQ.has(u);   // 有些攝影機不接受多加的網址參數，失敗過一次就改用原網址重連
+  im.onerror = () => { if (!plain) CAM.noQ.add(u); done(false); };
+  im.src = plain ? u : u + (u.includes("?") ? "&" : "?") + "_=" + Date.now();
+}, 6000);
+
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
 let composer = null, bloom = null;
