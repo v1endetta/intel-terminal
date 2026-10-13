@@ -484,6 +484,16 @@ body.nav-on .ch.last .card,body.exploring .ch.last .card{opacity:0;pointer-event
 #mkbar i{width:6px;height:6px;border-radius:50%}
 @media (max-width:760px){#mkbar{display:none}}
 #labels .lbl.gx{background:none;border:0;padding:0;backdrop-filter:none;-webkit-backdrop-filter:none}
+/* 地球 ↔ 台灣 路徑 */
+#gcrumb{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:16;display:none;align-items:center;gap:2px;padding:5px;border-radius:999px;background:rgba(28,28,30,.78);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border:1px solid rgba(255,255,255,.12);font-size:13px}
+body.exploring.fl-on #gcrumb{display:flex}
+#gcrumb button{all:unset;cursor:pointer;padding:6px 14px;border-radius:999px;color:#c7c7cc}
+#gcrumb button.on{background:rgba(255,255,255,.14);color:#fff;font-weight:600;cursor:default}
+#gcrumb button[data-g]:hover{color:#fff;background:rgba(255,255,255,.08)}
+#gcrumb .sep,#crumb .sep{color:#636366;font-size:12px}
+#crumb .path button.earth{color:#8e8e93}
+@media (max-width:760px){#gcrumb{top:112px;font-size:12px;backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(28,28,30,.92)}}
+#gcrumb{width:max-content;max-width:calc(100vw - 32px)}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2078,7 +2088,7 @@ async function buildGlobe() {
             c = mix(land * (0.7 + 0.3 * f), sea, ocean) + vec3(0.6, 0.8, 1.0) * rim * 0.35; }
           else { vec3 land = vec3(0.09, 0.11, 0.15) + d * 0.07, sea = vec3(0.015, 0.03, 0.07); c = mix(land, sea, ocean) + pow(n, vec3(1.5)) * vec3(1.0, 0.78, 0.45) * 1.5 + vec3(0.3, 0.55, 1.0) * rim * 0.25; }
           if (uTerm > 0.0) { float nt = 1.0 - smoothstep(-0.10, 0.06, dot(vN, uSunN)); c = mix(c, c * 0.3 + pow(n, vec3(1.6)) * vec3(1.0, 0.8, 0.5) * 1.7, nt * uTerm); }   // 市場時鐘：晨昏線，夜裡看得到城市燈光
-          float alt = length(cameraPosition - uC) - 6371.0; gl_FragColor = vec4(c, k * smoothstep(900.0, 3500.0, alt)); }` }), 1);
+          float alt = length(cameraPosition - uC) - 6371.0; gl_FragColor = vec4(c, k * smoothstep(600.0, 1500.0, alt)); }` }), 1);
     const earth = new THREE.Mesh(geo, mat); earth.renderOrder = -1; g.add(earth); GMAT = mat; }
   const atm = new THREE.Mesh(new THREE.SphereGeometry(R * 1.02, 96, 64), fm(new THREE.ShaderMaterial({ side: THREE.BackSide, blending: THREE.AdditiveBlending, uniforms: { k: { value: 1 } },
     vertexShader: "varying vec3 vN; varying vec3 vP; void main(){ vN = normalize(normalMatrix*normal); vec4 mv = modelViewMatrix*vec4(position,1.0); vP = mv.xyz; gl_Position = projectionMatrix*mv; }",
@@ -2406,13 +2416,17 @@ function buildDock() {
   const showCat = (ci, pick = 0) => { EXCAT = ci; moveHL(); const c = E[ci];
     $("chips").innerHTML = c.items.map((it, j) => `<button type="button" role="tab" data-j="${j}"${it.lens ? ` data-lens="${it.lens}" title="地圖會跟著換"` : it.globe ? ` data-globe="1" title="在地球上看"` : ""}>${esc(it.n)}</button>`).join("");
     $("chips").classList.remove("in"); void $("chips").offsetWidth; $("chips").classList.add("in"); pickItem(pick); };
-  const pickItem = j => { EXITEM = j; const it = E[EXCAT].items[j]; $("chips").querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", +b.dataset.j === j));
+  const pickItem = j => { EXITEM = j; const it = E[EXCAT].items[j]; if (it.globe) ST.lastGlobe = [EXCAT, j]; else if (it.lens) ST.lastMap = [EXCAT, j]; $("chips").querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", +b.dataset.j === j));
     // 有地圖視角的分類：地圖換成那個視角，卡片交給分層地圖（依目前層級回答）
     if (it.lens) { if (it.lens === "now") setLayer("wx"); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; } dimTo = 0; navSetLens(it.lens); return; }   // 現場疊天氣圖層；其他視角把圖層收掉，畫面只留那個視角
     let r = null; try { r = it.f(); } catch (e) { console.warn(e); r = { html: sideHTML({ title: it.n, body: '<p class="empty">資料暫時讀不到</p>' }) }; }
     if (r.gx) GX.key = r.gx;
     if (r.layer) setLayer(r.layer); else if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); cur = null; document.querySelectorAll("#labels .lbl").forEach(x => x.style.opacity = 0); }
     dimTo = r.layer && r.layer !== "wx" && r.layer !== "gx" ? 1 : 0; showSide(r.html + provHTML(it.n), null); navSetLens("now", true); };
+  // 地球 ↔ 台灣：回到上次看的那個地球場景／地圖視角（沒有就用市場時鐘／現場）
+  const at = (cat, n) => { const ci = E.findIndex(c => c.cat === cat); return [ci, Math.max(0, E[ci].items.findIndex(it => it.n === n))]; };
+  ST.goEarth = () => { const [c, j] = ST.lastGlobe || at("市場", "行事曆"); showCat(c, j); };
+  ST.goMap = () => { const [c, j] = ST.lastMap || at("現場", "此刻"); showCat(c, j); };
   seg.onclick = e => { const b = e.target.closest("button"); if (b) showCat(+b.dataset.c); };
   $("chips").onclick = e => { const b = e.target.closest("button"); if (b) pickItem(+b.dataset.j); };
   addEventListener("resize", moveHL);
@@ -2781,15 +2795,15 @@ function gdRotate(dx, dy) {
   _gq.setFromAxisAngle(_gA, lat1 - lat0); _gv.applyQuaternion(_gq);
   camera.position.copy(_gC).add(_gv); camera.up.copy(N); camera.lookAt(_gC);
 }
-function gdZoom(f) { _gv.copy(camera.position).sub(_gC); const d = Math.max(6371 + 500, Math.min(6371 + 42000, 6371 + (_gv.length() - 6371) * f)); _gv.setLength(d); camera.position.copy(_gC).add(_gv); camera.lookAt(_gC); }
+function gdZoom(f) { _gv.copy(camera.position).sub(_gC); const d = Math.max(6371 + 3000, Math.min(6371 + 42000, 6371 + (_gv.length() - 6371) * f)); _gv.setLength(d); camera.position.copy(_gC).add(_gv); camera.lookAt(_gC); }
 const gdEl = renderer.domElement;
-gdEl.addEventListener("pointerdown", e => { if (!GD.on) return; GD.ptrs.set(e.pointerId, [e.clientX, e.clientY]); GD.vx = GD.vy = 0; GD.pinch = 0; gdEl.setPointerCapture && gdEl.setPointerCapture(e.pointerId); fly = null; });
+gdEl.addEventListener("pointerdown", e => { if (!GD.on || fly) return;   /* 飛往地球途中按到畫面不要把飛行打斷（會停在半空中、地球還沒淡入，看起來像卡住） */ GD.ptrs.set(e.pointerId, [e.clientX, e.clientY]); GD.vx = GD.vy = 0; GD.pinch = 0; gdEl.setPointerCapture && gdEl.setPointerCapture(e.pointerId); });
 gdEl.addEventListener("pointermove", e => { if (!GD.on || !GD.ptrs.has(e.pointerId)) return; const p = GD.ptrs.get(e.pointerId), dx = e.clientX - p[0], dy = e.clientY - p[1]; GD.ptrs.set(e.pointerId, [e.clientX, e.clientY]);
   if (GD.ptrs.size >= 2) { const [a, b] = [...GD.ptrs.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (GD.pinch) gdZoom(GD.pinch / d); GD.pinch = d; return; }
   gdRotate(dx, dy); GD.vx = Math.max(-30, Math.min(30, dx)); GD.vy = Math.max(-30, Math.min(30, dy)); GD.t = performance.now(); });
 const gdUp = e => { if (!GD.ptrs.has(e.pointerId)) return; GD.ptrs.delete(e.pointerId); GD.pinch = 0; if (GD.ptrs.size || performance.now() - (GD.t || 0) > 80) GD.vx = GD.vy = 0; };   // 停住再放手就不滑
 gdEl.addEventListener("pointerup", gdUp); gdEl.addEventListener("pointercancel", gdUp);
-gdEl.addEventListener("wheel", e => { if (!GD.on) return; e.preventDefault(); gdZoom(Math.exp(e.deltaY * 0.0012)); }, { passive: false });
+gdEl.addEventListener("wheel", e => { if (!GD.on) return; e.preventDefault(); if (fly) return; gdZoom(Math.exp(e.deltaY * 0.0012)); }, { passive: false });
 function gdTick(dt) { if (!GD.on || GD.ptrs.size || (Math.abs(GD.vx) < 0.05 && Math.abs(GD.vy) < 0.05)) return; const f = Math.min(3, (dt || 0.016) * 60); gdRotate(GD.vx * f, GD.vy * f); const d = Math.pow(0.88, f); GD.vx *= d; GD.vy *= d; }   // 放手後的慣性，跟畫面格數無關
 layers.flights = {
   get g() { return FL.g || new THREE.Group(); },
@@ -3771,13 +3785,13 @@ function navCrumb() {
   let el = $("crumb");
   if (!el) { el = document.createElement("nav"); el.id = "crumb"; el.setAttribute("aria-label", "地圖層級"); document.body.appendChild(el);
     el.addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (!b) return; const g = b.dataset.go;
-      if (g === "d0" || g === "d1") { NAV.delta = g === "d1"; NAV.key = ""; NAV.t = 0; } else if (g === "lz") { navSetLens("now"); document.querySelectorAll("#chips button").forEach(b => b.setAttribute("aria-selected", "false")); } else if (g === "tw") navGoTaiwan(); else if (g === "c") navGoCounty(NAV.county); else if (g === "s") { el.classList.toggle("searching"); const i = el.querySelector("input"); if (i) { i.value = ""; i.focus(); navSearch(""); } } });
+      if (g === "d0" || g === "d1") { NAV.delta = g === "d1"; NAV.key = ""; NAV.t = 0; } else if (g === "lz") { navSetLens("now"); document.querySelectorAll("#chips button").forEach(b => b.setAttribute("aria-selected", "false")); } else if (g === "earth") ST.goEarth && ST.goEarth(); else if (g === "tw") navGoTaiwan(); else if (g === "c") navGoCounty(NAV.county); else if (g === "s") { el.classList.toggle("searching"); const i = el.querySelector("input"); if (i) { i.value = ""; i.focus(); navSearch(""); } } });
     el.addEventListener("input", e => navSearch(e.target.value));
     el.addEventListener("keydown", e => { if (e.key === "Escape") el.classList.remove("searching"); if (e.key === "Enter") { const f = el.querySelector(".res [data-r]"); f && f.click(); } });
     el.addEventListener("pointerdown", e => e.stopPropagation());
     addEventListener("keydown", e => { if (e.key === "Escape" && ST.explore && !el.classList.contains("searching")) { if (NAV.level === 2) navGoCounty(NAV.county); else if (NAV.level === 1) navGoTaiwan(); } });
   }
-  const parts = [`<button data-go="tw" class="${NAV.level === 0 ? "on" : ""}">台灣</button>`];
+  const parts = [`<button data-go="earth" class="earth" aria-label="回到地球">地球</button>`, `<button data-go="tw" class="${NAV.level === 0 ? "on" : ""}">台灣</button>`];
   if (NAV.county) parts.push(`<button data-go="c" class="${NAV.level === 1 ? "on" : ""}">${esc(norm(NAV.county.name))}</button>`);
   if (NAV.town && NAV.level === 2) parts.push(`<button class="on">${esc(NAV.town.name)}</button>`);
   const srch = el.querySelector(".srch"), LZ = LENS[NAV.lens];
@@ -3804,6 +3818,30 @@ document.addEventListener("click", e => {
   const t = e.target.closest && e.target.closest("#side [data-nt]"); if (t && NAV.county) navGoTown((NAV.towns || []).find(x => x.name === t.dataset.nt && sameC(x.county, NAV.county.name)));
 });
 window.__nav = { NAV, navSetLens, navGoCounty, navGoTown, townAt, COUNTIES: () => COUNTIES };
+
+// ---- 地球 ↔ 台灣：跟地圖 App 一樣，拉遠就回到地球、在地球上對著台灣拉近就進到台灣地圖 ----
+// 地球模式時上方也有一條路徑「地球 › 台灣」，點台灣就回地圖（手機沒有滾輪，靠這個）
+function gNav() {
+  let el = $("gcrumb");
+  if (!el) { el = document.createElement("nav"); el.id = "gcrumb"; el.setAttribute("aria-label", "地圖層級");
+    el.innerHTML = `<button class="on" tabindex="-1">地球</button><span class="sep">›</span><button data-g="tw">台灣</button>`;
+    el.addEventListener("click", e => { if (e.target.closest("[data-g=tw]")) ST.goMap && ST.goMap(); });
+    el.addEventListener("pointerdown", e => e.stopPropagation()); document.body.appendChild(el); }
+  return el;
+}
+const ZM = { acc: 0, t: 0 };
+renderer.domElement.addEventListener("wheel", e => {
+  const now = performance.now(); if (now - ZM.t > 700) ZM.acc = 0; ZM.t = now;
+  if (fly) return;   // 飛行中不判斷，避免連續觸發
+  if (GD.on && e.deltaY < 0) {   // 地球：拉到最近、台灣在畫面中間附近 → 進台灣地圖
+    const v = camera.position.clone().sub(_gC), alt = v.length() - 6371, tw = GLOBE.G(TW_LL[0], TW_LL[1], 0).sub(_gC);
+    if (alt < 3200 && v.angleTo(tw) < 0.9) { ZM.acc -= e.deltaY; if (ZM.acc > 240) { ZM.acc = 0; ST.goMap && ST.goMap(); } }
+  } else if (!GD.on && ST.explore && !ST.globeForce && NAV.level === 0 && e.deltaY > 0 && camera.position.distanceTo(controls.target) > controls.maxDistance * 0.93) {
+    ZM.acc += e.deltaY; if (ZM.acc > 320) { ZM.acc = 0; ST.goEarth && ST.goEarth(); }   // 台灣：已經拉到最遠還繼續拉 → 回到地球
+  }
+}, { passive: true });
+addEventListener("keydown", e => { if (e.key === "Escape" && GD.on && ST.explore && !/input|textarea/i.test((e.target || {}).tagName || "")) ST.goMap && ST.goMap(); });
+gNav();
 
 /* ---- 公路攝影機觀看面板 ----
    電腦：左側一欄（右邊是資訊卡，地圖留在中間）；手機：下方一張小卡，平常收成一顆「攝影機」按鈕。
