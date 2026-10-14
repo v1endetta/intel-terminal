@@ -606,6 +606,8 @@ body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!im
 /* 補助與徵件 */
 .gl .gtag{display:inline-block;font-style:normal;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:5px;margin-right:6px;vertical-align:1px;background:rgba(48,209,88,.15);color:#30d158}
 .gl .gdue{font-weight:600;color:#c7c7cc}.gl .gdue.hot{color:#ff9f0a}
+/* Google 焦點新聞 */
+.gtl .gtr{display:inline-block;min-width:20px;font-style:normal;font-weight:700;color:#64d2ff;margin-right:6px}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2492,6 +2494,7 @@ function EXPLORE() {
     ] },
     { cat: "輿情", items: [
       { n: "地方新聞", lens: "news" },
+      { n: "焦點新聞", f: () => gtopCard() },
       { n: "全球新聞", globe: 1, f: () => gxCard("wnews") },
       { n: "台灣情緒", lens: "mood", f: () => { const m = (P.mood || {}).taiwan || {}; return { html: sideHTML({ eyebrow: "輿情 · 社群情緒", title: "台灣人今天的心情", big: m.label || "", color: (m.score || 0) < 0 ? DNH : UPH, body: lineSVG(hist("mood", "taiwan"), (m.score || 0) < 0 ? DNH : UPH) + listHTML([{ t: m.line || "" }, ...(m.themes || []).map(t => ({ t: "· " + t }))]), foot: '<a href="/terminal/#p-mood">終端機 ›</a>' }) }; } },
       { n: "PTT", f: barsOf("PTT 各版熱度", () => (((P.ptt || {}).boards) || []).slice(0, 10).map(b => ({ name: b.zh || b.board, v: b.heat, txt: String(b.heat) })), "輿情", "ptt", { signed: false }) },
@@ -2534,6 +2537,7 @@ const PROV = {
   "全球新聞": ["worldnews", "BBC・半島電視台・NPR・衛報・日經亞洲・南華早報・韓聯社・CNA・日本時報（Gemini 翻譯與判讀）", "彙整", 60],
   "物價細項": ["prices", "行政院主計總處（全國）／臺北市政府主計處 消費者物價基本分類指數", "月資料", 1440],
   "觀光": ["tourism", "交通部觀光署 觀光統計資料庫・臺北市一般旅館營運報表", "年／月資料", 1440],
+  "焦點新聞": ["gtop", "Google 新聞・焦點新聞（台灣，非個人化）", "即時", 30],
   "補助徵件": ["grants", "Google 新聞的補助、徵件公告（Gemini 判讀，以原公告為準）", "彙整", 360],
   "lens:stop": ["alerts", "行政院人事行政總處 天然災害停止上班及上課情形", "即時", 30, p => (p.stopwork || {}).updated],
   "氣壓圖": ["pressure", "Open-Meteo（各國氣象模式）海平面氣壓", "預報", 360],
@@ -4584,6 +4588,20 @@ function tourismCard() {
   const big = I ? `來台 ${wan(I.total)}` : H ? `住用率 ${H.last.occ.toFixed(0)}%` : "";
   return { html: sideHTML({ eyebrow: "總經 · 觀光", title: "誰來台灣、台灣人去哪裡？", big, color: I && I.yoy != null ? tone(I.yoy) : "#64d2ff",
     body: `<p class="why">來台和出國是觀光署的年資料（每年更新一次）；台北旅館是每月資料，看得出旺季和淡季。</p>` + body }) };
+}
+
+/* ---- Google 焦點新聞：Google 判斷台灣此刻最重要的新聞（非個人化），附幾家在報、上榜多久 ---- */
+function gtopCard() {
+  const G = P.gtop || {}, xs = G.items || [];
+  if (!xs.length) return { html: sideHTML({ eyebrow: "輿情 · Google 焦點新聞", title: "大家現在在看什麼？", body: '<p class="empty">焦點新聞下一輪更新後出現（每半小時一次）。</p>' }) };
+  const hrs = x => x.first ? (Date.now() - new Date(x.first)) / 36e5 : 0;
+  const onFor = x => { const h = hrs(x); return h < 1 ? "剛上榜" : h < 24 ? `上榜 ${Math.round(h)} 小時` : `上榜 ${Math.round(h / 24)} 天`; };
+  const top = xs[0], long = xs.filter(x => hrs(x) >= 12).length;
+  const row = x => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener"><i class="gtr">${x.rank}</i>${esc(x.t)}</a>`
+    + `<span>${esc([x.src, x.n > 1 ? `${x.n} 家報導` : "", onFor(x), x.at ? navAgo(x.at) : ""].filter(Boolean).join("・"))}</span></li>`;
+  return { html: sideHTML({ eyebrow: `輿情 · Google 焦點新聞${long ? ` · ${long} 則上榜超過半天` : ""}`, title: "大家現在在看什麼？", big: top.t.length > 22 ? top.t.slice(0, 21) + "…" : top.t, color: "#64d2ff",
+    body: `<p class="why">Google 新聞判斷台灣此刻最重要的新聞，不是個人化推薦，大多數人在 Google 新聞首頁看到的就是這些。排序照 Google；上榜越久、越多家在報，代表話題越持久。</p>`
+      + `<ul class="lst gtl">${xs.slice(0, 15).map(row).join("")}</ul>` }) };
 }
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */

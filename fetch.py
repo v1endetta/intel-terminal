@@ -6983,6 +6983,38 @@ def p_prices():
     return _cpi_csv(txt, "台北市", "臺北市政府主計處 消費者物價基本分類指數（月）；全國資料還沒抓到時先用台北市")
 
 
+# ---------- Google 新聞焦點新聞（台灣）：不是個人化推薦，是 Google 判斷台灣此刻最重要的新聞；每則附「幾家在報」與上榜多久 ----------
+GTOP_URL = "https://news.google.com/rss?hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+
+
+def p_gtop():
+    root = ET.fromstring(get(GTOP_URL).content.lstrip(b"\xef\xbb\xbf \r\n\t"))
+    prev = load_prev("gtop") or {}
+    first = dict(prev.get("first") or {})
+    items = []
+    for rank, it in enumerate(root.iter("item"), 1):
+        title = (it.findtext("title") or "").strip()
+        src = (it.findtext("source") or "").strip()
+        if " - " in title:
+            title, tail = title.rsplit(" - ", 1)
+            src = src or tail
+        desc = html_mod.unescape(it.findtext("description") or "")
+        rel = []
+        for href, t, s_ in re.findall(r'<a href="([^"]+)"[^>]*>(.*?)</a>(?:&nbsp;|\s)*<font[^>]*>(.*?)</font>', desc, re.S):
+            rel.append({"t": re.sub(r"<[^>]+>", "", t).strip()[:80], "src": re.sub(r"<[^>]+>", "", s_).strip()[:16], "url": href})
+        k = re.sub(r"\W+", "", title)[:24]
+        first.setdefault(k, NOW_ISO)
+        items.append({"rank": rank, "t": title[:90], "src": src[:16], "url": (it.findtext("link") or "").strip(), "at": _rss_date(it.findtext("pubDate") or ""),
+                      "n": max(1, len({r["src"] for r in rel} | {src})), "rel": rel[1:5], "first": first[k]})
+        if rank >= 30:
+            break
+    if not items:
+        raise RuntimeError("gtop: empty")
+    keep = {re.sub(r"\W+", "", x["t"])[:24] for x in items}
+    first = {k: v for k, v in first.items() if k in keep}   # 掉出榜的就忘掉，下次上榜重新算
+    return {"items": items, "first": first, "src": "Google 新聞・焦點新聞（台灣，非個人化）"}
+
+
 def p_news():
     NEWS_ERRS.clear(); HOT_POOL.clear()
     tw = []
@@ -9883,6 +9915,7 @@ run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("worldnews", p_worldnews, keep_if_fresh_hours=1)
+run("gtop", p_gtop, keep_if_fresh_hours=0.5)  # Google 焦點新聞：半小時一次
 run("social", p_social, keep_if_fresh_hours=0.5)
 run("radar", p_radar, keep_if_fresh_hours=2)
 run("cofacts", p_cofacts, keep_if_fresh_hours=0.5)
