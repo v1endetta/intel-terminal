@@ -7015,6 +7015,174 @@ def p_gtop():
     return {"items": items, "first": first, "src": "Google 新聞・焦點新聞（台灣，非個人化）"}
 
 
+# ---------- 診所：健保特約名冊（每家的原始開業日、歇業日）＋診所檔（科別）→ 哪一科新開最多、開在哪一區 ----------
+NHI_ROSTER = "https://info.nhi.gov.tw/api/iode0000s01/Dataset?rId=A21030000I-D2100G-001"   # 健保特約醫療院所名冊（全部，含歇業）
+NHI_CLINIC = "https://info.nhi.gov.tw/api/iode0000s01/Dataset?rId=A21030000I-D21004-009"   # 健保特約醫事機構-診所（科別）
+CLINIC_GROUPS = [("身心科", r"精神科|身心"), ("醫美皮膚", r"整形外科|皮膚科|美容"), ("小兒科", r"小兒科|兒科"), ("婦產科", r"婦產科"),
+                 ("復健科", r"復健科"), ("眼科", r"眼科"), ("耳鼻喉科", r"耳鼻喉科"), ("骨科", r"骨科"), ("泌尿科", r"泌尿科"), ("家醫內科", r"家庭醫學科|內科|一般科")]
+
+
+def _clinic_group(kind, depts):
+    k = str(kind or "")
+    if "牙" in k:
+        return "牙醫"
+    if "中醫" in k:
+        return "中醫"
+    if not re.search(r"診所|西醫", k):
+        return ""
+    d = str(depts or "")
+    for g, pat in CLINIC_GROUPS:
+        if re.search(pat, d):
+            return g
+    return "其他西醫"
+
+
+def p_clinics():
+    import csv, io
+    roster = list(csv.DictReader(io.StringIO(get(NHI_ROSTER, timeout=180).content.decode("utf-8-sig", "replace"))))
+    clinic = {r.get("醫事機構代碼"): r for r in csv.DictReader(io.StringIO(get(NHI_CLINIC, timeout=240).content.decode("utf-8-sig", "replace")))}
+    kind_by_code = {}   # 名冊只有種類代碼，用兩份都有的機構對出「代碼 → 種類名稱」，歇業的診所才分得出類
+    for r in roster:
+        c = clinic.get(r.get("醫事機構代碼"))
+        if c and r.get("醫事機構種類"):
+            kind_by_code.setdefault(r["醫事機構種類"], c.get("醫事機構種類") or "")
+    today = TODAY_TPE.strftime("%Y%m%d")
+    d365 = (TODAY_TPE - timedelta(days=365)).strftime("%Y%m%d")
+    d730 = (TODAY_TPE - timedelta(days=730)).strftime("%Y%m%d")
+    d60 = (TODAY_TPE - timedelta(days=60)).strftime("%Y%m%d")
+    groups, towns, counties, recent, n_active = {}, {}, {}, [], 0
+    for r in roster:
+        code = r.get("醫事機構代碼") or ""
+        c = clinic.get(code) or {}
+        kind = c.get("醫事機構種類") or kind_by_code.get(r.get("醫事機構種類") or "", "")
+        g = _clinic_group(kind, c.get("診療科別"))
+        if not g:
+            continue
+        start = re.sub(r"\D", "", r.get("原始合約起始日期") or "")[:8]
+        end = re.sub(r"\D", "", r.get("終止合約或歇業日期") or "")[:8]
+        closed = bool(end) and end <= today
+        tk = _addr_town(r.get("機構地址") or c.get("地址") or "")
+        cty = tk[:3] if tk else ""
+        G = groups.setdefault(g, {"active": 0, "new": 0, "new_ly": 0, "close": 0})
+        T = towns.setdefault(tk, {"active": 0, "new": 0, "close": 0, "g": {}}) if tk else None
+        Cc = counties.setdefault(cty, {"active": 0, "new": 0, "new_ly": 0, "close": 0}) if cty else None
+        if not closed:
+            n_active += 1; G["active"] += 1
+            if T: T["active"] += 1
+            if Cc: Cc["active"] += 1
+        if start >= d365:
+            G["new"] += 1
+            if T:
+                T["new"] += 1; T["g"][g] = T["g"].get(g, 0) + 1
+            if Cc: Cc["new"] += 1
+            if start >= d60 and len(recent) < 400:
+                recent.append([r.get("醫事機構名稱") or c.get("醫事機構名稱") or "", g, (c.get("診療科別") or "").split(",")[0][:8], cty, TOWNS[tk][3] if tk else "", start])
+        elif d730 <= start < d365:
+            G["new_ly"] += 1
+            if Cc: Cc["new_ly"] += 1
+        if closed and end >= d365:
+            G["close"] += 1
+            if T: T["close"] += 1
+            if Cc: Cc["close"] += 1
+    if not groups:
+        raise RuntimeError("clinics: no rows")
+    recent.sort(key=lambda x: x[5], reverse=True)
+    out_towns = [[TOWNS[k][2].replace("臺", "台"), TOWNS[k][3], v["new"], v["close"], v["active"], sorted(v["g"].items(), key=lambda x: -x[1])[:3]]
+                 for k, v in towns.items() if k in TOWNS and (v["new"] or v["close"])]
+    out_towns.sort(key=lambda x: -x[2])
+    gl = [{"g": g, **v, "yoy": round((v["new"] - v["new_ly"]) / v["new_ly"] * 100) if v["new_ly"] else None} for g, v in groups.items()]
+    gl.sort(key=lambda x: -x["new"])
+    return {"asof": TODAY_TPE.strftime("%Y-%m-%d"), "n_active": n_active, "groups": gl, "towns": out_towns,
+            "counties": {k.replace("臺", "台"): v for k, v in counties.items()}, "recent": recent[:150],
+            "src": "衛福部健保署 健保特約醫療院所名冊（原始特約日、歇業日）＋特約診所（科別）；新開＝近 12 個月首次特約，跟前 12 個月比"}
+
+
+# ---------- 人口遷徙：內政部遷入遷出統計（到村里，每月）→ 各鄉鎮淨流入、從外縣市還是本縣搬來；最近 12 個月累計 ----------
+MIG_DS = "77144"
+MIG_CACHE = DATA / "migration_cache.json"
+
+
+def _mig_month(url):
+    import csv, io
+    rows = list(csv.DictReader(io.StringIO(get(url, timeout=120).content.decode("utf-8-sig", "replace"))))
+    if not rows:
+        return None, {}
+    ym = rows[0].get("統計年月") or ""
+    num = lambda v: int(re.sub(r"[^\d-]", "", str(v or "0")) or 0)
+    agg = {}
+    for r in rows:
+        area = (r.get("區域別") or "").strip()
+        tk = area if area in TOWNS else _addr_town(area)
+        if not tk:
+            continue
+        a = agg.setdefault(tk, [0, 0, 0, 0, 0])   # 遷入、遷出、外縣市遷入、本縣他鄉鎮遷入、國外遷入
+        g2 = lambda pre: num(r.get(pre + "_男")) + num(r.get(pre + "_女"))
+        a[0] += g2("遷入人數_合計"); a[1] += g2("遷出人數_合計"); a[4] += g2("遷入人數_自國外")
+        a[3] += g2("遷入人數_自本縣（市）他鄉（鎮市區）")
+        a[2] += sum(g2(k[:-2]) for k in r if k.startswith("遷入人數_自他省（市）") and k.endswith("_男")) + g2("遷入人數_自本省他縣（市）_")
+    if not ym:
+        return None, {}
+    y, m = int(ym[:-2]) + 1911, int(ym[-2:])
+    return f"{y}-{m:02d}", agg
+
+
+def p_migration():
+    res = gjson(f"https://data.gov.tw/api/v2/rest/dataset/{MIG_DS}").get("result") or {}
+    dist = [d for d in (res.get("distribution") or []) if (d.get("resourceFormat") or "").upper() == "CSV" and d.get("resourceDownloadUrl")]
+    if not dist:
+        raise RuntimeError("migration: no distributions")
+    def ym_of(d):
+        m = re.search(r"(\d{2,3})\s*年\s*(\d{1,2})\s*月", (d.get("resourceDescription") or "") + (d.get("resourceName") or ""))
+        return f"{int(m.group(1)) + 1911}-{int(m.group(2)):02d}" if m else None
+    try:
+        cache = json.loads(MIG_CACHE.read_text(encoding="utf-8")) if MIG_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    known = {u for u in (cache.get("_urls") or [])}
+    labeled = [(ym_of(d), d["resourceDownloadUrl"]) for d in dist]
+    if all(x[0] for x in labeled):
+        cand = [u for _, u in sorted(labeled, reverse=True)[:13]]
+    else:   # 說明沒寫年月：從最後面的資源往前抓（通常新的在後面）
+        cand = [d["resourceDownloadUrl"] for d in dist[-13:]][::-1]
+    errs, got = [], 0
+    for u in cand:
+        if u in known:
+            continue
+        try:
+            ym, agg = _mig_month(u)
+            if ym:
+                cache[ym] = {k: v for k, v in agg.items()}
+                got += 1
+        except Exception as e:  # noqa: BLE001
+            errs.append(safe_err(e))
+        known.add(u)
+        if got >= 4:   # 一次最多補 4 個月，避免第一次跑太久
+            break
+    cache["_urls"] = sorted(known)
+    months = sorted(k for k in cache if re.match(r"^\d{4}-\d{2}$", k))
+    for k in months[:-24]:
+        cache.pop(k, None)
+    months = months[-24:]
+    write_json(MIG_CACHE, cache)
+    if not months:
+        raise RuntimeError("migration: nothing " + "; ".join(errs)[:120])
+    last, win = months[-1], months[-12:]
+    towns = []
+    for tk in cache[last]:
+        if tk not in TOWNS:
+            continue
+        cur = cache[last][tk]
+        s12 = [sum((cache[m].get(tk) or [0] * 5)[i] for m in win) for i in range(5)]
+        towns.append([TOWNS[tk][2].replace("臺", "台"), TOWNS[tk][3], cur[0] - cur[1], cur[0], cur[1], s12[0] - s12[1], s12[2], s12[3], s12[4]])
+    towns.sort(key=lambda x: -x[5])
+    counties = {}
+    for t in towns:
+        c = counties.setdefault(t[0], {"net": 0, "net12": 0, "ext12": 0})
+        c["net"] += t[2]; c["net12"] += t[5]
+    return {"month": last, "months12": [win[0], win[-1]], "n_months": len(win), "towns": towns, "counties": counties, "errs": errs[:4],
+            "src": "內政部戶政司 遷入遷出統計（村里，每月）；淨流入＝遷入－遷出，不含出生死亡；12 個月累計"}
+
+
 def p_news():
     NEWS_ERRS.clear(); HOT_POOL.clear()
     tw = []
@@ -9889,7 +10057,9 @@ run("policy", p_policy, keep_if_fresh_hours=6)
 run("grants", p_grants, keep_if_fresh_hours=6)  # 政府補助與徵件：一天約 4 次，只判讀新標題
 run("relay_stats", p_relay_stats, keep_if_fresh_hours=6)  # 抓取站官方統計的狀態摘要（除錯用）
 run("prices", p_prices, keep_if_fresh_hours=1)  # 物價細項：月資料；全國版由台灣抓取站代抓，台北市版當備援
-run("tourism", p_tourism, keep_if_fresh_hours=24)  # 觀光：年資料＋台北旅館月資料，一天抓一次
+run("tourism", p_tourism, keep_if_fresh_hours=24)
+run("clinics", p_clinics, keep_if_fresh_hours=20)  # 診所：健保名冊每天更新，一天抓一次
+run("migration", p_migration, keep_if_fresh_hours=12)  # 人口遷徙：每月資料，第一次會分幾輪補齊 12 個月  # 觀光：年資料＋台北旅館月資料，一天抓一次
 run("ipr", p_ipr, keep_if_fresh_hours=72)
 run("media", p_media, keep_if_fresh_hours=2)
 # run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
