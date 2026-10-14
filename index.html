@@ -607,6 +607,15 @@ body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!im
 .gl .gdue{font-weight:600;color:#c7c7cc}.gl .gdue.hot{color:#ff9f0a}
 /* Google 焦點新聞 */
 .gtl .gtr{display:inline-block;min-width:20px;font-style:normal;font-weight:700;color:#64d2ff;margin-right:6px}
+/* 本月洞見 */
+.ins{padding:12px 0;border-top:1px solid rgba(255,255,255,.08)}
+.ins b{display:block;font-size:15px;line-height:1.45;color:#f5f5f7;margin:4px 0}
+.ins p{margin:2px 0;font-size:13px;line-height:1.6;color:#c7c7cc}
+.ins .ins-so{color:#ffd60a}
+.ins-tags i{display:inline-block;font-style:normal;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:5px;margin-right:5px;background:rgba(255,214,10,.14);color:#ffd60a}
+.ins-go{all:unset;cursor:pointer;margin-top:6px;font-size:12.5px;font-weight:600;color:#64d2ff}
+.insl{all:unset;cursor:pointer;display:block;margin-top:14px;font-size:14px;line-height:1.5;color:#f5f5f7}
+.insl i{font-style:normal;font-size:11px;font-weight:700;color:#1d1d1f;background:#ffd60a;border-radius:5px;padding:2px 7px;margin-right:8px;vertical-align:1px}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2478,6 +2487,7 @@ function EXPLORE() {
       { n: "美元流動性", globe: 1, f: () => gxCard("liq") },
     ] },
     { cat: "走向", items: [
+      { n: "本月洞見", f: () => insightsCard() },
       { n: "人口遷徙", lens: "move" },
       { n: "本週走向", f: listOf(((P.weekly || {}).headline) || "本週走向", () => (((P.weekly || {}).dirs) || []).map(d => ({ t: d.t, s: d.why })), "走向 · " + (((P.weekly || {}).week) || ""), "weekly") },
       { n: "趨勢雷達", f: barsOf("新聞量最多的主題", () => (((P.voice || {}).kw) || []).slice().sort((a, b) => b.news7 - a.news7).slice(0, 10).map(k => ({ name: k.k, v: k.news7, txt: k.news7 + " 則" })), "走向 · 近 7 天", "voice", { signed: false }) },
@@ -2543,6 +2553,7 @@ const PROV = {
   "新興生意": ["taxreg", "財政部 全國營業（稅籍）登記", "月資料", 1440],
   "lens:clinic": ["clinics", "衛福部健保署 健保特約醫療院所名冊", "每日", 1440],
   "lens:move": ["migration", "內政部戶政司 遷入遷出統計", "月資料", 1440],
+  "本月洞見": ["insights", "政府開放資料交叉比對（程式算訊號、Gemini 寫句子）", "每日", 1440],
   "補助徵件": ["grants", "Google 新聞的補助、徵件公告（Gemini 判讀，以原公告為準）", "彙整", 360],
   "lens:stop": ["alerts", "行政院人事行政總處 天然災害停止上班及上課情形", "即時", 30, p => (p.stopwork || {}).updated],
   "氣壓圖": ["pressure", "Open-Meteo（各國氣象模式）海平面氣壓", "預報", 360],
@@ -2580,6 +2591,7 @@ function buildDock() {
   seg.onclick = e => { const b = e.target.closest("button"); if (b) showCat(+b.dataset.c); };
   $("chips").onclick = e => { const b = e.target.closest("button"); if (b) pickItem(+b.dataset.j); };
   addEventListener("resize", moveHL);
+  ST.openAt = (cat, n) => { const [c, j] = at(cat, n); EXCAT = c; EXITEM = j; if (ST.explore) showCat(c, j); else { const d = document.querySelectorAll("#dots button"); d.length && d[d.length - 1].click(); } };
   ST.openExplore = () => { if (EXCAT < 0) { EXCAT = E.findIndex(c => c.cat === "現場"); EXITEM = 0; } showCat(EXCAT, Math.max(0, EXITEM)); requestAnimationFrame(moveHL); };
 }
 
@@ -2609,7 +2621,7 @@ async function buildStory() {
   const now = new Date(), d = `${now.getMonth() + 1} 月 ${now.getDate()} 日 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
   const CH = [];
   CH.push({ name: "開場", g: new THREE.Group(), cam: MOBILE ? { tgt: V(5, 0, -175), pos: V(35, 700, 420) } : ISLAND, cls: "hero",   // 手機：島往下放，讓出上面給五件事
-    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">每天固定看的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.tocC || t.color}">${t.tocDot ? `<i class="sig" style="background:${t.tocDot};color:${t.tocDot}"></i>` : ""}${esc(t.toc || t.chgTxt || "")}</span></li>`).join("")}</ol><div class="herofoot"><span class="scrollhint">往下捲</span><button type="button" class="replay" id="replay">重播開場</button></div>` });
+    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">每天固定看的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.tocC || t.color}">${t.tocDot ? `<i class="sig" style="background:${t.tocDot};color:${t.tocDot}"></i>` : ""}${esc(t.toc || t.chgTxt || "")}</span></li>`).join("")}</ol>${(((P.insights || {}).items) || [])[0] ? `<button type="button" class="insl" data-ins="1"><i>本月洞見</i>${esc(P.insights.items[0].title)} ›</button>` : ""}<div class="herofoot"><span class="scrollhint">往下捲</span><button type="button" class="replay" id="replay">重播開場</button></div>` });
   top.forEach((t, i) => { const sc = sceneFor(t, i);
     CH.push({ name: t.cat, g: sc.g, cam: sc.cam, globe: sc.globe, layer: sc.layer, geo: sc.geo, side: storySide(t, i),
       dom: `<div class="eyebrow">0${i + 1} / 五件事 · ${esc(t.name)}</div><h2 style="color:${t.color}">${esc(t.big)}</h2><p>${esc(t.say)}</p><p class="why"><b>為什麼看這個</b>${esc(t.why)}</p>` }); });
@@ -4701,6 +4713,26 @@ function nicheCard() {
       + `<div class="nvh">成長最快</div>` + barsHTML(up.slice(0, 8).map(row))
       + (dn.length ? `<div class="nvh">正在退的</div>` + barsHTML(dn.slice(0, 5).map(row)) : "") }) };
 }
+
+/* ---- 本月洞見：程式算訊號、Gemini 寫句子（數字都對過原始資料）；有地點的可以直接飛過去看 ---- */
+function insightsCard() {
+  const D = P.insights || {}, xs = D.items || [];
+  if (!xs.length) return { html: sideHTML({ eyebrow: "走向 · 本月洞見", title: "資料告訴我們什麼？", body: '<p class="empty">洞見每天整理一次，下一輪更新後出現。</p>' }) };
+  return { html: sideHTML({ eyebrow: `走向 · 本月洞見 · 交叉比對 ${D.n_sources || ""} 份資料`, title: "資料告訴我們什麼？", big: xs[0].title, color: "#ffd60a",
+    body: `<p class="why">人口遷徙、診所、新公司、新興生意、物價、消費放在一起看。訊號由程式算，句子由 AI 寫，每個數字都對過原始資料，對不上的就不放。</p>`
+      + xs.map((x, i) => `<div class="ins"><div class="ins-tags">${(x.tags || []).map(t => `<i>${esc(t)}</i>`).join("")}</div><b>${esc(x.title)}</b><p>${esc(x.body)}</p>`
+        + (x.so ? `<p class="ins-so">${esc(x.so)}</p>` : "") + (x.place ? `<button type="button" class="ins-go" data-insgo="${i}">在地圖上看 ${esc(x.place)} ›</button>` : "") + `</div>`).join("") }) };
+}
+document.addEventListener("click", e => {
+  const g = e.target.closest && e.target.closest("[data-insgo]");
+  if (g) {
+    const x = ((P.insights || {}).items || [])[+g.dataset.insgo]; if (!x) return;
+    const t = (NAV.towns || []).find(t => norm(t.county) + t.name === norm(x.place)) || (NAV.towns || []).find(t => norm(x.place).endsWith(t.name) && norm(x.place).startsWith(norm(t.county).slice(0, 2)));
+    navSetLens(x.lens || "now"); if (t) navGoTown(t);
+    return;
+  }
+  if (e.target.closest && e.target.closest("[data-ins]") && ST.openAt) ST.openAt("走向", "本月洞見");
+});
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
