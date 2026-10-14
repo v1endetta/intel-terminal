@@ -7138,26 +7138,42 @@ def p_migration():
         cache = json.loads(MIG_CACHE.read_text(encoding="utf-8")) if MIG_CACHE.exists() else {}
     except Exception:  # noqa: BLE001
         cache = {}
-    known = {u for u in (cache.get("_urls") or [])}
-    labeled = [(ym_of(d), d["resourceDownloadUrl"]) for d in dist]
-    if all(x[0] for x in labeled):
-        cand = [u for _, u in sorted(labeled, reverse=True)[:13]]
-    else:   # 說明沒寫年月：從最後面的資源往前抓（通常新的在後面）
-        cand = [d["resourceDownloadUrl"] for d in dist[-13:]][::-1]
+    # 資源說明沒寫年月、順序也不固定：每個檔案只讀開頭幾百個位元組拿「統計年月」，記在快取裡（之後只讀新出現的檔案）
+    ymap = dict(cache.get("_ym") or {})
     errs, got = [], 0
-    for u in cand:
-        if u in known:
+    for d in dist:
+        u = d["resourceDownloadUrl"]
+        if u in ymap:
             continue
+        ym = ym_of(d)
+        if not ym:
+            try:
+                r = S.get(u, timeout=40, stream=True)
+                head = r.raw.read(600, decode_content=True).decode("utf-8-sig", "replace"); r.close()
+                m = re.search(r"\n\s*(\d{3})(\d{2})\s*,", head)
+                ym = f"{int(m.group(1)) + 1911}-{m.group(2)}" if m else ""
+            except Exception as e:  # noqa: BLE001
+                errs.append("年月: " + safe_err(e)); ym = ""
+        ymap[u] = ym
+    cache["_ym"] = ymap
+    floor = (TODAY_TPE - timedelta(days=800)).strftime("%Y-%m")
+    for k in [k for k in cache if re.match(r"^\d{4}-\d{2}$", k) and k < floor]:
+        cache.pop(k, None)   # 舊的月份（例如之前誤抓的 2018 年）丟掉
+    want = sorted({ym for ym in ymap.values() if ym and ym >= floor}, reverse=True)[:13]
+    for ym in want:
+        if ym in cache:
+            continue
+        u = next(u for u, y in ymap.items() if y == ym)
         try:
-            ym, agg = _mig_month(u)
-            if ym:
-                cache[ym] = {k: v for k, v in agg.items()}
+            ym2, agg = _mig_month(u)
+            if ym2:
+                cache[ym2] = {k: v for k, v in agg.items()}
                 got += 1
         except Exception as e:  # noqa: BLE001
             errs.append(safe_err(e))
-        known.add(u)
         if got >= 4:   # 一次最多補 4 個月，避免第一次跑太久
             break
+    known = set(ymap)
     cache["_urls"] = sorted(known)
     months = sorted(k for k in cache if re.match(r"^\d{4}-\d{2}$", k))
     for k in months[:-24]:
@@ -10059,7 +10075,7 @@ run("relay_stats", p_relay_stats, keep_if_fresh_hours=6)  # 抓取站官方統�
 run("prices", p_prices, keep_if_fresh_hours=1)  # 物價細項：月資料；全國版由台灣抓取站代抓，台北市版當備援
 run("tourism", p_tourism, keep_if_fresh_hours=24)
 run("clinics", p_clinics, keep_if_fresh_hours=20)  # 診所：健保名冊每天更新，一天抓一次
-run("migration", p_migration, keep_if_fresh_hours=12)  # 人口遷徙：每月資料，第一次會分幾輪補齊 12 個月  # 觀光：年資料＋台北旅館月資料，一天抓一次
+run("migration", p_migration, keep_if_fresh_hours=1)  # 人口遷徙：每月資料；檔案年月已快取，平常只檢查有沒有新檔，第一次分幾輪補齊 12 個月  # 觀光：年資料＋台北旅館月資料，一天抓一次
 run("ipr", p_ipr, keep_if_fresh_hours=72)
 run("media", p_media, keep_if_fresh_hours=2)
 # run("reddit", p_reddit, keep_if_fresh_hours=1)  # 改用 PTT；有金鑰再開
