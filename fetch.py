@@ -7153,7 +7153,7 @@ def p_migration():
     for d in dist:
         if d["resourceDownloadUrl"] in todo_u and ym_of(d):
             ymap[d["resourceDownloadUrl"]] = ym_of(d)
-    todo_u = [u for u in todo_u if u not in ymap][:30]   # 每輪最多讀 30 個檔頭（同時讀），整輪不會被拖慢
+    todo_u = [u for u in todo_u if u not in ymap][:150]   # 檔頭很小、同時讀，一輪就能讀完全部
     from concurrent.futures import ThreadPoolExecutor
     with ThreadPoolExecutor(8) as ex:
         for u, ym in ex.map(_head_ym, todo_u):
@@ -7182,7 +7182,7 @@ def p_migration():
                 got += 1
         except Exception as e:  # noqa: BLE001
             errs.append(safe_err(e))
-        if got >= 4:   # 一次最多補 4 個月，避免第一次跑太久
+        if got >= 6:   # 一次最多補 6 個月，避免第一次跑太久
             break
     known = set(ymap)
     cache["_urls"] = sorted(known)
