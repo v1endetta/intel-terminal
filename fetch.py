@@ -7217,9 +7217,9 @@ def p_migration():
     counties = {}
     for t in towns:
         c = counties.setdefault(t[0], {"net": 0, "net12": 0, "ext12": 0})
-        c["net"] += t[2]; c["net12"] += t[5]
+        c["net"] += t[2]; c["net12"] += t[5]; c["ext12"] += t[6]
     return {"month": last, "months12": [win[0], win[-1]], "n_months": len(win), "towns": towns, "counties": counties, "errs": errs[:4],
-            "src": "內政部戶政司 遷入遷出統計（村里，每月）；淨流入＝遷入－遷出，不含出生死亡；12 個月累計"}
+            "src": "內政部戶政司 遷入遷出統計（村里，每月）；淨流入＝遷入－遷出，不含出生死亡；最近 12 個月累計（資料不足 12 個月時用現有月份）"}
 
 
 # ---------- 每月洞見：程式先從各份資料算出值得注意的變化並做鄉鎮交叉比對，Gemini 只負責把它寫成句子；
@@ -7325,6 +7325,10 @@ def p_insights():
         t, b, so = str(it.get("title") or "")[:40], str(it.get("body") or "")[:200], str(it.get("so") or "")[:80]
         if not t or not b:
             continue
+        if "人口遷徙" in sig and "個月" not in b:   # 人口數字一定要帶期間
+            nm = (RESULTS.get("migration") or load_prev("migration") or {}).get("n_months") or 0
+            b = re.sub(r"人口淨(流入|流出)", lambda m: f"近 {nm} 個月人口淨{m.group(1)}", b, count=1)[:200]
+        b = b.replace("其中外縣市搬來", "從外縣市遷入")
         txt = t + b + so
         if not _num_ok(txt, src) or INSIGHT_BANNED.search(txt):
             dropped.append(t); continue
@@ -7336,7 +7340,7 @@ def p_insights():
                       "place": str(it.get("place") or "")[:12], "lens": it.get("lens") if it.get("lens") in ("move", "clinic", "biz") else ""})
     if not items:
         raise RuntimeError(f"insights: 全部沒通過數字檢查（{len(dropped)} 條）")
-    return {"v": 3, "items": items[:5], "dropped": dropped[:5], "model": model, "n_sources": len(sig) - 1,
+    return {"v": 4, "items": items[:5], "dropped": dropped[:5], "model": model, "n_sources": len(sig) - 1,
             "src": "、".join(k for k in sig if k != "鄉鎮交叉") + "（程式算訊號、Gemini 寫句子；數字都對過原始資料）"}
 
 
@@ -10286,7 +10290,7 @@ run("pop", p_pop, keep_if_fresh_hours=3)
 run("roads", p_roads)
 run("cctv", p_cctv, keep_if_fresh_hours=12 if CCTV_PATH.exists() and '"thb"' in CCTV_PATH.read_text(encoding="utf-8") else 1)   # 攝影機清單（地圖車流視角）
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
-run("insights", p_insights, keep_if_fresh_hours=6 if (load_prev("insights") or {}).get("v") == 3 else 0)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
+run("insights", p_insights, keep_if_fresh_hours=6 if (load_prev("insights") or {}).get("v") == 4 else 0)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 run("housefc", p_housefc, keep_if_fresh_hours=24)
