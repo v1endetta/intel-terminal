@@ -7163,7 +7163,14 @@ def p_migration():
     floor = (TODAY_TPE - timedelta(days=800)).strftime("%Y-%m")
     for k in [k for k in cache if re.match(r"^\d{4}-\d{2}$", k) and k < floor]:
         cache.pop(k, None)   # 舊的月份（例如之前誤抓的 2018 年）丟掉
-    want = sorted({ym for ym in ymap.values() if ym and ym >= floor}, reverse=True)[:13]
+    newest = max([ym for ym in ymap.values() if ym] or [""])
+    def back(ym, k):
+        y, m = int(ym[:4]), int(ym[5:]) - k
+        while m <= 0:
+            y, m = y - 1, m + 12
+        return f"{y}-{m:02d}"
+    span = {back(newest, k) for k in range(12)} if newest else set()   # 最新月往回 12 個月（連續），只補這幾個月
+    want = sorted({ym for ym in ymap.values() if ym in span}, reverse=True)
     for ym in want:
         if ym in cache:
             continue
@@ -7186,7 +7193,8 @@ def p_migration():
     write_json(MIG_CACHE, cache)
     if not months:
         raise RuntimeError("migration: nothing " + "; ".join(errs)[:120])
-    last, win = months[-1], months[-12:]
+    last = months[-1]
+    win = [m for m in months if m in span] or [last]
     towns = []
     for tk in cache[last]:
         if tk not in TOWNS:
