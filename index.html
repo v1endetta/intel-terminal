@@ -4721,7 +4721,7 @@ function insightsCard() {
   return { html: sideHTML({ eyebrow: `走向 · 本月洞見 · 交叉比對 ${D.n_sources || ""} 份資料`, title: "資料告訴我們什麼？", big: xs[0].title, color: "#ffd60a",
     body: `<p class="why">人口遷徙、診所、新公司、新興生意、物價、消費放在一起看。訊號由程式算，句子由 AI 寫，每個數字都對過原始資料，對不上的就不放。</p>`
       + xs.map((x, i) => `<div class="ins"><div class="ins-tags">${(x.tags || []).map(t => `<i>${esc(t)}</i>`).join("")}</div><b>${esc(x.title)}</b><p>${esc(x.body)}</p>`
-        + (x.so ? `<p class="ins-so">${esc(x.so)}</p>` : "") + (x.place ? `<button type="button" class="ins-go" data-insgo="${i}">在地圖上看 ${esc(x.place)} ›</button>` : "") + `</div>`).join("") }) };
+        + (x.why ? `<p class="ins-so">${esc(x.why)}</p>` : x.so ? `<p class="ins-so">${esc(x.so)}</p>` : "") + (x.place ? `<button type="button" class="ins-go" data-insgo="${i}">在地圖上看 ${esc(x.place)} ›</button>` : "") + `</div>`).join("") }) };
 }
 document.addEventListener("click", e => {
   const g = e.target.closest && e.target.closest("[data-insgo]");

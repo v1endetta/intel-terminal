@@ -7283,6 +7283,32 @@ def _ins_signals():
     return sig
 
 
+def _ins_ranks():
+    """每個鄉鎮在各指標的全台排名、縣市內排名（程式算，不經 AI）→ 洞見卡的「為什麼值得注意」。"""
+    R = lambda k: RESULTS.get(k) or load_prev(k) or {}
+    out = {}
+    def rank(key, label, rows):   # rows: [(縣市, 鄉鎮, 數值)]，數值大的排前面
+        rows = [r for r in rows if r[2] is not None and r[2] > 0]
+        rows.sort(key=lambda r: -r[2])
+        byc = {}
+        for i, (c, t, v) in enumerate(rows):
+            c = norm_c(c); n_c = byc[c] = byc.get(c, 0) + 1
+            if i < 20 or n_c <= 3:
+                out.setdefault(c + t, {})[key] = f"{label}全台第 {i + 1}" + (f"（{c}第 {n_c}）" if n_c <= 3 and i >= 3 else "")
+    mg = R("migration")
+    if mg.get("towns") and (mg.get("n_months") or 0) >= 6:
+        rank("move", f"近 {mg['n_months']} 個月人口淨流入", [(t[0], t[1], t[5]) for t in mg["towns"]])
+    cl = R("clinics")
+    if cl.get("towns"):
+        rank("clinic", "診所淨增", [(t[0], t[1], t[2] - t[3]) for t in cl["towns"]])
+    try:
+        bt = json.loads(BIZ_TOWNS_PATH.read_text(encoding="utf-8"))
+        rank("biz", "新公司月增", [(t[0], t[1], round((t[2] - t[3]) / t[3] * 100)) for t in bt["towns"] if t[3] >= 20])
+    except Exception:  # noqa: BLE001
+        pass
+    return out
+
+
 def norm_c(c):
     return str(c or "").replace("臺", "台")
 
@@ -7307,22 +7333,22 @@ def p_insights():
     if len(sig) < 3:
         raise RuntimeError("insights: 資料不足")
     src = json.dumps(sig, ensure_ascii=False)
+    ranks = _ins_ranks()
     prompt = ("你是台灣的市場情報編輯，讀者是想從市場變化裡找機會的創業者。下面是程式從政府開放資料算好的訊號（JSON）。"
               "請寫 4～5 條洞見，每條都要把兩份以上的資料放在一起看（例如人口流入的區，同時新開了哪些診所、哪些公司），說出一個有立場的判斷。\n"
               "規則：\n- 只能用 JSON 裡出現的數字，不可以自己算新的數字、不可以估計、不可以加入你自己知道的時事。\n"
-              "- title 22 字內，直接講判斷；body 90 字內，附上支撐的數字；so 一句 30 字內：這對想找機會的人代表什麼。\n"
+              "- title 22 字內，直接講判斷；body 90 字內，附上支撐的數字。不要寫建議或「適合開什麼店」，讀者自己判斷。\n"
               "- 台灣用語、白話、短句。不要用「不是…而是」「不僅…更」「在這個…的時代」「讓我們」，不要用賦能、打造、旅程、沉浸式、極致、質感、溫度、療癒、宛如。\n"
               "- 不談政治。資料撐不起的就不要寫。\n"
               "- 家數多不等於有意義，大行政區本來就多。判斷要根據「變化」：年增、月增、淨增（新開減歇業）、跟同縣市其他區比；只講總數的不要寫。\n"
               "- 新開和歇業要一起講，不能只講好的一面。提到某區新公司，就要寫出跟上月比的月增%（可能是負的），月增是負的不能說成長或雙增。\n"
-              "- so 要具體：說出哪一種生意或客群、為什麼是這一區，不要寫「可關注…商機」「適合佈局…」這種放到哪一區都成立的話。\n"
               "- 只能談 JSON 裡有的資料：JSON 沒有「人口遷徙」就完全不要提人口移入或移出。\n"
               "- place 填最相關的一個鄉鎮（例如 新竹縣竹北市），沒有就空字串；lens 填最相關的地圖視角：move（人口遷徙）、clinic（診所）、biz（新公司），或空字串。\n"
-              '只回 JSON：{"items": [{"title": "", "body": "", "so": "", "tags": ["人口遷徙", "診所"], "place": "", "lens": ""}]}\n\n' + src)
+              '只回 JSON：{"items": [{"title": "", "body": "", "tags": ["人口遷徙", "診所"], "place": "", "lens": ""}]}\n\n' + src)
     data, model = _gemini_json(prompt, max_tokens=4000, timeout=120)
     items, dropped = [], []
     for it in _items_of(data):
-        t, b, so = str(it.get("title") or "")[:40], str(it.get("body") or "")[:200], str(it.get("so") or "")[:80]
+        t, b, so = str(it.get("title") or "")[:40], str(it.get("body") or "")[:200], ""
         if not t or not b:
             continue
         if "人口遷徙" in sig and "個月" not in b:   # 人口數字一定要帶期間
@@ -7336,11 +7362,13 @@ def p_insights():
             dropped.append(t + "（新公司沒講跟上月比）"); continue
         if "人口遷徙" not in sig and re.search(r"人口|移入|移出|遷入|遷出|搬來|搬入", txt):
             dropped.append(t + "（提到沒納入的人口資料）"); continue
-        items.append({"title": t, "body": b, "so": so, "tags": [str(x)[:8] for x in (it.get("tags") or [])][:4],
+        rk = ranks.get(str(it.get("place") or "").replace("臺", "台"), {})
+        why = [rk[k] for k, w in (("move", "人口"), ("clinic", "診所"), ("biz", "新公司")) if k in rk and w in txt]
+        items.append({"title": t, "body": b, "why": "、".join(why[:3]), "tags": [str(x)[:8] for x in (it.get("tags") or [])][:4],
                       "place": str(it.get("place") or "")[:12], "lens": it.get("lens") if it.get("lens") in ("move", "clinic", "biz") else ""})
     if not items:
         raise RuntimeError(f"insights: 全部沒通過數字檢查（{len(dropped)} 條）")
-    return {"v": 4, "items": items[:5], "dropped": dropped[:5], "model": model, "n_sources": len(sig) - 1,
+    return {"v": 5, "items": items[:5], "dropped": dropped[:5], "model": model, "n_sources": len(sig) - 1,
             "src": "、".join(k for k in sig if k != "鄉鎮交叉") + "（程式算訊號、Gemini 寫句子；數字都對過原始資料）"}
 
 
@@ -10290,7 +10318,7 @@ run("pop", p_pop, keep_if_fresh_hours=3)
 run("roads", p_roads)
 run("cctv", p_cctv, keep_if_fresh_hours=12 if CCTV_PATH.exists() and '"thb"' in CCTV_PATH.read_text(encoding="utf-8") else 1)   # 攝影機清單（地圖車流視角）
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
-run("insights", p_insights, keep_if_fresh_hours=6 if (load_prev("insights") or {}).get("v") == 4 else 0)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
+run("insights", p_insights, keep_if_fresh_hours=6 if (load_prev("insights") or {}).get("v") == 5 else 0)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 run("housefc", p_housefc, keep_if_fresh_hours=24)
