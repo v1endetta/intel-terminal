@@ -10261,7 +10261,7 @@ run("pop", p_pop, keep_if_fresh_hours=3)
 run("roads", p_roads)
 run("cctv", p_cctv, keep_if_fresh_hours=12 if CCTV_PATH.exists() and '"thb"' in CCTV_PATH.read_text(encoding="utf-8") else 1)   # 攝影機清單（地圖車流視角）
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
-run("insights", p_insights, keep_if_fresh_hours=24)  # 每月洞見：一天寫一次（1 次 Gemini）
+run("insights", p_insights, keep_if_fresh_hours=6)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 run("housefc", p_housefc, keep_if_fresh_hours=24)
