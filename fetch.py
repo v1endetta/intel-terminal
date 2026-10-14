@@ -7233,14 +7233,20 @@ def _ins_signals():
     if cl.get("groups"):
         sig["診所"] = {"說明": "健保特約診所，近 12 個月新開家數跟前 12 個月比（醫美多為自費，會低估）",
                      "各科": [{"科別": g["g"], "新開": g["new"], "前一年新開": g["new_ly"], "年增%": g.get("yoy")} for g in cl["groups"] if g["new"] >= 15 and g["g"] != "其他西醫"],
-                     "新開最多的區": [{"地點": norm_c(t[0]) + t[1], "新開": t[2], "歇業": t[3], "主要科別": [g[0] for g in t[5]]} for t in cl["towns"][:8]]}
-        for t in cl["towns"][:40]:
-            x = T(t[0], t[1]); x["診所新開"] = t[2]; x["診所歇業"] = t[3]; x["新診所科別"] = [f"{g[0]}{g[1]}" for g in t[5]]
+                     "淨增最多的區（新開減歇業）": [{"地點": norm_c(t[0]) + t[1], "淨增": t[2] - t[3], "新開": t[2], "歇業": t[3], "現有": t[4], "主要科別": [g[0] for g in t[5]]}
+                                          for t in sorted(cl["towns"], key=lambda t: -(t[2] - t[3]))[:8]],
+                     "淨減最多的區": [{"地點": norm_c(t[0]) + t[1], "淨減": t[3] - t[2], "新開": t[2], "歇業": t[3]} for t in sorted(cl["towns"], key=lambda t: (t[2] - t[3]))[:4] if t[3] > t[2]]}
+        for t in sorted(cl["towns"], key=lambda t: -(t[2] - t[3]))[:40]:
+            x = T(t[0], t[1]); x["診所淨增"] = t[2] - t[3]; x["診所新開"] = t[2]; x["診所歇業"] = t[3]; x["新診所科別"] = [f"{g[0]}{g[1]}" for g in t[5]]
     try:
         bt = json.loads(BIZ_TOWNS_PATH.read_text(encoding="utf-8"))
-        sig["新公司"] = {"月份": bt.get("month"), "最多的區": [{"地點": norm_c(t[0]) + t[1], "家數": t[2], "上月": t[3], "類別": [c[0] for c in t[4]]} for t in bt["towns"][:8]]}
-        for t in bt["towns"][:40]:
-            x = T(t[0], t[1]); x["新公司"] = t[2]; x["新公司類別"] = [c[0] for c in t[4][:2]]
+        grow = [t for t in bt["towns"] if t[3] >= 20]
+        pct = lambda t: round((t[2] - t[3]) / t[3] * 100)
+        sig["新公司"] = {"月份": bt.get("month"), "說明": "當月新設公司與商號，跟上月比（上月少於 20 家的區不比）",
+                       "比上月成長最多的區": [{"地點": norm_c(t[0]) + t[1], "本月": t[2], "上月": t[3], "月增%": pct(t), "類別": [c[0] for c in t[4]]} for t in sorted(grow, key=lambda t: -pct(t))[:6]],
+                       "比上月減少最多的區": [{"地點": norm_c(t[0]) + t[1], "本月": t[2], "上月": t[3], "月增%": pct(t)} for t in sorted(grow, key=lambda t: pct(t))[:4]]}
+        for t in grow:
+            x = T(t[0], t[1]); x["新公司本月"] = t[2]; x["新公司上月"] = t[3]; x["新公司月增%"] = pct(t); x["新公司類別"] = [c[0] for c in t[4][:2]]
     except Exception:  # noqa: BLE001
         pass
     tx = R("taxreg")
@@ -7260,8 +7266,8 @@ def _ins_signals():
     if (tr.get("inbound") or {}).get("rise"):
         sig["觀光"] = {"來台成長最快": [{"國家": x["name"], "年增%": round(x["yoy"])} for x in tr["inbound"]["rise"][:4]], "年份": tr["inbound"].get("year")}
     # 鄉鎮交叉：同一區在兩份以上資料都出現，才值得放在一起看
-    cross = [v for v in towns.values() if sum(k in v for k in ("人口淨流入", "診所新開", "新公司")) >= 2]
-    cross.sort(key=lambda v: -(v.get("人口淨流入") or 0))
+    cross = [v for v in towns.values() if sum(k in v for k in ("人口淨流入", "診所淨增", "新公司本月")) >= 2]
+    cross.sort(key=lambda v: -((v.get("人口淨流入") or 0) / 300 + (v.get("診所淨增") or 0) + (v.get("新公司月增%") or 0) / 10))
     sig["鄉鎮交叉"] = cross[:15]
     return sig
 
@@ -7296,6 +7302,9 @@ def p_insights():
               "- title 22 字內，直接講判斷；body 90 字內，附上支撐的數字；so 一句 30 字內：這對想找機會的人代表什麼。\n"
               "- 台灣用語、白話、短句。不要用「不是…而是」「不僅…更」「在這個…的時代」「讓我們」，不要用賦能、打造、旅程、沉浸式、極致、質感、溫度、療癒、宛如。\n"
               "- 不談政治。資料撐不起的就不要寫。\n"
+              "- 家數多不等於有意義，大行政區本來就多。判斷要根據「變化」：年增、月增、淨增（新開減歇業）、跟同縣市其他區比；只講總數的不要寫。\n"
+              "- 新開和歇業要一起講，不能只講好的一面。\n"
+              "- 只能談 JSON 裡有的資料：JSON 沒有「人口遷徙」就完全不要提人口移入或移出。\n"
               "- place 填最相關的一個鄉鎮（例如 新竹縣竹北市），沒有就空字串；lens 填最相關的地圖視角：move（人口遷徙）、clinic（診所）、biz（新公司），或空字串。\n"
               '只回 JSON：{"items": [{"title": "", "body": "", "so": "", "tags": ["人口遷徙", "診所"], "place": "", "lens": ""}]}\n\n' + src)
     data, model = _gemini_json(prompt, max_tokens=4000, timeout=120)
@@ -7307,12 +7316,14 @@ def p_insights():
         txt = t + b + so
         if not _num_ok(txt, src) or INSIGHT_BANNED.search(txt):
             dropped.append(t); continue
+        if "人口遷徙" not in sig and re.search(r"人口(移入|移出|流入|流出|淨)|移入人口|遷入|遷出", txt):
+            dropped.append(t + "（提到沒納入的人口資料）"); continue
         items.append({"title": t, "body": b, "so": so, "tags": [str(x)[:8] for x in (it.get("tags") or [])][:4],
                       "place": str(it.get("place") or "")[:12], "lens": it.get("lens") if it.get("lens") in ("move", "clinic", "biz") else ""})
     if not items:
         raise RuntimeError(f"insights: 全部沒通過數字檢查（{len(dropped)} 條）")
-    return {"items": items[:5], "dropped": dropped[:5], "model": model, "n_sources": len(sig),
-            "src": "人口遷徙、診所、新公司、新興生意、物價、電子發票消費、觀光（程式算訊號、Gemini 寫句子；數字都對過原始資料）"}
+    return {"v": 2, "items": items[:5], "dropped": dropped[:5], "model": model, "n_sources": len(sig) - 1,
+            "src": "、".join(k for k in sig if k != "鄉鎮交叉") + "（程式算訊號、Gemini 寫句子；數字都對過原始資料）"}
 
 
 def p_news():
@@ -10261,7 +10272,7 @@ run("pop", p_pop, keep_if_fresh_hours=3)
 run("roads", p_roads)
 run("cctv", p_cctv, keep_if_fresh_hours=12 if CCTV_PATH.exists() and '"thb"' in CCTV_PATH.read_text(encoding="utf-8") else 1)   # 攝影機清單（地圖車流視角）
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
-run("insights", p_insights, keep_if_fresh_hours=6)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
+run("insights", p_insights, keep_if_fresh_hours=6 if (load_prev("insights") or {}).get("v") == 2 else 0)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 run("housefc", p_housefc, keep_if_fresh_hours=24)
