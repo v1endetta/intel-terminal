@@ -7141,20 +7141,24 @@ def p_migration():
     # 資源說明沒寫年月、順序也不固定：每個檔案只讀開頭幾百個位元組拿「統計年月」，記在快取裡（之後只讀新出現的檔案）
     ymap = dict(cache.get("_ym") or {})
     errs, got = [], 0
+    def _head_ym(u):
+        try:
+            r = S.get(u, timeout=15, stream=True)
+            head = r.raw.read(600, decode_content=True).decode("utf-8-sig", "replace"); r.close()
+            m = re.search(r"\n\s*(\d{3})(\d{2})\s*,", head)
+            return u, (f"{int(m.group(1)) + 1911}-{m.group(2)}" if m else "")
+        except Exception:  # noqa: BLE001
+            return u, None   # 讀不到：下一輪再試
+    todo_u = [d["resourceDownloadUrl"] for d in dist if d["resourceDownloadUrl"] not in ymap]
     for d in dist:
-        u = d["resourceDownloadUrl"]
-        if u in ymap:
-            continue
-        ym = ym_of(d)
-        if not ym:
-            try:
-                r = S.get(u, timeout=40, stream=True)
-                head = r.raw.read(600, decode_content=True).decode("utf-8-sig", "replace"); r.close()
-                m = re.search(r"\n\s*(\d{3})(\d{2})\s*,", head)
-                ym = f"{int(m.group(1)) + 1911}-{m.group(2)}" if m else ""
-            except Exception as e:  # noqa: BLE001
-                errs.append("年月: " + safe_err(e)); ym = ""
-        ymap[u] = ym
+        if d["resourceDownloadUrl"] in todo_u and ym_of(d):
+            ymap[d["resourceDownloadUrl"]] = ym_of(d)
+    todo_u = [u for u in todo_u if u not in ymap][:30]   # 每輪最多讀 30 個檔頭（同時讀），整輪不會被拖慢
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(8) as ex:
+        for u, ym in ex.map(_head_ym, todo_u):
+            if ym is not None:
+                ymap[u] = ym
     cache["_ym"] = ymap
     floor = (TODAY_TPE - timedelta(days=800)).strftime("%Y-%m")
     for k in [k for k in cache if re.match(r"^\d{4}-\d{2}$", k) and k < floor]:
