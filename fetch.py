@@ -7143,12 +7143,23 @@ def p_migration():
     errs, got = [], 0
     def _head_ym(u):
         try:
+            import csv, io
             r = S.get(u, timeout=15, stream=True)
-            head = r.raw.read(600, decode_content=True).decode("utf-8-sig", "replace"); r.close()
-            m = re.search(r"\n\s*(\d{3})(\d{2})\s*,", head)
-            return u, (f"{int(m.group(1)) + 1911}-{m.group(2)}" if m else "")
+            head = r.raw.read(12000, decode_content=True).decode("utf-8-sig", "replace"); r.close()
+            lines = head.splitlines()[:-1]   # 最後一行可能被切一半
+            rows = list(csv.reader(io.StringIO("\n".join(lines))))
+            if len(rows) < 2:
+                return u, None
+            hdr = [h.strip() for h in rows[0]]
+            i = hdr.index("統計年月") if "統計年月" in hdr else 0
+            for row in rows[1:]:   # 有些檔第二行是英文欄名，跳過
+                v = re.sub(r"\D", "", row[i] if i < len(row) else "")
+                if len(v) == 5:
+                    return u, f"{int(v[:3]) + 1911}-{v[3:]}"
+            return u, ""
         except Exception:  # noqa: BLE001
             return u, None   # 讀不到：下一輪再試
+    ymap = {u: y for u, y in ymap.items() if y}   # 之前讀檔頭失敗（記成空字串）的重讀
     todo_u = [d["resourceDownloadUrl"] for d in dist if d["resourceDownloadUrl"] not in ymap]
     for d in dist:
         if d["resourceDownloadUrl"] in todo_u and ym_of(d):
@@ -7303,7 +7314,8 @@ def p_insights():
               "- 台灣用語、白話、短句。不要用「不是…而是」「不僅…更」「在這個…的時代」「讓我們」，不要用賦能、打造、旅程、沉浸式、極致、質感、溫度、療癒、宛如。\n"
               "- 不談政治。資料撐不起的就不要寫。\n"
               "- 家數多不等於有意義，大行政區本來就多。判斷要根據「變化」：年增、月增、淨增（新開減歇業）、跟同縣市其他區比；只講總數的不要寫。\n"
-              "- 新開和歇業要一起講，不能只講好的一面。\n"
+              "- 新開和歇業要一起講，不能只講好的一面。提到某區新公司，就要寫出跟上月比的月增%（可能是負的），月增是負的不能說成長或雙增。\n"
+              "- so 要具體：說出哪一種生意或客群、為什麼是這一區，不要寫「可關注…商機」「適合佈局…」這種放到哪一區都成立的話。\n"
               "- 只能談 JSON 裡有的資料：JSON 沒有「人口遷徙」就完全不要提人口移入或移出。\n"
               "- place 填最相關的一個鄉鎮（例如 新竹縣竹北市），沒有就空字串；lens 填最相關的地圖視角：move（人口遷徙）、clinic（診所）、biz（新公司），或空字串。\n"
               '只回 JSON：{"items": [{"title": "", "body": "", "so": "", "tags": ["人口遷徙", "診所"], "place": "", "lens": ""}]}\n\n' + src)
@@ -7316,13 +7328,15 @@ def p_insights():
         txt = t + b + so
         if not _num_ok(txt, src) or INSIGHT_BANNED.search(txt):
             dropped.append(t); continue
-        if "人口遷徙" not in sig and re.search(r"人口(移入|移出|流入|流出|淨)|移入人口|遷入|遷出", txt):
+        if "新公司" in txt and "月增" not in txt and "上月" not in txt:
+            dropped.append(t + "（新公司沒講跟上月比）"); continue
+        if "人口遷徙" not in sig and re.search(r"人口|移入|移出|遷入|遷出|搬來|搬入", txt):
             dropped.append(t + "（提到沒納入的人口資料）"); continue
         items.append({"title": t, "body": b, "so": so, "tags": [str(x)[:8] for x in (it.get("tags") or [])][:4],
                       "place": str(it.get("place") or "")[:12], "lens": it.get("lens") if it.get("lens") in ("move", "clinic", "biz") else ""})
     if not items:
         raise RuntimeError(f"insights: 全部沒通過數字檢查（{len(dropped)} 條）")
-    return {"v": 2, "items": items[:5], "dropped": dropped[:5], "model": model, "n_sources": len(sig) - 1,
+    return {"v": 3, "items": items[:5], "dropped": dropped[:5], "model": model, "n_sources": len(sig) - 1,
             "src": "、".join(k for k in sig if k != "鄉鎮交叉") + "（程式算訊號、Gemini 寫句子；數字都對過原始資料）"}
 
 
@@ -10272,7 +10286,7 @@ run("pop", p_pop, keep_if_fresh_hours=3)
 run("roads", p_roads)
 run("cctv", p_cctv, keep_if_fresh_hours=12 if CCTV_PATH.exists() and '"thb"' in CCTV_PATH.read_text(encoding="utf-8") else 1)   # 攝影機清單（地圖車流視角）
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
-run("insights", p_insights, keep_if_fresh_hours=6 if (load_prev("insights") or {}).get("v") == 2 else 0)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
+run("insights", p_insights, keep_if_fresh_hours=6 if (load_prev("insights") or {}).get("v") == 3 else 0)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 run("housefc", p_housefc, keep_if_fresh_hours=24)
