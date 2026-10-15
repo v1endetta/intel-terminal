@@ -10878,6 +10878,113 @@ def vault_push():
     return f"{obj} {len(lines)} rows {len(data)} bytes"
 
 
+# ---------- 異常警報：不尋常的事才推到 Slack（平常不吵）。每天最多 2 則，地震與停班停課例外；深夜（23～07 時）只推地震與停班停課 ----------
+ALERT_STATE = DATA / "alerts_state.json"
+SITE = "https://intel.daltatw.com/"
+
+
+def notify():
+    import hashlib, urllib.parse
+    hook = os.environ.get("SLACK_WEBHOOK_URL", "").strip()
+    if not hook:
+        return "沒有 SLACK_WEBHOOK_URL，略過"
+    try:
+        st = json.loads(ALERT_STATE.read_text(encoding="utf-8")) if ALERT_STATE.exists() else {}
+    except Exception:  # noqa: BLE001
+        st = {}
+    sent, last = st.setdefault("sent", {}), st.setdefault("last", {})
+    R = lambda k: RESULTS.get(k) or load_prev(k) or {}
+    link = lambda item, place="": f"<{SITE}?{urllib.parse.urlencode({'看': item, **({'地': place} if place else {})})}|在情報站看>"
+    tpe = NOW.astimezone(TPE) if hasattr(NOW, "astimezone") else NOW
+    today = tpe.strftime("%Y-%m-%d")
+    cand = []   # (key, 緊急, 標題, 內文)
+    # 1. 地震：規模 5.5 以上、3 小時內
+    for q in (R("quake").get("items") or []):
+        try:
+            age = (NOW - datetime.fromisoformat(str(q["at"]).replace("Z", "+00:00"))).total_seconds() / 3600
+        except Exception:  # noqa: BLE001
+            continue
+        if (q.get("mag") or 0) >= 5.5 and age <= 3:
+            loc = re.sub(r"\s+", " ", re.sub(r"^.*?\(位於", "", str(q.get("loc") or "")).rstrip(")"))
+            cand.append((f"quake:{q.get('no') or q['at']}", True, f"規模 {q['mag']} 地震",
+                         f"{loc}，深度 {q.get('depth')} 公里，最大震度 {q.get('intensity') or '—'}。\n{link('地震')}"))
+    # 2. 停班停課
+    sw = (R("alerts").get("stopwork") or {})
+    if sw.get("items"):
+        txt = "；".join(f"{x['area']}：{x['text']}" for x in sw["items"][:8])
+        cand.append(("stop:" + hashlib.sha1(txt.encode()).hexdigest()[:10], True, "停班停課", f"{txt}\n{link('停班停課')}"))
+    # 3. 颱風警報（氣象署發布海上／陸上颱風警報）
+    for a in (R("alerts").get("alerts") or []):
+        if re.search(r"颱風", str(a.get("cat") or "") + str(a.get("text") or "")[:20]) and re.search(r"警報", str(a.get("text") or "") + str(a.get("cat") or "")):
+            cand.append((f"ty:{a.get('id')}", False, f"{a.get('cat') or '颱風警報'}", f"{str(a.get('text') or '')[:160]}\n{link('天氣')}"))
+            break
+    # 4. 台海：共機超過近 30 天平均 2 倍，而且至少 20 架次；或國防部發布演習、聯合戰備警巡
+    pl = R("plaact")
+    L, a30 = pl.get("latest") or {}, (pl.get("avg30") or {}).get("air") or 0
+    if L and L.get("date") >= (TODAY_TPE - timedelta(days=1)).strftime("%Y-%m-%d") and (pl.get("n_days") or 0) >= 20 and L.get("air", 0) >= max(20, 2 * a30):
+        cand.append((f"pla:{L['date']}", False, f"共機 {L['air']} 架次，是平常的 {L['air'] / max(a30, 1):.1f} 倍",
+                     f"{L['date'][5:].replace('-', '/')} 06 時前 24 小時：共機 {L['air']} 架次（越中線 {L.get('cross', 0)}）、共艦 {L.get('ship', 0)} 艘，近 30 天平均 {a30} 架次。\n{link('台海')}"))
+    for ev in (pl.get("events") or [])[:3]:
+        if re.search(r"演習|演訓|戰備警巡|聯合利劍|海峽雷霆|圍台", ev.get("title", "")) and ev.get("date", "") >= (TODAY_TPE - timedelta(days=1)).strftime("%Y-%m-%d"):
+            cand.append((f"plaev:{ev['url']}", False, "國防部：" + ev["title"][:30], f"<{ev['url']}|國防部原文>　{link('台海')}"))
+    # 5. 海纜受損：24 小時內的新聞
+    for n in (R("cables").get("news") or []):
+        try:
+            age = (NOW - datetime.fromisoformat(str(n.get("at")).replace("Z", "+00:00"))).total_seconds() / 3600
+        except Exception:  # noqa: BLE001
+            continue
+        if age <= 24 and re.search(r"斷|受損|中斷|破壞|故障", n.get("title", "")):
+            cand.append(("cable:" + re.sub(r"\W+", "", n["title"])[:20], False, "海纜受損", f"{n['title']}（{n.get('source', '')}）\n<{n.get('url')}|新聞>　{link('海纜')}"))
+            break
+    # 6. 台股收盤漲跌超過 3%
+    tx = R("taiex")
+    hist = tx.get("history") or []
+    if tx.get("date") == today and tx.get("index") and not tx.get("live") and hist:
+        prev = next((v for d, v in reversed(hist) if d < today), None)
+        if prev:
+            pct = (tx["index"] / prev - 1) * 100
+            if abs(pct) >= 3:
+                cand.append((f"taiex:{today}", False, f"台股收盤{'大漲' if pct > 0 else '大跌'} {abs(pct):.1f}%",
+                             f"加權指數收 {tx['index']:,.0f}（{'+' if pct > 0 else '−'}{abs(tx['index'] - prev):,.0f} 點）。\n{link('台股')}"))
+    # 7. 景氣燈號換顏色
+    lt = next((x for x in (R("macro").get("items") or []) if "燈號" in str(x.get("label"))), None)
+    if lt and lt.get("value"):
+        old = last.get("light")
+        if old and old != lt["value"]:
+            cand.append((f"light:{lt.get('period')}", False, f"景氣燈號 {old} → {lt['value']}", f"{lt.get('period')} 景氣對策信號 {lt.get('score', '')} 分。\n{link('景氣指標')}"))
+        last["light"] = lt["value"]
+    # 8. 供電警戒（備轉容量率橙燈以上）
+    pw = R("power")
+    if str(pw.get("level") or "") in ("橙", "紅", "黑"):
+        cand.append((f"power:{today}:{pw['level']}", False, f"供電{pw['level']}燈", f"備轉容量率 {pw.get('reserve_pct')}%（{pw.get('asof', '')}）。\n{link('電力')}"))
+    # 送出
+    night = tpe.hour >= 23 or tpe.hour < 7
+    n_today = sum(1 for v in sent.values() if v.get("day") == today and not v.get("urgent"))
+    out = []
+    for key, urgent, title, body in cand:
+        if key in sent:
+            continue
+        if not urgent and (night or n_today >= 2):
+            continue
+        r = requests.post(hook, json={"text": f"*情報站・{title}*\n{body}"}, timeout=15)
+        if r.status_code == 200:
+            sent[key] = {"at": NOW_ISO, "day": today, "urgent": urgent}
+            out.append(title)
+            if not urgent:
+                n_today += 1
+        else:
+            log("notify slack", r.status_code)
+    cut = (TODAY_TPE - timedelta(days=30)).strftime("%Y-%m-%d")
+    st["sent"] = {k: v for k, v in sent.items() if v.get("day", "") >= cut}
+    write_json(ALERT_STATE, st)
+    return f"候選 {len(cand)}、送出 {out}"
+
+
+try:
+    log("notify:", notify())
+except Exception as e:  # noqa: BLE001
+    log("notify failed:", safe_err(e))
+
 try:
     log("vault:", vault_push())
 except Exception as e:  # noqa: BLE001
