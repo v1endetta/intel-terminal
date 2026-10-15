@@ -1513,7 +1513,7 @@ const renderers={
       <h3 class="ins-h">建照（一兩年後要蓋）· 依用途</h3>${HB(ty(B))}<h3 class="ins-h">使照（蓋好要交屋）· 依用途</h3>${HB(ty(U))}`;
     setMeta("p-permits",{...d,label:YM(d.month)+" 月資料"},24*40);},
   renewal(d){const C=Object.entries(d.counties||{}).sort((a,b)=>b[1]-a[1]),P=Object.entries(d.pending||{});
-    body("p-renewal").innerHTML=`<div class="veg-h">近 3 年重建核定<b>${fmt(n(d.n_recent),0)}</b><span>件 · 資料到 ${String(d.asof||"").slice(0,7).replace("-","/")}</span></div>
+    body("p-renewal").innerHTML=`<div class="veg-h">近 3 年重建核定<b>${fmt(n(d.n_recent),0)}</b><span>件 · 新北到 ${String(d.asof||"").slice(0,7).replace("-","/")}，其他縣市到 ${String(d.nat_asof||"").slice(0,7).replace("-","/")}（國土署約半年更新一次）</span></div>
       ${HB(C.slice(0,8).map(([k,v])=>({name:k.replace("臺","台"),v,txt:v+" 件"})),{signed:false})}
       <h3 class="ins-h">最新核定</h3><ul class="list wrap">${(d.recent||[]).slice(0,8).map(r=>LI(String(r[2]).replace(/^擬訂/,"").slice(0,42),`${String(r[0]).replace("臺","台")}${r[1]}${r[3]?" · "+r[3]:""}`,String(r[4]).slice(0,7).replace("-","/"))).join("")}</ul>
       ${P.length?`<div class="sub" style="font-size:11px;color:var(--muted)">台中審議中：${esc(P.map(([k,v])=>k.slice(3)+" "+v.length+" 件").join("、"))}</div>`:""}`;

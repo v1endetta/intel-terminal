@@ -4928,7 +4928,7 @@ const AR = {
     per: () => { const R = lazyJSON("presale", "presale_towns.json", 1440); return R && R.season ? String(R.season).replace(/^(\d+)S(\d)$/, "$1 年第 $2 季・兩到四年後交屋") : ""; } },
   renewal: { n: "都更重建核定", u: "件", rows: C => Object.entries(((P.renewal || {}).towns) || {}).filter(([k]) => sameC(k.slice(0, 3), C)).map(([k, v]) => ({ t: k.slice(3), v: v[0],
       sub: [`歷年 ${v[1]} 件`, v[2] ? `最新：${String(v[2][0]).replace(/^擬訂/, "").slice(0, 26)}${v[2][1] ? "（" + v[2][1] + "）" : ""}・${String(v[2][2]).slice(0, 7).replace("-", "/")}` : ""].filter(Boolean).join("・") })),
-    per: () => `近 3 年・資料到 ${String((P.renewal || {}).asof || "").slice(0, 7).replace("-", "/")}` },
+    per: () => `近 3 年・新北到 ${String((P.renewal || {}).asof || "").slice(0, 7).replace("-", "/")}、其他到 ${String((P.renewal || {}).nat_asof || "").slice(0, 7).replace("-", "/")}` },
   rent: { n: "住家租金", u: "元／坪・月", neu: 1, rows: C => arRent("towns", C), per: () => arRentPer() },
   shop: { n: "店面租金", u: "元／坪・月", neu: 1, rows: C => arRent("shops", C), per: () => arRentPer() },
 };
