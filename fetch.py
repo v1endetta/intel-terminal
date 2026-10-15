@@ -6786,8 +6786,99 @@ WORLD_FEEDS = [("BBC", "https://feeds.bbci.co.uk/news/world/rss.xml"), ("Al Jaze
                # 亞洲來源：英美媒體只會報亞洲的大事，日韓中東南亞跟台灣最相關的反而最少
                ("日經亞洲", "https://asia.nikkei.com/rss/feed/nar"), ("南華早報", "https://www.scmp.com/rss/91/feed"),
                ("韓聯社", "https://en.yna.co.kr/RSS/news.xml"), ("CNA 新加坡", "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6511"),
-               ("日本時報", "https://www.japantimes.co.jp/feed/")]
+               ("日本時報", "https://www.japantimes.co.jp/feed/"),
+               # Bloomberg 官方免費 RSS（標題＋連結）：只拿來判斷「影響台灣」，內文有付費牆不抓
+               ("彭博市場", "https://feeds.bloomberg.com/markets/news.rss"), ("彭博經濟", "https://feeds.bloomberg.com/economics/news.rss"),
+               ("彭博 Gurman", "https://www.bloomberg.com/authors/AS7Hj1mBMGM/mark-gurman.rss")]
 WNEWS_CACHE = DATA / "worldnews_cache.json"
+
+# ---------- 台灣還沒報：國外產業與日本消費媒體裡的新東西，查台灣中文新聞近 30 天報過幾次，報得越少越前面 ----------
+GAP_FEEDS = [("PR TIMES", "https://prtimes.jp/index.rdf", 40), ("FASHIONSNAP", "https://www.fashionsnap.com/rss.xml", 25),
+             ("WWDJAPAN", "https://www.wwdjapan.com/feed", 25), ("Glossy", "https://www.glossy.co/feed/", 15),
+             ("Wallpaper*", "https://www.wallpaper.com/feeds/all", 20), ("Modern Retail", "https://www.modernretail.co/feed/", 10),
+             ("Retail Dive", "https://www.retaildive.com/feeds/news/", 10), ("Skift", "https://skift.com/feed/", 10),
+             ("彭博科技", "https://feeds.bloomberg.com/technology/news.rss", 20)]
+GAP_CACHE = DATA / "gap_cache.json"
+GAP_CATS = ("美妝保健", "家居設計", "時尚", "零售通路", "餐飲", "旅遊", "科技商業模式", "其他")
+
+
+def p_gap():
+    errs, raw = [], []
+    for src, url, lim in GAP_FEEDS:
+        try:
+            raw += _rss(url, src, lim)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{src}: {safe_err(e)}")
+    if not raw:
+        raise RuntimeError("gap: nothing " + "; ".join(errs)[:160])
+    cache = {}
+    if GAP_CACHE.exists():
+        try:
+            cache = json.loads(GAP_CACHE.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            cache = {}
+    seen = cache.setdefault("items", {})   # key → 判讀結果（含來源、時間），留 14 天
+    tw = cache.setdefault("tw", {})        # 關鍵字 → [台灣報導數, 查詢時間]
+    key = lambda it: re.sub(r"\W+", "", it["title"].lower())[:60]
+    now = NOW.timestamp()
+    todo = [it for it in raw if key(it) not in seen]
+    for b in range(0, len(todo) if GEMINI_KEY else 0, 40):
+        part = todo[b:b + 40]
+        lines = "\n".join(f'{i}. [{it["source"]}] {it["title"]}' for i, it in enumerate(part))
+        prompt = ("你是台灣創意代理商的趨勢研究員，幫品牌找「國外已經在發生、台灣可能還沒有」的新東西。下面是日本與歐美產業媒體的新聞標題（日文、英文都有）。"
+                  "score 0～3：0＝例行消息（財報、人事、促銷、聯名周邊、名人、活動預告、單純新品上市而台灣同類很多）；1＝普通；2＝有新意的產品、服務或做法；"
+                  "3＝明確的新商業模式、新消費行為、新通路或新的設計手法，台灣品牌值得參考。寧可給低分，大部分應該是 0 或 1。"
+                  "zh：台灣用語的繁體中文標題，30 字內，不要中國用語。what：score 2 以上才寫，一句話說新在哪裡，30 字內。"
+                  "cat：" + "|".join(GAP_CATS) + "。"
+                  "kw：score 2 以上才寫，台灣人如果要搜尋這件事會打的中文關鍵字，2～8 字，寫品類或做法本身（例如「外泌體保養」「無人古著店」「訂閱制穿戴」），不要寫公司全名。"
+                  "kw_en：品牌名或原文關鍵字，沒有就空字串。land：score 2 以上才寫，台灣要做起來缺什麼條件（法規、通路、價格帶、習慣），25 字內。"
+                  "只回 JSON：{\"items\": [{\"i\": 編號, \"score\": 分數, \"zh\": \"\", \"what\": \"\", \"cat\": \"\", \"kw\": \"\", \"kw_en\": \"\", \"land\": \"\"}]}\n\n" + lines)
+        try:
+            data, _m = _gemini_json(prompt, max_tokens=8000, timeout=90, lite_first=True, max_models=3)
+            for r in _items_of(data):
+                try:
+                    it = part[int(r.get("i"))]
+                    sc = max(0, min(3, int(r.get("score") or 0)))
+                except (TypeError, ValueError, IndexError):
+                    continue
+                cat = str(r.get("cat") or "")
+                seen[key(it)] = {"src": it["source"], "url": it["url"], "at": it["at"] or NOW.isoformat(), "en": it["title"], "score": sc,
+                                 "zh": str(r.get("zh") or "")[:40], "what": str(r.get("what") or "")[:50] if sc >= 2 else "",
+                                 "cat": cat if cat in GAP_CATS else "其他", "kw": str(r.get("kw") or "")[:12] if sc >= 2 else "",
+                                 "kw_en": str(r.get("kw_en") or "")[:30] if sc >= 2 else "", "land": str(r.get("land") or "")[:40] if sc >= 2 else ""}
+        except Exception as e:  # noqa: BLE001
+            errs.append("判讀: " + safe_err(e)); break
+    # 台灣報導數：Google 新聞（台灣繁中）近 30 天，中文關鍵字與原文各查一次取大的；一天查一次
+    cut = (NOW - timedelta(days=14)).isoformat()
+    picks = [v for v in seen.values() if v["score"] >= 2 and v.get("kw") and (v.get("at") or "") >= cut]
+    picks.sort(key=lambda v: -v["score"])   # 查詢額度先給新意最高的
+    q_n = 0
+    for v in picks:
+        for term in [v["kw"], v.get("kw_en")]:
+            if not term or (term in tw and now - tw[term][1] < 86400):
+                continue
+            if q_n >= 30 or time.time() - START_TS > 560:
+                break
+            try:
+                tw[term] = [len(_gnews(f'"{term}" when:30d', "", 40)), now]; q_n += 1
+                time.sleep(0.4)
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"台灣查詢 {term}: {safe_err(e)}"); break
+    out = []
+    for v in picks:
+        ns = [tw[t][0] for t in (v["kw"], v.get("kw_en")) if t and t in tw]
+        if not ns:
+            continue
+        out.append({**{k: v[k] for k in ("zh", "what", "cat", "kw", "land", "src", "url", "at", "score")}, "tw_n": max(ns)})
+    # 落差排序：台灣報得越少越前面，再看新意分數、越新越前
+    out.sort(key=lambda x: x.get("at") or "", reverse=True)
+    out.sort(key=lambda x: (min(x["tw_n"], 6), -x["score"]))   # 穩定排序：同一級裡越新越前
+    gap = [x for x in out if x["tw_n"] <= 3]
+    cache["items"] = {k: v for k, v in seen.items() if (v.get("at") or "") >= cut}
+    cache["tw"] = {k: v for k, v in tw.items() if now - v[1] < 7 * 86400}
+    write_json(GAP_CACHE, cache, separators=(",", ":"))
+    return {"items": gap[:30], "known": [x for x in out if x["tw_n"] > 3][:10], "n_read": len(seen), "n_new": sum(1 for v in seen.values() if v["score"] >= 2),
+            "errs": errs[:6], "src": "PR TIMES、FASHIONSNAP、WWDJAPAN、Glossy、Wallpaper*、Modern Retail、Retail Dive、Skift、彭博科技；新意與關鍵字由 Gemini 判讀，台灣報導數查 Google 新聞（台灣繁中，近 30 天）"}
 
 
 def _items_of(data):
@@ -6925,7 +7016,7 @@ def p_worldnews():
     cache = {k: v for k, v in cache.items() if k in keep or len(cache) < 800}
     write_json(WNEWS_CACHE, cache)
     return {"items": out, "n_zh": sum(1 for x in out if x["t"]), "n_tw": sum(1 for x in out if (x["tw"] or 0) >= 3), "n_big": sum(1 for x in out if x["n_src"] >= 3), "errs": errs[:8],
-            "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷"}
+            "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報、彭博；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷"}
 
 
 # ---------- 政府補助與徵件：Google 新聞找公告 → Gemini 判斷是不是「現在還能申請」並抽出主辦、對象、金額、截止日 ----------
@@ -7999,7 +8090,7 @@ INSIGHT_BANNED = re.compile(r"不是.{0,12}而是|不僅.{0,12}更|在這個.{0,
 INS_CATS = {
     "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue"],
     "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits"],
-    "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention", "demo"],
+    "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention", "demo", "gap"],
     "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife"],
     "輿情": ["mood", "ptt", "trends", "cofacts", "gtop", "worldnews"],
     "現場": ["weather", "quake", "power", "alerts", "plaact", "cables", "airport", "typhoon"],
@@ -11184,7 +11275,8 @@ run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("worldnews", p_worldnews, keep_if_fresh_hours=1)
 run("plaact", p_plaact, keep_if_fresh_hours=1)  # 台海：國防部每天早上公布前一天 06 時到今天 06 時
-run("cables", p_cables, keep_if_fresh_hours=6)  # 海纜：路線一週更新一次，受損新聞每 6 小時
+run("cables", p_cables, keep_if_fresh_hours=6)
+run("gap", p_gap, keep_if_fresh_hours=3)  # 台灣還沒報：三小時一次（每次新進來的才判讀，台灣報導數一天查一次）  # 海纜：路線一週更新一次，受損新聞每 6 小時
 run("gtop", p_gtop, keep_if_fresh_hours=0.5)  # Google 焦點新聞：半小時一次
 run("social", p_social, keep_if_fresh_hours=0.5)
 run("radar", p_radar, keep_if_fresh_hours=2)

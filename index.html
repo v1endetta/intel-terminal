@@ -641,6 +641,11 @@ body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!im
 
 #side .gtl li.gti{display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:start}
 #side .gtl li img{width:84px;height:56px;object-fit:cover;border-radius:8px;background:rgba(255,255,255,.06)}
+
+#side .gapl li{position:relative;padding-right:76px}
+#side .gapl .gapb{position:absolute;right:0;top:9px;font-size:11px;font-weight:600;color:#64d2ff;border:1px solid rgba(100,210,255,.4);border-radius:10px;padding:1px 7px;white-space:nowrap}
+#side .gapl .gapb.z{color:#0b0b0d;background:#64d2ff;border-color:#64d2ff}
+#side .gapl .gapw{color:#c7c7cc}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2519,6 +2524,7 @@ function EXPLORE() {
     { cat: "走向", items: [
       { n: "本月洞見", f: () => insightsCard() },
       { n: "本週走向", f: listOf(((P.weekly || {}).headline) || "本週走向", () => (((P.weekly || {}).dirs) || []).map(d => ({ t: d.t, s: d.why })), "走向 · " + (((P.weekly || {}).week) || ""), "weekly") },
+      { n: "台灣還沒報", f: () => gapCard() },
       { n: "區域報告", lens: "area" },
       { n: "住哪裡", lens: "city" },
       { n: "人口遷徙", lens: "move" },
@@ -4783,7 +4789,7 @@ document.addEventListener("click", e => {
 
 /* ---- 各分類洞見：只用這一類的資料寫 2～3 條 ---- */
 const INS_SRC_ZH = { taiex: "台股", tw_market: "法人", world: "全球股市", fx: "匯率", fear: "恐慌", commodities: "原物料", luxury: "精品", sectors: "類股", revenue: "營收",
-  macro: "景氣", prices: "物價", veg: "菜價", oil: "油價", tourism: "觀光", liquidity: "美元流動性", consume: "消費", gmacro: "全球總經", house: "房價", cards: "刷卡", cars: "新車", permits: "建照", demo: "人口", bizlife: "公司生滅",
+  macro: "景氣", prices: "物價", veg: "菜價", oil: "油價", tourism: "觀光", liquidity: "美元流動性", consume: "消費", gmacro: "全球總經", house: "房價", cards: "刷卡", cars: "新車", permits: "建照", gap: "台灣還沒報", demo: "人口", bizlife: "公司生滅",
   weekly: "本週走向", voice: "趨勢雷達", chain: "主題鏈", wiki: "主題熱度", migration: "人口遷徙", attention: "注意力",
   jobs: "職缺", taxreg: "新興生意", grants: "補助", tenders: "標案", radar: "公司雷達", clinics: "診所", brands: "新公司", aiwire: "AI 快線",
   mood: "情緒", ptt: "PTT", trends: "熱搜", cofacts: "謠言", gtop: "焦點新聞", worldnews: "全球新聞",
@@ -5197,6 +5203,21 @@ function permitsCard() {
       + `<div class="nvh">建照件數，近 36 個月</div>` + lineSVG((bn.spark || []).filter(v => v != null), tone(bn.y3 || 0))
       + (U.length ? `<div class="nvh">使照樓地板面積・依用途</div>` + barsHTML(types(U).sort((a, b) => b.y3 - a.y3).map(x => ({ name: SH(x.h), v: x.y3, txt: `${y(x.y3)}・${nI(x.v / 3.30579)} 坪` }))) : "")
       + `<p class="note">坪數是最新一個月；百分比是近 3 個月合計比去年同期，單月件數起伏大。</p>`, foot: `<span>${esc(D.src || "")}</span>` }) };
+}
+
+// 台灣還沒報：國外產業與日本消費媒體的新東西，台灣中文新聞近 30 天幾乎沒報
+function gapCard() {
+  const D = P.gap || {}, xs = D.items || [];
+  if (!xs.length) return { html: sideHTML({ eyebrow: "走向 · 資訊落差", title: "國外在發生、台灣還沒報的", body: `<p class="empty">${D.n_read ? "這一輪沒有找到台灣幾乎沒報的新東西。" : "第一次判讀中，下一輪更新後出現。"}</p>` }) };
+  const badge = n => n === 0 ? "台灣 0 則" : `台灣僅 ${n} 則`;
+  const cats = [...new Set(xs.map(x => x.cat))];
+  const li = x => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.zh || x.kw)}</a><b class="gapb${x.tw_n === 0 ? " z" : ""}">${badge(x.tw_n)}</b>`
+    + `<span>${esc(x.src)}・${esc(navAgo(x.at))}・搜「${esc(x.kw)}」</span>`
+    + (x.what ? `<span class="gapw">新在：${esc(x.what)}</span>` : "") + (x.land ? `<span>台灣缺：${esc(x.land)}</span>` : "") + `</li>`;
+  return { html: sideHTML({ eyebrow: "走向 · 資訊落差 · 近 14 天", title: "國外在發生、台灣還沒報的", big: `${xs.length} 則`, color: "#64d2ff",
+    body: `<p class="why">從日本與歐美的產業、消費媒體挑出有新意的產品、服務和做法，再查台灣中文新聞近 30 天報過幾次，報得越少排越前面。沒人報不代表會紅，「台灣缺」那一行是落地前要先過的關。</p>`
+      + cats.map(c => `<div class="nvh">${esc(c)}</div><ul class="lst gapl">${xs.filter(x => x.cat === c).slice(0, 6).map(li).join("")}</ul>`).join(""),
+    foot: `<span>${esc(D.src || "")}</span>` }) };
 }
 
 /* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */
