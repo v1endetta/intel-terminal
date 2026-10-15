@@ -2508,6 +2508,7 @@ function EXPLORE() {
       { n: "房價", lens: "house" },
       { n: "刷卡", lens: "cards" },
       { n: "新車", f: () => carsCard() },
+      { n: "建照", f: () => permitsCard() },
       { n: "菜價", f: barsOf("菜價兩週變化", () => items("veg").slice(0, 10).map(x => ({ name: x.name, v: x.chg14, txt: pct(x.chg14, 0) })), "總經 · " + ((P.veg || {}).market || ""), "veg") },
       { n: "油價", f: barsOf("中油牌價", () => items("oil").map(x => ({ name: x.name, v: x.price, txt: nf(x.price) + " 元" })), "總經 · " + ((P.oil || {}).effective || ""), "macro", { signed: false }) },
       { n: "物價細項", f: () => pricesCard() },
@@ -4782,7 +4783,7 @@ document.addEventListener("click", e => {
 
 /* ---- 各分類洞見：只用這一類的資料寫 2～3 條 ---- */
 const INS_SRC_ZH = { taiex: "台股", tw_market: "法人", world: "全球股市", fx: "匯率", fear: "恐慌", commodities: "原物料", luxury: "精品", sectors: "類股", revenue: "營收",
-  macro: "景氣", prices: "物價", veg: "菜價", oil: "油價", tourism: "觀光", liquidity: "美元流動性", consume: "消費", gmacro: "全球總經", house: "房價", cards: "刷卡", cars: "新車", demo: "人口", bizlife: "公司生滅",
+  macro: "景氣", prices: "物價", veg: "菜價", oil: "油價", tourism: "觀光", liquidity: "美元流動性", consume: "消費", gmacro: "全球總經", house: "房價", cards: "刷卡", cars: "新車", permits: "建照", demo: "人口", bizlife: "公司生滅",
   weekly: "本週走向", voice: "趨勢雷達", chain: "主題鏈", wiki: "主題熱度", migration: "人口遷徙", attention: "注意力",
   jobs: "職缺", taxreg: "新興生意", grants: "補助", tenders: "標案", radar: "公司雷達", clinics: "診所", brands: "新公司", aiwire: "AI 快線",
   mood: "情緒", ptt: "PTT", trends: "熱搜", cofacts: "謠言", gtop: "焦點新聞", worldnews: "全球新聞",
@@ -4915,8 +4916,8 @@ const AR = {
     per: () => (NAV.bt && NAV.bt.gone_month) ? String(NAV.bt.gone_month).replace("-", "/") : "當月" },
   birth: { n: "出生", u: "人", rows: C => (((P.births || {}).towns) || []).filter(r => sameC(r[0], C)).map(r => ({ t: r[1], v: r[2], sub: (P.births || {}).prev_ok && r[3] ? `比前 12 個月 ${pctTxt((r[2] / r[3] - 1) * 100)}` : "" })),
     per: () => (P.births || {}).n_months >= 12 ? "近 12 個月" : `近 ${(P.births || {}).n_months || 0} 個月` },
-  rent: { n: "住家租金", u: "元／坪", neu: 1, rows: C => arRent("towns", C), per: () => arRentPer() },
-  shop: { n: "店面租金", u: "元／坪", neu: 1, rows: C => arRent("shops", C), per: () => arRentPer() },
+  rent: { n: "住家租金", u: "元／坪・月", neu: 1, rows: C => arRent("towns", C), per: () => arRentPer() },
+  shop: { n: "店面租金", u: "元／坪・月", neu: 1, rows: C => arRent("shops", C), per: () => arRentPer() },
 };
 // 租金：實價登錄租賃（每坪月租中位數；住家 5 筆以上、店面 3 筆以上才列）
 function arRent(kind, C) { const R = lazyJSON("rent", "rent_towns.json", 1440); if (!R || !R[kind]) return [];
@@ -5181,6 +5182,22 @@ STREET_VIEW.birth = (T, C) => {
   return { eyebrow: `${norm(T.county)} › ${T.name} · 出生登記 · ${brPer()}`, title: "這一區生多少？", big: `${nI(me[2])} 人`, chg: ok && v != null ? `比前 12 個月 ${pct(v, 1)}` : "", color: ok && v != null ? tone(v) : LENS.birth.c,
     body: `<p class="why">在${esc(norm(T.county))}排第 ${R.indexOf(me) + 1}／${R.length}；最近一個月 ${me[4]} 人。</p>` };
 };
+
+// 建照（未來要蓋的量）與使照（蓋好可交屋的量）：全台，近 3 個月合計比去年同期，依用途分樓地板面積
+function permitsCard() {
+  const D = P.permits || {}, B = D.build || [], U = D.use || [];
+  if (!B.length) return { html: sideHTML({ eyebrow: "總經 · 建照", title: "接下來要蓋多少？", body: '<p class="empty">資料載入中。</p>' }) };
+  const g = (L, h) => L.find(x => x.h === h) || {}, bn = g(B, "件數(件)"), ba = g(B, "總樓地板面積(平方公尺)"), un = g(U, "件數(件)"), ua = g(U, "總樓地板面積(平方公尺)"), bh = g(B, "住宿類(H類)/住宅");
+  const SH = h => h.replace(/^住宿類\(H類\)\//, "").replace(/\(.類\)|（.類）/, "").replace("(含農業設施)", "").replace("、福利、更生類", "福利").replace("類", "");
+  const types = L => L.filter(x => !/件數|總樓地板|工程造價/.test(x.h) && x.y3 != null && x.v >= 5000);
+  const y = v => v == null ? "—" : pct(v, 1);
+  return { html: sideHTML({ eyebrow: `總經 · 建照與使照 · ${ymTxt(D.month)}`, title: "接下來要蓋多少？", big: `建照面積 ${y(ba.y3)}`, color: tone(ba.y3 || 0),
+    body: `<p class="why">建照是「準備要蓋」：發照後一兩年才完工，是營建、建材、家具家電、搬家裝修需求的領先指標；使照是「蓋好可以交屋」。近 3 個月合計比去年同期：建照 ${y(bn.y3)}（件數）、樓地板面積 ${y(ba.y3)}，其中住宅 ${y(bh.y3)}；使照面積 ${y(ua.y3)}。</p>`
+      + `<div class="nvh">建照樓地板面積・依用途</div>` + barsHTML(types(B).sort((a, b) => b.y3 - a.y3).map(x => ({ name: SH(x.h), v: x.y3, txt: `${y(x.y3)}・${nI(x.v / 3.30579)} 坪` })))
+      + `<div class="nvh">建照件數，近 36 個月</div>` + lineSVG((bn.spark || []).filter(v => v != null), tone(bn.y3 || 0))
+      + (U.length ? `<div class="nvh">使照樓地板面積・依用途</div>` + barsHTML(types(U).sort((a, b) => b.y3 - a.y3).map(x => ({ name: SH(x.h), v: x.y3, txt: `${y(x.y3)}・${nI(x.v / 3.30579)} 坪` }))) : "")
+      + `<p class="note">坪數是最新一個月；百分比是近 3 個月合計比去年同期，單月件數起伏大。</p>`, foot: `<span>${esc(D.src || "")}</span>` }) };
+}
 
 /* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */
 const DL = { applied: false, last: "" };
