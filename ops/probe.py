@@ -1,16 +1,22 @@
-import requests, json, csv, io, re
+import requests, json, re
 S = requests.Session(); S.headers["User-Agent"] = "Mozilla/5.0"
 out = {}
-r = S.get("https://data.gov.tw/datasets/export/csv", timeout=120)
-rows = list(csv.reader(io.StringIO(r.content.decode("utf-8-sig", "replace"))))
-pats = {"retail": r"(批發|零售|餐飲).*(營業額|銷售額)|營業額.*(零售|餐飲)",
-        "card": r"信用卡.*(消費|簽帳|類別)|簽帳.*金額",
-        "permit": r"(使用執照|建造執照|建照|使照)",
-        "dissolve": r"(解散|廢止|歇業).*(登記|公司|商業)|(公司|商業).*(解散|歇業|廢止)",
-        "car": r"(新領牌|領牌|新車).*(數|照)|汽車.*新領",
-        "birth": r"(出生|結婚).*(按|區域|縣市|鄉鎮)",
-        "app": r"App|應用程式"}
-for k, p in pats.items():
-    hits = [x for x in rows[1:] if re.search(p, x[1])]
-    out[k] = [[x[0], x[1][:44], x[5][:12], x[11][:12], x[12][:8], x[18][:10] if len(x) > 18 else "", x[19][:10] if len(x) > 19 else "", x[6][:110], x[10][:120]] for x in hits][:18]
-json.dump(out, open("probe.json", "w"), ensure_ascii=False, indent=1)
+for did in ("6842", "175018", "62945", "21293", "29266", "6049", "30202", "157994", "131136", "29256"):
+    try:
+        res = S.get(f"https://data.gov.tw/api/v2/rest/dataset/{did}", timeout=30).json().get("result") or {}
+        dist = [(d.get("resourceFormat"), (d.get("resourceDownloadUrl") or "").strip(), (d.get("resourceDescription") or "")[:30]) for d in res.get("distribution") or []]
+        o = {"t": res.get("title"), "n": len(dist), "dist": dist[:3] + dist[-2:]}
+        for fmt, u, _ in (dist[-1:] + dist[:1]):
+            if (fmt or "").upper() == "CSV" and u:
+                try:
+                    r = S.get(u, timeout=(8, 40), stream=True)
+                    raw = r.raw.read(2500, decode_content=True)
+                    try: txt = raw.decode("utf-8-sig")
+                    except UnicodeDecodeError: txt = raw.decode("cp950", "replace")
+                    o.setdefault("heads", []).append([u[-60:], r.status_code, txt[:1400]])
+                except Exception as e:
+                    o.setdefault("heads", []).append([u[-60:], repr(e)[:100]])
+        out[did] = o
+    except Exception as e:
+        out[did] = repr(e)[:200]
+    json.dump(out, open("probe.json", "w"), ensure_ascii=False, indent=1)
