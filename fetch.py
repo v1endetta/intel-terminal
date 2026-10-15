@@ -7750,6 +7750,115 @@ def p_migration():
 INSIGHT_BANNED = re.compile(r"不是.{0,12}而是|不僅.{0,12}更|在這個.{0,8}的時代|讓我們|賦能|打造|旅程|沉浸式|極致|質感|溫度|療癒|宛如")
 
 
+
+# ---------- 各分類洞見：每個大分類各自的 2～3 條洞見（只用該分類的資料），每小時輪流重寫最舊的一類，每類約 6 小時更新一次 ----------
+INS_CATS = {
+    "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue"],
+    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house"],
+    "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention"],
+    "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire"],
+    "輿情": ["mood", "ptt", "trends", "cofacts", "gtop", "worldnews"],
+    "現場": ["weather", "quake", "power", "alerts", "plaact", "cables", "airport", "typhoon"],
+}
+_SKIP = re.compile(r"url|link|href|img|image|src|updatedAt|errs?$|^at$|^id$|_cols$|history|series|spark|past|^ll$|geom|lines|coords?|points?|town?s$", re.I)
+
+
+def ins_compact(x, depth=0, budget=[0]):
+    """面板 JSON → 精簡版：數字、短字串；清單只留前 6 筆；去掉網址、座標、長序列。"""
+    if isinstance(x, dict):
+        out = {}
+        for k, v in x.items():
+            if _SKIP.search(str(k)):
+                continue
+            c = ins_compact(v, depth + 1)
+            if c not in (None, "", [], {}):
+                out[k] = c
+        return out or None
+    if isinstance(x, list):
+        if x and all(isinstance(v, (int, float)) for v in x):
+            return None if len(x) > 8 else x   # 長數列（走勢）不放
+        return [c for c in (ins_compact(v, depth + 1) for v in x[:6]) if c not in (None, "", [], {})] or None
+    if isinstance(x, float):
+        return round(x, 2)
+    if isinstance(x, str):
+        s = x.strip()
+        return None if not s or s.startswith("http") or len(s) > 90 else s
+    return x
+
+
+def ins_src(P, cat, limit=7000):
+    out = {}
+    for k in INS_CATS[cat]:
+        p = P.get(k)
+        if not p or p.get("error"):
+            continue
+        c = ins_compact(p)
+        if c:
+            out[k] = c
+    s = json.dumps(out, ensure_ascii=False)
+    while len(s) > limit and out:   # 太長就把最大的那份砍半
+        big = max(out, key=lambda k: len(json.dumps(out[k], ensure_ascii=False)))
+        v = out[big]
+        if isinstance(v, dict) and len(v) > 1:
+            ks = list(v); out[big] = {kk: v[kk] for kk in ks[:max(1, len(ks) // 2)]}
+        else:
+            out.pop(big)
+        s = json.dumps(out, ensure_ascii=False)
+    return out
+
+INS_FOCUS = {
+    "市場": "最近一個交易日到這一週，市場最值得注意的變化（漲跌、資金、匯率、原物料、精品），要跟前一期比。",
+    "總經": "物價、景氣、消費、觀光、房市這些總體數字最近的方向，哪個在轉彎、哪個跟大家印象相反。",
+    "走向": "正在升溫或降溫的主題與人口流向，哪些是新出現的趨勢。",
+    "訊號": "新生意、職缺、補助、標案、新診所、新公司裡，跟平常不一樣的訊號。",
+    "輿情": "台灣人這幾天在關注、在擔心、在討論什麼，國外哪件事跟台灣有關。不評論政黨立場、不評價政治人物。",
+    "現場": "此刻台灣現場（天氣、地震、電力、示警、台海、海纜、機場）最不尋常的事。",
+}
+
+
+def p_insights_cat():
+    if not GEMINI_KEY:
+        raise RuntimeError("未設定 GEMINI_API_KEY")
+    prev = load_prev("insights_cat") or {}
+    cats = dict(prev.get("cats") or {})
+    P = {k: (RESULTS.get(k) or load_prev(k) or {}) for ks in INS_CATS.values() for k in ks}
+    order = sorted(INS_CATS, key=lambda c: (cats.get(c) or {}).get("at") or "")
+    todo = [c for c in order if not cats.get(c)][:2] or [c for c in order[:1] if ((cats.get(c) or {}).get("at") or "") < (NOW - timedelta(hours=6)).isoformat()]
+    errs = []
+    for cat in todo:
+        sig = ins_src(P, cat)
+        if len(sig) < 2:
+            errs.append(f"{cat}: 資料不足"); continue
+        src = json.dumps(sig, ensure_ascii=False)
+        prompt = (f"你是台灣的情報編輯，讀者是想從變化裡找機會的創業者。下面是情報站「{cat}」這一類的最新資料（JSON，程式整理過）。"
+                  f"請寫 2～3 條洞見，重點：{INS_FOCUS[cat]}\n"
+                  "規則：\n- 只能用 JSON 裡出現的數字，不可以自己算新的數字、不可以估計、不可以加入你自己知道的時事。\n"
+                  "- 判斷要根據「變化」或「跟平常比」，只講總數、只複述資料的不要寫；資料撐不起的就不要寫，寧可少寫。\n"
+                  "- title 22 字內，直接講判斷；body 80 字內，附上支撐的數字。不要寫建議。\n"
+                  "- 台灣用語、白話、短句。不要用「不是…而是」「不僅…更」「在這個…的時代」「讓我們」，不要用賦能、打造、旅程、沉浸式、極致、質感、溫度、療癒、宛如。\n"
+                  "- src 填這條用到的資料代號（JSON 最外層的 key，例如 taiex）。\n"
+                  '只回 JSON：{"items": [{"title": "", "body": "", "src": ["taiex"]}]}\n\n' + src)
+        try:
+            data, model = _gemini_json(prompt, max_tokens=2500, timeout=90)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{cat}: {safe_err(e)[:80]}"); continue
+        items, dropped = [], []
+        for it in _items_of(data):
+            t, b = str(it.get("title") or "")[:40], str(it.get("body") or "")[:180]
+            if not t or not b:
+                continue
+            if not _num_ok(t + b, src) or INSIGHT_BANNED.search(t + b):
+                dropped.append(t); continue
+            items.append({"title": t, "body": b, "src": [str(x) for x in (it.get("src") or []) if str(x) in sig][:3]})
+        if items:
+            cats[cat] = {"at": NOW_ISO, "items": items[:3], "dropped": dropped[:3], "model": model}
+        else:
+            errs.append(f"{cat}: 全部沒通過檢查（{len(dropped)} 條）")
+    if not cats:
+        raise RuntimeError("insights_cat: " + "; ".join(errs)[:150])
+    return {"cats": cats, "errs": errs[:6], "src": "情報站各分類資料（程式整理、Gemini 寫句子；數字都對過原始資料）"}
+
+
 def _ins_signals():
     R = lambda k: RESULTS.get(k) or load_prev(k) or {}
     sig, towns = {}, {}
@@ -10846,6 +10955,7 @@ run("pop", p_pop, keep_if_fresh_hours=3)
 run("roads", p_roads)
 run("cctv", p_cctv, keep_if_fresh_hours=12 if CCTV_PATH.exists() and '"tc"' in CCTV_PATH.read_text(encoding="utf-8") else 1)   # 攝影機清單（地圖車流視角）
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
+run("insights_cat", p_insights_cat, keep_if_fresh_hours=1)  # 各分類洞見：每小時重寫最舊的一類
 run("insights", p_insights, keep_if_fresh_hours=6 if (load_prev("insights") or {}).get("v") == 5 else 0)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API

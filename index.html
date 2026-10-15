@@ -2482,6 +2482,7 @@ function EXPLORE() {
   const tx = hist("taiex", "TAIEX");
   return [
     { cat: "市場", items: [
+      { n: "洞見", f: () => insCatCard("市場") },
       { n: "台股", mapLens: "stock", f: () => { const v = tx, s = surprise(v); return lineOf("台股加權", v, s ? tone(s.last) : NEU, "市場 · 證交所", "taiex", v.length ? nf(v[v.length - 1]) : "", s && s.pct != null ? pct(s.pct) : "")(); } },
       { n: "行事曆", globe: 1, f: () => gxCard("clock") },
       { n: "法人", globe: 1, f: () => gxCard("inst") },
@@ -2496,6 +2497,7 @@ function EXPLORE() {
           + `<p class="why">台股 ${s && s.pct != null ? pct(s.pct) : "—"}${inst ? `・外資${inst.net > 0 ? "買超" : "賣超"} ${nf(Math.abs(inst.net))} 億` : ""}</p>`; }) },
     ] },
     { cat: "總經", items: [
+      { n: "洞見", f: () => insCatCard("總經") },
       { n: "房價", lens: "house" },
       { n: "菜價", f: barsOf("菜價兩週變化", () => items("veg").slice(0, 10).map(x => ({ name: x.name, v: x.chg14, txt: pct(x.chg14, 0) })), "總經 · " + ((P.veg || {}).market || ""), "veg") },
       { n: "油價", f: barsOf("中油牌價", () => items("oil").map(x => ({ name: x.name, v: x.price, txt: nf(x.price) + " 元" })), "總經 · " + ((P.oil || {}).effective || ""), "macro", { signed: false }) },
@@ -2514,6 +2516,7 @@ function EXPLORE() {
       { n: "主題熱度", f: listOf("升溫中的主題", () => (((P.wiki || {}).rows) || []).filter(r => r.spiked).slice(0, 8).map(r => ({ t: r.title, s: r.grp })), "走向 · 維基瀏覽", "wiki") },
     ] },
     { cat: "訊號", items: [
+      { n: "洞見", f: () => insCatCard("訊號") },
       { n: "新公司", lens: "biz" },
       { n: "職缺", lens: "jobs", f: barsOf("各類職缺 7 天變化", () => (((P.jobs || {}).cats) || []).slice(0, 10).map(c => ({ name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) })), "訊號 · 全台 " + nf((P.jobs || {}).total || 0) + " 個職缺", "jobs") },
       { n: "AI 快線", globe: 1, f: () => gxCard("ai") },
@@ -2525,6 +2528,7 @@ function EXPLORE() {
       { n: "公司雷達", f: listOf("盯梢中的公司", () => (((P.radar || {}).watch) || []).slice(0, 7).map(x => ({ t: x.name, s: x.desc })), "訊號", "radar") },
     ] },
     { cat: "輿情", items: [
+      { n: "洞見", f: () => insCatCard("輿情") },
       { n: "地方新聞", lens: "news" },
       { n: "焦點新聞", f: () => gtopCard() },
       { n: "全球新聞", globe: 1, f: () => gxCard("wnews") },
@@ -2534,6 +2538,7 @@ function EXPLORE() {
       { n: "謠言", f: listOf("最多人查證的訊息", () => (((P.cofacts || {}).hot) || []).slice(0, 6).map(x => ({ t: x.text.slice(0, 42) + "…", s: `${x.verdict || "查證中"} · ${x.requests} 人回報`, url: x.url })), "輿情 · Cofacts", "cofacts") },
     ] },
     { cat: "現場", items: [
+      { n: "洞見", f: () => insCatCard("現場") },
       { n: "此刻", lens: "now" },
       { n: "天氣", f: layer("wx", "天氣與雷達", "現場 · 氣象署", () => { const W = P.weather || {}, warn = W.warnings || [];
         return (warn.length ? `<p class="why"><b style="color:#ff9f0a">${esc([...new Set(warn.map(w => w.what))].join("、"))}</b>：${esc(warn.map(w => norm(w.where)).join("、"))}</p>` : `<p class="why">目前沒有天氣特報。</p>`)
@@ -2579,6 +2584,7 @@ const PROV = {
   "lens:cable": ["cables", "TeleGeography Submarine Cable Map（CC BY-NC-SA 3.0）＋Google 新聞", "每週", 10080],
   "lens:area": ["migration", "內政部遷入遷出・經濟部公司登記・健保署與衛福部醫事機構名冊・實價登錄・104・Google 新聞（各項期間不同，見每一列）", "彙整", 1440],
   "lens:move": ["migration", "內政部戶政司 遷入遷出統計", "月資料", 1440],
+  "洞見": ["insights_cat", "情報站各分類資料（程式整理、Gemini 寫句子）", "彙整", 360],
   "本月洞見": ["insights", "政府開放資料交叉比對（程式算訊號、Gemini 寫句子）", "每日", 1440],
   "補助徵件": ["grants", "Google 新聞的補助、徵件公告（Gemini 判讀，以原公告為準）", "彙整", 360],
   "lens:stop": ["alerts", "行政院人事行政總處 天然災害停止上班及上課情形", "即時", 30, p => (p.stopwork || {}).updated],
@@ -4760,6 +4766,21 @@ document.addEventListener("click", e => {
   }
   if (e.target.closest && e.target.closest("[data-ins]") && ST.openAt) ST.openAt("走向", "本月洞見");
 });
+
+/* ---- 各分類洞見：只用這一類的資料寫 2～3 條 ---- */
+const INS_SRC_ZH = { taiex: "台股", tw_market: "法人", world: "全球股市", fx: "匯率", fear: "恐慌", commodities: "原物料", luxury: "精品", sectors: "類股", revenue: "營收",
+  macro: "景氣", prices: "物價", veg: "菜價", oil: "油價", tourism: "觀光", liquidity: "美元流動性", consume: "消費", gmacro: "全球總經", house: "房價",
+  weekly: "本週走向", voice: "趨勢雷達", chain: "主題鏈", wiki: "主題熱度", migration: "人口遷徙", attention: "注意力",
+  jobs: "職缺", taxreg: "新興生意", grants: "補助", tenders: "標案", radar: "公司雷達", clinics: "診所", brands: "新公司", aiwire: "AI 快線",
+  mood: "情緒", ptt: "PTT", trends: "熱搜", cofacts: "謠言", gtop: "焦點新聞", worldnews: "全球新聞",
+  weather: "天氣", quake: "地震", power: "電力", alerts: "示警", plaact: "台海", cables: "海纜", airport: "機場", typhoon: "颱風" };
+function insCatCard(cat) {
+  const D = (((P.insights_cat || {}).cats) || {})[cat], xs = (D && D.items) || [];
+  if (!xs.length) return { html: sideHTML({ eyebrow: `${cat} · 洞見`, title: "這一類最值得注意的", body: '<p class="empty">每個分類輪流整理，約 6 小時內會出現。</p>' }) };
+  return { html: sideHTML({ eyebrow: `${cat} · 洞見 · ${navAgo(D.at)}更新`, title: "這一類最值得注意的", big: xs[0].title, color: "#ffd60a",
+    body: `<p class="why">只看「${esc(cat)}」這一類的資料。句子由 AI 寫，每個數字都對過原始資料，對不上的就不放；約 6 小時重寫一次。</p>`
+      + xs.map(x => `<div class="ins"><div class="ins-tags">${(x.src || []).map(t => `<i>${esc(INS_SRC_ZH[t] || t)}</i>`).join("")}</div><b>${esc(x.title)}</b><p>${esc(x.body)}</p></div>`).join("") }) };
+}
 
 /* ---- 醫美（衛福部全機構名冊對健保名冊）、台海（國防部每日動態）、海纜（TeleGeography） ---- */
 LENS.aes = { n: "醫美", c: "#ff9ec7" };
