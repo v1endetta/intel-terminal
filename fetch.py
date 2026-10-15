@@ -768,12 +768,12 @@ def _atom(url, source, limit=8):
 
 
 OSSUSE_CACHE = DATA / "ossuse_cache.json"
-OSSUSE_CATS = ("影像影片", "聲音語音", "設計", "文字寫作", "AI 助理與 agent", "資料與研究", "開發工具", "其他")
+OSSUSE_CATS = ("語言模型", "影像影片", "聲音語音", "AI agent", "開發工具", "資料與研究", "機器人與硬體", "其他")
 
 
 def p_ossuse():
-    """用得上的開源：GitHub 每日＋每週熱門、Hugging Face 熱門模型與 Spaces，累積 14 天，
-    由 Gemini 依 Vin 的工作判斷「用不用得上」，只留用得上的；看過的不重複判讀。"""
+    """AI 與開源動態：GitHub 每日＋每週熱門、Hugging Face 熱門模型與 Spaces（累積 14 天），加上 HF Daily Papers（累積 7 天）。
+    Gemini 依「對市場的意義」排序（不是依 Vin 用不用得上）：大廠發布、新能力、爆紅被大量採用的排前面；論文依讚數排、只做中文化。看過的不重複判讀。"""
     errs, cand = [], []
     for since, lim in (("weekly", 25), ("daily", 25)):
         try:
@@ -796,7 +796,23 @@ def p_ossuse():
                              "src": "HF Spaces", "stars": sp.get("likes"), "gain": None})
     except Exception as e:  # noqa: BLE001
         errs.append("HF Spaces: " + safe_err(e))
-    if not cand:
+    # HF Daily Papers：今天和前兩天的清單（週末、假日當天可能很少）
+    paps = []
+    for d in (None, TODAY_TPE - timedelta(days=1), TODAY_TPE - timedelta(days=2)):
+        try:
+            rows = gjson("https://huggingface.co/api/daily_papers", params={"limit": 100, **({"date": d.isoformat()} if d else {})})
+            for x in rows if isinstance(rows, list) else []:
+                pp = x.get("paper") or x
+                pid, title = pp.get("id"), (pp.get("title") or x.get("title") or "").strip()
+                if not pid or not title:
+                    continue
+                paps.append({"k": "pa:" + str(pid), "name": title[:200], "url": "https://huggingface.co/papers/" + str(pid), "src": "論文",
+                             "desc": (pp.get("ai_summary") or pp.get("summary") or "")[:400], "stars": pp.get("upvotes") or x.get("upvotes") or 0,
+                             "org": ((x.get("organization") or {}).get("fullname") or (x.get("organization") or {}).get("name") or ""),
+                             "day": (x.get("publishedAt") or pp.get("publishedAt") or "")[:10], "gh": pp.get("githubRepo") or ""})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"HF Daily Papers{' ' + d.isoformat() if d else ''}: {safe_err(e)}")
+    if not cand and not paps:
         raise RuntimeError("ossuse: " + "; ".join(errs))
     cache = {}
     if OSSUSE_CACHE.exists():
@@ -805,46 +821,68 @@ def p_ossuse():
         except Exception:  # noqa: BLE001
             cache = {}
     now = NOW.isoformat()
-    for c in cand:   # 指標每輪更新；第一次看到的時間留著
+    for c in cand + paps:   # 指標每輪更新；第一次看到的時間留著
         x = cache.setdefault(c["k"], {"first": now})
         x.update({k: v for k, v in c.items() if k != "k" and v is not None})
         x["last"] = now
-    todo = [k for k, x in cache.items() if "use" not in x][:40]
+    todo = [k for k, x in cache.items() if not k.startswith("pa:") and "sig" not in x][:50]
     if todo and GEMINI_KEY:
         lines = "\n".join(f'{i}. [{cache[k]["src"]}] {cache[k]["name"]}｜{cache[k].get("lang", "")}｜{cache[k].get("desc", "")}' for i, k in enumerate(todo))
-        prompt = ("你在幫一位台灣創意代理商的創意總監挑開源工具。他做品牌、社群貼文和 Reels、廣告、視覺設計；生圖和影片用 Google Flow、Kling、Runway，設計用 Figma 和 Canva；"
-                  "會用 Claude Code 和 MCP 外掛，對 AI agent、本機跑模型有興趣；不太寫程式。內容以繁體中文為主。"
-                  "下面是 GitHub 和 Hugging Face 這週的熱門項目，逐一判斷：\n"
-                  "use 0～3：0＝跟他無關（遊戲、硬體驅動、底層函式庫、資安研究、純學術）；1＝有點關係但用不到；2＝值得知道（趨勢或之後可能用到）；3＝現在就能幫上他的工作。大部分應該是 0 或 1，寧可給低分。\n"
-                  "zh：一句繁體中文說它做什麼，15～25 字，有知名產品可比就比（例如「像 Remove.bg 的開源版」），不要用「專為」「一款」「打造」「強大的」。\n"
-                  "why：use 2 以上才寫，他可以拿來做什麼，25 字內，要具體到工作場景。\n"
+        prompt = ("你是科技產業分析師，幫一位想掌握 AI 與軟體市場最新動態的讀者整理 GitHub 和 Hugging Face 這週的熱門項目。"
+                  "依「這件事對市場的意義」判斷，不要依讀者的職業或用不用得上判斷；語言模型、agent、晶片推論、開發工具、機器人都一樣重要。逐一判斷：\n"
+                  "sig 0～3：3＝大廠或知名團隊的重要發布、新能力突破、開源追上閉源、短時間爆紅被大量採用；2＝能代表一個正在成形的趨勢；1＝一般熱門；"
+                  "0＝雜訊（教學合集、清單、重複上架、灌星、與 AI 和軟體趨勢無關）。寧可給低分，3 分要少。\n"
+                  "zh：一句繁體中文說它是什麼，15～25 字，有知名產品可比就比（例如「開源版的 Cursor」），不要用「專為」「一款」「打造」「強大的」。\n"
+                  "why：sig 2 以上才寫，為什麼值得注意、代表市場往哪裡走，30 字內，講具體（誰做的、追上誰、打破什麼）。\n"
                   "ease：瀏覽器就能用｜下載安裝｜要寫程式（HF Spaces 通常是瀏覽器就能用；模型通常要寫程式，除非有現成的 App）。\n"
                   "cat：" + "|".join(OSSUSE_CATS) + "。\n"
-                  "只回 JSON：{\"items\": [{\"i\": 編號, \"use\": 分數, \"zh\": \"\", \"why\": \"\", \"ease\": \"\", \"cat\": \"\"}]}\n\n" + lines)
+                  "只回 JSON：{\"items\": [{\"i\": 編號, \"sig\": 分數, \"zh\": \"\", \"why\": \"\", \"ease\": \"\", \"cat\": \"\"}]}\n\n" + lines)
         try:
-            data, _m = _gemini_json(prompt, max_tokens=8000, timeout=90, lite_first=True, max_models=3)
+            data, _m = _gemini_json(prompt, max_tokens=9000, timeout=100, lite_first=True, max_models=3)
             for r in _items_of(data):
                 try:
                     k = todo[int(r.get("i"))]
-                    u = max(0, min(3, int(r.get("use") or 0)))
+                    u = max(0, min(3, int(r.get("sig") or 0)))
                 except (TypeError, ValueError, IndexError):
                     continue
-                cat = str(r.get("cat") or "")
-                ease = str(r.get("ease") or "")
-                cache[k].update({"use": u, "zh": str(r.get("zh") or "")[:40], "why": str(r.get("why") or "")[:40] if u >= 2 else "",
+                cat, ease = str(r.get("cat") or ""), str(r.get("ease") or "")
+                cache[k].update({"sig": u, "zh": str(r.get("zh") or "")[:40], "why": str(r.get("why") or "")[:48] if u >= 2 else "",
                                  "ease": ease if ease in ("瀏覽器就能用", "下載安裝", "要寫程式") else "", "cat": cat if cat in OSSUSE_CATS else "其他"})
         except Exception as e:  # noqa: BLE001
             errs.append("判讀: " + safe_err(e))
+    # 論文：依讚數取前段，翻成中文標題＋一句白話（不篩題目）
+    pcut = (NOW - timedelta(days=7)).isoformat()
+    ptop = sorted([k for k, x in cache.items() if k.startswith("pa:") and (x.get("last") or "") >= pcut], key=lambda k: -(cache[k].get("stars") or 0))[:20]
+    ptodo = [k for k in ptop if "zh" not in cache[k]]
+    if ptodo and GEMINI_KEY:
+        lines = "\n".join(f'{i}. {cache[k]["name"]}｜{cache[k].get("org", "")}｜{cache[k].get("desc", "")[:300]}' for i, k in enumerate(ptodo))
+        prompt = ("下面是 Hugging Face Daily Papers 讚數最高的 AI 論文。逐篇用台灣用語的繁體中文寫：\n"
+                  "zh：中文標題，說它做到什麼，12～24 字，不要直譯英文標題、不要中國用語。\n"
+                  "why：一句白話，非研究人員也看得懂：解決什麼問題、比之前好在哪，35 字內。\n"
+                  "cat：" + "|".join(OSSUSE_CATS) + "。\n"
+                  "只回 JSON：{\"items\": [{\"i\": 編號, \"zh\": \"\", \"why\": \"\", \"cat\": \"\"}]}\n\n" + lines)
+        try:
+            data, _m = _gemini_json(prompt, max_tokens=6000, timeout=90, lite_first=True, max_models=3)
+            for r in _items_of(data):
+                try:
+                    k = ptodo[int(r.get("i"))]
+                except (TypeError, ValueError, IndexError):
+                    continue
+                cat = str(r.get("cat") or "")
+                cache[k].update({"zh": str(r.get("zh") or "")[:40], "why": str(r.get("why") or "")[:56], "cat": cat if cat in OSSUSE_CATS else "其他"})
+        except Exception as e:  # noqa: BLE001
+            errs.append("論文判讀: " + safe_err(e))
     cut = (NOW - timedelta(days=14)).isoformat()
-    cache = {k: x for k, x in cache.items() if (x.get("last") or "") >= cut}
+    cache = {k: x for k, x in cache.items() if (x.get("last") or "") >= (pcut if k.startswith("pa:") else cut)}
     write_json(OSSUSE_CACHE, cache, separators=(",", ":"))
-    keep = [dict(x, k=k) for k, x in cache.items() if x.get("use", 0) >= 2]
-    keep.sort(key=lambda x: (-x["use"], -(x.get("gain") or 0), -(x.get("stars") or 0)))
-    ready = [x for x in keep if x.get("ease") in ("瀏覽器就能用", "下載安裝")]
-    watch = [x for x in keep if x not in ready]
-    slim = lambda x: {k: x.get(k) for k in ("name", "url", "src", "zh", "why", "ease", "cat", "use", "stars", "gain", "gain_w", "first")}
-    return {"ready": [slim(x) for x in ready[:15]], "watch": [slim(x) for x in watch[:12]], "n_seen": len(cache), "n_judged": sum(1 for x in cache.values() if "use" in x),
-            "errs": errs[:6], "src": "GitHub Trending（每日、每週）、Hugging Face 熱門模型與 Spaces；用不用得上、上手難度由 Gemini 依你的工作判讀，累積 14 天"}
+    hot = [dict(x, k=k) for k, x in cache.items() if not k.startswith("pa:") and x.get("sig", 0) >= 2]
+    hot.sort(key=lambda x: (-x["sig"], -(x.get("gain") or 0), -(x.get("stars") or 0)))
+    papers = [dict(cache[k], k=k) for k in ptop]
+    slim = lambda x: {k: x.get(k) for k in ("name", "url", "src", "zh", "why", "ease", "cat", "sig", "stars", "gain", "gain_w", "first", "org", "day", "gh")}
+    return {"hot": [slim(x) for x in hot[:30]], "papers": [slim(x) for x in papers[:15]],
+            "n_seen": sum(1 for k in cache if not k.startswith("pa:")), "n_judged": sum(1 for k, x in cache.items() if not k.startswith("pa:") and "sig" in x),
+            "n_papers": sum(1 for k in cache if k.startswith("pa:")), "errs": errs[:6],
+            "src": "GitHub Trending（每日、每週）、Hugging Face 熱門模型與 Spaces（近 14 天）、HF Daily Papers（近 7 天）；重要性由 Gemini 依對市場的意義判讀"}
 
 
 def p_oss():
@@ -7015,9 +7053,9 @@ def p_gap():
     for b in range(0, len(todo) if GEMINI_KEY else 0, 40):
         part = todo[b:b + 40]
         lines = "\n".join(f'{i}. [{it["source"]}] {it["title"]}' for i, it in enumerate(part))
-        prompt = ("你是台灣創意代理商的趨勢研究員，幫品牌找「國外已經在發生、台灣可能還沒有」的新東西。下面是日本與歐美產業媒體的新聞標題（日文、英文都有）。"
+        prompt = ("你是趨勢研究員，幫讀者掌握「國外已經在發生、台灣可能還沒有」的新東西。下面是日本與歐美產業媒體的新聞標題（日文、英文都有）。"
                   "score 0～3：0＝例行消息（財報、人事、促銷、聯名周邊、名人、活動預告、單純新品上市而台灣同類很多）；1＝普通；2＝有新意的產品、服務或做法；"
-                  "3＝明確的新商業模式、新消費行為、新通路或新的設計手法，台灣品牌值得參考。寧可給低分，大部分應該是 0 或 1。"
+                  "3＝明確的新商業模式、新消費行為、新通路或新的設計手法，代表市場正在變。寧可給低分，大部分應該是 0 或 1。"
                   "zh：台灣用語的繁體中文標題，30 字內，不要中國用語。what：score 2 以上才寫，一句話說新在哪裡，30 字內。"
                   "cat：" + "|".join(GAP_CATS) + "。"
                   "kw：score 2 以上才寫，台灣人如果要搜尋這件事會打的中文關鍵字，2～8 字，寫品類或做法本身（例如「外泌體保養」「無人古著店」「訂閱制穿戴」），不要寫公司全名。"
@@ -11415,7 +11453,7 @@ run("fx", p_fx_any)
 run("poly", p_poly, keep_if_fresh_hours=0.5)
 run("tech", p_tech)
 run("oss", p_oss, keep_if_fresh_hours=1)
-run("ossuse", p_ossuse, keep_if_fresh_hours=6)  # 用得上的開源：六小時一次，新進的才判讀
+run("ossuse", p_ossuse, keep_if_fresh_hours=6 if "hot" in (load_prev("ossuse") or {}) else 0)  # AI 與開源動態：六小時一次，新進的才判讀
 run("trends", p_trends)
 run("youtube", p_youtube, keep_if_fresh_hours=0.5)
 run("attention", p_attention, keep_if_fresh_hours=3)

@@ -983,9 +983,9 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>經濟部商工登記「公司／商業設立登記清冊」（月，約晚一個月）· 類別依名稱關鍵字判斷 · 得標排行累積政府電子採購網決標紀錄（行銷、設計、影片、廣告類，滾動 180 天）</span></div>
   </section>
   <section class="panel w12 cap" id="p-ossuse">
-    <div class="ph"><h2>用得上的開源</h2><span class="zh">GitHub、Hugging Face 這兩週的熱門，只留你用得上的</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>AI 與開源動態</h2><span class="zh">GitHub、Hugging Face 這兩週最重要的，加上讚數最高的論文</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://github.com/trending" target="_blank" rel="noopener">GitHub Trending</a><span>六小時一次 · 用不用得上、上手難度由 AI 依你的工作判讀；原始清單在下面的「開源雷達」「科技社群」</span></div>
+    <div class="pf"><a href="https://github.com/trending" target="_blank" rel="noopener">GitHub Trending</a><a href="https://huggingface.co/papers" target="_blank" rel="noopener">HF Daily Papers</a><span>六小時一次 · 重要性由 AI 依對市場的意義判讀，不看跟你的工作有沒有關；右邊標的是上手難度；原始清單在下面的「開源雷達」「科技社群」</span></div>
   </section>
   <section class="panel w6 cap" id="p-clinics">
     <div class="ph"><h2>診所</h2><span class="zh">近 12 個月新開與歇業 · 依科別</span><span class="meta">排程</span></div>
@@ -1502,11 +1502,13 @@ const PP=v=>v==null||!isFinite(v)?"—":`${v>0?"+":v<0?"−":""}${fmt(Math.abs(v
 const CARDX=d=>{const C=d.counties||[],E=(d.ec||[]).filter(x=>x.cat!=="總計"),et=(d.ec||[]).find(x=>x.cat==="總計");if(!C.length&&!E.length)return"";
   return `<div class="vr-g" style="margin-top:10px">${C.length?`<div><h3 class="ins-h">各縣市 · 近 3 月年增（依帳單地址）</h3>${HB(C.map(x=>({name:x.c.replace("臺","台"),v:x.y3,txt:PP(x.y3)})))}</div>`:""}${E.length?`<div><h3 class="ins-h">網購（信用卡付款）${et&&et.share!=null?` · 占刷卡 ${et.share}%`:""}</h3>${HB(E.map(x=>({name:x.cat,v:x.yoy3,txt:`${PP(x.yoy3)}${x.share!=null?" · 占 "+x.share+"%":""}`})))}</div>`:""}</div>`;};
 const renderers={
-  ossuse(d){const R=d.ready||[],W=d.watch||[],EZ={"瀏覽器就能用":"up","下載安裝":"","要寫程式":"flat"};
-    const li=x=>`<li><span class="t"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.zh||x.name)}</a><span class="sub">${esc(x.src)} · ${esc(x.name)}${x.gain?` · ${x.gain_w?"本週":"今天"} +${fmt(n(x.gain),0)} 星`:x.stars?` · ${fmt(n(x.stars),0)} ${x.src==="GitHub"?"星":"讚"}`:""}</span>${x.why?`<span class="sub" style="color:var(--text)">你可以：${esc(x.why)}</span>`:""}</span><span class="v ${EZ[x.ease]||""}">${esc(x.ease||"")}</span></li>`;
-    const grp=L=>[...new Set(L.map(x=>x.cat))].map(c=>`<div><h3 class="ins-h">${esc(c)}</h3><ul class="list wrap">${L.filter(x=>x.cat===c).map(li).join("")}</ul></div>`).join("");
-    body("p-ossuse").innerHTML=(R.length||W.length)?`<div class="plain">這兩週看了 ${fmt(n(d.n_judged),0)} 個熱門專案，留下 ${R.length+W.length} 個跟你的工作有關的。右邊標的是上手難度：綠色＝瀏覽器打開就能用。</div>`
-      +(R.length?`<h3 class="ins-h" style="font-size:12px;color:var(--text)">現在就能用</h3><div class="ins-g">${grp(R)}</div>`:"")+(W.length?`<h3 class="ins-h" style="font-size:12px;color:var(--text);margin-top:14px">值得知道（要寫程式或還在早期）</h3><div class="ins-g">${grp(W)}</div>`:"")
+  ossuse(d){const H=d.hot||[],PA=d.papers||[],EZ={"瀏覽器就能用":"up","下載安裝":"","要寫程式":"flat"};
+    const li=x=>`<li><span class="t"><a href="${esc(x.url)}" target="_blank" rel="noopener">${x.sig>=3?`<b style="color:var(--warn)">重要</b> `:""}${esc(x.zh||x.name)}</a><span class="sub">${esc(x.src)} · ${esc(x.name)}${x.gain?` · ${x.gain_w?"本週":"今天"} +${fmt(n(x.gain),0)} 星`:x.stars?` · ${fmt(n(x.stars),0)} ${x.src==="GitHub"?"星":"讚"}`:""}</span>${x.why?`<span class="sub" style="color:var(--text)">${esc(x.why)}</span>`:""}</span><span class="v ${EZ[x.ease]||""}">${esc(x.ease||"")}</span></li>`;
+    const pli=x=>`<li><span class="t"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.zh||x.name)}</a><span class="sub">${x.org?esc(x.org)+" · ":""}${esc(x.name)}</span>${x.why?`<span class="sub" style="color:var(--text)">${esc(x.why)}</span>`:""}</span><span class="v">▲${fmt(n(x.stars),0)}</span></li>`;
+    const cats=[...new Set(H.map(x=>x.cat))];
+    body("p-ossuse").innerHTML=(H.length||PA.length)?`<div class="plain">GitHub 和 Hugging Face 這兩週看了 ${fmt(n(d.n_judged),0)} 個熱門項目，依對市場的意義排出 ${H.length} 個（標「重要」的是大廠發布、新能力或爆紅）；右欄是 HF Daily Papers 近 7 天讚數最高的論文。</div>`
+      +`<div class="ins-g">`+(H.length?`<div><h3 class="ins-h" style="font-size:12px;color:var(--text)">熱門專案・依重要性</h3>${cats.map(c=>`<h3 class="ins-h">${esc(c)}</h3><ul class="list wrap">${H.filter(x=>x.cat===c).map(li).join("")}</ul>`).join("")}</div>`:"")
+      +(PA.length?`<div><h3 class="ins-h" style="font-size:12px;color:var(--text)">論文・近 7 天讚數最高</h3><ul class="list wrap">${PA.map(pli).join("")}</ul></div>`:"")+`</div>`
       :`<div class="empty">第一次判讀中，下一輪更新後出現</div>`;
     setMeta("p-ossuse",{...d,label:"近 14 天"},12);},
   insights(d){const C=((window.LASTP||{}).insights_cat||{}).cats||{},cats=["市場","總經","走向","訊號","輿情","現場"];
@@ -2386,7 +2388,7 @@ document.querySelectorAll(".panel.cap").forEach(p=>{const b=document.createEleme
 const IB=(()=>{
 const NS="http://www.w3.org/2000/svg";
 const BANDS={1:[["p-brands","新品牌雷達"],["p-jobs","104 職缺"],["p-crowd","集資雷達"],["p-tenders","標案"],["p-awards","決標"],["p-radar","公司雷達"],["p-grants","補助徵件"],["p-clinics","診所"],["p-aesthetic","醫美"]],
-  2:[["p-news","新聞"],["p-watch","關注領域"]],3:[["p-ossuse","用得上的開源"],["p-aiwire","AI 快線"],["p-devpulse","開發者動態"],["p-tech","科技社群"],["p-oss","開源雷達"]],4:[["p-media","時尚媒體"],["p-design","設計媒體"],["p-lyst","時尚熱度"]],5:[["p-think","智庫觀點"]]};
+  2:[["p-news","新聞"],["p-watch","關注領域"]],3:[["p-ossuse","AI 與開源動態"],["p-aiwire","AI 快線"],["p-devpulse","開發者動態"],["p-tech","科技社群"],["p-oss","開源雷達"]],4:[["p-media","時尚媒體"],["p-design","設計媒體"],["p-lyst","時尚熱度"]],5:[["p-think","智庫觀點"]]};
 let open=new Set();try{open=new Set(JSON.parse(localStorage.getItem("intel:ibopen")||"[]"));}catch(_){}try{if(!localStorage.getItem("intel:ibdef2")){open.add("p-ossuse");localStorage.setItem("intel:ibdef2","1");localStorage.setItem("intel:ibopen",JSON.stringify([...open]));}}catch(_){open.add("p-ossuse");}
 const save=()=>{try{localStorage.setItem("intel:ibopen",JSON.stringify([...open]));}catch(_){}};
 function setup(){
