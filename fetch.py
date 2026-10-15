@@ -832,7 +832,7 @@ def p_ossuse():
                   "依「這件事對市場的意義」判斷，不要依讀者的職業或用不用得上判斷；語言模型、agent、晶片推論、開發工具、機器人都一樣重要。逐一判斷：\n"
                   "sig 0～3：3＝大廠或知名團隊的重要發布、新能力突破、開源追上閉源、短時間爆紅被大量採用；2＝能代表一個正在成形的趨勢；1＝一般熱門；"
                   "0＝雜訊（教學合集、清單、重複上架、灌星、與 AI 和軟體趨勢無關）。寧可給低分，3 分要少。\n"
-                  "zh：一句繁體中文說它是什麼，15～25 字，有知名產品可比就比（例如「開源版的 Cursor」），不要用「專為」「一款」「打造」「強大的」。\n"
+                  "zh：一句繁體中文說它是什麼，15～25 字，有知名產品可比就比（例如「開源版的 Cursor」），不要用「專為」「一款」「打造」「強大的」，句尾不要句號。\n"
                   "why：sig 2 以上才寫，為什麼值得注意、代表市場往哪裡走，30 字內，講具體（誰做的、追上誰、打破什麼）。\n"
                   "ease：瀏覽器就能用｜下載安裝｜要寫程式（HF Spaces 通常是瀏覽器就能用；模型通常要寫程式，除非有現成的 App）。\n"
                   "cat：" + "|".join(OSSUSE_CATS) + "。\n"
@@ -846,19 +846,20 @@ def p_ossuse():
                 except (TypeError, ValueError, IndexError):
                     continue
                 cat, ease = str(r.get("cat") or ""), str(r.get("ease") or "")
-                cache[k].update({"sig": u, "zh": str(r.get("zh") or "")[:40], "why": str(r.get("why") or "")[:48] if u >= 2 else "",
+                cache[k].update({"sig": u, "zh": str(r.get("zh") or "").rstrip("。.")[:40], "why": str(r.get("why") or "").rstrip("。.")[:48] if u >= 2 else "",
                                  "ease": ease if ease in ("瀏覽器就能用", "下載安裝", "要寫程式") else "", "cat": cat if cat in OSSUSE_CATS else "其他"})
         except Exception as e:  # noqa: BLE001
             errs.append("判讀: " + safe_err(e))
     # 論文：依讚數取前段，翻成中文標題＋一句白話（不篩題目）
     pcut = (NOW - timedelta(days=7)).isoformat()
     ptop = sorted([k for k, x in cache.items() if k.startswith("pa:") and (x.get("last") or "") >= pcut], key=lambda k: -(cache[k].get("stars") or 0))[:20]
-    ptodo = [k for k in ptop if "zh" not in cache[k]]
+    ptodo = [k for k in ptop if cache[k].get("zv") != 2]
     if ptodo and GEMINI_KEY:
         lines = "\n".join(f'{i}. {cache[k]["name"]}｜{cache[k].get("org", "")}｜{cache[k].get("desc", "")[:300]}' for i, k in enumerate(ptodo))
         prompt = ("下面是 Hugging Face Daily Papers 讚數最高的 AI 論文。逐篇用台灣用語的繁體中文寫：\n"
-                  "zh：中文標題，說它做到什麼，12～24 字，不要直譯英文標題、不要中國用語。\n"
+                  "zh：中文標題，說它做到什麼，12～24 字，用一般人聽得懂的話，不要直譯英文標題、不要中國用語。\n"
                   "why：一句白話，非研究人員也看得懂：解決什麼問題、比之前好在哪，35 字內。\n"
+                  "兩者都不要用「打造」「專為」「首創」「賦能」「一款」，不要用蒸餾、詞元、token、梯度這類術語（非用不可就加一句白話解釋），句尾不要句號。\n"
                   "cat：" + "|".join(OSSUSE_CATS) + "。\n"
                   "只回 JSON：{\"items\": [{\"i\": 編號, \"zh\": \"\", \"why\": \"\", \"cat\": \"\"}]}\n\n" + lines)
         try:
@@ -869,7 +870,7 @@ def p_ossuse():
                 except (TypeError, ValueError, IndexError):
                     continue
                 cat = str(r.get("cat") or "")
-                cache[k].update({"zh": str(r.get("zh") or "")[:40], "why": str(r.get("why") or "")[:56], "cat": cat if cat in OSSUSE_CATS else "其他"})
+                cache[k].update({"zh": str(r.get("zh") or "").rstrip("。.")[:40], "why": str(r.get("why") or "").rstrip("。.")[:56], "cat": cat if cat in OSSUSE_CATS else "其他", "zv": 2})
         except Exception as e:  # noqa: BLE001
             errs.append("論文判讀: " + safe_err(e))
     cut = (NOW - timedelta(days=14)).isoformat()
