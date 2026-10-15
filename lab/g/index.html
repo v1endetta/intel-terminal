@@ -630,6 +630,11 @@ body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!im
 #side .arl .arv{font-size:17px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 #side .arl li span{grid-column:1/-1}
 @media (max-width:600px){#crumb .shr{font-size:0;padding:6px 9px;margin-left:4px}#crumb .shr::before{content:"↗";font-size:14px;line-height:1}#crumb .shr.ok::before{content:"✓"}#crumb:has(.lz):has(.path button:nth-of-type(4)) .path button.earth,#crumb:has(.lz):has(.path button:nth-of-type(4)) .path .earth+.sep{display:none}}
+
+#side .arr{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+#side .arr button{border:0;border-radius:999px;padding:6px 11px;background:rgba(255,255,255,.08);color:#f5f5f7;font:500 12px/1 inherit;cursor:pointer}
+#side .arr button.on{background:#ffd60a;color:#000}
+#side .arhint{color:#ffd60a}
 </style>
 <script type="importmap">
 {"imports":{
@@ -4890,6 +4895,7 @@ STREET_VIEW.area = (T, C) => {
   const { rows, near } = arReport(T);
   for (const t of near) { for (const r of t.rings) navLine(r, 0x64d2ff, 0.35, 0.12); addLabel(pill(t.name, "隔壁"), gp(t.c[0], t.c[1], 1.2), "nv dim", "nav", 0); }
   if (!rows.length) return arEmpty("資料載入中。");
+  const circ = arCircle(T);
   const good = [], weak = [];
   for (const r of rows) { if (!r.me || r.n < 4 || r.k === "house") continue; const q = r.rank / r.n;
     if (q <= 0.15 || (r.avg > 0 && r.me.v >= r.avg * 1.8)) good.push(`${AR[r.k].n}排第 ${r.rank}`); else if (q >= 0.85 && r.k !== "house") weak.push(`${AR[r.k].n}排倒數`); }
@@ -4898,12 +4904,61 @@ STREET_VIEW.area = (T, C) => {
     const cmp = [r.navg != null ? `隔壁平均 ${arFmt(r.k, r.navg)}` : "", `${esc(norm(T.county))}平均 ${arFmt(r.k, r.avg)}`, r.rank ? `第 ${r.rank}／${r.n}` : ""].filter(Boolean).join("・");
     return `<li><b class="arn">${A.n}<small>${esc(A.per())}</small></b><b class="arv" style="color:${v == null ? "#8e8e93" : r.k === "house" ? NEU : up ? UPH : DNH}">${v == null ? "沒有資料" : arFmt(r.k, v) + " " + A.u}</b><span>${cmp}${r.me && r.me.sub ? `<br>${esc(r.me.sub)}` : ""}</span></li>`; };
   return { eyebrow: `${norm(T.county)} › ${T.name} · 區域報告`, title: "這一區值不值得進？", big: T.name, color: LENS.area.c,
-    body: `<p class="why">${good.length ? `突出的：${esc(good.join("、"))}。` : "沒有特別突出的項目。"}${weak.length ? `偏弱的：${esc(weak.join("、"))}。` : ""}${(() => { const h = rows.find(r => r.k === "house" && r.me); return h ? `房價在${esc(norm(T.county))}排第 ${h.rank}／${h.n}。` : ""; })()}綠＝高於全縣市平均、紅＝低於（房價不分好壞）。隔壁＝中心 9 公里內的 ${near.length} 區（${esc(near.map(t => t.name).join("、"))}）。</p>`
+    body: circ + `<div class="nvh">整個${esc(T.name)}</div><p class="why">${good.length ? `突出的：${esc(good.join("、"))}。` : "沒有特別突出的項目。"}${weak.length ? `偏弱的：${esc(weak.join("、"))}。` : ""}${(() => { const h = rows.find(r => r.k === "house" && r.me); return h ? `房價在${esc(norm(T.county))}排第 ${h.rank}／${h.n}。` : ""; })()}綠＝高於全縣市平均、紅＝低於（房價不分好壞）。隔壁＝中心 9 公里內的 ${near.length} 區（${esc(near.map(t => t.name).join("、"))}）。</p>`
       + `<ul class="lst arl">${rows.map(li).join("")}</ul>`
       + (NW.length ? `<div class="nvh">最近的在地新聞</div>` + listHTML(NW.map(x => ({ t: x.t, s: `${x.s || ""}・${navAgo(x.at)}`, url: x.u }))) : "")
       + (near.length ? `<div class="nvh">換一區看</div><ul class="lst nvl">${near.map(t => `<li data-ar="${esc(t.county)}|${esc(t.name)}" style="cursor:pointer">${esc(norm(t.county))} ${esc(t.name)}<span>${kmBetween(t.c, T.c).toFixed(1)} 公里</span></li>`).join("")}</ul>` : "") };
 };
 document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("#side [data-ar]"); if (!b) return; const [c, n] = b.dataset.ar.split("|"); const t = (NAV.towns || []).find(x => x.name === n && x.county === c); if (t) navGoTown(t); });
+
+/* ---- 第二版：在地圖上點一下 → 畫半徑，圈內村里的人口流向（村里中心點落在圈內就算） ---- */
+const ARP = { pin: null };
+const arKey = (c, t, v) => norm(c) + "|" + t + "|" + v;
+function arVill() {
+  const V = lazyJSON("vil", "villages.json", 1440), M = lazyJSON("mvv", "mig_villages.json", 360);
+  if (!V || !M) return null;
+  if (!ARP._vj || ARP._vj[0] !== V || ARP._vj[1] !== M) {
+    const mm = new Map((M.v || []).map(r => [arKey(r[0], r[1], r[2]), r]));
+    ARP._vj = [V, M, (V.v || []).map(r => ({ ll: [r[3], r[4]], c: r[0], t: r[1], v: r[2], m: mm.get(arKey(r[0], r[1], r[2])) }))];
+  }
+  return { list: ARP._vj[2], M };
+}
+function arCircle(T) {
+  if (!ARP.pin) return `<p class="why arhint">◎ 在地圖上點一下任何地方（例如店址），就會畫出半徑，算圈內的人口流向。</p>`;
+  const { ll, r } = ARP.pin, ring = [];
+  for (let i = 0; i <= 64; i++) { const a = i / 64 * Math.PI * 2; ring.push([ll[0] + Math.cos(a) * r / KX, ll[1] + Math.sin(a) * r / KY]); }
+  { const hMax = Math.max(...ring.map(([lo, la]) => hAt(lo, la))) + 0.3;   // 平的圈：用圈上最高的地面高度，不跟著地形起伏
+    const pts = ring.map(([lo, la]) => { const [x, z] = toXZ(lo, la); return new THREE.Vector3(x, hMax, z); });
+    const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0xffd60a, transparent: true, opacity: 0.95, depthTest: false }));
+    l.renderOrder = 9; NAV.g.add(l); }
+  addLabel(`<span class="nvpin" style="--c:#ffd60a"><i></i><b>這裡</b></span>`, gp(ll[0], ll[1], 0.1), "nv", "nav", 9);
+  const btn = `<span class="arr">${[0.5, 1, 2].map(k => `<button data-arr="${k}" class="${k === r ? "on" : ""}">${k < 1 ? k * 1000 + " 公尺" : k + " 公里"}</button>`).join("")}<button data-arr="x">清掉</button></span>`;
+  const D = arVill();
+  if (!D) return `<div class="nvh">半徑 ${r} 公里內</div>${btn}<p class="why">${NAV.vil === false || NAV.mvv === false ? "村里資料還在準備，第一次要等台灣抓取站把村里界抓回來、遷徙資料補齊 12 個月。" : "村里資料載入中…"}</p>`;
+  const inV = D.list.filter(x => kmBetween(x.ll, ll) <= r), withM = inV.filter(x => x.m);
+  const sum = i => withM.reduce((a, x) => a + x.m[i], 0), inn = sum(3), out = sum(4), ext = sum(5), net = inn - out;
+  const cams = camsNear(ll, r), NW = NEWS().filter(x => x.ll && x.lvl !== "town" && kmBetween(x.ll, ll) <= r);   // 只算定位到地標或路的，鄉鎮中心點的不算
+  const top = withM.slice().sort((a, b) => (b.m[3] - b.m[4]) - (a.m[3] - a.m[4]));
+  const per = D.M.n_months ? `近 ${D.M.n_months} 個月` : "";
+  return `<div class="nvh">半徑 ${r} 公里內・${per}</div>${btn}`
+    + (withM.length ? `<ul class="lst arl"><li><b class="arn">人口淨流入<small>${withM.length} 個村里（中心點在圈內）</small></b><b class="arv" style="color:${net >= 0 ? UPH : DNH}">${net >= 0 ? "+" : "−"}${Math.abs(net).toLocaleString("en-US")} 人</b><span>遷入 ${inn.toLocaleString("en-US")}・遷出 ${out.toLocaleString("en-US")}・從外縣市搬來 ${ext.toLocaleString("en-US")}（占遷入 ${inn ? Math.round(ext / inn * 100) : 0}%）</span></li>`
+      + `<li><b class="arn">攝影機<small>國道、省道、台中台南市區</small></b><b class="arv">${cams.length} 支</b>${cams.length ? `<span>最近一支 ${dist(cams[0].d)}</span>` : ""}</li>`
+      + `<li><b class="arn">在地新聞<small>標得出地點的</small></b><b class="arv">${NW.length} 則</b></li></ul>`
+      + (top.length > 1 ? `<div class="nvh">圈內移入最多的村里</div><ul class="lst nvl">${top.slice(0, 4).map(x => `<li>${esc(x.t)} ${esc(x.v)}<span>${(x.m[3] - x.m[4]) >= 0 ? "+" : "−"}${Math.abs(x.m[3] - x.m[4]).toLocaleString("en-US")} 人・${dist(kmBetween(x.ll, ll))}</span></li>`).join("")}</ul>` : "")
+      + (NW.length ? listHTML(NW.slice(0, 3).map(x => ({ t: x.t, s: `${x.s || ""}・${navAgo(x.at)}`, url: x.u }))) : "")
+      : `<p class="why">圈內沒有村里中心點，把半徑加大試試。</p>`)
+    + `<p class="why">診所、醫美、新公司要等地址轉成座標才能算到半徑，目前看下面「整個區」的數字。</p>`;
+}
+const _arClick = navClickAt;
+navClickAt = function (lon, lat, c) {
+  if (NAV.lens === "area" && NAV.level === 2) { ARP.pin = { ll: [lon, lat], r: (ARP.pin && ARP.pin.r) || 1 }; NAV.key = ""; return; }
+  return _arClick(lon, lat, c);
+};
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("#side [data-arr]"); if (!b) return;
+  if (b.dataset.arr === "x") ARP.pin = null; else if (ARP.pin) ARP.pin.r = +b.dataset.arr;
+  NAV.key = "";
+});
 
 /* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */
 const DL = { applied: false, last: "" };
@@ -4926,6 +4981,8 @@ function dlApply() {
   scrollTo({ top: (ST.chapters.length - 1) * secH(), behavior: "auto" });
   setTimeout(() => { ST.openAt(hit[0], hit[1]);
     const { C, T } = dlPlace(place);
+    const pc = (q.get("圈") || "").split(",").map(Number);
+    if (pc.length === 3 && pc.every(isFinite)) ARP.pin = { ll: [pc[0], pc[1]], r: pc[2] };
     if (C) setTimeout(() => { if (T) navGoTown(T); else navGoCounty(C); }, 1500);   // 先等鏡頭回到全台灣，再飛過去
   }, 400);
 }
@@ -4936,6 +4993,7 @@ function dlState() {
     const E = EXPLORE(), it = E[EXCAT] && E[EXCAT].items[EXITEM], q = new URLSearchParams();
     if (it) q.set("看", it.n);
     if (NAV.level >= 1 && NAV.county) q.set("地", norm(NAV.county.name) + (NAV.level === 2 && NAV.town ? NAV.town.name : ""));
+    if (NAV.lens === "area" && NAV.level === 2 && ARP.pin) q.set("圈", `${ARP.pin.ll[0].toFixed(5)},${ARP.pin.ll[1].toFixed(5)},${ARP.pin.r}`);
     s = q.toString() ? "?" + q.toString() : "";
   }
   if (s !== DL.last) { DL.last = s; try { history.replaceState(null, "", location.pathname + s); } catch (e) { } }
