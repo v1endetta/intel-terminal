@@ -616,6 +616,8 @@ body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!im
 .ins-go{all:unset;cursor:pointer;margin-top:6px;font-size:12.5px;font-weight:600;color:#64d2ff}
 .insl{all:unset;cursor:pointer;display:block;margin-top:14px;font-size:14px;line-height:1.5;color:#f5f5f7}
 .insl i{font-style:normal;font-size:11px;font-weight:700;color:#1d1d1f;background:#ffd60a;border-radius:5px;padding:2px 7px;margin-right:8px;vertical-align:1px}
+
+.plaimg{display:block;width:100%;border-radius:10px;margin:10px 0 4px;opacity:.95}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2501,6 +2503,7 @@ function EXPLORE() {
       { n: "補助徵件", f: () => grantsCard() },
       { n: "新興生意", f: () => nicheCard() },
       { n: "診所", lens: "clinic" },
+      { n: "醫美", lens: "aes" },
       { n: "標案", lens: "tender", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },
       { n: "公司雷達", f: listOf("盯梢中的公司", () => (((P.radar || {}).watch) || []).slice(0, 7).map(x => ({ t: x.name, s: x.desc })), "訊號", "radar") },
     ] },
@@ -2519,6 +2522,8 @@ function EXPLORE() {
         return (warn.length ? `<p class="why"><b style="color:#ff9f0a">${esc([...new Set(warn.map(w => w.what))].join("、"))}</b>：${esc(warn.map(w => norm(w.where)).join("、"))}</p>` : `<p class="why">目前沒有天氣特報。</p>`)
           + listHTML((W.items || []).map(w => ({ t: `${w.city}　${(+w.temp).toFixed(1)}°C　${w.weather || ""}`, s: `${w.forecast && w.forecast[0] ? `接下來 ${w.forecast[0].wx}・降雨 ${w.forecast[0].pop}%` : ""}${w.rain24h ? `・24 小時雨量 ${w.rain24h} mm` : ""}` }))); }) },
       { n: "地震", f: layer("quake", "顯著地震", "現場 · 氣象署", () => listHTML((((P.quake || {}).items) || []).slice(0, 8).map(q => ({ t: `M${q.mag}　${(q.loc || "").replace(/\s+/g, " ").replace(/\s*\(.*\)/, "")}`, s: `${q.intensity ? "最大震度 " + q.intensity + "・" : ""}深 ${q.depth} 公里・${new Date(q.at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })}`, url: q.url })))) },
+      { n: "台海", f: () => plaCard() },
+      { n: "海纜", lens: "cable" },
       { n: "車流", lens: "traffic" },
       { n: "停班停課", lens: "stop" },
       { n: "氣壓圖", globe: 1, f: () => gxCard("press") },
@@ -2552,6 +2557,9 @@ const PROV = {
   "焦點新聞": ["gtop", "Google 新聞・焦點新聞（台灣，非個人化）", "即時", 30],
   "新興生意": ["taxreg", "財政部 全國營業（稅籍）登記", "月資料", 1440],
   "lens:clinic": ["clinics", "衛福部健保署 健保特約醫療院所名冊", "每日", 1440],
+  "lens:aes": ["aesthetic", "衛福部醫事司 醫療機構與人員基本資料（全部機構，一年一版）對照健保特約名冊", "年資料", 10080, p => p.asof],
+  "台海": ["plaact", "國防部 即時軍事動態（每天早上公布前 24 小時）", "每日", 1440, p => (p.latest || {}).date],
+  "lens:cable": ["cables", "TeleGeography Submarine Cable Map（CC BY-NC-SA 3.0）＋Google 新聞", "每週", 10080],
   "lens:move": ["migration", "內政部戶政司 遷入遷出統計", "月資料", 1440],
   "本月洞見": ["insights", "政府開放資料交叉比對（程式算訊號、Gemini 寫句子）", "每日", 1440],
   "補助徵件": ["grants", "Google 新聞的補助、徵件公告（Gemini 判讀，以原公告為準）", "彙整", 360],
@@ -4062,7 +4070,7 @@ function navTick(dt) {
   navClear();
   NAV.anim = null;
   // 全島型的視角（景氣、情緒、電力）每一層都一樣；選戰沒有街道層，就用城市層
-  const TWONLY = { macro: 1, mood: 1, power: 1 }, lz = NAV.lens, at = [[], [C], [T, C]];
+  const TWONLY = { macro: 1, mood: 1, power: 1, cable: 1 }, lz = NAV.lens, at = [[], [C], [T, C]];
   let fn, args;
   if (TWONLY[lz]) { fn = TW_VIEW[lz]; args = []; }
   else if (NAV.delta && DELTA_OK[lz] && (level === 0 ? DELTA_TW[lz] : DELTA_CITY[lz])) { fn = level === 0 ? DELTA_TW[lz] : DELTA_CITY[lz]; args = level === 0 ? [] : [C]; }
@@ -4733,6 +4741,85 @@ document.addEventListener("click", e => {
   }
   if (e.target.closest && e.target.closest("[data-ins]") && ST.openAt) ST.openAt("走向", "本月洞見");
 });
+
+/* ---- 醫美（衛福部全機構名冊對健保名冊）、台海（國防部每日動態）、海纜（TeleGeography） ---- */
+LENS.aes = { n: "醫美", c: "#ff9ec7" };
+LENS.cable = { n: "海纜", c: "#64d2ff" };
+const AE = () => P.aesthetic || {};
+const aeTowns = C => ((AE().towns) || []).filter(r => sameC(r[0], C.name || C));
+const aeBig = (cty, town) => ((AE().big) || []).filter(r => sameC(r[1], cty) && (!town || r[2] === town));
+const aeAsof = () => AE().asof ? `資料到 ${AE().asof.slice(0, 4)} 年底` : "";
+const aeWhy = '<p class="why">醫美＝名稱有醫美、美學、整形等字，或沒簽健保的整形外科、皮膚科診所。衛福部名冊一年一版，看的是分布，不是最近的開關店。</p>';
+const aeEmpty = () => ({ eyebrow: "台灣 · 醫美", title: "醫美診所集中在哪？", big: "載入中", color: LENS.aes.c, body: '<p class="empty">醫美資料下一輪更新後出現。</p>' });
+TW_VIEW.aes = () => {
+  const D = AE(), Cs = D.counties || {}, ks = Object.keys(Cs);
+  if (!ks.length) { navCounties(() => ({ op: 0.2 })); return aeEmpty(); }
+  const mx = Math.max(1, ...ks.map(k => Cs[k][0])), col = new THREE.Color(LENS.aes.c);
+  navCounties(c => { const k = ks.find(x => sameC(x, c.name)); if (!k) return { dim: true, op: 0.12 }; const v = Cs[k];
+    return { col, op: 0.2 + 0.75 * Math.sqrt(v[0] / mx), sub: `醫美 ${v[0]}`, dot: LENS.aes.c, prio: 2 + v[0] / mx * 4 }; });
+  const rows = ks.sort((a, b) => Cs[b][0] - Cs[a][0]), tops = (D.towns || []).slice(0, 6);
+  return { eyebrow: `台灣 · 醫美 · ${aeAsof()}`, title: "醫美診所集中在哪？", big: `${(D.n_clear || 0).toLocaleString("en-US")} 家`, color: LENS.aes.c,
+    body: aeWhy + `<p class="why">另有 ${(D.n_self || 0).toLocaleString("en-US")} 家沒簽健保的西醫診所（多數做醫美、健檢、減重），名稱看不出來的醫美在這一群裡。${D.diff ? `跟 ${D.diff.from.slice(0, 4)} 年比：新出現 ${D.diff.new} 家、消失 ${D.diff.gone} 家。` : ""}</p>`
+      + `<div class="nvh">最集中的鄉鎮</div><ul class="lst nvl">${tops.map(t => `<li data-nc="${esc(t[0])}" style="cursor:pointer"><span class="sdot" style="background:${LENS.aes.c}"></span>${esc(norm(t[0]))} ${esc(t[1])}<span>醫美 ${t[2]}・其他自費 ${t[3]}</span></li>`).join("")}</ul>`
+      + `<div class="nvh">各縣市</div><ul class="lst nvl">${rankRows(rows.slice(0, 12).map(k => [k, `醫美 ${Cs[k][0]}・其他自費 ${Cs[k][1]}`]), "nc")}</ul>` };
+};
+CITY_VIEW.aes = C => {
+  const ts = navOutline(C), R = aeTowns(C), view = NAV.viewD || 60, mx = Math.max(1, ...R.map(r => r[2]));
+  if (!AE().towns) return aeEmpty();
+  R.forEach((r, i) => { const t = ts.find(t => t.name === r[1]); if (t && r[2]) navCol(t.c[0], t.c[1], r[2] / mx, view, r[1], `醫美 ${r[2]}`, 6 - i * 0.2, LENS.aes.c); });
+  townPills(ts, new Set(R.map(r => r[1])));
+  const v = (AE().counties || {})[Object.keys(AE().counties || {}).find(k => sameC(k, C.name))] || [0, 0], big = aeBig(C.name);
+  return { eyebrow: `${norm(C.name)} · 醫美 · ${aeAsof()}`, title: "醫美開在哪一區？", big: `${v[0]} 家`, color: LENS.aes.c,
+    body: `<p class="why">光柱越高醫美診所越多。另有其他自費西醫診所 ${v[1]} 家。</p><ul class="lst nvl">${rankRows(R.slice(0, 8).map(r => [r[1], `醫美 ${r[2]}・其他自費 ${r[3]}・醫師 ${r[4]} 位`]), "nt")}</ul>`
+      + (big.length ? `<div class="nvh">規模較大的（醫師 3 位以上）</div>` + listHTML(big.slice(0, 8).map(r => ({ t: r[0], s: `${r[2]}・醫師 ${r[3]}・護理 ${r[4]}`, url: `https://www.google.com/search?q=${encodeURIComponent(r[0] + " " + r[2])}` }))) : "") };
+};
+STREET_VIEW.aes = (T, C) => {
+  for (const r of T.rings) navLine(r, 0xffffff, 0.7, 0.15);
+  const R = aeTowns(T.county), me = R.find(r => r[1] === T.name), big = aeBig(T.county, T.name);
+  if (!me) return { eyebrow: `${norm(T.county)} › ${T.name} · 醫美`, title: "這一區有多少醫美？", big: T.name, color: LENS.aes.c, body: `<p class="empty">${AE().towns ? "這一區名冊上沒有醫美或自費西醫診所。" : "資料載入中。"}</p>` };
+  return { eyebrow: `${norm(T.county)} › ${T.name} · 醫美 · ${aeAsof()}`, title: "這一區有多少醫美？", big: `${me[2]} 家`, color: LENS.aes.c,
+    body: `<p class="why">在${esc(norm(T.county))}排第 ${R.indexOf(me) + 1}／${R.length}。醫師共 ${me[4]} 位；另有其他自費西醫診所 ${me[3]} 家。</p>`
+      + (big.length ? `<div class="nvh">規模較大的</div>` + listHTML(big.map(r => ({ t: r[0], s: `醫師 ${r[3]}・護理 ${r[4]}`, url: `https://www.google.com/search?q=${encodeURIComponent(r[0] + " " + T.name)}` }))) : "") };
+};
+
+/* 台海：國防部每天公布前一天 06 時到今天 06 時的共機、共艦 */
+function plaCard() {
+  const D = P.plaact || {}, L = D.latest, days = D.days || [];
+  if (!L) return { html: sideHTML({ eyebrow: "現場 · 台海", title: "共機共艦今天多不多？", body: '<p class="empty">國防部資料下一輪更新後出現（第一次要分幾輪補齊半年）。</p>' }) };
+  const a7 = (D.avg7 || {}).air, a30 = (D.avg30 || {}).air, hot = a30 ? L.air / a30 : 1, col = hot >= 2 ? DNH : hot >= 1.2 ? "#ff9f0a" : NEU;
+  const md = s => `${+s.slice(5, 7)}/${+s.slice(8, 10)}`, M = D.max90 || {};
+  const tail = days.slice(-90);
+  return { html: sideHTML({ eyebrow: `現場 · 台海 · ${md(L.date)} 06 時前 24 小時`, title: "共機共艦今天多不多？", big: `共機 ${L.air}・共艦 ${L.ship}`, color: col,
+    chg: L.cross ? `越中線 ${L.cross}` : "",
+    body: `<p class="why">國防部每天早上公布。今天共機是近 30 天平均（${a30} 架次）的 ${hot.toFixed(1)} 倍；近 7 天平均 ${a7} 架次。${L.off ? `另有公務船 ${L.off} 艘。` : ""}${L.balloon ? `氣球 ${L.balloon} 顆。` : ""}數字突然跳高通常是演習或政治事件前後，常常比新聞先反映到股市和匯率。</p>`
+      + `<div class="nvh">共機架次・近 ${tail.length} 天</div>` + lineSVG(tail.map(d => d[1]), "#ff9f0a")
+      + `<div class="nvh">共艦艘數・近 ${tail.length} 天</div>` + lineSVG(tail.map(d => d[3]), "#64d2ff")
+      + `<p class="why">近 90 天最多：共機 ${M.air} 架次（${M.air_date ? md(M.air_date) : ""}）、共艦 ${M.ship} 艘（${M.ship_date ? md(M.ship_date) : ""}）。</p>`
+      + (L.img ? `<a href="${esc(L.url)}" target="_blank" rel="noopener"><img class="plaimg" src="${esc(L.img)}" alt="國防部臺海周邊海、空域活動示意圖" loading="lazy" referrerpolicy="no-referrer"></a>` : "")
+      + ((D.events || []).length ? `<div class="nvh">其他公告</div>` + listHTML(D.events.slice(0, 4).map(e => ({ t: e.title, s: md(e.date), url: e.url }))) : ""),
+    foot: `<a href="${esc(L.url)}" target="_blank" rel="noopener">國防部原文 ›</a>` }) };
+}
+
+/* 海纜：台灣上岸的國際海纜（只畫台灣附近），上岸站、受損新聞 */
+const CB = () => P.cables || {};
+TW_VIEW.cable = () => {
+  const D = CB(), cs = D.cables || [];
+  navCounties(() => ({ op: 0.12, dim: true }));
+  if (!cs.length) return { eyebrow: "現場 · 海纜", title: "台灣靠哪幾條海纜連上世界？", big: "載入中", color: LENS.cable.c, body: '<p class="empty">海纜資料下一輪更新後出現。</p>' };
+  const hit = new Set();
+  for (const n of D.news || []) for (const c of cs) if (n.title.toLowerCase().includes(String(c.name).toLowerCase().replace(/\s*\(.*\)/, ""))) hit.add(c.id);
+  for (const c of cs) { const col = hit.has(c.id) ? 0xff453a : new THREE.Color(c.color || LENS.cable.c); for (const seg of c.lines || []) navLine(seg, col, c.planned ? 0.35 : 0.85, 0.3); }
+  const by = {}; for (const c of cs) for (const l of c.tw_lp || []) (by[l] = by[l] || []).push(c.name);
+  for (const [name, lo, la] of D.landing || []) addLabel(pill(name, `${(by[name] || []).length} 條`, LENS.cable.c), gp(lo, la, 1.2), "nv", "nav", 3 + (by[name] || []).length / 3);
+  const live = cs.filter(c => !c.planned), intl = live.filter(c => !c.domestic), dom = live.filter(c => c.domestic), plan = cs.filter(c => c.planned), old = live.filter(c => c.rfs && c.rfs <= new Date().getFullYear() - 20);
+  const lps = Object.entries(by).sort((a, b) => b[1].length - a[1].length);
+  return { eyebrow: "現場 · 海纜 · TeleGeography", title: "台灣靠哪幾條海纜連上世界？", big: `國際海纜 ${intl.length} 條`, color: LENS.cable.c, chg: [dom.length ? `外島 ${dom.length}` : "", plan.length ? `建設中 ${plan.length}` : ""].filter(Boolean).join("・"),
+    body: `<p class="why">國際網路九成以上走海纜。上岸站越集中，一個地方出事影響越大；用超過 20 年的海纜（${old.length} 條）比較容易故障。紅線＝最近新聞有點名的海纜。馬祖、金門、澎湖靠的國內海纜條數少，一斷就是整個島網路變慢。</p>`
+      + (old.length ? `<p class="why">用超過 20 年的：${esc(old.map(c => c.name).join("、"))}。</p>` : "")
+      + `<div class="nvh">上岸站</div>` + barsHTML(lps.map(([k, v]) => ({ name: k, v: v.length, txt: `${v.length} 條` })), { signed: false })
+      + ((D.news || []).length ? `<div class="nvh">海纜新聞・近 60 天</div>` + listHTML(D.news.slice(0, 6).map(n => ({ t: n.title, s: `${n.source || ""}・${navAgo(n.at)}`, url: n.url }))) : `<p class="why">近 60 天沒有海纜受損或中斷的新聞。</p>`)
+      + `<div class="nvh">海纜（新到舊）</div>` + listHTML(cs.slice().sort((a, b) => (b.rfs || 0) - (a.rfs || 0)).map(c => ({ t: `${c.name}${c.planned ? "（建設中）" : ""}`, s: [c.rfs ? `${c.rfs} 年啟用` : "", c.length, (c.tw_lp || []).join("、"), c.owners ? c.owners.split(",").slice(0, 3).join("、") : ""].filter(Boolean).join("・") }))) };
+};
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
