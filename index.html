@@ -2545,6 +2545,7 @@ function EXPLORE() {
       { n: "診所", lens: "clinic" },
       { n: "醫美", lens: "aes" },
       { n: "AI 快線", globe: 1, f: () => gxCard("ai") },
+      { n: "開源工具", f: () => ossCard() },
     ] },
     { cat: "輿情", items: [
       { n: "洞見", f: () => insCatCard("輿情") },
@@ -5225,6 +5226,18 @@ function gapCard() {
     body: `<p class="why">從日本與歐美的產業、消費媒體挑出有新意的產品、服務和做法，再查台灣中文新聞近 30 天報過幾次，報得越少排越前面。沒人報不代表會紅，「台灣缺」那一行是落地前要先過的關。</p>`
       + cats.map(c => `<div class="nvh">${esc(c)}</div><ul class="lst gapl">${xs.filter(x => x.cat === c).slice(0, 6).map(li).join("")}</ul>`).join(""),
     foot: `<span>${esc(D.src || "")}</span>` }) };
+}
+
+// 用得上的開源：GitHub、Hugging Face 熱門裡，跟創意工作有關的
+function ossCard() {
+  const D = P.ossuse || {}, R = D.ready || [], W = D.watch || [];
+  if (!R.length && !W.length) return { html: sideHTML({ eyebrow: "訊號 · 開源工具", title: "這兩週用得上的開源", body: '<p class="empty">第一次判讀中，下一輪更新後出現。</p>' }) };
+  const li = x => ({ t: x.zh || x.name, s: `${x.ease || ""}・${x.src}${x.why ? `｜你可以：${x.why}` : ""}`, url: x.url });
+  return { html: sideHTML({ eyebrow: "訊號 · 開源工具 · 近 14 天", title: "這兩週用得上的開源", big: `${R.length} 個現在就能用`, color: "#64d2ff",
+    body: `<p class="why">從 GitHub 和 Hugging Face 的熱門裡，只留跟品牌、社群、影片、設計工作有關的。「瀏覽器就能用」的點開就能試。</p>`
+      + (R.length ? `<div class="nvh">現在就能用</div>` + listHTML(R.slice(0, 8).map(li)) : "")
+      + (W.length ? `<div class="nvh">值得知道（要寫程式或還在早期）</div>` + listHTML(W.slice(0, 5).map(li)) : ""),
+    foot: `<a href="/terminal/#p-ossuse">終端機看完整清單 ›</a>` }) };
 }
 
 /* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */
