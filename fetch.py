@@ -7568,7 +7568,15 @@ def p_geocode():
             ae.append([v[0], v[1], r[2], r[3], pr, r[1]])
     write_json(GEO_POINTS, {"at": NOW_ISO, "clinic_cols": ["經度", "緯度", "科別群", "特約起", "歇業日", "門牌級"], "clinic": cl,
                             "aes_cols": ["經度", "緯度", "類別", "醫師", "門牌級", "名稱"], "aes": ae}, separators=(",", ":"))
-    return {"items": len(items), "located": n_ok, "doorplate": n_b, "pending_b": {c: len(v) for c, v in pend.items()}, "osm_queries": n_q, "b_done": b_done, "errs": errs[:4]}
+    relay_errs = {}
+    try:   # 台灣抓取站上一輪的錯誤（只留跟這裡有關的），方便遠端除錯
+        from google.cloud import storage
+        stt = json.loads(storage.Client(project=os.environ.get("GCP_PROJECT")).bucket(os.environ.get("GCP_BUCKET")).blob("relay/state.json").download_as_bytes(timeout=30))
+        relay_errs = {k: v for k, v in ((stt.get("last") or {}).get("errs") or {}).items() if re.match(r"geo|vill|mnd|tc_|tn_|city", k)}
+        relay_errs["_at"] = (stt.get("last") or {}).get("at"); relay_errs["_geob"] = {c: {kk: vv for kk, vv in v.items() if kk != "res"} for c, v in (stt.get("geob") or {}).items()}
+    except Exception as e:  # noqa: BLE001
+        relay_errs = {"_err": safe_err(e)[:80]}
+    return {"items": len(items), "located": n_ok, "doorplate": n_b, "relay": relay_errs, "pending_b": {c: len(v) for c, v in pend.items()}, "osm_queries": n_q, "b_done": b_done, "errs": errs[:4]}
 
 
 # ---------- 人口遷徙：內政部遷入遷出統計（到村里，每月）→ 各鄉鎮淨流入、從外縣市還是本縣搬來；最近 12 個月累計 ----------
