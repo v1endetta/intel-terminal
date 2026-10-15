@@ -1682,7 +1682,7 @@ function setupWx() {
   if (R && R.img) {
     const b = R.bounds; const lons = b.map(p => p[0]), lats = b.map(p => p[1]);
     uni.uRadarB.value.set(Math.min(...lons), Math.min(...lats), Math.max(...lons), Math.max(...lats));
-    new THREE.TextureLoader().load(RAW + R.img + "?t=" + Date.now(), t => { t.colorSpace = THREE.SRGBColorSpace; t.minFilter = THREE.LinearFilter; uni.uRadarTex.value = t; });
+    new THREE.TextureLoader().load(RAW + R.img + "?t=" + Date.now(), t => { t.colorSpace = THREE.SRGBColorSpace; t.minFilter = THREE.LinearFilter; const o = uni.uRadarTex.value; uni.uRadarTex.value = t; if (o && o !== t && o.dispose) o.dispose(); });
   }
   layers.wx.on = () => {
     uni.uRadar.value = uni.uRadarTex.value ? 1 : 0;
@@ -1872,9 +1872,9 @@ function flyTo(pos, tgt, dur = 2.2) { fly = { p0: camera.position.clone(), t0: c
 const ease = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
 
 function setLayer(name) {
-  if (cur && layers[cur]) { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); }
+  if (cur && layers[cur]) { try { layers[cur].g.visible = false; layers[cur].off && layers[cur].off(); } catch (e) { console.warn("layer off", cur, e); } }
   cur = name; const L = layers[name]; if (!L) return;
-  L.g.visible = true; L.on && L.on();
+  try { L.g.visible = true; L.on && L.on(); } catch (e) { console.warn("layer on", name, e); }
   dimTo = name === "wx" ? 0 : 1;
   document.querySelectorAll("#dock button").forEach(b => b.classList.toggle("on", b.dataset.l === name));
 }
@@ -2945,6 +2945,18 @@ async function buildFlights() {
   FL.lbl = addLabel("", V(0, 0, 0), "flt sel", "flights", 50); FL.lbl.hide = true;
   FL.built = true; flightsTick(true);
 }
+// 同一時間只建一次（進航班、5 分鐘資料更新可能同時要建）
+function flBuild() { return FL.building || (FL.building = buildFlights().finally(() => { FL.building = null; })); }
+// 資料每 5 分鐘更新：航班原地重建；正在看的人鏡頭不動，選到的那條航線新資料裡還有就繼續亮著
+function flRefresh() {
+  if (!FL.built || FL.building) return;
+  const old = FL.g, keep = FL.sel && FL.sel.code;
+  FL.built = false; FL.R = {}; FL.sel = null; clearLabels("flights");
+  return flBuild().then(() => {
+    if (old) { SG.remove(old); old.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); }); }
+    if (cur === "flights") { FL.g.visible = true; flSelect(keep && FL.R[keep] ? { code: keep } : null); }
+  });
+}
 // 選取：一條航線（代碼）或一架即時飛機（物件）；null＝全部回到淡淡的樣子
 function flSelect(s) {
   FL.sel = s;
@@ -3002,7 +3014,7 @@ renderer.domElement.addEventListener("pointerup", e => {
   if (cur !== "flights" || !FL.built || !_flDown || Math.hypot(e.clientX - _flDown[0], e.clientY - _flDown[1]) > 8) return;
   const s = flPick(e.clientX, e.clientY); flSelect(s && FL.sel && ((s.code && s.code === FL.sel.code) || (s.live && s.live === FL.sel.live)) ? null : s);
 });
-document.addEventListener("click", e => { const li = e.target.closest && e.target.closest("#side [data-fl]"); if (!li || cur !== "flights") return; e.stopPropagation(); flSelect(FL.sel && FL.sel.code === li.dataset.fl ? null : { code: li.dataset.fl }); }, true);
+document.addEventListener("click", e => { const li = e.target.closest && e.target.closest("#side [data-fl]"); if (!li || cur !== "flights" || !FL.built) return; e.stopPropagation(); if (!FL.R[li.dataset.fl]) return; flSelect(FL.sel && FL.sel.code === li.dataset.fl ? null : { code: li.dataset.fl }); }, true);
 // 地球拖曳：像轉地球儀一樣——左右拖＝沿經度轉、上下拖＝往南北看，北方永遠朝上；放手有慣性；滾輪／雙指縮放
 const GD = { on: false, ptrs: new Map(), vx: 0, vy: 0, pinch: 0 };
 const _gC = new THREE.Vector3(0, -6371, 0), _gN = new THREE.Vector3(), _gv = new THREE.Vector3(), _gA = new THREE.Vector3(), _gq = new THREE.Quaternion();
@@ -3017,11 +3029,11 @@ function gdRotate(dx, dy) {
 function gdZoom(f) { _gv.copy(camera.position).sub(_gC); const d = Math.max(6371 + 3000, Math.min(6371 + 42000, 6371 + (_gv.length() - 6371) * f)); _gv.setLength(d); camera.position.copy(_gC).add(_gv); camera.lookAt(_gC); }
 const gdEl = renderer.domElement;
 gdEl.addEventListener("pointerdown", e => { if (!GD.on || fly) return;   /* 飛往地球途中按到畫面不要把飛行打斷（會停在半空中、地球還沒淡入，看起來像卡住） */ GD.ptrs.set(e.pointerId, [e.clientX, e.clientY]); GD.vx = GD.vy = 0; GD.pinch = 0; gdEl.setPointerCapture && gdEl.setPointerCapture(e.pointerId); });
-gdEl.addEventListener("pointermove", e => { if (!GD.on || !GD.ptrs.has(e.pointerId)) return; const p = GD.ptrs.get(e.pointerId), dx = e.clientX - p[0], dy = e.clientY - p[1]; GD.ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+gdEl.addEventListener("pointermove", e => { if (!GD.on || !GD.ptrs.has(e.pointerId)) return; if (e.pointerType === "mouse" && !e.buttons) { gdUp(e); return; }   /* 放開的事件沒收到（滑鼠在視窗外放開）：不能讓地球一直黏著游標 */ const p = GD.ptrs.get(e.pointerId), dx = e.clientX - p[0], dy = e.clientY - p[1]; GD.ptrs.set(e.pointerId, [e.clientX, e.clientY]);
   if (GD.ptrs.size >= 2) { const [a, b] = [...GD.ptrs.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (GD.pinch) gdZoom(GD.pinch / d); GD.pinch = d; return; }
   gdRotate(dx, dy); GD.vx = Math.max(-30, Math.min(30, dx)); GD.vy = Math.max(-30, Math.min(30, dy)); GD.t = performance.now(); });
 const gdUp = e => { if (!GD.ptrs.has(e.pointerId)) return; GD.ptrs.delete(e.pointerId); GD.pinch = 0; if (GD.ptrs.size || performance.now() - (GD.t || 0) > 80) GD.vx = GD.vy = 0; };   // 停住再放手就不滑
-gdEl.addEventListener("pointerup", gdUp); gdEl.addEventListener("pointercancel", gdUp);
+gdEl.addEventListener("pointerup", gdUp); gdEl.addEventListener("pointercancel", gdUp); gdEl.addEventListener("lostpointercapture", gdUp);
 gdEl.addEventListener("wheel", e => { if (!GD.on) return; e.preventDefault(); if (fly) return; gdZoom(Math.exp(e.deltaY * 0.0012)); }, { passive: false });
 function gdTick(dt) { if (!GD.on || GD.ptrs.size || (Math.abs(GD.vx) < 0.05 && Math.abs(GD.vy) < 0.05)) return; const f = Math.min(3, (dt || 0.016) * 60); gdRotate(GD.vx * f, GD.vy * f); const d = Math.pow(0.88, f); GD.vx *= d; GD.vy *= d; }   // 放手後的慣性，跟畫面格數無關
 layers.flights = {
@@ -3034,7 +3046,8 @@ layers.flights = {
     controls.minDistance = 0; controls.maxDistance = Infinity; controls.minPolarAngle = 0; controls.maxPolarAngle = Math.PI;
     camera.up.copy(gdAxis()); camera.near = 20; camera.far = 300000; camera.updateProjectionMatrix(); flyTo(C.clone().addScaledVector(look, 6371 + (MOBILE ? 10500 : 8000)), C, 2.2);
     const show = () => { FL.g.visible = true; flSelect(null); };
-    if (FL.built) show(); else buildFlights().then(() => { if (cur === "flights") { show(); showSide(flightsSide(), null); } });
+    if (FL.built) show(); else flBuild().then(() => { if (cur === "flights") { show(); showSide(flightsSide(), null); } })
+      .catch(e => { console.warn("flights", e); if (cur === "flights") showSide(sideHTML({ eyebrow: "現場 · 桃園機場", title: "今天飛去哪裡", body: '<p class="empty">航線暫時讀不到。點上方「台灣」或下面任何一個項目都能離開。</p>' }), null); });
   },
   off() {
     ST.globeForce = false; document.body.classList.remove("fl-on"); if (FL.g) FL.g.visible = false; if (FL.lbl) FL.lbl.hide = true;
@@ -5534,12 +5547,13 @@ addEventListener("resize", () => { _measureVH(); const w = innerWidth, h = VH();
     setInterval(async () => {   // 每 5 分鐘更新資料：重建圖層
       try {
         await Promise.all([loadData(), loadRoads()]);
-        const was = cur; if (cur) { layers[cur].off && layers[cur].off(); }
-        for (const k in layers) { scene.remove(layers[k].g); }
-        for (const k in layers) delete layers[k];
+        const REB = ["wx", "quake", "house", "traffic", "flow"], was = cur, inReb = REB.includes(cur);
+        if (inReb) { try { layers[cur].off && layers[cur].off(); } catch (e) { console.warn(e); } }
+        for (const k of REB) if (layers[k]) { const g = layers[k].g; scene.remove(g); g.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => m.dispose()); }); delete layers[k]; }
         setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow();
-        cur = null; if (was && document.body.classList.contains("exploring")) setLayer(was);
-      } catch (e) { }
+        if (inReb) { cur = null; if (document.body.classList.contains("exploring")) setLayer(was); }
+        try { flRefresh(); } catch (e) { console.warn("flights refresh", e); }
+      } catch (e) { console.warn("refresh", e); }
     }, 300000);
   } catch (e) {
     console.error(e);
