@@ -12,7 +12,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - run: pip install requests
+      - run: pip install requests pandas odfpy
       - run: python ops/probe.py
       - name: Save to probe branch
         run: |
