@@ -4925,7 +4925,7 @@ const AR = {
     per: () => (P.births || {}).n_months >= 12 ? "近 12 個月" : `近 ${(P.births || {}).n_months || 0} 個月` },
   presale: { n: "預售屋成交", u: "件", rows: C => { const R = lazyJSON("presale", "presale_towns.json", 1440); if (!R || !R.towns) return [];
       return Object.entries(R.towns).filter(([k]) => sameC(k.slice(0, 3), C)).map(([k, v]) => ({ t: k.slice(3), v: v[0],
-        sub: [v[1] ? `住宅 ${v[1]} 件・${v[2].toLocaleString("en-US")} 坪` : "", v[3] ? `每坪中位 ${v[3]} 萬` : "", (v[4] || []).length ? `主要建案：${v[4].slice(0, 2).map(p => p[0]).join("、")}` : ""].filter(Boolean).join("・") })); },
+        sub: [v[1] ? `住宅 ${v[1]} 件・${v[2].toLocaleString("en-US")} 坪` : "", v[3] ? `每坪中位 ${v[3]} 萬` : "", (v[4] || []).length ? `主要建案：${v[4].slice(0, 2).map(p => p[0].replace(/[?？]/g, "")).join("、")}` : ""].filter(Boolean).join("・") })); },
     per: () => { const R = lazyJSON("presale", "presale_towns.json", 1440); return R && R.season ? String(R.season).replace(/^(\d+)S(\d)$/, "$1 年第 $2 季・兩到四年後交屋") : ""; } },
   rent: { n: "住家租金", u: "元／坪・月", neu: 1, rows: C => arRent("towns", C), per: () => arRentPer() },
   shop: { n: "店面租金", u: "元／坪・月", neu: 1, rows: C => arRent("shops", C), per: () => arRentPer() },
