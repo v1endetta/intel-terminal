@@ -7075,7 +7075,8 @@ def _pla_parse(body):
     n = lambda pat: int(m.group(1)) if (m := re.search(pat, txt)) else 0
     img = [u for u in re.findall(r'<img[^>]+src="([^"]+)"', body) if "NewUpload" in u and re.search(r"\.(jpe?g|png)$", u, re.I)]
     return {"air": n(r"共機(\d+)架次"), "cross": n(r"逾越中線[^。；]*?(\d+)架次"), "ship": n(r"共艦(\d+)艘"), "off": n(r"公務船(\d+)艘"),
-            "balloon": n(r"氣球(\d+)顆"), "img": img[-1] if img else "", "txt": txt[:240]}
+            "balloon": n(r"氣球(\d+)顆"), "img": img[-1] if img else "", "txt": txt[:240],
+            "zones": [z for z in ("北部", "中部", "西南", "東部", "東南", "南部", "東北") if (m := re.search(r"進入(.{0,30}?)空域", txt)) and z in m.group(1)]}
 
 
 def _pla_date(dt):
@@ -7132,8 +7133,10 @@ def p_plaact():
     events = [{"date": v["date"], "title": v["title"], "url": f"{PLA_BASE}news/plaact/{k}"} for k, v in sorted(cache.items(), key=lambda kv: -int(kv[0]))
               if "周邊海、空域動態" not in v.get("title", "")][:8]
     d90 = days[-90:]
+    if "zones" not in lv:   # 舊快取沒存空域，從原文再解析一次
+        lv["zones"] = [z for z in ("北部", "中部", "西南", "東部", "東南", "南部", "東北") if (m := re.search(r"進入(.{0,30}?)空域", lv.get("txt") or "")) and z in m.group(1)]
     return {"days": [d[:6] for d in days], "latest": {"date": last[0], "air": last[1], "cross": last[2], "ship": last[3], "off": last[4], "balloon": last[5],
-            "img": lv.get("img", ""), "url": f"{PLA_BASE}news/plaact/{last[6]}"},
+            "img": lv.get("img", ""), "url": f"{PLA_BASE}news/plaact/{last[6]}", "zones": lv.get("zones") or []},
             "avg7": {"air": avg(1, 7), "ship": avg(3, 7)}, "avg30": {"air": avg(1, 30), "ship": avg(3, 30)},
             "max90": {"air": max(d[1] for d in d90), "air_date": max(d90, key=lambda d: d[1])[0], "ship": max(d[3] for d in d90), "ship_date": max(d90, key=lambda d: d[3])[0]},
             "events": events, "n_days": len(days), "errs": errs[:3],
