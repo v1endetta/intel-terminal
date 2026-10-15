@@ -5363,6 +5363,31 @@ def p_births():
             "src": "內政部戶政司 出生登記統計（鄉鎮市區，每月；依登記地，不是出生醫院所在地）"}
 
 
+def p_permits():
+    """建造執照與使用執照（內政部統計查詢網，月）：全台件數、樓地板面積，依用途分。
+    建照＝未來一兩年要蓋的量（供給領先指標），使照＝蓋好可以交屋的量。"""
+    out, errs = {"month": None, "build": [], "use": []}, []
+    for key, fid in (("build", "c0850101"), ("use", "c0850201")):
+        try:
+            D = _moi_csv(fid, y0=TODAY_TPE.year - 1911 - 4)
+            for h, s in D.items():
+                if not s:
+                    continue
+                last = max(s)
+                def s3(ym):
+                    vs = [s.get(_ym_add(ym, -i)) for i in range(3)]
+                    return sum(vs) if all(v is not None for v in vs) else None
+                a, b = s3(last), s3(_ym_add(last, -12))
+                out[key].append({"h": h.replace("/ 區域別總計", "").strip(), "month": last, "v": s[last], "y3": round(100 * (a / b - 1), 1) if a is not None and b else None,
+                                 "spark": [s.get(k) for k in sorted(s)[-36:]]})
+                out["month"] = max(out["month"] or "", last)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{key}: {safe_err(e)}")
+    if not out["build"] and not out["use"]:
+        raise RuntimeError("permits: " + "; ".join(errs))
+    return {**out, "errs": errs, "src": "內政部統計查詢網（國土管理署 建造執照、使用執照統計，月）"}
+
+
 def p_cars():
     """新車領牌數（交通部公路局，月）：自用小客車、機車，近 3 個月合計比去年同期。"""
     txt = get("https://www.thb.gov.tw/Common/ThbOpenDataService.ashx?SN=517&format=4&rel=156232", timeout=60).content
@@ -7970,7 +7995,7 @@ INSIGHT_BANNED = re.compile(r"不是.{0,12}而是|不僅.{0,12}更|在這個.{0,
 # ---------- 各分類洞見：每個大分類各自的 2～3 條洞見（只用該分類的資料），每小時輪流重寫最舊的一類，每類約 6 小時更新一次 ----------
 INS_CATS = {
     "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue"],
-    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars"],
+    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits"],
     "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention", "demo"],
     "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife"],
     "輿情": ["mood", "ptt", "trends", "cofacts", "gtop", "worldnews"],
@@ -11210,6 +11235,7 @@ run("demo", p_demo, keep_if_fresh_hours=24)
 run("bizlife", p_bizlife, keep_if_fresh_hours=24)
 run("births", p_births, keep_if_fresh_hours=24 if BIRTH_CACHE.exists() and len(json.loads(BIRTH_CACHE.read_text(encoding="utf-8") or "{}")) >= 25 else 0)  # 鄉鎮出生數：前幾輪每輪補 4 個月，補滿 25 個月後一天一次
 run("cars", p_cars, keep_if_fresh_hours=24)
+run("permits", p_permits, keep_if_fresh_hours=24)
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 if load_prev("weekly"):  # 每週走向摘要由 weekly.yml 另外寫（Gemini 慢，不佔主迴圈時間），這裡只帶進 all.json
