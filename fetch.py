@@ -7629,7 +7629,7 @@ def p_geocode():
         from google.cloud import storage
         stt = json.loads(storage.Client(project=os.environ.get("GCP_PROJECT")).bucket(os.environ.get("GCP_BUCKET")).blob("relay/state.json").download_as_bytes(timeout=30))
         relay_errs = {k: v for k, v in ((stt.get("last") or {}).get("errs") or {}).items() if re.match(r"geo|vill|mnd|tc_|tn_|city", k)}
-        relay_errs["_at"] = (stt.get("last") or {}).get("at"); relay_errs["_geob"] = {c: {kk: vv for kk, vv in v.items() if kk != "res"} for c, v in (stt.get("geob") or {}).items()}
+        relay_errs["_at"] = (stt.get("last") or {}).get("at"); relay_errs["_sec"] = (stt.get("last") or {}).get("sec"); relay_errs["_mnd"] = stt.get("mnd"); relay_errs["_vill"] = stt.get("vill"); relay_errs["_geob"] = {c: {kk: vv for kk, vv in v.items() if kk != "res"} for c, v in (stt.get("geob") or {}).items()}
     except Exception as e:  # noqa: BLE001
         relay_errs = {"_err": safe_err(e)[:80]}
     return {"items": len(items), "located": n_ok, "doorplate": n_b, "relay": relay_errs, "pending_b": {c: len(v) for c, v in pend.items()}, "osm_queries": n_q, "b_done": b_done, "errs": errs[:4]}
