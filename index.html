@@ -4941,12 +4941,13 @@ function arCircle(T) {
   const per = D.M.n_months ? `近 ${D.M.n_months} 個月` : "";
   return `<div class="nvh">半徑 ${r} 公里內・${per}</div>${btn}`
     + (withM.length ? `<ul class="lst arl"><li><b class="arn">人口淨流入<small>${withM.length} 個村里（中心點在圈內）</small></b><b class="arv" style="color:${net >= 0 ? UPH : DNH}">${net >= 0 ? "+" : "−"}${Math.abs(net).toLocaleString("en-US")} 人</b><span>遷入 ${inn.toLocaleString("en-US")}・遷出 ${out.toLocaleString("en-US")}・從外縣市搬來 ${ext.toLocaleString("en-US")}（占遷入 ${inn ? Math.round(ext / inn * 100) : 0}%）</span></li>`
+      + arPoints(ll, r)
       + `<li><b class="arn">攝影機<small>國道、省道、台中台南市區</small></b><b class="arv">${cams.length} 支</b>${cams.length ? `<span>最近一支 ${dist(cams[0].d)}</span>` : ""}</li>`
       + `<li><b class="arn">在地新聞<small>標得出地點的</small></b><b class="arv">${NW.length} 則</b></li></ul>`
       + (top.length > 1 ? `<div class="nvh">圈內移入最多的村里</div><ul class="lst nvl">${top.slice(0, 4).map(x => `<li>${esc(x.t)} ${esc(x.v)}<span>${(x.m[3] - x.m[4]) >= 0 ? "+" : "−"}${Math.abs(x.m[3] - x.m[4]).toLocaleString("en-US")} 人・${dist(kmBetween(x.ll, ll))}</span></li>`).join("")}</ul>` : "")
       + (NW.length ? listHTML(NW.slice(0, 3).map(x => ({ t: x.t, s: `${x.s || ""}・${navAgo(x.at)}`, url: x.u }))) : "")
       : `<p class="why">圈內沒有村里中心點，把半徑加大試試。</p>`)
-    + `<p class="why">診所、醫美、新公司要等地址轉成座標才能算到半徑，目前看下面「整個區」的數字。</p>`;
+    + `<p class="why">${(() => { const g = P.geocode || {}; return g.items ? `地址轉座標進度：${Math.round((g.located || 0) / g.items * 100)}%（門牌級 ${(g.doorplate || 0).toLocaleString("en-US")} 家）。` : ""; })()}門牌級＝高雄、桃園、台南、新竹市、苗栗、台東的公開門牌座標；其他縣市是路段中心，標「約略」，可能差幾百公尺。新公司還沒接。</p>`;
 }
 const _arClick = navClickAt;
 navClickAt = function (lon, lat, c) {
@@ -4958,6 +4959,20 @@ document.addEventListener("click", e => {
   if (b.dataset.arr === "x") ARP.pin = null; else if (ARP.pin) ARP.pin.r = +b.dataset.arr;
   NAV.key = "";
 });
+
+function arPoints(ll, r) {
+  const G = lazyJSON("gpt", "geo_points.json", 60); if (!G) return "";
+  const d365 = (() => { const d = new Date(Date.now() - 365 * 864e5); return d.toISOString().slice(0, 10).replace(/-/g, ""); })(), today = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const inR = x => kmBetween([x[0], x[1]], ll) <= r;
+  const C = (G.clinic || []).filter(inR), A = (G.aes || []).filter(inR);
+  const act = C.filter(x => !x[4] || x[4] > today), nw = C.filter(x => x[3] >= d365), cl = C.filter(x => x[4] && x[4] >= d365 && x[4] <= today);
+  const prec = (L, i) => { const b = L.filter(x => x[i] === 1).length; return L.length ? (b === L.length ? "門牌級" : b ? `${b} 家門牌級、${L.length - b} 家約略` : "約略位置") : ""; };
+  const grp = {}; for (const x of nw) grp[x[2]] = (grp[x[2]] || 0) + 1;
+  const gtxt = Object.entries(grp).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([g, n]) => `${g} ${n} 家`).join("、");
+  const aes = A.filter(x => x[2] === "醫美");
+  return `<li><b class="arn">健保診所<small>${prec(act, 5)}</small></b><b class="arv">${act.length} 家</b><span>近 12 個月新開 ${nw.length}・歇業 ${cl.length}${gtxt ? `・新開以${gtxt}為主` : ""}</span></li>`
+    + `<li><b class="arn">醫美診所<small>${(P.aesthetic || {}).asof ? String(P.aesthetic.asof).slice(0, 4) + " 年底・" : ""}${prec(aes, 4)}</small></b><b class="arv">${aes.length} 家</b><span>另有其他自費西醫 ${A.length - aes.length} 家${aes.length ? "・" + aes.slice().sort((a, b) => b[3] - a[3]).slice(0, 3).map(x => x[5]).join("、") : ""}</span></li>`;
+}
 
 /* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */
 const DL = { applied: false, last: "" };
