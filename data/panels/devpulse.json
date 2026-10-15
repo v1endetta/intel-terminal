@@ -5,9 +5,9 @@
    "vendor": "openai",
    "title": "Model Not found on Chatgpt",
    "url": "https://community.openai.com/t/model-not-found-on-chatgpt/1406468",
-   "replies": 14,
+   "replies": 17,
    "likes": 1,
-   "views": 1653,
+   "views": 1770,
    "at": "2026-10-15T01:56:00Z"
   },
   {
@@ -17,18 +17,8 @@
    "url": "https://community.openai.com/t/model-not-found-error-in-chat-on-my-account/1406523",
    "replies": 8,
    "likes": 3,
-   "views": 871,
+   "views": 929,
    "at": "2026-10-15T07:33:43Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Persistent HTTP 520 (Cloudflare) on POST /v1/responses with sign-in-with-ChatGPT OAuth tok",
-   "url": "https://community.openai.com/t/persistent-http-520-cloudflare-on-post-v1-responses-with-sign-in-with-chatgpt-oauth-tokens/1406366",
-   "replies": 6,
-   "likes": 8,
-   "views": 151,
-   "at": "2026-10-14T17:49:06Z"
   },
   {
    "source": "OpenAI 論壇",
@@ -36,8 +26,8 @@
    "title": "Why is GPT-6.1 Sol MAX dramatically slower than GPT-5.6 Sol MAX using the same prompt?",
    "url": "https://community.openai.com/t/why-is-gpt-6-1-sol-max-dramatically-slower-than-gpt-5-6-sol-max-using-the-same-prompt/1406429",
    "replies": 7,
-   "likes": 12,
-   "views": 170,
+   "likes": 13,
+   "views": 178,
    "at": "2026-10-14T21:52:48Z"
   },
   {
@@ -47,18 +37,18 @@
    "url": "https://community.openai.com/t/seeking-arxiv-cs-cv-endorsement-quantized-yolov8-drone-detector-on-fpga-code-and-weights-open/1406406",
    "replies": 6,
    "likes": 10,
-   "views": 49,
+   "views": 55,
    "at": "2026-10-14T19:30:40Z"
   },
   {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Request to Restore Gemini 3.1 Pro Access for Google AI Pro Subscribers in Antigravity",
-   "url": "https://discuss.ai.google.dev/t/request-to-restore-gemini-3-1-pro-access-for-google-ai-pro-subscribers-in-antigravity/189485",
-   "replies": 1,
+   "source": "OpenAI 論壇",
+   "vendor": "openai",
+   "title": "GPT-6 is not conversational progress, it feels like reinventing Wikipedia",
+   "url": "https://community.openai.com/t/gpt-6-is-not-conversational-progress-it-feels-like-reinventing-wikipedia/1406566",
+   "replies": 0,
    "likes": 2,
-   "views": 36,
-   "at": "2026-10-15T03:26:05Z"
+   "views": 30,
+   "at": "2026-10-15T09:56:05Z"
   },
   {
    "source": "Google AI 論壇",
@@ -67,8 +57,18 @@
    "url": "https://discuss.ai.google.dev/t/google-ai-ultra-for-business-users-cannot-access-gemini-4-argon-in-antigravity-app-or-cli/189416",
    "replies": 7,
    "likes": 1,
-   "views": 109,
+   "views": 115,
    "at": "2026-10-14T22:36:54Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "Request to Restore Gemini 3.1 Pro Access for Google AI Pro Subscribers in Antigravity",
+   "url": "https://discuss.ai.google.dev/t/request-to-restore-gemini-3-1-pro-access-for-google-ai-pro-subscribers-in-antigravity/189485",
+   "replies": 2,
+   "likes": 2,
+   "views": 45,
+   "at": "2026-10-15T03:26:05Z"
   },
   {
    "source": "Google AI 論壇",
@@ -77,7 +77,7 @@
    "url": "https://discuss.ai.google.dev/t/argon-on-antigravity/189395",
    "replies": 0,
    "likes": 1,
-   "views": 52,
+   "views": 53,
    "at": "2026-10-14T18:42:12Z"
   },
   {
@@ -87,7 +87,7 @@
    "url": "https://discuss.ai.google.dev/t/antigravity-pro-has-lost-most-of-its-value/189446",
    "replies": 3,
    "likes": 3,
-   "views": 68,
+   "views": 77,
    "at": "2026-10-15T03:02:40Z"
   },
   {
@@ -97,7 +97,7 @@
    "url": "https://discuss.ai.google.dev/t/missing-gemini-pro-models-in-model-selector-despite-active-google-ai-pro-plan-100-quota/189434",
    "replies": 4,
    "likes": 0,
-   "views": 72,
+   "views": 74,
    "at": "2026-10-15T01:32:13Z"
   }
  ],
@@ -141,6 +141,15 @@
   {
    "source": "Claude release notes",
    "vendor": "anthropic",
+   "date": "October 19, 2026",
+   "kind": null,
+   "title": "The Compliance API now returns the text each organization member saved as Instructions for Claude in claude.ai and as Global instructions in",
+   "url": "https://platform.claude.com/docs/en/release-notes/overview",
+   "at": "2026-10-19T00:00:00Z"
+  },
+  {
+   "source": "Claude release notes",
+   "vendor": "anthropic",
    "date": "October 14, 2026",
    "kind": null,
    "title": "We've launched OpenTelemetry export in beta, so you can trace Messages API requests and Claude Managed Agents sessions in your observability",
@@ -164,15 +173,6 @@
    "title": "The Compliance API chat endpoints now also return chats from the unified Claude experience, in beta for Claude Enterprise organizations, wit",
    "url": "https://platform.claude.com/docs/en/release-notes/overview",
    "at": "2026-10-08T00:00:00Z"
-  },
-  {
-   "source": "Claude release notes",
-   "vendor": "anthropic",
-   "date": "October 7, 2026",
-   "kind": null,
-   "title": "We've lowered the price of prompt cache reads on Claude Sonnet 5.5 from $0.20 USD to $0.10 USD per million tokens: 0.05x the base input pric",
-   "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-10-07T00:00:00Z"
   },
   {
    "source": "Gemini changelog",
@@ -301,5 +301,5 @@
   "DeepSeek updates md: got html 48088b",
   "xAI release notes md: 19051b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### Grok Vo'"
  ],
- "updatedAt": "2026-10-15T18:04:32Z"
+ "updatedAt": "2026-10-15T19:04:37Z"
 }
