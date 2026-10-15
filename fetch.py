@@ -7020,20 +7020,7 @@ PLA_CACHE = DATA / "plaact_cache.json"
 PLA_BASE = "https://www.mnd.gov.tw/"
 
 
-def _pla_get(url):
-    for i in range(2):   # 國防部網站偶爾很慢，再等一次
-        try:
-            return get(url, timeout=(15, 75)).text
-        except Exception:  # noqa: BLE001
-            if i:
-                raise
-            time.sleep(3)
-
-
-def _pla_detail(pid):
-    d = _pla_get(f"{PLA_BASE}news/plaact/{pid}")
-    m = re.search(r'<div class="maincontent">(.*?)<div class="keyword', d, re.S)
-    body = m.group(1) if m else d
+def _pla_parse(body):
     txt = re.sub(r"\s+", "", html_mod.unescape(re.sub(r"<[^>]+>", " ", body)))
     n = lambda pat: int(m.group(1)) if (m := re.search(pat, txt)) else 0
     img = [u for u in re.findall(r'<img[^>]+src="([^"]+)"', body) if "NewUpload" in u and re.search(r"\.(jpe?g|png)$", u, re.I)]
@@ -7041,35 +7028,46 @@ def _pla_detail(pid):
             "balloon": n(r"氣球(\d+)顆"), "img": img[-1] if img else "", "txt": txt[:240]}
 
 
+def _pla_date(dt):
+    y, mo, dd = (int(x) for x in dt.split("."))
+    return f"{y + 1911}-{mo:02d}-{dd:02d}"
+
+
+PLA_LIST_RE = re.compile(r'<a href="news/plaact/(\d+)" class="news_list">\s*<div class="date[^"]*">([\d.]+)</div>\s*<div class="title[^"]*">(.*?)</div>', re.S)
+
+
 def p_plaact():
     try:
         cache = json.loads(PLA_CACHE.read_text(encoding="utf-8")) if PLA_CACHE.exists() else {}
     except Exception:  # noqa: BLE001
         cache = {}
-    entries, errs = [], []
+    errs = []
     oldest_need = (TODAY_TPE - timedelta(days=200)).strftime("%Y-%m-%d")
-    for page in range(1, 25):
-        url = f"{PLA_BASE}news/plaactlist" + (f"/{page}" if page > 1 else "")
+    # 主要來源：台灣抓取站（國防部網站從美國連常常逾時）
+    try:
+        for pid, v in ((relay_get("static/mnd_plaact") or {}).get("items") or {}).items():
+            if pid not in cache:
+                x = _pla_parse(v.get("body") or "")
+                x.update({"date": _pla_date(v["date"]), "title": html_mod.unescape(re.sub(r"<[^>]+>", "", v.get("title") or "")).strip()})
+                cache[pid] = x
+    except Exception as e:  # noqa: BLE001
+        errs.append("台灣抓取站：" + safe_err(e))
+    # 備援：直接抓第一頁（限時，不拖慢整輪）
+    newest = max([v.get("date", "") for v in cache.values()] or [""])
+    if newest < (TODAY_TPE - timedelta(days=1)).strftime("%Y-%m-%d"):
+        t1 = time.time()
         try:
-            t = _pla_get(url)
+            t = get(f"{PLA_BASE}news/plaactlist", timeout=(10, 25)).text
+            for pid, dt, title in PLA_LIST_RE.findall(t)[:8]:
+                if pid in cache or time.time() - t1 > 60:
+                    continue
+                d = get(f"{PLA_BASE}news/plaact/{pid}", timeout=(10, 25)).text
+                m = re.search(r'<div class="maincontent">(.*?)<div class="keyword', d, re.S)
+                x = _pla_parse(m.group(1) if m else d)
+                x.update({"date": _pla_date(dt), "title": html_mod.unescape(re.sub(r"<[^>]+>", "", title)).strip()})
+                cache[pid] = x
         except Exception as e:  # noqa: BLE001
-            errs.append(safe_err(e)); break
-        got = re.findall(r'<a href="news/plaact/(\d+)" class="news_list">\s*<div class="date[^"]*">([\d.]+)</div>\s*<div class="title[^"]*">(.*?)</div>', t, re.S)
-        if not got:
-            break
-        for pid, dt, title in got:
-            y, mo, dd = (int(x) for x in dt.split("."))
-            entries.append((pid, f"{y + 1911}-{mo:02d}-{dd:02d}", html_mod.unescape(re.sub(r"<[^>]+>", "", title)).strip()))
-        if entries[-1][1] < oldest_need or all(pid in cache for pid, _, _ in entries[-len(got):]) and page > 1:
-            break
-    n_new = 0
-    for pid, dt, title in entries:
-        if pid in cache or n_new >= 40:   # 第一次分幾輪補齊半年
-            continue
-        try:
-            x = _pla_detail(pid); x.update({"date": dt, "title": title}); cache[pid] = x; n_new += 1
-        except Exception as e:  # noqa: BLE001
-            errs.append(safe_err(e))
+            errs.append("國防部直連：" + safe_err(e))
     cache = {k: v for k, v in cache.items() if v.get("date", "") >= oldest_need}
     write_json(PLA_CACHE, cache, separators=(",", ":"))
     daily = {}

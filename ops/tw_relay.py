@@ -324,6 +324,55 @@ def stats_daily(state, errs):
         gcs_put("relay/static/stats_summary.json.gz", gz({"at": NOW_ISO, "jobs": summ}))
 
 
+MND = "https://www.mnd.gov.tw/"
+
+
+def mnd_plaact(state, errs):
+    """國防部「中共解放軍臺海周邊海、空域動態」：從美國抓常常逾時，改由台灣抓列表＋內文，存原始內文給 fetch.py 解析。
+    沒補齊前每輪都抓（每輪最多 12 篇、45 秒），補齊後一小時看一次有沒有新的。"""
+    st = state.setdefault("mnd", {"at": 0, "pages": 0})
+    try:
+        old = json.loads(gzip.decompress(gcs_get("relay/static/mnd_plaact.json.gz") or gz({"items": {}})))
+    except Exception:  # noqa: BLE001
+        old = {"items": {}}
+    items = old.get("items") or {}
+    backlog = st.get("pages", 0) < 22
+    if not backlog and time.time() - st.get("at", 0) < 3600:
+        return
+    t1 = time.time()
+    entries = []
+    for page in range(1, 23):
+        if time.time() - t1 > 25:
+            break
+        try:
+            t = get(MND + "news/plaactlist" + (f"/{page}" if page > 1 else ""), 20).decode("utf-8", "replace")
+        except Exception as e:  # noqa: BLE001
+            errs["mnd_list"] = repr(e)[:160]; break
+        got = re.findall(r'<a href="news/plaact/(\d+)" class="news_list">\s*<div class="date[^"]*">([\d.]+)</div>\s*<div class="title[^"]*">(.*?)</div>', t, re.S)
+        if not got:
+            break
+        entries += got
+        st["pages"] = max(st.get("pages", 0), page)
+        if not backlog and page >= 2:   # 補齊後只看前兩頁
+            break
+    n = 0
+    for pid, dt, title in entries:
+        if pid in items:
+            continue
+        if n >= 12 or time.time() - t1 > 45:
+            break
+        try:
+            d = get(MND + f"news/plaact/{pid}", 20).decode("utf-8", "replace")
+            m = re.search(r'<div class="maincontent">(.*?)<div class="keyword', d, re.S)
+            items[pid] = {"date": dt, "title": title, "body": (m.group(1) if m else "")[:4000]}
+            n += 1
+        except Exception as e:  # noqa: BLE001
+            errs["mnd_item"] = repr(e)[:160]
+    keep = sorted(items, key=int)[-260:]
+    gcs_put("relay/static/mnd_plaact.json.gz", gz({"at": NOW_ISO, "items": {k: items[k] for k in keep}}))
+    st["at"] = time.time()
+
+
 def main():
     t0 = time.time()
     state = json.loads(gcs_get("relay/state.json") or b"{}")
@@ -334,6 +383,11 @@ def main():
         stats_daily(state, errs)
     except Exception as e:  # noqa: BLE001
         errs["stats"] = repr(e)[:200]
+
+    try:
+        mnd_plaact(state, errs)
+    except Exception as e:  # noqa: BLE001
+        errs["mnd"] = repr(e)[:200]
 
     try:
         docs["yb"], yb_meta = youbike()
