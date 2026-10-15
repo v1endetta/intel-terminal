@@ -294,9 +294,9 @@
     1,
     6,
     47,
-    40,
+    39,
     47,
-    7
+    8
    ],
    "days7": [
     "2026-10-10",
@@ -392,13 +392,13 @@
     }
    ],
    "daily7": [
-    4,
+    0,
+    2,
+    3,
     9,
-    6,
-    13,
-    31,
-    82,
-    16
+    28,
+    111,
+    18
    ],
    "days7": [
     "2026-10-10",
@@ -447,7 +447,7 @@
     5,
     34,
     18,
-    24,
+    23,
     16,
     1
    ],
@@ -500,7 +500,7 @@
     25,
     28,
     33,
-    1
+    2
    ],
    "days7": [
     "2026-10-10",
@@ -516,10 +516,10 @@
    "name": "資訊安全",
    "items": [
     {
-     "source": "CIO Taiwan",
-     "title": "當資安風暴來襲，二十四小時內你能說清楚產品到底有沒有中鏢嗎？",
-     "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTE9nc1E2Q1VUekZGMVZSY2VDaWdjdW02dGFLeVR4cUZiN3pHLXJ3UlZlSnhsU3FRSXRBX2lYV1RyNTNXY3Zf?oc=5",
-     "at": "2026-10-15T22:00:55Z",
+     "source": "Cool3c",
+     "title": "駭客聲稱只靠猜123456當密碼就成功取得880萬筆丹麥人個資 #資安事件 (253057)",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5CRUxOLXlhMHI4MWpINkJGbmJOVzdveDJMU0QwYXY3cm5wa1ZxZ2lpNFhFdE9pbnNjTFMtSU1OQWgzOWJQMHFnQ293dGgxZw?oc=5",
+     "at": "2026-10-15T22:45:49Z",
      "kw": "資安 OR 駭客 OR 勒索軟體 OR 個資外洩"
     },
     {
@@ -547,11 +547,11 @@
    "daily7": [
     1,
     0,
-    17,
+    16,
     29,
     43,
-    83,
-    24
+    81,
+    26
    ],
    "days7": [
     "2026-10-10",
@@ -647,11 +647,11 @@
     }
    ],
    "daily7": [
-    8,
+    9,
     16,
     20,
-    22,
-    38,
+    21,
+    39,
     22,
     0
    ],
@@ -669,7 +669,7 @@
  "signals": {
   "gdelt": {
    "tone": 0.74,
-   "tone_at": "2026-10-15T21:39:45Z",
+   "tone_at": "2026-10-15T23:03:40Z",
    "spark": [
     1.854,
     1.462,
@@ -679,7 +679,7 @@
     3.595,
     3.595
    ],
-   "at": "2026-10-15T21:39:45Z"
+   "at": "2026-10-15T23:03:40Z"
   },
   "wiki": {
    "zh": [
@@ -761,8 +761,8 @@
     "sources": [
      "BigGo 財經",
      "CIO Taiwan",
-     "DIGITIMES",
-     "UDN"
+     "Cool3c",
+     "DIGITIMES"
     ],
     "sample": {
      "title": "當資安風暴來襲，二十四小時內你能說清楚產品到底有沒有中鏢嗎？",
@@ -816,26 +816,11 @@
     "hot": true
    },
    {
-    "term": "ADR",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "經濟日報",
-     "自由財經",
-     "鉅亨網"
-    ],
-    "sample": {
-     "title": "台積電法說變法會？ADR大暴跌 輝達、AMD臉綠",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5jckdGdld3TVlyM3h3YjV0Vm1NaVRUWGdsMkdpWmtwX1NaV0JDMHVEcWFRYW94VG5ibzVONXhtSERqQlJjUnFxNFp1Q1dyZDVPUUVQaDltV29iVmU3ZTBZ0gFkQVVfeXFMUEY5X2t2bllnejFtbm5KeHRSQy1oYkV0d1pxSFE2WnNwOHBidlFEelBzMnhZVTJSRm9nLTMtQ3hYR2U1Y2M5bms3b21zbV9kTENZRmhMajZsTlJFZ08xTHVSX3U0MA?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "台積電",
     "n": 3,
     "src": 3,
     "sources": [
-     "經濟日報",
+     "Yahoo股市",
      "自由財經",
      "鉅亨網"
     ],
@@ -887,11 +872,23 @@
      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPek5MdTRvUjNkaVlrTjBERkQxZHFjcDZjdDdmYjAtUFk0TWFIRFZCLUItR3ZvbF9mTXBuX1h5Ti1MRXRpLWQyb1E4SWl6bXpGcmVybmVPMVVDd2tBMTBnOTNXNzVGYVFsUWFiVEw3c09yWXI4enhMbXM3SDc5anNHU1A2WWFLMEVxZ2Eyeg?oc=5"
     },
     "hot": false
+   },
+   {
+    "term": "Security",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "BigGo Financ",
+     "Snyk"
+    ],
+    "sample": {
+     "title": "Snyk Launches Evo Agentic AppSec, Redefining Traditional App",
+     "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBvX3BySW9RYzlGd3N4NW42eF84VUVseFFxNUJzaHlCV2ZOY25xZ3VKeG5MY0h2TEZ3M3ZGZGs3Snh2U3FGR0R2VXhQYi1NdG81TzJ5ZkJKYTltWEVNd3lnQ21yVzU?oc=5"
+    },
+    "hot": false
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-10-15T22:45:19Z"
+ "errs": [],
+ "updatedAt": "2026-10-15T23:03:40Z"
 }
