@@ -7255,6 +7255,7 @@ def p_clinics():
     d730 = (TODAY_TPE - timedelta(days=730)).strftime("%Y%m%d")
     d60 = (TODAY_TPE - timedelta(days=60)).strftime("%Y%m%d")
     groups, towns, counties, recent, n_active = {}, {}, {}, [], 0
+    addrs = []   # 給地址轉座標：現有＋近兩年歇業
     for r in roster:
         code = r.get("醫事機構代碼") or ""
         c = clinic.get(code) or {}
@@ -7267,6 +7268,8 @@ def p_clinics():
         closed = bool(end) and end <= today
         tk = _addr_town(r.get("機構地址") or c.get("地址") or "")
         cty = tk[:3] if tk else ""
+        if not closed or end >= d730:
+            addrs.append([code, g, start, end if closed else "", r.get("醫事機構名稱") or c.get("醫事機構名稱") or "", r.get("機構地址") or c.get("地址") or ""])
         G = groups.setdefault(g, {"active": 0, "new": 0, "new_ly": 0, "close": 0})
         T = towns.setdefault(tk, {"active": 0, "new": 0, "close": 0, "g": {}}) if tk else None
         Cc = counties.setdefault(cty, {"active": 0, "new": 0, "new_ly": 0, "close": 0}) if cty else None
@@ -7294,6 +7297,10 @@ def p_clinics():
                    separators=(",", ":"))
     except Exception:  # noqa: BLE001
         pass
+    try:
+        write_json(CLINIC_ADDR, {"at": NOW_ISO, "cols": ["代碼", "科別群", "特約起", "歇業日", "名稱", "地址"], "rows": addrs}, separators=(",", ":"))
+    except Exception:  # noqa: BLE001
+        pass
     if not groups:
         raise RuntimeError("clinics: no rows")
     recent.sort(key=lambda x: x[5], reverse=True)
@@ -7309,6 +7316,8 @@ def p_clinics():
 
 # ---------- 醫美：衛福部「醫療機構與人員基本資料」（全部機構，含沒簽健保的自費診所）對健保名冊 → 自費醫美診所在哪 ----------
 NHI_CODES_PATH = DATA / "nhi_codes.json"
+CLINIC_ADDR = DATA / "clinic_addr.json"
+AES_ADDR = DATA / "aes_addr.json"
 AES_CACHE = DATA / "aesthetic_cache.json"
 AES_NAME = re.compile(r"醫美|美學|整形|微整|形象美|美容|時尚|抗衰|逆齡|雷射")
 AES_NOT = re.compile(r"牙|中醫|醫院|眼科|耳鼻|小兒|兒科|婦產|骨科|復健|精神|身心|洗腎|透析|檢驗|放射|物理治療|助產|聽力|語言|職能")
@@ -7359,7 +7368,7 @@ def p_aesthetic():
         raise RuntimeError("aesthetic: 欄位變了 " + ",".join(hdr[:8]))
     col = lambda row, k: row[ix[k]] if ix.get(k) is not None and ix[k] < len(row) else ""
     n_int = lambda v: int(re.sub(r"\D", "", v or "") or 0)
-    towns, counties, big, codes = {}, {}, [], []
+    towns, counties, big, codes, aaddr = {}, {}, [], [], []
     n_self = n_clear = n_west = 0
     for row in rows[1:]:
         code, name, dept = col(row, "機構代碼"), col(row, "機構名稱"), col(row, "科別")
@@ -7376,6 +7385,7 @@ def p_aesthetic():
         cty = norm_c(tk[:3]) if tk else ""
         docs = n_int(col(row, "A醫師")); nurses = n_int(col(row, "F護理師")) + n_int(col(row, "G護士"))
         kind = "醫美" if clear else "自費"
+        aaddr.append([code, name[:20], kind, docs, col(row, "地址")])
         if clear:
             n_clear += 1; codes.append(code)
         if self_pay:
@@ -7391,6 +7401,7 @@ def p_aesthetic():
             big.append([name[:20], cty, TOWNS[tk][3] if tk else "", docs, nurses])
     if n_clear < 200:
         raise RuntimeError(f"aesthetic: 太少（{n_clear}）")
+    write_json(AES_ADDR, {"at": NOW_ISO, "asof": asof, "cols": ["代碼", "名稱", "類別", "醫師", "地址"], "rows": aaddr}, separators=(",", ":"))
     # 每年一份：記下每一版的醫美機構代碼，新的一版出來就能算這一年新開、消失幾家
     try:
         cache = json.loads(AES_CACHE.read_text(encoding="utf-8")) if AES_CACHE.exists() else {}
@@ -7422,6 +7433,142 @@ def p_villages():
         raise RuntimeError(f"villages: 只有 {len(v)} 筆")
     write_json(VILLAGES_PATH, {"src": d.get("src"), "at": d.get("at"), "v": [[norm_c(r[0]), r[1], r[2], r[3], r[4]] for r in v]}, separators=(",", ":"))
     return {"n": len(v), "at": d.get("at")}
+
+
+# ---------- 地址轉座標：門牌級（高雄、桃園、台南、新竹市、苗栗、台東的公開門牌座標，由台灣抓取站比對）＋路段級（其他縣市，OpenStreetMap，標「約略」） ----------
+GEO_CACHE = DATA / "geocode_cache.json"
+GEO_POINTS = DATA / "geo_points.json"
+GEO_B_COUNTIES = ("高雄市", "桃園市", "臺南市", "新竹市", "苗栗縣", "臺東縣")
+_FW = str.maketrans("０１２３４５６７８９－–—ＡＢＣＤＥＦ　", "0123456789---ABCDEF ")
+_CN = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
+
+
+def _cn2n(s):
+    if s.isdigit():
+        return s
+    if s == "十":
+        return "10"
+    if s.startswith("十"):
+        return str(10 + _CN.get(s[1:], 0))
+    if s.endswith("十"):
+        return str(_CN.get(s[0], 0) * 10)
+    if "十" in s:
+        a, b = s.split("十", 1)
+        return str(_CN.get(a, 0) * 10 + _CN.get(b, 0))
+    return str(_CN.get(s, 0)) if s in _CN else s
+
+
+def addr_parts(addr):
+    """地址 → (縣市, 鄉鎮, 街路段, 巷, 弄, 號)；號只取主號（7之6 → 7之6，285、285-1 → 285）。對不上回傳 None。"""
+    a = str(addr or "").translate(_FW).replace(" ", "").replace("台", "臺")
+    a = re.sub(r"^\d{3,6}", "", a)
+    a = re.sub(r"[（(].*?[)）]", "", a)
+    m = re.match(r"^(.{2}[縣市])(.{1,3}?[鄉鎮市區])(.*)$", a)
+    if not m:
+        return None
+    cty, town, rest = m.groups()
+    rest = re.sub(r"^[一-鿿]{1,3}[村里](?=[一-鿿0-9]*?(?:路|街|大道|道))", "", rest)   # 村里名
+    rest = re.sub(r"^\d+鄰", "", rest)
+    rest = re.sub(r"([一二三四五六七八九十]+)段", lambda x: _cn2n(x.group(1)) + "段", rest)
+    rest = re.sub(r"([一二三四五六七八九十]+)(?=路)", lambda x: x.group(1), rest)
+    m = re.match(r"^(.+?(?:路|街|大道|道)(?:\d+段)?|.+?段)(?:(\d+)巷)?(?:(\d+)弄)?(\d+)(?:之(\d+)|-(\d+))?(?:號|[、,，及和])", rest)
+    if not m:
+        m2 = re.match(r"^(.+?(?:路|街|大道|道)(?:\d+段)?)", rest)
+        return (cty, town, m2.group(1), "", "", "") if m2 else None
+    road, lane, alley, no, z1, z2 = m.groups()
+    sub = z1 or z2
+    return (cty, town, road, lane or "", alley or "", no + (f"之{sub}" if sub else ""))
+
+
+def addr_key(p):
+    return "|".join(p) if p else ""
+
+
+def _gcs_put(name, data: bytes):
+    from google.cloud import storage
+    storage.Client(project=os.environ.get("GCP_PROJECT")).bucket(os.environ.get("GCP_BUCKET")).blob(name).upload_from_string(data, content_type="application/gzip")
+
+
+def p_geocode():
+    import gzip
+    try:
+        gc = json.loads(GEO_CACHE.read_text(encoding="utf-8")) if GEO_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        gc = {}
+    K, RD = gc.setdefault("k", {}), gc.setdefault("road", {})
+    items = []   # (類型, 資料列, parts)
+    for path, kind, ai in ((CLINIC_ADDR, "clinic", 5), (AES_ADDR, "aes", 4)):
+        try:
+            for r in json.loads(path.read_text(encoding="utf-8")).get("rows") or []:
+                items.append((kind, r, addr_parts(r[ai])))
+        except Exception:  # noqa: BLE001
+            pass
+    if not items:
+        raise RuntimeError("geocode: 還沒有地址清單")
+    errs = []
+    # 門牌級：台灣抓取站比對的結果收進來；還沒比對到的上傳待辦
+    b_done = {}
+    try:
+        gb = relay_get("static/geo_b")
+        b_done = gb.get("done") or {}
+        for k, v in (gb.get("k") or {}).items():
+            if k not in K or K[k][2] != "門牌":
+                K[k] = [v[0], v[1], "門牌"]
+    except Exception as e:  # noqa: BLE001
+        errs.append("門牌：" + safe_err(e)[:80])
+    pend = {}
+    for _, _, pt in items:
+        if pt and pt[0] in GEO_B_COUNTIES and pt[5]:
+            k = addr_key(pt)
+            if k not in K or K[k][2] != "門牌":
+                pend.setdefault(pt[0], set()).add(k)
+    try:
+        _gcs_put("relay/in/geo_pending.json.gz", gzip.compress(json.dumps({"at": NOW_ISO, "p": {c: sorted(v) for c, v in pend.items()}}, ensure_ascii=False).encode("utf-8")))
+    except Exception as e:  # noqa: BLE001
+        errs.append("上傳待辦：" + safe_err(e)[:80])
+    # 路段級：OpenStreetMap，一秒一筆、每輪限時，不搶整輪時間
+    n_q, t0 = 0, time.time()
+    for _, _, pt in items:
+        if not pt:
+            continue
+        k = addr_key(pt)
+        if k in K:
+            continue
+        if pt[0] in GEO_B_COUNTIES and (pt[0] not in b_done):
+            continue   # 門牌級的縣市先等台灣抓取站比對，比對過還是找不到才退回路段
+        rq = pt[0] + pt[1] + pt[2]
+        if rq not in RD:
+            if n_q >= 45 or time.time() - t0 > 60 or time.time() - START_TS > 600:
+                continue
+            try:
+                j = S.get("https://nominatim.openstreetmap.org/search", params={"q": rq, "countrycodes": "tw", "format": "jsonv2", "limit": 1},
+                          headers={"User-Agent": "dalta-intel-terminal/1.0 (personal non-commercial; github.com/v1endetta/intel-terminal)"}, timeout=15).json()
+                RD[rq] = [round(float(j[0]["lon"]), 5), round(float(j[0]["lat"]), 5)] if j else 0
+            except Exception as e:  # noqa: BLE001
+                errs.append("OSM：" + safe_err(e)[:60]); RD[rq] = None
+            n_q += 1
+            time.sleep(1.05)
+        v = RD.get(rq)
+        if v:
+            K[k] = [v[0], v[1], "路段"]
+    RD = {k: v for k, v in RD.items() if v is not None}
+    gc["road"] = RD
+    write_json(GEO_CACHE, gc, separators=(",", ":"))
+    # 輸出點位
+    cl, ae, n_ok, n_b = [], [], 0, 0
+    for kind, r, pt in items:
+        v = K.get(addr_key(pt)) if pt else None
+        if not v:
+            continue
+        n_ok += 1; n_b += v[2] == "門牌"
+        pr = 1 if v[2] == "門牌" else 0
+        if kind == "clinic":
+            cl.append([v[0], v[1], r[1], r[2], r[3], pr])
+        else:
+            ae.append([v[0], v[1], r[2], r[3], pr, r[1]])
+    write_json(GEO_POINTS, {"at": NOW_ISO, "clinic_cols": ["經度", "緯度", "科別群", "特約起", "歇業日", "門牌級"], "clinic": cl,
+                            "aes_cols": ["經度", "緯度", "類別", "醫師", "門牌級", "名稱"], "aes": ae}, separators=(",", ":"))
+    return {"items": len(items), "located": n_ok, "doorplate": n_b, "pending_b": {c: len(v) for c, v in pend.items()}, "osm_queries": n_q, "b_done": b_done, "errs": errs[:4]}
 
 
 # ---------- 人口遷徙：內政部遷入遷出統計（到村里，每月）→ 各鄉鎮淨流入、從外縣市還是本縣搬來；最近 12 個月累計 ----------
@@ -10615,9 +10762,10 @@ run("grants", p_grants, keep_if_fresh_hours=6)  # 政府補助與徵件：一天
 run("relay_stats", p_relay_stats, keep_if_fresh_hours=6)  # 抓取站官方統計的狀態摘要（除錯用）
 run("prices", p_prices, keep_if_fresh_hours=1)  # 物價細項：月資料；全國版由台灣抓取站代抓，台北市版當備援
 run("tourism", p_tourism, keep_if_fresh_hours=24)
-run("clinics", p_clinics, keep_if_fresh_hours=20 if NHI_CODES_PATH.exists() else 0)  # 診所：健保名冊每天更新，一天抓一次
-run("aesthetic", p_aesthetic, keep_if_fresh_hours=24 * 7)  # 醫美：衛福部全機構名冊一年一版，一週檢查一次
+run("clinics", p_clinics, keep_if_fresh_hours=20 if NHI_CODES_PATH.exists() and CLINIC_ADDR.exists() else 0)  # 診所：健保名冊每天更新，一天抓一次
+run("aesthetic", p_aesthetic, keep_if_fresh_hours=24 * 7 if AES_ADDR.exists() else 0)  # 醫美：衛福部全機構名冊一年一版，一週檢查一次
 run("villages", p_villages, keep_if_fresh_hours=24 * 30 if VILLAGES_PATH.exists() else 1)  # 村里中心點：一個月檢查一次
+run("geocode", p_geocode, keep_if_fresh_hours=0.5)  # 地址轉座標：每輪補一點（OSM 一秒一筆）
 run("migration", p_migration, keep_if_fresh_hours=1)  # 人口遷徙：每月資料；檔案年月已快取，平常只檢查有沒有新檔，第一次分幾輪補齊 12 個月  # 觀光：年資料＋台北旅館月資料，一天抓一次
 run("ipr", p_ipr, keep_if_fresh_hours=72)
 run("media", p_media, keep_if_fresh_hours=2)

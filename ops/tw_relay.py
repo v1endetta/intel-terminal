@@ -411,6 +411,206 @@ def villages_once(state, errs):
         errs["villages"] = repr(e)[:200]
 
 
+
+# ---------- 門牌級地址轉座標：fetch.py 上傳待辦地址（relay/in/geo_pending），這裡逐檔讀各縣市公開的門牌座標，比對到的存 relay/static/geo_b ----------
+GEO_DS = {"高雄市": "177859", "桃園市": "157689", "臺南市": "120044", "新竹市": "157547", "苗栗縣": "178083", "臺東縣": "165619"}
+_FW = str.maketrans("０１２３４５６７８９－–—ＡＢＣＤＥＦ　", "0123456789---ABCDEF ")
+_CN = {"一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
+
+
+def _cn2n(s):
+    if s.isdigit():
+        return s
+    if s == "十":
+        return "10"
+    if s.startswith("十"):
+        return str(10 + _CN.get(s[1:], 0))
+    if s.endswith("十"):
+        return str(_CN.get(s[0], 0) * 10)
+    if "十" in s:
+        a, b = s.split("十", 1)
+        return str(_CN.get(a, 0) * 10 + _CN.get(b, 0))
+    return str(_CN.get(s, 0)) if s in _CN else s
+
+
+def addr_parts(addr):
+    """地址 → (縣市, 鄉鎮, 街路段, 巷, 弄, 號)；號只取主號（7之6 → 7之6，285、285-1 → 285）。對不上回傳 None。"""
+    a = str(addr or "").translate(_FW).replace(" ", "").replace("台", "臺")
+    a = re.sub(r"^\d{3,6}", "", a)
+    a = re.sub(r"[（(].*?[)）]", "", a)
+    m = re.match(r"^(.{2}[縣市])(.{1,3}?[鄉鎮市區])(.*)$", a)
+    if not m:
+        return None
+    cty, town, rest = m.groups()
+    rest = re.sub(r"^[一-鿿]{1,3}[村里](?=[一-鿿0-9]*?(?:路|街|大道|道))", "", rest)   # 村里名
+    rest = re.sub(r"^\d+鄰", "", rest)
+    rest = re.sub(r"([一二三四五六七八九十]+)段", lambda x: _cn2n(x.group(1)) + "段", rest)
+    rest = re.sub(r"([一二三四五六七八九十]+)(?=路)", lambda x: x.group(1), rest)
+    m = re.match(r"^(.+?(?:路|街|大道|道)(?:\d+段)?|.+?段)(?:(\d+)巷)?(?:(\d+)弄)?(\d+)(?:之(\d+)|-(\d+))?(?:號|[、,，及和])", rest)
+    if not m:
+        m2 = re.match(r"^(.+?(?:路|街|大道|道)(?:\d+段)?)", rest)
+        return (cty, town, m2.group(1), "", "", "") if m2 else None
+    road, lane, alley, no, z1, z2 = m.groups()
+    sub = z1 or z2
+    return (cty, town, road, lane or "", alley or "", no + (f"之{sub}" if sub else ""))
+
+
+def addr_key(p):
+    return "|".join(p) if p else ""
+
+
+def _twd97_to_wgs84(x: float, y: float):
+    """TWD97 TM2（中央經線 121°）→ WGS84 經緯度。"""
+    import math
+    a, b = 6378137.0, 6356752.314245
+    lon0, k0, dx = math.radians(121), 0.9999, 250000.0
+    e = math.sqrt(1 - (b / a) ** 2)
+    x -= dx
+    m = y / k0
+    mu = m / (a * (1 - e ** 2 / 4 - 3 * e ** 4 / 64 - 5 * e ** 6 / 256))
+    e1 = (1 - math.sqrt(1 - e ** 2)) / (1 + math.sqrt(1 - e ** 2))
+    fp = (mu + (3 * e1 / 2 - 27 * e1 ** 3 / 32) * math.sin(2 * mu) + (21 * e1 ** 2 / 16 - 55 * e1 ** 4 / 32) * math.sin(4 * mu)
+          + (151 * e1 ** 3 / 96) * math.sin(6 * mu) + (1097 * e1 ** 4 / 512) * math.sin(8 * mu))
+    e2 = (e * a / b) ** 2
+    c1 = e2 * math.cos(fp) ** 2
+    t1 = math.tan(fp) ** 2
+    r1 = a * (1 - e ** 2) / (1 - e ** 2 * math.sin(fp) ** 2) ** 1.5
+    n1 = a / math.sqrt(1 - e ** 2 * math.sin(fp) ** 2)
+    d = x / (n1 * k0)
+    lat = fp - (n1 * math.tan(fp) / r1) * (d ** 2 / 2 - (5 + 3 * t1 + 10 * c1 - 4 * c1 ** 2 - 9 * e2) * d ** 4 / 24
+                                           + (61 + 90 * t1 + 298 * c1 + 45 * t1 ** 2 - 252 * e2 - 3 * c1 ** 2) * d ** 6 / 720)
+    lon = lon0 + (d - (1 + 2 * t1 + c1) * d ** 3 / 6 + (5 - 2 * c1 + 28 * t1 - 3 * c1 ** 2 + 8 * e2 + 24 * t1 ** 2) * d ** 5 / 120) / math.cos(fp)
+    return round(math.degrees(lon), 5), round(math.degrees(lat), 5)
+
+
+def _geo_resources(did):
+    """資料集 → 要讀的 CSV 網址：有分年月的只取最新一期，分區的全取。"""
+    res = json.loads(get(f"https://data.gov.tw/api/v2/rest/dataset/{did}", 40)).get("result") or {}
+    ds = [d for d in res.get("distribution") or [] if (d.get("resourceFormat") or "").upper() == "CSV" and d.get("resourceDownloadUrl")]
+    def ym(d):
+        m = re.search(r"(\d{2,3})\s*年\s*(\d{1,2})?\s*月?", (d.get("resourceDescription") or "") + (d.get("resourceName") or ""))
+        return (int(m.group(1)), int(m.group(2) or 0)) if m else None
+    tags = [ym(d) for d in ds]
+    if tags and all(tags) and len(set(tags)) > 1:
+        last = max(tags)
+        ds = [d for d, t in zip(ds, tags) if t == last]
+    return [d["resourceDownloadUrl"].strip() for d in ds]
+
+
+def _geo_scan(url, need, budget):
+    """串流讀一個門牌座標 CSV；need: {街路段|巷|弄|號: [完整 key...]} → {完整 key: [[經度, 緯度], ...]}（同一門牌可能在不同鄉鎮，交給呼叫端挑）。"""
+    import csv, io
+    t0 = time.time()
+    r = urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=60)
+    head = r.read(65536)
+    enc = "utf-8-sig"
+    try:
+        head.decode("utf-8")
+    except UnicodeDecodeError:
+        enc = "cp950"
+    def lines():
+        buf = head
+        while True:
+            chunk = r.read(1 << 20)
+            if not chunk:
+                break
+            buf += chunk
+            i = buf.rfind(b"\n")
+            if i >= 0:
+                yield from buf[:i + 1].decode(enc, "replace").splitlines()
+                buf = buf[i + 1:]
+            if time.time() - t0 > budget:
+                raise TimeoutError("geo scan over budget")
+        if buf:
+            yield from buf.decode(enc, "replace").splitlines()
+    rd = csv.reader(lines())
+    hdr = [h.strip() for h in next(rd)]
+    def col(*ks, avoid=()):
+        for i, h in enumerate(hdr):
+            if any(k in h for k in ks) and not any(a in h for a in avoid):
+                return i
+        return None
+    i_road, i_area = col("街路段", "街道", "路段", "街路"), col("地區")
+    i_lane, i_alley, i_no = col("巷"), col("弄"), col("號", avoid=("代碼", "序號"))
+    i_x, i_y = col("橫坐標", "橫座標", "TWD97X", "X坐標", "X座標", "x"), col("縱坐標", "縱座標", "TWD97Y", "Y坐標", "Y座標", "y")
+    if None in (i_no, i_x, i_y) or (i_road is None and i_area is None):
+        raise ValueError(f"欄位對不上 {hdr[:14]}")
+    num = lambda v, suf: re.sub(suf + "$", "", str(v or "").strip())
+    found = {}
+    for row in rd:
+        try:
+            road = (row[i_road] if i_road is not None else "") or (row[i_area] if i_area is not None else "")
+            if not road:
+                continue
+            lane = num(row[i_lane], "巷") if i_lane is not None else ""
+            alley = num(row[i_alley], "弄") if i_alley is not None else ""
+            no = num(row[i_no], "號")
+            pt = addr_parts(f"臺北市某某區{road}{lane + '巷' if lane else ''}{alley + '弄' if alley else ''}{no}號")
+            if not pt:
+                continue
+            ks = need.get("|".join(pt[2:]))
+            if not ks:
+                continue
+            x, y = float(row[i_x]), float(row[i_y])
+            lo, la = (x, y) if x < 200 else _twd97_to_wgs84(x, y)
+            for k in ks:
+                found.setdefault(k, []).append([lo, la])
+        except (IndexError, ValueError):
+            continue
+    return found
+
+
+def geo_b(state, errs):
+    if time.time() - T_START > 110:
+        return
+    raw = gcs_get("relay/in/geo_pending.json.gz")
+    pend = (json.loads(gzip.decompress(raw)).get("p") or {}) if raw else {}
+    if not pend:
+        return
+    old = gcs_get("relay/static/geo_b.json.gz")
+    res = json.loads(gzip.decompress(old)) if old else {"k": {}, "done": {}}
+    K, done = res.setdefault("k", {}), res.setdefault("done", {})
+    st = state.setdefault("geob", {})
+    tc = {}   # 鄉鎮中心（村里中心平均），同一門牌出現在不同鄉鎮時挑最近的
+    try:
+        vv = gcs_get("relay/static/villages.json.gz")
+        for c, t, _, lo, la in (json.loads(gzip.decompress(vv)).get("v") or []) if vv else []:
+            a = tc.setdefault(c + t, [0, 0, 0]); a[0] += lo; a[1] += la; a[2] += 1
+    except Exception:  # noqa: BLE001
+        pass
+    tc = {k: (a[0] / a[2], a[1] / a[2]) for k, a in tc.items() if a[2]}
+    changed = False
+    for cty, keys in pend.items():
+        if cty not in GEO_DS or time.time() - T_START > 110:
+            continue
+        need_keys = [k for k in keys if k not in K]
+        cs = st.setdefault(cty, {"i": 0})
+        if not need_keys or (cs.get("fin") and time.time() - cs["fin"] < 7 * 86400):
+            continue
+        try:
+            if not cs.get("res"):
+                cs["res"], cs["i"] = _geo_resources(GEO_DS[cty]), 0
+            if cs["i"] < len(cs["res"]):
+                need = {}
+                for k in need_keys:
+                    p = k.split("|")
+                    need.setdefault("|".join(p[2:]), []).append(k)
+                found = _geo_scan(cs["res"][cs["i"]], need, budget=max(20, 200 - (time.time() - T_START)))
+                for k, cands in found.items():
+                    p = k.split("|"); ctr = tc.get(p[0] + p[1])
+                    best = min(cands, key=lambda c: (c[0] - ctr[0]) ** 2 + (c[1] - ctr[1]) ** 2) if ctr else (cands[0] if len(cands) == 1 else None)
+                    if best and (not ctr or ((best[0] - ctr[0]) ** 2 + (best[1] - ctr[1]) ** 2) ** 0.5 < 0.12):
+                        K[k] = [round(best[0], 6), round(best[1], 6)]
+                cs["i"] += 1; changed = True
+            if cs["i"] >= len(cs.get("res") or []):
+                cs["fin"], cs["res"] = time.time(), None; done[cty] = NOW_ISO; changed = True
+        except Exception as e:  # noqa: BLE001
+            errs["geo_" + cty] = repr(e)[:160]
+            cs["i"] = cs.get("i", 0) + (1 if "欄位" in repr(e) else 0)
+        break   # 一輪只處理一個縣市的一個檔
+    if changed:
+        gcs_put("relay/static/geo_b.json.gz", gz({"at": NOW_ISO, "k": K, "done": done}))
+
 MND = "https://www.mnd.gov.tw/"
 
 
@@ -514,6 +714,11 @@ def main():
         gtrends(state)
     except Exception as e:  # noqa: BLE001
         errs["gtrends"] = repr(e)[:200]
+
+    try:
+        geo_b(state, errs)
+    except Exception as e:  # noqa: BLE001
+        errs["geo_b"] = repr(e)[:200]
 
     lines, changed = [], []
     for k, d in docs.items():
