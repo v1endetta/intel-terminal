@@ -1,121 +1,6 @@
 {
  "items": [
   {
-   "d": "2026-10-14",
-   "t": "10:10",
-   "ts": 1791943800000,
-   "r": "歐",
-   "n": "歐洲央行總裁 Lagarde 談話",
-   "k": "speech",
-   "imp": 2,
-   "ap": false,
-   "en": "ECB President Lagarde Speaks",
-   "cur": "EUR"
-  },
-  {
-   "d": "2026-10-14",
-   "t": "13:30",
-   "ts": 1791955800000,
-   "r": "英",
-   "n": "英國央行總裁 Bailey 談話",
-   "k": "speech",
-   "imp": 2,
-   "ap": false,
-   "en": "BOE Gov Bailey Speaks",
-   "cur": "GBP"
-  },
-  {
-   "d": "2026-10-14",
-   "t": "14:05",
-   "ts": 1791957900000,
-   "r": "加",
-   "n": "加拿大央行總裁 Macklem 談話",
-   "k": "speech",
-   "imp": 2,
-   "ap": false,
-   "en": "BOC Gov Macklem Speaks",
-   "cur": "CAD"
-  },
-  {
-   "d": "2026-10-14",
-   "t": "18:15",
-   "ts": 1791972900000,
-   "r": "歐",
-   "n": "歐盟經濟峰會",
-   "k": "data",
-   "imp": 2,
-   "ap": false,
-   "en": "EU Economic Summit",
-   "cur": "EUR"
-  },
-  {
-   "d": "2026-10-14",
-   "t": "20:30",
-   "ts": 1791981000000,
-   "r": "美",
-   "n": "核心 CPI 月增",
-   "k": "data",
-   "imp": 3,
-   "ap": false,
-   "en": "Core CPI m/m",
-   "cur": "USD",
-   "fc": "0.2%",
-   "pv": "0.3%"
-  },
-  {
-   "d": "2026-10-14",
-   "t": "20:30",
-   "ts": 1791981000000,
-   "r": "美",
-   "n": "核心 CPI 年增",
-   "k": "data",
-   "imp": 3,
-   "ap": false,
-   "en": "Core CPI y/y",
-   "cur": "USD",
-   "fc": "2.5%",
-   "pv": "2.4%"
-  },
-  {
-   "d": "2026-10-14",
-   "t": "20:30",
-   "ts": 1791981000000,
-   "r": "美",
-   "n": "CPI 月增",
-   "k": "data",
-   "imp": 3,
-   "ap": false,
-   "en": "CPI m/m",
-   "cur": "USD",
-   "fc": "0.6%",
-   "pv": "0.4%"
-  },
-  {
-   "d": "2026-10-14",
-   "t": "20:30",
-   "ts": 1791981000000,
-   "r": "美",
-   "n": "CPI 年增",
-   "k": "data",
-   "imp": 3,
-   "ap": false,
-   "en": "CPI y/y",
-   "cur": "USD",
-   "fc": "3.6%",
-   "pv": "3.4%"
-  },
-  {
-   "d": "2026-10-14",
-   "t": null,
-   "ts": null,
-   "r": "台",
-   "n": "泰合（6467）公開申購抽籤",
-   "k": "ipo",
-   "imp": 1,
-   "ap": false,
-   "code": "6467"
-  },
-  {
    "d": "2026-10-15",
    "t": "08:30",
    "ts": 1792024200000,
@@ -1106,6 +991,27 @@
    "imp": 1,
    "ap": false,
    "ex": "XNSE"
+  },
+  {
+   "d": "2026-11-13",
+   "t": "08:00",
+   "ts": null,
+   "r": "日",
+   "n": "日股 SQ 結算",
+   "k": "expiry",
+   "imp": 1,
+   "ap": false
+  },
+  {
+   "d": "2026-11-13",
+   "t": "21:30",
+   "ts": 1794576600000,
+   "r": "美",
+   "n": "PPI",
+   "k": "data",
+   "imp": 2,
+   "ap": false,
+   "src": "FRED"
   }
  ],
  "hol": [
@@ -1411,13 +1317,13 @@
    "n": "建國紀念日"
   }
  ],
- "from": "2026-10-15",
- "to": "2026-11-12",
+ "from": "2026-10-16",
+ "to": "2026-11-13",
  "ff_until": "2026-10-17",
- "n": 90,
+ "n": 83,
  "errs": [
   "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json"
  ],
  "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站",
- "updatedAt": "2026-10-15T15:37:45Z"
+ "updatedAt": "2026-10-15T18:42:31Z"
 }
