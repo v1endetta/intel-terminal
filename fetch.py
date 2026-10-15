@@ -7015,6 +7015,145 @@ def p_gtop():
     return {"items": items, "first": first, "src": "Google 新聞・焦點新聞（台灣，非個人化）"}
 
 
+# ---------- 台海：國防部「中共解放軍臺海周邊海、空域動態」每日公布 → 共機、逾越中線、共艦、公務船、氣球的每日數字 ----------
+PLA_CACHE = DATA / "plaact_cache.json"
+PLA_BASE = "https://www.mnd.gov.tw/"
+
+
+def _pla_detail(pid):
+    d = get(f"{PLA_BASE}news/plaact/{pid}", timeout=40).text
+    m = re.search(r'<div class="maincontent">(.*?)<div class="keyword', d, re.S)
+    body = m.group(1) if m else d
+    txt = re.sub(r"\s+", "", html_mod.unescape(re.sub(r"<[^>]+>", " ", body)))
+    n = lambda pat: int(m.group(1)) if (m := re.search(pat, txt)) else 0
+    img = [u for u in re.findall(r'<img[^>]+src="([^"]+)"', body) if "NewUpload" in u and re.search(r"\.(jpe?g|png)$", u, re.I)]
+    return {"air": n(r"共機(\d+)架次"), "cross": n(r"逾越中線[^。；]*?(\d+)架次"), "ship": n(r"共艦(\d+)艘"), "off": n(r"公務船(\d+)艘"),
+            "balloon": n(r"氣球(\d+)顆"), "img": img[-1] if img else "", "txt": txt[:240]}
+
+
+def p_plaact():
+    try:
+        cache = json.loads(PLA_CACHE.read_text(encoding="utf-8")) if PLA_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    entries, errs = [], []
+    oldest_need = (TODAY_TPE - timedelta(days=200)).strftime("%Y-%m-%d")
+    for page in range(1, 25):
+        url = f"{PLA_BASE}news/plaactlist" + (f"/{page}" if page > 1 else "")
+        try:
+            t = get(url, timeout=40).text
+        except Exception as e:  # noqa: BLE001
+            errs.append(safe_err(e)); break
+        got = re.findall(r'<a href="news/plaact/(\d+)" class="news_list">\s*<div class="date[^"]*">([\d.]+)</div>\s*<div class="title[^"]*">(.*?)</div>', t, re.S)
+        if not got:
+            break
+        for pid, dt, title in got:
+            y, mo, dd = (int(x) for x in dt.split("."))
+            entries.append((pid, f"{y + 1911}-{mo:02d}-{dd:02d}", html_mod.unescape(re.sub(r"<[^>]+>", "", title)).strip()))
+        if entries[-1][1] < oldest_need or all(pid in cache for pid, _, _ in entries[-len(got):]) and page > 1:
+            break
+    n_new = 0
+    for pid, dt, title in entries:
+        if pid in cache or n_new >= 40:   # 第一次分幾輪補齊半年
+            continue
+        try:
+            x = _pla_detail(pid); x.update({"date": dt, "title": title}); cache[pid] = x; n_new += 1
+        except Exception as e:  # noqa: BLE001
+            errs.append(safe_err(e))
+    cache = {k: v for k, v in cache.items() if v.get("date", "") >= oldest_need}
+    write_json(PLA_CACHE, cache, separators=(",", ":"))
+    daily = {}
+    for pid, v in sorted(cache.items(), key=lambda kv: int(kv[0])):
+        if "周邊海、空域動態" in v.get("title", "") and (v["air"] or v["ship"] or "未偵獲" in v.get("txt", "")):
+            daily[v["date"]] = [v["date"], v["air"], v["cross"], v["ship"], v["off"], v["balloon"], pid]
+    days = [daily[k] for k in sorted(daily)]
+    if not days:
+        raise RuntimeError("plaact: 沒有資料 " + "; ".join(errs)[:120])
+    last = days[-1]; lv = cache[last[6]]
+    avg = lambda i, n: round(sum(d[i] for d in days[-n:]) / max(1, len(days[-n:])), 1)
+    events = [{"date": v["date"], "title": v["title"], "url": f"{PLA_BASE}news/plaact/{k}"} for k, v in sorted(cache.items(), key=lambda kv: -int(kv[0]))
+              if "周邊海、空域動態" not in v.get("title", "")][:8]
+    d90 = days[-90:]
+    return {"days": [d[:6] for d in days], "latest": {"date": last[0], "air": last[1], "cross": last[2], "ship": last[3], "off": last[4], "balloon": last[5],
+            "img": lv.get("img", ""), "url": f"{PLA_BASE}news/plaact/{last[6]}"},
+            "avg7": {"air": avg(1, 7), "ship": avg(3, 7)}, "avg30": {"air": avg(1, 30), "ship": avg(3, 30)},
+            "max90": {"air": max(d[1] for d in d90), "air_date": max(d90, key=lambda d: d[1])[0], "ship": max(d[3] for d in d90), "ship_date": max(d90, key=lambda d: d[3])[0]},
+            "events": events, "n_days": len(days), "errs": errs[:3],
+            "src": "國防部 即時軍事動態（中共解放軍臺海周邊海、空域動態，每日 06 時到 06 時）"}
+
+
+# ---------- 海纜：TeleGeography 海纜地圖（台灣上岸的國際海纜路線、上岸站）＋海纜受損新聞 ----------
+CABLE_API = "https://www.submarinecablemap.com/api/v3/"
+CABLE_CACHE = DATA / "cables_cache.json"
+
+
+def p_cables():
+    try:
+        cache = json.loads(CABLE_CACHE.read_text(encoding="utf-8")) if CABLE_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    fresh = cache.get("at", "") >= (NOW - timedelta(days=7)).isoformat()
+    if not fresh or not cache.get("cables"):
+        tw = gjson(CABLE_API + "country/taiwan.json")
+        ids = {c["id"]: c for c in tw.get("cables") or []}
+        geo = gjson(CABLE_API + "cable/cable-geo.json", timeout=90)
+        lp = gjson(CABLE_API + "landing-point/landing-point-geo.json", timeout=90)
+        def clip(lines):   # 只留台灣附近（東經 110～135、北緯 8～35），座標取兩位小數
+            out = []
+            for ln in lines:
+                seg = []
+                for lo, la in ln:
+                    if 110 <= lo <= 135 and 8 <= la <= 35:
+                        p_ = [round(lo, 2), round(la, 2)]
+                        if not seg or abs(seg[-1][0] - p_[0]) + abs(seg[-1][1] - p_[1]) >= 0.04:
+                            seg.append(p_)
+                    elif len(seg) >= 2:
+                        out.append(seg); seg = []
+                    else:
+                        seg = []
+                if len(seg) >= 2:
+                    out.append(seg)
+            return out
+        cables = []
+        for f in geo.get("features") or []:
+            pr = f.get("properties") or {}
+            cid = pr.get("id")
+            if cid not in ids:
+                continue
+            lines = clip((f.get("geometry") or {}).get("coordinates") or [])
+            c = next((x for x in cables if x["id"] == cid), None)
+            if c:
+                c["lines"] += lines; continue
+            info = {}
+            try:
+                info = gjson(CABLE_API + f"cable/{cid}.json", timeout=30)
+            except Exception:  # noqa: BLE001
+                pass
+            lps = [x for x in (info.get("landing_points") or []) if x.get("country") == "Taiwan"]
+            cables.append({"id": cid, "name": pr.get("name") or ids[cid].get("name"), "color": pr.get("color") or "#64d2ff", "rfs": ids[cid].get("rfs_year"),
+                           "planned": bool(ids[cid].get("is_planned")), "length": info.get("length") or "", "owners": (info.get("owners") or "")[:160],
+                           "tw_lp": [x["name"].replace(", Taiwan", "") for x in lps], "n_lp": len(ids[cid].get("landing_points") or []), "lines": lines})
+        lps = [[(f["properties"].get("name") or "").replace(", Taiwan", ""), round(f["geometry"]["coordinates"][0], 3), round(f["geometry"]["coordinates"][1], 3)]
+               for f in lp.get("features") or [] if str((f.get("properties") or {}).get("id", "")).endswith("-taiwan")]
+        cache = {"at": NOW.isoformat(), "cables": cables, "landing": lps}
+        write_json(CABLE_CACHE, cache, separators=(",", ":"))
+    news, errs = [], []
+    try:
+        cut = (NOW - timedelta(days=60)).isoformat()
+        seen = set()
+        for x in _gnews("海纜 (斷 OR 斷裂 OR 受損 OR 中斷 OR 搶修 OR 破壞)", limit=20):
+            k = re.sub(r"\W+", "", x["title"])[:16]
+            if k in seen or (x.get("at") or "") < cut:
+                continue
+            seen.add(k); news.append(x)
+    except Exception as e:  # noqa: BLE001
+        errs.append(safe_err(e))
+    news.sort(key=lambda x: x.get("at") or "", reverse=True)
+    cs = cache["cables"]
+    return {"cables": cs, "landing": cache.get("landing") or [], "news": news[:10], "n": len([c for c in cs if not c["planned"]]), "n_planned": len([c for c in cs if c["planned"]]),
+            "errs": errs, "src": "TeleGeography Submarine Cable Map（CC BY-NC-SA 3.0，只畫台灣附近一段）＋Google 新聞"}
+
+
 # ---------- 診所：健保特約名冊（每家的原始開業日、歇業日）＋診所檔（科別）→ 哪一科新開最多、開在哪一區 ----------
 NHI_ROSTER = "https://info.nhi.gov.tw/api/iode0000s01/Dataset?rId=A21030000I-D2100G-001"   # 健保特約醫療院所名冊（全部，含歇業）
 NHI_CLINIC = "https://info.nhi.gov.tw/api/iode0000s01/Dataset?rId=A21030000I-D21004-009"   # 健保特約醫事機構-診所（科別）
@@ -7084,6 +7223,12 @@ def p_clinics():
             G["close"] += 1
             if T: T["close"] += 1
             if Cc: Cc["close"] += 1
+    try:   # 給醫美用：目前有健保特約的機構代碼
+        write_json(NHI_CODES_PATH, {"at": NOW_ISO, "codes": sorted({r.get("醫事機構代碼") for r in roster
+                                                                   if r.get("醫事機構代碼") and not (re.sub(r"\D", "", r.get("終止合約或歇業日期") or "")[:8] and re.sub(r"\D", "", r.get("終止合約或歇業日期") or "")[:8] <= today)})},
+                   separators=(",", ":"))
+    except Exception:  # noqa: BLE001
+        pass
     if not groups:
         raise RuntimeError("clinics: no rows")
     recent.sort(key=lambda x: x[5], reverse=True)
@@ -7095,6 +7240,110 @@ def p_clinics():
     return {"asof": TODAY_TPE.strftime("%Y-%m-%d"), "n_active": n_active, "groups": gl, "towns": out_towns,
             "counties": {k.replace("臺", "台"): v for k, v in counties.items()}, "recent": recent[:150],
             "src": "衛福部健保署 健保特約醫療院所名冊（原始特約日、歇業日）＋特約診所（科別）；新開＝近 12 個月首次特約，跟前 12 個月比"}
+
+
+# ---------- 醫美：衛福部「醫療機構與人員基本資料」（全部機構，含沒簽健保的自費診所）對健保名冊 → 自費醫美診所在哪 ----------
+NHI_CODES_PATH = DATA / "nhi_codes.json"
+AES_CACHE = DATA / "aesthetic_cache.json"
+AES_NAME = re.compile(r"醫美|美學|整形|微整|形象美|美容|時尚|抗衰|逆齡|雷射")
+AES_NOT = re.compile(r"牙|中醫|醫院|眼科|耳鼻|小兒|兒科|婦產|骨科|復健|精神|身心|洗腎|透析|檢驗|放射|物理治療|助產|聽力|語言|職能")
+
+
+def _ods_rows(content):
+    """ODS（試算表）→ 每列文字清單。只用標準函式庫，處理重複欄、重複列。"""
+    import zipfile, io
+    import xml.etree.ElementTree as ET
+    ns = {"table": "urn:oasis:names:tc:opendocument:xmlns:table:1.0", "text": "urn:oasis:names:tc:opendocument:xmlns:text:1.0"}
+    T = "{%s}" % ns["table"]
+    root = ET.fromstring(zipfile.ZipFile(io.BytesIO(content)).read("content.xml"))
+    rows = []
+    for tr in root.iter(T + "table-row"):
+        row = []
+        for td in tr:
+            if not td.tag.endswith("table-cell") and not td.tag.endswith("covered-table-cell"):
+                continue
+            v = "".join("".join(p.itertext()) for p in td.findall("text:p", ns))
+            row.extend([v] * min(int(td.get(T + "number-columns-repeated") or 1), 60))
+        while row and not row[-1]:
+            row.pop()
+        if row:
+            rows.append(row)
+    return rows
+
+
+def p_aesthetic():
+    nhi = set((json.loads(NHI_CODES_PATH.read_text(encoding="utf-8")) if NHI_CODES_PATH.exists() else {}).get("codes") or [])
+    if len(nhi) < 10000:
+        raise RuntimeError("aesthetic: 等診所（健保名冊）先跑")
+    url = "https://www.mohw.gov.tw/dl-96581-66dbb751-f83a-416a-a998-893222e20fef.html"
+    try:
+        res = gjson("https://data.gov.tw/api/v2/rest/dataset/15393").get("result") or {}
+        url = next((d["resourceDownloadUrl"] for d in res.get("distribution") or [] if d.get("resourceDownloadUrl")), url)
+    except Exception:  # noqa: BLE001
+        pass
+    r = get(url, timeout=180)
+    asof = ""
+    m = re.search(r"_(\d{8})\.ods", __import__("urllib.parse").parse.unquote(r.headers.get("content-disposition") or ""))
+    if m:
+        asof = f"{m.group(1)[:4]}-{m.group(1)[4:6]}-{m.group(1)[6:]}"
+    rows = _ods_rows(r.content)
+    hdr = rows[0]
+    ix = {h: i for i, h in enumerate(hdr)}
+    need = ("機構代碼", "機構名稱", "縣市區名", "地址", "科別")
+    if any(k not in ix for k in need):
+        raise RuntimeError("aesthetic: 欄位變了 " + ",".join(hdr[:8]))
+    col = lambda row, k: row[ix[k]] if ix.get(k) is not None and ix[k] < len(row) else ""
+    n_int = lambda v: int(re.sub(r"\D", "", v or "") or 0)
+    towns, counties, big, codes = {}, {}, [], []
+    n_self = n_clear = n_west = 0
+    for row in rows[1:]:
+        code, name, dept = col(row, "機構代碼"), col(row, "機構名稱"), col(row, "科別")
+        if not code or "診所" not in name or "醫院" in name:
+            continue
+        if AES_NOT.search(name) or re.search(r"牙醫|中醫", dept):
+            continue
+        n_west += 1
+        self_pay = code not in nhi
+        clear = bool(AES_NAME.search(name)) or bool(self_pay and (re.search(r"整形外科|皮膚科", dept) or "皮膚" in name))
+        if not (clear or self_pay):
+            continue
+        tk = _addr_town(col(row, "地址")) or _addr_town(col(row, "縣市區名"))
+        cty = norm_c(tk[:3]) if tk else ""
+        docs = n_int(col(row, "A醫師")); nurses = n_int(col(row, "F護理師")) + n_int(col(row, "G護士"))
+        kind = "醫美" if clear else "自費"
+        if clear:
+            n_clear += 1; codes.append(code)
+        if self_pay:
+            n_self += 1
+        if tk:
+            T = towns.setdefault(tk, [0, 0, 0])   # 明確醫美、其他自費西醫、醫師數（明確醫美）
+            T[0 if clear else 1] += 1
+            if clear:
+                T[2] += docs
+            Cc = counties.setdefault(cty, [0, 0])
+            Cc[0 if clear else 1] += 1
+        if clear and docs >= 3:
+            big.append([name[:20], cty, TOWNS[tk][3] if tk else "", docs, nurses])
+    if n_clear < 200:
+        raise RuntimeError(f"aesthetic: 太少（{n_clear}）")
+    # 每年一份：記下每一版的醫美機構代碼，新的一版出來就能算這一年新開、消失幾家
+    try:
+        cache = json.loads(AES_CACHE.read_text(encoding="utf-8")) if AES_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    if asof:
+        cache[asof] = sorted(codes)
+    vers = sorted(cache)[-3:]
+    cache = {k: cache[k] for k in vers}
+    write_json(AES_CACHE, cache, separators=(",", ":"))
+    diff = None
+    if len(vers) >= 2:
+        a, b = set(cache[vers[-2]]), set(cache[vers[-1]])
+        diff = {"from": vers[-2], "to": vers[-1], "new": len(b - a), "gone": len(a - b)}
+    big.sort(key=lambda x: -x[3])
+    out_towns = sorted([[norm_c(TOWNS[k][2]), TOWNS[k][3], v[0], v[1], v[2]] for k, v in towns.items() if k in TOWNS], key=lambda x: -x[2])
+    return {"asof": asof, "n_clear": n_clear, "n_self": n_self, "n_west": n_west, "towns": out_towns, "counties": counties, "big": big[:40], "diff": diff,
+            "src": "衛福部醫事司 醫療機構與人員基本資料（每年一版）對照健保特約名冊；醫美＝名稱有醫美／美學／整形等，或沒簽健保的整形外科、皮膚科；自費＝沒簽健保的其他西醫診所（多數做醫美、健檢、減重）"}
 
 
 # ---------- 人口遷徙：內政部遷入遷出統計（到村里，每月）→ 各鄉鎮淨流入、從外縣市還是本縣搬來；最近 12 個月累計 ----------
@@ -10247,7 +10496,8 @@ run("grants", p_grants, keep_if_fresh_hours=6)  # 政府補助與徵件：一天
 run("relay_stats", p_relay_stats, keep_if_fresh_hours=6)  # 抓取站官方統計的狀態摘要（除錯用）
 run("prices", p_prices, keep_if_fresh_hours=1)  # 物價細項：月資料；全國版由台灣抓取站代抓，台北市版當備援
 run("tourism", p_tourism, keep_if_fresh_hours=24)
-run("clinics", p_clinics, keep_if_fresh_hours=20)  # 診所：健保名冊每天更新，一天抓一次
+run("clinics", p_clinics, keep_if_fresh_hours=20 if NHI_CODES_PATH.exists() else 0)  # 診所：健保名冊每天更新，一天抓一次
+run("aesthetic", p_aesthetic, keep_if_fresh_hours=24 * 7)  # 醫美：衛福部全機構名冊一年一版，一週檢查一次
 run("migration", p_migration, keep_if_fresh_hours=1)  # 人口遷徙：每月資料；檔案年月已快取，平常只檢查有沒有新檔，第一次分幾輪補齊 12 個月  # 觀光：年資料＋台北旅館月資料，一天抓一次
 run("ipr", p_ipr, keep_if_fresh_hours=72)
 run("media", p_media, keep_if_fresh_hours=2)
@@ -10274,6 +10524,8 @@ run("aiwire", p_aiwire, keep_if_fresh_hours=0.25)
 run("devpulse", p_devpulse, keep_if_fresh_hours=1)
 run("news", p_news, keep_if_fresh_hours=0.25)
 run("worldnews", p_worldnews, keep_if_fresh_hours=1)
+run("plaact", p_plaact, keep_if_fresh_hours=1)  # 台海：國防部每天早上公布前一天 06 時到今天 06 時
+run("cables", p_cables, keep_if_fresh_hours=6)  # 海纜：路線一週更新一次，受損新聞每 6 小時
 run("gtop", p_gtop, keep_if_fresh_hours=0.5)  # Google 焦點新聞：半小時一次
 run("social", p_social, keep_if_fresh_hours=0.5)
 run("radar", p_radar, keep_if_fresh_hours=2)
