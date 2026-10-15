@@ -7020,8 +7020,18 @@ PLA_CACHE = DATA / "plaact_cache.json"
 PLA_BASE = "https://www.mnd.gov.tw/"
 
 
+def _pla_get(url):
+    for i in range(2):   # 國防部網站偶爾很慢，再等一次
+        try:
+            return get(url, timeout=(15, 75)).text
+        except Exception:  # noqa: BLE001
+            if i:
+                raise
+            time.sleep(3)
+
+
 def _pla_detail(pid):
-    d = get(f"{PLA_BASE}news/plaact/{pid}", timeout=40).text
+    d = _pla_get(f"{PLA_BASE}news/plaact/{pid}")
     m = re.search(r'<div class="maincontent">(.*?)<div class="keyword', d, re.S)
     body = m.group(1) if m else d
     txt = re.sub(r"\s+", "", html_mod.unescape(re.sub(r"<[^>]+>", " ", body)))
@@ -7041,7 +7051,7 @@ def p_plaact():
     for page in range(1, 25):
         url = f"{PLA_BASE}news/plaactlist" + (f"/{page}" if page > 1 else "")
         try:
-            t = get(url, timeout=40).text
+            t = _pla_get(url)
         except Exception as e:  # noqa: BLE001
             errs.append(safe_err(e)); break
         got = re.findall(r'<a href="news/plaact/(\d+)" class="news_list">\s*<div class="date[^"]*">([\d.]+)</div>\s*<div class="title[^"]*">(.*?)</div>', t, re.S)
@@ -7085,6 +7095,12 @@ def p_plaact():
 # ---------- 海纜：TeleGeography 海纜地圖（台灣上岸的國際海纜路線、上岸站）＋海纜受損新聞 ----------
 CABLE_API = "https://www.submarinecablemap.com/api/v3/"
 CABLE_CACHE = DATA / "cables_cache.json"
+CABLE_ZH = {"Toucheng": "頭城", "Pa Li": "八里", "Tanshui": "淡水", "Fangshan": "枋山", "Dawu": "大武", "Guningtou": "古寧頭", "Lake Ci": "慈湖", "Wujie": "五結",
+            "Dongyin": "東引", "Nangan": "南竿", "Xiju": "西莒", "Huxi Township": "湖西", "Tainan": "台南", "Taoyuan": "桃園", "Magong": "馬公", "Xiyu Township": "西嶼",
+            "Beigan": "北竿", "Yuanli": "苑裡", "Jinhu Township": "金湖", "Budai": "布袋", "Jincheng Township": "金城", "Fangliao": "枋寮", "Kaohsiung": "高雄", "Keelung": "基隆"}
+CABLE_NAME_ZH = {"taiwan-matsu-no-4": "台馬四號", "taiwan-penghu-kinmen-matsu-no2-tpkm2": "台澎金馬二號（TPKM2）", "taiwan-penghu-kinmen-matsu-no3-tpkm3": "台澎金馬三號（TPKM3）",
+                 "taiwan-strait-express-1-tse-1": "台海快線一號（TSE-1）", "cross-straits-cable-network-cscn": "兩岸海纜（CSCN）"}
+CABLE_DOMESTIC = re.compile(r"Matsu|Penghu|Kinmen|Cross-Straits|Strait Express", re.I)
 
 
 def p_cables():
@@ -7149,8 +7165,9 @@ def p_cables():
     except Exception as e:  # noqa: BLE001
         errs.append(safe_err(e))
     news.sort(key=lambda x: x.get("at") or "", reverse=True)
-    cs = cache["cables"]
-    return {"cables": cs, "landing": cache.get("landing") or [], "news": news[:10], "n": len([c for c in cs if not c["planned"]]), "n_planned": len([c for c in cs if c["planned"]]),
+    cs = [dict(c, name=CABLE_NAME_ZH.get(c["id"], c["name"]), en=c["name"], tw_lp=[CABLE_ZH.get(x, x) for x in c.get("tw_lp") or []],
+               domestic=bool(CABLE_DOMESTIC.search(c["name"]))) for c in cache["cables"]]
+    return {"cables": cs, "landing": [[CABLE_ZH.get(n, n), lo, la] for n, lo, la in cache.get("landing") or []], "news": news[:10], "n": len([c for c in cs if not c["planned"]]), "n_planned": len([c for c in cs if c["planned"]]),
             "errs": errs, "src": "TeleGeography Submarine Cable Map（CC BY-NC-SA 3.0，只畫台灣附近一段）＋Google 新聞"}
 
 
