@@ -495,9 +495,11 @@ canvas.o-fx{display:block;width:100%}
 /* 分頁內固定順序：台灣先、國際後；快的先、月更的後；結論先、原文後 */
 #p-pulse{display:none!important}
 #p-taiex{order:1}#p-fx{order:2}#p-fear{order:3}#p-taifex{order:4}#p-world{order:5}#p-tw-stocks{order:6}#p-lux{order:7}#p-mops{order:8}#p-usbig{order:9}@media (min-width:1101px){#p-taiex{grid-row:span 2}}#p-sectors{order:10}#p-cmdty{order:11}#p-revenue{order:12}
-#p-consume{order:5}#p-supply{order:3}#p-macro{order:1}#p-gmacro{order:11}#p-calendar{order:15}#p-liq{order:12}#p-veg{order:10}#p-cards{order:4}#p-lead{order:2}#p-housefc{order:7}#p-demo{order:8}#p-bizlife{order:9}#p-imports{order:13}#p-house{order:6}#p-poly{order:14}#p-jobs{order:16}
-#p-weekly{order:0}#ib-soc{order:0}#p-chain{order:1}#p-ledger{order:2}#p-voice{order:3}#p-wiki{order:4}#p-tech2{order:5}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
+#p-consume{order:5}#p-supply{order:3}#p-macro{order:1}#p-gmacro{order:16}#p-calendar{order:20}#p-liq{order:17}#p-veg{order:14}#p-cards{order:4}#p-lead{order:2}#p-housefc{order:9}#p-demo{order:10}#p-bizlife{order:12}#p-imports{order:18}#p-house{order:8}#p-poly{order:19}#p-jobs{order:21}
+#p-cars{order:6}#p-permits{order:7}#p-renewal{order:11}#p-prices{order:13}#p-tourism{order:15}#p-plaact{order:6}#p-cables{order:7}#p-pressure{order:11}#p-gtop{order:2}#p-worldnews{order:3}#p-townnews{order:9}#p-gap{order:2}#p-migration{order:8}#p-births{order:9}#p-maptools{order:10}#p-insights{order:1}#p-weekly{order:1}#ib-soc{order:0}#p-chain{order:3}#p-ledger{order:4}#p-voice{order:5}#p-wiki{order:6}#p-tech2{order:7}#p-pop{order:1}#p-mood{order:4}#p-cofacts{order:5}#p-ptt{order:6}#p-attention{order:7}#p-youtube{order:8}
 .grid{align-items:start}
+.hb{display:flex;flex-direction:column;gap:5px;margin:4px 0 10px}.hb-r{display:grid;grid-template-columns:minmax(0,9em) minmax(0,1fr) auto;gap:8px;align-items:center;font-size:12px}.hb-n{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hb-t{height:6px;background:var(--line2);border-radius:3px;overflow:hidden}.hb-t i{display:block;height:100%;border-radius:3px}.hb-v{font-family:var(--mono);white-space:nowrap;font-size:11.5px}.ins-h{font-size:11px;color:var(--dim);margin:10px 0 4px;display:flex;gap:8px;font-weight:600}.ins-h span{color:var(--muted);font-weight:400}.ins-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:0 22px}.spk{display:flex;gap:10px;align-items:center;font-size:11.5px;color:var(--muted);margin:2px 0 10px}.list.wrap li .t{white-space:normal;overflow:visible;text-overflow:clip;min-width:0;flex:1}.list.wrap li .t .sub{display:block;white-space:normal;overflow:visible;text-overflow:clip}.list.wrap li .v{white-space:nowrap;flex:none}.gtl li{align-items:flex-start}.gtl li img{width:72px;height:45px;object-fit:cover;border-radius:4px;flex:none}.mt-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px}.mt-g a{display:block;padding:12px 14px;border:1px solid var(--line);border-radius:8px;color:var(--text);font-weight:600;text-decoration:none}.mt-g a:hover{border-color:var(--blue)}.mt-g a span{display:block;font-weight:400;font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+
 /* 桃機翻牌看板：只有變動的字會翻 */
 .fids{display:grid;gap:3px;align-content:start}
 .fids .fr{display:grid;grid-template-columns:auto auto auto auto minmax(0,1fr);gap:8px;align-items:center;font-size:11px}
@@ -518,7 +520,7 @@ canvas.o-fx{display:block;width:100%}
 html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animation:none}
 @media (prefers-reduced-motion:reduce){.fids .ch b.fl,.ib-ping,.ib-chip.ib-pop{animation:none}}
 
-#p-geo{order:1}#p-elect{order:10}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:7}#p-airport{order:8}#p-roads{order:6}#p-metro{order:9}#p-quake{order:4}#p-power{order:5}
+#p-geo{order:1}#p-elect{order:13}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:9}#p-airport{order:10}#p-roads{order:8}#p-metro{order:12}#p-quake{order:4}#p-power{order:5}
 #p-vauth{order:1}#p-vsearch{order:2}#p-vtime{order:3}#p-vseries{order:4}
 .stopbar{margin:0 0 10px;padding:8px 12px;border:1px solid color-mix(in srgb,var(--down) 55%,var(--line));background:color-mix(in srgb,var(--down) 12%,var(--panel));border-radius:4px;font-size:13px;display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
 .stopbar b{color:var(--down);font-weight:600}.stopbar span{color:var(--text)}.stopbar .s{color:var(--muted);font-size:11.5px;margin-left:auto}
@@ -708,6 +710,11 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 
   <section class="pulse" id="p-pulse"></section>
   <section class="brief" id="brief" hidden></section>
+  <section class="panel w12 cap" id="p-insights">
+    <div class="ph"><h2>洞見</h2><span class="zh">本月交叉比對 ＋ 各分類重點</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=本月洞見">3D 台灣看</a><span>訊號由程式算、句子由 AI 寫，數字都對過原始資料，對不上的不放</span></div>
+  </section>
   <section class="ov" id="ov" aria-label="總覽"></section>
 
   <div class="sec">市場 Markets</div>
@@ -801,17 +808,42 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://data.moa.gov.tw/" target="_blank" rel="noopener">農業部開放資料</a><span>蔬菜批發平均價（元／公斤，同品項各品種依交易量加權）· 漲跌＝比前兩週平均 · 颱風前後最敏感</span></div>
   </section>
+  <section class="panel w12 cap" id="p-tourism">
+    <div class="ph"><h2>觀光</h2><span class="zh">誰來台灣、台灣人去哪裡、台北旅館</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://stat.taiwan.net.tw/" target="_blank" rel="noopener">觀光署</a><span>來台與出國是年資料，旅館是月資料</span></div>
+  </section>
 
   <section class="panel w6 cap" id="p-cards">
     <div class="ph"><h2>刷卡</h2><span class="zh">信用卡各類簽帳 · 消費溫度</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.nccc.com.tw/" target="_blank" rel="noopener">聯合信用卡處理中心</a><span>金管會開放資料 · 每月 · 年增＝比去年同月 · 「比整體」＝扣掉刷卡本身每年成長後，這一類是不是真的變熱 · 近 3 月取中位數，避開單月大額異常</span></div>
   </section>
+  <section class="panel w6 cap" id="p-cars">
+    <div class="ph"><h2>新車領牌</h2><span class="zh">自用小客車、機車</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.thb.gov.tw/" target="_blank" rel="noopener">交通部公路局</a><span>每月 · 大筆消費最先縮手的就是買車</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-permits">
+    <div class="ph"><h2>建照與使照</h2><span class="zh">接下來要蓋多少 · 依用途</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://statis.moi.gov.tw/micst/" target="_blank" rel="noopener">內政部統計查詢網</a><span>每月 · 建照是一兩年後要蓋的量，使照是蓋好要交屋的量</span></div>
+  </section>
 
   <section class="panel w6 cap" id="p-demo">
     <div class="ph"><h2>人口結構</h2><span class="zh">出生、死亡、高齡、戶數</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://statis.moi.gov.tw/micst/" target="_blank" rel="noopener">內政部統計查詢網</a><span>每月 · 約晚 1 個月 · 人口是最確定的長期走向：長照、獨居、寵物、小宅這幾條主題鏈的底層需求都從這裡來</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-renewal">
+    <div class="ph"><h2>都市更新</h2><span class="zh">近 3 年重建核定 · 各縣市與最新案子</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://data.gov.tw/dataset/8201" target="_blank" rel="noopener">國土管理署</a><span>不定期 · 舊屋拆掉、幾年後新屋交屋</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-prices">
+    <div class="ph"><h2>物價細項</h2><span class="zh">哪些東西變貴了 · 比去年同月</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.stat.gov.tw/" target="_blank" rel="noopener">主計總處</a><span>每月 · 消費者物價基本分類</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-bizlife">
@@ -946,6 +978,21 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>經濟部商工登記「公司／商業設立登記清冊」（月，約晚一個月）· 類別依名稱關鍵字判斷 · 得標排行累積政府電子採購網決標紀錄（行銷、設計、影片、廣告類，滾動 180 天）</span></div>
   </section>
+  <section class="panel w6 cap" id="p-clinics">
+    <div class="ph"><h2>診所</h2><span class="zh">近 12 個月新開與歇業 · 依科別</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=診所">地圖看</a><span>每天 · 健保特約名冊</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-aesthetic">
+    <div class="ph"><h2>醫美</h2><span class="zh">醫美診所分布</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=醫美">地圖看</a><span>衛福部名冊一年一版，看的是分布</span></div>
+  </section>
+  <section class="panel w12 cap" id="p-grants">
+    <div class="ph"><h2>補助與徵件</h2><span class="zh">現在還能申請的</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=補助徵件">3D 台灣看</a><span>近兩週新聞裡的公告；是否還能申請、對象、金額由 AI 判讀，申請前請看原公告</span></div>
+  </section>
 
   <section class="panel w12 lite" id="p-crowd">
     <div class="ph"><h2>集資雷達</h2><span class="zh">台灣爆案、操盤方動態、Kickstarter 熱門</span><span class="meta">排程</span></div>
@@ -963,6 +1010,11 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ph"><h2>本週市場往哪走</h2><span class="zh">每週一由模型讀完所有面板寫一次</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Gemini 只讀情報站本週的數據摘要（景氣、物價、消費、主題鏈、維基、美國財報、科技、進口、政策、選舉、預測帳本），不加自己的時事知識 · 每條判斷都附來源面板 · 下週會拿上週的判斷對答案 · 舊週存在 weekly_archive.json</span></div>
+  </section>
+  <section class="panel w12 cap" id="p-gap">
+    <div class="ph"><h2>台灣還沒報</h2><span class="zh">國外產業與日本消費媒體的新東西 · 台灣中文新聞近 30 天幾乎沒報</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=台灣還沒報">3D 台灣看</a><span>三小時一次 · 沒人報不代表會紅，「台灣缺」是落地前要先過的關</span></div>
   </section>
 
   <section class="ibx ib-band" id="ib-soc"><div class="ib-q"><span class="no">輿情 · 一眼看</span><h2>大家在吵什麼？</h2><p class="ans" id="ibsa">等待排程寫入</p></div>
@@ -997,10 +1049,35 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://pypistats.org/" target="_blank" rel="noopener">PyPI Stats</a><a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm</a><a href="https://openalex.org/" target="_blank" rel="noopener">OpenAlex</a><a href="https://store.steampowered.com/charts" target="_blank" rel="noopener">Steam</a><span>下載量用每日中位數（避開 CI 機器人暴量）· 三個月＝近 28 天比三個月前 · 整個平台的下載量會一起起伏，所以看「比同組」＝扣掉同一組套件的中位數 · 論文＝近 12 個月比前 12 個月（標題與摘要）· Steam＝官方最多人玩排行，7 天變化從今天開始累積</span></div>
   </section>
+  <section class="panel w6 cap" id="p-migration">
+    <div class="ph"><h2>人口遷徙</h2><span class="zh">近 12 個月淨流入 · 縣市與鄉鎮</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=人口遷徙">地圖看</a><span>每月 · 遷入減遷出，不含出生死亡</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-births">
+    <div class="ph"><h2>出生</h2><span class="zh">近 12 個月出生登記 · 比前 12 個月</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=出生">地圖看</a><span>每月 · 依登記地</span></div>
+  </section>
+  <section class="panel w12 cap" id="p-maptools">
+    <div class="ph"><h2>地圖工具</h2><span class="zh">區域報告 · 住哪裡 · 圈一塊地</span><span class="meta">開啟 3D 台灣</span></div>
+    <div class="pb"><div class="mt-g"><a href="/?看=區域報告">區域報告<span>選一個鄉鎮：人口流向、出生、新公司與解散、診所和醫美、房價、預售屋、都更、租金、職缺，跟隔壁幾區和全縣市比</span></a><a href="/?看=住哪裡">住哪裡<span>遠端工作、年輕成家、生活機能三種情境，各區用網速、咖啡、租金、空氣、交通、診所、人口排名</span></a><a href="/?看=區域報告">圈一塊地<span>進區域報告後點地圖任何地方，畫 0.5～2 公里半徑，看圈內村里的人口流向、診所、醫美、新聞</span></a></div></div>
+    <div class="pf"><a href="/">3D 台灣</a><span>這三個要在地圖上點，終端機只放入口</span></div>
+  </section>
   <section class="panel w12" id="p-pop">
     <div class="ph"><h2>流行排行</h2><span class="zh">台灣在聽、在看、在讀什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Spotify 台灣每日（kworb 整理）· KKBOX 華語每日 · Netflix 官方台灣每週前十 · Apple Podcast 台灣熱門 · LINE TODAY 即時熱門</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-gtop">
+    <div class="ph"><h2>焦點新聞</h2><span class="zh">Google 新聞台灣版首頁</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://news.google.com/home?hl=zh-TW&gl=TW&ceid=TW:zh-Hant" target="_blank" rel="noopener">Google 新聞</a><span>半小時一次</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-worldnews">
+    <div class="ph"><h2>全球新聞</h2><span class="zh">對台灣的影響 · 幾家同報</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=全球新聞">地球看</a><span>BBC、半島、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報、彭博</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-devpulse">
@@ -1037,6 +1114,11 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ph"><h2>YouTube 發燒榜</h2><span class="zh">台灣，美國對照</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>YouTube Data API · 每 30 分鐘 · 分類：全部／音樂／娛樂／新聞</span></div>
+  </section>
+  <section class="panel w12 cap" id="p-townnews">
+    <div class="ph"><h2>各區地方新聞</h2><span class="zh">鄉鎮市區層級</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=地方新聞">地圖看</a><span>三小時一次 · Google 新聞依地名歸到鄉鎮</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-media">
@@ -1127,6 +1209,21 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ph"><h2>電力</h2><span class="zh">台電備轉容量</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>台電開放資料 · 燈號：綠 ≥10% 黃 6–10% 橘 3–6% 紅 &lt;3%</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-plaact">
+    <div class="ph"><h2>台海</h2><span class="zh">共機共艦 · 國防部每日</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.mnd.gov.tw/news/plaactlist" target="_blank" rel="noopener">國防部</a><span>每天 · 前一天 06 時到當天 06 時</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-cables">
+    <div class="ph"><h2>海纜</h2><span class="zh">國際海纜上岸站 · 受損新聞</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=海纜">地圖看</a><span>TeleGeography（CC BY-NC-SA）</span></div>
+  </section>
+  <section class="panel w12 cap" id="p-pressure">
+    <div class="ph"><h2>氣壓圖</h2><span class="zh">東亞海平面氣壓 · 現在</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=氣壓圖">地球看</a><span>Open-Meteo · 數字越小越可能有颱風或鋒面</span></div>
   </section>
 
   <section class="panel w12 cap tall" id="p-house">
@@ -1387,7 +1484,109 @@ function PLAIN(P){const put=(id,html)=>{const b=document.querySelector(`#${id} .
   try{const T2=P.tech2||{},top=a=>(a||[]).filter(x=>isFinite(n(x.rel90))).sort((a,b)=>n(b.rel90)-n(a.rel90))[0];const a=top(T2.pypi),b=top(T2.npm),pp=(T2.papers||[])[0];
     put("p-tech2",`「比同組」＝這個套件三個月的成長，減掉同類套件的中位數，正的代表比同類長得快。${a?`Python 長最快：${esc(a.name)}（${g(n(a.rel90),0)}）`:""}${b?`；JavaScript：${esc(b.name)}（${g(n(b.rel90),0)}）`:""}${pp?`；論文成長最快的題目：${esc(pp.name)}（${g(n(pp.chg),0)}%）`:""}。`);}catch(e){}
 }
+/* ---------- 新增面板共用：橫條圖、清單列、月份、百分比 ---------- */
+const HB=(rows,o={})=>{const signed=o.signed!==false,r=(rows||[]).filter(x=>isFinite(x.v));if(!r.length)return"";const mx=Math.max(...r.map(x=>Math.abs(x.v)))||1;
+  return `<div class="hb">${r.map(x=>`<div class="hb-r"><span class="hb-n" title="${esc(x.name)}">${esc(String(x.name).replace(/臺/g,"台"))}</span><span class="hb-t"><i style="width:${(Math.abs(x.v)/mx*100).toFixed(1)}%;background:var(${!signed?"--blue":x.v>=0?"--up":"--down"})"></i></span><span class="hb-v ${signed?cls(x.v):""}">${esc(x.txt??fmt(x.v,0))}</span></div>`).join("")}</div>`;};
+const LI=(t,sub,v,vc,url)=>{t=String(t??"").replace(/^(臺)(北|中|南|東)/,"台$2");return `<li><span class="t">${url?`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(t)}</a>`:esc(t)}${sub?`<span class="sub">${esc(sub)}</span>`:""}</span>${v!=null&&v!==""?`<span class="v ${vc||""}">${esc(v)}</span>`:""}</li>`;};
+const YM=x=>{x=String(x||"").replace("-","");return x.length>=6?`${x.slice(0,4)}/${+x.slice(4,6)}`:"";};
+const PP=v=>v==null||!isFinite(v)?"—":`${v>0?"+":v<0?"−":""}${fmt(Math.abs(v),1)}%`;
+const CARDX=d=>{const C=d.counties||[],E=(d.ec||[]).filter(x=>x.cat!=="總計"),et=(d.ec||[]).find(x=>x.cat==="總計");if(!C.length&&!E.length)return"";
+  return `<div class="vr-g" style="margin-top:10px">${C.length?`<div><h3 class="ins-h">各縣市 · 近 3 月年增（依帳單地址）</h3>${HB(C.map(x=>({name:x.c.replace("臺","台"),v:x.y3,txt:PP(x.y3)})))}</div>`:""}${E.length?`<div><h3 class="ins-h">網購（信用卡付款）${et&&et.share!=null?` · 占刷卡 ${et.share}%`:""}</h3>${HB(E.map(x=>({name:x.cat,v:x.yoy3,txt:`${PP(x.yoy3)}${x.share!=null?" · 占 "+x.share+"%":""}`})))}</div>`:""}</div>`;};
 const renderers={
+  insights(d){const C=((window.LASTP||{}).insights_cat||{}).cats||{},cats=["市場","總經","走向","訊號","輿情","現場"];
+    const top=(d.items||[]).map(x=>`<li><span class="t"><b>${esc(x.title)}</b><span class="sub">${esc(x.body)}</span>${x.why?`<span class="sub" style="color:var(--dim)">依據：${esc(x.why)}</span>`:""}</span></li>`).join("");
+    const cc=cats.filter(c=>C[c]&&(C[c].items||[]).length).map(c=>`<div><h3 class="ins-h">${c}<span>${ago(C[c].at)}</span></h3><ul class="list wrap">${C[c].items.map(x=>`<li><span class="t"><b>${esc(x.title)}</b><span class="sub">${esc(x.body)}</span></span></li>`).join("")}</ul></div>`).join("");
+    body("p-insights").innerHTML=(top?`<h3 class="ins-h">本月洞見<span>交叉比對 ${esc(d.n_sources||"")} 份資料</span></h3><ul class="list wrap">${top}</ul>`:"")+(cc?`<div class="ins-g" style="margin-top:8px">${cc}</div>`:"");
+    setMeta("p-insights",{...d,label:"洞見"},12);},
+  insights_cat(d){const L=window.LASTP||{};if(L.insights)renderers.insights(L.insights);},
+  cars(d){const c=d.car||{},m=d.moto||{};
+    body("p-cars").innerHTML=`<div class="veg-h">自用小客車<b class="${cls(n(c.y3))}">${PP(n(c.y3))}</b><span>近 3 個月比去年同期 · ${YM(d.month)} 單月 ${fmt(n(c.v),0)} 輛（${PP(n(c.yoy))}）</span></div>
+      <div class="spk">${mini((c.spark||[]).filter(v=>v!=null))}<span>每月領牌 · 近 25 月</span></div>
+      <div class="veg-h">機車<b class="${cls(n(m.y3))}">${PP(n(m.y3))}</b><span>${fmt(n(m.v),0)} 輛（${PP(n(m.yoy))}）</span></div><div class="spk">${mini((m.spark||[]).filter(v=>v!=null))}<span>近 25 月</span></div>
+      ${d.lease?`<ul class="list wrap">${LI("租賃小客車","近 3 個月比去年同期",`${fmt(n(d.lease.v),0)} 輛 ${PP(n(d.lease.y3))}`,cls(n(d.lease.y3)))}</ul>`:""}`;
+    setMeta("p-cars",{...d,label:"月資料"},24*40);},
+  permits(d){const B=d.build||[],U=d.use||[],g=(L,h)=>L.find(x=>x.h===h)||{},bn=g(B,"件數(件)"),ba=g(B,"總樓地板面積(平方公尺)"),ua=g(U,"總樓地板面積(平方公尺)");
+    const SH=h=>h.replace(/^住宿類\(H類\)\//,"").replace(/\(.類\)/,"").replace("(含農業設施)","").replace("、福利、更生類","福利").replace(/類$/,"");
+    const ty=L=>L.filter(x=>!/件數|總樓地板|工程造價/.test(x.h)&&x.y3!=null&&x.v>=5000).sort((a,b)=>b.y3-a.y3).map(x=>({name:SH(x.h),v:x.y3,txt:`${PP(x.y3)} · ${fmt(x.v/3.30579/1e4,1)} 萬坪`}));
+    body("p-permits").innerHTML=`<div class="veg-h">建照面積<b class="${cls(n(ba.y3))}">${PP(n(ba.y3))}</b><span>近 3 月比去年同期 · 件數 ${PP(n(bn.y3))} · 使照面積 ${PP(n(ua.y3))}</span></div>
+      <div class="spk">${mini((bn.spark||[]).filter(v=>v!=null))}<span>建照件數 · 近 36 月</span></div>
+      <h3 class="ins-h">建照（一兩年後要蓋）· 依用途</h3>${HB(ty(B))}<h3 class="ins-h">使照（蓋好要交屋）· 依用途</h3>${HB(ty(U))}`;
+    setMeta("p-permits",{...d,label:YM(d.month)+" 月資料"},24*40);},
+  renewal(d){const C=Object.entries(d.counties||{}).sort((a,b)=>b[1]-a[1]),P=Object.entries(d.pending||{});
+    body("p-renewal").innerHTML=`<div class="veg-h">近 3 年重建核定<b>${fmt(n(d.n_recent),0)}</b><span>件 · 資料到 ${String(d.asof||"").slice(0,7).replace("-","/")}</span></div>
+      ${HB(C.slice(0,8).map(([k,v])=>({name:k.replace("臺","台"),v,txt:v+" 件"})),{signed:false})}
+      <h3 class="ins-h">最新核定</h3><ul class="list wrap">${(d.recent||[]).slice(0,8).map(r=>LI(String(r[2]).replace(/^擬訂/,"").slice(0,42),`${String(r[0]).replace("臺","台")}${r[1]}${r[3]?" · "+r[3]:""}`,String(r[4]).slice(0,7).replace("-","/"))).join("")}</ul>
+      ${P.length?`<div class="sub" style="font-size:11px;color:var(--muted)">台中審議中：${esc(P.map(([k,v])=>k.slice(3)+" "+v.length+" 件").join("、"))}</div>`:""}`;
+    setMeta("p-renewal",{...d,label:"不定期"},24*40);},
+  prices(d){const I=d.items||[],t=I.find(x=>x.lvl===0)||{},L=I.filter(x=>x.lvl===2&&isFinite(n(x.yoy)));
+    const up=L.slice().sort((a,b)=>b.yoy-a.yoy).slice(0,8),dn=L.slice().sort((a,b)=>a.yoy-b.yoy).slice(0,4);
+    body("p-prices").innerHTML=`<div class="veg-h">CPI 總指數<b class="${cls(n(t.yoy))}">${PP(n(t.yoy))}</b><span>${YM(d.month)} 比去年同月 · ${esc(d.area||"")}</span></div>
+      <div class="spk">${mini(t.spark)}<span>年增率 · 近 13 月</span></div>
+      <h3 class="ins-h">漲最多</h3>${HB(up.map(x=>({name:x.name,v:x.yoy,txt:PP(x.yoy)})))}<h3 class="ins-h">跌最多</h3>${HB(dn.map(x=>({name:x.name,v:x.yoy,txt:PP(x.yoy)})))}`;
+    setMeta("p-prices",{...d,label:"月資料"},24*40);},
+  tourism(d){const I=d.inbound||{},O=d.outbound||{},H=d.tpe_hotel||{},hl=H.last||{};
+    const col=(X,ttl)=>`<div><div class="veg-h">${ttl}<b>${fmt(n(X.total)/1e4,0)} 萬</b><span>${X.year||""} 年 · ${PP(n(X.yoy))} · 是 2019 年的 ${fmt(n(X.vs2019),0)}%</span></div><div class="spk">${mini(X.spark)}<span>${(X.spark_years||[])[0]||""}–${X.year||""}</span></div>${HB((X.top||[]).slice(0,8).map(x=>({name:x.name,v:n(x.n),txt:`${fmt(n(x.n)/1e4,1)} 萬 ${PP(n(x.yoy))}`})),{signed:false})}${(X.rise||[]).length?`<div class="sub" style="font-size:11px;color:var(--muted)">長最快：${esc(X.rise.slice(0,4).map(x=>`${x.name} ${PP(n(x.yoy))}`).join("、"))}</div>`:""}</div>`;
+    body("p-tourism").innerHTML=`<div class="vr-g">${col(I,"來台旅客")}${col(O,"國人出國")}</div>${hl.m?`<div class="veg-h" style="margin-top:12px">台北旅館住房率<b>${fmt(n(hl.occ),1)}%</b><span>${YM(hl.m)} · 比去年 ${n(H.occ_yoy_pp)>0?"+":""}${fmt(n(H.occ_yoy_pp),1)} 個百分點 · 平均房價 ${fmt(n(hl.price),0)} 元（${PP(n(H.price_yoy))}）</span></div><div class="spk">${mini((H.rows||[]).map(r=>r.occ))}<span>住房率 · 近 ${(H.rows||[]).length} 月</span></div>`:""}`;
+    setMeta("p-tourism",{...d,label:"年／月資料"},24*40);},
+  gap(d){const X=d.items||[],cats=[...new Set(X.map(x=>x.cat))];
+    const li=x=>`<li><span class="t"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.zh||x.kw)}</a><span class="sub">${esc(x.src)} · ${ago(x.at)} · 搜「${esc(x.kw)}」</span>${x.what?`<span class="sub" style="color:var(--text)">新在：${esc(x.what)}</span>`:""}${x.land?`<span class="sub">台灣缺：${esc(x.land)}</span>`:""}</span><span class="v ${x.tw_n===0?"up":""}">台灣 ${x.tw_n} 則</span></li>`;
+    body("p-gap").innerHTML=X.length?`<div class="plain">從日本與歐美的產業、消費媒體挑出有新意的產品、服務和做法，再查台灣中文新聞近 30 天報過幾次，報得越少越前面。近 14 天讀了 ${fmt(n(d.n_read),0)} 則，台灣幾乎沒報的有 ${X.length} 則。</div><div class="ins-g">${cats.map(c=>`<div><h3 class="ins-h">${esc(c)}</h3><ul class="list wrap">${X.filter(x=>x.cat===c).map(li).join("")}</ul></div>`).join("")}</div>`
+      :`<div class="empty">這輪沒有找到台灣幾乎沒報的新東西</div>`;
+    setMeta("p-gap",{...d,label:"近 14 天"},6);},
+  migration(d){const C=Object.entries(d.counties||{}).sort((a,b)=>b[1].net12-a[1].net12),T=d.towns||[],up=T.slice().sort((a,b)=>b[5]-a[5]).slice(0,6),dn=T.slice().sort((a,b)=>a[5]-b[5]).slice(0,4);
+    const sg=v=>`${v>0?"+":v<0?"−":""}${fmt(Math.abs(v),0)}`;
+    body("p-migration").innerHTML=`<div class="veg-h">近 ${d.n_months||12} 個月淨流入<span>到 ${YM(d.month)} · 遷入減遷出，不含出生死亡</span></div>${HB(C.map(([k,v])=>({name:k,v:v.net12,txt:sg(v.net12)})))}
+      <h3 class="ins-h">搬進來最多的區</h3><ul class="list wrap">${up.map(r=>LI(`${r[0]} ${r[1]}`,`外縣市搬來 ${fmt(r[6],0)}`,sg(r[5]),"up")).join("")}</ul><h3 class="ins-h">搬走最多</h3><ul class="list wrap">${dn.map(r=>LI(`${r[0]} ${r[1]}`,"",sg(r[5]),"down")).join("")}</ul>`;
+    setMeta("p-migration",{...d,label:"月資料"},24*40);},
+  births(d){const T=d.towns||[],ok=d.prev_ok,C={};T.forEach(r=>{const c=C[r[0]]=C[r[0]]||{n:0,p:0};c.n+=r[2];c.p+=r[3]||0;});
+    const tot=Object.values(C).reduce((a,c)=>a+c.n,0),tp=Object.values(C).reduce((a,c)=>a+c.p,0);
+    const ch=r=>r[3]?(r[2]/r[3]-1)*100:null,up=ok?T.filter(r=>r[3]>=100).map(r=>[r,ch(r)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,6):[];
+    body("p-births").innerHTML=`<div class="veg-h">全台<b>${fmt(tot,0)}</b><span>人 · 近 ${d.n_months} 個月${ok&&tp?` · 比前 12 個月 ${PP((tot/tp-1)*100)}`:""} · 到 ${YM(d.month)}</span></div>
+      ${HB(Object.entries(C).sort((a,b)=>b[1].n-a[1].n).slice(0,12).map(([k,c])=>({name:k,v:ok&&c.p?(c.n/c.p-1)*100:c.n,txt:`${fmt(c.n,0)} 人${ok&&c.p?" "+PP((c.n/c.p-1)*100):""}`})),{signed:!!ok})}
+      ${up.length?`<h3 class="ins-h">逆勢增加的區（前一年 100 人以上）</h3><ul class="list wrap">${up.map(([r,v])=>LI(`${r[0]} ${r[1]}`,`${fmt(r[2],0)} 人`,PP(v),"up")).join("")}</ul>`:""}`;
+    setMeta("p-births",{...d,label:"月資料"},24*40);},
+  clinics(d){const G=(d.groups||[]).filter(g=>g.g!=="其他西醫"),cs=Object.values(d.counties||{}),tot=cs.reduce((a,c)=>a+c.new,0),cl=cs.reduce((a,c)=>a+c.close,0);
+    body("p-clinics").innerHTML=`<div class="veg-h">近 12 個月新開<b>${fmt(tot,0)}</b><span>家 · 歇業 ${fmt(cl,0)} 家 · 現有 ${fmt(n(d.n_active),0)} 家</span></div>
+      <h3 class="ins-h">各科新開，比前 12 個月</h3>${HB(G.filter(g=>g.new>=10&&g.yoy!=null).sort((a,b)=>b.yoy-a.yoy).map(g=>({name:g.g,v:g.yoy,txt:`${g.new} 家 ${g.yoy>0?"+":""}${g.yoy}%`})))}
+      <h3 class="ins-h">新開最多的區</h3><ul class="list wrap">${(d.towns||[]).slice(0,6).map(r=>LI(`${r[0]} ${r[1]}`,(r[5]||[]).map(g=>g[0]+" "+g[1]).join("、"),`新開 ${r[2]} · 歇業 ${r[3]}`)).join("")}</ul>`;
+    setMeta("p-clinics",{...d,label:"每天"},48);},
+  aesthetic(d){const C=Object.entries(d.counties||{}).sort((a,b)=>b[1][0]-a[1][0]);
+    body("p-aesthetic").innerHTML=`<div class="veg-h">醫美診所<b>${fmt(n(d.n_clear),0)}</b><span>家 · 另有自費西醫 ${fmt(n(d.n_self),0)} 家 · 資料到 ${String(d.asof||"").slice(0,4)} 年底</span></div>
+      ${HB(C.slice(0,8).map(([k,v])=>({name:k,v:v[0],txt:`${v[0]} 家`})),{signed:false})}
+      <h3 class="ins-h">最集中的區</h3><ul class="list wrap">${(d.towns||[]).slice().sort((a,b)=>b[2]-a[2]).slice(0,6).map(r=>LI(`${r[0]} ${r[1]}`,`另有自費西醫 ${r[3]} 家`,`${r[2]} 家`)).join("")}</ul>`;
+    setMeta("p-aesthetic",{...d,label:"年資料"},24*400);},
+  grants(d){const today=new Date(Date.now()+8*36e5).toISOString().slice(0,10),X=(d.items||[]).filter(x=>!x.due||x.due>=today).sort((a,b)=>(b.fit||0)-(a.fit||0)||String(a.due||"9").localeCompare(String(b.due||"9")));
+    const dl=x=>{if(!x.due)return"";const k=Math.ceil((new Date(x.due+"T23:59:59+08:00")-Date.now())/864e5);return k<=7?`剩 ${Math.max(0,k)} 天`:x.due.slice(5).replace("-","/")+" 截止";};
+    body("p-grants").innerHTML=X.length?`<div class="ins-g">${[...new Set(X.map(x=>x.cat))].map(c=>`<div><h3 class="ins-h">${esc(c)}</h3><ul class="list wrap">${X.filter(x=>x.cat===c).slice(0,6).map(x=>LI(x.name,[x.org,x.who,x.amt].filter(Boolean).join(" · "),dl(x),/剩/.test(dl(x))?"down":"",x.url)).join("")}</ul></div>`).join("")}</div>`:`<div class="empty">目前沒有還能申請的公告</div>`;
+    setMeta("p-grants",{...d,label:`${X.length} 則還能申請`},6);},
+  gtop(d){const X=(d.items||[]).slice(0,15);
+    body("p-gtop").innerHTML=`<ul class="list wrap gtl">${X.map(x=>`<li>${x.img?`<img src="${esc(x.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:""}<span class="t"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.t)}</a><span class="sub">${esc(x.src)} · ${ago(x.at)}${x.n>1?` · ${x.n} 家在報`:""}</span></span></li>`).join("")}</ul>`;
+    setMeta("p-gtop",{...d,label:"焦點"},1);},
+  worldnews(d){const X=(d.items||[]).slice(0,16);
+    body("p-worldnews").innerHTML=`<div class="veg-h">明顯影響台灣<b>${fmt(n(d.n_tw),0)}</b><span>則 · ${fmt(n(d.n_big),0)} 件 3 家以上同報</span></div><ul class="list wrap">${X.map(x=>LI(x.t||x.en,[(x.srcs||[x.src]).slice(0,3).join("、")+(x.n_src>3?` 等 ${x.n_src} 家`:""),x.place,x.why].filter(Boolean).join(" · "),x.tw!=null?`影響 ${x.tw}/5`:"",x.tw>=3?"up":"",x.url)).join("")}</ul>`;
+    setMeta("p-worldnews",{...d,label:"每小時"},3);},
+  townnews(d){const X=d.items||[],by={};X.forEach(x=>{(by[x.county]=by[x.county]||[]).push(x);});
+    const cs=Object.entries(by).sort((a,b)=>b[1].length-a[1].length);
+    body("p-townnews").innerHTML=`<div class="veg-h">${fmt(n(d.n_towns),0)}<span>個鄉鎮有新聞 · 共 ${X.length} 則</span></div><div class="ins-g">${cs.slice(0,9).map(([c,xs])=>`<div><h3 class="ins-h">${esc(c)}<span>${xs.length} 則</span></h3><ul class="list wrap">${xs.slice(0,4).map(x=>LI(x.title,`${x.town} · ${x.source} · ${ago(x.at)}`,null,"",x.url)).join("")}</ul></div>`).join("")}</div>`;
+    setMeta("p-townnews",{...d,label:"每 3 小時"},6);},
+  plaact(d){const D=d.days||[],L=d.latest||{},A30=d.avg30||{},A7=d.avg7||{},M=d.max90||{},W=320,H=64,mx=Math.max(1,...D.map(x=>x[1])),bw=W/Math.max(1,D.length);
+    const svg=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:72px;display:block;margin:4px 0 2px">${D.map((x,i)=>{const h=Math.max(1,x[1]/mx*H);return `<rect x="${(i*bw+1).toFixed(1)}" y="${(H-h).toFixed(1)}" width="${Math.max(1,bw-2).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" style="fill:var(${x[1]>=Math.max(20,2*n(A30.air))?"--down":"--blue"});opacity:.85"><title>${x[0]} 共機 ${x[1]}・越中線 ${x[2]}・共艦 ${x[3]}</title></rect>`;}).join("")}</svg><div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-bottom:8px"><span>${String((D[0]||[""])[0]).slice(5).replace("-","/")}</span><span>每天共機架次，紅＝明顯偏多</span><span>${String((D[D.length-1]||[""])[0]).slice(5).replace("-","/")}</span></div>`;
+    body("p-plaact").innerHTML=`<div class="veg-h">共機<b class="${n(L.air)>=Math.max(20,2*n(A30.air))?"down":""}">${fmt(n(L.air),0)}</b><span>架次 · 越中線 ${fmt(n(L.cross),0)} · 共艦 ${fmt(n(L.ship),0)} · 公務船 ${fmt(n(L.off),0)}${(L.zones||[]).length?` · 進入${esc(L.zones.join("、"))}空域`:""}</span></div>${svg}
+      <ul class="list wrap">${LI("近 7 天平均",`近 30 天：共機 ${fmt(n(A30.air),1)} · 共艦 ${fmt(n(A30.ship),1)}`,`共機 ${fmt(n(A7.air),1)} · 共艦 ${fmt(n(A7.ship),1)}`)}${LI("近 90 天最多",`共機 ${M.air_date||""} · 共艦 ${M.ship_date||""}`,`共機 ${fmt(n(M.air),0)} · 共艦 ${fmt(n(M.ship),0)}`)}${L.url?LI("國防部原始公告",L.date||"",null,"",L.url):""}</ul>`;
+    setMeta("p-plaact",{...d,label:L.date||""},30);},
+  cables(d){const C=(d.cables||[]).filter(x=>!x.domestic),act=C.filter(x=>!x.planned),pl=C.filter(x=>x.planned),LP={};C.forEach(c=>(c.tw_lp||[]).forEach(p=>LP[p]=(LP[p]||0)+1));
+    body("p-cables").innerHTML=`<div class="veg-h">國際海纜<b>${act.length}</b><span>條 · 建設中 ${pl.length} 條</span></div>
+      <h3 class="ins-h">上岸站（越集中，一個地方出事影響越大）</h3>${HB(Object.entries(LP).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k,v])=>({name:k,v,txt:v+" 條"})),{signed:false})}
+      <h3 class="ins-h">最近的海纜新聞</h3><ul class="list wrap">${(d.news||[]).slice(0,5).map(x=>LI(x.title,`${x.source} · ${ago(x.at)}`,null,"",x.url)).join("")}</ul>`;
+    setMeta("p-cables",{...d,label:"每 6 小時"},24);},
+  pressure(d){const F=(d.frames||[])[0];if(!F||!d.lon||!d.lat)return;const W=d.lon.length,H=d.lat.length,cw=14,ch=12,vals=F.p.filter(v=>v!=null),mn=Math.min(...vals),mx=Math.max(...vals);
+    const col=v=>{if(v==null)return"transparent";const t=(v-mn)/((mx-mn)||1);return `hsl(${(t*210).toFixed(0)},65%,${(36+t*14).toFixed(0)}%)`;};
+    let cells="";for(let j=0;j<H;j++)for(let i=0;i<W;i++){const v=F.p[j*W+i];cells+=`<rect x="${i*cw}" y="${(H-1-j)*ch}" width="${cw}" height="${ch}" style="fill:${col(v)}"><title>${d.lat[j]}°N ${d.lon[i]}°E ${v==null?"":fmt(v,0)+" hPa"}</title></rect>`;}
+    const ti=Math.max(0,d.lon.findIndex(x=>x>=121)),tj=Math.max(0,d.lat.findIndex(x=>x>=23.5)),tv=F.p[tj*W+ti],mi=F.p.indexOf(mn);
+    body("p-pressure").innerHTML=`<div class="veg-h">台灣附近<b>${fmt(n(tv),0)}</b><span>hPa · 範圍內最低 ${fmt(mn,0)} hPa（北緯 ${d.lat[Math.floor(mi/W)]}°、東經 ${d.lon[mi%W]}°）· ${esc(String(F.t).replace("T"," "))}</span></div>
+      <svg viewBox="0 0 ${W*cw} ${H*ch}" style="width:100%;max-width:520px;display:block;border-radius:6px">${cells}<circle cx="${ti*cw+cw/2}" cy="${(H-1-tj)*ch+ch/2}" r="5" style="fill:none;stroke:#fff;stroke-width:1.5"/></svg>
+      <div class="sub" style="font-size:11px;color:var(--muted);margin-top:6px">紅＝低壓（颱風、鋒面）、藍＝高壓，白圈是台灣。要看未來 72 小時怎麼走，點下面的「地球看」。</div>`;
+    setMeta("p-pressure",{...d,label:"每 3 小時"},12);},
   taiex(d){twm.taiex=d;renderTaiex();},
   tw_market(d){twm.market=d;renderTaiex();},
   _taiex_old(d){const idx=n(d.index),chg=n(d.change);const pct=chg/(idx-chg)*100;const series=(d.history&&d.history.length>5?d.history.map(x=>x[1]):(d.series||[])).map(n);
@@ -1620,7 +1819,7 @@ const renderers={
     setMeta("p-elect",d,1);},
   cards(d){const tr=(d.rows||[]).map(x=>`<tr${x.cat==="總計"?' class="vr-ref"':""}><td class="name">${esc(x.cat)}${mini(x.spark)}</td><td class="r num">${fmt(n(x.amt),0)}</td><td class="r num ${cls(n(x.yoy))}">${x.yoy!=null?sgn(n(x.yoy),1,"%"):"—"}</td><td class="r num ${cls(n(x.yoy3))}">${x.yoy3!=null?sgn(n(x.yoy3),1,"%"):"—"}</td><td class="r num ${cls(n(x.rel))}">${x.rel!=null?sgn(n(x.rel),1):"—"}</td></tr>`).join("");
     const hot=(d.rows||[]).filter(x=>x.rel!=null).sort((a,b)=>b.rel-a.rel);
-    body("p-cards").innerHTML=`<div class="veg-h">${hot[0]?`最熱<b class="up">${esc(hot[0].cat)}</b><span>比整體多長 ${sgn(n(hot[0].rel),1)} 個百分點 · 最冷 ${esc(hot[hot.length-1].cat)}（${sgn(n(hot[hot.length-1].rel),1)}）· ${esc(d.month||"")}</span>`:""}</div><table><tr><th>類別（線＝年增 24 個月）</th><th class="r">億元</th><th class="r">年增</th><th class="r">近 3 月</th><th class="r">比整體</th></tr>${tr}</table>`;
+    body("p-cards").innerHTML=`<div class="veg-h">${hot[0]?`最熱<b class="up">${esc(hot[0].cat)}</b><span>比整體多長 ${sgn(n(hot[0].rel),1)} 個百分點 · 最冷 ${esc(hot[hot.length-1].cat)}（${sgn(n(hot[hot.length-1].rel),1)}）· ${esc(d.month||"")}</span>`:""}</div><table><tr><th>類別（線＝年增 24 個月）</th><th class="r">億元</th><th class="r">年增</th><th class="r">近 3 月</th><th class="r">比整體</th></tr>${tr}</table>`+CARDX(d);
     setMeta("p-cards",{...d,label:(d.month||"")+" 月資料"},24*40);},
   demo(d){const ym=x=>x?`${String(x).slice(0,4)}/${String(x).slice(4)}`:"",pp=v=>v==null?"—":`${v>0?"+":""}${fmt(v,1)}%`;
     const os=d.old_share,o12=d.old_share_12;
@@ -2524,7 +2723,7 @@ const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"m
   "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-elect":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
-  "brief":"overview","ov":"overview","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
+  "brief":"overview","ov":"overview","p-insights":"overview","p-cars":"macro","p-permits":"macro","p-renewal":"macro","p-prices":"macro","p-tourism":"macro","p-gap":"trend","p-migration":"trend","p-births":"trend","p-maptools":"trend","p-clinics":"intel","p-aesthetic":"intel","p-grants":"intel","p-gtop":"social","p-worldnews":"social","p-townnews":"social","p-plaact":"live","p-cables":"live","p-pressure":"live","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
 const tabsEl=$("#tabs");
 tabsEl.innerHTML=TABS.map(([k,nm])=>`<button class="tab" role="tab" id="tab-${k}" data-k="${k}" aria-selected="false" type="button">${nm}<i class="bd" aria-hidden="true"></i></button>`).join("")+'<span class="tbar" id="tbar"></span>';
 let cur="overview";
