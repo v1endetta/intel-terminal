@@ -33,12 +33,16 @@ jobs:
       - name: Build city scores
         env:
           INTEL_DATA_DIR: ${{ github.workspace }}/out/data
+          MOENV_API_KEY: ${{ secrets.MOENV_API_KEY }}
         run: python city.py
       - name: Commit to data branch
+        env:
+          MOENV_API_KEY: ${{ secrets.MOENV_API_KEY }}
         run: |
           cd out
           git config user.name "intel-bot"
           git config user.email "intel-bot@users.noreply.github.com"
+          [ -n "$MOENV_API_KEY" ] && grep -rqF -- "$MOENV_API_KEY" data && { echo "::error::secret found in output"; exit 1; }
           git add data/city_scores.json
           git diff --cached --quiet && { echo "no change"; exit 0; }
           git commit -qm "city: $(date -u +'%Y-%m-%d %H:%M') UTC"

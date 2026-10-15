@@ -99,42 +99,54 @@ def population():
 COUNTIES = sorted({t["c"].replace("台", "臺") for t in TOWNS})
 
 
+def _osm_county(c, out):
+    q = (f'[out:json][timeout:120];area["name"="{c}"]["admin_level"="4"]->.a;('
+         'node["amenity"="cafe"](area.a);way["amenity"="cafe"](area.a);'
+         'node["amenity"="coworking_space"](area.a);way["amenity"="coworking_space"](area.a);node["office"="coworking"](area.a);'
+         'node["railway"="station"](area.a);node["station"="subway"](area.a););out center tags;')
+    EPS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://overpass.private.coffee/api/interpreter"]
+    for attempt in range(6):
+        try:
+            r = S.get(EPS[attempt % len(EPS)], params={"data": q}, timeout=180)
+            if r.status_code == 200:
+                els = r.json().get("elements") or []
+                for e in els:
+                    lo, la = (e.get("lon"), e.get("lat")) if e.get("type") == "node" else ((e.get("center") or {}).get("lon"), (e.get("center") or {}).get("lat"))
+                    if lo is None:
+                        continue
+                    tk = town_at(lo, la)
+                    if not tk:
+                        continue
+                    tg = e.get("tags") or {}
+                    o = out.setdefault(tk, [0, 0, 0])
+                    if tg.get("amenity") == "cafe":
+                        o[0] += 1
+                    elif tg.get("amenity") == "coworking_space" or tg.get("office") == "coworking":
+                        o[1] += 1
+                    else:
+                        o[2] += 1
+                log("osm", c, len(els))
+                return True
+            log("osm", c, "http", r.status_code)
+        except Exception as e:  # noqa: BLE001
+            log("osm", c, repr(e)[:80])
+        time.sleep(10 * (attempt + 1))
+    return False
+
+
 def osm():
-    out = {}
-    for c in COUNTIES:
-        q = (f'[out:json][timeout:120];area["name"="{c}"]["admin_level"="4"]->.a;('
-             'node["amenity"="cafe"](area.a);way["amenity"="cafe"](area.a);'
-             'node["amenity"="coworking_space"](area.a);way["amenity"="coworking_space"](area.a);node["office"="coworking"](area.a);'
-             'node["railway"="station"](area.a);node["station"="subway"](area.a););out center tags;')
-        EPS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://overpass.private.coffee/api/interpreter"]
-        for attempt in range(6):
-            try:
-                r = S.get(EPS[attempt % len(EPS)], params={"data": q}, timeout=180)
-                if r.status_code == 200:
-                    els = r.json().get("elements") or []
-                    for e in els:
-                        lo, la = (e.get("lon"), e.get("lat")) if e.get("type") == "node" else ((e.get("center") or {}).get("lon"), (e.get("center") or {}).get("lat"))
-                        if lo is None:
-                            continue
-                        tk = town_at(lo, la)
-                        if not tk:
-                            continue
-                        tg = e.get("tags") or {}
-                        o = out.setdefault(tk, [0, 0, 0])
-                        if tg.get("amenity") == "cafe":
-                            o[0] += 1
-                        elif tg.get("amenity") == "coworking_space" or tg.get("office") == "coworking":
-                            o[1] += 1
-                        else:
-                            o[2] += 1
-                    log("osm", c, len(els))
-                    break
-                log("osm", c, "http", r.status_code)
-            except Exception as e:  # noqa: BLE001
-                log("osm", c, repr(e)[:80])
-            time.sleep(10 * (attempt + 1))
-        time.sleep(4)
-    return out
+    out, ok = {}, set()
+    for rnd in range(2):   # 第二輪只補第一輪失敗的縣市（Overpass 常 502）
+        todo = [c for c in COUNTIES if c not in ok]
+        if not todo:
+            break
+        if rnd:
+            log("osm retry", len(todo)); time.sleep(90)
+        for c in todo:
+            if _osm_county(c, out):
+                ok.add(c)
+            time.sleep(5)
+    return {"towns": out, "ok": sorted(ok)}
 
 
 # ---------- Ookla Speedtest（每季，約 600 公尺一格）----------
@@ -200,7 +212,7 @@ def ookla():
 
 
 # ---------- 空氣：PM2.5 月平均（環境部），每個鄉鎮用最近的測站 ----------
-AQ_KEY = "e75b1660-e564-4107-aad5-a8be1f905dd9"   # 政府資料開放平臺上公開附在下載連結裡的金鑰
+AQ_KEY = os.environ.get("MOENV_API_KEY") or "e75b1660-e564-4107-aad5-a8be1f905dd9"   # 自己的金鑰優先；公開金鑰大家共用，常超過每日 5000 次
 
 
 def _moenv(ds, **kw):
@@ -267,6 +279,7 @@ def main():
         except Exception:  # noqa: BLE001
             return {}
     rent = load("rent_towns.json").get("towns") or {}
+    prev_rows = {r["k"]: r for r in (load("city_scores.json").get("rows") or [])}
     clinics = {(r[0].replace("台", "臺") + r[1]): r for r in (load("panels/clinics.json").get("towns") or [])}
     mig = {(r[0].replace("台", "臺") + r[1]): r for r in (load("panels/migration.json").get("towns") or [])}
     pop = (parts.get("pop") or {}).get("towns") or {}
@@ -275,13 +288,17 @@ def main():
         k = t["k"]; p = pop.get(k)
         if not p or p[0] < 30000:   # 太小的鄉鎮不排（樣本太少，分數會亂跳）
             continue
-        o = (parts.get("osm") or {}).get(k) or [0, 0, 0]
+        osm_ok = t["c"].replace("台", "臺") in set((parts.get("osm") or {}).get("ok") or [])
+        o = ((parts.get("osm") or {}).get("towns") or {}).get(k) or [0, 0, 0]
+        if not osm_ok:   # 這個縣市這次 OSM 沒抓到：沿用上一次的數字，沒有就當作沒資料
+            pv = prev_rows.get(k)
+            o = [pv["cafe"], pv["cowork"], pv["station"]] if pv and pv.get("cafe") is not None and pv.get("osm_ok") else None
         n = ((parts.get("net") or {}).get("towns") or {}).get(k) or {}
         a = ((parts.get("air") or {}).get("towns") or {}).get(k)
         cl = clinics.get(k); mg = mig.get(k); rt = rent.get(k)
         per10k = lambda x: round(x / p[0] * 1e4, 2)
         rows.append({"k": k, "c": t["c"].replace("臺", "台"), "t": t["t"], "pop": p[0], "young": round(p[1] / p[0] * 100, 1), "old": round(p[2] / p[0] * 100, 1),
-                     "cafe": o[0], "cowork": o[1], "station": o[2], "cafe_n": o[0] + o[1] * 3,
+                     "cafe": o[0] if o else None, "cowork": o[1] if o else None, "station": o[2] if o else None, "cafe_n": (o[0] + o[1] * 3) if o else None, "osm_ok": bool(o),
                      "net_fixed": (n.get("fixed") or [None])[0], "net_mobile": (n.get("mobile") or [None])[0], "lat_ms": (n.get("fixed") or [None, None])[1],
                      "pm25": a[0] if a else None, "pm_site": a[1] if a else "",
                      "rent": rt[0] if rt else None, "rent_n": rt[1] if rt else 0,

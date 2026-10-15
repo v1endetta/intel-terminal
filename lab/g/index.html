@@ -5033,10 +5033,10 @@ const CYD = () => lazyJSON("city", "city_scores.json", 720);
 const CY_M = [
   ["net", "固網速度", r => r.net_fixed != null ? `${r.net_fixed} Mbps` : null],
   ["mobile", "行動網路", r => r.net_mobile != null ? `${r.net_mobile} Mbps` : null],
-  ["cafe", "咖啡廳與共同工作空間", r => `咖啡 ${r.cafe}・共享空間 ${r.cowork}`],
+  ["cafe", "咖啡廳與共同工作空間", r => r.cafe != null ? `咖啡 ${r.cafe}・共享空間 ${r.cowork}` : null],
   ["rent", "租金（住家）", r => r.rent != null ? `每坪 ${r.rent.toLocaleString("en-US")} 元／月` : null],
   ["air", "空氣（PM2.5）", r => r.pm25 != null ? `${r.pm25} μg/m³（${r.pm_site}站）` : null],
-  ["transit", "車站", r => `${r.station} 站`],
+  ["transit", "車站", r => r.station != null ? `${r.station} 站` : null],
   ["clinic", "診所密度", r => r.clinic10k != null ? `每萬人 ${r.clinic10k} 家` : null],
   ["growth", "人口流入", r => r.net_mig != null ? `近一年 ${r.net_mig >= 0 ? "+" : "−"}${Math.abs(r.net_mig).toLocaleString("en-US")} 人` : null],
   ["young", "20～39 歲比例", r => `${r.young}%`],
