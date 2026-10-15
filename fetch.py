@@ -4316,7 +4316,66 @@ def p_cards():
     t3 = next((r["yoy3"] for r in rows if r["cat"] == "總計"), None)
     for r in rows:  # 刷卡本身每年在長，所以看「比整體多長多少」才是真的變熱
         r["rel"] = round(r["yoy3"] - t3, 1) if r["yoy3"] is not None and t3 is not None and r["cat"] != "總計" else None
-    return {"month": f"{last[:4]}-{last[4:]}", "rows": rows, "src": "聯合信用卡處理中心（金管會銀行局開放資料）"}
+    errs = []
+    counties, ec = [], []
+    try:   # 各縣市（依持卡人帳單地址）：近 3 個月合計比去年同期，避開單月大額
+        txt = get("https://www.nccc.com.tw/dataDownload/Billing%20Address/BANK_LCSUM_IDSUM_BA.CSV", timeout=90).content.decode("utf-8-sig", "ignore")
+        cs = {}
+        for row in csv.reader(io.StringIO(txt)):
+            if len(row) < 5 or not row[0].isdigit() or row[1] not in CARD_AREA:
+                continue
+            a = num(row[4])
+            if a:
+                d = cs.setdefault(CARD_AREA[row[1]], {}).setdefault(row[2], {})
+                d[row[0]] = d.get(row[0], 0) + a
+        def s3(s, ym):
+            return sum(s.get(_ym_add(ym, -i), 0) for i in range(3))
+        for c, cats in cs.items():
+            tot_c = {}
+            for s in cats.values():
+                for ym, v in s.items():
+                    tot_c[ym] = tot_c.get(ym, 0) + v
+            lc = max(tot_c)
+            a, b = s3(tot_c, lc), s3(tot_c, _ym_add(lc, -12))
+            if not b:
+                continue
+            cy = {k: round(100 * (s3(s, lc) / s3(s, _ym_add(lc, -12)) - 1), 1) for k, s in cats.items() if s3(s, _ym_add(lc, -12))}
+            hot = max(cy.items(), key=lambda kv: kv[1]) if cy else None
+            counties.append({"c": c, "amt": round(tot_c[lc] / 1e8, 1), "y3": round(100 * (a / b - 1), 1), "month": lc, "hot": list(hot) if hot else None, "cats": cy})
+        counties.sort(key=lambda r: -r["y3"])
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"縣市：{safe_err(e)}")
+    try:   # 網購（信用卡付款的網路交易）各類別
+        txt = get("https://www.nccc.com.tw/dataDownload/EC/BANK_EC_ALL.CSV", timeout=90).content.decode("utf-8-sig", "ignore")
+        es = {}
+        for row in csv.reader(io.StringIO(txt)):
+            if len(row) < 5 or not row[0].isdigit():
+                continue
+            a = num(row[4])
+            if a:
+                es.setdefault(row[2], {})[row[0]] = es.setdefault(row[2], {}).get(row[0], 0) + a
+        et = {}
+        for s in es.values():
+            for ym, v in s.items():
+                et[ym] = et.get(ym, 0) + v
+        es["總計"] = et
+        le = max(et)
+        for cat in ["總計", "食", "衣", "住", "行", "文教康樂", "百貨", "其他"]:
+            s = es.get(cat) or {}
+            if le in s:
+                y3 = sorted(v for v in (yoy(s, m) for m in sorted(s)[-3:]) if v is not None)
+                ec.append({"cat": cat, "amt": round(s[le] / 1e8, 1), "yoy": yoy(s, le), "yoy3": y3[len(y3) // 2] if y3 else None,
+                           "share": round(100 * s[le] / (agg.get(cat) or {}).get(le, 0), 1) if (agg.get(cat) or {}).get(le) else None})
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"網購：{safe_err(e)}")
+    return {"month": f"{last[:4]}-{last[4:]}", "rows": rows, "counties": counties, "ec": ec, "errs": errs,
+            "src": "聯合信用卡處理中心（金管會銀行局開放資料）：持卡人消費、各縣市依帳單地址、網路購物"}
+
+
+CARD_AREA = {"63000000": "臺北市", "65000000": "新北市", "68000000": "桃園市", "66000000": "臺中市", "67000000": "臺南市", "64000000": "高雄市",
+             "10002000": "宜蘭縣", "10004000": "新竹縣", "10005000": "苗栗縣", "10007000": "彰化縣", "10008000": "南投縣", "10009000": "雲林縣",
+             "10010000": "嘉義縣", "10013000": "屏東縣", "10014000": "臺東縣", "10015000": "花蓮縣", "10016000": "澎湖縣", "10017000": "基隆市",
+             "10018000": "新竹市", "10020000": "嘉義市", "09020000": "金門縣", "09007000": "連江縣"}
 
 
 # ---------- 景氣轉向：國發會領先指標、經濟部外銷訂單 ----------
@@ -5248,6 +5307,101 @@ def _gcis_get(url):
             time.sleep(5 * (k + 1))
 
 
+BIRTH_CACHE = DATA / "births_towns.json"
+
+
+def p_births():
+    """各鄉鎮每月出生登記（內政部戶政司，出生登記子女從姓統計，加總所有從姓方式＝出生數）。
+    每輪補 4 個沒抓過的月份，留 25 個月；算最近 12 個月合計、比前 12 個月。"""
+    cache = {}
+    if BIRTH_CACHE.exists():
+        try:
+            cache = json.loads(BIRTH_CACHE.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            cache = {}
+    j = gjson("https://data.gov.tw/api/v2/rest/dataset/157994", timeout=40)
+    dist = {}
+    for d in (j.get("result") or {}).get("distribution") or []:
+        m = re.match(r"(\d{3})(\d{2})", d.get("resourceDescription") or "")
+        u = d.get("resourceDownloadUrl")
+        if m and u:
+            dist[f"{int(m.group(1)) + 1911}{m.group(2)}"] = u
+    want = sorted(dist)[-25:]
+    errs, got = [], 0
+    for ym in sorted((k for k in want if k not in cache), reverse=True)[:4]:
+        try:
+            rows = list(csv.reader(io.StringIO(get(dist[ym], timeout=60).content.decode("utf-8-sig", "replace"))))
+            t = {}
+            for r in rows[1:]:
+                if len(r) >= 6 and re.fullmatch(r"\d{8}", r[1] or ""):
+                    k = (r[2] or "").strip().replace("台", "臺")
+                    t[k] = t.get(k, 0) + int(num(r[5]) or 0)
+            if len(t) > 300:
+                cache[ym] = t; got += 1
+            else:
+                errs.append(f"{ym}: 只有 {len(t)} 區")
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{ym}: {safe_err(e)}")
+    cache = {k: v for k, v in cache.items() if k in want}
+    write_json(BIRTH_CACHE, cache, separators=(",", ":"))
+    ks = sorted(cache)
+    if not ks:
+        raise RuntimeError("births: no months " + "; ".join(errs[:3]))
+    last = ks[-1]
+    cur = [k for k in ks if k > _ym_add(last, -12)]
+    prv = [k for k in ks if _ym_add(last, -24) < k <= _ym_add(last, -12)]
+    towns = []
+    for key in cache[last]:
+        c, tn = key[:3], key[3:]
+        if c not in TW_COUNTIES or not tn:
+            continue
+        a = sum(cache[k].get(key, 0) for k in cur)
+        b = sum(cache[k].get(key, 0) for k in prv) if len(prv) == len(cur) else None
+        towns.append([c, tn, a, b, cache[last].get(key, 0)])
+    towns.sort(key=lambda r: -r[2])
+    return {"month": last, "n_months": len(cur), "prev_ok": len(prv) == len(cur), "towns": towns, "have": len(ks), "errs": errs,
+            "src": "內政部戶政司 出生登記統計（鄉鎮市區，每月；依登記地，不是出生醫院所在地）"}
+
+
+def p_cars():
+    """新車領牌數（交通部公路局，月）：自用小客車、機車，近 3 個月合計比去年同期。"""
+    txt = get("https://www.thb.gov.tw/Common/ThbOpenDataService.ashx?SN=517&format=4&rel=156232", timeout=60).content
+    for enc in ("utf-8-sig", "cp950"):
+        try:
+            txt = txt.decode(enc); break
+        except UnicodeDecodeError:
+            continue
+    if isinstance(txt, bytes):
+        txt = txt.decode("utf-8", "replace")
+    rows = list(csv.reader(io.StringIO(txt)))
+    hd = [h.strip() for h in rows[0]]
+    cols = {"car": "小客車/自用", "moto": "機車", "lease": "小客車/營業/租賃", "truck": "小貨車"}
+    ix = {k: hd.index(v) for k, v in cols.items() if v in hd}
+    ser = {k: {} for k in ix}
+    for r in rows[1:]:
+        m = re.match(r"(\d{2,3})年\s*(\d{1,2})月", (r[0] if r else "").strip())
+        if not m:
+            continue
+        ym = f"{int(m.group(1)) + 1911}{int(m.group(2)):02d}"
+        for k, i in ix.items():
+            v = num(r[i]) if i < len(r) else None
+            if v is not None:
+                ser[k][ym] = v
+    if not ser.get("car"):
+        raise RuntimeError(f"cars: 欄位 {hd[:8]}")
+    last = max(ser["car"])
+    def s3(s, ym):
+        return sum(s.get(_ym_add(ym, -i), 0) for i in range(3))
+    out = {}
+    for k, s in ser.items():
+        if last not in s:
+            continue
+        a, b = s3(s, last), s3(s, _ym_add(last, -12))
+        out[k] = {"v": s[last], "yoy": round(100 * (s[last] / s[_ym_add(last, -12)] - 1), 1) if s.get(_ym_add(last, -12)) else None,
+                  "y3": round(100 * (a / b - 1), 1) if b else None, "spark": [s.get(m) for m in sorted(s)[-25:]]}
+    return {"month": last, **out, "src": "交通部公路局 新車領牌數（月）"}
+
+
 def p_bizlife():
     tot = {}
     for _, u in _gcis_dist(29237)[:1]:
@@ -5906,9 +6060,12 @@ def _plvr_rows(season):
                 ix = {k: hd.index(k) for k in ("鄉鎮市區", "租賃標的", "主要用途", "單價元平方公尺", "建物型態") if k in hd}
                 for r in rd[2:]:
                     d = {k: (r[i].strip() if i < len(r) else "") for k, i in ix.items()}
-                    if "住" not in d.get("主要用途", "") or "車位" in d.get("租賃標的", "") or not d.get("單價元平方公尺"):
+                    if "車位" in d.get("租賃標的", "") or not d.get("單價元平方公尺"):
                         continue
-                    PLVR_RENT.append([PLVR_CITY[m.group(1)], d.get("鄉鎮市區", ""), float(d["單價元平方公尺"]) * 3.30579])
+                    use, typ = d.get("主要用途", ""), d.get("建物型態", "")
+                    kind = "店" if ("店面" in typ or "店鋪" in typ) else "住" if "住" in use else ""   # 店面：建物型態寫店面（店鋪）的租約
+                    if kind:
+                        PLVR_RENT.append([PLVR_CITY[m.group(1)], d.get("鄉鎮市區", ""), float(d["單價元平方公尺"]) * 3.30579, kind])
             except Exception:  # noqa: BLE001
                 pass
     for name in zf.namelist():
@@ -5998,11 +6155,14 @@ def p_house():
         raise RuntimeError("plvr: no rows")
     used = used or seasons[2]
     try:   # 租金：同一季住家用租賃，每坪月租中位數（5 筆以上才算）
-        rt = {}
-        for c, t, v in PLVR_RENT:
-            if 100 <= v <= 6000:
+        rt, sh = {}, {}
+        for c, t, v, kind in PLVR_RENT:
+            if kind == "住" and 100 <= v <= 6000:
                 rt.setdefault(c + t, []).append(v)
-        write_json(RENT_PATH, {"season": used, "towns": {k: [round(_med(v)), len(v)] for k, v in rt.items() if len(v) >= 5}}, separators=(",", ":"))
+            elif kind == "店" and 100 <= v <= 30000:
+                sh.setdefault(c + t, []).append(v)
+        write_json(RENT_PATH, {"season": used, "towns": {k: [round(_med(v)), len(v)] for k, v in rt.items() if len(v) >= 5},
+                               "shops": {k: [round(_med(v)), len(v)] for k, v in sh.items() if len(v) >= 3}}, separators=(",", ":"))
     except Exception as e:  # noqa: BLE001
         log("rent", e)
     deals = _plvr_clean(rows)
@@ -7810,9 +7970,9 @@ INSIGHT_BANNED = re.compile(r"不是.{0,12}而是|不僅.{0,12}更|在這個.{0,
 # ---------- 各分類洞見：每個大分類各自的 2～3 條洞見（只用該分類的資料），每小時輪流重寫最舊的一類，每類約 6 小時更新一次 ----------
 INS_CATS = {
     "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue"],
-    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house"],
-    "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention"],
-    "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire"],
+    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars"],
+    "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention", "demo"],
+    "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife"],
     "輿情": ["mood", "ptt", "trends", "cofacts", "gtop", "worldnews"],
     "現場": ["weather", "quake", "power", "alerts", "plaact", "cables", "airport", "typhoon"],
 }
@@ -10542,9 +10702,17 @@ BRAND_CATS = [
 BIZ_TOWNS_PATH = DATA / "biz_towns.json"
 
 
-def biz_towns(month, cur, prv):
-    """地圖「新公司」視角：每個鄉鎮這個月新設立幾家、比上個月、主要產業、資本額最大的幾家（只用登記地址，不另外查 API）。"""
+def biz_towns(month, cur, prv, gone=(), gone_k=None):
+    """地圖「新公司」視角：每個鄉鎮這個月新設立幾家、比上個月、主要產業、資本額最大的幾家（只用登記地址，不另外查 API）。
+    gone＝同一個月的公司解散清冊；列尾多兩欄：[這個月新設的「公司」家數, 解散家數]（商業登記沒有解散清冊，所以淨增只算公司）。"""
     T, C = {}, {}
+    G, GC = {}, {}
+    for x in gone:
+        if x.get("town"):
+            G[x["town"]] = G.get(x["town"], 0) + 1
+        c = (x.get("city") or "")[:3]
+        if c in TW_COUNTIES:
+            GC[c] = GC.get(c, 0) + 1
     for which, lst in (("n", cur), ("p", prv)):
         for x in lst:
             k = x.get("town") or ""
@@ -10564,10 +10732,19 @@ def biz_towns(month, cur, prv):
         lo, la, c, tn = TOWNS[k]
         cats = sorted([kv for kv in t["cats"].items() if kv[0] != "名稱看不出產業"], key=lambda kv: -kv[1])[:3]
         top = sorted(t["top"], key=lambda x: -(x["cap"] or 0))[:5]
-        rows.append([c, tn, t["n"], t["p"], cats, t["cats"].get("設計創意", 0), [[x["name"], x["cap"], x["cat"], x["date"]] for x in top]])
+        rows.append([c, tn, t["n"], t["p"], cats, t["cats"].get("設計創意", 0), [[x["name"], x["cap"], x["cat"], x["date"]] for x in top],
+                     sum(1 for x in cur if x.get("town") == k and x["kind"] == "公司") if gone else None, G.get(k, 0) if gone else None])
+    if gone:   # 只有解散、沒有新設的鄉鎮也要列
+        for k, g in G.items():
+            if k not in T and k in TOWNS:
+                lo, la, c, tn = TOWNS[k]
+                rows.append([c, tn, 0, 0, [], 0, [], 0, g])
+        for c, g in GC.items():
+            C.setdefault(c, {"n": 0, "p": 0})["gone"] = g
     rows.sort(key=lambda r: -r[2])
     located = sum(1 for x in cur if x.get("town"))
     write_json(BIZ_TOWNS_PATH, {"month": month, "total": len(cur), "located": located, "counties": C, "towns": rows,
+                                "gone_month": gone_k if gone else None, "gone_total": len(gone),
                                 "src": "經濟部商業司 公司／商業登記（data.gov.tw），依登記地址歸到鄉鎮市區", "updatedAt": NOW.isoformat()},
                separators=(",", ":"))
     return located
@@ -10657,8 +10834,21 @@ def p_brands():
         if prv_k:
             hist_put("brands", c, prv_k, p_)
         cats.append({"cat": c, "n": n_, "prev": p_, "chg": round((n_ - p_) / p_ * 100, 1) if p_ else None, "spark": hist_get("brands", c, 12)})
+    gone, gone_k = [], None
+    try:   # 公司解散清冊：最新一個月，依公司所在地歸到鄉鎮（和新設同一個月才拿來相減）
+        for desc, u in _gov_dists(6049)[-2:][::-1]:
+            m = re.search(r"(\d{4})年(\d{1,2})月", desc)
+            k = f"{m.group(1)}-{int(m.group(2)):02d}" if m else ""
+            if k and k > cur_k:
+                continue
+            gone = [{"town": _addr_town(r.get("公司所在地")), "city": (r.get("公司所在地") or "")[:3].replace("台", "臺"), "name": (r.get("公司名稱") or "").strip(),
+                     "cap": num(r.get("資本額"))} for r in _csv_rows(u)]
+            gone_k = k
+            break
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"解散：{safe_err(e)}")
     try:
-        biz_towns(cur_k, cur, prv)
+        biz_towns(cur_k, cur, prv, gone if gone_k == cur_k else [], gone_k)
     except Exception as e:  # noqa: BLE001
         errs.append(f"biz_towns: {safe_err(e)}")
     peers = sorted([x for x in cur if x["cat"] == "設計創意"], key=lambda x: (-(x["cap"] or 0), x["date"]))[:30]
@@ -10950,7 +11140,7 @@ run("liquidity", p_liquidity, keep_if_fresh_hours=3)
 run("calendar", p_calendar, keep_if_fresh_hours=6)
 run("mktcal", p_mktcal, keep_if_fresh_hours=3)  # Forex Factory 每 5 分鐘最多兩次，3 小時一次很安全
 run("awards", p_awards, keep_if_fresh_hours=1)
-run("brands", p_brands, keep_if_fresh_hours=12 if BIZ_TOWNS_PATH.exists() else 0)  # 地圖的鄉鎮統計檔還沒有時，這輪就重抓一次
+run("brands", p_brands, keep_if_fresh_hours=12 if BIZ_TOWNS_PATH.exists() and '"gone_month"' in BIZ_TOWNS_PATH.read_text(encoding="utf-8") else 0)  # 地圖的鄉鎮統計檔還沒有時，這輪就重抓一次
 run("taxreg", p_taxreg, keep_if_fresh_hours=72)
 run("crowd", p_crowd, keep_if_fresh_hours=3)
 _sp = load_prev("supply") or {}
@@ -10979,7 +11169,7 @@ run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
 run("flights", p_flights)
 run("lightning", p_lightning, keep_if_fresh_hours=0.15)
-run("house", p_house, keep_if_fresh_hours=24 * 5 if RENT_PATH.exists() else 0)
+run("house", p_house, keep_if_fresh_hours=24 * 5 if RENT_PATH.exists() and '"shops"' in RENT_PATH.read_text(encoding="utf-8") else 0)   # 租金檔還沒有店面時，這輪重抓一次
 run("jobs", p_jobs, keep_if_fresh_hours=6)
 run("jobtowns", p_jobtowns, keep_if_fresh_hours=20)   # 六都＋新竹各區職缺，約 170 次 104 查詢，一天一次
 run("mops", p_mops, keep_if_fresh_hours=0.5)
@@ -11018,6 +11208,8 @@ run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
 run("housefc", p_housefc, keep_if_fresh_hours=24)
 run("demo", p_demo, keep_if_fresh_hours=24)
 run("bizlife", p_bizlife, keep_if_fresh_hours=24)
+run("births", p_births, keep_if_fresh_hours=24 if BIRTH_CACHE.exists() and len(json.loads(BIRTH_CACHE.read_text(encoding="utf-8") or "{}")) >= 25 else 0)  # 鄉鎮出生數：前幾輪每輪補 4 個月，補滿 25 個月後一天一次
+run("cars", p_cars, keep_if_fresh_hours=24)
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 if load_prev("weekly"):  # 每週走向摘要由 weekly.yml 另外寫（Gemini 慢，不佔主迴圈時間），這裡只帶進 all.json
