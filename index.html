@@ -4286,7 +4286,7 @@ function camRender(fresh) {
   }
   const c = CAM.list[CAM.i], u = c[4], name = camName(c), sp = camSpeed(c), kind = c[2] === "fw" ? "國道" : "省道";
   const spC = sp == null ? "#8e8e93" : sp >= 60 ? UPH : sp >= 30 ? "#ffd60a" : DNH;
-  const hls = /\.m3u8/i.test(u), insecure = location.protocol === "https:" && u.startsWith("http:");
+  const hls = /\.m3u8|Showcctv|\.aspx|\.html?(\?|$)/i.test(u), insecure = location.protocol === "https:" && u.startsWith("http:");   // 網頁型的（台中市區）也改成新視窗開
   el.className = "open";
   if (fresh || !el.querySelector(".cp-v")) el.innerHTML = `
     <div class="cp-h"><span class="cp-live"><i></i>即時</span><span class="cp-k">${kind}</span><span class="cp-n">${CAM.i + 1} / ${n}</span><button data-cp="x" aria-label="關閉攝影機">×</button></div>

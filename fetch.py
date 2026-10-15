@@ -5772,7 +5772,7 @@ def p_cctv():
                 if lo and la and lo > 1000:   # TWD97 → 經緯度
                     lo, la = _twd97_to_wgs84(lo, la)
                 u = str(g("url", "videostreamurl", "imageurl", "videourl", "cctvurl", "link") or "")
-                if not lo or not la or not (118 < lo < 123 and 21 < la < 27) or not u.startswith("http") or str(g("status") or "1") in ("0", "N", "停用"):
+                if not lo or not la or not (118 < lo < 123 and 21 < la < 27) or not u.startswith("http") or (kind != "tc" and str(g("status") or "1") in ("0", "N", "停用")):
                     continue
                 out.append([round(lo, 5), round(la, 5), kind, str(g("roadsection", "location", "name", "cctvname", "camname", "roadname") or "")[:40], u])
             info[kind]["kept"] = len(out) - n0

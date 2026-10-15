@@ -580,13 +580,14 @@ def geo_b(state, errs):
         pass
     tc = {k: (a[0] / a[2], a[1] / a[2]) for k, a in tc.items() if a[2]}
     changed = False
-    for cty, keys in pend.items():
+    for cty, keys in sorted(pend.items(), key=lambda kv: st.get(kv[0], {}).get("try", 0)):   # 輪流：最久沒試的縣市先
         if cty not in GEO_DS or time.time() - T_START > 110:
             continue
         need_keys = [k for k in keys if k not in K]
         cs = st.setdefault(cty, {"i": 0})
         if not need_keys or (cs.get("fin") and time.time() - cs["fin"] < 7 * 86400):
             continue
+        cs["try"] = time.time()
         try:
             if not cs.get("res"):
                 cs["res"], cs["i"] = _geo_resources(GEO_DS[cty]), 0
@@ -606,7 +607,10 @@ def geo_b(state, errs):
                 cs["fin"], cs["res"] = time.time(), None; done[cty] = NOW_ISO; changed = True
         except Exception as e:  # noqa: BLE001
             errs["geo_" + cty] = repr(e)[:160]
-            cs["i"] = cs.get("i", 0) + (1 if "欄位" in repr(e) else 0)
+            cs["fail"] = cs.get("fail", 0) + 1
+            if "欄位" in repr(e) or cs["fail"] >= 3:   # 同一個檔失敗三次就跳過
+                cs["i"] = cs.get("i", 0) + 1; cs["fail"] = 0
+            changed = True
         break   # 一輪只處理一個縣市的一個檔
     if changed:
         gcs_put("relay/static/geo_b.json.gz", gz({"at": NOW_ISO, "k": K, "done": done}))
