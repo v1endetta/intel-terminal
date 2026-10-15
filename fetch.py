@@ -5391,6 +5391,81 @@ def p_permits():
     return {**out, "errs": errs, "src": "內政部統計查詢網（國土管理署 建造執照、使用執照統計，月）"}
 
 
+def _gov_csv(ds):
+    """data.gov.tw 資料集第一個下載檔 → list of rows（自動判斷 UTF-8／Big5）。"""
+    j = gjson(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", timeout=40)
+    u = next(d.get("resourceDownloadUrl") for d in (j.get("result") or {}).get("distribution") or [] if d.get("resourceDownloadUrl"))
+    b = get(u, timeout=90).content
+    for enc in ("utf-8-sig", "cp950"):
+        try:
+            return list(csv.reader(io.StringIO(b.decode(enc))))
+        except UnicodeDecodeError:
+            continue
+    return list(csv.reader(io.StringIO(b.decode("utf-8", "replace"))))
+
+
+def p_renewal():
+    """都市更新：國土署全國民間都更案（核定日期）＋新北每月核定清單（比全國新）＋台中審議中案件。
+    重建案＝舊屋拆掉、幾年後新屋交屋，跟預售屋一樣是未來裝修與換設備需求的預告。"""
+    errs, cases = [], []
+    try:
+        rows = _gov_csv(8201)
+        hd = [h.strip() for h in rows[0]]
+        ix = {k: hd.index(k) for k in ("處理方式", "縣市", "鄉鎮市區", "案名", "實施者", "事業計畫核定日期") if k in hd}
+        ia = next((i for i, h in enumerate(hd) if "面積" in h), None)
+        for r in rows[1:]:
+            g = lambda k: (r[ix[k]].strip() if k in ix and ix[k] < len(r) else "")
+            m = re.match(r"(\d{4})/(\d{1,2})/(\d{1,2})", g("事業計畫核定日期"))
+            if not m or not g("縣市"):
+                continue
+            cases.append({"c": g("縣市").replace("台", "臺"), "t": g("鄉鎮市區"), "name": g("案名")[:60], "by": g("實施者")[:30], "kind": g("處理方式"),
+                          "d": f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}", "area": num(r[ia]) if ia is not None and ia < len(r) else None})
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"全國：{safe_err(e)}")
+    nat_max = max((c["d"] for c in cases), default="")
+    try:   # 新北：每月更新，補全國清單之後核定的案子
+        for r in _gov_csv(122883)[1:]:
+            if len(r) < 5:
+                continue
+            m = re.search(r"(\d{2,3})\.(\d{1,2})\.(\d{1,2})", r[4])
+            if not m:
+                continue
+            d = f"{int(m.group(1)) + 1911}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+            if d > nat_max:
+                cases.append({"c": "新北市", "t": r[2].strip() + ("區" if not r[2].strip().endswith(("區", "市", "鎮", "鄉")) else ""), "name": r[3].strip()[:60],
+                              "by": "", "kind": "重建", "d": d, "area": None})
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"新北：{safe_err(e)}")
+    pending = {}
+    try:   # 台中：報核審議中、已審定未核定
+        for r in _gov_csv(83957)[1:]:
+            if len(r) >= 6 and r[3].strip():
+                pending.setdefault("臺中市" + r[3].strip(), []).append([r[4].strip()[:60], r[5].strip()])
+    except Exception as e:  # noqa: BLE001
+        errs.append(f"台中：{safe_err(e)}")
+    if not cases:
+        raise RuntimeError("renewal: " + "; ".join(errs))
+    cut = (TODAY_TPE - timedelta(days=3 * 365)).isoformat()
+    towns = {}
+    for c in cases:
+        if "重建" not in c["kind"]:
+            continue
+        k = c["c"] + c["t"]
+        x = towns.setdefault(k, [0, 0, None])
+        x[1] += 1
+        if c["d"] >= cut:
+            x[0] += 1
+        if not x[2] or c["d"] > x[2][2]:
+            x[2] = [c["name"], c["by"], c["d"]]
+    recent = sorted([c for c in cases if "重建" in c["kind"] and c["d"] >= cut], key=lambda c: c["d"], reverse=True)
+    by_c = {}
+    for c in recent:
+        by_c[c["c"]] = by_c.get(c["c"], 0) + 1
+    return {"asof": max(c["d"] for c in cases), "nat_asof": nat_max, "n": len(cases), "n_recent": len(recent), "counties": by_c,
+            "towns": {k: v for k, v in towns.items()}, "pending": pending, "recent": [[c["c"], c["t"], c["name"], c["by"], c["d"]] for c in recent[:40]],
+            "errs": errs, "src": "內政部國土管理署 民間都更事業（事業計畫核定日期）、新北市都市更新核定成果（每月）、臺中市都市更新辦理進度"}
+
+
 def p_cars():
     """新車領牌數（交通部公路局，月）：自用小客車、機車，近 3 個月合計比去年同期。"""
     txt = get("https://www.thb.gov.tw/Common/ThbOpenDataService.ashx?SN=517&format=4&rel=156232", timeout=60).content
@@ -8124,7 +8199,7 @@ INSIGHT_BANNED = re.compile(r"不是.{0,12}而是|不僅.{0,12}更|在這個.{0,
 # ---------- 各分類洞見：每個大分類各自的 2～3 條洞見（只用該分類的資料），每小時輪流重寫最舊的一類，每類約 6 小時更新一次 ----------
 INS_CATS = {
     "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue"],
-    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits"],
+    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits", "renewal"],
     "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention", "demo", "gap"],
     "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife"],
     "輿情": ["mood", "ptt", "trends", "cofacts", "gtop", "worldnews"],
@@ -11366,6 +11441,7 @@ run("bizlife", p_bizlife, keep_if_fresh_hours=24)
 run("births", p_births, keep_if_fresh_hours=24 if BIRTH_CACHE.exists() and len(json.loads(BIRTH_CACHE.read_text(encoding="utf-8") or "{}")) >= 25 else 0)  # 鄉鎮出生數：前幾輪每輪補 4 個月，補滿 25 個月後一天一次
 run("cars", p_cars, keep_if_fresh_hours=24)
 run("permits", p_permits, keep_if_fresh_hours=24)
+run("renewal", p_renewal, keep_if_fresh_hours=24)  # 都更：資料一個月頂多更新一次，一天看一次就好
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 if load_prev("weekly"):  # 每週走向摘要由 weekly.yml 另外寫（Gemini 慢，不佔主迴圈時間），這裡只帶進 all.json
