@@ -169,8 +169,8 @@ body.storying::before{content:"";position:fixed;inset:0;z-index:11;pointer-event
 @keyframes pop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
 #side .chart .dot{transform-box:fill-box;transform-origin:center}
 #side .bars{display:flex;flex-direction:column;gap:7px}
-#side .bar{display:grid;grid-template-columns:minmax(0,7.5em) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13px}
-#side .bn{color:#c7c7cc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#side .bar{display:grid;grid-template-columns:minmax(0,8.5em) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13px}
+#side .bn{color:#c7c7cc;overflow:hidden;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-all}
 #side .bt{height:6px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden}
 #side .bt i{display:block;height:100%;border-radius:3px;transform-origin:left;animation:grow .9s cubic-bezier(.2,.8,.2,1) both}
 @keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
@@ -2491,64 +2491,64 @@ function EXPLORE() {
     { cat: "市場", items: [
       { n: "洞見", f: () => insCatCard("市場") },
       { n: "台股", mapLens: "stock", f: () => { const v = tx, s = surprise(v); return lineOf("台股加權", v, s ? tone(s.last) : NEU, "市場 · 證交所", "taiex", v.length ? nf(v[v.length - 1]) : "", s && s.pct != null ? pct(s.pct) : "")(); } },
-      { n: "行事曆", globe: 1, f: () => gxCard("clock") },
       { n: "法人", globe: 1, f: () => gxCard("inst") },
       { n: "個股", lens: "stock", f: barsOf("關注個股漲跌", () => items("tw_stocks").slice(0, 10).map(x => { const v = x.pct != null ? x.pct : (x.price && x.chg != null ? x.chg / (x.price - x.chg) * 100 : 0); return { name: x.name, v, txt: pct(v) }; }), "市場 · 最近收盤", "taiex") },
+      { n: "資金流向", f: layer("flow", "資金流向", "市場 · 海外 → 台灣", () => { const W = Object.fromEntries(items("world").map(x => [x.sym || x.name, x])), tx = hist("taiex", "TAIEX"), s = surprise(tx), inst = ((((P.tw_market || {}).institutions) || {}).items || []).find(x => /外資/.test(x.name));
+        return `<p class="why">線條是海外主要市場前一個交易日的漲跌，紅圈＝海外漲、台股卻跌（或反過來），傳導卡住。</p>` + barsHTML(items("world").slice(0, 8).map(x => ({ name: x.name, v: x.chg_pct, txt: pct(x.chg_pct) })))
+          + `<p class="why">台股 ${s && s.pct != null ? pct(s.pct) : "—"}${inst ? `・外資${inst.net > 0 ? "買超" : "賣超"} ${nf(Math.abs(inst.net))} 億` : ""}</p>`; }) },
       { n: "全球股市", globe: 1, f: () => gxCard("world") },
       { n: "匯率", globe: 1, f: () => gxCard("fx") },
       { n: "恐慌", f: () => { const v = items("fear").find(x => x.sym === "^VIX") || {}; return lineOf("VIX 恐慌指數", v.spark, v.value > 25 ? DNH : v.value > 15 ? "#ff9f0a" : UPH, "市場 · 15 以下平靜、25 以上緊張", "fear", nf(v.value || 0), pct(v.chg_pct || 0))(); } },
       { n: "原物料", globe: 1, f: () => gxCard("cmdty") },
       { n: "精品", globe: 1, f: () => gxCard("lux") },
-      { n: "資金流向", f: layer("flow", "資金流向", "市場 · 海外 → 台灣", () => { const W = Object.fromEntries(items("world").map(x => [x.sym || x.name, x])), tx = hist("taiex", "TAIEX"), s = surprise(tx), inst = ((((P.tw_market || {}).institutions) || {}).items || []).find(x => /外資/.test(x.name));
-        return `<p class="why">線條是海外主要市場前一個交易日的漲跌，紅圈＝海外漲、台股卻跌（或反過來），傳導卡住。</p>` + barsHTML(items("world").slice(0, 8).map(x => ({ name: x.name, v: x.chg_pct, txt: pct(x.chg_pct) })))
-          + `<p class="why">台股 ${s && s.pct != null ? pct(s.pct) : "—"}${inst ? `・外資${inst.net > 0 ? "買超" : "賣超"} ${nf(Math.abs(inst.net))} 億` : ""}</p>`; }) },
+      { n: "行事曆", globe: 1, f: () => gxCard("clock") },
     ] },
     { cat: "總經", items: [
       { n: "洞見", f: () => insCatCard("總經") },
-      { n: "房價", lens: "house" },
+      { n: "景氣指標", lens: "macro", f: listOf("台灣總經", () => items("macro").map(x => ({ t: `${x.label}  ${x.value}`, s: `${x.period} · 前期 ${x.prev}` })), "總經", "macro") },
       { n: "刷卡", lens: "cards" },
       { n: "新車", f: () => carsCard() },
+      { n: "觀光", f: () => tourismCard() },
+      { n: "房價", lens: "house" },
       { n: "建照", f: () => permitsCard() },
+      { n: "物價細項", f: () => pricesCard() },
       { n: "菜價", f: barsOf("菜價兩週變化", () => items("veg").slice(0, 10).map(x => ({ name: x.name, v: x.chg14, txt: pct(x.chg14, 0) })), "總經 · " + ((P.veg || {}).market || ""), "veg") },
       { n: "油價", f: barsOf("中油牌價", () => items("oil").map(x => ({ name: x.name, v: x.price, txt: nf(x.price) + " 元" })), "總經 · " + ((P.oil || {}).effective || ""), "macro", { signed: false }) },
-      { n: "物價細項", f: () => pricesCard() },
-      { n: "觀光", f: () => tourismCard() },
-      { n: "景氣指標", lens: "macro", f: listOf("台灣總經", () => items("macro").map(x => ({ t: `${x.label}  ${x.value}`, s: `${x.period} · 前期 ${x.prev}` })), "總經", "macro") },
       { n: "美元流動性", globe: 1, f: () => gxCard("liq") },
     ] },
     { cat: "走向", items: [
       { n: "本月洞見", f: () => insightsCard() },
+      { n: "本週走向", f: listOf(((P.weekly || {}).headline) || "本週走向", () => (((P.weekly || {}).dirs) || []).map(d => ({ t: d.t, s: d.why })), "走向 · " + (((P.weekly || {}).week) || ""), "weekly") },
       { n: "區域報告", lens: "area" },
       { n: "住哪裡", lens: "city" },
       { n: "人口遷徙", lens: "move" },
       { n: "出生", lens: "birth" },
-      { n: "本週走向", f: listOf(((P.weekly || {}).headline) || "本週走向", () => (((P.weekly || {}).dirs) || []).map(d => ({ t: d.t, s: d.why })), "走向 · " + (((P.weekly || {}).week) || ""), "weekly") },
       { n: "趨勢雷達", f: barsOf("新聞量最多的主題", () => (((P.voice || {}).kw) || []).slice().sort((a, b) => b.news7 - a.news7).slice(0, 10).map(k => ({ name: k.k, v: k.news7, txt: k.news7 + " 則" })), "走向 · 近 7 天", "voice", { signed: false }) },
-      { n: "主題鏈", f: listOf("缺口與機會", () => (((P.chain || {}).rows) || []).slice(0, 8).map(r => ({ t: `${r.k}・${r.verdict || ""}`, s: r.why })), "走向", "chain") },
       { n: "主題熱度", f: listOf("升溫中的主題", () => (((P.wiki || {}).rows) || []).filter(r => r.spiked).slice(0, 8).map(r => ({ t: r.title, s: r.grp })), "走向 · 維基瀏覽", "wiki") },
+      { n: "主題鏈", f: listOf("缺口與機會", () => (((P.chain || {}).rows) || []).slice(0, 8).map(r => ({ t: `${r.k}・${r.verdict || ""}`, s: r.why })), "走向", "chain") },
     ] },
     { cat: "訊號", items: [
       { n: "洞見", f: () => insCatCard("訊號") },
       { n: "新公司", lens: "biz" },
       { n: "公司生滅", f: () => bizlifeCard() },
-      { n: "職缺", lens: "jobs", f: barsOf("各類職缺 7 天變化", () => (((P.jobs || {}).cats) || []).slice(0, 10).map(c => ({ name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) })), "訊號 · 全台 " + nf((P.jobs || {}).total || 0) + " 個職缺", "jobs") },
-      { n: "AI 快線", globe: 1, f: () => gxCard("ai") },
-      { n: "補助徵件", f: () => grantsCard() },
       { n: "新興生意", f: () => nicheCard() },
-      { n: "診所", lens: "clinic" },
-      { n: "醫美", lens: "aes" },
+      { n: "職缺", lens: "jobs", f: barsOf("各類職缺 7 天變化", () => (((P.jobs || {}).cats) || []).slice(0, 10).map(c => ({ name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) })), "訊號 · 全台 " + nf((P.jobs || {}).total || 0) + " 個職缺", "jobs") },
+      { n: "補助徵件", f: () => grantsCard() },
       { n: "標案", lens: "tender", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },
       { n: "公司雷達", f: listOf("盯梢中的公司", () => (((P.radar || {}).watch) || []).slice(0, 7).map(x => ({ t: x.name, s: x.desc })), "訊號", "radar") },
+      { n: "診所", lens: "clinic" },
+      { n: "醫美", lens: "aes" },
+      { n: "AI 快線", globe: 1, f: () => gxCard("ai") },
     ] },
     { cat: "輿情", items: [
       { n: "洞見", f: () => insCatCard("輿情") },
-      { n: "地方新聞", lens: "news" },
       { n: "焦點新聞", f: () => gtopCard() },
+      { n: "地方新聞", lens: "news" },
       { n: "全球新聞", globe: 1, f: () => gxCard("wnews") },
       { n: "台灣情緒", lens: "mood", f: () => { const m = (P.mood || {}).taiwan || {}; return { html: sideHTML({ eyebrow: "輿情 · 社群情緒", title: "台灣人今天的心情", big: m.label || "", color: (m.score || 0) < 0 ? DNH : UPH, body: lineSVG(hist("mood", "taiwan"), (m.score || 0) < 0 ? DNH : UPH) + listHTML([{ t: m.line || "" }, ...(m.themes || []).map(t => ({ t: "· " + t }))]), foot: '<a href="/terminal/#p-mood">終端機 ›</a>' }) }; } },
-      { n: "PTT", f: barsOf("PTT 各版熱度", () => (((P.ptt || {}).boards) || []).slice(0, 10).map(b => ({ name: b.zh || b.board, v: b.heat, txt: String(b.heat) })), "輿情", "ptt", { signed: false }) },
       { n: "熱搜", f: listOf("Google 熱搜", () => items("trends").slice(0, 8).map(x => ({ t: x.title, s: x.traffic })), "輿情", "trends") },
-      { n: "謠言", f: listOf("最多人查證的訊息", () => (((P.cofacts || {}).hot) || []).slice(0, 6).map(x => ({ t: x.text.slice(0, 42) + "…", s: `${x.verdict || "查證中"} · ${x.requests} 人回報`, url: x.url })), "輿情 · Cofacts", "cofacts") },
+      { n: "PTT", f: barsOf("PTT 各版熱度", () => (((P.ptt || {}).boards) || []).slice(0, 10).map(b => ({ name: b.zh || b.board, v: b.heat, txt: String(b.heat) })), "輿情", "ptt", { signed: false }) },
+      { n: "謠言", f: listOf("最多人查證的訊息", () => (((P.cofacts || {}).hot) || []).slice(0, 6).map(x => ({ t: /^https?:\/\/\S+$/.test(String(x.text).trim()) ? `只有一個連結（${String(x.text).trim().replace(/^https?:\/\/(www\.)?/, "").split("/")[0]}）` : String(x.text).length > 42 ? String(x.text).slice(0, 42) + "…" : String(x.text), s: `${x.verdict || "查證中"} · ${x.requests} 人回報`, url: x.url })), "輿情 · Cofacts", "cofacts") },
     ] },
     { cat: "現場", items: [
       { n: "洞見", f: () => insCatCard("現場") },
@@ -2557,14 +2557,14 @@ function EXPLORE() {
         return (warn.length ? `<p class="why"><b style="color:#ff9f0a">${esc([...new Set(warn.map(w => w.what))].join("、"))}</b>：${esc(warn.map(w => norm(w.where)).join("、"))}</p>` : `<p class="why">目前沒有天氣特報。</p>`)
           + listHTML((W.items || []).map(w => ({ t: `${w.city}　${(+w.temp).toFixed(1)}°C　${w.weather || ""}`, s: `${w.forecast && w.forecast[0] ? `接下來 ${w.forecast[0].wx}・降雨 ${w.forecast[0].pop}%` : ""}${w.rain24h ? `・24 小時雨量 ${w.rain24h} mm` : ""}` }))); }) },
       { n: "地震", f: layer("quake", "顯著地震", "現場 · 氣象署", () => listHTML((((P.quake || {}).items) || []).slice(0, 8).map(q => ({ t: `M${q.mag}　${(q.loc || "").replace(/\s+/g, " ").replace(/\s*\(.*\)/, "")}`, s: `${q.intensity ? "最大震度 " + q.intensity + "・" : ""}深 ${q.depth} 公里・${new Date(q.at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })}`, url: q.url })))) },
+      { n: "停班停課", lens: "stop" },
+      { n: "電力", lens: "power", f: () => { const pw = P.power || {}; return lineOf("備轉容量率", pw.spark, (pw.reserve_pct || 0) < 10 ? "#ff9f0a" : UPH, "現場 · 台電", "power", nf(pw.reserve_pct || 0) + "%", "燈號" + (pw.level || ""))(); } },
+      { n: "車流", lens: "traffic" },
+      { n: "航班", f: () => ({ layer: "flights", html: FL.built ? flightsSide() : sideHTML({ eyebrow: "現場 · 桃園機場 · ADS-B", title: "今天飛去哪裡", body: '<p class="empty">航線載入中…</p>' }) }) },
       { n: "台海", mapLens: "pla", f: () => plaCard() },
       { n: "海纜", lens: "cable" },
-      { n: "車流", lens: "traffic" },
-      { n: "停班停課", lens: "stop" },
-      { n: "氣壓圖", globe: 1, f: () => gxCard("press") },
       { n: "選戰", lens: "elect", f: barsOf("五都領先者當選機率", () => (((P.elect || {}).cities) || []).map(c => { const t = (c.cands || []).slice().sort((a, b) => b.p - a.p)[0] || {}; return { name: `${c.city} ${t.name || ""}`, v: t.p, txt: nf(t.p || 0) + "%" }; }), "現場 · 預測市場", "elect", { signed: false }) },
-      { n: "電力", lens: "power", f: () => { const pw = P.power || {}; return lineOf("備轉容量率", pw.spark, (pw.reserve_pct || 0) < 10 ? "#ff9f0a" : UPH, "現場 · 台電", "power", nf(pw.reserve_pct || 0) + "%", "燈號" + (pw.level || ""))(); } },
-      { n: "航班", f: () => ({ layer: "flights", html: FL.built ? flightsSide() : sideHTML({ eyebrow: "現場 · 桃園機場 · ADS-B", title: "今天飛去哪裡", body: '<p class="empty">航線載入中…</p>' }) }) },
+      { n: "氣壓圖", globe: 1, f: () => gxCard("press") },
     ] },
   ];
 }

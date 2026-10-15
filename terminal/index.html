@@ -495,7 +495,7 @@ canvas.o-fx{display:block;width:100%}
 /* 分頁內固定順序：台灣先、國際後；快的先、月更的後；結論先、原文後 */
 #p-pulse{display:none!important}
 #p-taiex{order:1}#p-fx{order:2}#p-fear{order:3}#p-taifex{order:4}#p-world{order:5}#p-tw-stocks{order:6}#p-lux{order:7}#p-mops{order:8}#p-usbig{order:9}@media (min-width:1101px){#p-taiex{grid-row:span 2}}#p-sectors{order:10}#p-cmdty{order:11}#p-revenue{order:12}
-#p-consume{order:1}#p-supply{order:2}#p-macro{order:3}#p-gmacro{order:4}#p-calendar{order:5}#p-liq{order:6}#p-veg{order:7}#p-cards{order:7}#p-lead{order:7}#p-housefc{order:7}#p-demo{order:7}#p-bizlife{order:7}#p-imports{order:7}#p-house{order:8}#p-poly{order:9}#p-jobs{order:10}
+#p-consume{order:5}#p-supply{order:3}#p-macro{order:1}#p-gmacro{order:11}#p-calendar{order:15}#p-liq{order:12}#p-veg{order:10}#p-cards{order:4}#p-lead{order:2}#p-housefc{order:7}#p-demo{order:8}#p-bizlife{order:9}#p-imports{order:13}#p-house{order:6}#p-poly{order:14}#p-jobs{order:16}
 #p-weekly{order:0}#ib-soc{order:0}#p-chain{order:1}#p-ledger{order:2}#p-voice{order:3}#p-wiki{order:4}#p-tech2{order:5}#p-pop{order:0}#p-mood{order:1}#p-cofacts{order:2}#p-ptt{order:3}#p-attention{order:4}#p-youtube{order:5}
 .grid{align-items:start}
 /* 桃機翻牌看板：只有變動的字會翻 */
@@ -518,7 +518,7 @@ canvas.o-fx{display:block;width:100%}
 html.still .fids .ch b.fl,html.still .ib-ping,html.still .ib-chip.ib-pop{animation:none}
 @media (prefers-reduced-motion:reduce){.fids .ch b.fl,.ib-ping,.ib-chip.ib-pop{animation:none}}
 
-#p-geo{order:1}#p-elect{order:2}#p-twnow{order:3}#p-weather{order:4}#p-twpulse{order:5}#p-airport{order:6}#p-roads{order:7}#p-metro{order:7}#p-quake{order:8}#p-power{order:9}
+#p-geo{order:1}#p-elect{order:10}#p-twnow{order:2}#p-weather{order:3}#p-twpulse{order:7}#p-airport{order:8}#p-roads{order:6}#p-metro{order:9}#p-quake{order:4}#p-power{order:5}
 #p-vauth{order:1}#p-vsearch{order:2}#p-vtime{order:3}#p-vseries{order:4}
 .stopbar{margin:0 0 10px;padding:8px 12px;border:1px solid color-mix(in srgb,var(--down) 55%,var(--line));background:color-mix(in srgb,var(--down) 12%,var(--panel));border-radius:4px;font-size:13px;display:flex;gap:14px;flex-wrap:wrap;align-items:baseline}
 .stopbar b{color:var(--down);font-weight:600}.stopbar span{color:var(--text)}.stopbar .s{color:var(--muted);font-size:11.5px;margin-left:auto}
@@ -713,133 +713,133 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <div class="sec">市場 Markets</div>
 
   <section class="panel w8 hero" id="p-taiex">
-    <div class="ph"><h2>TAIEX</h2><span class="zh">台股大盤</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>台股大盤</h2><span class="zh"></span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://openapi.twse.com.tw/" target="_blank" rel="noopener">證交所</a><a href="https://www.tpex.org.tw/" target="_blank" rel="noopener">櫃買</a><a href="https://finmindtrade.com/" target="_blank" rel="noopener">FinMind</a><span>盤後更新 · 法人單位億元 · 夜盤 15:00–05:00</span></div>
   </section>
 
   <section class="panel" id="p-fx">
-    <div class="ph"><h2>FX</h2><span class="zh">匯率 · 台銀即期</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>匯率</h2><span class="zh">台銀即期</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://rate.bot.com.tw/xrt?Lang=zh-TW" target="_blank" rel="noopener">臺灣銀行牌告</a></div>
   </section>
 
   <section class="panel w6 cap" id="p-taifex">
-    <div class="ph"><h2>TAIFEX</h2><span class="zh">台指期籌碼 · 三大法人淨未平倉</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>台指期籌碼</h2><span class="zh">三大法人淨未平倉</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.taifex.com.tw/" target="_blank" rel="noopener">期交所</a><span>淨未平倉＝多單減空單（口）· 變化＝比前一交易日 · Put/Call 比＞100 偏避險</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-world">
-    <div class="ph"><h2>Global Indices</h2><span class="zh">主要經濟體大盤</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>全球股市</h2><span class="zh">主要經濟體大盤</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Yahoo 日線 · 盤中為未完成棒 · 5 日％＝近 5 個交易日</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-usbig">
-    <div class="ph"><h2>US Mega Caps</h2><span class="zh">美股巨頭、期貨與美債</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>美股巨頭</h2><span class="zh">期貨與美債</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Yahoo 日線 · 美債為殖利率，變化以基點（bp）計 · ADR 溢價＝台積電 ADR 換算每股台幣 ÷ 台股收盤 − 1</span></div>
   </section>
 
   <section class="panel hero" id="p-fear">
-    <div class="ph"><h2>Fear Structure</h2><span class="zh">恐慌三層 ＋ 期限結構 · CBOE 官方</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>恐慌結構</h2><span class="zh">三層 ＋ 期限結構 · CBOE 官方</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>CBOE 每日收盤為主、Yahoo 盤中補值 · 狀態判定：恐慌當下（VIX/VIX3M&gt;1）→ 恐慌區（VIX&gt;25）→ 波動放大（VIX、VVIX 五日同升）→ 暴風雨前的平靜（VIX 低、VVIX 或 SKEW 紅）→ 風平浪靜（全綠）</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-sectors">
-    <div class="ph"><h2>US Sectors</h2><span class="zh">美股板塊輪動（代理指標）</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>美股板塊</h2><span class="zh">輪動（代理指標）</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>SPDR 11 檔板塊 ETF · 相對強弱＝5 日％－SPY · 相對量＝最近完整日量 ÷ 20 日均 · 不是真正資金流向</span></div>
   </section>
 
   <section class="panel w6" id="p-cmdty">
-    <div class="ph"><h2>Commodities</h2><span class="zh">原物料與運價</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>原物料</h2><span class="zh">含運價</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>棉花、原油、銅、鋁、黃金、白銀、鐵礦砂、熱軋鋼 · Drewry WCI 週更</span></div>
   </section>
 
   <section class="panel w6" id="p-lux">
-    <div class="ph"><h2>Luxury</h2><span class="zh">精品與快時尚</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>精品</h2><span class="zh">精品與快時尚股價</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>巴黎／馬德里／東京／紐約收盤</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-tw-stocks">
-    <div class="ph"><h2>TW Watchlist</h2><span class="zh">台股觀察清單 · 權值／ETF／主動式 ETF／消費</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>台股觀察清單</h2><span class="zh">權值／ETF／主動式 ETF／消費</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>證交所盤後＋盤中即時（MIS）· 債券 ETF 為櫃買中心 · 主動式 ETF＝代號結尾 A，依成交值排序 · 消費：通路、食品、百貨、餐飲、飯店、機能服飾的代表股，看消費景氣</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-poly">
-    <div class="ph"><h2>Polymarket</h2><span class="zh">世界在賭什麼</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>預測市場</h2><span class="zh">Polymarket · 世界在賭什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a><span>依領域分組 · 每組取 24 小時成交量最大的題目 · 多選題列前 3 個選項 · 已濾掉運彩、每日價位題</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-mops">
-    <div class="ph"><h2>Filings</h2><span class="zh">上市櫃重大訊息 · 依類別</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>上市櫃重大訊息</h2><span class="zh">依類別</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://mops.twse.com.tw/" target="_blank" rel="noopener">公開資訊觀測站</a><span>證交所、櫃買中心開放資料 · 每 30 分鐘 · 保留 14 天 · 類別依主旨關鍵字自動分 · 公司所在地上地圖（生活組「重訊」）</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-revenue">
-    <div class="ph"><h2>Revenue</h2><span class="zh">通路與供應鏈 · 月營收</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>月營收</h2><span class="zh">通路與供應鏈</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>公開資訊觀測站 · 每月 10 日前後</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-supply">
-    <div class="ph"><h2>Retail</h2><span class="zh">零售分業 · 營業額年增</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>零售分業</h2><span class="zh">營業額年增</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>經濟部零售業營業額指數（分業）· 年增由指數自算 · 月更</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-veg">
-    <div class="ph"><h2>Food Prices</h2><span class="zh">菜價 · 台北一批發市場</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>菜價</h2><span class="zh">台北一批發市場</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://data.moa.gov.tw/" target="_blank" rel="noopener">農業部開放資料</a><span>蔬菜批發平均價（元／公斤，同品項各品種依交易量加權）· 漲跌＝比前兩週平均 · 颱風前後最敏感</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-cards">
-    <div class="ph"><h2>Card Spend</h2><span class="zh">消費溫度 · 信用卡各類簽帳</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>刷卡</h2><span class="zh">信用卡各類簽帳 · 消費溫度</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.nccc.com.tw/" target="_blank" rel="noopener">聯合信用卡處理中心</a><span>金管會開放資料 · 每月 · 年增＝比去年同月 · 「比整體」＝扣掉刷卡本身每年成長後，這一類是不是真的變熱 · 近 3 月取中位數，避開單月大額異常</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-demo">
-    <div class="ph"><h2>Population</h2><span class="zh">人口結構 · 出生、死亡、高齡、戶數</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>人口結構</h2><span class="zh">出生、死亡、高齡、戶數</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://statis.moi.gov.tw/micst/" target="_blank" rel="noopener">內政部統計查詢網</a><span>每月 · 約晚 1 個月 · 人口是最確定的長期走向：長照、獨居、寵物、小宅這幾條主題鏈的底層需求都從這裡來</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-bizlife">
-    <div class="ph"><h2>Company Births &amp; Deaths</h2><span class="zh">公司開關 · 新設與解散撤銷廢止</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>公司生滅</h2><span class="zh">新設與解散撤銷廢止</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://data.gcis.nat.gov.tw/" target="_blank" rel="noopener">經濟部商工行政資料開放平臺</a><span>公司登記（不含行號）· 每月 · 約晚 1 個月 · 分行業只有大類，製造業另有中類 · 稅籍「新店」看的是開，這裡補上「關」</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-housefc">
-    <div class="ph"><h2>Housing Momentum</h2><span class="zh">房市動能 · 買賣棟數、台北房價月指數</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>房市動能</h2><span class="zh">買賣棟數、台北房價月指數</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://statis.moi.gov.tw/micst/" target="_blank" rel="noopener">內政部統計查詢網</a><a href="https://data.taipei/" target="_blank" rel="noopener">臺北市資料大平臺</a><span>買賣棟數＝建物所有權買賣移轉登記（全台、月）· 台北住宅價格月指數（全市）約晚 2 個月公布 · 房貸＝中央銀行五大銀行新承做購屋貸款與購置住宅貸款餘額 · 回測（2012 起）：房價半年方向延續 69%；「買賣量先動、房價跟著變」只有 41%，在台北不成立，帳本只留統計不寫預測</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-lead">
-    <div class="ph"><h2>Turning Point</h2><span class="zh">景氣轉向 · 領先指標、外銷訂單</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>景氣轉向</h2><span class="zh">領先指標、外銷訂單</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://index.ndc.gov.tw/" target="_blank" rel="noopener">國發會景氣指標</a><a href="https://www.moea.gov.tw/" target="_blank" rel="noopener">經濟部統計處</a><a href="https://www.fao.org/worldfoodsituation/foodpricesindex/en/" target="_blank" rel="noopener">FAO Food Price Index（CC BY-NC-SA 3.0 IGO）</a><span>領先指標（不含趨勢）連續上升＝半年內景氣大多續溫，連續下滑＝轉弱前兆 · 外銷訂單領先出口 1 到 3 個月</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-imports">
-    <div class="ph"><h2>Imports</h2><span class="zh">農產品進口量 · 上游在備什麼貨</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>農產品進口量</h2><span class="zh">上游在備什麼貨</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://data.moa.gov.tw/" target="_blank" rel="noopener">農業部開放資料</a><span>進口重量（各國加總），近 3 個月比去年同期 · 只涵蓋農業部列管的約 50 項主要農產品（飼料、肉、茶、蛋、蔬果等），不是全部進口 · 不到 20 公噸的品項不列</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-jobs">
-    <div class="ph"><h2>Jobs</h2><span class="zh">職缺溫度 · 104 全站（不限產業）</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>職缺溫度</h2><span class="zh">104 全站（不限產業）</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.104.com.tw/" target="_blank" rel="noopener">104 人力銀行</a><span>站上刊登中職缺總數、各職類與縣市 · 每 6 小時 · 漲跌＝比 7 天前（累積一週後才有）· 最新職缺依公司產業分類，有座標的上地圖（生活組「職缺」）</span></div>
   </section>
@@ -847,31 +847,31 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <div class="sec">總經 Macro</div>
 
   <section class="panel w12" id="p-consume">
-    <div class="ph"><h2>Consumption</h2><span class="zh">消費溫度計 · 電子發票各行業金額年增、零售業態客單價</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>消費溫度計</h2><span class="zh">電子發票各行業金額年增、零售業態客單價</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>財政部電子發票開放資料（月，約晚一到兩個月）· 依賣方登記行業分類，不是商品別 · 客單價＝各縣市平均開立金額 ÷ 平均開立張數</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-calendar">
-    <div class="ph"><h2>Calendar</h2><span class="zh">接下來三週 · 數據發布與央行</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>行事曆</h2><span class="zh">接下來三週 · 數據發布與央行</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>美：FRED 官方發布時程、FOMC · 台：主計總處／央行／國發會固定時程（「約」＝依慣例推估）· 台股休市：證交所</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-liq">
-    <div class="ph"><h2>USD Liquidity</h2><span class="zh">美元流動性 · NY Fed ＋ 聯準會週報</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>美元流動性</h2><span class="zh">NY Fed ＋ 聯準會週報</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>淨流動性＝聯準會資產 − 財政部 TGA − ON RRP（週三）· SOFR−IORB &gt;0＝資金緊 · SRF 平常為零 · 單位十億美元</span></div>
   </section>
 
   <section class="panel w6" id="p-macro">
-    <div class="ph"><h2>TW Macro</h2><span class="zh">台灣總經 · 含 PMI／NMI</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>台灣總經</h2><span class="zh">含 PMI／NMI</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.stat.gov.tw/" target="_blank" rel="noopener">主計總處</a><a href="http://rcted.ncu.edu.tw/cci.asp" target="_blank" rel="noopener">台經中心 CCI</a><span>PMI／NMI（中經院）、燈號、央行、房價自動抓 · CPI／PPI（5–7 日）、失業率（22 日）、CCI（27 日）、GDP（季）手動</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-gmacro">
-    <div class="ph"><h2>Global Macro</h2><span class="zh">全球總經 · 美 歐 日 中 英</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>全球總經</h2><span class="zh">美 歐 日 中 英</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED</a><span>美國、歐元區、日本利率來自 FRED；英國 CPI 來自 ONS · 年增由指數自算 · 費城／紐約聯準會與 CFNAI 是 ISM PMI 的免費替代（&gt;0 擴張）· 日本與中國 CPI 暫缺</span></div>
   </section>
@@ -906,61 +906,61 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 
 
   <section class="panel w12 cap" id="p-think">
-    <div class="ph"><h2>Think Tank</h2><span class="zh">智庫觀點 · McKinsey 最新文章</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>智庫觀點</h2><span class="zh">McKinsey 最新文章</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.mckinsey.com/featured-insights" target="_blank" rel="noopener">McKinsey Insights</a><span>RSS 只有標題、摘要與分類，全文點連結到官網看 · 依分類自動分三欄 · 保留 120 天，可在資料庫搜尋</span></div>
   </section>
 
   <section class="panel w12 hero cap tall" id="p-news">
-    <div class="ph"><h2>News</h2><span class="zh">時事 · 台灣 / 國際 / 關鍵字</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>時事</h2><span class="zh">台灣 / 國際 / 關鍵字</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>中央社 · 公視 · BBC · Guardian · GDELT（全球提到 Taiwan 的量與語調）· Wikipedia 昨日熱門條目</span></div>
   </section>
 
   <section class="panel w12 cap tall" id="p-watch">
-    <div class="ph"><h2>Watchlist</h2><span class="zh">關注領域 · 七組關鍵字</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>關注領域</h2><span class="zh">七組關鍵字</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Google News 繁中 · 廣告與代理商 · 品牌與設計 · AI 與製作工具 · 市場與投資 · 地緣與科技政策 · 時尚與奢華 · 文化與生活 · 關鍵字在 fetch.py 的 NEWS_GROUPS</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-tenders">
-    <div class="ph"><h2>Tenders</h2><span class="zh">政府標案 · AI／長照／淨零／觀光／運動</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>政府標案</h2><span class="zh">AI／長照／淨零／觀光／運動</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>政府電子採購網（g0v 鏡像）· 只列招標公告 · 預算補抓，可能晚一輪</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-design">
-    <div class="ph"><h2>Design & Ad Press</h2><span class="zh">設計與廣告媒體</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>設計與廣告媒體</h2><span class="zh"></span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Dezeen · It's Nice That · Campaign Brief Asia · Creative Review</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-radar">
-    <div class="ph"><h2>Radar</h2><span class="zh">公司雷達 · 盯梢 5 家 ＋ 自動發現小而有潛力的新公司</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>公司雷達</h2><span class="zh">盯梢 5 家 ＋ 自動發現小而有潛力的新公司</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>盯梢：Google News 英文 7 天 · Hacker News 7 天 · Bluesky 24h，聲量是過去中位數兩倍以上標「升溫」· 雷達：新募資（1.5 億美元以下；創意、AI 助理、資安、生技，每類最多 4 筆）· Show HN 兩天內 ≥20 分 · Product Hunt 精選</span></div>
   </section>
 
   <section class="panel w12" id="p-brands">
-    <div class="ph"><h2>New Brands</h2><span class="zh">新品牌雷達 · 每月新設公司與行號、同業新設、得標排行</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>新品牌雷達</h2><span class="zh">每月新設公司與行號、同業新設、得標排行</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>經濟部商工登記「公司／商業設立登記清冊」（月，約晚一個月）· 類別依名稱關鍵字判斷 · 得標排行累積政府電子採購網決標紀錄（行銷、設計、影片、廣告類，滾動 180 天）</span></div>
   </section>
 
   <section class="panel w12 lite" id="p-crowd">
-    <div class="ph"><h2>Crowdfunding</h2><span class="zh">集資雷達 · 台灣爆案、操盤方動態、Kickstarter 熱門</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>集資雷達</h2><span class="zh">台灣爆案、操盤方動態、Kickstarter 熱門</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Google News（嘖嘖、flyingV 等平台擋程式讀取，改看報導）· 依標題分流：有金額與達標字眼算爆案，平台／操盤方／年報算動態 · 已濾掉港股 IPO、創投融資等同字異義 · 近 60 天 · Kickstarter 熱門：Kicktraq 今日前十（排名變化）· 官方精選：Kickstarter Projects We Love 新案 · 每 3 小時</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-aiwire">
-    <div class="ph"><h2>AI Wire</h2><span class="zh">AI 快線 · 官方部落格與科技媒體第一手</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>AI 快線</h2><span class="zh">官方部落格與科技媒體第一手</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>OpenAI · Anthropic · Google AI／Gemini · DeepSeek · xAI 官方頁面 · The Verge AI · TechCrunch AI · 「發布」= 官方標題含 launch／introduce，或 GitHub／HF 偵測到新 repo／新模型</span></div>
   </section>
 
   <section class="panel w12" id="p-weekly">
-    <div class="ph"><h2>Weekly Direction</h2><span class="zh">本週市場往哪走 · 每週一由模型讀完所有面板寫一次</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>本週市場往哪走</h2><span class="zh">每週一由模型讀完所有面板寫一次</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Gemini 只讀情報站本週的數據摘要（景氣、物價、消費、主題鏈、維基、美國財報、科技、進口、政策、選舉、預測帳本），不加自己的時事知識 · 每條判斷都附來源面板 · 下週會拿上週的判斷對答案 · 舊週存在 weekly_archive.json</span></div>
   </section>
@@ -969,102 +969,102 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ib-body"><div class="ib-viz"><h3>同一個話題出現在哪些平台<span class="n">● 越大＝越多則 · 越多平台越上面</span></h3><svg id="ibsv" role="img" aria-label="話題在各平台出現的次數"></svg></div>
       <div class="ib-viz"><h3>情緒溫度<span class="n">−1 負面 ～ +1 正面</span></h3><svg id="ibsm" role="img" aria-label="台灣與國外社群情緒"></svg><h3 style="margin-top:8px">PTT 看板熱度<span class="n">近期推文熱度 · 綠＝推多、紅＝噓多</span></h3><svg id="ibsp" role="img" aria-label="PTT 看板熱度"></svg></div></div></section>
   <section class="panel w12 cap" id="p-chain">
-    <div class="ph"><h2>Theme Chain</h2><span class="zh">主題鏈 · 每個主題走到哪一站、缺口在哪</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>主題鏈</h2><span class="zh">每個主題走到哪一站、缺口在哪</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>鏈的順序：國外（美國財報、英日文維基）→ 搜尋 → 維基 → 媒體 → 商標 → 新店（稅籍）→ 消費（刷卡）→ 政策 · ▲ 年增 ≥ 10%（刷卡比整體 ≥ 2 個百分點）、▼ ≤ −10%、— 持平、空白＝沒有對應資料 · 缺口窗口＝前面（搜尋、維基、媒體）在長、後面（商標、新店）還沒跟上 · 對照表在 ops/themes.json</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-ledger">
-    <div class="ph"><h2>Forecast Ledger</h2><span class="zh">預測帳本 · 寫下來、到期對答案</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>預測帳本</h2><span class="zh">寫下來、到期對答案</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>每週一次把訊號寫成可驗證的預測，到期自動用原始資料對答案 · 機率＝這條規則在歷史資料上的回測命中率（樣本不到 20 筆用 60%）· 選舉用預測市場機率 · 準的規則之後加權，不準的降權</span></div>
   </section>
 
   <section class="panel w12" id="p-voice">
-    <div class="ph"><h2>Trend Radar</h2><span class="zh">趨勢雷達 · 台灣正在發生的大轉變，哪裡有機會</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>趨勢雷達</h2><span class="zh">台灣正在發生的大轉變，哪裡有機會</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>搜尋：Google 趨勢台灣近 5 年每週，年增＝近 4 週比去年同期、近一月＝比前 12 週 · 媒體：Google 新聞近 7 天比去年同期（量太大＝一次最多 100 則，頂到上限無法比） · 新店：財政部稅籍近 6 個月新開家數年增，已扣掉全體倒店與登錄延遲 · 討論：Dcard／PTT／Mobile01／痞客邦近 90 天篇數 · 判讀來自上面的主題鏈 · 關鍵字在 ops/voice_keywords.json</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-wiki">
-    <div class="ph"><h2>Topic Gauge</h2><span class="zh">主題溫度計 · 熱潮還是趨勢、國外先還是台灣先</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>主題溫度計</h2><span class="zh">熱潮還是趨勢、國外先還是台灣先</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://wikimedia.org/api/rest_v1/" target="_blank" rel="noopener">Wikimedia Pageviews</a><span>維基百科逐月瀏覽量，2016 起 · 先換算成占該語言總瀏覽量的比例，再跟所有主題的中位數比（維基整體被 AI 摘要分流，大家一起掉的部分會扣掉）· 國外＝英文、日文維基 · 領先＝國外年增率比中文早幾個月、相關係數 ≥ 0.6 才顯示 · 主題清單在 ops/wiki_topics.json</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-tech2">
-    <div class="ph"><h2>Frontier</h2><span class="zh">科技前沿 · 開發者在裝什麼、研究在追什麼、玩家在玩什麼</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>科技前沿</h2><span class="zh">開發者在裝什麼、研究在追什麼、玩家在玩什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://pypistats.org/" target="_blank" rel="noopener">PyPI Stats</a><a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm</a><a href="https://openalex.org/" target="_blank" rel="noopener">OpenAlex</a><a href="https://store.steampowered.com/charts" target="_blank" rel="noopener">Steam</a><span>下載量用每日中位數（避開 CI 機器人暴量）· 三個月＝近 28 天比三個月前 · 整個平台的下載量會一起起伏，所以看「比同組」＝扣掉同一組套件的中位數 · 論文＝近 12 個月比前 12 個月（標題與摘要）· Steam＝官方最多人玩排行，7 天變化從今天開始累積</span></div>
   </section>
   <section class="panel w12" id="p-pop">
-    <div class="ph"><h2>Pop Charts</h2><span class="zh">流行排行 · 台灣在聽、在看、在讀什麼</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>流行排行</h2><span class="zh">台灣在聽、在看、在讀什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Spotify 台灣每日（kworb 整理）· KKBOX 華語每日 · Netflix 官方台灣每週前十 · Apple Podcast 台灣熱門 · LINE TODAY 即時熱門</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-devpulse">
-    <div class="ph"><h2>Dev Pulse</h2><span class="zh">開發者論壇熱串 · 五家 changelog（不發部落格的改動）</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>開發者動態</h2><span class="zh">論壇熱串 · 五家 changelog（不發部落格的改動）</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>OpenAI／Google AI 論壇當日 top（Discourse）· OpenAI／Claude／Gemini／DeepSeek／xAI changelog · claude-code releases</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-awards">
-    <div class="ph"><h2>Awards</h2><span class="zh">決標公告 · 誰得標、多少錢</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>決標公告</h2><span class="zh">誰得標、多少錢</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>政府電子採購網（g0v 鏡像）· 同一組關鍵字 · 決標金額補抓，可能晚一輪</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-tech">
-    <div class="ph"><h2>Tech</h2><span class="zh">GitHub · Hugging Face · Hacker News</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>科技社群</h2><span class="zh">GitHub · Hugging Face · Hacker News</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>GitHub：近 7 天新 repo 星數　HF：趨勢分數　HN：首頁</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-oss">
-    <div class="ph"><h2>OSS 雷達</h2><span class="zh">GitHub Trending · Simon Willison · HF Spaces · 盯梢 repo</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>開源雷達</h2><span class="zh">GitHub Trending · Simon Willison · HF Spaces · 盯梢 repo</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Trending：今日新增星數，含舊 repo 爆紅　Spaces：趨勢分數　新版本：ComfyUI、Open Design、Remotion、Postiz、PhotoCraft</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-lyst">
-    <div class="ph"><h2>Lyst Index</h2><span class="zh">全球最熱品牌與單品</span><span class="meta">排程 · 季更</span></div>
+    <div class="ph"><h2>時尚熱度</h2><span class="zh">Lyst Index · 全球最熱品牌與單品</span><span class="meta">排程 · 季更</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.lyst.com/data/the-lyst-index/" target="_blank" rel="noopener">Lyst</a></div>
   </section>
 
   <section class="panel w6 cap" id="p-youtube">
-    <div class="ph"><h2>YouTube</h2><span class="zh">台灣發燒榜 · 美國對照</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>YouTube 發燒榜</h2><span class="zh">台灣，美國對照</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>YouTube Data API · 每 30 分鐘 · 分類：全部／音樂／娛樂／新聞</span></div>
   </section>
 
   <section class="panel w12 cap" id="p-media">
-    <div class="ph"><h2>Fashion Press</h2><span class="zh">時尚媒體 · 最新標題、本週同框、標題語感庫</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>時尚媒體</h2><span class="zh">最新標題、本週同框、標題語感庫</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>美麗佳人（官方新聞清單）· VOGUE · ELLE · BAZAAR · COSMO・Women's Health 台灣版官方 RSS · BEAUTY美人圈 RSS · GQ（經 Google 新聞）· WWD RSS · 文章分類照各家網址與 RSS 分類，沒有才看標題關鍵字 · 同框已排除開箱、懶人包、贈票、星座等業配與專欄字眼 · 每 2 小時</span></div>
   </section>
 
   <section class="panel w6" id="p-attention">
-    <div class="ph"><h2>Attention</h2><span class="zh">注意力流向 · 台灣這週在看什麼</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>注意力流向</h2><span class="zh">台灣這週在看什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>電影票房：國家影視聽中心（週）· App：Apple 台灣免費榜 · YouTube 發燒榜 · Google 搜尋趨勢 · 維基百科中文昨日熱門</span></div>
   </section>
 
   <section class="panel w6" id="p-mood">
-    <div class="ph"><h2>Mood</h2><span class="zh">台灣情緒 · PTT ＋ LINE（Cofacts），國外情緒 · Bluesky</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>台灣情緒</h2><span class="zh">PTT ＋ LINE（Cofacts），國外情緒 · Bluesky</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Gemini 讀當輪原文判分（-1～1），只看文字不看時事知識 · 每小時一次 · 三天走勢</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-cofacts">
-    <div class="ph"><h2>Cofacts</h2><span class="zh">真的假的 · LINE 群組正在轉傳什麼</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>真的假的</h2><span class="zh">LINE 群組正在轉傳什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>Cofacts 開放資料 · 近三天被查詢最多的訊息 · 「被查 N 次」= 有多少人把它丟進查核機器人</span></div>
   </section>
 
   <section class="panel w12" id="p-ptt">
-    <div class="ph"><h2>PTT</h2><span class="zh">台灣大眾情緒 · 看板熱度與推噓</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>PTT 熱度</h2><span class="zh">看板熱度與推噓</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>12 板各最新兩頁 · 熱度＝推文加總 · 情緒＝正推文占比減噓文占比（-1～1）· 爆卦＝八卦板最早的突發訊號 · 標題進熱詞引擎</span></div>
   </section>
@@ -1072,7 +1072,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   <div class="sec">台灣現場 Taiwan Live</div>
 
   <section class="panel w12 hero" id="p-geo">
-    <div class="ph"><h2>Map</h2><span class="zh">全台現場 · 點點直接看新聞、示警、地震、藝文</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>全台現場</h2><span class="zh">點點直接看新聞、示警、地震、藝文</span><span class="meta">排程</span></div>
     <div class="pb" style="padding:6px">
       <div class="mapwrap"><div id="map"></div>
         <div class="mapctl"><select id="geo-city"><option value="all">全台總覽</option></select><span id="geo-avail" class="avail"></span><span style="width:6px"></span><span id="map-grp" class="grpbar"></span><button type="button" id="map-more" class="more">圖層 ▾</button><div id="map-menu" class="mapmenu" hidden></div></div>
@@ -1083,81 +1083,81 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   </section>
 
   <section class="panel w12" id="p-elect">
-    <div class="ph"><h2>Election</h2><span class="zh">2026 五都選戰 · 預測市場 × 新聞聲量</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>2026 五都選戰</h2><span class="zh">預測市場 × 新聞聲量</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://polymarket.com/" target="_blank" rel="noopener">Polymarket</a><span>市場機率＝押注者的看法，不是民調 · 可信度依交易量判斷 · 新聞聲量＝情報站收進來的新聞、地方新聞、PTT 標題提到名字的則數（現任市長會因市政新聞偏高）· 民調手動整理，附出處 · 台灣下注選舉違法，只看不押</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-twnow">
-    <div class="ph"><h2>Taiwan Now</h2><span class="zh">各地現況 · 災害示警、停班停課、地方新聞</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>各地現況</h2><span class="zh">災害示警、停班停課、地方新聞</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://alerts.ncdr.nat.gov.tw/" target="_blank" rel="noopener">國家災防中心</a><span>災害示警（仍有效、已解除的不列）· 人事總處停班停課 · Google News 依縣市（近 24 小時、標題要提到該縣市）</span></div>
   </section>
 
   <section class="panel w6 cap" id="p-twpulse">
-    <div class="ph"><h2>Taiwan Pulse</h2><span class="zh">台灣脈搏 · 全台 YouBike、台北停車場與道路</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>台灣脈搏</h2><span class="zh">全台 YouBike、台北停車場與道路</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://data.taipei/" target="_blank" rel="noopener">台北市資料大平臺</a><span>全台 YouBike 由 Google Cloud 彰化機房每 5 分鐘抓 · YouBike 可借車數 · 台北 VD 路段車速（車流量加權）</span></div>
   </section>
   <section class="panel w12 cap" id="p-roads">
-    <div class="ph"><h2>Roads</h2><span class="zh">全台路況 · 國道與省道即時車速、事件、看板</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>全台路況</h2><span class="zh">國道與省道即時車速、事件、看板</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://tisvcloud.freeway.gov.tw/" target="_blank" rel="noopener">高公局交通資料庫</a><a href="https://thbtrafficapp.thb.gov.tw/opendata/" target="_blank" rel="noopener">公路局</a><span>Google Cloud 彰化機房每 5 分鐘抓 · 路段顏色在地圖「交通」組</span></div>
   </section>
 
   <section class="panel w12" id="p-metro">
-    <div class="ph"><h2>Metro</h2><span class="zh">台北捷運各站人流 · 哪個生活圈在長</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>台北捷運各站人流</h2><span class="zh">哪個生活圈在長</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://data.taipei/" target="_blank" rel="noopener">台北市資料大平臺</a><span>臺北捷運各站進站人次，月資料比去年同月 · 只列每月 15 萬人次以上的站 · 新線通車、轉乘改變會造成大幅跳動</span></div>
   </section>
 
   <section class="panel w6 lite" id="p-weather">
-    <div class="ph"><h2>Weather</h2><span class="zh">主要縣市 · 觀測與 12 小時預報</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>天氣</h2><span class="zh">主要縣市 · 觀測與 12 小時預報</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待氣象署金鑰</div></div>
     <div class="pf"><a href="https://www.cwa.gov.tw/" target="_blank" rel="noopener">中央氣象署</a><span>14 縣市 · 有人測站優先、自動站備援 · 觀測每 10 分鐘 · 預報第一段（12h）與下一段降雨機率 · 特報</span></div>
   </section>
 
   <section class="panel w6 lite" id="p-quake">
-    <div class="ph"><h2>Quake</h2><span class="zh">顯著有感地震</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>地震</h2><span class="zh">顯著有感地震</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>氣象署地震報告 · 近 5 筆</span></div>
   </section>
 
   <section class="panel w6 lite" id="p-power">
-    <div class="ph"><h2>Power</h2><span class="zh">台電備轉容量</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>電力</h2><span class="zh">台電備轉容量</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>台電開放資料 · 燈號：綠 ≥10% 黃 6–10% 橘 3–6% 紅 &lt;3%</span></div>
   </section>
 
   <section class="panel w12 cap tall" id="p-house">
-    <div class="ph"><h2>Real Estate</h2><span class="zh">實價登錄 · 縣市 › 區 › 路段 › 成交</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>實價登錄</h2><span class="zh">縣市 › 區 › 路段 › 成交</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://lvr.land.moi.gov.tw/" target="_blank" rel="noopener">內政部實價登錄</a><span>最近一季住宅買賣 · 每坪單價已扣車位 · 排除親友、特殊關係、毛胚等交易 · 中位數 · 季變化＝比上一季同區中位數</span></div>
   </section>
 
   <section class="panel w12" id="p-vauth">
-    <div class="ph"><h2>Vault</h2><span class="zh">歷史資料庫 · 你的 Google Cloud（intel-vault）</span><span class="meta" id="va-meta">未登入</span></div>
+    <div class="ph"><h2>歷史資料庫</h2><span class="zh">你的 Google Cloud（intel-vault）</span><span class="meta" id="va-meta">未登入</span></div>
     <div class="pb"><div class="va-bar"><button type="button" class="va-btn" id="va-login">用 Google 登入</button><span class="sub" id="va-who">資料只存在你的 Google Cloud；要用有權限的 Google 帳號登入才查得到。登入一次約可用 1 小時。</span><span class="sub" id="va-usage" style="margin-left:auto"></span></div></div>
     <div class="pf"><span>每輪有更新的面板整份存下（約 5～15 分鐘一份）· 查詢用 BigQuery，每月前 1 TB 掃描免費，每次查詢上限 20 GB，超過會直接拒絕不會扣錢</span></div>
   </section>
 
   <section class="panel w12" id="p-vsearch">
-    <div class="ph"><h2>Search</h2><span class="zh">全文搜尋 · 新聞、重訊、職缺、Polymarket、PTT、藝文、新公司…</span><span class="meta" id="vs-meta"></span></div>
+    <div class="ph"><h2>全文搜尋</h2><span class="zh">新聞、重訊、職缺、Polymarket、PTT、藝文、新公司…</span><span class="meta" id="vs-meta"></span></div>
     <div class="pb"><form class="va-form" id="vs-form"><input type="search" id="vs-q" placeholder="關鍵字，例如：無薪假、台積電、Anthropic（留空＝列出這段時間全部）" autocomplete="off"><select id="vs-p"></select><select id="vs-r"><option value="7">近 7 天</option><option value="30" selected>近 30 天</option><option value="90">近 90 天</option><option value="365">近一年</option><option value="0">全部</option></select><button type="submit" class="va-btn">搜尋</button><button type="button" class="va-btn ghost" id="vs-csv" disabled>匯出 CSV</button></form><div id="vs-out"><div class="empty">登入後輸入關鍵字搜尋。同一則在不同時間出現只列一次，顯示第一次出現的時間</div></div></div>
   </section>
 
   <section class="panel w6" id="p-vtime">
-    <div class="ph"><h2>Time Machine</h2><span class="zh">時光機 · 回到過去某個時間的整個情報站</span><span class="meta"></span></div>
+    <div class="ph"><h2>時光機</h2><span class="zh">回到過去某個時間的整個情報站</span><span class="meta"></span></div>
     <div class="pb"><form class="va-form" id="vt-form"><input type="datetime-local" id="vt-t"><button type="submit" class="va-btn">回到這個時間</button></form><div class="sub" id="vt-out">選一個時間，所有分頁會換成當時的資料（地圖和即時 YouBike 仍是現在的）。看完按頂端的「回到現在」。</div></div>
   </section>
 
   <section class="panel w6" id="p-vseries">
-    <div class="ph"><h2>Trend</h2><span class="zh">走勢 · 任一面板的任一數字</span><span class="meta" id="vr-meta"></span></div>
+    <div class="ph"><h2>走勢</h2><span class="zh">任一面板的任一數字</span><span class="meta" id="vr-meta"></span></div>
     <div class="pb"><form class="va-form" id="vr-form"><select id="vr-p"></select><select id="vr-f"></select><select id="vr-r"><option value="7">近 7 天（每小時）</option><option value="30" selected>近 30 天（每天）</option><option value="90">近 90 天（每天）</option><option value="365">近一年（每天）</option></select><button type="submit" class="va-btn">畫走勢</button><button type="button" class="va-btn ghost" id="vr-csv" disabled>匯出 CSV</button></form><div id="vr-out"><div class="empty">先選面板，再選要看的數字</div></div></div>
   </section>
 
   <section class="panel w6 lite" id="p-airport">
-    <div class="ph"><h2>TPE Airport</h2><span class="zh">桃機今日航班</span><span class="meta">排程</span></div>
+    <div class="ph"><h2>桃機航班</h2><span class="zh">今日起降</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://www.taoyuan-airport.com/" target="_blank" rel="noopener">桃園機場</a><span>官網航班資料 · 延誤＝取消以外、晚 30 分鐘以上 · 接下來 8 班出發</span></div>
   </section>
@@ -1184,7 +1184,7 @@ const fmt=(v,d=2)=>isFinite(v)?v.toLocaleString("en-US",{minimumFractionDigits:d
 const cls=v=>!isFinite(v)||Math.abs(v)<1e-9?"flat":v>0?"up":"down";
 const sgn=(v,d=2,suf="")=>!isFinite(v)?"—":(v>0?"+":"")+fmt(v,d)+suf;
 const rocToIso=s=>{const m=String(s).match(/^(\d{3})(\d{2})(\d{2})$/);return m?`${+m[1]+1911}-${m[2]}-${m[3]}`:String(s);};
-const compact=v=>{if(!isFinite(v))return"—";if(v>=1e9)return(v/1e9).toFixed(2)+"B";if(v>=1e6)return(v/1e6).toFixed(1)+"M";if(v>=1e3)return(v/1e3).toFixed(0)+"K";return String(v);};
+const compact=v=>{if(!isFinite(v))return"—";const a=Math.abs(v);if(a>=1e12)return(v/1e12).toFixed(2)+" 兆";if(a>=1e8)return(v/1e8).toFixed(a>=1e10?0:1)+" 億";if(a>=1e5)return(v/1e4).toFixed(a>=1e6?0:1)+" 萬";return Math.round(v).toLocaleString("en-US");};   // 中文單位：兆／億／萬
 const body=id=>$(`#${id} .pb`);
 const meta=id=>$(`#${id} .ph .meta`);
 const setErr=(id,msg)=>{body(id).innerHTML=`<div class="empty">${esc(msg)}</div>`;};
@@ -1245,7 +1245,7 @@ function renderTaiex(){
   const right=`${inst?`<h3>三大法人買賣超 <span class="sub">${esc((inst.date||"").replace(/(\d{4})(\d{2})(\d{2})/,"$2/$3"))}</span></h3><table>${inst.items.map(i=>`<tr><td class="name">${esc(i.name)}</td><td class="r num ${cls(n(i.net))}${K("inst:"+i.name,n(i.net))}">${sgn(n(i.net),1)} 億</td></tr>`).join("")}</table>`:""}
     ${b?`<h3>漲跌家數</h3><div class="breadth"><i style="width:${total?b.up/total*100:0}%;background:var(--up)"></i><i style="width:${total?b.flat/total*100:0}%;background:var(--line2)"></i><i style="width:${total?b.down/total*100:0}%;background:var(--down)"></i></div><div class="kv"><span class="up">漲 ${b.up}<b>${b.up_limit?"("+b.up_limit+" 漲停)":""}</b></span><span>平 ${b.flat}</span><span class="down">跌 ${b.down}<b>${b.down_limit?"("+b.down_limit+" 跌停)":""}</b></span></div>`:""}
     ${m.sectors?`<h3>類股</h3><div class="secs">${m.sectors.map(sct=>`<span class="${cls(n(sct.pct))}">${esc(sct.name)} ${sgn(n(sct.pct),2,"%")}</span>`).join("")}</div>`:""}
-    ${mg?`<h3>融資融券</h3><div class="kv"><span>融資餘額<b>${fmt(n(mg.margin_amt),0)} 億</b><span class="${cls(n(mg.margin_amt_chg))}"> ${sgn(n(mg.margin_amt_chg),1)}</span></span><span>融券<b>${compact(n(mg.short_units))} 張</b><span class="${cls(-n(mg.short_units_chg))}"> ${sgn(n(mg.short_units_chg),0)}</span></span></div>`:""}`;
+    ${mg?`<h3>融資融券</h3><div class="kv"><span>融資餘額<b>${fmt(n(mg.margin_amt),0)} 億</b><span class="${cls(n(mg.margin_amt_chg))}"> ${sgn(n(mg.margin_amt_chg),1)}</span></span><span>融券<b>${compact(n(mg.short_units))}張</b><span class="${cls(-n(mg.short_units_chg))}"> ${sgn(n(mg.short_units_chg),0)}</span></span></div>`:""}`;
   body("p-taiex").innerHTML=`<div class="tx2"><div>${left}</div><div>${right}</div></div>`;
   setMeta("p-taiex",{...d,label:"盤後",error:d.error||m.error},30);
 }
@@ -1486,7 +1486,7 @@ const renderers={
     if(g){const r=n(g.vol_ratio);sig+=`<span><span class="l">全球提到 Taiwan</span><span class="v ${r>=1.3?"bad":r<=0.7?"up":""}${K("gdelt:vol",n(g.vol))}">${isFinite(r)?(r>=1?"×"+r.toFixed(2):"×"+r.toFixed(2)):""}</span><span class="sub"> vs 前兩日</span>${mini(g.spark)}</span>`;
       if(g.tone!=null)sig+=`<span><span class="l">語調</span><span class="v ${n(g.tone)<-3?"bad":n(g.tone)>0?"up":""}">${sgn(n(g.tone),1)}</span></span>`;}
     const hot=(d.signals||{}).hot;if(hot&&hot.length){sig+=`<span class="w"><span class="l">🔥 多源同提</span>${hot.slice(0,8).map(h=>`<a href="${esc(safe(h.sample&&h.sample.url))}" target="_blank" rel="noopener" title="${esc((h.sources||[]).join("、"))}" style="${h.hot?"color:var(--warn);font-weight:600":""}">${esc(h.term)}<span class="sub"> ${h.src}</span></a>`).join("")}</span>`;}
-    if(w){const wl=(a,l)=>a&&a.length?`<span class="w"><span class="l">維基 ${l}</span>${a.map(x=>`<a href="${esc(safe(x.url))}" target="_blank" rel="noopener" title="${compact(n(x.views))} 次">${esc(x.title)}</a>`).join("")}</span>`:"";sig+=wl(w.zh,"中文")+wl(w.en,"英文");}
+    if(w){const wl=(a,l)=>a&&a.length?`<span class="w"><span class="l">維基 ${l}</span>${a.map(x=>`<a href="${esc(safe(x.url))}" target="_blank" rel="noopener" title="${compact(n(x.views))}次">${esc(x.title)}</a>`).join("")}</span>`:"";sig+=wl(w.zh,"中文")+wl(w.en,"英文");}
     body("p-news").innerHTML=`${sig?`<div class="sig">${sig}</div>`:""}<div class="nw nw2"><div><h3>台灣</h3><ul class="list">${li(d.tw||[])}</ul></div><div><h3>國際</h3><ul class="list">${li(d.intl||[])}</ul></div></div>${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${errNote(d.errs)}</div>`:""}`;setMeta("p-news",d,2);
     const gs=(d.groups||[]).map(g=>`<div class="wg"><h3>${esc(g.name)}</h3><ul class="list">${li(g.items||[])||'<li class="empty">沒有結果</li>'}</ul></div>`).join("");
     body("p-watch").innerHTML=gs?`<div class="nw nw3">${gs}</div>`:`<div class="empty">等待排程寫入</div>`;setMeta("p-watch",d,2);},
@@ -1585,7 +1585,7 @@ const renderers={
     const bd=(d.boards||[]).map(b=>`<tr><td class="name">${esc(b.zh)}<span class="sub">${esc(b.facet)} · 今日 ${b.today} 篇</span>${mini(b.spark)}</td><td class="r num">${fmt(n(b.heat),0)}</td><td class="r num ${b.boom?"bad":""}">${b.boom||"—"}</td><td class="r num ${b.boo>=3?"bad":""}">${b.boo||"—"}</td><td class="r num ${n(b.mood)>=0.5?"up":n(b.mood)<0.2?"bad":""}">${fmt(n(b.mood),2)}</td></tr>`).join("");
     const brk=(d.breaking||[]).map(it=>`<li><span class="src" style="color:var(--warn)">爆卦</span><span class="t"><a href="${esc(safe(it.url))}" target="_blank" rel="noopener">${esc(it.title.replace(/^\[爆卦\]\s*/,""))}</a></span><span class="m bad">${it.push>=100?"爆":it.push}</span></li>`).join("");
     body("p-ptt").innerHTML=`${bd?`<table><tr><th>看板</th><th class="r">熱度</th><th class="r">爆</th><th class="r">噓</th><th class="r">情緒</th></tr>${bd}</table>`:""}${brk?`<h3 style="margin-top:8px">爆卦</h3><ul class="list">${brk}</ul>`:""}<h3 style="margin-top:8px">熱文 ${esc(d.label||"")}</h3>${li?`<ul class="list">${li}</ul>`:`<div class="empty">${esc(d.note||"這輪沒抓到")}</div>`}`;setMeta("p-ptt",d,2);},
-  tiktok(d){if(!document.getElementById("p-tiktok"))return;const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${it.rank||i+1}</span><span class="t">#${esc(it.tag)}</span><span class="m">${it.views?compact(n(it.views))+" 次":""}${it.trend?` <span class="${n(it.trend)>0?"up":"down"}">${sgn(n(it.trend),0)}</span>`:""}</span></li>`).join("");
+  tiktok(d){if(!document.getElementById("p-tiktok"))return;const li=(d.items||[]).map((it,i)=>`<li><span class="rank">${it.rank||i+1}</span><span class="t">#${esc(it.tag)}</span><span class="m">${it.views?compact(n(it.views))+"次":""}${it.trend?` <span class="${n(it.trend)>0?"up":"down"}">${sgn(n(it.trend),0)}</span>`:""}</span></li>`).join("");
     body("p-tiktok").innerHTML=li?`<ul class="list">${li}</ul>`:`<div class="empty">抓不到</div>`;setMeta("p-tiktok",d,30);},
   fx(d){const tr=(d.items||[]).map(it=>`<tr><td class="name">${esc(it.name)}<span class="sub">${esc(it.code)}</span>${mini(it.spark)}</td><td class="r num${K("fx:"+it.code,n(it.buy??it.mid))}">${fmt(n(it.buy??it.mid),it.code==="JPY"?4:3)}</td><td class="r num">${it.sell!=null?fmt(n(it.sell),it.code==="JPY"?4:3):""}</td><td class="r num ${cls(n(it.chg_pct))}">${isFinite(n(it.chg_pct))?sgn(n(it.chg_pct),2,"%"):""}</td></tr>`).join("");
     const yh=d.source==="yahoo";body("p-fx").innerHTML=`<table><tr><th>幣別</th><th class="r">${yh?"中價":"即期買入"}</th><th class="r">${yh?"":"即期賣出"}</th><th class="r">日%</th></tr>${tr}</table>`;setMeta("p-fx",d,3);},
@@ -1708,7 +1708,7 @@ const renderers={
   typhoon(d){try{applyWx();}catch(e){}},
   culture(d){try{applyWx();}catch(e){}},
   consume(d){const tile=x=>{const y=n(x.yoy);const a=Math.min(1,Math.abs(y||0)/15);const bg=y==null?"var(--panel2)":`color-mix(in srgb,var(${y>=0?"--up":"--down"}) ${10+a*45}%,var(--panel2))`;
-      return`<div class="cs-c" style="background:${bg}"><div class="l">${esc(x.name.replace("及相關服務業","").replace("服務業","").replace("業",""))}</div><div class="v num">${y!=null?sgn(y,1,"%"):"—"}</div><div class="p">${x.amt?compact(n(x.amt))+" 元":""}${x.mom!=null?` · 月 ${sgn(n(x.mom),1,"%")}`:""}</div>${mini(x.spark)}</div>`;};
+      return`<div class="cs-c" style="background:${bg}"><div class="l">${esc(x.name.replace("及相關服務業","").replace("服務業","").replace("業",""))}</div><div class="v num">${y!=null?sgn(y,1,"%"):"—"}</div><div class="p">${x.amt?compact(n(x.amt))+"元":""}${x.mom!=null?` · 月 ${sgn(n(x.mom),1,"%")}`:""}</div>${mini(x.spark)}</div>`;};
     const focus=[...(d.focus||[])].sort((a,b)=>(n(b.yoy)||-999)-(n(a.yoy)||-999)).map(tile).join("");
     const mv=(arr)=>arr.map(x=>`<li><span class="t">${esc(x.name)}</span><span class="m ${cls(n(x.yoy))}">${sgn(n(x.yoy),1,"%")}</span></li>`).join("");
     const rt=(d.retail||[]).map(x=>`<li><span class="t">${esc(x.name)}${mini(x.spark)}</span><span class="m num">${x.ticket?"$"+fmt(n(x.ticket),0):"—"}</span><span class="m ${cls(n(x.yoy))}" style="min-width:52px;text-align:right">${x.yoy!=null?sgn(n(x.yoy),1,"%"):""}</span></li>`).join("");
@@ -2518,7 +2518,7 @@ root.classList.toggle("still",!motion);
 const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",String(motion));mbtn.textContent=motion?"動畫：開":"動畫：關";};syncBtn();
 
 /* ---------- tabs ---------- */
-const TABS=[["overview","總覽"],["trend","走向"],["intel","訊號"],["social","輿情"],["market","市場"],["macro","總經"],["live","台灣現場"],["vault","資料庫"]];
+const TABS=[["overview","總覽"],["market","市場"],["macro","總經"],["trend","走向"],["intel","訊號"],["social","輿情"],["live","台灣現場"],["vault","資料庫"]];
 const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"trend","p-ledger":"trend","p-chain":"trend","p-weekly":"trend","p-tech2":"trend","p-imports":"macro","p-housefc":"macro","p-demo":"macro","p-bizlife":"macro","p-metro":"live",
   "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
@@ -2596,17 +2596,17 @@ function snap(P){
 function layout(){
   $("#ov").innerHTML=`
   <section class="w12 o-tks" id="ov-tks" aria-label="主要行情"></section>
-  <section class="o-card w12" id="ov-c-opp">${H("This Week","本週走向與機會 · 主題鏈判讀 · 民生消費 · 小店在開","trend")}<div id="ov-wk"></div><div class="o-opp" id="ov-opp"></div></section>
-  <section class="o-card w4" id="ov-c-tw">${H("TAIEX","加權 · 法人 · 家數","market")}
+  <section class="o-card w12" id="ov-c-opp">${H("本週","走向與機會 · 主題鏈判讀 · 民生消費 · 小店在開","trend")}<div id="ov-wk"></div><div class="o-opp" id="ov-opp"></div></section>
+  <section class="o-card w4" id="ov-c-tw">${H("台股","加權 · 法人 · 家數","market")}
     <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><div class="o-odo" id="ov-odo"></div><span class="num" id="ov-twchg"></span></div>
     <svg class="o-tw-spark" id="ov-twspark" viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%;height:46px;display:block" aria-hidden="true"></svg>
     <div class="o-sub" id="ov-txline"></div>
     <div class="o-dv" id="ov-inst"></div>
     <div><div class="o-bt" id="ov-bt"><i class="u"></i><i class="f"></i><i class="d"></i></div><div class="o-sub" id="ov-btx" style="margin-top:3px"></div></div>
   </section>
-  <section class="o-card w4" id="ov-c-macro">${H("Macro","利率 · 通膨 · 下個數據","macro")}
+  <section class="o-card w4" id="ov-c-macro">${H("總經","利率 · 通膨 · 下個數據","macro")}
     <div class="o-kv" id="ov-rates"></div><div class="o-hr"></div><div class="o-cd" id="ov-cal"></div></section>
-  <section class="o-card w4" id="ov-c-risk">${H("Risk","恐慌指針 · 結構 · 電網","market")}
+  <section class="o-card w4" id="ov-c-risk">${H("風險","恐慌指針 · 結構 · 電網","market")}
     <svg class="o-gauge" viewBox="0 0 240 150" aria-hidden="true">
       <path d="M20 120 A100 100 0 0 1 220 120" fill="none" stroke="var(--line2)" stroke-width="10"/>
       <path d="M20 120 A100 100 0 0 1 100 22.4" fill="none" stroke="#39B978" stroke-width="10"/>
@@ -2618,20 +2618,20 @@ function layout(){
     </svg>
     <div class="o-chips" id="ov-fear"></div><div class="o-hr"></div>
     <div class="o-batt" id="ov-batt"></div><div class="o-sub" id="ov-pwx"></div></section>
-  <section class="o-card w8" id="ov-c-news">${H("Wire","最新頭條 · AI 與開發者","intel")}
+  <section class="o-card w8" id="ov-c-news">${H("快訊","最新頭條 · AI 與開發者","intel")}
     <div class="o-cols2"><div><div class="o-colh">新聞</div><ul class="o-ls" id="ov-news"></ul></div><div><div class="o-colh">AI 大廠 · 開發者</div><ul class="o-ls" id="ov-ai"></ul></div></div></section>
-  <section class="o-card w4" id="ov-c-hot">${H("Hot","多源同提 · 字越大來源越多","intel")}
+  <section class="o-card w4" id="ov-c-hot">${H("熱議","多源同提 · 字越大來源越多","intel")}
     <div class="o-words" id="ov-words"></div><div class="o-hr"></div><div class="o-colh">GOOGLE 趨勢</div><ul class="o-ls rk" id="ov-trends"></ul></section>
-  <section class="o-card w4" id="ov-c-mood">${H("Mood","情緒波形 · 越亂越負面","social")}
+  <section class="o-card w4" id="ov-c-mood">${H("情緒","波形 · 越亂越負面","social")}
     <canvas class="o-fx" id="ov-wave" height="84"></canvas><div class="o-dv" id="ov-moodsrc"></div><div class="o-sub" id="ov-themes"></div></section>
   <section class="o-card w4" id="ov-c-ptt">${H("PTT","看板熱度 · 100 推發光","social")}<div class="o-eq" id="ov-eq"></div><ul class="o-ls" id="ov-ptt"></ul></section>
-  <section class="o-card w4" id="ov-c-cof">${H("Cofacts","LINE 轉傳查核","social")}<div class="o-sub" id="ov-cofs"></div><ul class="o-ls cof" id="ov-cof"></ul></section>
-  <section class="o-card w5" id="ov-c-map">${H("Taiwan","縣市氣溫 · 地震漣漪","live")}<canvas class="o-fx" id="ov-map" height="250"></canvas></section>
-  <section class="o-card w3" id="ov-c-radar">${H("Radar","公司雷達","intel")}<canvas class="o-fx" id="ov-radar" height="150"></canvas><div class="o-hr"></div><div class="o-colh">本週募資</div><ul class="o-ls" id="ov-fund"></ul></section>
-  <section class="o-card w4" id="ov-c-live">${H("TPE","桃機翻牌","live")}<div class="o-flaps" id="ov-flaps"></div><div class="o-hr"></div><div class="o-colh">接下來出發</div><ul class="o-ls" id="ov-deps"></ul></section>
-  <section class="o-card w8" id="ov-c-sec">${H("Sectors","板塊熱力 · 依漲跌排序","market")}
+  <section class="o-card w4" id="ov-c-cof">${H("謠言","LINE 轉傳查核","social")}<div class="o-sub" id="ov-cofs"></div><ul class="o-ls cof" id="ov-cof"></ul></section>
+  <section class="o-card w5" id="ov-c-map">${H("全台","縣市氣溫 · 地震漣漪","live")}<canvas class="o-fx" id="ov-map" height="250"></canvas></section>
+  <section class="o-card w3" id="ov-c-radar">${H("雷達","盯梢中的公司","intel")}<canvas class="o-fx" id="ov-radar" height="150"></canvas><div class="o-hr"></div><div class="o-colh">本週募資</div><ul class="o-ls" id="ov-fund"></ul></section>
+  <section class="o-card w4" id="ov-c-live">${H("桃機","航班翻牌","live")}<div class="o-flaps" id="ov-flaps"></div><div class="o-hr"></div><div class="o-colh">接下來出發</div><ul class="o-ls" id="ov-deps"></ul></section>
+  <section class="o-card w8" id="ov-c-sec">${H("板塊","熱力 · 依漲跌排序","market")}
     <div class="o-cols2"><div><div class="o-colh">美股 11 板塊</div><div class="o-heat" id="ov-ussec"></div></div><div><div class="o-colh">台股類股</div><div class="o-heat" id="ov-twsec"></div></div></div></section>
-  <section class="o-card w4" id="ov-c-gov">${H("Gov","政府標案 · 決標（產業方向）","intel")}<ul class="o-ls" id="ov-gov"></ul></section>`;
+  <section class="o-card w4" id="ov-c-gov">${H("標案","招標與決標 · 看產業方向","intel")}<ul class="o-ls" id="ov-gov"></ul></section>`;
 }
 
 /* ---------- 各區塊 ---------- */

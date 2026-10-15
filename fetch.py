@@ -298,6 +298,9 @@ def p_taiex():
         if q.get("price") and q.get("prev") and day > out["date"] and q.get("asOf") and (NOW.timestamp() - q["asOf"]) < 12 * 3600:
             out.update({"index": q["price"], "change": round(q["price"] - q["prev"], 2), "date": day,
                         "live": datetime.fromtimestamp(q["asOf"], TPE).strftime("%H:%M"), "value": None, "transactions": None})
+            if out["live"] >= "13:30":   # 收盤後：今天的收盤先記進歷史，首頁和終端機才會一致；隔天日檔出來會用官方值覆蓋
+                hist_put("taiex", "TAIEX", day, q["price"])
+                out["history"] = HISTORY.get("taiex", {}).get("TAIEX", [])[-60:]
     except Exception as e:  # noqa: BLE001
         log("taiex mis", e)
     return out
