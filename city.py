@@ -106,9 +106,10 @@ def osm():
              'node["amenity"="cafe"](area.a);way["amenity"="cafe"](area.a);'
              'node["amenity"="coworking_space"](area.a);way["amenity"="coworking_space"](area.a);node["office"="coworking"](area.a);'
              'node["railway"="station"](area.a);node["station"="subway"](area.a););out center tags;')
-        for attempt in range(3):
+        EPS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://overpass.private.coffee/api/interpreter"]
+        for attempt in range(6):
             try:
-                r = S.get("https://overpass-api.de/api/interpreter", params={"data": q}, timeout=180)
+                r = S.get(EPS[attempt % len(EPS)], params={"data": q}, timeout=180)
                 if r.status_code == 200:
                     els = r.json().get("elements") or []
                     for e in els:
@@ -131,7 +132,7 @@ def osm():
                 log("osm", c, "http", r.status_code)
             except Exception as e:  # noqa: BLE001
                 log("osm", c, repr(e)[:80])
-            time.sleep(15 * (attempt + 1))
+            time.sleep(10 * (attempt + 1))
         time.sleep(4)
     return out
 
@@ -202,8 +203,17 @@ def ookla():
 AQ_KEY = "e75b1660-e564-4107-aad5-a8be1f905dd9"   # 政府資料開放平臺上公開附在下載連結裡的金鑰
 
 
+def _moenv(ds, **kw):
+    r = S.get(f"https://data.moenv.gov.tw/api/v2/{ds}", params={"api_key": AQ_KEY, "format": "JSON", **kw}, timeout=60)
+    try:
+        return r.json()
+    except ValueError:
+        log("moenv", ds, r.status_code, r.text[:160].replace("\n", " "))
+        raise
+
+
 def air():
-    st = S.get("https://data.moenv.gov.tw/api/v2/aqx_p_07", params={"api_key": AQ_KEY, "limit": 1000, "format": "JSON"}, timeout=60).json()
+    st = _moenv("aqx_p_07", limit=1000)
     st = st.get("records") if isinstance(st, dict) else st
     pos = {}
     for s_ in st or []:
@@ -211,7 +221,7 @@ def air():
             pos[s_.get("sitename")] = (float(s_.get("twd97lon") or s_.get("longitude")), float(s_.get("twd97lat") or s_.get("latitude")))
         except (TypeError, ValueError):
             pass
-    mv = S.get("https://data.moenv.gov.tw/api/v2/aqx_p_08", params={"api_key": AQ_KEY, "limit": 3000, "sort": "monitormonth desc", "format": "JSON"}, timeout=60).json()
+    mv = _moenv("aqx_p_08", limit=3000, sort="monitormonth desc")
     mv = mv.get("records") if isinstance(mv, dict) else mv
     pm, month = {}, ""
     for r in mv or []:
@@ -263,7 +273,7 @@ def main():
     rows = []
     for t in TOWNS:
         k = t["k"]; p = pop.get(k)
-        if not p or p[0] < 15000:   # 太小的鄉鎮不排（樣本太少，分數會亂跳）
+        if not p or p[0] < 30000:   # 太小的鄉鎮不排（樣本太少，分數會亂跳）
             continue
         o = (parts.get("osm") or {}).get(k) or [0, 0, 0]
         n = ((parts.get("net") or {}).get("towns") or {}).get(k) or {}
@@ -271,13 +281,13 @@ def main():
         cl = clinics.get(k); mg = mig.get(k); rt = rent.get(k)
         per10k = lambda x: round(x / p[0] * 1e4, 2)
         rows.append({"k": k, "c": t["c"].replace("臺", "台"), "t": t["t"], "pop": p[0], "young": round(p[1] / p[0] * 100, 1), "old": round(p[2] / p[0] * 100, 1),
-                     "cafe": o[0], "cowork": o[1], "station": o[2], "cafe10k": per10k(o[0] + o[1] * 3),
+                     "cafe": o[0], "cowork": o[1], "station": o[2], "cafe_n": o[0] + o[1] * 3,
                      "net_fixed": (n.get("fixed") or [None])[0], "net_mobile": (n.get("mobile") or [None])[0], "lat_ms": (n.get("fixed") or [None, None])[1],
                      "pm25": a[0] if a else None, "pm_site": a[1] if a else "",
                      "rent": rt[0] if rt else None, "rent_n": rt[1] if rt else 0,
                      "clinic10k": per10k(cl[4]) if cl else None, "net_mig": mg[5] if mg else None, "mig10k": per10k(mg[5]) if mg else None})
     # 各項排名（全台百分位，越高越好）
-    M = {"net": ("net_fixed", True), "mobile": ("net_mobile", True), "cafe": ("cafe10k", True), "rent": ("rent", False), "air": ("pm25", False),
+    M = {"net": ("net_fixed", True), "mobile": ("net_mobile", True), "cafe": ("cafe_n", True), "rent": ("rent", False), "air": ("pm25", False),
          "transit": ("station", True), "clinic": ("clinic10k", True), "young": ("young", True), "growth": ("mig10k", True)}
     for key, (f, hb) in M.items():
         vals = [r[f] for r in rows if r.get(f) is not None]
