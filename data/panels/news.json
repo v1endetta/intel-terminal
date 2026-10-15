@@ -392,13 +392,13 @@
     }
    ],
    "daily7": [
-    0,
-    2,
     4,
-    9,
-    30,
-    113,
-    14
+    10,
+    5,
+    12,
+    32,
+    84,
+    15
    ],
    "days7": [
     "2026-10-10",
@@ -443,9 +443,9 @@
     }
    ],
    "daily7": [
-    3,
+    2,
     5,
-    33,
+    35,
     18,
     24,
     16,
@@ -547,9 +547,9 @@
    "daily7": [
     1,
     0,
-    17,
+    16,
     29,
-    42,
+    43,
     84,
     23
    ],
@@ -597,11 +597,11 @@
    ],
    "daily7": [
     1,
-    2,
+    3,
     4,
-    10,
-    17,
-    22,
+    9,
+    16,
+    20,
     1
    ],
    "days7": [
@@ -650,7 +650,7 @@
     9,
     16,
     20,
-    21,
+    22,
     38,
     22,
     0
@@ -816,6 +816,36 @@
     "hot": true
    },
    {
+    "term": "ADR",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Yahoo新聞",
+     "經濟日報",
+     "自由財經"
+    ],
+    "sample": {
+     "title": "台積電法說變法會？ADR大暴跌 輝達、AMD臉綠",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5jckdGdld3TVlyM3h3YjV0Vm1NaVRUWGdsMkdpWmtwX1NaV0JDMHVEcWFRYW94VG5ibzVONXhtSERqQlJjUnFxNFp1Q1dyZDVPUUVQaDltV29iVmU3ZTBZ0gFkQVVfeXFMUEY5X2t2bllnejFtbm5KeHRSQy1oYkV0d1pxSFE2WnNwOHBidlFEelBzMnhZVTJSRm9nLTMtQ3hYR2U1Y2M5bms3b21zbV9kTENZRmhMajZsTlJFZ08xTHVSX3U0MA?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "台積電",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Yahoo新聞",
+     "經濟日報",
+     "自由財經"
+    ],
+    "sample": {
+     "title": "台積電法說變法會？ADR大暴跌 輝達、AMD臉綠",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5jckdGdld3TVlyM3h3YjV0Vm1NaVRUWGdsMkdpWmtwX1NaV0JDMHVEcWFRYW94VG5ibzVONXhtSERqQlJjUnFxNFp1Q1dyZDVPUUVQaDltV29iVmU3ZTBZ0gFkQVVfeXFMUEY5X2t2bllnejFtbm5KeHRSQy1oYkV0d1pxSFE2WnNwOHBidlFEelBzMnhZVTJSRm9nLTMtQ3hYR2U1Y2M5bms3b21zbV9kTENZRmhMajZsTlJFZ08xTHVSX3U0MA?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "生醫療",
     "n": 3,
     "src": 3,
@@ -825,8 +855,23 @@
      "鉅亨網"
     ],
     "sample": {
-     "title": "三顧攜正揚推進血小板裂解液及乾眼症製劑兩大產品 攻再生醫療與眼科商機",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBhOXJRRW5STWtYN3FZUXVSb0NJWnVQbUFlSG8zQzFGNkhrNkFZZ3VSeWM0OEpMUFIwQVVQdlB3Nkc2VUdSaVdYUUNiSlk1QlU?oc=5"
+     "title": "三顧揭攜手正揚 打造再生醫療供應鏈",
+     "url": "https://news.google.com/rss/articles/CBMilAJBVV95cUxPanFPZzJXRmxWeUtPaGZaRTVpVVlmNDJ6Znd3TkozcWlwdzM3bFhMWFl4RlRqLVk2dUZPZXRsSTJPZUJOMUE3ZDJ2MWFoWkxUbXRSTktoT1UyT194a29VTW5MM1R1TUh4NmxCSnVjczJSb2QtSXk3N2l6bzdIelhEMTVpblFHZXRtTURMY1NvakRUTGtPQWJjZ1ZRek8yNTRKcHNEYlBGRDg2cU5qSzNvTU5Hak0wdGwyaFdWRGhmdXdjRF81SmpZWEQ5bllkNUY0ZENocTktTnpQU0JnTVFzaEd5WEFWVFJ6dE9mX21tbUFXSWFrcDM5VkpYajIxcC1ObGVDdlM4RjA4T1NIOGVTV2NxNW0?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "美股",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Yahoo新聞",
+     "中央社",
+     "經濟日報"
+    ],
+    "sample": {
+     "title": "投資人轉向AI以外標的　美股道瓊終場漲逾500點",
+     "url": "https://www.cna.com.tw/news/afe/202610160008.aspx"
     },
     "hot": true
    },
@@ -843,53 +888,11 @@
      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5uUC1FWEN4aHlRVDZlU2l6MEJtb042aURWcGRxUFJEbm44OHJrUnhjX3AyWUxLNU1BdVNsREcyQUZ0b2RldnlCaWlrOVV4aWhqNVNPTEVfY21kQVo1cEp3bGIxZVh5cE1UR3poX0dDRQ?oc=5"
     },
     "hot": false
-   },
-   {
-    "term": "Rosalind",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "OpenAI",
-     "Unite.AI"
-    ],
-    "sample": {
-     "title": "OpenAI Launches Rosalind Academic Plan for U.S. University L",
-     "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPek5MdTRvUjNkaVlrTjBERkQxZHFjcDZjdDdmYjAtUFk0TWFIRFZCLUItR3ZvbF9mTXBuX1h5Ti1MRXRpLWQyb1E4SWl6bXpGcmVybmVPMVVDd2tBMTBnOTNXNzVGYVFsUWFiVEw3c09yWXI4enhMbXM3SDc5anNHU1A2WWFLMEVxZ2Eyeg?oc=5"
-    },
-    "hot": false
-   },
-   {
-    "term": "Security",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "BigGo Financ",
-     "Snyk"
-    ],
-    "sample": {
-     "title": "Snyk Launches Evo Agentic AppSec, Redefining Traditional App",
-     "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBvX3BySW9RYzlGd3N4NW42eF84VUVseFFxNUJzaHlCV2ZOY25xZ3VKeG5MY0h2TEZ3M3ZGZGs3Snh2U3FGR0R2VXhQYi1NdG81TzJ5ZkJKYTltWEVNd3lnQ21yVzU?oc=5"
-    },
-    "hot": false
-   },
-   {
-    "term": "Bringing",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "HN",
-     "OpenAI"
-    ],
-    "sample": {
-     "title": "Bringing GPT-Rosalind to academic research labs",
-     "url": "https://openai.com/index/introducing-the-rosalind-academic-plan"
-    },
-    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-15T22:02:43Z"
+ "updatedAt": "2026-10-15T22:23:09Z"
 }
