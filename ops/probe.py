@@ -1,14 +1,20 @@
 import requests, json, csv, io, re
 S = requests.Session(); S.headers["User-Agent"] = "Mozilla/5.0"
-t = S.get("https://data.gov.tw/datasets/export/csv", timeout=120).content.decode("utf-8-sig", "replace")
 out = {}
-pat = {"都更": r"都市更新|都更|危老|老舊建築物重建", "重劃": r"重劃|區段徵收", "產業園區": r"產業園區|工業區|科學園區|科技產業園區|加工出口區"}
-for x in csv.reader(io.StringIO(t)):
-    if len(x) < 13:
-        continue
-    for k, p in pat.items():
-        if re.search(p, x[1]):
-            out.setdefault(k, []).append([x[0], x[1][:50], x[5][:15], x[11][:16], x[12][:8], x[10][:160]])
-for k in out:
-    out[k] = out[k][:70]
+def dist(i):
+    r = S.get(f"https://data.gov.tw/api/v2/rest/dataset/{i}", timeout=30).json()["result"]
+    return r.get("modifiedDate"), [(d.get("resourceDescription"), d.get("resourceDownloadUrl")) for d in r["distribution"]]
+for i in (8201, 8202, 8796, 7597, 32554, 83957, 122883):
+    try:
+        mod, ds = dist(i)
+        u = next(x for _, x in ds if x)
+        b = S.get(u, timeout=60).content
+        try: t = b.decode("utf-8-sig")
+        except UnicodeDecodeError: t = b.decode("cp950", "replace")
+        rows = list(csv.reader(io.StringIO(t)))
+        out[i] = {"mod": mod, "n": len(rows), "hd": rows[0][:12], "tail": rows[-3:], "head": rows[1:3]}
+    except Exception as e:
+        out[i] = repr(e)[:200]
+t = S.get("https://data.gov.tw/datasets/export/csv", timeout=120).content.decode("utf-8-sig", "replace")
+out["weilao"] = [[x[0], x[1][:50], x[11][:16], x[12][:8], x[10][:120]] for x in csv.reader(io.StringIO(t)) if len(x) > 12 and re.search(r"危險及老舊|危老", x[1])][:30]
 json.dump(out, open("probe.json", "w"), ensure_ascii=False, indent=1)
