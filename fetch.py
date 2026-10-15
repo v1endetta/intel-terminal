@@ -6069,6 +6069,8 @@ _FW = str.maketrans("０１２３４５６７８９", "0123456789")
 
 PLVR_RENT = []   # [縣市, 鄉鎮, 每坪月租]
 RENT_PATH = DATA / "rent_towns.json"
+PLVR_PRESALE = []   # 預售屋（b 檔）：[縣市, 鄉鎮, 建案名稱, 住家用?, 建物坪數, 每坪萬元]
+PRESALE_PATH = DATA / "presale_towns.json"
 
 
 def _plvr_rows(season):
@@ -6094,6 +6096,23 @@ def _plvr_rows(season):
                     kind = "店" if ("店面" in typ or "店鋪" in typ) else "住" if "住" in use else ""   # 店面：建物型態寫店面（店鋪）的租約
                     if kind:
                         PLVR_RENT.append([PLVR_CITY[m.group(1)], d.get("鄉鎮市區", ""), float(d["單價元平方公尺"]) * 3.30579, kind])
+            except Exception:  # noqa: BLE001
+                pass
+    for name in zf.namelist():   # 預售屋（b 檔）：兩到四年後交屋，看哪一區接下來會有一波裝修、家具需求
+        m = re.match(r"^([a-z])_lvr_land_b\.csv$", name.lower())
+        if m and m.group(1) in PLVR_CITY:
+            try:
+                rd = list(csv.reader(io.StringIO(zf.read(name).decode("utf-8-sig", errors="replace"))))
+                hd = [h.strip() for h in rd[0]]
+                ix = {k: hd.index(k) for k in ("鄉鎮市區", "交易標的", "主要用途", "建物移轉總面積平方公尺", "單價元平方公尺", "建案名稱", "解約情形") if k in hd}
+                for r in rd[2:]:
+                    d = {k: (r[i].strip() if i < len(r) else "") for k, i in ix.items()}
+                    if d.get("解約情形") or "建物" not in d.get("交易標的", "") or not d.get("鄉鎮市區"):
+                        continue
+                    area = num(d.get("建物移轉總面積平方公尺")) or 0
+                    unit = num(d.get("單價元平方公尺")) or 0
+                    PLVR_PRESALE.append([PLVR_CITY[m.group(1)], d["鄉鎮市區"], d.get("建案名稱", "")[:20], "住" in d.get("主要用途", ""),
+                                         round(area / 3.30579, 1), round(unit * 3.30579 / 1e4, 1)])
             except Exception:  # noqa: BLE001
                 pass
     for name in zf.namelist():
@@ -6172,7 +6191,7 @@ def p_house():
     rows, used = [], ""
     for ssn in seasons[:3]:
         try:
-            PLVR_RENT.clear()
+            PLVR_RENT.clear(); PLVR_PRESALE.clear()
             rows = _plvr_rows(ssn)
         except Exception as e:  # noqa: BLE001
             log("plvr", ssn, e); rows = []
@@ -6193,6 +6212,22 @@ def p_house():
                                "shops": {k: [round(_med(v)), len(v)] for k, v in sh.items() if len(v) >= 3}}, separators=(",", ":"))
     except Exception as e:  # noqa: BLE001
         log("rent", e)
+    try:   # 預售屋：各鄉鎮這一季的成交件數（不含解約）、住宅坪數、每坪中位數、主要建案
+        ps = {}
+        for c, t, proj, res, ping, unit in PLVR_PRESALE:
+            x = ps.setdefault(c + t, {"n": 0, "res": 0, "ping": 0.0, "u": [], "p": {}})
+            x["n"] += 1
+            if res:
+                x["res"] += 1; x["ping"] += ping
+                if 5 <= unit <= 400:
+                    x["u"].append(unit)
+            if proj:
+                x["p"][proj] = x["p"].get(proj, 0) + 1
+        write_json(PRESALE_PATH, {"season": used, "n": len(PLVR_PRESALE), "towns": {k: [x["n"], x["res"], round(x["ping"]), round(_med(x["u"]), 1) if x["u"] else None,
+                                                                                    sorted(x["p"].items(), key=lambda kv: -kv[1])[:4]] for k, x in ps.items()}},
+                   separators=(",", ":"))
+    except Exception as e:  # noqa: BLE001
+        log("presale", e)
     deals = _plvr_clean(rows)
     # 前一季的各區中位數（算季變化）；歷史裡沒有才多抓一次
     prev_ssn = seasons[seasons.index(used) + 1] if used in seasons and seasons.index(used) + 1 < len(seasons) else None
@@ -11289,7 +11324,7 @@ run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
 run("flights", p_flights)
 run("lightning", p_lightning, keep_if_fresh_hours=0.15)
-run("house", p_house, keep_if_fresh_hours=24 * 5 if RENT_PATH.exists() and '"shops"' in RENT_PATH.read_text(encoding="utf-8") else 0)   # 租金檔還沒有店面時，這輪重抓一次
+run("house", p_house, keep_if_fresh_hours=24 * 5 if RENT_PATH.exists() and '"shops"' in RENT_PATH.read_text(encoding="utf-8") and PRESALE_PATH.exists() else 0)   # 租金檔還沒有店面時，這輪重抓一次
 run("jobs", p_jobs, keep_if_fresh_hours=6)
 run("jobtowns", p_jobtowns, keep_if_fresh_hours=20)   # 六都＋新竹各區職缺，約 170 次 104 查詢，一天一次
 run("mops", p_mops, keep_if_fresh_hours=0.5)

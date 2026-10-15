@@ -4923,6 +4923,10 @@ const AR = {
     per: () => (NAV.bt && NAV.bt.gone_month) ? String(NAV.bt.gone_month).replace("-", "/") : "當月" },
   birth: { n: "出生", u: "人", rows: C => (((P.births || {}).towns) || []).filter(r => sameC(r[0], C)).map(r => ({ t: r[1], v: r[2], sub: (P.births || {}).prev_ok && r[3] ? `比前 12 個月 ${pctTxt((r[2] / r[3] - 1) * 100)}` : "" })),
     per: () => (P.births || {}).n_months >= 12 ? "近 12 個月" : `近 ${(P.births || {}).n_months || 0} 個月` },
+  presale: { n: "預售屋成交", u: "件", rows: C => { const R = lazyJSON("presale", "presale_towns.json", 1440); if (!R || !R.towns) return [];
+      return Object.entries(R.towns).filter(([k]) => sameC(k.slice(0, 3), C)).map(([k, v]) => ({ t: k.slice(3), v: v[0],
+        sub: [v[1] ? `住宅 ${v[1]} 件・${v[2].toLocaleString("en-US")} 坪` : "", v[3] ? `每坪中位 ${v[3]} 萬` : "", (v[4] || []).length ? `主要建案：${v[4].slice(0, 2).map(p => p[0]).join("、")}` : ""].filter(Boolean).join("・") })); },
+    per: () => { const R = lazyJSON("presale", "presale_towns.json", 1440); return R && R.season ? String(R.season).replace(/^(\d+)S(\d)$/, "$1 年第 $2 季・兩到四年後交屋") : ""; } },
   rent: { n: "住家租金", u: "元／坪・月", neu: 1, rows: C => arRent("towns", C), per: () => arRentPer() },
   shop: { n: "店面租金", u: "元／坪・月", neu: 1, rows: C => arRent("shops", C), per: () => arRentPer() },
 };
@@ -4935,7 +4939,7 @@ const arFmt = (k, v) => v == null ? "—" : (AR[k].sgn && v > 0 ? "+" : v < 0 ? 
 const arNear = T => (NAV.towns || []).filter(t => t !== T && kmBetween(t.c, T.c) < 9).sort((a, b) => kmBetween(a.c, T.c) - kmBetween(b.c, T.c)).slice(0, 5);
 function arReport(T) {
   const out = [], near = arNear(T);
-  for (const k of ["move", "birth", "biz", "gone", "clinic", "aes", "house", "rent", "shop", "jobs"].filter(k => AR[k])) {
+  for (const k of ["move", "birth", "biz", "gone", "clinic", "aes", "house", "presale", "rent", "shop", "jobs"].filter(k => AR[k])) {
     const R = AR[k].rows(T.county); if (!R.length) continue;
     const me = R.find(r => r.t === T.name), sorted = R.slice().sort((a, b) => b.v - a.v);
     const avg = R.reduce((a, r) => a + r.v, 0) / R.length;
@@ -4950,7 +4954,7 @@ TW_VIEW.area = () => {
   navCounties(c => ({ op: 0.3, sub: "", prio: /[市]$/.test(c.name) ? 1 : 0 }));
   navBiz();
   return { eyebrow: "區域報告", title: "這一區值不值得進？", big: "點一個縣市", color: LENS.area.c,
-    body: `<p class="why">選一個鄉鎮，就會列出那一區的人口流向、出生、新公司與解散、診所和醫美、房價與住家、店面租金、職缺、在地新聞，跟隔壁幾區、全縣市平均比，並標出在縣市裡排第幾。所有數字都是政府開放資料原值，沒有估算。</p><p class="why">點地圖上的縣市，或用上方 ⌕ 搜尋行政區。看到想留的，按「分享」就能把這一區的報告傳出去。</p>`
+    body: `<p class="why">選一個鄉鎮，就會列出那一區的人口流向、出生、新公司與解散、診所和醫美、房價、預售屋、住家與店面租金、職缺、在地新聞，跟隔壁幾區、全縣市平均比，並標出在縣市裡排第幾。所有數字都是政府開放資料原值，沒有估算。</p><p class="why">點地圖上的縣市，或用上方 ⌕ 搜尋行政區。看到想留的，按「分享」就能把這一區的報告傳出去。</p>`
       + `<ul class="lst nvl">${rankRows(["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市"].map(k => [k, "點進去選區"]), "nc")}</ul>` };
 };
 CITY_VIEW.area = C => {
