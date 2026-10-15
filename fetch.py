@@ -10957,6 +10957,11 @@ def notify():
     pw = R("power")
     if str(pw.get("level") or "") in ("橙", "紅", "黑"):
         cand.append((f"power:{today}:{pw['level']}", False, f"供電{pw['level']}燈", f"備轉容量率 {pw.get('reserve_pct')}%（{pw.get('asof', '')}）。\n{link('電力')}"))
+    # 第一次接上：送一則確認，之後不再送
+    if not st.get("hello"):
+        r = requests.post(hook, json={"text": "*情報站・警報已接上*\n之後只有不尋常的事才會傳到這裡：地震 5.5 以上、停班停課、颱風警報、共機異常、海纜受損、台股收盤漲跌 3%、景氣燈號變色、供電警戒。一天最多 2 則（地震、停班停課例外），深夜只傳緊急的。"}, timeout=15)
+        if r.status_code == 200:
+            st["hello"] = NOW_ISO
     # 送出
     night = tpe.hour >= 23 or tpe.hour < 7
     n_today = sum(1 for v in sent.values() if v.get("day") == today and not v.get("urgent"))
