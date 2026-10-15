@@ -767,6 +767,86 @@ def _atom(url, source, limit=8):
     return out
 
 
+OSSUSE_CACHE = DATA / "ossuse_cache.json"
+OSSUSE_CATS = ("影像影片", "聲音語音", "設計", "文字寫作", "AI 助理與 agent", "資料與研究", "開發工具", "其他")
+
+
+def p_ossuse():
+    """用得上的開源：GitHub 每日＋每週熱門、Hugging Face 熱門模型與 Spaces，累積 14 天，
+    由 Gemini 依 Vin 的工作判斷「用不用得上」，只留用得上的；看過的不重複判讀。"""
+    errs, cand = [], []
+    for since, lim in (("weekly", 25), ("daily", 25)):
+        try:
+            for r in _gh_trending(since, lim):
+                cand.append({"k": "gh:" + r["name"], "name": r["name"], "url": r["url"], "desc": (r.get("desc") or "").replace(f"Star {r['name'].replace('/', ' / ')}", "").strip()[:200],
+                             "src": "GitHub", "lang": r.get("lang") or "", "stars": r.get("stars"), "gain": r.get("today"), "gain_w": since == "weekly"})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"GitHub {since}: {safe_err(e)}")
+    try:
+        for m in gjson("https://huggingface.co/api/models", params={"sort": "trendingScore", "limit": 40}):
+            if m.get("id") and not OSS_SPACE_SKIP.search(m["id"]):
+                cand.append({"k": "hf:" + m["id"], "name": m["id"], "url": "https://huggingface.co/" + m["id"], "desc": m.get("pipeline_tag") or "",
+                             "src": "HF 模型", "stars": m.get("likes"), "gain": None})
+    except Exception as e:  # noqa: BLE001
+        errs.append("HF 模型: " + safe_err(e))
+    try:
+        for sp in gjson("https://huggingface.co/api/spaces", params={"sort": "trendingScore", "limit": 40}):
+            if sp.get("id") and not OSS_SPACE_SKIP.search(sp["id"]):
+                cand.append({"k": "sp:" + sp["id"], "name": sp["id"], "url": "https://huggingface.co/spaces/" + sp["id"], "desc": sp.get("sdk") or "",
+                             "src": "HF Spaces", "stars": sp.get("likes"), "gain": None})
+    except Exception as e:  # noqa: BLE001
+        errs.append("HF Spaces: " + safe_err(e))
+    if not cand:
+        raise RuntimeError("ossuse: " + "; ".join(errs))
+    cache = {}
+    if OSSUSE_CACHE.exists():
+        try:
+            cache = json.loads(OSSUSE_CACHE.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            cache = {}
+    now = NOW.isoformat()
+    for c in cand:   # 指標每輪更新；第一次看到的時間留著
+        x = cache.setdefault(c["k"], {"first": now})
+        x.update({k: v for k, v in c.items() if k != "k" and v is not None})
+        x["last"] = now
+    todo = [k for k, x in cache.items() if "use" not in x][:40]
+    if todo and GEMINI_KEY:
+        lines = "\n".join(f'{i}. [{cache[k]["src"]}] {cache[k]["name"]}｜{cache[k].get("lang", "")}｜{cache[k].get("desc", "")}' for i, k in enumerate(todo))
+        prompt = ("你在幫一位台灣創意代理商的創意總監挑開源工具。他做品牌、社群貼文和 Reels、廣告、視覺設計；生圖和影片用 Google Flow、Kling、Runway，設計用 Figma 和 Canva；"
+                  "會用 Claude Code 和 MCP 外掛，對 AI agent、本機跑模型有興趣；不太寫程式。內容以繁體中文為主。"
+                  "下面是 GitHub 和 Hugging Face 這週的熱門項目，逐一判斷：\n"
+                  "use 0～3：0＝跟他無關（遊戲、硬體驅動、底層函式庫、資安研究、純學術）；1＝有點關係但用不到；2＝值得知道（趨勢或之後可能用到）；3＝現在就能幫上他的工作。大部分應該是 0 或 1，寧可給低分。\n"
+                  "zh：一句繁體中文說它做什麼，15～25 字，有知名產品可比就比（例如「像 Remove.bg 的開源版」），不要用「專為」「一款」「打造」「強大的」。\n"
+                  "why：use 2 以上才寫，他可以拿來做什麼，25 字內，要具體到工作場景。\n"
+                  "ease：瀏覽器就能用｜下載安裝｜要寫程式（HF Spaces 通常是瀏覽器就能用；模型通常要寫程式，除非有現成的 App）。\n"
+                  "cat：" + "|".join(OSSUSE_CATS) + "。\n"
+                  "只回 JSON：{\"items\": [{\"i\": 編號, \"use\": 分數, \"zh\": \"\", \"why\": \"\", \"ease\": \"\", \"cat\": \"\"}]}\n\n" + lines)
+        try:
+            data, _m = _gemini_json(prompt, max_tokens=8000, timeout=90, lite_first=True, max_models=3)
+            for r in _items_of(data):
+                try:
+                    k = todo[int(r.get("i"))]
+                    u = max(0, min(3, int(r.get("use") or 0)))
+                except (TypeError, ValueError, IndexError):
+                    continue
+                cat = str(r.get("cat") or "")
+                ease = str(r.get("ease") or "")
+                cache[k].update({"use": u, "zh": str(r.get("zh") or "")[:40], "why": str(r.get("why") or "")[:40] if u >= 2 else "",
+                                 "ease": ease if ease in ("瀏覽器就能用", "下載安裝", "要寫程式") else "", "cat": cat if cat in OSSUSE_CATS else "其他"})
+        except Exception as e:  # noqa: BLE001
+            errs.append("判讀: " + safe_err(e))
+    cut = (NOW - timedelta(days=14)).isoformat()
+    cache = {k: x for k, x in cache.items() if (x.get("last") or "") >= cut}
+    write_json(OSSUSE_CACHE, cache, separators=(",", ":"))
+    keep = [dict(x, k=k) for k, x in cache.items() if x.get("use", 0) >= 2]
+    keep.sort(key=lambda x: (-x["use"], -(x.get("gain") or 0), -(x.get("stars") or 0)))
+    ready = [x for x in keep if x.get("ease") in ("瀏覽器就能用", "下載安裝")]
+    watch = [x for x in keep if x not in ready]
+    slim = lambda x: {k: x.get(k) for k in ("name", "url", "src", "zh", "why", "ease", "cat", "use", "stars", "gain", "gain_w", "first")}
+    return {"ready": [slim(x) for x in ready[:15]], "watch": [slim(x) for x in watch[:12]], "n_seen": len(cache), "n_judged": sum(1 for x in cache.values() if "use" in x),
+            "errs": errs[:6], "src": "GitHub Trending（每日、每週）、Hugging Face 熱門模型與 Spaces；用不用得上、上手難度由 Gemini 依你的工作判讀，累積 14 天"}
+
+
 def p_oss():
     errs, out = [], {}
     gh_hdr = {"Accept": "application/vnd.github+json", **({"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"]} if os.environ.get("GITHUB_TOKEN") else {})}
@@ -8201,7 +8281,7 @@ INS_CATS = {
     "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue"],
     "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits", "renewal"],
     "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention", "demo", "gap"],
-    "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife"],
+    "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife", "ossuse"],
     "輿情": ["mood", "ptt", "trends", "cofacts", "gtop", "worldnews"],
     "現場": ["weather", "quake", "power", "alerts", "plaact", "cables", "airport", "typhoon"],
 }
@@ -11335,6 +11415,7 @@ run("fx", p_fx_any)
 run("poly", p_poly, keep_if_fresh_hours=0.5)
 run("tech", p_tech)
 run("oss", p_oss, keep_if_fresh_hours=1)
+run("ossuse", p_ossuse, keep_if_fresh_hours=6)  # 用得上的開源：六小時一次，新進的才判讀
 run("trends", p_trends)
 run("youtube", p_youtube, keep_if_fresh_hours=0.5)
 run("attention", p_attention, keep_if_fresh_hours=3)
