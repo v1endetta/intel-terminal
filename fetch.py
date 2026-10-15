@@ -5763,7 +5763,7 @@ def p_cctv():
     for key, kind in (("static/tc_cctv", "tc"), ("static/tn_cctv", "tn")):   # 台中、台南市區路口（交通局開放資料）
         try:
             rows = _city_cam_rows(relay_get(key).get("raw") or "")
-            info[kind] = {"n": len(rows), "keys": list(rows[0].keys())[:12] if rows else []}
+            info[kind] = {"n": len(rows), "keys": list(rows[0].keys())[:12] if rows else [], "sample": {k: str(v)[:80] for k, v in list(rows[0].items())[:8]} if rows else {}}
             n0 = len(out)
             for r in rows:
                 K = {k.lower(): v for k, v in r.items()}
