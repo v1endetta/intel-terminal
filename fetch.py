@@ -7062,7 +7062,33 @@ def p_gtop():
         raise RuntimeError("gtop: empty")
     keep = {re.sub(r"\W+", "", x["t"])[:24] for x in items}
     first = {k: v for k, v in first.items() if k in keep}   # 掉出榜的就忘掉，下次上榜重新算
-    return {"items": items, "first": first, "src": "Google 新聞・焦點新聞（台灣，非個人化）"}
+    # 配圖：Google 新聞的 RSS 沒有圖、連結也解不出原文，改用同一則標題去 Bing 新聞找縮圖（找不到就不放）
+    imgs = {k: v for k, v in (prev.get("imgs") or {}).items() if k in keep}
+    nq = 0
+    for x in items[:15]:
+        k = re.sub(r"\W+", "", x["t"])[:24]
+        if k in imgs:
+            x["img"] = imgs[k]; continue
+        if nq >= 15:
+            continue
+        nq += 1
+        try:
+            b = S.get("https://www.bing.com/news/search", params={"q": x["t"][:40], "format": "rss", "mkt": "zh-TW"}, timeout=12).text
+            img = ""
+            for itm in re.findall(r"<item>(.*?)</item>", b, re.S)[:3]:
+                t2 = html_mod.unescape(re.sub(r"<[^>]+>", "", (re.findall(r"<title>(.*?)</title>", itm, re.S) or [""])[0]))
+                a1, a2 = set(re.sub(r"\W", "", x["t"])), set(re.sub(r"\W", "", t2))
+                m = re.search(r"<News:Image>(.*?)</News:Image>", itm)
+                if m and a1 and len(a1 & a2) / len(a1) >= 0.6:
+                    img = html_mod.unescape(m.group(1)).replace("http://", "https://")
+                    img += ("&" if "?" in img else "?") + "w=240&h=150&c=7"
+                    break
+            imgs[k] = img
+            if img:
+                x["img"] = img
+        except Exception:  # noqa: BLE001
+            pass
+    return {"items": items, "first": first, "imgs": imgs, "src": "Google 新聞・焦點新聞（台灣，非個人化）；縮圖來自 Bing 新聞"}
 
 
 # ---------- 台海：國防部「中共解放軍臺海周邊海、空域動態」每日公布 → 共機、逾越中線、共艦、公務船、氣球的每日數字 ----------
