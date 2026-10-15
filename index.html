@@ -618,6 +618,10 @@ body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!im
 .insl i{font-style:normal;font-size:11px;font-weight:700;color:#1d1d1f;background:#ffd60a;border-radius:5px;padding:2px 7px;margin-right:8px;vertical-align:1px}
 
 .plaimg{display:block;width:100%;border-radius:10px;margin:10px 0 4px;opacity:.95}
+
+#crumb .shr{border:0;background:rgba(255,255,255,.08);color:#f5f5f7;font:500 12px/1 inherit;padding:7px 10px;border-radius:999px;cursor:pointer;margin-left:6px;white-space:nowrap}
+#crumb .shr:hover{background:rgba(255,255,255,.16)}
+#crumb .shr.ok{background:rgba(48,209,88,.22);color:#30d158}
 </style>
 <script type="importmap">
 {"imports":{
@@ -4118,7 +4122,7 @@ function navCrumb() {
   const srch = el.querySelector(".srch"), LZ = LENS[NAV.lens];
   const badge = NAV.lens !== "now" ? `<button data-go="lz" class="lz" style="--c:${LZ.c}" aria-label="地圖視角：${LZ.n}，點一下回到現場"><i></i>${LZ.n}<span>×</span></button>` : NAV.quiet && NAV.bare ? `<span class="lz q" title="這則資訊沒有地點，地圖先只留地形；拉近或點縣市就回到現場">這則沒有地點</span>` : "";
   const dt = DELTA_OK[NAV.lens] ? `<span class="dt"><button data-go="d0" class="${NAV.delta ? "" : "on"}">現況</button><button data-go="d1" class="${NAV.delta ? "on" : ""}">${DELTA_OK[NAV.lens]}</button></span>` : "";
-  el.innerHTML = `<div class="path">${parts.join('<span class="sep">›</span>')}</div>${badge}${dt}<button data-go="s" class="sbtn" aria-label="搜尋">⌕</button><div class="srch"><input type="search" placeholder="搜尋縣市、行政區、地標" aria-label="搜尋地點"><div class="res"></div></div>`;
+  el.innerHTML = `<div class="path">${parts.join('<span class="sep">›</span>')}</div>${badge}${dt}<button data-go="share" class="shr" aria-label="複製這個畫面的連結">分享</button><button data-go="s" class="sbtn" aria-label="搜尋">⌕</button><div class="srch"><input type="search" placeholder="搜尋縣市、行政區、地標" aria-label="搜尋地點"><div class="res"></div></div>`;
   if (srch && el.classList.contains("searching")) { const i = el.querySelector("input"); i.value = srch.querySelector("input").value; navSearch(i.value); }
 }
 const NAV_LM = [["台北 101", 121.5645, 25.034], ["高雄 85 大樓", 120.3007, 22.6116], ["圓山大飯店", 121.5262, 25.0785], ["台中國家歌劇院", 120.6406, 24.1627], ["赤崁樓", 120.2025, 22.9975]];
@@ -4821,6 +4825,52 @@ TW_VIEW.cable = () => {
       + ((D.news || []).length ? `<div class="nvh">海纜新聞・近 60 天</div>` + listHTML(D.news.slice(0, 6).map(n => ({ t: n.title, s: `${n.source || ""}・${navAgo(n.at)}`, url: n.url }))) : `<p class="why">近 60 天沒有海纜受損或中斷的新聞。</p>`)
       + `<div class="nvh">海纜（新到舊）</div>` + listHTML(cs.slice().sort((a, b) => (b.rfs || 0) - (a.rfs || 0)).map(c => ({ t: `${c.name}${c.planned ? "（建設中）" : ""}`, s: [c.rfs ? `${c.rfs} 年啟用` : "", c.length, (c.tw_lp || []).join("、"), c.owners ? c.owners.split(",").slice(0, 3).join("、") : ""].filter(Boolean).join("・") }))) };
 };
+
+/* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */
+const DL = { applied: false, last: "" };
+const dlFind = n => { const E = EXPLORE(); for (const c of E) { const it = c.items.find(x => x.n === n); if (it) return [c.cat, it.n]; } return null; };
+const dlPlace = s => {
+  s = norm(String(s || "")); if (!s) return {};
+  const C = COUNTIES.find(c => s.startsWith(norm(c.name))); if (!C) return {};
+  const rest = s.slice(norm(C.name).length);
+  const T = rest ? (NAV.towns || []).find(t => sameC(t.county, C.name) && t.name === rest) : null;
+  return { C, T };
+};
+function dlApply() {
+  const q = new URLSearchParams(location.search), item = q.get("看"), place = q.get("地");
+  if (!item && !place) { DL.applied = true; return; }
+  if (place && !NAV.towns && !DL.tw) { DL.tw = 1; navTowns(); }   // 行政區外框平常是進到地圖才載，這裡先載
+  if (!ST.openAt || !ST.chapters || !ST.chapters.length || !COUNTIES.length || (place && !NAV.towns)) return setTimeout(dlApply, 300);
+  DL.applied = true;
+  if (typeof INTRO !== "undefined" && INTRO.on) endIntro(true);
+  const hit = dlFind(item) || ["現場", "此刻"];
+  scrollTo({ top: (ST.chapters.length - 1) * secH(), behavior: "auto" });
+  setTimeout(() => { ST.openAt(hit[0], hit[1]);
+    const { C, T } = dlPlace(place);
+    if (C) setTimeout(() => { if (T) navGoTown(T); else navGoCounty(C); }, 1500);   // 先等鏡頭回到全台灣，再飛過去
+  }, 400);
+}
+function dlState() {
+  if (!DL.applied) return;
+  let s = "";
+  if (ST.explore && EXCAT >= 0) {
+    const E = EXPLORE(), it = E[EXCAT] && E[EXCAT].items[EXITEM], q = new URLSearchParams();
+    if (it) q.set("看", it.n);
+    if (NAV.level >= 1 && NAV.county) q.set("地", norm(NAV.county.name) + (NAV.level === 2 && NAV.town ? NAV.town.name : ""));
+    s = q.toString() ? "?" + q.toString() : "";
+  }
+  if (s !== DL.last) { DL.last = s; try { history.replaceState(null, "", location.pathname + s); } catch (e) { } }
+}
+setTimeout(dlApply, 600);
+setInterval(dlState, 800);
+// 麵包屑的「分享」：複製這個畫面的連結
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("[data-go=share]"); if (!b) return;
+  dlState();
+  const done = () => { b.classList.add("ok"); b.textContent = "已複製"; setTimeout(() => { b.classList.remove("ok"); b.textContent = "分享"; }, 1600); };
+  if (navigator.share && MOBILE) navigator.share({ title: document.title, url: location.href }).catch(() => { });
+  else if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(done, () => { b.textContent = "請從網址列複製"; });
+});
 
 /* ---------- 發光後製：亮的東西（掃描線、燈光、資料線、窗戶）暈開；手機用半解析度 ---------- */
 const FX = { on: new URLSearchParams(location.search).get("fx") !== "0" && !LITE };
