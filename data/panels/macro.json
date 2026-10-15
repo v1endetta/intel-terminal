@@ -1,0 +1,89 @@
+{
+ "items": [
+  {
+   "label": "CPI 年增",
+   "value": "2.73%",
+   "period": "2026-09",
+   "prev": "2.05%",
+   "tone": "up",
+   "src": "主計總處（自動）"
+  },
+  {
+   "label": "核心 CPI 年增",
+   "value": "2.52%",
+   "period": "2026-09",
+   "prev": "2.31%",
+   "tone": "up",
+   "src": "主計總處（自動）"
+  },
+  {
+   "label": "失業率",
+   "value": "3.41%",
+   "period": "2026-08",
+   "prev": "3.39%",
+   "tone": "up",
+   "src": "主計總處（自動）"
+  },
+  {
+   "label": "GDP 成長率（最新季）",
+   "value": "12.92%",
+   "period": "2026Q2",
+   "prev": "15.43%",
+   "tone": "down"
+  },
+  {
+   "label": "PPI 年增",
+   "value": "16.75%",
+   "period": "2026-08",
+   "prev": "16.94%",
+   "tone": "down"
+  },
+  {
+   "label": "消費者信心指數",
+   "value": "65.01",
+   "period": "2026-08",
+   "prev": "64.58",
+   "tone": "up"
+  },
+  {
+   "label": "景氣燈號",
+   "value": "紅燈",
+   "score": 41,
+   "period": "2026-09",
+   "auto": true
+  },
+  {
+   "label": "重貼現率",
+   "value": "2.000%",
+   "period": "2026-08",
+   "auto": true
+  },
+  {
+   "label": "M1B 年增",
+   "value": "6.65%",
+   "period": "2026-08",
+   "prev": "7.34%",
+   "tone": "down",
+   "auto": true
+  },
+  {
+   "label": "M2 年增",
+   "value": "6.79%",
+   "period": "2026-08",
+   "prev": "7.42%",
+   "tone": "down",
+   "auto": true
+  },
+  {
+   "label": "信義房價指數（全台）",
+   "value": "168.77",
+   "period": "2026/Q2",
+   "sub": "季 +0.74% · 年 +2.66%",
+   "tone": "up",
+   "auto": true
+  }
+ ],
+ "note": "自動：景氣燈號（國發會）· 重貼現率、M1B、M2（央行）· 房價指數（信義）。CPI、核心 CPI、失業率：主計總處（台灣抓取站代抓，自動）。手動：PPI、GDP、CCI",
+ "auto_errors": [],
+ "updatedAt": "2026-10-15T11:33:43Z"
+}

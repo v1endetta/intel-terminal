@@ -1,0 +1,91 @@
+{
+ "n": 4919,
+ "info": {
+  "fw": {
+   "n": 1881,
+   "cols": [
+    "CCTVID",
+    "SubAuthorityCode",
+    "LinkID",
+    "VideoStreamURL",
+    "LocationType",
+    "PositionLon",
+    "PositionLat",
+    "RoadID",
+    "RoadName",
+    "RoadClass",
+    "RoadDirection",
+    "RoadSection.Start",
+    "RoadSection.End",
+    "LocationMile"
+   ],
+   "at": "2026-10-15T05:50:10+08:00"
+  },
+  "thb": {
+   "n": 2345,
+   "cols": [
+    "CCTVID",
+    "SubAuthorityCode",
+    "LinkID",
+    "VideoStreamURL",
+    "VideoImageURL",
+    "LocationType",
+    "PositionLon",
+    "PositionLat",
+    "SurveillanceDescription",
+    "RoadID",
+    "RoadName",
+    "RoadClass",
+    "RoadDirection",
+    "LocationMile"
+   ],
+   "at": "2026-10-15T06:20:10+08:00"
+  },
+  "tc": {
+   "n": 315,
+   "keys": [
+    "cctvid",
+    "roadsection",
+    "px",
+    "py",
+    "url",
+    "status",
+    "AgencyCodes",
+    "LocalCallService",
+    "Extension",
+    "CountyCode",
+    "AreaCode",
+    "PostalCode"
+   ],
+   "sample": {
+    "cctvid": "66000C000001",
+    "roadsection": "中清路/環中路(右側車流往文心路),Zhongqing Rd./Huanzhong Rd. (Right side Traffic flow to Wenxin",
+    "px": "120.6555749",
+    "py": "24.1996255",
+    "url": "https://motoretag.taichung.gov.tw/ATIS_TCC/Device/Showcctv?id=C000001",
+    "status": "0",
+    "AgencyCodes": "387000000A",
+    "LocalCallService": "(04)22289111"
+   },
+   "kept": 315
+  },
+  "tn": {
+   "n": 397,
+   "keys": [
+    "Location",
+    "wgsx",
+    "wgsy",
+    "url"
+   ],
+   "sample": {
+    "Location": "大同路一段與法華街口西桿(向西)-廣角",
+    "wgsx": "120.211108",
+    "wgsy": "22.984683",
+    "url": "https://trafficvideo3.tainan.gov.tw/cf1d895e"
+   },
+   "kept": 397
+  }
+ },
+ "errs": [],
+ "updatedAt": "2026-10-15T07:37:25Z"
+}
