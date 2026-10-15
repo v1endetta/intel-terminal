@@ -7411,9 +7411,25 @@ def p_aesthetic():
             "src": "衛福部醫事司 醫療機構與人員基本資料（每年一版）對照健保特約名冊；醫美＝名稱有醫美／美學／整形等，或沒簽健保的整形外科、皮膚科；自費＝沒簽健保的其他西醫診所（多數做醫美、健檢、減重）"}
 
 
+# ---------- 村里中心點（台灣抓取站從國土測繪中心抓村里界一次、算好中心）→ data/villages.json ----------
+VILLAGES_PATH = DATA / "villages.json"
+
+
+def p_villages():
+    d = relay_get("static/villages")
+    v = d.get("v") or []
+    if len(v) < 5000:
+        raise RuntimeError(f"villages: 只有 {len(v)} 筆")
+    write_json(VILLAGES_PATH, {"src": d.get("src"), "at": d.get("at"), "v": [[norm_c(r[0]), r[1], r[2], r[3], r[4]] for r in v]}, separators=(",", ":"))
+    return {"n": len(v), "at": d.get("at")}
+
+
 # ---------- 人口遷徙：內政部遷入遷出統計（到村里，每月）→ 各鄉鎮淨流入、從外縣市還是本縣搬來；最近 12 個月累計 ----------
 MIG_DS = "77144"
 MIG_CACHE = DATA / "migration_cache.json"
+MIG_VCACHE = DATA / "migration_vcache.json"   # 村里層級，每月一份
+MIG_VILL = DATA / "mig_villages.json"         # 前端讀：近 12 個月各村里遷入遷出
+MIG_VCACHE_TMP = {}
 
 
 def _mig_month(url):
@@ -7423,20 +7439,26 @@ def _mig_month(url):
         return None, {}
     ym = rows[0].get("統計年月") or ""
     num = lambda v: int(re.sub(r"[^\d-]", "", str(v or "0")) or 0)
-    agg = {}
+    agg, vagg = {}, {}
     for r in rows:
         area = (r.get("區域別") or "").strip()
         tk = area if area in TOWNS else _addr_town(area)
         if not tk:
             continue
+        vn = (r.get("村里名稱") or "").strip()
         a = agg.setdefault(tk, [0, 0, 0, 0, 0])   # 遷入、遷出、外縣市遷入、本縣他鄉鎮遷入、國外遷入
         g2 = lambda pre: num(r.get(pre + "_男")) + num(r.get(pre + "_女"))
         a[0] += g2("遷入人數_合計"); a[1] += g2("遷出人數_合計"); a[4] += g2("遷入人數_自國外")
         a[3] += g2("遷入人數_自本縣（市）他鄉（鎮市區）")
-        a[2] += sum(g2(k[:-2]) for k in r if k.startswith("遷入人數_自他省（市）") and k.endswith("_男")) + g2("遷入人數_自本省他縣（市）_")
+        ext = sum(g2(k[:-2]) for k in r if k.startswith("遷入人數_自他省（市）") and k.endswith("_男")) + g2("遷入人數_自本省他縣（市）_")
+        a[2] += ext
+        if vn:   # 村里層級（給區域報告畫半徑用）：遷入、遷出、外縣市遷入
+            v = vagg.setdefault(tk + "|" + vn, [0, 0, 0])
+            v[0] += g2("遷入人數_合計"); v[1] += g2("遷出人數_合計"); v[2] += ext
     if not ym:
         return None, {}
     y, m = int(ym[:-2]) + 1911, int(ym[-2:])
+    MIG_VCACHE_TMP[f"{y}-{m:02d}"] = vagg
     return f"{y}-{m:02d}", agg
 
 
@@ -7509,6 +7531,38 @@ def p_migration():
             errs.append(safe_err(e))
         if got >= 6:   # 一次最多補 6 個月，避免第一次跑太久
             break
+    # 村里層級：視窗內每個月都要有；舊版快取沒存村里的月份重抓（一輪最多 4 個月）
+    try:
+        vc = json.loads(MIG_VCACHE.read_text(encoding="utf-8")) if MIG_VCACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        vc = {}
+    vc.update(MIG_VCACHE_TMP)
+    vgot = 0
+    for ym in want:
+        if ym in vc or vgot >= 4:
+            continue
+        u = next((u for u, y in ymap.items() if y == ym), None)
+        if not u:
+            continue
+        try:
+            _mig_month(u); vc.update(MIG_VCACHE_TMP); vgot += 1
+        except Exception as e:  # noqa: BLE001
+            errs.append("村里：" + safe_err(e))
+    vc = {k: v for k, v in vc.items() if k in span}
+    write_json(MIG_VCACHE, vc, separators=(",", ":"))
+    vw = sorted(vc)
+    if vw:
+        tot = {}
+        for m in vw:
+            for k, v in vc[m].items():
+                t = tot.setdefault(k, [0, 0, 0])
+                t[0] += v[0]; t[1] += v[1]; t[2] += v[2]
+        rows_v = []
+        for k, v in tot.items():
+            tk, vn = k.split("|", 1)
+            if tk in TOWNS:
+                rows_v.append([norm_c(TOWNS[tk][2]), TOWNS[tk][3], vn, v[0], v[1], v[2]])
+        write_json(MIG_VILL, {"months": [vw[0], vw[-1]], "n_months": len(vw), "cols": ["縣市", "鄉鎮", "村里", "遷入", "遷出", "外縣市遷入"], "v": rows_v}, separators=(",", ":"))
     known = set(ymap)
     cache["_urls"] = sorted(known)
     months = sorted(k for k in cache if re.match(r"^\d{4}-\d{2}$", k))
@@ -10563,6 +10617,7 @@ run("prices", p_prices, keep_if_fresh_hours=1)  # 物價細項：月資料；全
 run("tourism", p_tourism, keep_if_fresh_hours=24)
 run("clinics", p_clinics, keep_if_fresh_hours=20 if NHI_CODES_PATH.exists() else 0)  # 診所：健保名冊每天更新，一天抓一次
 run("aesthetic", p_aesthetic, keep_if_fresh_hours=24 * 7)  # 醫美：衛福部全機構名冊一年一版，一週檢查一次
+run("villages", p_villages, keep_if_fresh_hours=24 * 30 if VILLAGES_PATH.exists() else 1)  # 村里中心點：一個月檢查一次
 run("migration", p_migration, keep_if_fresh_hours=1)  # 人口遷徙：每月資料；檔案年月已快取，平常只檢查有沒有新檔，第一次分幾輪補齊 12 個月  # 觀光：年資料＋台北旅館月資料，一天抓一次
 run("ipr", p_ipr, keep_if_fresh_hours=72)
 run("media", p_media, keep_if_fresh_hours=2)

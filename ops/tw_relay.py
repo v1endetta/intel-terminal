@@ -347,6 +347,70 @@ def city_cctv(state, errs):
             at[k] = time.time() - 86400 + 6 * 3600
 
 
+VILL_ZIP = "https://www.tgos.tw/tgos/VirtualDir/Product/a04697c8-64db-450a-a105-3eb471c45abd/" + urllib.parse.quote("村(里)界(TWD97經緯度).zip", safe="()")
+
+
+def _shp_dbf_centroids(zbytes):
+    """純標準函式庫讀 SHP＋DBF（國土測繪中心村里界）→ [[縣市, 鄉鎮, 村里, 經度, 緯度]]，中心用最大那塊的面積加權。"""
+    import io, struct, zipfile
+    z = zipfile.ZipFile(io.BytesIO(zbytes)); names = z.namelist()
+    shp_n = next(n for n in names if n.lower().endswith(".shp")); base = shp_n[:-4]
+    find = lambda ext: next((n for n in names if n.lower() == (base + ext).lower()), None)
+    shp, dbf = z.read(shp_n), z.read(find(".dbf"))
+    cpg = z.read(find(".cpg")).decode("ascii", "ignore").strip().lower() if find(".cpg") else ""
+    enc = "utf-8" if "utf" in cpg else "cp950"
+    nrec, hlen, rlen = struct.unpack("<IHH", dbf[4:12])
+    fields, off = [], 32
+    while dbf[off] != 0x0D:
+        nm = dbf[off:off + 11].split(b"\0")[0].decode("ascii", "ignore"); fl = dbf[off + 16]; fields.append((nm, fl)); off += 32
+    recs = []
+    for i in range(nrec):
+        r = dbf[hlen + i * rlen: hlen + (i + 1) * rlen]; pos, d = 1, {}
+        for nm, fl in fields:
+            raw = r[pos:pos + fl]
+            try:
+                d[nm] = raw.decode(enc).strip()
+            except UnicodeDecodeError:
+                d[nm] = raw.decode("cp950" if enc == "utf-8" else "utf-8", "replace").strip()
+            pos += fl
+        recs.append(d)
+    out, pos, k = [], 100, 0
+    while pos + 8 <= len(shp) and k < len(recs):
+        clen = struct.unpack(">i", shp[pos + 4:pos + 8])[0] * 2; c = shp[pos + 8:pos + 8 + clen]; pos += 8 + clen
+        rec = recs[k]; k += 1
+        if len(c) < 44 or struct.unpack("<i", c[:4])[0] not in (5, 15, 25):
+            continue
+        npart, npt = struct.unpack("<ii", c[36:44])
+        parts = list(struct.unpack(f"<{npart}i", c[44:44 + 4 * npart])) + [npt]
+        p0 = 44 + 4 * npart
+        pts = [struct.unpack("<dd", c[p0 + 16 * j:p0 + 16 * j + 16]) for j in range(npt)]
+        best, bA = None, 0.0
+        for i in range(npart):
+            ring = pts[parts[i]:parts[i + 1]]
+            A = cx = cy = 0.0
+            for (x0, y0), (x1, y1) in zip(ring, ring[1:] + ring[:1]):
+                cr = x0 * y1 - x1 * y0; A += cr; cx += (x0 + x1) * cr; cy += (y0 + y1) * cr
+            if A and abs(A) > bA:
+                bA, best = abs(A), (cx / (3 * A), cy / (3 * A))
+        if best:
+            g = lambda *ks: next((rec[f] for f in rec for kk in ks if f.upper() == kk), "")
+            out.append([g("COUNTYNAME").replace("台", "臺"), g("TOWNNAME"), g("VILLNAME"), round(best[0], 5), round(best[1], 5)])
+    return out, [f[0] for f in fields]
+
+
+def villages_once(state, errs):
+    st = state.setdefault("vill", {"done": 0, "try": 0})
+    if st.get("done") or time.time() - st.get("try", 0) < 6 * 3600:
+        return
+    st["try"] = time.time()
+    try:
+        rows, flds = _shp_dbf_centroids(get(VILL_ZIP, 120))
+        gcs_put("relay/static/villages.json.gz", gz({"at": NOW_ISO, "src": "內政部國土測繪中心 村里界圖（TWD97經緯度），面積加權中心", "fields": flds, "v": rows}))
+        st["done"] = time.time(); st["n"] = len(rows)
+    except Exception as e:  # noqa: BLE001
+        errs["villages"] = repr(e)[:200]
+
+
 MND = "https://www.mnd.gov.tw/"
 
 
@@ -406,6 +470,11 @@ def main():
         stats_daily(state, errs)
     except Exception as e:  # noqa: BLE001
         errs["stats"] = repr(e)[:200]
+
+    try:
+        villages_once(state, errs)
+    except Exception as e:  # noqa: BLE001
+        errs["villages"] = repr(e)[:200]
 
     try:
         city_cctv(state, errs)
