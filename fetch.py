@@ -5705,6 +5705,38 @@ def _news_value(pts):
 CCTV_PATH = DATA / "cctv.json"
 
 
+def _city_cam_rows(raw):
+    """縣市攝影機原始檔（JSON／CSV／XML）→ list of dict。"""
+    import csv, io
+    t = raw.strip()
+    if t[:1] in "[{":
+        d = json.loads(t)
+        def find(x):
+            if isinstance(x, list) and x and isinstance(x[0], dict):
+                return x
+            if isinstance(x, dict):
+                for v in x.values():
+                    f = find(v)
+                    if f:
+                        return f
+            if isinstance(x, list):
+                for v in x:
+                    f = find(v)
+                    if f:
+                        return f
+            return None
+        return find(d) or []
+    if t.startswith("<"):
+        root = ET.fromstring(t.encode("utf-8"))
+        rows = []
+        for e in root.iter():
+            kids = list(e)
+            if kids and all(not list(k) for k in kids) and len(kids) >= 3:
+                rows.append({k.tag.split("}")[-1]: (k.text or "").strip() for k in kids})
+        return rows
+    return list(csv.DictReader(io.StringIO(t)))
+
+
 def p_cctv():
     """公路攝影機清單（國道、省道；台灣抓取站一天抓一次）→ data/cctv.json：[[經度, 緯度, 種類, 名稱, 影像網址]]。
     影像本身不經過我們，由看的人的瀏覽器直接向高公局、公路局載入。"""
@@ -5728,9 +5760,27 @@ def p_cctv():
                 continue
             nm = " ".join(dict.fromkeys(str(r[i]) for i in inm if r[i] not in (None, "")))[:40]
             out.append([round(lo, 5), round(la, 5), kind, nm, u])
+    for key, kind in (("static/tc_cctv", "tc"), ("static/tn_cctv", "tn")):   # 台中、台南市區路口（交通局開放資料）
+        try:
+            rows = _city_cam_rows(relay_get(key).get("raw") or "")
+            info[kind] = {"n": len(rows), "keys": list(rows[0].keys())[:12] if rows else []}
+            n0 = len(out)
+            for r in rows:
+                K = {k.lower(): v for k, v in r.items()}
+                g = lambda *ks: next((K[k] for k in ks if K.get(k) not in (None, "")), None)
+                lo, la = num(g("px", "wgsx", "lon", "longitude", "positionlon", "x")), num(g("py", "wgsy", "lat", "latitude", "positionlat", "y"))
+                if lo and la and lo > 1000:   # TWD97 → 經緯度
+                    lo, la = _twd97_to_wgs84(lo, la)
+                u = str(g("url", "videostreamurl", "imageurl", "videourl", "cctvurl", "link") or "")
+                if not lo or not la or not (118 < lo < 123 and 21 < la < 27) or not u.startswith("http") or str(g("status") or "1") in ("0", "N", "停用"):
+                    continue
+                out.append([round(lo, 5), round(la, 5), kind, str(g("roadsection", "location", "name", "cctvname", "camname", "roadname") or "")[:40], u])
+            info[kind]["kept"] = len(out) - n0
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{kind}: {safe_err(e)}")
     if not out:
         raise RuntimeError("cctv: nothing " + "; ".join(errs)[:200])
-    write_json(CCTV_PATH, {"at": NOW.isoformat(), "cams": out, "src": "交通部高速公路局、公路局 開放資料"}, separators=(",", ":"))
+    write_json(CCTV_PATH, {"at": NOW.isoformat(), "cams": out, "src": "交通部高速公路局、公路局、臺中市政府交通局、臺南市政府交通局 開放資料"}, separators=(",", ":"))
     return {"n": len(out), "info": info, "errs": errs[:4]}
 
 
@@ -10583,7 +10633,7 @@ run("think", p_think, keep_if_fresh_hours=2)
 run("voice", p_voice, keep_if_fresh_hours=6)
 run("pop", p_pop, keep_if_fresh_hours=3)
 run("roads", p_roads)
-run("cctv", p_cctv, keep_if_fresh_hours=12 if CCTV_PATH.exists() and '"thb"' in CCTV_PATH.read_text(encoding="utf-8") else 1)   # 攝影機清單（地圖車流視角）
+run("cctv", p_cctv, keep_if_fresh_hours=12 if CCTV_PATH.exists() and '"tc"' in CCTV_PATH.read_text(encoding="utf-8") else 1)   # 攝影機清單（地圖車流視角）
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
 run("insights", p_insights, keep_if_fresh_hours=6 if (load_prev("insights") or {}).get("v") == 5 else 0)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪

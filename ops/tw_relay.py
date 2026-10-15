@@ -324,6 +324,29 @@ def stats_daily(state, errs):
         gcs_put("relay/static/stats_summary.json.gz", gz({"at": NOW_ISO, "jobs": summ}))
 
 
+CITY_CCTV = {   # 縣市交通局的路口攝影機（原始檔照存，fetch.py 解析）
+    "tc_cctv": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=695dc746-4b1e-4d1d-98a8-a894e7d8dc81",
+    "tn_cctv": "https://trafficopendata.tainan.gov.tw/opendata/json/cctv/latest",
+}
+
+
+def city_cctv(state, errs):
+    at = state.setdefault("city_cctv_at", {})
+    for k, u in CITY_CCTV.items():
+        if time.time() - at.get(k, 0) < 86400:
+            continue
+        try:
+            b = get(u, 60)
+            txt = b.decode("utf-8-sig", "replace")
+            if "\ufffd" in txt[:2000]:
+                txt = b.decode("big5", "replace")
+            gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "raw": txt[:4_000_000]}))
+            at[k] = time.time()
+        except Exception as e:  # noqa: BLE001
+            errs[k] = repr(e)[:200]
+            at[k] = time.time() - 86400 + 6 * 3600
+
+
 MND = "https://www.mnd.gov.tw/"
 
 
@@ -383,6 +406,11 @@ def main():
         stats_daily(state, errs)
     except Exception as e:  # noqa: BLE001
         errs["stats"] = repr(e)[:200]
+
+    try:
+        city_cctv(state, errs)
+    except Exception as e:  # noqa: BLE001
+        errs["city_cctv"] = repr(e)[:200]
 
     try:
         mnd_plaact(state, errs)

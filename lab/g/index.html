@@ -3624,8 +3624,9 @@ function vdDraw(segs, lift) {
   for (const x of segs) { C.setHex(vdCol(x[4])); const a = gp(x[0], x[1], lift), b = gp(x[2], x[3], lift); pos.push(a.x, a.y, a.z, b.x, b.y, b.z); col.push(C.r, C.g, C.b, C.r, C.g, C.b); }
   if (pos.length) NAV.g.add(fatSegs(pos, col, MOBILE ? 2.5 : 3.5, 0.95));
 }
-const camName = c => String(c[3] || (c[2] === "fw" ? "國道" : "省道")).replace(/ S /, " 南向 ").replace(/ N /, " 北向 ").replace(/ E /, " 東向 ").replace(/ W /, " 西向 ");
-const camHTML = list => list.length ? `<div class="nvh">附近的公路攝影機（${list.length}）</div><ul class="lst nvl cams">${list.slice(0, 6).map(({ c, d }) => `<li><button class="cam" ${camAttrs(c)}>▶ ${esc(camName(c))}</button><span>${c[2] === "fw" ? "國道" : "省道"}・${dist(d)}</span></li>`).join("")}</ul>` : "";
+const CAMK = { fw: "國道", thb: "省道", tc: "台中市區", tn: "台南市區" };
+const camName = c => String(c[3] || CAMK[c[2]] || "攝影機").replace(/ S /, " 南向 ").replace(/ N /, " 北向 ").replace(/ E /, " 東向 ").replace(/ W /, " 西向 ");
+const camHTML = list => list.length ? `<div class="nvh">附近的攝影機（${list.length}）</div><ul class="lst nvl cams">${list.slice(0, 6).map(({ c, d }) => `<li><button class="cam" ${camAttrs(c)}>▶ ${esc(camName(c))}</button><span>${CAMK[c[2]] || ""}・${dist(d)}</span></li>`).join("")}</ul>` : "";
 const camAttrs = c => `data-cam="${esc(c[4])}" data-camn="${esc(camName(c))}" data-ll="${c[0]},${c[1]}"`;
 const trAt = () => ROADS_LIVE && ROADS_LIVE.at ? ROADS_LIVE.at.slice(11, 16) : "";
 // 個股：總部地址（listed_basic.json）→ 鄉鎮中心；重大訊息（mops）本來就有座標
@@ -3851,7 +3852,7 @@ const CITY_VIEW = {
         + (() => { const seen = new Set(), near = [];   // 塞的地方（或事件）旁邊最近的攝影機，直接點來看
           for (const x of [...slow.slice(0, 4), ...E.slice(0, 3)]) { const c = camsNear(x.ll, 1.5)[0]; if (c && !seen.has(c.c[4])) { seen.add(c.c[4]); near.push(c); } }
           camSetList(near.map(x => x.c), { auto: false, where: norm(C.name) + "塞車點" });
-          return near.length ? camHTML(near).replace("附近的公路攝影機", "塞車點旁的攝影機") : ""; })() };
+          return near.length ? camHTML(near).replace("附近的攝影機", "塞車點旁的攝影機") : ""; })() };
   },
   jobs(C) {
     const ts = navOutline(C), R = jobTowns(C.name), a = jobArea(C.name), L = jobLatest(C.name), view = NAV.viewD || 60;
