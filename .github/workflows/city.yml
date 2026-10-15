@@ -1,0 +1,49 @@
+name: city
+
+# 住哪裡：各鄉鎮生活條件評分（網路、咖啡與共同工作空間、租金、空氣、交通、醫療、人口）。每週一次，手動也可以跑。
+# 只寫 data/city_scores.json，主迴圈不會碰這個檔。
+
+on:
+  schedule:
+    - cron: "20 19 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: city
+  cancel-in-progress: false
+
+jobs:
+  city:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: data
+          path: out
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests duckdb
+      - name: Build city scores
+        env:
+          INTEL_DATA_DIR: ${{ github.workspace }}/out/data
+        run: python city.py
+      - name: Commit to data branch
+        run: |
+          cd out
+          git config user.name "intel-bot"
+          git config user.email "intel-bot@users.noreply.github.com"
+          git add data/city_scores.json
+          git diff --cached --quiet && { echo "no change"; exit 0; }
+          git commit -qm "city: $(date -u +'%Y-%m-%d %H:%M') UTC"
+          for i in 1 2 3 4 5 6; do
+            git push -q origin HEAD:data && exit 0
+            sleep 10; git pull -q --rebase origin data || { git rebase --abort; exit 1; }
+          done
+          exit 1

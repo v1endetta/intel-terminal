@@ -5885,6 +5885,10 @@ PLVR_CITY = {"a": "臺北市", "b": "臺中市", "c": "基隆市", "d": "臺南�
 _FW = str.maketrans("０１２３４５６７８９", "0123456789")
 
 
+PLVR_RENT = []   # [縣市, 鄉鎮, 每坪月租]
+RENT_PATH = DATA / "rent_towns.json"
+
+
 def _plvr_rows(season):
     """一季的買賣明細（a 檔），每列回傳 dict。"""
     import zipfile
@@ -5893,6 +5897,20 @@ def _plvr_rows(season):
     rows = []
     want = ("鄉鎮市區", "交易標的", "土地位置建物門牌", "交易年月日", "移轉層次", "總樓層數", "建物型態", "主要用途", "建築完成年月", "建物移轉總面積平方公尺",
             "建物現況格局-房", "建物現況格局-廳", "總價元", "單價元平方公尺", "車位移轉總面積平方公尺", "車位總價元", "備註", "電梯")
+    for name in zf.namelist():   # 租賃（c 檔）順便收，給「住哪裡」算租金
+        m = re.match(r"^([a-z])_lvr_land_c\.csv$", name.lower())
+        if m and m.group(1) in PLVR_CITY:
+            try:
+                rd = list(csv.reader(io.StringIO(zf.read(name).decode("utf-8-sig", errors="replace"))))
+                hd = [h.strip() for h in rd[0]]
+                ix = {k: hd.index(k) for k in ("鄉鎮市區", "租賃標的", "主要用途", "單價元平方公尺", "建物型態") if k in hd}
+                for r in rd[2:]:
+                    d = {k: (r[i].strip() if i < len(r) else "") for k, i in ix.items()}
+                    if "住" not in d.get("主要用途", "") or "車位" in d.get("租賃標的", "") or not d.get("單價元平方公尺"):
+                        continue
+                    PLVR_RENT.append([PLVR_CITY[m.group(1)], d.get("鄉鎮市區", ""), float(d["單價元平方公尺"]) * 3.30579])
+            except Exception:  # noqa: BLE001
+                pass
     for name in zf.namelist():
         m = re.match(r"^([a-z])_lvr_land_a\.csv$", name.lower())
         if not m or m.group(1) not in PLVR_CITY:
@@ -5969,6 +5987,7 @@ def p_house():
     rows, used = [], ""
     for ssn in seasons[:3]:
         try:
+            PLVR_RENT.clear()
             rows = _plvr_rows(ssn)
         except Exception as e:  # noqa: BLE001
             log("plvr", ssn, e); rows = []
@@ -5978,6 +5997,14 @@ def p_house():
     if not rows:
         raise RuntimeError("plvr: no rows")
     used = used or seasons[2]
+    try:   # 租金：同一季住家用租賃，每坪月租中位數（5 筆以上才算）
+        rt = {}
+        for c, t, v in PLVR_RENT:
+            if 100 <= v <= 6000:
+                rt.setdefault(c + t, []).append(v)
+        write_json(RENT_PATH, {"season": used, "towns": {k: [round(_med(v)), len(v)] for k, v in rt.items() if len(v) >= 5}}, separators=(",", ":"))
+    except Exception as e:  # noqa: BLE001
+        log("rent", e)
     deals = _plvr_clean(rows)
     # 前一季的各區中位數（算季變化）；歷史裡沒有才多抓一次
     prev_ssn = seasons[seasons.index(used) + 1] if used in seasons and seasons.index(used) + 1 < len(seasons) else None
@@ -10952,7 +10979,7 @@ run("design", p_design, keep_if_fresh_hours=1)
 run("quake", p_quake)
 run("flights", p_flights)
 run("lightning", p_lightning, keep_if_fresh_hours=0.15)
-run("house", p_house, keep_if_fresh_hours=24 * 5)
+run("house", p_house, keep_if_fresh_hours=24 * 5 if RENT_PATH.exists() else 0)
 run("jobs", p_jobs, keep_if_fresh_hours=6)
 run("jobtowns", p_jobtowns, keep_if_fresh_hours=20)   # 六都＋新竹各區職缺，約 170 次 104 查詢，一天一次
 run("mops", p_mops, keep_if_fresh_hours=0.5)
