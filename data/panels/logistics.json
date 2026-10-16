@@ -114,6 +114,20 @@
  ],
  "storms": [
   {
+   "name": "CHAMPI",
+   "level": "Red",
+   "ll": [
+    150.2,
+    11.9
+   ],
+   "from": "2026-10-14T12:00",
+   "to": "2026-10-16T18:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 250 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=10&eventtype=TC",
+   "near": [],
+   "id": "1001338-10"
+  },
+  {
    "name": "SIMON",
    "level": "Orange",
    "ll": [
@@ -133,18 +147,18 @@
    "id": "1001335-37"
   },
   {
-   "name": "CHAMPI",
+   "name": "ONE",
    "level": "Orange",
    "ll": [
-    151.4,
-    11.4
+    -163.4,
+    -12.7
    ],
-   "from": "2026-10-14T12:00",
-   "to": "2026-10-16T12:00",
-   "sev": "Tropical Storm (maximum wind speed of 250 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=9&eventtype=TC",
+   "from": "2026-10-16T06:00",
+   "to": "2026-10-16T18:00",
+   "sev": "Tropical Storm (maximum wind speed of 120 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001339&episodeid=2&eventtype=TC",
    "near": [],
-   "id": "1001338-9"
+   "id": "1001339-2"
   },
   {
    "name": "TRUDY",
@@ -168,20 +182,6 @@
     }
    ],
    "id": "1001337-13"
-  },
-  {
-   "name": "ONE",
-   "level": "Green",
-   "ll": [
-    -163.3,
-    -10.8
-   ],
-   "from": "2026-10-16T06:00",
-   "to": "2026-10-16T06:00",
-   "sev": "Tropical Storm (maximum wind speed of 120 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001339&episodeid=1&eventtype=TC",
-   "near": [],
-   "id": "1001339-1"
   },
   {
    "name": "TWENTYEIGHT",
@@ -461,6 +461,38 @@
  ],
  "news": [
   {
+   "source": "FreightWaves",
+   "title": "Evos raises $9M to build AI operators for industrial businesses",
+   "url": "https://www.freightwaves.com/news/evos-raises-9m-to-build-ai-operators-for-industrial-businesses",
+   "at": "2026-10-17T03:55:52+08:00",
+   "hot": false,
+   "zh": "Evos募資900萬美元，為工業企業打造AI營運系統"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Tesla staffs up Nevada Semi plant as fleet orders stack up",
+   "url": "https://www.freightwaves.com/news/tesla-semi-nevada-hiring",
+   "at": "2026-10-17T03:52:19+08:00",
+   "hot": false,
+   "zh": "隨著車隊訂單湧入，特斯拉擴編內華達州Semi工廠人力"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Veteran trucker launches free parking, fuel-price platform for drivers",
+   "url": "https://www.freightwaves.com/news/veteran-trucker-launches-free-parking-fuel-price-platform-for-drivers",
+   "at": "2026-10-17T03:50:24+08:00",
+   "hot": false,
+   "zh": "資深貨車司機推出免費停車與油價查詢平台"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Louisiana attorney, staged accident scammer, finally sentenced",
+   "url": "https://www.freightwaves.com/news/louisiana-attorney-staged-accident-scammer-finally-sentenced",
+   "at": "2026-10-17T03:26:51+08:00",
+   "hot": false,
+   "zh": "製造假車禍詐保的路易斯安那州律師終於遭判刑"
+  },
+  {
    "source": "The Loadstar",
    "title": "DHL Group raises full-year 2026 earnings guidance",
    "url": "https://theloadstar.com/dhl-group-raises-full-year-2026-earnings-guidance/",
@@ -565,14 +597,6 @@
    "zh": "亞歐航線現貨運價在群聚漲價前夕走揚"
   },
   {
-   "source": "FreightWaves",
-   "title": "J.B. Hunt experiences growing pains in Q3",
-   "url": "https://www.freightwaves.com/news/j-b-hunt-experiences-growing-pains-in-q3",
-   "at": "2026-10-16T20:20:27+08:00",
-   "hot": false,
-   "zh": "J.B. Hunt第三季面臨成長陣痛"
-  },
-  {
    "source": "The Loadstar",
    "title": "DHL Express puts its faith – and its cash – in Africa’s trade potential",
    "url": "https://theloadstar.com/dhl-express-puts-its-faith-and-its-cash-in-africas-trade-potential/",
@@ -605,14 +629,6 @@
    "zh": "JB Hunt迎來新一波定價週期——貨主得付錢了"
   },
   {
-   "source": "FreightWaves",
-   "title": "Jury hits Wyoming logistics broker with $9.4M fraud verdict",
-   "url": "https://www.freightwaves.com/news/jury-hits-wyoming-logistics-broker-with-9-4m-fraud-verdict",
-   "at": "2026-10-16T19:00:00+08:00",
-   "hot": false,
-   "zh": "陪審團裁定懷俄明州物流經銷商詐欺，判賠940萬美元"
-  },
-  {
    "source": "The Loadstar",
    "title": "Ex-India spot rates and surcharges ease as peak comes to an end",
    "url": "https://theloadstar.com/ex-india-spot-rates-and-surcharges-ease-as-peak-comes-to-an-end/",
@@ -635,26 +651,10 @@
    "at": "2026-10-16T14:43:11+08:00",
    "hot": false,
    "zh": "CoreWeave CDS陷入困境：「投資人對AI債務反感」"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "First look: J.B. Hunt’s Q3 earnings",
-   "url": "https://www.freightwaves.com/news/first-look-j-b-hunt-q3-earnings",
-   "at": "2026-10-16T05:17:54+08:00",
-   "hot": false,
-   "zh": "搶先看：J.B. Hunt 第三季財報"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "Federal DOT grants will fund more than 2,400 parking spots",
-   "url": "https://www.freightwaves.com/news/federal-dot-grants-will-fund-more-than-2400-parking-spots",
-   "at": "2026-10-16T05:00:00+08:00",
-   "hot": false,
-   "zh": "聯邦交通部補助將資助超過2,400個停車位"
   }
  ],
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-16T19:44:26Z"
+ "updatedAt": "2026-10-16T20:47:21Z"
 }
