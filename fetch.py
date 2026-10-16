@@ -4994,7 +4994,11 @@ LEDGER_RULES = {
     "biz_net": ("景氣轉向", "公司淨新設（新設減解散）近 3 個月比去年同期少（多）一成以上，3 個月後同時指標比現在低（高）"),
     "chain_gap": ("缺口會不會被填", "主題鏈判「缺口窗口」的主題，6 個月內新設店家年增比現在高（供給跟上）"),
     "chain_hot": ("缺口會不會被填", "主題鏈判「供給過熱」的主題，6 個月內新設店家年增比現在低（開始收）"),
+    "credit_wide": ("錢往哪走", "高收益債利差一個月內從低檔跳到近 3 年前 30%，3 個月後台股比現在低"),
+    "bounce_hi": ("企業壓力", "退票金額比率創 12 個月新高，3 個月後同時指標比現在低"),
+    "furlough_up": ("企業壓力", "減班休息人數連兩期增加，3 個月後同時指標比現在低"),
 }
+LEDGER_NOBT = {"elect_fav", "chain_gap", "chain_hot", "credit_wide", "bounce_hi", "furlough_up"}  # 沒有足夠歷史回測的規則：機率先給 50%，對過答案再說
 
 
 def _ym_add(ym, k):  # ym = "YYYYMM"
@@ -5182,7 +5186,7 @@ def p_ledger():
     preds = L.get("preds", [])
     today = TODAY_TPE.isoformat()
     # 1) 回測（每週一次）
-    missing_bt = set(LEDGER_RULES) - {"elect_fav", "chain_gap", "chain_hot"} - set(L.get("bt") or {})  # 新規則立刻補回測
+    missing_bt = set(LEDGER_RULES) - LEDGER_NOBT - set(L.get("bt") or {})  # 新規則立刻補回測
     if not L.get("bt_at") or (date_from(today) - date_from(L["bt_at"])).days >= 7 or (missing_bt and L.get("bt_try") != today):
         L["bt_try"] = today
         L["bt"] = _backtests(); L["bt_at"] = today
@@ -5253,6 +5257,14 @@ def p_ledger():
                 if v is not None:
                     ok = v > max(p["base"], 0) if r == "chain_gap" else v < p["base"]
                     p.update(status="hit" if ok else "miss", actual=f"新店年增 {p['base']:+.0f}% → {v:+.0f}%", resolved=today)
+            elif r == "credit_wide" and today >= p["due"]:
+                tx = [(d, v) for d, v in (HISTORY.get("taiex", {}).get("TAIEX") or []) if d >= p["due"]]
+                if tx:
+                    p.update(status="hit" if tx[0][1] < p["base"] else "miss", actual=f"加權指數 {p['base']:,.0f} → {tx[0][1]:,.0f}", resolved=today)
+            elif r in ("bounce_hi", "furlough_up"):
+                coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); due = p["due"].replace("-", "")
+                if due in coin:
+                    p.update(status="hit" if coin[due] < p["base"] else "miss", actual=f"同時指標 {p['base']:.2f} → {coin[due]:.2f}", resolved=today)
             elif r == "elect_fav" and today >= p["due"]:
                 ev = gjson("https://gamma-api.polymarket.com/events", params={"slug": p["slug"]}, timeout=30)
                 ms = (ev[0] if ev else {}).get("markets") or []
@@ -5328,6 +5340,21 @@ def p_ledger():
                         f"{du[:4]}-{du[4:]}", base=coin[cm], dir=ch)
             except Exception as e:  # noqa: BLE001
                 log("ledger biz gen", e)
+        hy = next((x for x in ((RESULTS.get("credit") or {}).get("rows") or []) if x.get("id") == "BAMLH0A0HYM2"), None)
+        tx = (HISTORY.get("taiex", {}).get("TAIEX") or [])
+        if hy and tx and hy["pct"] >= 70 and hy["pct"] - hy["pct20"] >= 30:
+            d3 = (TODAY_TPE + timedelta(days=91)).isoformat()
+            add("credit_wide", "台股", f"高收益債利差一個月內從第 {hy['pct20']} 跳到第 {hy['pct']} 百分位：加權指數到 {d3[:10].replace('-', '/')} 低於現在（{tx[-1][1]:,.0f}）",
+                d3, base=tx[-1][1], prob=0.5)
+        ST = RESULTS.get("stress") or {}
+        try:
+            coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); cm = max(coin); du = _ym_add(cm, 3)
+            if (ST.get("bounce") or {}).get("hi12"):
+                add("bounce_hi", "景氣", f"退票金額比率創 12 個月新高（{ST['bounce']['month']}）：同時指標到 {du[:4]}/{du[4:]} 低於現在（{coin[cm]:.2f}）", f"{du[:4]}-{du[4:]}", base=coin[cm], prob=0.5)
+            if (ST.get("furlough") or {}).get("up2"):
+                add("furlough_up", "景氣", f"減班休息人數連兩期增加：同時指標到 {du[:4]}/{du[4:]} 低於現在（{coin[cm]:.2f}）", f"{du[:4]}-{du[4:]}", base=coin[cm], prob=0.5)
+        except Exception as e:  # noqa: BLE001
+            log("ledger stress gen", e)
         d6 = (TODAY_TPE + timedelta(days=182)).isoformat()
         for r in ((RESULTS.get("chain") or {}).get("rows") or []):  # 還沒有歷史可回測：機率先給 50%，等對完答案再說
             sv = next((x.get("v") for x in r.get("stages") or [] if x.get("k") == "新店"), None)
@@ -8317,10 +8344,10 @@ INSIGHT_BANNED = re.compile(r"不是.{0,12}而是|不僅.{0,12}更|在這個.{0,
 
 # ---------- 各分類洞見：每個大分類各自的 2～3 條洞見（只用該分類的資料），每小時輪流重寫最舊的一類，每類約 6 小時更新一次 ----------
 INS_CATS = {
-    "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue"],
-    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits", "renewal"],
+    "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue", "logistics"],
+    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits", "renewal", "credit", "exports", "stress"],
     "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention", "demo", "gap"],
-    "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife", "ossuse"],
+    "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife", "ossuse", "uspolicy"],
     "輿情": ["mood", "ptt", "trends", "cofacts", "gtop", "worldnews"],
     "現場": ["weather", "quake", "power", "alerts", "plaact", "cables", "airport", "typhoon"],
 }
@@ -11499,6 +11526,7 @@ def p_credit():
 
 # ---------- 美國政策源頭：Federal Register（USTR、商務部 BIS／ITA）＋ USTR 新聞稿 ＋ 國會涉台法案 ----------
 CONGRESS_KEY = os.environ.get("CONGRESS_API_KEY", "").strip()
+CONGRESS_ON = False   # 國會涉台法案：實測回報、Vin 核准後才打開
 USP_AG = [("trade-representative-office-of-united-states", "USTR"), ("industry-and-security-bureau", "BIS"), ("international-trade-administration", "ITA")]
 USP_KW = re.compile(r"Taiwan|semiconductor|chip|Section 232|Section 301|tariff|export control|Entity List|Mexico|USMCA|China|PRC|wafer|integrated circuit|server|artificial intelligence|AI diffusion", re.I)
 USP_HOT = re.compile(r"Taiwan|semiconductor|wafer|integrated circuit|Section 232|Entity List|Mexico|USMCA", re.I)
@@ -11514,7 +11542,7 @@ def p_uspolicy():
                               "fields[]": ["title", "publication_date", "type", "abstract", "html_url", "document_number"]}, timeout=40)
             for d in j.get("results") or []:
                 t, ab = d.get("title") or "", d.get("abstract") or ""
-                if USP_NOISE.search(t) or not USP_KW.search(t + " " + ab):
+                if USP_NOISE.search(t) or not (USP_HOT if short == "ITA" else USP_KW).search(t + " " + ab):   # ITA 每天幾十件反傾銷，只留跟台灣、半導體、墨西哥有關的
                     continue
                 kind = {"Rule": "規則", "Proposed Rule": "草案", "Notice": "公告", "Presidential Document": "總統文件"}.get(d.get("type"), d.get("type") or "")
                 items.append({"src": short, "kind": kind, "title": t[:220], "date": d.get("publication_date"), "url": d.get("html_url"),
@@ -11529,7 +11557,7 @@ def p_uspolicy():
     except Exception as e:  # noqa: BLE001
         errs.append("USTR 新聞稿: " + safe_err(e))
     bills = []
-    if CONGRESS_KEY:
+    if CONGRESS_KEY and CONGRESS_ON:
         try:
             j = gjson("https://api.congress.gov/v3/bill", params={"api_key": CONGRESS_KEY, "format": "json", "limit": 250, "sort": "updateDate+desc"}, timeout=40)
             for b in j.get("bills") or []:
@@ -11550,8 +11578,8 @@ def p_uspolicy():
             x["action_zh"] = zh.get(x["action"], "")
     wk = (TODAY_TPE - timedelta(days=7)).isoformat()
     return {"items": items, "bills": bills[:15], "n_week": sum(1 for x in items if (x["date"] or "") >= wk), "n_hot_week": sum(1 for x in items if x["hot"] and (x["date"] or "") >= wk),
-            "congress": bool(CONGRESS_KEY), "errs": errs[:5],
-            "src": "Federal Register API（USTR、商務部 BIS、ITA，依關鍵字篩）、USTR 新聞稿 RSS" + ("、Congress.gov API" if CONGRESS_KEY else "；國會法案待金鑰")}
+            "congress": bool(CONGRESS_KEY and CONGRESS_ON), "errs": errs[:5],
+            "src": "Federal Register API（USTR、商務部 BIS、ITA，依關鍵字篩）、USTR 新聞稿 RSS" + ("、Congress.gov API" if CONGRESS_KEY and CONGRESS_ON else "")}
 
 
 # ---------- 台灣出口結構：財政部統計資料庫（對六大市場×貨品，月資料）＋ 國別總表（墨西哥、歐洲） ----------
@@ -11591,9 +11619,9 @@ def p_exports():
             s3, s3l = sum(tot(k) or 0 for k in k3), sum(tot(k) or 0 for k in k3l)
             for k in ks:
                 hist_put("exports", name, k, round((tot(k) or 0) / 1000, 1))
-            mkts.append({"name": name, "month": last, "v": round(tot(last) / 1e3, 1), "yoy": _yoy(tot(last), tot(ly)), "yoy3": _yoy(s3, s3l),
+            mkts.append({"name": name, "month": last, "v": round(tot(last) / 1e5, 1), "yoy": _yoy(tot(last), tot(ly)), "yoy3": _yoy(s3, s3l),
                          "ee_share": round(100 * m16(last) / tot(last), 1) if m16(last) and tot(last) else None, "ee_yoy": _yoy(m16(last), m16(ly)),
-                         "spark": [round((tot(k) or 0) / 1e3) for k in ks[-13:]]})
+                         "spark": [round((tot(k) or 0) / 1e5, 1) for k in ks[-13:]]})
         except Exception as e:  # noqa: BLE001
             errs.append(f"{name}: {safe_err(e)}")
     goods = []
@@ -11608,8 +11636,8 @@ def p_exports():
                 continue
             cur, prv = ser[last][i], (ser.get(ly) or [None] * 60)[i]
             k3 = ks[-3:]; s3 = sum((ser[k][i] or 0) for k in k3); s3l = sum(((ser.get(f"{int(k[:4]) - 1}{k[4:]}") or [0] * 60)[i] or 0) for k in k3)
-            goods.append({"name": label, "month": last, "v": round(cur / 1e3, 1) if cur else None, "yoy": _yoy(cur, prv), "yoy3": _yoy(s3, s3l),
-                          "share": round(100 * cur / ser[last][0], 1) if cur and ser[last][0] else None, "spark": [round((ser[k][i] or 0) / 1e3, 1) for k in ks[-13:]]})
+            goods.append({"name": label, "month": last, "v": round(cur / 100, 1) if cur else None, "yoy": _yoy(cur, prv), "yoy3": _yoy(s3, s3l),
+                          "share": round(100 * cur / ser[last][0], 1) if cur and ser[last][0] else None, "spark": [round((ser[k][i] or 0) / 100, 1) for k in ks[-13:]]})
             for k in ks:
                 hist_put("exports_goods", label, k, round((ser[k][i] or 0) / 1e3, 2))
     except Exception as e:  # noqa: BLE001
@@ -11624,10 +11652,10 @@ def p_exports():
         for c in ("墨西哥", "歐洲", "越南", "印度", "加拿大"):
             if c not in head:
                 continue
-            i = head.index(c); v = lambda k: num(str((ser.get(k) or [None] * 400)[i]).replace(",", ""))
+            i = head.index(c); v = lambda k, i=i: (lambda r: num(str(r[i]).replace(",", "")) if r and i < len(r) else None)(ser.get(k))
             k3 = ks[-3:]; s3 = sum(v(k) or 0 for k in k3); s3l = sum(v(f"{int(k[:4]) - 1}{k[4:]}") or 0 for k in k3)
-            extra.append({"name": c, "month": last, "v": round(v(last) / 1e6, 2) if v(last) else None, "yoy": _yoy(v(last), v(ly)), "yoy3": _yoy(s3, s3l),
-                          "spark": [round((v(k) or 0) / 1e6, 2) for k in ks[-13:]]})
+            extra.append({"name": c, "month": last, "v": round(v(last) / 1e5, 1) if v(last) else None, "yoy": _yoy(v(last), v(ly)), "yoy3": _yoy(s3, s3l),
+                          "spark": [round((v(k) or 0) / 1e5, 1) for k in ks[-13:]]})
             for k in ks[-36:]:
                 hist_put("exports", c, k, round((v(k) or 0) / 1e3, 1))
     except Exception as e:  # noqa: BLE001
@@ -11638,7 +11666,7 @@ def p_exports():
     note = ""
     if us and cn and us["v"] and cn["v"]:
         note = f"對美出口是對中港的 {us['v'] / cn['v']:.1f} 倍" if us["v"] > cn["v"] else f"對中港出口仍是對美的 {cn['v'] / us['v']:.1f} 倍"
-    return {"month": month, "markets": mkts, "goods": goods, "extra": extra, "note": note, "errs": errs[:5],
+    return {"month": month, "unit": "億美元", "markets": mkts, "goods": goods, "extra": extra, "note": note, "errs": errs[:5],
             "src": "財政部統計資料庫（出口按國家×主要貨品、出口按主要貨品）、財政部進出口貿易值國別總表（開放資料，較晚更新）"}
 
 
@@ -11650,13 +11678,13 @@ def p_stress():
         rows = [r for r in csv.reader(io.StringIO(t)) if r and re.match(r"\d{4}M\d\d", r[0])]
         S = {f"{r[0][:4]}-{r[0][5:]}": {"n": num(r[3]), "amt": num(r[4]), "rn": num(r[5]), "ra": num(r[6])} for r in rows}
         ks = sorted(S); last = ks[-1]; ly = f"{int(last[:4]) - 1}{last[4:]}"
-        ra = [S[k]["ra"] for k in ks[-12:] if S[k]["ra"] is not None]
+        ra = [S[k]["ra"] for k in ks[-12:-1] if S[k]["ra"] is not None]   # 前 11 個月
         a3 = sum(S[k]["amt"] or 0 for k in ks[-3:]); a3l = sum((S.get(f"{int(k[:4]) - 1}{k[4:]}") or {}).get("amt") or 0 for k in ks[-3:])
         for k in ks[-60:]:
             hist_put("stress", "bounce_ra", k, S[k]["ra"]); hist_put("stress", "bounce_amt", k, S[k]["amt"])
         out["bounce"] = {"month": last, "ratio_amt": S[last]["ra"], "ratio_n": S[last]["rn"], "amt": S[last]["amt"], "n": S[last]["n"],
                          "amt_yoy": _yoy(S[last]["amt"], (S.get(ly) or {}).get("amt")), "amt3_yoy": _yoy(a3, a3l),
-                         "hi12": bool(ra) and S[last]["ra"] is not None and S[last]["ra"] >= max(ra),
+                         "hi12": bool(ra) and S[last]["ra"] is not None and S[last]["ra"] > max(ra),
                          "spark": [S[k]["ra"] for k in ks[-24:]], "spark_m": ks[-24:]}
     except Exception as e:  # noqa: BLE001
         errs.append("退票: " + safe_err(e))
@@ -11727,11 +11755,11 @@ def p_logistics():
     try:   # Drewry：頁面上的分航線句子（WCI 綜合指數本身已在原物料面板）
         html = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", get("https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry").text))
         lanes = []
-        for m in re.finditer(r"(Shanghai|Rotterdam|Los Angeles|New York|Genoa)\s+to\s+(Shanghai|Rotterdam|Los Angeles|New York|Genoa)\s+(?:\w+\s+){0,3}?(increased|decreased|rose|fell|inched up|inched down|dropped|climbed|declined|remained stable|was stable)(?:\s+(?:by\s+)?(\d+(?:\.\d+)?)%)?(?:\s+to\s+\$([\d,]+))?", html, re.I):
+        for m in re.finditer(r"(Shanghai|Rotterdam|Los Angeles|New York|Genoa)\s+to\s+(Shanghai|Rotterdam|Los Angeles|New York|Genoa)\s+(?:\w+\s+){0,3}?(increased|decreased|rose|fell|grew|gained|slipped|inched up|inched down|dropped|climbed|declined|remained stable|was stable|stayed stable)(?:\s+(?:by\s+)?(\d+(?:\.\d+)?)%)?(?:\s+to\s+\$([\d,]+))?", html, re.I):
             a, b, verb, pct, val = m.groups()
             if any(x["from"] == a and x["to"] == b for x in lanes):
                 continue
-            up = re.search(r"increase|rose|up|climb", verb, re.I); dn = re.search(r"decrease|fell|down|drop|declin", verb, re.I)
+            up = re.search(r"increase|rose|up|climb|grew|gain", verb, re.I); dn = re.search(r"decrease|fell|down|drop|declin|slip", verb, re.I)
             lanes.append({"from": a, "to": b, "chg": (num(pct) or 0) * (1 if up else -1 if dn else 0) if pct else 0.0, "v": num(val.replace(",", "")) if val else None})
         zh = {"Shanghai": "上海", "Rotterdam": "鹿特丹", "Los Angeles": "洛杉磯", "New York": "紐約", "Genoa": "熱那亞"}
         for x in lanes:
@@ -12238,6 +12266,25 @@ def notify():
     pw = R("power")
     if str(pw.get("level") or "") in ("橙", "紅", "黑"):
         cand.append((f"power:{today}:{pw['level']}", False, f"供電{pw['level']}燈", f"備轉容量率 {pw.get('reserve_pct')}%（{pw.get('asof', '')}）。\n{link('電力')}"))
+    # 9. 信用利差快速擴大（百分位，不含原始數值）
+    ca = R("credit").get("alert")
+    if ca:
+        cand.append((f"credit:{ca['sid']}:{ca['date']}", False, f"{ca['name']}利差快速擴大", f"在近 3 年的百分位：一個月前第 {ca['p20']} → 現在第 {ca['p']}。{R('credit').get('verdict', '')}\n{link('信用利差')}"))
+    # 10. 風暴逼近主要貨櫃港（GDACS 橙色以上、300 公里內）
+    for t in (R("logistics").get("threat") or [])[:2]:
+        cand.append((f"storm:{t['id']}:{t['port']}", t["level"] == "Red", f"風暴 {t['storm']} 逼近{t['port']}港", f"GDACS {t['level']} 警戒，距港口約 {t['km']} 公里。\n<{t['url']}|GDACS>　{link('全球物流')}"))
+    # 11. 美國政策：兩天內點名台灣，或 BIS 新規則涉及半導體／實體清單
+    for x in (R("uspolicy").get("items") or [])[:20]:
+        if (x.get("date") or "") >= (TODAY_TPE - timedelta(days=2)).isoformat() and (x.get("tw") or (x.get("src") == "BIS" and x.get("kind") == "規則" and x.get("hot"))):
+            cand.append((f"usp:{x['url']}", False, f"美國 {x['src']}：{(x.get('zh') or x['title'])[:36]}", f"{x.get('zh') or x['title']}\n<{x['url']}|原文>　{link('美國政策')}"))
+    # 12. 企業壓力：減班休息連兩期增加、退票比率創 12 個月新高
+    stv = R("stress")
+    if (stv.get("furlough") or {}).get("up2") and (stv["furlough"].get("latest") or {}).get("at"):
+        f = stv["furlough"]
+        cand.append((f"furlough:{f['latest']['at'][:10]}", False, f"減班休息連兩期增加，最新 {f['latest']['v']:,} 人", f"{f['latest']['title']}\n{link('企業壓力')}"))
+    if (stv.get("bounce") or {}).get("hi12"):
+        b = stv["bounce"]
+        cand.append((f"bounce:{b['month']}", False, f"退票金額比率 {b['ratio_amt']}% 創 12 個月新高", f"{b['month']} 存款不足退票金額比去年同月 {b.get('amt_yoy') or 0:+.0f}%。\n{link('企業壓力')}"))
     # 第一次接上：送一則確認，之後不再送
     if not st.get("hello"):
         r = requests.post(hook, json={"text": "*情報站・警報已接上*\n之後只有不尋常的事才會傳到這裡：地震 5.5 以上、停班停課、颱風警報、共機異常、海纜受損、台股收盤漲跌 3%、景氣燈號變色、供電警戒。一天最多 2 則（地震、停班停課例外），深夜只傳緊急的。"}, timeout=15)

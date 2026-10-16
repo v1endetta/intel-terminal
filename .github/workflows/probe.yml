@@ -20,6 +20,7 @@ jobs:
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
       - name: Save to probe branch
         run: |
           mkdir /tmp/p && cp probe.json /tmp/p/
