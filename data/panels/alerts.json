@@ -1,11 +1,25 @@
 {
- "alerts": [],
- "n_total": 0,
+ "alerts": [
+  {
+   "id": "CWA-Weather_heat_202610161233001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "屏東縣"
+   ],
+   "text": "天氣高溫炎熱，今(16)日中午前後屏東縣地區為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-16T04:33:29Z",
+   "exp": "2026-10-16T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610161233.cap"
+  }
+ ],
+ "n_total": 1,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/16 12:22:17"
+  "updated": "2026/10/16 12:37:26"
  },
  "errs": [],
- "updatedAt": "2026-10-16T04:26:10Z"
+ "updatedAt": "2026-10-16T04:43:33Z"
 }
