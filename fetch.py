@@ -11644,7 +11644,11 @@ def p_exports():
         errs.append("主要貨品: " + safe_err(e))
     extra = []
     try:   # 國別總表（開放資料，通常晚 2～3 個月）：墨西哥、歐洲、印度、越南
-        t = get("https://service.mof.gov.tw/public/data/statistic/trade/u2010ex.csv", timeout=60).content.decode("utf-8-sig", "replace")
+        b_ = get("https://service.mof.gov.tw/public/data/statistic/trade/u2010ex.csv", timeout=60).content
+        try:
+            t = b_.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            t = b_.decode("cp950", "replace")
         rows = list(csv.reader(io.StringIO(t))); head = [re.sub(r"\(千元\)", "", h).strip() for h in rows[0]]
         mrows = [r for r in rows[1:] if r and re.match(r"\d{4}年\d+月", r[0])]
         ym = lambda s: (lambda m: f"{m.group(1)}-{int(m.group(2)):02d}")(re.match(r"(\d{4})年(\d+)月", s))
@@ -11740,7 +11744,7 @@ PORTS = [("上海洋山", 122.07, 30.62), ("寧波舟山", 121.85, 29.93), ("深
 FBX_ZH = {"FBX": "全球綜合", "FBX01": "中國→美西", "FBX02": "美西→中國", "FBX03": "中國→美東", "FBX04": "美東→中國", "FBX11": "中國→北歐", "FBX12": "北歐→中國",
           "FBX13": "中國→地中海", "FBX14": "地中海→中國", "FBX21": "美東→北歐", "FBX22": "北歐→美東", "FBX24": "北歐→南美東", "FBX26": "北歐→南美西"}
 LOGI_FEEDS = [("FreightWaves", "https://www.freightwaves.com/feed"), ("Supply Chain Dive", "https://www.supplychaindive.com/feeds/news/"), ("The Loadstar", "https://theloadstar.com/feed/")]
-LOGI_HOT = re.compile(r"Mexico|Mexican|Laredo|nearshor|port|strike|closure|congest|Red Sea|Suez|Panama|tariff|Taiwan|semiconductor|shortage|blank sailing|rate", re.I)
+LOGI_HOT = re.compile(r"\b(?:Mexic\w*|Laredo|nearshor\w*|ports?|strikes?|closures?|congest\w*|Red Sea|Suez|Panama|tariffs?|Taiwan|semiconductors?|shortages?|blank sailings?|freight rates?|spot rates?|disrupt\w*)\b", re.I)
 
 
 def _km(a, b):
