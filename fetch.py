@@ -11527,6 +11527,12 @@ def p_credit():
 # ---------- 美國政策源頭：Federal Register（USTR、商務部 BIS／ITA）＋ USTR 新聞稿 ＋ 國會涉台法案 ----------
 CONGRESS_KEY = os.environ.get("CONGRESS_API_KEY", "").strip()
 CONGRESS_ON = False   # 國會涉台法案：實測回報、Vin 核准後才打開
+CONGRESS_CACHE = DATA / "congress_bills.json"
+CG_TW = re.compile(r"Taiwan", re.I)
+CG_TECH = re.compile(r"\bsemiconductors?\b|\bchips?\b|\bCHIPS\b|export control", re.I)
+CG_NOISE = re.compile(r"potato chip|chocolate chip|wood chip", re.I)
+CG_CN = re.compile(r"\bChina\b|\bChinese\b|People's Republic", re.I)
+CG_CN2 = re.compile(r"\bAI\b|artificial intelligence|\bchips?\b|semiconductor|tariff|export|trade|technolog|supply chain", re.I)
 USP_AG = [("trade-representative-office-of-united-states", "USTR"), ("industry-and-security-bureau", "BIS"), ("international-trade-administration", "ITA")]
 USP_KW = re.compile(r"Taiwan|semiconductor|chip|Section 232|Section 301|tariff|export control|Entity List|Mexico|USMCA|China|PRC|wafer|integrated circuit|server|artificial intelligence|AI diffusion", re.I)
 USP_HOT = re.compile(r"Taiwan|semiconductor|wafer|integrated circuit|Section 232|Entity List|Mexico|USMCA", re.I)
@@ -11558,15 +11564,37 @@ def p_uspolicy():
         errs.append("USTR 新聞稿: " + safe_err(e))
     bills = []
     if CONGRESS_KEY and CONGRESS_ON:
-        try:
-            j = gjson("https://api.congress.gov/v3/bill", params={"api_key": CONGRESS_KEY, "format": "json", "limit": 250, "sort": "updateDate+desc"}, timeout=40)
-            for b in j.get("bills") or []:
+        try:   # 每輪抓近 2 天有更新的法案，標題比對；比對到的存進快取，之後每天跟著它的最新動作
+            cache = json.loads(CONGRESS_CACHE.read_text(encoding="utf-8")) if CONGRESS_CACHE.exists() else {}
+            got, off = [], 0
+            while off < 1500:
+                j = gjson("https://api.congress.gov/v3/bill", params={"api_key": CONGRESS_KEY, "format": "json", "limit": 250, "offset": off, "sort": "updateDate desc",
+                                                                      "fromDateTime": (NOW - timedelta(days=2)).strftime("%Y-%m-%dT00:00:00Z"), "toDateTime": NOW.strftime("%Y-%m-%dT%H:%M:%SZ")}, timeout=40)
+                bs = j.get("bills") or []; got += bs
+                if len(bs) < 250:
+                    break
+                off += 250
+            for b in got:
                 t = b.get("title") or ""
-                if re.search(r"Taiwan|semiconductor|chip|CHIPS|tariff|export control|Mexico", t, re.I):
-                    la = b.get("latestAction") or {}
-                    bills.append({"src": "國會", "kind": f"{b.get('type', '')} {b.get('number', '')}", "title": t[:220], "date": (la.get("actionDate") or b.get("updateDate") or "")[:10],
-                                  "action": (la.get("text") or "")[:160], "url": f"https://www.congress.gov/bill/{b.get('congress')}th-congress/{'house' if str(b.get('type', '')).upper().startswith('H') else 'senate'}-bill/{b.get('number')}",
-                                  "hot": True, "tw": bool(re.search(r"Taiwan", t, re.I))})
+                tw = bool(CG_TW.search(t)); tech = bool(CG_TECH.search(t)) and not CG_NOISE.search(t); cn = bool(CG_CN.search(t) and CG_CN2.search(t))
+                if not (tw or tech or cn) or int(b.get("congress") or 0) < 119:
+                    continue
+                k = f"{b.get('congress')}-{b.get('type')}-{b.get('number')}"; la = b.get("latestAction") or {}
+                ch = "house" if str(b.get("originChamberCode") or b.get("type", "")).upper().startswith("H") else "senate"
+                kind = {"HR": "眾院法案", "S": "參院法案", "HRES": "眾院決議", "SRES": "參院決議", "HCONRES": "共同決議", "SCONRES": "共同決議", "HJRES": "聯合決議", "SJRES": "聯合決議"}.get(str(b.get("type")).upper(), b.get("type"))
+                tp = {"HR": "house-bill", "S": "senate-bill", "HRES": "house-resolution", "SRES": "senate-resolution", "HCONRES": "house-concurrent-resolution",
+                      "SCONRES": "senate-concurrent-resolution", "HJRES": "house-joint-resolution", "SJRES": "senate-joint-resolution"}.get(str(b.get("type")).upper(), ch + "-bill")
+                old = cache.get(k) or {}
+                cache[k] = {"src": "國會", "kind": f"{kind} {b.get('number')}", "title": t[:220], "date": la.get("actionDate") or "", "action": (la.get("text") or "")[:200],
+                            "url": f"https://www.congress.gov/bill/{b.get('congress')}th-congress/{tp}/{b.get('number')}", "tw": tw, "hot": tw or tech,
+                            "first": old.get("first") or TODAY_TPE.isoformat(), "moved": (la.get("actionDate") or "") != old.get("date") and bool(old)}
+            cut = (TODAY_TPE - timedelta(days=365)).isoformat()
+            cache = {k: v for k, v in cache.items() if (v.get("date") or "") >= cut or v.get("tw")}
+            write_json(CONGRESS_CACHE, cache)
+            m30 = (TODAY_TPE - timedelta(days=30)).isoformat()
+            bills = sorted(cache.values(), key=lambda x: (not x["tw"], (x.get("date") or "") < m30, -(int((x.get("date") or "0000-00-00").replace("-", "")))))
+            for b in bills:
+                b["active"] = (b.get("date") or "") >= m30; b["id"] = b["url"].rsplit("/", 2)[-2] + "-" + b["url"].rsplit("/", 1)[-1]
         except Exception as e:  # noqa: BLE001
             errs.append("國會: " + safe_err(e))
     items.sort(key=lambda x: x["date"] or "", reverse=True)
@@ -11577,7 +11605,7 @@ def p_uspolicy():
         if x.get("action"):
             x["action_zh"] = zh.get(x["action"], "")
     wk = (TODAY_TPE - timedelta(days=7)).isoformat()
-    return {"items": items, "bills": bills[:15], "n_week": sum(1 for x in items if (x["date"] or "") >= wk), "n_hot_week": sum(1 for x in items if x["hot"] and (x["date"] or "") >= wk),
+    return {"items": items, "bills": bills[:20], "n_week": sum(1 for x in items if (x["date"] or "") >= wk), "n_hot_week": sum(1 for x in items if x["hot"] and (x["date"] or "") >= wk),
             "congress": bool(CONGRESS_KEY and CONGRESS_ON), "errs": errs[:5],
             "src": "Federal Register API（USTR、商務部 BIS、ITA，依關鍵字篩）、USTR 新聞稿 RSS" + ("、Congress.gov API" if CONGRESS_KEY and CONGRESS_ON else "")}
 
@@ -11630,7 +11658,7 @@ def p_exports():
         ser = {_roc_ym(r[0]): [num(x.replace(",", "")) for x in r[1:]] for r in rows}
         ks = sorted(k for k in ser if k); last = ks[-1]; ly = f"{int(last[:4]) - 1}{last[4:]}"
         names = [re.sub(r"^\(?\d+[.)]\s*", "", re.sub(r"^.*?/\s*", "", h).strip()) for h in head[1:]]
-        for want, label in (("電子零組件", "電子零組件（含半導體）"), ("資通與視聽產品", "資通與視聽（含伺服器、電腦）"), ("機械", "機械"), ("基本金屬及其製品", "基本金屬"), ("塑膠、橡膠及其製品", "塑橡膠")):
+        for want, label in (("電子零組件", "電子零組件"), ("資通與視聽產品", "資通與視聽"), ("機械", "機械"), ("基本金屬及其製品", "基本金屬"), ("塑膠、橡膠及其製品", "塑橡膠")):
             i = next((i for i, n in enumerate(names) if n == want), None)
             if i is None:
                 continue
@@ -11800,7 +11828,7 @@ def p_logistics():
                 continue
             ll = (float(c[0]), float(c[1]))
             near = sorted(((round(_km(ll, (p[1], p[2]))), p[0]) for p in PORTS))[:3]
-            storms.append({"name": re.sub(r"^Tropical Cyclone\s+", "", pr.get("name") or pr.get("eventname") or ""), "level": pr.get("alertlevel"),
+            storms.append({"name": re.sub(r"-\d\d$", "", re.sub(r"^Tropical Cyclone\s+", "", pr.get("name") or pr.get("eventname") or "")), "level": pr.get("alertlevel"),
                            "ll": [round(ll[0], 2), round(ll[1], 2)], "from": (pr.get("fromdate") or "")[:16], "to": (pr.get("todate") or "")[:16],
                            "sev": ((pr.get("severitydata") or {}).get("severitytext") or "")[:120], "url": ((pr.get("url") or {}).get("report") or ""),
                            "near": [{"port": n, "km": d} for d, n in near if d <= 800], "id": f"{pr.get('eventid')}-{pr.get('episodeid')}"})
@@ -12281,6 +12309,9 @@ def notify():
     for x in (R("uspolicy").get("items") or [])[:20]:
         if (x.get("date") or "") >= (TODAY_TPE - timedelta(days=2)).isoformat() and (x.get("tw") or (x.get("src") == "BIS" and x.get("kind") == "規則" and x.get("hot"))):
             cand.append((f"usp:{x['url']}", False, f"美國 {x['src']}：{(x.get('zh') or x['title'])[:36]}", f"{x.get('zh') or x['title']}\n<{x['url']}|原文>　{link('美國政策')}"))
+    for b in (R("uspolicy").get("bills") or [])[:20]:   # 涉台法案有新動作
+        if b.get("tw") and b.get("moved") and (b.get("date") or "") >= (TODAY_TPE - timedelta(days=3)).isoformat():
+            cand.append((f"bill:{b.get('id')}:{b.get('date')}", False, f"國會 {b['kind']}：{(b.get('zh') or b['title'])[:30]}", f"最新動作（{b['date']}）：{b.get('action_zh') or b.get('action')}\n<{b['url']}|Congress.gov>　{link('美國政策')}"))
     # 12. 企業壓力：減班休息連兩期增加、退票比率創 12 個月新高
     stv = R("stress")
     if (stv.get("furlough") or {}).get("up2") and (stv["furlough"].get("latest") or {}).get("at"):

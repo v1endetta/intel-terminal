@@ -214,6 +214,7 @@ td.name{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:now
 td .sub{color:var(--dim);font-size:10.5px;margin-left:6px;font-family:var(--mono)}
 tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--muted)} .bad{color:var(--down)}
+.v.tw{color:var(--warn);font-weight:600}
 .big{font-family:var(--mono);font-size:26px;font-weight:500;letter-spacing:-.01em;line-height:1.1}
 .kpi{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:6px}
 .kpi .lbl{font-size:10.5px;color:var(--dim);letter-spacing:.04em}
@@ -770,6 +771,11 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>棉花、原油、銅、鋁、黃金、白銀、鐵礦砂、熱軋鋼 · Drewry WCI 週更</span></div>
   </section>
+  <section class="panel w12 cap" id="p-logistics">
+    <div class="ph"><h2>全球物流</h2><span class="zh">運價、風暴對港口、物流新聞</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry" target="_blank" rel="noopener">Drewry WCI</a><a href="https://fbx.freightos.com/" target="_blank" rel="noopener">Freightos FBX</a><a href="https://www.gdacs.org/" target="_blank" rel="noopener">GDACS</a><span>運價每週／每日 · 風暴每小時 · FBX 只放變動不放報價</span></div>
+  </section>
 
   <section class="panel w6" id="p-lux">
     <div class="ph"><h2>精品</h2><span class="zh">精品與快時尚股價</span><span class="meta">排程</span></div>
@@ -888,6 +894,21 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>財政部電子發票開放資料（月，約晚一到兩個月）· 依賣方登記行業分類，不是商品別 · 客單價＝各縣市平均開立金額 ÷ 平均開立張數</span></div>
   </section>
 
+  <section class="panel w6 cap" id="p-credit">
+    <div class="ph"><h2>信用利差</h2><span class="zh">美國公司債：借錢的人要多付多少</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://fred.stlouisfed.org/series/BAMLH0A0HYM2" target="_blank" rel="noopener">FRED · ICE BofA</a><span>每日 · 百分位越高＝利差越寬＝市場越怕借錢給公司；依 ICE 授權只放百分位不放數值</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-exports">
+    <div class="ph"><h2>出口結構</h2><span class="zh">賣到哪裡、賣什麼</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://web02.mof.gov.tw/njswww/WebMain.aspx?sys=100&funid=defjsptgl" target="_blank" rel="noopener">財政部統計資料庫</a><span>每月 · 單位億美元 · 墨西哥等國別總表較晚更新</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-stress">
+    <div class="ph"><h2>企業壓力</h2><span class="zh">退票、減班休息</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.cbc.gov.tw/tw/lp-370-1.html" target="_blank" rel="noopener">中央銀行</a><a href="https://www.mol.gov.tw/1607/1632/1640/" target="_blank" rel="noopener">勞動部</a><span>退票每月 · 減班每月兩次（從新聞標題擷取，以勞動部新聞稿為準）</span></div>
+  </section>
   <section class="panel w6 cap" id="p-calendar">
     <div class="ph"><h2>行事曆</h2><span class="zh">接下來三週 · 數據發布與央行</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -981,6 +1002,11 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="ph"><h2>新品牌雷達</h2><span class="zh">每月新設公司與行號、同業新設、得標排行</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>經濟部商工登記「公司／商業設立登記清冊」（月，約晚一個月）· 類別依名稱關鍵字判斷 · 得標排行累積政府電子採購網決標紀錄（行銷、設計、影片、廣告類，滾動 180 天）</span></div>
+  </section>
+  <section class="panel w12 cap" id="p-uspolicy">
+    <div class="ph"><h2>美國政策源頭</h2><span class="zh">USTR、商務部、國會：關稅與出口管制在改什麼</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.federalregister.gov/" target="_blank" rel="noopener">Federal Register</a><a href="https://ustr.gov/" target="_blank" rel="noopener">USTR</a><a href="https://www.congress.gov/" target="_blank" rel="noopener">Congress.gov</a><span>每天 · 只留跟台灣、半導體、關稅、出口管制、墨西哥有關的 · 中文是 AI 翻譯，以原文為準</span></div>
   </section>
   <section class="panel w12 cap" id="p-ossuse">
     <div class="ph"><h2>AI 與開源動態</h2><span class="zh">GitHub、Hugging Face 這兩週最重要的，加上讚數最高的論文</span><span class="meta">排程</span></div>
@@ -1517,6 +1543,36 @@ const renderers={
     body("p-insights").innerHTML=(top?`<h3 class="ins-h">本月洞見<span>交叉比對 ${esc(d.n_sources||"")} 份資料</span></h3><ul class="list wrap">${top}</ul>`:"")+(cc?`<div class="ins-g" style="margin-top:8px">${cc}</div>`:"");
     setMeta("p-insights",{...d,label:"洞見"},12);},
   insights_cat(d){const L=window.LASTP||{};if(L.insights)renderers.insights(L.insights);try{guide(cur);}catch(e){}},
+  credit(d){const R=d.rows||[],tc={red:"var(--down)",amber:"var(--warn)",green:"var(--up)"}[d.tone]||"var(--text)";
+    const pc=p=>p>=70?"down":p<=30?"up":"flat";
+    body("p-credit").innerHTML=`<div class="plain" style="border-left:3px solid ${tc};padding-left:8px">${esc(d.verdict||"")}</div>`+R.map(r=>`<div class="veg-h">${esc(r.name)}<b class="${pc(n(r.pct))}">第 ${fmt(n(r.pct),0)} 百分位</b><span>${esc(r.state)} · 一個月前第 ${fmt(n(r.pct20),0)}、三個月前第 ${fmt(n(r.pct60),0)}${r.fast?" · <em style=\"color:var(--down);font-style:normal\">短期快速擴大</em>":""}</span></div><div class="spk">${mini(r.trend)}<span>${esc(r.what)} · 百分位走勢近半年</span></div>`).join("")
+      +`<div class="sub" style="margin-top:6px;color:var(--muted);font-size:11px">百分位＝現在的利差在近 ${fmt(n((R[0]||{}).n_years),0)} 年裡排第幾；資料到 ${esc((R[0]||{}).asof||"")}</div>`;
+    setMeta("p-credit",{...d,label:"每日"},30);},
+  exports(d){const M=d.markets||[],G=d.goods||[],X=d.extra||[];
+    body("p-exports").innerHTML=`<div class="plain">${YM(d.month)} 出口${d.note?`：${esc(d.note)}`:""}。右邊是近 3 個月比去年同期。</div>`
+      +`<h3 class="ins-h">賣到哪裡</h3><ul class="list wrap">${M.map(m=>LI(m.name,`${YM(m.month)} 單月 ${fmt(n(m.v),0)} 億美元（${PP(n(m.yoy))}）· 機械及電機設備占 ${fmt(n(m.ee_share),0)}%`,PP(n(m.yoy3)),cls(n(m.yoy3)))).join("")}</ul>`
+      +(G.length?`<h3 class="ins-h">賣什麼（電子零組件含半導體；資通與視聽含伺服器、電腦）</h3>${HB(G.map(g=>({name:g.name,v:n(g.yoy3),txt:`${PP(n(g.yoy3))} · 占 ${fmt(n(g.share),0)}%`})))}`:"")
+      +(X.length?`<h3 class="ins-h">其他市場（國別總表，到 ${YM(X[0].month)}）</h3><ul class="list wrap">${X.map(m=>LI(m.name,`單月 ${fmt(n(m.v),1)} 億美元（${PP(n(m.yoy))}）`,PP(n(m.yoy3)),cls(n(m.yoy3)))).join("")}</ul>`:"");
+    setMeta("p-exports",{...d,label:YM(d.month)+" 月資料"},24*40);},
+  stress(d){const b=d.bounce||{},f=d.furlough||{},L=f.latest||{},tc={amber:"var(--warn)",green:"var(--up)"}[d.tone]||"var(--text)";
+    body("p-stress").innerHTML=`<div class="plain" style="border-left:3px solid ${tc};padding-left:8px">${esc(d.verdict||"")}</div>`
+      +(b.month?`<div class="veg-h">退票金額比率<b class="${b.hi12?"down":"flat"}">${fmt(n(b.ratio_amt),2)}%</b><span>${YM(b.month)} · 退票金額比去年同月 ${PP(n(b.amt_yoy))}、近 3 月 ${PP(n(b.amt3_yoy))}${b.hi12?" · 12 個月新高":""}</span></div><div class="spk">${mini(b.spark)}<span>存款不足退票金額占交換金額 · 近 24 月</span></div>`:"")
+      +(L.v?`<div class="veg-h">減班休息<b class="${(f.chg||0)>0?"down":(f.chg||0)<0?"up":"flat"}">${fmt(n(L.v),0)} 人</b><span>${f.chg!=null?`比上期 ${f.chg>0?"+":""}${fmt(f.chg,0)} 人 · `:""}${ago(L.at)}公布${f.up2?" · 連兩期增加":""}</span></div>${(f.series||[]).length>1?`<div class="spk">${mini(f.series.map(x=>x[1]))}<span>每期公布人數</span></div>`:""}<ul class="list wrap">${(f.news||[]).slice(0,3).map(x=>LI(x.title,`${x.source||""} · ${ago(x.at)}`,"","",x.url)).join("")}</ul>`:"");
+    setMeta("p-stress",{...d,label:"月資料"},24*20);},
+  logistics(d){const S=d.storms||[],Dl=((d.drewry||{}).lanes)||[],F=d.fbx||[],N=d.news||[],LV={Red:"紅色",Orange:"橙色",Green:"綠色"},LC={Red:"down",Orange:"tw",Green:"flat"};
+    const st=S.length?`<h3 class="ins-h">風暴對港口</h3><ul class="list wrap">${S.slice(0,6).map(x=>LI(x.name,(x.near||[]).length?`離${x.near[0].port}約 ${fmt(x.near[0].km,0)} 公里${x.near[1]?`、${x.near[1].port} ${fmt(x.near[1].km,0)} 公里`:""}`:"附近沒有主要貨櫃港",LV[x.level]||x.level,LC[x.level]||"",x.url)).join("")}</ul>`:`<div class="plain">目前沒有接近主要貨櫃港的熱帶氣旋。</div>`;
+    const rates=(Dl.length?`<h3 class="ins-h">Drewry 貨櫃運價（每 40 呎，週變動）</h3>${HB(Dl.map(x=>({name:x.name,v:n(x.chg),txt:`${x.v?"$"+fmt(x.v,0)+" · ":""}${PP(n(x.chg))}`})))}`:"")
+      +(F.length?`<h3 class="ins-h">Freightos FBX（日變動）</h3>${HB(F.map(x=>({name:x.name,v:n(x.chg),txt:PP(n(x.chg))})))}`:"");
+    const nw=N.length?`<h3 class="ins-h">物流新聞</h3><ul class="list wrap">${N.slice(0,10).map(x=>LI((x.hot?"● ":"")+(x.zh||x.title),`${x.source} · ${ago(x.at)}`,"","",x.url)).join("")}</ul>`:"";
+    body("p-logistics").innerHTML=`<div class="ins-g"><div>${st}${rates}</div><div>${nw}</div></div>`;
+    setMeta("p-logistics",{...d,label:"每小時"},3);},
+  uspolicy(d){const I=d.items||[],B=d.bills||[];
+    const li=x=>LI(x.zh||x.title,`${x.src} · ${x.kind} · ${x.date||""}${x.zh?` · ${x.title.length>90?x.title.slice(0,90)+"…":x.title}`:""}`,x.tw?"台灣":x.hot?"重點":"",x.tw?"tw":x.hot?"up":"",x.url);
+    const bl=x=>LI(x.zh||x.title,`${x.kind} · 最新動作 ${x.date||""}：${x.action_zh||x.action||""}`,x.tw?"台灣":"",x.active?"tw":"flat",x.url);
+    body("p-uspolicy").innerHTML=`<div class="plain">近 7 天 ${fmt(n(d.n_week),0)} 件，其中 ${fmt(n(d.n_hot_week),0)} 件跟台灣、半導體、Section 232、實體清單或墨西哥直接有關。</div>`
+      +(B.length?`<div class="ins-g"><div><h3 class="ins-h">國會法案（亮色＝近 30 天有動作）</h3><ul class="list wrap">${B.slice(0,10).map(bl).join("")}</ul></div><div><h3 class="ins-h">行政部門公告與新聞稿</h3><ul class="list wrap">${I.slice(0,18).map(li).join("")}</ul></div></div>`
+        :`<h3 class="ins-h">行政部門公告與新聞稿</h3><ul class="list wrap">${I.slice(0,18).map(li).join("")}</ul>`);
+    setMeta("p-uspolicy",{...d,label:"每日"},8);},
   cars(d){const c=d.car||{},m=d.moto||{};
     body("p-cars").innerHTML=`<div class="veg-h">自用小客車<b class="${cls(n(c.y3))}">${PP(n(c.y3))}</b><span>近 3 個月比去年同期 · ${YM(d.month)} 單月 ${fmt(n(c.v),0)} 輛（${PP(n(c.yoy))}）</span></div>
       <div class="spk">${mini((c.spark||[]).filter(v=>v!=null))}<span>每月領牌 · 近 25 月</span></div>
@@ -2388,7 +2444,7 @@ document.querySelectorAll(".panel.cap").forEach(p=>{const b=document.createEleme
 const IB=(()=>{
 const NS="http://www.w3.org/2000/svg";
 const BANDS={1:[["p-brands","新品牌雷達"],["p-jobs","104 職缺"],["p-crowd","集資雷達"],["p-tenders","標案"],["p-awards","決標"],["p-radar","公司雷達"],["p-grants","補助徵件"],["p-clinics","診所"],["p-aesthetic","醫美"]],
-  2:[["p-news","新聞"],["p-watch","關注領域"]],3:[["p-ossuse","AI 與開源動態"],["p-aiwire","AI 快線"],["p-devpulse","開發者動態"],["p-tech","科技社群"],["p-oss","開源雷達"]],4:[["p-media","時尚媒體"],["p-design","設計媒體"],["p-lyst","時尚熱度"]],5:[["p-think","智庫觀點"]]};
+  2:[["p-uspolicy","美國政策源頭"],["p-news","新聞"],["p-watch","關注領域"]],3:[["p-ossuse","AI 與開源動態"],["p-aiwire","AI 快線"],["p-devpulse","開發者動態"],["p-tech","科技社群"],["p-oss","開源雷達"]],4:[["p-media","時尚媒體"],["p-design","設計媒體"],["p-lyst","時尚熱度"]],5:[["p-think","智庫觀點"]]};
 let open=new Set();try{open=new Set(JSON.parse(localStorage.getItem("intel:ibopen")||"[]"));}catch(_){}try{if(!localStorage.getItem("intel:ibdef2")){open.add("p-ossuse");localStorage.setItem("intel:ibdef2","1");localStorage.setItem("intel:ibopen",JSON.stringify([...open]));}}catch(_){open.add("p-ossuse");}
 const save=()=>{try{localStorage.setItem("intel:ibopen",JSON.stringify([...open]));}catch(_){}};
 function setup(){
@@ -2736,7 +2792,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["market","市場"],["macro","總經"],["trend","走向"],["intel","訊號"],["social","輿情"],["live","台灣現場"],["vault","資料庫"]];
-const TAB_OF={"p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
+const TAB_OF={"p-credit":"macro","p-exports":"macro","p-stress":"macro","p-logistics":"market","p-uspolicy":"intel","p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"trend","p-ledger":"trend","p-chain":"trend","p-weekly":"trend","p-tech2":"trend","p-imports":"macro","p-housefc":"macro","p-demo":"macro","p-bizlife":"macro","p-metro":"live",
   "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
@@ -2763,15 +2819,16 @@ const GUIDE={
   market:{cat:"市場",sub:"台股今天怎麼走、錢從哪裡來、全球市場和原物料",secs:[
     ["今天盤勢","大盤、匯率、恐慌程度",["p-taiex","p-fx","p-fear"]],
     ["台股籌碼與公司","期貨籌碼、個股、重大訊息",["p-taifex","p-tw-stocks","p-mops"]],
-    ["全球市場","各國大盤、美股、原物料",["p-world","p-usbig","p-sectors","p-cmdty"]],
+    ["全球市場","各國大盤、美股、原物料、運價與港口",["p-world","p-usbig","p-sectors","p-cmdty","p-logistics"]],
     ["消費與品牌股","通路月營收、精品股",["p-revenue","p-lux"]]]},
   macro:{cat:"總經",sub:"台灣經濟現在幾度、錢花在哪、房子蓋多少、東西貴不貴",secs:[
     ["景氣","整體經濟熱不熱、半年後往哪走",["p-macro","p-lead"]],
+    ["出口與企業壓力","錢從國外進來多少、哪裡先撐不住",["p-exports","p-stress"]],
     ["消費","大家還願不願意花錢、花在哪",["p-supply","p-cards","p-consume","p-tourism"]],
     ["房子與車子","大額消費：買賣、房價、接下來要蓋多少、舊屋重建、新車",["p-house","p-housefc","p-permits","p-renewal","p-cars"]],
     ["人口與公司","人口結構和公司開關",["p-demo","p-bizlife"]],
     ["物價","哪些東西變貴、菜價、上游進口",["p-prices","p-veg","p-imports"]],
-    ["全球","國際總經、美元、預測市場、行事曆",["p-gmacro","p-liq","p-poly","p-calendar"]]]},
+    ["全球","國際總經、美元流動性、信用利差、行事曆、預測市場",["p-gmacro","p-liq","p-credit","p-calendar","p-poly"]]]},
   trend:{sub:"這週往哪走、國外有什麼台灣還沒有、主題熱度、人往哪裡搬",nav:1,secs:[
     ["本週判斷","每週一讀完所有面板寫一次，加上台灣還沒報的",["p-weekly","p-gap"]],
     ["主題與趨勢","哪個主題走到哪一站、熱潮還是趨勢、預測對答案",["p-chain","p-voice","p-wiki","p-ledger","p-tech2"]],

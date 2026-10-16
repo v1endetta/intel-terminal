@@ -2505,6 +2505,7 @@ function EXPLORE() {
       { n: "匯率", globe: 1, f: () => gxCard("fx") },
       { n: "恐慌", f: () => { const v = items("fear").find(x => x.sym === "^VIX") || {}; return lineOf("VIX 恐慌指數", v.spark, v.value > 25 ? DNH : v.value > 15 ? "#ff9f0a" : UPH, "市場 · 15 以下平靜、25 以上緊張", "fear", nf(v.value || 0), pct(v.chg_pct || 0))(); } },
       { n: "原物料", globe: 1, f: () => gxCard("cmdty") },
+      { n: "全球物流", f: () => logisticsCard() },
       { n: "精品", globe: 1, f: () => gxCard("lux") },
       { n: "行事曆", globe: 1, f: () => gxCard("clock") },
     ] },
@@ -2512,6 +2513,8 @@ function EXPLORE() {
       { n: "洞見", f: () => insCatCard("總經") },
       { n: "景氣指標", lens: "macro", f: listOf("台灣總經", () => items("macro").map(x => ({ t: `${x.label}  ${x.value}`, s: `${x.period} · 前期 ${x.prev}` })), "總經", "macro") },
       { n: "刷卡", lens: "cards" },
+      { n: "出口結構", globe: 1, f: () => gxCard("exports") },
+      { n: "企業壓力", f: () => stressCard() },
       { n: "新車", f: () => carsCard() },
       { n: "觀光", f: () => tourismCard() },
       { n: "房價", lens: "house" },
@@ -2520,6 +2523,7 @@ function EXPLORE() {
       { n: "菜價", f: barsOf("菜價兩週變化", () => items("veg").slice(0, 10).map(x => ({ name: x.name, v: x.chg14, txt: pct(x.chg14, 0) })), "總經 · " + ((P.veg || {}).market || ""), "veg") },
       { n: "油價", f: barsOf("中油牌價", () => items("oil").map(x => ({ name: x.name, v: x.price, txt: nf(x.price) + " 元" })), "總經 · " + ((P.oil || {}).effective || ""), "macro", { signed: false }) },
       { n: "美元流動性", globe: 1, f: () => gxCard("liq") },
+      { n: "信用利差", f: () => creditCard() },
     ] },
     { cat: "走向", items: [
       { n: "本月洞見", f: () => insightsCard() },
@@ -2540,6 +2544,7 @@ function EXPLORE() {
       { n: "新興生意", f: () => nicheCard() },
       { n: "職缺", lens: "jobs", f: barsOf("各類職缺 7 天變化", () => (((P.jobs || {}).cats) || []).slice(0, 10).map(c => ({ name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) })), "訊號 · 全台 " + nf((P.jobs || {}).total || 0) + " 個職缺", "jobs") },
       { n: "補助徵件", f: () => grantsCard() },
+      { n: "美國政策", f: () => uspolicyCard() },
       { n: "標案", lens: "tender", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },
       { n: "公司雷達", f: listOf("盯梢中的公司", () => (((P.radar || {}).watch) || []).slice(0, 7).map(x => ({ t: x.name, s: x.desc })), "訊號", "radar") },
       { n: "診所", lens: "clinic" },
@@ -2607,6 +2612,11 @@ const PROV = {
   "lens:move": ["migration", "內政部戶政司 遷入遷出統計", "月資料", 1440],
   "洞見": ["insights_cat", "情報站各分類資料（程式整理、Gemini 寫句子）", "彙整", 360],
   "本月洞見": ["insights", "政府開放資料交叉比對（程式算訊號、Gemini 寫句子）", "每日", 1440],
+  "信用利差": ["credit", "ICE BofA 美國公司債利差（經 FRED），只顯示近 3 年百分位", "每日", 1440, p => (((p.rows || [])[0]) || {}).asof],
+  "出口結構": ["exports", "財政部統計資料庫：出口按國家×主要貨品", "每月", 43200, p => p.month],
+  "企業壓力": ["stress", "中央銀行退票統計；勞動部減班休息（從新聞標題擷取）", "每月", 43200, p => (p.bounce || {}).month],
+  "全球物流": ["logistics", "Drewry WCI・Freightos FBX（只放變動）・GDACS 熱帶氣旋・物流媒體", "彙整", 180],
+  "美國政策": ["uspolicy", "Federal Register（USTR、BIS、ITA）・USTR 新聞稿・Congress.gov", "每日", 480],
   "AI 與開源": ["ossuse", "GitHub Trending・Hugging Face 熱門模型與 Spaces・HF Daily Papers（重要性由 Gemini 依對市場的意義判讀）", "彙整", 360],
   "補助徵件": ["grants", "Google 新聞的補助、徵件公告（Gemini 判讀，以原公告為準）", "彙整", 360],
   "lens:stop": ["alerts", "行政院人事行政總處 天然災害停止上班及上課情形", "即時", 30, p => (p.stopwork || {}).updated],
@@ -3362,6 +3372,15 @@ const GX_SPEC = {
       nodes: items("luxury").filter(x => AT[x.name]).map(x => { const ll = GXP[AT[x.name]].slice(), k = seen[AT[x.name]] = (seen[AT[x.name]] || 0) + 1; if (k > 1) { ll[0] += 3 * (k - 1); ll[1] += 2 * (k - 1); } return { name: x.name, ll, chg: x.chg_pct, sub: `${AT[x.name]}　${gxPct(x.chg_pct)}` }; }),
       why: "品牌總部所在地的股價漲跌，看消費情緒從哪裡先轉。" };
   },
+  exports() {   // 台灣出口：線從台灣拉到各市場，粗細＝近 3 個月年增
+    const E = P.exports || {}, AT = { 美國: [-98, 38.5], 中國大陸及香港: GXP["上海"], 東協: [104, 4], 日本: GXP["東京"], 南韓: GXP["首爾"], 德國: GXP["法蘭克福"], 墨西哥: GXP["墨西哥"], 越南: [106, 16], 印度: GXP["孟買"] };
+    const rows = (E.markets || []).concat((E.extra || []).filter(x => x.name === "墨西哥" || x.name === "越南" || x.name === "印度"));
+    return { look: [175, 22], alt: 18000, dir: "out", scale: 60, title: "台灣出口賣到哪裡", eyebrow: `總經 · 財政部 · ${(E.month || "").replace("-", "/")} · 近 3 個月比去年同期`,
+      nodes: rows.filter(x => AT[x.name] && x.yoy3 != null).map(x => ({ name: x.name === "中國大陸及香港" ? "中港" : x.name, ll: AT[x.name], chg: x.yoy3,
+        sub: `${(x.month || "").replace("-", "/")} 單月 ${x.v != null ? nf(x.v) : "—"} 億美元（${x.yoy != null ? gxPct(x.yoy) : "—"}）${x.ee_share != null ? `・機械及電機設備占 ${Math.round(x.ee_share)}%` : ""}${x.name === "墨西哥" || x.name === "越南" || x.name === "印度" ? "・國別總表，較晚更新" : ""}` })),
+      why: `線越粗，對那個市場的出口近 3 個月成長越多。${E.note ? E.note + "。" : ""}墨西哥、越南、印度用財政部國別總表，比主要市場晚 2～3 個月。`,
+      extra: (E.goods || []).length ? `<div class="nvh">賣什麼（近 3 個月比去年同期）</div>` + barsHTML(E.goods.map(g => ({ name: g.name, v: g.yoy3, txt: `${pct(g.yoy3, 1)}・占 ${Math.round(g.share || 0)}%` }))) + `<p class="why">電子零組件含半導體；資通與視聽含伺服器、電腦。</p>` : "" };
+  },
   liq() {
     const L = P.liquidity || {}, n = L.net || {}, k = n.chg4w;
     return { look: [-160, 35], alt: 16000, dir: "out", title: "美元流動性", eyebrow: "總經 · 聯準會",
@@ -3415,7 +3434,7 @@ function gxBuild() {
   s.nodes.forEach((n, i) => {
     if (!n.ll) return;
     const pts = s.dir === "out" ? GLOBE.arc(TW_LL, n.ll, 0.05, 90) : GLOBE.arc(n.ll, TW_LL, 0.05, 90), col = gxCol(n.chg);
-    const mag = n.chg == null ? Math.min(1, (n.w || 1) / 4) : Math.min(1, Math.abs(n.chg) / 2.5), r = 7 + 26 * mag;
+    const mag = n.chg == null ? Math.min(1, (n.w || 1) / 4) : Math.min(1, Math.abs(n.chg) / (s.scale || 2.5)), r = 7 + 26 * mag;
     const tube = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 90, r, 6, false), fm(new THREE.MeshBasicMaterial({ color: col, blending: THREE.AdditiveBlending, depthTest: true, depthWrite: false }), 0.32 + 0.4 * mag));
     const dot = new THREE.Mesh(new THREE.SphereGeometry(30 + 40 * mag, 16, 12), fm(new THREE.MeshBasicMaterial({ color: col, depthTest: true }), 0.95));
     dot.position.copy(GLOBE.G(n.ll[0], n.ll[1], 30));
@@ -5254,6 +5273,51 @@ function ossCard() {
       + (H.length ? `<div class="nvh">熱門專案</div>` + listHTML(H.slice(0, 8).map(li)) : "")
       + (PA.length ? `<div class="nvh">論文</div>` + listHTML(PA.slice(0, 5).map(pli)) : ""),
     foot: `<a href="/terminal/#p-ossuse">終端機看完整清單 ›</a>` }) };
+}
+
+// ---- 錢往哪走、哪裡會先斷 ----
+// 信用利差：ICE 授權只放百分位
+function creditCard() {
+  const D = P.credit || {}, R = D.rows || [];
+  if (!R.length) return { html: sideHTML({ eyebrow: "總經 · 信用利差", title: "借錢的人要多付多少？", body: '<p class="empty">資料載入中。</p>' }) };
+  const hy = R.find(r => r.id === "BAMLH0A0HYM2") || R[0], col = p => p >= 70 ? DNH : p <= 30 ? UPH : NEU;
+  return { html: sideHTML({ eyebrow: `總經 · 美國公司債利差 · 資料到 ${(hy.asof || "").slice(5).replace("-", "/")}`, title: "借錢的人要多付多少？", big: `第 ${hy.pct} 百分位`, color: col(hy.pct),
+    body: `<p class="why">${esc(D.verdict || "")}。百分位是現在的利差在近 ${Math.round(hy.n_years || 3)} 年裡排第幾：越高＝市場越不敢借錢給體質差的公司，通常比股市先反應。</p>`
+      + barsHTML(R.map(r => ({ name: r.name, v: r.pct, txt: `第 ${r.pct}（月前 ${r.pct20}）`, color: col(r.pct) })), { signed: false })
+      + `<div class="nvh">高收益債百分位，近半年</div>` + lineSVG(hy.trend || [], col(hy.pct))
+      + listHTML(R.map(r => ({ t: `${r.name}・${r.state}${r.fast ? "・短期快速擴大" : ""}`, s: r.what }))),
+    foot: `<span>ICE BofA（經 FRED）；依授權只顯示百分位</span>` }) };
+}
+// 企業壓力：退票、減班休息
+function stressCard() {
+  const D = P.stress || {}, b = D.bounce || {}, f = D.furlough || {}, L = f.latest || {};
+  if (!b.month && !L.v) return { html: sideHTML({ eyebrow: "總經 · 企業壓力", title: "哪裡先撐不住？", body: '<p class="empty">資料載入中。</p>' }) };
+  return { html: sideHTML({ eyebrow: `總經 · 企業壓力`, title: "哪裡先撐不住？", big: L.v ? `減班休息 ${nI(L.v)} 人` : `退票比率 ${b.ratio_amt}%`, color: (D.signals || []).length ? "#ff9f0a" : UPH,
+    body: `<p class="why">${esc(D.verdict || "")}。退票是公司付不出錢最早的痕跡；減班休息是工廠訂單不夠、先讓員工放無薪假。</p>`
+      + (b.month ? `<div class="nvh">退票金額比率，近 24 個月（${ymTxt(b.month)} ${b.ratio_amt}%，比去年同月 ${b.amt_yoy != null ? pct(b.amt_yoy, 0) : "—"}）</div>` + lineSVG(b.spark || [], b.hi12 ? DNH : NEU) : "")
+      + (L.v ? `<div class="nvh">減班休息${f.chg != null ? `（比上期 ${f.chg > 0 ? "+" : ""}${nI(f.chg)} 人）` : ""}</div>` + listHTML((f.news || []).slice(0, 3).map(x => ({ t: x.title, s: x.source, url: x.url }))) : ""),
+    foot: `<span>${esc(D.src || "")}</span>` }) };
+}
+// 全球物流：風暴對港口、運價、物流新聞
+function logisticsCard() {
+  const D = P.logistics || {}, S = D.storms || [], Dl = (D.drewry || {}).lanes || [], F = D.fbx || [], N = D.news || [], LV = { Red: "紅色", Orange: "橙色", Green: "綠色" };
+  const th = D.threat || [];
+  return { html: sideHTML({ eyebrow: "市場 · 全球物流", title: "貨卡在哪裡？", big: th.length ? `${th[0].storm} 逼近${th[0].port}` : S.length ? `${S.length} 個熱帶氣旋` : "港口沒有風暴威脅", color: th.length ? DNH : UPH,
+    body: (S.length ? `<div class="nvh">熱帶氣旋（GDACS 警戒等級）</div>` + listHTML(S.slice(0, 5).map(s => ({ t: `${s.name}・${LV[s.level] || s.level}`, s: (s.near || []).length ? `離${s.near[0].port} ${nI(s.near[0].km)} 公里` : "附近沒有主要貨櫃港", url: s.url }))) : "")
+      + (Dl.length ? `<div class="nvh">Drewry 貨櫃運價（週變動）</div>` + barsHTML(Dl.map(x => ({ name: x.name, v: x.chg, txt: `${x.v ? "$" + nI(x.v) + "・" : ""}${pct(x.chg, 0)}` }))) : "")
+      + (F.length ? `<div class="nvh">Freightos FBX（日變動）</div>` + barsHTML(F.slice(0, 6).map(x => ({ name: x.name, v: x.chg, txt: pct(x.chg, 1) }))) : "")
+      + (N.length ? `<div class="nvh">物流新聞</div>` + listHTML(N.slice(0, 5).map(x => ({ t: x.zh || x.title, s: x.source, url: x.url }))) : ""),
+    foot: `<a href="/terminal/#p-logistics">終端機看完整清單 ›</a>` }) };
+}
+// 美國政策源頭
+function uspolicyCard() {
+  const D = P.uspolicy || {}, I = D.items || [], B = D.bills || [];
+  if (!I.length && !B.length) return { html: sideHTML({ eyebrow: "訊號 · 美國政策", title: "美國在改什麼規則？", body: '<p class="empty">資料載入中。</p>' }) };
+  return { html: sideHTML({ eyebrow: "訊號 · USTR・商務部・國會", title: "美國在改什麼規則？", big: `近 7 天 ${D.n_week || 0} 件`, color: (D.n_hot_week || 0) ? "#ff9f0a" : NEU,
+    body: `<p class="why">關稅、出口管制、實體清單在這裡先出現，新聞通常晚一兩天。標「台灣」的是內容直接點名台灣。</p>`
+      + (B.length ? `<div class="nvh">國會法案</div>` + listHTML(B.slice(0, 4).map(x => ({ t: x.zh || x.title, s: `${x.kind}・${(x.date || "").slice(5).replace("-", "/")} ${x.action_zh || x.action || ""}`, url: x.url }))) : "")
+      + `<div class="nvh">行政部門</div>` + listHTML(I.slice(0, 7).map(x => ({ t: (x.tw ? "【台灣】" : x.hot ? "【重點】" : "") + (x.zh || x.title), s: `${x.src}・${x.kind}・${(x.date || "").slice(5).replace("-", "/")}`, url: x.url }))),
+    foot: `<a href="/terminal/#p-uspolicy">終端機看完整清單 ›</a>` }) };
 }
 
 /* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */
