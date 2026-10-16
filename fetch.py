@@ -5340,21 +5340,6 @@ def p_ledger():
                         f"{du[:4]}-{du[4:]}", base=coin[cm], dir=ch)
             except Exception as e:  # noqa: BLE001
                 log("ledger biz gen", e)
-        hy = next((x for x in ((RESULTS.get("credit") or {}).get("rows") or []) if x.get("id") == "BAMLH0A0HYM2"), None)
-        tx = (HISTORY.get("taiex", {}).get("TAIEX") or [])
-        if hy and tx and hy["pct"] >= 70 and hy["pct"] - hy["pct20"] >= 30:
-            d3 = (TODAY_TPE + timedelta(days=91)).isoformat()
-            add("credit_wide", "台股", f"高收益債利差一個月內從第 {hy['pct20']} 跳到第 {hy['pct']} 百分位：加權指數到 {d3[:10].replace('-', '/')} 低於現在（{tx[-1][1]:,.0f}）",
-                d3, base=tx[-1][1], prob=0.5)
-        ST = RESULTS.get("stress") or {}
-        try:
-            coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); cm = max(coin); du = _ym_add(cm, 3)
-            if (ST.get("bounce") or {}).get("hi12"):
-                add("bounce_hi", "景氣", f"退票金額比率創 12 個月新高（{ST['bounce']['month']}）：同時指標到 {du[:4]}/{du[4:]} 低於現在（{coin[cm]:.2f}）", f"{du[:4]}-{du[4:]}", base=coin[cm], prob=0.5)
-            if (ST.get("furlough") or {}).get("up2"):
-                add("furlough_up", "景氣", f"減班休息人數連兩期增加：同時指標到 {du[:4]}/{du[4:]} 低於現在（{coin[cm]:.2f}）", f"{du[:4]}-{du[4:]}", base=coin[cm], prob=0.5)
-        except Exception as e:  # noqa: BLE001
-            log("ledger stress gen", e)
         d6 = (TODAY_TPE + timedelta(days=182)).isoformat()
         for r in ((RESULTS.get("chain") or {}).get("rows") or []):  # 還沒有歷史可回測：機率先給 50%，等對完答案再說
             sv = next((x.get("v") for x in r.get("stages") or [] if x.get("k") == "新店"), None)
@@ -5368,6 +5353,29 @@ def p_ledger():
         if not new_rules or not L.get("gen_at") or (date_from(today) - date_from(L["gen_at"])).days >= 7:
             L["gen_at"] = today
         L["gen_rules"] = sorted(LEDGER_RULES)
+    # 訊號型規則（利差、退票、減班）：每輪都檢查，訊號出現當天就寫，不等每週一次
+    open_keys2 = {(p["rule"], p["subject"]) for p in preds if p["status"] == "open"}
+    def add(rule, subject, text, due, **kw):
+        if (rule, subject) in open_keys2:
+            return
+        open_keys2.add((rule, subject))
+        preds.append({"id": f"{today}-{rule}-{len(preds)}", "made": today, "rule": rule, "subject": subject, "text": text,
+                      "prob": kw.pop("prob", None) or prob(rule), "due": due, "status": "open", **kw})
+    hy = next((x for x in ((RESULTS.get("credit") or {}).get("rows") or []) if x.get("id") == "BAMLH0A0HYM2"), None)
+    tx = (HISTORY.get("taiex", {}).get("TAIEX") or [])
+    if hy and tx and hy["pct"] >= 70 and hy["pct"] - hy["pct20"] >= 30:
+        d3 = (TODAY_TPE + timedelta(days=91)).isoformat()
+        add("credit_wide", "台股", f"高收益債利差一個月內從第 {hy['pct20']} 跳到第 {hy['pct']} 百分位：加權指數到 {d3[:10].replace('-', '/')} 低於現在（{tx[-1][1]:,.0f}）",
+            d3, base=tx[-1][1], prob=0.5)
+    ST = RESULTS.get("stress") or {}
+    try:
+        coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); cm = max(coin); du = _ym_add(cm, 3)
+        if (ST.get("bounce") or {}).get("hi12"):
+            add("bounce_hi", "景氣", f"退票金額比率創 12 個月新高（{ST['bounce']['month']}）：同時指標到 {du[:4]}/{du[4:]} 低於現在（{coin[cm]:.2f}）", f"{du[:4]}-{du[4:]}", base=coin[cm], prob=0.5)
+        if (ST.get("furlough") or {}).get("up2"):
+            add("furlough_up", "景氣", f"減班休息人數連兩期增加：同時指標到 {du[:4]}/{du[4:]} 低於現在（{coin[cm]:.2f}）", f"{du[:4]}-{du[4:]}", base=coin[cm], prob=0.5)
+    except Exception as e:  # noqa: BLE001
+        log("ledger stress gen", e)
     L["preds"] = preds[-600:]
     write_json(LEDGER, L)
     # 4) 統計
@@ -11882,6 +11890,11 @@ run("taifex", p_taifex, keep_if_fresh_hours=1)
 run("sectors", p_sectors, keep_if_fresh_hours=0.5)
 run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
+run("credit", p_credit, keep_if_fresh_hours=6)  # 五個新面板放前面，避免排在最後被本輪時限略過。信用利差：FRED 每天收盤後更新一次
+run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Federal Register 每個工作日早上出刊
+run("exports", p_exports, keep_if_fresh_hours=24)  # 台灣出口結構：月資料，每月 9 日前後公布
+run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
+run("logistics", p_logistics, keep_if_fresh_hours=1)  # 全球物流：風暴要即時，運價週／日資料
 run("revenue", p_revenue, keep_if_fresh_hours=20)
 run("etfholders", p_etfholders, keep_if_fresh_hours=12)
 run("corp", p_corp, keep_if_fresh_hours=6)
@@ -11978,11 +11991,6 @@ run("births", p_births, keep_if_fresh_hours=24 if BIRTH_CACHE.exists() and len(j
 run("cars", p_cars, keep_if_fresh_hours=24)
 run("permits", p_permits, keep_if_fresh_hours=24)
 run("renewal", p_renewal, keep_if_fresh_hours=24)  # 都更：資料一個月頂多更新一次，一天看一次就好
-run("credit", p_credit, keep_if_fresh_hours=6)  # 信用利差：FRED 每天收盤後更新一次
-run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Federal Register 每個工作日早上出刊
-run("exports", p_exports, keep_if_fresh_hours=24)  # 台灣出口結構：月資料，每月 9 日前後公布
-run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
-run("logistics", p_logistics, keep_if_fresh_hours=1)  # 全球物流：風暴要即時，運價週／日資料
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 if load_prev("weekly"):  # 每週走向摘要由 weekly.yml 另外寫（Gemini 慢，不佔主迴圈時間），這裡只帶進 all.json
