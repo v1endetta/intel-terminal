@@ -5,9 +5,9 @@
    "vendor": "openai",
    "title": "Model Not found on Chatgpt",
    "url": "https://community.openai.com/t/model-not-found-on-chatgpt/1406468",
-   "replies": 17,
+   "replies": 19,
    "likes": 2,
-   "views": 2083,
+   "views": 2120,
    "at": "2026-10-15T01:56:00Z"
   },
   {
@@ -17,7 +17,7 @@
    "url": "https://community.openai.com/t/model-not-found-error-in-chat-on-my-account/1406523",
    "replies": 8,
    "likes": 3,
-   "views": 1071,
+   "views": 1086,
    "at": "2026-10-15T07:33:43Z"
   },
   {
@@ -27,7 +27,7 @@
    "url": "https://community.openai.com/t/gpt-6-is-not-conversational-progress-it-feels-like-reinventing-wikipedia/1406566",
    "replies": 0,
    "likes": 2,
-   "views": 35,
+   "views": 37,
    "at": "2026-10-15T09:56:05Z"
   },
   {
@@ -37,7 +37,7 @@
    "url": "https://community.openai.com/t/why-is-there-no-indication-that-dots-is-running-in-the-background/1406497",
    "replies": 0,
    "likes": 2,
-   "views": 34,
+   "views": 35,
    "at": "2026-10-15T05:00:52Z"
   },
   {
@@ -57,7 +57,7 @@
    "url": "https://discuss.ai.google.dev/t/antigravity-pro-has-lost-most-of-its-value/189446",
    "replies": 3,
    "likes": 3,
-   "views": 104,
+   "views": 110,
    "at": "2026-10-15T03:02:40Z"
   },
   {
@@ -65,9 +65,9 @@
    "vendor": "google",
    "title": "Request to Restore Gemini 3.1 Pro Access for Google AI Pro Subscribers in Antigravity",
    "url": "https://discuss.ai.google.dev/t/request-to-restore-gemini-3-1-pro-access-for-google-ai-pro-subscribers-in-antigravity/189485",
-   "replies": 2,
+   "replies": 5,
    "likes": 2,
-   "views": 66,
+   "views": 75,
    "at": "2026-10-15T03:26:05Z"
   },
   {
@@ -77,7 +77,7 @@
    "url": "https://discuss.ai.google.dev/t/missing-gemini-pro-models-in-model-selector-despite-active-google-ai-pro-plan-100-quota/189434",
    "replies": 4,
    "likes": 0,
-   "views": 79,
+   "views": 81,
    "at": "2026-10-15T01:32:13Z"
   },
   {
@@ -87,18 +87,18 @@
    "url": "https://discuss.ai.google.dev/t/antigravity-2-23-0-model-unavailable-retry-loop-is-a-60-second-cutoff-on-silent-model-responses-logs-and-data/189559",
    "replies": 2,
    "likes": 0,
-   "views": 84,
+   "views": 89,
    "at": "2026-10-15T04:35:14Z"
   },
   {
    "source": "Google AI 論壇",
    "vendor": "google",
-   "title": "Transfer Argon 4 quota to antigravity",
-   "url": "https://discuss.ai.google.dev/t/transfer-argon-4-quota-to-antigravity/189741",
-   "replies": 0,
+   "title": "Google Antigravity IDE | Gemini Pro not showing, only Flash 3.8",
+   "url": "https://discuss.ai.google.dev/t/google-antigravity-ide-gemini-pro-not-showing-only-flash-3-8/189480",
+   "replies": 2,
    "likes": 1,
-   "views": 22,
-   "at": "2026-10-15T19:56:11Z"
+   "views": 62,
+   "at": "2026-10-15T03:25:58Z"
   }
  ],
  "changelogs": [
@@ -123,20 +123,20 @@
   {
    "source": "OpenAI changelog",
    "vendor": "openai",
+   "date": "Oct 15",
+   "kind": "Feature",
+   "title": "Added native Decisions integration in GPT-Live.",
+   "url": "https://developers.openai.com/api/docs/changelog",
+   "at": "2026-10-15T00:00:00Z"
+  },
+  {
+   "source": "OpenAI changelog",
+   "vendor": "openai",
    "date": "Oct 8",
    "kind": "Feature",
    "title": "Added Ultrafast mode for GPT-6.1 Sol in the Responses API.",
    "url": "https://developers.openai.com/api/docs/changelog",
    "at": "2026-10-08T00:00:00Z"
-  },
-  {
-   "source": "OpenAI changelog",
-   "vendor": "openai",
-   "date": "Oct 7",
-   "kind": "Update",
-   "title": "Updated the chat-latest snapshot, which points to the latest model available in ChatGPT for Plus, Pro, Business and Enterprise users.",
-   "url": "https://developers.openai.com/api/docs/changelog",
-   "at": "2026-10-07T00:00:00Z"
   },
   {
    "source": "Claude release notes",
@@ -150,29 +150,29 @@
   {
    "source": "Claude release notes",
    "vendor": "anthropic",
-   "date": "October 15, 2026",
-   "kind": null,
-   "title": "Fast mode is out of research preview for Claude Opus 5.5, and you no longer need to request access.",
-   "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-10-15T00:00:00Z"
-  },
-  {
-   "source": "Claude release notes",
-   "vendor": "anthropic",
-   "date": "October 15, 2026",
-   "kind": null,
-   "title": "Fast mode for Claude Opus 5.5 is now available on Claude in Microsoft Foundry for deployments hosted on Azure.",
-   "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-10-15T00:00:00Z"
-  },
-  {
-   "source": "Claude release notes",
-   "vendor": "anthropic",
    "date": "October 14, 2026",
    "kind": null,
    "title": "We've launched OpenTelemetry export in beta, so you can trace Messages API requests and Claude Managed Agents sessions in your observability",
    "url": "https://platform.claude.com/docs/en/release-notes/overview",
    "at": "2026-10-14T00:00:00Z"
+  },
+  {
+   "source": "Claude release notes",
+   "vendor": "anthropic",
+   "date": "October 9, 2026",
+   "kind": null,
+   "title": "You can now let a Claude Managed Agents agent use dynamic workflows, in beta with the managed-agents-2026-04-01 beta header.",
+   "url": "https://platform.claude.com/docs/en/release-notes/overview",
+   "at": "2026-10-09T00:00:00Z"
+  },
+  {
+   "source": "Claude release notes",
+   "vendor": "anthropic",
+   "date": "October 8, 2026",
+   "kind": null,
+   "title": "The Compliance API chat endpoints now also return chats from the unified Claude experience, in beta for Claude Enterprise organizations, wit",
+   "url": "https://platform.claude.com/docs/en/release-notes/overview",
+   "at": "2026-10-08T00:00:00Z"
   },
   {
    "source": "Gemini changelog",
@@ -301,5 +301,5 @@
   "DeepSeek updates md: got html 48088b",
   "xAI release notes md: 19051b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### Grok Vo'"
  ],
- "updatedAt": "2026-10-15T23:25:20Z"
+ "updatedAt": "2026-10-16T00:45:48Z"
 }
