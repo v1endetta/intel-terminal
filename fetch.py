@@ -11526,7 +11526,7 @@ def p_credit():
 
 # ---------- 美國政策源頭：Federal Register（USTR、商務部 BIS／ITA）＋ USTR 新聞稿 ＋ 國會涉台法案 ----------
 CONGRESS_KEY = os.environ.get("CONGRESS_API_KEY", "").strip()
-CONGRESS_ON = False   # 國會涉台法案：實測回報、Vin 核准後才打開
+CONGRESS_ON = True   # 國會涉台法案：2026-10-16 Vin 核准
 CONGRESS_CACHE = DATA / "congress_bills.json"
 CG_TW = re.compile(r"Taiwan", re.I)
 CG_TECH = re.compile(r"\bsemiconductors?\b|\bchips?\b|\bCHIPS\b|export control", re.I)
