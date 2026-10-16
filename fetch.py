@@ -11567,9 +11567,10 @@ def p_uspolicy():
         try:   # 每輪抓近 2 天有更新的法案，標題比對；比對到的存進快取，之後每天跟著它的最新動作
             cache = json.loads(CONGRESS_CACHE.read_text(encoding="utf-8")) if CONGRESS_CACHE.exists() else {}
             got, off = [], 0
-            while off < 1500:
+            back, cap = (2, 1500) if cache else (30, 3500)   # 第一次：往回補 30 天，之後每輪只看近 2 天
+            while off < cap:
                 j = gjson("https://api.congress.gov/v3/bill", params={"api_key": CONGRESS_KEY, "format": "json", "limit": 250, "offset": off, "sort": "updateDate desc",
-                                                                      "fromDateTime": (NOW - timedelta(days=2)).strftime("%Y-%m-%dT00:00:00Z"), "toDateTime": NOW.strftime("%Y-%m-%dT%H:%M:%SZ")}, timeout=40)
+                                                                      "fromDateTime": (NOW - timedelta(days=back)).strftime("%Y-%m-%dT00:00:00Z"), "toDateTime": NOW.strftime("%Y-%m-%dT%H:%M:%SZ")}, timeout=40)
                 bs = j.get("bills") or []; got += bs
                 if len(bs) < 250:
                     break
