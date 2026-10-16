@@ -11446,6 +11446,361 @@ def p_consume():
             "retail": retail, "retail_month": f"{retail_m[:4]}-{retail_m[4:]}" if retail_m else None}
 
 
+
+# ========== 錢往哪走、哪裡會先斷：信用利差、美國政策源頭、台灣出口結構、企業壓力、全球物流 ==========
+CREDIT = [("BAMLH0A0HYM2", "高收益債", "信用最差的一群公司借錢要多付多少"), ("BAMLH0A3HYC", "CCC 級", "高收益債裡最弱的一段，通常最先動"),
+          ("BAMLC0A0CM", "投資級", "體質好的公司，動得慢；一起擴大才是真的緊")]
+
+
+def _pctile(xs, v):
+    return round(100 * sum(1 for x in xs if x <= v) / len(xs)) if xs else None
+
+
+def p_credit():
+    """美國公司債利差（ICE BofA，經 FRED）。ICE 授權不得重製數值：網站只放「在近 3 年的第幾百分位」與狀態，原始數字不存、不輸出。"""
+    if not FRED_KEY:
+        raise RuntimeError("no FRED_API_KEY")
+    rows, errs, alert = [], [], None
+    for sid, name, what in CREDIT:
+        try:
+            pairs = fred(sid, n=1000); obs = [v for _, v in pairs]
+            ds = [pairs[-1][0]] if pairs else []
+            if len(obs) < 200:
+                raise RuntimeError("太短")
+            p_now = _pctile(obs, obs[-1]); p20 = _pctile(obs, obs[-21]); p60 = _pctile(obs, obs[-61])
+            trend = [_pctile(obs, x) for x in obs[-120:][::3]]
+            d20 = obs[-1] - obs[-21]; d5 = obs[-1] - obs[-6]   # 只在程式裡判斷用，不輸出
+            st = ("壓力大" if p_now >= 90 else "偏緊" if p_now >= 70 else "正常" if p_now >= 30 else "很鬆")
+            fast = (sid != "BAMLC0A0CM" and (d20 >= 0.75 or d5 >= 0.4)) or (sid == "BAMLC0A0CM" and (d20 >= 0.3 or d5 >= 0.15))
+            if fast and alert is None:
+                alert = {"sid": sid, "name": name, "date": ds[0] if ds else "", "p": p_now, "p20": p20}
+            rows.append({"id": sid, "name": name, "what": what, "pct": p_now, "pct20": p20, "pct60": p60, "state": st, "fast": fast,
+                         "trend": trend, "asof": ds[0] if ds else "", "n_years": round(len(obs) / 252, 1)})
+            hist_put("credit_pct", sid, ds[0] if ds else TODAY_TPE.isoformat(), p_now)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{name}: {safe_err(e)}")
+    if not rows:
+        raise RuntimeError("credit: " + "; ".join(errs))
+    hy = next((r for r in rows if r["id"] == "BAMLH0A0HYM2"), rows[0])
+    ig = next((r for r in rows if r["id"] == "BAMLC0A0CM"), None)
+    if alert:
+        verdict, tone = f"{alert['name']}利差短時間快速擴大（百分位 {alert['p20']} → {alert['p']}）", "red"
+    elif hy["pct"] >= 70 and ig and ig["pct"] >= 70:
+        verdict, tone = "高收益和投資級一起偏寬：資金在避險，不只是個別公司出事", "red"
+    elif hy["pct"] - hy["pct20"] >= 25:
+        verdict, tone = "高收益債利差這個月明顯往上，先看 CCC 級是不是一起動", "amber"
+    elif hy["pct"] <= 20:
+        verdict, tone = "利差在 3 年低檔：市場願意借錢給體質差的公司，風險被定價得很便宜", "green"
+    else:
+        verdict, tone = "利差在正常區間，債市沒有在防守", "green"
+    return {"rows": rows, "verdict": verdict, "tone": tone, "alert": alert, "errs": errs,
+            "src": "ICE BofA 美國公司債選擇權調整利差（經 FRED）；依 ICE 授權只顯示近 3 年百分位，不顯示原始數值"}
+
+
+# ---------- 美國政策源頭：Federal Register（USTR、商務部 BIS／ITA）＋ USTR 新聞稿 ＋ 國會涉台法案 ----------
+CONGRESS_KEY = os.environ.get("CONGRESS_API_KEY", "").strip()
+USP_AG = [("trade-representative-office-of-united-states", "USTR"), ("industry-and-security-bureau", "BIS"), ("international-trade-administration", "ITA")]
+USP_KW = re.compile(r"Taiwan|semiconductor|chip|Section 232|Section 301|tariff|export control|Entity List|Mexico|USMCA|China|PRC|wafer|integrated circuit|server|artificial intelligence|AI diffusion", re.I)
+USP_HOT = re.compile(r"Taiwan|semiconductor|wafer|integrated circuit|Section 232|Entity List|Mexico|USMCA", re.I)
+USP_NOISE = re.compile(r"Information Collection|Sunshine Act|Privacy Act|Paperwork Reduction|Agency Information|Meeting of the|Advisory Committee", re.I)
+
+
+def p_uspolicy():
+    items, errs = [], []
+    for ag, short in USP_AG:
+        try:
+            j = gjson("https://www.federalregister.gov/api/v1/documents.json",
+                      params={"conditions[agencies][]": ag, "per_page": 60, "order": "newest",
+                              "fields[]": ["title", "publication_date", "type", "abstract", "html_url", "document_number"]}, timeout=40)
+            for d in j.get("results") or []:
+                t, ab = d.get("title") or "", d.get("abstract") or ""
+                if USP_NOISE.search(t) or not USP_KW.search(t + " " + ab):
+                    continue
+                kind = {"Rule": "規則", "Proposed Rule": "草案", "Notice": "公告", "Presidential Document": "總統文件"}.get(d.get("type"), d.get("type") or "")
+                items.append({"src": short, "kind": kind, "title": t[:220], "date": d.get("publication_date"), "url": d.get("html_url"),
+                              "hot": bool(USP_HOT.search(t + " " + ab)), "tw": bool(re.search(r"Taiwan", t + " " + ab, re.I))})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{short}: {safe_err(e)}")
+    try:
+        for it in _rss_items(get("https://ustr.gov/rss.xml", timeout=40).content)[:20]:
+            t = it["title"]
+            items.append({"src": "USTR 新聞稿", "kind": "新聞稿", "title": t[:220], "date": (it.get("at") or "")[:10], "url": it["url"],
+                          "hot": bool(USP_HOT.search(t + " " + it.get("desc", ""))), "tw": bool(re.search(r"Taiwan", t + " " + it.get("desc", ""), re.I))})
+    except Exception as e:  # noqa: BLE001
+        errs.append("USTR 新聞稿: " + safe_err(e))
+    bills = []
+    if CONGRESS_KEY:
+        try:
+            j = gjson("https://api.congress.gov/v3/bill", params={"api_key": CONGRESS_KEY, "format": "json", "limit": 250, "sort": "updateDate+desc"}, timeout=40)
+            for b in j.get("bills") or []:
+                t = b.get("title") or ""
+                if re.search(r"Taiwan|semiconductor|chip|CHIPS|tariff|export control|Mexico", t, re.I):
+                    la = b.get("latestAction") or {}
+                    bills.append({"src": "國會", "kind": f"{b.get('type', '')} {b.get('number', '')}", "title": t[:220], "date": (la.get("actionDate") or b.get("updateDate") or "")[:10],
+                                  "action": (la.get("text") or "")[:160], "url": f"https://www.congress.gov/bill/{b.get('congress')}th-congress/{'house' if str(b.get('type', '')).upper().startswith('H') else 'senate'}-bill/{b.get('number')}",
+                                  "hot": True, "tw": bool(re.search(r"Taiwan", t, re.I))})
+        except Exception as e:  # noqa: BLE001
+            errs.append("國會: " + safe_err(e))
+    items.sort(key=lambda x: x["date"] or "", reverse=True)
+    items = items[:40]
+    zh = _zh_translate([x["title"] for x in items + bills] + [x.get("action", "") for x in bills if x.get("action")], kind="美國政府公告或法案標題")
+    for x in items + bills:
+        x["zh"] = zh.get(x["title"], "")
+        if x.get("action"):
+            x["action_zh"] = zh.get(x["action"], "")
+    wk = (TODAY_TPE - timedelta(days=7)).isoformat()
+    return {"items": items, "bills": bills[:15], "n_week": sum(1 for x in items if (x["date"] or "") >= wk), "n_hot_week": sum(1 for x in items if x["hot"] and (x["date"] or "") >= wk),
+            "congress": bool(CONGRESS_KEY), "errs": errs[:5],
+            "src": "Federal Register API（USTR、商務部 BIS、ITA，依關鍵字篩）、USTR 新聞稿 RSS" + ("、Congress.gov API" if CONGRESS_KEY else "；國會法案待金鑰")}
+
+
+# ---------- 台灣出口結構：財政部統計資料庫（對六大市場×貨品，月資料）＋ 國別總表（墨西哥、歐洲） ----------
+EXP_MKT = [("fld2", "美國"), ("fld1", "中國大陸及香港"), ("fld6", "東協"), ("fld3", "日本"), ("fld4", "南韓"), ("fld5", "德國")]
+MOF_Q = "https://web02.mof.gov.tw/njswww/webMain.aspx?sys=220&ym={ym}&kind=21&type=4&funid={fid}&cycle=41&outmode=12&compmode=00&outkind={ok}&{extra}&utf=1"
+
+
+def _mof_rows(url):
+    t = get(url, timeout=60).content.decode("utf-8-sig", "replace")
+    rows = list(csv.reader(io.StringIO(t)))
+    return rows[0], [r for r in rows[1:] if r and re.match(r"\d+年\s*\d+月", r[0].strip())]
+
+
+def _roc_ym(s):   # "115年 9月" → "2026-09"
+    m = re.match(r"(\d+)年\s*(\d+)月", s.strip())
+    return f"{int(m.group(1)) + 1911}-{int(m.group(2)):02d}" if m else None
+
+
+def _yoy(cur, prev):
+    return round((cur / prev - 1) * 100, 1) if cur and prev else None
+
+
+def p_exports():
+    errs, mkts, month = [], [], None
+    ym0 = f"{TODAY_TPE.year - 1911 - 2}00"
+    for fld, name in EXP_MKT:
+        try:
+            head, rows = _mof_rows(MOF_Q.format(ym=ym0, fid="op8201", ok=12, extra=f"{fld}=1&codspc0=0,20,"))
+            ser = {_roc_ym(r[0]): [num(x.replace(",", "")) for x in r[1:]] for r in rows}
+            ks = sorted(k for k in ser if k)
+            last = ks[-1]; month = max(month or "", last)
+            ly = f"{int(last[:4]) - 1}{last[4:]}"
+            tot = lambda k: (ser.get(k) or [None])[0]
+            i16 = next(i for i, h in enumerate(head[1:]) if h.startswith("16."))
+            m16 = lambda k: (ser.get(k) or [None] * 30)[i16]
+            k3 = ks[-3:]; k3l = [f"{int(k[:4]) - 1}{k[4:]}" for k in k3]
+            s3, s3l = sum(tot(k) or 0 for k in k3), sum(tot(k) or 0 for k in k3l)
+            for k in ks:
+                hist_put("exports", name, k, round((tot(k) or 0) / 1000, 1))
+            mkts.append({"name": name, "month": last, "v": round(tot(last) / 1e3, 1), "yoy": _yoy(tot(last), tot(ly)), "yoy3": _yoy(s3, s3l),
+                         "ee_share": round(100 * m16(last) / tot(last), 1) if m16(last) and tot(last) else None, "ee_yoy": _yoy(m16(last), m16(ly)),
+                         "spark": [round((tot(k) or 0) / 1e3) for k in ks[-13:]]})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{name}: {safe_err(e)}")
+    goods = []
+    try:
+        head, rows = _mof_rows(MOF_Q.format(ym=ym0, fid="i8121", ok=1, extra="fld0=1&codlst0=1101111010100011110111100111110110100"))
+        ser = {_roc_ym(r[0]): [num(x.replace(",", "")) for x in r[1:]] for r in rows}
+        ks = sorted(k for k in ser if k); last = ks[-1]; ly = f"{int(last[:4]) - 1}{last[4:]}"
+        names = [re.sub(r"^\(?\d+[.)]\s*", "", re.sub(r"^.*?/\s*", "", h).strip()) for h in head[1:]]
+        for want, label in (("電子零組件", "電子零組件（含半導體）"), ("資通與視聽產品", "資通與視聽（含伺服器、電腦）"), ("機械", "機械"), ("基本金屬及其製品", "基本金屬"), ("塑膠、橡膠及其製品", "塑橡膠")):
+            i = next((i for i, n in enumerate(names) if n == want), None)
+            if i is None:
+                continue
+            cur, prv = ser[last][i], (ser.get(ly) or [None] * 60)[i]
+            k3 = ks[-3:]; s3 = sum((ser[k][i] or 0) for k in k3); s3l = sum(((ser.get(f"{int(k[:4]) - 1}{k[4:]}") or [0] * 60)[i] or 0) for k in k3)
+            goods.append({"name": label, "month": last, "v": round(cur / 1e3, 1) if cur else None, "yoy": _yoy(cur, prv), "yoy3": _yoy(s3, s3l),
+                          "share": round(100 * cur / ser[last][0], 1) if cur and ser[last][0] else None, "spark": [round((ser[k][i] or 0) / 1e3, 1) for k in ks[-13:]]})
+            for k in ks:
+                hist_put("exports_goods", label, k, round((ser[k][i] or 0) / 1e3, 2))
+    except Exception as e:  # noqa: BLE001
+        errs.append("主要貨品: " + safe_err(e))
+    extra = []
+    try:   # 國別總表（開放資料，通常晚 2～3 個月）：墨西哥、歐洲、印度、越南
+        t = get("https://service.mof.gov.tw/public/data/statistic/trade/u2010ex.csv", timeout=60).content.decode("utf-8-sig", "replace")
+        rows = list(csv.reader(io.StringIO(t))); head = [re.sub(r"\(千元\)", "", h).strip() for h in rows[0]]
+        mrows = [r for r in rows[1:] if r and re.match(r"\d{4}年\d+月", r[0])]
+        ym = lambda s: (lambda m: f"{m.group(1)}-{int(m.group(2)):02d}")(re.match(r"(\d{4})年(\d+)月", s))
+        ser = {ym(r[0]): r for r in mrows}; ks = sorted(ser); last = ks[-1]; ly = f"{int(last[:4]) - 1}{last[4:]}"
+        for c in ("墨西哥", "歐洲", "越南", "印度", "加拿大"):
+            if c not in head:
+                continue
+            i = head.index(c); v = lambda k: num(str((ser.get(k) or [None] * 400)[i]).replace(",", ""))
+            k3 = ks[-3:]; s3 = sum(v(k) or 0 for k in k3); s3l = sum(v(f"{int(k[:4]) - 1}{k[4:]}") or 0 for k in k3)
+            extra.append({"name": c, "month": last, "v": round(v(last) / 1e6, 2) if v(last) else None, "yoy": _yoy(v(last), v(ly)), "yoy3": _yoy(s3, s3l),
+                          "spark": [round((v(k) or 0) / 1e6, 2) for k in ks[-13:]]})
+            for k in ks[-36:]:
+                hist_put("exports", c, k, round((v(k) or 0) / 1e3, 1))
+    except Exception as e:  # noqa: BLE001
+        errs.append("國別總表: " + safe_err(e))
+    if not mkts and not goods:
+        raise RuntimeError("exports: " + "; ".join(errs))
+    us = next((m for m in mkts if m["name"] == "美國"), None); cn = next((m for m in mkts if m["name"] == "中國大陸及香港"), None)
+    note = ""
+    if us and cn and us["v"] and cn["v"]:
+        note = f"對美出口是對中港的 {us['v'] / cn['v']:.1f} 倍" if us["v"] > cn["v"] else f"對中港出口仍是對美的 {cn['v'] / us['v']:.1f} 倍"
+    return {"month": month, "markets": mkts, "goods": goods, "extra": extra, "note": note, "errs": errs[:5],
+            "src": "財政部統計資料庫（出口按國家×主要貨品、出口按主要貨品）、財政部進出口貿易值國別總表（開放資料，較晚更新）"}
+
+
+# ---------- 企業壓力：退票（央行）＋ 減班休息（勞動部每月兩次公布；官方沒有結構化資料，從新聞標題抽數字） ----------
+def p_stress():
+    errs, out = [], {}
+    try:
+        t = get("https://www.cbc.gov.tw/public/data/OpenData/經研處/EF70M01.csv", timeout=60).content.decode("utf-8-sig", "replace")
+        rows = [r for r in csv.reader(io.StringIO(t)) if r and re.match(r"\d{4}M\d\d", r[0])]
+        S = {f"{r[0][:4]}-{r[0][5:]}": {"n": num(r[3]), "amt": num(r[4]), "rn": num(r[5]), "ra": num(r[6])} for r in rows}
+        ks = sorted(S); last = ks[-1]; ly = f"{int(last[:4]) - 1}{last[4:]}"
+        ra = [S[k]["ra"] for k in ks[-12:] if S[k]["ra"] is not None]
+        a3 = sum(S[k]["amt"] or 0 for k in ks[-3:]); a3l = sum((S.get(f"{int(k[:4]) - 1}{k[4:]}") or {}).get("amt") or 0 for k in ks[-3:])
+        for k in ks[-60:]:
+            hist_put("stress", "bounce_ra", k, S[k]["ra"]); hist_put("stress", "bounce_amt", k, S[k]["amt"])
+        out["bounce"] = {"month": last, "ratio_amt": S[last]["ra"], "ratio_n": S[last]["rn"], "amt": S[last]["amt"], "n": S[last]["n"],
+                         "amt_yoy": _yoy(S[last]["amt"], (S.get(ly) or {}).get("amt")), "amt3_yoy": _yoy(a3, a3l),
+                         "hi12": bool(ra) and S[last]["ra"] is not None and S[last]["ra"] >= max(ra),
+                         "spark": [S[k]["ra"] for k in ks[-24:]], "spark_m": ks[-24:]}
+    except Exception as e:  # noqa: BLE001
+        errs.append("退票: " + safe_err(e))
+    try:
+        news = _gnews("減班休息 OR 無薪假 勞動部 人數 when:60d", limit=30)
+        obs = []
+        for n in news:
+            t = n["title"]
+            if not re.search(r"減班|無薪假", t):
+                continue
+            m = re.search(r"(\d[\d,]{2,6})\s*人", t)
+            if m:
+                v = int(m.group(1).replace(",", ""))
+                if 50 <= v <= 300000:
+                    obs.append({"v": v, "at": n.get("at") or "", "title": t, "url": n.get("url"), "source": n.get("source")})
+        obs.sort(key=lambda x: x["at"], reverse=True)
+        H = dict(HISTORY.get("stress", {}).get("furlough") or [])
+        for o in obs[:6]:   # 同一期公布會有多家媒體報導：以日期歸成一筆
+            d = (o["at"] or "")[:10]
+            if d and not any(abs((date_from(d) - date_from(k)).days) <= 3 for k in H if k != d):
+                hist_put("stress", "furlough", d, o["v"]); H[d] = o["v"]
+        fs = sorted(H.items())[-12:]
+        out["furlough"] = {"latest": obs[0] if obs else None, "series": fs,
+                           "chg": (fs[-1][1] - fs[-2][1]) if len(fs) >= 2 else None, "up2": len(fs) >= 3 and fs[-1][1] > fs[-2][1] > fs[-3][1],
+                           "news": [{k: o[k] for k in ("title", "url", "source", "at")} for o in obs[:5]]}
+        if not obs:
+            errs.append("減班休息：近 60 天新聞標題沒有抽到人數")
+    except Exception as e:  # noqa: BLE001
+        errs.append("減班休息: " + safe_err(e))
+    if not out:
+        raise RuntimeError("stress: " + "; ".join(errs))
+    b, f = out.get("bounce") or {}, out.get("furlough") or {}
+    sig = []
+    if b.get("hi12"):
+        sig.append("退票金額比率創 12 個月新高")
+    if (b.get("amt3_yoy") or 0) >= 20:
+        sig.append(f"退票金額近 3 月比去年多 {b['amt3_yoy']:.0f}%")
+    if f.get("up2"):
+        sig.append("減班休息人數連兩期增加")
+    out.update({"signals": sig, "verdict": "、".join(sig) if sig else "退票和減班都沒有異常", "tone": "amber" if sig else "green", "errs": errs[:5],
+                "src": "中央銀行 票據交換及存款不足退票（月資料）；勞動部減班休息人數（每月 1、16 日前後公布，從新聞標題擷取，以勞動部新聞稿為準）"})
+    return out
+
+
+# ---------- 全球物流：運價（Drewry WCI 分航線、Freightos FBX 變動）＋ 全球風暴對主要港口 ＋ 物流媒體 ----------
+PORTS = [("上海洋山", 122.07, 30.62), ("寧波舟山", 121.85, 29.93), ("深圳", 114.27, 22.57), ("廣州南沙", 113.6, 22.75), ("青島", 120.3, 36.07), ("天津", 117.78, 38.98),
+         ("廈門", 118.07, 24.47), ("香港", 114.15, 22.3), ("高雄", 120.28, 22.6), ("基隆／台北", 121.74, 25.15), ("台中", 120.5, 24.27), ("釜山", 129.05, 35.08),
+         ("東京灣", 139.8, 35.6), ("大阪神戶", 135.2, 34.65), ("新加坡", 103.8, 1.26), ("巴生", 101.3, 3.0), ("林查班", 100.88, 13.08), ("胡志明／蓋梅", 107.03, 10.55),
+         ("馬尼拉", 120.95, 14.6), ("可倫坡", 79.85, 6.95), ("孟買新港", 72.95, 18.95), ("杰貝阿里", 55.05, 25.01), ("鹿特丹", 4.05, 51.95), ("安特衛普", 4.3, 51.28),
+         ("漢堡", 9.95, 53.53), ("洛杉磯／長灘", -118.25, 33.74), ("奧克蘭", -122.3, 37.8), ("西雅圖／塔科馬", -122.4, 47.27), ("溫哥華", -123.1, 49.29),
+         ("曼薩尼約（墨）", -104.3, 19.07), ("拉薩羅卡德納斯（墨）", -102.18, 17.94), ("韋拉克魯斯（墨）", -96.13, 19.2), ("休士頓", -95.0, 29.6), ("薩凡納", -81.1, 32.08),
+         ("紐約／紐澤西", -74.1, 40.67), ("巴拿馬運河", -79.7, 9.1), ("桑托斯", -46.3, -23.95)]
+FBX_ZH = {"FBX": "全球綜合", "FBX01": "中國→美西", "FBX02": "美西→中國", "FBX03": "中國→美東", "FBX04": "美東→中國", "FBX11": "中國→北歐", "FBX12": "北歐→中國",
+          "FBX13": "中國→地中海", "FBX14": "地中海→中國", "FBX21": "美東→北歐", "FBX22": "北歐→美東", "FBX24": "北歐→南美東", "FBX26": "北歐→南美西"}
+LOGI_FEEDS = [("FreightWaves", "https://www.freightwaves.com/feed"), ("Supply Chain Dive", "https://www.supplychaindive.com/feeds/news/"), ("The Loadstar", "https://theloadstar.com/feed/")]
+LOGI_HOT = re.compile(r"Mexico|Mexican|Laredo|nearshor|port|strike|closure|congest|Red Sea|Suez|Panama|tariff|Taiwan|semiconductor|shortage|blank sailing|rate", re.I)
+
+
+def _km(a, b):
+    import math
+    D = math.pi / 180
+    s = math.sin((b[1] - a[1]) * D / 2) ** 2 + math.cos(a[1] * D) * math.cos(b[1] * D) * math.sin((b[0] - a[0]) * D / 2) ** 2
+    return 12742 * math.asin(min(1, math.sqrt(s)))
+
+
+def p_logistics():
+    errs, out = [], {}
+    try:   # Drewry：頁面上的分航線句子（WCI 綜合指數本身已在原物料面板）
+        html = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", get("https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry").text))
+        lanes = []
+        for m in re.finditer(r"(Shanghai|Rotterdam|Los Angeles|New York|Genoa)\s+to\s+(Shanghai|Rotterdam|Los Angeles|New York|Genoa)\s+(?:\w+\s+){0,3}?(increased|decreased|rose|fell|inched up|inched down|dropped|climbed|declined|remained stable|was stable)(?:\s+(?:by\s+)?(\d+(?:\.\d+)?)%)?(?:\s+to\s+\$([\d,]+))?", html, re.I):
+            a, b, verb, pct, val = m.groups()
+            if any(x["from"] == a and x["to"] == b for x in lanes):
+                continue
+            up = re.search(r"increase|rose|up|climb", verb, re.I); dn = re.search(r"decrease|fell|down|drop|declin", verb, re.I)
+            lanes.append({"from": a, "to": b, "chg": (num(pct) or 0) * (1 if up else -1 if dn else 0) if pct else 0.0, "v": num(val.replace(",", "")) if val else None})
+        zh = {"Shanghai": "上海", "Rotterdam": "鹿特丹", "Los Angeles": "洛杉磯", "New York": "紐約", "Genoa": "熱那亞"}
+        for x in lanes:
+            x["name"] = f"{zh.get(x['from'], x['from'])}→{zh.get(x['to'], x['to'])}"
+            if x["v"]:
+                hist_put("shipping", "WCI " + x["name"], TODAY_TPE.isoformat(), x["v"])
+        out["drewry"] = {"lanes": lanes[:8], "wci": ((load_prev("commodities") or {}).get("shipping") or [None])[0]}
+    except Exception as e:  # noqa: BLE001
+        errs.append("Drewry: " + safe_err(e))
+    try:   # FBX：首頁跑馬燈裡的數字。Freightos 的報價不重製：只留它自己公布的變動百分比，報價本身不存、不輸出
+        t = get("https://fbx.freightos.com/").text
+        m = re.search(r"frProductIntroTickerData\[[^\]]+\]\s*=\s*(\[.*?\]);", t, re.S)
+        arr = json.loads(m.group(1)) if m else []
+        fbx = []
+        for x in arr:
+            lab = x.get("label"); chg = num(str(x.get("change", "")).replace("%", "").replace("+", ""))
+            if lab and chg is not None:
+                fbx.append({"code": lab, "name": FBX_ZH.get(lab, lab), "chg": chg})
+        out["fbx"] = fbx
+        if not fbx:
+            errs.append("FBX：頁面格式變了，沒抓到數字")
+    except Exception as e:  # noqa: BLE001
+        errs.append("FBX: " + safe_err(e))
+    storms = []
+    try:   # GDACS：全球所有洋區的熱帶氣旋（含西太平洋颱風），附警戒等級
+        j = gjson("https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH", params={"eventlist": "TC", "alertlevel": "Green;Orange;Red"}, timeout=40)
+        cut = (NOW - timedelta(days=2)).isoformat()[:19]
+        for f in j.get("features") or []:
+            pr = f.get("properties") or {}
+            if str(pr.get("iscurrent", "true")).lower() == "false" or (pr.get("todate") or "") < cut:
+                continue
+            c = (f.get("geometry") or {}).get("coordinates") or []
+            if len(c) < 2:
+                continue
+            ll = (float(c[0]), float(c[1]))
+            near = sorted(((round(_km(ll, (p[1], p[2]))), p[0]) for p in PORTS))[:3]
+            storms.append({"name": re.sub(r"^Tropical Cyclone\s+", "", pr.get("name") or pr.get("eventname") or ""), "level": pr.get("alertlevel"),
+                           "ll": [round(ll[0], 2), round(ll[1], 2)], "from": (pr.get("fromdate") or "")[:16], "to": (pr.get("todate") or "")[:16],
+                           "sev": ((pr.get("severitydata") or {}).get("severitytext") or "")[:120], "url": ((pr.get("url") or {}).get("report") or ""),
+                           "near": [{"port": n, "km": d} for d, n in near if d <= 800], "id": f"{pr.get('eventid')}-{pr.get('episodeid')}"})
+        lv = {"Red": 0, "Orange": 1, "Green": 2}
+        storms.sort(key=lambda s: (lv.get(s["level"], 3), (s["near"] or [{"km": 9999}])[0]["km"]))
+    except Exception as e:  # noqa: BLE001
+        errs.append("GDACS: " + safe_err(e))
+    out["storms"] = storms[:12]
+    out["ports"] = [{"name": p[0], "ll": [p[1], p[2]]} for p in PORTS]
+    news = []
+    for src, u in LOGI_FEEDS:
+        try:
+            for it in _rss_items(get(u, timeout=40).content)[:12]:
+                news.append({"source": src, "title": it["title"][:200], "url": it["url"], "at": it.get("at") or "", "hot": bool(LOGI_HOT.search(it["title"] + " " + it.get("desc", "")))})
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{src}: {safe_err(e)}")
+    news.sort(key=lambda x: x["at"], reverse=True)
+    news = news[:24]
+    zh = _zh_translate([n["title"] for n in news], kind="物流與供應鏈新聞標題")
+    for n in news:
+        n["zh"] = zh.get(n["title"], "")
+    out["news"] = news
+    threat = [s for s in storms if s["level"] in ("Red", "Orange") and s["near"] and s["near"][0]["km"] <= 300]
+    out["threat"] = [{"storm": s["name"], "level": s["level"], "port": s["near"][0]["port"], "km": s["near"][0]["km"], "id": s["id"], "url": s["url"]} for s in threat]
+    out["errs"] = errs[:6]
+    out["src"] = "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar"
+    if not (out.get("drewry") or out.get("fbx") or storms or news):
+        raise RuntimeError("logistics: " + "; ".join(errs))
+    return out
+
+
+
 run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
@@ -11562,6 +11917,11 @@ run("births", p_births, keep_if_fresh_hours=24 if BIRTH_CACHE.exists() and len(j
 run("cars", p_cars, keep_if_fresh_hours=24)
 run("permits", p_permits, keep_if_fresh_hours=24)
 run("renewal", p_renewal, keep_if_fresh_hours=24)  # 都更：資料一個月頂多更新一次，一天看一次就好
+run("credit", p_credit, keep_if_fresh_hours=6)  # 信用利差：FRED 每天收盤後更新一次
+run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Federal Register 每個工作日早上出刊
+run("exports", p_exports, keep_if_fresh_hours=24)  # 台灣出口結構：月資料，每月 9 日前後公布
+run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
+run("logistics", p_logistics, keep_if_fresh_hours=1)  # 全球物流：風暴要即時，運價週／日資料
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 if load_prev("weekly"):  # 每週走向摘要由 weekly.yml 另外寫（Gemini 慢，不佔主迴圈時間），這裡只帶進 all.json
