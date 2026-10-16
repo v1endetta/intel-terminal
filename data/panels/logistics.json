@@ -1,0 +1,664 @@
+{
+ "drewry": {
+  "lanes": [
+   {
+    "from": "Shanghai",
+    "to": "Los Angeles",
+    "chg": 3.0,
+    "v": 7884.0,
+    "name": "上海→洛杉磯"
+   },
+   {
+    "from": "Shanghai",
+    "to": "New York",
+    "chg": -1.0,
+    "v": 10075.0,
+    "name": "上海→紐約"
+   },
+   {
+    "from": "Shanghai",
+    "to": "Rotterdam",
+    "chg": 6.0,
+    "v": 3522.0,
+    "name": "上海→鹿特丹"
+   },
+   {
+    "from": "Shanghai",
+    "to": "Genoa",
+    "chg": 7.0,
+    "v": 3945.0,
+    "name": "上海→熱那亞"
+   }
+  ],
+  "wci": {
+   "name": "Drewry WCI",
+   "value": 4485.0,
+   "unit": "USD/40ft",
+   "date": "15 Oct 2026",
+   "chg_pct": 3.0,
+   "chg_label": "週%",
+   "spark": [
+    4468.0,
+    4434.0,
+    4351.0,
+    4485.0
+   ]
+  }
+ },
+ "fbx": [
+  {
+   "code": "FBX",
+   "name": "全球綜合",
+   "chg": 0.03
+  },
+  {
+   "code": "FBX01",
+   "name": "中國→美西",
+   "chg": -2.07
+  },
+  {
+   "code": "FBX02",
+   "name": "美西→中國",
+   "chg": -6.03
+  },
+  {
+   "code": "FBX03",
+   "name": "中國→美東",
+   "chg": 0.0
+  },
+  {
+   "code": "FBX04",
+   "name": "美東→中國",
+   "chg": 13.9
+  },
+  {
+   "code": "FBX11",
+   "name": "中國→北歐",
+   "chg": 0.0
+  },
+  {
+   "code": "FBX12",
+   "name": "北歐→中國",
+   "chg": -5.27
+  },
+  {
+   "code": "FBX13",
+   "name": "中國→地中海",
+   "chg": 7.0
+  },
+  {
+   "code": "FBX14",
+   "name": "地中海→中國",
+   "chg": 0.0
+  },
+  {
+   "code": "FBX21",
+   "name": "美東→北歐",
+   "chg": 8.34
+  },
+  {
+   "code": "FBX22",
+   "name": "北歐→美東",
+   "chg": 3.75
+  },
+  {
+   "code": "FBX24",
+   "name": "北歐→南美東",
+   "chg": 0.3
+  },
+  {
+   "code": "FBX26",
+   "name": "北歐→南美西",
+   "chg": -0.5
+  }
+ ],
+ "storms": [
+  {
+   "name": "SIMON",
+   "level": "Orange",
+   "ll": [
+    -108.5,
+    19.5
+   ],
+   "from": "2026-10-07T15:00",
+   "to": "2026-10-16T03:00",
+   "sev": "Tropical Storm (maximum wind speed of 250 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001335&episodeid=35&eventtype=TC",
+   "near": [
+    {
+     "port": "曼薩尼約（墨）",
+     "km": 443
+    },
+    {
+     "port": "拉薩羅卡德納斯（墨）",
+     "km": 688
+    }
+   ],
+   "id": "1001335-35"
+  },
+  {
+   "name": "CHAMPI",
+   "level": "Orange",
+   "ll": [
+    152.7,
+    11.4
+   ],
+   "from": "2026-10-14T12:00",
+   "to": "2026-10-16T06:00",
+   "sev": "Tropical Storm (maximum wind speed of 241 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=8&eventtype=TC",
+   "near": [],
+   "id": "1001338-8"
+  },
+  {
+   "name": "TRUDY",
+   "level": "Green",
+   "ll": [
+    -102.1,
+    14.3
+   ],
+   "from": "2026-10-13T15:00",
+   "to": "2026-10-16T03:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 231 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001337&episodeid=11&eventtype=TC",
+   "near": [
+    {
+     "port": "拉薩羅卡德納斯（墨）",
+     "km": 405
+    },
+    {
+     "port": "曼薩尼約（墨）",
+     "km": 580
+    }
+   ],
+   "id": "1001337-11"
+  },
+  {
+   "name": "ONE",
+   "level": "Green",
+   "ll": [
+    -163.3,
+    -10.8
+   ],
+   "from": "2026-10-16T06:00",
+   "to": "2026-10-16T06:00",
+   "sev": "Tropical Storm (maximum wind speed of 120 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001339&episodeid=1&eventtype=TC",
+   "near": [],
+   "id": "1001339-1"
+  },
+  {
+   "name": "TWENTYEIGHT",
+   "level": "Green",
+   "ll": [
+    139.7,
+    22.5
+   ],
+   "from": "2026-10-12T00:00",
+   "to": "2026-10-15T06:00",
+   "sev": "Tropical Depression (maximum wind speed of 56 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001336&episodeid=14&eventtype=TC",
+   "near": [],
+   "id": "1001336-14"
+  }
+ ],
+ "ports": [
+  {
+   "name": "上海洋山",
+   "ll": [
+    122.07,
+    30.62
+   ]
+  },
+  {
+   "name": "寧波舟山",
+   "ll": [
+    121.85,
+    29.93
+   ]
+  },
+  {
+   "name": "深圳",
+   "ll": [
+    114.27,
+    22.57
+   ]
+  },
+  {
+   "name": "廣州南沙",
+   "ll": [
+    113.6,
+    22.75
+   ]
+  },
+  {
+   "name": "青島",
+   "ll": [
+    120.3,
+    36.07
+   ]
+  },
+  {
+   "name": "天津",
+   "ll": [
+    117.78,
+    38.98
+   ]
+  },
+  {
+   "name": "廈門",
+   "ll": [
+    118.07,
+    24.47
+   ]
+  },
+  {
+   "name": "香港",
+   "ll": [
+    114.15,
+    22.3
+   ]
+  },
+  {
+   "name": "高雄",
+   "ll": [
+    120.28,
+    22.6
+   ]
+  },
+  {
+   "name": "基隆／台北",
+   "ll": [
+    121.74,
+    25.15
+   ]
+  },
+  {
+   "name": "台中",
+   "ll": [
+    120.5,
+    24.27
+   ]
+  },
+  {
+   "name": "釜山",
+   "ll": [
+    129.05,
+    35.08
+   ]
+  },
+  {
+   "name": "東京灣",
+   "ll": [
+    139.8,
+    35.6
+   ]
+  },
+  {
+   "name": "大阪神戶",
+   "ll": [
+    135.2,
+    34.65
+   ]
+  },
+  {
+   "name": "新加坡",
+   "ll": [
+    103.8,
+    1.26
+   ]
+  },
+  {
+   "name": "巴生",
+   "ll": [
+    101.3,
+    3.0
+   ]
+  },
+  {
+   "name": "林查班",
+   "ll": [
+    100.88,
+    13.08
+   ]
+  },
+  {
+   "name": "胡志明／蓋梅",
+   "ll": [
+    107.03,
+    10.55
+   ]
+  },
+  {
+   "name": "馬尼拉",
+   "ll": [
+    120.95,
+    14.6
+   ]
+  },
+  {
+   "name": "可倫坡",
+   "ll": [
+    79.85,
+    6.95
+   ]
+  },
+  {
+   "name": "孟買新港",
+   "ll": [
+    72.95,
+    18.95
+   ]
+  },
+  {
+   "name": "杰貝阿里",
+   "ll": [
+    55.05,
+    25.01
+   ]
+  },
+  {
+   "name": "鹿特丹",
+   "ll": [
+    4.05,
+    51.95
+   ]
+  },
+  {
+   "name": "安特衛普",
+   "ll": [
+    4.3,
+    51.28
+   ]
+  },
+  {
+   "name": "漢堡",
+   "ll": [
+    9.95,
+    53.53
+   ]
+  },
+  {
+   "name": "洛杉磯／長灘",
+   "ll": [
+    -118.25,
+    33.74
+   ]
+  },
+  {
+   "name": "奧克蘭",
+   "ll": [
+    -122.3,
+    37.8
+   ]
+  },
+  {
+   "name": "西雅圖／塔科馬",
+   "ll": [
+    -122.4,
+    47.27
+   ]
+  },
+  {
+   "name": "溫哥華",
+   "ll": [
+    -123.1,
+    49.29
+   ]
+  },
+  {
+   "name": "曼薩尼約（墨）",
+   "ll": [
+    -104.3,
+    19.07
+   ]
+  },
+  {
+   "name": "拉薩羅卡德納斯（墨）",
+   "ll": [
+    -102.18,
+    17.94
+   ]
+  },
+  {
+   "name": "韋拉克魯斯（墨）",
+   "ll": [
+    -96.13,
+    19.2
+   ]
+  },
+  {
+   "name": "休士頓",
+   "ll": [
+    -95.0,
+    29.6
+   ]
+  },
+  {
+   "name": "薩凡納",
+   "ll": [
+    -81.1,
+    32.08
+   ]
+  },
+  {
+   "name": "紐約／紐澤西",
+   "ll": [
+    -74.1,
+    40.67
+   ]
+  },
+  {
+   "name": "巴拿馬運河",
+   "ll": [
+    -79.7,
+    9.1
+   ]
+  },
+  {
+   "name": "桑托斯",
+   "ll": [
+    -46.3,
+    -23.95
+   ]
+  }
+ ],
+ "news": [
+  {
+   "source": "The Loadstar",
+   "title": "CoreWeave CDS distress – ‘investors sour on AI debt’",
+   "url": "https://theloadstar.com/coreweave-cds-distress-investors-sour-on-ai-debt/",
+   "at": "2026-10-16T14:43:11+08:00",
+   "hot": false,
+   "zh": "CoreWeave CDS陷入困境：「投資人對AI債務反感」"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "First look: J.B. Hunt’s Q3 earnings",
+   "url": "https://www.freightwaves.com/news/first-look-j-b-hunt-q3-earnings",
+   "at": "2026-10-16T05:17:54+08:00",
+   "hot": false,
+   "zh": "搶先看：J.B. Hunt 第三季財報"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Federal DOT grants will fund more than 2,400 parking spots",
+   "url": "https://www.freightwaves.com/news/federal-dot-grants-will-fund-more-than-2400-parking-spots",
+   "at": "2026-10-16T05:00:00+08:00",
+   "hot": false,
+   "zh": "聯邦交通部補助將資助超過2,400個停車位"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Freight Visibility Gets a Second Set of Eyes",
+   "url": "https://www.freightwaves.com/news/freight-visibility-gets-a-second-set-of-eyes",
+   "at": "2026-10-16T04:54:07+08:00",
+   "hot": false,
+   "zh": "貨運透明度迎來第二雙眼睛"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "How AI Agents Boost Fleet Safety & Efficiency by 30%",
+   "url": "https://www.freightwaves.com/news/how-ai-agents-boost-fleet-safety-efficiency-by-30",
+   "at": "2026-10-16T04:16:46+08:00",
+   "hot": false,
+   "zh": "AI代理如何將車隊安全與效率提升30%"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Is Your Trailer Leasing EXPOSURE Covered?",
+   "url": "https://www.freightwaves.com/news/is-your-trailer-leasing-exposure-covered",
+   "at": "2026-10-16T04:16:00+08:00",
+   "hot": false,
+   "zh": "你的拖車租賃風險覆蓋了嗎？"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Fleetworthy expands Expedited Inspection to five states",
+   "url": "https://www.freightwaves.com/news/fleetworthy-expedited-inspection-five-states",
+   "at": "2026-10-16T03:26:57+08:00",
+   "hot": false,
+   "zh": "Fleetworthy將加急檢驗擴大至五州"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Penske Automotive accepts offer, will be bought out",
+   "url": "https://www.freightwaves.com/news/penske-automotive-accepts-offer-will-be-bought-out",
+   "at": "2026-10-16T02:46:48+08:00",
+   "hot": false,
+   "zh": "潘世奇汽車接受收購要約將被買下"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "5 trends defining consumer electronics supply chains",
+   "url": "https://www.supplychaindive.com/news/5-trends-defining-consumer-electronics-supply-chains/832717/",
+   "at": "2026-10-16T00:00:00+08:00",
+   "hot": false,
+   "zh": "定義消費性電子供應鏈的5大趨勢"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Alabama association chief Colson named new head of ATA",
+   "url": "https://www.freightwaves.com/news/alabama-association-chief-colson-named-new-head-of-ata",
+   "at": "2026-10-15T23:42:07+08:00",
+   "hot": false,
+   "zh": "阿拉巴馬州協會負責人Colson出任美國卡車運輸協會新任主管"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Unilever puts business results first in factory digital twin rollout",
+   "url": "https://www.supplychaindive.com/news/unilever-puts-business-results-first-in-factory-digital-twin-rollout/833011/",
+   "at": "2026-10-15T23:14:00+08:00",
+   "hot": false,
+   "zh": "聯合利華在工廠數位雙生推廣中將商業成果擺第一"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "R&R trucking CEO reports $12.7M in assets after company collapse",
+   "url": "https://www.freightwaves.com/news/rr-trucking-ceo-reports-12-7m-in-assets-after-company-collapse",
+   "at": "2026-10-15T23:06:46+08:00",
+   "hot": false,
+   "zh": "R&R貨運執行長在公司倒閉後回報擁有1,270萬美元資產"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "AP Møller Capital acquires Singapore’s Portek International from Mitsui",
+   "url": "https://theloadstar.com/ap-moller-capital-acquires-portek-international-from-mitsui/",
+   "at": "2026-10-15T22:55:39+08:00",
+   "hot": true,
+   "zh": "AP Møller Capital從三井手中收購新加坡Portek International"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Prologis tops Q3 estimates, raises development starts forecast again",
+   "url": "https://www.freightwaves.com/news/prologis-tops-q3-estimates-raises-development-starts-forecast-again",
+   "at": "2026-10-15T22:20:04+08:00",
+   "hot": false,
+   "zh": "普洛斯第三季財報超預期，再次上調開發動工預測"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "How UNFI tackles higher fuel prices",
+   "url": "https://www.supplychaindive.com/news/how-unfi-tackles-higher-fuel-prices/832977/",
+   "at": "2026-10-15T22:06:00+08:00",
+   "hot": false,
+   "zh": "UNFI如何應對高漲的油價"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Opinion: How politics and policy are rewriting the rules of parcel delivery",
+   "url": "https://www.freightwaves.com/news/opinion-how-politics-and-policy-are-rewriting-the-rules-of-parcel-delivery",
+   "at": "2026-10-15T21:59:56+08:00",
+   "hot": false,
+   "zh": "觀點：政治與政策如何重寫包裹遞送規則"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "California diesel prices remain above $8 per gallon as truckers call for relief",
+   "url": "https://www.supplychaindive.com/news/california-diesel-prices-remain-above-8-per-gallon-as-truckers-call-for-re/833092/",
+   "at": "2026-10-15T21:45:10+08:00",
+   "hot": false,
+   "zh": "加州柴油價格維持在每加侖8美元以上，卡車司機呼籲紓困"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "The Heavy-Duty Oil Standard Is Changing In January, What It Means For Your Fleet, Your Costs, And Your Equipment",
+   "url": "https://www.freightwaves.com/news/the-heavy-duty-oil-standard-is-changing-in-january-what-it-means-for-your-fleet-your-costs-and-your-equipment",
+   "at": "2026-10-15T21:28:30+08:00",
+   "hot": false,
+   "zh": "重型機油標準一月將變更，對你的車隊、成本與設備意味著什麼"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "UK port volume growth not due to EU shippers avoiding ETS, says BPA",
+   "url": "https://theloadstar.com/uk-port-volume-growth-not-due-to-eu-shippers-avoiding-ets-says-bpa/",
+   "at": "2026-10-15T20:19:45+08:00",
+   "hot": true,
+   "zh": "英國港口吞吐量成長並非因歐盟貨主規避碳交易機制，BPA表示"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Low Rhine water level driving barge cargo to capacity-strained road and rail",
+   "url": "https://theloadstar.com/low-rhine-water-level-driving-barge-cargo-to-capacity-strained-road-and-rail/",
+   "at": "2026-10-15T20:11:23+08:00",
+   "hot": false,
+   "zh": "萊茵河水位過低迫使駁船貨物轉向運能吃緊的公路與鐵路"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Big forwarders are failing shippers on service, says Ascent’s new COO",
+   "url": "https://theloadstar.com/big-forwarders-are-failing-shippers-on-service-says-ascents-new-coo/",
+   "at": "2026-10-15T19:59:57+08:00",
+   "hot": false,
+   "zh": "Ascent新任營運長表示大型貨代在服務上讓貨主失望"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "DSV, not K+N, the golden goose",
+   "url": "https://theloadstar.com/dsv-not-kn-the-golden-goose/",
+   "at": "2026-10-15T19:34:28+08:00",
+   "hot": false,
+   "zh": "是DSV而非德迅（K+N）才是搖錢樹"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Pharma traffic on the rise for LATAM Cargo, but global market stays ‘flat’",
+   "url": "https://theloadstar.com/pharma-traffic-on-the-rise-for-latam-cargo-but-global-market-stays-flat/",
+   "at": "2026-10-15T19:15:50+08:00",
+   "hot": false,
+   "zh": "南美航空貨運（LATAM Cargo）的醫藥運輸量上升，但全球市場維持「持平」"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "GlobalFoundries building $21B New York fabs under US-Japan trade deal",
+   "url": "https://www.supplychaindive.com/news/globalfoundries-building-21b-new-york-fabs-under-us-japan-trade-deal/832995/",
+   "at": "2026-10-15T19:12:00+08:00",
+   "hot": true,
+   "zh": "格羅方德在美日貿易協議下於紐約建造210億美元晶圓廠"
+  }
+ ],
+ "threat": [],
+ "errs": [],
+ "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
+ "updatedAt": "2026-10-16T08:50:45Z"
+}
