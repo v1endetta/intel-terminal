@@ -395,12 +395,12 @@
     }
    ],
    "daily7": [
-    3,
-    3,
+    2,
+    4,
     6,
     13,
-    60,
-    84,
+    62,
+    83,
     3
    ],
    "days7": [
@@ -497,12 +497,12 @@
     }
    ],
    "daily7": [
-    0,
     2,
-    29,
-    31,
-    17,
-    10,
+    2,
+    26,
+    25,
+    20,
+    12,
     1
    ],
    "days7": [
@@ -601,8 +601,8 @@
    "daily7": [
     3,
     5,
-    5,
-    15,
+    4,
+    14,
     20,
     12,
     0
@@ -671,10 +671,10 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.994,
-   "vol_ratio": 2.03,
-   "tone": 1.0,
-   "tone_at": "2026-10-16T17:55:40Z",
+   "vol": 2.011,
+   "vol_ratio": 2.05,
+   "tone": 1.05,
+   "tone_at": "2026-10-16T19:29:14Z",
    "spark": [
     1.854,
     1.462,
@@ -684,9 +684,9 @@
     3.595,
     3.595,
     1.86,
-    1.994
+    2.011
    ],
-   "at": "2026-10-16T19:12:29Z"
+   "at": "2026-10-16T19:29:14Z"
   },
   "wiki": {
    "zh": [
@@ -762,21 +762,6 @@
     "hot": true
    },
    {
-    "term": "資安",
-    "n": 4,
-    "src": 3,
-    "sources": [
-     "iThome",
-     "優分析UAnalyze",
-     "鉅亨網"
-    ],
-    "sample": {
-     "title": "【資安週報】1012～1016，美國查封中國永信至誠的網路攻擊基礎設施，7國網路安全與執法機構亦針對其攻擊活動聯合示警",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBwT090RkVTZWNMT1ZPcFJtd2pBOFhkbUdmM0Q2TkM2OXlWcHZaenMwUURxbG5JSVhoZHdsOERoc25wUVdnRUgzMm9ZLVJYZw?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "OpenAI",
     "n": 3,
     "src": 3,
@@ -822,6 +807,20 @@
     "hot": true
    },
    {
+    "term": "Anthropic",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "HN",
+     "Mashable"
+    ],
+    "sample": {
+     "title": "Meta launches Muse Wonder, catching OpenAI, Anthropic: How t",
+     "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9jQWhkclNlSmV2TEZzY19JYW8wQ3pkZVhFNzFLaElxdHh2bFprTGwyYWxIVmtMd2tEMEw3bjVaMFJfQU9xU0lVQ2Q1S2owb185YXFpdElfZzVxTnJ6b1FMSWdZaFJSTFFWb1dTRzBqbjJjcngyb0E?oc=5"
+    },
+    "hot": false
+   },
+   {
     "term": "Ukraine",
     "n": 3,
     "src": 2,
@@ -850,16 +849,16 @@
     "hot": false
    },
    {
-    "term": "Anthropic",
-    "n": 2,
+    "term": "資安",
+    "n": 3,
     "src": 2,
     "sources": [
-     "HN",
-     "Mashable"
+     "iThome",
+     "優分析UAnalyze"
     ],
     "sample": {
-     "title": "Meta launches Muse Wonder, catching OpenAI, Anthropic: How t",
-     "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9jQWhkclNlSmV2TEZzY19JYW8wQ3pkZVhFNzFLaElxdHh2bFprTGwyYWxIVmtMd2tEMEw3bjVaMFJfQU9xU0lVQ2Q1S2owb185YXFpdElfZzVxTnJ6b1FMSWdZaFJSTFFWb1dTRzBqbjJjcngyb0E?oc=5"
+     "title": "【資安週報】1012～1016，美國查封中國永信至誠的網路攻擊基礎設施，7國網路安全與執法機構亦針對其攻擊活動聯合示警",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBwT090RkVTZWNMT1ZPcFJtd2pBOFhkbUdmM0Q2TkM2OXlWcHZaenMwUURxbG5JSVhoZHdsOERoc25wUVdnRUgzMm9ZLVJYZw?oc=5"
     },
     "hot": false
    },
@@ -894,5 +893,5 @@
   ]
  },
  "errs": [],
- "updatedAt": "2026-10-16T19:12:29Z"
+ "updatedAt": "2026-10-16T19:29:14Z"
 }
