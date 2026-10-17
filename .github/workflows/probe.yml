@@ -26,7 +26,6 @@ jobs:
       - run: python ops/probe.py
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-        env:
           GCP_PROJECT: intel-vault-510704
           GCP_BUCKET: intel-vault-510704-vault
       - name: Save to probe branch
