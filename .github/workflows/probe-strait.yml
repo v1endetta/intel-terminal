@@ -1,0 +1,14 @@
+name: probe-strait
+on:
+  push:
+    branches: [probe-strait]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install requests
+      - run: python probe/strait_probe.py
