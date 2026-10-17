@@ -14,12 +14,20 @@
    "cat": "政治",
    "tw": 2,
    "why": "美國對俄政策轉變牽動國際地緣政治與區域安全局勢。",
-   "n_src": 2,
+   "n_src": 5,
    "srcs": [
     "BBC",
-    "日本時報"
+    "Al Jazeera",
+    "日本時報",
+    "Guardian",
+    "NPR"
    ],
    "also": [
+    {
+     "src": "Al Jazeera",
+     "url": "https://www.aljazeera.com/opinions/2026/10/17/ukraine-and-europe-have-little-choice-but-to-work-with-trump?traffic_source=rss",
+     "en": "Ukraine and Europe have little choice but to work with Trump"
+    },
     {
      "src": "日本時報",
      "url": "https://www.japantimes.co.jp/news/2026/10/17/world/politics/trump-waives-russia-sanctions/",
@@ -29,33 +37,16 @@
      "src": "BBC",
      "url": "https://www.bbc.co.uk/news/articles/c64g18ljjd8do?at_medium=RSS&at_campaign=rss",
      "en": "Trump 'completely wrong' to restrict support for Ukraine, Italian minister tells BBC"
-    }
-   ]
-  },
-  {
-   "t": "北韓聲稱成功測試AI輔助魚雷系統",
-   "en": "North Korea says tested AI-assisted torpedo system",
-   "src": "日本時報",
-   "url": "https://www.japantimes.co.jp/news/2026/10/17/asia-pacific/north-korea-ai-torpedo/",
-   "at": "2026-10-17T04:51:00Z",
-   "place": "北韓",
-   "ll": [
-    125.76,
-    39.04
-   ],
-   "cat": "科技",
-   "tw": 2,
-   "why": "朝鮮半島軍事科技升級，影響東亞區域安全穩定。",
-   "n_src": 2,
-   "srcs": [
-    "日本時報",
-    "韓聯社"
-   ],
-   "also": [
+    },
     {
-     "src": "韓聯社",
-     "url": "https://en.yna.co.kr/view/AEN20261017000752315",
-     "en": "(2nd LD) N. Korea tests new precision-guided torpedo using AI: KCNA"
+     "src": "BBC",
+     "url": "https://www.bbc.co.uk/news/articles/ckz65g34wyd8o?at_medium=RSS&at_campaign=rss",
+     "en": "Trump denies limiting Ukraine access to Starlink network"
+    },
+    {
+     "src": "Guardian",
+     "url": "https://www.theguardian.com/world/2026/oct/16/ukraine-military-starlink-access-starshield-volodymyr-zelenskyy",
+     "en": "Starlink access still not fully restored for Ukraine’s military, says Zelenskyy"
     }
    ]
   },
@@ -73,11 +64,12 @@
    "cat": "政治",
    "tw": 0,
    "why": "",
-   "n_src": 4,
+   "n_src": 5,
    "srcs": [
     "南華早報",
     "彭博市場",
     "CNA 新加坡",
+    "NPR",
     "日經亞洲"
    ],
    "also": [
@@ -90,6 +82,11 @@
      "src": "CNA 新加坡",
      "url": "https://www.channelnewsasia.com/asia/india-cockroach-janta-party-leader-detained-protests-6466986",
      "en": "Indian police arrest 'cockroach' founder, detain student leaders ahead of Delhi rally"
+    },
+    {
+     "src": "NPR",
+     "url": "https://www.npr.org/2026/10/16/g-s1-148383/crowds-throng-new-delhi-and-wave-indian-flags-amid-escalating-protests",
+     "en": "Crowds throng New Delhi and wave Indian flags amid escalating protests"
     },
     {
      "src": "日經亞洲",
@@ -134,8 +131,8 @@
    "why": "",
    "n_src": 2,
    "srcs": [
-    "彭博經濟",
-    "CNA 新加坡"
+    "CNA 新加坡",
+    "彭博經濟"
    ],
    "also": [
     {
@@ -206,6 +203,26 @@
    "also": []
   },
   {
+   "t": "北韓聲稱成功測試AI輔助魚雷系統",
+   "en": "North Korea says tested AI-assisted torpedo system",
+   "src": "日本時報",
+   "url": "https://www.japantimes.co.jp/news/2026/10/17/asia-pacific/north-korea-ai-torpedo/",
+   "at": "2026-10-17T04:51:00Z",
+   "place": "北韓",
+   "ll": [
+    125.76,
+    39.04
+   ],
+   "cat": "科技",
+   "tw": 2,
+   "why": "朝鮮半島軍事科技升級，影響東亞區域安全穩定。",
+   "n_src": 1,
+   "srcs": [
+    "日本時報"
+   ],
+   "also": []
+  },
+  {
    "t": "聖嬰現象重創農作物，印度暫停將糖蜜轉用於生產乙醇",
    "en": "India Halts Sugar Diversion to Ethanol After El Nino Hurts Crops",
    "src": "彭博市場",
@@ -271,72 +288,6 @@
     "彭博市場"
    ],
    "also": []
-  },
-  {
-   "t": "墨西哥3人殺害美澳衝浪客，各被判刑158年",
-   "en": "Three Mexicans jailed for 158 years each for killing Australian, US surfers",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/10/17/three-mexicans-jailed-for-158-years-each-for-killing-australian-us-surfers?traffic_source=rss",
-   "at": "2026-10-17T05:01:14Z",
-   "place": "墨西哥",
-   "ll": [
-    -99.13,
-    19.43
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 3,
-   "srcs": [
-    "Al Jazeera",
-    "BBC",
-    "Guardian"
-   ],
-   "also": [
-    {
-     "src": "BBC",
-     "url": "https://www.bbc.co.uk/news/articles/c3kgqjkzw29wo?at_medium=RSS&at_campaign=rss",
-     "en": "Three men jailed for 158 years each for murdering Australian and US surfers in Mexico"
-    },
-    {
-     "src": "Guardian",
-     "url": "https://www.theguardian.com/australia-news/2026/oct/17/mexican-judge-sentences-three-men-to-158-years-in-prison-for-murders-of-australian-and-us-surfers-ntwnfb",
-     "en": "Mexican judge sentences three men to 158 years in prison for murders of Australian and US surfers​"
-    }
-   ]
-  },
-  {
-   "t": "川普否認限制烏克蘭使用星鏈網路",
-   "en": "Trump denies limiting Ukraine access to Starlink network",
-   "src": "BBC",
-   "url": "https://www.bbc.co.uk/news/articles/ckz65g34wyd8o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-16T19:33:48Z",
-   "place": "美國華盛頓",
-   "ll": [
-    -77.04,
-    38.9
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 3,
-   "srcs": [
-    "BBC",
-    "Guardian",
-    "NPR"
-   ],
-   "also": [
-    {
-     "src": "Guardian",
-     "url": "https://www.theguardian.com/world/2026/oct/16/ukraine-military-starlink-access-starshield-volodymyr-zelenskyy",
-     "en": "Starlink access still not fully restored for Ukraine’s military, says Zelenskyy"
-    },
-    {
-     "src": "NPR",
-     "url": "https://www.npr.org/2026/10/15/nx-s1-6002949/ukraine-says-its-starshield-access-is-back",
-     "en": "Ukraine says its Starshield access is back"
-    }
-   ]
   },
   {
    "t": "中國突破性癌症試驗：借鏡廢水技術療效達84%",
@@ -419,43 +370,6 @@
    "also": []
   },
   {
-   "t": "烏克蘭與歐洲別無選擇，只能設法與川普合作",
-   "en": "Ukraine and Europe have little choice but to work with Trump",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/opinions/2026/10/17/ukraine-and-europe-have-little-choice-but-to-work-with-trump?traffic_source=rss",
-   "at": "2026-10-17T06:36:03Z",
-   "place": "比利時",
-   "ll": [
-    4.35,
-    50.85
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
-   ],
-   "also": []
-  },
-  {
-   "t": "專家憂心：AI恐懼遭有心人士惡意利用",
-   "en": "AI fears are being weaponised",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/opinions/2026/10/17/ai-fears-are-being-weaponised?traffic_source=rss",
-   "at": "2026-10-17T06:21:39Z",
-   "place": "",
-   "ll": null,
-   "cat": "科技",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
-   ],
-   "also": []
-  },
-  {
    "t": "南韓前8個月深偽色情影片審查量，已超越去年全年總數",
    "en": "No. of deepfake sex videos up for review exceeds last year's figure in 8 months",
    "src": "韓聯社",
@@ -496,23 +410,6 @@
    "also": []
   },
   {
-   "t": "聊天機器人教殺人？AI在隱私保護與暴力通報間拔河",
-   "en": "The chatbot murder guide: AI’s struggle between privacy, reporting violence",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/10/17/the-chatbot-murder-guide-ais-struggle-between-privacy-reporting-violence?traffic_source=rss",
-   "at": "2026-10-17T05:50:37Z",
-   "place": "",
-   "ll": null,
-   "cat": "科技",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
-   ],
-   "also": []
-  },
-  {
    "t": "歐洲央行總裁拉加德：穩健財政是經濟穩定關鍵",
    "en": "Lagarde Says Sustainable Finances Key for Economic Stability",
    "src": "彭博市場",
@@ -529,46 +426,6 @@
    "n_src": 1,
    "srcs": [
     "彭博市場"
-   ],
-   "also": []
-  },
-  {
-   "t": "東協氣候監測機構針對有毒霧霾發布最高警戒",
-   "en": "Asean climate monitor issues highest alert level over toxic haze",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/asia/southeast-asia/article/3371235/asean-climate-monitor-issues-highest-alert-level-over-toxic-haze?utm_source=rss_feed",
-   "at": "2026-10-17T05:26:04Z",
-   "place": "東南亞",
-   "ll": [
-    103.82,
-    1.35
-   ],
-   "cat": "災害",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "俄軍空襲烏克蘭釀至少8死、百萬戶大停電",
-   "en": "Russian attacks in Ukraine kill at least 8, cut power to 1 million",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/10/17/russian-attacks-in-ukraine-kill-at-least-8-cut-power-to-1-million?traffic_source=rss",
-   "at": "2026-10-17T05:19:19Z",
-   "place": "烏克蘭",
-   "ll": [
-    30.52,
-    50.45
-   ],
-   "cat": "戰爭衝突",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
    ],
    "also": []
   },
@@ -713,22 +570,49 @@
    "also": []
   },
   {
-   "t": "普丁宣告俄軍在烏克蘭邊境建立不可談判的安全區",
-   "en": "Ukraine war briefing: Russia building non-negotiable ‘security zone’ inside Ukrainian border, Putin declares",
-   "src": "Guardian",
-   "url": "https://www.theguardian.com/world/2026/oct/17/ukraine-war-briefing-russia-building-non-negotiable-security-zone-inside-ukrainian-border-putin-declares",
-   "at": "2026-10-17T01:15:21Z",
-   "place": "莫斯科，俄羅斯",
+   "t": "墨西哥3男子謀殺澳美衝浪客 各被判處158年徒刑",
+   "en": "Three men jailed for 158 years each for murdering Australian and US surfers in Mexico",
+   "src": "BBC",
+   "url": "https://www.bbc.co.uk/news/articles/c3kgqjkzw29wo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-17T03:11:10Z",
+   "place": "墨西哥",
    "ll": [
-    37.62,
-    55.76
+    102.55,
+    23.63
    ],
-   "cat": "戰爭衝突",
-   "tw": 1,
+   "cat": "社會",
+   "tw": 0,
    "why": "",
+   "n_src": 2,
+   "srcs": [
+    "BBC",
+    "Guardian"
+   ],
+   "also": [
+    {
+     "src": "Guardian",
+     "url": "https://www.theguardian.com/australia-news/2026/oct/17/mexican-judge-sentences-three-men-to-158-years-in-prison-for-murders-of-australian-and-us-surfers-ntwnfb",
+     "en": "Mexican judge sentences three men to 158 years in prison for murders of Australian and US surfers​"
+    }
+   ]
+  },
+  {
+   "t": "台灣肥胖率攀升之際，高蛋白便當大行其道",
+   "en": "Taiwan bulks up on protein-packed bentos as obesity rates rise",
+   "src": "日經亞洲",
+   "url": "https://asia.nikkei.com/business/food-beverage/taiwan-bulks-up-on-protein-packed-bentos-as-obesity-rates-rise",
+   "at": "",
+   "place": "台灣",
+   "ll": [
+    121.57,
+    25.03
+   ],
+   "cat": "社會",
+   "tw": 3,
+   "why": "反映台灣肥胖率上升與健康飲食消費趨勢的改變。",
    "n_src": 1,
    "srcs": [
-    "Guardian"
+    "日經亞洲"
    ],
    "also": []
   },
@@ -773,88 +657,31 @@
    "also": []
   },
   {
-   "t": "南韓職棒季後賽：球星敲雙響砲助隊奪勝",
-   "en": "Slugger lives up to superstar billing with 2 homers in KBO postseason victory",
-   "src": "韓聯社",
-   "url": "https://en.yna.co.kr/view/AEN20261017002700315",
-   "at": "2026-10-17T08:07:18Z",
-   "place": "南韓",
+   "t": "普丁宣告俄軍在烏克蘭邊境建立不可談判的安全區",
+   "en": "Ukraine war briefing: Russia building non-negotiable ‘security zone’ inside Ukrainian border, Putin declares",
+   "src": "Guardian",
+   "url": "https://www.theguardian.com/world/2026/oct/17/ukraine-war-briefing-russia-building-non-negotiable-security-zone-inside-ukrainian-border-putin-declares",
+   "at": "2026-10-17T01:15:21Z",
+   "place": "莫斯科，俄羅斯",
    "ll": [
-    126.98,
-    37.57
+    37.62,
+    55.76
    ],
-   "cat": "其他",
-   "tw": 0,
+   "cat": "戰爭衝突",
+   "tw": 1,
    "why": "",
    "n_src": 1,
    "srcs": [
-    "韓聯社"
+    "Guardian"
    ],
    "also": []
   },
   {
-   "t": "南韓職棒季後賽：起亞虎擊敗雙城搶下首勝",
-   "en": "Tigers defeat Twins to open KBO postseason series",
-   "src": "韓聯社",
-   "url": "https://en.yna.co.kr/view/AEN20261017002600315",
-   "at": "2026-10-17T08:02:03Z",
-   "place": "南韓",
-   "ll": [
-    126.98,
-    37.57
-   ],
-   "cat": "其他",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "韓聯社"
-   ],
-   "also": []
-  },
-  {
-   "t": "記者筆記：AI信用卡將消費轉為算力額度",
-   "en": "Reporter’s notebook: Kimi’s AI credit card turns spending into computing quotas – with lim",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/tech/tech-trends/article/3371226/reporters-notebook-kimis-ai-credit-card-turns-spending-computing-quotas-limits?utm_source=rss_feed",
-   "at": "2026-10-17T08:00:11Z",
-   "place": "香港",
-   "ll": [
-    114.17,
-    22.32
-   ],
-   "cat": "科技",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "大衛·拜恩談被遺忘的點子如何死灰復燃",
-   "en": "David Byrne Explains How Forgotten Ideas Come Back to Life",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/audio/2026-10-17/david-byrne-explains-how-forgotten-ideas-come-back-to-life",
-   "at": "2026-10-17T08:00:00Z",
-   "place": "",
-   "ll": null,
-   "cat": "其他",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
-   "t": "IMF峰會上 歐洲代表團集體離席抗議俄羅斯財長",
-   "en": "European delegates walk out on Russian finance minister at IMF summit",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/world/europe/article/3371248/european-delegates-walk-out-russian-finance-minister-imf-summit?utm_source=rss_feed",
-   "at": "2026-10-17T07:51:33Z",
+   "t": "上任不到五天，白宮幕僚凱蒂・扎查里亞宣布離職",
+   "en": "Katie Zacharia leaving White House role less than five days into job",
+   "src": "BBC",
+   "url": "https://www.bbc.co.uk/news/articles/c32l4ekpvzl8o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-17T09:14:10Z",
    "place": "美國",
    "ll": [
     -77.04,
@@ -865,15 +692,221 @@
    "why": "",
    "n_src": 1,
    "srcs": [
+    "BBC"
+   ],
+   "also": []
+  },
+  {
+   "t": "港男涉偷妻香奈兒、愛馬仕包與勞力士落網",
+   "en": "Man arrested for alleged HK$450,000 theft of wife’s Chanel and Hermes bags, Rolex",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/hong-kong/law-and-crime/article/3371250/man-arrested-alleged-hk450000-theft-wifes-chanel-and-hermes-bags-rolex?utm_source=rss_feed",
+   "at": "2026-10-17T09:07:59Z",
+   "place": "香港",
+   "ll": [
+    114.17,
+    22.32
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
     "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "世衛研究：2050年前吸水煙將全球增百萬起肺癌",
+   "en": "Shisha smoking will cause 1 million new lung cancer cases globally by 2050: WHO study",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/hong-kong/health-environment/article/3371189/shisha-smoking-will-cause-1-million-new-lung-cancer-cases-globally-2050-who-study?utm_source=rss_feed",
+   "at": "2026-10-17T09:00:06Z",
+   "place": "瑞士",
+   "ll": [
+    6.14,
+    46.2
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "星國總理黃循財上任後首訪中東，將赴卡達與阿聯",
+   "en": "PM Wong to visit Qatar, UAE in first trip to Middle East region since taking office",
+   "src": "CNA 新加坡",
+   "url": "https://www.channelnewsasia.com/singapore/lawrence-wong-qatar-uae-middle-east-visit-6468046",
+   "at": "2026-10-17T09:00:04Z",
+   "place": "卡達",
+   "ll": [
+    51.53,
+    25.29
+   ],
+   "cat": "政治",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "CNA 新加坡"
+   ],
+   "also": []
+  },
+  {
+   "t": "美國親友住院沒地方住，家屬克難街頭露宿",
+   "en": "Sidewalk sleepers: They have nowhere else to stay while a loved one is in the hospital",
+   "src": "NPR",
+   "url": "https://www.npr.org/2026/10/17/g-s1-147874/hospital-diagnosis-patients-india-sidewalk",
+   "at": "2026-10-17T09:00:00Z",
+   "place": "美國",
+   "ll": [
+    -77.04,
+    38.9
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "NPR"
+   ],
+   "also": []
+  },
+  {
+   "t": "韓職季後賽重砲雙響砲，球星身手不凡",
+   "en": "(LEAD) Slugger lives up to superstar billing with 2 homers in KBO postseason victory",
+   "src": "韓聯社",
+   "url": "https://en.yna.co.kr/view/AEN20261017002751315",
+   "at": "2026-10-17T08:58:58Z",
+   "place": "南韓",
+   "ll": [
+    126.98,
+    37.57
+   ],
+   "cat": "其他",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "韓聯社"
+   ],
+   "also": [
+    {
+     "src": "韓聯社",
+     "url": "https://en.yna.co.kr/view/AEN20261017003000315",
+     "en": "Tigers manager marvels at All-Star slugger: 'He knows how to hit home runs'"
+    },
+    {
+     "src": "韓聯社",
+     "url": "https://en.yna.co.kr/view/AEN20261017002900315",
+     "en": "American ace, homegrown veteran to duel in KBO postseason game"
+    },
+    {
+     "src": "韓聯社",
+     "url": "https://en.yna.co.kr/view/AEN20261017002800315",
+     "en": "Naile strengthens stellar postseason resume in Tigers' victory"
+    },
+    {
+     "src": "韓聯社",
+     "url": "https://en.yna.co.kr/view/AEN20261017002651315",
+     "en": "(LEAD) Tigers defeat Twins to open KBO postseason series"
+    },
+    {
+     "src": "韓聯社",
+     "url": "https://en.yna.co.kr/view/AEN20261017002700315",
+     "en": "Slugger lives up to superstar billing with 2 homers in KBO postseason victory"
+    }
+   ]
+  },
+  {
+   "t": "馬來西亞謀殺案：為蒙娜麗莎案尋求遲來的正義",
+   "en": "Murder in Malaysia: Justice for Altantuya Shaariibuu",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/video/101-east/2026/10/17/murder-in-malaysia-justice-for-altantuya-shaariibuu?traffic_source=rss",
+   "at": "2026-10-17T08:40:47Z",
+   "place": "馬來西亞",
+   "ll": [
+    101.69,
+    3.14
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "Al Jazeera"
+   ],
+   "also": []
+  },
+  {
+   "t": "學者：香港生育率爭論關鍵在語言而非金錢",
+   "en": "Language matters in Hong Kong’s birth rate debate, not just money",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/opinion/hong-kong-opinion/article/3370807/language-matters-hong-kongs-birth-rate-debate-not-just-money?utm_source=rss_feed",
+   "at": "2026-10-17T08:30:06Z",
+   "place": "香港",
+   "ll": [
+    114.17,
+    22.32
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "紀錄片導演尋找傳奇導演小津安二郎的身影",
+   "en": "‘Ozu showed the way’: A documentarian looks for the man behind the legend",
+   "src": "日本時報",
+   "url": "https://www.japantimes.co.jp/culture/2026/10/17/film/daniel-raim-ozu-diaries/",
+   "at": "2026-10-17T08:30:00Z",
+   "place": "日本",
+   "ll": [
+    139.65,
+    35.68
+   ],
+   "cat": "其他",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "日本時報"
+   ],
+   "also": []
+  },
+  {
+   "t": "盧比歐訪烏茲別克，凸顯中亞尋求多元夥伴",
+   "en": "Rubio’s Uzbekistan trip underlines Central Asia’s hunt for diverse partners",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news-analysis/2026/10/17/rubios-uzbekistan-trip-underlines-central-asias-hunt-for-diverse-partners?traffic_source=rss",
+   "at": "2026-10-17T08:27:28Z",
+   "place": "烏茲別克",
+   "ll": [
+    69.24,
+    41.3
+   ],
+   "cat": "政治",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "Al Jazeera"
    ],
    "also": []
   }
  ],
  "n_zh": 40,
- "n_tw": 4,
- "n_big": 3,
+ "n_tw": 5,
+ "n_big": 2,
  "errs": [],
  "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報、彭博；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷",
- "updatedAt": "2026-10-17T08:11:46Z"
+ "updatedAt": "2026-10-17T09:13:24Z"
 }
