@@ -2530,6 +2530,7 @@ function EXPLORE() {
     ] },
     { cat: "走向", items: [
       { n: "本月洞見", f: () => insightsCard() },
+      { n: "論點追蹤", f: () => thesesCard() },
       { n: "本週走向", f: listOf(((P.weekly || {}).headline) || "本週走向", () => (((P.weekly || {}).dirs) || []).map(d => ({ t: d.t, s: d.why })), "走向 · " + (((P.weekly || {}).week) || ""), "weekly") },
       { n: "台灣還沒報", f: () => gapCard() },
       { n: "區域報告", lens: "area" },
@@ -2616,6 +2617,7 @@ const PROV = {
   "洞見": ["insights_cat", "情報站各分類資料（程式整理、Gemini 寫句子）", "彙整", 360],
   "本月洞見": ["insights", "政府開放資料交叉比對（程式算訊號、Gemini 寫句子）", "每日", 1440],
   "AI 循環": ["aicycle", "SEC 財報（雲端五家資本支出）・財報新聞（AI 擷取指引）・FinMind 月營收・DRAMeXchange（只放漲跌）", "彙整", 360],
+  "論點追蹤": ["theses", "情報站各面板的資料，依每個論點寫好的門檻由程式判斷；美元指數、日圓、費半、加權指數歷史來自 Yahoo Finance", "每輪", 720],
   "領先指標": ["dlead", "dalta 自建：台股、韓股、費半、M1B 減 M2、紐約與費城聯準會調查、美國公司債利差等權合成", "每月", 1440, p => p.month],
   "信用利差": ["credit", "ICE BofA 美國公司債利差（經 FRED），只顯示近 3 年百分位", "每日", 1440, p => (((p.rows || [])[0]) || {}).asof],
   "出口結構": ["exports", "財政部統計資料庫：出口按國家×主要貨品", "每月", 43200, p => p.month],
@@ -2690,7 +2692,7 @@ async function buildStory() {
   const now = new Date(), d = `${now.getMonth() + 1} 月 ${now.getDate()} 日 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
   const CH = [];
   CH.push({ name: "開場", g: new THREE.Group(), cam: MOBILE ? { tgt: V(5, 0, -175), pos: V(35, 700, 420) } : ISLAND, cls: "hero",   // 手機：島往下放，讓出上面給五件事
-    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">每天固定看的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.tocC || t.color}">${t.tocDot ? `<i class="sig" style="background:${t.tocDot};color:${t.tocDot}"></i>` : ""}${esc(t.toc || t.chgTxt || "")}</span></li>`).join("")}</ol>${(((P.insights || {}).items) || [])[0] ? `<button type="button" class="insl" data-ins="1"><i>本月洞見</i>${esc(P.insights.items[0].title)} ›</button>` : ""}<div class="herofoot"><span class="scrollhint">往下捲</span><button type="button" class="replay" id="replay">重播開場</button></div>` });
+    dom: `<div class="eyebrow">dalta 情報站 · ${d}</div><h1>台灣，此刻。</h1><p class="lede">每天固定看的五件事。</p><ol class="toc">${top.map((t, i) => `<li><span class="n">0${i + 1}</span><span class="c">${esc(t.cat)}</span><span class="t">${esc(t.name)}</span><span class="v" style="color:${t.tocC || t.color}">${t.tocDot ? `<i class="sig" style="background:${t.tocDot};color:${t.tocDot}"></i>` : ""}${esc(t.toc || t.chgTxt || "")}</span></li>`).join("")}</ol>${(((P.insights || {}).items) || [])[0] ? `<button type="button" class="insl" data-ins="1"><i>本月洞見</i>${esc(P.insights.items[0].title)} ›</button>` : ""}${((P.theses || {}).rows || []).length ? `<button type="button" class="insl" data-thz="1"><i style="background:#64d2ff">論點追蹤</i>主論點 ${esc(thesesSum())} ›</button>` : ""}<div class="herofoot"><span class="scrollhint">往下捲</span><button type="button" class="replay" id="replay">重播開場</button></div>` });
   top.forEach((t, i) => { const sc = sceneFor(t, i);
     CH.push({ name: t.cat, g: sc.g, cam: sc.cam, globe: sc.globe, layer: sc.layer, geo: sc.geo, side: storySide(t, i),
       dom: `<div class="eyebrow">0${i + 1} / 五件事 · ${esc(t.name)}</div><h2 style="color:${t.color}">${esc(t.big)}</h2><p>${esc(t.say)}</p><p class="why"><b>為什麼看這個</b>${esc(t.why)}</p>` }); });
@@ -4824,6 +4826,7 @@ document.addEventListener("click", e => {
     return;
   }
   if (e.target.closest && e.target.closest("[data-ins]") && ST.openAt) ST.openAt("走向", "本月洞見");
+  if (e.target.closest && e.target.closest("[data-thz]") && ST.openAt) ST.openAt("走向", "論點追蹤");
 });
 
 /* ---- 各分類洞見：只用這一類的資料寫 2～3 條 ---- */
@@ -5335,6 +5338,22 @@ function dleadCard() {
       + `<div class="nvh">7 個成分（正＝偏熱）</div>` + barsHTML(C.map(c => ({ name: c.name, v: c.z, txt: `${c.z >= 0 ? "+" : "−"}${Math.abs(c.z || 0).toFixed(2)}` })))
       + (th.n ? `<p class="why">1990 年以來它發出的 ${th.n} 次轉折訊號，${th.hit} 次在 0～12 個月內等到景氣同方向轉折（${Math.round((th.rate || 0) * 100)}%）。3 個成分是股價，會受股市情緒影響。</p>` : ""),
     foot: `<a href="/terminal/#p-dlead">終端機看和國發會的比較 ›</a>` }) };
+}
+// 論點追蹤：押的方向，每輪對一次證據
+function thSL() { return { ok: ["✅", "證據支持"], mixed: ["⚠️", "證據分歧"], weak: ["🔻", "證據轉弱"], kill: ["❌", "推翻條件觸發"], pending: ["⏳", "資料待補"] }; }
+function thesesSum() { const R = ((P.theses || {}).rows || []).filter(r => r.tier === "main"), c = {}; R.forEach(r => { c[r.status] = (c[r.status] || 0) + 1; });
+  const S = thSL(); return Object.keys(S).filter(k => c[k]).map(k => `${S[k][0]} ${c[k]}`).join("　"); }
+function thesesCard() {
+  const D = P.theses || {}, R = D.rows || [];
+  if (!R.length) return { html: sideHTML({ eyebrow: "走向 · 論點追蹤", title: "押的方向還站得住嗎？", body: '<p class="empty">資料載入中。</p>' }) };
+  const SL = thSL(), sl = k => SL[k] || SL.pending, M = R.filter(r => r.tier === "main"), bad = M.some(r => r.status === "kill");
+  const ev = r => (r.ev || []).filter(e => e.s != null).slice(0, 3).map(e => `${e.s > 0 ? "▲" : e.s < 0 ? "▼" : "・"} ${e.name} ${e.txt}`).join("　");
+  const grp = (t, rows) => rows.length ? `<div class="nvh">${t}</div>` + listHTML(rows.map(r => ({ t: `${sl(r.status)[0]} ${r.title}`, s: `${sl(r.status)[1]} · ${r.region}${r.hint ? " · " + r.hint : ""}` }))) : "";
+  return { html: sideHTML({ eyebrow: `走向 · 論點追蹤 · 下次季度檢討 ${String(D.next_review || "").slice(5).replace("-", "/")}`, title: "押的方向還站得住嗎？", big: thesesSum(), color: bad ? DNH : UPH,
+    body: `<p class="why">每個論點都寫好推翻條件，程式每輪拿情報站的資料對一次：▲ 支持、▼ 反對。只有主論點的推翻條件觸發才會發 Slack；每個論點也各寫一條預測進帳本，到期自動對答案。</p>`
+      + `<div class="nvh">主論點</div>` + listHTML(M.map(r => ({ t: `${sl(r.status)[0]} ${r.title}`, s: ev(r) })))
+      + grp("觀察", R.filter(r => r.tier === "watch")) + grp("保留", R.filter(r => r.tier === "keep")),
+    foot: `<a href="/terminal/#p-theses">終端機看每條證據和推翻條件 ›</a>` }) };
 }
 // AI 循環：雲端業者資本支出 → 台灣 AI 供應鏈營收 → DRAM
 function aicycleCard() {

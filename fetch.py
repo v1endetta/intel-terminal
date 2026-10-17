@@ -4998,8 +4998,9 @@ LEDGER_RULES = {
     "bounce_hi": ("企業壓力", "退票金額比率創 12 個月新高，3 個月後同時指標比現在低"),
     "furlough_up": ("企業壓力", "減班休息人數連兩期增加，3 個月後同時指標比現在低"),
     "dlead_turn": ("景氣轉向", "dalta 領先指標確認高點（低點），9 個月後同時指標比現在低（高）"),
+    "thesis": ("論點追蹤", "每個論點寫一條可驗證的預測，到期日指標過門檻就算對；機率是設定論點時的信心，不是回測"),
 }
-LEDGER_NOBT = {"elect_fav", "chain_gap", "chain_hot", "credit_wide", "bounce_hi", "furlough_up", "dlead_turn"}  # 沒有足夠歷史回測的規則：機率先給 50%，對過答案再說
+LEDGER_NOBT = {"elect_fav", "chain_gap", "chain_hot", "credit_wide", "bounce_hi", "furlough_up", "dlead_turn", "thesis"}  # 沒有足夠歷史回測的規則：機率先給 50%，對過答案再說
 
 
 def _ym_add(ym, k):  # ym = "YYYYMM"
@@ -5271,6 +5272,13 @@ def p_ledger():
                 coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); due = p["due"].replace("-", "")
                 if due in coin:
                     p.update(status="hit" if coin[due] < p["base"] else "miss", actual=f"同時指標 {p['base']:.2f} → {coin[due]:.2f}", resolved=today)
+            elif r == "thesis":
+                ser = HISTORY.get("thesis_m", {}).get(p["metric"]) or []
+                nx = next(((d, v) for d, v in ser if d >= p["due"]), None)
+                if nx:
+                    v, t = nx[1], p["target"]
+                    ok = {">": v > t, ">=": v >= t, "<": v < t, "<=": v <= t}[p["op"]]
+                    p.update(status="hit" if ok else "miss", actual=f"{v:,.2f}（門檻 {p['op']} {t:,.2f}，{nx[0]}）", resolved=today)
             elif r == "elect_fav" and today >= p["due"]:
                 ev = gjson("https://gamma-api.polymarket.com/events", params={"slug": p["slug"]}, timeout=30)
                 ms = (ev[0] if ev else {}).get("markets") or []
@@ -5392,6 +5400,8 @@ def p_ledger():
                 f"{du[:4]}-{du[4:]}", base=coin[cm], dir=1 if up else -1, prob=th.get("rate") if (th.get("n") or 0) >= 10 and th.get("rate") else 0.5)
     except Exception as e:  # noqa: BLE001
         log("ledger dlead gen", e)
+    for tp in ((RESULTS.get("theses") or {}).get("preds") or []):   # 論點追蹤：每個論點一條，到期前不重寫
+        add("thesis", tp["tid"], tp["text"], tp["due"], metric=tp["metric"], op=tp["op"], target=tp["target"], prob=tp["prob"])
     L["preds"] = preds[-600:]
     write_json(LEDGER, L)
     # 4) 統計
@@ -12241,6 +12251,411 @@ def p_aicycle():
     return out
 
 
+
+# ---------- 論點追蹤：每天把各論點的證據對一次，主論點的推翻條件觸發才發 Slack；能量化的寫進預測帳本 ----------
+THESES_STATE = DATA / "theses_state.json"
+TIER_NAME = {"main": "主論點", "watch": "觀察", "keep": "保留"}
+THESES = [  # id, 層級, 範圍, 標題, 主張, 推翻條件（文字）
+    ("t1", "main", "全球", "AI 資本支出到 2027 上半年不收手", "雲端五大的資本支出年增維持正數，台灣供應鏈營收跟著走", "兩家以上下調資本支出指引，或最新一季資本支出年減"),
+    ("t3", "main", "全球", "信用風險從最弱一端累積", "CCC 級利差先擴大，壓力會一路傳到高收益債、投資級和台灣企業", "CCC 級利差跌回近 3 年第 50 百分位以下"),
+    ("t2", "main", "台灣", "非 AI 經濟偏弱", "電子出口很強，但傳產出口、公司新設、就業偏弱，是兩速經濟", "傳產出口近 3 月年增連兩個月超過 10%，而且公司新設轉為年增"),
+    ("t6", "main", "台灣", "民間消費降級", "錢往便宜的通路走，百貨和非必需品落後整體", "刷卡百貨類追上整體，而且非必需品不再落後食品"),
+    ("t13", "main", "台灣", "台股跑在實體經濟前面", "加權指數漲幅遠大於景氣同時指標，股價先反映了還沒發生的成長", "dalta 領先指標再創新高，景氣追上股價"),
+    ("t5", "watch", "全球", "美國把供應鏈推往墨西哥／本土", "台灣對美、墨出口持續超過對中港，政策面還在推", "對美出口近 3 月年增落後中港 10 個百分點以上"),
+    ("t10", "watch", "全球", "關稅讓美國核心通膨再起", "核心 PCE 停在 3% 以上，而且往上", "核心 PCE 跌破 2.7%，而且 3 個月往下"),
+    ("t12", "watch", "全球", "貨櫃運價年底前上漲", "Drewry WCI 到年底高於 10 月中（4,485 美元）", "WCI 比起始值低 15% 以上"),
+    ("g1", "watch", "全球", "日本升息與套利交易回補", "日銀繼續升息、日圓轉強，借日圓買資產的錢會被迫回補", "日銀半年沒升息，而且日圓 3 個月貶超過 3%"),
+    ("t9", "watch", "台灣", "電力成為台灣 AI 瓶頸", "夏季尖峰備轉容量率常掉到 6% 以下，用電成長追不上", "2027 夏季（6～9 月）備轉從沒低於 10%"),
+    ("t4", "keep", "台灣", "景氣年底見頂", "dalta 領先指標 6 月見高，同時指標年底前後轉弱", "dalta 領先指標再創新高"),
+    ("t7", "keep", "台灣", "房市量縮價撐", "買賣棟數縮，房價沒跟著跌", "台北房價指數半年跌超過 3%"),
+    ("t8", "keep", "台灣", "出生數再創新低", "近 12 個月出生數比前 12 個月少", "近 12 個月出生數轉為年增"),
+    ("t11", "keep", "全球", "美國勞動市場放緩不衰退", "失業率緩升、初領失業金低，沒進衰退", "失業率觸發 Sahm 規則（3 月平均比 12 個月低點高 0.5）"),
+    ("t14", "keep", "全球", "開源 AI 帶動 AI 新公司", "開源模型降低門檻，軟體與 AI 服務的新公司和營收變多", "資訊服務業營收轉為年減"),
+    ("t15", "keep", "台灣", "醫美抗老擴張", "醫美皮膚診所新開比去年多", "醫美皮膚新開診所年減超過 10%"),
+    ("g2", "keep", "全球", "中國內需弱", "中國國內需求疲弱，出口和價格往外輸出通縮", "（還沒有可靠的中國內需代理指標，暫不判斷）"),
+    ("g3", "keep", "全球", "美元走弱週期", "美元指數半年往下，資金往美國以外走", "美元指數半年漲超過 5%"),
+]
+THESES_PRED = {  # 論點 → 寫進預測帳本的一條可驗證預測（指標名、比較、門檻、到期、機率、文字）；門檻 None＝用寫入當下的值
+    "t1": ("ai_capex_yoy", ">", 0, "2027-03-31", 0.8, "雲端五大 2027 年第 1 季資本支出仍是年增"),
+    "t3": ("ccc_pct", ">=", 70, "2027-01-15", 0.6, "2027/1/15 CCC 級利差仍在近 3 年第 70 百分位以上"),
+    "t2": ("nonai_exp", "<", 10, "2026-12-01", 0.4, "2026 年 12 月傳產出口（機械、基本金屬、塑橡膠）近 3 月年增平均低於 10%"),
+    "t6": ("dept_rel", "<", 0, "2026-12-01", 0.65, "2026 年 12 月刷卡百貨類年增仍落後整體"),
+    "t13": ("tx_gap", "<", None, "2027-04-15", 0.65, "2027/4/15 台股年漲幅減景氣同時指標年增的差距比現在小"),
+    "t5": ("us_cn", ">", 1, "2026-12-01", 0.75, "2026 年 12 月台灣對美出口仍高於對中港"),
+    "t10": ("core_pce", ">=", 3, "2026-12-01", 0.5, "美國 2026 年 12 月核心 PCE 年增在 3% 以上"),
+    "t12": ("wci", ">", None, "2026-12-31", 0.55, "2026/12/31 Drewry WCI 高於現在"),
+    "g1": ("boj", ">", None, "2027-01-01", 0.6, "2027 年 1 月日銀政策利率高於現在"),
+    "t9": ("pw_low6", ">=", 3, "2027-09-30", 0.4, "2027 年 9 月底前，當年備轉容量率低於 6% 的天數達 3 天"),
+    "t7": ("tpe6", ">", -3, "2027-03-01", 0.7, "2027 年 3 月台北房價指數半年跌幅不超過 3%"),
+    "t8": ("births_yoy", "<", 0, "2026-12-01", 0.85, "到 2026 年 12 月，近 12 個月出生數仍比前 12 個月少"),
+    "t11": ("us_unemp", "<=", 4.6, "2027-02-01", 0.75, "美國 2027 年 2 月失業率不超過 4.6%"),
+    "t15": ("aes_yoy", ">", 0, "2027-04-17", 0.6, "2027/4/17 醫美皮膚新開診所仍比去年同期多"),
+    "g3": ("dxy", "<", None, "2027-04-17", 0.5, "2027/4/17 美元指數低於現在"),
+}
+
+
+def _th_yq(st, sym, rng="2y", interval="1wk"):
+    """Yahoo 歷史收盤（6 小時快取在 theses_state；本輪時間不夠就只用快取）。回傳 [(YYYY-MM-DD, close)]"""
+    c = st.setdefault("yq", {}).get(sym) or {}
+    fresh = c.get("at") and (NOW - datetime.fromisoformat(c["at"].replace("Z", "+00:00"))) < timedelta(hours=6)
+    if not fresh and time.time() < SOFT_DEADLINE - 30:
+        try:
+            j = _yahoo_get(sym, {"range": rng, "interval": interval})["chart"]["result"][0]
+            ts, cl = j.get("timestamp") or [], (j["indicators"]["quote"][0].get("close") or [])
+            ser = [(datetime.fromtimestamp(t, TPE).strftime("%Y-%m-%d"), round(v, 4)) for t, v in zip(ts, cl) if v is not None]
+            if len(ser) >= 20:
+                c = {"at": NOW_ISO, "s": ser}; st["yq"][sym] = c
+        except Exception as e:  # noqa: BLE001
+            log("theses yahoo", sym, safe_err(e))
+    return [tuple(x) for x in c.get("s") or []]
+
+
+def _th_chg(ser, days):
+    """序列最後一點對 days 天前的漲跌 %"""
+    if len(ser) < 2:
+        return None
+    d0 = (date_from(ser[-1][0]) - timedelta(days=days)).isoformat()
+    base = next((v for d, v in reversed(ser) if d <= d0), None)
+    return round((ser[-1][1] / base - 1) * 100, 1) if base else None
+
+
+def p_theses():
+    try:
+        st = json.loads(THESES_STATE.read_text(encoding="utf-8")) if THESES_STATE.exists() else {}
+    except Exception:  # noqa: BLE001
+        st = {}
+    R = lambda k: RESULTS.get(k) or load_prev(k) or {}
+    today = TODAY_TPE.isoformat()
+    M = lambda key, d, v: hist_put("thesis_m", key, d, v)   # 論點用的指標存成序列，帳本到期就用它對答案
+    def E(name, txt, s, note=""):
+        return {"name": name, "txt": txt, "s": s, "note": note}
+    pos = lambda v, hi, lo: None if v is None else (1 if v >= hi else (-1 if v <= lo else 0))   # 越大越支持
+    neg = lambda v, lo, hi: None if v is None else (1 if v <= lo else (-1 if v >= hi else 0))   # 越小越支持
+    f1 = lambda v, u="%": "—" if v is None else f"{v:+.1f}{u}"
+    gm = {(i.get("group"), i.get("label")): i for i in (R("gmacro").get("items") or [])}
+    ev, kill, data_note = {}, {}, {}
+
+    # t1 AI 資本支出
+    AC = R("aicycle"); rows = (AC.get("capex") or {}).get("rows") or []
+    for r in rows:
+        y, q = int(r["q"][:4]), int(r["q"][-1])
+        M("ai_capex_yoy", f"{y}-{q * 3:02d}-{[31, 30, 30, 31][q - 1]}", r.get("yoy"))
+    lq = rows[-1] if rows else {}
+    gd = AC.get("guide") or []
+    latest = {}
+    for g in sorted(gd, key=lambda g: g.get("at") or ""):
+        latest[g.get("tk")] = g.get("dir")
+    cut = sum(1 for v in latest.values() if v == "下調"); upg = sum(1 for v in latest.values() if v == "上調")
+    tw = AC.get("tw") or {}
+    sox = _th_yq(st, "^SOX"); sox1y = _th_chg(sox, 365)
+    ev["t1"] = [E(f"雲端五大資本支出（{lq.get('q', '—')}）", f"年增 {f1(lq.get('yoy'))}", pos(lq.get("yoy"), 20, 5)),
+                E("財報後指引", f"上調 {upg} 家、下調 {cut} 家（共 {len(latest)} 家）", -1 if cut else (1 if upg else 0)),
+                E("台灣 AI 供應鏈月營收", f"近 3 月年增 {f1(tw.get('yoy3'))}", pos(tw.get("yoy3"), 15, 0)),
+                E("費城半導體 1 年", f1(sox1y), pos(sox1y, 0, -20))]
+    kill["t1"] = cut >= 2 or (lq.get("yoy") is not None and lq["yoy"] < 0)
+
+    # t3 信用風險
+    CR = {r["id"]: r for r in (R("credit").get("rows") or [])}
+    ccc, hy, ig = CR.get("BAMLH0A3HYC") or {}, CR.get("BAMLH0A0HYM2") or {}, CR.get("BAMLC0A0CM") or {}
+    if ccc.get("pct") is not None:
+        M("ccc_pct", ccc.get("asof") or today, ccc["pct"])
+    SB = (R("stress").get("bounce") or {}); SF = (R("stress").get("furlough") or {})
+    gap = ccc["pct"] - hy["pct"] if ccc.get("pct") is not None and hy.get("pct") is not None else None
+    ev["t3"] = [E("CCC 級利差", f"近 3 年第 {ccc.get('pct', '—')} 百分位（一個月前 {ccc.get('pct20', '—')}）", pos(ccc.get("pct"), 80, 50)),
+                E("弱端領先（CCC 減高收益債）", "—" if gap is None else f"差 {gap:+.0f} 個百分位", None if gap is None else (1 if gap >= 15 else 0)),
+                E("投資級利差", f"第 {ig.get('pct', '—')} 百分位", None if ig.get("pct") is None else (1 if ig["pct"] >= 80 else 0), "到 80 以上＝已擴散到體質好的公司"),
+                E("台灣退票金額比率", f"{SB.get('ratio_amt', '—')}%（{'創 12 個月新高' if SB.get('hi12') else '沒創新高'}，金額 3 月年增 {f1(SB.get('amt3_yoy'))}）",
+                  None if not SB else (1 if SB.get("hi12") or (SB.get("amt3_yoy") or 0) >= 10 else 0)),
+                E("減班休息", f"{(SF.get('latest') or {}).get('v', '—')} 人（{'連兩期增加' if SF.get('up2') else '沒有連增'}）", None if not SF else (1 if SF.get("up2") else 0))]
+    kill["t3"] = ccc.get("pct") is not None and ccc["pct"] < 50
+
+    # t2 非 AI 經濟
+    EX = R("exports"); G = {g["name"]: g for g in (EX.get("goods") or [])}
+    tr = [G[k]["yoy3"] for k in ("機械", "基本金屬", "塑橡膠") if k in G and G[k].get("yoy3") is not None]
+    el = [G[k]["yoy3"] for k in ("電子零組件", "資通與視聽") if k in G and G[k].get("yoy3") is not None]
+    tra = round(sum(tr) / len(tr), 1) if len(tr) == 3 else None
+    ela = round(sum(el) / len(el), 1) if len(el) == 2 else None
+    if tra is not None and EX.get("month"):
+        M("nonai_exp", EX["month"] + "-01", tra)
+    BZ, TX = R("bizlife"), R("taxreg")
+    ev["t2"] = [E("傳產出口（機械、基本金屬、塑橡膠）", f"近 3 月年增平均 {f1(tra)}", neg(tra, 5, 10), "基本金屬有價格因素，機械含半導體設備"),
+                E("電子與傳產的出口差距", "—" if tra is None or ela is None else f"電子 {ela:+.0f}% vs 傳產 {tra:+.0f}%", None if tra is None or ela is None else (1 if ela - tra >= 20 else (-1 if ela - tra < 5 else 0))),
+                E("公司新設", f"近 3 月年增 {f1(BZ.get('new_y3'))}，解散 {f1(BZ.get('close_y3'))}", neg(BZ.get("new_y3"), -3, 3)),
+                E("營業登記新設（近 6 月）", f"年增 {f1(TX.get('raw_yoy'))}", neg(TX.get("raw_yoy"), -3, 3)),
+                E("減班休息", f"{(SF.get('latest') or {}).get('v', '—')} 人，比上期 {'+' if (SF.get('chg') or 0) >= 0 else ''}{SF.get('chg', '—')}", None if not SF else (1 if SF.get("up2") else 0))]
+    ne = hist_get("thesis_m", "nonai_exp", 2)
+    kill["t2"] = len(ne) == 2 and min(ne) > 10 and (BZ.get("new_y3") or -1) > 0
+
+    # t6 消費降級
+    CD = {r["cat"]: r for r in (R("cards").get("rows") or [])}
+    dept = (CD.get("百貨") or {}).get("rel")
+    disc = [CD[k]["rel"] for k in ("百貨", "衣", "文教康樂") if (CD.get(k) or {}).get("rel") is not None]
+    food = (CD.get("食") or {}).get("rel")
+    dgap = round(sum(disc) / len(disc) - food, 1) if len(disc) == 3 and food is not None else None
+    if dept is not None and R("cards").get("month"):
+        M("dept_rel", R("cards")["month"] + "-01", dept)
+    RT = {r["name"]: r for r in (R("consume").get("retail") or [])}
+    dtk, hyp = (RT.get("百貨公司") or {}).get("yoy"), (RT.get("零售式量販店") or {}).get("yoy")
+    up = next((u for u in (TX.get("up") or []) if u.get("code") == "471912"), None)
+    car = (R("cars").get("car") or {})
+    ev["t6"] = [E("刷卡百貨類 vs 整體", f"相對 {f1(dept, ' 個百分點')}", neg(dept, -3, 0)),
+                E("非必需（百貨、衣、文教康樂）vs 食", f"{f1(dgap, ' 個百分點')}", neg(dgap, -2, 2)),
+                E("百貨公司客單價", f"年增 {f1(dtk)}（量販 {f1(hyp)}）", neg(dtk, -2, 2)),
+                E("量販店新設登記", "—" if not up else f"近 6 月 {up['n6']} 家，去年 {up['ly6']} 家", None if not up else (1 if up["n6"] > up["ly6"] * 1.2 else 0)),
+                E("新車掛牌", f"近 3 月年增 {f1(car.get('y3'))}", neg(car.get("y3"), 0, 5), "大額消費")]
+    kill["t6"] = dept is not None and dept > 0 and dgap is not None and dgap >= 0
+
+    # t13 台股跑在實體前面
+    twii = _th_yq(st, "^TWII"); tx1y = _th_chg(twii, 365)
+    coin_yoy = None
+    try:
+        coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); cm = max(coin); cp = f"{int(cm[:4]) - 1}{cm[4:]}"
+        coin_yoy = round((coin[cm] / coin[cp] - 1) * 100, 1) if cp in coin else None
+    except Exception:  # noqa: BLE001
+        cm = None
+    txg = round(tx1y - coin_yoy, 1) if tx1y is not None and coin_yoy is not None else None
+    if txg is not None:
+        M("tx_gap", today, txg)
+    DL = R("dlead"); hi52 = max((v for d, v in twii if d >= (TODAY_TPE - timedelta(days=365)).isoformat()), default=None)
+    off = round((twii[-1][1] / hi52 - 1) * 100, 1) if twii and hi52 else None
+    dl_hi = max((v for v in ((DL.get("series") or {}).get("B") or []) if v is not None), default=None)
+    ev["t13"] = [E("加權指數 1 年漲幅", f1(tx1y), pos(tx1y, 30, 10)),
+                 E("景氣同時指標年增", f"{f1(coin_yoy)}（{cm[:4] + '/' + cm[4:] if cm else '—'}）", None),
+                 E("股價減景氣的差距", f1(txg, " 個百分點"), pos(txg, 30, 10)),
+                 E("dalta 領先指標", f"{DL.get('value', '—')}，3 個月 {f1(DL.get('chg3'), '')}", None if DL.get("chg3") is None else (1 if DL["chg3"] < 0 else -1), DL.get("status") or ""),
+                 E("離 1 年高點", f1(off), None, "回落 15% 以上＝差距正在被修正")]
+    kill["t13"] = DL.get("value") is not None and dl_hi is not None and DL["value"] >= dl_hi and (DL.get("chg3") or 0) > 0
+
+    # t5 供應鏈往美墨
+    MK = {m["name"]: m for m in (EX.get("markets") or [])}; XT = {m["name"]: m for m in (EX.get("extra") or [])}
+    us, cn, mx = MK.get("美國") or {}, MK.get("中國大陸及香港") or {}, XT.get("墨西哥") or {}
+    ratio = round(us["v"] / cn["v"], 2) if us.get("v") and cn.get("v") else None
+    if ratio is not None and EX.get("month"):
+        M("us_cn", EX["month"] + "-01", ratio)
+    d30 = (TODAY_TPE - timedelta(days=30)).isoformat()
+    usp = [x for x in (R("uspolicy").get("items") or []) if x.get("hot") and (x.get("date") or "") >= d30 and x.get("src") in ("BIS", "USTR 新聞稿", "USTR")]
+    ygap = round(us["yoy3"] - cn["yoy3"], 1) if us.get("yoy3") is not None and cn.get("yoy3") is not None else None
+    ev["t5"] = [E("對美 vs 對中港出口", "—" if ratio is None else f"{us['v']:.0f} vs {cn['v']:.0f} 億美元（{ratio:.2f} 倍）", None if ratio is None else (1 if ratio >= 1.1 else (-1 if ratio < 0.9 else 0))),
+                E("近 3 月年增差（美減中港）", f1(ygap, " 個百分點"), pos(ygap, 5, -5)),
+                E("對墨西哥出口", f"近 3 月年增 {f1(mx.get('yoy3'))}", pos(mx.get("yoy3"), 15, 0)),
+                E("美國貿易政策（近 30 天 BIS／USTR 重點）", f"{len(usp)} 則", 1 if len(usp) >= 3 else 0)]
+    kill["t5"] = ygap is not None and ygap <= -10
+
+    # t10 美國核心通膨
+    pce, cpi = gm.get(("美國", "核心 PCE 年增")) or {}, gm.get(("美國", "CPI 年增")) or {}
+    ps = [v for v in (pce.get("spark") or []) if v is not None]
+    p3 = round(ps[-1] - ps[-4], 2) if len(ps) >= 4 else None
+    if pce.get("raw") is not None and pce.get("period"):
+        M("core_pce", pce["period"][:7] + "-01", pce["raw"])
+    ev["t10"] = [E("核心 PCE 年增", f"{pce.get('value', '—')}（{pce.get('period', '')}）", pos(pce.get("raw"), 3.0, 2.6)),
+                 E("核心 PCE 3 個月變化", f1(p3, " 個百分點"), pos(p3, 0.1, -0.1)),
+                 E("CPI 年增", f"{cpi.get('value', '—')}（比上月 {f1(cpi.get('delta'), '')}）", None if cpi.get("raw") is None else (1 if cpi["raw"] >= 3 and (cpi.get("delta") or 0) > 0 else (-1 if cpi["raw"] < 2.5 else 0)))]
+    kill["t10"] = pce.get("raw") is not None and pce["raw"] < 2.7 and p3 is not None and p3 < 0
+
+    # t12 貨櫃運價
+    LG = R("logistics"); wci = ((LG.get("drewry") or {}).get("wci") or {})
+    wv = wci.get("value")
+    if wv:
+        try:
+            M("wci", datetime.strptime(wci["date"], "%d %b %Y").date().isoformat(), wv)
+        except Exception:  # noqa: BLE001
+            M("wci", today, wv)
+    base = st.setdefault("base", {}).setdefault("wci", wv) if wv else (st.get("base") or {}).get("wci")
+    w4 = hist_get("thesis_m", "wci", 5)
+    w4c = round((w4[-1] / w4[0] - 1) * 100, 1) if len(w4) >= 3 else wci.get("chg_pct")
+    lanes = (LG.get("drewry") or {}).get("lanes") or []
+    fbx = next((x for x in (LG.get("fbx") or []) if x.get("code") == "FBX"), {})
+    nup, ndn = sum(1 for x in lanes if (x.get("chg") or 0) > 0), sum(1 for x in lanes if (x.get("chg") or 0) < 0)
+    ev["t12"] = [E("Drewry WCI", "—" if not wv else f"{wv:,.0f} 美元／40 呎（起始 {base:,.0f}）", None if not wv or not base else (1 if wv > base * 1.03 else (-1 if wv < base * 0.97 else 0))),
+                 E("WCI 近幾週", f1(w4c), pos(w4c, 0.5, -3)),
+                 E("Freightos FBX 全球", f1(fbx.get("chg")), pos(fbx.get("chg"), 0.5, -3)),
+                 E("Drewry 主要航線", f"{nup} 條漲、{ndn} 條跌", None if not lanes else (1 if nup > ndn else (-1 if ndn > nup else 0))),
+                 E("風暴逼近港口", f"{len(LG.get('threat') or [])} 個", 1 if LG.get("threat") else 0, "會短暫推高運價")]
+    kill["t12"] = bool(wv and base and wv < base * 0.85)
+
+    # g1 日本
+    bj = gm.get(("日本", "政策利率")) or {}; bs = [v for v in (bj.get("spark") or []) if v is not None]
+    b6 = round(bs[-1] - bs[-7], 2) if len(bs) >= 7 else None
+    if bj.get("raw") is not None and bj.get("period"):
+        M("boj", bj["period"][:7] + "-01", bj["raw"])
+    jpy = _th_yq(st, "JPY=X"); j3 = _th_chg(jpy, 91)
+    vix = next((x for x in (R("fear").get("items") or []) if x.get("sym") == "^VIX"), {})
+    ev["g1"] = [E("日銀政策利率", f"{bj.get('value', '—')}，半年 {f1(b6, ' 個百分點')}", None if b6 is None else (1 if b6 >= 0.2 else (-1 if b6 <= 0 else 0))),
+                E("美元兌日圓 3 個月", "—" if not jpy else f"{jpy[-1][1]:.1f}（{f1(j3)}）", neg(j3, -3, 3), "往下＝日圓轉強，套利交易有回補壓力"),
+                E("VIX", f"{vix.get('value', '—')}", None if vix.get("value") is None else (1 if vix["value"] >= 25 and (j3 or 0) < 0 else 0), "日圓急升又碰上 VIX 跳高＝回補正在發生")]
+    kill["g1"] = b6 is not None and b6 <= 0 and j3 is not None and j3 > 3
+
+    # t9 電力
+    PW = R("power")
+    if PW.get("yday_reserve_pct") is not None:
+        M("pw_res", (TODAY_TPE - timedelta(days=1)).isoformat(), PW["yday_reserve_pct"])
+    pr = HISTORY.get("thesis_m", {}).get("pw_res") or []
+    yr = str(TODAY_TPE.year)
+    low6 = sum(1 for d, v in pr if d.startswith(yr) and v < 6)
+    M("pw_low6", today, low6)
+    sm = [v for v in (PW.get("spark") or []) if v is not None]
+    summer = 6 <= TODAY_TPE.month <= 9
+    ev["t9"] = [E("近期備轉容量率最低", "—" if not sm else f"{min(sm):.1f}%", None if not sm else (1 if min(sm) < 6 else (-1 if min(sm) > 10 and summer else 0)), "" if summer else "秋冬淡季，關鍵在明年 6～9 月"),
+                E(f"{yr} 年備轉低於 6% 的天數", f"{low6} 天（從開始記錄算）", 1 if low6 >= 3 else 0),
+                E("供電燈號", f"{PW.get('level', '—')}燈，尖峰 {(PW.get('peak_mw') or 0):,.0f} MW", None if not PW.get("level") else (1 if PW["level"] in ("橙", "紅", "黑") else 0))]
+    kill["t9"] = TODAY_TPE.month >= 10 and TODAY_TPE.year >= 2027 and not any(v < 10 for d, v in pr if d.startswith(yr) and "06" <= d[5:7] <= "09")
+
+    # t4 景氣見頂
+    pend, conf = DL.get("pending") or {}, DL.get("confirmed") or {}
+    LD = (R("lead").get("lead") or {})
+    ev["t4"] = [E("dalta 領先指標", DL.get("status") or "—", 1 if pend.get("kind") == "峰" or conf.get("kind") == "峰" else (-1 if (DL.get("chg3") or 0) > 0 else 0)),
+                E("國發會領先指標", f"{LD.get('value', '—')}，連 {LD.get('streak', '—')} 個月{'升' if (LD.get('streak') or 0) > 0 else '降'}", None if LD.get("streak") is None else (-1 if LD["streak"] >= 3 else (1 if LD["streak"] <= -2 else 0)), "國發會比 dalta 晚約 3 個月"),
+                E("景氣燈號", f"{LD.get('signal', '—')}燈 {LD.get('score', '')} 分", None if not LD.get("signal") else (1 if LD["signal"] == "紅" else 0), "紅燈＝過熱")]
+    kill["t4"] = DL.get("value") is not None and dl_hi is not None and DL["value"] >= dl_hi
+
+    # t7 房市
+    HF = R("housefc")
+    if HF.get("tpe_6m") is not None and HF.get("tpe_month"):
+        M("tpe6", f"{HF['tpe_month'][:4]}-{HF['tpe_month'][4:]}-01", HF["tpe_6m"])
+    ev["t7"] = [E("全台買賣棟數", f"近 3 月年增 {f1(HF.get('vol_yoy3'))}", neg(HF.get("vol_yoy3"), -5, 5)),
+                E("台北房價指數", f"半年 {f1(HF.get('tpe_6m'))}、1 年 {f1(HF.get('tpe_12m'))}", None if HF.get("tpe_12m") is None else (1 if HF["tpe_12m"] > -1 else (-1 if HF["tpe_12m"] < -3 else 0))),
+                E("新增房貸金額", f"近 3 月年增 {f1(HF.get('mort_amt_y3'))}", neg(HF.get("mort_amt_y3"), 0, 10))]
+    kill["t7"] = HF.get("tpe_6m") is not None and HF["tpe_6m"] < -3
+
+    # t8 出生數
+    BR = R("births"); tw_ = BR.get("towns") or []
+    n12, p12 = sum(t[2] for t in tw_ if len(t) > 3 and t[2]), sum(t[3] for t in tw_ if len(t) > 3 and t[3])
+    by = round((n12 / p12 - 1) * 100, 1) if n12 and p12 and BR.get("prev_ok") else None
+    if by is not None and BR.get("month"):
+        M("births_yoy", f"{BR['month'][:4]}-{BR['month'][4:]}-01", by)
+    ev["t8"] = [E("近 12 個月出生數", "—" if by is None else f"{n12:,} 人，前 12 個月 {p12:,}（{by:+.1f}%）", neg(by, -1, 1))]
+    kill["t8"] = by is not None and by > 0
+
+    # t11 美國勞動
+    ue, cl = gm.get(("美國", "失業率")) or {}, gm.get(("美國", "初領失業金")) or {}
+    us_ = [v for v in (ue.get("spark") or []) if v is not None]
+    sahm = None
+    if len(us_) >= 14:
+        ma = [sum(us_[i - 2:i + 1]) / 3 for i in range(2, len(us_))]
+        sahm = round(ma[-1] - min(ma[-13:-1]), 2)
+    if ue.get("raw") is not None and ue.get("period"):
+        M("us_unemp", ue["period"][:7] + "-01", ue["raw"])
+    u12 = round(us_[-1] - us_[-13], 1) if len(us_) >= 13 else None
+    ev["t11"] = [E("失業率", f"{ue.get('value', '—')}，1 年 {f1(u12, ' 個百分點')}", None if u12 is None else (1 if 0 <= u12 < 0.5 else (-1 if u12 >= 0.5 else 0)), "微升＝放緩；降＝還很緊"),
+                 E("Sahm 規則", "—" if sahm is None else f"{sahm:+.2f}（到 +0.5 觸發）", None if sahm is None else (1 if sahm < 0.3 else (-1 if sahm >= 0.5 else 0))),
+                 E("初領失業金", f"{cl.get('value', '—')}", None if cl.get("raw") is None else (1 if cl["raw"] < 260000 else (-1 if cl["raw"] > 300000 else 0)))]
+    kill["t11"] = sahm is not None and sahm >= 0.5
+
+    # t14 開源 AI
+    CF = {x["name"]: x for x in ((R("consume").get("focus") or []) + (R("consume").get("up") or []))}
+    sw, info = (CF.get("電腦程式設計、諮詢及相關服務業") or {}).get("yoy"), (CF.get("資訊服務業") or {}).get("yoy")
+    oss = R("ossuse"); hot2 = sum(1 for h in (oss.get("hot") or []) if (h.get("sig") or 0) >= 2)
+    sw_reg = next((u for u in (TX.get("up") or []) if u.get("code") == "483112"), None)
+    ev["t14"] = [E("資訊服務業營收", f"年增 {f1(info)}", pos(info, 10, 0)),
+                 E("程式設計與諮詢營收", f"年增 {f1(sw)}", pos(sw, 15, 0), "統一發票，只算台灣"),
+                 E("市場重要的開源專案", f"這輪 {hot2} 個（重要性 2 分以上）", None, "看量的變化，不單獨判斷"),
+                 E("電腦套裝軟體零售新設", "—" if not sw_reg else f"近 6 月 {sw_reg['n6']} 家，去年 {sw_reg['ly6']}", None if not sw_reg else (1 if sw_reg["n6"] > sw_reg["ly6"] * 1.2 else 0))]
+    kill["t14"] = info is not None and info < 0
+
+    # t15 醫美
+    cg = next((g for g in (R("clinics").get("groups") or []) if g.get("g") == "醫美皮膚"), {})
+    if cg.get("yoy") is not None:
+        M("aes_yoy", today, cg["yoy"])
+    ev["t15"] = [E("醫美皮膚新開診所", "—" if not cg else f"今年 {cg['new']} 家，去年同期 {cg['new_ly']}（{cg['yoy']:+.0f}%）", pos(cg.get("yoy"), 5, -10)),
+                 E("醫美皮膚營業中", "—" if not cg else f"{cg['active']:,} 家", None)]
+    kill["t15"] = cg.get("yoy") is not None and cg["yoy"] < -10
+
+    # g2 中國內需：資料待補
+    ev["g2"] = [E("台灣對中港出口", f"近 3 月年增 {f1(cn.get('yoy3'))}", None, "被 AI 伺服器拉高，不能代表中國內需")]
+    kill["g2"] = False; data_note["g2"] = "還沒有可靠的中國內需代理指標（規劃中：韓台對中出口、銅價、中國進口），先不判斷"
+
+    # g3 美元
+    dxy = _th_yq(st, "DX-Y.NYB"); d6 = _th_chg(dxy, 182)
+    if dxy:
+        M("dxy", dxy[-1][0], dxy[-1][1])
+    ma40 = sum(v for _, v in dxy[-40:]) / len(dxy[-40:]) if len(dxy) >= 40 else None
+    usd = next((x for x in (R("fx").get("items") or []) if x.get("code") == "USD"), {})
+    ts_ = [v for v in (usd.get("spark") or []) if v]
+    t1m = round((ts_[-1] / ts_[0] - 1) * 100, 1) if len(ts_) >= 2 else None
+    ev["g3"] = [E("美元指數半年", "—" if not dxy else f"{dxy[-1][1]:.1f}（{f1(d6)}）", neg(d6, -3, 3)),
+                E("美元指數 vs 40 週均線", "—" if not ma40 else f"{(dxy[-1][1] / ma40 - 1) * 100:+.1f}%", None if not ma40 else (1 if dxy[-1][1] < ma40 else -1)),
+                E("新台幣（美元兌台幣近一個月）", f"{usd.get('mid', 0):.2f}（{f1(t1m)}）" if usd else "—", neg(t1m, -1, 1), "往下＝台幣升值")]
+    kill["g3"] = d6 is not None and d6 > 5
+
+    # 判斷狀態、歷史、升降級建議
+    H = st.setdefault("hist", {})
+    out, preds = [], []
+    for tid, tier, reg, title, claim, kill_txt in THESES:
+        es = ev.get(tid) or []
+        sc = [e["s"] for e in es if e["s"] is not None]
+        score, n_ = sum(sc), len(sc)
+        if tid in data_note or n_ == 0:
+            code = "pending"
+        elif kill.get(tid):
+            code = "kill"
+        elif score >= max(1, -(-n_ * 3 // 10)):
+            code = "ok"
+        elif score <= -1:
+            code = "weak"
+        else:
+            code = "mixed"
+        h = H.setdefault(tid, [])
+        if h and h[-1][0] == today:
+            h[-1] = [today, code, score]
+        else:
+            h.append([today, code, score])
+        del h[:-400]
+        streak = 0
+        for d_, c_, _ in reversed(h):
+            if c_ != code:
+                break
+            streak += 1
+        span = (date_from(today) - date_from(h[-streak][0])).days + 1 if streak else 0
+        hint = None
+        if tier == "watch" and code == "ok" and span >= 14:
+            hint = f"證據連續 {span} 天支持：可以考慮升成主論點"
+        elif tier == "main" and code in ("weak", "kill") and span >= 30:
+            hint = f"連續 {span} 天轉弱：可以考慮降成觀察"
+        elif tier == "keep" and code == "ok" and span >= 30:
+            hint = f"證據連續 {span} 天支持：可以考慮升成觀察"
+        q0 = f"{TODAY_TPE.year}-{(TODAY_TPE.month - 1) // 3 * 3 + 1:02d}-01"
+        qs = next((x for x in h if x[0] >= q0), None)
+        row = {"id": tid, "tier": tier, "region": reg, "title": title, "claim": claim, "kill_txt": kill_txt, "status": code, "score": score, "n": n_,
+               "since": h[-streak][0] if streak else today, "days": span, "ev": es, "hint": hint, "q_start": qs[1] if qs else None, "q_score0": qs[2] if qs else None}
+        if tid in data_note:
+            row["note"] = data_note[tid]
+        pr_ = THESES_PRED.get(tid)
+        if pr_:
+            key, op, tgt, due, pb, txt = pr_
+            cur_ = HISTORY.get("thesis_m", {}).get(key) or []
+            if tgt is None and cur_:
+                tgt = cur_[-1][1]
+                txt += f"（{tgt:,.2f}）" if abs(tgt) < 100 else f"（{tgt:,.0f}）"
+            if tgt is not None and today < due:
+                preds.append({"tid": tid, "metric": key, "op": op, "target": tgt, "due": due, "prob": pb, "text": f"【{title}】{txt}"})
+            row["pred"] = {"text": txt, "due": due, "prob": pb, "now": cur_[-1][1] if cur_ else None}
+        out.append(row)
+    # 季度檢討：每季第一輪把上一季的狀態變化存起來
+    qk = f"{TODAY_TPE.year}Q{(TODAY_TPE.month - 1) // 3 + 1}"
+    if st.get("q") and st["q"] != qk:
+        rv = {"q": st["q"], "at": today, "rows": []}
+        for r in out:
+            hq = [x for x in H.get(r["id"], []) if x[0] < today and x[0] >= st.get("q_from", "0")]
+            if hq:
+                cnt = {}
+                for x in hq:
+                    cnt[x[1]] = cnt.get(x[1], 0) + 1
+                rv["rows"].append({"id": r["id"], "title": r["title"], "tier": r["tier"], "from": hq[0][1], "to": hq[-1][1], "days": cnt})
+        st.setdefault("reviews", []).append(rv); del st["reviews"][:-8]
+        st["q_from"] = today
+    if not st.get("q"):
+        st["q_from"] = today
+    st["q"] = qk
+    write_json(THESES_STATE, st)
+    nq = TODAY_TPE.month + 3 - (TODAY_TPE.month - 1) % 3
+    next_rev = f"{TODAY_TPE.year + (nq > 12)}-{(nq - 1) % 12 + 1:02d}-01"
+    cnt = {}
+    for r in out:
+        if r["tier"] == "main":
+            cnt[r["status"]] = cnt.get(r["status"], 0) + 1
+    return {"rows": out, "preds": preds, "main": cnt, "next_review": next_rev, "review": (st.get("reviews") or [None])[-1],
+            "src": "全部用情報站其他面板的資料自動判斷；美元指數、日圓、費半、加權指數來自 Yahoo Finance"}
+
 run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
@@ -12365,6 +12780,7 @@ run("cars", p_cars, keep_if_fresh_hours=24)
 run("permits", p_permits, keep_if_fresh_hours=24)
 run("renewal", p_renewal, keep_if_fresh_hours=24)  # 都更：資料一個月頂多更新一次，一天看一次就好
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
+run("theses", p_theses, cheap=True)  # 論點追蹤：吃本輪其他面板的結果（另打 4 個 Yahoo 歷史，6 小時快取），要在帳本前面
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 if load_prev("weekly"):  # 每週走向摘要由 weekly.yml 另外寫（Gemini 慢，不佔主迴圈時間），這裡只帶進 all.json
     RESULTS["weekly"] = load_prev("weekly")
@@ -12707,6 +13123,11 @@ def notify():
     if (stv.get("bounce") or {}).get("hi12"):
         b = stv["bounce"]
         cand.append((f"bounce:{b['month']}", False, f"退票金額比率 {b['ratio_amt']}% 創 12 個月新高", f"{b['month']} 存款不足退票金額比去年同月 {b.get('amt_yoy') or 0:+.0f}%。\n{link('企業壓力')}"))
+    # 14. 主論點的推翻條件觸發（同一次觸發只推一次；觀察與保留層不推）
+    for t in (R("theses").get("rows") or []):
+        if t.get("tier") == "main" and t.get("status") == "kill":
+            evs = "；".join(f"{e['name']} {e['txt']}" for e in (t.get("ev") or [])[:4])
+            cand.append((f"thesis:{t['id']}:{t.get('since')}", False, f"主論點推翻條件觸發：{t['title']}", f"推翻條件：{t['kill_txt']}。\n{evs}\n{link('論點追蹤')}"))
     # 第一次接上：送一則確認，之後不再送
     if not st.get("hello"):
         r = requests.post(hook, json={"text": "*情報站・警報已接上*\n之後只有不尋常的事才會傳到這裡：地震 5.5 以上、停班停課、颱風警報、共機異常、海纜受損、台股收盤漲跌 3%、景氣燈號變色、供電警戒。一天最多 2 則（地震、停班停課例外），深夜只傳緊急的。"}, timeout=15)

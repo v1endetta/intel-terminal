@@ -127,6 +127,11 @@ td.r,th.r{white-space:nowrap}
 .panel.hero .ph h2{font-size:13px;letter-spacing:.1em}.panel.hero .ph .zh{font-size:12px;color:var(--text)}
 .panel.lite .ph{padding:6px 10px 4px}.panel.lite .ph h2{font-size:10.5px;color:var(--muted)}
 /* 列表面板：桌面固定高度內捲，手機收合可展開 */
+.th-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:10px;margin:2px 0 6px}.th-c{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;min-width:0}.th-c.kill{border-color:var(--down)}@media (min-width:1300px){.th-g{grid-template-columns:repeat(5,minmax(0,1fr))}}.th-c .th-sm{display:none}@media (max-width:640px){.th-c{cursor:pointer}.th-c:not(.open) .th-ev,.th-c:not(.open) .th-k,.th-c:not(.open) .th-cl{display:none}.th-c:not(.open) .th-sm{display:block;margin-top:4px}.th-c:not(.open) .th-sm::after{content:" ▾";color:var(--blue)}}
+.th-s{font-size:12px;font-weight:600;white-space:nowrap}.th-r{font:10.5px var(--mono);color:var(--muted);border:1px solid var(--line2);border-radius:3px;padding:0 5px;margin-left:6px;white-space:nowrap}.th-t{font-size:14.5px;font-weight:600;margin:4px 0 2px;color:var(--text);line-height:1.4}.th-cl{font-size:12px;color:var(--muted);line-height:1.55;margin:2px 0 6px}
+.th-ev{list-style:none;margin:0;padding:0;font-size:12px}.th-ev li{display:grid;grid-template-columns:1.1em minmax(0,1fr);gap:6px;padding:4px 0;border-top:1px dashed var(--line);line-height:1.45}.th-ev b{font-weight:500;color:var(--text)}.th-ev span{color:var(--muted)}.th-ev i{font-style:normal;font-size:10px;padding-top:2px}.th-ev .p{color:var(--up)}.th-ev .m{color:var(--down)}.th-ev .z{color:var(--dim)}.th-n{font-size:11px;color:var(--dim)}
+.th-k{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.6;border-top:1px solid var(--line);padding-top:6px}.th-h{font-size:11.5px;color:var(--warn);margin-top:4px}
+.th-d{border-top:1px solid var(--line);padding:6px 0}.th-d>summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:13px}.th-d>summary::-webkit-details-marker{display:none}.th-d>summary b{font-weight:600;color:var(--text)}.th-sm{font-size:11.5px;color:var(--muted);flex-basis:100%;min-width:0}.th-d[open]>summary .th-sm{display:none}.th-d>div,.th-d>ul{margin-left:2px}
 .panel.cap .more{display:none}
 .panel.cap .pb{position:relative}
 @media (min-width:641px){.panel.cap .pb{max-height:440px;overflow:auto;scrollbar-width:thin}.panel.cap.tall .pb{max-height:560px}}
@@ -715,6 +720,11 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 
   <section class="pulse" id="p-pulse"></section>
   <section class="brief" id="brief" hidden></section>
+  <section class="panel w12" id="p-theses">
+    <div class="ph"><h2>論點追蹤</h2><span class="zh">押的方向，每天對一次證據</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="/?看=論點追蹤">3D 台灣看</a><span>▲ 支持、▼ 反對、・ 中性 · 只有主論點的推翻條件觸發才發 Slack · 每個論點都寫一條預測進帳本，到期自動對答案 · 狀態全由程式依門檻判斷</span></div>
+  </section>
   <section class="panel w12 cap" id="p-insights">
     <div class="ph"><h2>洞見</h2><span class="zh">本月交叉比對 ＋ 各分類重點</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -1597,6 +1607,20 @@ const renderers={
       ${th.n?LI("1990 年以來的轉折訊號",`之後 0～12 個月景氣同方向轉折`,`${Math.round((th.rate||0)*100)}%（${th.hit}／${th.n}）`,""):""}</ul></div></div>`;
     body("p-dlead").innerHTML=`<div class="veg-h">${YM(d.month)}<b class="${n(d.value)>=0?"up":"down"}">${sgn(n(d.value),2)}</b><span>3 個月 ${sgn(n(d.chg3),2)} · ${esc(d.status||"")}</span></div>${svg}${lg}${card}`;
     setMeta("p-dlead",{...d,label:"每月，股價每天更新"},24*3);},
+  theses(d){const R=d.rows||[],SL={ok:["✅","證據支持","var(--up)"],mixed:["⚠️","證據分歧","var(--warn)"],weak:["🔻","證據轉弱","var(--down)"],kill:["❌","推翻條件觸發","var(--down)"],pending:["⏳","資料待補","var(--muted)"]},sl=k=>SL[k]||SL.pending;
+    const st=r=>`<span class="th-s" style="color:${sl(r.status)[2]}">${sl(r.status)[0]} ${sl(r.status)[1]}</span>`;
+    const ev=r=>`<ul class="th-ev">${(r.ev||[]).map(e=>`<li><i class="${e.s>0?"p":e.s<0?"m":"z"}">${e.s>0?"▲":e.s<0?"▼":"・"}</i><div><b>${esc(e.name)}</b> <span>${esc(e.txt)}</span>${e.note?`<div class="th-n">${esc(e.note)}</div>`:""}</div></li>`).join("")}</ul>`;
+    const ft=r=>`<div class="th-k">推翻條件：${esc(r.kill_txt)}${r.pred?`<br>帳本：${esc(r.pred.text)} · ${esc(String(r.pred.due).replace(/-/g,"/"))} 到期 · 信心 ${Math.round((r.pred.prob||0)*100)}%`:""}${r.note?`<br>${esc(r.note)}`:""}<br>這個狀態從 ${esc(String(r.since||"").slice(5).replace("-","/"))} 開始（${r.days||1} 天）${r.q_start&&r.q_start!==r.status?` · 本季初是「${sl(r.q_start)[1]}」`:""}</div>${r.hint?`<div class="th-h">💡 ${esc(r.hint)}</div>`:""}`;
+    const card=r=>`<div class="th-c${r.status==="kill"?" kill":""}">${st(r)}<span class="th-r">${esc(r.region)}</span><div class="th-t">${esc(r.title)}</div><div class="th-sm">${esc((r.ev||[]).filter(e=>e.s!=null).slice(0,2).map(e=>e.name+" "+e.txt).join(" · "))}</div><div class="th-cl">${esc(r.claim)}</div>${ev(r)}${ft(r)}</div>`;
+    const row=r=>`<details class="th-d"><summary>${st(r)}<b>${esc(r.title)}</b><span class="th-r">${esc(r.region)}</span>${r.hint?`<span class="th-h">💡</span>`:""}<span class="th-sm">${esc((r.ev||[]).filter(e=>e.s!=null).slice(0,2).map(e=>e.name+" "+e.txt).join(" · ")||r.note||"")}</span></summary><div class="th-cl">${esc(r.claim)}</div>${ev(r)}${ft(r)}</details>`;
+    const M=R.filter(r=>r.tier==="main"),W=R.filter(r=>r.tier==="watch"),K=R.filter(r=>r.tier==="keep"),cnt=k=>M.filter(r=>r.status===k).length;
+    const sum=Object.keys(SL).filter(k=>cnt(k)).map(k=>`${SL[k][0]} ${cnt(k)}`).join("　");
+    const rv=d.review,rvh=rv&&(rv.rows||[]).length?`<details class="th-d"><summary><b>上一季檢討（${esc(rv.q)}）</b><span class="th-sm">每個論點這一季從什麼狀態走到什麼狀態</span></summary><ul class="th-ev">${rv.rows.map(x=>`<li><i class="z">・</i><div><b>${esc(x.title)}</b> <span>${esc(sl(x.from)[1])} → ${esc(sl(x.to)[1])} · ${Object.entries(x.days||{}).map(([k,v])=>`${sl(k)[0]} ${v} 天`).join("　")}</span></div></li>`).join("")}</ul></details>`:"";
+    body("p-theses").innerHTML=`<div class="veg-h">主論點 ${M.length} 條<b>${sum}</b><span>每輪自動對證據 · 下次季度檢討 ${esc(String(d.next_review||"").replace(/-/g,"/"))}</span></div><div class="th-g">${M.map(card).join("")}</div>
+      <h3 class="ins-h">觀察 <span>${W.length} 條 · 證據連續 2 週支持會建議升級 · 不發 Slack</span></h3>${W.map(row).join("")}
+      <h3 class="ins-h">保留 <span>${K.length} 條 · 照樣每輪判斷、記進帳本，不發 Slack</span></h3>${K.map(row).join("")}${rvh}`;
+    body("p-theses").querySelectorAll(".th-c").forEach(c=>c.addEventListener("click",e=>{if(!e.target.closest("a"))c.classList.toggle("open");}));
+    setMeta("p-theses",{...d,label:"每輪"},12);},
   aicycle(d){const C=(d.capex||{}).rows||[],G=d.guide||[],T=d.tw||{},D=(d.dram||{}).items||[],LT=d.leadtest||[],tc={red:"var(--down)",amber:"var(--warn)",green:"var(--up)"}[d.tone]||"var(--text)";
     const bn=v=>`${fmt(n(v)*10,0)} 億美元`;const last=C[C.length-1]||{};const best=LT.slice().sort((a,b)=>(b.corr||0)-(a.corr||0))[0];
     const cap=`<h3 class="ins-h">上游：雲端業者每季資本支出（年增）</h3>${HB(C.slice(-8).map(r=>({name:r.q,v:n(r.yoy),txt:`${bn(r.total)} · ${PP(n(r.yoy))}`})))}`
@@ -2830,7 +2854,7 @@ const TAB_OF={"p-aicycle":"macro","p-dlead":"macro","p-credit":"macro","p-export
   "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-elect":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
-  "brief":"overview","ov":"overview","p-ossuse":"intel","p-insights":"overview","p-cars":"macro","p-permits":"macro","p-renewal":"macro","p-prices":"macro","p-tourism":"macro","p-gap":"trend","p-migration":"trend","p-births":"trend","p-maptools":"trend","p-clinics":"intel","p-aesthetic":"intel","p-grants":"intel","p-gtop":"social","p-worldnews":"social","p-townnews":"social","p-plaact":"live","p-cables":"live","p-pressure":"live","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
+  "brief":"overview","ov":"overview","p-ossuse":"intel","p-insights":"overview","p-theses":"overview","p-cars":"macro","p-permits":"macro","p-renewal":"macro","p-prices":"macro","p-tourism":"macro","p-gap":"trend","p-migration":"trend","p-births":"trend","p-maptools":"trend","p-clinics":"intel","p-aesthetic":"intel","p-grants":"intel","p-gtop":"social","p-worldnews":"social","p-townnews":"social","p-plaact":"live","p-cables":"live","p-pressure":"live","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
 const tabsEl=$("#tabs");
 tabsEl.innerHTML=TABS.map(([k,nm])=>`<button class="tab" role="tab" id="tab-${k}" data-k="${k}" aria-selected="false" type="button">${nm}<i class="bd" aria-hidden="true"></i></button>`).join("")+'<span class="tbar" id="tbar"></span>';
 let cur="overview";
