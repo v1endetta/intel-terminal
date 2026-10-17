@@ -1,63 +1,6 @@
 {
  "items": [
   {
-   "d": "2026-10-16",
-   "t": "04:00",
-   "ts": 1792180800000,
-   "r": "美",
-   "n": "美股月選擇權到期",
-   "k": "expiry",
-   "imp": 2,
-   "ap": false
-  },
-  {
-   "d": "2026-10-16",
-   "t": "10:00",
-   "ts": 1792116000000,
-   "r": "英",
-   "n": "英國央行總裁 Bailey 談話",
-   "k": "speech",
-   "imp": 3,
-   "ap": false,
-   "en": "BOE Gov Bailey Speaks",
-   "cur": "GBP"
-  },
-  {
-   "d": "2026-10-16",
-   "t": "11:30",
-   "ts": 1792121400000,
-   "r": "美",
-   "n": "聯準會主席 Warsh 談話",
-   "k": "speech",
-   "imp": 3,
-   "ap": false,
-   "en": "Fed Chairman Warsh Speaks",
-   "cur": "USD"
-  },
-  {
-   "d": "2026-10-16",
-   "t": "12:15",
-   "ts": 1792124100000,
-   "r": "加",
-   "n": "加拿大央行總裁 Macklem 談話",
-   "k": "speech",
-   "imp": 2,
-   "ap": false,
-   "en": "BOC Gov Macklem Speaks",
-   "cur": "CAD"
-  },
-  {
-   "d": "2026-10-16",
-   "t": null,
-   "ts": null,
-   "r": "台",
-   "n": "湧盛（2249）公開申購抽籤",
-   "k": "ipo",
-   "imp": 1,
-   "ap": false,
-   "code": "2249"
-  },
-  {
    "d": "2026-10-17",
    "t": "09:00",
    "ts": null,
@@ -1114,15 +1057,22 @@
    "m": "日股",
    "r": "日",
    "n": "建國紀念日"
+  },
+  {
+   "d": "2027-02-15",
+   "ex": "XNYS",
+   "m": "美股",
+   "r": "美",
+   "n": "總統日"
   }
  ],
- "from": "2026-10-17",
- "to": "2026-11-14",
+ "from": "2026-10-18",
+ "to": "2026-11-15",
  "ff_until": "2026-10-17",
- "n": 68,
+ "n": 63,
  "errs": [
   "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json"
  ],
  "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站",
- "updatedAt": "2026-10-17T14:36:04Z"
+ "updatedAt": "2026-10-17T17:44:26Z"
 }
