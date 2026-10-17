@@ -664,6 +664,78 @@ def mnd_plaact(state, errs):
     st["at"] = time.time()
 
 
+# ---------- 國道貨運車流（高公局車輛偵測 TDCS M03A：每個門架每 5 分鐘、分車種的通過量）----------
+# 每天加總全台各車種的通過量（是「車次×門架」的活動量，不是車輛數）：31 小客車、32 小貨車、41 大客車、42 大貨車、5 聯結車
+# 每天補前一天；歷史從 2021/6 起「每週三」抽一天補（省運算），每輪最多 3 天、限時約 60 秒（整支要在 240 秒內跑完）
+TDCS_M03A = "https://tisvcloud.freeway.gov.tw/history/TDCS/M03A/"
+
+
+def _tdcs_day(d):
+    import tarfile, io as _io
+    from concurrent.futures import ThreadPoolExecutor
+    tot, n = {}, 0
+    def add(txt):
+        for line in txt.splitlines():
+            p = line.split(",")
+            if len(p) >= 5:
+                try:
+                    tot[p[3]] = tot.get(p[3], 0) + int(p[4])
+                except ValueError:
+                    pass
+    try:
+        b = get(f"{TDCS_M03A}M03A_{d}.tar.gz", 120)
+        with tarfile.open(fileobj=_io.BytesIO(b)) as tf:
+            for m in tf.getmembers():
+                if m.isfile() and m.name.endswith(".csv"):
+                    add(tf.extractfile(m).read().decode("utf-8", "ignore")); n += 1
+        return tot, n
+    except urllib.error.HTTPError as e:
+        if e.code != 404:
+            raise
+    urls = [f"{TDCS_M03A}{d}/{h:02d}/TDCS_M03A_{d}_{h:02d}{mi:02d}00.csv" for h in range(24) for mi in range(0, 60, 5)]
+    def one(u):
+        try:
+            return get(u, 25).decode("utf-8", "ignore")
+        except Exception:  # noqa: BLE001
+            return None
+    with ThreadPoolExecutor(12) as ex:
+        for txt in ex.map(one, urls):
+            if txt:
+                add(txt); n += 1
+    return tot, n
+
+
+def tdcs_daily(state, errs):
+    t0 = time.time()
+    store = json.loads(gzip.decompress(gcs_get("relay/static/tdcs_daily.json.gz") or gz({"days": {}}))).get("days", {})
+    want = []
+    y = (NOW - timedelta(days=1)).date()
+    if NOW.hour >= 3 and y.isoformat() not in store:
+        want.append(y)
+    d = datetime(2021, 6, 23).date()   # 第一個有資料的週三
+    while d < y - timedelta(days=6):
+        if d.isoformat() not in store and state.get("tdcs_bad", {}).get(d.isoformat(), 0) < 3:
+            want.append(d)
+        d += timedelta(days=7)
+    changed = False
+    for d in want[:3]:
+        if time.time() - t0 > 55:
+            break
+        k = d.isoformat()
+        try:
+            tot, n = _tdcs_day(d.strftime("%Y%m%d"))
+            if n >= 270:
+                store[k] = {**tot, "n": n}; changed = True
+            else:
+                bad = state.setdefault("tdcs_bad", {}); bad[k] = bad.get(k, 0) + 1
+                errs["tdcs:" + k] = f"只有 {n} 個檔"
+        except Exception as e:  # noqa: BLE001
+            errs["tdcs:" + k] = repr(e)[:160]
+            bad = state.setdefault("tdcs_bad", {}); bad[k] = bad.get(k, 0) + 1
+    if changed:
+        gcs_put("relay/static/tdcs_daily.json.gz", gz({"at": NOW_ISO, "days": dict(sorted(store.items()))}))
+
+
 def main():
     t0 = time.time()
     state = json.loads(gcs_get("relay/state.json") or b"{}")
@@ -674,6 +746,11 @@ def main():
         stats_daily(state, errs)
     except Exception as e:  # noqa: BLE001
         errs["stats"] = repr(e)[:200]
+
+    try:
+        tdcs_daily(state, errs)
+    except Exception as e:  # noqa: BLE001
+        errs["tdcs"] = repr(e)[:200]
 
     try:
         villages_once(state, errs)
