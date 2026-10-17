@@ -421,13 +421,14 @@
    "made": "2026-10-17",
    "rule": "thesis",
    "subject": "t2",
-   "text": "【非 AI 經濟偏弱】2026 年 12 月傳產出口（機械、基本金屬、塑橡膠）近 3 月年增平均低於 10%",
-   "prob": 0.4,
+   "text": "【非 AI 經濟偏弱】2026 年 12 月非電子出口近 3 月年增低於 10%",
+   "prob": 0.45,
    "due": "2026-12-01",
    "status": "open",
-   "metric": "nonai_exp",
+   "metric": "nonel_exp",
    "op": "<",
-   "target": 10
+   "target": 10,
+   "rev": "r2"
   },
   {
    "id": "2026-10-17-thesis-41",
@@ -440,7 +441,8 @@
    "status": "open",
    "metric": "dept_rel",
    "op": "<",
-   "target": 0
+   "target": 0,
+   "rev": "r2"
   },
   {
    "id": "2026-10-17-thesis-43",
@@ -453,7 +455,8 @@
    "status": "open",
    "metric": "us_cn",
    "op": ">",
-   "target": 1
+   "target": 1,
+   "rev": "r2"
   },
   {
    "id": "2026-10-17-thesis-44",
@@ -466,7 +469,8 @@
    "status": "open",
    "metric": "core_pce",
    "op": ">=",
-   "target": 3
+   "target": 3,
+   "rev": "r2"
   },
   {
    "id": "2026-10-17-thesis-49",
@@ -479,7 +483,8 @@
    "status": "open",
    "metric": "births_yoy",
    "op": "<",
-   "target": 0
+   "target": 0,
+   "rev": "r2"
   },
   {
    "id": "2026-10-17-thesis-45",
@@ -492,7 +497,8 @@
    "status": "open",
    "metric": "wci",
    "op": ">",
-   "target": 4485.0
+   "target": 4485.0,
+   "rev": "r2"
   },
   {
    "id": "2026-10-17-thesis-46",
@@ -505,7 +511,8 @@
    "status": "open",
    "metric": "boj",
    "op": ">",
-   "target": 1.043
+   "target": 1.043,
+   "rev": "r2"
   },
   {
    "id": "2026-10-16-credit_wide-37",
@@ -529,7 +536,8 @@
    "status": "open",
    "metric": "ccc_pct",
    "op": ">=",
-   "target": 70
+   "target": 70,
+   "rev": "r2"
   },
   {
    "id": "2026-10-17-thesis-50",
@@ -542,7 +550,8 @@
    "status": "open",
    "metric": "us_unemp",
    "op": "<=",
-   "target": 4.6
+   "target": 4.6,
+   "rev": "r2"
   },
   {
    "id": "2026-10-11-wiki_abroad-3",
@@ -605,20 +614,22 @@
    "status": "open",
    "metric": "tpe6",
    "op": ">",
-   "target": -3
+   "target": -3,
+   "rev": "r2"
   },
   {
    "id": "2026-10-17-thesis-38",
    "made": "2026-10-17",
    "rule": "thesis",
    "subject": "t1",
-   "text": "【AI 資本支出到 2027 上半年不收手】雲端五大 2027 年第 1 季資本支出仍是年增",
-   "prob": 0.8,
+   "text": "【AI 資本支出到 2027 上半年不收手】雲端五大 2027 年第 1 季資本支出年增仍高於 20%",
+   "prob": 0.65,
    "due": "2027-03-31",
    "status": "open",
    "metric": "ai_capex_yoy",
    "op": ">",
-   "target": 0
+   "target": 20,
+   "rev": "r2"
   },
   {
    "id": "2026-10-11-chain_gap-25",
@@ -649,5 +660,5 @@
  "n_hit": 0,
  "gen_at": "2026-10-11",
  "bt_at": "2026-10-12",
- "updatedAt": "2026-10-17T10:33:03Z"
+ "updatedAt": "2026-10-17T10:55:34Z"
 }
