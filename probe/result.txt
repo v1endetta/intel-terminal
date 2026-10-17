@@ -1,0 +1,51 @@
+PROBE msa_fj BAD 503 5637B 2.5s final=https://www.fj.msa.gov.cn/
+   hits={}
+   head= 503 *{box-sizing:border-box}main{display:block}body{margin:0;background:#0a111c;color:#e8edf4;font:13px/1.6 "PingFang SC","Microsoft YaHei",sans-serif;padding:14px 16px} main{max-width:500px;margin:48px auto 0}.t{font-size:11px;color:#66758a;overflow:hidden}.
+PROBE msa_xm ERR ConnectionError(MaxRetryError('HTTPSConnectionPool(host=\'www.xm.msa.gov.cn\', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urll
+PROBE msa_gd OK  200 80611B 3.5s final=https://www.gd.msa.gov.cn/
+   hits={}
+   head= 中华人民共和国广东海事局 您好，欢迎登录中华人民共和国广东海事局！ WAP 网站无障碍 关怀版 邮箱登录 首页 机构职能 本局介绍 领导介绍 机构设置 联系我们 政府信息公开 政府信息公开指南 政府信息公开制度 法定主动公开内容 政府信息公开年报 依申请公开 网上政务 在线办理 信息查询 集成服务 政务服务视频 行政许可办理结果 一网通办 交通运输政务服务平台 互动交流 投诉举报 智能问答 人工咨询 局长信箱 在线访谈 意见征集*在线调查 安全生产举报 海事数据 数据图表 数据集 数据统计 搜索 首页 机构职能 
+PROBE msa_zj BAD 504 516B 12.3s final=https://www.zj.msa.gov.cn/
+   hits={}
+   head= 504 Gateway Time-out 504 Gateway Time-out 
+PROBE msa_sh_list OK  200 31270B 1.9s final=https://www.sh.msa.gov.cn/hxtjgsj/index.jhtml
+   hits={'航行警告': 2}
+   head= 航行通警告数据-中华人民共和国上海海事局 .classANav{ font-size: 0; } .classANav span{ display: inline-block; height: 60px; width: 16.5%; line-height: 60px; font-size: 18px; color: #fff; text-align: center; border: 1px solid #0e050a; border-bottom: 0; background: #2c79bc; cursor:
+PROBE nga total=146 china_related=21
+   NGA 2024/1427 issue=301527Z APR 2024 auth=MRCC SINGAPORE 0/24 301449Z APR 24. | SOUTH CHINA SEA. INDONESIA. DNC 11. DISTRESS SIGNAL RECEIVED IN VICINITY 03-07.38N 106-06.96E AT 300100Z APR. VESSELS IN VICINITY REQUESTED TO KEEP A SHARP LOOKOUT, ASSIST IF POSSIBLE. REPORTS TO MRCC SINGAPORE, PHONE: 656 226 553
+   NGA 2024/334 issue=281231Z JAN 2024 auth=NAVAREA XI 35/24 281200Z JAN 24. | SOUTH CHINA SEA. PHILIPPINES. DNC 23. CABLE OPERATIONS 29 JAN UNTIL FURTHER NOTICE BY CABLESHIP FU HAI ALONG TRACKLINE JOINING 18-22.26N 116-43.53E, 18-21.25N 116-53.85E, 18-20.66N 116-58.68E, 18-25.18N 117-14.96E, 18-31.21N 117-2
+   NGA 2024/1397 issue=280540Z APR 2024 auth=MRCC VIETNAM 0/24 280534Z APR 24. | SOUTH CHINA SEA. VIETNAM. DNC 11. BARGE HP 4400, FOUR PERSONS ON BOARD, DISABLED AND ADRIFT IN 12-38.00N 109-30.00E AT 280035Z APR. VESSELS IN VICINITY REQUESTED TO KEEP A SHARP LOOKOUT, ASSIST IF POSSIBLE. REPORTS TO VIET NAM COA
+   NGA 2024/1358 issue=242032Z APR 2024 auth=JAPAN COAST GUARD 0/24 242026Z APR 24. | SEA OF JAPAN. WESTERN NORTH PACIFIC. CHINA. DNC 24. DISTRESS SIGNAL RECEIVED ON 406 MHZ AT 240907Z APR IN: A. 42-33.83N 132-32.51E. B. 47-27.65N 158-09.35E. VESSELS IN VICINITY REQUESTED TO KEEP A SHARP LOOKOUT, ASSIST IF POSSIBLE
+   NGA 2024/1344 issue=240543Z APR 2024 auth=MRCC VIETNAM 0/24 240424Z APR 24. | SOUTH CHINA SEA. VIETNAM. DNC 23. BARGE LA 06695 AND BARGE LA 06883, FIVE PERSONS ON BOARD EACH, SANK WITHIN THREE MILES OF LY SON (15-22.85N 109-07.05E). TWO PERSONS RECOVERED, EIGHT PERSONS REMAIN MISSING. VESSELS IN VICINITY RE
+   NGA 2024/1325 issue=230637Z APR 2024 auth=MRCC VIETNAM 0/24 230619Z APR 24. | SOUTH CHINA SEA. DNC 11. 1. MAN OVERBOARD FROM F/V QNG 95307 TS IN 07-37.00N 112-05.00E AT 212350Z APR. VESSELS IN VICINITY REQUESTED TO KEEP A SHARP LOOKOUT, ASSIST IF POSSIBLE. REPORTS TO MRCC VIETNAM, FAX: 8422 5398 1615, E-MAI
+   NGA 2024/1320 issue=221616Z APR 2024 auth=MRCC VIETNAM 0/24 221549Z APR 24. | SOUTH CHINA SEA. DNC 11. F/V QNG 90729 TS SUFFERED COLLISION IN 08-00.00N 115-02.00E AT 212000Z APR. EIGHT PERSONS RESCUED, 16 PERSONS ADRIFT IN LIFE RAFTS, 16 PERSONS REMAIN ABOARD AT 221220Z APR. VESSELS IN VICINITY REQUESTED TO
+   NGA 2024/1311 issue=220837Z APR 2024 auth=MRCC SINGAPORE 0/24 220812Z APR 24. | SOUTH CHINA SEA. INDONESIA. DNC 11. DISTRESS SIGNAL RECEIVED IN VICINITY 03-06.60N 106-08.00E AT 220715Z APR. VESSELS IN VICINITY REQUESTED TO KEEP A SHARP LOOKOUT, ASSIST IF POSSIBLE. REPORTS TO MRCC SINGAPORE, PHONE: 656 226 553
+   NGA 2024/894 issue=180010Z MAR 2024 auth=NAVAREA XI 136/24 180000Z MAR 24. | SIBUYAN SEA. SOUTH CHINA SEA. SULU SEA. PHILIPPINES. DNC 11. 1. PIPELINE OPERATIONS IN PROGRESS UNTIL FURTHER NOTICE IN VICINITY OF TRACKLINE JOINING 11-38.57N 118-54.38E 11-37.75N 118-58.07E 11-36.13N 119-00.28E 11-29.25N 119-09.
+   NGA 2024/1262 issue=171835Z APR 2024 auth=MRCC SINGAPORE 0/24 171817Z APR 24. | SOUTH CHINA SEA. INDONESIA. DNC 11. TUG JTN 2012 AND BARGE CEL 203 UNREPORTED. LAST KNOWN POSITION IN VICINITY 00-14.86N 105-53.86E ON 15 APR. VESSELS IN VICINITY REQUESTED TO KEEP A SHARP LOOKOUT, ASSIST IF POSSIBLE. REPORTS TO M
+   NGA 2023/3886 issue=111314Z DEC 2023 auth=NAVAREA XI 445/23 111248Z DEC 23. | SOUTH CHINA SEA. INDONESIA. DNC 03. 1. RACON AT SOUTH CARDINAL BUOY 01-03.61N 103-38.96E OFF AIR. 2. CANCEL HYDROPAC 3380/23. 
+   NGA 2023/3880 issue=110655Z DEC 2023 auth=NAVAREA XI 444/23 110358Z DEC 23. | SOUTH CHINA SEA. INDONESIA. DNC 03. 1. RACON AT SOUTH CARDINAL BUOY 01-03.61N 103-38.96E TEMPORARILY REMOVED. 2. CANCEL HYDROPAC 3283/23. 
+   NGA keys= ['msgYear', 'msgNumber', 'navArea', 'subregion', 'text', 'status', 'issueDate', 'authority', 'cancelDate', 'cancelNavArea', 'cancelMsgYear', 'cancelMsgNumber', 'number', 'year', 'area']
+PROBE js_top BAD 403 5615B 0.3s final=https://www.mod.go.jp/js/
+   hits={'Just a moment': 1}
+   head= Just a moment... *{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-syst
+PROBE js_en BAD 403 5624B 0.1s final=https://www.mod.go.jp/js/en/
+   hits={'Just a moment': 1}
+   head= Just a moment... *{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-syst
+PROBE mod_press BAD 403 5681B 0.1s final=https://www.mod.go.jp/j/press/index.html
+   hits={'Just a moment': 1}
+   head= Just a moment... *{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-syst
+PROBE mod_rss BAD 403 5654B 0.1s final=https://www.mod.go.jp/rss/whatsnew.xml
+   hits={'Just a moment': 1}
+   head= Just a moment... *{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-syst
+PROBE js_keikai_en BAD 403 5765B 0.1s final=https://www.mod.go.jp/js/en/activity/domestic/keikai2026.html
+   hits={'Just a moment': 1}
+   head= Just a moment... *{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-syst
+PROBE js_pdf_guess found=14 ['https://www.mod.go.jp/js/pdf/2026/p20261016_01.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261016_02.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261016_03.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261016_04.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261016_05.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261016_06.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261016_07.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261016_08.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261015_01.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261015_02.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261015_03.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261014_01.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261014_02.pdf', 'https://www.mod.go.jp/js/pdf/2026/p20261013_01.pdf']
+   PDF 026/p20261016_01.pdf 北海道網走市における林野火災に係る災害派遣について令和８年１０月１６日防衛省※数値等は全て速報値のため、今後変更される可能性があります。【お知らせ】概要○令和８年１０月１５日（木）、北海道網走市において林野火災が発生。地元消防等が消火活動を実施するも鎮火に至らないことから、１０月１６日（金）０８２５、北海道知事から陸上自衛隊第５旅団長（帯広・北海道）に対し、空中消火に係る災害派遣要請があり同時刻受
+   PDF 026/p20261016_02.pdf （お知らせ）令和８年１０月１６日統合幕僚監部海賊対処のために派遣された固定翼哨戒機の活動状況について（令和８年９月）１任務実績（９月１日～９月３０日）（１）飛行回数１４回（累計３，６２０回）（２）飛行時間約９０時間（累計約２５，６９０時間）（３）確認した商船数６４２隻（累計２９５，６０３隻）（４）護衛艦、諸外国の艦艇等及び民間商船への情報提供４５回（累計１６，８３２回）２事案への対処等を行った事例
+   PDF 026/p20261016_03.pdf （お知らせ）令和８年１０月１６日統合幕僚監部中東地域における日本関係船舶の安全確保に必要な情報収集に従事した水上部隊及び航空隊の活動状況について（令和８年９月）１活動海域の状況水上部隊及び航空隊による情報収集活動任務中、特異事象は確認していない。２水上部隊（派遣海賊対処行動水上部隊）（１）活動海域：オマーン湾の公海・アラビア海北部の公海（２）確認した船舶数１２隻（累計９８，１８６隻）３航空隊（派遣
+PROBE 81cn_dzzq OK  200 155349B 1.9s final=http://www.81.cn/
+   hits={'实弹': 5, '射击': 4, '军事': 23}
+   head= 中国军网 - 中国人民解放军官方军事新闻门户 @font-face { font-family: 'icomoon'; src: url('http://ww
+   LINK 东部战区海军某油料技术保障大队开展应急油料保障演练 -> http://www.81.cn/bz_208549/16492143.html
+PROBE_DONE
