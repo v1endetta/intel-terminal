@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - run: pip install requests
+      - run: pip install requests pypdf
       - run: python probe/strait_probe.py | tee probe/result.txt
       - run: |
           git config user.name "probe-bot"; git config user.email "probe-bot@users.noreply.github.com"
