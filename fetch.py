@@ -12751,6 +12751,69 @@ def p_theses():
     return {"rows": out, "preds": preds, "main": cnt, "next_review": next_rev, "review": (st.get("reviews") or [None])[-1],
             "src": "全部用情報站其他面板的資料自動判斷；美元指數、日圓、費半、加權指數來自 Yahoo Finance"}
 
+
+# ---------- 民調：從新聞標題擷取正式民調（抽樣過的民意），對照社群情緒 ----------
+POLLS_CACHE = DATA / "polls_cache.json"
+POLL_Q = ["民調 when:14d", "民意基金會 民調 when:30d", "TVBS 民調 when:30d", "美麗島電子報 國政民調 when:30d", "民調 滿意度 when:30d", "民調 支持度 when:30d", "民調 贊成 反對 when:30d"]
+
+
+def p_polls():
+    try:
+        C = json.loads(POLLS_CACHE.read_text(encoding="utf-8")) if POLLS_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        C = {}
+    seen, heads, errs = C.setdefault("seen", {}), [], []
+    for q in POLL_Q:
+        try:
+            for it in _gnews(q, limit=25):
+                k = re.sub(r"\W+", "", it["title"])[:40]
+                if k and k not in seen and "民調" in it["title"] + q and re.search(r"\d", it["title"]):
+                    seen[k] = 1; heads.append(it)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{q}: {safe_err(e)}")
+    new = []
+    for i in range(0, min(len(heads), 80), 40):
+        chunk = heads[i:i + 40]
+        prompt = ("以下是台灣新聞標題。請找出「有具體民調數字」的標題，擷取成 JSON 陣列，每筆："
+                  '{"i": 標題編號, "org": "調查單位（例如 台灣民意基金會、TVBS、美麗島電子報；不知道寫空字串）", '
+                  '"subject": "對象（人名、政黨或政策，越短越好，例如 賴清德、國民黨、核三重啟）", '
+                  '"metric": "指標（例如 施政滿意度、聲望、好感度、支持度、贊成、不信任）", "value": 百分比數字, '
+                  '"race": "如果是選舉對比，寫選區（例如 台北市長），否則空字串", "zh": "一句話描述，20 字內，台灣用語"}。'
+                  "一個標題可以有多筆（例如兩位候選人）。沒有具體百分比的、國外民調、民調以外的數字都不要。只輸出 JSON 陣列。\n\n"
+                  + "\n".join(f"{j}. {h['title']}" for j, h in enumerate(chunk)))
+        try:
+            data, _m = _gemini_json(prompt, max_tokens=5000, timeout=60, lite_first=True, max_models=2)
+            for d in (data if isinstance(data, list) else []):
+                h = chunk[int(d.get("i", -1))] if str(d.get("i", "")).lstrip("-").isdigit() and 0 <= int(d["i"]) < len(chunk) else None
+                v = num(d.get("value"))
+                if not h or v is None or not (0 < v <= 100) or not d.get("subject"):
+                    continue
+                new.append({"org": str(d.get("org") or "")[:16], "subject": str(d["subject"])[:16], "metric": str(d.get("metric") or "")[:12], "value": round(v, 1),
+                            "race": str(d.get("race") or "")[:12], "zh": str(d.get("zh") or "")[:30], "title": h["title"], "url": h["url"], "src": h["source"], "at": h["at"]})
+        except Exception as e:  # noqa: BLE001
+            errs.append("AI 擷取: " + safe_err(e))
+    rows = C.get("rows", []) + new
+    cut = (TODAY_TPE - timedelta(days=200)).isoformat()
+    rows = [r for r in rows if (r.get("at") or "") >= cut]
+    rows.sort(key=lambda r: r.get("at") or "", reverse=True)
+    C["rows"] = rows[:600]
+    if len(seen) > 4000:
+        C["seen"] = dict(list(seen.items())[-3000:])
+    write_json(POLLS_CACHE, C)
+    # 追蹤序列：同一個「對象＋指標」出現 3 次以上就畫走勢
+    ser = {}
+    for r in sorted(rows, key=lambda r: r.get("at") or ""):
+        if r["race"]:
+            continue
+        ser.setdefault((r["subject"], r["metric"]), []).append({"at": (r.get("at") or "")[:10], "v": r["value"], "org": r["org"]})
+    tracks = sorted([{"subject": s, "metric": m, "pts": p[-20:], "n": len(p)} for (s, m), p in ser.items() if len(p) >= 3], key=lambda t: -t["n"])[:8]
+    races = {}
+    for r in rows:
+        if r["race"] and (r.get("at") or "") >= (TODAY_TPE - timedelta(days=45)).isoformat():
+            races.setdefault(r["race"], []).append(r)
+    return {"latest": rows[:25], "tracks": tracks, "races": {k: v[:8] for k, v in list(races.items())[:6]}, "n_new": len(new), "n_rows": len(rows),
+            "errs": errs[:5], "src": "Google 新聞標題（AI 擷取民調數字，以原新聞與調查單位公布為準）"}
+
 run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
