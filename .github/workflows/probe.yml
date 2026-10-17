@@ -1,0 +1,39 @@
+name: probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [ops/probe.py]
+permissions:
+  contents: write
+  id-token: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - id: gcp
+        uses: google-github-actions/auth@v2
+        continue-on-error: true
+        with:
+          workload_identity_provider: projects/896764575828/locations/global/workloadIdentityPools/github/providers/intel-terminal
+          service_account: intel-writer@intel-vault-510704.iam.gserviceaccount.com
+      - run: python ops/probe.py
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          SEC_CONTACT: ${{ secrets.SEC_CONTACT }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GCP_PROJECT: intel-vault-510704
+          GCP_BUCKET: intel-vault-510704-vault
+      - name: Save to probe branch
+        run: |
+          mkdir /tmp/p && cp probe.json /tmp/p/
+          git config user.name probe && git config user.email probe@users.noreply.github.com
+          git checkout --orphan probe-out && git rm -rqf . && cp /tmp/p/probe.json . && git add probe.json
+          git commit -qm "probe $(date -u +%FT%TZ)" && git push -f origin probe-out

@@ -8368,7 +8368,7 @@ INSIGHT_BANNED = re.compile(r"不是.{0,12}而是|不僅.{0,12}更|在這個.{0,
 
 # ---------- 各分類洞見：每個大分類各自的 2～3 條洞見（只用該分類的資料），每小時輪流重寫最舊的一類，每類約 6 小時更新一次 ----------
 INS_CATS = {
-    "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue", "logistics"],
+    "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue", "logistics", "aicycle"],
     "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits", "renewal", "credit", "exports", "stress", "dlead"],
     "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention", "demo", "gap"],
     "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife", "ossuse", "uspolicy"],
@@ -12025,6 +12025,217 @@ def p_dlead():
             "src": "台股、韓股、費半（Yahoo 月線）・央行 M1B／M2・紐約與費城聯準會製造業調查・Moody's Baa 公司債利差（FRED）；z 分數以 1990–2018 為基準，等權平均"}
 
 
+
+# ---------- AI 循環：上游（雲端業者資本支出＋指引）→ 中游（台灣 AI 供應鏈月營收、資通與視聽出口）→ 溫度計（DRAM 現貨漲跌） ----------
+AI_CAPEX = [("MSFT", "微軟", 789019), ("GOOGL", "Google", 1652044), ("AMZN", "亞馬遜", 1018724), ("META", "Meta", 1326801), ("ORCL", "甲骨文", 1341439)]
+AI_CAPEX_CONCEPTS = ("PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets", "PaymentsForProceedsFromProductiveAssets",
+                     "PaymentsToAcquirePropertyPlantAndEquipmentAndIntangibleAssets")
+AI_TW = [("2330", "台積電"), ("2317", "鴻海"), ("2382", "廣達"), ("3231", "緯創"), ("6669", "緯穎"), ("2308", "台達電")]
+AI_GUIDE_CACHE = DATA / "ai_guide_cache.json"
+
+
+def _sec_quarters(units):
+    """XBRL 現金流量表多半是年初累計：同一個起日的累計值相減，得到每一季；以季末月份對到日曆季。"""
+    from datetime import date as _d
+    seen, rows = set(), []
+    for x in units:
+        if x.get("form") not in ("10-Q", "10-K", "10-K/A", "10-Q/A"):
+            continue
+        k = (x["start"], x["end"])
+        if k in seen:
+            continue
+        seen.add(k); rows.append((x["start"], x["end"], x["val"]))
+    dur = lambda a, b: (_d.fromisoformat(b) - _d.fromisoformat(a)).days
+    q = {}
+    for s, e, v in rows:
+        if 80 <= dur(s, e) <= 100:
+            q[e] = v
+    by_start = {}
+    for s, e, v in rows:
+        by_start.setdefault(s, []).append((e, v))
+    for s, lst in by_start.items():
+        lst.sort()
+        prev_e, prev_v = None, None
+        for e, v in lst:
+            if dur(s, e) <= 100:
+                prev_e, prev_v = e, v; continue
+            if prev_e and 80 <= dur(prev_e, e) <= 100 and e not in q:
+                q[e] = v - prev_v
+            prev_e, prev_v = e, v
+    out = {}
+    for e, v in q.items():
+        y, m = int(e[:4]), int(e[5:7])
+        if int(e[8:10]) < 15:   # 季末落在月初（例如 1/1）算上個月
+            m -= 1
+            if m == 0:
+                y, m = y - 1, 12
+        out[f"{y}Q{(m - 1) // 3 + 1}"] = v
+    return out
+
+
+def p_aicycle():
+    errs, out = [], {}
+    contact = os.environ.get("SEC_CONTACT", "").strip()
+    hdr = {"User-Agent": f"intel-terminal {contact}" if "@" in contact else "intel-terminal personal research", "Accept": "application/json"}
+    per = {}
+    for tk, name, cik in AI_CAPEX:
+        best = None
+        for con in AI_CAPEX_CONCEPTS:
+            try:
+                r = S.get(f"https://data.sec.gov/api/xbrl/companyconcept/CIK{cik:010d}/us-gaap/{con}.json", headers=hdr, timeout=40); time.sleep(0.2)
+                if r.status_code != 200:
+                    continue
+                qs = _sec_quarters(r.json().get("units", {}).get("USD", []))
+                if qs and (best is None or max(qs) > max(best)):
+                    best = qs
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"SEC {tk}: {safe_err(e)}")
+        if best:
+            per[tk] = best
+    if per:
+        allq = sorted(set().union(*[set(v) for v in per.values()]))
+        cur_q = f"{TODAY_TPE.year}Q{(TODAY_TPE.month - 1) // 3 + 1}"
+        qs = [q for q in allq if q < cur_q]
+        def tot(q, need=None):
+            ks = need or [t for t in per if q in per[t]]
+            return sum(per[t][q] for t in ks if q in per[t]) if all(q in per[t] for t in ks) else None
+        rows = []
+        for q in qs[-12:]:
+            ly = f"{int(q[:4]) - 1}{q[4:]}"
+            common = [t for t in per if q in per[t] and ly in per[t]]   # 同一批公司才比年增
+            a, b = sum(per[t][q] for t in common), sum(per[t][ly] for t in common)
+            rows.append({"q": q, "total": round(sum(per[t][q] for t in per if q in per[t]) / 1e9, 1), "yoy": round(100 * (a / b - 1), 1) if b else None,
+                         "n": sum(1 for t in per if q in per[t]), "by": {t: round(per[t][q] / 1e9, 1) for t in per if q in per[t]}})
+        for q in qs:
+            hist_put("ai_capex", "total", q, round(sum(per[t][q] for t in per if q in per[t]) / 1e9, 2))
+        out["capex"] = {"rows": rows, "names": {tk: nm for tk, nm, _ in AI_CAPEX if tk in per}, "missing": [nm for tk, nm, _ in AI_CAPEX if tk not in per]}
+    # 指引：財報後新聞標題，Gemini 擷取（翻過的標題存快取）
+    try:
+        cache = json.loads(AI_GUIDE_CACHE.read_text(encoding="utf-8")) if AI_GUIDE_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    heads = []
+    for tk, name, _ in AI_CAPEX:
+        q = {"MSFT": "Microsoft", "GOOGL": "Alphabet", "AMZN": "Amazon", "META": "Meta", "ORCL": "Oracle"}[tk]
+        try:
+            for n in _gnews(f'{q} capex OR "capital expenditures" guidance when:120d', limit=8, lang="en"):
+                heads.append((tk, n))
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"指引新聞 {tk}: {safe_err(e)}")
+    todo = [(tk, n) for tk, n in heads if n["title"] not in cache][:40]
+    if todo and GEMINI_KEY:
+        lines = "\n".join(f"{i}. [{tk}] {n['title']}" for i, (tk, n) in enumerate(todo))
+        prompt = ("下面是美國雲端業者財報相關新聞標題。逐則判斷有沒有明確寫出「資本支出（capex）的金額指引或方向」。\n"
+                  "amount：標題裡的資本支出金額，十億美元，沒有寫就 null；year：指的是哪一年（例如 2026），不確定就 null；"
+                  "dir：上調｜維持｜下調｜無（標題沒講方向就無）；zh：一句繁體中文摘要，20 字內。\n"
+                  "只回 JSON：{\"items\": [{\"i\": 編號, \"amount\": 數字或 null, \"year\": 數字或 null, \"dir\": \"\", \"zh\": \"\"}]}\n\n" + lines)
+        try:
+            data, _m = _gemini_json(prompt, max_tokens=4000, timeout=60, lite_first=True, max_models=2)
+            for r in _items_of(data):
+                try:
+                    tk, n = todo[int(r.get("i"))]
+                except (TypeError, ValueError, IndexError):
+                    continue
+                cache[n["title"]] = {"tk": tk, "amount": num(r.get("amount")), "year": r.get("year"), "dir": str(r.get("dir") or "無"), "zh": str(r.get("zh") or "")[:40],
+                                     "at": n.get("at") or "", "url": n.get("url"), "source": n.get("source")}
+        except Exception as e:  # noqa: BLE001
+            errs.append("指引判讀: " + safe_err(e))
+        cache = dict(list(cache.items())[-400:])
+        write_json(AI_GUIDE_CACHE, cache)
+    guide = {}
+    for t, g in cache.items():
+        if g.get("dir") in ("上調", "維持", "下調") or g.get("amount"):
+            cur = guide.get(g["tk"])
+            if not cur or (g.get("at") or "") > (cur.get("at") or ""):
+                guide[g["tk"]] = {**g, "title": t}
+    out["guide"] = [{"name": nm, **guide[tk]} for tk, nm, _ in AI_CAPEX if tk in guide]
+    # 台灣 AI 供應鏈月營收
+    try:
+        headers = {"Authorization": f"Bearer {FINMIND_TOKEN}"} if FINMIND_TOKEN else {}
+        ser = {}
+        for code, name in AI_TW:
+            j = gjson("https://api.finmindtrade.com/api/v4/data", params={"dataset": "TaiwanStockMonthRevenue", "data_id": code, "start_date": "2014-01-01"}, headers=headers)
+            for r in j.get("data") or []:
+                ser.setdefault(code, {})[f"{r['revenue_year']}{r['revenue_month']:02d}"] = r["revenue"]
+            time.sleep(0.3)
+        common = sorted(set.intersection(*[set(v) for v in ser.values()])) if ser else []
+        last = common[-1]
+        def ymd(ym, k):
+            y, m = int(ym[:4]), int(ym[4:]) + k; y += (m - 1) // 12; m = (m - 1) % 12 + 1; return f"{y}{m:02d}"
+        T = {m: sum(ser[c][m] for c in ser) for m in common}
+        yoy = lambda m: round(100 * (T[m] / T[ymd(m, -12)] - 1), 1) if ymd(m, -12) in T else None
+        y3 = lambda m: round(100 * (sum(T[ymd(m, -i)] for i in range(3)) / sum(T[ymd(m, -12 - i)] for i in range(3)) - 1), 1) if all(ymd(m, -12 - i) in T for i in range(3)) else None
+        firms = []
+        for code, name in AI_TW:
+            s = ser.get(code, {})
+            if last in s and ymd(last, -12) in s:
+                f3 = 100 * (sum(s.get(ymd(last, -i), 0) for i in range(3)) / max(1, sum(s.get(ymd(last, -12 - i), 0) for i in range(3))) - 1)
+                firms.append({"code": code, "name": name, "yoy": round(100 * (s[last] / s[ymd(last, -12)] - 1), 1), "yoy3": round(f3, 1), "v": round(s[last] / 1e8)})
+        for m in common[-60:]:
+            if yoy(m) is not None:
+                hist_put("ai_tw", "yoy", f"{m[:4]}-{m[4:]}", yoy(m))
+        out["tw"] = {"month": f"{last[:4]}-{last[4:]}", "total": round(T[last] / 1e8), "yoy": yoy(last), "yoy3": y3(last),
+                     "spark": [y3(m) for m in common[-24:]], "firms": sorted(firms, key=lambda f: -f["yoy3"])}
+        # 驗證：雲端資本支出年增 vs 台灣 AI 供應鏈營收年增，誰領先幾季（2014 起）
+        if per:
+            capq = {}
+            for q in sorted(set().union(*[set(v) for v in per.values()])):
+                ly = f"{int(q[:4]) - 1}{q[4:]}"; cm = [t for t in per if q in per[t] and ly in per[t]]
+                if len(cm) >= 3:
+                    capq[q] = 100 * (sum(per[t][q] for t in cm) / sum(per[t][ly] for t in cm) - 1)
+            twq = {}
+            for m in common:
+                q = f"{m[:4]}Q{(int(m[4:]) - 1) // 3 + 1}"
+                if int(m[4:]) % 3 == 0 and yoy(m) is not None and y3(m) is not None:
+                    twq[q] = y3(m)
+            def qadd(q, k):
+                y, n = int(q[:4]), int(q[5:]) - 1 + k; return f"{y + n // 4}Q{n % 4 + 1}"
+            res = []
+            for lag in range(0, 5):
+                ks = [q for q in capq if qadd(q, lag) in twq]
+                if len(ks) >= 16:
+                    a = [capq[q] for q in ks]; b = [twq[qadd(q, lag)] for q in ks]
+                    ma, mb = sum(a) / len(a), sum(b) / len(b)
+                    va = sum((x - ma) ** 2 for x in a) ** .5; vb = sum((y - mb) ** 2 for y in b) ** .5
+                    res.append({"lag": lag, "corr": round(sum((x - ma) * (y - mb) for x, y in zip(a, b)) / (va * vb), 2) if va and vb else None, "n": len(ks)})
+            out["leadtest"] = res
+    except Exception as e:  # noqa: BLE001
+        errs.append("台灣供應鏈營收: " + safe_err(e))
+    # DRAM 現貨（集邦科技 DRAMeXchange 首頁）：只留漲跌幅，不重製報價
+    try:
+        t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " | ", get("https://www.dramexchange.com/").text))
+        dram = []
+        for nm in ("DDR5 16Gb (2Gx8) 4800/5600", "DDR4 16Gb (2Gx8) 3200", "DDR4 8Gb (1Gx8) 3200", "DDR5 RDIMM 32GB"):
+            i = t.find(nm)
+            if i < 0:
+                continue
+            m = re.search(r"(-?\d+(?:\.\d+)?)\s*%", t[i:i + 400])
+            if m:
+                dram.append({"name": nm.split(" (")[0].replace(" 4800/5600", ""), "chg": num(m.group(1))})
+        upd = re.search(r"Last Update:\s*([A-Za-z]{3}\.?\s*\d{1,2}\s*\d{4})", t)
+        out["dram"] = {"items": dram, "asof": upd.group(1) if upd else ""}
+        if not dram:
+            errs.append("DRAM：頁面格式變了")
+    except Exception as e:  # noqa: BLE001
+        errs.append("DRAM: " + safe_err(e))
+    if not out:
+        raise RuntimeError("aicycle: " + "; ".join(errs))
+    cx = (out.get("capex") or {}).get("rows") or []
+    tw = out.get("tw") or {}
+    gd = [g for g in out.get("guide") or [] if g.get("dir") == "下調"]
+    if gd:
+        verdict, tone = f"{'、'.join(g['name'] for g in gd)}下調資本支出指引：上游燃料開始收，留意台灣供應鏈 1～2 季後放緩", "red"
+    elif cx and (cx[-1].get("yoy") or 0) > 30 and (tw.get("yoy3") or 0) > 20:
+        verdict, tone = f"上游還在加速（資本支出年增 {cx[-1]['yoy']:.0f}%），台灣供應鏈營收近 3 月年增 {tw['yoy3']:.0f}%：循環仍在擴張", "green"
+    elif cx and len(cx) >= 2 and (cx[-1].get("yoy") or 0) < (cx[-2].get("yoy") or 0) - 10:
+        verdict, tone = "資本支出年增明顯放慢：成長還在、但速度在降，這通常是循環轉折的第一步", "amber"
+    else:
+        verdict, tone = "循環平穩", "green"
+    out.update({"verdict": verdict, "tone": tone, "errs": errs[:6],
+                "src": "SEC 財報 XBRL（微軟、Google、亞馬遜、Meta、甲骨文購置不動產廠房設備）、財報後新聞（AI 擷取指引）、FinMind 月營收、DRAMeXchange（只放漲跌）"})
+    return out
+
+
 run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
@@ -12050,6 +12261,7 @@ run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Feder
 run("exports", p_exports, keep_if_fresh_hours=24)  # 台灣出口結構：月資料，每月 9 日前後公布
 run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
 run("logistics", p_logistics, keep_if_fresh_hours=1)  # 全球物流：風暴要即時，運價週／日資料
+run("aicycle", p_aicycle, keep_if_fresh_hours=6)  # AI 循環：資本支出一季一次、營收每月、DRAM 每日
 run("revenue", p_revenue, keep_if_fresh_hours=20)
 run("etfholders", p_etfholders, keep_if_fresh_hours=12)
 run("corp", p_corp, keep_if_fresh_hours=6)
