@@ -1,6 +1,20 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610180724001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "臺南市",
+    "屏東縣"
+   ],
+   "text": "天氣高溫炎熱，今(18)日中午前後屏東縣為橙色燈號，有連續出現36度高溫的機率，請加強注意。臺南市為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-17T23:24:25Z",
+   "exp": "2026-10-18T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610180724.cap"
+  },
+  {
    "id": "CWA-Weather_heat_202610171725001",
    "cat": "高溫",
    "lvl": 2,
@@ -15,12 +29,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610171725.cap"
   }
  ],
- "n_total": 1,
+ "n_total": 2,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/18 07:01:15"
+  "updated": "2026/10/18 07:25:29"
  },
  "errs": [],
- "updatedAt": "2026-10-17T23:07:38Z"
+ "updatedAt": "2026-10-17T23:26:38Z"
 }
