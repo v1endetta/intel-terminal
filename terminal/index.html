@@ -904,6 +904,11 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><a href="https://fred.stlouisfed.org/series/BAMLH0A0HYM2" target="_blank" rel="noopener">FRED · ICE BofA</a><span>每日 · 百分位越高＝利差越寬＝市場越怕借錢給公司；依 ICE 授權只放百分位不放數值</span></div>
   </section>
+  <section class="panel w12 cap" id="p-aicycle">
+    <div class="ph"><h2>AI 循環</h2><span class="zh">雲端業者花多少錢 → 台灣接到多少單 → 記憶體熱不熱</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.sec.gov/edgar/search/" target="_blank" rel="noopener">SEC 財報</a><a href="https://www.dramexchange.com/" target="_blank" rel="noopener">DRAMeXchange</a><span>資本支出每季（財報現金流量表的購置固定資產）· 指引由 AI 從財報新聞標題擷取，以公司公告為準 · 營收每月 10 日前 · DRAM 只放漲跌</span></div>
+  </section>
   <section class="panel w6 cap" id="p-exports">
     <div class="ph"><h2>出口結構</h2><span class="zh">賣到哪裡、賣什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -1592,6 +1597,15 @@ const renderers={
       ${th.n?LI("1990 年以來的轉折訊號",`之後 0～12 個月景氣同方向轉折`,`${Math.round((th.rate||0)*100)}%（${th.hit}／${th.n}）`,""):""}</ul></div></div>`;
     body("p-dlead").innerHTML=`<div class="veg-h">${YM(d.month)}<b class="${n(d.value)>=0?"up":"down"}">${sgn(n(d.value),2)}</b><span>3 個月 ${sgn(n(d.chg3),2)} · ${esc(d.status||"")}</span></div>${svg}${lg}${card}`;
     setMeta("p-dlead",{...d,label:"每月，股價每天更新"},24*3);},
+  aicycle(d){const C=(d.capex||{}).rows||[],G=d.guide||[],T=d.tw||{},D=(d.dram||{}).items||[],LT=d.leadtest||[],tc={red:"var(--down)",amber:"var(--warn)",green:"var(--up)"}[d.tone]||"var(--text)";
+    const bn=v=>`${fmt(n(v)*10,0)} 億美元`;const last=C[C.length-1]||{};const best=LT.slice().sort((a,b)=>(b.corr||0)-(a.corr||0))[0];
+    const cap=`<h3 class="ins-h">上游：雲端業者每季資本支出（年增）</h3>${HB(C.slice(-8).map(r=>({name:r.q,v:n(r.yoy),txt:`${bn(r.total)} · ${PP(n(r.yoy))}`})))}`
+      +(G.length?`<h3 class="ins-h">最新指引（新聞整理）</h3><ul class="list wrap">${G.map(g=>LI(`${g.name}：${g.dir}${g.amount?`至 ${fmt(g.amount*10,0)} 億美元`:""}${g.year?`（${g.year} 年）`:""}`,`${g.source||""} · ${(g.at||"").slice(0,10)}`,g.dir,g.dir==="上調"?"up":g.dir==="下調"?"down":"flat",g.url)).join("")}</ul>`:"");
+    const tw=T.month?`<h3 class="ins-h">中游：台灣 AI 供應鏈月營收（${YM(T.month)}）</h3><div class="veg-h">六家合計<b class="${cls(n(T.yoy3))}">${PP(n(T.yoy3))}</b><span>近 3 月比去年同期 · 單月 ${PP(n(T.yoy))}</span></div><div class="spk">${mini(T.spark)}<span>近 3 月年增 · 近 24 月</span></div>${HB((T.firms||[]).map(f=>({name:f.name,v:n(f.yoy3),txt:`${PP(n(f.yoy3))} · 單月 ${PP(n(f.yoy))}`})))}`:"";
+    const dr=D.length?`<h3 class="ins-h">溫度計：DRAM 現貨日漲跌（${esc((d.dram||{}).asof||"")}）</h3>${HB(D.map(x=>({name:x.name,v:n(x.chg),txt:PP(n(x.chg))})))}`:"";
+    const lt=best?`<div class="sub" style="color:var(--muted);font-size:11px;margin-top:6px">2014 年以來：資本支出年增領先台灣供應鏈營收約 ${best.lag} 季（相關 ${fmt(n(best.corr),2)}，${best.n} 季），樣本不大，看方向用。</div>`:"";
+    body("p-aicycle").innerHTML=`<div class="plain" style="border-left:3px solid ${tc};padding-left:8px">${esc(d.verdict||"")}</div><div class="ins-g"><div>${cap}</div><div>${tw}${dr}${lt}</div></div>`;
+    setMeta("p-aicycle",{...d,label:"季／月／日"},8);},
   cars(d){const c=d.car||{},m=d.moto||{};
     body("p-cars").innerHTML=`<div class="veg-h">自用小客車<b class="${cls(n(c.y3))}">${PP(n(c.y3))}</b><span>近 3 個月比去年同期 · ${YM(d.month)} 單月 ${fmt(n(c.v),0)} 輛（${PP(n(c.yoy))}）</span></div>
       <div class="spk">${mini((c.spark||[]).filter(v=>v!=null))}<span>每月領牌 · 近 25 月</span></div>
@@ -2811,7 +2825,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["market","市場"],["macro","總經"],["trend","走向"],["intel","訊號"],["social","輿情"],["live","台灣現場"],["vault","資料庫"]];
-const TAB_OF={"p-dlead":"macro","p-credit":"macro","p-exports":"macro","p-stress":"macro","p-logistics":"market","p-uspolicy":"intel","p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
+const TAB_OF={"p-aicycle":"macro","p-dlead":"macro","p-credit":"macro","p-exports":"macro","p-stress":"macro","p-logistics":"market","p-uspolicy":"intel","p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"trend","p-ledger":"trend","p-chain":"trend","p-weekly":"trend","p-tech2":"trend","p-imports":"macro","p-housefc":"macro","p-demo":"macro","p-bizlife":"macro","p-metro":"live",
   "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
@@ -2842,7 +2856,7 @@ const GUIDE={
     ["消費與品牌股","通路月營收、精品股",["p-revenue","p-lux"]]]},
   macro:{cat:"總經",sub:"台灣經濟現在幾度、錢花在哪、房子蓋多少、東西貴不貴",secs:[
     ["景氣","整體經濟熱不熱、半年後往哪走（dalta 領先指標看 3～6 個月後）",["p-dlead","p-macro","p-lead"]],
-    ["出口與企業壓力","錢從國外進來多少、哪裡先撐不住",["p-exports","p-stress"]],
+    ["AI 循環、出口與企業壓力","台灣這台單引擎還能跑多久、錢從國外進來多少、哪裡先撐不住",["p-aicycle","p-exports","p-stress"]],
     ["消費","大家還願不願意花錢、花在哪",["p-supply","p-cards","p-consume","p-tourism"]],
     ["房子與車子","大額消費：買賣、房價、接下來要蓋多少、舊屋重建、新車",["p-house","p-housefc","p-permits","p-renewal","p-cars"]],
     ["人口與公司","人口結構和公司開關",["p-demo","p-bizlife"]],

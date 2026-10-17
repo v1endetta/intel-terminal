@@ -2512,6 +2512,7 @@ function EXPLORE() {
     { cat: "總經", items: [
       { n: "洞見", f: () => insCatCard("總經") },
       { n: "領先指標", f: () => dleadCard() },
+      { n: "AI 循環", f: () => aicycleCard() },
       { n: "景氣指標", lens: "macro", f: listOf("台灣總經", () => items("macro").map(x => ({ t: `${x.label}  ${x.value}`, s: `${x.period} · 前期 ${x.prev}` })), "總經", "macro") },
       { n: "刷卡", lens: "cards" },
       { n: "出口結構", globe: 1, f: () => gxCard("exports") },
@@ -2613,6 +2614,7 @@ const PROV = {
   "lens:move": ["migration", "內政部戶政司 遷入遷出統計", "月資料", 1440],
   "洞見": ["insights_cat", "情報站各分類資料（程式整理、Gemini 寫句子）", "彙整", 360],
   "本月洞見": ["insights", "政府開放資料交叉比對（程式算訊號、Gemini 寫句子）", "每日", 1440],
+  "AI 循環": ["aicycle", "SEC 財報（雲端五家資本支出）・財報新聞（AI 擷取指引）・FinMind 月營收・DRAMeXchange（只放漲跌）", "彙整", 360],
   "領先指標": ["dlead", "dalta 自建：台股、韓股、費半、M1B 減 M2、紐約與費城聯準會調查、美國公司債利差等權合成", "每月", 1440, p => p.month],
   "信用利差": ["credit", "ICE BofA 美國公司債利差（經 FRED），只顯示近 3 年百分位", "每日", 1440, p => (((p.rows || [])[0]) || {}).asof],
   "出口結構": ["exports", "財政部統計資料庫：出口按國家×主要貨品", "每月", 43200, p => p.month],
@@ -5332,6 +5334,17 @@ function dleadCard() {
       + `<div class="nvh">7 個成分（正＝偏熱）</div>` + barsHTML(C.map(c => ({ name: c.name, v: c.z, txt: `${c.z >= 0 ? "+" : "−"}${Math.abs(c.z || 0).toFixed(2)}` })))
       + (th.n ? `<p class="why">1990 年以來它發出的 ${th.n} 次轉折訊號，${th.hit} 次在 0～12 個月內等到景氣同方向轉折（${Math.round((th.rate || 0) * 100)}%）。3 個成分是股價，會受股市情緒影響。</p>` : ""),
     foot: `<a href="/terminal/#p-dlead">終端機看和國發會的比較 ›</a>` }) };
+}
+// AI 循環：雲端業者資本支出 → 台灣 AI 供應鏈營收 → DRAM
+function aicycleCard() {
+  const D = P.aicycle || {}, C = (D.capex || {}).rows || [], G = D.guide || [], T = D.tw || {}, last = C[C.length - 1] || {};
+  if (!C.length && !T.month) return { html: sideHTML({ eyebrow: "總經 · AI 循環", title: "台灣這台單引擎還能跑多久？", body: '<p class="empty">資料載入中。</p>' }) };
+  return { html: sideHTML({ eyebrow: `總經 · AI 循環 · ${last.q || ""}`, title: "台灣這台單引擎還能跑多久？", big: last.yoy != null ? `資本支出 ${pct(last.yoy, 0)}` : "", color: D.tone === "red" ? DNH : D.tone === "amber" ? "#ff9f0a" : UPH,
+    body: `<p class="why">${esc(D.verdict || "")}。微軟、Google、亞馬遜、Meta、甲骨文每季花在機房設備的錢，是台灣伺服器、晶片訂單的源頭；2014 年以來它大約領先台灣供應鏈營收一季。</p>`
+      + `<div class="nvh">每季資本支出（億美元）</div>` + barsHTML(C.slice(-6).map(r => ({ name: r.q, v: r.total * 10, txt: `${nI(r.total * 10)}・${pct(r.yoy, 0)}` })), { signed: false })
+      + (G.length ? `<div class="nvh">最新指引（新聞整理）</div>` + listHTML(G.map(g => ({ t: `${g.name}：${g.dir}${g.amount ? `至 ${nI(g.amount * 10)} 億美元` : ""}${g.year ? `（${g.year}）` : ""}`, s: (g.at || "").slice(0, 10), url: g.url }))) : "")
+      + (T.month ? `<div class="nvh">台灣 AI 供應鏈月營收（${ymTxt(T.month)}，近 3 月年增）</div>` + barsHTML((T.firms || []).map(f => ({ name: f.name, v: f.yoy3, txt: pct(f.yoy3, 0) }))) : ""),
+    foot: `<a href="/terminal/#p-aicycle">終端機看完整 ›</a>` }) };
 }
 
 /* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */

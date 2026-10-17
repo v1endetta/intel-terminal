@@ -12099,16 +12099,21 @@ def p_aicycle():
         def tot(q, need=None):
             ks = need or [t for t in per if q in per[t]]
             return sum(per[t][q] for t in ks if q in per[t]) if all(q in per[t] for t in ks) else None
-        rows = []
-        for q in qs[-12:]:
+        rows, partial = [], None
+        for q in qs[-13:]:
             ly = f"{int(q[:4]) - 1}{q[4:]}"
             common = [t for t in per if q in per[t] and ly in per[t]]   # 同一批公司才比年增
             a, b = sum(per[t][q] for t in common), sum(per[t][ly] for t in common)
-            rows.append({"q": q, "total": round(sum(per[t][q] for t in per if q in per[t]) / 1e9, 1), "yoy": round(100 * (a / b - 1), 1) if b else None,
-                         "n": sum(1 for t in per if q in per[t]), "by": {t: round(per[t][q] / 1e9, 1) for t in per if q in per[t]}})
+            row = {"q": q, "total": round(sum(per[t][q] for t in per if q in per[t]) / 1e9, 1), "yoy": round(100 * (a / b - 1), 1) if b else None,
+                   "n": sum(1 for t in per if q in per[t]), "by": {t: round(per[t][q] / 1e9, 1) for t in per if q in per[t]}}
+            if row["n"] >= len(per) - 1:   # 至少四家都公布了才算完整的一季
+                rows.append(row)
+            else:
+                partial = row
+        rows = rows[-12:]
         for q in qs:
             hist_put("ai_capex", "total", q, round(sum(per[t][q] for t in per if q in per[t]) / 1e9, 2))
-        out["capex"] = {"rows": rows, "names": {tk: nm for tk, nm, _ in AI_CAPEX if tk in per}, "missing": [nm for tk, nm, _ in AI_CAPEX if tk not in per]}
+        out["capex"] = {"rows": rows, "partial": partial, "names": {tk: nm for tk, nm, _ in AI_CAPEX if tk in per}, "missing": [nm for tk, nm, _ in AI_CAPEX if tk not in per]}
     # 指引：財報後新聞標題，Gemini 擷取（翻過的標題存快取）
     try:
         cache = json.loads(AI_GUIDE_CACHE.read_text(encoding="utf-8")) if AI_GUIDE_CACHE.exists() else {}
@@ -12126,7 +12131,7 @@ def p_aicycle():
     if todo and GEMINI_KEY:
         lines = "\n".join(f"{i}. [{tk}] {n['title']}" for i, (tk, n) in enumerate(todo))
         prompt = ("下面是美國雲端業者財報相關新聞標題。逐則判斷有沒有明確寫出「資本支出（capex）的金額指引或方向」。\n"
-                  "amount：標題裡的資本支出金額，十億美元，沒有寫就 null；year：指的是哪一年（例如 2026），不確定就 null；"
+                  "amount：標題裡的資本支出金額，單位十億美元（例如 $205 billion 就填 205），沒有寫就 null；year：指的是哪一年（例如 2026），不確定就 null；"
                   "dir：上調｜維持｜下調｜無（標題沒講方向就無）；zh：一句繁體中文摘要，20 字內。\n"
                   "只回 JSON：{\"items\": [{\"i\": 編號, \"amount\": 數字或 null, \"year\": 數字或 null, \"dir\": \"\", \"zh\": \"\"}]}\n\n" + lines)
         try:
