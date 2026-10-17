@@ -664,6 +664,31 @@ def mnd_plaact(state, errs):
     st["at"] = time.time()
 
 
+def probe_tdcs_once(state, errs):   # 一次性實測（2026-10-17）：國道車輛偵測 TDCS 歷史資料能不能從台灣機房抓、回溯多久；結果存 relay/static/probe_tdcs.json.gz
+    if state.get("probe_tdcs_v1"):
+        return
+    state["probe_tdcs_v1"] = NOW_ISO
+    out = {"at": NOW_ISO}
+    base = "https://tisvcloud.freeway.gov.tw/history/TDCS/"
+    for k, u in (("root", base), ("m03a", base + "M03A/"), ("m05a", base + "M05A/"), ("m06a", base + "M06A/")):
+        try:
+            t = get(u, 40).decode("utf-8", "ignore")
+            hrefs = re.findall(r'href="([^"?#]+)"', t)
+            out[k] = {"n": len(hrefs), "first": hrefs[:12], "last": hrefs[-12:]}
+        except Exception as e:  # noqa: BLE001
+            out[k] = {"err": repr(e)[:200]}
+    d = (NOW - timedelta(days=2)).strftime("%Y%m%d")
+    for k, u in (("m03a_day", f"{base}M03A/{d}/"), ("m03a_csv", f"{base}M03A/{d}/08/TDCS_M03A_{d}_080000.csv"), ("m03a_tar", f"{base}M03A/M03A_{d}.tar.gz"),
+                 ("m03a_old", f"{base}M03A/M03A_20200115.tar.gz"), ("m03a_old_dir", f"{base}M03A/20200115/08/TDCS_M03A_20200115_080000.csv"),
+                 ("m03a_2015", f"{base}M03A/20150115/08/TDCS_M03A_20150115_080000.csv")):
+        try:
+            b = get(u, 90)
+            out[k] = {"bytes": len(b), "head": b[:600].decode("utf-8", "ignore") if not u.endswith(".gz") else "(gzip)"}
+        except Exception as e:  # noqa: BLE001
+            out[k] = {"err": repr(e)[:200]}
+    gcs_put("relay/static/probe_tdcs.json.gz", gz(out))
+
+
 def main():
     t0 = time.time()
     state = json.loads(gcs_get("relay/state.json") or b"{}")
@@ -674,6 +699,11 @@ def main():
         stats_daily(state, errs)
     except Exception as e:  # noqa: BLE001
         errs["stats"] = repr(e)[:200]
+
+    try:
+        probe_tdcs_once(state, errs)
+    except Exception as e:  # noqa: BLE001
+        errs["probe_tdcs"] = repr(e)[:200]
 
     try:
         villages_once(state, errs)
