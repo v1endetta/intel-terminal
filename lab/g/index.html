@@ -2685,6 +2685,12 @@ function buildDock() {
   seg.onclick = e => { const b = e.target.closest("button"); if (b) showCat(+b.dataset.c); };
   $("chips").onclick = e => { const b = e.target.closest("button"); if (b) pickItem(+b.dataset.j); };
   addEventListener("resize", moveHL);
+  ST.redrawCard = () => {   // 每 5 分鐘讀到新資料時：開著的卡片原地重畫（保留捲動位置，不動鏡頭）
+    const s = $("side"); if (!s || !s.classList.contains("on") || !document.body.classList.contains("exploring") || EXCAT < 0) return;
+    const it = ((E[EXCAT] || {}).items || [])[EXITEM]; if (!it) return;
+    if (it.lens) { NAV.key = ""; return; }   // 地圖視角的卡片：讓地圖下一輪自己重畫
+    let r = null; try { r = it.f(); } catch (e) { return; } if (!r || !r.html) return;
+    const top = s.scrollTop; s.innerHTML = r.html + provHTML(it.n); s.scrollTop = top; };
   ST.openAt = (cat, n) => { const [c, j] = at(cat, n); EXCAT = c; EXITEM = j; if (ST.explore) showCat(c, j); else { const d = document.querySelectorAll("#dots button"); d.length && d[d.length - 1].click(); } };
   ST.openExplore = () => { if (EXCAT < 0) { EXCAT = E.findIndex(c => c.cat === "現場"); EXITEM = 0; } showCat(EXCAT, Math.max(0, EXITEM)); requestAnimationFrame(moveHL); };
 }
@@ -3374,6 +3380,7 @@ const GXP = { 紐約: [-74, 40.71], 東京: [139.69, 35.69], 香港: [114.17, 22
   倫敦: [-0.13, 51.5], 華盛頓: [-77.04, 38.9], 米蘭: [9.19, 45.46], 西班牙: [-8.41, 43.36], 奧勒岡: [-122.8, 45.49], 美國德州: [-99, 31.5], 美國奧克拉荷馬: [-96.77, 35.98], 北海: [2, 57.5],
   智利: [-69.5, -23.6], 中國: [112, 33], 墨西哥: [-102, 23.5], 西澳: [118.5, -22.5], 舊金山: [-122.42, 37.77], 山景城: [-122.08, 37.39], 雷德蒙: [-122.12, 47.67], 西雅圖: [-122.33, 47.61],
   聖塔克拉拉: [-121.96, 37.35], 庫比蒂諾: [-122.03, 37.32], 門洛帕克: [-122.18, 37.45], 杭州: [120.15, 30.27], 北京: [116.4, 39.9] };
+const GX_UNIT = { "USD/bbl": "美元／桶", "USc/lb": "美分／磅", "USD/lb": "美元／磅", "USD/t": "美元／噸", "USD/oz": "美元／盎司" };
 const gxPct = v => v == null ? "—" : `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(2)}%`;
 const gxCol = v => v == null ? 0x64d2ff : v >= 0 ? 0x30d158 : 0xff453a;
 // 每個分類：節點（地點、漲跌、粗細）＋ 鏡頭看哪裡 ＋ 卡片
@@ -3394,7 +3401,8 @@ const GX_SPEC = {
   cmdty() {
     const AT = { 棉花: "美國德州", "WTI 原油": "美國奧克拉荷馬", "Brent 原油": "北海", 銅: "智利", 鋁: "中國", 黃金: "倫敦", 白銀: "墨西哥", "鐵礦砂 62%": "西澳", 熱軋鋼捲: "中國" }, seen = {};
     return { look: [150, 0], alt: 17000, dir: "in", title: "原物料期貨", eyebrow: "市場 · 主要產地或定價地 → 台灣",
-      nodes: items("commodities").filter(x => AT[x.name]).map(x => { const ll = GXP[AT[x.name]].slice(), k = seen[AT[x.name]] = (seen[AT[x.name]] || 0) + 1; if (k > 1) { ll[0] += 4 * (k - 1); ll[1] -= 3 * (k - 1); } return { name: x.name, ll, chg: x.chg_pct, sub: `${AT[x.name]}　${gxPct(x.chg_pct)}` }; }),
+      nodes: items("commodities").filter(x => AT[x.name]).map(x => { const ll = GXP[AT[x.name]].slice(), k = seen[AT[x.name]] = (seen[AT[x.name]] || 0) + 1; if (k > 1) { ll[0] += 4 * (k - 1); ll[1] -= 3 * (k - 1); } const u = GX_UNIT[x.unit] || x.unit || "";
+        return { name: x.name, ll, chg: x.chg_pct, price: x.price != null ? nf(x.price) : null, sub: `${u ? u + "・" : ""}${gxPct(x.chg_pct)}・${AT[x.name]}` }; }),
       why: "線從主要產地或定價地拉到台灣：台灣的原料大多靠進口，這些價格最後會進到成本。" };
   },
   lux() {
@@ -3453,7 +3461,7 @@ function gxCard(key) {
   let s = null; try { s = GX_SPEC[key](); } catch (e) { console.warn(e); }
   if (!s) return { html: sideHTML({ title: "地球", body: '<p class="empty">資料暫時讀不到</p>' }) };
   const rows = s.nodes.slice().sort((a, b) => Math.abs(b.chg ?? 0) - Math.abs(a.chg ?? 0));
-  return { layer: "gx", gx: key, html: sideHTML({ eyebrow: s.eyebrow, title: s.title, body: (key === "world" ? worldViz() : "") + `<p class="why">${s.why}</p>` + (key === "ai" || key === "liq" || key === "inst" || key === "world" ? "" : listHTML(rows.map(n => ({ t: n.name, s: n.sub })))) + (s.extra || "") }) };
+  return { layer: "gx", gx: key, html: sideHTML({ eyebrow: s.eyebrow, title: s.title, body: (key === "world" ? worldViz() : "") + `<p class="why">${s.why}</p>` + (key === "ai" || key === "liq" || key === "inst" || key === "world" ? "" : listHTML(rows.map(n => ({ t: n.price != null ? `${n.name}　${n.price}` : n.name, s: n.sub })))) + (s.extra || "") }) };
 }
 function gxBuild() {
   if (GX.g) { SG.remove(GX.g); GX.g.traverse(o => { o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); }); }
@@ -3473,7 +3481,7 @@ function gxBuild() {
     P0.material.color = new THREE.Color(col);
     GX.g.add(tube, dot, P0);
     GX.flows.push({ pts, P: P0, sp: 0.06 + 0.12 * mag, off: i * 0.13 });
-    GX.lbls.push([addLabel(`<span class="gxl" data-gx="${i}"><b>${esc(n.name)}</b>${n.chg != null ? `<em style="color:#${new THREE.Color(col).getHexString()}">${s.key === "liq" || s.key === "inst" ? "" : gxPct(n.chg)}</em>` : n.w ? `<em>${n.w} 則</em>` : ""}</span>`, GLOBE.G(n.ll[0], n.ll[1], 260), "gx", "gx", 2 + mag * 3), GLOBE.G(n.ll[0], n.ll[1], 0)]);
+    GX.lbls.push([addLabel(`<span class="gxl" data-gx="${i}"><b>${esc(n.name)}</b>${n.price != null ? `<em>${esc(n.price)}</em>` : ""}${n.chg != null ? `<em style="color:#${new THREE.Color(col).getHexString()}">${s.key === "liq" || s.key === "inst" ? "" : gxPct(n.chg)}</em>` : n.w ? `<em>${n.w} 則</em>` : ""}</span>`, GLOBE.G(n.ll[0], n.ll[1], 260), "gx", "gx", 2 + mag * 3), GLOBE.G(n.ll[0], n.ll[1], 0)]);
   });
   const tw = new THREE.Mesh(new THREE.SphereGeometry(55, 16, 12), fm(new THREE.MeshBasicMaterial({ color: 0xffffff }), 1)); tw.position.copy(GLOBE.G(TW_LL[0], TW_LL[1], 40)); GX.g.add(tw);
   addLabel(`<span class="gxl tw"><b>台灣</b></span>`, GLOBE.G(TW_LL[0], TW_LL[1], 300), "gx", "gx", 9, () => ({ html: `<b>${esc(s.title || "台灣")}</b><p>${esc(s.why || "")}</p>${s.nodes.length ? `<p>${s.nodes.slice(0, 6).map(n => `${esc(n.name)} ${n.chg != null ? gxPct(n.chg) : ""}`).join("　")}</p>` : ""}` }));
@@ -5907,6 +5915,7 @@ addEventListener("resize", () => { _measureVH(); const w = innerWidth, h = VH();
         setupWx(); setupQuake(); setupHouse(); setupTraffic(); setupFlow();
         if (inReb) { cur = null; if (document.body.classList.contains("exploring")) setLayer(was); }
         try { flRefresh(); } catch (e) { console.warn("flights refresh", e); }
+        try { const sig = Object.values(P || {}).map(x => (x && x.updatedAt) || "").join("|"); if (ST._sig && sig !== ST._sig && ST.redrawCard) ST.redrawCard(); ST._sig = sig; } catch (e) { console.warn("card redraw", e); }   // 資料有變：開著的卡片跟著重畫
       } catch (e) { console.warn("refresh", e); }
     }, 300000);
   } catch (e) {
