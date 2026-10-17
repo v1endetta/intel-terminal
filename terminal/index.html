@@ -869,7 +869,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
   </section>
 
   <section class="panel w12" id="p-dlead">
-    <div class="ph"><h2>dalta 領先指標</h2><span class="zh">7 個訊號合成，看 3～6 個月後的景氣</span><span class="meta">排程</span></div>
+    <div class="ph"><h2><span style="text-transform:none">dalta</span> 領先指標</h2><span class="zh">7 個訊號合成，看 3～6 個月後的景氣</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>台股、韓股、費半、M1B 減 M2、紐約與費城聯準會製造業調查、美國公司債利差 · 0＝1990–2018 平均 · 3 個成分是股價，會受股市情緒影響</span></div>
   </section>
@@ -1582,7 +1582,7 @@ const renderers={
     const all=[...B,...N,...C].filter(v=>v!=null&&isFinite(v)),mn=Math.min(...all,-1),mx=Math.max(...all,1),W=640,H=170,px=i=>8+i*(W-16)/Math.max(1,T.length-1),py=v=>H-14-(v-mn)/(mx-mn||1)*(H-28);
     const path=(a)=>a.map((v,i)=>v==null?null:`${px(i).toFixed(1)},${py(v).toFixed(1)}`).filter(Boolean).join(" ");
     const yr=T.map((t,i)=>t.endsWith("-01")?`<text x="${px(i)}" y="${H-1}" font-size="10" fill="var(--muted)" text-anchor="middle">${t.slice(0,4)}</text><line x1="${px(i)}" x2="${px(i)}" y1="6" y2="${H-14}" stroke="var(--line)"/>`:"").join("");
-    const svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="none" role="img" aria-label="dalta 領先指標、國發會領先、同時指標走勢">${yr}<line x1="8" x2="${W-8}" y1="${py(0)}" y2="${py(0)}" stroke="var(--line)" stroke-dasharray="3 3"/>
+    const svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;max-height:220px;display:block" role="img" aria-label="dalta 領先指標、國發會領先、同時指標走勢">${yr}<line x1="8" x2="${W-8}" y1="${py(0)}" y2="${py(0)}" stroke="var(--line)" stroke-dasharray="3 3"/>
       <polyline points="${path(C)}" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/><polyline points="${path(N)}" fill="none" stroke="var(--warn)" stroke-width="1.5"/><polyline points="${path(B)}" fill="none" stroke="var(--blue)" stroke-width="2.4"/></svg>`;
     const lg=`<div class="sub" style="display:flex;gap:14px;font-size:11px;color:var(--muted);margin:2px 0 8px"><span><b style="color:var(--blue)">━</b> dalta 領先</span><span><b style="color:var(--warn)">━</b> 國發會領先（對齊到拿得到的月份）</span><span>┅ 景氣同時指標</span><span>都換成 z 分數</span></div>`;
     const comp=HB((d.components||[]).map(c=>({name:c.name,v:n(c.z),txt:`${sgn(n(c.z),2)}${c.chg3!=null?` · 3 月 ${sgn(n(c.chg3),2)}`:""}`})));

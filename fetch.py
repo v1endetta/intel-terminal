@@ -12010,9 +12010,10 @@ def p_dlead():
         z = Z.get(key) or {}
         if not z:
             continue
-        zl = z.get(last); z3 = z.get(ks[-4]) if len(ks) >= 4 else None
+        zk = sorted(t for t in z if t <= last); lt = zk[-1] if zk else None   # 次月才公布的成分：用最近一個拿得到的月份
+        zl = z.get(lt) if lt else None; z3 = z.get(_ym_add2(lt, -3)) if lt else None
         comps.append({"key": key, "name": name, "z": round(zl, 2) if zl is not None else None, "chg3": round(zl - z3, 2) if zl is not None and z3 is not None else None,
-                      "form": "年增" if form == "yoy" else "水準", "avail": "當月" if lag <= 0 else "次月下旬"})
+                      "form": "年增" if form == "yoy" else "水準", "avail": "當月" if lag <= 0 else "次月下旬", "asof": f"{lt[:4]}-{lt[4:]}" if lt else None})
     comps.sort(key=lambda c: -(c["z"] or 0))
     tl = ks[-48:]
     return {"month": f"{last[:4]}-{last[4:]}", "value": round(B[last], 2), "chg3": round(d3, 2), "status": status, "pending": pending,

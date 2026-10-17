@@ -2511,6 +2511,7 @@ function EXPLORE() {
     ] },
     { cat: "總經", items: [
       { n: "洞見", f: () => insCatCard("總經") },
+      { n: "領先指標", f: () => dleadCard() },
       { n: "景氣指標", lens: "macro", f: listOf("台灣總經", () => items("macro").map(x => ({ t: `${x.label}  ${x.value}`, s: `${x.period} · 前期 ${x.prev}` })), "總經", "macro") },
       { n: "刷卡", lens: "cards" },
       { n: "出口結構", globe: 1, f: () => gxCard("exports") },
@@ -2612,6 +2613,7 @@ const PROV = {
   "lens:move": ["migration", "內政部戶政司 遷入遷出統計", "月資料", 1440],
   "洞見": ["insights_cat", "情報站各分類資料（程式整理、Gemini 寫句子）", "彙整", 360],
   "本月洞見": ["insights", "政府開放資料交叉比對（程式算訊號、Gemini 寫句子）", "每日", 1440],
+  "領先指標": ["dlead", "dalta 自建：台股、韓股、費半、M1B 減 M2、紐約與費城聯準會調查、美國公司債利差等權合成", "每月", 1440, p => p.month],
   "信用利差": ["credit", "ICE BofA 美國公司債利差（經 FRED），只顯示近 3 年百分位", "每日", 1440, p => (((p.rows || [])[0]) || {}).asof],
   "出口結構": ["exports", "財政部統計資料庫：出口按國家×主要貨品", "每月", 43200, p => p.month],
   "企業壓力": ["stress", "中央銀行退票統計；勞動部減班休息（從新聞標題擷取）", "每月", 43200, p => (p.bounce || {}).month],
@@ -5318,6 +5320,18 @@ function uspolicyCard() {
       + (B.length ? `<div class="nvh">國會法案</div>` + listHTML(B.slice(0, 4).map(x => ({ t: x.zh || x.title, s: `${x.kind}・${(x.date || "").slice(5).replace("-", "/")} ${x.action_zh || x.action || ""}`, url: x.url }))) : "")
       + `<div class="nvh">行政部門</div>` + listHTML(I.slice(0, 7).map(x => ({ t: (x.tw ? "【台灣】" : x.hot ? "【重點】" : "") + (x.zh || x.title), s: `${x.src}・${x.kind}・${(x.date || "").slice(5).replace("-", "/")}`, url: x.url }))),
     foot: `<a href="/terminal/#p-uspolicy">終端機看完整清單 ›</a>` }) };
+}
+// dalta 領先指標：7 個訊號合成，2019–2026 考試贏國發會 3～6 個月後的相關與出來的時間
+function dleadCard() {
+  const D = P.dlead || {}, S = D.series || {}, C = D.components || [], th = D.turn_hit || {};
+  if (!S.B) return { html: sideHTML({ eyebrow: "總經 · dalta 領先指標", title: "半年後景氣會更好嗎？", body: '<p class="empty">資料載入中。</p>' }) };
+  const v = D.value || 0;
+  return { html: sideHTML({ eyebrow: `總經 · dalta 領先指標 · ${ymTxt(D.month)}`, title: "半年後景氣會更好嗎？", big: `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(2)}`, color: v >= 0 ? UPH : DNH,
+    body: `<p class="why">${esc(D.status || "")}。0＝1990–2018 平均，越高代表 3～6 個月後景氣越熱。2019–2026 的考試裡，它對 4～6 個月後景氣的相關贏國發會領先指標，轉折平均早 5.3 個月抓到，但假警報比較多。</p>`
+      + `<div class="nvh">近 4 年走勢</div>` + lineSVG(S.B.slice(-48), v >= 0 ? UPH : DNH)
+      + `<div class="nvh">7 個成分（正＝偏熱）</div>` + barsHTML(C.map(c => ({ name: c.name, v: c.z, txt: `${c.z >= 0 ? "+" : "−"}${Math.abs(c.z || 0).toFixed(2)}` })))
+      + (th.n ? `<p class="why">1990 年以來它發出的 ${th.n} 次轉折訊號，${th.hit} 次在 0～12 個月內等到景氣同方向轉折（${Math.round((th.rate || 0) * 100)}%）。3 個成分是股價，會受股市情緒影響。</p>` : ""),
+    foot: `<a href="/terminal/#p-dlead">終端機看和國發會的比較 ›</a>` }) };
 }
 
 /* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */
