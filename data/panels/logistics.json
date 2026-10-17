@@ -117,15 +117,15 @@
    "name": "CHAMPI",
    "level": "Red",
    "ll": [
-    146.1,
-    12.6
+    144.8,
+    13.1
    ],
    "from": "2026-10-14T12:00",
-   "to": "2026-10-17T12:00",
+   "to": "2026-10-17T18:00",
    "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 259 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=13&eventtype=TC",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=14&eventtype=TC",
    "near": [],
-   "id": "1001338-13"
+   "id": "1001338-14"
   },
   {
    "name": "SIMON",
@@ -145,6 +145,20 @@
     }
    ],
    "id": "1001335-38"
+  },
+  {
+   "name": "WATI",
+   "level": "Orange",
+   "ll": [
+    -163.2,
+    -14.8
+   ],
+   "from": "2026-10-16T06:00",
+   "to": "2026-10-17T18:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 130 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001339&episodeid=4&eventtype=TC",
+   "near": [],
+   "id": "1001339-4"
   },
   {
    "name": "TRUDY",
@@ -168,20 +182,6 @@
     }
    ],
    "id": "1001337-17"
-  },
-  {
-   "name": "WATI",
-   "level": "Green",
-   "ll": [
-    -163.2,
-    -13.2
-   ],
-   "from": "2026-10-16T06:00",
-   "to": "2026-10-17T06:00",
-   "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001339&episodeid=3&eventtype=TC",
-   "near": [],
-   "id": "1001339-3"
   }
  ],
  "ports": [
@@ -642,5 +642,5 @@
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-17T19:30:24Z"
+ "updatedAt": "2026-10-17T20:31:49Z"
 }
