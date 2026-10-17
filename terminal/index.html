@@ -868,6 +868,11 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><a href="https://statis.moi.gov.tw/micst/" target="_blank" rel="noopener">內政部統計查詢網</a><a href="https://data.taipei/" target="_blank" rel="noopener">臺北市資料大平臺</a><span>買賣棟數＝建物所有權買賣移轉登記（全台、月）· 台北住宅價格月指數（全市）約晚 2 個月公布 · 房貸＝中央銀行五大銀行新承做購屋貸款與購置住宅貸款餘額 · 回測（2012 起）：房價半年方向延續 69%；「買賣量先動、房價跟著變」只有 41%，在台北不成立，帳本只留統計不寫預測</span></div>
   </section>
 
+  <section class="panel w12" id="p-dlead">
+    <div class="ph"><h2>dalta 領先指標</h2><span class="zh">7 個訊號合成，看 3～6 個月後的景氣</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>台股、韓股、費半、M1B 減 M2、紐約與費城聯準會製造業調查、美國公司債利差 · 0＝1990–2018 平均 · 3 個成分是股價，會受股市情緒影響</span></div>
+  </section>
   <section class="panel w6 cap" id="p-lead">
     <div class="ph"><h2>景氣轉向</h2><span class="zh">領先指標、外銷訂單</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -1573,6 +1578,20 @@ const renderers={
       +(B.length?`<div class="ins-g"><div><h3 class="ins-h">國會法案（亮色＝近 30 天有動作）</h3><ul class="list wrap">${B.slice(0,10).map(bl).join("")}</ul></div><div><h3 class="ins-h">行政部門公告與新聞稿</h3><ul class="list wrap">${I.slice(0,18).map(li).join("")}</ul></div></div>`
         :`<h3 class="ins-h">行政部門公告與新聞稿</h3><ul class="list wrap">${I.slice(0,18).map(li).join("")}</ul>`);
     setMeta("p-uspolicy",{...d,label:"每日"},8);},
+  dlead(d){const S=d.series||{},T=S.t||[],B=S.B||[],N=S.ndc||[],C=S.coin||[],E=d.exam||{},cr=E.corr||{},tu=E.turns||{},th=d.turn_hit||{};
+    const all=[...B,...N,...C].filter(v=>v!=null&&isFinite(v)),mn=Math.min(...all,-1),mx=Math.max(...all,1),W=640,H=170,px=i=>8+i*(W-16)/Math.max(1,T.length-1),py=v=>H-14-(v-mn)/(mx-mn||1)*(H-28);
+    const path=(a)=>a.map((v,i)=>v==null?null:`${px(i).toFixed(1)},${py(v).toFixed(1)}`).filter(Boolean).join(" ");
+    const yr=T.map((t,i)=>t.endsWith("-01")?`<text x="${px(i)}" y="${H-1}" font-size="10" fill="var(--muted)" text-anchor="middle">${t.slice(0,4)}</text><line x1="${px(i)}" x2="${px(i)}" y1="6" y2="${H-14}" stroke="var(--line)"/>`:"").join("");
+    const svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="none" role="img" aria-label="dalta 領先指標、國發會領先、同時指標走勢">${yr}<line x1="8" x2="${W-8}" y1="${py(0)}" y2="${py(0)}" stroke="var(--line)" stroke-dasharray="3 3"/>
+      <polyline points="${path(C)}" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/><polyline points="${path(N)}" fill="none" stroke="var(--warn)" stroke-width="1.5"/><polyline points="${path(B)}" fill="none" stroke="var(--blue)" stroke-width="2.4"/></svg>`;
+    const lg=`<div class="sub" style="display:flex;gap:14px;font-size:11px;color:var(--muted);margin:2px 0 8px"><span><b style="color:var(--blue)">━</b> dalta 領先</span><span><b style="color:var(--warn)">━</b> 國發會領先（對齊到拿得到的月份）</span><span>┅ 景氣同時指標</span><span>都換成 z 分數</span></div>`;
+    const comp=HB((d.components||[]).map(c=>({name:c.name,v:n(c.z),txt:`${sgn(n(c.z),2)}${c.chg3!=null?` · 3 月 ${sgn(n(c.chg3),2)}`:""}`})));
+    const card=`<div class="ins-g"><div><h3 class="ins-h">7 個成分（z 分數，正＝偏熱）</h3>${comp}</div><div><h3 class="ins-h">2019–2026 最後考試（事前沒碰過的資料）</h3><ul class="list wrap">${["3","4","5","6"].map(k=>LI(`${k} 個月後景氣的相關`,`國發會 ${fmt(n((cr[k]||[])[1]),2)}`,fmt(n((cr[k]||[])[0]),2),n((cr[k]||[])[0])>n((cr[k]||[])[1])?"up":"down")).join("")}
+      ${LI("轉折點抓到",`國發會 ${(tu.caught||[])[1]}／${tu.of} 個 · 假警報 ${(tu.false||[])[1]} 次`,`${(tu.caught||[])[0]}／${tu.of} 個 · 假警報 ${(tu.false||[])[0]} 次`,"down")}
+      ${LI("抓到的平均提早",`國發會 ${(tu.lead||[])[1]} 個月`,`${(tu.lead||[])[0]} 個月`,"up")}${LI("什麼時候拿得到","國發會：月底後約 27 天","月底當天","up")}
+      ${th.n?LI("1990 年以來的轉折訊號",`之後 0～12 個月景氣同方向轉折`,`${Math.round((th.rate||0)*100)}%（${th.hit}／${th.n}）`,""):""}</ul></div></div>`;
+    body("p-dlead").innerHTML=`<div class="veg-h">${YM(d.month)}<b class="${n(d.value)>=0?"up":"down"}">${sgn(n(d.value),2)}</b><span>3 個月 ${sgn(n(d.chg3),2)} · ${esc(d.status||"")}</span></div>${svg}${lg}${card}`;
+    setMeta("p-dlead",{...d,label:"每月，股價每天更新"},24*3);},
   cars(d){const c=d.car||{},m=d.moto||{};
     body("p-cars").innerHTML=`<div class="veg-h">自用小客車<b class="${cls(n(c.y3))}">${PP(n(c.y3))}</b><span>近 3 個月比去年同期 · ${YM(d.month)} 單月 ${fmt(n(c.v),0)} 輛（${PP(n(c.yoy))}）</span></div>
       <div class="spk">${mini((c.spark||[]).filter(v=>v!=null))}<span>每月領牌 · 近 25 月</span></div>
@@ -2792,7 +2811,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["market","市場"],["macro","總經"],["trend","走向"],["intel","訊號"],["social","輿情"],["live","台灣現場"],["vault","資料庫"]];
-const TAB_OF={"p-credit":"macro","p-exports":"macro","p-stress":"macro","p-logistics":"market","p-uspolicy":"intel","p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
+const TAB_OF={"p-dlead":"macro","p-credit":"macro","p-exports":"macro","p-stress":"macro","p-logistics":"market","p-uspolicy":"intel","p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"trend","p-ledger":"trend","p-chain":"trend","p-weekly":"trend","p-tech2":"trend","p-imports":"macro","p-housefc":"macro","p-demo":"macro","p-bizlife":"macro","p-metro":"live",
   "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
@@ -2822,7 +2841,7 @@ const GUIDE={
     ["全球市場","各國大盤、美股、原物料、運價與港口",["p-world","p-usbig","p-sectors","p-cmdty","p-logistics"]],
     ["消費與品牌股","通路月營收、精品股",["p-revenue","p-lux"]]]},
   macro:{cat:"總經",sub:"台灣經濟現在幾度、錢花在哪、房子蓋多少、東西貴不貴",secs:[
-    ["景氣","整體經濟熱不熱、半年後往哪走",["p-macro","p-lead"]],
+    ["景氣","整體經濟熱不熱、半年後往哪走（dalta 領先指標看 3～6 個月後）",["p-dlead","p-macro","p-lead"]],
     ["出口與企業壓力","錢從國外進來多少、哪裡先撐不住",["p-exports","p-stress"]],
     ["消費","大家還願不願意花錢、花在哪",["p-supply","p-cards","p-consume","p-tourism"]],
     ["房子與車子","大額消費：買賣、房價、接下來要蓋多少、舊屋重建、新車",["p-house","p-housefc","p-permits","p-renewal","p-cars"]],

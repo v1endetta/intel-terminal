@@ -4997,8 +4997,9 @@ LEDGER_RULES = {
     "credit_wide": ("錢往哪走", "高收益債利差一個月內從低檔跳到近 3 年前 30%，3 個月後台股比現在低"),
     "bounce_hi": ("企業壓力", "退票金額比率創 12 個月新高，3 個月後同時指標比現在低"),
     "furlough_up": ("企業壓力", "減班休息人數連兩期增加，3 個月後同時指標比現在低"),
+    "dlead_turn": ("景氣轉向", "dalta 領先指標確認高點（低點），9 個月後同時指標比現在低（高）"),
 }
-LEDGER_NOBT = {"elect_fav", "chain_gap", "chain_hot", "credit_wide", "bounce_hi", "furlough_up"}  # 沒有足夠歷史回測的規則：機率先給 50%，對過答案再說
+LEDGER_NOBT = {"elect_fav", "chain_gap", "chain_hot", "credit_wide", "bounce_hi", "furlough_up", "dlead_turn"}  # 沒有足夠歷史回測的規則：機率先給 50%，對過答案再說
 
 
 def _ym_add(ym, k):  # ym = "YYYYMM"
@@ -5261,6 +5262,11 @@ def p_ledger():
                 tx = [(d, v) for d, v in (HISTORY.get("taiex", {}).get("TAIEX") or []) if d >= p["due"]]
                 if tx:
                     p.update(status="hit" if tx[0][1] < p["base"] else "miss", actual=f"加權指數 {p['base']:,.0f} → {tx[0][1]:,.0f}", resolved=today)
+            elif r == "dlead_turn":
+                coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); due = p["due"].replace("-", "")
+                if due in coin:
+                    ok = coin[due] < p["base"] if p["dir"] < 0 else coin[due] > p["base"]
+                    p.update(status="hit" if ok else "miss", actual=f"同時指標 {p['base']:.2f} → {coin[due]:.2f}", resolved=today)
             elif r in ("bounce_hi", "furlough_up"):
                 coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); due = p["due"].replace("-", "")
                 if due in coin:
@@ -5376,6 +5382,16 @@ def p_ledger():
             add("furlough_up", "景氣", f"減班休息人數連兩期增加：同時指標到 {du[:4]}/{du[4:]} 低於現在（{coin[cm]:.2f}）", f"{du[:4]}-{du[4:]}", base=coin[cm], prob=0.5)
     except Exception as e:  # noqa: BLE001
         log("ledger stress gen", e)
+    DL = RESULTS.get("dlead") or {}
+    cf = DL.get("confirmed") or {}
+    try:
+        if cf.get("month") and (date_from(today) - date_from(cf["month"] + "-01")).days <= 240:   # 剛確認的轉折（高低點後 6～8 個月內）
+            coin = dict(json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))["coin"]); cm = max(coin); du = _ym_add(cm, 9); up = cf["kind"] == "谷"
+            th = DL.get("turn_hit") or {}
+            add("dlead_turn", f"景氣{cf['kind']}{cf['month']}", f"dalta 領先指標確認{'低點' if up else '高點'}（{cf['month'].replace('-', '/')}）：同時指標到 {du[:4]}/{du[4:]} {'高於' if up else '低於'}現在（{coin[cm]:.2f}）",
+                f"{du[:4]}-{du[4:]}", base=coin[cm], dir=1 if up else -1, prob=th.get("rate") if (th.get("n") or 0) >= 10 and th.get("rate") else 0.5)
+    except Exception as e:  # noqa: BLE001
+        log("ledger dlead gen", e)
     L["preds"] = preds[-600:]
     write_json(LEDGER, L)
     # 4) 統計
@@ -8353,7 +8369,7 @@ INSIGHT_BANNED = re.compile(r"不是.{0,12}而是|不僅.{0,12}更|在這個.{0,
 # ---------- 各分類洞見：每個大分類各自的 2～3 條洞見（只用該分類的資料），每小時輪流重寫最舊的一類，每類約 6 小時更新一次 ----------
 INS_CATS = {
     "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue", "logistics"],
-    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits", "renewal", "credit", "exports", "stress"],
+    "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits", "renewal", "credit", "exports", "stress", "dlead"],
     "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention", "demo", "gap"],
     "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife", "ossuse", "uspolicy"],
     "輿情": ["mood", "ptt", "trends", "cofacts", "gtop", "worldnews"],
@@ -11870,6 +11886,144 @@ def p_logistics():
 
 
 
+
+# ---------- dalta 領先指標：7 個訊號等權合成（2026-10-17 回測：1990–2018 定規則，2019–2026 最後考試贏國發會 3～6 個月後的相關與出來的時間） ----------
+DLEAD_SPEC = [   # (key, 名稱, 來源, 形式, 方向, 月底後幾天公布)
+    ("taiex", "台股加權", "^TWII", "yoy", 1, -1), ("kospi", "韓國股市", "^KS11", "yoy", 1, -1), ("sox", "費城半導體", "^SOX", "yoy", 1, -1),
+    ("m1b_m2", "M1B 減 M2 年增", "cbc", "level", 1, 25), ("empire", "紐約聯準會製造業", "GACDISA066MSFRBNY", "level", 1, -15),
+    ("philly_no", "費城聯準會新訂單", "NOCDFSA066MSFRBPHI", "level", 1, -12), ("us_baa", "美國公司債利差（反向）", "BAA10Y", "level", -1, 0)]
+DLEAD_EXAM = {"period": "2019–2026", "corr": {"3": [0.771, 0.759], "4": [0.789, 0.706], "5": [0.789, 0.634], "6": [0.772, 0.55]},
+              "turns": {"caught": [3, 4], "of": 5, "lead": [5.3, 2.8], "false": [2, 1]}, "avail_days": [0, 27]}
+
+
+def _ym_add2(ym, k):
+    y, m = int(ym[:4]), int(ym[4:]); m += k; y += (m - 1) // 12; m = (m - 1) % 12 + 1
+    return f"{y}{m:02d}"
+
+
+def _dl_turns(s, w=6, amp=None):
+    import math
+    ks = sorted(s); vals = [s[k] for k in ks]
+    if amp is None:
+        m = sum(vals) / len(vals); amp = 0.6 * math.sqrt(sum((x - m) ** 2 for x in vals) / len(vals))
+    out = []
+    for i in range(w, len(ks) - w):
+        v = vals[i]; win = vals[i - w:i + w + 1]
+        if v == max(win) and v - min(win) >= amp:
+            out.append((ks[i], "峰"))
+        elif v == min(win) and max(win) - v >= amp:
+            out.append((ks[i], "谷"))
+    return out, amp
+
+
+def p_dlead():
+    import math
+    errs, raw = [], {}
+    for key, name, src, form, sign, lag in DLEAD_SPEC:
+        try:
+            if src.startswith("^"):
+                res = _yahoo_get(src, {"range": "max", "interval": "1mo", "includePrePost": "false"})["chart"]["result"][0]
+                raw[key] = {datetime.fromtimestamp(t, tz=timezone.utc).strftime("%Y%m"): c for t, c in zip(res.get("timestamp") or [], res["indicators"]["quote"][0].get("close") or []) if c}
+            elif src == "cbc":
+                j = gjson("https://cpx.cbc.gov.tw/API/DataAPI/Get?FileName=EF15M01")
+                labels = [l.get("data", l) if isinstance(l, dict) else l for l in j["data"]["structure"]["Table1"]]
+                rows = [r for r in j["data"]["dataSets"] if r and re.match(r"\d{4}M\d\d", r[0])]
+                def col(p):
+                    fw = p.replace("M", "Ｍ").replace("1", "１").replace("2", "２").replace("B", "Ｂ")
+                    return 2 + 2 * [k for k, l in enumerate(labels) if str(l).endswith(fw) or str(l).endswith(p)][0]
+                c1, c2 = col("M1B"), col("M2")
+                raw[key] = {r[0].replace("M", ""): num(r[c1]) - num(r[c2]) for r in rows if num(r[c1]) is not None and num(r[c2]) is not None}
+            else:
+                if not FRED_KEY:
+                    raise RuntimeError("no FRED key")
+                mm = {}
+                for d, v in fred(src, n=20000):
+                    mm.setdefault(d[:4] + d[5:7], []).append(v)
+                raw[key] = {k: sum(v) / len(v) for k, v in mm.items()}
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{name}: {safe_err(e)}")
+    yoy = lambda s: {k: 100 * (v / s[_ym_add2(k, -12)] - 1) for k, v in s.items() if s.get(_ym_add2(k, -12))}
+    ma3 = lambda s: {k: (s[k] + s[_ym_add2(k, -1)] + s[_ym_add2(k, -2)]) / 3 for k in s if _ym_add2(k, -1) in s and _ym_add2(k, -2) in s}
+    Z, last_raw = {}, {}
+    cur_ym = TODAY_TPE.strftime("%Y%m")
+    for key, name, src, form, sign, lag in DLEAD_SPEC:
+        s = raw.get(key)
+        if not s:
+            continue
+        f = ma3(yoy(s)) if form == "yoy" else ma3(s)
+        sh = 0 if lag <= 0 else (1 if lag <= 30 else 2)
+        f = {_ym_add2(k, sh): v for k, v in f.items()}   # 對齊成「這個月底手上拿得到什麼」
+        base = [v for t, v in f.items() if "199001" <= t <= "201812"]
+        if len(base) < 60:
+            errs.append(f"{name}: 基準期資料不足"); continue
+        m = sum(base) / len(base); sd = math.sqrt(sum((x - m) ** 2 for x in base) / len(base)) or 1
+        Z[key] = {t: sign * (v - m) / sd for t, v in f.items() if t <= cur_ym}
+    if len(Z) < 4:
+        raise RuntimeError("dlead: 成分不足 " + "; ".join(errs))
+    months = sorted(set().union(*[set(z) for z in Z.values()]))
+    B = {}
+    for t in months:
+        vals = [Z[k][t] for k in Z if t in Z[k]]
+        if len(vals) >= 4:
+            B[t] = sum(vals) / len(vals)
+    ks = sorted(B); last = ks[-1]
+    for t in ks[-36:]:
+        hist_put("dlead", "B", f"{t[:4]}-{t[4:]}", round(B[t], 3))
+    # 國發會領先、同時（不含趨勢）也換成 z 分數，好放同一張圖
+    try:
+        ls = json.loads((DATA / "lead_series.json").read_text(encoding="utf-8"))
+        def zser(rows, shift):
+            d = {_ym_add2(k, shift): v for k, v in rows}
+            base = [v for t, v in d.items() if "199001" <= t <= "201812"]; m = sum(base) / len(base); sd = math.sqrt(sum((x - m) ** 2 for x in base) / len(base)) or 1
+            return {t: (v - m) / sd for t, v in d.items()}
+        NDC, COIN = zser(ls["lead"], 1), zser(ls["coin"], 0)
+        coin_raw = dict(ls["coin"])
+    except Exception as e:  # noqa: BLE001
+        NDC, COIN, coin_raw = {}, {}, {}; errs.append("國發會序列: " + safe_err(e))
+    turns, amp = _dl_turns(B)
+    # 進行中的轉折：近 12 個月的高（低）點已過 3 個月以上、之後連續往反方向走，但還沒滿 6 個月確認
+    w12 = ks[-13:]; hi_t = max(w12, key=lambda t: B[t]); lo_t = min(w12, key=lambda t: B[t])
+    mo = lambda a, b: (int(b[:4]) * 12 + int(b[4:])) - (int(a[:4]) * 12 + int(a[4:]))
+    status, pending = "", None
+    d3 = B[last] - B[ks[-4]] if len(ks) >= 4 else 0
+    if hi_t != last and mo(hi_t, last) >= 3 and B[hi_t] - B[last] >= 0.5 * amp:
+        pending = {"kind": "峰", "month": hi_t, "since": mo(hi_t, last), "drop": round(B[hi_t] - B[last], 2)}
+        status = f"疑似高點（{hi_t[:4]}/{int(hi_t[4:])}），之後連 {mo(hi_t, last)} 個月往下；滿 6 個月才確認"
+    elif lo_t != last and mo(lo_t, last) >= 3 and B[last] - B[lo_t] >= 0.5 * amp:
+        pending = {"kind": "谷", "month": lo_t, "since": mo(lo_t, last), "rise": round(B[last] - B[lo_t], 2)}
+        status = f"疑似低點（{lo_t[:4]}/{int(lo_t[4:])}），之後連 {mo(lo_t, last)} 個月往上；滿 6 個月才確認"
+    else:
+        status = "往上" if d3 > 0.1 else "往下" if d3 < -0.1 else "持平"
+    confirmed = turns[-1] if turns else None
+    # 歷史：模型 B 的轉折後 3～9 個月內，同時指標出現同方向轉折的比例（1990 起）
+    ct = _dl_turns({k: v for k, v in coin_raw.items()}, 6, 1.5)[0] if coin_raw else []
+    hit = n = 0; leads = []
+    for t, kind in turns:
+        if t < "199001" or mo(t, cur_ym) < 9:
+            continue
+        n += 1
+        m_ = [c for c, k2 in ct if k2 == kind and 0 <= mo(t, c) <= 12]
+        if m_:
+            hit += 1; leads.append(mo(t, m_[0]))
+    comps = []
+    for key, name, src, form, sign, lag in DLEAD_SPEC:
+        z = Z.get(key) or {}
+        if not z:
+            continue
+        zl = z.get(last); z3 = z.get(ks[-4]) if len(ks) >= 4 else None
+        comps.append({"key": key, "name": name, "z": round(zl, 2) if zl is not None else None, "chg3": round(zl - z3, 2) if zl is not None and z3 is not None else None,
+                      "form": "年增" if form == "yoy" else "水準", "avail": "當月" if lag <= 0 else "次月下旬"})
+    comps.sort(key=lambda c: -(c["z"] or 0))
+    tl = ks[-48:]
+    return {"month": f"{last[:4]}-{last[4:]}", "value": round(B[last], 2), "chg3": round(d3, 2), "status": status, "pending": pending,
+            "confirmed": {"kind": confirmed[1], "month": f"{confirmed[0][:4]}-{confirmed[0][4:]}"} if confirmed else None,
+            "turn_hit": {"n": n, "hit": hit, "rate": round(hit / n, 2) if n else None, "avg_lead": round(sum(leads) / len(leads), 1) if leads else None},
+            "series": {"t": [f"{t[:4]}-{t[4:]}" for t in tl], "B": [round(B[t], 2) for t in tl], "ndc": [round(NDC[t], 2) if t in NDC else None for t in tl],
+                       "coin": [round(COIN[t], 2) if t in COIN else None for t in tl]},
+            "components": comps, "exam": DLEAD_EXAM, "errs": errs[:5],
+            "src": "台股、韓股、費半（Yahoo 月線）・央行 M1B／M2・紐約與費城聯準會製造業調查・Moody's Baa 公司債利差（FRED）；z 分數以 1990–2018 為基準，等權平均"}
+
+
 run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
@@ -11966,6 +12120,7 @@ run("fruit", p_fruit, keep_if_fresh_hours=6)
 run("meat", p_meat, keep_if_fresh_hours=6)
 run("cards", p_cards, keep_if_fresh_hours=24 if (load_prev("cards") or {}).get("counties") else 0)  # 還沒有縣市拆分時重抓一次
 run("lead", p_lead, keep_if_fresh_hours=24)
+run("dlead", p_dlead, keep_if_fresh_hours=12)  # dalta 領先指標：吃 lead_series.json，放在國發會領先指標後面
 run("wiki", p_wiki, keep_if_fresh_hours=72)
 run("tech2", p_tech2, keep_if_fresh_hours=24)
 run("imports", p_imports, keep_if_fresh_hours=24 * 5)
@@ -12321,6 +12476,11 @@ def notify():
     for b in (R("uspolicy").get("bills") or [])[:20]:   # 涉台法案有新動作
         if b.get("tw") and b.get("moved") and (b.get("date") or "") >= (TODAY_TPE - timedelta(days=3)).isoformat():
             cand.append((f"bill:{b.get('id')}:{b.get('date')}", False, f"國會 {b['kind']}：{(b.get('zh') or b['title'])[:30]}", f"最新動作（{b['date']}）：{b.get('action_zh') or b.get('action')}\n<{b['url']}|Congress.gov>　{link('美國政策')}"))
+    # 13. dalta 領先指標確認轉折（高低點後滿 6 個月才確認，一個轉折只推一次）
+    dl = R("dlead"); cf = dl.get("confirmed") or {}
+    if cf.get("month") and cf["month"] >= (TODAY_TPE - timedelta(days=270)).strftime("%Y-%m"):
+        cand.append((f"dlead:{cf['kind']}:{cf['month']}", False, f"dalta 領先指標確認{'低點' if cf['kind'] == '谷' else '高點'}（{cf['month'].replace('-', '/')}）",
+                     f"過去這個訊號之後 0～12 個月內景氣同方向轉折的比例 {int(100 * ((dl.get('turn_hit') or {}).get('rate') or 0))}%，平均提早 {(dl.get('turn_hit') or {}).get('avg_lead') or '—'} 個月。目前 {dl.get('value')}（0＝歷史平均）。\n{link('領先指標')}"))
     # 12. 企業壓力：減班休息連兩期增加、退票比率創 12 個月新高
     stv = R("stress")
     if (stv.get("furlough") or {}).get("up2") and (stv["furlough"].get("latest") or {}).get("at"):
