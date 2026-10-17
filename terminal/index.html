@@ -3463,5 +3463,34 @@ loadAll();setInterval(()=>{if(Date.now()>=nextAt)loadAll();},15e3);
   setTimeout(chk,4000);setInterval(chk,10*60e3);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")chk();});})();
 </script>
+<script>
+/* ---- 使用紀錄：只存在這台瀏覽器（localStorage），不上傳；跑 6 週後用來決定哪些面板可以砍 ----
+   看＝面板在畫面上停超過 2 秒（同一次開頁只算一次）；點＝在面板裡點了東西。網址加 #usage 看整理好的表（含 3D 地圖晶片）。 */
+(()=>{const K="intel:usage",day=()=>new Date(Date.now()+8*3600e3).toISOString().slice(0,10);
+  let U=null;try{U=JSON.parse(localStorage.getItem(K)||"null");}catch(_){}
+  if(!U||!U.start)U={start:day(),p:{},m:{}};U.p=U.p||{};U.m=U.m||{};
+  let dirty=false;const save=()=>{if(!dirty)return;dirty=false;try{localStorage.setItem(K,JSON.stringify(U));}catch(_){}};
+  const rec=(id,f)=>{const r=U.p[id]||(U.p[id]={v:0,c:0,days:0});r[f]++;if(r.last!==day()){r.days++;r.last=day();}dirty=true;};
+  setInterval(save,5000);addEventListener("pagehide",save);document.addEventListener("visibilitychange",()=>{if(document.hidden)save();});
+  const seen=new Set(),tm={};
+  const io=new IntersectionObserver(es=>es.forEach(e=>{const id=e.target.id;if(e.isIntersecting&&e.intersectionRatio>=.4){if(!seen.has(id)&&!tm[id])tm[id]=setTimeout(()=>{if(!document.hidden&&!seen.has(id)){seen.add(id);rec(id,"v");}tm[id]=0;},2000);}else if(tm[id]){clearTimeout(tm[id]);tm[id]=0;}}),{threshold:[0,.4]});
+  const watch=()=>document.querySelectorAll("main .panel[id]").forEach(p=>{if(!p.__u){p.__u=1;io.observe(p);}});watch();setTimeout(watch,5000);
+  let lc={};document.addEventListener("click",e=>{const p=e.target.closest&&e.target.closest("main .panel[id]");if(!p)return;if(Date.now()-(lc[p.id]||0)<5000)return;lc[p.id]=Date.now();rec(p.id,"c");},true);
+  const show=()=>{if(location.hash!=="#usage")return;save();let D=U;try{D=JSON.parse(localStorage.getItem(K)||"null")||U;}catch(_){}
+    const wk=Math.max(0,Math.round((Date.parse(day())-Date.parse(D.start))/864e5/7*10)/10),nm=id=>((document.querySelector("#"+id+" .ph h2")||{}).textContent||id).trim();
+    const P=[...document.querySelectorAll("main .panel[id]")].map(p=>({k:p.id,n:nm(p.id),...(D.p[p.id]||{v:0,c:0,days:0})})).sort((a,b)=>(a.v+a.c*3)-(b.v+b.c*3));
+    const M=(D.all3d||Object.keys(D.m)).map(k=>({k,n:k,v:0,...(D.m[k]||{c:0,days:0})})).sort((a,b)=>a.c-b.c);
+    const row=x=>`<tr><td>${x.n.replace(/</g,"&lt;")}</td><td class="r">${x.v||0}</td><td class="r">${x.c||0}</td><td class="r">${x.days||0}</td><td>${x.last||"從沒"}</td></tr>`;
+    const txt=["面板\t看\t點\t天數\t最後"].concat(P.map(x=>`${x.n}\t${x.v}\t${x.c}\t${x.days}\t${x.last||"-"}`),["","3D 晶片\t點\t天數\t最後"],M.map(x=>`${x.n}\t${x.c}\t${x.days}\t${x.last||"-"}`)).join("\n");
+    const o=document.createElement("div");o.id="usage-ov";o.style.cssText="position:fixed;inset:0;z-index:9999;background:var(--bg);color:var(--text);overflow:auto;padding:20px;font-size:13px";
+    o.innerHTML=`<div style="max-width:900px;margin:0 auto"><h2 style="margin:0 0 4px">使用紀錄（只有這台瀏覽器）</h2><p style="color:var(--muted);margin:0 0 12px">從 ${D.start} 開始，已 ${wk} 週 · 面板 ${P.filter(x=>!x.v&&!x.c).length}／${P.length} 個從沒看過或點過 · 3D 晶片 ${M.filter(x=>!x.c).length}／${M.length} 個從沒點過 · 手機和電腦各自記，兩邊都要看</p>
+      <p><button id="usage-cp" style="padding:6px 12px">複製全部（貼給 Claude）</button> <a href="#" id="usage-x" style="margin-left:12px">關閉</a></p>
+      <table style="width:100%;border-collapse:collapse"><tr><th align="left">終端機面板（少的在上）</th><th class="r">看</th><th class="r">點</th><th class="r">天數</th><th align="left">最後</th></tr>${P.map(row).join("")}
+      <tr><th align="left" style="padding-top:16px">3D 地圖晶片（少的在上）</th><th class="r">—</th><th class="r">點</th><th class="r">天數</th><th align="left">最後</th></tr>${M.map(row).join("")}</table></div>`;
+    document.body.appendChild(o);o.querySelectorAll("td,th").forEach(c=>{c.style.padding="4px 6px";c.style.borderBottom="1px solid var(--line)";if(c.classList.contains("r"))c.style.textAlign="right";});
+    o.querySelector("#usage-cp").onclick=()=>{try{navigator.clipboard.writeText(txt);o.querySelector("#usage-cp").textContent="已複製";}catch(_){}};
+    o.querySelector("#usage-x").onclick=e=>{e.preventDefault();o.remove();history.replaceState(null,"",location.pathname);};};
+  addEventListener("hashchange",show);setTimeout(show,1500);})();
+</script>
 </body>
 </html>

@@ -2661,6 +2661,7 @@ function provHTML(key) {
 let EXCAT = -1, EXITEM = -1;
 function buildDock() {
   const E = EXPLORE(), d = $("dock2");
+  ST.allChips = E.flatMap(c => c.items.map(it => c.cat + "/" + it.n)); ST.curCat = () => (E[EXCAT] || {}).cat;   // 給使用紀錄用
   d.innerHTML = `<div class="chips" id="chips" role="tablist" aria-label="項目"></div><div class="seg" role="tablist" aria-label="分類"><span class="hl" id="segHL"></span>${E.map((c, i) => `<button type="button" role="tab" data-c="${i}">${c.cat}</button>`).join("")}</div>`;
   const seg = d.querySelector(".seg");
   const moveHL = () => { const b = seg.querySelector(`[data-c="${EXCAT}"]`), hl = $("segHL"); if (b) { hl.style.width = b.offsetWidth + "px"; hl.style.transform = `translateX(${b.offsetLeft - 4}px)`; } seg.querySelectorAll("button").forEach(x => x.setAttribute("aria-selected", +x.dataset.c === EXCAT)); };
@@ -5529,6 +5530,22 @@ function gapViz(xs) {
 function worldViz() {
   return vzDivBars(items("world").filter(x => x.chg_pct != null).sort((a, b) => b.chg_pct - a.chg_pct).map(x => ({ name: x.name, v: x.chg_pct })));
 }
+
+/* ---- 使用紀錄：只存在這台瀏覽器（localStorage），不上傳；跑 6 週後用來決定哪些晶片可以砍 ----
+   記：點了哪個晶片（分類/名稱）、總次數、點過幾天、最後一次。終端機網址加 #usage 可以看整理好的表。 */
+(() => {
+  const K = "intel:usage", day = () => new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
+  let U = null; try { U = JSON.parse(localStorage.getItem(K) || "null"); } catch (_) {}
+  if (!U || !U.start) U = { start: day(), p: {}, m: {} }; U.m = U.m || {};
+  let dirty = false, lastK = "", lastT = 0;
+  const save = () => { if (!dirty) return; dirty = false; try { localStorage.setItem(K, JSON.stringify(U)); } catch (_) {} };
+  const hit = k => { if (!k || (k === lastK && Date.now() - lastT < 1500)) return; lastK = k; lastT = Date.now();
+    const r = U.m[k] || (U.m[k] = { c: 0, days: 0 }); r.c++; if (r.last !== day()) { r.days++; r.last = day(); } dirty = true; save(); };
+  document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("#chips button"); if (b && ST.curCat) hit(ST.curCat() + "/" + b.textContent.trim()); }, true);
+  const wrap = () => { if (!ST.openAt || ST.openAt.__u) return !!(ST.openAt && ST.openAt.__u); const f = ST.openAt; ST.openAt = (c, n) => { hit(c + "/" + n); return f(c, n); }; ST.openAt.__u = 1; return true; };
+  const t = setInterval(() => { if (wrap() && ST.allChips) { U.all3d = ST.allChips; dirty = true; save(); clearInterval(t); } }, 1000);
+  addEventListener("pagehide", save);
+})();
 
 /* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */
 const DL = { applied: false, last: "" };
