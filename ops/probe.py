@@ -20,20 +20,22 @@ def tryget(name, url, js=False):
         except Exception as e:
             r0[how] = {"err": f"{type(e).__name__}: {str(e)[:120]}"}
     out[name] = r0
-tryget("dcard_api", "https://www.dcard.tw/service/api/v2/posts?popular=true&limit=30", js=True)
-tryget("dcard_robots", "https://www.dcard.tw/robots.txt")
-tryget("m01_hot", "https://www.mobile01.com/hottopics.php")
-tryget("m01_robots", "https://www.mobile01.com/robots.txt")
-tryget("baha_hot", "https://forum.gamer.com.tw/B.php?bsn=60076")
-tryget("baha_robots", "https://forum.gamer.com.tw/robots.txt")
-for k in ("dcard_robots", "m01_robots", "baha_robots"):
-    for how in ("requests", "cffi"):
-        try:
-            r = (requests.get if how == "requests" else (lambda u, **kw: cffi.get(u, impersonate="chrome", **kw)))({"dcard_robots": "https://www.dcard.tw/robots.txt", "m01_robots": "https://www.mobile01.com/robots.txt", "baha_robots": "https://forum.gamer.com.tw/robots.txt"}[k], timeout=20, **({"headers": UA} if how == "requests" else {}))
-            if r.status_code == 200:
-                out[k]["robots_txt"] = r.text[:1500]; break
-        except Exception:
-            pass
+def cf(url):
+    return cffi.get(url, impersonate="chrome", timeout=25)
+try:
+    r = cf("https://www.mobile01.com/robots.txt"); out["m01_robots_full"] = r.text[:4000]
+    r = cf("https://www.mobile01.com/hottopics.php"); t = r.text
+    out["m01_hot"] = {"status": r.status_code, "titles": re.findall(r'<a[^>]+href="(topicdetail\.php\?[^"]+)"[^>]*>([^<]{6,80})</a>', t)[:25]}
+except Exception as e:
+    out["m01_hot"] = {"err": str(e)[:150]}
+for name, url in [("baha_index", "https://forum.gamer.com.tw/"), ("baha_hot", "https://forum.gamer.com.tw/A.php?bsn=0"), ("dcard_sitemap", "https://www.dcard.tw/sitemaps/index.xml"),
+                  ("dcard_f", "https://www.dcard.tw/f")]:
+    try:
+        r = cf(url); t = r.text
+        out[name] = {"status": r.status_code, "bytes": len(t), "title": (re.search(r"<title>([^<]*)", t) or [None, ""])[1][:80],
+                     "links": re.findall(r'<a[^>]+href="([^"]+)"[^>]*>([^<]{8,60})</a>', t)[:25]}
+    except Exception as e:
+        out[name] = {"err": str(e)[:150]}
 # 民調試跑
 try:
     tmp = tempfile.mkdtemp(); os.environ["INTEL_DATA_DIR"] = tmp

@@ -12778,8 +12778,9 @@ def p_polls():
                   '{"i": 標題編號, "org": "調查單位（例如 台灣民意基金會、TVBS、美麗島電子報；不知道寫空字串）", '
                   '"subject": "對象（人名、政黨或政策，越短越好，例如 賴清德、國民黨、核三重啟）", '
                   '"metric": "指標（例如 施政滿意度、聲望、好感度、支持度、贊成、不信任）", "value": 百分比數字, '
-                  '"race": "如果是選舉對比，寫選區（例如 台北市長），否則空字串", "zh": "一句話描述，20 字內，台灣用語"}。'
-                  "一個標題可以有多筆（例如兩位候選人）。沒有具體百分比的、國外民調、民調以外的數字都不要。只輸出 JSON 陣列。\n\n"
+                  '"kind": "比例 或 差距（標題只說誰領先誰幾個百分點就是差距）", "vs": "差距時，被領先的一方；否則空字串", '
+                  '"race": "如果是選舉，寫選區（例如 台北市長），否則空字串", "zh": "一句話描述，20 字內，台灣用語"}。'
+                  "一個標題可以有多筆（例如兩位候選人各自的支持度）。沒有具體百分比的、國外民調、民調以外的數字都不要。只輸出 JSON 陣列。\n\n"
                   + "\n".join(f"{j}. {h['title']}" for j, h in enumerate(chunk)))
         try:
             data, _m = _gemini_json(prompt, max_tokens=5000, timeout=60, lite_first=True, max_models=2)
@@ -12788,7 +12789,7 @@ def p_polls():
                 v = num(d.get("value"))
                 if not h or v is None or not (0 < v <= 100) or not d.get("subject"):
                     continue
-                new.append({"org": str(d.get("org") or "")[:16], "subject": str(d["subject"])[:16], "metric": str(d.get("metric") or "")[:12], "value": round(v, 1),
+                new.append({"org": str(d.get("org") or "")[:16], "subject": str(d["subject"])[:16], "metric": str(d.get("metric") or "")[:12], "value": round(v, 1), "kind": "差距" if "差" in str(d.get("kind") or "") else "比例", "vs": str(d.get("vs") or "")[:12],
                             "race": str(d.get("race") or "")[:12], "zh": str(d.get("zh") or "")[:30], "title": h["title"], "url": h["url"], "src": h["source"], "at": h["at"]})
         except Exception as e:  # noqa: BLE001
             errs.append("AI 擷取: " + safe_err(e))
@@ -12803,7 +12804,7 @@ def p_polls():
     # 追蹤序列：同一個「對象＋指標」出現 3 次以上就畫走勢
     ser = {}
     for r in sorted(rows, key=lambda r: r.get("at") or ""):
-        if r["race"]:
+        if r["race"] or r.get("kind") == "差距":
             continue
         ser.setdefault((r["subject"], r["metric"]), []).append({"at": (r.get("at") or "")[:10], "v": r["value"], "org": r["org"]})
     tracks = sorted([{"subject": s, "metric": m, "pts": p[-20:], "n": len(p)} for (s, m), p in ser.items() if len(p) >= 3], key=lambda t: -t["n"])[:8]
