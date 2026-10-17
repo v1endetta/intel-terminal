@@ -1,0 +1,45 @@
+PROBE msa_home OK  200 66855B 2.6s final=https://www.msa.gov.cn/ ct=text/html
+   hits={}
+   head= ä¸­åäººæ°å ±åå½æµ·äºå± // Baidu statistics (function () { var hm = document.createElement("script"); hm.src = "//hm.baidu.com/hm.js?89a42a8529b1127d2cd6fa639511a328"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s)
+   links=['/html/cnmsa/xxgk/article/2026/6d3defac411d44b8a50f2b42721de2b7.html', '/html/cnmsa/xxgk/article/2026/97f8d313beb642db95cfb7b9f6e11ffc.html', '/html/cnmsa/xxgk/article/2026/1474a017aa0b41c491c188b120d7f405.html', '/html/cnmsa/xxgk/article/2025/c8a649a810dc45718381444f19705f1e.html', '/html/cnmsa/xxgk/article/2025/109f5403a3a84a1582ab09c7914b987c.html', '/html/cnmsa/xxgk/article/2026/377e3abb70834966b0c235649ed92d36.html']
+PROBE msa_warn_page BAD 403 207B 0.7s final=https://www.msa.gov.cn/page/channelArticles.do?channelids=9C219298-B27F-460E-995A-99401B3F ct=text/html
+   hits={}
+   head= ERROR: ACCESS DENIED ERROR: ACCESS DENIED Sat, 17 Oct 2026 05:31:27 GMT i2580094_c29070 
+PROBE msa_list_ajax BAD 403 207B 0.7s final=https://www.msa.gov.cn/page/openInfo/articleList.do ct=text/html
+   hits={}
+   head= ERROR: ACCESS DENIED ERROR: ACCESS DENIED Sat, 17 Oct 2026 05:31:28 GMT i2580094_c29070 
+PROBE msa_list_ajax_get BAD 403 207B 0.7s final=https://www.msa.gov.cn/page/openInfo/articleList.do?channelId=9C219298-B27F-460E-995A-9940 ct=text/html
+   hits={}
+   head= ERROR: ACCESS DENIED ERROR: ACCESS DENIED Sat, 17 Oct 2026 05:31:29 GMT i2758292_c29730 
+PROBE msa_wap BAD 403 207B 1.5s final=https://www.msa.gov.cn/msacncms_wap//pages/info_report.do?channelId=9C219298-B27F-460E-995 ct=text/html
+   hits={}
+   head= ERROR: ACCESS DENIED ERROR: ACCESS DENIED Sat, 17 Oct 2026 05:31:30 GMT i2758918_c29730 
+PROBE msa_fujian BAD 403 207B 1.7s final=https://www.msa.gov.cn/page/channelArticles.do?channelids=7B084057-6038-4570-A0FB-44E9204C ct=text/html
+   hits={}
+   head= ERROR: ACCESS DENIED ERROR: ACCESS DENIED Sat, 17 Oct 2026 05:31:32 GMT i2580094_c29070 
+PROBE sh_msa OK  200 31270B 1.8s final=https://www.sh.msa.gov.cn/hxtjgsj/index.jhtml ct=text/html;charset=UTF-8
+   hits={'航行警告': 2}
+   head= 航行通警告数据-中华人民共和国上海海事局 var _hmt = _hmt || []; (function () { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?ba12bfebfd95b229531c5712ef4bc097"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);
+   links=['/r/cms/www/shmsa/report/report_2025.pdf']
+PROBE nga_hydropac OK  200 78334B 1.8s final=https://msi.nga.mil/api/publications/broadcast-warn?navArea=P&status=active&output=json ct=application/json;charset=UTF-8
+   hits={'TAIWAN': 1, 'CHINA': 21}
+   head={"broadcast-warn":[{"msgYear":2024,"msgNumber":1571,"navArea":"P","subregion":"75","text":"BASS STRAIT.\nAUSTRALIA.\nDNC 05.\n1. UNDERWATER OPERATIONS IN PROGRESS\n UNTIL FURTHER NOTICE BY M/V INVESTIGATOR\n IN AREA BOUND BY\n 37-57.00S 148-13.00E, 38-54.00S 1
+PROBE jcg_navarea11 BAD 404 3474B 0.8s final=https://www1.kaiho.mlit.go.jp/TUHO/navarea/index.html ct=text/html
+   hits={}
+   head= ãæ¢ãã®ãã¼ã¸ãè¦ã¤ãããã¨ãã§ãã¾ããã§ãããï½æµ·ä¸ä¿å®åºãæµ·æ´æ å ±é¨ æµ·ä¸ä¿å®åºæµ·æ´æ å ±é¨ æµ·ä¸ä¿å®åºããã ç®¡åºæµ·æ´æ å ±é¨ ç³è«ã»å±åº ã¢ã¯ã»ã¹ ãµã¤ãããã English ãæ¢ãã®ãã
+PROBE jp_js_keikai BAD 403 5735B 0.6s final=https://www.mod.go.jp/js/activity/domestic/keikai2026.html ct=text/html; charset=UTF-8
+   hits={}
+   head= Just a moment... *{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color E
+PROBE jp_js_press BAD 403 5633B 0.0s final=https://www.mod.go.jp/js/press/ ct=text/html; charset=UTF-8
+   hits={}
+   head= Just a moment... *{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color E
+PROBE jp_js_pdf OK  200 402866B 0.1s final=https://www.mod.go.jp/js/pdf/2026/p20261015_02.pdf ct=application/pdf
+   hits={}
+   head=
+PROBE eastern_theater_weibo OK  200 9558B 2.2s final=https://passport.weibo.com/visitor/visitor?entry=miniblog&a=enter&url=https%3A%2F%2Fweibo. ct=text/html
+   hits={}
+   head= Sina Visitor System window.use_fp = "1" == "1"; // æ¯å¦ééè®¾å¤æçº¹ã var url = url || {}; (function () { this.l = function (u, c) { try { var s = document.createElement("script"); s.type = "text/javascript"; s[document.all ? "onreadystatechange" : "
+PROBE chinamil_news OK  200 155349B 1.9s final=http://www.81.cn/ ct=text/html; charset=utf-8
+   hits={'实弹': 5, '射击': 4, '军事': 23}
+   head= 中国军网 - 中国人民解放军官方军事新闻门户 // 判断shi是否是IE以下，是出现提示弹窗 对象不支持“prepend”属性或方法 var temp = window.navigator.userAgent.toUpperCase() var charHead = temp.indexOf('MSIE') var charLast = temp.indexOf(';', charHead) var ieVersion = temp.substring(charHead, charLast) ieVersion 
+PROBE_DONE
