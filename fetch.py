@@ -11690,6 +11690,7 @@ def p_exports():
                 hist_put("exports", name, k, round((tot(k) or 0) / 1000, 1))
             mkts.append({"name": name, "month": last, "v": round(tot(last) / 1e5, 1), "yoy": _yoy(tot(last), tot(ly)), "yoy3": _yoy(s3, s3l),
                          "ee_share": round(100 * m16(last) / tot(last), 1) if m16(last) and tot(last) else None, "ee_yoy": _yoy(m16(last), m16(ly)),
+                         "nonee_yoy3": _yoy(sum((tot(k) or 0) - (m16(k) or 0) for k in k3), sum((tot(k) or 0) - (m16(k) or 0) for k in k3l)),   # 非機電（塑化、金屬、紡織…）：對中港這一項當中國內需的外部代理
                          "spark": [round((tot(k) or 0) / 1e5, 1) for k in ks[-13:]]})
         except Exception as e:  # noqa: BLE001
             errs.append(f"{name}: {safe_err(e)}")
@@ -12284,7 +12285,7 @@ THESES = [  # id, 層級, 範圍, 標題, 主張, 推翻條件（文字）
     ("t11", "keep", "全球", "美國勞動市場放緩不衰退", "失業率緩升、初領失業金低，沒進衰退", "失業率觸發 Sahm 規則（3 月平均比 12 個月低點高 0.5）"),
     ("t14", "keep", "全球", "開源 AI 帶動 AI 新公司", "開源模型降低門檻，軟體與 AI 服務的新公司和營收變多", "資訊服務業營收轉為年減"),
     ("t15", "keep", "台灣", "醫美抗老擴張", "醫美皮膚診所營業中家數持續增加", "醫美皮膚營業中家數半年減少（累積滿半年紀錄前，改用新開家數，而且去年同期至少 20 家才判）"),
-    ("g2", "keep", "全球", "中國內需弱", "中國國內需求疲弱，出口和價格往外輸出通縮", "（還沒有可靠的中國內需代理指標，暫不判斷）"),
+    ("g2", "keep", "全球", "中國內需弱", "中國國內需求疲弱，從外面買的原料和材料跟著弱（李克強指數思路，不用官方數字）", "台灣對中港非機電出口近 3 月年增超過 5%，而且銅價半年漲超過 10%"),
     ("g3", "keep", "全球", "美元走弱週期", "美元指數半年往下，資金往美國以外走", "美元指數半年漲超過 5%"),
 ]
 THESES_PRED = {  # 論點 → 寫進預測帳本的一條可驗證預測（指標名、比較、門檻、到期、機率、文字）；門檻 None＝用寫入當下的值
@@ -12303,6 +12304,7 @@ THESES_PRED = {  # 論點 → 寫進預測帳本的一條可驗證預測（指�
     "t11": ("us_unemp", "<=", 4.6, "2027-02-01", 0.75, "美國 2027 年 2 月失業率不超過 4.6%"),
     "t15": ("aes_active", ">", None, "2027-04-17", 0.6, "2027/4/17 醫美皮膚營業中診所比現在多"),
     "g3": ("dxy", "<", None, "2027-04-17", 0.5, "2027/4/17 美元指數低於現在"),
+    "g2": ("cn_nonee", "<", 5, "2027-03-01", 0.6, "2027 年 3 月台灣對中港非機電出口近 3 月年增仍低於 5%"),
 }
 
 
@@ -12329,6 +12331,31 @@ def _th_chg(ser, days):
     d0 = (date_from(ser[-1][0]) - timedelta(days=days)).isoformat()
     base = next((v for d, v in reversed(ser) if d <= d0), None)
     return round((ser[-1][1] / base - 1) * 100, 1) if base else None
+
+
+def _th_jgb(st):
+    """日本 10 年公債殖利率（財務省公開 CSV，免金鑰）：歷史檔一週抓一次、當月檔 6 小時一次，合併成近 400 天序列"""
+    c = st.setdefault("jgb", {"s": [], "all_at": None, "at": None})
+    def parse(txt):
+        out = []
+        for ln in txt.splitlines():
+            p = ln.split(",")
+            if len(p) > 10 and re.match(r"\d{4}/\d{1,2}/\d{1,2}$", p[0]) and re.match(r"-?\d", p[10] or ""):
+                y, m, d = p[0].split("/"); out.append([f"{y}-{int(m):02d}-{int(d):02d}", float(p[10])])
+        return out
+    base = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/"
+    old = lambda k, h: not c.get(k) or (NOW - datetime.fromisoformat(c[k].replace("Z", "+00:00"))) > timedelta(hours=h)
+    try:
+        if time.time() < SOFT_DEADLINE - 30:
+            rows = dict(map(tuple, c["s"]))
+            if old("all_at", 24 * 7):
+                rows.update(dict(map(tuple, parse(get(base + "historical/jgbcme_all.csv", timeout=60).content.decode("utf-8", "replace"))))); c["all_at"] = NOW_ISO
+            if old("at", 6):
+                rows.update(dict(map(tuple, parse(get(base + "jgbcme.csv", timeout=30).content.decode("utf-8", "replace"))))); c["at"] = NOW_ISO
+            c["s"] = [list(x) for x in sorted(rows.items())][-400:]
+    except Exception as e:  # noqa: BLE001
+        log("theses jgb", safe_err(e))
+    return [tuple(x) for x in c["s"]]
 
 
 def p_theses():
@@ -12498,8 +12525,14 @@ def p_theses():
     if bj.get("raw") is not None and bj.get("period"):
         M("boj", bj["period"][:7] + "-01", bj["raw"])
     jpy = _th_yq(st, "JPY=X"); j3 = _th_chg(jpy, 91)
+    jgb = _th_jgb(st); jg3 = None
+    if jgb:
+        M("jgb10", jgb[-1][0], jgb[-1][1])
+        d0 = (date_from(jgb[-1][0]) - timedelta(days=91)).isoformat(); b0 = next((v for d, v in reversed(jgb) if d <= d0), None)
+        jg3 = round(jgb[-1][1] - b0, 2) if b0 is not None else None
     vix = next((x for x in (R("fear").get("items") or []) if x.get("sym") == "^VIX"), {})
     ev["g1"] = [E("日銀政策利率", f"{bj.get('value', '—')}，半年 {f1(b6, ' 個百分點')}", None if b6 is None else (1 if b6 >= 0.2 else (-1 if b6 <= 0 else 0))),
+                E("日本 10 年公債殖利率", "—" if not jgb else f"{jgb[-1][1]:.2f}%（3 個月 {f1(jg3, ' 個百分點')}）", pos(jg3, 0.2, -0.1), "往上＝日本利率正常化，借日圓的成本變高"),
                 E("美元兌日圓 3 個月", "—" if not jpy else f"{jpy[-1][1]:.1f}（{f1(j3)}）", neg(j3, -3, 3), "往下＝日圓轉強，套利交易有回補壓力"),
                 E("VIX", f"{vix.get('value', '—')}", None if vix.get("value") is None else (1 if vix["value"] >= 25 and (j3 or 0) < 0 else 0), "日圓急升又碰上 VIX 跳高＝回補正在發生")]
     kill["g1"] = b6 is not None and b6 <= 0 and j3 is not None and j3 > 3
@@ -12584,9 +12617,21 @@ def p_theses():
                  E("醫美皮膚營業中", "—" if not cg else f"{cg['active']:,} 家" + (f"，半年 {a6c:+.1f}%" if a6c is not None else f"（{len(act)} 天紀錄，滿半年才比）"), None if a6c is None else (1 if a6c > 0 else -1))]
     kill["t15"] = (a6c < 0) if a6c is not None else (cg.get("yoy") is not None and cg["yoy"] < -10 and (cg.get("new_ly") or 0) >= 20)
 
-    # g2 中國內需：資料待補
-    ev["g2"] = [E("台灣對中港出口", f"近 3 月年增 {f1(cn.get('yoy3'))}", None, "被 AI 伺服器拉高，不能代表中國內需")]
-    kill["g2"] = False; data_note["g2"] = "還沒有可靠的中國內需代理指標（規劃中：韓台對中出口、銅價、中國進口），先不判斷"
+    # g2 中國內需弱：李克強指數的思路，不看中國官方數字，看外面賣給中國的原料與材料（越弱越支持）
+    cne = cn.get("nonee_yoy3")
+    if cne is not None and EX.get("month"):
+        M("cn_nonee", EX["month"] + "-01", cne)
+    cu, fe = _th_yq(st, "HG=F"), _th_yq(st, "TIO=F")
+    cu6, fe6 = _th_chg(cu, 182), _th_chg(fe, 182)
+    cny = _th_yq(st, "CNY=X"); cny3 = _th_chg(cny, 91)
+    ev["g2"] = [E("台灣對中港非機電出口（塑化、金屬、紡織…）", f"近 3 月年增 {f1(cne)}", neg(cne, 0, 5), "中國內需實際在買的材料，扣掉被 AI 伺服器墊高的機電"),
+                E("銅價半年", f1(cu6), neg(cu6, 0, 10)),
+                E("鐵礦砂半年", f1(fe6), neg(fe6, 0, 10), "中國蓋房子、基建的需求"),
+                E("人民幣 3 個月（美元兌人民幣）", f1(cny3), None if cny3 is None else (1 if cny3 > 1 else (-1 if cny3 < -1 else 0)), "往上＝人民幣變弱"),
+                E("台灣對中港總出口", f"近 3 月年增 {f1(cn.get('yoy3'))}", None, "參考用：被 AI 伺服器拉高")]
+    kill["g2"] = cne is not None and cne > 5 and cu6 is not None and cu6 > 10
+    if cne is None and cu6 is None:
+        data_note["g2"] = "對中非機電出口下一次抓出口資料後出現"
 
     # g3 美元
     dxy = _th_yq(st, "DX-Y.NYB"); d6 = _th_chg(dxy, 182)
@@ -12622,6 +12667,7 @@ def p_theses():
         "t14": GG(info, 0, 1, "資訊服務業營收年增", "%"),
         "t15": GG(a6c, 0, 1, "醫美皮膚營業中半年", "%") if a6c is not None else GG(cg.get("yoy"), -10, 1, "醫美皮膚新開診所年增（暫用）", "%", 0),
         "g3": GG(d6, 5, -1, "美元指數半年", "%"),
+        "g2": GG(cne, 5, -1, "對中港非機電出口近 3 月年增", "%"),
     }
     # 判斷狀態、歷史、升降級建議
     H = st.setdefault("hist", {})
@@ -12727,7 +12773,7 @@ run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("credit", p_credit, keep_if_fresh_hours=6)  # 五個新面板放前面，避免排在最後被本輪時限略過。信用利差：FRED 每天收盤後更新一次
 run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Federal Register 每個工作日早上出刊
-run("exports", p_exports, keep_if_fresh_hours=24 if "nonel" in (load_prev("exports") or {}) else 0)  # 新增非電子出口時先重抓一次； 台灣出口結構：月資料，每月 9 日前後公布
+run("exports", p_exports, keep_if_fresh_hours=24 if "nonee_yoy3" in json.dumps(load_prev("exports") or {}) else 0)  # 新增非電子出口時先重抓一次； 台灣出口結構：月資料，每月 9 日前後公布
 run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
 run("logistics", p_logistics, keep_if_fresh_hours=1)  # 全球物流：風暴要即時，運價週／日資料
 run("aicycle", p_aicycle, keep_if_fresh_hours=6)  # AI 循環：資本支出一季一次、營收每月、DRAM 每日
