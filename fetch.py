@@ -12577,6 +12577,28 @@ def p_theses():
                 E("新台幣（美元兌台幣近一個月）", f"{usd.get('mid', 0):.2f}（{f1(t1m)}）" if usd else "—", neg(t1m, -1, 1), "往下＝台幣升值")]
     kill["g3"] = d6 is not None and d6 > 5
 
+    # 子彈圖：現在的位置 vs 推翻線（side＝論點站得住的是哪一側：+1 在線上方、-1 在線下方）
+    def GG(now, k, side, label, unit="", d=1):
+        return {"now": round(now, 3), "kill": round(k, 3), "side": side, "label": label, "unit": unit, "d": d} if now is not None and k is not None else None
+    gauge = {
+        "t1": GG(lq.get("yoy"), 0, 1, "雲端資本支出年增", "%"),
+        "t3": GG(ccc.get("pct"), 50, 1, "CCC 利差百分位", "", 0),
+        "t2": GG(tra, 10, -1, "傳產出口近 3 月年增", "%"),
+        "t6": GG(dept, 0, -1, "百貨刷卡比整體", " 個百分點"),
+        "t13": GG(DL.get("value"), dl_hi, -1, "dalta 領先指標（推翻線＝前高）", "", 2),
+        "t5": GG(ygap, -10, 1, "對美減對中港年增", " 個百分點"),
+        "t10": GG(pce.get("raw"), 2.7, 1, "核心 PCE 年增", "%", 2),
+        "t12": GG(wv, base * 0.85 if base else None, 1, "Drewry WCI", "", 0),
+        "g1": GG(j3, 3, -1, "美元兌日圓 3 個月", "%"),
+        "t9": GG(min(sm) if sm else None, 10, -1, "近期備轉容量率最低", "%"),
+        "t4": GG(DL.get("value"), dl_hi, -1, "dalta 領先指標（推翻線＝前高）", "", 2),
+        "t7": GG(HF.get("tpe_6m"), -3, 1, "台北房價半年", "%"),
+        "t8": GG(by, 0, -1, "近 12 月出生數年增", "%"),
+        "t11": GG(sahm, 0.5, -1, "Sahm 規則", "", 2),
+        "t14": GG(info, 0, 1, "資訊服務業營收年增", "%"),
+        "t15": GG(cg.get("yoy"), -10, 1, "醫美皮膚新開診所年增", "%", 0),
+        "g3": GG(d6, 5, -1, "美元指數半年", "%"),
+    }
     # 判斷狀態、歷史、升降級建議
     H = st.setdefault("hist", {})
     out, preds = [], []
@@ -12619,6 +12641,8 @@ def p_theses():
                "since": h[-streak][0] if streak else today, "days": span, "ev": es, "hint": hint, "q_start": qs[1] if qs else None, "q_score0": qs[2] if qs else None}
         if tid in data_note:
             row["note"] = data_note[tid]
+        if gauge.get(tid):
+            row["gauge"] = gauge[tid]
         pr_ = THESES_PRED.get(tid)
         if pr_:
             key, op, tgt, due, pb, txt = pr_

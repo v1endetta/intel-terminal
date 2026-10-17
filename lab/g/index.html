@@ -647,6 +647,26 @@ body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!im
 #side .gapl .gapb{position:absolute;right:0;top:9px;font-size:11px;font-weight:600;color:#64d2ff;border:1px solid rgba(100,210,255,.4);border-radius:10px;padding:1px 7px;white-space:nowrap}
 #side .gapl .gapb.z{color:#0b0b0d;background:#64d2ff;border-color:#64d2ff}
 #side .gapl .gapw{color:#c7c7cc}
+
+/* 卡片主圖 */
+#side .vz{margin:12px 0 4px}#side .vz svg{width:100%;height:auto;display:block;overflow:visible}#side .vz figcaption{font-size:11px;color:#8e8e93;margin-top:4px;line-height:1.5}
+#side .vzt{fill:#8e8e93;font-size:10px}#side .vzc{fill:#f5f5f7;font-size:20px;font-weight:700}#side .vzb{fill:#0b0c0f;font-size:9.5px;font-weight:700}
+#side .vzk{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:0}
+#side .vzd{display:flex;flex-direction:column;gap:6px;margin:10px 0 12px}#side .vzd-r{display:grid;grid-template-columns:minmax(0,6.5em) minmax(0,1fr) 4.6em;gap:8px;align-items:center;font-size:12px}
+#side .vzd-n{color:#d1d1d6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#side .vzd-t{position:relative;height:8px;background:rgba(255,255,255,.05);border-radius:2px}#side .vzd-t::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:rgba(255,255,255,.25)}
+#side .vzd-t i{position:absolute;top:0;bottom:0;border-radius:2px}#side .vzd-v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+#side .vzn{display:flex;align-items:center;gap:14px;margin:10px 0}#side .vzn svg{flex:none}#side .vzl{list-style:none;margin:0;padding:0;font-size:12px;color:#d1d1d6;display:flex;flex-direction:column;gap:4px;min-width:0}
+#side .vzl li{display:flex;align-items:center;gap:6px}#side .vzl i{width:8px;height:8px;border-radius:2px;flex:none}#side .vzl b{margin-left:auto;padding-left:10px;color:#f5f5f7;font-variant-numeric:tabular-nums}
+#side .vzrow{display:flex;align-items:center;gap:10px;margin:10px 0}#side .vzrow .vzm{flex:none;height:auto;max-height:210px}#side .vzrow .vzn{flex-direction:column;align-items:flex-start;gap:8px;margin:0}#side .vzrow .vzn svg{width:96px;height:96px}
+#side .vzi{display:flex;align-items:center;gap:8px;margin:4px 0 2px;font-size:11px;color:#8e8e93}#side .vzs{flex:none}
+#side .vzw{display:flex;flex-direction:column;gap:10px;margin:12px 0}#side .vzw-r{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:start}#side .vzw-a{font-size:24px;line-height:1}
+#side .vzw-r b{display:block;font-size:14px;color:#f5f5f7;font-weight:600}#side .vzw-r span{display:block;font-size:13.5px;color:#f5f5f7;margin-top:3px;font-weight:600}#side .vzw-r em{display:block;font-style:normal;font-size:12px;color:#8e8e93;margin-top:2px;line-height:1.5}#side .vzw-r{padding:10px 0;border-top:1px solid rgba(255,255,255,.07)}
+#side .vzth{padding:9px 0;border-top:1px solid rgba(255,255,255,.07)}#side .vzth-h{display:flex;align-items:center;gap:7px;font-size:13.5px}#side .vzth-h i{width:8px;height:8px;border-radius:50%;flex:none}#side .vzth-h b{font-weight:600;color:#f5f5f7;min-width:0}#side .vzth-h em{font-style:normal;font-size:11.5px;margin-left:auto;white-space:nowrap;padding-left:8px}
+#side .vzg{display:flex;flex-direction:column;gap:5px;margin-top:7px}#side .vzg-t{position:relative;height:10px;background:rgba(255,255,255,.05);border-radius:5px}#side .vzg-s{position:absolute;top:0;bottom:0;background:rgba(100,210,255,.13);border-radius:5px}
+#side .vzg-k{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:#ff453a;border-radius:1px}#side .vzg-n{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:2px solid #121317}
+#side .vzg-l{display:block;font-size:11.5px;color:#8e8e93;margin-top:4px}
+#side .wnl .rk{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#3a3a3c;color:#f5f5f7;font-size:10.5px;font-style:normal;font-weight:700;margin-right:6px;vertical-align:1px}
+#side .vzcap{font-size:11.5px;color:#8e8e93;margin:-4px 0 6px}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2531,7 +2551,7 @@ function EXPLORE() {
     { cat: "走向", items: [
       { n: "本月洞見", f: () => insightsCard() },
       { n: "論點追蹤", f: () => thesesCard() },
-      { n: "本週走向", f: listOf(((P.weekly || {}).headline) || "本週走向", () => (((P.weekly || {}).dirs) || []).map(d => ({ t: d.t, s: d.why })), "走向 · " + (((P.weekly || {}).week) || ""), "weekly") },
+      { n: "本週走向", f: () => weeklyCard() },
       { n: "台灣還沒報", f: () => gapCard() },
       { n: "區域報告", lens: "area" },
       { n: "住哪裡", lens: "city" },
@@ -2561,7 +2581,7 @@ function EXPLORE() {
       { n: "焦點新聞", f: () => gtopCard() },
       { n: "地方新聞", lens: "news" },
       { n: "全球新聞", globe: 1, f: () => gxCard("wnews") },
-      { n: "台灣情緒", lens: "mood", f: () => { const m = (P.mood || {}).taiwan || {}; return { html: sideHTML({ eyebrow: "輿情 · 社群情緒", title: "台灣人今天的心情", big: m.label || "", color: (m.score || 0) < 0 ? DNH : UPH, body: lineSVG(hist("mood", "taiwan"), (m.score || 0) < 0 ? DNH : UPH) + listHTML([{ t: m.line || "" }, ...(m.themes || []).map(t => ({ t: "· " + t }))]), foot: '<a href="/terminal/#p-mood">終端機 ›</a>' }) }; } },
+      { n: "台灣情緒", lens: "mood", f: () => { const m = (P.mood || {}).taiwan || {}; return { html: sideHTML({ eyebrow: "輿情 · 社群情緒", title: "台灣人今天的心情", big: m.label || "", color: (m.score || 0) < 0 ? DNH : UPH, body: moodViz() + listHTML([{ t: m.line || "" }, ...(m.themes || []).map(t => ({ t: "· " + t }))]), foot: '<a href="/terminal/#p-mood">終端機 ›</a>' }) }; } },
       { n: "熱搜", f: listOf("Google 熱搜", () => items("trends").slice(0, 8).map(x => ({ t: x.title, s: x.traffic })), "輿情", "trends") },
       { n: "PTT", f: barsOf("PTT 各版熱度", () => (((P.ptt || {}).boards) || []).slice(0, 10).map(b => ({ name: b.zh || b.board, v: b.heat, txt: String(b.heat) })), "輿情", "ptt", { signed: false }) },
       { n: "謠言", f: listOf("最多人查證的訊息", () => (((P.cofacts || {}).hot) || []).slice(0, 6).map(x => ({ t: /^https?:\/\/\S+$/.test(String(x.text).trim()) ? `只有一個連結（${String(x.text).trim().replace(/^https?:\/\/(www\.)?/, "").split("/")[0]}）` : String(x.text).length > 42 ? String(x.text).slice(0, 42) + "…" : String(x.text), s: `${x.verdict || "查證中"} · ${x.requests} 人回報`, url: x.url })), "輿情 · Cofacts", "cofacts") },
@@ -3332,8 +3352,9 @@ function wnCard() {
     const top = xs[0], hi = xs.filter(x => (x.tw || 0) >= 3).length, big = xs.filter(x => (x.n_src || 1) >= 3).length, head = (top.t || top.en || "");
     return { layer: "gx", gx: "wnews", html: sideHTML({ eyebrow: `輿情 · 全球新聞 · ${[hi ? `${hi} 則影響台灣` : "", big ? `${big} 件多家同報` : ""].filter(Boolean).join("・") || "今天沒有直接影響台灣的大事"}`, title: "今天國外哪件事會影響台灣？", big: head.length > 22 ? head.slice(0, 21) + "…" : head, color: (top.tw || 0) >= 3 ? "#ffd60a" : "#bf5af2",
       body: (top.why ? `<p class="why" style="color:#ffd60a">跟台灣：${esc(top.why)}</p>` : "") + ((top.n_src || 1) > 1 ? `<p class="why" style="color:#64d2ff">${top.n_src} 家報導：${esc((top.srcs || []).join("、"))}</p>` : "")
+        + vzFig(vzBubbles(xs.slice(0, 18), x => WN_C[x.cat] || "#aeaeb2"), [...new Set(xs.slice(0, 18).map(x => x.cat))].map(c => `<i class="vzk" style="background:${WN_C[c] || "#aeaeb2"}"></i>${esc(c)}`).join("　") + "・泡泡越大越多家報，數字對應下面的排名")
         + `<p class="why">九家英美、亞洲媒體，依跟台灣的關係和幾家同時在報排序，越舊越後面。點越大越重要，紅色是戰爭衝突。</p>`
-        + `<ul class="lst wnl">${xs.slice(0, 18).map(x => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${(x.n_src || 1) >= 2 ? `<i class="srcn${x.n_src >= 3 ? " big" : ""}">${x.n_src} 家報導</i>` : ""}${twTag(x) ? `<i class="twt t${Math.min(4, x.tw)}">${twTag(x)}</i>` : ""}${esc(x.t || x.en)}</a>${x.why ? `<em class="tww">${esc(x.why)}</em>` : ""}<span>${esc([(x.srcs && x.srcs.length > 1 ? x.srcs.join("、") : x.src), x.place, x.at ? navAgo(x.at) : ""].filter(Boolean).join("・"))}</span></li>`).join("")}</ul>`
+        + `<ul class="lst wnl">${xs.slice(0, 18).map((x, i) => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${i < 8 ? `<i class="rk">${i + 1}</i>` : ""}${(x.n_src || 1) >= 2 ? `<i class="srcn${x.n_src >= 3 ? " big" : ""}">${x.n_src} 家報導</i>` : ""}${twTag(x) ? `<i class="twt t${Math.min(4, x.tw)}">${twTag(x)}</i>` : ""}${esc(x.t || x.en)}</a>${x.why ? `<em class="tww">${esc(x.why)}</em>` : ""}<span>${esc([(x.srcs && x.srcs.length > 1 ? x.srcs.join("、") : x.src), x.place, x.at ? navAgo(x.at) : ""].filter(Boolean).join("・"))}</span></li>`).join("")}</ul>`
         + (W.n_zh < xs.length ? `<p class="why">有 ${xs.length - W.n_zh} 則還沒翻譯，先顯示原文。</p>` : "") }) };
   }
   return { layer: "gx", gx: "wnews", html: sideHTML({ eyebrow: "輿情 · 全球新聞 · 翻成中文", title: "世界正在發生什麼？", big: gs[0] && gs[0].xs.length > 1 ? `${gs[0].place} ${gs[0].xs.length} 則` : `${xs.length} 則國際新聞`, color: "#bf5af2",
@@ -3429,7 +3450,7 @@ function gxCard(key) {
   let s = null; try { s = GX_SPEC[key](); } catch (e) { console.warn(e); }
   if (!s) return { html: sideHTML({ title: "地球", body: '<p class="empty">資料暫時讀不到</p>' }) };
   const rows = s.nodes.slice().sort((a, b) => Math.abs(b.chg ?? 0) - Math.abs(a.chg ?? 0));
-  return { layer: "gx", gx: key, html: sideHTML({ eyebrow: s.eyebrow, title: s.title, body: `<p class="why">${s.why}</p>` + (key === "ai" || key === "liq" || key === "inst" ? "" : listHTML(rows.map(n => ({ t: n.name, s: n.sub })))) + (s.extra || "") }) };
+  return { layer: "gx", gx: key, html: sideHTML({ eyebrow: s.eyebrow, title: s.title, body: (key === "world" ? worldViz() : "") + `<p class="why">${s.why}</p>` + (key === "ai" || key === "liq" || key === "inst" || key === "world" ? "" : listHTML(rows.map(n => ({ t: n.name, s: n.sub })))) + (s.extra || "") }) };
 }
 function gxBuild() {
   if (GX.g) { SG.remove(GX.g); GX.g.traverse(o => { o.geometry && o.geometry.dispose(); o.material && o.material.dispose(); }); }
@@ -3807,7 +3828,7 @@ const TW_VIEW = {
     const m = (P.mood || {}).taiwan || {}, sc = m.score || 0, hex = sc <= -0.25 ? "#ff453a" : sc < -0.05 ? "#ff9f0a" : sc < 0.1 ? "#ffd60a" : "#30d158";
     islandTint(hex, 1 + Math.abs(sc) * 4, m.label || "情緒", (m.themes || []).slice(0, 2).join("・"));
     return { eyebrow: "輿情 · 社群與新聞標題", title: "台灣人今天的心情", big: m.label || "—", color: hex,
-      body: `<p class="why">${esc(m.line || "")}</p>` + listHTML((m.themes || []).map(t => ({ t: "· " + t }))) + (P.mood && P.mood.watch ? `<p class="why">${esc(P.mood.watch)}</p>` : "") };
+      body: moodViz() + `<p class="why">${esc(m.line || "")}</p>` + listHTML((m.themes || []).map(t => ({ t: "· " + t }))) + (P.mood && P.mood.watch ? `<p class="why">${esc(P.mood.watch)}</p>` : "") };
   },
   power() {
     const pw = P.power || {}, r = pw.reserve_pct || 0, hex = { 綠: "#30d158", 黃: "#ffd60a", 橘: "#ff9f0a", 紅: "#ff453a", 黑: "#8e8e93" }[pw.level] || (r < 6 ? "#ff453a" : r < 10 ? "#ffd60a" : "#30d158");
@@ -3854,7 +3875,7 @@ const TW_VIEW = {
       return { col: Pu, op: fresh ? 0.9 : 0.35, sub: x.t.slice(0, 12) + (x.t.length > 12 ? "…" : ""), dot: fresh ? LENS.news.c : "#8e8e93", prio: 2 + Math.max(0, 6 - h) }; });
     const list = Object.entries(top).sort((a, b) => newsScore(b[1]) - newsScore(a[1]));
     return { eyebrow: "台灣 · 地方新聞", title: "各地在發生什麼？", big: `${list.length} 個縣市`, color: LENS.news.c,
-      body: `<p class="why">每個縣市最值得知道的一則：開店、建設、交通、活動、政策優先，政治口水和社會新聞往後放。紫點＝6 小時內。點縣市看那裡的新聞。</p><ul class="lst nvl">${list.map(([k, x]) => `<li data-nc="${esc(k)}" style="cursor:pointer"><b style="font-weight:600">${esc(norm(k))}</b>　${esc(x.t)}<span>${esc(x.s || "")}・${navAgo(x.at)}</span></li>`).join("")}</ul>` };
+      body: newsViz(list) + `<p class="why">每個縣市最值得知道的一則：開店、建設、交通、活動、政策優先，政治口水和社會新聞往後放。紫點＝6 小時內。點縣市看那裡的新聞。</p><ul class="lst nvl">${list.map(([k, x]) => `<li data-nc="${esc(k)}" style="cursor:pointer"><b style="font-weight:600">${esc(norm(k))}</b>　${esc(x.t)}<span>${esc(x.s || "")}・${navAgo(x.at)}</span></li>`).join("")}</ul>` };
   },
 };
 // ---- 第 1 層：城市 ----
@@ -4841,7 +4862,7 @@ function insCatCard(cat) {
   if (!xs.length) return { html: sideHTML({ eyebrow: `${cat} · 洞見`, title: "這一類最值得注意的", body: '<p class="empty">每個分類輪流整理，約 6 小時內會出現。</p>' }) };
   return { html: sideHTML({ eyebrow: `${cat} · 洞見 · ${navAgo(D.at)}更新`, title: "這一類最值得注意的", big: xs[0].title, color: "#ffd60a",
     body: `<p class="why">只看「${esc(cat)}」這一類的資料。句子由 AI 寫，每個數字都對過原始資料，對不上的就不放；約 6 小時重寫一次。</p>`
-      + xs.map(x => `<div class="ins"><div class="ins-tags">${(x.src || []).map(t => `<i>${esc(INS_SRC_ZH[t] || t)}</i>`).join("")}</div><b>${esc(x.title)}</b><p>${esc(x.body)}</p></div>`).join("") }) };
+      + xs.map(x => `<div class="ins"><div class="ins-tags">${(x.src || []).map(t => `<i>${esc(INS_SRC_ZH[t] || t)}</i>`).join("")}</div><b>${esc(x.title)}</b>${vzInsRow(x)}<p>${esc(x.body)}</p></div>`).join("") }) };
 }
 
 /* ---- 醫美（衛福部全機構名冊對健保名冊）、台海（國防部每日動態）、海纜（TeleGeography） ---- */
@@ -5264,7 +5285,7 @@ function gapCard() {
     + `<span>${esc(x.src)}・${esc(navAgo(x.at))}・搜「${esc(x.kw)}」</span>`
     + (x.what ? `<span class="gapw">新在：${esc(x.what)}</span>` : "") + (x.land ? `<span>台灣缺：${esc(x.land)}</span>` : "") + `</li>`;
   return { html: sideHTML({ eyebrow: "走向 · 資訊落差 · 近 14 天", title: "國外在發生、台灣還沒報的", big: `${xs.length} 則`, color: "#64d2ff",
-    body: `<p class="why">從日本與歐美的產業、消費媒體挑出有新意的產品、服務和做法，再查台灣中文新聞近 30 天報過幾次，報得越少排越前面。沒人報不代表會紅，「台灣缺」那一行是落地前要先過的關。</p>`
+    body: gapViz(xs) + `<p class="why">從日本與歐美的產業、消費媒體挑出有新意的產品、服務和做法，再查台灣中文新聞近 30 天報過幾次，報得越少排越前面。沒人報不代表會紅，「台灣缺」那一行是落地前要先過的關。</p>`
       + cats.map(c => `<div class="nvh">${esc(c)}</div><ul class="lst gapl">${xs.filter(x => x.cat === c).slice(0, 6).map(li).join("")}</ul>`).join(""),
     foot: `<span>${esc(D.src || "")}</span>` }) };
 }
@@ -5339,21 +5360,20 @@ function dleadCard() {
       + (th.n ? `<p class="why">1990 年以來它發出的 ${th.n} 次轉折訊號，${th.hit} 次在 0～12 個月內等到景氣同方向轉折（${Math.round((th.rate || 0) * 100)}%）。3 個成分是股價，會受股市情緒影響。</p>` : ""),
     foot: `<a href="/terminal/#p-dlead">終端機看和國發會的比較 ›</a>` }) };
 }
-// 論點追蹤：押的方向，每輪對一次證據
-function thSL() { return { ok: ["✅", "證據支持"], mixed: ["⚠️", "證據分歧"], weak: ["🔻", "證據轉弱"], kill: ["❌", "推翻條件觸發"], pending: ["⏳", "資料待補"] }; }
+// 論點追蹤：押的方向，每輪對一次證據；主圖是子彈圖（現在的位置 vs 推翻線）
+function thSL() { return { ok: ["成立中", "#64d2ff"], mixed: ["分歧", "#ffd60a"], weak: ["動搖中", "#ff9f0a"], kill: ["已推翻", "#ff453a"], pending: ["資料待補", "#8e8e93"] }; }
 function thesesSum() { const R = ((P.theses || {}).rows || []).filter(r => r.tier === "main"), c = {}; R.forEach(r => { c[r.status] = (c[r.status] || 0) + 1; });
-  const S = thSL(); return Object.keys(S).filter(k => c[k]).map(k => `${S[k][0]} ${c[k]}`).join("　"); }
+  const S = thSL(); return Object.keys(S).filter(k => c[k]).map(k => `${S[k][0]} ${c[k]}`).join("・"); }
 function thesesCard() {
   const D = P.theses || {}, R = D.rows || [];
   if (!R.length) return { html: sideHTML({ eyebrow: "走向 · 論點追蹤", title: "押的方向還站得住嗎？", body: '<p class="empty">資料載入中。</p>' }) };
   const SL = thSL(), sl = k => SL[k] || SL.pending, M = R.filter(r => r.tier === "main"), bad = M.some(r => r.status === "kill");
-  const ev = r => (r.ev || []).filter(e => e.s != null).slice(0, 3).map(e => `${e.s > 0 ? "▲" : e.s < 0 ? "▼" : "・"} ${e.name} ${e.txt}`).join("　");
-  const grp = (t, rows) => rows.length ? `<div class="nvh">${t}</div>` + listHTML(rows.map(r => ({ t: `${sl(r.status)[0]} ${r.title}`, s: `${sl(r.status)[1]} · ${r.region}${r.hint ? " · " + r.hint : ""}` }))) : "";
-  return { html: sideHTML({ eyebrow: `走向 · 論點追蹤 · 下次季度檢討 ${String(D.next_review || "").slice(5).replace("-", "/")}`, title: "押的方向還站得住嗎？", big: thesesSum(), color: bad ? DNH : UPH,
-    body: `<p class="why">每個論點都寫好推翻條件，程式每輪拿情報站的資料對一次：▲ 支持、▼ 反對。只有主論點的推翻條件觸發才會發 Slack；每個論點也各寫一條預測進帳本，到期自動對答案。</p>`
-      + `<div class="nvh">主論點</div>` + listHTML(M.map(r => ({ t: `${sl(r.status)[0]} ${r.title}`, s: ev(r) })))
-      + grp("觀察", R.filter(r => r.tier === "watch")) + grp("保留", R.filter(r => r.tier === "keep")),
-    foot: `<a href="/terminal/#p-theses">終端機看每條證據和推翻條件 ›</a>` }) };
+  const blk = r => `<div class="vzth"><div class="vzth-h"><i style="background:${sl(r.status)[1]}"></i><b>${esc(r.title)}</b><em style="color:${sl(r.status)[1]}">${sl(r.status)[0]}</em></div>${r.gauge ? vzBullet(r.gauge, sl(r.status)[1]) : `<span class="vzg-l">${esc(r.note || "")}</span>`}${r.hint ? `<span class="vzg-l" style="color:#ffd60a">${esc(r.hint)}</span>` : ""}</div>`;
+  return { html: sideHTML({ eyebrow: `走向 · 論點追蹤 · 下次季度檢討 ${String(D.next_review || "").slice(5).replace("-", "/")}`, title: "押的方向還站得住嗎？", big: thesesSum(), color: bad ? DNH : "#64d2ff",
+    body: `<p class="why">點是現在的位置，紅線是推翻線，淡色那一側代表論點還站得住。點離紅線越遠越穩；碰到紅線才發 Slack（只限主論點）。</p>`
+      + `<div class="nvh">主論點</div>` + M.map(blk).join("") + `<div class="nvh">觀察</div>` + R.filter(r => r.tier === "watch").map(blk).join("")
+      + `<div class="nvh">保留</div>` + R.filter(r => r.tier === "keep").map(blk).join(""),
+    foot: `<a href="/terminal/#p-theses">終端機看每條證據 ›</a>` }) };
 }
 // AI 循環：雲端業者資本支出 → 台灣 AI 供應鏈營收 → DRAM
 function aicycleCard() {
@@ -5365,6 +5385,149 @@ function aicycleCard() {
       + (G.length ? `<div class="nvh">最新指引（新聞整理）</div>` + listHTML(G.map(g => ({ t: `${g.name}：${g.dir}${g.amount ? `至 ${nI(g.amount * 10)} 億美元` : ""}${g.year ? `（${g.year}）` : ""}`, s: (g.at || "").slice(0, 10), url: g.url }))) : "")
       + (T.month ? `<div class="nvh">台灣 AI 供應鏈月營收（${ymTxt(T.month)}，近 3 月年增）</div>` + barsHTML((T.firms || []).map(f => ({ name: f.name, v: f.yoy3, txt: pct(f.yoy3, 0) }))) : ""),
     foot: `<a href="/terminal/#p-aicycle">終端機看完整 ›</a>` }) };
+}
+
+/* ---- 卡片主圖：每張卡先用一張圖講「這張在說什麼」，文字只補原因 ----
+   走勢＝線、比較＝正負長條、占比＝甜甜圈、位置＝台灣小地圖、分量＝泡泡、離門檻多遠＝子彈圖 */
+const VZ_G = "rgba(255,255,255,.09)", VZ_M = "#8e8e93";
+const vzFig = (svg, cap) => svg ? `<figure class="vz">${svg}${cap ? `<figcaption>${cap}</figcaption>` : ""}</figure>` : "";
+const vzF = (v, d = 1) => v == null || !isFinite(v) ? "—" : (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString("en-US") : (+v).toFixed(d));
+
+// 正負走勢：0 以上綠、以下紅
+function vzDiverge(vals, o = {}) {
+  vals = clean(vals); if (vals.length < 3) return "";
+  const W = 320, H = o.h || 96, p = 6, mx = Math.max(o.min || 0.1, ...vals.map(Math.abs)), sx = (W - p * 2) / (vals.length - 1), y = v => H / 2 - v / mx * (H / 2 - p), id = "vz" + (++SVGID);
+  const pts = vals.map((v, i) => [p + i * sx, y(v)]), d = pts.map((q, i) => (i ? "L" : "M") + q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" "), L = pts[pts.length - 1], area = `${d} L${L[0].toFixed(1)} ${H / 2} L${p} ${H / 2} Z`;
+  return `<svg viewBox="0 0 ${W} ${H + 16}" role="img" aria-label="${esc(o.label || "走勢")}"><defs><clipPath id="${id}a"><rect width="${W}" height="${H / 2}"/></clipPath><clipPath id="${id}b"><rect y="${H / 2}" width="${W}" height="${H / 2}"/></clipPath></defs>
+    <line x1="${p}" x2="${W - p}" y1="${H / 2}" y2="${H / 2}" stroke="${VZ_G}"/>
+    <path d="${area}" fill="${UPH}" opacity=".2" clip-path="url(#${id}a)"/><path d="${area}" fill="${DNH}" opacity=".2" clip-path="url(#${id}b)"/>
+    <path d="${d}" fill="none" stroke="${UPH}" stroke-width="1.8" stroke-linejoin="round" clip-path="url(#${id}a)"/><path d="${d}" fill="none" stroke="${DNH}" stroke-width="1.8" stroke-linejoin="round" clip-path="url(#${id}b)"/>
+    <circle cx="${L[0].toFixed(1)}" cy="${L[1].toFixed(1)}" r="7" fill="${tone(vals[vals.length - 1])}" opacity=".25"/><circle cx="${L[0].toFixed(1)}" cy="${L[1].toFixed(1)}" r="3.4" fill="${tone(vals[vals.length - 1])}"/>
+    <text x="${p}" y="11" class="vzt">${esc(o.hi || "")}</text><text x="${p}" y="${H - 3}" class="vzt">${esc(o.lo || "")}</text>
+    <text x="${p}" y="${H + 13}" class="vzt">${esc(o.from || "")}</text><text x="${W - p}" y="${H + 13}" text-anchor="end" class="vzt">${esc(o.to || "最新")}</text></svg>`;
+}
+// 小走勢（放在一段文字旁邊）
+function vzSpark(vals, color, w = 96, h = 28) {
+  vals = clean(vals); if (vals.length < 3) return "";
+  const mn = Math.min(...vals), mx = Math.max(...vals), sx = (w - 4) / (vals.length - 1), y = v => h - 3 - (v - mn) / ((mx - mn) || 1) * (h - 6);
+  const d = vals.map((v, i) => (i ? "L" : "M") + (2 + i * sx).toFixed(1) + " " + y(v).toFixed(1)).join(" ");
+  return `<svg class="vzs" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true"><path d="${d}" fill="none" stroke="${color}" stroke-width="1.6" stroke-linejoin="round"/><circle cx="${(2 + (vals.length - 1) * sx).toFixed(1)}" cy="${y(vals[vals.length - 1]).toFixed(1)}" r="2.6" fill="${color}"/></svg>`;
+}
+// 正負長條（中線對齊）：漲綠跌紅
+function vzDivBars(rows, unit = "%") {
+  rows = rows.filter(r => r && r.v != null && isFinite(r.v)); if (!rows.length) return "";
+  const mx = Math.max(...rows.map(r => Math.abs(r.v))) || 1;
+  return `<div class="vzd">${rows.map(r => { const w = Math.abs(r.v) / mx * 50, c = r.color || tone(r.v);
+    return `<div class="vzd-r"><span class="vzd-n">${esc(r.name)}</span><span class="vzd-t"><i style="${r.v >= 0 ? `left:50%` : `right:50%`};width:${w.toFixed(1)}%;background:${c}"></i></span><span class="vzd-v" style="color:${c}">${esc(r.txt ?? ((r.v >= 0 ? "+" : "−") + vzF(Math.abs(r.v), 2) + unit))}</span></div>`; }).join("")}</div>`;
+}
+// 甜甜圈＋圖例
+function vzDonut(parts, center, sub) {
+  parts = parts.filter(x => x.v > 0); const tot = parts.reduce((a, x) => a + x.v, 0); if (!tot) return "";
+  const R = 46, r = 30, cx = 56, cy = 56; let a0 = -Math.PI / 2;
+  const arcs = parts.map(x => { const a1 = a0 + x.v / tot * Math.PI * 2, lg = a1 - a0 > Math.PI ? 1 : 0, P1 = [cx + R * Math.cos(a0), cy + R * Math.sin(a0)], P2 = [cx + R * Math.cos(a1), cy + R * Math.sin(a1)], Q1 = [cx + r * Math.cos(a1), cy + r * Math.sin(a1)], Q2 = [cx + r * Math.cos(a0), cy + r * Math.sin(a0)];
+    const path = parts.length === 1 ? `M${cx - R} ${cy}A${R} ${R} 0 1 1 ${cx + R} ${cy}A${R} ${R} 0 1 1 ${cx - R} ${cy}M${cx - r} ${cy}A${r} ${r} 0 1 0 ${cx + r} ${cy}A${r} ${r} 0 1 0 ${cx - r} ${cy}Z`
+      : `M${P1[0].toFixed(2)} ${P1[1].toFixed(2)}A${R} ${R} 0 ${lg} 1 ${P2[0].toFixed(2)} ${P2[1].toFixed(2)}L${Q1[0].toFixed(2)} ${Q1[1].toFixed(2)}A${r} ${r} 0 ${lg} 0 ${Q2[0].toFixed(2)} ${Q2[1].toFixed(2)}Z`;
+    a0 = a1; return `<path d="${path}" fill="${x.color}" stroke="#121317" stroke-width="1.5" fill-rule="evenodd"/>`; }).join("");
+  return `<div class="vzn"><svg viewBox="0 0 112 112" width="112" height="112" role="img" aria-label="占比">${arcs}<text x="56" y="56" text-anchor="middle" class="vzc">${esc(center)}</text><text x="56" y="71" text-anchor="middle" class="vzt">${esc(sub || "")}</text></svg>`
+    + `<ul class="vzl">${parts.map(x => `<li><i style="background:${x.color}"></i>${esc(x.name)}<b>${x.v}</b></li>`).join("")}</ul></div>`;
+}
+// 台灣小地圖：縣市輪廓＋點
+function vzTaiwan(pts) {
+  if (typeof COUNTIES === "undefined" || !COUNTIES.length) return "";
+  const L0 = 119.3, L1 = 122.1, A0 = 21.85, A1 = 25.35, H = 210, W = Math.round(H * (L1 - L0) * Math.cos(23.6 * Math.PI / 180) / (A1 - A0));
+  const X = lo => ((lo - L0) / (L1 - L0) * W).toFixed(1), Y = la => ((A1 - la) / (A1 - A0) * H).toFixed(1), inb = ([lo, la]) => lo >= L0 && lo <= L1 && la >= A0 && la <= A1;
+  const paths = COUNTIES.map(c => (c.rings || []).filter(r => r.length > 2 && inb(r[0])).map(r => { const k = Math.max(1, Math.floor(r.length / 120)); return "M" + r.filter((_, i) => i % k === 0).map(q => X(q[0]) + " " + Y(q[1])).join("L") + "Z"; }).join("")).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="vzm" role="img" aria-label="台灣各縣市"><path d="${paths}" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.22)" stroke-width=".6"/>`
+    + pts.filter(q => q.ll && inb(q.ll)).map(q => `<circle cx="${X(q.ll[0])}" cy="${Y(q.ll[1])}" r="${q.r || 4}" fill="${q.color}" opacity="${q.op ?? 0.95}" stroke="#121317" stroke-width="1"/>`).join("") + `</svg>`;
+}
+// 泡泡圖：x＝影響台灣、y＝多新、大小＝幾家報
+function vzBubbles(xs, colOf) {
+  xs = xs.filter(x => x.at); if (!xs.length) return "";
+  const W = 320, H = 170, l = 8, r = 8, t = 12, b = 26, now = Date.now(), h0 = x => Math.max(0, (now - new Date(x.at)) / 36e5), hm = Math.max(6, ...xs.map(h0)), hrs = x => Math.min(hm, h0(x));
+  const X = (x, i) => l + 14 + Math.min(4.2, Math.max(-0.2, (x.tw || 0) + ((i * 37) % 9 - 4) * 0.09)) / 4 * (W - l - r - 28), Y = (x, i) => t + hrs(x) / hm * (H - t - b - 8) + ((i * 53) % 7) * 1.3;
+  const dots = xs.map((x, i) => ({ x, i, cx: X(x, i), cy: Y(x, i), rr: 5 + 3.5 * Math.min(5, (x.n_src || 1) - 1) + (i < 3 ? 2 : 0) })).reverse();
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="新聞分量與對台灣的影響">`
+    + [0, 1, 2, 3, 4].map(k => `<line x1="${(l + 14 + k / 4 * (W - l - r - 28)).toFixed(1)}" x2="${(l + 14 + k / 4 * (W - l - r - 28)).toFixed(1)}" y1="${t}" y2="${H - b}" stroke="${VZ_G}"/>`).join("")
+    + dots.map(d => `<circle cx="${d.cx.toFixed(1)}" cy="${d.cy.toFixed(1)}" r="${d.rr.toFixed(1)}" fill="${colOf(d.x)}" opacity="${d.i < 8 ? 0.9 : 0.35}" stroke="#121317" stroke-width="1"/>${d.i < 8 ? `<text x="${d.cx.toFixed(1)}" y="${(d.cy + 3.5).toFixed(1)}" text-anchor="middle" class="vzb">${d.i + 1}</text>` : ""}`).join("")
+    + `<text x="${l}" y="${H - 8}" class="vzt">無關</text><text x="${W / 2}" y="${H - 8}" text-anchor="middle" class="vzt">→ 越右越影響台灣</text><text x="${W - r}" y="${H - 8}" text-anchor="end" class="vzt">重大</text>`
+    + `<text x="${W - r}" y="${t - 2}" text-anchor="end" class="vzt">↑ 越上越新（最舊 ${Math.round(hm)} 小時前）</text></svg>`;
+}
+// 子彈圖：現在的位置 vs 推翻線
+function vzBullet(g, col) {
+  if (!g || g.now == null || g.kill == null) return "";
+  const span = Math.max(Math.abs(g.now - g.kill) * 1.6, Math.abs(g.kill) * 0.25, g.min_span || 1), lo = Math.min(g.now, g.kill) - span * 0.25, hi = Math.max(g.now, g.kill) + span * 0.25;
+  const P = v => ((v - lo) / (hi - lo) * 100).toFixed(1), k = P(g.kill), n = P(g.now), safeL = g.side > 0 ? k : 0, safeW = g.side > 0 ? 100 - k : k;
+  return `<div class="vzg"><span class="vzg-t"><i class="vzg-s" style="left:${safeL}%;width:${safeW}%"></i><i class="vzg-k" style="left:${k}%"></i><i class="vzg-n" style="left:${n}%;background:${col}"></i></span>`
+    + `<span class="vzg-l"><b style="color:${col}">${esc(g.label)} ${vzF(g.now, g.d ?? 1)}${esc(g.unit || "")}</b>　推翻線 ${vzF(g.kill, g.d ?? 1)}${esc(g.unit || "")}</span></div>`;
+}
+
+/* ---- 洞見：每一則旁邊放它引用那項資料的小走勢 ---- */
+function vzSeries(k) {
+  const it = (key, f) => (items(key).find(f) || {}), D = P[k] || {};
+  const M = {
+    fear: () => ["VIX", it("fear", x => x.sym === "^VIX").spark], world: () => ["S&P 500", it("world", x => x.sym === "^GSPC").spark],
+    taiex: () => ["加權指數", hist("taiex", "TAIEX")], fx: () => ["美元兌台幣", it("fx", x => x.code === "USD").spark],
+    commodities: () => ["WTI 原油", it("commodities", x => x.sym === "CL=F").spark], luxury: () => ["LVMH", it("luxury", x => x.sym === "MC.PA").spark],
+    cards: () => ["刷卡年增", ((D.rows || [])[0] || {}).spark], cars: () => ["新車掛牌", (D.car || {}).spark], lead: () => ["領先指標", (D.lead || {}).spark],
+    dlead: () => ["dalta 領先", (D.series || {}).B], credit: () => ["CCC 利差百分位", ((D.rows || []).find(r => r.id === "BAMLH0A3HYC") || {}).trend],
+    consume: () => ["零售業營業額", ((D.focus || [])[0] || {}).spark], power: () => ["備轉容量率", D.spark], mood: () => ["台灣情緒", D.spark_tw],
+    housefc: () => ["台北房價指數", D.tpe_spark], aicycle: () => ["雲端資本支出", ((D.capex || {}).rows || []).map(r => r.total)],
+    exports: () => ["電子零組件出口", ((D.goods || [])[0] || {}).spark], stress: () => ["退票比率", (D.bounce || {}).spark],
+    logistics: () => ["Drewry WCI", ((D.drewry || {}).wci || {}).spark], gmacro: () => ["美國 CPI", it("gmacro", x => x.label === "CPI 年增").spark],
+    bizlife: () => ["公司新設", D.new_spark], taxreg: () => ["營業登記新設", (D.monthly || []).map(x => x[1])], ptt: () => ["PTT 熱度", null],
+  };
+  try { if (M[k]) { const [n, v] = M[k](); if (clean(v).length >= 4) return { n, v: clean(v) }; } } catch (e) { /* 沒有就不畫 */ }
+  let found = null; (function walk(o, dep) { if (found || !o || dep > 3) return; if (Array.isArray(o)) { if (o.length >= 6 && o.every(x => typeof x === "number")) found = o; else o.slice(0, 3).forEach(x => walk(x, dep + 1)); return; }
+    if (typeof o === "object") for (const [kk, vv] of Object.entries(o)) { if (/spark|trend|series/i.test(kk) || dep < 2) walk(vv, dep + 1); if (found) return; } })(D, 0);
+  return found ? { n: INS_SRC_ZH[k] || k, v: clean(found) } : null;
+}
+function vzInsRow(x) {
+  const s = (x.src || []).map(vzSeries).find(Boolean); if (!s) return "";
+  const c = s.v[s.v.length - 1] >= s.v[0] ? UPH : DNH;
+  return `<div class="vzi">${vzSpark(s.v.slice(-40), c, 110, 30)}<span>${esc(s.n)}・近 ${Math.min(40, s.v.length)} 筆</span></div>`;
+}
+
+/* ---- 本週走向：每個方向一個箭頭＋第一個數字 ---- */
+function vzWeekly(W) {
+  const D = (W && W.dirs) || []; if (!D.length) return "";
+  const ar = t => t === "up" ? ["↗", UPH] : t === "down" ? ["↘", DNH] : ["→", YLH];
+  return `<div class="vzw">${D.map(d => { const [a, c] = ar(d.tone), w = String(d.why || ""), k = w.split(/[，,；;。]/)[0], rest = w.slice(k.length).replace(/^[，,；;。]/, "");
+    return `<div class="vzw-r"><b class="vzw-a" style="color:${c}">${a}</b><div><b>${esc(d.t)}</b><span>${esc(k)}</span>${rest ? `<em>${esc(rest)}</em>` : ""}</div></div>`; }).join("")}</div>`;
+}
+function weeklyCard() {
+  const W = P.weekly || {}, D = W.dirs || [];
+  if (!D.length) return { html: sideHTML({ eyebrow: "走向 · 本週", title: "本週走向", body: '<p class="empty">每週一更新。</p>' }) };
+  return { html: sideHTML({ eyebrow: `走向 · ${W.week || ""}`, title: W.headline || "本週走向", body: vzWeekly(W), foot: '<a href="/terminal/#p-weekly">終端機 ›</a>' }) };
+}
+
+/* ---- 台灣情緒：近幾次的分數走勢＋各來源 ---- */
+function moodViz() {
+  const M = P.mood || {}, s = M.spark_tw || hist("mood", "taiwan"), S = M.sources || {}, os = (M.overseas || {}).score, tw = (M.taiwan || {}).score;
+  const rows = [{ name: "台灣整體", v: tw }, ...Object.entries(S).map(([k, v]) => ({ name: k, v: v.score })), { name: "海外", v: os }].filter(r => r.v != null).map(r => ({ ...r, txt: (r.v >= 0 ? "+" : "−") + Math.abs(r.v).toFixed(1) }));
+  return vzFig(vzDiverge(s, { hi: "正面", lo: "負面", from: `${clean(s).length} 次前`, to: "現在", label: "台灣情緒走勢" })) + vzDivBars(rows, "");
+}
+
+/* ---- 地方新聞：每縣市一點（顏色＝類別）＋類別占比 ---- */
+const NEWS_C = { 建設: "#64d2ff", 交通: "#ff9f0a", 災害: "#ff453a", 商業: "#30d158", 活動: "#bf5af2", 政策: "#ffd60a", 社會: "#aeaeb2", 政治: "#8e8e93" };
+const newsCat = x => String(x.kc || (String(x.s || "").split("｜")[0]) || "其他");
+function newsViz(list) {
+  const cnt = {}; list.forEach(([, x]) => { const k = newsCat(x); cnt[k] = (cnt[k] || 0) + 1; });
+  const parts = Object.entries(cnt).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ name: k, v, color: NEWS_C[k] || "#636366" }));
+  const pts = list.map(([k, x]) => { const c = COUNTIES.find(q => q.name === k), h = (Date.now() - new Date(x.at)) / 36e5; return c ? { ll: c.c, color: NEWS_C[newsCat(x)] || "#636366", r: h < 6 ? 5.5 : 4, op: h < 6 ? 1 : 0.6 } : null; }).filter(Boolean);
+  return `<div class="vzrow">${vzTaiwan(pts)}${vzDonut(parts, `${list.length}`, "個縣市")}</div>`;
+}
+
+/* ---- 台灣還沒報：缺口分在哪幾類 ---- */
+const GAP_C = ["#64d2ff", "#bf5af2", "#ffd60a", "#30d158", "#ff9f0a", "#ff375f", "#5e5ce6", "#aeaeb2"];
+function gapViz(xs) {
+  const cnt = {}; xs.forEach(x => { cnt[x.cat] = (cnt[x.cat] || 0) + 1; });
+  const z = xs.filter(x => x.tw_n === 0).length;
+  return vzDonut(Object.entries(cnt).sort((a, b) => b[1] - a[1]).map(([k, v], i) => ({ name: k, v, color: GAP_C[i % GAP_C.length] })), `${xs.length}`, "則") + `<p class="vzcap">${z} 則在台灣近 30 天中文新聞裡 0 報導</p>`;
+}
+
+/* ---- 全球股市：依漲跌排的正負長條 ---- */
+function worldViz() {
+  return vzDivBars(items("world").filter(x => x.chg_pct != null).sort((a, b) => b.chg_pct - a.chg_pct).map(x => ({ name: x.name, v: x.chg_pct })));
 }
 
 /* ---- 網址記住畫面：?看=醫美&地=台中市北屯區 → 打開就是同一個項目、同一個地方；逛的時候網址跟著變，複製就能分享 ---- */
