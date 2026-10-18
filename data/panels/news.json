@@ -75,17 +75,17 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Several dead or injured in major fire at Canada military base",
+   "url": "https://www.bbc.co.uk/news/articles/cr86z0w4lxdxo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-18T14:07:20Z"
+  },
+  {
    "source": "Guardian",
    "title": "Arrests over France protests rise to 1,800, with whole streets in Paris ‘devastated’ – Eur",
    "url": "https://www.theguardian.com/world/live/2026/oct/18/paris-protests-france-demonstrations-europe-live-latest-news",
    "at": "2026-10-18T13:18:46Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Several dead or injured in major fire at Canada military base",
-   "url": "https://www.bbc.co.uk/news/articles/cr86z0w4lxdxo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-18T12:41:59Z"
   },
   {
    "source": "BBC",
@@ -294,7 +294,7 @@
     8,
     20,
     37,
-    20,
+    21,
     17,
     7
    ],
@@ -394,10 +394,10 @@
    "daily7": [
     5,
     6,
-    2,
+    1,
     38,
-    66,
-    27,
+    65,
+    28,
     8
    ],
    "days7": [
@@ -444,8 +444,8 @@
    ],
    "daily7": [
     9,
-    11,
-    21,
+    12,
+    20,
     10,
     10,
     19,
@@ -547,9 +547,9 @@
    "daily7": [
     10,
     15,
-    19,
+    20,
     38,
-    53,
+    52,
     38,
     26
    ],
@@ -599,7 +599,7 @@
     3,
     6,
     12,
-    16,
+    15,
     9,
     4,
     3
@@ -650,8 +650,8 @@
     5,
     6,
     24,
-    10,
-    16,
+    9,
+    15,
     9,
     39
    ],
@@ -668,10 +668,10 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.761,
-   "vol_ratio": 1.08,
-   "tone": 0.89,
-   "tone_at": "2026-10-18T12:16:07Z",
+   "vol": 1.762,
+   "vol_ratio": 1.07,
+   "tone": 0.77,
+   "tone_at": "2026-10-18T14:14:40Z",
    "spark": [
     1.854,
     1.462,
@@ -682,9 +682,9 @@
     3.595,
     1.86,
     1.44,
-    1.761
+    1.762
    ],
-   "at": "2026-10-18T13:18:06Z"
+   "at": "2026-10-18T14:14:40Z"
   },
   "hot": [
    {
@@ -835,9 +835,8 @@
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json",
   "wiki zh: HTTPError: 404 Client Error: Not Found for url: https://wikimedia.org/api/rest_v1/metrics/pageviews/top/zh.wikipedia/all-access/2026/10/16",
   "wiki en: HTTPError: 404 Client Error: Not Found for url: https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/2026/10/16"
  ],
- "updatedAt": "2026-10-18T13:55:29Z"
+ "updatedAt": "2026-10-18T14:14:40Z"
 }
