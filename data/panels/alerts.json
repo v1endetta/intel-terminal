@@ -1,6 +1,21 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610190719001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "臺中市",
+    "臺南市",
+    "屏東縣"
+   ],
+   "text": "天氣高溫炎熱，今(19)日中午前後臺中市、臺南市、屏東縣為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-18T23:19:51Z",
+   "exp": "2026-10-19T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610190719.cap"
+  },
+  {
    "id": "CWA-Weather_heat_202610181724001",
    "cat": "高溫",
    "lvl": 2,
@@ -16,12 +31,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610181724.cap"
   }
  ],
- "n_total": 1,
+ "n_total": 2,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/19 07:14:23"
+  "updated": "2026/10/19 07:26:21"
  },
  "errs": [],
- "updatedAt": "2026-10-18T23:14:08Z"
+ "updatedAt": "2026-10-18T23:35:39Z"
 }
