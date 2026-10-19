@@ -75,17 +75,17 @@
  ],
  "intl": [
   {
-   "source": "Guardian",
-   "title": "French authorities announce partial curfews as PM blames ‘ultra-left’ for exploiting prote",
-   "url": "https://www.theguardian.com/world/live/2026/oct/19/europe-france-protests-riots-macron-ukraine-russia-zelenskyy-sweden-latest-news-updates",
-   "at": "2026-10-19T19:41:04Z",
-   "sec": "World news"
-  },
-  {
    "source": "BBC",
    "title": "Ukrainians dying because US restricting intelligence sharing, Zelensky adviser tells BBC",
    "url": "https://www.bbc.co.uk/news/articles/cmj47yx572z5o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-19T18:23:50Z"
+   "at": "2026-10-19T20:13:27Z"
+  },
+  {
+   "source": "Guardian",
+   "title": "French authorities announce partial curfews as PM blames ‘ultra-left’ for exploiting prote",
+   "url": "https://www.theguardian.com/world/live/2026/oct/19/europe-france-protests-riots-macron-ukraine-russia-zelenskyy-sweden-latest-news-updates",
+   "at": "2026-10-19T19:59:00Z",
+   "sec": "World news"
   },
   {
    "source": "Guardian",
@@ -291,7 +291,7 @@
     }
    ],
    "daily7": [
-    13,
+    14,
     19,
     15,
     15,
@@ -395,11 +395,11 @@
    "daily7": [
     1,
     18,
-    25,
-    18,
-    11,
-    55,
-    1
+    24,
+    20,
+    10,
+    54,
+    2
    ],
    "days7": [
     "2026-10-14",
@@ -444,7 +444,7 @@
     }
    ],
    "daily7": [
-    7,
+    6,
     10,
     9,
     18,
@@ -495,10 +495,10 @@
     }
    ],
    "daily7": [
-    20,
-    12,
-    6,
+    19,
+    13,
     8,
+    7,
     11,
     11,
     1
@@ -547,12 +547,12 @@
    ],
    "daily7": [
     11,
-    11,
+    12,
     25,
     23,
-    10,
+    11,
     72,
-    32
+    33
    ],
    "days7": [
     "2026-10-14",
@@ -602,7 +602,7 @@
     11,
     2,
     1,
-    10,
+    12,
     0
    ],
    "days7": [
@@ -652,7 +652,7 @@
     4,
     14,
     10,
-    28,
+    27,
     35,
     1
    ],
@@ -906,6 +906,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-10-19T19:58:29Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-10-19T20:13:29Z"
 }
