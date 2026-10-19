@@ -99,17 +99,6 @@
    "d": "2026-10-19",
    "t": null,
    "ts": null,
-   "r": "港",
-   "n": "港股休市：重陽節翌日",
-   "k": "holiday",
-   "imp": 1,
-   "ap": false,
-   "ex": "XHKG"
-  },
-  {
-   "d": "2026-10-19",
-   "t": null,
-   "ts": null,
    "r": "台",
    "n": "程曦資訊（6898）公開申購抽籤",
    "k": "ipo",
@@ -1026,16 +1015,20 @@
    "imp": 2,
    "ap": false,
    "src": "FRED"
+  },
+  {
+   "d": "2026-11-17",
+   "t": "21:30",
+   "ts": 1794922200000,
+   "r": "美",
+   "n": "美國零售銷售",
+   "k": "data",
+   "imp": 2,
+   "ap": false,
+   "src": "FRED"
   }
  ],
  "hol": [
-  {
-   "d": "2026-10-19",
-   "ex": "XHKG",
-   "m": "港股",
-   "r": "港",
-   "n": "重陽節翌日"
-  },
   {
    "d": "2026-10-20",
    "ex": "XNSE",
@@ -1338,13 +1331,13 @@
    "n": "總統日"
   }
  ],
- "from": "2026-10-19",
- "to": "2026-11-16",
+ "from": "2026-10-20",
+ "to": "2026-11-17",
  "ff_until": "2026-10-23",
  "n": 83,
  "errs": [
   "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json"
  ],
  "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站",
- "updatedAt": "2026-10-19T13:33:35Z"
+ "updatedAt": "2026-10-19T16:36:28Z"
 }
