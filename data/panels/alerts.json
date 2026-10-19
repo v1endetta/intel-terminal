@@ -1,6 +1,22 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610191430001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "臺北市",
+    "新北市",
+    "桃園市",
+    "臺中市"
+   ],
+   "text": "天氣高溫炎熱，今(19)日中午前後新北市、桃園市、臺中市為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-19T06:30:36Z",
+   "exp": "2026-10-19T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610191430.cap"
+  },
+  {
    "id": "CWA-Weather_heat_202610191126001",
    "cat": "高溫",
    "lvl": 2,
@@ -31,12 +47,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610181724.cap"
   }
  ],
- "n_total": 2,
+ "n_total": 3,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/19 14:11:14"
+  "updated": "2026/10/19 14:38:14"
  },
  "errs": [],
- "updatedAt": "2026-10-19T06:21:28Z"
+ "updatedAt": "2026-10-19T06:39:34Z"
 }
