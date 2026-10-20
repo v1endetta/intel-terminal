@@ -5,9 +5,9 @@
    "vendor": "openai",
    "title": "Why Have Age Verification If Adults Still Can't Write Explicit Fiction?",
    "url": "https://community.openai.com/t/why-have-age-verification-if-adults-still-cant-write-explicit-fiction/1407909",
-   "replies": 6,
-   "likes": 22,
-   "views": 122,
+   "replies": 8,
+   "likes": 25,
+   "views": 131,
    "at": "2026-10-20T01:36:56Z"
   },
   {
@@ -15,20 +15,20 @@
    "vendor": "openai",
    "title": "Workspace routing discovery failed",
    "url": "https://community.openai.com/t/workspace-routing-discovery-failed/1408110",
-   "replies": 3,
-   "likes": 8,
-   "views": 38,
+   "replies": 4,
+   "likes": 11,
+   "views": 54,
    "at": "2026-10-20T15:35:18Z"
   },
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "Why was my support complaint automatically closed after only 23 hours while my older topic",
-   "url": "https://community.openai.com/t/why-was-my-support-complaint-automatically-closed-after-only-23-hours-while-my-older-topics-remain-open/1407837",
-   "replies": 2,
-   "likes": 8,
-   "views": 61,
-   "at": "2026-10-19T18:20:06Z"
+   "title": "OpenAI OAuth servers are down?",
+   "url": "https://community.openai.com/t/openai-oauth-servers-are-down/1408124",
+   "replies": 4,
+   "likes": 14,
+   "views": 46,
+   "at": "2026-10-20T17:21:39Z"
   },
   {
    "source": "OpenAI 論壇",
@@ -37,7 +37,7 @@
    "url": "https://community.openai.com/t/same-image-prompt-2-successful-generations-3-safety-rejections-via-openrouter-no-substantive-support-findings/1407980",
    "replies": 2,
    "likes": 8,
-   "views": 31,
+   "views": 32,
    "at": "2026-10-20T08:00:30Z"
   },
   {
@@ -47,7 +47,7 @@
    "url": "https://community.openai.com/t/personalized-temporary-chats-and-save-button-missing-on-chatgpt-web/1407855",
    "replies": 3,
    "likes": 3,
-   "views": 243,
+   "views": 251,
    "at": "2026-10-19T20:16:11Z"
   },
   {
@@ -57,37 +57,17 @@
    "url": "https://discuss.ai.google.dev/t/pro-trial-is-not-a-trial-of-ai-pro/190857",
    "replies": 2,
    "likes": 5,
-   "views": 58,
-   "at": "2026-10-19T20:56:30Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Argon in Antigravity is an insulting, laughable, condensing joke",
-   "url": "https://discuss.ai.google.dev/t/argon-in-antigravity-is-an-insulting-laughable-condensing-joke/190841",
-   "replies": 1,
-   "likes": 2,
    "views": 60,
-   "at": "2026-10-19T17:56:50Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Gemini 3.8 Flash Low has ~57s TTFT in Antigravity 2.24.0",
-   "url": "https://discuss.ai.google.dev/t/gemini-3-8-flash-low-has-57s-ttft-in-antigravity-2-24-0/191022",
-   "replies": 2,
-   "likes": 3,
-   "views": 100,
-   "at": "2026-10-20T10:20:42Z"
+   "at": "2026-10-19T20:56:30Z"
   },
   {
    "source": "Google AI 論壇",
    "vendor": "google",
    "title": "Severe latency regression on Gemini 3.8 in Antigravity — Unusually high TTFT and slow stre",
    "url": "https://discuss.ai.google.dev/t/severe-latency-regression-on-gemini-3-8-in-antigravity-unusually-high-ttft-and-slow-streaming/191002",
-   "replies": 1,
-   "likes": 2,
-   "views": 81,
+   "replies": 3,
+   "likes": 3,
+   "views": 103,
    "at": "2026-10-20T09:39:54Z"
   },
   {
@@ -97,11 +77,40 @@
    "url": "https://discuss.ai.google.dev/t/gemini-3-8-flash-stuck-on-working-despite-available-quota-google-ai-pro/190960",
    "replies": 1,
    "likes": 2,
-   "views": 108,
+   "views": 113,
    "at": "2026-10-20T06:27:56Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "Gemini 3.8 Flash Low has ~57s TTFT in Antigravity 2.24.0",
+   "url": "https://discuss.ai.google.dev/t/gemini-3-8-flash-low-has-57s-ttft-in-antigravity-2-24-0/191022",
+   "replies": 3,
+   "likes": 3,
+   "views": 117,
+   "at": "2026-10-20T10:20:42Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "Gemini 3.8 Flash model is not working properly in Antigravity.",
+   "url": "https://discuss.ai.google.dev/t/gemini-3-8-flash-model-is-not-working-properly-in-antigravity/191012",
+   "replies": 2,
+   "likes": 2,
+   "views": 101,
+   "at": "2026-10-20T09:42:18Z"
   }
  ],
  "changelogs": [
+  {
+   "source": "OpenAI changelog",
+   "vendor": "openai",
+   "date": "Oct 20",
+   "kind": "Feature",
+   "title": "You can now choose 12-hour prompt caching in the API. 12-hour prompt caching keeps shared instructions, tools, and context cached longer to ",
+   "url": "https://developers.openai.com/api/docs/changelog",
+   "at": "2026-10-20T00:00:00Z"
+  },
   {
    "source": "OpenAI changelog",
    "vendor": "openai",
@@ -128,15 +137,6 @@
    "title": "Added encodingformat parameter to the Embeddings API",
    "url": "https://developers.openai.com/api/docs/changelog",
    "at": "2026-10-16T00:00:00Z"
-  },
-  {
-   "source": "OpenAI changelog",
-   "vendor": "openai",
-   "date": "Oct 15",
-   "kind": "Feature",
-   "title": "Added native Decisions integration in GPT-Live.",
-   "url": "https://developers.openai.com/api/docs/changelog",
-   "at": "2026-10-15T00:00:00Z"
   },
   {
    "source": "Claude release notes",
@@ -301,5 +301,5 @@
   "DeepSeek updates md: got html 49316b",
   "xAI release notes md: 19051b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### Grok Vo'"
  ],
- "updatedAt": "2026-10-20T17:36:12Z"
+ "updatedAt": "2026-10-20T18:39:05Z"
 }
