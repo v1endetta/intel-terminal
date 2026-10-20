@@ -2,6 +2,12 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "美科技股反彈　市場憂AI業者借貸成本高影響獲利",
+   "url": "https://www.cna.com.tw/news/afe/202610200014.aspx",
+   "at": "2026-10-20T00:12:52Z"
+  },
+  {
+   "source": "中央社",
    "title": "AI盈利前景吸引投資人逢低買進　美國股市多收漲",
    "url": "https://www.cna.com.tw/news/afe/202610200010.aspx",
    "at": "2026-10-19T22:05:39Z"
@@ -41,12 +47,6 @@
    "title": "傳陸勝操演戰車壓壞貓眼石　教準部：釐清責任修復",
    "url": "https://www.cna.com.tw/news/aipl/202610190262.aspx",
    "at": "2026-10-19T13:39:31Z"
-  },
-  {
-   "source": "中央社",
-   "title": "南非稀土專家：各國願意投資　分散全球關鍵原料來源",
-   "url": "https://www.cna.com.tw/news/ait/202610190250.aspx",
-   "at": "2026-10-19T12:41:01Z"
   },
   {
    "source": "公視",
@@ -292,7 +292,7 @@
     13,
     16,
     12,
-    14,
+    15,
     3,
     37,
     7
@@ -391,13 +391,13 @@
     }
    ],
    "daily7": [
-    3,
-    17,
-    18,
+    1,
     16,
+    17,
+    15,
     10,
     49,
-    14
+    15
    ],
    "days7": [
     "2026-10-14",
@@ -442,11 +442,11 @@
     }
    ],
    "daily7": [
-    4,
+    5,
     9,
     7,
     15,
-    14,
+    13,
     29,
     10
    ],
@@ -493,7 +493,7 @@
     }
    ],
    "daily7": [
-    23,
+    24,
     12,
     5,
     7,
@@ -544,13 +544,13 @@
     }
    ],
    "daily7": [
-    9,
+    8,
     13,
-    22,
+    21,
     19,
     11,
     67,
-    52
+    54
    ],
    "days7": [
     "2026-10-14",
@@ -650,7 +650,7 @@
     3,
     11,
     8,
-    26,
+    25,
     34,
     1
    ],
@@ -667,8 +667,8 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.794,
-   "vol_ratio": 1.08,
+   "vol": 1.772,
+   "vol_ratio": 1.05,
    "tone": 0.5,
    "tone_at": "2026-10-19T22:16:10Z",
    "spark": [
@@ -683,9 +683,9 @@
     1.44,
     1.803,
     2.082,
-    1.794
+    1.772
    ],
-   "at": "2026-10-19T23:57:31Z"
+   "at": "2026-10-20T00:36:57Z"
   },
   "wiki": {
    "zh": [
@@ -779,6 +779,22 @@
     "hot": true
    },
    {
+    "term": "科技",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "PTT",
+     "Yahoo股市",
+     "中央社",
+     "大紀元"
+    ],
+    "sample": {
+     "title": "美科技股反彈　市場憂AI業者借貸成本高影響獲利",
+     "url": "https://www.cna.com.tw/news/afe/202610200014.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "出新",
     "n": 4,
     "src": 3,
@@ -810,21 +826,6 @@
     "hot": true
    },
    {
-    "term": "ADR",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "Yahoo股市",
-     "壹蘋新聞網",
-     "經濟日報"
-    ],
-    "sample": {
-     "title": "台股反彈訊號來了？美股科技股反攻、台積電ADR同步走高 台指期夜盤逼近47K",
-     "url": "https://news.google.com/rss/articles/CBMiwwNBVV95cUxPeUtyZnF1Wm8yWHpvd2JrNy03V25RdDRodTkyQzdFMzMwU3BtUmR4MEQ5MHo2TU5WZDZlRGZzLUN6Y0JaUG1wYUI5dGJOSHc1c1gtdWVWLVZkM0RCS2FOYVk4LXBNSHUtU013UlVGRkNpeF9jaksxaGpqRXBKTVlvdF91TTRnX1FzaTl0dzFUZ3gxTWdyTm5lU3BOSXpubDRzeHRhNVVwR1VLWDBLR290aVNjM3J4cXBFdlFLaHpvcDNUOTNidEM1TGpQYUZVQmZnY3dFcU5nUGtsNW5MT0lfU2dxQmNpVkxxbUl2Q2RpcFdxY1VIVE9uakNLZHpMb2oyM25GUG5VWndWWlNzMnZaT1M5azk2STAwdHlEYzJWLUY3bDdFVlRzc2ZpV180QTEtZml6a0RGMXFpMFVVYlN3S1M0SmFENWtvMVNlRWU0Rmx4OXY3UXFYUmZSSnM0TEF4VHhxaDZ4YTNyQ1p4UUpOYkwxWFRSRHkxQS0yb3FMQi15SS1yUDg5TklOT2NtUVExSmt4RFl5TnhUSnBXdjdWeUl5cG8tek51aENscHN2NGVyMVlOUG11Y1NpbUFpTlhGVUZF?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "台積電",
     "n": 3,
     "src": 3,
@@ -840,17 +841,32 @@
     "hot": true
    },
    {
-    "term": "科技",
+    "term": "ADR",
     "n": 3,
     "src": 3,
     "sources": [
-     "PTT",
      "Yahoo股市",
-     "大紀元"
+     "壹蘋新聞網",
+     "經濟日報"
     ],
     "sample": {
      "title": "台股反彈訊號來了？美股科技股反攻、台積電ADR同步走高 台指期夜盤逼近47K",
      "url": "https://news.google.com/rss/articles/CBMiwwNBVV95cUxPeUtyZnF1Wm8yWHpvd2JrNy03V25RdDRodTkyQzdFMzMwU3BtUmR4MEQ5MHo2TU5WZDZlRGZzLUN6Y0JaUG1wYUI5dGJOSHc1c1gtdWVWLVZkM0RCS2FOYVk4LXBNSHUtU013UlVGRkNpeF9jaksxaGpqRXBKTVlvdF91TTRnX1FzaTl0dzFUZ3gxTWdyTm5lU3BOSXpubDRzeHRhNVVwR1VLWDBLR290aVNjM3J4cXBFdlFLaHpvcDNUOTNidEM1TGpQYUZVQmZnY3dFcU5nUGtsNW5MT0lfU2dxQmNpVkxxbUl2Q2RpcFdxY1VIVE9uakNLZHpMb2oyM25GUG5VWndWWlNzMnZaT1M5azk2STAwdHlEYzJWLUY3bDdFVlRzc2ZpV180QTEtZml6a0RGMXFpMFVVYlN3S1M0SmFENWtvMVNlRWU0Rmx4OXY3UXFYUmZSSnM0TEF4VHhxaDZ4YTNyQ1p4UUpOYkwxWFRSRHkxQS0yb3FMQi15SS1yUDg5TklOT2NtUVExSmt4RFl5TnhUSnBXdjdWeUl5cG8tek51aENscHN2NGVyMVlOUG11Y1NpbUFpTlhGVUZF?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "反彈",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Yahoo股市",
+     "中央社",
+     "經濟日報"
+    ],
+    "sample": {
+     "title": "美科技股反彈　市場憂AI業者借貸成本高影響獲利",
+     "url": "https://www.cna.com.tw/news/afe/202610200014.aspx"
     },
     "hot": true
    },
@@ -883,25 +899,9 @@
      "url": "https://www.cna.com.tw/news/aopl/202610190274.aspx"
     },
     "hot": false
-   },
-   {
-    "term": "California",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "LAist",
-     "The Guardian"
-    ],
-    "sample": {
-     "title": "California to recieve $6m settlement after 23andMe data brea",
-     "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOMDd6NnFscDJSbUpydU1yV195bzR4QWdTWXp1bjRheXlKamFIdzVKM29VSnVNamxBaWZIM1pYNmRMN0YwQ1o2bXZxR28yeEZzYjAxRll6Wmw0eFNsa2ZvRUZJcjVKNHhaQndRTUlyZEdodHRiRmVRSFNsc1JnMjFPM2VFY3lVSEw1TVA3RXY0dU1PMXc?oc=5"
-    },
-    "hot": false
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-10-20T00:16:29Z"
+ "errs": [],
+ "updatedAt": "2026-10-20T00:36:57Z"
 }
