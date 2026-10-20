@@ -2,17 +2,17 @@
  "label": "推文 ≥30",
  "items": [
   {
+   "board": "Gossiping",
+   "title": "[新聞] 大翻盤！北市民調：沈伯洋50.3％反超蔣",
+   "push": 100,
+   "url": "https://www.ptt.cc/bbs/Gossiping/M.1792462201.A.2BD.html",
+   "date": "10/20"
+  },
+  {
    "board": "HatePolitics",
    "title": "[LIVE] 信民協會×戴立安「第二場北市民調」",
    "push": 100,
    "url": "https://www.ptt.cc/bbs/HatePolitics/M.1792457218.A.D97.html",
-   "date": "10/20"
-  },
-  {
-   "board": "Stock",
-   "title": "[閒聊] 2026/10/20 盤中閒聊",
-   "push": 100,
-   "url": "https://www.ptt.cc/bbs/Stock/M.1792456203.A.A7D.html",
    "date": "10/20"
   },
   {
@@ -30,6 +30,13 @@
    "date": "10/18"
   },
   {
+   "board": "Stock",
+   "title": "[閒聊] 2026/10/20 盤中閒聊",
+   "push": 99,
+   "url": "https://www.ptt.cc/bbs/Stock/M.1792456203.A.A7D.html",
+   "date": "10/20"
+  },
+  {
    "board": "Lifeismoney",
    "title": "[情報] 10/18蝦皮優惠整理",
    "push": 83,
@@ -42,13 +49,6 @@
    "push": 83,
    "url": "https://www.ptt.cc/bbs/car/M.1612939340.A.772.html",
    "date": "2/10"
-  },
-  {
-   "board": "HatePolitics",
-   "title": "[黑特] 戴立安台北市 沈伯洋50.3% 蔣萬安33.3%",
-   "push": 82,
-   "url": "https://www.ptt.cc/bbs/HatePolitics/M.1792461843.A.517.html",
-   "date": "10/20"
   },
   {
    "board": "Stock",
@@ -74,21 +74,21 @@
   {
    "board": "Stock",
    "title": "[新聞] 台股陷熊市危機 彭金隆肯定基本面",
-   "push": 66,
+   "push": 67,
    "url": "https://www.ptt.cc/bbs/Stock/M.1792454714.A.F66.html",
    "date": "10/20"
   },
   {
    "board": "Stock",
    "title": "[新聞] 「這些年中國股民是怎麼活的」成熱話",
-   "push": 65,
+   "push": 66,
    "url": "https://www.ptt.cc/bbs/Stock/M.1792424671.A.174.html",
    "date": "10/19"
   },
   {
    "board": "car",
    "title": "[新聞] 美媒：泰國向中國電動車開大門　如今正付",
-   "push": 60,
+   "push": 61,
    "url": "https://www.ptt.cc/bbs/car/M.1792391180.A.6C4.html",
    "date": "10/19"
   },
@@ -116,14 +116,14 @@
   {
    "board": "Stock",
    "title": "[標的] 2313 華通 三角收斂中",
-   "push": 48,
+   "push": 49,
    "url": "https://www.ptt.cc/bbs/Stock/M.1792417635.A.F67.html",
    "date": "10/19"
   },
   {
    "board": "car",
    "title": "[閒聊] 買車改喇叭的人多嗎",
-   "push": 47,
+   "push": 49,
    "url": "https://www.ptt.cc/bbs/car/M.1792328533.A.0AD.html",
    "date": "10/18"
   },
@@ -163,11 +163,11 @@
    "date": "1/02"
   },
   {
-   "board": "car",
-   "title": "[新聞] Toyota Camry 新年式登場！入門車型升級",
+   "board": "Lifeismoney",
+   "title": "[情報] 必勝客 外帶9吋鬆厚小比薩+可樂 $111",
    "push": 36,
-   "url": "https://www.ptt.cc/bbs/car/M.1792249228.A.14A.html",
-   "date": "10/17"
+   "url": "https://www.ptt.cc/bbs/Lifeismoney/M.1792385736.A.D2C.html",
+   "date": "10/19"
   }
  ],
  "boards": [
@@ -175,12 +175,12 @@
    "board": "Gossiping",
    "zh": "八卦",
    "facet": "大眾",
-   "n": 38,
-   "today": 38,
-   "heat": 102,
-   "boom": 0,
+   "n": 39,
+   "today": 39,
+   "heat": 246,
+   "boom": 1,
    "boo": 0,
-   "mood": 0.82,
+   "mood": 0.74,
    "spark": [
     76,
     98,
@@ -229,20 +229,28 @@
     161,
     76,
     186,
-    102
+    246
    ],
-   "top": []
+   "top": [
+    {
+     "board": "Gossiping",
+     "title": "[新聞] 大翻盤！北市民調：沈伯洋50.3％反超蔣",
+     "push": 100,
+     "url": "https://www.ptt.cc/bbs/Gossiping/M.1792462201.A.2BD.html",
+     "date": "10/20"
+    }
+   ]
   },
   {
    "board": "HatePolitics",
    "zh": "政黑",
    "facet": "政治",
-   "n": 23,
-   "today": 23,
-   "heat": 290,
+   "n": 40,
+   "today": 40,
+   "heat": 234,
    "boom": 1,
    "boo": 0,
-   "mood": 0.65,
+   "mood": 0.62,
    "spark": [
     255,
     225,
@@ -291,7 +299,7 @@
     167,
     192,
     361,
-    290
+    234
    ],
    "top": [
     {
@@ -300,20 +308,6 @@
      "push": 100,
      "url": "https://www.ptt.cc/bbs/HatePolitics/M.1792457218.A.D97.html",
      "date": "10/20"
-    },
-    {
-     "board": "HatePolitics",
-     "title": "[黑特] 戴立安台北市 沈伯洋50.3% 蔣萬安33.3%",
-     "push": 82,
-     "url": "https://www.ptt.cc/bbs/HatePolitics/M.1792461843.A.517.html",
-     "date": "10/20"
-    },
-    {
-     "board": "HatePolitics",
-     "title": "[討論] 凌濤大讚蔣萬安:具有不怕得罪人的勇氣",
-     "push": 34,
-     "url": "https://www.ptt.cc/bbs/HatePolitics/M.1792460473.A.048.html",
-     "date": "10/20"
     }
    ]
   },
@@ -321,12 +315,12 @@
    "board": "Stock",
    "zh": "股板",
    "facet": "市場",
-   "n": 22,
-   "today": 8,
-   "heat": 526,
-   "boom": 1,
+   "n": 23,
+   "today": 9,
+   "heat": 543,
+   "boom": 0,
    "boo": 0,
-   "mood": 0.91,
+   "mood": 0.96,
    "spark": [
     1308,
     1350,
@@ -375,13 +369,13 @@
     1366,
     484,
     506,
-    526
+    543
    ],
    "top": [
     {
      "board": "Stock",
      "title": "[閒聊] 2026/10/20 盤中閒聊",
-     "push": 100,
+     "push": 99,
      "url": "https://www.ptt.cc/bbs/Stock/M.1792456203.A.A7D.html",
      "date": "10/20"
     },
@@ -395,7 +389,7 @@
     {
      "board": "Stock",
      "title": "[新聞] 台股陷熊市危機 彭金隆肯定基本面",
-     "push": 66,
+     "push": 67,
      "url": "https://www.ptt.cc/bbs/Stock/M.1792454714.A.F66.html",
      "date": "10/20"
     }
@@ -407,7 +401,7 @@
    "facet": "生活",
    "n": 24,
    "today": 1,
-   "heat": 160,
+   "heat": 161,
    "boom": 0,
    "boo": 0,
    "mood": 0.88,
@@ -459,7 +453,7 @@
     160,
     160,
     160,
-    160
+    161
    ],
    "top": [
     {
@@ -477,7 +471,7 @@
    "facet": "消費",
    "n": 29,
    "today": 2,
-   "heat": 675,
+   "heat": 680,
    "boom": 1,
    "boo": 1,
    "mood": 0.76,
@@ -529,7 +523,7 @@
     669,
     670,
     672,
-    675
+    680
    ],
    "top": [
     {
@@ -561,7 +555,7 @@
    "facet": "消費",
    "n": 22,
    "today": 3,
-   "heat": 216,
+   "heat": 226,
    "boom": 0,
    "boo": 0,
    "mood": 0.68,
@@ -613,7 +607,7 @@
     168,
     180,
     191,
-    216
+    226
    ],
    "top": [
     {
@@ -632,10 +626,10 @@
     },
     {
      "board": "home-sale",
-     "title": "[閒聊] 台灣房價物價也很高，為何沒有歐洲暴民?",
-     "push": 30,
-     "url": "https://www.ptt.cc/bbs/home-sale/M.1792391163.A.5FC.html",
-     "date": "10/19"
+     "title": "Re: [新聞] 北市都更門檻降到50% 蔣萬安推大街廓都更",
+     "push": 34,
+     "url": "https://www.ptt.cc/bbs/home-sale/M.1792427470.A.44E.html",
+     "date": "10/20"
     }
    ]
   },
@@ -645,7 +639,7 @@
    "facet": "消費",
    "n": 37,
    "today": 0,
-   "heat": 888,
+   "heat": 893,
    "boom": 1,
    "boo": 0,
    "mood": 0.97,
@@ -697,7 +691,7 @@
     867,
     879,
     883,
-    888
+    893
    ],
    "top": [
     {
@@ -985,7 +979,7 @@
    "facet": "文化",
    "n": 22,
    "today": 3,
-   "heat": 156,
+   "heat": 158,
    "boom": 0,
    "boo": 0,
    "mood": 0.91,
@@ -1037,11 +1031,11 @@
     137,
     143,
     145,
-    156
+    158
    ],
    "top": []
   }
  ],
  "breaking": [],
- "updatedAt": "2026-10-20T02:06:03Z"
+ "updatedAt": "2026-10-20T02:38:48Z"
 }
