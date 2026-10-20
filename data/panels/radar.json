@@ -28,6 +28,7 @@
     1,
     1,
     0,
+    0,
     0
    ],
    "spike": false
@@ -42,6 +43,7 @@
    "hn_top": null,
    "score": 0,
    "spark": [
+    0,
     0,
     0,
     0,
@@ -99,6 +101,7 @@
     0,
     0,
     0,
+    3,
     3
    ],
    "spike": false
@@ -131,6 +134,7 @@
     0,
     0,
     0,
+    0,
     0
    ],
    "spike": false
@@ -139,6 +143,12 @@
    "name": "Fish Audio",
    "desc": "聲音複製與配音",
    "news": [
+    {
+     "source": "www.voiceove",
+     "title": "Fish Audio Drama 3: Directable AI Voice, Cloned Actors",
+     "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQT3JTOWZ4N3c1WDJyT19XQ0hFSXpfYzRKZ1A0ajM1SUNfbFR0dHl0V2JQM19GLUhIcnhtR1BjUFpVcUdPR19uUDFkVFFJbUU5WE1Jcy1YMU1xQUpXOVNmNzhpX1hHMWNLaEk0VHJSVmJjbFZtNV9mbXd1TGtFYVhwMVUzRVJIOHNuQ1ZrZjZ0TzJuWnBuUWc?oc=5",
+     "at": "2026-10-20T00:00:00Z"
+    },
     {
      "source": "MarkTechPost",
      "title": "Fish Audio Releases Drama 3, a 35B Open-Weight MoE Text-to-Speech Model",
@@ -150,15 +160,9 @@
      "title": "ElevenLabs and Fish Audio: Cost, Pauses and Voice Quality",
      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNbTd4T3dveXNVeTJwa3UzN0xVUEhTZlIyUWloSnNRSlhWUmliZVNtM2JjZWxPNTdaaTFWU1VvTGJLZzNFb293ZHhjelo5VWRHUDlIRDBmWGJVaDNuLVlwMVZSQ21sT1dwUkRtTWpxczRmT0JZWFlxWVowd0FRMm1OaE02NS0?oc=5",
      "at": "2026-10-17T11:00:00Z"
-    },
-    {
-     "source": "Startup Fort",
-     "title": "Fish Audio releases Drama 3, a free voice model that beats ElevenLabs on pronunciation",
-     "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNMmFtOVM4MlQ3RENjbXJHOGw1UGtpVjBldTdGdkMwOTZkc3l2RmZqMUFHQk5oZ05xenZDQklxaVNTTkRlV0pldU9vMzR5WDVoNFlkaDRqYjV2eFduYk51VTVGUGVJd3pCZVJOSlhIb3FyQzg2VXlZNUJJWnFuXy1hNGl3aFhDQTM1dHBQSElPYjhCWVJSUWFLakEzSEYtLXdDX3RzTEt2cWZyM1hfbU9Hc2RTZw?oc=5",
-     "at": "2026-10-14T04:41:07Z"
     }
    ],
-   "n_news7": 5,
+   "n_news7": 6,
    "n_hn7": 3,
    "n_bsky1": 3,
    "hn_top": {
@@ -169,7 +173,7 @@
     "hn": "https://news.ycombinator.com/item?id=50085198",
     "at": "2026-10-14T10:15:32Z"
    },
-   "score": 24,
+   "score": 27,
    "spark": [
     3,
     2,
@@ -189,12 +193,33 @@
     36,
     28,
     27,
-    24
+    24,
+    27
    ],
    "spike": true
   }
  ],
  "funding": [
+  {
+   "company": "Capable",
+   "amount": 38.0,
+   "stage": "種子",
+   "cat": "生技",
+   "title": "Capable raises $38M seed to build AI drug-discovery lab",
+   "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPRE1WMEdfMy1kTEVLbkk5V3JBSzVTRVl5S18zNmloMzZRbTZJU2JLeWlmS0VpZGRVMDc1MW9yZ2M4SUNCVklFWjRmemdibmZUdEFVWnJmelJsR1B1ZmRqUzgyVFpfeGtfcUs2aTN4YjMtU1J1RV9oR3N1MzVNSldSa2JNbFpsVFpmck5YUDRSQXVpZw?oc=5",
+   "at": "2026-10-20T16:29:29Z",
+   "source": "Dealroom"
+  },
+  {
+   "company": "Asymptote Labs",
+   "amount": 5.5,
+   "stage": "",
+   "cat": "AI 助理",
+   "title": "Asymptote Labs raises $5.5M to track and control what AI agents do",
+   "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFA5cl9STUhwVjJNSHNQeEdwTjdiUm9Cbm8xdUE0YzRITUk0YUJqbnNybGdwc1FPMmltR25aQm9TdmhTQktmVXpfTUctWUc0WFFGRTRKT3AxZm9zdDBXSXJlZGlPVFVqa1R4TVhLcW5WVXZuMUVsRERrZGVn?oc=5",
+   "at": "2026-10-20T16:18:07Z",
+   "source": "The Next Web"
+  },
   {
    "company": "Altay Therapeutics",
    "amount": 37.0,
@@ -259,5 +284,5 @@
  "showhn": [],
  "ph": [],
  "errs": [],
- "updatedAt": "2026-10-20T15:04:20Z"
+ "updatedAt": "2026-10-20T17:08:31Z"
 }
