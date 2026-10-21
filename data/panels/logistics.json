@@ -117,15 +117,24 @@
    "name": "CHAMPI",
    "level": "Red",
    "ll": [
-    127.9,
-    19.3
+    126.9,
+    19.9
    ],
    "from": "2026-10-14T12:00",
-   "to": "2026-10-21T12:00",
+   "to": "2026-10-21T18:00",
    "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 296 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=29&eventtype=TC",
-   "near": [],
-   "id": "1001338-29"
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=30&eventtype=TC",
+   "near": [
+    {
+     "port": "高雄",
+     "km": 749
+    },
+    {
+     "port": "基隆／台北",
+     "km": 788
+    }
+   ],
+   "id": "1001338-30"
   },
   {
    "name": "TRUDY",
@@ -151,18 +160,18 @@
    "id": "1001337-27"
   },
   {
-   "name": "TWENTY-TWO-E",
+   "name": "VANCE",
    "level": "Green",
    "ll": [
-    -99.3,
-    9.5
+    -99.8,
+    9.4
    ],
    "from": "2026-10-21T15:00",
-   "to": "2026-10-21T15:00",
-   "sev": "Tropical Depression (maximum wind speed of 185 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=1&eventtype=TC",
+   "to": "2026-10-21T21:00",
+   "sev": "Tropical Storm (maximum wind speed of 194 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=2&eventtype=TC",
    "near": [],
-   "id": "1001341-1"
+   "id": "1001341-2"
   }
  ],
  "ports": [
@@ -429,6 +438,14 @@
  "news": [
   {
    "source": "FreightWaves",
+   "title": "The Heartbeat of the American Supply Chain",
+   "url": "https://www.freightwaves.com/news/the-heartbeat-of-the-american-supply-chain",
+   "at": "2026-10-22T04:11:46+08:00",
+   "hot": false,
+   "zh": "美國供應鏈的心跳"
+  },
+  {
+   "source": "FreightWaves",
    "title": "TQL’s RICO response: rips carriers’ ‘poor business practices’",
    "url": "https://www.freightwaves.com/news/tqls-rico-response-rips-carriers-poor-business-practices",
    "at": "2026-10-22T02:16:39+08:00",
@@ -604,14 +621,6 @@
    "zh": "Primo Brands 合併後啟用首座新工廠"
   },
   {
-   "source": "FreightWaves",
-   "title": "Highway pitches shared standards as freight fraud shifts",
-   "url": "https://www.freightwaves.com/news/highway-shared-standards-freight-fraud",
-   "at": "2026-10-21T19:00:00+08:00",
-   "hot": false,
-   "zh": "隨著貨運詐騙手法轉變，Highway力推共用標準"
-  },
-  {
    "source": "The Loadstar",
    "title": "Podcast: How AI will transform freight forwarding beyond the hype",
    "url": "https://theloadstar.com/how-ai-will-transform-freight-forwarding-beyond-the-hype/",
@@ -623,5 +632,5 @@
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-21T20:00:09Z"
+ "updatedAt": "2026-10-21T21:00:41Z"
 }
