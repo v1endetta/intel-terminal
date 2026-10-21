@@ -63,10 +63,10 @@
   "veg_revert": {
    "cat": "生活成本",
    "desc": "兩週內漲超過 20% 的菜，再兩週會回落",
-   "open": 3,
-   "done": 0,
-   "hits": 0,
-   "brier": null,
+   "open": 1,
+   "done": 2,
+   "hits": 2,
+   "brier": 0.16,
    "bt_n": 25,
    "bt_rate": 0.72
   },
@@ -201,28 +201,6 @@
    "prob": 0.75,
    "due": "2026-08",
    "status": "open"
-  },
-  {
-   "id": "2026-10-11-veg_revert-18",
-   "made": "2026-10-11",
-   "rule": "veg_revert",
-   "subject": "青江菜",
-   "text": "青江菜（28.6 元）兩週後會比現在便宜",
-   "prob": 0.6,
-   "due": "2026-10-21",
-   "status": "open",
-   "base": 28.6
-  },
-  {
-   "id": "2026-10-11-veg_revert-19",
-   "made": "2026-10-11",
-   "rule": "veg_revert",
-   "subject": "小白菜",
-   "text": "小白菜（23.0 元）兩週後會比現在便宜",
-   "prob": 0.6,
-   "due": "2026-10-21",
-   "status": "open",
-   "base": 23.0
   },
   {
    "id": "2026-10-16-veg_revert-35",
@@ -655,13 +633,62 @@
    "due": "2027-04-11",
    "status": "open",
    "base": -11
+  },
+  {
+   "id": "2026-10-11-chain_gap-26",
+   "made": "2026-10-11",
+   "rule": "chain_gap",
+   "subject": "睡眠",
+   "text": "「睡眠」相關新店到 2027/04 年增高於現在（-13%），供給會跟上",
+   "prob": 0.5,
+   "due": "2027-04-11",
+   "status": "open",
+   "base": -13
+  },
+  {
+   "id": "2026-10-11-chain_gap-27",
+   "made": "2026-10-11",
+   "rule": "chain_gap",
+   "subject": "老屋翻新",
+   "text": "「老屋翻新」相關新店到 2027/04 年增高於現在（-6%），供給會跟上",
+   "prob": 0.5,
+   "due": "2027-04-11",
+   "status": "open",
+   "base": -6
   }
  ],
- "recent": [],
- "n_open": 54,
- "n_done": 0,
- "n_hit": 0,
+ "recent": [
+  {
+   "id": "2026-10-11-veg_revert-18",
+   "made": "2026-10-11",
+   "rule": "veg_revert",
+   "subject": "青江菜",
+   "text": "青江菜（28.6 元）兩週後會比現在便宜",
+   "prob": 0.6,
+   "due": "2026-10-21",
+   "status": "hit",
+   "base": 28.6,
+   "actual": "28.6 → 23.0 元/公斤",
+   "resolved": "2026-10-21"
+  },
+  {
+   "id": "2026-10-11-veg_revert-19",
+   "made": "2026-10-11",
+   "rule": "veg_revert",
+   "subject": "小白菜",
+   "text": "小白菜（23.0 元）兩週後會比現在便宜",
+   "prob": 0.6,
+   "due": "2026-10-21",
+   "status": "hit",
+   "base": 23.0,
+   "actual": "23.0 → 22.2 元/公斤",
+   "resolved": "2026-10-21"
+  }
+ ],
+ "n_open": 52,
+ "n_done": 2,
+ "n_hit": 2,
  "gen_at": "2026-10-18",
  "bt_at": "2026-10-19",
- "updatedAt": "2026-10-21T05:46:02Z"
+ "updatedAt": "2026-10-21T05:58:29Z"
 }
