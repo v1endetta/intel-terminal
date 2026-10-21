@@ -112,59 +112,7 @@
    "chg": -0.78
   }
  ],
- "storms": [
-  {
-   "name": "CHAMPI",
-   "level": "Red",
-   "ll": [
-    130.1,
-    18.1
-   ],
-   "from": "2026-10-14T12:00",
-   "to": "2026-10-21T00:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 296 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=27&eventtype=TC",
-   "near": [],
-   "id": "1001338-27"
-  },
-  {
-   "name": "TRUDY",
-   "level": "Green",
-   "ll": [
-    -108.0,
-    19.5
-   ],
-   "from": "2026-10-13T15:00",
-   "to": "2026-10-20T03:00",
-   "sev": "Tropical Depression (maximum wind speed of 194 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001337&episodeid=27&eventtype=TC",
-   "near": [
-    {
-     "port": "曼薩尼約（墨）",
-     "km": 391
-    },
-    {
-     "port": "拉薩羅卡德納斯（墨）",
-     "km": 637
-    }
-   ],
-   "id": "1001337-27"
-  },
-  {
-   "name": "WATI",
-   "level": "Green",
-   "ll": [
-    -156.8,
-    -20.7
-   ],
-   "from": "2026-10-16T06:00",
-   "to": "2026-10-19T06:00",
-   "sev": "Tropical Storm (maximum wind speed of 120 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001339&episodeid=7&eventtype=TC",
-   "near": [],
-   "id": "1001339-7"
-  }
- ],
+ "storms": [],
  "ports": [
   {
    "name": "上海洋山",
@@ -621,7 +569,9 @@
   }
  ],
  "threat": [],
- "errs": [],
+ "errs": [
+  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
+ ],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-21T02:28:28Z"
+ "updatedAt": "2026-10-21T03:31:55Z"
 }
