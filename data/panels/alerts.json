@@ -1,6 +1,22 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610211125001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "南投縣",
+    "臺南市",
+    "高雄市",
+    "屏東縣"
+   ],
+   "text": "天氣高溫炎熱，今(21)日中午前後南投縣、臺南市、高雄市、屏東縣為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-21T03:25:49Z",
+   "exp": "2026-10-21T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610211125.cap"
+  },
+  {
    "id": "CWA-Weather_strong-wind_202610211055001",
    "cat": "強風",
    "lvl": 2,
@@ -29,22 +45,6 @@
    "at": "2026-10-21T02:55:29Z",
    "exp": "2026-10-22T23:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610211055.cap"
-  },
-  {
-   "id": "CWA-Weather_heat_202610210731001",
-   "cat": "高溫",
-   "lvl": 2,
-   "area": [
-    "南投縣",
-    "臺南市",
-    "高雄市",
-    "屏東縣"
-   ],
-   "text": "天氣高溫炎熱，今(21)日中午前後南投縣、臺南市、高雄市、屏東縣為黃色燈號，請注意。",
-   "src": "中央氣象署",
-   "at": "2026-10-20T23:31:04Z",
-   "exp": "2026-10-21T17:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610210731.cap"
   },
   {
    "id": "CWA-Weather_strong-wind_202610210437001",
@@ -151,8 +151,8 @@
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/21 11:20:18"
+  "updated": "2026/10/21 11:41:14"
  },
  "errs": [],
- "updatedAt": "2026-10-21T03:25:39Z"
+ "updatedAt": "2026-10-21T03:41:23Z"
 }
