@@ -624,6 +624,28 @@
    "s": "瑞昱半導體將於115年10月29日(四)舉行2026年第3季線上法人說明會。 時間：4:00-5:00 pm 語言: 英"
   },
   {
+   "d": "2026-10-29",
+   "t": "20:30",
+   "ts": 1793277000000,
+   "r": "美",
+   "n": "GDP",
+   "k": "data",
+   "imp": 2,
+   "ap": false,
+   "src": "FRED"
+  },
+  {
+   "d": "2026-10-29",
+   "t": "20:30",
+   "ts": 1793277000000,
+   "r": "美",
+   "n": "PCE",
+   "k": "data",
+   "imp": 2,
+   "ap": false,
+   "src": "FRED"
+  },
+  {
    "d": "2026-10-30",
    "t": "13:30",
    "ts": null,
@@ -736,6 +758,17 @@
   },
   {
    "d": "2026-11-03",
+   "t": "23:00",
+   "ts": 1793718000000,
+   "r": "美",
+   "n": "JOLTS",
+   "k": "data",
+   "imp": 2,
+   "ap": false,
+   "src": "FRED"
+  },
+  {
+   "d": "2026-11-03",
    "t": null,
    "ts": null,
    "r": "日",
@@ -786,6 +819,17 @@
   },
   {
    "d": "2026-11-06",
+   "t": "21:30",
+   "ts": 1793971800000,
+   "r": "美",
+   "n": "美國非農就業",
+   "k": "data",
+   "imp": 3,
+   "ap": false,
+   "src": "FRED"
+  },
+  {
+   "d": "2026-11-06",
    "t": null,
    "ts": null,
    "r": "台",
@@ -804,6 +848,17 @@
    "imp": 1,
    "ap": false,
    "ex": "XSES"
+  },
+  {
+   "d": "2026-11-10",
+   "t": "21:30",
+   "ts": 1794317400000,
+   "r": "美",
+   "n": "CPI",
+   "k": "data",
+   "imp": 3,
+   "ap": false,
+   "src": "FRED"
   },
   {
    "d": "2026-11-10",
@@ -838,6 +893,28 @@
    "k": "expiry",
    "imp": 1,
    "ap": false
+  },
+  {
+   "d": "2026-11-13",
+   "t": "21:30",
+   "ts": 1794576600000,
+   "r": "美",
+   "n": "PPI",
+   "k": "data",
+   "imp": 2,
+   "ap": false,
+   "src": "FRED"
+  },
+  {
+   "d": "2026-11-17",
+   "t": "21:30",
+   "ts": 1794922200000,
+   "r": "美",
+   "n": "美國零售銷售",
+   "k": "data",
+   "imp": 2,
+   "ap": false,
+   "src": "FRED"
   },
   {
    "d": "2026-11-18",
@@ -1149,11 +1226,10 @@
  "from": "2026-10-22",
  "to": "2026-11-19",
  "ff_until": "2026-10-23",
- "n": 68,
+ "n": 75,
  "errs": [
-  "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json",
-  "FRED: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+  "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json"
  ],
  "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站",
- "updatedAt": "2026-10-22T04:01:00Z"
+ "updatedAt": "2026-10-22T07:09:12Z"
 }
