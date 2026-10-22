@@ -2583,6 +2583,7 @@ function EXPLORE() {
       { n: "焦點新聞", f: () => gtopCard() },
       { n: "地方新聞", lens: "news" },
       { n: "全球新聞", globe: 1, f: () => gxCard("wnews") },
+      { n: "民調", f: () => pollsCard() },
       { n: "台灣情緒", lens: "mood", f: () => { const m = (P.mood || {}).taiwan || {}; return { html: sideHTML({ eyebrow: "輿情 · 社群情緒", title: "台灣人今天的心情", big: m.label || "", color: (m.score || 0) < 0 ? DNH : UPH, body: moodViz() + listHTML([{ t: m.line || "" }, ...(m.themes || []).map(t => ({ t: "· " + t }))]), foot: '<a href="/terminal/#p-mood">終端機 ›</a>' }) }; } },
       { n: "熱搜", f: listOf("Google 熱搜", () => items("trends").slice(0, 8).map(x => ({ t: x.title, s: x.traffic })), "輿情", "trends") },
       { n: "PTT", f: () => pttCard() },
@@ -2639,6 +2640,7 @@ const PROV = {
   "洞見": ["insights_cat", "情報站各分類資料（程式整理、Gemini 寫句子）", "彙整", 360],
   "本月洞見": ["insights", "政府開放資料交叉比對（程式算訊號、Gemini 寫句子）", "每日", 1440],
   "AI 循環": ["aicycle", "SEC 財報（雲端五家資本支出）・財報新聞（AI 擷取指引）・FinMind 月營收・DRAMeXchange（只放漲跌）", "彙整", 360],
+  "民調": ["polls", "Google 新聞標題（AI 擷取民調數字，以調查單位公布為準）", "每 3 小時", 360],
   "論點追蹤": ["theses", "情報站各面板的資料，依每個論點寫好的門檻由程式判斷；美元指數、日圓、費半、加權指數歷史來自 Yahoo Finance", "每輪", 720],
   "領先指標": ["dlead", "dalta 自建：台股、韓股、費半、M1B 減 M2、紐約與費城聯準會調查、美國公司債利差等權合成", "每月", 1440, p => p.month],
   "信用利差": ["credit", "ICE BofA 美國公司債利差（經 FRED），只顯示近 3 年百分位", "每日", 1440, p => (((p.rows || [])[0]) || {}).asof],
@@ -5598,6 +5600,23 @@ function uspViz(D) {
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="近 30 天美國政策動作">` + lanes.map((n, i) => `<text x="0" y="${18 + i * 24}" class="vzt">${n}</text><line x1="${L}" x2="${W - 8}" y1="${14 + i * 24}" y2="${14 + i * 24}" stroke="rgba(255,255,255,.08)"/>`).join("")
     + pts.map((x, i) => `<circle cx="${X(x.date).toFixed(1)}" cy="${14 + lane(x.src) * 24 + ((i * 5) % 3 - 1) * 3}" r="${x.tw ? 5.5 : x.hot ? 4.2 : 3}" fill="${x.tw ? "#ffd60a" : x.hot ? "#ff9f0a" : "#636366"}" stroke="#121317" stroke-width="1" opacity=".95"/>`).join("")
     + `<text x="${L}" y="${H - 4}" class="vzt">30 天前</text><text x="${W - 8}" y="${H - 4}" text-anchor="end" class="vzt">今天</text></svg>`;
+}
+
+/* ---- 民調：持續追蹤的走勢＋各選區最新一筆 ---- */
+function pollsCard() {
+  const D = P.polls || {}, T = D.tracks || [], R = D.races || {}, L = (D.latest || []).filter(x => !x.race);
+  if (!T.length && !Object.keys(R).length && !L.length) return { html: sideHTML({ eyebrow: "輿情 · 民調", title: "抽樣民意怎麼說？", body: '<p class="empty">民調下一輪更新後出現（每 3 小時一次）。</p>' }) };
+  const t0 = T[0], last = t0 ? t0.pts[t0.pts.length - 1] : null;
+  const trk = T.slice(0, 4).map(t => { const v = t.pts.map(p => p.v), l = t.pts[t.pts.length - 1];
+    return `<div class="vzr-r"><span class="vzr-n">${esc(t.subject)}・${esc(t.metric)}</span>${vzSpark(v, v[v.length - 1] >= v[0] ? UPH : DNH, 90, 24)}<b>${l.v}%</b></div>`; }).join("");
+  const rc = Object.entries(R).slice(0, 5).map(([k, v]) => { const sh = v.filter(x => x.kind !== "差距").slice(0, 2), gp = v.find(x => x.kind === "差距");
+    return { t: k, s: [sh.map(x => `${x.subject} ${x.value}%`).join(" vs "), gp ? `${gp.subject}領先${gp.vs || ""} ${gp.value} 個百分點` : "", (v[0] || {}).org].filter(Boolean).join("・"), url: (v[0] || {}).url }; });
+  return { html: sideHTML({ eyebrow: "輿情 · 民調（新聞標題 AI 擷取）", title: "抽樣民意怎麼說？", big: last ? `${t0.subject}${t0.metric} ${last.v}%` : `${L.length} 則民調`, color: "#64d2ff",
+    body: (trk ? `<div class="nvh">持續追蹤（同一題出現 3 次以上）</div><div class="vzr">${trk}</div>` : "")
+      + (rc.length ? `<div class="nvh">選舉</div>` + listHTML(rc) : "")
+      + (L.length ? `<div class="nvh">最新議題民調</div>` + listHTML(L.slice(0, 6).map(x => ({ t: `${x.subject}・${x.metric} ${x.value}${x.kind === "差距" ? " 個百分點" : "%"}`, s: [x.org || x.src, (x.at || "").slice(5, 10).replace("-", "/")].filter(Boolean).join("・"), url: x.url }))) : "")
+      + `<p class="why">社群情緒是會說話的人，民調是抽樣過的全體。兩邊方向不一樣時最值得注意。不同調查單位的題目和方法不同，跨單位不能直接比數字。</p>`,
+    foot: '<a href="/terminal/#p-polls">終端機 ›</a>' }) };
 }
 
 /* ---- 使用紀錄：只存在這台瀏覽器（localStorage），不上傳；跑 6 週後用來決定哪些晶片可以砍 ----
