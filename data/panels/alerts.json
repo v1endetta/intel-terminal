@@ -1,6 +1,40 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_typhoon-warning_202610222109007732",
+   "cat": "颱風",
+   "lvl": 3,
+   "area": [
+    "臺北市",
+    "新北市",
+    "基隆市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "南投縣",
+    "雲林縣",
+    "嘉義市",
+    "嘉義縣",
+    "臺南市",
+    "高雄市",
+    "屏東縣",
+    "宜蘭縣",
+    "花蓮縣",
+    "臺東縣",
+    "澎湖縣",
+    "金門縣",
+    "連江縣"
+   ],
+   "text": "8-1LAND29CHAMPI薔琵2026-10-22T13:00:00+00:0021.30,124.804555940320中度颱風TYPHOON2026-10-23T12:00:00+00:0024.40,122.804555940320中度颱風 薔琵（國際命名 CHAMPI）22日21時的中心位置在北緯 21.",
+   "src": "中央氣象署",
+   "at": "2026-10-22T13:09:00Z",
+   "exp": "2026-10-23T01:15:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610222109.cap"
+  },
+  {
    "id": "CWA-Weather_typhoon-warning_202610222036267731",
    "cat": "颱風",
    "lvl": 3,
@@ -476,7 +510,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610211055.cap"
   }
  ],
- "n_total": 19,
+ "n_total": 20,
  "stopwork": {
   "items": [
    {
@@ -552,5 +586,5 @@
   "updated": "2026/10/22 21:08:03"
  },
  "errs": [],
- "updatedAt": "2026-10-22T13:07:07Z"
+ "updatedAt": "2026-10-22T13:16:55Z"
 }
