@@ -12423,6 +12423,7 @@ def p_theses():
     if nel is not None and NE.get("month"):
         M("nonel_exp", NE["month"] + "-01", nel)
     ev["t2"] = [E("非電子出口（扣掉電子零組件、資通與視聽）", f"近 3 月年增 {f1(nel)}，占總出口 {NE.get('share', '—')}%", neg(nel, 5, 10)),
+                E("台灣隱形冠軍營收（運動鞋、自行車、被動元件等 9 類，含海外工廠）", f"近 3 月年增 {f1(R('champions').get('index'))}（{R('champions').get('up_n', '—')}／{R('champions').get('n', '—')} 類成長）", neg(R("champions").get("index"), 0, 8), "出口統計看不到台商海外生產，這項補上"),
                 E("傳產三類（機械、基本金屬、塑橡膠）", f"近 3 月年增平均 {f1(tra)}", None, "參考用：機械含半導體設備、基本金屬有價格因素"),
                 E("電子與非電子的出口差距", "—" if nel is None or ela is None else f"電子 {ela:+.0f}% vs 非電子 {nel:+.0f}%", None if nel is None or ela is None else (1 if ela - nel >= 20 else (-1 if ela - nel < 5 else 0))),
                 E("公司新設", f"近 3 月年增 {f1(BZ.get('new_y3'))}，解散 {f1(BZ.get('close_y3'))}", neg(BZ.get("new_y3"), -3, 3)),
@@ -12834,6 +12835,63 @@ def p_forums():
     hist_put("forums", "m01_n", TODAY_TPE.isoformat(), len(items))
     return {"m01": items[:30], "src": "Mobile01 熱門討論（公開頁面）"}
 
+
+# ---------- 台灣隱形冠軍：稱霸全球但工廠多在海外的非 AI 製造業（出口統計看不到，月營收看得到） ----------
+CHAMP = [  # (經濟體, 上游訊號說明, [(代號, 名稱)])
+    ("運動鞋", "品牌庫存（Nike、Deckers）", [("9904", "寶成"), ("9910", "豐泰"), ("9802", "鈺齊")]),
+    ("機能布料", "品牌庫存、美國服飾消費", [("1476", "儒鴻"), ("1477", "聚陽")]),
+    ("自行車", "Shimano 營收與庫存", [("9921", "巨大"), ("9914", "美利達")]),
+    ("高爾夫", "Acushnet、Callaway 庫存", [("8924", "大田"), ("6670", "復盛應用"), ("8938", "明安")]),
+    ("被動元件", "手機、車用、工業需求", [("2327", "國巨"), ("2492", "華新科")]),
+    ("汽車售後零件", "美國里程數、車齡", [("1319", "東陽"), ("1522", "堤維西"), ("6605", "帝寶")]),
+    ("健身器材", "居家與健身房支出", [("1736", "喬山"), ("1598", "岱宇")]),
+    ("螺絲", "美國新屋開工", [("2012", "春雨")]),
+    ("航太零件", "波音、空巴交機", [("2634", "漢翔")]),
+]
+
+
+def p_champions():
+    headers = {"Authorization": f"Bearer {FINMIND_TOKEN}"} if FINMIND_TOKEN else {}
+    ser, errs = {}, []
+    for _, _, firms in CHAMP:
+        for code, name in firms:
+            try:
+                j = gjson("https://api.finmindtrade.com/api/v4/data", params={"dataset": "TaiwanStockMonthRevenue", "data_id": code, "start_date": "2017-01-01"}, headers=headers)
+                for r in j.get("data") or []:
+                    ser.setdefault(code, {})[f"{r['revenue_year']}{r['revenue_month']:02d}"] = r["revenue"]
+                time.sleep(0.3)
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{name}: {safe_err(e)}")
+    if len(ser) < 10:
+        raise RuntimeError(f"月營收只抓到 {len(ser)} 家")
+    def ymd(ym, k):
+        y, m = int(ym[:4]), int(ym[4:]) + k; y += (m - 1) // 12; m = (m - 1) % 12 + 1; return f"{y}{m:02d}"
+    def y3(codes, m):
+        cs = [c for c in codes if all(ymd(m, -i) in ser.get(c, {}) and ymd(m, -12 - i) in ser.get(c, {}) for i in range(3))]
+        if not cs:
+            return None
+        a = sum(ser[c][ymd(m, -i)] for c in cs for i in range(3)); b = sum(ser[c][ymd(m, -12 - i)] for c in cs for i in range(3))
+        return round(100 * (a / b - 1), 1) if b else None
+    months = sorted({m for v in ser.values() for m in v})
+    last = max(m for m in months if sum(1 for v in ser.values() if m in v) >= len(ser) * 0.7)   # 七成公司都公布了的最新月份
+    rows, idx = [], {}
+    for name, up, firms in CHAMP:
+        codes = [c for c, _ in firms]
+        spark = [y3(codes, m) for m in months if m <= last][-24:]
+        rows.append({"name": name, "up": up, "yoy3": y3(codes, last), "spark": spark,
+                     "firms": [{"code": c, "name": n, "yoy3": y3([c], last)} for c, n in firms]})
+    for m in [m for m in months if m <= last][-60:]:   # 合成指數：各經濟體近 3 月年增等權平均（不讓寶成、國巨這種大公司一家定江山）
+        vs = [y3([c for c, _ in f], m) for _, _, f in CHAMP]
+        vs = [v for v in vs if v is not None]
+        if len(vs) >= 6:
+            idx[m] = round(sum(vs) / len(vs), 1)
+            hist_put("champions", "idx", f"{m[:4]}-{m[4:]}", idx[m])
+    k = sorted(idx)
+    up_n = sum(1 for r in rows if (r["yoy3"] or 0) > 0)
+    return {"month": f"{last[:4]}-{last[4:]}", "index": idx.get(last), "index_spark": [idx[m] for m in k[-36:]], "index_t": [f"{m[:4]}-{m[4:]}" for m in k[-36:]],
+            "rows": sorted(rows, key=lambda r: -(r["yoy3"] if r["yoy3"] is not None else -999)), "up_n": up_n, "n": len(rows), "errs": errs[:5],
+            "src": "FinMind 上市櫃月營收（含海外子公司）；寶成含中國運動用品零售（寶勝）"}
+
 run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
@@ -12859,7 +12917,8 @@ run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Feder
 run("exports", p_exports, keep_if_fresh_hours=24 if "nonee_yoy3" in json.dumps(load_prev("exports") or {}) else 0)  # 新增非電子出口時先重抓一次； 台灣出口結構：月資料，每月 9 日前後公布
 run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
 run("logistics", p_logistics, keep_if_fresh_hours=1)  # 全球物流：風暴要即時，運價週／日資料
-run("aicycle", p_aicycle, keep_if_fresh_hours=6)  # AI 循環：資本支出一季一次、營收每月、DRAM 每日
+run("aicycle", p_aicycle, keep_if_fresh_hours=6)
+run("champions", p_champions, keep_if_fresh_hours=12)  # 台灣隱形冠軍：月營收，半天抓一次  # AI 循環：資本支出一季一次、營收每月、DRAM 每日
 run("revenue", p_revenue, keep_if_fresh_hours=20)
 run("etfholders", p_etfholders, keep_if_fresh_hours=12)
 run("corp", p_corp, keep_if_fresh_hours=6)
