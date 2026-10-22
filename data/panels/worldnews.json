@@ -1,24 +1,37 @@
 {
  "items": [
   {
-   "t": "強颱昌碧來襲，台股5兆美元市值股市暫停交易",
-   "en": "Typhoon Champi Shuts Taiwan’s $5 Trillion Stock Market",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-22/typhoon-champi-shuts-taiwan-s-5-trillion-stock-market",
-   "at": "2026-10-22T13:28:31Z",
-   "place": "台灣",
+   "t": "伊朗威脅若美以再發動攻擊，將鎖定波灣七國油氣與AI設施",
+   "en": "Iran threatens oil and AI facilities across seven Gulf countries if US and Israel renew attacks",
+   "src": "Guardian",
+   "url": "https://www.theguardian.com/world/2026/oct/22/iran-threatens-seven-gulf-countries-us-israel-renew-attacks",
+   "at": "2026-10-22T15:03:00Z",
+   "place": "伊朗",
    "ll": [
-    120.96,
-    23.7
+    53.69,
+    32.43
    ],
-   "cat": "災害",
-   "tw": 5,
-   "why": "颱風直接侵襲台灣並造成股市休市，對金融市場與經濟活動有直接衝擊。",
-   "n_src": 1,
+   "cat": "戰爭衝突",
+   "tw": 3,
+   "why": "中東局勢惡化恐衝擊全球能源供應，推升台灣能源進口成本。",
+   "n_src": 3,
    "srcs": [
-    "彭博市場"
+    "Guardian",
+    "Al Jazeera",
+    "NPR"
    ],
-   "also": []
+   "also": [
+    {
+     "src": "Al Jazeera",
+     "url": "https://www.aljazeera.com/news/2026/10/22/netanyahu-promises-iran-regime-change-can-israel-topple-tehran-government?traffic_source=rss",
+     "en": "Netanyahu promises Iran regime change: Can Israel topple Tehran government?"
+    },
+    {
+     "src": "NPR",
+     "url": "https://www.npr.org/2026/10/22/nx-s1-6011514/us-israel-iran-war",
+     "en": "U.S. and Israel are planning for a possible attack on Iran, source tells NPR"
+    }
+   ]
   },
   {
    "t": "強烈颱風「薔琵」逼近，台灣發布陸上警報",
@@ -39,6 +52,30 @@
     "CNA 新加坡"
    ],
    "also": []
+  },
+  {
+   "t": "什麼是PHP？為何引發全球資安大亂",
+   "en": "What is PHP and why did it spark a global cyber-security scramble?",
+   "src": "BBC 商業",
+   "url": "https://www.bbc.co.uk/news/articles/c3qjnwye0ep5o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-22T13:58:28Z",
+   "place": "",
+   "ll": null,
+   "cat": "科技",
+   "tw": 3,
+   "why": "PHP漏洞影響全球網站安全，台灣企業與伺服器面臨資安風險。",
+   "n_src": 2,
+   "srcs": [
+    "南華早報",
+    "BBC"
+   ],
+   "also": [
+    {
+     "src": "南華早報",
+     "url": "https://www.scmp.com/news/asia/southeast-asia/article/3371820/singapore-pushes-quick-action-php-security-flaws-hackers-prowl",
+     "en": "Singapore pushes for quick action on PHP security flaws as hackers prowl"
+    }
+   ]
   },
   {
    "t": "報告：華為與DeepSeek縮小與輝達的AI晶片生態差距，黃仁勳挫折",
@@ -81,39 +118,75 @@
    "also": []
   },
   {
-   "t": "什麼是PHP？為何引發全球資安大亂",
-   "en": "What is PHP and why did it spark a global cyber-security scramble?",
+   "t": "馬斯克為何策劃SpaceX與特斯拉世紀合併？",
+   "en": "Why is Elon Musk plotting a mega-merger of SpaceX and Tesla?",
    "src": "BBC 商業",
-   "url": "https://www.bbc.co.uk/news/articles/c3qjnwye0ep5o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-22T11:15:58Z",
-   "place": "",
-   "ll": null,
-   "cat": "科技",
-   "tw": 3,
-   "why": "PHP漏洞影響全球網站安全，台灣企業與伺服器面臨資安風險。",
-   "n_src": 1,
-   "srcs": [
-    "BBC"
-   ],
-   "also": []
-  },
-  {
-   "t": "支出擔憂升溫之際，蘋果成華爾街最愛的AI避風港",
-   "en": "Apple Is Wall Street’s Favorite AI Haven as Spending Fears Hit",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-22/apple-s-cash-flow-machine-makes-it-investors-favorite-ai-hedge",
-   "at": "2026-10-22T08:45:38Z",
+   "url": "https://www.bbc.co.uk/news/articles/cr93z1e87e0do?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-22T11:32:00Z",
    "place": "美國",
    "ll": [
     -95.71,
     37.09
    ],
    "cat": "科技",
+   "tw": 2,
+   "why": "科技巨頭合併案牽動全球資本市場與科技產業走向。",
+   "n_src": 3,
+   "srcs": [
+    "日本時報",
+    "NPR",
+    "BBC"
+   ],
+   "also": [
+    {
+     "src": "日本時報",
+     "url": "https://www.japantimes.co.jp/business/2026/10/22/musk-baggage-spacex-tesla-merger/",
+     "en": "Musk’s political baggage clouds prospects for SpaceX-Tesla deal"
+    },
+    {
+     "src": "NPR",
+     "url": "https://www.npr.org/2026/10/22/g-s1-149315/up-first-newsletter-midterm-campaign-israel-iran-elon-musk-spacex-tesla",
+     "en": "U.S., Israel may attack Iran post-elections. And, SpaceX and Tesla consider merging"
+    }
+   ]
+  },
+  {
+   "t": "胡塞武裝加劇攻擊沙烏地，油價應聲上漲",
+   "en": "Houthis Step Up Attacks on Saudi, Sending Oil Higher",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/videos/2026-10-22/houthis-step-up-attacks-on-saudi-sending-oil-higher-video",
+   "at": "2026-10-22T15:22:28Z",
+   "place": "沙烏地阿拉伯",
+   "ll": [
+    45.08,
+    23.89
+   ],
+   "cat": "戰爭衝突",
    "tw": 3,
-   "why": "蘋果AI策略與資本支出牽動台灣蘋概股與半導體供應鏈表現。",
+   "why": "油價上漲將推升台灣能源進口成本，並加劇國內通膨壓力。",
    "n_src": 1,
    "srcs": [
     "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "四方安全對話確認召開，馬尼拉暗示川習會前將有「小組」會談",
+   "en": "Quad confirmed, Manila envoy signals likely ‘Squad’ talks before Trump-Xi summit",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/us/diplomacy/article/3371804/quad-confirmed-manila-envoy-signals-likely-squad-talks-trump-xi-summit",
+   "at": "2026-10-22T15:00:05Z",
+   "place": "菲律賓",
+   "ll": [
+    121.77,
+    12.88
+   ],
+   "cat": "政治",
+   "tw": 3,
+   "why": "區域安全架構調整直接影響台海周邊地緣政治穩定。",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
    ],
    "also": []
   },
@@ -138,16 +211,79 @@
    "also": []
   },
   {
-   "t": "銅價受AI熱潮推動，但面臨供需不確定性",
-   "en": "Copper’s AI Tailwind Faces Supply and Demand Uncertainty",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/videos/2026-10-22/copper-s-ai-tailwind-faces-supply-and-demand-uncertainty-video",
-   "at": "2026-10-22T14:20:16Z",
-   "place": "全球",
-   "ll": null,
+   "t": "歐洲央行官員帕內塔：債券殖利率攀升將抑制經濟",
+   "en": "ECB’s Panetta Says Rising Bond Yields Will Restrain Economy",
+   "src": "彭博經濟",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-22/ecb-s-panetta-says-rising-bond-yields-will-restrain-economy",
+   "at": "2026-10-22T15:24:11Z",
+   "place": "歐盟",
+   "ll": [
+    8.68,
+    50.11
+   ],
    "cat": "經濟",
    "tw": 2,
-   "why": "銅是電子與半導體供應鏈關鍵原物料，價格波動牽動台灣科技業成本。",
+   "why": "歐元區經濟放緩可能影響台灣對歐出口需求與全球金融市場穩定。",
+   "n_src": 1,
+   "srcs": [
+    "彭博經濟"
+   ],
+   "also": []
+  },
+  {
+   "t": "美國期中選舉前夕，通膨與預算緊縮衝擊民生",
+   "en": "Rising costs and tight budgets strain Americans ahead of midterm elections",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/economy/2026/10/22/rising-costs-and-tight-budgets-strain-americans-ahead-of-midterm-elections?traffic_source=rss",
+   "at": "2026-10-22T15:07:38Z",
+   "place": "美國",
+   "ll": [
+    -95.71,
+    37.09
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "美國消費力道減弱將影響台灣電子與消費品出口表現。",
+   "n_src": 1,
+   "srcs": [
+    "Al Jazeera"
+   ],
+   "also": []
+  },
+  {
+   "t": "Spotify訂戶成長股價漲，愛馬仕因中國銷售疲軟下跌",
+   "en": "Spotify Rallies on Subscribers; Hermès falls on China Sales | Stock Movers",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/videos/2026-10-22/spotify-up-on-subscribers-hermes-falls-on-china-sales-video",
+   "at": "2026-10-22T14:54:37Z",
+   "place": "法國",
+   "ll": [
+    2.21,
+    46.23
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "中國消費市場疲軟將影響台灣相關供應鏈與精品代工出口。",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "美國IPO市場陷入停滯，關注Anthropic後是否有新動能",
+   "en": "‘Paralyzed’ US IPO Market Asks If There’s Life After Anthropic",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-22/-paralyzed-us-ipo-market-asks-if-there-s-life-after-anthropic",
+   "at": "2026-10-22T14:52:25Z",
+   "place": "美國",
+   "ll": [
+    -95.71,
+    37.09
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "美股IPO市場冷清影響全球科技業募資與台灣相關科技股評價。",
    "n_src": 1,
    "srcs": [
     "彭博市場"
@@ -175,24 +311,31 @@
    "also": []
   },
   {
-   "t": "駭客猖獗，新加坡敦促迅速修復PHP安全漏洞",
-   "en": "Singapore pushes for quick action on PHP security flaws as hackers prowl",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/asia/southeast-asia/article/3371820/singapore-pushes-quick-action-php-security-flaws-hackers-prowl",
-   "at": "2026-10-22T13:58:28Z",
-   "place": "新加坡",
+   "t": "法國首度發現人類感染沙蒙達病毒",
+   "en": "Shamonda virus detected in human for first time in France",
+   "src": "Guardian",
+   "url": "https://www.theguardian.com/world/2026/oct/22/shamonda-virus-detected-in-human-first-time-france",
+   "at": "2026-10-22T15:07:01Z",
+   "place": "法國",
    "ll": [
-    103.82,
-    1.35
+    2.21,
+    46.23
    ],
-   "cat": "科技",
-   "tw": 2,
-   "why": "PHP安全漏洞影響全球伺服器與網路安全，台灣資安與企業需留意防範。",
-   "n_src": 1,
+   "cat": "社會",
+   "tw": 1,
+   "why": "",
+   "n_src": 2,
    "srcs": [
-    "南華早報"
+    "Guardian",
+    "BBC"
    ],
-   "also": []
+   "also": [
+    {
+     "src": "BBC",
+     "url": "https://www.bbc.co.uk/news/articles/c6reyx1d9ge9o?at_medium=RSS&at_campaign=rss",
+     "en": "First human case of Shamonda virus detected in France, officials say"
+    }
+   ]
   },
   {
    "t": "前外交官：歐盟認為中國會屈服於壓力的想法是「嚴重誤判」",
@@ -212,24 +355,45 @@
    "srcs": [
     "南華早報"
    ],
-   "also": []
+   "also": [
+    {
+     "src": "南華早報",
+     "url": "https://www.scmp.com/opinion/world-opinion/article/3371543/europe-still-has-no-clear-goal-china",
+     "en": "Europe still has no clear goal on China"
+    },
+    {
+     "src": "南華早報",
+     "url": "https://www.scmp.com/news/china/diplomacy/article/3371807/who-blinked-first-fragile-eu-china-trade-peace-sparks-new-war-words",
+     "en": "Who blinked first? Fragile EU-China trade peace sparks new war of words"
+    }
+   ]
   },
   {
-   "t": "恐癱瘓7成網路？解析PHP編碼漏洞",
-   "en": "What’s the PHP coding flaw that could pull down 70 percent of the internet?",
+   "t": "官員遇襲事件頻傳：伊爾汗·歐瑪住家遭搜查",
+   "en": "Ilhan Omar home raid, Haines attack: Inside rise in violence on officials",
    "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/10/22/whats-the-php-coding-flaw-that-could-pull-down-70-percent-of-the-internet?traffic_source=rss",
-   "at": "2026-10-22T12:37:34Z",
-   "place": "",
-   "ll": null,
-   "cat": "科技",
-   "tw": 2,
-   "why": "全球網路安全漏洞可能波及台灣企業與網路服務。",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
+   "url": "https://www.aljazeera.com/news-analysis/2026/10/22/ilhan-omar-home-raid-haines-attack-inside-rise-in-violence-on-officials?traffic_source=rss",
+   "at": "2026-10-22T14:34:46Z",
+   "place": "美國",
+   "ll": [
+    -95.71,
+    37.09
    ],
-   "also": []
+   "cat": "社會",
+   "tw": 1,
+   "why": "",
+   "n_src": 2,
+   "srcs": [
+    "Al Jazeera",
+    "BBC"
+   ],
+   "also": [
+    {
+     "src": "BBC",
+     "url": "https://www.bbc.co.uk/news/articles/cm75p1kxryl5o?at_medium=RSS&at_campaign=rss",
+     "en": "Ilhan Omar says 'bizarre' pre-dawn raid on her home is forcing her to move out"
+    }
+   ]
   },
   {
    "t": "美國初領失業金人數降至19.4萬創三個月新低",
@@ -248,26 +412,6 @@
    "n_src": 1,
    "srcs": [
     "彭博經濟"
-   ],
-   "also": []
-  },
-  {
-   "t": "伊朗揭露進攻性戰略、美國發布警報：戰事一觸即發？",
-   "en": "Iran reveals ‘offensive’ doctrine, US issues alert: Is war imminent?",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/10/22/iran-reveals-offensive-doctrine-us-issues-alert-is-war-imminent?traffic_source=rss",
-   "at": "2026-10-22T12:12:32Z",
-   "place": "伊朗",
-   "ll": [
-    51.39,
-    35.69
-   ],
-   "cat": "戰爭衝突",
-   "tw": 2,
-   "why": "中東地緣政治緊張可能推升國際油價，影響台灣能源成本。",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
    ],
    "also": []
   },
@@ -292,24 +436,31 @@
    "also": []
   },
   {
-   "t": "誰先眨眼？脆弱的中歐貿易和平掀起新一輪口水戰",
-   "en": "Who blinked first? Fragile EU-China trade peace sparks new war of words",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/china/diplomacy/article/3371807/who-blinked-first-fragile-eu-china-trade-peace-sparks-new-war-words",
-   "at": "2026-10-22T12:00:18Z",
-   "place": "歐洲",
+   "t": "葉門青年運動攻擊沙烏地東部機場釀2死",
+   "en": "Two killed in Houthi attack on airport in eastern Saudi Arabia, authorities say",
+   "src": "BBC",
+   "url": "https://www.bbc.co.uk/news/articles/cqwy71ww156ro?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-22T13:46:33Z",
+   "place": "沙烏地阿拉伯",
    "ll": [
-    4.35,
-    50.85
+    45.08,
+    23.89
    ],
-   "cat": "政治",
-   "tw": 2,
-   "why": "歐中貿易衝突可能影響台灣對歐出口與全球供應鏈布局。",
-   "n_src": 1,
+   "cat": "戰爭衝突",
+   "tw": 1,
+   "why": "",
+   "n_src": 2,
    "srcs": [
-    "南華早報"
+    "BBC",
+    "Guardian"
    ],
-   "also": []
+   "also": [
+    {
+     "src": "Guardian",
+     "url": "https://www.theguardian.com/world/2026/oct/22/us-diplomats-told-to-leave-saudi-arabia-amid-houthi-attacks",
+     "en": "Some US diplomats told to leave Saudi Arabia amid Houthi attacks"
+    }
+   ]
   },
   {
    "t": "商會：美中關係需要更多工作層級對話，不只是高峰會",
@@ -332,22 +483,22 @@
    "also": []
   },
   {
-   "t": "中國與區域國家發表首份聯合聲明 敦促開放曼德海峽",
-   "en": "China urges opening Bab al-Mandeb in first joint statement with regional nation",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/china/diplomacy/article/3371811/china-urges-opening-bab-al-mandeb-first-joint-statement-regional-nation",
-   "at": "2026-10-22T11:39:20Z",
-   "place": "中國",
+   "t": "AI股震盪引發避險需求，美債價格飆升",
+   "en": "Treasuries Surge as AI Stock Jitters Fuel Haven Demand",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-22/long-end-us-yield-hits-one-month-low-as-ai-fears-fuel-haven-bid",
+   "at": "2026-10-22T03:46:59Z",
+   "place": "美國",
    "ll": [
-    104.2,
-    35.86
+    -95.71,
+    37.09
    ],
-   "cat": "政治",
-   "tw": 2,
-   "why": "中東航運安全牽動台灣能源進口與海運成本。",
+   "cat": "經濟",
+   "tw": 3,
+   "why": "美債殖利率波動影響全球資金流向，牽動台灣股市與匯率穩定。",
    "n_src": 1,
    "srcs": [
-    "南華早報"
+    "彭博市場"
    ],
    "also": []
   },
@@ -392,22 +543,176 @@
    "also": []
   },
   {
-   "t": "知情人士透露，美以正計畫對伊朗發動可能攻擊",
-   "en": "U.S. and Israel are planning for a possible attack on Iran, source tells NPR",
-   "src": "NPR",
-   "url": "https://www.npr.org/2026/10/22/nx-s1-6011514/us-israel-iran-war",
-   "at": "2026-10-22T08:56:58Z",
+   "t": "秘魯政府擬擴大財政赤字以提振經濟",
+   "en": "Peru Government to Seek Higher Fiscal Deficits to Shield Economy",
+   "src": "彭博經濟",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-22/peru-government-to-seek-higher-fiscal-deficits-to-shield-economy",
+   "at": "2026-10-22T15:28:56Z",
+   "place": "秘魯",
+   "ll": [
+    -75.02,
+    -9.19
+   ],
+   "cat": "經濟",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "彭博經濟"
+   ],
+   "also": []
+  },
+  {
+   "t": "馬克宏：法國週末示威將僅限於工會活動",
+   "en": "French weekend protests to be limited to union demos only, says Macron",
+   "src": "BBC",
+   "url": "https://www.bbc.co.uk/news/articles/cvde8g40xx42o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-22T15:22:48Z",
+   "place": "法國",
+   "ll": [
+    2.21,
+    46.23
+   ],
+   "cat": "政治",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "BBC"
+   ],
+   "also": []
+  },
+  {
+   "t": "祖克柏獲配Meta新股，留守加州應對富人稅表決",
+   "en": "Zuckerberg gets new Meta shares to stay in California amid billionaire tax vote",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/world/united-states-canada/article/3371825/zuckerberg-gets-new-meta-shares-stay-california-amid-billionaire-tax-vote",
+   "at": "2026-10-22T15:20:50Z",
+   "place": "美國",
+   "ll": [
+    -119.42,
+    36.78
+   ],
+   "cat": "經濟",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "長壽風險成投資人首要考量",
+   "en": "Retirement Longevity Risk a Top Factor for Investors",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/videos/2026-10-22/retirement-longevity-risk-a-top-factor-for-investors-video",
+   "at": "2026-10-22T15:03:29Z",
+   "place": "",
+   "ll": null,
+   "cat": "經濟",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "私人信貸每日估值面臨審查",
+   "en": "Private Credit's Daily Marks Under Fire",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/videos/2026-10-22/private-credit-s-daily-marks-under-fire-video",
+   "at": "2026-10-22T15:00:42Z",
+   "place": "",
+   "ll": null,
+   "cat": "經濟",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "加拿大與土耳其啟動強韌夥伴關係",
+   "en": "Carney, Erdogan launch ‘strong and resilient’ Canada-Turkiye partnership",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news/2026/10/22/carney-and-erdogan-launch-strong-and-resilient-canada-turkiye-partnership?traffic_source=rss",
+   "at": "2026-10-22T15:00:37Z",
+   "place": "加拿大",
+   "ll": [
+    -106.35,
+    56.13
+   ],
+   "cat": "政治",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "Al Jazeera"
+   ],
+   "also": []
+  },
+  {
+   "t": "加拿大亞伯達省曾歡迎移工，如今擬限縮權益",
+   "en": "Alberta welcomed migrant workers. Now, it wants to restrict their rights",
+   "src": "Guardian",
+   "url": "https://www.theguardian.com/world/2026/oct/22/canada-alberta-migrant-workers",
+   "at": "2026-10-22T15:00:29Z",
+   "place": "加拿大",
+   "ll": [
+    -116.58,
+    53.93
+   ],
+   "cat": "社會",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "Guardian"
+   ],
+   "also": []
+  },
+  {
+   "t": "Partners’ EyeCare擬達成協議，折價償還債務",
+   "en": "Partners’ EyeCare Set to Close Deal to Repay Debt at Discount",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-22/partners-eyecare-set-to-close-deal-to-repay-debt-at-discount",
+   "at": "2026-10-22T14:45:38Z",
    "place": "美國",
    "ll": [
     -95.71,
     37.09
    ],
-   "cat": "政治",
-   "tw": 2,
-   "why": "中東地緣政治若進一步升級，將衝擊全球能源供應及台灣金融與原物料市場。",
+   "cat": "經濟",
+   "tw": 1,
+   "why": "",
    "n_src": 1,
    "srcs": [
-    "NPR"
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "德國逮捕一名涉嫌為俄羅斯從事間諜活動的烏克蘭人",
+   "en": "Germany arrests Ukrainian man accused of spying for Russia",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news/2026/10/22/germany-arrests-ukrainian-man-accused-of-spying-for-russia?traffic_source=rss",
+   "at": "2026-10-22T14:36:06Z",
+   "place": "德國",
+   "ll": [
+    10.45,
+    51.17
+   ],
+   "cat": "政治",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "Al Jazeera"
    ],
    "also": []
   },
@@ -416,7 +721,7 @@
    "en": "Barclays cutting 5,000 jobs as it increases reliance on AI",
    "src": "BBC 商業",
    "url": "https://www.bbc.co.uk/news/articles/cm4g1p347qgxo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-22T14:05:23Z",
+   "at": "2026-10-22T14:28:59Z",
    "place": "英國倫敦",
    "ll": [
     -0.13,
@@ -429,20 +734,26 @@
    "srcs": [
     "BBC"
    ],
-   "also": []
+   "also": [
+    {
+     "src": "BBC 商業",
+     "url": "https://www.bbc.co.uk/news/articles/cm9qzgg5z89no?at_medium=RSS&at_campaign=rss",
+     "en": "Is an 'AI war' complicating your job search?"
+    }
+   ]
   },
   {
-   "t": "葉門青年運動攻擊沙烏地東部機場釀2死",
-   "en": "Two killed in Houthi attack on airport in eastern Saudi Arabia, authorities say",
+   "t": "印度網紅理財專家自殺，YouTuber遭逮捕",
+   "en": "YouTuber arrested after popular Indian finance influencer's suicide",
    "src": "BBC",
-   "url": "https://www.bbc.co.uk/news/articles/cqwy71ww156ro?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-22T13:46:33Z",
-   "place": "沙烏地阿拉伯",
+   "url": "https://www.bbc.co.uk/news/articles/ckx2d0ej7w7do?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-22T14:08:10Z",
+   "place": "印度",
    "ll": [
-    45.08,
-    23.89
+    78.96,
+    20.59
    ],
-   "cat": "戰爭衝突",
+   "cat": "社會",
    "tw": 1,
    "why": "",
    "n_src": 1,
@@ -472,64 +783,36 @@
    "also": []
   },
   {
-   "t": "前哨站、暴力與有罪不罰：以色列屯墾區土地掠奪剖析",
-   "en": "Outposts, violence, impunity: The anatomy of Israeli settler land grabs",
+   "t": "塞爾維亞學生走上街頭，盼透過選舉翻轉政局",
+   "en": "From the streets to the ballot box: Serbia’s students hope for election win",
    "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/features/2026/10/22/outposts-violence-impunity-the-anatomy-of-israeli-settler-land-grabs?traffic_source=rss",
-   "at": "2026-10-22T13:33:27Z",
-   "place": "以色列",
+   "url": "https://www.aljazeera.com/news/2026/10/22/from-the-streets-to-the-ballot-box-serbias-students-hope-for-election-win?traffic_source=rss",
+   "at": "2026-10-22T15:13:34Z",
+   "place": "塞爾維亞",
    "ll": [
-    34.85,
-    31.05
-   ],
-   "cat": "戰爭衝突",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
-   ],
-   "also": []
-  },
-  {
-   "t": "卡達與美國簽署液化天然氣長期採購協議至2054年",
-   "en": "Qatar Agrees to Buy US LNG to 2054 as War Disrupts Own Supply",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-22/qatar-agrees-to-buy-us-lng-to-2054-as-war-disrupts-own-supply",
-   "at": "2026-10-22T13:33:21Z",
-   "place": "卡達",
-   "ll": [
-    51.18,
-    25.35
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
-   "t": "葉門叛軍攻擊之際 部分美國外交官被令撤離沙烏地阿拉伯",
-   "en": "Some US diplomats told to leave Saudi Arabia amid Houthi attacks",
-   "src": "Guardian",
-   "url": "https://www.theguardian.com/world/2026/oct/22/us-diplomats-told-to-leave-saudi-arabia-amid-houthi-attacks",
-   "at": "2026-10-22T13:05:30Z",
-   "place": "沙烏地阿拉伯",
-   "ll": [
-    45.08,
-    23.89
+    21.01,
+    44.02
    ],
    "cat": "政治",
-   "tw": 1,
+   "tw": 0,
    "why": "",
-   "n_src": 1,
+   "n_src": 2,
    "srcs": [
+    "Al Jazeera",
     "Guardian"
    ],
-   "also": []
+   "also": [
+    {
+     "src": "Guardian",
+     "url": "https://www.theguardian.com/world/live/2026/oct/22/france-protests-emmanuel-macron-ukraine-energy-attacks-latest-europe-news-updates",
+     "en": "Rocky campaign nears end as Serbia prepares for watershed election – as it happened"
+    },
+    {
+     "src": "Guardian",
+     "url": "https://www.theguardian.com/world/2026/oct/22/serbia-election-student-protests-explainer-key-issues",
+     "en": "What is at stake in Serbia’s election? The key players, main issues and potential fallout"
+    }
+   ]
   },
   {
    "t": "荷姆茲海峽居民注意：美伊衝突如何影響你的生活？",
@@ -590,214 +873,12 @@
     "日本時報"
    ],
    "also": []
-  },
-  {
-   "t": "歐洲對中國仍缺乏明確戰略目標",
-   "en": "Europe still has no clear goal on China",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/opinion/world-opinion/article/3371543/europe-still-has-no-clear-goal-china",
-   "at": "2026-10-22T12:30:07Z",
-   "place": "比利時",
-   "ll": [
-    4.35,
-    50.85
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "香港再吸引18家重點企業、承諾投資百億港幣",
-   "en": "Hong Kong attracts another 18 strategic firms, HK$10 billion in investment pledged",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3371815/hong-kong-attracts-another-18-strategic-firms-hk10-billion-investment-pledged",
-   "at": "2026-10-22T12:23:55Z",
-   "place": "香港",
-   "ll": [
-    114.17,
-    22.32
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "捷克央行官員：能源風險增溫，升息決策陷入艱難",
-   "en": "Czech Policymaker Sees Tough Rate Hike Call as Energy Risks Grow",
-   "src": "彭博經濟",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-22/czech-policymaker-sees-tough-rate-hike-call-as-energy-risks-grow",
-   "at": "2026-10-22T12:13:14Z",
-   "place": "捷克",
-   "ll": [
-    15.47,
-    49.82
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博經濟"
-   ],
-   "also": []
-  },
-  {
-   "t": "馬斯克的政治包袱 替SpaceX與特斯拉協議增添變數",
-   "en": "Musk’s political baggage clouds prospects for SpaceX-Tesla deal",
-   "src": "日本時報",
-   "url": "https://www.japantimes.co.jp/business/2026/10/22/musk-baggage-spacex-tesla-merger/",
-   "at": "2026-10-22T11:32:00Z",
-   "place": "美國",
-   "ll": [
-    -95.71,
-    37.09
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "日本時報"
-   ],
-   "also": []
-  },
-  {
-   "t": "傳美以擬於大選後攻擊伊朗，特斯拉與SpaceX考慮合併",
-   "en": "U.S., Israel may attack Iran post-elections. And, SpaceX and Tesla consider merging",
-   "src": "NPR",
-   "url": "https://www.npr.org/2026/10/22/g-s1-149315/up-first-newsletter-midterm-campaign-israel-iran-elon-musk-spacex-tesla",
-   "at": "2026-10-22T11:28:24Z",
-   "place": "美國",
-   "ll": [
-    -95.71,
-    37.09
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "NPR"
-   ],
-   "also": []
-  },
-  {
-   "t": "對俄政策引發共和黨反彈 成為川普在國會的挑戰",
-   "en": "Republican backlash over Russia policy poses challenge for Trump in Congress",
-   "src": "日本時報",
-   "url": "https://www.japantimes.co.jp/news/2026/10/22/world/trump-russia-backlash-challenge/",
-   "at": "2026-10-22T11:24:00Z",
-   "place": "美國",
-   "ll": [
-    -95.71,
-    37.09
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "日本時報"
-   ],
-   "also": []
-  },
-  {
-   "t": "美國食螺蠅首次擴散至野生動物",
-   "en": "US Says Screwworm Spreads to Wildlife for First Time",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-22/usda-confirms-first-us-wildlife-case-of-new-world-screwworm",
-   "at": "2026-10-22T11:23:53Z",
-   "place": "美國",
-   "ll": [
-    -95.71,
-    37.09
-   ],
-   "cat": "社會",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
-   "t": "南韓與美國舉行聯合渡河演習",
-   "en": "S. Korea, U.S. hold combined river-crossing drills",
-   "src": "韓聯社",
-   "url": "https://en.yna.co.kr/view/AEN20261022012000315",
-   "at": "2026-10-22T11:15:59Z",
-   "place": "南韓",
-   "ll": [
-    127.77,
-    35.91
-   ],
-   "cat": "戰爭衝突",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "韓聯社"
-   ],
-   "also": []
-  },
-  {
-   "t": "英國政界利用AI生成焦點團體測試宣傳訊息",
-   "en": "U.K. politicians are testing their messages on AI-generated focus groups",
-   "src": "日本時報",
-   "url": "https://www.japantimes.co.jp/news/2026/10/22/world/politics/uk-politicians-ai-focus-groups/",
-   "at": "2026-10-22T11:12:00Z",
-   "place": "英國",
-   "ll": [
-    -3.44,
-    55.38
-   ],
-   "cat": "科技",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "日本時報"
-   ],
-   "also": []
-  },
-  {
-   "t": "土耳其謹慎降息 替未來政策保留空間",
-   "en": "Turkey Delivers Cautious Rate Cut, Leaves Room for Another",
-   "src": "彭博經濟",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-22/turkey-cuts-interest-rate-for-first-time-since-start-of-iran-war",
-   "at": "2026-10-22T11:02:06Z",
-   "place": "土耳其",
-   "ll": [
-    35.24,
-    38.96
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博經濟"
-   ],
-   "also": []
   }
  ],
  "n_zh": 40,
- "n_tw": 7,
- "n_big": 0,
- "errs": [
-  "同事件比對: RuntimeError: gemini-3.1-flash-lite 503 This model is currently experiencing high demand. Spikes in demand are usually temporary. "
- ],
+ "n_tw": 9,
+ "n_big": 2,
+ "errs": [],
  "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報、彭博；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷",
- "updatedAt": "2026-10-22T14:25:42Z"
+ "updatedAt": "2026-10-22T15:29:06Z"
 }
