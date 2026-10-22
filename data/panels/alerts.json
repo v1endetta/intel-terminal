@@ -1,6 +1,21 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_extremely-rain_202610221403001",
+   "cat": "降雨",
+   "lvl": 2,
+   "area": [
+    "基隆市",
+    "桃園市",
+    "宜蘭縣"
+   ],
+   "text": "東北季風及第29號颱風外圍環流影響，易有短延時強降雨，今(22)日基隆北海岸、桃園以北及宜蘭地區有局部大雨發生的機率，請注意雷擊及強陣風，低窪地區請慎防積水。",
+   "src": "中央氣象署",
+   "at": "2026-10-22T06:03:36Z",
+   "exp": "2026-10-23T00:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610221403.cap"
+  },
+  {
    "id": "CWA-Weather_typhoon-warning_202610221314427713",
    "cat": "颱風",
    "lvl": 3,
@@ -323,7 +338,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610211055.cap"
   }
  ],
- "n_total": 10,
+ "n_total": 11,
  "stopwork": {
   "items": [
    {
@@ -396,8 +411,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/22 13:56:03"
+  "updated": "2026/10/22 14:17:03"
  },
  "errs": [],
- "updatedAt": "2026-10-22T06:04:38Z"
+ "updatedAt": "2026-10-22T06:20:45Z"
 }
