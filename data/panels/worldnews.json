@@ -1,39 +1,6 @@
 {
  "items": [
   {
-   "t": "AI揭露重大資安漏洞，全球多個網站陷入癱瘓",
-   "en": "Websites go dark worldwide as AI exposes critical security flaws",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/world/article/3371694/websites-go-dark-worldwide-ai-exposes-critical-security-flaws",
-   "at": "2026-10-22T00:10:27Z",
-   "place": "美國",
-   "ll": [
-    -77.04,
-    38.9
-   ],
-   "cat": "科技",
-   "tw": 2,
-   "why": "全球網站與資安漏洞可能波及台灣企業與網路服務。",
-   "n_src": 3,
-   "srcs": [
-    "Al Jazeera",
-    "南華早報",
-    "BBC"
-   ],
-   "also": [
-    {
-     "src": "Al Jazeera",
-     "url": "https://www.aljazeera.com/news/2026/10/22/world-leaders-warn-against-security-flaw-found-in-php-computer-programming?traffic_source=rss",
-     "en": "World leaders warn of security flaws found in PHP programming language"
-    },
-    {
-     "src": "BBC 商業",
-     "url": "https://www.bbc.co.uk/news/articles/cmly0lg3w5x2o?at_medium=RSS&at_campaign=rss",
-     "en": "Websites taken down worldwide as critical cyber-security update issued"
-    }
-   ]
-  },
-  {
    "t": "美方憂心青年運動威脅 下令駐沙烏地阿拉伯人員撤離",
    "en": "US orders departure of personnel from Saudi Arabia, citing Houthi threat",
    "src": "Al Jazeera",
@@ -47,9 +14,10 @@
    "cat": "政治",
    "tw": 2,
    "why": "中東地緣政治緊張升溫，可能影響國際油價與台灣能源進口成本。",
-   "n_src": 3,
+   "n_src": 4,
    "srcs": [
     "南華早報",
+    "日本時報",
     "Al Jazeera",
     "NPR"
    ],
@@ -60,6 +28,11 @@
      "en": "US orders diplomats to leave Saudi Arabia amid Houthi strikes"
     },
     {
+     "src": "日本時報",
+     "url": "https://www.japantimes.co.jp/news/2026/10/22/world/us-diplomats-saudi-arabia-houthi/",
+     "en": "U.S. orders diplomats to depart Saudi Arabia amid Houthi strikes"
+    },
+    {
      "src": "NPR",
      "url": "https://www.npr.org/2026/10/21/nx-s1-6009545/saudi-arabia-cancels-davos-in-the-desert-due-to-air-strikes",
      "en": "Saudi Arabia cancels 'Davos in the Desert' due to Yemen's Houthi strikes"
@@ -67,29 +40,64 @@
    ]
   },
   {
-   "t": "北韓令邊境部隊 遇南韓威脅採取果斷行動",
-   "en": "North Korea tells border troops to take 'resolute action' if South threatens their safety",
-   "src": "CNA 新加坡",
-   "url": "https://www.channelnewsasia.com/east-asia/north-korea-border-troops-resolute-action-safety-6478126",
-   "at": "2026-10-22T00:02:16Z",
-   "place": "北韓",
-   "ll": [
-    127.51,
-    40.34
-   ],
-   "cat": "戰爭衝突",
+   "t": "發布關鍵資安更新後 全球多個網站傳出當機",
+   "en": "Websites taken down worldwide as critical cyber-security update issued",
+   "src": "BBC 商業",
+   "url": "https://www.bbc.co.uk/news/articles/cmly0lg3w5x2o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-22T00:17:00Z",
+   "place": "",
+   "ll": null,
+   "cat": "科技",
    "tw": 2,
-   "why": "朝鮮半島緊張局勢升溫，牽動區域安全與地緣政治穩定。",
+   "why": "全球性資安更新釀成網站當機，可能波及台灣企業運作與網路服務。",
    "n_src": 2,
    "srcs": [
-    "韓聯社",
-    "CNA 新加坡"
+    "日本時報",
+    "BBC"
    ],
    "also": [
     {
-     "src": "韓聯社",
-     "url": "https://en.yna.co.kr/view/AEN20261022001151320",
-     "en": "(LEAD) N.K. leader's sister warns of border countermeasures, loudspeakers to be ready with"
+     "src": "日本時報",
+     "url": "https://www.japantimes.co.jp/news/2026/10/22/world/government-websites-security-php-ai/",
+     "en": "Government websites go dark after AI-discovered flaw sparks security scramble"
+    }
+   ]
+  },
+  {
+   "t": "普丁會晤川普烏克蘭特使 下令釋放遭關押美國人",
+   "en": "Putin orders release of jailed American as he meets Trump envoy for Ukraine talks",
+   "src": "Guardian",
+   "url": "https://www.theguardian.com/world/2026/oct/21/putin-witkoff-russia-ukraine-trump-stephen-hubbard-release",
+   "at": "2026-10-22T01:16:20Z",
+   "place": "俄羅斯莫斯科",
+   "ll": [
+    37.62,
+    55.76
+   ],
+   "cat": "政治",
+   "tw": 1,
+   "why": "",
+   "n_src": 3,
+   "srcs": [
+    "Guardian",
+    "日本時報",
+    "NPR"
+   ],
+   "also": [
+    {
+     "src": "日本時報",
+     "url": "https://www.japantimes.co.jp/news/2026/10/22/world/putin-us-hostage-release/",
+     "en": "Putin releases hostage to U.S., drawing praise from Trump administration"
+    },
+    {
+     "src": "NPR",
+     "url": "https://www.npr.org/2026/10/21/nx-s1-6010608/putin-releases-american-stephen-hubbard-from-russian-prison",
+     "en": "Putin releases American Stephen Hubbard from Russian prison"
+    },
+    {
+     "src": "NPR",
+     "url": "https://www.npr.org/2026/10/21/nx-s1-6009380/russia-releases-imprisoned-us-citizen",
+     "en": "Russia releases imprisoned U.S. citizen Stephen Hubbard following Trump's request"
     }
    ]
   },
@@ -114,44 +122,6 @@
    "also": []
   },
   {
-   "t": "普丁釋放美國人質獲川普政府讚賞",
-   "en": "Putin releases hostage to U.S., drawing praise from Trump administration",
-   "src": "日本時報",
-   "url": "https://www.japantimes.co.jp/news/2026/10/22/world/putin-us-hostage-release/",
-   "at": "2026-10-21T23:59:00Z",
-   "place": "俄羅斯莫斯科",
-   "ll": [
-    37.62,
-    55.76
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 3,
-   "srcs": [
-    "日本時報",
-    "NPR",
-    "Guardian"
-   ],
-   "also": [
-    {
-     "src": "NPR",
-     "url": "https://www.npr.org/2026/10/21/nx-s1-6010608/putin-releases-american-stephen-hubbard-from-russian-prison",
-     "en": "Putin releases American Stephen Hubbard from Russian prison"
-    },
-    {
-     "src": "Guardian",
-     "url": "https://www.theguardian.com/world/2026/oct/21/putin-witkoff-russia-ukraine-trump-stephen-hubbard-release",
-     "en": "Putin orders release of jailed American as he meets Trump envoy for Ukraine talks"
-    },
-    {
-     "src": "NPR",
-     "url": "https://www.npr.org/2026/10/21/nx-s1-6009380/russia-releases-imprisoned-us-citizen",
-     "en": "Russia releases imprisoned U.S. citizen Stephen Hubbard following Trump's request"
-    }
-   ]
-  },
-  {
    "t": "台灣公平會禁止Grab併購台灣吳柏毅外送業務",
    "en": "Taiwan regulator blocks Grab's purchase of Foodpanda delivery business in Taiwan",
    "src": "CNA 新加坡",
@@ -172,11 +142,48 @@
    "also": []
   },
   {
-   "t": "AI疑慮未除，首爾股市開盤走低",
-   "en": "(LEAD) Seoul shares open lower amid persistent AI woes",
-   "src": "韓聯社",
-   "url": "https://en.yna.co.kr/view/AEN20261022001851320",
-   "at": "2026-10-22T00:26:00Z",
+   "t": "台北禁止赴陸參加國父誕辰紀念 北京砲轟",
+   "en": "Beijing hits out after Taipei bans mainland travel for Sun Yat-sen anniversary",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/china/politics/article/3371695/beijing-hits-out-after-taipei-bans-mainland-travel-sun-yat-sen-anniversary",
+   "at": "2026-10-22T01:00:10Z",
+   "place": "台灣台北",
+   "ll": [
+    121.57,
+    25.03
+   ],
+   "cat": "政治",
+   "tw": 2,
+   "why": "兩岸政治互動與交流限制影響兩岸關係氛圍。",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "儘管獲利堪憂 AI熱潮有望支撐亞洲經濟",
+   "en": "AI Boom Likely to Cushion Asia Despite Earnings Woes",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/videos/2026-10-22/ai-boom-likely-to-cushion-asia-despite-earnings-woes-video",
+   "at": "2026-10-22T00:55:16Z",
+   "place": "亞洲",
+   "ll": null,
+   "cat": "經濟",
+   "tw": 2,
+   "why": "AI熱潮帶動亞洲供應鏈，間接影響台灣科技股表現。",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "晶片繁榮帶動南韓央行罕見連續升息後維持利率不變",
+   "en": "BOK Holds Rate After Rare Back-to-Back Increase Due to Chip Boom",
+   "src": "彭博經濟",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-22/bok-holds-rate-as-it-takes-stock-of-back-to-back-increases",
+   "at": "2026-10-22T00:52:07Z",
    "place": "南韓首爾",
    "ll": [
     126.98,
@@ -184,10 +191,10 @@
    ],
    "cat": "經濟",
    "tw": 2,
-   "why": "南韓股市波動可能牽動亞洲半導體與電子類股表現。",
+   "why": "南韓晶片出口暢旺帶動經濟，與台灣半導體產業具競合關係。",
    "n_src": 1,
    "srcs": [
-    "韓聯社"
+    "彭博經濟"
    ],
    "also": []
   },
@@ -208,46 +215,6 @@
    "n_src": 1,
    "srcs": [
     "彭博市場"
-   ],
-   "also": []
-  },
-  {
-   "t": "AI疑慮未除，首爾股市開盤走低",
-   "en": "Seoul shares open lower amid persistent AI woes",
-   "src": "韓聯社",
-   "url": "https://en.yna.co.kr/view/AEN20261022001800320",
-   "at": "2026-10-22T00:04:16Z",
-   "place": "南韓首爾",
-   "ll": [
-    126.98,
-    37.57
-   ],
-   "cat": "經濟",
-   "tw": 2,
-   "why": "南韓股市波動可能牽動亞洲半導體與電子類股表現。",
-   "n_src": 1,
-   "srcs": [
-    "韓聯社"
-   ],
-   "also": []
-  },
-  {
-   "t": "AI疑慮未除，首爾股市開盤走低",
-   "en": "(URGENT) Seoul shares open lower amid persistent AI woes",
-   "src": "韓聯社",
-   "url": "https://en.yna.co.kr/view/AEN20261022001700320",
-   "at": "2026-10-22T00:02:03Z",
-   "place": "南韓首爾",
-   "ll": [
-    126.98,
-    37.57
-   ],
-   "cat": "經濟",
-   "tw": 2,
-   "why": "南韓股市波動可能牽動亞洲半導體與電子類股表現。",
-   "n_src": 1,
-   "srcs": [
-    "韓聯社"
    ],
    "also": []
   },
@@ -312,26 +279,6 @@
    "also": []
   },
   {
-   "t": "桑托斯能源受惠新液化天然氣與石油項目 季度產量創新高",
-   "en": "Santos Posts Record Quarterly Output on New LNG, Oil Projects",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-21/santos-posts-record-quarterly-output-on-new-lng-oil-projects",
-   "at": "2026-10-21T23:09:53Z",
-   "place": "澳洲雪梨",
-   "ll": [
-    151.21,
-    -33.87
-   ],
-   "cat": "經濟",
-   "tw": 2,
-   "why": "澳洲能源產量變動，牽動亞太地區天然氣與原油供應及價格。",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
    "t": "馬斯克為何策劃SpaceX與特斯拉世紀合併？",
    "en": "Why is Elon Musk plotting a mega-merger of SpaceX and Tesla?",
    "src": "BBC 商業",
@@ -352,26 +299,6 @@
    "also": []
   },
   {
-   "t": "花旗等待中國證券牌照 擬爭取中國市場龍頭地位",
-   "en": "Citi Targets Top Spot in China as It Awaits Securities License",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-21/citi-targets-top-spot-in-china-as-it-awaits-securities-license",
-   "at": "2026-10-21T23:00:00Z",
-   "place": "中國北京",
-   "ll": [
-    116.41,
-    39.9
-   ],
-   "cat": "經濟",
-   "tw": 2,
-   "why": "外商金融機構在中國佈局調整，影響外資在兩岸三地的金融動向。",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
    "t": "聖嬰現象加劇通膨威脅 菲律賓擬調升基準利率",
    "en": "Philippines to Lift Key Rate as El Niño Adds to Inflation Threat",
    "src": "彭博經濟",
@@ -388,26 +315,6 @@
    "n_src": 1,
    "srcs": [
     "彭博經濟"
-   ],
-   "also": []
-  },
-  {
-   "t": "財報後美股期指下跌、油價上揚",
-   "en": "US Stock Futures Drop After Earnings, Oil Gains: Markets Wrap",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-21/stock-market-today-dow-s-p-live-updates",
-   "at": "2026-10-21T22:13:33Z",
-   "place": "美國紐約",
-   "ll": [
-    -74.01,
-    40.71
-   ],
-   "cat": "經濟",
-   "tw": 2,
-   "why": "美股期指與國際油價波動將連動台股開盤與國內能源成本。",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
    ],
    "also": []
   },
@@ -459,53 +366,6 @@
    ]
   },
   {
-   "t": "MSCI遭投資人施壓，須為印尼嚴厲警告給出合理解釋",
-   "en": "MSCI Pressed by Investors to Justify Drastic Indonesia Warning",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-21/msci-pressed-by-investors-to-justify-drastic-indonesia-warning",
-   "at": "2026-10-21T23:00:00Z",
-   "place": "印尼雅加達",
-   "ll": [
-    106.85,
-    -6.21
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 2,
-   "srcs": [
-    "彭博市場",
-    "CNA 新加坡"
-   ],
-   "also": [
-    {
-     "src": "CNA 新加坡",
-     "url": "https://www.channelnewsasia.com/asia/prabowo-accuses-msci-intimidate-indonesia-market-rout-6478796",
-     "en": "Prabowo accuses MSCI of trying to intimidate Indonesia after market rout"
-    }
-   ]
-  },
-  {
-   "t": "南海外交緊張之際 北京稱允許菲律賓運補軍艦",
-   "en": "China says it allowed Philippines to resupply warship amid diplomatic tensions",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/china/diplomacy/article/3371693/china-says-it-allowed-philippines-resupply-warship-amid-diplomatic-tensions",
-   "at": "2026-10-21T20:57:34Z",
-   "place": "南海",
-   "ll": [
-    121.77,
-    12.88
-   ],
-   "cat": "政治",
-   "tw": 2,
-   "why": "南海地緣政治緊張，牽動區域安全與台灣的周邊海域穩定。",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
    "t": "醫師表示：教宗方濟各接受癌症手術後無需進一步治療",
    "en": "Pope Leo needs no further treatment after cancer surgery, doctors say",
    "src": "Al Jazeera",
@@ -539,6 +399,26 @@
    ]
   },
   {
+   "t": "美光台灣廠展開史上首次晶片工人罷工",
+   "en": "Taiwan's first-ever chip workers strike begins at Micron plant",
+   "src": "日經亞洲",
+   "url": "https://asia.nikkei.com/business/tech/semiconductors/taiwan-s-first-ever-chip-workers-strike-begins-at-micron-plant",
+   "at": "",
+   "place": "台灣",
+   "ll": [
+    120.96,
+    23.7
+   ],
+   "cat": "經濟",
+   "tw": 4,
+   "why": "外商半導體在台廠房首次發生罷工，直接衝擊台灣高科技產業供應鏈。",
+   "n_src": 1,
+   "srcs": [
+    "日經亞洲"
+   ],
+   "also": []
+  },
+  {
    "t": "沙烏地法赫德國王國際機場遭攻擊，釀1死8傷",
    "en": "One killed, eight injured in attack on Saudi Arabia’s King Fahd airport",
    "src": "Al Jazeera",
@@ -559,22 +439,19 @@
    "also": []
   },
   {
-   "t": "中國企業推出「守衛者」機器人，能解除攻擊並抬起汽車",
-   "en": "Chinese firm unveils ‘guardian’ robot that can disarm attackers, lift cars",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/tech/tech-trends/article/3371683/chinese-firm-unveils-guardian-robot-can-disarm-attackers-lift-cars",
-   "at": "2026-10-22T00:00:15Z",
-   "place": "中國",
-   "ll": [
-    104.2,
-    35.86
-   ],
+   "t": "全球領袖警告PHP程式語言存在安全漏洞",
+   "en": "World leaders warn of security flaws found in PHP programming language",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news/2026/10/22/world-leaders-warn-against-security-flaw-found-in-php-computer-programming?traffic_source=rss",
+   "at": "2026-10-22T00:10:27Z",
+   "place": "",
+   "ll": null,
    "cat": "科技",
    "tw": 1,
    "why": "",
    "n_src": 1,
    "srcs": [
-    "南華早報"
+    "Al Jazeera"
    ],
    "also": []
   },
@@ -679,6 +556,33 @@
    "also": []
   },
   {
+   "t": "普拉博沃警告區域批評者 印尼不會在霾害問題上受辱",
+   "en": "Prabowo warns regional critics Indonesia won’t be ‘insulted’ over haze",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/asia/southeast-asia/article/3371700/prabowo-warns-regional-critics-indonesia-wont-be-insulted-over-haze",
+   "at": "2026-10-22T00:54:00Z",
+   "place": "印尼",
+   "ll": [
+    113.92,
+    -0.79
+   ],
+   "cat": "政治",
+   "tw": 0,
+   "why": "",
+   "n_src": 2,
+   "srcs": [
+    "南華早報",
+    "CNA 新加坡"
+   ],
+   "also": [
+    {
+     "src": "CNA 新加坡",
+     "url": "https://www.channelnewsasia.com/asia/president-prabowo-berates-countries-insult-indonesia-wildfires-haze-6478676",
+     "en": "Prabowo berates countries that 'insult' Indonesia over wildfires"
+    }
+   ]
+  },
+  {
    "t": "Airbnb新規上路：房東不得再要求房客自己剝床單洗碗",
    "en": "Airbnb hosts can no longer make guests strip beds and wash dishes under new rules",
    "src": "BBC 商業",
@@ -695,26 +599,6 @@
    "n_src": 1,
    "srcs": [
     "BBC"
-   ],
-   "also": []
-  },
-  {
-   "t": "加拿大出版商因作家小說使用AI而終止合作",
-   "en": "Canadian publisher drops writer Thelyson Orelien over AI use in novel",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/10/21/canadian-publisher-cuts-ties-with-best-selling-writer-orelien-over-ai-use?traffic_source=rss",
-   "at": "2026-10-21T22:16:50Z",
-   "place": "加拿大渥太華",
-   "ll": [
-    -75.7,
-    45.42
-   ],
-   "cat": "科技",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
    ],
    "also": []
   },
@@ -739,26 +623,6 @@
    "also": []
   },
   {
-   "t": "中國尋求出售殲-35匿蹤戰機，巴基斯坦與美國因素成關鍵",
-   "en": "Pakistan and the US factor as China looks to sell its J-35 stealth jets",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/opinion/asia-opinion/article/3371561/pakistan-and-us-factor-china-looks-sell-its-j-35-stealth-jets",
-   "at": "2026-10-21T21:30:06Z",
-   "place": "中國",
-   "ll": [
-    116.41,
-    39.9
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
    "t": "俄羅斯同意美國呼籲恢復烏克蘭和平會談之際，基輔遭飛彈襲擊",
    "en": "Missiles hit Kyiv after Russia agrees to US call to resume Ukraine peace talks",
    "src": "BBC",
@@ -777,33 +641,6 @@
     "BBC"
    ],
    "also": []
-  },
-  {
-   "t": "拉馬斯瓦米競選廣告納入民主黨對手疏離母親 引發爭議",
-   "en": "Ramaswamy faces firestorm over US political ad featuring Democrat rival’s estranged mother",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/world/united-states-canada/article/3371696/ramaswamy-faces-firestorm-over-us-political-ad-featuring-democrat-rivals-estranged-mother",
-   "at": "2026-10-21T22:34:51Z",
-   "place": "美國華盛頓",
-   "ll": [
-    -77.04,
-    38.91
-   ],
-   "cat": "政治",
-   "tw": 0,
-   "why": "",
-   "n_src": 2,
-   "srcs": [
-    "南華早報",
-    "Guardian"
-   ],
-   "also": [
-    {
-     "src": "Guardian",
-     "url": "https://www.theguardian.com/world/2026/oct/21/heidi-levine-palestinians-israeli-settler-attack-west-bank",
-     "en": "Heidi Levine recounts how Palestinian youths helped save her in settler attack"
-    }
-   ]
   },
   {
    "t": "分析：美國外交施壓對烏克蘭即刻和平希望渺茫",
@@ -846,57 +683,190 @@
    "also": []
   },
   {
-   "t": "Just Eat AI生成餐點圖片出包引發社群嘲諷 道歉了事",
-   "en": "Just Eat apologises for AI food mistakes after social media ridicule",
-   "src": "BBC 商業",
-   "url": "https://www.bbc.co.uk/news/articles/crz981p0klvgo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-21T17:04:13Z",
-   "place": "英國倫敦",
-   "ll": [
-    -0.13,
-    51.51
-   ],
-   "cat": "科技",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "BBC"
-   ],
-   "also": []
-  },
-  {
-   "t": "東京與大阪氣溫破30度，創下年度最晚紀錄",
-   "en": "Tokyo, Osaka temperatures top 30°C later in year than ever before",
-   "src": "CNA 新加坡",
-   "url": "https://www.channelnewsasia.com/east-asia/tokyo-osaka-record-high-temperatures-midsummer-6478356",
-   "at": "2026-10-21T10:23:00Z",
-   "place": "東京，日本",
+   "t": "日本經濟成長戰略：短期聚焦晶片、中期鎖定AI",
+   "en": "Japan growth strategy to focus on chips in short term, AI in medium term",
+   "src": "日經亞洲",
+   "url": "https://asia.nikkei.com/economy/japan-growth-strategy-to-focus-on-chips-in-short-term-ai-in-medium-term",
+   "at": "",
+   "place": "日本東京",
    "ll": [
     139.65,
     35.68
    ],
-   "cat": "災害",
-   "tw": 1,
-   "why": "",
-   "n_src": 2,
+   "cat": "科技",
+   "tw": 3,
+   "why": "日本重押半導體與AI戰略，將直接影響台灣半導體供應鏈的國際競爭與合作。",
+   "n_src": 1,
    "srcs": [
-    "日本時報",
-    "CNA 新加坡"
+    "日經亞洲"
    ],
-   "also": [
-    {
-     "src": "日本時報",
-     "url": "https://www.japantimes.co.jp/news/2026/10/21/japan/tokyo-osaka-weather/",
-     "en": "Tokyo and Osaka record latest-ever day above 30 Celsius"
-    }
-   ]
+   "also": []
+  },
+  {
+   "t": "台北會選出30多年來首位民進黨籍市長嗎？",
+   "en": "Could Taipei elect its first DPP mayor in more than 30 years?",
+   "src": "日經亞洲",
+   "url": "https://asia.nikkei.com/opinion/could-taipei-elect-its-first-dpp-mayor-in-more-than-30-years",
+   "at": "",
+   "place": "台灣台北",
+   "ll": [
+    121.57,
+    25.03
+   ],
+   "cat": "政治",
+   "tw": 3,
+   "why": "直接涉及台灣首都的政治選舉與地方政局變化。",
+   "n_src": 1,
+   "srcs": [
+    "日經亞洲"
+   ],
+   "also": []
+  },
+  {
+   "t": "美光技術長：儘管長江存儲急起直追，美光仍不考慮4F平方記憶體晶片",
+   "en": "Micron won't pursue 4F-squared memory chips despite CXMT's advance: CTO",
+   "src": "日經亞洲",
+   "url": "https://asia.nikkei.com/business/tech/semiconductors/micron-won-t-pursue-4f-squared-memory-chips-despite-cxmt-s-advance-cto",
+   "at": "",
+   "place": "美國",
+   "ll": [
+    -95.71,
+    37.09
+   ],
+   "cat": "科技",
+   "tw": 3,
+   "why": "美光與競爭對手的記憶體技術動向，將牽動台灣半導體產業鏈的競爭格局。",
+   "n_src": 1,
+   "srcs": [
+    "日經亞洲"
+   ],
+   "also": []
+  },
+  {
+   "t": "香港法治指數跌至全球第24名 整體分數下滑",
+   "en": "Hong Kong ranks 24th in global rule of law index as overall score falls",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/hong-kong/society/article/3371705/hong-kong-ranks-24th-global-rule-law-index-overall-score-falls",
+   "at": "2026-10-22T01:33:36Z",
+   "place": "香港",
+   "ll": [
+    114.17,
+    22.32
+   ],
+   "cat": "政治",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "在大都會中闖出一片天",
+   "en": "Making it in the metropolis",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/plus/news/hong-kong/hong-kong-economy/article/3371703/making-it-metropolis",
+   "at": "2026-10-22T01:30:38Z",
+   "place": "香港",
+   "ll": [
+    114.17,
+    22.32
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "香港的大灣區願景",
+   "en": "Hong Kong’s Bay Area vision",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/plus/news/hong-kong/hong-kong-economy/article/3371704/hong-kongs-bay-area-vision",
+   "at": "2026-10-22T01:30:29Z",
+   "place": "香港",
+   "ll": [
+    114.17,
+    22.32
+   ],
+   "cat": "經濟",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "AI浩劫？香港真正的挑戰沒那麼戲劇化",
+   "en": "An AI apocalypse? Hong Kong’s real challenge is much less dramatic",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/opinion/hong-kong-opinion/article/3370985/ai-apocalypse-hong-kongs-real-challenge-much-less-dramatic",
+   "at": "2026-10-22T01:30:18Z",
+   "place": "香港",
+   "ll": [
+    114.17,
+    22.32
+   ],
+   "cat": "科技",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "K聯賽足球將在同一個周末決定冠軍與墊底球隊",
+   "en": "Champion, last-place team set to be determined on same weekend in K League football",
+   "src": "韓聯社",
+   "url": "https://en.yna.co.kr/view/AEN20261022003100315",
+   "at": "2026-10-22T01:28:10Z",
+   "place": "南韓",
+   "ll": [
+    126.98,
+    37.57
+   ],
+   "cat": "其他",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "韓聯社"
+   ],
+   "also": []
+  },
+  {
+   "t": "延世大學入口網站遭駭 洩漏1萬名學生與畢業生資料",
+   "en": "Yonsei Univ. portal hack leaks data of 10,000 students, graduates",
+   "src": "韓聯社",
+   "url": "https://en.yna.co.kr/view/AEN20261022003300315",
+   "at": "2026-10-22T01:27:08Z",
+   "place": "南韓首爾",
+   "ll": [
+    126.98,
+    37.57
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "韓聯社"
+   ],
+   "also": []
   }
  ],
  "n_zh": 40,
- "n_tw": 3,
- "n_big": 4,
+ "n_tw": 7,
+ "n_big": 3,
  "errs": [],
  "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報、彭博；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷",
- "updatedAt": "2026-10-22T00:33:10Z"
+ "updatedAt": "2026-10-22T01:33:22Z"
 }
