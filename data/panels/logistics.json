@@ -45,8 +45,135 @@
    ]
   }
  },
- "fbx": [],
- "storms": [],
+ "fbx": [
+  {
+   "code": "FBX",
+   "name": "全球綜合",
+   "chg": 1.59
+  },
+  {
+   "code": "FBX01",
+   "name": "中國→美西",
+   "chg": -0.29
+  },
+  {
+   "code": "FBX02",
+   "name": "美西→中國",
+   "chg": -1.3
+  },
+  {
+   "code": "FBX03",
+   "name": "中國→美東",
+   "chg": 1.11
+  },
+  {
+   "code": "FBX04",
+   "name": "美東→中國",
+   "chg": -0.37
+  },
+  {
+   "code": "FBX11",
+   "name": "中國→北歐",
+   "chg": 5.6
+  },
+  {
+   "code": "FBX12",
+   "name": "北歐→中國",
+   "chg": 4.47
+  },
+  {
+   "code": "FBX13",
+   "name": "中國→地中海",
+   "chg": 3.22
+  },
+  {
+   "code": "FBX14",
+   "name": "地中海→中國",
+   "chg": 0.0
+  },
+  {
+   "code": "FBX21",
+   "name": "美東→北歐",
+   "chg": 7.5
+  },
+  {
+   "code": "FBX22",
+   "name": "北歐→美東",
+   "chg": 1.21
+  },
+  {
+   "code": "FBX24",
+   "name": "北歐→南美東",
+   "chg": 0.47
+  },
+  {
+   "code": "FBX26",
+   "name": "北歐→南美西",
+   "chg": -0.78
+  }
+ ],
+ "storms": [
+  {
+   "name": "CHAMPI",
+   "level": "Red",
+   "ll": [
+    125.4,
+    20.9
+   ],
+   "from": "2026-10-14T12:00",
+   "to": "2026-10-22T06:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 296 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=32&eventtype=TC",
+   "near": [
+    {
+     "port": "高雄",
+     "km": 562
+    },
+    {
+     "port": "基隆／台北",
+     "km": 603
+    },
+    {
+     "port": "台中",
+     "km": 627
+    }
+   ],
+   "id": "1001338-32"
+  },
+  {
+   "name": "JOSEPHINE",
+   "level": "Green",
+   "ll": [
+    -68.3,
+    38.7
+   ],
+   "from": "2026-10-21T21:00",
+   "to": "2026-10-22T09:00",
+   "sev": "Tropical Storm (maximum wind speed of 130 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001342&episodeid=3&eventtype=TC",
+   "near": [
+    {
+     "port": "紐約／紐澤西",
+     "km": 542
+    }
+   ],
+   "id": "1001342-3"
+  },
+  {
+   "name": "VANCE",
+   "level": "Green",
+   "ll": [
+    -101.5,
+    9.7
+   ],
+   "from": "2026-10-21T15:00",
+   "to": "2026-10-22T09:00",
+   "sev": "Tropical Storm (maximum wind speed of 194 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=4&eventtype=TC",
+   "near": [],
+   "id": "1001341-4"
+  }
+ ],
  "ports": [
   {
    "name": "上海洋山",
@@ -310,6 +437,30 @@
  ],
  "news": [
   {
+   "source": "The Loadstar",
+   "title": "Mexican airlines eager to launch new US flights – but no freighters",
+   "url": "https://theloadstar.com/mexican-airlines-eager-to-launch-new-us-flights-but-no-freighters/",
+   "at": "2026-10-22T18:51:23+08:00",
+   "hot": true,
+   "zh": "墨西哥航空公司急盼開通美國新航線，但沒有貨機"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Bitter triumph: Kuehne + Nagel cements Air & Sea leadership…",
+   "url": "https://theloadstar.com/bitter-triumph-kuehne-nagel-cements-air-sea-leadership/",
+   "at": "2026-10-22T18:33:22+08:00",
+   "hot": false,
+   "zh": "苦澀的勝利：德迅鞏固海空運龍頭地位…"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "EXCLUSIVE: Brazil’s Craft – European M&A under the spotlight",
+   "url": "https://theloadstar.com/exclusive-brazils-craft-european-ma-under-the-spotlight/",
+   "at": "2026-10-22T18:19:55+08:00",
+   "hot": false,
+   "zh": "獨家：巴西 Craft——歐洲併購案備受矚目"
+  },
+  {
    "source": "FreightWaves",
    "title": "Tesla Semi enters volume production as 2027 rollout approaches",
    "url": "https://www.freightwaves.com/news/tesla-semi-enters-volume-production-as-2027-rollout-approaches",
@@ -470,43 +621,16 @@
    "zh": "投資人捧紅「金雞母」DSV，漢納格納爾面臨高標挑戰"
   },
   {
-   "source": "The Loadstar",
-   "title": "EXCLUSIVE: North America changes at the top of DSV Air & Sea",
-   "url": "https://theloadstar.com/exclusive-north-america-changes-at-the-top-of-dsv-air-sea/",
-   "at": "2026-10-21T19:28:10+08:00",
-   "hot": true,
-   "zh": "獨家：DSV海空運北美高層人事異動"
-  },
-  {
-   "source": "The Loadstar",
-   "title": "Terminal operators and liners eye concession opportunity at Colombo Port",
-   "url": "https://theloadstar.com/terminal-operators-and-liners-eye-concession-opportunity-at-colombo-port/",
-   "at": "2026-10-21T19:16:48+08:00",
-   "hot": true,
-   "zh": "碼頭營運商與航商看好可倫坡港的特許經營商機"
-  },
-  {
    "source": "Supply Chain Dive",
    "title": "Primo Brands opens first new factory post merger",
    "url": "https://www.supplychaindive.com/news/primo-brands-opens-first-new-factory-post-merger/833375/",
    "at": "2026-10-21T19:15:00+08:00",
    "hot": false,
    "zh": "Primo Brands 合併後啟用首座新工廠"
-  },
-  {
-   "source": "The Loadstar",
-   "title": "Podcast: How AI will transform freight forwarding beyond the hype",
-   "url": "https://theloadstar.com/how-ai-will-transform-freight-forwarding-beyond-the-hype/",
-   "at": "2026-10-21T16:23:45+08:00",
-   "hot": false,
-   "zh": "Podcast：AI將如何超越宣傳噱頭，徹底轉型貨運承攬業"
   }
  ],
  "threat": [],
- "errs": [
-  "FBX：頁面格式變了，沒抓到數字",
-  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-22T10:00:51Z"
+ "updatedAt": "2026-10-22T11:11:46Z"
 }
