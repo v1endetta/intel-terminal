@@ -12991,7 +12991,7 @@ run("ossuse", p_ossuse, keep_if_fresh_hours=6 if "hot" in (load_prev("ossuse") o
 run("trends", p_trends)
 run("youtube", p_youtube, keep_if_fresh_hours=0.5)
 run("attention", p_attention, keep_if_fresh_hours=3)
-run("consume", p_consume, keep_if_fresh_hours=24)
+run("consume", p_consume, keep_if_fresh_hours=24 if (DATA / "consume_series.json").exists() else 0)  # 還沒有各行業序列時先重抓一次
 run("luxury", p_luxury, keep_if_fresh_hours=3)
 run("world", p_world, keep_if_fresh_hours=0.25)
 run("usbig", p_usbig, keep_if_fresh_hours=0.25)
