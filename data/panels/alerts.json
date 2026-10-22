@@ -1,6 +1,28 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_extremely-rain_202610221954001",
+   "cat": "降雨",
+   "lvl": 2,
+   "area": [
+    "臺北市",
+    "新北市",
+    "基隆市",
+    "桃園市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "南投縣",
+    "宜蘭縣",
+    "花蓮縣"
+   ],
+   "text": "第29號颱風及其外圍環流影響，今(22日)晚至明(23)日宜蘭縣山區有局部大豪雨或超大豪雨，臺北市山區、新北市山區、桃園市山區有局部豪雨或大豪雨，新北市地區、桃園市地區、宜蘭縣地區、新竹縣山區、苗栗縣山區、花蓮縣山區有局部大雨或豪雨，基隆、臺北、新竹、苗栗、花蓮地區及臺中、南投山區有局部大雨發生的機率，請注意瞬間大雨，",
+   "src": "中央氣象署",
+   "at": "2026-10-22T11:54:10Z",
+   "exp": "2026-10-23T20:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610221954.cap"
+  },
+  {
    "id": "THB-Bobe_633_23791_42662_20261022193543",
    "cat": "道路封閉",
    "lvl": 2,
@@ -454,7 +476,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610211055.cap"
   }
  ],
- "n_total": 18,
+ "n_total": 19,
  "stopwork": {
   "items": [
    {
@@ -527,8 +549,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/22 19:32:03"
+  "updated": "2026/10/22 19:56:04"
  },
  "errs": [],
- "updatedAt": "2026-10-22T11:36:57Z"
+ "updatedAt": "2026-10-22T11:56:35Z"
 }
