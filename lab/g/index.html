@@ -5643,7 +5643,7 @@ function sectorsViz(R) {
   const X = v => c + v / sx * (c - 14), Y = v => m - v / sy * (m - 16);
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="各產業的錢和人"><line x1="8" x2="${W - 8}" y1="${m}" y2="${m}" stroke="rgba(255,255,255,.2)"/><line x1="${c}" x2="${c}" y1="6" y2="${H - 6}" stroke="rgba(255,255,255,.2)"/>`
     + `<text x="${W - 8}" y="16" text-anchor="end" class="vzt">錢和人都進來</text><text x="8" y="${H - 8}" class="vzt">錢和人都退</text><text x="${W - 8}" y="${H - 8}" text-anchor="end" class="vzt">錢進、人沒跟上</text><text x="8" y="16" class="vzt">人進、錢沒跟上</text>`
-    + R.map(r => `<circle cx="${X(r.yoy3).toFixed(1)}" cy="${Y(r.new_yoy).toFixed(1)}" r="5" fill="${r.yoy3 >= 0 ? UPH : DNH}" stroke="#121317" stroke-width="1"/><text x="${(X(r.yoy3) + 7).toFixed(1)}" y="${(Y(r.new_yoy) + 4).toFixed(1)}" class="vzl2">${esc(r.name)}</text>`).join("")
+    + R.map(r => `<circle cx="${X(r.yoy3).toFixed(1)}" cy="${Y(r.new_yoy).toFixed(1)}" r="5" fill="${r.yoy3 >= 0 ? UPH : DNH}" stroke="#121317" stroke-width="1"/>${X(r.yoy3) > W - 80 ? `<text x="${(X(r.yoy3) - 7).toFixed(1)}" y="${(Y(r.new_yoy) + 4).toFixed(1)}" text-anchor="end" class="vzl2">${esc(r.name)}</text>` : `<text x="${(X(r.yoy3) + 7).toFixed(1)}" y="${(Y(r.new_yoy) + 4).toFixed(1)}" class="vzl2">${esc(r.name)}</text>`}`).join("")
     + `<text x="${c + 4}" y="${H - 20}" class="vzt">→ 營業額</text><text x="${c + 4}" y="28" class="vzt">↑ 新設</text></svg>`;
 }
 function sectorsCard() {
