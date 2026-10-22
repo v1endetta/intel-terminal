@@ -1,6 +1,53 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610230736001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "花蓮縣",
+    "臺東縣"
+   ],
+   "text": "颱風環流沉降影響，今(23)日東南部地區有焚風發生的機率，晚起東部地區亦有焚風發生的機率，23日花蓮縣、臺東縣為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-22T23:36:20Z",
+   "exp": "2026-10-24T08:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610230736.cap"
+  },
+  {
+   "id": "CWA-Weather_typhoon-warning_202610230717147750",
+   "cat": "颱風",
+   "lvl": 3,
+   "area": [
+    "臺北市",
+    "新北市",
+    "基隆市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "南投縣",
+    "雲林縣",
+    "嘉義市",
+    "嘉義縣",
+    "臺南市",
+    "高雄市",
+    "屏東縣",
+    "宜蘭縣",
+    "花蓮縣",
+    "臺東縣",
+    "澎湖縣",
+    "連江縣"
+   ],
+   "text": "11-2LAND29CHAMPI薔琵2026-10-22T23:00:00+00:0022.40,124.004353945320中度颱風TYPHOON2026-10-23T21:00:00+00:0024.90,122.503545965300中度颱風 薔琵（國際命名 CHAMPI）23日7時的中心位置在北緯 22.",
+   "src": "中央氣象署",
+   "at": "2026-10-22T23:17:14Z",
+   "exp": "2026-10-23T11:15:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610230717.cap"
+  },
+  {
    "id": "CWA-Weather_typhoon-warning_202610230613477747",
    "cat": "颱風",
    "lvl": 3,
@@ -204,40 +251,6 @@
    "at": "2026-10-22T20:12:17Z",
    "exp": "2026-10-23T08:15:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610230412.cap"
-  },
-  {
-   "id": "CWA-Weather_typhoon-warning_202610230316077741",
-   "cat": "颱風",
-   "lvl": 3,
-   "area": [
-    "臺北市",
-    "新北市",
-    "基隆市",
-    "桃園市",
-    "新竹市",
-    "新竹縣",
-    "苗栗縣",
-    "臺中市",
-    "彰化縣",
-    "南投縣",
-    "雲林縣",
-    "嘉義市",
-    "嘉義縣",
-    "臺南市",
-    "高雄市",
-    "屏東縣",
-    "宜蘭縣",
-    "花蓮縣",
-    "臺東縣",
-    "澎湖縣",
-    "金門縣",
-    "連江縣"
-   ],
-   "text": "10-1LAND29CHAMPI薔琵2026-10-22T19:00:00+00:0021.90,124.304353945320中度颱風TYPHOON2026-10-23T18:00:00+00:0024.90,122.503848960300中度颱風 薔琵（國際命名 CHAMPI）23日3時的中心位置在北緯 21.",
-   "src": "中央氣象署",
-   "at": "2026-10-22T19:16:07Z",
-   "exp": "2026-10-23T07:15:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610230316.cap"
   },
   {
    "id": "THB-Bobe_633_23795_42669_20261023002932",
@@ -465,7 +478,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 22,
+ "n_total": 23,
  "stopwork": {
   "items": [
    {
@@ -538,8 +551,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/23 07:11:03"
+  "updated": "2026/10/23 07:32:03"
  },
  "errs": [],
- "updatedAt": "2026-10-22T23:11:52Z"
+ "updatedAt": "2026-10-22T23:37:15Z"
 }
