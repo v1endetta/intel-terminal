@@ -12908,7 +12908,7 @@ SECTORS = [  # (名稱, 發票行業名稱 regex, 新設登記代碼前綴, 說�
 ]
 
 
-def p_sectors():
+def p_tw_sectors():
     try:
         CS = json.loads((DATA / "consume_series.json").read_text(encoding="utf-8"))
     except Exception:  # noqa: BLE001
@@ -12969,7 +12969,11 @@ def p_sectors():
             verdict = "很多人進場，但營業額沒跟上：可能過熱"
         else:
             verdict = "持平"
-        rows.append({"name": name, "note": note, "yoy3": yoy3, "spark": spark, "new_yoy": new_yoy, "n6": n6, "inds": ks,
+        def p3(k):
+            a_ = sum(S[k].get(m, 0) for m in ms(3)); b_ = sum(S[k].get(_ym_shift(m, -12), 0) for m in ms(3))
+            return round(100 * (a_ / b_ - 1), 1) if a_ and b_ else None
+        parts = [{"name": re.sub(r"業$", "", k.split("；")[0]).replace("及相關服務", "")[:10], "yoy3": p3(k)} for k in ks]
+        rows.append({"name": name, "note": note, "yoy3": yoy3, "spark": spark, "new_yoy": new_yoy, "n6": n6, "inds": ks, "parts": parts,
                      "hot": [{"name": v[0], "n6": v[1], "ly6": v[2]} for v in hot], "extra": extra, "verdict": verdict})
         hist_put("sectors_tw", name, f"{last[:4]}-{last[4:]}", yoy3)
     return {"month": f"{last[:4]}-{last[4:]}", "rows": rows, "reg_win": TC.get("w6"),
@@ -13102,7 +13106,7 @@ run("cars", p_cars, keep_if_fresh_hours=24)
 run("permits", p_permits, keep_if_fresh_hours=24)
 run("renewal", p_renewal, keep_if_fresh_hours=24)  # 都更：資料一個月頂多更新一次，一天看一次就好
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
-run("sectors", p_sectors, cheap=True)  # 台灣內需產業：吃本輪消費、營業登記、建照等結果
+run("twsectors", p_tw_sectors, cheap=True)  # 台灣內需產業：吃本輪消費、營業登記、建照等結果
 run("theses", p_theses, cheap=True)  # 論點追蹤：吃本輪其他面板的結果（另打 4 個 Yahoo 歷史，6 小時快取），要在帳本前面
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 if load_prev("weekly"):  # 每週走向摘要由 weekly.yml 另外寫（Gemini 慢，不佔主迴圈時間），這裡只帶進 all.json

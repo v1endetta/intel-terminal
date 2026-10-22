@@ -925,6 +925,11 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pb"><div class="empty">等待排程寫入</div></div>
     <div class="pf"><span>上市櫃月營收（含海外子公司）近 3 月年增 · 指數＝8 類等權平均，不讓大公司一家定江山 · 被動元件近期被 AI 伺服器拉抬，照列但不算進指數 · 寶成含中國零售（寶勝）</span></div>
   </section>
+  <section class="panel w12" id="p-twsectors">
+    <div class="ph"><h2>台灣內需產業</h2><span class="zh">同一把尺：錢（發票營業額）和人（新設登記）往哪個產業走</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>營業額＝財政部電子發票各行業金額，近 3 月比去年同期 · 新設＝營業登記近 6 月，已扣掉全體新設的變動 · 發票只含開電子發票的交易</span></div>
+  </section>
   <section class="panel w6 cap" id="p-exports">
     <div class="ph"><h2>出口結構</h2><span class="zh">賣到哪裡、賣什麼</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -1639,6 +1644,9 @@ const renderers={
       <h3 class="ins-h">保留 <span>${K.length} 條 · 照樣每輪判斷、記進帳本，不發 Slack</span></h3>${K.map(row).join("")}${rvh}`;
     body("p-theses").querySelectorAll(".th-c").forEach(c=>c.addEventListener("click",e=>{if(!e.target.closest("a"))c.classList.toggle("open");}));
     setMeta("p-theses",{...d,label:"每輪"},12);},
+  twsectors(d){const R=d.rows||[],vc=v=>/都在進來/.test(v)?"up":/都在退|變少/.test(v)?"down":/過熱|沒跟上/.test(v)?"warn":"";
+    const tr=R.map(r=>`<tr><td class="name"><b>${esc(r.name)}</b><span class="sub" style="display:block;font-size:11px">${esc(r.note)}</span></td><td class="r num ${cls(n(r.yoy3))}">${sgn(n(r.yoy3),1,"%")}${mini(r.spark)}</td><td class="r num ${cls(n(r.new_yoy))}">${sgn(n(r.new_yoy),0,"%")}</td><td><span class="${vc(r.verdict)}" style="${vc(r.verdict)==="warn"?"color:var(--warn)":""}">${esc(r.verdict)}</span><span class="sub" style="display:block;font-size:11px;color:var(--muted)">${esc([(r.parts||[]).length>1?r.parts.map(p=>`${p.name} ${sgn(n(p.yoy3),0,"%")}`).join("、"):"",(r.hot||[]).length?"新設最多："+r.hot.map(h=>h.name).join("、"):"",...(r.extra||[])].filter(Boolean).join(" · "))}</span></td></tr>`).join("");
+    body("p-twsectors").innerHTML=`<table><tr><th>產業</th><th class="r">營業額（近 3 月年增）</th><th class="r">新設（近 6 月）</th><th>判斷</th></tr>${tr}</table>`;setMeta("p-twsectors",{...d,label:`發票 ${d.month||""}`},24*7);},
   champions(d){const R=d.rows||[],S=d.index_spark||[],mx=Math.max(1,...R.map(r=>Math.abs(n(r.yoy3)||0)));
     const rows=R.map(r=>`<div class="hb-r" style="grid-template-columns:minmax(0,7em) minmax(0,1fr) 4.5em"><span class="hb-n" style="${r.ai?"opacity:.55":""}">${esc(r.name)}${r.ai?" ＊":""}</span><span class="hb-t" style="position:relative;background:var(--line)"><i style="position:absolute;top:0;bottom:0;${n(r.yoy3)>=0?"left:50%":"right:50%"};width:${(Math.abs(n(r.yoy3)||0)/mx*50).toFixed(1)}%;background:${n(r.yoy3)>=0?"var(--up)":"var(--down)"};${r.ai?"opacity:.45":""}"></i></span><span class="hb-v ${cls(n(r.yoy3))}">${sgn(n(r.yoy3),1,"%")}</span></div><div class="sub" style="font-size:11px;color:var(--muted);margin:-2px 0 4px 0">${r.firms.map(x=>`${esc(x.name)} ${sgn(n(x.yoy3),0,"%")}`).join(" · ")} · 上游：${esc(r.up)}</div>`).join("");
     body("p-champions").innerHTML=`<div class="veg-h">${YM(d.month)}<b class="${cls(n(d.index))}">${sgn(n(d.index),1,"%")}</b><span>非 AI 隱形冠軍指數（近 3 月年增）· ${d.up_n}／${d.n} 類成長 ${mini(S)}</span></div><div class="hb">${rows}</div>`;setMeta("p-champions",d,24*3);},
@@ -2876,7 +2884,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["market","市場"],["macro","總經"],["trend","走向"],["intel","訊號"],["social","輿情"],["live","台灣現場"],["vault","資料庫"]];
-const TAB_OF={"p-aicycle":"macro","p-champions":"macro","p-dlead":"macro","p-credit":"macro","p-exports":"macro","p-stress":"macro","p-logistics":"market","p-uspolicy":"intel","p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
+const TAB_OF={"p-aicycle":"macro","p-champions":"macro","p-twsectors":"macro","p-dlead":"macro","p-credit":"macro","p-exports":"macro","p-stress":"macro","p-logistics":"market","p-uspolicy":"intel","p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"trend","p-ledger":"trend","p-chain":"trend","p-weekly":"trend","p-tech2":"trend","p-imports":"macro","p-housefc":"macro","p-demo":"macro","p-bizlife":"macro","p-metro":"live",
   "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
@@ -2907,7 +2915,7 @@ const GUIDE={
     ["消費與品牌股","通路月營收、精品股",["p-revenue","p-lux"]]]},
   macro:{cat:"總經",sub:"台灣經濟現在幾度、錢花在哪、房子蓋多少、東西貴不貴",secs:[
     ["景氣","整體經濟熱不熱、半年後往哪走（dalta 領先指標看 3～6 個月後）",["p-dlead","p-macro","p-lead"]],
-    ["AI 循環、隱形冠軍、出口與企業壓力","AI 這具引擎還能跑多久、非 AI 的台商在海外做得怎樣、錢從國外進來多少、哪裡先撐不住",["p-aicycle","p-champions","p-exports","p-stress"]],
+    ["AI 循環、隱形冠軍、內需產業、出口與企業壓力","AI 這具引擎還能跑多久、非 AI 的台商在海外做得怎樣、國內各產業的錢和人往哪走、哪裡先撐不住",["p-aicycle","p-champions","p-twsectors","p-exports","p-stress"]],
     ["消費","大家還願不願意花錢、花在哪",["p-supply","p-cards","p-consume","p-tourism"]],
     ["房子與車子","大額消費：買賣、房價、接下來要蓋多少、舊屋重建、新車",["p-house","p-housefc","p-permits","p-renewal","p-cars"]],
     ["人口與公司","人口結構和公司開關",["p-demo","p-bizlife"]],

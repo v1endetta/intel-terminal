@@ -669,6 +669,7 @@ body.nav-quiet #labels .lbl:not(.gxl){opacity:0!important;pointer-events:none!im
 #side .vzcap{font-size:11.5px;color:#8e8e93;margin:-4px 0 6px}
 #side .vzg.off .vzg-s{background:rgba(255,255,255,.06)}#side .vzg.off .vzg-k{background:#636366}
 #side .vzr{display:flex;flex-direction:column;gap:5px;margin:12px 0}#side .vzr-r{display:grid;grid-template-columns:minmax(0,1fr) 90px 3.6em;gap:8px;align-items:center;font-size:12.5px}#side .vzr-n{color:#d1d1d6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#side .vzr-r b{text-align:right;font-variant-numeric:tabular-nums;font-size:12px}
+#side .vzl2{fill:#d1d1d6;font-size:10.5px}
 </style>
 <script type="importmap">
 {"imports":{
@@ -2537,6 +2538,7 @@ function EXPLORE() {
       { n: "領先指標", f: () => dleadCard() },
       { n: "AI 循環", f: () => aicycleCard() },
       { n: "隱形冠軍", f: () => champCard() },
+      { n: "內需產業", f: () => sectorsCard() },
       { n: "景氣指標", lens: "macro", f: listOf("台灣總經", () => items("macro").map(x => ({ t: `${x.label}  ${x.value}`, s: `${x.period} · 前期 ${x.prev}` })), "總經", "macro") },
       { n: "刷卡", lens: "cards" },
       { n: "出口結構", globe: 1, f: () => gxCard("exports") },
@@ -2642,6 +2644,7 @@ const PROV = {
   "本月洞見": ["insights", "政府開放資料交叉比對（程式算訊號、Gemini 寫句子）", "每日", 1440],
   "AI 循環": ["aicycle", "SEC 財報（雲端五家資本支出）・財報新聞（AI 擷取指引）・FinMind 月營收・DRAMeXchange（只放漲跌）", "彙整", 360],
   "民調": ["polls", "Google 新聞標題（AI 擷取民調數字，以調查單位公布為準）", "每 3 小時", 360],
+  "內需產業": ["twsectors", "財政部電子發票各行業金額・營業登記新設", "每月", 1440, p => p.month],
   "隱形冠軍": ["champions", "FinMind 上市櫃月營收（含海外子公司）", "每月", 1440, p => p.month],
   "論點追蹤": ["theses", "情報站各面板的資料，依每個論點寫好的門檻由程式判斷；美元指數、日圓、費半、加權指數歷史來自 Yahoo Finance", "每輪", 720],
   "領先指標": ["dlead", "dalta 自建：台股、韓股、費半、M1B 減 M2、紐約與費城聯準會調查、美國公司債利差等權合成", "每月", 1440, p => p.month],
@@ -5631,6 +5634,25 @@ function champCard() {
       + `<div class="nvh">非 AI 指數近 3 年（近 3 月年增）</div>` + vzFig(vzDiverge(D.index_spark || [], { min: 3, from: (D.index_t || [])[0] || "", to: ymTxt(D.month) }))
       + `<p class="why">運動鞋、自行車、高爾夫、汽車零件這些台灣稱霸全球的製造業，工廠多在越南、印尼、中國，出口統計看不到，看台商自己的營收才看得到。＊被動元件近期被 AI 伺服器拉抬，照列但不算進指數。</p>`,
     foot: '<a href="/terminal/#p-champions">終端機看每家公司 ›</a>' }) };
+}
+
+/* ---- 台灣內需產業：營業額（錢）× 新設（人）的四象限 ---- */
+function sectorsViz(R) {
+  R = R.filter(r => r.yoy3 != null && r.new_yoy != null); if (!R.length) return "";
+  const W = 320, H = 210, c = 160, m = 103, sx = Math.max(10, ...R.map(r => Math.abs(r.yoy3))) * 1.15, sy = Math.max(10, ...R.map(r => Math.abs(r.new_yoy))) * 1.15;
+  const X = v => c + v / sx * (c - 14), Y = v => m - v / sy * (m - 16);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="各產業的錢和人"><line x1="8" x2="${W - 8}" y1="${m}" y2="${m}" stroke="rgba(255,255,255,.2)"/><line x1="${c}" x2="${c}" y1="6" y2="${H - 6}" stroke="rgba(255,255,255,.2)"/>`
+    + `<text x="${W - 8}" y="16" text-anchor="end" class="vzt">錢和人都進來</text><text x="8" y="${H - 8}" class="vzt">錢和人都退</text><text x="${W - 8}" y="${H - 8}" text-anchor="end" class="vzt">錢進、人沒跟上</text><text x="8" y="16" class="vzt">人進、錢沒跟上</text>`
+    + R.map(r => `<circle cx="${X(r.yoy3).toFixed(1)}" cy="${Y(r.new_yoy).toFixed(1)}" r="5" fill="${r.yoy3 >= 0 ? UPH : DNH}" stroke="#121317" stroke-width="1"/><text x="${(X(r.yoy3) + 7).toFixed(1)}" y="${(Y(r.new_yoy) + 4).toFixed(1)}" class="vzl2">${esc(r.name)}</text>`).join("")
+    + `<text x="${c + 4}" y="${H - 20}" class="vzt">→ 營業額</text><text x="${c + 4}" y="28" class="vzt">↑ 新設</text></svg>`;
+}
+function sectorsCard() {
+  const D = P.twsectors || {}, R = D.rows || [];
+  if (!R.length) return { html: sideHTML({ eyebrow: "總經 · 台灣內需產業", title: "錢和人往哪個產業走？", body: '<p class="empty">資料載入中。</p>' }) };
+  return { html: sideHTML({ eyebrow: `總經 · 台灣內需產業 · 發票 ${ymTxt(D.month)}`, title: "錢和人往哪個產業走？",
+    body: vzFig(sectorsViz(R), "橫軸：營業額近 3 月年增（錢）　縱軸：新設登記近 6 月（人，已扣掉全體）")
+      + listHTML(R.map(r => ({ t: `${r.name}　${r.yoy3 != null ? pct(r.yoy3, 1) : "—"}・${r.verdict}`, s: [(r.parts || []).length > 1 ? r.parts.map(p => `${p.name} ${p.yoy3 != null ? pct(p.yoy3, 0) : "—"}`).join("、") : "", ...(r.extra || [])].filter(Boolean).join(" · ") }))),
+    foot: '<a href="/terminal/#p-sectors">終端機 ›</a>' }) };
 }
 
 /* ---- 使用紀錄：只存在這台瀏覽器（localStorage），不上傳；跑 6 週後用來決定哪些晶片可以砍 ----
