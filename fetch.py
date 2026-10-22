@@ -11485,6 +11485,7 @@ def p_consume():
         spark = [round(s.get(_ym_shift(last, -i), 0) / 1e8, 2) for i in range(12, -1, -1)]
         return {"name": k, "amt": cur, "yoy": round((cur / yo - 1) * 100, 1) if cur and yo else None,
                 "mom": round((cur / mo - 1) * 100, 1) if cur and mo else None, "spark": spark}
+    write_json(DATA / "consume_series.json", {"last": last, "s": {k: {m: round(v / 1e6, 1) for m, v in s.items() if m >= _ym_shift(last, -27)} for k, s in agg.items()}}, separators=(",", ":"))   # 各行業發票金額（百萬元），給「台灣內需產業」用
     focus = [item(k) for k in CONSUME_FOCUS if k in agg]
     allind = sorted([item(k) for k in agg], key=lambda x: -(x["yoy"] if x["yoy"] is not None else -999))
     # 製造、批發、工程等 B2B 行業的發票受大單影響大，年增常是幾倍，不適合當消費訊號
@@ -12895,6 +12896,85 @@ def p_champions():
             "rows": sorted(rows, key=lambda r: -(r["yoy3"] if r["yoy3"] is not None else -999)), "up_n": up_n, "n": len(rows) - len(CHAMP_AI), "errs": errs[:5],
             "src": "FinMind 上市櫃月營收（含海外子公司）；寶成含中國運動用品零售（寶勝）"}
 
+
+# ---------- 台灣內需產業：同一把尺量各行業（統一發票營業額＋新設登記），對照 AI 循環與隱形冠軍 ----------
+SECTORS = [  # (名稱, 發票行業名稱 regex, 新設登記代碼前綴, 說明)
+    ("營建與居家", r"建築工程業|土木工程業|專門營造業|不動產開發業|不動產經營", ("41", "42", "43", "68", "740100"), "蓋房子、賣房子、裝修"),
+    ("影視與演出", r"影片|聲音錄製|創作及藝術表演|廣播、電視", ("59", "60", "90"), "影片製作、音樂、表演"),
+    ("運動健身", r"運動、娛樂及休閒", ("931", "8593", "4763"), "運動場館、健身、運動教學"),
+    ("廣告與設計", r"廣告業及市場研究|專門設計", ("73", "7409", "702012"), "dalta 自己的產業"),
+    ("餐飲", r"^餐飲業", ("56",), "餐廳、小吃、飲料店"),
+    ("觀光旅宿", r"住宿業|旅行及相關", ("55", "79"), "旅館、民宿、旅行社"),
+]
+
+
+def p_sectors():
+    try:
+        CS = json.loads((DATA / "consume_series.json").read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        CS = {}
+    try:
+        TC = json.loads(TAXREG_CODES.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        TC = {}
+    S, last, codes, base6 = CS.get("s") or {}, CS.get("last"), TC.get("codes") or {}, TC.get("base6") or 1
+    if not S or not last:
+        raise RuntimeError("還沒有各行業發票資料（下一次抓消費資料後出現）")
+    R = lambda k: RESULTS.get(k) or load_prev(k) or {}
+    ms = lambda k: [_ym_shift(last, -i) for i in range(k)]
+    rows = []
+    for name, rx, pre, note in SECTORS:
+        ks = [k for k in S if re.search(rx, k)]
+        cur = sum(S[k].get(m, 0) for k in ks for m in ms(3)); ly = sum(S[k].get(_ym_shift(m, -12), 0) for k in ks for m in ms(3))
+        yoy3 = round(100 * (cur / ly - 1), 1) if cur and ly else None
+        spark = []
+        for i in range(12, -1, -1):
+            e = _ym_shift(last, -i); a = sum(S[k].get(_ym_shift(e, -j), 0) for k in ks for j in range(3)); b = sum(S[k].get(_ym_shift(e, -12 - j), 0) for k in ks for j in range(3))
+            spark.append(round(100 * (a / b - 1), 1) if a and b else None)
+        cs = [(c, v) for c, v in codes.items() if c.startswith(pre) and v[2] >= max(8, v[1] * 0.15)]   # 去年幾乎沒有的新代碼不算
+        n6, l6 = sum(v[1] for _, v in cs), sum(v[2] for _, v in cs)
+        new_yoy = round(100 * ((n6 / l6) / base6 - 1)) if l6 else None
+        hot = sorted([v for _, v in cs if v[2] >= 15], key=lambda v: -(v[1] / v[2]))[:2]
+        extra = []
+        if name == "營建與居家":
+            b = next((x for x in (R("permits").get("build") or []) if x.get("h") == "件數(件)"), {})
+            if b.get("y3") is not None:
+                extra.append(f"建照件數近 3 月 {b['y3']:+.0f}%（領先完工約 2 年）")
+            hf = R("housefc")
+            if hf.get("vol_yoy3") is not None:
+                extra.append(f"買賣棟數近 3 月 {hf['vol_yoy3']:+.1f}%")
+        elif name == "運動健身":
+            g = next((x for x in (R("champions").get("rows") or []) if x.get("name") == "健身器材"), {})
+            if g.get("yoy3") is not None:
+                extra.append(f"健身器材廠營收 {g['yoy3']:+.1f}%（喬山、岱宇）")
+        elif name == "餐飲":
+            c = next((x for x in (R("cards").get("rows") or []) if x.get("cat") == "食"), {})
+            if c.get("yoy3") is not None:
+                extra.append(f"刷卡「食」近 3 月 {c['yoy3']:+.1f}%")
+        elif name == "觀光旅宿":
+            t = (R("tourism").get("inbound") or {})
+            if t.get("yoy") is not None:
+                extra.append(f"來台旅客 {t.get('year')} 年 {t['yoy']:+.1f}%（2019 的 {t.get('vs2019')}%）")
+        if yoy3 is None:
+            verdict = "資料不足"
+        elif yoy3 >= 8 and (new_yoy or 0) >= 5:
+            verdict = "錢和人都在進來"
+        elif yoy3 >= 8:
+            verdict = "錢變多，但開店的人沒跟上"
+        elif yoy3 <= -3 and (new_yoy or 0) <= -5:
+            verdict = "錢和人都在退"
+        elif yoy3 <= -3:
+            verdict = "錢變少"
+        elif (new_yoy or 0) >= 15:
+            verdict = "很多人進場，但營業額沒跟上：可能過熱"
+        else:
+            verdict = "持平"
+        rows.append({"name": name, "note": note, "yoy3": yoy3, "spark": spark, "new_yoy": new_yoy, "n6": n6, "inds": ks,
+                     "hot": [{"name": v[0], "n6": v[1], "ly6": v[2]} for v in hot], "extra": extra, "verdict": verdict})
+        hist_put("sectors_tw", name, f"{last[:4]}-{last[4:]}", yoy3)
+    return {"month": f"{last[:4]}-{last[4:]}", "rows": rows, "reg_win": TC.get("w6"),
+            "src": "財政部電子發票各行業金額（近 3 月比去年同期）；財政部營業登記新設（近 6 月，已扣掉全體新設的變動）"}
+
 run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
@@ -13022,6 +13102,7 @@ run("cars", p_cars, keep_if_fresh_hours=24)
 run("permits", p_permits, keep_if_fresh_hours=24)
 run("renewal", p_renewal, keep_if_fresh_hours=24)  # 都更：資料一個月頂多更新一次，一天看一次就好
 run("chain", p_chain, cheap=True)  # 主題鏈：吃本輪其他面板的結果，不打外部 API
+run("sectors", p_sectors, cheap=True)  # 台灣內需產業：吃本輪消費、營業登記、建照等結果
 run("theses", p_theses, cheap=True)  # 論點追蹤：吃本輪其他面板的結果（另打 4 個 Yahoo 歷史，6 小時快取），要在帳本前面
 run("ledger", p_ledger, cheap=True)  # 預測帳本：放最後，吃本輪其他面板的結果
 if load_prev("weekly"):  # 每週走向摘要由 weekly.yml 另外寫（Gemini 慢，不佔主迴圈時間），這裡只帶進 all.json
