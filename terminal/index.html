@@ -1201,6 +1201,16 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><span>Cofacts 開放資料 · 近三天被查詢最多的訊息 · 「被查 N 次」= 有多少人把它丟進查核機器人</span></div>
   </section>
 
+  <section class="panel w6 cap" id="p-polls">
+    <div class="ph"><h2>民調</h2><span class="zh">抽樣過的民意：跟社群情緒對照</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><span>Google 新聞標題 · AI 擷取數字 · 以調查單位公布為準 · 「差距」是領先幾個百分點，不是支持度</span></div>
+  </section>
+  <section class="panel w6 cap" id="p-forums">
+    <div class="ph"><h2>Mobile01 熱門</h2><span class="zh">中年男性在聊什麼：車、房、3C、時事</span><span class="meta">排程</span></div>
+    <div class="pb"><div class="empty">等待排程寫入</div></div>
+    <div class="pf"><a href="https://www.mobile01.com/hottopics.php" target="_blank" rel="noopener">Mobile01 熱門</a><span>每小時一次 · 標題也進「台灣人今天的心情」判讀</span></div>
+  </section>
   <section class="panel w12" id="p-ptt">
     <div class="ph"><h2>PTT 熱度</h2><span class="zh">看板熱度與推噓</span><span class="meta">排程</span></div>
     <div class="pb"><div class="empty">等待排程寫入</div></div>
@@ -1907,8 +1917,14 @@ const renderers={
     body("p-liq").innerHTML=`${net}<div class="macro">${rates}${card("ON RRP 逆回購",d.rrp,"停在聯準會的閒錢")}${card("銀行準備金",d.reserves,"")}${card("財政部 TGA",d.tga,"")}${card("聯準會總資產",d.walcl,"")}${srf}</div>${d.errs&&d.errs.length?`<div class="empty" style="padding:6px 0 0;font-size:10.5px">${errNote(d.errs)}</div>`:""}`;setMeta("p-liq",d,30);},
   mood(d){const tw=d.taiwan||{},os=d.overseas||{},sc=d.sources||{};const col=v=>v==null?"var(--dim)":v<=-0.3?"var(--down)":v>=0.3?"var(--up)":"var(--warn)";
     const card=(t,m,sp)=>`<div class="c"><div class="l">${esc(t)}</div><div class="v" style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:${col(m.score)};box-shadow:0 0 0 3px color-mix(in srgb,${col(m.score)} 25%,transparent)"></span><span>${m.score==null?"—":sgn(n(m.score),2)}</span><span class="sub" style="font-size:12px">${esc(m.label||"")}</span>${mini(sp)}</div><div class="p">${esc((m.themes||[]).join(" · "))}</div><div class="p" style="margin-top:4px;color:var(--text);font-family:var(--head);font-size:12px;line-height:1.4">${esc(m.line||"")}</div></div>`;
-    const srcs=["PTT","LINE"].filter(k=>sc[k]&&sc[k].score!=null).map(k=>`<span>${k}<b class="${n(sc[k].score)<=-0.3?"down":n(sc[k].score)>=0.3?"up":""}">${sgn(n(sc[k].score),2)}</b><span class="sub"> ${esc(sc[k].note||"")}</span></span>`).join("");
-    body("p-mood").innerHTML=`<div class="macro" style="grid-template-columns:1fr 1fr">${card("台灣",tw,d.spark_tw)}${card("國外",os,d.spark_os)}</div>${srcs?`<div class="kv" style="margin-top:8px">${srcs}</div>`:""}${d.watch?`<div class="kv" style="margin-top:6px"><span>盯一件事<b>${esc(d.watch)}</b></span></div>`:""}`;setMeta("p-mood",d,2);},
+    const srcs=["PTT","Mobile01","LINE"].filter(k=>sc[k]&&sc[k].score!=null).map(k=>`<span>${k}<b class="${n(sc[k].score)<=-0.3?"down":n(sc[k].score)>=0.3?"up":""}">${sgn(n(sc[k].score),2)}</b><span class="sub"> ${esc(sc[k].note||"")}</span></span>`).join("");
+    body("p-mood").innerHTML=`<div class="macro" style="grid-template-columns:1fr 1fr">${card("台灣",tw,d.spark_tw)}${card("國外",os,d.spark_os)}</div>${srcs?`<div class="kv" style="margin-top:8px">${srcs}</div>`:""}${d.watch?`<div class="kv" style="margin-top:6px"><span>盯一件事<b>${esc(d.watch)}</b></span></div>`:""}${d.missing?`<div class="sub" style="margin-top:6px;font-size:11px;color:var(--muted)">⚠️ 還沒涵蓋：${esc(d.missing)}</div>`:""}`;setMeta("p-mood",d,2);},
+  polls(d){const L=d.latest||[],T=d.tracks||[],R=d.races||{};
+    const tr=T.slice(0,4).map(t=>{const v=t.pts.map(p=>p.v),last=t.pts[t.pts.length-1]||{},first=t.pts[0]||{};return `<li><span class="t">${esc(t.subject)}・${esc(t.metric)}<span class="sub">${t.n} 次 · ${esc(first.at||"")} → ${esc(last.at||"")}</span></span>${mini(v)}<span class="v">${fmt(n(last.v),1)}%</span></li>`;}).join("");
+    const rc=Object.entries(R).slice(0,5).map(([k,v])=>{const sh=v.filter(x=>x.kind!=="差距").slice(0,2),gp=v.find(x=>x.kind==="差距");return `<li><span class="t">${esc(k)}<span class="sub">${esc(sh.map(x=>`${x.subject} ${x.value}%`).join(" vs ")||"")}${gp?`${sh.length?" · ":""}${esc(gp.subject)}領先${gp.vs?esc(gp.vs):""} ${gp.value} 個百分點`:""}${(v[0]||{}).org?` · ${esc(v[0].org)}`:""}</span></span></li>`;}).join("");
+    const li=L.filter(x=>!x.race).slice(0,8).map(x=>`<li><span class="src">${esc((x.org||x.src||"").slice(0,6))}</span><span class="t"><a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.subject)}・${esc(x.metric)} ${x.value}${x.kind==="差距"?" 個百分點":"%"}</a><span class="sub">${esc((x.at||"").slice(5,10).replace("-","/"))} ${esc(x.zh||"")}</span></span></li>`).join("");
+    body("p-polls").innerHTML=(tr?`<h3 class="ins-h">持續追蹤</h3><ul class="list wrap">${tr}</ul>`:"")+(rc?`<h3 class="ins-h">選舉（近 45 天）</h3><ul class="list wrap">${rc}</ul>`:"")+(li?`<h3 class="ins-h">最新議題民調</h3><ul class="list wrap">${li}</ul>`:"")||'<div class="empty">還沒擷取到民調</div>';setMeta("p-polls",d,8);},
+  forums(d){const M=d.m01||[];body("p-forums").innerHTML=M.length?`<ul class="list">${M.slice(0,15).map((x,i)=>`<li><span class="src">${i+1}</span><span class="t"><a href="${esc(safe(x.url))}" target="_blank" rel="noopener">${esc(x.title)}</a></span></li>`).join("")}</ul>`:'<div class="empty">沒抓到</div>';setMeta("p-forums",d,3);},
   cofacts(d){const st=d.stats||{};const li=(d.hot||[]).slice(0,10).map(h=>`<li><span class="src ${h.verdict==="含錯誤訊息"?"bad":""}" style="min-width:64px">${esc(h.verdict.slice(0,5))}</span><span class="t"><a href="${esc(safe(h.url))}" target="_blank" rel="noopener">${esc(cofTxt(h.text).slice(0,72))}</a></span><span class="m ${h.requests>=20?"bad":""}">${h.requests} 查</span></li>`).join("");
     body("p-cofacts").innerHTML=`<div class="kv"><span>熱門<b>${st.hot_n||0}</b></span><span>未查核<b class="${st.unchecked>=10?"bad":""}">${st.unchecked||0}</b></span><span>錯誤訊息<b class="${st.rumor?"bad":""}">${st.rumor||0}</b></span><span>查詢總數<b>${fmt(n(st.requests_total),0)}</b>${mini(st.spark)}</span></div>${li?`<ul class="list">${li}</ul>`:'<div class="empty">沒抓到</div>'}`;setMeta("p-cofacts",d,2);},
   threads_g(d){const q=d.quota||{};const kws=(d.keywords||[]).map(k=>`<div class="wg"><h3><span class="kw" style="margin-right:6px;${k.kind==="hot"?"color:var(--warn)":""}">${k.kind==="hot"?"🔥":"固定"}</span>${esc(k.kw)}<span class="sub" style="margin-left:8px">索引約 ${compact(n(k.n_24h))} 則</span></h3>${(k.posts||[]).length?`<ul class="list">${k.posts.slice(0,3).map(p=>`<li><span class="src">@${esc((p.user||"").slice(0,10))}</span><span class="t"><a href="${esc(safe(p.url))}" target="_blank" rel="noopener">${esc(p.text.slice(0,72))}</a></span></li>`).join("")}</ul>`:'<div class="empty" style="padding:2px 0 6px">沒有結果</div>'}</div>`).join("");
@@ -2857,7 +2873,7 @@ const TAB_OF={"p-aicycle":"macro","p-dlead":"macro","p-credit":"macro","p-export
   "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
   "p-geo":"live","p-elect":"live","p-twnow":"live","p-twpulse":"live","p-roads":"live","p-weather":"live","p-quake":"live","p-power":"live","p-airport":"live",
-  "brief":"overview","ov":"overview","p-ossuse":"intel","p-insights":"overview","p-theses":"overview","p-cars":"macro","p-permits":"macro","p-renewal":"macro","p-prices":"macro","p-tourism":"macro","p-gap":"trend","p-migration":"trend","p-births":"trend","p-maptools":"trend","p-clinics":"intel","p-aesthetic":"intel","p-grants":"intel","p-gtop":"social","p-worldnews":"social","p-townnews":"social","p-plaact":"live","p-cables":"live","p-pressure":"live","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
+  "brief":"overview","ov":"overview","p-ossuse":"intel","p-polls":"social","p-forums":"social","p-insights":"overview","p-theses":"overview","p-cars":"macro","p-permits":"macro","p-renewal":"macro","p-prices":"macro","p-tourism":"macro","p-gap":"trend","p-migration":"trend","p-births":"trend","p-maptools":"trend","p-clinics":"intel","p-aesthetic":"intel","p-grants":"intel","p-gtop":"social","p-worldnews":"social","p-townnews":"social","p-plaact":"live","p-cables":"live","p-pressure":"live","p-vauth":"vault","p-vsearch":"vault","p-vtime":"vault","p-vseries":"vault"};
 const tabsEl=$("#tabs");
 tabsEl.innerHTML=TABS.map(([k,nm])=>`<button class="tab" role="tab" id="tab-${k}" data-k="${k}" aria-selected="false" type="button">${nm}<i class="bd" aria-hidden="true"></i></button>`).join("")+'<span class="tbar" id="tbar"></span>';
 let cur="overview";
@@ -2895,7 +2911,7 @@ const GUIDE={
     ["人口與區域","人往哪裡搬、哪裡在生、各區報告",["p-migration","p-births","p-maptools"]]]},
   social:{sub:"新聞、社群情緒、大家在看什麼",nav:1,secs:[
     ["新聞","焦點、國際、各地",["p-gtop","p-worldnews","p-townnews"]],
-    ["社群情緒","台灣人的心情、謠言、PTT",["p-mood","p-cofacts","p-ptt"]],
+    ["社群情緒","台灣人的心情、民調、謠言、PTT、Mobile01",["p-mood","p-polls","p-cofacts","p-ptt","p-forums"]],
     ["流行與注意力","在聽在看什麼、注意力往哪走",["p-pop","p-attention","p-youtube"]]]},
   live:{cat:"現場",sub:"現在哪裡不對勁：示警、天氣、地震、台海、交通、電力",secs:[
     ["全台此刻","示警、停班停課、天氣、地震、電力、氣壓",["p-geo","p-twnow","p-weather","p-quake","p-power","p-pressure"]],

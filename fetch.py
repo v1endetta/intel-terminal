@@ -9528,18 +9528,19 @@ def p_mood():
     blocks["PTT"] = [f"[{r['board']}] {r['title']}" for r in (ptt.get("items") or [])[:40]]
     blocks["LINE（Cofacts）"] = [f"（被查 {h['requests']} 次）{h['text'][:80]}" for h in (cof.get("hot") or [])[:15]]
     blocks["Threads"] = [f"[{k['kw']}] {p_['text'][:90]}" for k in (thg.get("keywords") or []) for p_ in (k.get("posts") or [])[:3]]
+    blocks["Mobile01"] = [x["title"] for x in ((load_prev("forums") or {}).get("m01") or [])[:25]]
     blocks["Bluesky（國外）"] = [f"[{k['kw']}] {p_['text'][:90]}" for k in (soc.get("keywords") or []) for p_ in (k.get("top") or [])[:2]]
     if sum(len(v) for v in blocks.values()) < 10:
         raise RuntimeError("mood: 素材不足")
     material = "\n\n".join(f"## {k}\n" + "\n".join(f"- {x}" for x in v) for k, v in blocks.items() if v)
-    prompt = f"""你是台灣的輿情分析師。下面是今天從三個來源抓到的原文（PTT 熱文標題、LINE 群組正在轉傳並被拿去查證的訊息、Bluesky 英文貼文）。
+    prompt = f"""你是台灣的輿情分析師。下面是今天從幾個來源抓到的原文（PTT 熱文標題、Mobile01 熱門討論、LINE 群組正在轉傳並被拿去查證的訊息、Bluesky 英文貼文）。各平台的族群不同：PTT 偏中壯年男性與政治股市、Mobile01 偏中年男性（車房 3C）、LINE 謠言偏中高齡；Dcard、Threads、IG 的年輕族群與女性目前沒有涵蓋，判斷時不要假裝代表全台灣。
 請只根據這些文字判斷「大眾情緒」，不要加入你自己的時事知識。用繁體中文、台灣用語，不要用「不是…而是…」句型，不要空泛。
 
 輸出 JSON，格式：
 {{
   "taiwan": {{"score": -1到1的小數（-1 極負面、0 中性、1 極正面）, "label": "兩到四個字的情緒標籤，例如 焦慮、亢奮、無感、憤怒", "themes": ["最多三個正在燒的主題，各 2-6 字"], "line": "一句 40 字內的判讀：台灣人今天在意什麼、語氣如何"}},
   "overseas": {{"score": 同上, "label": 同上, "themes": [...], "line": "一句 40 字內的判讀（英文貼文的情緒）"}},
-  "sources": {{"PTT": {{"score": 小數, "note": "15 字內"}}, "LINE": {{"score": 小數, "note": "15 字內"}}}},
+  "sources": {{"PTT": {{"score": 小數, "note": "15 字內"}}, "Mobile01": {{"score": 小數, "note": "15 字內"}}, "LINE": {{"score": 小數, "note": "15 字內"}}}},
   "watch": "一句 30 字內：如果只能盯一件事，盯什麼"
 }}
 來源沒有資料就把該來源 score 設為 null。
@@ -9550,7 +9551,7 @@ def p_mood():
     hist_put("mood", "taiwan", NOW_ISO[:13], tw.get("score"))
     hist_put("mood", "overseas", NOW_ISO[:13], (js.get("overseas") or {}).get("score"))
     return {**js, "model": model, "spark_tw": hist_get("mood", "taiwan", 72), "spark_os": hist_get("mood", "overseas", 72),
-            "n_inputs": {k: len(v) for k, v in blocks.items()}}
+            "n_inputs": {k: len(v) for k, v in blocks.items()}, "missing": "Dcard、Threads、IG（年輕族群、女性）還沒涵蓋"}
 
 
 
@@ -12815,6 +12816,24 @@ def p_polls():
     return {"latest": rows[:25], "tracks": tracks, "races": {k: v[:8] for k, v in list(races.items())[:6]}, "n_new": len(new), "n_rows": len(rows),
             "errs": errs[:5], "src": "Google 新聞標題（AI 擷取民調數字，以原新聞與調查單位公布為準）"}
 
+
+# ---------- 論壇：Mobile01 熱門討論（中年男性：車、房、3C、時事；robots 允許熱門頁） ----------
+def p_forums():
+    from curl_cffi import requests as cffi
+    r = cffi.get("https://www.mobile01.com/hottopics.php", impersonate="chrome", timeout=30)
+    r.raise_for_status()
+    t = r.text; seen, items = set(), []
+    for href, title in re.findall(r'<a[^>]+href="(topicdetail\.php\?f=\d+&(?:amp;)?t=\d+)"[^>]*>([^<]{6,90})</a>', t):
+        tid = re.search(r"t=(\d+)", href).group(1)
+        if tid in seen:
+            continue
+        seen.add(tid)
+        items.append({"title": html_mod.unescape(title.strip()), "url": "https://www.mobile01.com/" + html_mod.unescape(href), "f": int(re.search(r"f=(\d+)", href).group(1))})
+    if len(items) < 5:
+        raise RuntimeError(f"Mobile01 熱門只解析到 {len(items)} 則")
+    hist_put("forums", "m01_n", TODAY_TPE.isoformat(), len(items))
+    return {"m01": items[:30], "src": "Mobile01 熱門討論（公開頁面）"}
+
 run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
@@ -12886,7 +12905,9 @@ run("gtop", p_gtop, keep_if_fresh_hours=0.5)  # Google 焦點新聞：半小時�
 run("social", p_social, keep_if_fresh_hours=0.5)
 run("radar", p_radar, keep_if_fresh_hours=2)
 run("cofacts", p_cofacts, keep_if_fresh_hours=0.5)
+run("polls", p_polls, keep_if_fresh_hours=3)  # 民調：新聞標題 AI 擷取，三小時一次（只送新標題）
 # run("threads_g", p_threads_g, keep_if_fresh_hours=3)  # Custom Search JSON API 不收新客戶、Gemini grounding 免費層無額度（429）；Threads 暫無免費路徑
+run("forums", p_forums, keep_if_fresh_hours=1)  # Mobile01 熱門：一小時一次，給情緒判讀用
 run("mood", p_mood, keep_if_fresh_hours=1)
 run("tenders", p_tenders, keep_if_fresh_hours=0.5)
 run("tendermap", p_tendermap, keep_if_fresh_hours=2 if PCC_DAYS.exists() and len(json.loads(PCC_DAYS.read_text(encoding="utf-8") or "{}")) >= 20 else 0)   # 每天所有採購公告，依機關歸到縣市（地圖用）
