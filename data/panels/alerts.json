@@ -1,6 +1,54 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_typhoon-warning_202610222212477733",
+   "cat": "颱風",
+   "lvl": 3,
+   "area": [
+    "臺北市",
+    "新北市",
+    "基隆市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "南投縣",
+    "雲林縣",
+    "嘉義市",
+    "嘉義縣",
+    "臺南市",
+    "高雄市",
+    "屏東縣",
+    "宜蘭縣",
+    "花蓮縣",
+    "臺東縣",
+    "澎湖縣",
+    "金門縣",
+    "連江縣"
+   ],
+   "text": "8-2LAND29CHAMPI薔琵2026-10-22T14:00:00+00:0021.40,124.704555940320中度颱風TYPHOON2026-10-23T12:00:00+00:0024.40,122.804555940320中度颱風 薔琵（國際命名 CHAMPI）22日22時的中心位置在北緯 21.",
+   "src": "中央氣象署",
+   "at": "2026-10-22T14:12:47Z",
+   "exp": "2026-10-23T02:15:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610222212.cap"
+  },
+  {
+   "id": "THB-Bobe_633_23792_42665_20261022220959",
+   "cat": "道路封閉",
+   "lvl": 2,
+   "area": [
+    "臺北市",
+    "新北市"
+   ],
+   "text": "新北市 八里區 台61線 0K+0~2K+0。受損狀況/管制原因: 因應薔琵颱風侵襲台灣，氣象情資預測淡水地區風速將達到8級風，達到實施預警性封閉標準。",
+   "src": "交通部公路局",
+   "at": "2026-10-22T14:09:59Z",
+   "exp": "2026-10-24T12:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23792_42665_20261022220959.cap"
+  },
+  {
    "id": "CWA-Weather_typhoon-warning_202610222109007732",
    "cat": "颱風",
    "lvl": 3,
@@ -476,7 +524,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610211055.cap"
   }
  ],
- "n_total": 19,
+ "n_total": 21,
  "stopwork": {
   "items": [
    {
@@ -549,8 +597,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/22 21:44:04"
+  "updated": "2026/10/22 22:14:04"
  },
  "errs": [],
- "updatedAt": "2026-10-22T13:55:15Z"
+ "updatedAt": "2026-10-22T14:11:58Z"
 }
