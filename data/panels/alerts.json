@@ -1,6 +1,54 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261023151840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "臺北市",
+    "新北市",
+    "桃園市"
+   ],
+   "text": "水利署訊石門水庫:(洩洪至大漢溪):調節性放水,影響範圍:新北市，三峽區、淡水區、樹林區、蘆洲區、五股區、鶯歌區、土城區、新莊區、八里區、三重區、板橋區；臺北市，士林區、大同區、萬華區、北投區；桃園市，龍潭區、大溪區",
+   "src": "水利署",
+   "at": "2026-10-23T07:18:40Z",
+   "exp": "2026-10-23T18:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261023151840_0000.cap"
+  },
+  {
+   "id": "CWA-Weather_typhoon-warning_202610231517107764",
+   "cat": "颱風",
+   "lvl": 3,
+   "area": [
+    "臺北市",
+    "新北市",
+    "基隆市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "南投縣",
+    "雲林縣",
+    "嘉義市",
+    "嘉義縣",
+    "臺南市",
+    "高雄市",
+    "屏東縣",
+    "宜蘭縣",
+    "花蓮縣",
+    "臺東縣",
+    "澎湖縣",
+    "連江縣"
+   ],
+   "text": "14-1LAND29CHAMPI薔琵2026-10-23T07:00:00+00:0023.90,123.204353945320中度颱風TYPHOON2026-10-24T06:00:00+00:0026.20,122.903343970250中度颱風 薔琵（國際命名 CHAMPI）23日15時的中心位置在北緯 23",
+   "src": "中央氣象署",
+   "at": "2026-10-23T07:17:10Z",
+   "exp": "2026-10-23T19:15:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610231517.cap"
+  },
+  {
    "id": "THB-Bobe_633_23792_42700_20261023150127",
    "cat": "道路封閉",
    "lvl": 2,
@@ -133,21 +181,6 @@
    "at": "2026-10-23T05:14:27Z",
    "exp": "2026-10-23T17:15:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610231314.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261023124840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "臺北市",
-    "新北市",
-    "桃園市"
-   ],
-   "text": "水利署訊石門水庫:(洩洪至大漢溪):調節性放水,影響範圍:新北市，三峽區、淡水區、樹林區、蘆洲區、五股區、鶯歌區、土城區、新莊區、八里區、三重區、板橋區；臺北市，士林區、大同區、萬華區、北投區；桃園市，龍潭區、大溪區",
-   "src": "水利署",
-   "at": "2026-10-23T04:48:40Z",
-   "exp": "2026-10-23T15:49:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261023124840_0000.cap"
   },
   {
    "id": "CWA-Weather_typhoon-warning_202610231221047760",
@@ -642,7 +675,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 33,
+ "n_total": 34,
  "stopwork": {
   "items": [
    {
@@ -735,8 +768,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/23 14:56:03"
+  "updated": "2026/10/23 15:29:03"
  },
  "errs": [],
- "updatedAt": "2026-10-23T06:59:22Z"
+ "updatedAt": "2026-10-23T07:28:32Z"
 }
