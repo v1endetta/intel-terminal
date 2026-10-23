@@ -1,6 +1,53 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_typhoon-warning_202610230837317753",
+   "cat": "颱風",
+   "lvl": 3,
+   "area": [
+    "臺北市",
+    "新北市",
+    "基隆市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "南投縣",
+    "雲林縣",
+    "嘉義市",
+    "嘉義縣",
+    "臺南市",
+    "高雄市",
+    "屏東縣",
+    "宜蘭縣",
+    "花蓮縣",
+    "臺東縣",
+    "澎湖縣",
+    "連江縣"
+   ],
+   "text": "12LAND29CHAMPI薔琵2026-10-23T00:00:00+00:0022.60,123.904353945320中度颱風TYPHOON2026-10-24T00:00:00+00:0025.20,122.603343970280中度颱風 薔琵（國際命名 CHAMPI）23日8時的中心位置在北緯 22.6 ",
+   "src": "中央氣象署",
+   "at": "2026-10-23T00:37:31Z",
+   "exp": "2026-10-23T12:30:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610230837.cap"
+  },
+  {
+   "id": "CWA-Weather_heat_202610230832001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "花蓮縣",
+    "臺東縣"
+   ],
+   "text": "颱風環流沉降影響，今、明(23、24)兩天東南部地區有焚風發生的機率，今(23日)晚起東部地區亦有焚風發生的機率，23日、24日花蓮縣、臺東縣為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-23T00:32:11Z",
+   "exp": "2026-10-24T08:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610230832.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261023081840_0000",
    "cat": "水庫放流",
    "lvl": 2,
@@ -94,19 +141,6 @@
    "at": "2026-10-22T22:13:47Z",
    "exp": "2026-10-23T10:15:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610230613.cap"
-  },
-  {
-   "id": "WRA_FloodWarn_20261023053730_0000",
-   "cat": "淹水",
-   "lvl": 3,
-   "area": [
-    "宜蘭縣"
-   ],
-   "text": "水利署訊宜蘭縣南澳鄉淹水一級警戒 (武塔站三小時雨量超過150mm) ,如持續降雨轄內易淹水村里及道路可能已經開始積淹水 (如：南澳鄉-南澳村,碧候村,武塔村,金洋村,金岳村)，建請即時注意淹水通報及應變，低窪地區及道路請特別注意防範積淹水。",
-   "src": "水利署",
-   "at": "2026-10-22T21:37:30Z",
-   "exp": "2026-10-23T08:38:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/Flood/WRA_FloodWarn_20261023053730_0000.cap"
   },
   {
    "id": "CWA-Weather_typhoon-warning_202610230526367745",
@@ -433,7 +467,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 21,
+ "n_total": 22,
  "stopwork": {
   "items": [
    {
@@ -506,8 +540,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/23 08:14:03"
+  "updated": "2026/10/23 08:41:03"
  },
  "errs": [],
- "updatedAt": "2026-10-23T00:17:16Z"
+ "updatedAt": "2026-10-23T00:41:04Z"
 }
