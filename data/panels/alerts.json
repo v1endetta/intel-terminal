@@ -1,6 +1,33 @@
 {
  "alerts": [
   {
+   "id": "THB-Bobe_633_23797_42688_20261023111627",
+   "cat": "道路封閉",
+   "lvl": 2,
+   "area": [
+    "宜蘭縣"
+   ],
+   "text": "宜蘭縣 大同鄉 台7線 85K+500~94K+0。受損狀況/管制原因: 預警性封閉。",
+   "src": "交通部公路局",
+   "at": "2026-10-23T03:16:27Z",
+   "exp": "2026-10-24T15:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23797_42688_20261023111627.cap"
+  },
+  {
+   "id": "THB-Bobe_633_23806_42686_20261023111350",
+   "cat": "道路封閉",
+   "lvl": 2,
+   "area": [
+    "臺中市",
+    "宜蘭縣"
+   ],
+   "text": "宜蘭縣大同鄉-臺中市和平區 台7甲線 0K+0~50K+0。受損狀況/管制原因: 考量山區道路受連續強降雨影響，易發生邊坡坍方、落石、土石流及路基流失等災害，致災風險高，為維護用路人車安全。",
+   "src": "交通部公路局",
+   "at": "2026-10-23T03:13:50Z",
+   "exp": "2026-10-24T15:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23806_42686_20261023111350.cap"
+  },
+  {
    "id": "CWA-Weather_strong-wind_202610231045001",
    "cat": "強風",
    "lvl": 2,
@@ -132,20 +159,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23801_42676_20261023094024.cap"
   },
   {
-   "id": "THB-Bobe_633_23798_42673_20261023092103",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "臺中市",
-    "宜蘭縣"
-   ],
-   "text": "宜蘭縣大同鄉-臺中市和平區 台7甲線 0K+0~50K+0。受損狀況/管制原因: 預警性封閉。",
-   "src": "交通部公路局",
-   "at": "2026-10-23T01:21:03Z",
-   "exp": "2026-10-24T15:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23798_42673_20261023092103.cap"
-  },
-  {
    "id": "CWA-Weather_typhoon-warning_202610230917047755",
    "cat": "颱風",
    "lvl": 3,
@@ -177,19 +190,6 @@
    "at": "2026-10-23T01:17:04Z",
    "exp": "2026-10-23T13:15:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610230917.cap"
-  },
-  {
-   "id": "THB-Bobe_633_23797_42672_20261023091142",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "宜蘭縣"
-   ],
-   "text": "宜蘭縣 大同鄉 台7線 85K+500~94K+0。受損狀況/管制原因: 預警性封閉。",
-   "src": "交通部公路局",
-   "at": "2026-10-23T01:11:42Z",
-   "exp": "2026-10-24T15:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23797_42672_20261023091142.cap"
   },
   {
    "id": "WRA_FloodWarn_20261023084730_0000",
@@ -264,39 +264,6 @@
    "at": "2026-10-22T23:36:20Z",
    "exp": "2026-10-24T08:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610230736.cap"
-  },
-  {
-   "id": "CWA-Weather_typhoon-warning_202610230717147750",
-   "cat": "颱風",
-   "lvl": 3,
-   "area": [
-    "臺北市",
-    "新北市",
-    "基隆市",
-    "桃園市",
-    "新竹市",
-    "新竹縣",
-    "苗栗縣",
-    "臺中市",
-    "彰化縣",
-    "南投縣",
-    "雲林縣",
-    "嘉義市",
-    "嘉義縣",
-    "臺南市",
-    "高雄市",
-    "屏東縣",
-    "宜蘭縣",
-    "花蓮縣",
-    "臺東縣",
-    "澎湖縣",
-    "連江縣"
-   ],
-   "text": "11-2LAND29CHAMPI薔琵2026-10-22T23:00:00+00:0022.40,124.004353945320中度颱風TYPHOON2026-10-23T21:00:00+00:0024.90,122.503545965300中度颱風 薔琵（國際命名 CHAMPI）23日7時的中心位置在北緯 22.",
-   "src": "中央氣象署",
-   "at": "2026-10-22T23:17:14Z",
-   "exp": "2026-10-23T11:15:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610230717.cap"
   },
   {
    "id": "CWA-Weather_strong-wind_202610230520001",
@@ -590,7 +557,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 29,
+ "n_total": 28,
  "stopwork": {
   "items": [
    {
@@ -663,8 +630,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/23 10:53:03"
+  "updated": "2026/10/23 11:08:04"
  },
  "errs": [],
- "updatedAt": "2026-10-23T03:00:51Z"
+ "updatedAt": "2026-10-23T03:15:28Z"
 }
