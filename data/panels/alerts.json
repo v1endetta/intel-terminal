@@ -1,6 +1,53 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261024061840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "彰化縣",
+    "南投縣",
+    "雲林縣"
+   ],
+   "text": "水利署訊集集攔河堰:(洩洪至濁水溪):調節性放水,影響範圍:雲林縣，林內鄉、莿桐鄉、麥寮鄉、崙背鄉、二崙鄉、西螺鎮；南投縣，集集鎮、名間鄉、竹山鎮；彰化縣，大城鄉、二水鄉、竹塘鄉、溪州鄉",
+   "src": "水利署",
+   "at": "2026-10-23T22:18:40Z",
+   "exp": "2026-10-24T09:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024061840_0000.cap"
+  },
+  {
+   "id": "CWA-Weather_typhoon-warning_202610240614457791",
+   "cat": "颱風",
+   "lvl": 3,
+   "area": [
+    "臺北市",
+    "新北市",
+    "基隆市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "南投縣",
+    "雲林縣",
+    "嘉義縣",
+    "臺南市",
+    "高雄市",
+    "屏東縣",
+    "宜蘭縣",
+    "花蓮縣",
+    "臺東縣",
+    "澎湖縣",
+    "連江縣"
+   ],
+   "text": "19-1LAND29CHAMPI薔琵2026-10-23T22:00:00+00:0024.50,122.804050950280中度颱風TYPHOON2026-10-24T21:00:00+00:0028.90,124.002330988180中度颱風 薔琵（國際命名 CHAMPI）24日6時的中心位置在北緯 24.",
+   "src": "中央氣象署",
+   "at": "2026-10-23T22:14:45Z",
+   "exp": "2026-10-24T10:15:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610240614.cap"
+  },
+  {
    "id": "CWA-Weather_typhoon-warning_202610240542187788",
    "cat": "颱風",
    "lvl": 3,
@@ -168,21 +215,6 @@
    "at": "2026-10-23T20:20:09Z",
    "exp": "2026-10-24T08:15:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610240420.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261024041840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "彰化縣",
-    "南投縣",
-    "雲林縣"
-   ],
-   "text": "水利署訊集集攔河堰:(洩洪至濁水溪):調節性放水,影響範圍:雲林縣，林內鄉、莿桐鄉、麥寮鄉、崙背鄉、二崙鄉、西螺鎮；南投縣，集集鎮、名間鄉、竹山鎮；彰化縣，大城鄉、二水鄉、竹塘鄉、溪州鄉",
-   "src": "水利署",
-   "at": "2026-10-23T20:18:40Z",
-   "exp": "2026-10-24T07:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024041840_0000.cap"
   },
   {
    "id": "CWA-Weather_heat_202610240341001",
@@ -799,7 +831,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 41,
+ "n_total": 42,
  "stopwork": {
   "items": [
    {
@@ -892,8 +924,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/24 06:02:03"
+  "updated": "2026/10/24 06:29:03"
  },
  "errs": [],
- "updatedAt": "2026-10-23T22:12:51Z"
+ "updatedAt": "2026-10-23T22:28:42Z"
 }
