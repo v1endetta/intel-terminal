@@ -1,6 +1,20 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610240341001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "花蓮縣",
+    "臺東縣"
+   ],
+   "text": "颱風環流沉降影響，臺東縣已有焚風發生，花蓮地區有焚風發生的機率，今(24)日臺東縣為橙色燈號，有38度極端高溫出現的機率；花蓮縣為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-23T19:41:03Z",
+   "exp": "2026-10-24T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610240341.cap"
+  },
+  {
    "id": "CWA-Weather_typhoon-warning_202610240326517786",
    "cat": "颱風",
    "lvl": 3,
@@ -727,7 +741,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 38,
+ "n_total": 39,
  "stopwork": {
   "items": [
    {
@@ -820,8 +834,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/24 03:23:03"
+  "updated": "2026/10/24 03:50:03"
  },
  "errs": [],
- "updatedAt": "2026-10-23T19:32:27Z"
+ "updatedAt": "2026-10-23T19:54:56Z"
 }
