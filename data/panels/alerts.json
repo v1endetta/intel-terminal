@@ -1,6 +1,32 @@
 {
  "alerts": [
   {
+   "id": "THB-Bobe_633_23824_42721_20261023205512",
+   "cat": "道路封閉",
+   "lvl": 2,
+   "area": [
+    "宜蘭縣"
+   ],
+   "text": "宜蘭縣 南澳鄉 台9線 104K+100~113K+400。受損狀況/管制原因: 受薔琵颱風帶來強陣風影響，蘇花改蘇澳至東澳路段預警性道路封閉。",
+   "src": "交通部公路局",
+   "at": "2026-10-23T12:55:12Z",
+   "exp": "2026-10-24T23:52:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23824_42721_20261023205512.cap"
+  },
+  {
+   "id": "THB-Bobe_633_23823_42720_20261023204904",
+   "cat": "道路封閉",
+   "lvl": 2,
+   "area": [
+    "花蓮縣"
+   ],
+   "text": "花蓮縣 秀林鄉 台9線 124K+497~145K+61。受損狀況/管制原因: 受薔琵颱風帶來強陣風影響，蘇花改南澳至和平路段預警性道路封閉。",
+   "src": "交通部公路局",
+   "at": "2026-10-23T12:49:04Z",
+   "exp": "2026-10-24T23:44:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23823_42720_20261023204904.cap"
+  },
+  {
    "id": "CWA-Weather_typhoon-warning_202610232030467773",
    "cat": "颱風",
    "lvl": 3,
@@ -61,19 +87,6 @@
    "at": "2026-10-23T11:38:54Z",
    "exp": "2026-10-24T22:34:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23819_42709_20261023193854.cap"
-  },
-  {
-   "id": "THB-Bobe_633_23818_42708_20261023193346",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "宜蘭縣"
-   ],
-   "text": "宜蘭縣 南澳鄉 台9線 104K+100~113K+200。受損狀況/管制原因: 受薔琵颱風帶來強陣風影響，蘇花改蘇澳~東澳路段預警性道路封閉。",
-   "src": "交通部公路局",
-   "at": "2026-10-23T11:33:46Z",
-   "exp": "2026-10-24T22:29:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23818_42708_20261023193346.cap"
   },
   {
    "id": "WRA_ReservoirWarn_20261023191840_0000",
@@ -710,7 +723,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 36,
+ "n_total": 37,
  "stopwork": {
   "items": [
    {
@@ -803,8 +816,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/23 20:35:04"
+  "updated": "2026/10/23 20:59:04"
  },
  "errs": [],
- "updatedAt": "2026-10-23T12:38:06Z"
+ "updatedAt": "2026-10-23T13:00:14Z"
 }
