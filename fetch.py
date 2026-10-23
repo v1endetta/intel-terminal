@@ -2493,6 +2493,9 @@ def p_weather():
     # 雨量站：全台正在下雨的站（過去 1 小時 ≥0.5mm 或 10 分鐘內有雨），地圖畫點；同一筆資料不多打 API
     rainmap, county_rain = [], {}
     for st in rain.values():
+        cty0 = (st.get("GeoInfo") or {}).get("CountyName") or ""
+        if cty0:
+            county_rain.setdefault(cty0, 0)   # 有雨量站回報、沒在下雨 → 0（跟「沒資料」分開）
         lon, lat = _cwa_ll(st)
         re_ = st.get("RainfallElement") or {}
         r1 = _cwa_num((re_.get("Past1hr") or {}).get("Precipitation"))
@@ -3948,8 +3951,14 @@ def _cap_time(s: str):
     return datetime(int(y), int(mo), int(d), hh, int(mi), int(ss), tzinfo=TPE)
 
 
+def _cty_txt(text: str) -> str:
+    """「新北市」「竹北市」裡有「北市」兩個字，不先拿掉會被算成臺北市（新北的藝文活動以前全被歸到臺北）。"""
+    return str(text or "").replace("新北市", "新北").replace("竹北市", "竹北")
+
+
 def _counties_in(text: str) -> list:
     out = []
+    text = _cty_txt(text)
     for name, (_, _, keys) in TW_COUNTIES.items():
         if any(k in text for k in keys):
             out.append(name)
@@ -4050,7 +4059,7 @@ def p_localnews():
             errs.append(f"{name}: {safe_err(e)}"); continue
         items = []
         for it in got:
-            if not any(k in it["title"] for k in keys) or WATCH_SRC_BLOCK.search(it.get("source", "")) or CROWD_SRC_BLOCK.search(it.get("source", "")):
+            if not any(k in _cty_txt(it["title"]) for k in keys) or WATCH_SRC_BLOCK.search(it.get("source", "")) or CROWD_SRC_BLOCK.search(it.get("source", "")):
                 continue
             items.append({"title": it["title"][:70], "url": it["url"], "source": it["source"], "at": it["at"]})
         items.sort(key=lambda x: x.get("at") or "", reverse=True)
@@ -4062,8 +4071,26 @@ def p_localnews():
 
 
 TOWN_COMMON = {"新社", "光復", "成功", "和平", "復興", "太平", "永安", "安定", "大樹", "清水", "大同", "民生", "新興", "三民", "福興", "東山", "大安", "中正", "中山",
-               "信義", "仁愛", "和美", "新城", "新市", "長治", "水上", "大社", "大城", "大村", "萬里", "金山", "富里", "玉里", "瑞穗", "壽豐", "吉安"}   # 一般用語也會出現的鄉鎮簡稱
-NEWS_AGENCY = re.compile(r"俄新社|中新社|法新社|美聯社|路透社?|共同社|新華社|韓聯社|塔斯社|朝中社|德新社|安莎社|俄羅斯衛星通訊社")
+               "信義", "仁愛", "和美", "新城", "新市", "長治", "水上", "大社", "大城", "大村", "萬里", "金山", "富里", "玉里", "瑞穗", "壽豐", "吉安",
+               # 2026-10 補：國外地名、品牌、日常用語也會撞名
+               "大埔", "關西", "獅子", "金沙", "大內", "三星", "春日", "田中", "竹田", "峨眉", "潮州", "牡丹", "滿州", "將軍", "山上", "龍井",
+               "北斗", "花壇", "魚池", "林內", "安樂", "暖暖", "延平", "北門", "桃源", "莒光", "公館"}   # 一般用語也會出現的鄉鎮簡稱：要有全名或縣市才算
+NEWS_AGENCY = re.compile(r"俄新社|中新社|法新社|美聯社|路透社?|共同社|新華社|韓聯社|塔斯社|朝中社|德新社|安莎社|俄羅斯衛星通訊社"
+                         r"|前鎮長|南澳洲|白沙屯|大武崙|石門水庫|淡水河谷|金沙集團|布袋戲|閃耀暖暖|龍井茶|新屋主|關西機場|三重縣|岡山縣|永康街|八德路|金城武|龜山島|大湖公園|橋頭堡")   # 這些字串裡的地名不是那個鄉鎮
+# 香港、中國、財經、星座這類標題就算撞到鄉鎮名也不是台灣地方新聞
+TOWN_FOREIGN = re.compile(r"香港|港府|港澳|港元|港股|李家超|鄧炳強|澳門|深圳|廣東|廣州|內地|訪陸|大陸|中國大陸|目標價|評級|星座|運勢")
+TOWN_SRC_FOREIGN = re.compile(r"巴士的報|輕新聞|明報|星島|東網|香港01|頭條日報|信報|智通財經|Investing|TradingView|on\.cc|HK01", re.I)
+# 標題提到別的縣市、卻沒提到命中的縣市 → 多半是撞名（台東的大溪、基隆的大武崙）
+TOWN_CTY_NAMES = {"臺北": {"臺北市"}, "新北": {"新北市"}, "基隆": {"基隆市"}, "桃園": {"桃園市"}, "新竹": {"新竹市", "新竹縣"}, "苗栗": {"苗栗縣"},
+                  "臺中": {"臺中市"}, "彰化": {"彰化縣"}, "南投": {"南投縣"}, "雲林": {"雲林縣"}, "嘉義": {"嘉義市", "嘉義縣"}, "臺南": {"臺南市"},
+                  "高雄": {"高雄市"}, "屏東": {"屏東縣"}, "宜蘭": {"宜蘭縣"}, "花蓮": {"花蓮縣"}, "臺東": {"臺東縣"}, "澎湖": {"澎湖縣"},
+                  "金門": {"金門縣"}, "馬祖": {"連江縣"}, "連江": {"連江縣"}}
+
+
+def _town_cty_conflict(title, county):
+    t = title.replace("台", "臺").replace("中華臺北", "")
+    named = [cs for n, cs in TOWN_CTY_NAMES.items() if n in t]
+    return bool(named) and not any(county in cs for cs in named)
 
 
 def _town_terms():
@@ -4083,21 +4110,27 @@ def p_townnews():
     for c, terms in _town_terms().items():
         keys = TW_COUNTIES.get(c, (0, 0, ()))[2]
         per_c = 0
-        for i in range(0, len(terms), 10):
-            chunk = terms[i:i + 10]
-            q = " OR ".join(f'"{t[0]}"' for t in chunk) + " when:1d"
+        # 東區、中正區這類多縣市都有的分開查，查詢裡直接帶縣市名，不然會被台北東區的新聞淹掉（嘉義市、新竹市以前幾乎查不到）
+        plain, amb = [t for t in terms if not t[2]], [t for t in terms if t[2]]
+        batches = [(plain[i:i + 10], "") for i in range(0, len(plain), 10)]
+        batches += [(amb[i:i + 8], "(" + " OR ".join(f'"{x}"' for x in keys) + ") ") for i in range(0, len(amb), 8)]
+        for chunk, pre in batches:
+            q = pre + "(" + " OR ".join(f'"{t[0]}"' for t in chunk) + ") when:1d"
             try:
                 got = _gnews(q, limit=25)
             except Exception as e:  # noqa: BLE001
                 errs.append(f"{c}: {safe_err(e)}"); break
             for it in got:
                 title = it["title"]
-                if WATCH_SRC_BLOCK.search(it.get("source", "")) or CROWD_SRC_BLOCK.search(it.get("source", "")):
+                src = it.get("source", "")
+                if WATCH_SRC_BLOCK.search(src) or CROWD_SRC_BLOCK.search(src) or TOWN_SRC_FOREIGN.search(src):
+                    continue
+                if (TOWN_FOREIGN.search(title) and not any(x in _cty_txt(title) for x in keys)) or _town_cty_conflict(title, c):
                     continue
                 k = re.sub(r"\W+", "", title)[:30]
                 if k in seen:
                     continue
-                t2 = NEWS_AGENCY.sub("", title)   # 「據俄新社」不是台中新社區
+                t2 = _cty_txt(NEWS_AGENCY.sub("", title))   # 「據俄新社」不是台中新社區
                 hit = next((t for t in chunk if t[0] in t2 and (not t[2] or any(x in t2 for x in keys))
                             and (t[0] == t[1] or t[0] not in TOWN_COMMON or t[1] in t2 or any(x in t2 for x in keys))), None)   # 光復、成功這類常用詞：要有全名或縣市才算
                 if not hit:
