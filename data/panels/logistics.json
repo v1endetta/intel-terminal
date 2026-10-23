@@ -113,68 +113,7 @@
    "chg": -0.78
   }
  ],
- "storms": [
-  {
-   "name": "CHAMPI",
-   "level": "Red",
-   "ll": [
-    124.3,
-    21.9
-   ],
-   "from": "2026-10-14T12:00",
-   "to": "2026-10-22T18:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 296 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=34&eventtype=TC",
-   "near": [
-    {
-     "port": "高雄",
-     "km": 421
-    },
-    {
-     "port": "基隆／台北",
-     "km": 446
-    },
-    {
-     "port": "台中",
-     "km": 470
-    }
-   ],
-   "id": "1001338-34"
-  },
-  {
-   "name": "JOSEPHINE",
-   "level": "Green",
-   "ll": [
-    -67.3,
-    39.2
-   ],
-   "from": "2026-10-21T21:00",
-   "to": "2026-10-22T15:00",
-   "sev": "Tropical Storm (maximum wind speed of 120 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001342&episodeid=4&eventtype=TC",
-   "near": [
-    {
-     "port": "紐約／紐澤西",
-     "km": 602
-    }
-   ],
-   "id": "1001342-4"
-  },
-  {
-   "name": "VANCE",
-   "level": "Green",
-   "ll": [
-    -101.5,
-    10.0
-   ],
-   "from": "2026-10-21T15:00",
-   "to": "2026-10-22T21:00",
-   "sev": "Tropical Storm (maximum wind speed of 194 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=6&eventtype=TC",
-   "near": [],
-   "id": "1001341-6"
-  }
- ],
+ "storms": [],
  "ports": [
   {
    "name": "上海洋山",
@@ -631,7 +570,9 @@
   }
  ],
  "threat": [],
- "errs": [],
+ "errs": [
+  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
+ ],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-23T00:17:16Z"
+ "updatedAt": "2026-10-23T01:23:24Z"
 }
