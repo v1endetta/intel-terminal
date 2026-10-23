@@ -1,6 +1,66 @@
 {
  "alerts": [
   {
+   "id": "cwa.gov.tw_thunderstorm_20261024002359_000",
+   "cat": "雷雨",
+   "lvl": 2,
+   "area": [],
+   "text": "115年10月24日00時23分氣象署發布大雷雨即時訊息，持續時間至01時23分；有致災性短延時強降雨、9級以上強陣風、短延時強降雨發生，請慎防低窪地區積水、低能見度、瞬間大浪",
+   "src": "中央氣象署",
+   "at": "2026-10-23T16:24:47Z",
+   "exp": "2026-10-24T01:23:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/thunderstorm/cwa.gov.tw_thunderstorm_20261024002359_000.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261024001840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "彰化縣",
+    "南投縣",
+    "雲林縣"
+   ],
+   "text": "水利署訊集集攔河堰:(洩洪至濁水溪):調節性放水,影響範圍:雲林縣，林內鄉、莿桐鄉、麥寮鄉、崙背鄉、二崙鄉、西螺鎮；南投縣，集集鎮、名間鄉、竹山鎮；彰化縣，大城鄉、二水鄉、竹塘鄉、溪州鄉",
+   "src": "水利署",
+   "at": "2026-10-23T16:18:40Z",
+   "exp": "2026-10-24T03:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024001840_0000.cap"
+  },
+  {
+   "id": "CWA-Weather_typhoon-warning_202610240017387781",
+   "cat": "颱風",
+   "lvl": 3,
+   "area": [
+    "臺北市",
+    "新北市",
+    "基隆市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "南投縣",
+    "雲林縣",
+    "嘉義市",
+    "嘉義縣",
+    "臺南市",
+    "高雄市",
+    "屏東縣",
+    "宜蘭縣",
+    "花蓮縣",
+    "臺東縣",
+    "澎湖縣",
+    "金門縣",
+    "連江縣"
+   ],
+   "text": "17-1LAND29CHAMPI薔琵2026-10-23T16:00:00+00:0024.80,121.904353945320中度颱風TYPHOON2026-10-24T15:00:00+00:0027.90,123.403038975200中度颱風 薔琵（國際命名 CHAMPI）24日0時的中心位置在北緯 24.",
+   "src": "中央氣象署",
+   "at": "2026-10-23T16:17:38Z",
+   "exp": "2026-10-24T04:15:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610240017.cap"
+  },
+  {
    "id": "CWA-Weather_typhoon-warning_202610232331147779",
    "cat": "颱風",
    "lvl": 3,
@@ -107,21 +167,6 @@
    "at": "2026-10-23T14:40:01Z",
    "exp": "2026-10-24T23:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610232240.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261023221840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "彰化縣",
-    "南投縣",
-    "雲林縣"
-   ],
-   "text": "水利署訊集集攔河堰:(洩洪至濁水溪):調節性放水,影響範圍:雲林縣，林內鄉、莿桐鄉、麥寮鄉、崙背鄉、二崙鄉、西螺鎮；南投縣，集集鎮、名間鄉、竹山鎮；彰化縣，大城鄉、二水鄉、竹塘鄉、溪州鄉",
-   "src": "水利署",
-   "at": "2026-10-23T14:18:40Z",
-   "exp": "2026-10-24T01:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261023221840_0000.cap"
   },
   {
    "id": "CWA-Weather_typhoon-warning_202610232217087777",
@@ -648,7 +693,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 35,
+ "n_total": 37,
  "stopwork": {
   "items": [
    {
@@ -741,8 +786,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/24 00:08:04"
+  "updated": "2026/10/24 00:23:03"
  },
  "errs": [],
- "updatedAt": "2026-10-23T16:10:54Z"
+ "updatedAt": "2026-10-23T16:27:15Z"
 }
