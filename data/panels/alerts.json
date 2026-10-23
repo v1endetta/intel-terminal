@@ -1,6 +1,21 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261023121840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "彰化縣",
+    "南投縣",
+    "雲林縣"
+   ],
+   "text": "水利署訊集集攔河堰:(洩洪至濁水溪):調節性放水,影響範圍:雲林縣，林內鄉、莿桐鄉、麥寮鄉、崙背鄉、二崙鄉、西螺鎮；南投縣，集集鎮、名間鄉、竹山鎮；彰化縣，大城鄉、二水鄉、竹塘鄉、溪州鄉",
+   "src": "水利署",
+   "at": "2026-10-23T04:18:40Z",
+   "exp": "2026-10-23T15:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261023121840_0000.cap"
+  },
+  {
    "id": "THB-Bobe_633_23798_42695_20261023114839",
    "cat": "道路封閉",
    "lvl": 2,
@@ -603,7 +618,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 30,
+ "n_total": 31,
  "stopwork": {
   "items": [
    {
@@ -676,8 +691,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/23 12:08:04"
+  "updated": "2026/10/23 12:20:04"
  },
  "errs": [],
- "updatedAt": "2026-10-23T04:10:53Z"
+ "updatedAt": "2026-10-23T04:19:54Z"
 }
