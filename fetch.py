@@ -4004,8 +4004,10 @@ def p_alerts():
             for tr in re.findall(r"<TR[^>]*>(.*?)</TR>", body, re.S | re.I)[:30]:
                 cells = [re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", c)).strip() for c in re.findall(r"<TD[^>]*>(.*?)</TD>", tr, re.S | re.I)]
                 cells = [c for c in cells if c]
-                if len(cells) >= 2 and _counties_in(cells[0]):
-                    stop["items"].append({"area": cells[0][:12], "text": cells[1][:120]})
+                # 每個地區（北部、中部、南部、東部、外島）第一列多一格地區名（rowspan），縣市在第二格：找第一個是縣市的格子
+                i = next((i for i, c in enumerate(cells[:-1]) if _counties_in(c)), None)
+                if i is not None:
+                    stop["items"].append({"area": cells[i][:12], "text": cells[i + 1][:120]})
             stop["none"] = not stop["items"]
     except Exception as e:  # noqa: BLE001
         log("dgpa", e); errs.append("停班停課: " + safe_err(e))
