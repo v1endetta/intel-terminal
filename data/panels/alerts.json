@@ -1,6 +1,67 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_heat_202610240729001",
+   "cat": "高溫",
+   "lvl": 2,
+   "area": [
+    "花蓮縣",
+    "臺東縣"
+   ],
+   "text": "颱風外圍環流沉降影響，花蓮縣及臺東縣已有焚風發生，今(24)日臺東縣為橙色燈號，有38度極端高溫出現的機率；花蓮縣為黃色燈號，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-23T23:29:07Z",
+   "exp": "2026-10-24T17:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610240729.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261024071840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "臺北市",
+    "新北市",
+    "桃園市"
+   ],
+   "text": "水利署訊石門水庫:(洩洪至大漢溪):洩洪中,影響範圍:新北市，三峽區、淡水區、樹林區、蘆洲區、五股區、鶯歌區、土城區、新莊區、八里區、三重區、板橋區；臺北市，士林區、大同區、萬華區、北投區；桃園市，龍潭區、大溪區",
+   "src": "水利署",
+   "at": "2026-10-23T23:18:40Z",
+   "exp": "2026-10-24T10:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024071840_0000.cap"
+  },
+  {
+   "id": "CWA-Weather_typhoon-warning_202610240714447792",
+   "cat": "颱風",
+   "lvl": 3,
+   "area": [
+    "臺北市",
+    "新北市",
+    "基隆市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "南投縣",
+    "雲林縣",
+    "嘉義縣",
+    "臺南市",
+    "高雄市",
+    "屏東縣",
+    "宜蘭縣",
+    "花蓮縣",
+    "臺東縣",
+    "澎湖縣",
+    "連江縣"
+   ],
+   "text": "19-2LAND29CHAMPI薔琵2026-10-23T23:00:00+00:0024.60,123.004050950280中度颱風TYPHOON2026-10-24T21:00:00+00:0028.90,124.002330988180中度颱風 薔琵（國際命名 CHAMPI）24日7時的中心位置在北緯 24.",
+   "src": "中央氣象署",
+   "at": "2026-10-23T23:14:44Z",
+   "exp": "2026-10-24T11:15:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610240714.cap"
+  },
+  {
    "id": "THB-Bobe_632_23828_42740_20261024065310",
    "cat": "道路封閉",
    "lvl": 2,
@@ -146,21 +207,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610240528.cap"
   },
   {
-   "id": "WRA_ReservoirWarn_20261024051840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "臺北市",
-    "新北市",
-    "桃園市"
-   ],
-   "text": "水利署訊石門水庫:(洩洪至大漢溪):洩洪中,影響範圍:新北市，三峽區、淡水區、樹林區、蘆洲區、五股區、鶯歌區、土城區、新莊區、八里區、三重區、板橋區；臺北市，士林區、大同區、萬華區、北投區；桃園市，龍潭區、大溪區",
-   "src": "水利署",
-   "at": "2026-10-23T21:18:40Z",
-   "exp": "2026-10-24T08:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024051840_0000.cap"
-  },
-  {
    "id": "THB-Bobe_633_23794_42737_20261024051816",
    "cat": "道路封閉",
    "lvl": 2,
@@ -242,40 +288,6 @@
    "at": "2026-10-23T19:41:03Z",
    "exp": "2026-10-24T17:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610240341.cap"
-  },
-  {
-   "id": "CWA-Weather_typhoon-warning_202610240326517786",
-   "cat": "颱風",
-   "lvl": 3,
-   "area": [
-    "臺北市",
-    "新北市",
-    "基隆市",
-    "桃園市",
-    "新竹市",
-    "新竹縣",
-    "苗栗縣",
-    "臺中市",
-    "彰化縣",
-    "南投縣",
-    "雲林縣",
-    "嘉義市",
-    "嘉義縣",
-    "臺南市",
-    "高雄市",
-    "屏東縣",
-    "宜蘭縣",
-    "花蓮縣",
-    "臺東縣",
-    "澎湖縣",
-    "金門縣",
-    "連江縣"
-   ],
-   "text": "18-1LAND29CHAMPI薔琵2026-10-23T19:00:00+00:0024.30,122.404353945320中度颱風TYPHOON2026-10-24T18:00:00+00:0028.30,123.803038975200中度颱風 薔琵（國際命名 CHAMPI）24日3時的中心位置在北緯 24.",
-   "src": "中央氣象署",
-   "at": "2026-10-23T19:26:51Z",
-   "exp": "2026-10-24T07:15:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610240326.cap"
   },
   {
    "id": "CWA-Weather_extremely-rain_202610240226001",
@@ -810,7 +822,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 42,
+ "n_total": 43,
  "stopwork": {
   "items": [
    {
@@ -903,8 +915,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/24 07:05:03"
+  "updated": "2026/10/24 07:32:03"
  },
  "errs": [],
- "updatedAt": "2026-10-23T23:10:18Z"
+ "updatedAt": "2026-10-23T23:33:53Z"
 }
