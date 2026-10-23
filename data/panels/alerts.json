@@ -1,6 +1,19 @@
 {
  "alerts": [
   {
+   "id": "CWA-EQ115070-2026-1024-044817",
+   "cat": "地震",
+   "lvl": 3,
+   "area": [
+    "花蓮縣"
+   ],
+   "text": "10/24 04:48臺灣東部海域發生規模5.0有感地震，最大震度花蓮縣花蓮市3級。",
+   "src": "中央氣象署",
+   "at": "2026-10-23T20:52:49Z",
+   "exp": "2026-10-24T05:53:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Earthquake/CWA-EQ115070-2026-1024-044817.cap"
+  },
+  {
    "id": "CWA-Weather_typhoon-warning_202610240420097787",
    "cat": "颱風",
    "lvl": 3,
@@ -726,7 +739,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610221713.cap"
   }
  ],
- "n_total": 38,
+ "n_total": 39,
  "stopwork": {
   "items": [
    {
@@ -819,8 +832,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/24 04:38:04"
+  "updated": "2026/10/24 04:47:04"
  },
  "errs": [],
- "updatedAt": "2026-10-23T20:44:44Z"
+ "updatedAt": "2026-10-23T20:55:44Z"
 }
