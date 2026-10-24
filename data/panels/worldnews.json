@@ -1,26 +1,6 @@
 {
  "items": [
   {
-   "t": "強烈颱風侵襲台灣，造成一人死亡數百人受傷",
-   "en": "Typhoon Champi hits Taiwan, killing one and injuring hundreds",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/10/23/typhoon-champi-hits-taiwan-killing-one-and-injuring-350?traffic_source=rss",
-   "at": "2026-10-23T23:10:54Z",
-   "place": "台灣",
-   "ll": [
-    120.96,
-    23.7
-   ],
-   "cat": "災害",
-   "tw": 5,
-   "why": "颱風直接侵襲台灣，造成人員傷亡與財產損失",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
-   ],
-   "also": []
-  },
-  {
    "t": "PHP漏洞掀全球網路危機！日本將進行大型網路攻擊模擬演習",
    "en": "Japan to simulate cyberattacks as PHP flaws roil global internet",
    "src": "日本時報",
@@ -34,31 +14,24 @@
    "cat": "科技",
    "tw": 3,
    "why": "PHP漏洞影響全球伺服器與資安，牽動台灣企業與網路系統安全防護。",
-   "n_src": 1,
+   "n_src": 3,
    "srcs": [
-    "日本時報"
+    "日本時報",
+    "NPR",
+    "日經亞洲"
    ],
-   "also": []
-  },
-  {
-   "t": "報告：中國AI算力飆升，高度依賴美國晶片與海外雲端服務",
-   "en": "China’s AI compute surge heavily reliant on US chips, offshore cloud access: report",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/tech/tech-war/article/3371929/chinas-ai-compute-surge-heavily-reliant-us-chips-offshore-cloud-access-report",
-   "at": "2026-10-24T01:00:11Z",
-   "place": "中國",
-   "ll": [
-    104.2,
-    35.86
-   ],
-   "cat": "科技",
-   "tw": 3,
-   "why": "美中晶片管制與AI算力競賽牽動台灣半導體產業鏈與出口表現。",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
+   "also": [
+    {
+     "src": "NPR",
+     "url": "https://www.npr.org/2026/10/23/g-s1-149503/hacking-php-flaws",
+     "en": "Hacking attempts rise after flaws found in program affecting 70% of websites"
+    },
+    {
+     "src": "日經亞洲",
+     "url": "https://asia.nikkei.com/spotlight/cybersecurity/php-security-flaws-prompt-japan-to-take-websites-down-while-us-keeps-them-up",
+     "en": "PHP security flaws prompt Japan to take websites down while US keeps them up"
+    }
+   ]
   },
   {
    "t": "白宮稱梅蘭妮亞·川普為瀕臨災難邊緣的烏克蘭城市促成休戰",
@@ -92,6 +65,66 @@
      "en": "Melania Trump secures localized Russia-Ukraine ceasefire for humanitarian aid: White House"
     }
    ]
+  },
+  {
+   "t": "外媒：俄國諾瓦泰克資助美國液化天然氣專案開發商",
+   "en": "US LNG Project Developer Funded by Russia’s Novatek, FT Says",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-24/us-lng-project-developer-funded-by-russia-s-novatek-ft-says",
+   "at": "2026-10-24T04:24:04Z",
+   "place": "美國",
+   "ll": [
+    -95.71,
+    37.09
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "牽動國際能源供應與制裁局勢，可能影響台灣的能源進口成本。",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "南韓股市震盪！券商客戶投資存款急遽縮水",
+   "en": "Investor deposits at brokerages plunge on stock market volatility",
+   "src": "韓聯社",
+   "url": "https://en.yna.co.kr/view/AEN20261024001800320",
+   "at": "2026-10-24T04:11:34Z",
+   "place": "南韓",
+   "ll": [
+    127.77,
+    35.91
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "反映亞洲鄰近股市波動風險，牽動外資動向與台灣金融市場情緒。",
+   "n_src": 1,
+   "srcs": [
+    "韓聯社"
+   ],
+   "also": []
+  },
+  {
+   "t": "中國深入調查土耳其最大稀土礦床",
+   "en": "China carries out in-depth investigation of Turkey’s largest rare earth deposit",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/china/science/article/3371800/china-carries-out-depth-investigation-turkeys-largest-rare-earth-deposit",
+   "at": "2026-10-24T04:00:11Z",
+   "place": "土耳其",
+   "ll": [
+    35.24,
+    38.96
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "稀土供應鏈與中國全球礦產布局牽動高科技原物料市場，值得台灣關注。",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
   },
   {
    "t": "應對朝中飛彈威脅 美軍在關島成立防空營",
@@ -154,24 +187,136 @@
    "also": []
   },
   {
-   "t": "陸克文：美中戰略競爭將持續升溫 備受全球關注",
-   "en": "US-China strategic competition to keep escalating as world watches on, Rudd says",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/china/diplomacy/article/3371990/us-china-strategic-competition-keep-escalating-world-watches-rudd-says",
-   "at": "2026-10-23T22:29:03Z",
-   "place": "美國",
+   "t": "世衛組織宣布：剛果民主共和國啟動伊波拉疫苗臨床試驗",
+   "en": "WHO announces start of Ebola vaccine clinical trial in DR Congo",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news/2026/10/24/who-announces-start-of-ebola-vaccine-clinical-trial-in-dr-congo?traffic_source=rss",
+   "at": "2026-10-24T00:27:21Z",
+   "place": "剛果民主共和國",
    "ll": [
-    -77.04,
-    38.9
+    21.76,
+    -4.04
    ],
-   "cat": "政治",
-   "tw": 2,
-   "why": "美中角力持續升溫，牽動台海安全與區域政經局勢。",
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 3,
+   "srcs": [
+    "Al Jazeera",
+    "BBC",
+    "NPR"
+   ],
+   "also": [
+    {
+     "src": "BBC",
+     "url": "https://www.bbc.co.uk/news/articles/c6x2355448eyo?at_medium=RSS&at_campaign=rss",
+     "en": "Woman, 65, becomes second patient to die of Ebola in Kenya"
+    },
+    {
+     "src": "NPR",
+     "url": "https://www.npr.org/2026/10/23/g-s1-149515/africa-ebola-outbreak",
+     "en": "Authorities investigating whether first Kenya and Nigeria Ebola cases crossed paths"
+    }
+   ]
+  },
+  {
+   "t": "涉詐加密平台在港設辦公室 惹議員質疑籲加強審查",
+   "en": "Crypto platform on alert lists opens Hong Kong office, prompting calls for scrutiny",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3371978/crypto-platform-alert-lists-opens-hong-kong-office-prompting-calls-scrutiny",
+   "at": "2026-10-24T04:00:16Z",
+   "place": "香港",
+   "ll": [
+    114.17,
+    22.32
+   ],
+   "cat": "科技",
+   "tw": 1,
+   "why": "",
    "n_src": 1,
    "srcs": [
     "南華早報"
    ],
    "also": []
+  },
+  {
+   "t": "五角大廈將孔子學院列為國家安全威脅",
+   "en": "Pentagon designates Confucius Institutes a national security threat",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news/2026/10/24/pentagon-designates-confucius-institutes-a-national-security-threat?traffic_source=rss",
+   "at": "2026-10-24T03:38:20Z",
+   "place": "美國",
+   "ll": [
+    -77.06,
+    38.87
+   ],
+   "cat": "政治",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "Al Jazeera"
+   ],
+   "also": []
+  },
+  {
+   "t": "阿根廷辨識出數十名「骯髒戰爭」遇害者身分",
+   "en": "Argentina identifies dozens of victims killed in its ‘Dirty War’",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/video/newsfeed/2026/10/24/argentina-identifies-dozens-of-victims-killed-in-its-dirty?traffic_source=rss",
+   "at": "2026-10-24T03:51:58Z",
+   "place": "阿根廷",
+   "ll": [
+    -63.62,
+    -38.42
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 2,
+   "srcs": [
+    "Al Jazeera",
+    "BBC"
+   ],
+   "also": [
+    {
+     "src": "Al Jazeera",
+     "url": "https://www.aljazeera.com/news/2026/10/24/argentinian-judge-drops-fraud-investigation-into-milei-over-crypto-scandal?traffic_source=rss",
+     "en": "Argentinian judge drops fraud investigation into Milei over crypto scandal"
+    },
+    {
+     "src": "BBC",
+     "url": "https://www.bbc.co.uk/news/articles/c64g1eplpvddo?at_medium=RSS&at_campaign=rss",
+     "en": "Argentina drops investigation into President Milei over crypto fraud"
+    }
+   ]
+  },
+  {
+   "t": "日本皇室成員減少因應法案正式生效",
+   "en": "Revised law to maintain Japan’s imperial family size takes effect",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/asia/east-asia/article/3371993/revised-law-maintain-japans-imperial-family-size-takes-effect",
+   "at": "2026-10-24T03:30:15Z",
+   "place": "日本東京",
+   "ll": [
+    139.65,
+    35.68
+   ],
+   "cat": "政治",
+   "tw": 0,
+   "why": "",
+   "n_src": 2,
+   "srcs": [
+    "南華早報",
+    "日本時報"
+   ],
+   "also": [
+    {
+     "src": "日本時報",
+     "url": "https://www.japantimes.co.jp/news/2026/10/24/japan/new-imperial-house-law/",
+     "en": "Revised Imperial House Law comes into effect, but challenges remain"
+    }
+   ]
   },
   {
    "t": "浦項鋼鐵與工會薪資談判破裂",
@@ -294,26 +439,6 @@
    "also": []
   },
   {
-   "t": "印尼的雄心與成長陣痛：普拉伯沃執政兩年的風雨",
-   "en": "Big dreams, growing pains in Indonesia: Prabowo’s turbulent 2 years in power",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/week-asia/people/article/3371953/big-dreams-growing-pains-indonesia-prabowos-turbulent-2-years-power",
-   "at": "2026-10-24T00:00:19Z",
-   "place": "印尼",
-   "ll": [
-    113.92,
-    -0.79
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
    "t": "沙烏地阿拉伯攔截擊落瞄準利雅德的葉門胡塞組織彈道飛彈",
    "en": "Iran war live: Saudi downs Houthi ballistic missile targeting Riyadh",
    "src": "Al Jazeera",
@@ -350,40 +475,13 @@
    "n_src": 2,
    "srcs": [
     "Guardian",
-    "BBC"
+    "NPR"
    ],
    "also": [
     {
-     "src": "BBC",
-     "url": "https://www.bbc.co.uk/news/articles/cq4g1p974wxko?at_medium=RSS&at_campaign=rss",
-     "en": "Israeli forces begin demolishing Palestinian buildings in Hebron after two Israeli soldier"
-    }
-   ]
-  },
-  {
-   "t": "阿根廷法官撤銷對總統米萊加密貨幣醜聞的欺詐調查",
-   "en": "Argentinian judge drops fraud investigation into Milei over crypto scandal",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/10/24/argentinian-judge-drops-fraud-investigation-into-milei-over-crypto-scandal?traffic_source=rss",
-   "at": "2026-10-24T01:21:18Z",
-   "place": "阿根廷",
-   "ll": [
-    63.62,
-    -38.42
-   ],
-   "cat": "政治",
-   "tw": 0,
-   "why": "",
-   "n_src": 2,
-   "srcs": [
-    "Al Jazeera",
-    "BBC"
-   ],
-   "also": [
-    {
-     "src": "BBC",
-     "url": "https://www.bbc.co.uk/news/articles/c64g1eplpvddo?at_medium=RSS&at_campaign=rss",
-     "en": "Argentina drops investigation into President Milei over crypto fraud"
+     "src": "NPR",
+     "url": "https://www.npr.org/2026/10/23/nx-s1-6013333/netanyahu-closure-west-bank",
+     "en": "Israel orders closure of West Bank after soldiers kill 2 men behind an alleged attack"
     }
    ]
   },
@@ -488,6 +586,26 @@
    "also": []
   },
   {
+   "t": "以色列選戰白熱化！候選人遭受人身攻擊與惡毒嘲諷",
+   "en": "Israeli election campaign turns ugly with jibes, attacks against candidates",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/world/middle-east/article/3371998/israeli-election-campaign-turns-ugly-jibes-attacks-against-candidates",
+   "at": "2026-10-24T04:30:10Z",
+   "place": "以色列",
+   "ll": [
+    34.85,
+    31.05
+   ],
+   "cat": "政治",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
    "t": "巴黎郊區恐怖槍擊釀死 馬克宏嚴厲譴責種族主義",
    "en": "Macron condemns racism after one killed in ‘terrorist’ shooting near Paris",
    "src": "Guardian",
@@ -515,31 +633,124 @@
    ]
   },
   {
-   "t": "約旦教堂喪禮遭蒙面槍手攻擊釀7死",
-   "en": "Masked gunmen kill seven in attack on church funeral in Jordan",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/video/newsfeed/2026/10/23/aje-onl-nf_masked-gunmen-kill-seven-in-attack-on-church-jordan-231026?traffic_source=rss",
-   "at": "2026-10-23T21:27:32Z",
-   "place": "約旦",
+   "t": "法國全國暴動一周後 警戒準備新一波抗議潮",
+   "en": "France prepares for day of protest a week after nationwide riots",
+   "src": "BBC",
+   "url": "https://www.bbc.co.uk/news/articles/cj62yv5k0w4yo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-24T04:03:46Z",
+   "place": "法國",
    "ll": [
-    35.93,
-    31.95
+    2.21,
+    46.23
    ],
    "cat": "社會",
    "tw": 0,
    "why": "",
-   "n_src": 2,
+   "n_src": 1,
    "srcs": [
-    "Al Jazeera",
     "BBC"
    ],
-   "also": [
-    {
-     "src": "BBC",
-     "url": "https://www.bbc.co.uk/news/articles/ck87zlpzny15o?at_medium=RSS&at_campaign=rss",
-     "en": "Seven shot dead by gunmen at church funeral in Jordan, officials say"
-    }
-   ]
+   "also": []
+  },
+  {
+   "t": "海外菲勞包裹「人間蒸發」心碎求償 促當局給交代",
+   "en": "Overseas Filipinos feel heartache over missing parcels for loved ones, demand answers",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/week-asia/lifestyle-culture/article/3371982/overseas-filipinos-feel-heartache-over-missing-parcels-loved-ones-demand-answers",
+   "at": "2026-10-24T04:00:20Z",
+   "place": "菲律賓",
+   "ll": [
+    121.77,
+    12.88
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "印度監管機構下令 選擇權名師須退還54.6億盧比",
+   "en": "India Regulator Orders Options Trainer Avadhut Sathe to Refund INR 5.46B",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-24/india-regulator-orders-options-trainer-avadhut-sathe-to-refund-inr-5-46b",
+   "at": "2026-10-24T03:54:47Z",
+   "place": "印度",
+   "ll": [
+    78.96,
+    20.59
+   ],
+   "cat": "經濟",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "希特勒「鷹巢」度假屋失火 警方逮捕嫌犯",
+   "en": "Arrest made after fire at Hitler's Eagle's Nest retreat",
+   "src": "BBC",
+   "url": "https://www.bbc.co.uk/news/articles/cr93zwjw1k4qo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-24T03:51:25Z",
+   "place": "德國",
+   "ll": [
+    10.45,
+    51.17
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "BBC"
+   ],
+   "also": []
+  },
+  {
+   "t": "魯比歐促古巴人與CIA合作 推翻當地政權",
+   "en": "Marco Rubio urges Cubans to collaborate with CIA to topple gov’t",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/video/newsfeed/2026/10/24/10-24-rubi0-cuba-cia?traffic_source=rss",
+   "at": "2026-10-24T03:50:32Z",
+   "place": "古巴",
+   "ll": [
+    -77.78,
+    21.52
+   ],
+   "cat": "政治",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "Al Jazeera"
+   ],
+   "also": []
+  },
+  {
+   "t": "以色列突襲約旦河西岸城鎮 逮捕數十名巴勒斯坦人",
+   "en": "Israel raids towns, detains dozens of Palestinians in occupied West Bank",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news/2026/10/24/israel-raids-towns-detains-dozens-of-palestinians-in-occupied-west-bank?traffic_source=rss",
+   "at": "2026-10-24T03:47:14Z",
+   "place": "巴勒斯坦",
+   "ll": [
+    35.23,
+    31.95
+   ],
+   "cat": "戰爭衝突",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "Al Jazeera"
+   ],
+   "also": []
   },
   {
    "t": "巴黎示威潮引發恐慌，部分居民買防狼噴霧自保",
@@ -553,26 +764,6 @@
     48.86
    ],
    "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "日本皇室成員減少因應法案正式生效",
-   "en": "Revised law to maintain Japan’s imperial family size takes effect",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/asia/east-asia/article/3371993/revised-law-maintain-japans-imperial-family-size-takes-effect",
-   "at": "2026-10-24T03:30:15Z",
-   "place": "日本東京",
-   "ll": [
-    139.65,
-    35.68
-   ],
-   "cat": "政治",
    "tw": 0,
    "why": "",
    "n_src": 1,
@@ -680,172 +871,12 @@
     "南華早報"
    ],
    "also": []
-  },
-  {
-   "t": "中國寵物視為財產，寵物撫養權爭議日益受到關注",
-   "en": "Pet custody disputes draw increasing attention in China, where pets are treated as propert",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/people-culture/trending-china/article/3371992/pet-custody-disputes-draw-increasing-attention-china-where-pets-are-treated-property",
-   "at": "2026-10-24T02:14:29Z",
-   "place": "中國",
-   "ll": [
-    104.2,
-    35.86
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "影響7成網站程式碼被發現漏洞 駭客攻擊激增",
-   "en": "Hacking attempts rise after flaws found in program affecting 70% of websites",
-   "src": "NPR",
-   "url": "https://www.npr.org/2026/10/23/g-s1-149503/hacking-php-flaws",
-   "at": "2026-10-23T09:37:38Z",
-   "place": "美國",
-   "ll": [
-    -77.04,
-    38.9
-   ],
-   "cat": "科技",
-   "tw": 2,
-   "why": "全球多數網站使用的程式碼出現漏洞，可能波及台灣企業與網路資安防護。",
-   "n_src": 1,
-   "srcs": [
-    "NPR"
-   ],
-   "also": []
-  },
-  {
-   "t": "致命意外頻傳！日本傳統祭典面臨存亡危機",
-   "en": "Danger, death and devotion: Japan’s festivals face crisis after fatal accidents",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/week-asia/lifestyle-culture/article/3371913/danger-death-and-devotion-japans-festivals-face-crisis-after-fatal-accidents",
-   "at": "2026-10-24T01:30:16Z",
-   "place": "日本",
-   "ll": [
-    138.25,
-    36.2
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "港媒：香港應重新思考私人體育俱樂部地價政策",
-   "en": "Why Hong Kong should rethink premiums for private recreation clubs",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/opinion/hong-kong-opinion/article/3371499/why-hong-kong-should-rethink-premiums-private-recreation-clubs",
-   "at": "2026-10-24T01:30:11Z",
-   "place": "香港",
-   "ll": [
-    114.17,
-    22.32
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "美籍王牌投手將在韓職季後賽首戰正面對決",
-   "en": "American aces to face each other in KBO postseason series opener",
-   "src": "韓聯社",
-   "url": "https://en.yna.co.kr/view/AEN20261024001100315",
-   "at": "2026-10-24T01:25:28Z",
-   "place": "南韓",
-   "ll": [
-    127.77,
-    35.91
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "韓聯社"
-   ],
-   "also": []
-  },
-  {
-   "t": "美以被警告勿對伊朗發動新一輪空襲",
-   "en": "US and Israel are warned against launching fresh strikes on Iran",
-   "src": "Guardian",
-   "url": "https://www.theguardian.com/world/2026/oct/23/european-middle-eastern-ministers-summit-iran-us-israel",
-   "at": "2026-10-23T17:18:34Z",
-   "place": "伊朗",
-   "ll": [
-    51.39,
-    35.69
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Guardian"
-   ],
-   "also": []
-  },
-  {
-   "t": "兩名日本登山客在尼泊爾偏遠喜馬拉雅山峰喪生",
-   "en": "Two Japanese climbers die on remote Himalayan peak in Nepal",
-   "src": "日本時報",
-   "url": "https://www.japantimes.co.jp/news/2026/10/24/japan/nepal-japan-climbers-dead/",
-   "at": "2026-10-24T01:06:00Z",
-   "place": "尼泊爾",
-   "ll": [
-    84.12,
-    28.39
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "日本時報"
-   ],
-   "also": []
-  },
-  {
-   "t": "日本政府因成本攀升將檢討汽油補貼政策",
-   "en": "Government to review gasoline subsidies as costs mount",
-   "src": "日本時報",
-   "url": "https://www.japantimes.co.jp/news/2026/10/24/japan/gas-subsidies-review/",
-   "at": "2026-10-24T01:06:00Z",
-   "place": "日本",
-   "ll": [
-    138.25,
-    36.2
-   ],
-   "cat": "經濟",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "日本時報"
-   ],
-   "also": []
   }
  ],
  "n_zh": 40,
- "n_tw": 4,
- "n_big": 1,
+ "n_tw": 2,
+ "n_big": 3,
  "errs": [],
  "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報、彭博；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷",
- "updatedAt": "2026-10-24T03:44:32Z"
+ "updatedAt": "2026-10-24T04:48:36Z"
 }
