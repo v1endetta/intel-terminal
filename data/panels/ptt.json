@@ -2,20 +2,6 @@
  "label": "推文 ≥30",
  "items": [
   {
-   "board": "Stock",
-   "title": "[閒聊] 2026/10/22 盤後閒聊",
-   "push": 100,
-   "url": "https://www.ptt.cc/bbs/Stock/M.1792648803.A.8C4.html",
-   "date": "10/22"
-  },
-  {
-   "board": "Stock",
-   "title": "[新聞] 川普警告伊朗不談判就再打！揚言來一場",
-   "push": 100,
-   "url": "https://www.ptt.cc/bbs/Stock/M.1792806880.A.375.html",
-   "date": "10/24"
-  },
-  {
    "board": "Lifeismoney",
    "title": "[集中] 未滿1元集點抽獎資訊集中文",
    "push": 100,
@@ -31,10 +17,24 @@
   },
   {
    "board": "Stock",
+   "title": "[閒聊] 2026/10/22 盤後閒聊",
+   "push": 99,
+   "url": "https://www.ptt.cc/bbs/Stock/M.1792648803.A.8C4.html",
+   "date": "10/22"
+  },
+  {
+   "board": "Stock",
    "title": "[新聞] 颱風假與股市脫鉤？　金管會：持續蒐集意",
    "push": 99,
    "url": "https://www.ptt.cc/bbs/Stock/M.1792746638.A.FBB.html",
    "date": "10/23"
+  },
+  {
+   "board": "Stock",
+   "title": "[新聞] 川普警告伊朗不談判就再打！揚言來一場",
+   "push": 99,
+   "url": "https://www.ptt.cc/bbs/Stock/M.1792806880.A.375.html",
+   "date": "10/24"
   },
   {
    "board": "Stock",
@@ -86,6 +86,13 @@
    "date": "10/21"
   },
   {
+   "board": "HatePolitics",
+   "title": "[新聞] 陳柏惟本要上《面對面》提問!爆蔣萬安團",
+   "push": 49,
+   "url": "https://www.ptt.cc/bbs/HatePolitics/M.1792829591.A.DCC.html",
+   "date": "10/24"
+  },
+  {
    "board": "WomenTalk",
    "title": "[討論] 不管做什麼事情都提不起勁，該怎麼做",
    "push": 49,
@@ -100,6 +107,13 @@
    "date": "10/19"
   },
   {
+   "board": "Gossiping",
+   "title": "[新聞] 快訊／新莊工地「電梯高速墜落」！2工人",
+   "push": 43,
+   "url": "https://www.ptt.cc/bbs/Gossiping/M.1792828857.A.516.html",
+   "date": "10/24"
+  },
+  {
    "board": "Stock",
    "title": "[新聞] 美伊又告急 油價衝116美元 專家：行情恐",
    "push": 43,
@@ -108,24 +122,24 @@
   },
   {
    "board": "car",
-   "title": "[閒聊] 2026 Toyota RAV4 IIHS crash test",
-   "push": 42,
-   "url": "https://www.ptt.cc/bbs/car/M.1792649107.A.E62.html",
-   "date": "10/22"
-  },
-  {
-   "board": "car",
    "title": "[閒聊] 家庭MPV 5+2 試乘閒聊",
-   "push": 41,
+   "push": 42,
    "url": "https://www.ptt.cc/bbs/car/M.1792764086.A.B6F.html",
    "date": "10/23"
   },
   {
    "board": "car",
    "title": "[閒聊] 也有人在關注比較新的CUV小車嗎~",
-   "push": 40,
+   "push": 42,
    "url": "https://www.ptt.cc/bbs/car/M.1792765965.A.C75.html",
    "date": "10/23"
+  },
+  {
+   "board": "car",
+   "title": "[閒聊] 2026 Toyota RAV4 IIHS crash test",
+   "push": 42,
+   "url": "https://www.ptt.cc/bbs/car/M.1792649107.A.E62.html",
+   "date": "10/22"
   },
   {
    "board": "Lifeismoney",
@@ -151,22 +165,8 @@
   {
    "board": "movie",
    "title": "[新聞]新任007詹姆斯龐德最終試鏡！三名男星闖進",
-   "push": 35,
+   "push": 37,
    "url": "https://www.ptt.cc/bbs/movie/M.1792764517.A.0FB.html",
-   "date": "10/23"
-  },
-  {
-   "board": "HatePolitics",
-   "title": "[討論] 葛如鈞做的“台北安可電視台”",
-   "push": 34,
-   "url": "https://www.ptt.cc/bbs/HatePolitics/M.1792827438.A.656.html",
-   "date": "10/24"
-  },
-  {
-   "board": "Lifeismoney",
-   "title": "[情報] Momo簽到 簽滿27點",
-   "push": 34,
-   "url": "https://www.ptt.cc/bbs/Lifeismoney/M.1792692467.A.C61.html",
    "date": "10/23"
   }
  ],
@@ -175,12 +175,12 @@
    "board": "Gossiping",
    "zh": "八卦",
    "facet": "大眾",
-   "n": 25,
-   "today": 25,
-   "heat": 129,
+   "n": 32,
+   "today": 32,
+   "heat": 180,
    "boom": 0,
    "boo": 0,
-   "mood": 0.88,
+   "mood": 0.94,
    "spark": [
     183,
     389,
@@ -229,20 +229,28 @@
     137,
     114,
     96,
-    129
+    180
    ],
-   "top": []
+   "top": [
+    {
+     "board": "Gossiping",
+     "title": "[新聞] 快訊／新莊工地「電梯高速墜落」！2工人",
+     "push": 43,
+     "url": "https://www.ptt.cc/bbs/Gossiping/M.1792828857.A.516.html",
+     "date": "10/24"
+    }
+   ]
   },
   {
    "board": "HatePolitics",
    "zh": "政黑",
    "facet": "政治",
-   "n": 25,
-   "today": 24,
-   "heat": 113,
+   "n": 24,
+   "today": 23,
+   "heat": 167,
    "boom": 0,
    "boo": 0,
-   "mood": 0.64,
+   "mood": 0.71,
    "spark": [
     248,
     152,
@@ -291,14 +299,21 @@
     193,
     219,
     95,
-    113
+    167
    ],
    "top": [
     {
      "board": "HatePolitics",
-     "title": "[討論] 葛如鈞做的“台北安可電視台”",
-     "push": 34,
-     "url": "https://www.ptt.cc/bbs/HatePolitics/M.1792827438.A.656.html",
+     "title": "[新聞] 陳柏惟本要上《面對面》提問!爆蔣萬安團",
+     "push": 49,
+     "url": "https://www.ptt.cc/bbs/HatePolitics/M.1792829591.A.DCC.html",
+     "date": "10/24"
+    },
+    {
+     "board": "HatePolitics",
+     "title": "[討論] 蔣萬安血條到底有多厚、厚到可以玩樹枝 ?",
+     "push": 32,
+     "url": "https://www.ptt.cc/bbs/HatePolitics/M.1792828348.A.014.html",
      "date": "10/24"
     }
    ]
@@ -307,12 +322,12 @@
    "board": "Stock",
    "zh": "股板",
    "facet": "市場",
-   "n": 30,
-   "today": 22,
-   "heat": 950,
-   "boom": 2,
+   "n": 33,
+   "today": 25,
+   "heat": 989,
+   "boom": 0,
    "boo": 0,
-   "mood": 1.0,
+   "mood": 0.97,
    "spark": [
     1369,
     755,
@@ -361,22 +376,15 @@
     840,
     906,
     928,
-    950
+    989
    ],
    "top": [
     {
      "board": "Stock",
      "title": "[閒聊] 2026/10/22 盤後閒聊",
-     "push": 100,
+     "push": 99,
      "url": "https://www.ptt.cc/bbs/Stock/M.1792648803.A.8C4.html",
      "date": "10/22"
-    },
-    {
-     "board": "Stock",
-     "title": "[新聞] 川普警告伊朗不談判就再打！揚言來一場",
-     "push": 100,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1792806880.A.375.html",
-     "date": "10/24"
     },
     {
      "board": "Stock",
@@ -384,6 +392,13 @@
      "push": 99,
      "url": "https://www.ptt.cc/bbs/Stock/M.1792746638.A.FBB.html",
      "date": "10/23"
+    },
+    {
+     "board": "Stock",
+     "title": "[新聞] 川普警告伊朗不談判就再打！揚言來一場",
+     "push": 99,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1792806880.A.375.html",
+     "date": "10/24"
     }
    ]
   },
@@ -393,7 +408,7 @@
    "facet": "生活",
    "n": 22,
    "today": 2,
-   "heat": 155,
+   "heat": 156,
    "boom": 0,
    "boo": 0,
    "mood": 0.64,
@@ -445,7 +460,7 @@
     152,
     152,
     152,
-    155
+    156
    ],
    "top": [
     {
@@ -463,7 +478,7 @@
    "facet": "消費",
    "n": 29,
    "today": 3,
-   "heat": 753,
+   "heat": 754,
    "boom": 1,
    "boo": 1,
    "mood": 0.93,
@@ -515,7 +530,7 @@
     733,
     745,
     749,
-    753
+    754
    ],
    "top": [
     {
@@ -545,12 +560,12 @@
    "board": "home-sale",
    "zh": "房產",
    "facet": "消費",
-   "n": 33,
-   "today": 19,
-   "heat": 127,
+   "n": 36,
+   "today": 22,
+   "heat": 132,
    "boom": 0,
    "boo": 0,
-   "mood": 0.48,
+   "mood": 0.5,
    "spark": [
     354,
     381,
@@ -599,7 +614,7 @@
     397,
     110,
     121,
-    127
+    132
    ],
    "top": []
   },
@@ -609,7 +624,7 @@
    "facet": "消費",
    "n": 23,
    "today": 3,
-   "heat": 567,
+   "heat": 573,
    "boom": 1,
    "boo": 1,
    "mood": 0.87,
@@ -661,7 +676,7 @@
     541,
     552,
     561,
-    567
+    573
    ],
    "top": [
     {
@@ -949,7 +964,7 @@
    "facet": "文化",
    "n": 33,
    "today": 9,
-   "heat": 228,
+   "heat": 234,
    "boom": 0,
    "boo": 0,
    "mood": 0.88,
@@ -1001,13 +1016,13 @@
     202,
     218,
     220,
-    228
+    234
    ],
    "top": [
     {
      "board": "movie",
      "title": "[新聞]新任007詹姆斯龐德最終試鏡！三名男星闖進",
-     "push": 35,
+     "push": 37,
      "url": "https://www.ptt.cc/bbs/movie/M.1792764517.A.0FB.html",
      "date": "10/23"
     },
@@ -1022,5 +1037,5 @@
   }
  ],
  "breaking": [],
- "updatedAt": "2026-10-24T08:06:17Z"
+ "updatedAt": "2026-10-24T08:50:13Z"
 }
