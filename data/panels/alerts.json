@@ -1,6 +1,57 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261024193840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "臺北市",
+    "新北市",
+    "桃園市"
+   ],
+   "text": "水利署訊石門水庫:(洩洪至大漢溪):洩洪中,影響範圍:新北市，三峽區、淡水區、樹林區、蘆洲區、五股區、鶯歌區、土城區、新莊區、八里區、三重區、板橋區；臺北市，士林區、大同區、萬華區、北投區；桃園市，龍潭區、大溪區",
+   "src": "水利署",
+   "at": "2026-10-24T11:38:40Z",
+   "exp": "2026-10-24T22:39:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024193840_0001.cap"
+  },
+  {
+   "id": "CWA-Weather_extremely-rain_202610241929001",
+   "cat": "降雨",
+   "lvl": 2,
+   "area": [
+    "臺北市",
+    "新北市",
+    "桃園市",
+    "新竹縣",
+    "苗栗縣",
+    "宜蘭縣"
+   ],
+   "text": "(更正)第29號颱風外圍環流影響，易有短延時強降雨，今(24日)晚至明(25)日臺北市、新北市、桃園市、新竹縣、苗栗縣山區有局部大雨或豪雨，苗栗以北及宜蘭地區有局部大雨發生的機率，低窪地區請慎防積水，連日降雨，山區請慎防坍方、落石、土石流。",
+   "src": "中央氣象署",
+   "at": "2026-10-24T11:29:27Z",
+   "exp": "2026-10-25T11:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610241929.cap"
+  },
+  {
+   "id": "CWA-Weather_extremely-rain_202610241912001",
+   "cat": "降雨",
+   "lvl": 2,
+   "area": [
+    "臺北市",
+    "新北市",
+    "桃園市",
+    "新竹縣",
+    "苗栗縣",
+    "宜蘭縣"
+   ],
+   "text": "第29號颱風外圍環流影響，易有短延時強降雨，今(24日)晚至明(25)日臺北市、新北市、桃園市、新竹縣、苗栗縣山區有局部大雨或豪雨，苗栗以北及宜蘭地區有局部大雨發生的機率，低窪地區請慎防積水，連日降雨，山區請慎防坍方、落石、土石流。",
+   "src": "中央氣象署",
+   "at": "2026-10-24T11:12:38Z",
+   "exp": "2026-10-25T11:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610241912.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261024181840_0001",
    "cat": "水庫放流",
    "lvl": 2,
@@ -12,21 +63,6 @@
    "at": "2026-10-24T10:18:40Z",
    "exp": "2026-10-24T21:19:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024181840_0001.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261024173840_0001",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "臺北市",
-    "新北市",
-    "桃園市"
-   ],
-   "text": "水利署訊石門水庫:(洩洪至大漢溪):洩洪中,影響範圍:新北市，三峽區、淡水區、樹林區、蘆洲區、五股區、鶯歌區、土城區、新莊區、八里區、三重區、板橋區；臺北市，士林區、大同區、萬華區、北投區；桃園市，龍潭區、大溪區",
-   "src": "水利署",
-   "at": "2026-10-24T09:38:40Z",
-   "exp": "2026-10-24T20:39:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024173840_0001.cap"
   },
   {
    "id": "CWA-Weather_strong-wind_202610241642001",
@@ -509,7 +545,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23793_42667_20261023002442.cap"
   }
  ],
- "n_total": 24,
+ "n_total": 26,
  "stopwork": {
   "items": [
    {
@@ -602,8 +638,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/24 19:08:14"
+  "updated": "2026/10/24 19:35:14"
  },
  "errs": [],
- "updatedAt": "2026-10-24T11:09:09Z"
+ "updatedAt": "2026-10-24T11:33:25Z"
 }
