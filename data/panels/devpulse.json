@@ -1,66 +1,6 @@
 {
  "forums": [
   {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Chatting with Sage via ChatGPT",
-   "url": "https://community.openai.com/t/chatting-with-sage-via-chatgpt/1409194",
-   "replies": 14,
-   "likes": 3,
-   "views": 116,
-   "at": "2026-10-23T19:15:32Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Introducing Scheduled Automations to the Agents API",
-   "url": "https://community.openai.com/t/introducing-scheduled-automations-to-the-agents-api/1409223",
-   "replies": 0,
-   "likes": 3,
-   "views": 87,
-   "at": "2026-10-23T21:24:34Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "How do you structure OpenAI API access across multiple client projects?",
-   "url": "https://community.openai.com/t/how-do-you-structure-openai-api-access-across-multiple-client-projects/1409220",
-   "replies": 3,
-   "likes": 6,
-   "views": 65,
-   "at": "2026-10-23T20:50:08Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Agent's \"thinking\" messages intermittently truncated",
-   "url": "https://community.openai.com/t/agents-thinking-messages-intermittently-truncated/1409155",
-   "replies": 0,
-   "likes": 2,
-   "views": 35,
-   "at": "2026-10-23T16:13:26Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "\"chat memory full error\" is still here and affecting me",
-   "url": "https://community.openai.com/t/chat-memory-full-error-is-still-here-and-affecting-me/1409214",
-   "replies": 3,
-   "likes": 2,
-   "views": 71,
-   "at": "2026-10-23T20:14:30Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Ai studio quota exeeded error",
-   "url": "https://discuss.ai.google.dev/t/ai-studio-quota-exeeded-error/191883",
-   "replies": 0,
-   "likes": 3,
-   "views": 35,
-   "at": "2026-10-23T15:33:06Z"
-  },
-  {
    "source": "Google AI 論壇",
    "vendor": "google",
    "title": "\"An internal error has occurred\" error and heavy restrictions!",
@@ -77,28 +17,38 @@
    "url": "https://discuss.ai.google.dev/t/permission-denied-consumer-projects-671449220151-has-been-suspended/191889",
    "replies": 2,
    "likes": 0,
-   "views": 32,
+   "views": 34,
    "at": "2026-10-23T17:14:19Z"
   },
   {
    "source": "Google AI 論壇",
    "vendor": "google",
-   "title": "Estimating Updated Quota for Claude / Gemini 4 Argon",
-   "url": "https://discuss.ai.google.dev/t/estimating-updated-quota-for-claude-gemini-4-argon/191879",
-   "replies": 0,
+   "title": "Antigravity 请求添加网络代理设置",
+   "url": "https://discuss.ai.google.dev/t/antigravity/191953",
+   "replies": 1,
    "likes": 0,
-   "views": 42,
-   "at": "2026-10-23T14:54:06Z"
+   "views": 19,
+   "at": "2026-10-24T07:13:28Z"
   },
   {
    "source": "Google AI 論壇",
    "vendor": "google",
-   "title": "Não consigo gerar imagens renderizadas",
-   "url": "https://discuss.ai.google.dev/t/nao-consigo-gerar-imagens-renderizadas/191881",
-   "replies": 1,
+   "title": "URGENTE - Incumplimiento de normas de Gemini",
+   "url": "https://discuss.ai.google.dev/t/urgente-incumplimiento-de-normas-de-gemini/191909",
+   "replies": 0,
    "likes": 0,
    "views": 25,
-   "at": "2026-10-23T15:29:11Z"
+   "at": "2026-10-23T21:51:47Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "I built Mana 🌿 — an AI journaling and self-reflection companion",
+   "url": "https://discuss.ai.google.dev/t/i-built-mana-an-ai-journaling-and-self-reflection-companion/191900",
+   "replies": 0,
+   "likes": 0,
+   "views": 25,
+   "at": "2026-10-23T20:09:51Z"
   }
  ],
  "changelogs": [
@@ -295,11 +245,13 @@
    "at": "2026-10-22T04:34:55Z"
   }
  ],
- "errs": [],
+ "errs": [
+  "OpenAI 論壇: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+ ],
  "diag": [
-  "Gemini changelog md: got html 161364b",
+  "Gemini changelog md: got html 161368b",
   "DeepSeek updates md: got html 49316b",
   "xAI release notes md: 19061b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### Grok Vo'"
  ],
- "updatedAt": "2026-10-24T15:09:59Z"
+ "updatedAt": "2026-10-24T16:26:45Z"
 }
