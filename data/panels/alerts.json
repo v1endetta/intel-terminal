@@ -1,6 +1,34 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261024151840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "彰化縣",
+    "南投縣",
+    "雲林縣"
+   ],
+   "text": "水利署訊集集攔河堰:(洩洪至濁水溪):調節性放水,影響範圍:雲林縣，林內鄉、莿桐鄉、麥寮鄉、崙背鄉、二崙鄉、西螺鎮；南投縣，集集鎮、名間鄉、竹山鎮；彰化縣，大城鄉、二水鄉、竹塘鄉、溪州鄉",
+   "src": "水利署",
+   "at": "2026-10-24T07:18:40Z",
+   "exp": "2026-10-24T18:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024151840_0000.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261024150840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣"
+   ],
+   "text": "水利署訊明德水庫:(洩洪至後龍溪):調節性放水,影響範圍:苗栗縣，頭屋鄉",
+   "src": "水利署",
+   "at": "2026-10-24T07:08:40Z",
+   "exp": "2026-10-24T18:09:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024150840_0000.cap"
+  },
+  {
    "id": "CWA-Weather_typhoon-warning_202610241435377808",
    "cat": "颱風",
    "lvl": 3,
@@ -71,21 +99,6 @@
    "at": "2026-10-24T05:57:30Z",
    "exp": "2026-10-24T16:58:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/Flood/WRA_FloodWarn_20261024135730_0000.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261024132840_0001",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "彰化縣",
-    "南投縣",
-    "雲林縣"
-   ],
-   "text": "水利署訊集集攔河堰:(洩洪至濁水溪):調節性放水,影響範圍:雲林縣，林內鄉、莿桐鄉、麥寮鄉、崙背鄉、二崙鄉、西螺鎮；南投縣，集集鎮、名間鄉、竹山鎮；彰化縣，大城鄉、二水鄉、竹塘鄉、溪州鄉",
-   "src": "水利署",
-   "at": "2026-10-24T05:28:40Z",
-   "exp": "2026-10-24T16:29:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024132840_0001.cap"
   },
   {
    "id": "WRA_ReservoirWarn_20261024131840_0001",
@@ -167,19 +180,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610241214.cap"
   },
   {
-   "id": "WRA_ReservoirWarn_20261024120840_0001",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "苗栗縣"
-   ],
-   "text": "水利署訊明德水庫:(洩洪至後龍溪):調節性放水,影響範圍:苗栗縣，頭屋鄉",
-   "src": "水利署",
-   "at": "2026-10-24T04:08:40Z",
-   "exp": "2026-10-24T15:09:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024120840_0001.cap"
-  },
-  {
    "id": "CWA-Weather_heat_202610241135001",
    "cat": "高溫",
    "lvl": 2,
@@ -256,19 +256,6 @@
    "at": "2026-10-24T02:31:32Z",
    "exp": "2026-10-25T04:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610241031.cap"
-  },
-  {
-   "id": "THB-Bobe_633_23841_42784_20261024100645",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "宜蘭縣"
-   ],
-   "text": "宜蘭縣 頭城鎮 台9線 64K+0~65K+500。受損狀況/管制原因: 喬木傾倒、電桿倒塌及電線垂落。",
-   "src": "交通部公路局",
-   "at": "2026-10-24T02:06:45Z",
-   "exp": "2026-10-24T15:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23841_42784_20261024100645.cap"
   },
   {
    "id": "THB-Bobe_633_23836_42769_20261024094133",
@@ -524,19 +511,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202610232240.cap"
   },
   {
-   "id": "THB-Bobe_633_23798_42729_20261023211955",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "宜蘭縣"
-   ],
-   "text": "宜蘭縣 大同鄉 台7甲線 0K+0~45K+407。受損狀況/管制原因: 考量山區道路受連續強降雨影響，易發生邊坡坍方、落石、土石流及路基流失等災害，致災風險高，為維護用。",
-   "src": "交通部公路局",
-   "at": "2026-10-23T13:19:55Z",
-   "exp": "2026-10-24T15:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23798_42729_20261023211955.cap"
-  },
-  {
    "id": "THB-Bobe_633_23824_42721_20261023205512",
    "cat": "道路封閉",
    "lvl": 2,
@@ -662,33 +636,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23813_42698_20261023143729.cap"
   },
   {
-   "id": "THB-Bobe_633_23797_42691_20261023112432",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "宜蘭縣"
-   ],
-   "text": "宜蘭縣 大同鄉 台7線 85K+500~94K+0。受損狀況/管制原因: 考量山區道路受連續強降雨影響，易發生邊坡坍方、落石、土石流及路基流失等災害，致災風險高，為維護用路人車安全實施預警性封閉。",
-   "src": "交通部公路局",
-   "at": "2026-10-23T03:24:32Z",
-   "exp": "2026-10-24T15:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23797_42691_20261023112432.cap"
-  },
-  {
-   "id": "THB-Bobe_633_23806_42686_20261023111350",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "臺中市",
-    "宜蘭縣"
-   ],
-   "text": "宜蘭縣大同鄉-臺中市和平區 台7甲線 0K+0~50K+0。受損狀況/管制原因: 考量山區道路受連續強降雨影響，易發生邊坡坍方、落石、土石流及路基流失等災害，致災風險高，為維護用路人車安全。",
-   "src": "交通部公路局",
-   "at": "2026-10-23T03:13:50Z",
-   "exp": "2026-10-24T15:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23806_42686_20261023111350.cap"
-  },
-  {
    "id": "CWA-Weather_strong-wind_202610231045001",
    "cat": "強風",
    "lvl": 2,
@@ -722,32 +669,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610231045.cap"
   },
   {
-   "id": "THB-Bobe_633_23802_42679_20261023094805",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "花蓮縣"
-   ],
-   "text": "花蓮縣 秀林鄉 台9線 154K+700~165K+400。受損狀況/管制原因: 因應薔琵颱風實施預警性封路。",
-   "src": "交通部公路局",
-   "at": "2026-10-23T01:48:05Z",
-   "exp": "2026-10-24T15:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23802_42679_20261023094805.cap"
-  },
-  {
-   "id": "THB-Bobe_633_23801_42676_20261023094024",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "花蓮縣"
-   ],
-   "text": "花蓮縣 秀林鄉 台9丁線 2K+0~64K+200。受損狀況/管制原因: 因應薔琵颱風實施預警性封路。",
-   "src": "交通部公路局",
-   "at": "2026-10-23T01:40:24Z",
-   "exp": "2026-10-24T15:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23801_42676_20261023094024.cap"
-  },
-  {
    "id": "THB-Bobe_633_23795_42669_20261023002932",
    "cat": "道路封閉",
    "lvl": 2,
@@ -774,7 +695,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23793_42667_20261023002442.cap"
   }
  ],
- "n_total": 39,
+ "n_total": 33,
  "stopwork": {
   "items": [
    {
@@ -867,8 +788,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/24 14:53:03"
+  "updated": "2026/10/24 15:17:04"
  },
  "errs": [],
- "updatedAt": "2026-10-24T06:56:06Z"
+ "updatedAt": "2026-10-24T07:18:28Z"
 }
