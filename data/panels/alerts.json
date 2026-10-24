@@ -1,6 +1,19 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261024120840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣"
+   ],
+   "text": "水利署訊明德水庫:(洩洪至後龍溪):調節性放水,影響範圍:苗栗縣，頭屋鄉",
+   "src": "水利署",
+   "at": "2026-10-24T04:08:40Z",
+   "exp": "2026-10-24T15:09:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261024120840_0001.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261024113840_0001",
    "cat": "水庫放流",
    "lvl": 2,
@@ -256,19 +269,6 @@
    "at": "2026-10-23T23:29:07Z",
    "exp": "2026-10-24T17:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/heatWave/fifows_heat_202610240729.cap"
-  },
-  {
-   "id": "THB-Bobe_632_23828_42740_20261024065310",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "臺東縣"
-   ],
-   "text": "臺東縣 海端鄉 台20線 150K+900~150K+900。受損狀況/管制原因: 路樹倒塌，雙向道路阻斷無法通行。",
-   "src": "交通部公路局",
-   "at": "2026-10-23T22:53:10Z",
-   "exp": "2026-10-24T12:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_632_23828_42740_20261024065310.cap"
   },
   {
    "id": "CWA-Weather_strong-wind_202610240536001",
@@ -648,19 +648,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610231651.cap"
   },
   {
-   "id": "THB-Bobe_633_23792_42700_20261023150127",
-   "cat": "道路封閉",
-   "lvl": 2,
-   "area": [
-    "新北市"
-   ],
-   "text": "新北市 八里區 台61線 0K+0~2K+0。受損狀況/管制原因: 因應薔琵颱風侵襲台灣，氣象情資預測淡水地區風速將達到10級風，達到實施預警性封閉標準。",
-   "src": "交通部公路局",
-   "at": "2026-10-23T07:01:27Z",
-   "exp": "2026-10-24T12:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23792_42700_20261023150127.cap"
-  },
-  {
    "id": "THB-Bobe_633_23813_42698_20261023143729",
    "cat": "道路封閉",
    "lvl": 2,
@@ -813,7 +800,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23790_42660_20261022184517.cap"
   }
  ],
- "n_total": 42,
+ "n_total": 41,
  "stopwork": {
   "items": [
    {
@@ -906,8 +893,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/24 11:44:03"
+  "updated": "2026/10/24 12:08:03"
  },
  "errs": [],
- "updatedAt": "2026-10-24T03:44:32Z"
+ "updatedAt": "2026-10-24T04:07:41Z"
 }
