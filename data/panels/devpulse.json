@@ -1,56 +1,6 @@
 {
  "forums": [
   {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Chatting with Sage via ChatGPT",
-   "url": "https://community.openai.com/t/chatting-with-sage-via-chatgpt/1409194",
-   "replies": 12,
-   "likes": 3,
-   "views": 104,
-   "at": "2026-10-23T19:15:32Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Introducing Scheduled Automations to the Agents API",
-   "url": "https://community.openai.com/t/introducing-scheduled-automations-to-the-agents-api/1409223",
-   "replies": 0,
-   "likes": 3,
-   "views": 74,
-   "at": "2026-10-23T21:24:34Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "How do you structure OpenAI API access across multiple client projects?",
-   "url": "https://community.openai.com/t/how-do-you-structure-openai-api-access-across-multiple-client-projects/1409220",
-   "replies": 3,
-   "likes": 6,
-   "views": 65,
-   "at": "2026-10-23T20:50:08Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Agent's \"thinking\" messages intermittently truncated",
-   "url": "https://community.openai.com/t/agents-thinking-messages-intermittently-truncated/1409155",
-   "replies": 0,
-   "likes": 2,
-   "views": 32,
-   "at": "2026-10-23T16:13:26Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "I can make AI chatbots do crazy stuff",
-   "url": "https://community.openai.com/t/i-can-make-ai-chatbots-do-crazy-stuff/1409208",
-   "replies": 0,
-   "likes": 2,
-   "views": 29,
-   "at": "2026-10-23T19:39:44Z"
-  },
-  {
    "source": "Google AI 論壇",
    "vendor": "google",
    "title": "Ai studio quota exeeded error",
@@ -295,11 +245,13 @@
    "at": "2026-10-22T04:34:55Z"
   }
  ],
- "errs": [],
+ "errs": [
+  "OpenAI 論壇: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+ ],
  "diag": [
   "Gemini changelog md: got html 161368b",
   "DeepSeek updates md: got html 49316b",
   "xAI release notes md: 19061b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### Grok Vo'"
  ],
- "updatedAt": "2026-10-24T12:44:10Z"
+ "updatedAt": "2026-10-24T13:55:08Z"
 }
