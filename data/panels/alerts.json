@@ -1,6 +1,32 @@
 {
  "alerts": [
   {
+   "id": "THB-Bobe_633_23836_42769_20261024094133",
+   "cat": "道路封閉",
+   "lvl": 2,
+   "area": [
+    "新北市"
+   ],
+   "text": "新北市 石碇區 台9線 22K+890~22K+910。受損狀況/管制原因: 路樹倒塌阻斷1車道。",
+   "src": "交通部公路局",
+   "at": "2026-10-24T01:41:33Z",
+   "exp": "2026-10-25T12:39:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23836_42769_20261024094133.cap"
+  },
+  {
+   "id": "CWA-EQ115072-2026-1024-092557",
+   "cat": "地震",
+   "lvl": 3,
+   "area": [
+    "高雄市"
+   ],
+   "text": "10/24 09:25高雄市桃源區發生規模4.0有感地震，最大震度高雄市桃源4級。",
+   "src": "中央氣象署",
+   "at": "2026-10-24T01:30:13Z",
+   "exp": "2026-10-24T10:30:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Earthquake/CWA-EQ115072-2026-1024-092557.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261024091840_0000",
    "cat": "水庫放流",
    "lvl": 2,
@@ -197,38 +223,6 @@
    "at": "2026-10-23T22:14:45Z",
    "exp": "2026-10-24T10:15:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610240614.cap"
-  },
-  {
-   "id": "CWA-Weather_typhoon-warning_202610240542187788",
-   "cat": "颱風",
-   "lvl": 3,
-   "area": [
-    "臺北市",
-    "新北市",
-    "基隆市",
-    "桃園市",
-    "新竹市",
-    "新竹縣",
-    "苗栗縣",
-    "臺中市",
-    "彰化縣",
-    "南投縣",
-    "雲林縣",
-    "嘉義縣",
-    "臺南市",
-    "高雄市",
-    "屏東縣",
-    "宜蘭縣",
-    "花蓮縣",
-    "臺東縣",
-    "澎湖縣",
-    "連江縣"
-   ],
-   "text": "19LAND29CHAMPI薔琵2026-10-23T21:00:00+00:0024.40,122.704050950280中度颱風TYPHOON2026-10-24T21:00:00+00:0028.90,124.002330988180中度颱風 薔琵（國際命名 CHAMPI）24日5時的中心位置在北緯 24.4 ",
-   "src": "中央氣象署",
-   "at": "2026-10-23T21:42:18Z",
-   "exp": "2026-10-24T09:30:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610240542.cap"
   },
   {
    "id": "CWA-Weather_strong-wind_202610240536001",
@@ -799,7 +793,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23790_42660_20261022184517.cap"
   }
  ],
- "n_total": 41,
+ "n_total": 42,
  "stopwork": {
   "items": [
    {
@@ -892,8 +886,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/24 09:20:11"
+  "updated": "2026/10/24 09:44:04"
  },
  "errs": [],
- "updatedAt": "2026-10-24T01:20:37Z"
+ "updatedAt": "2026-10-24T01:48:19Z"
 }
