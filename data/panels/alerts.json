@@ -1,6 +1,38 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_typhoon-warning_202610240824157793",
+   "cat": "颱風",
+   "lvl": 3,
+   "area": [
+    "臺北市",
+    "新北市",
+    "基隆市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "南投縣",
+    "雲林縣",
+    "嘉義縣",
+    "臺南市",
+    "高雄市",
+    "屏東縣",
+    "宜蘭縣",
+    "花蓮縣",
+    "臺東縣",
+    "澎湖縣",
+    "連江縣"
+   ],
+   "text": "20LAND29CHAMPI薔琵2026-10-24T00:00:00+00:0024.80,123.203545965250中度颱風TYPHOON2026-10-25T00:00:00+00:0029.30,124.402330988180中度颱風 薔琵（國際命名 CHAMPI）24日8時的中心位置在北緯 24.8 ",
+   "src": "中央氣象署",
+   "at": "2026-10-24T00:24:15Z",
+   "exp": "2026-10-24T12:30:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Typhoon_warnings/fifows_typhoon-warning_202610240824.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261024081840_0000",
    "cat": "水庫放流",
    "lvl": 2,
@@ -722,7 +754,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23790_42660_20261022184517.cap"
   }
  ],
- "n_total": 38,
+ "n_total": 39,
  "stopwork": {
   "items": [
    {
@@ -815,8 +847,8 @@
    }
   ],
   "none": false,
-  "updated": "2026/10/24 08:11:03"
+  "updated": "2026/10/24 08:41:03"
  },
  "errs": [],
- "updatedAt": "2026-10-24T00:15:02Z"
+ "updatedAt": "2026-10-24T00:40:07Z"
 }
