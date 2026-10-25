@@ -1149,6 +1149,17 @@
    "k": "data",
    "imp": 1,
    "ap": true
+  },
+  {
+   "d": "2026-11-23",
+   "t": null,
+   "ts": null,
+   "r": "日",
+   "n": "日股休市：勤勞感謝日",
+   "k": "holiday",
+   "imp": 1,
+   "ap": false,
+   "ex": "XJPX"
   }
  ],
  "hol": [
@@ -1445,15 +1456,22 @@
    "m": "美股",
    "r": "美",
    "n": "總統日"
+  },
+  {
+   "d": "2027-02-23",
+   "ex": "XJPX",
+   "m": "日股",
+   "r": "日",
+   "n": "天皇誕生日"
   }
  ],
- "from": "2026-10-25",
- "to": "2026-11-22",
+ "from": "2026-10-26",
+ "to": "2026-11-23",
  "ff_until": "2026-10-30",
- "n": 92,
+ "n": 93,
  "errs": [
   "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json"
  ],
  "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站",
- "updatedAt": "2026-10-25T14:56:18Z"
+ "updatedAt": "2026-10-25T18:12:15Z"
 }
