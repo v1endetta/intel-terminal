@@ -115,6 +115,33 @@
  ],
  "storms": [
   {
+   "name": "CHAMPI",
+   "level": "Red",
+   "ll": [
+    125.5,
+    30.1
+   ],
+   "from": "2026-10-14T12:00",
+   "to": "2026-10-25T06:00",
+   "sev": "Tropical Storm (maximum wind speed of 296 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=44&eventtype=TC",
+   "near": [
+    {
+     "port": "上海洋山",
+     "km": 334
+    },
+    {
+     "port": "寧波舟山",
+     "km": 352
+    },
+    {
+     "port": "釜山",
+     "km": 646
+    }
+   ],
+   "id": "1001338-44"
+  },
+  {
    "name": "VANCE",
    "level": "Green",
    "ll": [
@@ -136,6 +163,20 @@
     }
    ],
    "id": "1001341-16"
+  },
+  {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    165.0,
+    12.0
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-10-25T06:00",
+   "sev": "Tropical Storm (maximum wind speed of 213 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=8&eventtype=TC",
+   "near": [],
+   "id": "1001343-8"
   }
  ],
  "ports": [
@@ -596,5 +637,5 @@
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-25T11:35:02Z"
+ "updatedAt": "2026-10-25T12:43:40Z"
 }
