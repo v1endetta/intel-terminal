@@ -113,7 +113,31 @@
    "chg": 3.05
   }
  ],
- "storms": [],
+ "storms": [
+  {
+   "name": "VANCE",
+   "level": "Green",
+   "ll": [
+    -103.4,
+    14.3
+   ],
+   "from": "2026-10-21T15:00",
+   "to": "2026-10-25T09:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 139 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=16&eventtype=TC",
+   "near": [
+    {
+     "port": "拉薩羅卡德納斯（墨）",
+     "km": 425
+    },
+    {
+     "port": "曼薩尼約（墨）",
+     "km": 539
+    }
+   ],
+   "id": "1001341-16"
+  }
+ ],
  "ports": [
   {
    "name": "上海洋山",
@@ -378,6 +402,14 @@
  "news": [
   {
    "source": "FreightWaves",
+   "title": "Borderlands Mexico: Avocado imports generate $641M for US trucking, warehousing",
+   "url": "https://www.freightwaves.com/news/borderlands-mexico-avocado-imports-generate-641m-for-us-trucking-warehousing",
+   "at": "2026-10-25T19:00:00+08:00",
+   "hot": true,
+   "zh": "美墨邊境：酪梨進口為美國卡車運輸與倉儲業帶來6.41億美元商機"
+  },
+  {
+   "source": "FreightWaves",
    "title": "Truckload contract rate increases riding steady above 10%",
    "url": "https://www.freightwaves.com/news/truckload-contract-rate-increases-riding-steady-above-10",
    "at": "2026-10-25T08:30:00+08:00",
@@ -489,14 +521,6 @@
    "zh": "Levi's物流網路轉型風波持續拖延"
   },
   {
-   "source": "FreightWaves",
-   "title": "A new PNW container port? $205M for Oregon rail project",
-   "url": "https://www.freightwaves.com/news/a-new-pnw-container-port-205m-for-oregon-rail-project",
-   "at": "2026-10-23T21:37:00+08:00",
-   "hot": true,
-   "zh": "美西北要建新貨櫃港？俄勒岡州鐵路專案獲2.05億美元資金"
-  },
-  {
    "source": "The Loadstar",
    "title": "Carriers opt for more blanked sailings to bolster freight rates",
    "url": "https://theloadstar.com/carriers-opt-for-more-blanked-sailings-to-bolster-freight-rates/",
@@ -572,5 +596,5 @@
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-25T10:25:26Z"
+ "updatedAt": "2026-10-25T11:35:02Z"
 }
