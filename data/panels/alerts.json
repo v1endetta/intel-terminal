@@ -1,6 +1,24 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_strong-wind_202610252227001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "臺中市",
+    "彰化縣",
+    "雲林縣",
+    "嘉義縣",
+    "屏東縣",
+    "澎湖縣"
+   ],
+   "text": "東北風增強，25日晚上至26日晚上綠島、臺中市、彰化縣、雲林縣、嘉義縣、屏東縣、澎湖縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-25T14:27:39Z",
+   "exp": "2026-10-26T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610252227.cap"
+  },
+  {
    "id": "CWA-Weather_strong-wind_202610251637001",
    "cat": "強風",
    "lvl": 2,
@@ -72,12 +90,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_633_23793_42667_20261023002442.cap"
   }
  ],
- "n_total": 5,
+ "n_total": 6,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/25 22:05:17"
+  "updated": "2026/10/25 22:35:14"
  },
  "errs": [],
- "updatedAt": "2026-10-25T14:09:30Z"
+ "updatedAt": "2026-10-25T14:30:34Z"
 }
