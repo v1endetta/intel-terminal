@@ -113,86 +113,7 @@
    "chg": 3.05
   }
  ],
- "storms": [
-  {
-   "name": "CHAMPI",
-   "level": "Red",
-   "ll": [
-    127.4,
-    31.2
-   ],
-   "from": "2026-10-14T12:00",
-   "to": "2026-10-25T18:00",
-   "sev": "Tropical Storm (maximum wind speed of 296 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=46&eventtype=TC",
-   "near": [
-    {
-     "port": "釜山",
-     "km": 458
-    },
-    {
-     "port": "上海洋山",
-     "km": 513
-    },
-    {
-     "port": "寧波舟山",
-     "km": 550
-    }
-   ],
-   "id": "1001338-46"
-  },
-  {
-   "name": "VANCE",
-   "level": "Green",
-   "ll": [
-    -103.8,
-    14.3
-   ],
-   "from": "2026-10-21T15:00",
-   "to": "2026-10-25T15:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 139 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=17&eventtype=TC",
-   "near": [
-    {
-     "port": "拉薩羅卡德納斯（墨）",
-     "km": 440
-    },
-    {
-     "port": "曼薩尼約（墨）",
-     "km": 533
-    }
-   ],
-   "id": "1001341-17"
-  },
-  {
-   "name": "IN-FA",
-   "level": "Green",
-   "ll": [
-    163.9,
-    13.4
-   ],
-   "from": "2026-10-25T06:00",
-   "to": "2026-10-25T18:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 231 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=10&eventtype=TC",
-   "near": [],
-   "id": "1001343-10"
-  },
-  {
-   "name": "THREE-C",
-   "level": "Green",
-   "ll": [
-    -179.3,
-    14.6
-   ],
-   "from": "2026-10-25T15:00",
-   "to": "2026-10-25T15:00",
-   "sev": "Tropical Depression (maximum wind speed of 65 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=1&eventtype=TC",
-   "near": [],
-   "id": "1001344-1"
-  }
- ],
+ "storms": [],
  "ports": [
   {
    "name": "上海洋山",
@@ -649,7 +570,9 @@
   }
  ],
  "threat": [],
- "errs": [],
+ "errs": [
+  "GDACS: HTTPError: 400 Client Error: Bad Request for url: https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=TC&alertlevel=Green%3BOrange%3BRed"
+ ],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-25T20:24:52Z"
+ "updatedAt": "2026-10-25T21:35:10Z"
 }
