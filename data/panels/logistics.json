@@ -118,28 +118,28 @@
    "name": "CHAMPI",
    "level": "Red",
    "ll": [
-    126.3,
-    30.7
+    127.4,
+    31.2
    ],
    "from": "2026-10-14T12:00",
-   "to": "2026-10-25T12:00",
+   "to": "2026-10-25T18:00",
    "sev": "Tropical Storm (maximum wind speed of 296 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=45&eventtype=TC",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=46&eventtype=TC",
    "near": [
     {
+     "port": "釜山",
+     "km": 458
+    },
+    {
      "port": "上海洋山",
-     "km": 405
+     "km": 513
     },
     {
      "port": "寧波舟山",
-     "km": 436
-    },
-    {
-     "port": "釜山",
-     "km": 551
+     "km": 550
     }
    ],
-   "id": "1001338-45"
+   "id": "1001338-46"
   },
   {
    "name": "VANCE",
@@ -165,6 +165,20 @@
    "id": "1001341-17"
   },
   {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    163.9,
+    13.4
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-10-25T18:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 231 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=10&eventtype=TC",
+   "near": [],
+   "id": "1001343-10"
+  },
+  {
    "name": "THREE-C",
    "level": "Green",
    "ll": [
@@ -177,20 +191,6 @@
    "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=1&eventtype=TC",
    "near": [],
    "id": "1001344-1"
-  },
-  {
-   "name": "IN-FA",
-   "level": "Green",
-   "ll": [
-    164.5,
-    12.8
-   ],
-   "from": "2026-10-25T06:00",
-   "to": "2026-10-25T12:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 231 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=9&eventtype=TC",
-   "near": [],
-   "id": "1001343-9"
   }
  ],
  "ports": [
@@ -651,5 +651,5 @@
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-25T19:20:36Z"
+ "updatedAt": "2026-10-25T20:24:52Z"
 }
