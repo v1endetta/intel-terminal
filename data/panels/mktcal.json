@@ -1,28 +1,6 @@
 {
  "items": [
   {
-   "d": "2026-10-25",
-   "t": null,
-   "ts": null,
-   "r": "紐",
-   "n": "紐 銀行假日（外匯清算）",
-   "k": "bank",
-   "imp": 1,
-   "ap": false,
-   "cur": "NZD"
-  },
-  {
-   "d": "2026-10-26",
-   "t": null,
-   "ts": null,
-   "r": "台",
-   "n": "台股休市：臺灣光復暨金門古寧頭大捷紀念日",
-   "k": "holiday",
-   "imp": 2,
-   "ap": false,
-   "ex": "TWSE"
-  },
-  {
    "d": "2026-10-27",
    "t": "09:00",
    "ts": null,
@@ -1173,16 +1151,20 @@
    "imp": 1,
    "ap": false,
    "ex": "XJPX"
+  },
+  {
+   "d": "2026-11-24",
+   "t": null,
+   "ts": null,
+   "r": "印",
+   "n": "印度股休市：Guru Nanak Jayanti",
+   "k": "holiday",
+   "imp": 1,
+   "ap": false,
+   "ex": "XNSE"
   }
  ],
  "hol": [
-  {
-   "d": "2026-10-26",
-   "ex": "TWSE",
-   "m": "台股",
-   "r": "台",
-   "n": "臺灣光復暨金門古寧頭大捷紀念日"
-  },
   {
    "d": "2026-11-03",
    "ex": "XJPX",
@@ -1478,13 +1460,13 @@
    "n": "天皇誕生日"
   }
  ],
- "from": "2026-10-26",
- "to": "2026-11-23",
+ "from": "2026-10-27",
+ "to": "2026-11-24",
  "ff_until": "2026-10-30",
- "n": 94,
+ "n": 93,
  "errs": [
   "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json"
  ],
  "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站",
- "updatedAt": "2026-10-26T15:39:26Z"
+ "updatedAt": "2026-10-26T18:46:46Z"
 }
