@@ -89,7 +89,7 @@
    "ap": false,
    "en": "CB Consumer Confidence",
    "cur": "USD",
-   "fc": "80.7",
+   "fc": "81.2",
    "pv": "81.9"
   },
   {
@@ -527,7 +527,7 @@
    "ap": false,
    "en": "Advance GDP Price Index q/q",
    "cur": "USD",
-   "fc": "3.5%",
+   "fc": "3.3%",
    "pv": "6.2%"
   },
   {
@@ -713,20 +713,6 @@
   },
   {
    "d": "2026-10-30",
-   "t": "14:29",
-   "ts": 1793341740000,
-   "r": "歐",
-   "n": "德國 CPI 初值 月增",
-   "k": "data",
-   "imp": 2,
-   "ap": false,
-   "en": "German Prelim CPI m/m",
-   "cur": "EUR",
-   "fc": "0.1%",
-   "pv": "0.6%"
-  },
-  {
-   "d": "2026-10-30",
    "t": "15:00",
    "ts": null,
    "r": "台",
@@ -737,6 +723,20 @@
    "code": "2454",
    "ind": "半導體業",
    "s": "‎(1) 公布本公司2026年第3季財務報告及2026年第4季業績展望。 (2) 參加方式：請參見https://www"
+  },
+  {
+   "d": "2026-10-30",
+   "t": "15:29",
+   "ts": 1793345340000,
+   "r": "歐",
+   "n": "德國 CPI 初值 月增",
+   "k": "data",
+   "imp": 2,
+   "ap": false,
+   "en": "German Prelim CPI m/m",
+   "cur": "EUR",
+   "fc": "0.1%",
+   "pv": "0.6%"
   },
   {
    "d": "2026-10-30",
@@ -1078,6 +1078,19 @@
    "code": "2897",
    "ind": "金融保險",
    "s": "公布本公司2026年第三季營運概況。"
+  },
+  {
+   "d": "2026-11-17",
+   "t": "09:00",
+   "ts": null,
+   "r": "台",
+   "n": "亞德客-KY（1590）法說會",
+   "k": "conf",
+   "imp": 1,
+   "ap": false,
+   "code": "1590",
+   "ind": "電機機械",
+   "s": "本公司受邀參加摩根大通證券舉辦之法人說明會「APAC Technology, Innovation and Growth"
   },
   {
    "d": "2026-11-17",
@@ -1463,10 +1476,10 @@
  "from": "2026-10-27",
  "to": "2026-11-24",
  "ff_until": "2026-10-30",
- "n": 93,
+ "n": 94,
  "errs": [
   "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json"
  ],
  "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站",
- "updatedAt": "2026-10-26T18:46:46Z"
+ "updatedAt": "2026-10-26T22:10:01Z"
 }
