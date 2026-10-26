@@ -159,24 +159,38 @@
    "name": "VANCE",
    "level": "Green",
    "ll": [
-    -104.2,
-    14.9
+    -104.7,
+    15.0
    ],
    "from": "2026-10-21T15:00",
-   "to": "2026-10-25T21:00",
+   "to": "2026-10-26T03:00",
    "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=18&eventtype=TC",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=19&eventtype=TC",
    "near": [
     {
      "port": "拉薩羅卡德納斯（墨）",
-     "km": 401
+     "km": 423
     },
     {
      "port": "曼薩尼約（墨）",
-     "km": 464
+     "km": 455
     }
    ],
-   "id": "1001341-18"
+   "id": "1001341-19"
+  },
+  {
+   "name": "THREE-C",
+   "level": "Green",
+   "ll": [
+    -177.3,
+    14.9
+   ],
+   "from": "2026-10-25T15:00",
+   "to": "2026-10-26T03:00",
+   "sev": "Tropical Storm (maximum wind speed of 74 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=3&eventtype=TC",
+   "near": [],
+   "id": "1001344-3"
   },
   {
    "name": "IN-FA",
@@ -191,20 +205,6 @@
    "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=11&eventtype=TC",
    "near": [],
    "id": "1001343-11"
-  },
-  {
-   "name": "THREE-C",
-   "level": "Green",
-   "ll": [
-    -178.0,
-    14.8
-   ],
-   "from": "2026-10-25T15:00",
-   "to": "2026-10-25T21:00",
-   "sev": "Tropical Storm (maximum wind speed of 74 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=2&eventtype=TC",
-   "near": [],
-   "id": "1001344-2"
   }
  ],
  "ports": [
@@ -665,5 +665,5 @@
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-26T02:22:06Z"
+ "updatedAt": "2026-10-26T03:27:23Z"
 }
