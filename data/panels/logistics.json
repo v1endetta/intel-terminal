@@ -113,7 +113,100 @@
    "chg": 3.05
   }
  ],
- "storms": [],
+ "storms": [
+  {
+   "name": "CHAMPI",
+   "level": "Red",
+   "ll": [
+    127.4,
+    31.2
+   ],
+   "from": "2026-10-14T12:00",
+   "to": "2026-10-25T18:00",
+   "sev": "Tropical Storm (maximum wind speed of 296 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=46&eventtype=TC",
+   "near": [
+    {
+     "port": "釜山",
+     "km": 458
+    },
+    {
+     "port": "上海洋山",
+     "km": 513
+    },
+    {
+     "port": "寧波舟山",
+     "km": 550
+    }
+   ],
+   "id": "1001338-46"
+  },
+  {
+   "name": "ARNAB",
+   "level": "Red",
+   "ll": [
+    87.2,
+    15.9
+   ],
+   "from": "2026-10-26T00:00",
+   "to": "2026-10-26T12:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 194 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001345&episodeid=3&eventtype=TC",
+   "near": [],
+   "id": "1001345-3"
+  },
+  {
+   "name": "VANCE",
+   "level": "Green",
+   "ll": [
+    -105.1,
+    15.3
+   ],
+   "from": "2026-10-21T15:00",
+   "to": "2026-10-26T09:00",
+   "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=20&eventtype=TC",
+   "near": [
+    {
+     "port": "拉薩羅卡德納斯（墨）",
+     "km": 428
+    },
+    {
+     "port": "曼薩尼約（墨）",
+     "km": 428
+    }
+   ],
+   "id": "1001341-20"
+  },
+  {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    162.7,
+    14.1
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-10-26T12:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 250 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=13&eventtype=TC",
+   "near": [],
+   "id": "1001343-13"
+  },
+  {
+   "name": "THREE-C",
+   "level": "Green",
+   "ll": [
+    -176.6,
+    14.9
+   ],
+   "from": "2026-10-25T15:00",
+   "to": "2026-10-26T09:00",
+   "sev": "Tropical Storm (maximum wind speed of 65 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=4&eventtype=TC",
+   "near": [],
+   "id": "1001344-4"
+  }
+ ],
  "ports": [
   {
    "name": "上海洋山",
@@ -378,6 +471,22 @@
  "news": [
   {
    "source": "Supply Chain Dive",
+   "title": "Inside FedEx’s Network 2.0 overhaul",
+   "url": "https://www.supplychaindive.com/news/inside-fedexs-network-20-overhaul/833618/",
+   "at": "2026-10-26T23:20:25+08:00",
+   "hot": false,
+   "zh": "深入解析FedEx聯邦快遞「網路2.0」改造計畫"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "UPS plans 5.9% rate increase on Dec. 21",
+   "url": "https://www.supplychaindive.com/news/ups-plans-59-rate-increase-on-dec-21/872751/",
+   "at": "2026-10-26T23:10:00+08:00",
+   "hot": false,
+   "zh": "UPS將於12月21日調漲5.9%費率"
+  },
+  {
+   "source": "Supply Chain Dive",
    "title": "CSX sees rail conversion opportunities from battered trucking market",
    "url": "https://www.supplychaindive.com/news/csx-sees-rail-conversion-opportunities-from-battered-trucking-market/833858/",
    "at": "2026-10-26T22:40:00+08:00",
@@ -551,28 +660,10 @@
    "at": "2026-10-24T02:31:28+08:00",
    "hot": false,
    "zh": "Roadrunner 宣布推出加拿大出境物流服務"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "Trump tweaks Canada tariffs, removing certain goods while adding others",
-   "url": "https://www.supplychaindive.com/news/trump-tweaks-canada-tariffs-removing-certain-goods-while-adding-others/833895/",
-   "at": "2026-10-24T02:24:00+08:00",
-   "hot": true,
-   "zh": "川普調整對加拿大關稅，豁免部分商品並加徵其他商品"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "Wabtec earnings rise on higher freight and transit sales",
-   "url": "https://www.freightwaves.com/news/wabtec-earnings-rise-on-higher-freight-and-transit-sales",
-   "at": "2026-10-24T02:06:23+08:00",
-   "hot": false,
-   "zh": "Wabtec 貨運與大眾運輸銷售增加，帶動獲利成長"
   }
  ],
  "threat": [],
- "errs": [
-  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-26T14:44:30Z"
+ "updatedAt": "2026-10-26T15:49:15Z"
 }
