@@ -145,38 +145,52 @@
    "name": "ARNAB",
    "level": "Red",
    "ll": [
-    87.2,
-    15.9
+    85.8,
+    16.0
    ],
    "from": "2026-10-26T00:00",
-   "to": "2026-10-26T12:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 194 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001345&episodeid=3&eventtype=TC",
+   "to": "2026-10-26T18:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 185 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001345&episodeid=4&eventtype=TC",
    "near": [],
-   "id": "1001345-3"
+   "id": "1001345-4"
   },
   {
    "name": "VANCE",
    "level": "Green",
    "ll": [
-    -105.7,
+    -106.1,
     15.4
    ],
    "from": "2026-10-21T15:00",
-   "to": "2026-10-26T15:00",
+   "to": "2026-10-26T21:00",
    "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=21&eventtype=TC",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=22&eventtype=TC",
    "near": [
     {
      "port": "曼薩尼約（墨）",
-     "km": 434
+     "km": 451
     },
     {
      "port": "拉薩羅卡德納斯（墨）",
-     "km": 469
+     "km": 504
     }
    ],
-   "id": "1001341-21"
+   "id": "1001341-22"
+  },
+  {
+   "name": "THREE-C",
+   "level": "Green",
+   "ll": [
+    -176.6,
+    13.6
+   ],
+   "from": "2026-10-25T15:00",
+   "to": "2026-10-26T21:00",
+   "sev": "Tropical Depression (maximum wind speed of 65 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=6&eventtype=TC",
+   "near": [],
+   "id": "1001344-6"
   },
   {
    "name": "IN-FA",
@@ -191,20 +205,6 @@
    "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=14&eventtype=TC",
    "near": [],
    "id": "1001343-14"
-  },
-  {
-   "name": "THREE-C",
-   "level": "Green",
-   "ll": [
-    -176.6,
-    14.9
-   ],
-   "from": "2026-10-25T15:00",
-   "to": "2026-10-26T09:00",
-   "sev": "Tropical Storm (maximum wind speed of 65 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=4&eventtype=TC",
-   "near": [],
-   "id": "1001344-4"
   }
  ],
  "ports": [
@@ -471,6 +471,14 @@
  "news": [
   {
    "source": "Supply Chain Dive",
+   "title": "USTR weighs extending pause on China-linked vessel fees to January",
+   "url": "https://www.supplychaindive.com/news/ustr-weighs-extending-pause-on-china-linked-vessel-fees-to-january/872763/",
+   "at": "2026-10-27T04:48:18+08:00",
+   "hot": false,
+   "zh": "美商業代表署考慮將中國相關船舶費用的暫緩徵收期延長至1月"
+  },
+  {
+   "source": "Supply Chain Dive",
    "title": "USPS to debut weekly fuel fee in 2027, matching FedEx, UPS practices",
    "url": "https://www.supplychaindive.com/news/usps-to-debut-weekly-fuel-fee-in-2027-matching-fedex-ups-practices/872778/",
    "at": "2026-10-27T03:12:00+08:00",
@@ -652,18 +660,10 @@
    "at": "2026-10-26T19:27:00+08:00",
    "hot": true,
    "zh": "百事可樂因汽水銷量下滑關閉田納西州裝瓶廠"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "Australia Post CEO to retire as financial challenges continue",
-   "url": "https://www.freightwaves.com/news/australia-post-ceo-to-retire-as-financial-challenges-continue",
-   "at": "2026-10-26T19:15:35+08:00",
-   "hot": false,
-   "zh": "澳洲郵政執行長將退休，公司財務挑戰仍未解"
   }
  ],
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-26T20:02:29Z"
+ "updatedAt": "2026-10-26T21:04:56Z"
 }
