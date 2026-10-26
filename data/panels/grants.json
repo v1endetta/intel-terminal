@@ -420,5 +420,6 @@
  "n": 32,
  "errs": [],
  "src": "Google 新聞（近兩週的補助、徵件、計畫徵求公告）；是否還能申請、對象、金額、截止日由 Gemini 從標題判讀，申請前請看原公告",
- "updatedAt": "2026-10-26T02:50:17Z"
+ "updatedAt": "2026-10-26T02:50:17Z",
+ "error": "2026-10-26T08:50:57Z RuntimeError: grants: nothing 補助 徵件: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E8%A3%9C%E5%8A%A9+%E5%BE%B5%E4%BB%B6+when"
 }

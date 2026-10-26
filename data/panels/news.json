@@ -8,6 +8,12 @@
   },
   {
    "source": "中央社",
+   "title": "Anthropic涉擅用貓王274首歌曲訓練AI模型　挨告侵權",
+   "url": "https://www.cna.com.tw/news/ait/202610260141.aspx",
+   "at": "2026-10-26T07:28:05Z"
+  },
+  {
+   "source": "中央社",
    "title": "菲律賓通膨加劇  近1/4家庭曾挨餓",
    "url": "https://www.cna.com.tw/news/aopl/202610260138.aspx",
    "at": "2026-10-26T07:16:59Z"
@@ -41,28 +47,22 @@
    "title": "AI財富浪潮帶動美國慈善捐贈　資金流向備受關注",
    "url": "https://www.cna.com.tw/news/aopl/202610260119.aspx",
    "at": "2026-10-26T06:27:17Z"
-  },
-  {
-   "source": "中央社",
-   "title": "沈伯洋天母萬聖節發糖  爆炸頭船長PUMA亮相",
-   "url": "https://www.cna.com.tw/news/aipl/202610260116.aspx",
-   "at": "2026-10-26T06:09:11Z"
   }
  ],
  "intl": [
   {
    "source": "Guardian",
-   "title": "Brazil runoff live updates: world leaders congratulate Lula on historic election win as Bo",
-   "url": "https://www.theguardian.com/world/live/2026/oct/25/brazil-election-runoff-live-updates-flavio-bolsonaro-lula",
-   "at": "2026-10-26T08:18:02Z",
-   "sec": "World news"
+   "title": "AI cloud computing companies face ‘guppy-level death’, Elon Musk warns, as funding dries u",
+   "url": "https://www.theguardian.com/business/live/2026/oct/26/ai-cloud-computing-companies-guppy-level-death-elon-musk-stock-markets-dollar-oil-bond-yieds-latest-news-updates",
+   "at": "2026-10-26T08:49:18Z",
+   "sec": "Business"
   },
   {
    "source": "Guardian",
-   "title": "AI cloud computing companies face ‘guppy-level death’, Elon Musk warns, as funding dries u",
-   "url": "https://www.theguardian.com/business/live/2026/oct/26/ai-cloud-computing-companies-guppy-level-death-elon-musk-stock-markets-dollar-oil-bond-yieds-latest-news-updates",
-   "at": "2026-10-26T08:15:54Z",
-   "sec": "Business"
+   "title": "Brazil runoff live updates: world leaders congratulate Lula on historic election win as Bo",
+   "url": "https://www.theguardian.com/world/live/2026/oct/25/brazil-election-runoff-live-updates-flavio-bolsonaro-lula",
+   "at": "2026-10-26T08:40:13Z",
+   "sec": "World news"
   },
   {
    "source": "Guardian",
@@ -356,10 +356,10 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 2.064,
-   "vol_ratio": 1.09,
-   "tone": 0.7,
-   "tone_at": "2026-10-26T06:41:05Z",
+   "vol": 2.063,
+   "vol_ratio": 1.1,
+   "tone": 0.71,
+   "tone_at": "2026-10-26T08:50:57Z",
    "spark": [
     2.054,
     3.595,
@@ -374,9 +374,9 @@
     1.986,
     2.082,
     1.755,
-    2.064
+    2.063
    ],
-   "at": "2026-10-26T08:21:11Z"
+   "at": "2026-10-26T08:50:57Z"
   },
   "wiki": {
    "zh": [
@@ -437,31 +437,18 @@
   "hot": [
    {
     "term": "Anthropic",
-    "n": 2,
-    "src": 2,
+    "n": 3,
+    "src": 3,
     "sources": [
      "Anthropic",
-     "HN"
-    ],
-    "sample": {
-     "title": "Investing in the public benefit We’re committing a portion o",
-     "url": "https://www.anthropic.com/news/public-benefit-fund"
-    },
-    "hot": false
-   },
-   {
-    "term": "沈伯洋",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "Wiki",
+     "HN",
      "中央社"
     ],
     "sample": {
-     "title": "沈伯洋天母萬聖節發糖  爆炸頭船長PUMA亮相",
-     "url": "https://www.cna.com.tw/news/aipl/202610260116.aspx"
+     "title": "Anthropic涉擅用貓王274首歌曲訓練AI模型　挨告侵權",
+     "url": "https://www.cna.com.tw/news/ait/202610260141.aspx"
     },
-    "hot": false
+    "hot": true
    },
    {
     "term": "關注",
@@ -482,12 +469,12 @@
  "errs": [
   "pts gnews: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=site%3Anews.pts.org.tw&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
   "kw \"比稿\" 廣告 OR 行銷 OR 品牌: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%22%E6%AF%94%E7%A8%BF%22+%E5%BB%A3%E5%91%8A+OR+%E8%A1%8C%E9%8A%B7+OR+%E5%93%",
-  "kw \"廣告代理商\": HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%22%E5%BB%A3%E5%91%8A%E4%BB%A3%E7%90%86%E5%95%86%22&hl=zh-TW&gl=TW&ceid=TW%3",
   "kw 廣告不實 OR 誇大不實 開罰: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E5%BB%A3%E5%91%8A%E4%B8%8D%E5%AF%A6+OR+%E8%AA%87%E5%A4%A7%E4%B8%8D%E5%AF%A6",
-  "kw \"數位廣告\" OR \"廣告量\" 台灣: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%22%E6%95%B8%E4%BD%8D%E5%BB%A3%E5%91%8A%22+OR+%22%E5%BB%A3%E5%91%8A%E9%87%8F",
+  "kw \"廣告代理商\": HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%22%E5%BB%A3%E5%91%8A%E4%BB%A3%E7%90%86%E5%95%86%22&hl=zh-TW&gl=TW&ceid=TW%3",
   "kw 坎城創意節 OR 時報廣告金像獎 OR 4A創意獎 OR 龍璽: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E5%9D%8E%E5%9F%8E%E5%89%B5%E6%84%8F%E7%AF%80+OR+%E6%99%82%E5%A0%B1%E5%BB%A3",
+  "kw \"數位廣告\" OR \"廣告量\" 台灣: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%22%E6%95%B8%E4%BD%8D%E5%BB%A3%E5%91%8A%22+OR+%22%E5%BB%A3%E5%91%8A%E9%87%8F",
   "kw \"品牌重塑\" OR \"品牌升級\": HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%22%E5%93%81%E7%89%8C%E9%87%8D%E5%A1%91%22+OR+%22%E5%93%81%E7%89%8C%E5%8D%87",
-  "kw 家具展 OR 室內設計 OR 設計師品牌: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E5%AE%B6%E5%85%B7%E5%B1%95+OR+%E5%AE%A4%E5%85%A7%E8%A8%AD%E8%A8%88+OR+%E8%A"
+  "kw 台灣設計展 OR 文博會 OR 金點設計獎: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E5%8F%B0%E7%81%A3%E8%A8%AD%E8%A8%88%E5%B1%95+OR+%E6%96%87%E5%8D%9A%E6%9C%83"
  ],
- "updatedAt": "2026-10-26T08:21:11Z"
+ "updatedAt": "2026-10-26T08:50:57Z"
 }
