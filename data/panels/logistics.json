@@ -113,7 +113,100 @@
    "chg": 3.05
   }
  ],
- "storms": [],
+ "storms": [
+  {
+   "name": "CHAMPI",
+   "level": "Red",
+   "ll": [
+    127.4,
+    31.2
+   ],
+   "from": "2026-10-14T12:00",
+   "to": "2026-10-25T18:00",
+   "sev": "Tropical Storm (maximum wind speed of 296 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=46&eventtype=TC",
+   "near": [
+    {
+     "port": "釜山",
+     "km": 458
+    },
+    {
+     "port": "上海洋山",
+     "km": 513
+    },
+    {
+     "port": "寧波舟山",
+     "km": 550
+    }
+   ],
+   "id": "1001338-46"
+  },
+  {
+   "name": "ARNAB",
+   "level": "Red",
+   "ll": [
+    83.8,
+    16.2
+   ],
+   "from": "2026-10-26T00:00",
+   "to": "2026-10-27T06:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 222 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001345&episodeid=6&eventtype=TC",
+   "near": [],
+   "id": "1001345-6"
+  },
+  {
+   "name": "VANCE",
+   "level": "Green",
+   "ll": [
+    -106.9,
+    15.9
+   ],
+   "from": "2026-10-21T15:00",
+   "to": "2026-10-27T09:00",
+   "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=24&eventtype=TC",
+   "near": [
+    {
+     "port": "曼薩尼約（墨）",
+     "km": 448
+    },
+    {
+     "port": "拉薩羅卡德納斯（墨）",
+     "km": 551
+    }
+   ],
+   "id": "1001341-24"
+  },
+  {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    162.1,
+    14.5
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-10-27T06:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 231 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=16&eventtype=TC",
+   "near": [],
+   "id": "1001343-16"
+  },
+  {
+   "name": "THREE-C",
+   "level": "Green",
+   "ll": [
+    -175.9,
+    13.0
+   ],
+   "from": "2026-10-25T15:00",
+   "to": "2026-10-27T03:00",
+   "sev": "Tropical Depression (maximum wind speed of 65 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=7&eventtype=TC",
+   "near": [],
+   "id": "1001344-7"
+  }
+ ],
  "ports": [
   {
    "name": "上海洋山",
@@ -378,6 +471,22 @@
  "news": [
   {
    "source": "The Loadstar",
+   "title": "Produce shippers need better visibility and metrics to ward off costly delays",
+   "url": "https://theloadstar.com/produce-shippers-need-better-visibility-and-metrics-to-ward-off-costly-delays/",
+   "at": "2026-10-27T19:16:39+08:00",
+   "hot": false,
+   "zh": "農産品貨主需要更好的能見度與指標，以避免慘重的延誤損失"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Spartan’s operators went from AI skeptics to agent builders",
+   "url": "https://www.freightwaves.com/news/spartan-carrier-alvys-foundry-ai-agents",
+   "at": "2026-10-27T19:00:00+08:00",
+   "hot": false,
+   "zh": "Spartan 的營運人員從 AI 懷疑論者變成代理程式建構者"
+  },
+  {
+   "source": "The Loadstar",
    "title": "FedEx appoints new CFO",
    "url": "https://theloadstar.com/fedex-appoints-new-cfo/",
    "at": "2026-10-27T16:49:33+08:00",
@@ -410,11 +519,11 @@
   },
   {
    "source": "The Loadstar",
-   "title": "Car carrier orderbook surge raises oversupply fears",
+   "title": "Car-carrier order surge raises fears of oversupply",
    "url": "https://theloadstar.com/car-carrier-orderbook-surge-raises-oversupply-fears/",
    "at": "2026-10-27T01:59:08+08:00",
    "hot": false,
-   "zh": "汽車船訂單暴增引發供過於求疑慮"
+   "zh": "汽車運輸船訂單激增引發產能過剩擔憂"
   },
   {
    "source": "FreightWaves",
@@ -551,28 +660,10 @@
    "at": "2026-10-26T20:00:17+08:00",
    "hot": false,
    "zh": "CH Robinson 押注 AI 大軍，力拚在貨代市場勝出"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "New ‘conundrum’: Asia-US, Europe ocean rates diverge",
-   "url": "https://www.freightwaves.com/news/new-conundrum-asia-us-europe-ocean-rates-diverge",
-   "at": "2026-10-26T19:59:46+08:00",
-   "hot": true,
-   "zh": "新難題：亞美與亞歐航線運價走勢分歧"
-  },
-  {
-   "source": "The Loadstar",
-   "title": "China-India rates ease but port delays still a strain on services",
-   "url": "https://theloadstar.com/china-india-rates-ease-but-port-delays-still-a-strain-on-services/",
-   "at": "2026-10-26T19:35:25+08:00",
-   "hot": true,
-   "zh": "中印航線運價回穩，但港口塞港仍拖累服務效率"
   }
  ],
  "threat": [],
- "errs": [
-  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-27T10:41:15Z"
+ "updatedAt": "2026-10-27T11:52:55Z"
 }
