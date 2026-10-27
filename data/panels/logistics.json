@@ -113,7 +113,73 @@
    "chg": 3.05
   }
  ],
- "storms": [],
+ "storms": [
+  {
+   "name": "ARNAB",
+   "level": "Red",
+   "ll": [
+    82.7,
+    16.3
+   ],
+   "from": "2026-10-26T00:00",
+   "to": "2026-10-27T12:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 222 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001345&episodeid=7&eventtype=TC",
+   "near": [],
+   "id": "1001345-7"
+  },
+  {
+   "name": "VANCE",
+   "level": "Green",
+   "ll": [
+    -107.7,
+    16.3
+   ],
+   "from": "2026-10-21T15:00",
+   "to": "2026-10-27T15:00",
+   "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=25&eventtype=TC",
+   "near": [
+    {
+     "port": "曼薩尼約（墨）",
+     "km": 474
+    },
+    {
+     "port": "拉薩羅卡德納斯（墨）",
+     "km": 614
+    }
+   ],
+   "id": "1001341-25"
+  },
+  {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    160.8,
+    14.7
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-10-27T18:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 231 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=18&eventtype=TC",
+   "near": [],
+   "id": "1001343-18"
+  },
+  {
+   "name": "THREE-C",
+   "level": "Green",
+   "ll": [
+    -175.9,
+    13.0
+   ],
+   "from": "2026-10-25T15:00",
+   "to": "2026-10-27T03:00",
+   "sev": "Tropical Depression (maximum wind speed of 65 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=7&eventtype=TC",
+   "near": [],
+   "id": "1001344-7"
+  }
+ ],
  "ports": [
   {
    "name": "上海洋山",
@@ -378,6 +444,14 @@
  "news": [
   {
    "source": "FreightWaves",
+   "title": "Mexico truckers reach deal for talks after strike disrupts 19 states",
+   "url": "https://www.freightwaves.com/news/mexico-truckers-reach-deal-for-talks-after-strike-disrupts-19-states",
+   "at": "2026-10-28T03:17:32+08:00",
+   "hot": true,
+   "zh": "墨西哥卡車司機罷工癱瘓19州，達成協議同意展開談判"
+  },
+  {
+   "source": "FreightWaves",
    "title": "Diesel Is Breaking Records While Gasoline Stays Cheap, And The Reason Is Not What Most Truckers Think",
    "url": "https://www.freightwaves.com/news/diesel-is-breaking-records-while-gasoline-stays-cheap-and-the-reason-is-not-what-most-truckers-think",
    "at": "2026-10-28T02:33:56+08:00",
@@ -521,14 +595,6 @@
    "zh": "TiL表示：關稅宣告引發貨櫃場站貨物大亂"
   },
   {
-   "source": "FreightWaves",
-   "title": "The Biggest Shift In Freight Liability Since Deregulation Is Here, And Few Are Ready For It",
-   "url": "https://www.freightwaves.com/news/the-biggest-shift-in-freight-liability-since-deregulation-is-here-and-few-are-ready-for-it",
-   "at": "2026-10-27T20:44:00+08:00",
-   "hot": false,
-   "zh": "放寬管制以來最大的貨運責任變革已然來臨，卻少有人準備好"
-  },
-  {
    "source": "The Loadstar",
    "title": "£10bn sale of Associated British Ports – pension funds just love it",
    "url": "https://theloadstar.com/10bn-sale-of-associated-british-ports-pension-funds-just-love-it/",
@@ -570,9 +636,7 @@
   }
  ],
  "threat": [],
- "errs": [
-  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-27T19:10:08Z"
+ "updatedAt": "2026-10-27T20:15:15Z"
 }
