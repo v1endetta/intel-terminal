@@ -113,7 +113,100 @@
    "chg": 3.05
   }
  ],
- "storms": [],
+ "storms": [
+  {
+   "name": "CHAMPI",
+   "level": "Red",
+   "ll": [
+    127.4,
+    31.2
+   ],
+   "from": "2026-10-14T12:00",
+   "to": "2026-10-25T18:00",
+   "sev": "Tropical Storm (maximum wind speed of 296 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=46&eventtype=TC",
+   "near": [
+    {
+     "port": "釜山",
+     "km": 458
+    },
+    {
+     "port": "上海洋山",
+     "km": 513
+    },
+    {
+     "port": "寧波舟山",
+     "km": 550
+    }
+   ],
+   "id": "1001338-46"
+  },
+  {
+   "name": "ARNAB",
+   "level": "Red",
+   "ll": [
+    84.8,
+    16.0
+   ],
+   "from": "2026-10-26T00:00",
+   "to": "2026-10-27T00:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 185 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001345&episodeid=5&eventtype=TC",
+   "near": [],
+   "id": "1001345-5"
+  },
+  {
+   "name": "VANCE",
+   "level": "Green",
+   "ll": [
+    -106.3,
+    15.5
+   ],
+   "from": "2026-10-21T15:00",
+   "to": "2026-10-27T03:00",
+   "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=23&eventtype=TC",
+   "near": [
+    {
+     "port": "曼薩尼約（墨）",
+     "km": 450
+    },
+    {
+     "port": "拉薩羅卡德納斯（墨）",
+     "km": 516
+    }
+   ],
+   "id": "1001341-23"
+  },
+  {
+   "name": "THREE-C",
+   "level": "Green",
+   "ll": [
+    -175.9,
+    13.0
+   ],
+   "from": "2026-10-25T15:00",
+   "to": "2026-10-27T03:00",
+   "sev": "Tropical Depression (maximum wind speed of 65 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=7&eventtype=TC",
+   "near": [],
+   "id": "1001344-7"
+  },
+  {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    162.4,
+    14.3
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-10-27T00:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 241 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=15&eventtype=TC",
+   "near": [],
+   "id": "1001343-15"
+  }
+ ],
  "ports": [
   {
    "name": "上海洋山",
@@ -570,9 +663,7 @@
   }
  ],
  "threat": [],
- "errs": [
-  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-27T02:44:58Z"
+ "updatedAt": "2026-10-27T03:46:20Z"
 }
