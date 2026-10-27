@@ -159,24 +159,38 @@
    "name": "VANCE",
    "level": "Green",
    "ll": [
-    -106.3,
-    15.5
+    -106.9,
+    15.9
    ],
    "from": "2026-10-21T15:00",
-   "to": "2026-10-27T03:00",
+   "to": "2026-10-27T09:00",
    "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=23&eventtype=TC",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=24&eventtype=TC",
    "near": [
     {
      "port": "曼薩尼約（墨）",
-     "km": 450
+     "km": 448
     },
     {
      "port": "拉薩羅卡德納斯（墨）",
-     "km": 516
+     "km": 551
     }
    ],
-   "id": "1001341-23"
+   "id": "1001341-24"
+  },
+  {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    162.1,
+    14.5
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-10-27T06:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 231 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=16&eventtype=TC",
+   "near": [],
+   "id": "1001343-16"
   },
   {
    "name": "THREE-C",
@@ -191,20 +205,6 @@
    "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=7&eventtype=TC",
    "near": [],
    "id": "1001344-7"
-  },
-  {
-   "name": "IN-FA",
-   "level": "Green",
-   "ll": [
-    162.4,
-    14.3
-   ],
-   "from": "2026-10-25T06:00",
-   "to": "2026-10-27T00:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 241 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=15&eventtype=TC",
-   "near": [],
-   "id": "1001343-15"
   }
  ],
  "ports": [
@@ -470,6 +470,14 @@
  ],
  "news": [
   {
+   "source": "The Loadstar",
+   "title": "FedEx appoints new CFO",
+   "url": "https://theloadstar.com/fedex-appoints-new-cfo/",
+   "at": "2026-10-27T16:49:33+08:00",
+   "hot": false,
+   "zh": "聯邦快遞任命新財務長"
+  },
+  {
    "source": "FreightWaves",
    "title": "FMCSA’s Elison addresses Motus again, still no date on full repair",
    "url": "https://www.freightwaves.com/news/fmcsas-elison-addresses-motus-again-still-no-date-on-full-repair",
@@ -652,18 +660,10 @@
    "at": "2026-10-26T19:35:25+08:00",
    "hot": true,
    "zh": "中印航線運價回穩，但港口塞港仍拖累服務效率"
-  },
-  {
-   "source": "The Loadstar",
-   "title": "Analysis: Kuehne + Nagel invests up front to win next wave of customers",
-   "url": "https://theloadstar.com/analysis-kuehne-nagel-invests-up-front-to-win-next-wave-of-customers/",
-   "at": "2026-10-26T19:34:35+08:00",
-   "hot": false,
-   "zh": "分析：Kuehne + Nagel 提前佈局，搶攻下一波客戶"
   }
  ],
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-27T08:19:54Z"
+ "updatedAt": "2026-10-27T09:27:17Z"
 }
