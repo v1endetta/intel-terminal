@@ -58,7 +58,7 @@
    "list": "2026-10-20",
    "price": 105.6,
    "rate": 0.42,
-   "ind": "生技醫療業"
+   "ind": ""
   },
   {
    "code": "2249",
@@ -1702,7 +1702,7 @@
    "time": "14:30",
    "place": "線上法說會。",
    "summary": "公布本公司2026年第三季營運概況。",
-   "ind": "金融保險",
+   "ind": "金融保險業",
    "cons": false,
    "routine": false
   },
@@ -1745,6 +1745,8 @@
  ],
  "conf_n": 77,
  "src": "證交所／櫃買中心 OpenAPI（公開申購、申請上市櫃、經營權及營業範圍異動專區）＋ 公開資訊觀測站 法人說明會一覽表",
- "errs": [],
- "updatedAt": "2026-10-26T19:05:36Z"
+ "errs": [
+  "產業對照: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+ ],
+ "updatedAt": "2026-10-27T01:10:34Z"
 }
