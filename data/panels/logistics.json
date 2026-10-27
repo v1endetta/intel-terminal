@@ -113,100 +113,7 @@
    "chg": 3.05
   }
  ],
- "storms": [
-  {
-   "name": "CHAMPI",
-   "level": "Red",
-   "ll": [
-    127.4,
-    31.2
-   ],
-   "from": "2026-10-14T12:00",
-   "to": "2026-10-25T18:00",
-   "sev": "Tropical Storm (maximum wind speed of 296 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=46&eventtype=TC",
-   "near": [
-    {
-     "port": "釜山",
-     "km": 458
-    },
-    {
-     "port": "上海洋山",
-     "km": 513
-    },
-    {
-     "port": "寧波舟山",
-     "km": 550
-    }
-   ],
-   "id": "1001338-46"
-  },
-  {
-   "name": "ARNAB",
-   "level": "Red",
-   "ll": [
-    82.7,
-    16.3
-   ],
-   "from": "2026-10-26T00:00",
-   "to": "2026-10-27T12:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 222 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001345&episodeid=7&eventtype=TC",
-   "near": [],
-   "id": "1001345-7"
-  },
-  {
-   "name": "VANCE",
-   "level": "Green",
-   "ll": [
-    -107.7,
-    16.3
-   ],
-   "from": "2026-10-21T15:00",
-   "to": "2026-10-27T15:00",
-   "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=25&eventtype=TC",
-   "near": [
-    {
-     "port": "曼薩尼約（墨）",
-     "km": 474
-    },
-    {
-     "port": "拉薩羅卡德納斯（墨）",
-     "km": 614
-    }
-   ],
-   "id": "1001341-25"
-  },
-  {
-   "name": "IN-FA",
-   "level": "Green",
-   "ll": [
-    161.6,
-    14.5
-   ],
-   "from": "2026-10-25T06:00",
-   "to": "2026-10-27T12:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 222 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=17&eventtype=TC",
-   "near": [],
-   "id": "1001343-17"
-  },
-  {
-   "name": "THREE-C",
-   "level": "Green",
-   "ll": [
-    -175.9,
-    13.0
-   ],
-   "from": "2026-10-25T15:00",
-   "to": "2026-10-27T03:00",
-   "sev": "Tropical Depression (maximum wind speed of 65 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=7&eventtype=TC",
-   "near": [],
-   "id": "1001344-7"
-  }
- ],
+ "storms": [],
  "ports": [
   {
    "name": "上海洋山",
@@ -470,6 +377,46 @@
  ],
  "news": [
   {
+   "source": "The Loadstar",
+   "title": "Champi’s support won’t reverse market trend",
+   "url": "https://theloadstar.com/champis-support-wont-reverse-market-trend/",
+   "at": "2026-10-27T23:30:52+08:00",
+   "hot": true,
+   "zh": "強皮的支持無法扭轉市場趨勢"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "2027 FreightTech 25 winners announced at F3",
+   "url": "https://www.freightwaves.com/news/2027-freighttech-25-winners-announced-at-f3",
+   "at": "2026-10-27T23:22:43+08:00",
+   "hot": false,
+   "zh": ""
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Band24 seeks early testers for satellite-connected asset tracker ahead of Nov. 13 deadline",
+   "url": "https://www.freightwaves.com/news/band24-seeks-early-testers-for-satellite-connected-asset-tracker-ahead-of-nov-13-deadline",
+   "at": "2026-10-27T22:57:32+08:00",
+   "hot": false,
+   "zh": "Band24 尋找衛星聯網資產追蹤器早期測試者，截止日為 11 月 13 日"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Miami airport to deploy shared logistics platform for cargo community",
+   "url": "https://www.freightwaves.com/news/miami-airport-to-deploy-shared-logistics-platform-for-cargo-community",
+   "at": "2026-10-27T22:51:49+08:00",
+   "hot": false,
+   "zh": "邁阿密機場將為貨運社群部署共用物流平台"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Double Nickel launches AI agent to automate driver employment checks",
+   "url": "https://www.freightwaves.com/news/double-nickel-launches-ai-agent-to-automate-driver-employment-checks",
+   "at": "2026-10-27T22:41:03+08:00",
+   "hot": false,
+   "zh": "Double Nickel 推出 AI 代理以自動化駕駛員雇用審查"
+  },
+  {
    "source": "FreightWaves",
    "title": "Federal guidance on carrier selection not around the corner: TIA’s Burroughs",
    "url": "https://www.freightwaves.com/news/federal-guidance-on-carrier-selection-not-around-the-corner-tias-burroughs",
@@ -620,50 +567,12 @@
    "at": "2026-10-27T01:09:30+08:00",
    "hot": false,
    "zh": "美國郵政已備妥迎戰旺季出貨潮"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "Japan Airlines hires B747 cargo carriers to meet high-tech demand",
-   "url": "https://www.freightwaves.com/news/japan-airlines-hires-b747-cargo-carriers-to-meet-high-tech-demand",
-   "at": "2026-10-27T00:28:24+08:00",
-   "hot": false,
-   "zh": "日本航空租用B747貨機，以滿足高科技產品運輸需求"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "Trucking Needs More Than a Choice Between Diesel and EV Trucks",
-   "url": "https://www.freightwaves.com/news/trucking-needs-more-than-a-choice-between-diesel-and-ev-trucks",
-   "at": "2026-10-26T23:30:00+08:00",
-   "hot": false,
-   "zh": "貨運業不能只在柴油車與電動卡車之間二選一"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "AI air freight drives Kuehne+Nagel profit increase",
-   "url": "https://www.freightwaves.com/news/ai-air-freight-drives-kuehnenagel-profit-increase",
-   "at": "2026-10-26T23:26:44+08:00",
-   "hot": false,
-   "zh": "AI 空運需求推動德之邦獲利成長"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "Inside FedEx’s Network 2.0 overhaul",
-   "url": "https://www.supplychaindive.com/news/inside-fedexs-network-20-overhaul/833618/",
-   "at": "2026-10-26T23:20:25+08:00",
-   "hot": false,
-   "zh": "深入解析FedEx聯邦快遞「網路2.0」改造計畫"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "UPS plans 5.9% rate increase on Dec. 21",
-   "url": "https://www.supplychaindive.com/news/ups-plans-59-rate-increase-on-dec-21/872751/",
-   "at": "2026-10-26T23:10:00+08:00",
-   "hot": false,
-   "zh": "UPS將於12月21日調漲5.9%費率"
   }
  ],
  "threat": [],
- "errs": [],
+ "errs": [
+  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
+ ],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-27T15:00:22Z"
+ "updatedAt": "2026-10-27T16:04:25Z"
 }
