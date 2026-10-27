@@ -1,7 +1,31 @@
 {
  "alerts": [
   {
-   "id": "WRA_ReservoirWarn_20261028021840_0000",
+   "id": "CWA-Weather_strong-wind_202610280426001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "新北市",
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "雲林縣",
+    "屏東縣",
+    "臺東縣",
+    "澎湖縣",
+    "連江縣"
+   ],
+   "text": "東北風明顯偏強，28日晨至28日晚上新北市、桃園市、新竹市、新竹縣、苗栗縣、臺中市、彰化縣、雲林縣、屏東縣、臺東縣(含蘭嶼、綠島)、澎湖縣、連江縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-27T20:26:01Z",
+   "exp": "2026-10-28T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610280426.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261028041840_0000",
    "cat": "水庫放流",
    "lvl": 2,
    "area": [
@@ -10,9 +34,9 @@
    ],
    "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
    "src": "水利署",
-   "at": "2026-10-27T18:18:40Z",
-   "exp": "2026-10-28T05:19:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261028021840_0000.cap"
+   "at": "2026-10-27T20:18:40Z",
+   "exp": "2026-10-28T07:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261028041840_0000.cap"
   },
   {
    "id": "CWA-Weather_strong-wind_202610272225001",
@@ -90,12 +114,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610271033.cap"
   }
  ],
- "n_total": 4,
+ "n_total": 5,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/28 04:11:14"
+  "updated": "2026/10/28 04:23:14"
  },
  "errs": [],
- "updatedAt": "2026-10-27T20:07:59Z"
+ "updatedAt": "2026-10-27T20:25:34Z"
 }
