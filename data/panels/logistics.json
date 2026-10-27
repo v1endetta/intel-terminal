@@ -113,7 +113,100 @@
    "chg": 3.05
   }
  ],
- "storms": [],
+ "storms": [
+  {
+   "name": "CHAMPI",
+   "level": "Red",
+   "ll": [
+    127.4,
+    31.2
+   ],
+   "from": "2026-10-14T12:00",
+   "to": "2026-10-25T18:00",
+   "sev": "Tropical Storm (maximum wind speed of 296 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001338&episodeid=46&eventtype=TC",
+   "near": [
+    {
+     "port": "釜山",
+     "km": 458
+    },
+    {
+     "port": "上海洋山",
+     "km": 513
+    },
+    {
+     "port": "寧波舟山",
+     "km": 550
+    }
+   ],
+   "id": "1001338-46"
+  },
+  {
+   "name": "ARNAB",
+   "level": "Red",
+   "ll": [
+    82.7,
+    16.3
+   ],
+   "from": "2026-10-26T00:00",
+   "to": "2026-10-27T12:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 222 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001345&episodeid=7&eventtype=TC",
+   "near": [],
+   "id": "1001345-7"
+  },
+  {
+   "name": "VANCE",
+   "level": "Green",
+   "ll": [
+    -107.7,
+    16.3
+   ],
+   "from": "2026-10-21T15:00",
+   "to": "2026-10-27T15:00",
+   "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=25&eventtype=TC",
+   "near": [
+    {
+     "port": "曼薩尼約（墨）",
+     "km": 474
+    },
+    {
+     "port": "拉薩羅卡德納斯（墨）",
+     "km": 614
+    }
+   ],
+   "id": "1001341-25"
+  },
+  {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    161.6,
+    14.5
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-10-27T12:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 222 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=17&eventtype=TC",
+   "near": [],
+   "id": "1001343-17"
+  },
+  {
+   "name": "THREE-C",
+   "level": "Green",
+   "ll": [
+    -175.9,
+    13.0
+   ],
+   "from": "2026-10-25T15:00",
+   "to": "2026-10-27T03:00",
+   "sev": "Tropical Depression (maximum wind speed of 65 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=7&eventtype=TC",
+   "near": [],
+   "id": "1001344-7"
+  }
+ ],
  "ports": [
   {
    "name": "上海洋山",
@@ -377,6 +470,38 @@
  ],
  "news": [
   {
+   "source": "FreightWaves",
+   "title": "The Case For Renting The Box And Buying The Truck",
+   "url": "https://www.freightwaves.com/news/the-case-for-renting-the-box-and-buying-the-truck",
+   "at": "2026-10-28T00:21:34+08:00",
+   "hot": false,
+   "zh": "為什麼租貨櫃、買卡車才是上策"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Why Logistics AI Still Needs “Experts in the Loop”",
+   "url": "https://www.freightwaves.com/news/why-logistics-ai-still-needs-experts-in-the-loop",
+   "at": "2026-10-28T00:13:29+08:00",
+   "hot": false,
+   "zh": "為什麼物流AI仍然需要「專家介入」"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "UPS gears up for peak season with less Amazon volume in tow",
+   "url": "https://www.supplychaindive.com/news/ups-gears-up-for-peak-season-with-less-amazon-volume-in-tow/872845/",
+   "at": "2026-10-28T00:06:00+08:00",
+   "hot": false,
+   "zh": "UPS備戰旺季，亞馬遜貨量減少"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Knight-Swift CEO says CDL crackdown could fuel lasting trucking recovery",
+   "url": "https://www.freightwaves.com/news/knight-swift-ceo-says-cdl-crackdown-could-fuel-lasting-trucking-recovery",
+   "at": "2026-10-27T23:57:36+08:00",
+   "hot": false,
+   "zh": "Knight-Swift執行長表示，嚴格取締商用駕照有助於貨運業迎來持久復甦"
+  },
+  {
    "source": "The Loadstar",
    "title": "Champi’s support won’t reverse market trend",
    "url": "https://theloadstar.com/champis-support-wont-reverse-market-trend/",
@@ -489,6 +614,14 @@
    "zh": "一家供應商盯上38個目標？航運業資安供應鏈成焦點"
   },
   {
+   "source": "Supply Chain Dive",
+   "title": "Audi investing $4B to build its first US plant in Georgia",
+   "url": "https://www.supplychaindive.com/news/audi-investing-4b-to-build-its-first-us-plant-in-georgia/872866/",
+   "at": "2026-10-27T19:31:00+08:00",
+   "hot": false,
+   "zh": "奧迪投資40億美元在喬州建立首座美國工廠"
+  },
+  {
    "source": "FreightWaves",
    "title": "Police recover $54K in Hot Wheels after BNSF freight train burglary in California",
    "url": "https://www.freightwaves.com/news/police-recover-54k-in-hot-wheels-after-bnsf-freight-train-burglary-in-california",
@@ -521,58 +654,16 @@
    "zh": "聯邦快遞任命新財務長"
   },
   {
-   "source": "FreightWaves",
-   "title": "FMCSA’s Elison addresses Motus again, still no date on full repair",
-   "url": "https://www.freightwaves.com/news/fmcsas-elison-addresses-motus-again-still-no-date-on-full-repair",
-   "at": "2026-10-27T06:58:08+08:00",
-   "hot": false,
-   "zh": "聯邦汽車運輸安全管理局的埃利森再次回應 Motus 事件，全面修復日期仍未定"
-  },
-  {
    "source": "Supply Chain Dive",
-   "title": "USTR weighs extending pause on China-linked vessel fees to January",
-   "url": "https://www.supplychaindive.com/news/ustr-weighs-extending-pause-on-china-linked-vessel-fees-to-january/872763/",
-   "at": "2026-10-27T04:48:18+08:00",
+   "title": "Supply Chain AI Has an Execution Problem",
+   "url": "https://www.supplychaindive.com/spons/supply-chain-ai-has-an-execution-problem/872776/",
+   "at": "2026-10-27T11:00:00+08:00",
    "hot": false,
-   "zh": "美商業代表署考慮將中國相關船舶費用的暫緩徵收期延長至1月"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "USPS to debut weekly fuel fee in 2027, matching FedEx, UPS practices",
-   "url": "https://www.supplychaindive.com/news/usps-to-debut-weekly-fuel-fee-in-2027-matching-fedex-ups-practices/872778/",
-   "at": "2026-10-27T03:12:00+08:00",
-   "hot": false,
-   "zh": "美國郵政將於2027年起實施每週燃油費，比照聯邦快遞與優比速的做法"
-  },
-  {
-   "source": "The Loadstar",
-   "title": "Car-carrier order surge raises fears of oversupply",
-   "url": "https://theloadstar.com/car-carrier-orderbook-surge-raises-oversupply-fears/",
-   "at": "2026-10-27T01:59:08+08:00",
-   "hot": false,
-   "zh": "汽車運輸船訂單激增引發產能過剩擔憂"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "Mexican truckers launch national strike over highway security, rising costs",
-   "url": "https://www.freightwaves.com/news/mexican-truckers-launch-national-strike-over-highway-security-rising-costs",
-   "at": "2026-10-27T01:17:15+08:00",
-   "hot": true,
-   "zh": "墨西哥卡車司機發起全國大罷工，抗議公路安全惡化與成本飆升"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "U.S. Postal Service prepared for peak season surge",
-   "url": "https://www.freightwaves.com/news/u-s-postal-service-prepared-for-peak-season-surge",
-   "at": "2026-10-27T01:09:30+08:00",
-   "hot": false,
-   "zh": "美國郵政已備妥迎戰旺季出貨潮"
+   "zh": "供應鏈AI面臨執行難題"
   }
  ],
  "threat": [],
- "errs": [
-  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-27T16:04:25Z"
+ "updatedAt": "2026-10-27T17:06:04Z"
 }

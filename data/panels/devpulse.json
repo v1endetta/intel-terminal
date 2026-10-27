@@ -1,56 +1,6 @@
 {
  "forums": [
   {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Browser access works in regular ChatGPT chat but fails in ChatGPT Work",
-   "url": "https://community.openai.com/t/browser-access-works-in-regular-chatgpt-chat-but-fails-in-chatgpt-work/1410147",
-   "replies": 41,
-   "likes": 20,
-   "views": 362,
-   "at": "2026-10-27T13:23:14Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Hello, my name is Ibrahim, this is my project",
-   "url": "https://community.openai.com/t/hello-my-name-is-ibrahim-this-is-my-project/1409863",
-   "replies": 16,
-   "likes": 11,
-   "views": 104,
-   "at": "2026-10-26T17:16:04Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "The Exponential Time Hypothesis is False",
-   "url": "https://community.openai.com/t/the-exponential-time-hypothesis-is-false/1410073",
-   "replies": 0,
-   "likes": 3,
-   "views": 2253,
-   "at": "2026-10-27T09:18:49Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Open letter to Sam Altman",
-   "url": "https://community.openai.com/t/open-letter-to-sam-altman/1409985",
-   "replies": 0,
-   "likes": 3,
-   "views": 50,
-   "at": "2026-10-27T02:57:36Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Codex CLI: Add shortcut to cycle through models",
-   "url": "https://community.openai.com/t/codex-cli-add-shortcut-to-cycle-through-models/1410156",
-   "replies": 1,
-   "likes": 4,
-   "views": 16,
-   "at": "2026-10-27T13:59:40Z"
-  },
-  {
    "source": "Google AI 論壇",
    "vendor": "google",
    "title": "Google Falling Behind in development",
@@ -67,7 +17,7 @@
    "url": "https://discuss.ai.google.dev/t/gemini-4-argon-missing-unavailable-in-google-antigravity-on-active-google-ai-pro-account/196175",
    "replies": 1,
    "likes": 0,
-   "views": 60,
+   "views": 63,
    "at": "2026-10-27T03:50:43Z"
   },
   {
@@ -77,8 +27,18 @@
    "url": "https://discuss.ai.google.dev/t/critical-feedback-regression-in-real-time-diff-preview-error-handling-in-v2-5-5/196289",
    "replies": 3,
    "likes": 3,
-   "views": 25,
+   "views": 28,
    "at": "2026-10-27T12:29:09Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "Deployment Error",
+   "url": "https://discuss.ai.google.dev/t/deployment-error/196271",
+   "replies": 4,
+   "likes": 0,
+   "views": 24,
+   "at": "2026-10-27T10:42:10Z"
   },
   {
    "source": "Google AI 論壇",
@@ -87,18 +47,8 @@
    "url": "https://discuss.ai.google.dev/t/antigravity-models-filter-view-is-broken/196150",
    "replies": 2,
    "likes": 0,
-   "views": 29,
+   "views": 33,
    "at": "2026-10-27T00:24:33Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Repeated 503 responses from gemini-3.8-flash on free tier",
-   "url": "https://discuss.ai.google.dev/t/repeated-503-responses-from-gemini-3-8-flash-on-free-tier/196209",
-   "replies": 1,
-   "likes": 0,
-   "views": 31,
-   "at": "2026-10-27T04:03:01Z"
   }
  ],
  "changelogs": [
@@ -295,11 +245,13 @@
    "at": "2026-10-22T22:18:57Z"
   }
  ],
- "errs": [],
+ "errs": [
+  "OpenAI 論壇: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+ ],
  "diag": [
-  "Gemini changelog md: got html 162142b",
+  "Gemini changelog md: got html 162138b",
   "DeepSeek updates md: got html 49316b",
   "xAI release notes md: 19061b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### Grok Vo'"
  ],
- "updatedAt": "2026-10-27T16:04:25Z"
+ "updatedAt": "2026-10-27T17:06:04Z"
 }
