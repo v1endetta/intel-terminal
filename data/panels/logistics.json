@@ -113,73 +113,7 @@
    "chg": 3.05
   }
  ],
- "storms": [
-  {
-   "name": "ARNAB",
-   "level": "Red",
-   "ll": [
-    81.6,
-    16.4
-   ],
-   "from": "2026-10-26T00:00",
-   "to": "2026-10-27T18:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 222 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001345&episodeid=8&eventtype=TC",
-   "near": [],
-   "id": "1001345-8"
-  },
-  {
-   "name": "VANCE",
-   "level": "Green",
-   "ll": [
-    -108.4,
-    17.3
-   ],
-   "from": "2026-10-21T15:00",
-   "to": "2026-10-28T03:00",
-   "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=27&eventtype=TC",
-   "near": [
-    {
-     "port": "曼薩尼約（墨）",
-     "km": 476
-    },
-    {
-     "port": "拉薩羅卡德納斯（墨）",
-     "km": 663
-    }
-   ],
-   "id": "1001341-27"
-  },
-  {
-   "name": "IN-FA",
-   "level": "Green",
-   "ll": [
-    159.9,
-    14.9
-   ],
-   "from": "2026-10-25T06:00",
-   "to": "2026-10-28T00:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 241 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=19&eventtype=TC",
-   "near": [],
-   "id": "1001343-19"
-  },
-  {
-   "name": "THREE-C",
-   "level": "Green",
-   "ll": [
-    -175.9,
-    13.0
-   ],
-   "from": "2026-10-25T15:00",
-   "to": "2026-10-27T03:00",
-   "sev": "Tropical Depression (maximum wind speed of 65 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=7&eventtype=TC",
-   "near": [],
-   "id": "1001344-7"
-  }
- ],
+ "storms": [],
  "ports": [
   {
    "name": "上海洋山",
@@ -444,6 +378,14 @@
  "news": [
   {
    "source": "FreightWaves",
+   "title": "WEX, Euclid AI target 90% reduction in trucking transaction costs",
+   "url": "https://www.freightwaves.com/news/wex-euclid-ai-target-90-reduction-in-trucking-transaction-costs",
+   "at": "2026-10-28T12:27:10+08:00",
+   "hot": false,
+   "zh": "WEX與Euclid AI目標將卡車運輸交易成本降低90%"
+  },
+  {
+   "source": "FreightWaves",
    "title": "Insurance claims adjustments tank Landstar’s otherwise strong Q3",
    "url": "https://www.freightwaves.com/news/insurance-claims-adjustments-tank-landstars-otherwise-strong-q3",
    "at": "2026-10-28T11:22:42+08:00",
@@ -555,14 +497,6 @@
    "zh": ""
   },
   {
-   "source": "FreightWaves",
-   "title": "Band24 seeks early testers for satellite-connected asset tracker ahead of Nov. 13 deadline",
-   "url": "https://www.freightwaves.com/news/band24-seeks-early-testers-for-satellite-connected-asset-tracker-ahead-of-nov-13-deadline",
-   "at": "2026-10-27T22:57:32+08:00",
-   "hot": false,
-   "zh": "Band24 尋找衛星聯網資產追蹤器早期測試者，截止日為 11 月 13 日"
-  },
-  {
    "source": "Supply Chain Dive",
    "title": "Cycling apparel company unites planning, sourcing on single platform",
    "url": "https://www.supplychaindive.com/news/cycling-apparel-company-unites-planning-sourcing-on-single-platform/833732/",
@@ -636,7 +570,9 @@
   }
  ],
  "threat": [],
- "errs": [],
+ "errs": [
+  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
+ ],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-28T04:05:19Z"
+ "updatedAt": "2026-10-28T05:08:32Z"
 }
