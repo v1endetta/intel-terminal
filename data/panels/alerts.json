@@ -1,6 +1,29 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_strong-wind_202610281034001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "桃園市",
+    "新竹市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "雲林縣",
+    "屏東縣",
+    "臺東縣",
+    "澎湖縣",
+    "連江縣"
+   ],
+   "text": "東北風明顯偏強，28日上午至晚上桃園市、新竹市、新竹縣、苗栗縣、臺中市、彰化縣、雲林縣、屏東縣、臺東縣(含蘭嶼、綠島)、澎湖縣、連江縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-28T02:34:44Z",
+   "exp": "2026-10-28T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610281034.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261028101840_0000",
    "cat": "水庫放流",
    "lvl": 2,
@@ -141,12 +164,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610271033.cap"
   }
  ],
- "n_total": 7,
+ "n_total": 8,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/28 10:19:15"
+  "updated": "2026/10/28 10:37:15"
  },
  "errs": [],
- "updatedAt": "2026-10-28T02:26:55Z"
+ "updatedAt": "2026-10-28T02:43:14Z"
 }
