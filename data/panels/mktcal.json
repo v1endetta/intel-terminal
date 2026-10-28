@@ -1,43 +1,6 @@
 {
  "items": [
   {
-   "d": "2026-10-27",
-   "t": "09:00",
-   "ts": null,
-   "r": "台",
-   "n": "東擎科技（7710）上市掛牌",
-   "k": "ipo",
-   "imp": 1,
-   "ap": false,
-   "code": "7710",
-   "ind": "電腦及週邊設備業",
-   "px": 138.0
-  },
-  {
-   "d": "2026-10-27",
-   "t": "22:00",
-   "ts": 1793109600000,
-   "r": "美",
-   "n": "經濟諮商局消費信心",
-   "k": "data",
-   "imp": 2,
-   "ap": false,
-   "en": "CB Consumer Confidence",
-   "cur": "USD",
-   "fc": "81.2",
-   "pv": "81.9"
-  },
-  {
-   "d": "2026-10-27",
-   "t": null,
-   "ts": null,
-   "r": "台",
-   "n": "景氣燈號（國發會）",
-   "k": "data",
-   "imp": 2,
-   "ap": true
-  },
-  {
    "d": "2026-10-28",
    "t": "08:15",
    "ts": 1793146500000,
@@ -1325,6 +1288,17 @@
    "imp": 2,
    "ap": false,
    "src": "FRED"
+  },
+  {
+   "d": "2026-11-26",
+   "t": null,
+   "ts": null,
+   "r": "美",
+   "n": "美股休市：感恩節",
+   "k": "holiday",
+   "imp": 2,
+   "ap": false,
+   "ex": "XNYS"
   }
  ],
  "hol": [
@@ -1623,13 +1597,13 @@
    "n": "天皇誕生日"
   }
  ],
- "from": "2026-10-28",
- "to": "2026-11-25",
+ "from": "2026-10-29",
+ "to": "2026-11-26",
  "ff_until": "2026-10-30",
- "n": 106,
+ "n": 104,
  "errs": [
   "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json"
  ],
  "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站",
- "updatedAt": "2026-10-28T14:35:34Z"
+ "updatedAt": "2026-10-28T17:44:47Z"
 }
