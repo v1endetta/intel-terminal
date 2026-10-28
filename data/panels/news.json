@@ -2,6 +2,12 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "美期中選舉前　聯準會利率按兵不動",
+   "url": "https://www.cna.com.tw/news/aopl/202610290008.aspx",
+   "at": "2026-10-28T18:07:51Z"
+  },
+  {
+   "source": "中央社",
    "title": "市場靜待聯準會利率決策　歐股多收高",
    "url": "https://www.cna.com.tw/news/afe/202610290004.aspx",
    "at": "2026-10-28T17:16:42Z"
@@ -29,12 +35,6 @@
    "title": "投資人關注Fed決策和企業財報　美股開盤多上漲",
    "url": "https://www.cna.com.tw/news/afe/202610280335.aspx",
    "at": "2026-10-28T13:53:08Z"
-  },
-  {
-   "source": "中央社",
-   "title": "台郡爆3308萬元鉅額違約交割　今年上市公司第14起",
-   "url": "https://www.cna.com.tw/news/afe/202610280334.aspx",
-   "at": "2026-10-28T13:50:06Z"
   },
   {
    "source": "中央社",
@@ -76,16 +76,30 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "Death toll rises to 68 with dozens injured after high-speed train collision in Spain – lat",
-   "url": "https://www.theguardian.com/world/live/2026/oct/28/spain-train-crash-toledo-europe-latest-news-updates",
-   "at": "2026-10-28T18:47:47Z",
+   "title": "Israel election results live: Netanyahu bloc loses majority as most ballots counted",
+   "url": "https://www.theguardian.com/world/live/2026/oct/28/israel-election-results-live-updates-exit-polls-netanyahu-likud-eisenkot-latest-news",
+   "at": "2026-10-28T19:15:11Z",
    "sec": "World news"
   },
   {
    "source": "Guardian",
-   "title": "Israel election results live: Netanyahu bloc loses majority as most ballots counted",
-   "url": "https://www.theguardian.com/world/live/2026/oct/28/israel-election-results-live-updates-exit-polls-netanyahu-likud-eisenkot-latest-news",
-   "at": "2026-10-28T18:47:19Z",
+   "title": "Coalition talks loom in Israel as Netanyahu and Eisenkot blocs set to fall short of majori",
+   "url": "https://www.theguardian.com/world/2026/oct/28/israel-election-exit-polls-suggest-netanyahu-eisenkot-blocs-tied-ntwnfb",
+   "at": "2026-10-28T19:14:24Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
+   "title": "Death toll rises to 68 with dozens injured after high-speed train collision in Spain – lat",
+   "url": "https://www.theguardian.com/world/live/2026/oct/28/spain-train-crash-toledo-europe-latest-news-updates",
+   "at": "2026-10-28T19:07:01Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
+   "title": "Israel’s choice: Netanyahu remaining in power or a Palestinian-backed coalition",
+   "url": "https://www.theguardian.com/world/2026/oct/28/israel-elections-choice-netanyahu-remaining-power-or-palestinian-backed-coalition",
+   "at": "2026-10-28T18:54:10Z",
    "sec": "World news"
   },
   {
@@ -108,13 +122,6 @@
    "url": "https://www.theguardian.com/business/2026/oct/28/fed-interest-rates-midterms",
    "at": "2026-10-28T18:07:23Z",
    "sec": "Business"
-  },
-  {
-   "source": "Guardian",
-   "title": "Coalition talks loom in Israel as Netanyahu and Eisenkot blocs set to fall short of majori",
-   "url": "https://www.theguardian.com/world/2026/oct/28/israel-election-exit-polls-suggest-netanyahu-eisenkot-blocs-tied-ntwnfb",
-   "at": "2026-10-28T18:04:01Z",
-   "sec": "World news"
   },
   {
    "source": "Guardian",
@@ -148,13 +155,6 @@
    "title": "Second fatal train collision this year casts doubt over Spain’s high-speed rail network",
    "url": "https://www.theguardian.com/world/2026/oct/28/analysis-fatal-collision-doubt-over-spain-high-speed-rail",
    "at": "2026-10-28T16:56:46Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Spain’s Sánchez declares three days of mourning after at least 68 killed in Toledo train c",
-   "url": "https://www.theguardian.com/world/2026/oct/28/spain-train-crash-high-speed-toledo",
-   "at": "2026-10-28T16:39:15Z",
    "sec": "World news"
   }
  ],
@@ -243,12 +243,12 @@
     }
    ],
    "daily7": [
+    1,
+    0,
     2,
     0,
     3,
-    2,
-    4,
-    7,
+    8,
     1
    ],
    "days7": [
@@ -294,12 +294,12 @@
     }
    ],
    "daily7": [
-    6,
-    5,
-    2,
-    15,
-    52,
-    74,
+    3,
+    3,
+    1,
+    14,
+    51,
+    75,
     2
    ],
    "days7": [
@@ -323,10 +323,17 @@
      "kw": "Sora OR Runway OR Kling 影片"
     },
     {
-     "source": "BigGo 財經",
-     "title": "租GPU轉賣Token月入百萬美元，中國開源模型成矽谷創業新寵",
-     "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBJc01NYWNlWnRnT1k3ZXFET3RPRTBOYmdyeW1wQlI5MS1LN3NNc0I3TlJsaTVyTm8yQ3M5cGFfOGRsNUp2NFNadUlWaDVtam5IaWJLeEVoSlVlRkpWUXdONDkxOTJQNjZjSUEzWkN5d2tqajRNQWZHSEdB?oc=5",
-     "at": "2026-10-27T09:05:00Z",
+     "source": "新假期",
+     "title": "日本首宗生成式AI版權訴訟 Sai指千葉美容院擅自再加工髮型圖並索禁制令",
+     "url": "https://news.google.com/rss/articles/CBMigANBVV95cUxOb3RTbTVQUDg4RUotLTNaZVd5ZzdHT2Rja0djaDVHcGs4YlMtUkV0YnpuVmxtdHBNYlNtLWk4YWdHNmZDd195cFdBa2c1NGhmdzBUWUFhN0NUeXF4aWdhcUZlLUZNY0NVaGkxdF9iRGxGNzVIRWtnR0ktajA4d3kza2U4cDV2MFNYWS01RnY1WllnSVc3UEMyM2V4dU90YXpYWUlVSlgycUVCYmFpWThFNFVVYkNFNmo5X3BWRjRYNVdUZUR1a2gzQTY5aC1rcERrTk9IMkotaHI4dDlFSVU3b190ZU1DSlpGUFpDbjBFU1h2M1h5Q2Uta2EwNUZpU0pDbWxzUDd2S2xZZDVxZHNzS0kzcVloMC1obGE3MlRxY09WdW5XSFZHTU1rdmZfc081TnpWS3RESVozMXByWVhrWlNhZEk0bHQ4LXVqdlktZ1FwSS1MQUVJdWZMejFVeERENkJvSWo5bjI1S3h0QmhCOFAyd0xTOVBBSEhjZ0ZhcU4?oc=5",
+     "at": "2026-10-28T13:37:19Z",
+     "kw": "生成式AI 廣告 OR 生成式AI 版權"
+    },
+    {
+     "source": "股市報價& 財經新聞",
+     "title": "國泰海通：Kimi K3.1 Pro發佈 看好開源模型生態繁榮帶動AI應用加速落地 作者 智通財經 - Investing.com 香港",
+     "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFA3WGdpUjh6UGI1VGt5VU1qaE5PaDFKSi1vc1UyMl9mUU54R3I2MnNVelk2UWFFdUpPSlpVQlNrQTF2NnNuX1ZfR3dNTl9ZZkRtWHFvcWZVNkRkem9yRHRNVWc4aUpIc24yUlhSR3I1Ylc?oc=5",
+     "at": "2026-10-27T23:23:07Z",
      "kw": "開源模型 OR Ollama OR 本地部署"
     },
     {
@@ -335,21 +342,14 @@
      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9QMDNVY3VsbDZTdWk1UUZpUEUxQll4Sm1XMXhmbGNQN0l6T3BkamNob1RXTS1sTlczNnZOdHdnRk03QThvaG9LS3owOUxpVXlqaHBXem4ycjlYelJGM3BQc0lLSmdQdEhEYm0wSTZDdw?oc=5",
      "at": "2026-10-23T12:41:48Z",
      "kw": "Sora OR Runway OR Kling 影片"
-    },
-    {
-     "source": "iThome",
-     "title": "Ollama加入串流文字轉語音功能，並整合d3決策模型",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFAxc0kwaFNyOTRVV1lQOXRScGtfRXZUamJtbVA1MFQta3hXek16UFNtb040Q0xTd3hINVZpU0tLYlduUGMwMlpqMlh5YzhHZw?oc=5",
-     "at": "2026-10-27T01:19:34Z",
-     "kw": "開源模型 OR Ollama OR 本地部署"
     }
    ],
    "daily7": [
-    5,
     3,
-    2,
+    3,
+    0,
     1,
-    6,
+    4,
     4,
     0
    ],
@@ -381,10 +381,10 @@
      "kw": "聯準會 利率 OR FOMC"
     },
     {
-     "source": "理財周刊",
-     "title": "費半狂飆3.6% 台積電ADR大漲近3% AI買盤回歸有望點火台股",
-     "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9GYWlQYUlpVEJOb1JDMzJGUGtpUmtyc2g0SFI5LWRDUnVOblRoYk9Fcllkd1lweGlIRl9HRUxwb0JtSW8yLUkxRUFQbnpjc1E2MmhnR2RFYU9oRHZTTDBMTHFDb29qUFdhS1plNlBRUQ?oc=5",
-     "at": "2026-10-28T00:53:39Z",
+     "source": "風傳媒",
+     "title": "女股神出手了！大砍台積電、超微持股套現7.2億元 資金重押「這產業」 | 張庭維 | 新聞",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBTQUN4MzFiTDBpWFdMNDJCWTBqUDdxY0VlMVYwZHUxZFY2NVMwNnJ4amVUTXB2c1pvWG5uMG1meGUzd0V4bEJvLWRJa3dGdw?oc=5",
+     "at": "2026-10-28T08:53:00Z",
      "kw": "台積電 法說 OR 台積電 ADR"
     },
     {
@@ -396,13 +396,13 @@
     }
    ],
    "daily7": [
-    0,
-    1,
-    3,
+    10,
+    5,
+    4,
     9,
-    34,
-    70,
-    20
+    32,
+    66,
+    24
    ],
    "days7": [
     "2026-10-23",
@@ -448,7 +448,7 @@
    ],
    "daily7": [
     10,
-    10,
+    9,
     9,
     16,
     18,
@@ -483,10 +483,10 @@
      "kw": "精品 台灣 OR 精品 業績"
     },
     {
-     "source": "鉅亨號",
-     "title": "愛馬仕也賣不動了？",
-     "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE8zYWZUZVp5UXFGaEFxNlFUNHc3aFhIa09PN3prUF9STlJ3TFJBdVljMUNEa1BFREwyOGVSZU9GbmVCcVRPMWxhbA?oc=5",
-     "at": "2026-10-25T05:39:56Z",
+     "source": "報新聞",
+     "title": "鉑金包的「稀缺性溢價」正在退潮，但這不是愛馬仕的崩潰，而是一場投機泡沫的出清",
+     "url": "https://news.google.com/rss/articles/CBMi5wJBVV95cUxQVWt1SEZmSmU2N2lwbzZNZHZUbDYwMUZsMzh0LURRekFfcG4zNk9uQi0wNkVnbVRJT0psenZST3J2bkJlU0c3dlhCSzlVWklVNndpM2VKeklhQ19Hc1I0R3phMVc0aDlPWWpEZU0wNlhLLV94WXhMdU1SWF9PRlhLMDJkVFYxNFpkOVlNZmRycU1OVmRTdnZreE03Q2VIVUQxYUlKNmRnSGlQMGFQcDBIS1A0aU9xdGh5N3RaM3FjVWp0a3NUWENhOGJHRHhwOE1zcENzTXladHpXTU1VVEFjbk1seUVDdGxwdEVfNVMxd0N1Si1JcTdkMXRpQXhGU1ZTYXJtMEpVR1FHMU9oNEJUNkZBejV1bi1IbkRTdWhjRmxwbEZGVVFXZEZ2dHNqNWFmZVI2V2thMFktT0tuOVVvVWdCb2Z5VlVPVlgtLW5rS3pJcmlOQU1GWUk5dFNJZUpIQkxOSmJ2RQ?oc=5",
+     "at": "2026-10-28T00:36:52Z",
      "kw": "LVMH OR Kering OR Hermès OR 愛馬仕"
     },
     {
@@ -498,13 +498,13 @@
     }
    ],
    "daily7": [
-    8,
+    12,
     4,
-    4,
-    9,
-    5,
     6,
-    0
+    11,
+    9,
+    6,
+    1
    ],
    "days7": [
     "2026-10-23",
@@ -541,21 +541,21 @@
      "kw": "資安 新創 OR 資安 募資 OR 資安 併購"
     },
     {
-     "source": "Quartz",
-     "title": "Columbia opens claims for $16 million data breach settlement",
-     "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFAyWFdNaV9oLUtnWXR3SG5iX0R0MWZxVUxhTEFTQjlVZDRQNUo4V1lGVUNwNWJRMV9XMnVfQmFUazJibHROS1o1b2JCUVpZWjFlVThuZEJ2b3MwWFlIZ25IUWlyOHE4NDRYN3Q3ZlAxSHVWTkE?oc=5",
-     "at": "2026-10-28T17:06:40Z",
+     "source": "Bloomberg.co",
+     "title": "Columbia Opens Claims for $16 Million Data Breach Settlement",
+     "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPZnRoVmJVc2JXYVNFTXJraGx1QlpUZ20zM1E5VVhTSnNubHB3cUJYS3NtM3Y4cmptaXZQeEhEYnN1RTNBamJOTkFtRlpaN2dramZDcS1WLTAtZUUzeEJBeW1NSDlEQ2xtalA0S2x4YTJyM1BMZGxPWERlRGhpUHpfMXRpSThQbloyaGZDY1Y1dWtxSDkwdnFiVklYS1N2Z3NkQ09NNGg3blAzT21UN3Zv?oc=5",
+     "at": "2026-10-28T15:05:08Z",
      "kw": "en:cybersecurity breach OR ransomware OR \"zero-day\""
     }
    ],
    "daily7": [
-    5,
-    0,
+    4,
+    1,
     2,
-    8,
-    20,
-    141,
-    20
+    6,
+    18,
+    139,
+    21
    ],
    "days7": [
     "2026-10-23",
@@ -571,10 +571,10 @@
    "name": "生物科技",
    "items": [
     {
-     "source": "工商時報",
-     "title": "國際授權熱生技業啖合作商機- 日報",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE56MVBIWWhzSlR3dW5OVWNCZVFsWVk1X09HeGZEemhCTDc1S0RnUWpGdTNRVjdxVWIwa2VnZ3JOdTVIYzZ5U2NKTlRORWJpRVQ1TzJ1MU40OVhRSmtOMlNB?oc=5",
-     "at": "2026-10-26T19:00:00Z",
+     "source": "工研院產科國際所",
+     "title": "國際授權熱 生技業啖合作商機",
+     "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOODh5LVhzZHpESElVMTBaUEdkSU42S1drZnlKTWp6bE40YlBpbGVReXJReF9aQ05CUWNEcWdQRXhKRHdGZG9yUnJwX3ZSa1l6X3Vrc0RRV1d5dFN0N3VRTUtkR29HYnZrQzFYdmtmM003WmZTLTNPaHgzcWlWd25TNjNXZFZSS1ZwZzk5UkhhZzdzazZtMjFHQ19VQUw2Nl84Xy1GNnFCcXVUb2FDZGh5MWdROTBKQWhpOVNJ?oc=5",
+     "at": "2026-10-26T20:40:00Z",
      "kw": "生技 新藥 OR 生技 募資 OR 生技 授權"
     },
     {
@@ -585,27 +585,27 @@
      "kw": "細胞治療 OR 基因治療 OR 再生醫療 OR 外泌體"
     },
     {
+     "source": "短新聞SHOTNEWS",
+     "title": "B肝功能性治癒近2成 FDA准GSK新藥",
+     "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBTd3pQMHpzS1l0OWNyckk3VVRXUjRKbktRdnRVaURyWmE0ZTVZVW4ydnlJWkRqZ2tkVHY0V05nNEw4NHJCMWJGbDZFN3FOdG01QlZ3SA?oc=5",
+     "at": "2026-10-23T00:50:00Z",
+     "kw": "FDA 核准 OR 食藥署 核准 新藥"
+    },
+    {
      "source": "BigGo Financ",
      "title": "From AI Drug Discovery to Space Biotech: BIX 2026 Opens in Seoul with 300 Companies from 3",
      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9rdi1UMy1JR1I0bmVqdlJLbkRxcExDMG91ZnE0NXg0Qy1QdHAtYmFvZG9fQnlKVmpxX1NQYjJqX3dFQnc5SWdZcmxaaWZmRGdMZ3BQam9NbXdaVUZ0YzNTc0dVS09KV1l2c19MSGdsbHQ4RXZEN2c?oc=5",
      "at": "2026-10-28T06:40:21Z",
      "kw": "en:biotech raises OR \"drug discovery\" AI"
-    },
-    {
-     "source": "Endpoints Ne",
-     "title": "FDA charts path for approval of individualized gene editing therapies",
-     "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQejBCV3JQS0wxSDQ3Tk50TklVWkRxeGpiaW9jUVRBekxybTBBTDIwTkF3SmZzWXNuM0lvOVFVX2VoZFl0TWNscEpHSWZEbkpXNjA2VUd5N1pGcG9pd0lLbUIzUkVuZmdBYVJKaVhEQmNsVGFIN0RkVHk5dlZWR2lyOFExRmJQcFVxeFZuQk4tTWNEbHh0cnB5cA?oc=5",
-     "at": "2026-10-28T18:21:00Z",
-     "kw": "en:\"AI biology\" OR \"protein design\" OR \"gene editing\""
     }
    ],
    "daily7": [
-    4,
-    2,
-    0,
+    5,
+    6,
+    1,
+    8,
     7,
-    4,
-    13,
+    16,
     2
    ],
    "days7": [
@@ -629,10 +629,10 @@
      "kw": "廟宇 OR 媽祖 OR 民間信仰"
     },
     {
-     "source": "網路溫度計 DailyV",
-     "title": "萬聖節活動登場！誠品狗狗蛋糕盲盒、毛孩遊行與限定市集一次看｜熱門話題",
-     "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1HOFBzRlRPVmFrSW5QY2Q2VV9UT0xQTC1YTkFUZG5FWks2LVp5dHoyUXhVYjdtWFZGS183QzdjRnV0cUwwUW5TbHNOd0JudEVYN3B3?oc=5",
-     "at": "2026-10-28T08:30:00Z",
+     "source": "法庭線 The Witn",
+     "title": "獨立書店塔冷通、長夢承認未備存董事登記冊等 罰款$4000至$16,000",
+     "url": "https://news.google.com/rss/articles/CBMiygJBVV95cUxOekJ6T3A1dUJvRy15b25Nc294bHhFQjYtbFhYNmpJZ1ZJWml3TTY1OWJ0akhtUWVwQ2VBMGdxTXFNSDl5OGNXSjZKb19uUjhWVDJ1Wng5QWFmNjVaVmpCWmFPbjg4R1g5UGNyMl91T2IyRC1GdHZpQkdaYk5odTk4LTBTSG40ZHNNWTVZTUN6b1JlcEdIcWY1QU54ZzUxRDJfMlNKZ2RwTW1YWnJ1ZWlxOG5GbE1sU2xhRnBSQVA0aHhadzRmNjlLN0l1WVYyZ1g1RVAyWk9FQ3BVdmpzOVBMX2R3eVp0OE1GUDBxdmFIRE1IZENzdk5XakdPRUZYdXRLbzA1Y2Q3OE1IVGg5MWRSVXVpRmhrbmxsLW5oWUZDOEZSaEVKcXFWbHFrLUVZZkU4N19MN1F2Y2FSYkJBcFpVMXhSaXRWTElIX2c?oc=5",
+     "at": "2026-10-28T12:18:50Z",
      "kw": "獨立書店 OR 誠品"
     },
     {
@@ -655,7 +655,7 @@
     2,
     4,
     9,
-    32,
+    33,
     33,
     0
    ],
@@ -748,7 +748,7 @@
    },
    {
     "term": "利率",
-    "n": 5,
+    "n": 6,
     "src": 4,
     "sources": [
      "中央社",
@@ -758,14 +758,14 @@
      "鉅亨網"
     ],
     "sample": {
-     "title": "市場靜待聯準會利率決策　歐股多收高",
-     "url": "https://www.cna.com.tw/news/afe/202610290004.aspx"
+     "title": "美期中選舉前　聯準會利率按兵不動",
+     "url": "https://www.cna.com.tw/news/aopl/202610290008.aspx"
     },
     "hot": true
    },
    {
     "term": "Anthropic",
-    "n": 4,
+    "n": 5,
     "src": 4,
     "sources": [
      "Anthropic",
@@ -781,7 +781,7 @@
    },
    {
     "term": "聯準會",
-    "n": 4,
+    "n": 5,
     "src": 3,
     "sources": [
      "中央社",
@@ -790,8 +790,23 @@
      "自由財經"
     ],
     "sample": {
-     "title": "市場靜待聯準會利率決策　歐股多收高",
-     "url": "https://www.cna.com.tw/news/afe/202610290004.aspx"
+     "title": "美期中選舉前　聯準會利率按兵不動",
+     "url": "https://www.cna.com.tw/news/aopl/202610290008.aspx"
+    },
+    "hot": true
+   },
+   {
+    "term": "Gemini",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "Gemini",
+     "HN",
+     "TechCrunch"
+    ],
+    "sample": {
+     "title": "Dive into new topics with immersive explorations in the Gemi",
+     "url": "https://blog.google/innovation-and-ai/products/gemini-app/immersive-explorations-student-hub/"
     },
     "hot": true
    },
@@ -826,6 +841,21 @@
     "hot": true
    },
    {
+    "term": "Google",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Google AI 論壇",
+     "TechCrunch",
+     "iThome"
+    ],
+    "sample": {
+     "title": "【資安日報】10月28日，Google Brotli漏洞恐造成資訊洩漏及阻斷服務，.NET、PHP與Linux陸續修補",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE8zc0g4bWhfLXVFSUtqTGxXN3diaDhISVo2R09saWo3RUlDRnA1MmgtMkJ2dURnT2NvTVNVWmU5em94NGlMb3hmNG5BaXFsdw?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "Fed",
     "n": 3,
     "src": 3,
@@ -854,41 +884,11 @@
      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9uLVl5QjZxRUM5NVNYaDRpbE5qLUYwWHI5NXlOZGwtMjFQTV9DRzlVelk2X3pJUHduZDZJdWZwUjctdFlROU9tUG9lcDE3X2VpVURlZGxIMGhaYzA?oc=5"
     },
     "hot": true
-   },
-   {
-    "term": "台海",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "新唐人電視台",
-     "經濟日報",
-     "自由時報"
-    ],
-    "sample": {
-     "title": "劍指美軍與台海！中國部署太空雷射武器 估2020年代末成軍",
-     "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFA5ZjZWQnVXUUphVG1SMmM0QkJmSHVNV2pqZHVJUG1ZcllacG5zV3JFU0tYZEtKQVJQeDliV0hCaWNaVmtTSnlyUkRqNzJJeE1BQ0dLcXhELVg4VEwxWk0xYUdoeURnZ9IBa0FVX3lxTE1SUnRNdTZna2ptbjFFeEFYMVVpMExQbTFOY2hzZzZGWHFtdklqTV8wTHFtcDRsRVRTbHpBN2lyWTdDU2tIb3VGNFdYNURHXzRQSWRiVTJ5SGpuY1VMb1M2cVloZnJXV1IwMEZv?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "資訊",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "CIO Taiwan",
-     "PTT",
-     "iThome"
-    ],
-    "sample": {
-     "title": "【資安日報】10月28日，Google Brotli漏洞恐造成資訊洩漏及阻斷服務，.NET、PHP與Linux陸續修補",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE8zc0g4bWhfLXVFSUtqTGxXN3diaDhISVo2R09saWo3RUlDRnA1MmgtMkJ2dURnT2NvTVNVWmU5em94NGlMb3hmNG5BaXFsdw?oc=5"
-    },
-    "hot": true
    }
   ]
  },
  "errs": [
-  "gdelt: RuntimeError: gdelt empty"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-10-28T18:50:27Z"
+ "updatedAt": "2026-10-28T19:13:39Z"
 }
