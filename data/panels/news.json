@@ -2,6 +2,12 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "駐舊金山處長柏克萊演說：台灣科技成就與民主密切相連",
+   "url": "https://www.cna.com.tw/news/aipl/202610280030.aspx",
+   "at": "2026-10-28T01:38:01Z"
+  },
+  {
+   "source": "中央社",
    "title": "台積電漲30元　台股早盤漲780點重返季線",
    "url": "https://www.cna.com.tw/news/afe/202610280028.aspx",
    "at": "2026-10-28T01:14:56Z"
@@ -26,6 +32,12 @@
   },
   {
    "source": "中央社",
+   "title": "出席國慶酒會收中國警告信　美印第安納州財長強調繼續對台交流",
+   "url": "https://www.cna.com.tw/news/aipl/202610280024.aspx",
+   "at": "2026-10-28T00:53:48Z"
+  },
+  {
+   "source": "中央社",
    "title": "美AI股勁揚台積電ADR漲　法人：台股拚收復季線",
    "url": "https://www.cna.com.tw/news/afe/202610280018.aspx",
    "at": "2026-10-28T00:26:34Z"
@@ -35,18 +47,6 @@
    "title": "歐盟駐處推漫畫文宣諷中國　一中原則如童話純屬虛構",
    "url": "https://www.cna.com.tw/news/aipl/202610280014.aspx",
    "at": "2026-10-27T23:32:25Z"
-  },
-  {
-   "source": "中央社",
-   "title": "投資人對AI類股重燃熱情　美股收紅",
-   "url": "https://www.cna.com.tw/news/afe/202610280012.aspx",
-   "at": "2026-10-27T21:20:16Z"
-  },
-  {
-   "source": "中央社",
-   "title": "重啟外交化解中東衝突　國際油價下滑",
-   "url": "https://www.cna.com.tw/news/afe/202610280010.aspx",
-   "at": "2026-10-27T20:55:11Z"
   },
   {
    "source": "公視",
@@ -75,18 +75,24 @@
  ],
  "intl": [
   {
-   "source": "Guardian",
-   "title": "Israel election live: Netanyahu speaks as exit polls point to tie with Eisenkot opposition",
-   "url": "https://www.theguardian.com/world/live/2026/oct/27/israel-elections-knesset-netanyahu-likud-eisenkot-gaza-latest-updates",
-   "at": "2026-10-28T01:56:44Z",
-   "sec": "World news"
+   "source": "BBC",
+   "title": "Alexander brothers each sentenced to 30 years in prison in sex trafficking case",
+   "url": "https://www.bbc.co.uk/news/articles/cqn498mng08ro?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-28T02:20:25Z"
   },
   {
    "source": "Guardian",
    "title": "Australia’s inflation rate rises to 4.3%, fuelling fears of fifth interest rate hike this ",
    "url": "https://www.theguardian.com/australia-news/2026/oct/28/inflation-rate-australia-2026-number-data-consumer-price-index-cpi-release",
-   "at": "2026-10-28T01:03:24Z",
+   "at": "2026-10-28T02:17:32Z",
    "sec": "Business"
+  },
+  {
+   "source": "Guardian",
+   "title": "Israel election live: Netanyahu speaks as exit polls point to tie with Eisenkot opposition",
+   "url": "https://www.theguardian.com/world/live/2026/oct/27/israel-elections-knesset-netanyahu-likud-eisenkot-gaza-latest-updates",
+   "at": "2026-10-28T02:13:39Z",
+   "sec": "World news"
   },
   {
    "source": "Guardian",
@@ -108,12 +114,6 @@
    "url": "https://www.theguardian.com/world/2026/oct/27/palestinian-parties-knesset-election-exit-polls-redraw-israel-political-landscape",
    "at": "2026-10-27T23:57:50Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Alexander brothers each sentenced to 30 years in prison in sex trafficking case",
-   "url": "https://www.bbc.co.uk/news/articles/cqn498mng08ro?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-27T23:41:23Z"
   },
   {
    "source": "BBC",
@@ -243,10 +243,10 @@
     0,
     2,
     1,
+    3,
     2,
-    1,
-    4,
-    1
+    5,
+    0
    ],
    "days7": [
     "2026-10-22",
@@ -295,9 +295,9 @@
     5,
     5,
     3,
-    18,
+    17,
     60,
-    22
+    23
    ],
    "days7": [
     "2026-10-22",
@@ -313,11 +313,11 @@
    "name": "AI 與製作工具",
    "items": [
     {
-     "source": "電腦領域HKEPC Ha",
-     "title": "圖庫巨頭 Getty Images 申請破產 「版權惡霸」最終不敵生成式 AI 衝擊",
-     "url": "https://news.google.com/rss/articles/CBMi1wJBVV95cUxORmhfcG5FbGJuQUE5cl9zLVo1UW1xRVppSXltNjF0LVAyZE1MQTBMQk5tcVN6SFJLUkJFb0Z3ZzU1ajZ5NWE3TDRTVmZTeGhHeFdXdDN2cVd2OTZfTlMyUjUtMzk3dmIzMTl0ZHFlcGFfcGRMZ1VBR1JIY1NLYTlMWDgzLXlqZWxrWlEwQ1BsZ0hZblFTTHFTbGFFMjVfdW1BdmZXeG5BQ1g1dGZFZ2d4MnlENXJXNUxKU3VPYWwwdkFwNi1kZlVBcU1RUlBoNDVrNGZPbGpjTm93TkNYeDk2ZE1uRS1INVkyUzU4aUE5SHNtam9NWENXSEpMcklLbE8ydmRsUWVzX1dhb05JRDJFWUdnd3o5U1ptV2pVVDNZSDhTdE1HbmsySGV3N2haMm95NEtQUDBEaXdub3hPVF9rMGduX2wzbFVhajg3MlAwOU9NWDF2OEZZ?oc=5",
-     "at": "2026-10-22T09:55:55Z",
-     "kw": "生成式AI 廣告 OR 生成式AI 版權"
+     "source": "股市報價& 財經新聞",
+     "title": "YouCam整合Kling 4.0 API，率先推出AI影片生成功能 作者 Investing.com - Investing.com 香港",
+     "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9Pb3l2SUJXWjdyYmFWQktNOHRpVFJQVkZhVnNseklFSXZhMnVNbHBnZnRDaDNYaVJUeDlpTU9zTVFaVDNsaEJwLWw1cnlaSV91bkJoanJEODdQcEEwSFhOMnBKcjZVd0pYakhhNzBYY2M?oc=5",
+     "at": "2026-10-23T16:05:07Z",
+     "kw": "Sora OR Runway OR Kling 影片"
     },
     {
      "source": "OrcaRouter",
@@ -327,24 +327,24 @@
      "kw": "開源模型 OR Ollama OR 本地部署"
     },
     {
+     "source": "OrcaRouter",
+     "title": "Kling 4.0 對比 Flux 3 Video：價目表 vs 天花板",
+     "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9QMDNVY3VsbDZTdWk1UUZpUEUxQll4Sm1XMXhmbGNQN0l6T3BkamNob1RXTS1sTlczNnZOdHdnRk03QThvaG9LS3owOUxpVXlqaHBXem4ycjlYelJGM3BQc0lLSmdQdEhEYm0wSTZDdw?oc=5",
+     "at": "2026-10-23T12:41:48Z",
+     "kw": "Sora OR Runway OR Kling 影片"
+    },
+    {
      "source": "BigGo 財經",
      "title": "租GPU轉賣Token月入百萬美元，中國開源模型成矽谷創業新寵",
      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBJc01NYWNlWnRnT1k3ZXFET3RPRTBOYmdyeW1wQlI5MS1LN3NNc0I3TlJsaTVyTm8yQ3M5cGFfOGRsNUp2NFNadUlWaDVtam5IaWJLeEVoSlVlRkpWUXdONDkxOTJQNjZjSUEzWkN5d2tqajRNQWZHSEdB?oc=5",
      "at": "2026-10-27T09:05:00Z",
      "kw": "開源模型 OR Ollama OR 本地部署"
-    },
-    {
-     "source": "iThome",
-     "title": "Ollama加入串流文字轉語音功能，並整合d3決策模型",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFAxc0kwaFNyOTRVV1lQOXRScGtfRXZUamJtbVA1MFQta3hXek16UFNtb040Q0xTd3hINVZpU0tLYlduUGMwMlpqMlh5YzhHZw?oc=5",
-     "at": "2026-10-27T01:19:34Z",
-     "kw": "開源模型 OR Ollama OR 本地部署"
     }
    ],
    "daily7": [
-    1,
+    0,
+    5,
     3,
-    2,
     2,
     1,
     6,
@@ -371,17 +371,17 @@
      "kw": "槓桿ETF OR 00631L OR 00675L"
     },
     {
-     "source": "群益期貨",
-     "title": "美聯儲料按兵不動，沃什或釋放鷹派信號：美債多頭恐遭反殺！",
-     "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNaXI5TDNjMkhXaTBWTDhoQ0J6VURtSmdncHpLbmZBd1FCdVBqQ0dVbGNnUTZLYkF0Y00xblVqQl9HbDU5eDlKR0M5R041VGl1WS1rcmR2Q2FmczRGdEhHcFMwUFpQelBqZmJ2R2phY0lZbDlrSGU4UE83X3A3dnlXZnBzX1RUZjlhV3Q4X3k5bTZTaHhVeWxUQ2lEV2dacHhyb1pR?oc=5",
-     "at": "2026-10-28T01:19:02Z",
+     "source": "民視新聞網",
+     "title": "市場緊盯聯準會利率動向 美元維持兩週高點震盪",
+     "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5jeXpnU3ppV3VXVGpXdmcwOGtQZ2hTRXdSY3pmT08xQXFuUXdxQ1hoclhsQnZ4NWhQX1lyM3k3ald2Y3k5enZOWm96VGZnWUk4RFlRUU9BeTlCejY4ajlHdQ?oc=5",
+     "at": "2026-10-28T01:05:11Z",
      "kw": "聯準會 利率 OR FOMC"
     },
     {
-     "source": "UDN",
-     "title": "台積電ADR大漲3% 日月光狂飆5% 台指期夜盤上漲774點",
-     "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1oN3MxTUgxbUxETk1EdU90Qmp3UnM0ajRQYU1kZTYwSHVLc3I3WFYzdjRHcjd0NG5XWTdrdEVCem5Wa2xEQW93WmNfYWhmVm9J?oc=5",
-     "at": "2026-10-27T23:24:33Z",
+     "source": "中央社 CNA",
+     "title": "美AI股勁揚台積電ADR漲法人：台股拚收復季線| 證券",
+     "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1wbGtUNnpyV0lydFh2ZVlnX0EwV2xGdnNENk1xdkItdlBpNmtpM0I3X2R3V3lvb1Ayb04yWjFZa2wtT0ljNkFuTWs0LW1uN3NVNUJJemxNUEpRdS1OWEE?oc=5",
+     "at": "2026-10-28T00:26:00Z",
      "kw": "台積電 法說 OR 台積電 ADR"
     },
     {
@@ -393,13 +393,13 @@
     }
    ],
    "daily7": [
-    1,
-    0,
-    1,
     5,
-    15,
-    53,
-    45
+    9,
+    5,
+    4,
+    13,
+    57,
+    47
    ],
    "days7": [
     "2026-10-22",
@@ -416,9 +416,9 @@
    "items": [
     {
      "source": "Yahoo新聞",
-     "title": "偵獲6架次共機、7共艦擾台 國軍嚴密監控應處",
-     "url": "https://news.google.com/rss/articles/CBMisAJBVV95cUxONm9MLXFTQklHTWNwbHZnUlhQZEdLYk8zMDNlS0c3TFI3SHhRWUJLSFFrWXcydmRsV3hXT016Sy1NYURDTVFmNkZDUnF1Zk9GZTZ1R2V6V2ZwYUYwWHU1WkVvZUlGRGpxOU9EU1FsNkQ2NDFOSFdXSDlQdkozMWFXQmhUN3VYeWQyZ21jUHBSNDYyTkdHTFEyZnRIS2g2TV8tWHMxeWRzUXJRVWYxOERwMTJUcXJGbXdJUzF0b2x0b2pGWVBqZ1pqNW80MmxCSGNiN1NNSVJWM3YzU2FDckJCR3Z1U2pZemV5NDlick53QlV5VDZ5dUhnWVl0NVgxRXZLVFFfN2dTMVR3TFF6dzA5QlVxSXVaVm5HelI0bFYxc0N1MFFBQnBVRVhnT3pXYnVk?oc=5",
-     "at": "2026-10-28T01:52:41Z",
+     "title": "台海周邊動態曝光！ 共機6架次、共艦7艘持續活動",
+     "url": "https://news.google.com/rss/articles/CBMivAJBVV95cUxOR09SbF8zWVp1cmlmTnNaNXgtT3BvYkZIcm5fZUtyYXBSTEptX0ExWjNZcGpRNUp5VEJkWTNRY3lleV8zWUk0Q2lJZGUwbmxzeTd4Q1c3ZThQTXdXMEJXY21TenoybDdRcld0Ny00UWlsUmRXc3hiSXF6Wk8yZkV2S21JNzhicE0xRVMxSkhEY3FLRzB0Q0oyeWVaV2hLZ2NmTnJZM0g0ejE3S0Y1dmZhb0ZZekpIZ01TS1EzZXVTbTVKRldjb253ckxnQ1hYVGxKLVpSejJpQVFyVVphY09KRlRqb2lHQ2ZTNV9ta0k3bXFGaGdkRVlBM2U3Z1U0OFdCaURackJQTE9pNzN3aVJlVUNVaHNmZTdxbmVkTXV5ZVZ4dGFGMC1yUVJYclM4aGFxZUtSbjc5RzNKV1p6?oc=5",
+     "at": "2026-10-28T02:25:44Z",
      "kw": "台海 OR 共機 OR 軍演"
     },
     {
@@ -444,13 +444,13 @@
     }
    ],
    "daily7": [
-    6,
-    13,
-    11,
-    11,
+    3,
     16,
+    12,
+    12,
+    17,
     19,
-    5
+    6
    ],
    "days7": [
     "2026-10-22",
@@ -495,12 +495,12 @@
     }
    ],
    "daily7": [
-    9,
-    8,
-    4,
+    16,
+    12,
     5,
-    10,
     7,
+    14,
+    10,
     1
    ],
    "days7": [
@@ -546,13 +546,13 @@
     }
    ],
    "daily7": [
-    38,
-    10,
-    1,
+    35,
+    7,
+    0,
     4,
-    22,
-    101,
-    46
+    24,
+    102,
+    49
    ],
    "days7": [
     "2026-10-22",
@@ -597,12 +597,12 @@
     }
    ],
    "daily7": [
-    3,
+    1,
     5,
     4,
     2,
     8,
-    9,
+    10,
     5
    ],
    "days7": [
@@ -689,7 +689,7 @@
     2.299,
     2.299
    ],
-   "at": "2026-10-28T02:10:54Z"
+   "at": "2026-10-28T02:26:55Z"
   },
   "wiki": {
    "zh": [
@@ -757,7 +757,7 @@
      "UDN",
      "Yahoo股市",
      "中央社",
-     "太報 TaiSounds",
+     "中央社 CNA",
      "自由財經"
     ],
     "sample": {
@@ -803,12 +803,12 @@
    {
     "term": "ADR",
     "n": 5,
-    "src": 5,
+    "src": 4,
     "sources": [
      "UDN",
      "Yahoo股市",
      "中央社",
-     "太報 TaiSounds",
+     "中央社 CNA",
      "自由財經"
     ],
     "sample": {
@@ -820,32 +820,16 @@
    {
     "term": "勁揚",
     "n": 4,
-    "src": 4,
+    "src": 3,
     "sources": [
      "Yahoo股市",
      "中央社",
-     "太報 TaiSounds",
+     "中央社 CNA",
      "自由財經"
     ],
     "sample": {
      "title": "美AI股勁揚台積電ADR漲　法人：台股拚收復季線",
      "url": "https://www.cna.com.tw/news/afe/202610280018.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "美股",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "Yahoo股市",
-     "中央社",
-     "太報 TaiSounds",
-     "自由財經"
-    ],
-    "sample": {
-     "title": "投資人對AI類股重燃熱情　美股收紅",
-     "url": "https://www.cna.com.tw/news/afe/202610280012.aspx"
     },
     "hot": true
    },
@@ -865,23 +849,8 @@
     "hot": true
    },
    {
-    "term": "美股收",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "中央社",
-     "太報 TaiSounds",
-     "自由財經"
-    ],
-    "sample": {
-     "title": "投資人對AI類股重燃熱情　美股收紅",
-     "url": "https://www.cna.com.tw/news/afe/202610280012.aspx"
-    },
-    "hot": true
-   },
-   {
     "term": "情報",
-    "n": 11,
+    "n": 10,
     "src": 2,
     "sources": [
      "CMoney投資網誌",
@@ -890,6 +859,20 @@
     "sample": {
      "title": "中日出口管制引爆工具機轉單潮！AI需求升溫，這4檔台廠接單能見度大增-財經焦點情報站",
      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNREx0MG5USHd0eVVQUk1wZVg5akZIdml3RHBjVDhFNjRVcmVZaHNjT0JMdnJmUFlad25wY3NCWlAzWGk1S2c1WnZRSmRDQ08wWmc3WDZDbjJzaFVTekowd1FuZHl2b3k0TlBPbmdSNUpnQUVwU3FkbXpjR1diZ2hvUUd3?oc=5"
+    },
+    "hot": false
+   },
+   {
+    "term": "季線",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "中央社",
+     "中央社 CNA"
+    ],
+    "sample": {
+     "title": "台積電漲30元　台股早盤漲780點重返季線",
+     "url": "https://www.cna.com.tw/news/afe/202610280028.aspx"
     },
     "hot": false
    },
@@ -906,9 +889,23 @@
      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1wU2Z5MGo2Q2dLNk9xcnNGNUNjMjdHU2V2WmkyRUdfZUxkTVdoNWRoSGhZUzhRbGdFc0JKOE0tc2t2R1dhbHVTUERVMGJaeHVOaFQ0OVpOZ3FmcW1Sa29iUHBnZ3BmUzg?oc=5"
     },
     "hot": false
+   },
+   {
+    "term": "台指期夜",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "UDN",
+     "Yahoo股市"
+    ],
+    "sample": {
+     "title": "台積電ADR勁揚近2%！美股漲多跌少「費半噴2%、特斯拉飆3%」 台指期夜盤一度強漲600點",
+     "url": "https://news.google.com/rss/articles/CBMiiANBVV95cUxOTDRsZTQyV0pGQVZYblQtckFNRFdBS0pqdVRocFVWWUZUR2x4Q2xRLWdHWTFLSEFPdnVNZFVCcDVaMkJVVFUtVDJSUXVDSnM5WElMTlU2OU5kRHR3ZnZpVHJSdGpWd3pXY2RUTXRlM1RtWkhrZ1lxN2ZSRHctdFhmcHYyd1BldnN6dEx2Yng2X2VPb3pyaU12MVQxdzNNbnQzSVlwQmcxb21uVWlraDk3aUJWNkdUS1lCUEwwVEZmcTNfdmVoaTVQcnZmSnQweENfeWdzYkV4Z1lLQUxxbUpxUnZHYkhORDJ0RUduOThHN1NFVjFLVGlhbWtyZzhVcmcwTU1sbnRWZkh6THQyM2pDTkN0enhaNV9wY2w0SFJCV0hIRERQOUUzSzhESlpCNHpBT01WcnRsS2tjQm9xY19MdXJ6ZWpENUxEa3lSM25uMzZmS0FFRkdvcnVQSndkMDZwQXlEVGhkczV0aGtFRENMQnZ6OG5PY2Q5TGt0aTNfZ3FmbHVJUVAybg?oc=5"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [],
- "updatedAt": "2026-10-28T02:10:54Z"
+ "updatedAt": "2026-10-28T02:26:55Z"
 }
