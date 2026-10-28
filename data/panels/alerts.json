@@ -1,6 +1,19 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261028084840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "苗栗縣"
+   ],
+   "text": "水利署訊明德水庫:(洩洪至後龍溪):調節性放水,影響範圍:苗栗縣，頭屋鄉",
+   "src": "水利署",
+   "at": "2026-10-28T00:48:40Z",
+   "exp": "2026-10-28T11:49:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261028084840_0001.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261028081840_0001",
    "cat": "水庫放流",
    "lvl": 2,
@@ -128,12 +141,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610271033.cap"
   }
  ],
- "n_total": 6,
+ "n_total": 7,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/28 08:23:14"
+  "updated": "2026/10/28 08:50:14"
  },
  "errs": [],
- "updatedAt": "2026-10-28T00:30:10Z"
+ "updatedAt": "2026-10-28T00:52:48Z"
 }
