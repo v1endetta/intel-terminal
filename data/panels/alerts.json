@@ -1,6 +1,20 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261028151840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "新竹市",
+    "新竹縣"
+   ],
+   "text": "水利署訊寶山第二水庫:(洩洪至石井溪):自由溢流,影響範圍:新竹縣，寶山鄉、峨眉鄉；新竹市，東區、北區、香山區",
+   "src": "水利署",
+   "at": "2026-10-28T07:18:40Z",
+   "exp": "2026-10-28T18:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261028151840_0000.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261028141840_0000",
    "cat": "水庫放流",
    "lvl": 2,
@@ -13,20 +27,6 @@
    "at": "2026-10-28T06:18:40Z",
    "exp": "2026-10-28T17:19:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261028141840_0000.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261028130840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "新竹市",
-    "新竹縣"
-   ],
-   "text": "水利署訊寶山第二水庫:(洩洪至石井溪):自由溢流,影響範圍:新竹縣，寶山鄉、峨眉鄉；新竹市，東區、北區、香山區",
-   "src": "水利署",
-   "at": "2026-10-28T05:08:40Z",
-   "exp": "2026-10-28T16:09:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261028130840_0000.cap"
   },
   {
    "id": "CWA-Weather_strong-wind_202610281034001",
@@ -155,8 +155,8 @@
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/28 15:04:14"
+  "updated": "2026/10/28 15:25:18"
  },
  "errs": [],
- "updatedAt": "2026-10-28T07:09:45Z"
+ "updatedAt": "2026-10-28T07:28:52Z"
 }
