@@ -4,45 +4,46 @@
    {
     "from": "Shanghai",
     "to": "Los Angeles",
-    "chg": 2.0,
-    "v": 8007.0,
+    "chg": -6.0,
+    "v": 7514.0,
     "name": "上海→洛杉磯"
    },
    {
     "from": "Shanghai",
     "to": "New York",
-    "chg": 1.0,
-    "v": 10166.0,
+    "chg": -5.0,
+    "v": 9631.0,
     "name": "上海→紐約"
    },
    {
     "from": "Shanghai",
     "to": "Rotterdam",
-    "chg": 3.0,
-    "v": 3632.0,
+    "chg": 1.0,
+    "v": 3686.0,
     "name": "上海→鹿特丹"
    },
    {
     "from": "Shanghai",
     "to": "Genoa",
-    "chg": 5.0,
-    "v": 4152.0,
+    "chg": 0.0,
+    "v": null,
     "name": "上海→熱那亞"
    }
   ],
   "wci": {
    "name": "Drewry WCI",
-   "value": 4585.0,
+   "value": 4429.0,
    "unit": "USD/40ft",
-   "date": "22 Oct 2026",
-   "chg_pct": 2.0,
+   "date": "29 Oct 2026",
+   "chg_pct": -3.0,
    "chg_label": "週%",
    "spark": [
     4468.0,
     4434.0,
     4351.0,
     4485.0,
-    4585.0
+    4585.0,
+    4429.0
    ]
   }
  },
@@ -132,24 +133,20 @@
    "name": "VANCE",
    "level": "Green",
    "ll": [
-    -108.4,
-    21.0
+    -108.8,
+    21.6
    ],
    "from": "2026-10-21T15:00",
-   "to": "2026-10-29T09:00",
+   "to": "2026-10-29T15:00",
    "sev": "Tropical Storm (maximum wind speed of 139 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=32&eventtype=TC",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=33&eventtype=TC",
    "near": [
     {
      "port": "曼薩尼約（墨）",
-     "km": 479
-    },
-    {
-     "port": "拉薩羅卡德納斯（墨）",
-     "km": 735
+     "km": 547
     }
    ],
-   "id": "1001341-32"
+   "id": "1001341-33"
   },
   {
    "name": "IN-FA",
@@ -429,12 +426,44 @@
  ],
  "news": [
   {
+   "source": "Supply Chain Dive",
+   "title": "FedEx drawing parcel-focused shippers to its air freight services",
+   "url": "https://www.supplychaindive.com/news/fedex-drawing-parcel-focused-shippers-to-its-air-freight-services/873182/",
+   "at": "2026-10-29T23:36:00+08:00",
+   "hot": false,
+   "zh": "聯邦快遞吸引專注包裹的貨主使用其航空貨運服務"
+  },
+  {
    "source": "FreightWaves",
-   "title": "9 alleged Sinaloa Cartel associates arrested in California train theft ring",
-   "url": "https://www.freightwaves.com/news/9-alleged-sinaloa-cartel-associates-arrested-in-california-train-theft-ring",
+   "title": "What the Mastio Rankings Actually Tell Shippers",
+   "url": "https://www.freightwaves.com/news/what-the-mastio-rankings-actually-tell-shippers",
+   "at": "2026-10-29T22:41:03+08:00",
+   "hot": false,
+   "zh": "Mastio 排行榜真正告訴貨主的事"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "OPI, Nioxin owner appoints chief supply chain officer",
+   "url": "https://www.supplychaindive.com/news/opi-nioxin-owner-appoints-chief-supply-chain-officer/872796/",
+   "at": "2026-10-29T22:26:34+08:00",
+   "hot": false,
+   "zh": "OPI 與 Nioxin 母公司任命供應鏈長"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Fed holds main interest rate steady despite accelerating inflation",
+   "url": "https://www.supplychaindive.com/news/fed-holds-main-interest-rate-steady-despite-accelerating-inflation/873147/",
+   "at": "2026-10-29T22:20:00+08:00",
+   "hot": false,
+   "zh": "儘管通膨加劇，聯準會仍維持主要利率不變"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "9 alleged Mexican Cartel associates arrested in California train theft ring",
+   "url": "https://www.freightwaves.com/news/9-alleged-mexican-cartel-associates-arrested-in-california-train-theft-ring",
    "at": "2026-10-29T22:09:44+08:00",
    "hot": true,
-   "zh": "9名疑涉錫納羅亞販毒集團成員在加州火車盜竊案中遭逮捕"
+   "zh": "9名疑涉加州火車竊盜集團的墨西哥販毒集團成員遭逮捕"
   },
   {
    "source": "FreightWaves",
@@ -459,6 +488,14 @@
    "at": "2026-10-29T20:20:34+08:00",
    "hot": false,
    "zh": "價值50萬美元的SIG Sauer軍火因假冒提貨被竊，加州兩嫌落網"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Trump opts for trade talks over tariffs for robotics, industrial machinery",
+   "url": "https://www.supplychaindive.com/news/trump-opts-for-trade-talks-over-tariffs-for-robotics-industrial-machinery/873166/",
+   "at": "2026-10-29T20:14:00+08:00",
+   "hot": true,
+   "zh": "川普對機器人與工業機械選擇貿易談判而非關稅"
   },
   {
    "source": "FreightWaves",
@@ -579,50 +616,10 @@
    "at": "2026-10-29T08:07:26+08:00",
    "hot": false,
    "zh": "Scan Global Logistics將收購奧勒岡州的OIA Global"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "Aurora adds 500-truck Charger MOU toward 30,000-truck goal",
-   "url": "https://www.freightwaves.com/news/aurora-charger-logistics-500-driverless-trucks-mou",
-   "at": "2026-10-29T05:50:06+08:00",
-   "hot": false,
-   "zh": "Aurora簽署500輛卡車充電備忘錄，朝3萬輛目標邁進"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "C.H Robinson and Landstar stock prices slammed; insurance a factor",
-   "url": "https://www.freightwaves.com/news/c-h-robinson-and-landstar-stock-prices-slammed-insurance-costs-a-factor",
-   "at": "2026-10-29T05:40:55+08:00",
-   "hot": false,
-   "zh": "C.H. Robinson與Landstar股價重挫，保險成關鍵因素"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "How One Trucker Turned One Video A Day Into Billions Of Views, And What It Cost Him",
-   "url": "https://www.freightwaves.com/news/how-one-trucker-turned-one-video-a-day-into-billions-of-views-and-what-it-cost-him",
-   "at": "2026-10-29T02:44:02+08:00",
-   "hot": false,
-   "zh": "卡車司機如何靠日更影片賺進數十億流量？代價是什麼？"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "Tesla begins humanoid production in California",
-   "url": "https://www.supplychaindive.com/news/tesla-begins-optimus-humanoid-production-california-shipments-2027/872992/",
-   "at": "2026-10-28T22:41:23+08:00",
-   "hot": false,
-   "zh": "特斯拉在加州開始生產人形機器人"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "Nvidia forges supplier agreements to expand capacity for AI",
-   "url": "https://www.supplychaindive.com/news/nvidia-forges-supplier-agreements-to-expand-capacity-for-ai/872780/",
-   "at": "2026-10-28T22:20:20+08:00",
-   "hot": false,
-   "zh": "輝達達成供應商協議，擴大AI產能"
   }
  ],
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-29T14:24:03Z"
+ "updatedAt": "2026-10-29T15:42:21Z"
 }
