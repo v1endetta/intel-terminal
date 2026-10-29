@@ -1,6 +1,35 @@
 {
  "alerts": [
   {
+   "id": "CWA-EQ115074-2026-1030-043743",
+   "cat": "地震",
+   "lvl": 3,
+   "area": [
+    "宜蘭縣",
+    "花蓮縣"
+   ],
+   "text": "10/30 04:37臺灣東部海域發生規模4.4有感地震，最大震度花蓮縣和平、宜蘭縣南澳3級。",
+   "src": "中央氣象署",
+   "at": "2026-10-29T20:40:25Z",
+   "exp": "2026-10-30T05:40:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Earthquake/CWA-EQ115074-2026-1030-043743.cap"
+  },
+  {
+   "id": "CWA-Weather_strong-wind_202610300430001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "苗栗縣",
+    "臺中市",
+    "屏東縣"
+   ],
+   "text": "東北風增強，30日下午至晚上蘭嶼、綠島、苗栗縣、臺中市、屏東縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-10-29T20:30:16Z",
+   "exp": "2026-10-30T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610300430.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261030041840_0000",
    "cat": "水庫放流",
    "lvl": 2,
@@ -29,21 +58,6 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261030030840_0000.cap"
   },
   {
-   "id": "CWA-Weather_strong-wind_202610292228001",
-   "cat": "強風",
-   "lvl": 2,
-   "area": [
-    "苗栗縣",
-    "臺中市",
-    "屏東縣"
-   ],
-   "text": "東北風增強，30日下午至晚上蘭嶼、綠島、苗栗縣、臺中市、屏東縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
-   "src": "中央氣象署",
-   "at": "2026-10-29T14:28:17Z",
-   "exp": "2026-10-30T23:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610292228.cap"
-  },
-  {
    "id": "CWA-Weather_strong-wind_202610291033001",
    "cat": "強風",
    "lvl": 2,
@@ -59,12 +73,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610291033.cap"
   }
  ],
- "n_total": 4,
+ "n_total": 5,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/30 04:20:15"
+  "updated": "2026/10/30 04:44:15"
  },
  "errs": [],
- "updatedAt": "2026-10-29T20:30:49Z"
+ "updatedAt": "2026-10-29T20:47:24Z"
 }
