@@ -6,9 +6,9 @@
    "news": [],
    "n_news7": 0,
    "n_hn7": 0,
-   "n_bsky1": 0,
+   "n_bsky1": 1,
    "hn_top": null,
-   "score": 0,
+   "score": 1,
    "spark": [
     24,
     19,
@@ -37,7 +37,7 @@
     9,
     10,
     3,
-    0
+    1
    ],
    "spike": false
   },
@@ -167,12 +167,19 @@
   {
    "name": "Fish Audio",
    "desc": "聲音複製與配音",
-   "news": [],
-   "n_news7": 0,
+   "news": [
+    {
+     "source": "OrcaRouter",
+     "title": "GPT-Live-1 vs Fish Audio Drama 3: Unduh atau Sewa?",
+     "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9QLXFRZ2c2aHdkQ29lUG9jMkwwWnVDTlloT2toakVac3VUb1ZISmxhZ2pBV3F3dVVFSFoyNW82Q3drYm5SNXV1dk5NTEtNcURvdm96Nm54NVB3LVJWLTc5eTQ2Ukp5MUpIbE1jeENfVkxxWG1h?oc=5",
+     "at": "2026-10-29T11:03:30Z"
+    }
+   ],
+   "n_news7": 1,
    "n_hn7": 0,
    "n_bsky1": 2,
    "hn_top": null,
-   "score": 2,
+   "score": 5,
    "spark": [
     3,
     2,
@@ -201,22 +208,12 @@
     8,
     2,
     3,
-    2
+    5
    ],
    "spike": false
   }
  ],
  "funding": [
-  {
-   "company": "BioGeometry",
-   "amount": 100.0,
-   "stage": "A 輪",
-   "cat": "生技",
-   "title": "BioGeometry raises $100M in Series A extension for its AI drug-design models",
-   "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPVXJkTnZscWRtbFE1S0V4Q0ZwcnpMX01UU1lUOU1pZU1Ld3pnNXJBSExzZXpHc0JMNW1Fc2pfd0UxSXFBcDRocHp2eno0eHRWT0pXNWpTTkVpQkYwaERxNkhVaHZuWHZDUnlJZ0pfQ3JDQUdGUEZyLU1CMTJacDNKaTBfamZvUEhTeEkxUW92ZkF0NWtjNXZsVE9wcXgtb0lGNHRvdDN2RHVOR0hZWVE?oc=5",
-   "at": "2026-10-28T19:33:50Z",
-   "source": "Dealroom"
-  },
   {
    "company": "Dalet Labs",
    "amount": 7.0,
@@ -232,10 +229,10 @@
    "amount": 18.5,
    "stage": "A 輪",
    "cat": "創意",
-   "title": "Circuit Mind Raises $18.5M Series A as It Announces $25M for AI Electronics Design",
-   "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBFM2tWWkVWVkpWWUFyUE16SWpRVHdsaVdDRTZ3T1NaMXdfTXJ0MXRvTm5UWG9CS05lbDZDcGJCekY2b1VEZnFlOHlwT1ZxMmV5Zk9EWll6a3FzTG9VN3ZuQW5UMlk4MlQ4RklGNjRWRjQ0b1RkS3NGY1lsZw?oc=5",
-   "at": "2026-10-28T12:00:30Z",
-   "source": "Unite.AI"
+   "title": "Circuit Mind raises $18.5M Series A to design circuit boards with AI",
+   "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNd1RtM0FvLWJSa3lSZE5BWGlBUmY2X0JQcllhaVFTdzJJcDFCQ3dmR0ltYUJ0eFZqNDVtbVNrcTB1VTN2VWNscTZkVUpFZjlHUkNZTGpra19sMk9EZlVZWkp4Tjdhc0xqaEx1R3lwOGZ4Y0xCTEdhY1BKdWhsNHh3YWxlX2YzWjdHS0FSR0hoUEdvUk5mdmtDVk9Hb0dwSXNSb0hF?oc=5",
+   "at": "2026-10-28T15:22:39Z",
+   "source": "Dealroom"
   },
   {
    "company": "Seattle startup Avante",
@@ -258,6 +255,16 @@
    "source": "TNGlobal"
   },
   {
+   "company": "Mave",
+   "amount": 34.0,
+   "stage": "",
+   "cat": "資安",
+   "title": "Mave Raises $34M to Expand AI Cybersecurity Platform",
+   "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNd0ZyQk1qcmV4WV9xdjN4OWFmXzlDcFplaGpEbWFoNEdhUlBoTGFnMkxvcEk2NF91OVlCeFRSdnNvaDlKbGttVldzSFAyUWRmOTRKcnFDcWNwOGsyRG5fbFFPcXlnN3dzRy1makpsN0FLVVF4aTUwbXNocUszUzR2UHJB0gGCAUFVX3lxTE13RnJCTWpyZXhZX3F2M3g5YWZfOUNwWmVoakRtYWg0R2FSUGhMYWcyTG9wSTY0X3U5WUJ4VFJ2c29oOUpsa21WV3NIUDJRZGY5NEpycUNxY3A4azJEbl9sUU9xeWc3d3NHLWZqSmw3QUtVUXhpNTBtc2hxSzNTNHZQckE?oc=5",
+   "at": "2026-10-22T19:47:44Z",
+   "source": "Ventureburn"
+  },
+  {
    "company": "Israeli AI cybersecurity startup Mave",
    "amount": 34.0,
    "stage": "",
@@ -271,7 +278,7 @@
  "showhn": [
   {
    "title": "Show HN: SlideBySide – Present slides without sharing your screen",
-   "points": 71,
+   "points": 75,
    "comments": 31,
    "url": "https://slidebyside.com/",
    "hn": "https://news.ycombinator.com/item?id=50276883",
@@ -299,5 +306,5 @@
  ],
  "ph": [],
  "errs": [],
- "updatedAt": "2026-10-29T10:33:49Z"
+ "updatedAt": "2026-10-29T12:43:53Z"
 }
