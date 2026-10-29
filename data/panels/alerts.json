@@ -1,6 +1,20 @@
 {
  "alerts": [
   {
+   "id": "CWA-EQ115073-2026-1029-143847",
+   "cat": "地震",
+   "lvl": 3,
+   "area": [
+    "嘉義縣",
+    "高雄市"
+   ],
+   "text": "10/29 14:38高雄市桃源區發生規模4.0有感地震，最大震度高雄市桃源、嘉義縣大埔3級。",
+   "src": "中央氣象署",
+   "at": "2026-10-29T06:42:13Z",
+   "exp": "2026-10-29T15:42:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Earthquake/CWA-EQ115073-2026-1029-143847.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261029141840_0001",
    "cat": "水庫放流",
    "lvl": 2,
@@ -44,12 +58,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202610291033.cap"
   }
  ],
- "n_total": 3,
+ "n_total": 4,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/10/29 14:23:14"
+  "updated": "2026/10/29 14:41:15"
  },
  "errs": [],
- "updatedAt": "2026-10-29T06:23:49Z"
+ "updatedAt": "2026-10-29T06:42:29Z"
 }
