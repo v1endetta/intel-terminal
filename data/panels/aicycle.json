@@ -160,10 +160,11 @@
   ],
   "partial": {
    "q": "2026Q3",
-   "total": 62.4,
-   "yoy": 128.5,
-   "n": 2,
+   "total": 101.8,
+   "yoy": 117.9,
+   "n": 3,
    "by": {
+    "MSFT": 39.4,
     "META": 33.9,
     "ORCL": 28.5
    }
@@ -193,14 +194,14 @@
   {
    "name": "Google",
    "tk": "GOOGL",
-   "amount": 205.0,
-   "year": null,
-   "dir": "上調",
-   "zh": "皮查伊將Alphabet資本支出指引上調至205億美元。",
-   "at": "2026-08-16T07:00:00Z",
-   "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPcm0zSUFGOFlxV2VacEhSTW82OTNtMVd4Ui1nVUNDZnpEdWwtaEZ2Q0hLUk9INmlCaFJraFJ4WWRqMkM4RmoycU1MT1VVSVdvOVFpUFRCNFFmTXB6TEkxSXEtODdPNmFiczV5aUlLRVF1NmFrNU9jVTRfZW9oY0NGUGI5OWR3SXFJYjRkeV9Rd0hkcXoyU3cwMw?oc=5",
-   "source": "The Motley F",
-   "title": "Sundar Pichai Raised Alphabet's Capex Guidance to $205 Billion the Same Quarter Google Clo"
+   "amount": null,
+   "year": 2026,
+   "dir": "維持",
+   "zh": "Alphabet 維持 2026 年資本支出不變。",
+   "at": "2026-10-28T16:00:01Z",
+   "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9mMXgyTllzVlZsWFR1UGY5bTVRWWNYRnFoX3pCdDVjNU41Q3VQUTJyb2lTSUs3ZTdBakY3M0RVaERvZUZRMXA2RlhlYTNyeUJnb1MyX0ZjVHJWODNxd0pWbWRHRjNqb0FWVC1xdzdzZ29qQW8wMl9Z0gF8QVVfeXFMTU5rc0Fla1l1QVdxV2I0d3Znd2JCWm1tY1EtdFR6NTNuV0FaYmhWbEVsZUhFYWdNcXZ0ZGlrdWVaZUxnbThKMVR4V290N0hyb3VmSmtRVDFuUC03Yks5b3poak1UNFJoNkE3RHkzWWZMeUFqajFCc0Yzc1BwSw?oc=5",
+   "source": "CNBC",
+   "title": "Alphabet sinks 10% as it holds 2026 capex unchanged, expects significant increase in 2027"
   },
   {
    "name": "亞馬遜",
@@ -318,8 +319,8 @@
  "leadtest": [
   {
    "lag": 0,
-   "corr": 0.66,
-   "n": 38
+   "corr": 0.72,
+   "n": 39
   },
   {
    "lag": 1,
@@ -367,5 +368,5 @@
  "tone": "green",
  "errs": [],
  "src": "SEC 財報 XBRL（微軟、Google、亞馬遜、Meta、甲骨文購置不動產廠房設備）、財報後新聞（AI 擷取指引）、FinMind 月營收、DRAMeXchange（只放漲跌）",
- "updatedAt": "2026-10-28T19:13:39Z"
+ "updatedAt": "2026-10-29T01:20:09Z"
 }
