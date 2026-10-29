@@ -1,172 +1,6 @@
 {
  "items": [
   {
-   "d": "2026-10-28",
-   "t": "08:15",
-   "ts": 1793146500000,
-   "r": "澳",
-   "n": "澳洲央行總裁 Bullock 談話",
-   "k": "speech",
-   "imp": 2,
-   "ap": false,
-   "en": "RBA Gov Bullock Speaks",
-   "cur": "AUD"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "08:30",
-   "ts": 1793147400000,
-   "r": "澳",
-   "n": "CPI 月增",
-   "k": "data",
-   "imp": 3,
-   "ap": false,
-   "en": "CPI m/m",
-   "cur": "AUD",
-   "fc": "0.7%",
-   "pv": "0.4%"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "08:30",
-   "ts": 1793147400000,
-   "r": "澳",
-   "n": "CPI 年增",
-   "k": "data",
-   "imp": 3,
-   "ap": false,
-   "en": "CPI y/y",
-   "cur": "AUD",
-   "fc": "4.2%",
-   "pv": "4.0%"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "08:30",
-   "ts": 1793147400000,
-   "r": "澳",
-   "n": "Trimmed Mean CPI m/m",
-   "k": "data",
-   "imp": 3,
-   "ap": false,
-   "en": "Trimmed Mean CPI m/m",
-   "cur": "AUD",
-   "fc": "0.3%",
-   "pv": "0.2%"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "09:00",
-   "ts": 1793149200000,
-   "r": "紐",
-   "n": "紐西蘭央行利率決議",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "Official Cash Rate",
-   "cur": "NZD",
-   "fc": "3.00%",
-   "pv": "2.75%"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "09:00",
-   "ts": 1793149200000,
-   "r": "紐",
-   "n": "RBNZ Rate Statement",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "RBNZ Rate Statement",
-   "cur": "NZD"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "10:00",
-   "ts": 1793152800000,
-   "r": "紐",
-   "n": "RBNZ Press Conference",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "RBNZ Press Conference",
-   "cur": "NZD"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "20:30",
-   "ts": 1793190600000,
-   "r": "英",
-   "n": "Annual Budget Release",
-   "k": "data",
-   "imp": 3,
-   "ap": false,
-   "en": "Annual Budget Release",
-   "cur": "GBP"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "20:30",
-   "ts": 1793190600000,
-   "r": "英",
-   "n": "Autumn Forecast Statement",
-   "k": "data",
-   "imp": 2,
-   "ap": false,
-   "en": "Autumn Forecast Statement",
-   "cur": "GBP"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "21:45",
-   "ts": 1793195100000,
-   "r": "加",
-   "n": "BOC Monetary Policy Report",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "BOC Monetary Policy Report",
-   "cur": "CAD"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "21:45",
-   "ts": 1793195100000,
-   "r": "加",
-   "n": "加拿大央行聲明",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "BOC Rate Statement",
-   "cur": "CAD"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "21:45",
-   "ts": 1793195100000,
-   "r": "加",
-   "n": "加拿大央行利率決議",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "Overnight Rate",
-   "cur": "CAD",
-   "fc": "2.50%",
-   "pv": "2.25%"
-  },
-  {
-   "d": "2026-10-28",
-   "t": "22:30",
-   "ts": 1793197800000,
-   "r": "加",
-   "n": "BOC Press Conference",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "BOC Press Conference",
-   "cur": "CAD"
-  },
-  {
    "d": "2026-10-29",
    "t": "02:00",
    "ts": 1793210400000,
@@ -1221,6 +1055,16 @@
    "imp": 2,
    "ap": false,
    "ex": "XNYS"
+  },
+  {
+   "d": "2026-11-27",
+   "t": null,
+   "ts": null,
+   "r": "台",
+   "n": "景氣燈號（國發會）",
+   "k": "data",
+   "imp": 2,
+   "ap": true
   }
  ],
  "hol": [
@@ -1519,13 +1363,13 @@
    "n": "天皇誕生日"
   }
  ],
- "from": "2026-10-29",
- "to": "2026-11-26",
+ "from": "2026-10-30",
+ "to": "2026-11-27",
  "ff_until": "2026-10-30",
- "n": 98,
+ "n": 86,
  "errs": [
   "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json"
  ],
  "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站",
- "updatedAt": "2026-10-29T15:42:21Z"
+ "updatedAt": "2026-10-29T18:46:21Z"
 }
