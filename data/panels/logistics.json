@@ -113,7 +113,73 @@
    "chg": 3.05
   }
  ],
- "storms": [],
+ "storms": [
+  {
+   "name": "ARNAB",
+   "level": "Red",
+   "ll": [
+    81.8,
+    16.4
+   ],
+   "from": "2026-10-26T00:00",
+   "to": "2026-10-28T06:00",
+   "sev": "Tropical Storm (maximum wind speed of 222 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001345&episodeid=10&eventtype=TC",
+   "near": [],
+   "id": "1001345-10"
+  },
+  {
+   "name": "VANCE",
+   "level": "Green",
+   "ll": [
+    -109.1,
+    20.1
+   ],
+   "from": "2026-10-21T15:00",
+   "to": "2026-10-28T21:00",
+   "sev": "Tropical Depression (maximum wind speed of 139 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001341&episodeid=30&eventtype=TC",
+   "near": [
+    {
+     "port": "曼薩尼約（墨）",
+     "km": 516
+    },
+    {
+     "port": "拉薩羅卡德納斯（墨）",
+     "km": 766
+    }
+   ],
+   "id": "1001341-30"
+  },
+  {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    156.3,
+    15.6
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-10-28T18:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 241 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=22&eventtype=TC",
+   "near": [],
+   "id": "1001343-22"
+  },
+  {
+   "name": "THREE-C",
+   "level": "Green",
+   "ll": [
+    -175.9,
+    13.0
+   ],
+   "from": "2026-10-25T15:00",
+   "to": "2026-10-27T03:00",
+   "sev": "Tropical Depression (maximum wind speed of 65 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001344&episodeid=7&eventtype=TC",
+   "near": [],
+   "id": "1001344-7"
+  }
+ ],
  "ports": [
   {
    "name": "上海洋山",
@@ -377,6 +443,22 @@
  ],
  "news": [
   {
+   "source": "FreightWaves",
+   "title": "Scan Global Logistics to acquire Oregon-based OIA Global",
+   "url": "https://www.freightwaves.com/news/scan-global-logistics-to-acquire-oregon-based-oia-global",
+   "at": "2026-10-29T08:07:26+08:00",
+   "hot": false,
+   "zh": "Scan Global Logistics將收購奧勒岡州的OIA Global"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "How accurate load measurement prevents tarp, strap, and permit errors",
+   "url": "https://theloadstar.com/how-accurate-load-measurement-prevents-tarp-strap-and-permit-errors/",
+   "at": "2026-10-29T08:01:43+08:00",
+   "hot": false,
+   "zh": "如何透過精準載重測量避免帆布、綁帶與通行證錯誤"
+  },
+  {
    "source": "The Loadstar",
    "title": "Damodaran: The Prospectus Arrives: My (but not the) Anthropic IPO Valuation!",
    "url": "https://theloadstar.com/damodaran-the-prospectus-arrives-my-but-not-the-anthropic-ipo-valuation/",
@@ -394,11 +476,11 @@
   },
   {
    "source": "FreightWaves",
-   "title": "C.H Robinson and Landstar stock prices slammed; insurance costs a factor",
+   "title": "C.H Robinson and Landstar stock prices slammed; insurance a factor",
    "url": "https://www.freightwaves.com/news/c-h-robinson-and-landstar-stock-prices-slammed-insurance-costs-a-factor",
    "at": "2026-10-29T05:40:55+08:00",
    "hot": false,
-   "zh": "羅賓遜全球物流與Landstar股價重挫，保險成本是主因"
+   "zh": "C.H. Robinson與Landstar股價重挫，保險成關鍵因素"
   },
   {
    "source": "FreightWaves",
@@ -505,14 +587,6 @@
    "zh": "Forward Air保住大客戶「顯著比例」的業務"
   },
   {
-   "source": "FreightWaves",
-   "title": "Strike threat by port security workers at Los Angeles–Long Beach",
-   "url": "https://www.freightwaves.com/news/strike-threat-by-port-security-workers-at-los-angeles-long-beach",
-   "at": "2026-10-28T21:23:00+08:00",
-   "hot": true,
-   "zh": "洛杉磯與長堤港港口安保人員揚言罷工"
-  },
-  {
    "source": "The Loadstar",
    "title": "Container newbuilding fleet closing in on 16m teu by year-end",
    "url": "https://theloadstar.com/container-newbuilding-fleet-closing-in-on-16m-teu-by-year-end/",
@@ -559,20 +633,10 @@
    "at": "2026-10-28T19:35:53+08:00",
    "hot": true,
    "zh": "貨主承諾將更多貨物交給能在關鍵時刻完成交貨的承攬業"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "WD-40 credits supply chain for $7M in cost savings",
-   "url": "https://www.supplychaindive.com/news/wd-40-credits-supply-chain-for-7m-in-cost-savings/872902/",
-   "at": "2026-10-28T19:22:00+08:00",
-   "hot": false,
-   "zh": "WD-40將省下700萬美元成本歸功於供應鏈優化"
   }
  ],
  "threat": [],
- "errs": [
-  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-10-28T23:13:08Z"
+ "updatedAt": "2026-10-29T00:24:01Z"
 }
