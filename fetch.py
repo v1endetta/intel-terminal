@@ -10507,6 +10507,25 @@ def _ust_auctions():
         rows.append({"date": a.get("auction_date"), "term": term.replace("-Year", " 年"), "y": num(a.get("high_yield")), "btc": round(btc, 2),
                      "ind": round(ind / comp * 100, 1) if ind is not None and comp else None,
                      "dlr": round(dlr / comp * 100, 1) if dlr is not None and comp else None, "reopen": str(a.get("reopening")).lower() == "yes"})
+    # Fiscal Data 的開標結果要晚幾天才補上；最近 90 天改用 TreasuryDirect（開標當天就有），同一天同天期以 TreasuryDirect 為準
+    try:
+        td = []
+        for typ in ("Note", "Bond"):
+            td += gjson("https://www.treasurydirect.gov/TA_WS/securities/auctioned", params={"format": "json", "type": typ, "days": "90"}, timeout=60) or []
+        for a in td:
+            btc = num(a.get("bidToCoverRatio"))
+            if btc is None or str(a.get("inflationIndexSecurity")).lower() == "yes" or str(a.get("floatingRate")).lower() == "yes":
+                continue
+            term = a.get("originalSecurityTerm") or a.get("securityTerm") or ""
+            if term not in UST_AUC_TERMS:
+                continue
+            d, t = str(a.get("auctionDate") or "")[:10], term.replace("-Year", " 年")
+            comp, ind, dlr = num(a.get("competitiveAccepted")) or num(a.get("totalAccepted")), num(a.get("indirectBidderAccepted")), num(a.get("primaryDealerAccepted"))
+            r = {"date": d, "term": t, "y": num(a.get("highYield")), "btc": round(btc, 2), "ind": round(ind / comp * 100, 1) if ind is not None and comp else None,
+                 "dlr": round(dlr / comp * 100, 1) if dlr is not None and comp else None, "reopen": str(a.get("reopening")).lower() == "yes"}
+            rows = [x for x in rows if (x["date"], x["term"]) != (d, t)] + [r]
+    except Exception as e:  # noqa: BLE001
+        log("ust treasurydirect", e)
     rows.sort(key=lambda r: r["date"], reverse=True)
     latest, seen = [], set()
     for r in rows:   # 每個天期最新一次，跟同天期前 6 次平均比
@@ -10516,6 +10535,7 @@ def _ust_auctions():
         prev = [x for x in rows if x["term"] == r["term"] and x["date"] < r["date"]][:6]
         avg = lambda k: round(sum(x[k] for x in prev if x[k] is not None) / max(1, sum(1 for x in prev if x[k] is not None)), 2) if prev else None
         r = {**r, "btc_avg": avg("btc"), "ind_avg": avg("ind"), "n_prev": len(prev)}
+        r["stale"] = r["date"] < (TODAY_TPE - timedelta(days=45)).isoformat()
         r["weak"] = bool(prev) and ((r["btc_avg"] is not None and r["btc"] < r["btc_avg"] - 0.15) or (r["ind"] is not None and r["ind_avg"] is not None and r["ind"] < r["ind_avg"] - 5))
         r["strong"] = bool(prev) and not r["weak"] and r["btc_avg"] is not None and r["btc"] > r["btc_avg"] + 0.15
         latest.append(r)
@@ -13288,7 +13308,7 @@ run("sectors", p_sectors, keep_if_fresh_hours=0.5)
 run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("credit", p_credit, keep_if_fresh_hours=6)  # 五個新面板放前面，避免排在最後被本輪時限略過。信用利差：FRED 每天收盤後更新一次
-run("ust", p_ust, keep_if_fresh_hours=3)  # 美債殖利率：財政部收盤後一天更新一次，3 小時檢查一次；論點會用到，要在 theses 前面
+run("ust", p_ust, keep_if_fresh_hours=3 if '"stale"' in json.dumps(load_prev("ust") or {}) else 0)  # 美債殖利率：財政部收盤後一天更新一次，3 小時檢查一次；論點會用到，要在 theses 前面
 run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Federal Register 每個工作日早上出刊
 run("exports", p_exports, keep_if_fresh_hours=24 if "nonee_yoy3" in json.dumps(load_prev("exports") or {}) else 0)  # 新增非電子出口時先重抓一次； 台灣出口結構：月資料，每月 9 日前後公布
 run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
