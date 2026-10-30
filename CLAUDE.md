@@ -299,6 +299,7 @@ RI=999999 STEPS="wait|15000;js|(__story.openAt('總經','內需產業'),1);wait|
 | 📅 11/28 | 6 週使用紀錄滿：請 Vin 從電腦與手機的 `#usage` 複製報告，整理建議砍、併、留的面板與 3D chips，等他拍板，**不要直接砍** |
 | ⚠️ 已知 | 美股板塊 `sectors` 曾因撞名出過一次錯，已自癒；再出現就看 error 退避 |
 | ⚠️ 已知 | Dcard 擋、嘖嘖擋（10/30 探測：GitHub IP 全站 Cloudflare challenge，連 robots.txt 都 403）、Threads 無免費管道、Custom Search 不收新客戶、Gemini grounding 免費層無額度：都不要再試。集資雷達 `crowd` 維持看新聞＋Kickstarter |
+| ⚠️ 已知 | 10/31 探測消費者商品層級來源：App Store 台灣（免費、付費、營收榜）✅ 可讀；PChome 搜尋 API ✅ 可讀但只能按關鍵字查、沒有銷量數字；博客來（Cloudflare 403）、momo 排行榜（403）❌ 擋，不接 |
 | ⚠️ 已知 | 鄉鎮新聞：嘉義市、新竹市的新聞本來就少寫區名，數量少是正常的；只寫縣市名的新聞放在各縣市新聞 `localnews` |
 
 ---
