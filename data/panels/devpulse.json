@@ -17,7 +17,7 @@
    "url": "https://community.openai.com/t/please-bring-sora-2-back-even-if-it-means-paying-for-it/1410897",
    "replies": 1,
    "likes": 5,
-   "views": 45,
+   "views": 46,
    "at": "2026-10-29T23:33:42Z"
   },
   {
@@ -27,7 +27,7 @@
    "url": "https://community.openai.com/t/january-14-2027-shutdown-of-gpt-4o-gpt-4-1-mini-without-required-notice/1410935",
    "replies": 0,
    "likes": 2,
-   "views": 32,
+   "views": 35,
    "at": "2026-10-30T04:27:46Z"
   },
   {
@@ -37,7 +37,7 @@
    "url": "https://community.openai.com/t/critical-billing-bug-team-promo-code-bypasses-the-2-seat-minimum-enabling-a-free-single-seat-team-workspace/1410804",
    "replies": 0,
    "likes": 0,
-   "views": 875,
+   "views": 913,
    "at": "2026-10-29T16:23:42Z"
   },
   {
@@ -57,7 +57,7 @@
    "url": "https://discuss.ai.google.dev/t/antigravity-2-6-0-new-update-on-october-29-is-impressive/196795",
    "replies": 3,
    "likes": 7,
-   "views": 140,
+   "views": 146,
    "at": "2026-10-29T16:26:19Z"
   },
   {
@@ -65,9 +65,9 @@
    "vendor": "google",
    "title": "AI Studio consistently failing to generate content across ALL chats and models (October 30",
    "url": "https://discuss.ai.google.dev/t/ai-studio-consistently-failing-to-generate-content-across-all-chats-and-models-october-30/196919",
-   "replies": 2,
-   "likes": 7,
-   "views": 86,
+   "replies": 3,
+   "likes": 8,
+   "views": 104,
    "at": "2026-10-30T06:37:46Z"
   },
   {
@@ -75,30 +75,30 @@
    "vendor": "google",
    "title": "Playground fails with \"Failed to generate content / An internal error has occurred\" whenev",
    "url": "https://discuss.ai.google.dev/t/playground-fails-with-failed-to-generate-content-an-internal-error-has-occurred-whenever-my-own-api-key-is-linked-works-unlinked-and-requests-never-reach-the-gemini-api/196847",
-   "replies": 6,
-   "likes": 5,
-   "views": 133,
+   "replies": 8,
+   "likes": 6,
+   "views": 157,
    "at": "2026-10-30T03:59:05Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "AI Studio에서 유료 API 키 연결 시 생성·토큰 계산 요청이 CORS 오류로 실패합니다",
-   "url": "https://discuss.ai.google.dev/t/ai-studio-api-cors/196911",
-   "replies": 0,
-   "likes": 1,
-   "views": 97,
-   "at": "2026-10-30T05:49:26Z"
   },
   {
    "source": "Google AI 論壇",
    "vendor": "google",
    "title": "Paid API key fails only in AI Studio — CountTokens / GenerateContent OPTIONS requests retu",
    "url": "https://discuss.ai.google.dev/t/paid-api-key-fails-only-in-ai-studio-counttokens-generatecontent-options-requests-return-403/196908",
-   "replies": 4,
-   "likes": 1,
-   "views": 103,
+   "replies": 6,
+   "likes": 3,
+   "views": 129,
    "at": "2026-10-30T05:35:39Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "AI Studio에서 유료 API 키 연결 시 생성·토큰 계산 요청이 CORS 오류로 실패합니다",
+   "url": "https://discuss.ai.google.dev/t/ai-studio-api-cors/196911",
+   "replies": 1,
+   "likes": 1,
+   "views": 113,
+   "at": "2026-10-30T05:49:26Z"
   }
  ],
  "changelogs": [
@@ -177,6 +177,14 @@
   {
    "source": "Gemini changelog",
    "vendor": "google",
+   "date": "October 30, 2026",
+   "title": "Computer Use generally available (GA): Released the",
+   "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
+   "at": "2026-10-30T00:00:00Z"
+  },
+  {
+   "source": "Gemini changelog",
+   "vendor": "google",
    "date": "October 27, 2026",
    "title": "Gemini API CLI (gemini-api) beta: Released the Gemini API",
    "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
@@ -197,14 +205,6 @@
    "title": "Gemini 4 Argon (gemini-4-argon) generally available (GA): Released",
    "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
    "at": "2026-10-13T00:00:00Z"
-  },
-  {
-   "source": "Gemini changelog",
-   "vendor": "google",
-   "date": "October 8, 2026",
-   "title": "It is no longer available to select in Google AI Studio, and API requests to",
-   "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
-   "at": "2026-10-08T00:00:00Z"
   },
   {
    "source": "DeepSeek updates",
@@ -297,9 +297,9 @@
  ],
  "errs": [],
  "diag": [
-  "Gemini changelog md: got html 163025b",
+  "Gemini changelog md: got html 163312b",
   "DeepSeek updates md: 18854b 0 entries head='# Change Log\\n\\n***\\n\\n## Date: 2026-10-17\\n\\n### Opening up the i'",
   "xAI release notes md: 19458b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### Custom '"
  ],
- "updatedAt": "2026-10-30T12:09:30Z"
+ "updatedAt": "2026-10-30T13:13:03Z"
 }
