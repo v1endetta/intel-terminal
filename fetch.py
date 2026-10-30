@@ -10514,15 +10514,19 @@ def _ust_auctions():
             td += gjson("https://www.treasurydirect.gov/TA_WS/securities/auctioned", params={"format": "json", "type": typ, "days": "90"}, timeout=60) or []
         for a in td:
             btc = num(a.get("bidToCoverRatio"))
-            if btc is None or str(a.get("inflationIndexSecurity")).lower() == "yes" or str(a.get("floatingRate")).lower() == "yes":
+            if btc is None or str(a.get("inflationProtected")).lower() == "yes" or str(a.get("floatingRate")).lower() == "yes":
                 continue
             term = a.get("originalSecurityTerm") or a.get("securityTerm") or ""
             if term not in UST_AUC_TERMS:
                 continue
-            d, t = str(a.get("auctionDate") or "")[:10], term.replace("-Year", " 年")
-            comp, ind, dlr = num(a.get("competitiveAccepted")) or num(a.get("totalAccepted")), num(a.get("indirectBidderAccepted")), num(a.get("primaryDealerAccepted"))
+            d, t = str(a.get("competitiveAuctionCloseDate") or a.get("auctionDate") or "")[:10], term.replace("-Year", " 年")
+            if not d:
+                continue
+            # 欄位名稱跟 Fiscal Data 不同：得標都看競標部分（2026-10 實測）
+            comp = num(a.get("subtotalCompetitiveParAwardedInsideOfOfferingAmount"))
+            ind, dlr = num(a.get("indirectBiddersCompetitiveParAwarded")), num(a.get("primaryDealersCompetitiveParAwarded"))
             r = {"date": d, "term": t, "y": num(a.get("highYield")), "btc": round(btc, 2), "ind": round(ind / comp * 100, 1) if ind is not None and comp else None,
-                 "dlr": round(dlr / comp * 100, 1) if dlr is not None and comp else None, "reopen": str(a.get("reopening")).lower() == "yes"}
+                 "dlr": round(dlr / comp * 100, 1) if dlr is not None and comp else None, "reopen": str(a.get("reopening")).lower() == "yes", "td": 1}
             rows = [x for x in rows if (x["date"], x["term"]) != (d, t)] + [r]
     except Exception as e:  # noqa: BLE001
         log("ust treasurydirect", e)
@@ -13308,7 +13312,7 @@ run("sectors", p_sectors, keep_if_fresh_hours=0.5)
 run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("credit", p_credit, keep_if_fresh_hours=6)  # 五個新面板放前面，避免排在最後被本輪時限略過。信用利差：FRED 每天收盤後更新一次
-run("ust", p_ust, keep_if_fresh_hours=3 if '"stale"' in json.dumps(load_prev("ust") or {}) else 0)  # 美債殖利率：財政部收盤後一天更新一次，3 小時檢查一次；論點會用到，要在 theses 前面
+run("ust", p_ust, keep_if_fresh_hours=3 if '"td"' in json.dumps(load_prev("ust") or {}) else 0)  # 美債殖利率：財政部收盤後一天更新一次，3 小時檢查一次；論點會用到，要在 theses 前面
 run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Federal Register 每個工作日早上出刊
 run("exports", p_exports, keep_if_fresh_hours=24 if "nonee_yoy3" in json.dumps(load_prev("exports") or {}) else 0)  # 新增非電子出口時先重抓一次； 台灣出口結構：月資料，每月 9 日前後公布
 run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
