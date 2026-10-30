@@ -14,24 +14,18 @@
    "cat": "科技",
    "tw": 2,
    "why": "虛擬貨幣遭駭事件規模龐大，可能影響台灣加密貨幣市場與資安防護。",
-   "n_src": 5,
+   "n_src": 4,
    "srcs": [
     "NPR",
-    "Al Jazeera",
-    "彭博經濟",
+    "BBC",
     "日本時報",
     "日經亞洲"
    ],
    "also": [
     {
-     "src": "Al Jazeera",
-     "url": "https://www.aljazeera.com/news/2026/10/30/binance-says-6-3bn-stolen-in-biggest-crypto-heist-in-history-what-we-know?traffic_source=rss",
-     "en": "Binance says $6.3bn stolen in biggest crypto heist in history: What we know"
-    },
-    {
-     "src": "彭博經濟",
-     "url": "https://www.bloomberg.com/news/videos/2026-10-30/bloomberg-brief-10-30-2026-video",
-     "en": "Tech Selloff Intensifies on Earnings; Binance Estimates $6.3B Hacked"
+     "src": "BBC 商業",
+     "url": "https://www.bbc.co.uk/news/videos/cv2d62e34rw5o?at_medium=RSS&at_campaign=rss",
+     "en": "What we know about Binance's $6.3bn hack"
     },
     {
      "src": "日本時報",
@@ -39,11 +33,83 @@
      "en": "Hackers steal $6.3 billion from Binance in record heist blamed on North Korea"
     },
     {
+     "src": "BBC 商業",
+     "url": "https://www.bbc.co.uk/news/articles/cwg7xp8kx4v5o?at_medium=RSS&at_campaign=rss",
+     "en": "Crypto giant Binance hit by $6.3bn hack suspected to be largest in history"
+    },
+    {
      "src": "日經亞洲",
      "url": "https://asia.nikkei.com/spotlight/cryptocurrencies/binance-suspends-withdrawals-and-freezes-funds-amid-6.3bn-hack",
      "en": "Binance suspends withdrawals and freezes funds amid $6.3bn hack"
     }
    ]
+  },
+  {
+   "t": "中國否認針對輝達執行長的間諜活動指控",
+   "en": "China denies allegations of spy operation targeting Nvidia CEO",
+   "src": "BBC",
+   "url": "https://www.bbc.co.uk/news/articles/ckgj9plnlxdeo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-10-30T12:20:04Z",
+   "place": "北京，中國",
+   "ll": [
+    116.41,
+    39.9
+   ],
+   "cat": "科技",
+   "tw": 3,
+   "why": "涉及AI巨頭輝達的高層安全與地緣政治指控，牽動台灣半導體產業敏感神經。",
+   "n_src": 2,
+   "srcs": [
+    "BBC",
+    "CNA 新加坡"
+   ],
+   "also": [
+    {
+     "src": "CNA 新加坡",
+     "url": "https://www.channelnewsasia.com/east-asia/nvidia-jensen-huang-megaspeed-international-6505791",
+     "en": "Nvidia's Huang says dealings with firm in US spy probe were 'normal' as China denies alleg"
+    }
+   ]
+  },
+  {
+   "t": "聯準會巴金表態支持「漸進式」升息",
+   "en": "Fed’s Barkin Indicates Backing for ‘Gradual’ Rate Increases",
+   "src": "彭博經濟",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-30/fed-s-barkin-indicates-backing-for-gradual-rate-increases",
+   "at": "2026-10-30T14:07:51Z",
+   "place": "華盛頓特區，美國",
+   "ll": [
+    -77.04,
+    38.9
+   ],
+   "cat": "經濟",
+   "tw": 3,
+   "why": "美國聯準會貨幣政策將牽動全球匯率與台股資金走向。",
+   "n_src": 1,
+   "srcs": [
+    "彭博經濟"
+   ],
+   "also": []
+  },
+  {
+   "t": "中美在日本及南海附近擴大軍用無人機飛行",
+   "en": "China and US expand military drone flights near Japan and the South China Sea",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/china/military/article/3372782/china-and-us-expand-military-drone-flights-near-japan-and-south-china-sea",
+   "at": "2026-10-30T13:54:47Z",
+   "place": "東京，日本",
+   "ll": [
+    139.65,
+    35.68
+   ],
+   "cat": "戰爭衝突",
+   "tw": 3,
+   "why": "美中在鄰近區域擴大軍事無人機活動，影響台海周邊安全局勢。",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
   },
   {
    "t": "傳中國黨代會將恢復最高領導層的軍方代表地位",
@@ -59,170 +125,38 @@
    "cat": "政治",
    "tw": 2,
    "why": "中共高層人事與軍事權力變動牽動台海安全局勢。",
-   "n_src": 5,
-   "srcs": [
-    "南華早報",
-    "BBC",
-    "Guardian",
-    "NPR",
-    "日經亞洲"
-   ],
-   "also": [
-    {
-     "src": "BBC",
-     "url": "https://www.bbc.co.uk/news/articles/cq5ynw94k7kzo?at_medium=RSS&at_campaign=rss",
-     "en": "Record number of purges as Xi emphasises 'party discipline' at China political gathering"
-    },
-    {
-     "src": "Guardian",
-     "url": "https://www.theguardian.com/world/2026/oct/30/china-expels-record-number-communist-party-xi-jinping-purges-officials-fifth-plenum",
-     "en": "China expels a record number from Communist party amid Xi’s intensified purges of top officials"
-    },
-    {
-     "src": "NPR",
-     "url": "https://www.npr.org/2026/10/29/g-s1-150645/china-elevates-a-military-general-to-the-politburo-and-seeks-to-strengthen-party-discipline",
-     "en": "China elevates a military general to the Politburo and seeks to strengthen party disciplin"
-    },
-    {
-     "src": "日經亞洲",
-     "url": "https://asia.nikkei.com/politics/who-fell-and-who-rose-at-china-s-fifth-plenum",
-     "en": "Who fell and who rose at China's fifth plenum"
-    }
-   ]
-  },
-  {
-   "t": "北京在南海爭議島礁附近演練水砲與無人機",
-   "en": "Beijing drills water cannons and drones near disputed South China Sea shoals",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/china/diplomacy/article/3372764/beijing-drills-water-cannons-and-drones-near-disputed-south-china-sea-shoals",
-   "at": "2026-10-30T11:39:56Z",
-   "place": "南海",
-   "ll": [
-    114.0,
-    12.0
-   ],
-   "cat": "戰爭衝突",
-   "tw": 3,
-   "why": "南海地緣政治緊張升高，牽動區域安全及台灣周邊海空域動態。",
    "n_src": 2,
    "srcs": [
     "南華早報",
-    "CNA 新加坡"
-   ],
-   "also": [
-    {
-     "src": "CNA 新加坡",
-     "url": "https://www.channelnewsasia.com/east-asia/china-combat-readiness-patrols-scarborough-shoal-6506366",
-     "en": "China conducts combat readiness patrols around disputed shoal in South China Sea"
-    }
-   ]
-  },
-  {
-   "t": "財報激化AI疑慮，科技股跌勢加劇",
-   "en": "Tech Rout Deepens as Earnings Stoke AI Fears",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/videos/2026-10-30/the-opening-trade-10-30-2026-video",
-   "at": "2026-10-30T11:57:17Z",
-   "place": "美國",
-   "ll": [
-    -122.42,
-    37.77
-   ],
-   "cat": "科技",
-   "tw": 3,
-   "why": "美股科技股與AI疑慮加深，將直接衝擊台灣半導體與AI供應鏈股價。",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
-   "t": "美國大選前夕將公布GDP報告，以色列大選陷入僵局",
-   "en": "GDP report to give insight before Election Day. And, Israel's election is deadlocked",
-   "src": "NPR",
-   "url": "https://www.npr.org/2026/10/29/g-s1-150614/up-first-newsletter-midterm-elections-gdp-inflation-israel-department-of-education-lawsuit",
-   "at": "2026-10-30T12:09:03Z",
-   "place": "美國華盛頓",
-   "ll": [
-    -77.04,
-    38.9
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 3,
-   "srcs": [
-    "Al Jazeera",
-    "NPR",
-    "Guardian"
-   ],
-   "also": [
-    {
-     "src": "Al Jazeera",
-     "url": "https://www.aljazeera.com/news/2026/10/30/georgia-midterm-elections-why-this-is-a-key-us-battleground?traffic_source=rss",
-     "en": "Georgia midterm elections: Why this is a key US battleground"
-    },
-    {
-     "src": "Al Jazeera",
-     "url": "https://www.aljazeera.com/news/2026/10/30/how-can-israel-break-its-election-deadlock?traffic_source=rss",
-     "en": "How can Israel break its election deadlock?"
-    },
-    {
-     "src": "NPR",
-     "url": "https://www.npr.org/2026/10/30/g-s1-150761/israel-election-politics-deadlock-arabs",
-     "en": "Israel is in a political deadlock. What comes next?"
-    },
-    {
-     "src": "Guardian",
-     "url": "https://www.theguardian.com/world/2026/oct/30/friday-briefing-israel-has-a-dilemma-can-its-opposition-govern-with-palestinian-parties",
-     "en": "Friday briefing: Israel has a dilemma - can its opposition govern with Palestinian parties?"
-    }
-   ]
-  },
-  {
-   "t": "西班牙首相：死傷者恐涵蓋27國國民",
-   "en": "People of 27 nationalities may be among those killed or injured in Spain train crash, Sánchez says – Europe live",
-   "src": "Guardian",
-   "url": "https://www.theguardian.com/world/live/2026/oct/30/spain-investigates-toledo-crash-pedro-sanchez-france-italy-protests-latest-news-updates",
-   "at": "2026-10-30T13:08:52Z",
-   "place": "西班牙",
-   "ll": [
-    -3.7,
-    40.42
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 4,
-   "srcs": [
-    "Guardian",
-    "BBC",
-    "Al Jazeera",
     "NPR"
    ],
    "also": [
     {
-     "src": "BBC",
-     "url": "https://www.bbc.co.uk/news/articles/c6zxj2e5qlxxo?at_medium=RSS&at_campaign=rss",
-     "en": "Spain transport minister says he won't resign over high-speed rail disaster"
-    },
-    {
-     "src": "Al Jazeera",
-     "url": "https://www.aljazeera.com/news/2026/10/30/spains-train-crash-redraws-the-electoral-battle-ahead-of-the-elections?traffic_source=rss",
-     "en": "Spain’s deadly train crash redraws electoral battle lines"
-    },
-    {
-     "src": "Guardian",
-     "url": "https://www.theguardian.com/world/2026/oct/30/battle-lines-redrawn-spain-snap-election-train-disaster-pedro-sanchez-psoe-pp-vox",
-     "en": "Battle lines redrawn in Spain’s snap election after latest train disaster"
-    },
-    {
      "src": "NPR",
-     "url": "https://www.npr.org/2026/10/29/nx-s1-6021963/spain-train-crash-updates",
-     "en": "Spain reckons with 2nd deadly train crash of the year ahead of national election"
+     "url": "https://www.npr.org/2026/10/29/g-s1-150645/china-elevates-a-military-general-to-the-politburo-and-seeks-to-strengthen-party-discipline",
+     "en": "China elevates a military general to the Politburo and seeks to strengthen party disciplin"
     }
    ]
+  },
+  {
+   "t": "中國在南海爭議島礁周邊進行戰備警巡",
+   "en": "China conducts combat readiness patrols around disputed shoal in South China Sea",
+   "src": "CNA 新加坡",
+   "url": "https://www.channelnewsasia.com/east-asia/china-combat-readiness-patrols-scarborough-shoal-6506366",
+   "at": "2026-10-30T09:09:31Z",
+   "place": "南海",
+   "ll": [
+    121.77,
+    12.88
+   ],
+   "cat": "政治",
+   "tw": 3,
+   "why": "南海區域局勢升溫，影響台海周邊安全與區域航運穩定。",
+   "n_src": 1,
+   "srcs": [
+    "CNA 新加坡"
+   ],
+   "also": []
   },
   {
    "t": "著眼中國威脅 日本考慮舉行更具實戰化的聯合軍演",
@@ -245,22 +179,102 @@
    "also": []
   },
   {
-   "t": "美國財政部本週標售公債創下8390億美元紀錄",
-   "en": "US Treasury Borrows Record $839 Billion in Auctions This Week",
+   "t": "智利銅礦產量創至少二十年來最慘單季表現",
+   "en": "Chile Copper Mines Deliver Worst Quarter in at Least Two Decades",
    "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-30/us-treasury-borrows-record-839-billion-in-auctions-this-week",
-   "at": "2026-10-30T13:00:41Z",
-   "place": "美國",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-30/chile-copper-mines-deliver-worst-quarter-in-at-least-two-decades",
+   "at": "2026-10-30T13:54:30Z",
+   "place": "聖地牙哥，智利",
+   "ll": [
+    -70.67,
+    -33.45
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "智利銅礦產量大減可能推升國際銅價，影響台灣相關製造業成本。",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "艾克森美孚與雪佛龍受惠於強勁煉油利潤 獲利豐厚",
+   "en": "Exxon, Chevron Deliver Big Profits on Strong Refining",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/videos/2026-10-30/exxon-chevron-deliver-big-profits-on-strong-refining-video",
+   "at": "2026-10-30T13:50:18Z",
+   "place": "休士頓，美國",
+   "ll": [
+    -95.37,
+    29.76
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "國際能源巨頭獲利大增反映油價與煉油利潤變化，牽動台灣能源輸入成本。",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "習近平告訴德國總統 中歐必須「保持夥伴關係錨定」",
+   "en": "Xi Jinping tells German president China and EU must ‘stay anchored to their partnership’",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/china/diplomacy/article/3372781/xi-jinping-tells-german-president-china-and-eu-must-stay-anchored-their-partnership",
+   "at": "2026-10-30T13:45:56Z",
+   "place": "北京，中國",
+   "ll": [
+    116.41,
+    39.9
+   ],
+   "cat": "政治",
+   "tw": 2,
+   "why": "中歐關係動向牽動國際地緣政治格局與台灣的經貿外交環境。",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "獲利疑慮升溫 科技企業債務保障成本攀升",
+   "en": "Tech Firms’ Debt-Protection Costs are Surging on Profit Concerns",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-30/tech-firms-debt-protection-costs-are-surging-on-profit-concerns",
+   "at": "2026-10-30T13:32:59Z",
+   "place": "紐約，美國",
+   "ll": [
+    -74.01,
+    40.71
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "科技業融資成本上升可能影響全球科技股表現及台灣供應鏈企業資金壓力。",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "參議員聽取川普重啟對伊朗戰爭「瘋狂」計畫的簡報",
+   "en": "Senators briefed on Trump’s ‘insane’ plan to restart war on Iran",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/video/newsfeed/2026/10/30/senators-briefed-on-trumps-insane-plan-to-restart-war-on-iran?traffic_source=rss",
+   "at": "2026-10-30T13:01:43Z",
+   "place": "華盛頓特區，美國",
    "ll": [
     -77.04,
     38.9
    ],
-   "cat": "經濟",
+   "cat": "政治",
    "tw": 2,
-   "why": "美債發行量創新高可能牽動全球利率走勢及外資動向。",
+   "why": "中東地緣政治緊張若升級，將影響國際油價與全球金融市場穩定。",
    "n_src": 1,
    "srcs": [
-    "彭博市場"
+    "Al Jazeera"
    ],
    "also": []
   },
@@ -285,26 +299,6 @@
    "also": []
   },
   {
-   "t": "習近平敦促德國對中維持「務實」政策",
-   "en": "Xi Urges Germany to Maintain ‘Pragmatic’ Policy Toward China",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-30/xi-urges-germany-to-maintain-pragmatic-policy-toward-china",
-   "at": "2026-10-30T12:55:19Z",
-   "place": "德國",
-   "ll": [
-    13.4,
-    52.52
-   ],
-   "cat": "政治",
-   "tw": 2,
-   "why": "中歐關係互動牽動地緣政治及台灣的國際外交空間。",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
    "t": "華爾街財報不如預期引發劇烈拋售，華爾街轉趨冷酷",
    "en": "Wall Street Turns Ruthless as Earnings Misses Fuel Deep Selloffs",
    "src": "彭博市場",
@@ -318,26 +312,6 @@
    "cat": "經濟",
    "tw": 2,
    "why": "美股財報失利引發拋售，將連帶衝擊台股表現與科技類股走勢。",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
-   "t": "反AI情緒升溫，印度股市成亞洲表現最佳市場",
-   "en": "Indian Stocks Top Performers in Asia as Anti-AI Appeal Grows",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-30/indian-stocks-top-performers-in-asia-as-anti-ai-appeal-grows",
-   "at": "2026-10-30T12:27:37Z",
-   "place": "印度",
-   "ll": [
-    77.21,
-    28.61
-   ],
-   "cat": "經濟",
-   "tw": 2,
-   "why": "亞洲資金流向轉變與股市表現，影響台灣外資布局與區域資金競爭。",
    "n_src": 1,
    "srcs": [
     "彭博市場"
@@ -365,39 +339,42 @@
    "also": []
   },
   {
-   "t": "輝達黃仁勳：與美國間諜調查企業往來「正常」 中國否認指控",
-   "en": "Nvidia's Huang says dealings with firm in US spy probe were 'normal' as China denies alleg",
-   "src": "CNA 新加坡",
-   "url": "https://www.channelnewsasia.com/east-asia/nvidia-jensen-huang-megaspeed-international-6505791",
-   "at": "2026-10-30T02:58:00Z",
-   "place": "美國華盛頓",
+   "t": "財報引爆科技股賣壓加劇 幣安估遭駭63億美元",
+   "en": "Tech Selloff Intensifies on Earnings; Binance Estimates $6.3B Hacked",
+   "src": "彭博經濟",
+   "url": "https://www.bloomberg.com/news/videos/2026-10-30/bloomberg-brief-10-30-2026-video",
+   "at": "2026-10-30T11:47:12Z",
+   "place": "美國",
    "ll": [
-    -77.04,
-    38.9
+    -95.71,
+    37.09
    ],
-   "cat": "科技",
-   "tw": 3,
-   "why": "輝達為台灣AI供應鏈核心樞紐，美中科技角力直接影響台灣半導體產業。",
+   "cat": "經濟",
+   "tw": 2,
+   "why": "全球科技股與加密貨幣市場賣壓，影響台灣金融市場及相關概念股。",
    "n_src": 1,
    "srcs": [
-    "CNA 新加坡"
+    "彭博經濟"
    ],
    "also": []
   },
   {
-   "t": "加密貨幣巨頭幣安遭63億美元駭客攻擊 恐為史上最大規模",
-   "en": "Crypto giant Binance hit by $6.3bn hack suspected to be largest in history",
-   "src": "BBC 商業",
-   "url": "https://www.bbc.co.uk/news/articles/cwg7xp8kx4v5o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-30T09:33:51Z",
-   "place": "",
-   "ll": null,
-   "cat": "科技",
+   "t": "燃料價格飆升 能源巨頭海撈 560 億美元意外之財",
+   "en": "Big Oil Scores $56 Billion Windfall on Spiking Fuel Prices",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-30/exxon-reaps-record-oil-refining-profits-on-war-driven-gasoline-diesel-spikes",
+   "at": "2026-10-30T10:30:22Z",
+   "place": "紐約，美國",
+   "ll": [
+    -74.01,
+    40.71
+   ],
+   "cat": "經濟",
    "tw": 2,
-   "why": "虛擬貨幣交易所遭巨額駭客攻擊，影響台灣加密貨幣投資人與整體市場信任。",
+   "why": "國際燃料價格飆升帶動能源成本上揚，影響台灣進口物價與製造業成本。",
    "n_src": 1,
    "srcs": [
-    "BBC"
+    "彭博市場"
    ],
    "also": []
   },
@@ -422,26 +399,6 @@
    "also": []
   },
   {
-   "t": "北韓試射飛彈與火箭，金正恩敦促建立無人機優勢",
-   "en": "Kim urges drone dominance as North Korea fires missiles and rockets",
-   "src": "日本時報",
-   "url": "https://www.japantimes.co.jp/news/2026/10/30/asia-pacific/kim-drone-dominance/",
-   "at": "2026-10-30T06:16:00Z",
-   "place": "北韓平壤",
-   "ll": [
-    125.76,
-    39.04
-   ],
-   "cat": "戰爭衝突",
-   "tw": 2,
-   "why": "北韓試射飛彈與發展無人機牽動朝鮮半島局勢，間接影響東亞區域安全。",
-   "n_src": 1,
-   "srcs": [
-    "日本時報"
-   ],
-   "also": []
-  },
-  {
    "t": "鴻海董座淡化AI泡沫疑慮 看好2027年強勁成長",
    "en": "Foxconn chief downplays AI bubble concerns, sees strong 2027 growth",
    "src": "日經亞洲",
@@ -458,6 +415,26 @@
    "n_src": 1,
    "srcs": [
     "日經亞洲"
+   ],
+   "also": []
+  },
+  {
+   "t": "北韓試射飛彈與火箭，金正恩敦促建立無人機優勢",
+   "en": "Kim urges drone dominance as North Korea fires missiles and rockets",
+   "src": "日本時報",
+   "url": "https://www.japantimes.co.jp/news/2026/10/30/asia-pacific/kim-drone-dominance/",
+   "at": "2026-10-30T06:16:00Z",
+   "place": "北韓平壤",
+   "ll": [
+    125.76,
+    39.04
+   ],
+   "cat": "戰爭衝突",
+   "tw": 2,
+   "why": "北韓試射飛彈與發展無人機牽動朝鮮半島局勢，間接影響東亞區域安全。",
+   "n_src": 1,
+   "srcs": [
+    "日本時報"
    ],
    "also": []
   },
@@ -522,24 +499,41 @@
    "also": []
   },
   {
-   "t": "美國就業成本連續兩季落後通膨",
-   "en": "US Employment Costs Trail Inflation for Second Straight Quarter",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-30/us-employment-cost-growth-holds-steady-stays-below-inflation",
-   "at": "2026-10-30T12:32:57Z",
-   "place": "美國",
+   "t": "西班牙今年發生第二起致命高鐵事故 總理坦言民眾對高鐵信任已破裂",
+   "en": "Spain’s trust in high-speed rail ‘broken’ after second deadly crash this year, says PM",
+   "src": "Guardian",
+   "url": "https://www.theguardian.com/world/2026/oct/30/spain-trust-high-speed-rail-broken-after-second-deadly-crash-this-year-says-pedro-sanchez",
+   "at": "2026-10-30T14:13:52Z",
+   "place": "馬德里，西班牙",
    "ll": [
-    -77.04,
-    38.9
+    -3.7,
+    40.42
    ],
-   "cat": "經濟",
-   "tw": 1,
+   "cat": "災害",
+   "tw": 0,
    "why": "",
-   "n_src": 1,
+   "n_src": 2,
    "srcs": [
-    "彭博市場"
+    "Guardian",
+    "NPR"
    ],
-   "also": []
+   "also": [
+    {
+     "src": "Guardian",
+     "url": "https://www.theguardian.com/world/live/2026/oct/30/spain-investigates-toledo-crash-pedro-sanchez-france-italy-protests-latest-news-updates",
+     "en": "People of 27 nationalities may be among those killed or injured in Spain train crash, Sánchez says – Europe live"
+    },
+    {
+     "src": "Guardian",
+     "url": "https://www.theguardian.com/world/2026/oct/30/battle-lines-redrawn-spain-snap-election-train-disaster-pedro-sanchez-psoe-pp-vox",
+     "en": "Battle lines redrawn in Spain’s snap election after latest train disaster"
+    },
+    {
+     "src": "NPR",
+     "url": "https://www.npr.org/2026/10/29/nx-s1-6021963/spain-train-crash-updates",
+     "en": "Spain reckons with 2nd deadly train crash of the year ahead of national election"
+    }
+   ]
   },
   {
    "t": "歐洲央行要求歐盟領袖展開尋找連恩繼任者工作",
@@ -558,26 +552,6 @@
    "n_src": 1,
    "srcs": [
     "彭博經濟"
-   ],
-   "also": []
-  },
-  {
-   "t": "評論：深圳習川普普丁峰會能否重啟烏克蘭和平",
-   "en": "A Xi-Trump-Putin summit in Shenzhen could kick-start peace in Ukraine",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/opinion/china-opinion/article/3372321/xi-trump-putin-summit-shenzhen-could-kick-start-peace-ukraine",
-   "at": "2026-10-30T12:30:06Z",
-   "place": "中國",
-   "ll": [
-    114.06,
-    22.54
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
    ],
    "also": []
   },
@@ -622,46 +596,6 @@
    "also": []
   },
   {
-   "t": "卡達官員赴伊朗爭取重啟與美國的停火協議",
-   "en": "Qatari officials in Iran in bid to revive ceasefire deal with US",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/10/30/qatari-officials-in-iran-in-bid-to-revive-ceasefire-deal-with-us?traffic_source=rss",
-   "at": "2026-10-30T12:26:56Z",
-   "place": "卡達",
-   "ll": [
-    51.53,
-    25.29
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
-   ],
-   "also": []
-  },
-  {
-   "t": "美國天然氣商隨需求成長擴大開採",
-   "en": "US Natural Gas Drillers Scale Up as Demand Grows",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/newsletters/2026-10-30/us-natural-gas-drillers-scale-up-as-demand-grows",
-   "at": "2026-10-30T12:10:31Z",
-   "place": "美國",
-   "ll": [
-    -95.71,
-    37.09
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
    "t": "義大利財長：通膨飆升是戰爭帶來的劇烈結果",
    "en": "Italy’s Inflation Jump Is Dramatic Result of War, Giorgetti Says",
    "src": "彭博經濟",
@@ -678,26 +612,6 @@
    "n_src": 1,
    "srcs": [
     "彭博經濟"
-   ],
-   "also": []
-  },
-  {
-   "t": "香港未來5年將成亞洲國際葡萄酒展獨家主辦地",
-   "en": "Hong Kong to be exclusive host of Vinexpo Asia trade fair for next 5 years",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3372765/hong-kong-be-exclusive-host-vinexpo-asia-trade-fair-next-five-years",
-   "at": "2026-10-30T11:32:00Z",
-   "place": "香港",
-   "ll": [
-    114.17,
-    22.32
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
    ],
    "also": []
   },
@@ -720,33 +634,6 @@
     "彭博經濟"
    ],
    "also": []
-  },
-  {
-   "t": "撤離走廊開啟 俄軍佔領區奧列什基居民紛紛逃離家園",
-   "en": "Residents leave devastated Russian-occupied Oleshky as evacuation corridor opens",
-   "src": "BBC",
-   "url": "https://www.bbc.co.uk/news/articles/c60me298k1yeo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-10-30T12:25:53Z",
-   "place": "烏克蘭奧列什基",
-   "ll": [
-    32.72,
-    46.63
-   ],
-   "cat": "戰爭衝突",
-   "tw": 0,
-   "why": "",
-   "n_src": 2,
-   "srcs": [
-    "BBC",
-    "Al Jazeera"
-   ],
-   "also": [
-    {
-     "src": "Al Jazeera",
-     "url": "https://www.aljazeera.com/news/2026/10/30/aid-convoy-enters-besieged-ukrainian-town-oleshky?traffic_source=rss",
-     "en": "Aid convoy enters besieged Ukrainian town Oleshky"
-    }
-   ]
   },
   {
    "t": "印度喜馬拉雅山區直升機失事，恐6人罹難",
@@ -772,93 +659,6 @@
      "src": "BBC",
      "url": "https://www.bbc.co.uk/news/articles/cr93zxyn9eqeo?at_medium=RSS&at_campaign=rss",
      "en": "Helicopter carrying six people crashes in northern Indian state"
-    }
-   ]
-  },
-  {
-   "t": "艾克森美孚增加莫三比克天然氣專案持股",
-   "en": "Exxon Increases Stake in Mozambique Gas Project",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-30/exxon-increases-stake-in-mozambique-gas-project-via-eni-swap",
-   "at": "2026-10-30T10:31:02Z",
-   "place": "莫三比克",
-   "ll": [
-    35.53,
-    -18.67
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
-   "t": "戰爭推動煉油利潤飆升 能源巨頭海撈560億美元",
-   "en": "Big Oil Scores $56 Billion Windfall on War-Driven Refining Spike",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-30/exxon-reaps-record-oil-refining-profits-on-war-driven-gasoline-diesel-spikes",
-   "at": "2026-10-30T10:30:22Z",
-   "place": "英國",
-   "ll": [
-    -3.44,
-    55.38
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
-   "t": "歐洲央行帕內塔：可能需要進一步升息來抑制物價",
-   "en": "ECB’s Panetta Says More Hikes May Be Needed to Tame Prices",
-   "src": "彭博經濟",
-   "url": "https://www.bloomberg.com/news/articles/2026-10-30/ecb-s-panetta-says-more-rate-hikes-may-be-needed-to-tame-prices",
-   "at": "2026-10-30T10:15:00Z",
-   "place": "德國法蘭克福",
-   "ll": [
-    8.68,
-    50.11
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博經濟"
-   ],
-   "also": []
-  },
-  {
-   "t": "南韓學生利用AI眼鏡作弊 2027年起將面臨起訴",
-   "en": "South Korean students caught cheating with AI glasses to face prosecution from 2027",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/asia/east-asia/article/3372755/south-korean-students-caught-cheating-ai-glasses-face-prosecution-2027",
-   "at": "2026-10-30T10:44:06Z",
-   "place": "南韓首爾",
-   "ll": [
-    126.98,
-    37.57
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 2,
-   "srcs": [
-    "南華早報",
-    "CNA 新加坡"
-   ],
-   "also": [
-    {
-     "src": "CNA 新加坡",
-     "url": "https://www.channelnewsasia.com/east-asia/south-korea-ai-smart-glasses-students-cheating-6505571",
-     "en": "South Korea seeks criminal charges, 3-year exam ban for cheating with AI glasses"
     }
    ]
   },
@@ -903,6 +703,26 @@
    "also": []
   },
   {
+   "t": "通膨與科技股拋售潮夾擊 黃金價格跌至一年來最低",
+   "en": "Gold Slumps to Lowest in a Year on Inflation, Tech-Stock Rout",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-10-29/gold-steadies-near-4-000-as-inflation-keeps-rate-hike-bets-firm",
+   "at": "2026-10-29T23:32:06Z",
+   "place": "紐約，美國",
+   "ll": [
+    -74.01,
+    40.71
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "國際金價與金融市場波動影響投資人資產配置及台灣金融市場走向。",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
    "t": "消息人士：五角大廈告訴歐洲國家對俄羅斯放緩言論",
    "en": "Pentagon tells Europeans to cool their rhetoric on Russia, sources say",
    "src": "日本時報",
@@ -921,12 +741,132 @@
     "日本時報"
    ],
    "also": []
+  },
+  {
+   "t": "日本央行總裁植田和男：2%通膨目標尚未穩定達成",
+   "en": "BOJ chief Ueda says 2% inflation goal not yet sustainably achieved",
+   "src": "日經亞洲",
+   "url": "https://asia.nikkei.com/economy/bank-of-japan/boj-chief-ueda-says-2-inflation-goal-not-yet-sustainably-achieved",
+   "at": "",
+   "place": "日本",
+   "ll": [
+    139.65,
+    35.68
+   ],
+   "cat": "經濟",
+   "tw": 3,
+   "why": "日本央行貨幣政策動向影響日圓匯率，進而牽動台灣對日出口競爭力與赴日旅遊消費。",
+   "n_src": 1,
+   "srcs": [
+    "日經亞洲"
+   ],
+   "also": []
+  },
+  {
+   "t": "美中期選舉將至 川普暫緩實施產能過剩關稅",
+   "en": "Trump holds off overcapacity tariffs as US midterms near",
+   "src": "日經亞洲",
+   "url": "https://asia.nikkei.com/politics/u.s.-midterm-elections/trump-holds-off-overcapacity-tariffs-as-us-midterms-near",
+   "at": "",
+   "place": "美國",
+   "ll": [
+    -77.04,
+    38.9
+   ],
+   "cat": "政治",
+   "tw": 3,
+   "why": "美國關稅政策變動將影響全球貿易走向，並牽動台灣出口製造業與供應鏈佈局。",
+   "n_src": 1,
+   "srcs": [
+    "日經亞洲"
+   ],
+   "also": []
+  },
+  {
+   "t": "法拉維歐波索納羅稱川普為「當選總統」挨批業餘笨蛋",
+   "en": "‘Amateur morons’: Flávio Bolsonaro’s short-lived ‘president-elect’ claim met with mockery",
+   "src": "Guardian",
+   "url": "https://www.theguardian.com/world/2026/oct/30/flavio-bolsonaros-president-elect-claim-mockery-brazil",
+   "at": "2026-10-30T14:08:41Z",
+   "place": "巴西利亞，巴西",
+   "ll": [
+    -47.92,
+    -15.83
+   ],
+   "cat": "政治",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "Guardian"
+   ],
+   "also": []
+  },
+  {
+   "t": "瑞士外長重啟外交辦公室後 向首爾簡報平壤訪問行程",
+   "en": "Swiss FM briefs Seoul on Pyongyang trip after reopening diplomatic office",
+   "src": "韓聯社",
+   "url": "https://en.yna.co.kr/view/AEN20261030013300315",
+   "at": "2026-10-30T14:06:05Z",
+   "place": "首爾，南韓",
+   "ll": [
+    126.98,
+    37.57
+   ],
+   "cat": "政治",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "韓聯社"
+   ],
+   "also": []
+  },
+  {
+   "t": "香港官員為大埔致命大火不辭職的決定辯護",
+   "en": "Hong Kong ministers defend decision not to resign over deadly Tai Po fire",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/hong-kong/society/article/3372783/hong-kong-ministers-defend-decision-not-resign-over-deadly-tai-po-fire",
+   "at": "2026-10-30T14:04:01Z",
+   "place": "香港",
+   "ll": [
+    114.17,
+    22.32
+   ],
+   "cat": "社會",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
+   "t": "教宗利奧成為史上首位在美國大選投票並投下郵寄選票的教宗",
+   "en": "Pope Leo becomes first pope ever to vote in US election, submits mail-in ballot",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/world/united-states-canada/article/3372784/pope-leo-becomes-first-pope-ever-vote-us-election-submits-mail-ballot",
+   "at": "2026-10-30T14:02:26Z",
+   "place": "梵蒂岡",
+   "ll": [
+    12.45,
+    41.9
+   ],
+   "cat": "政治",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
   }
  ],
  "n_zh": 40,
- "n_tw": 5,
- "n_big": 4,
+ "n_tw": 8,
+ "n_big": 1,
  "errs": [],
  "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報、彭博；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷",
- "updatedAt": "2026-10-30T13:13:03Z"
+ "updatedAt": "2026-10-30T14:16:41Z"
 }
