@@ -1,138 +1,6 @@
 {
  "items": [
   {
-   "d": "2026-10-29",
-   "t": "02:00",
-   "ts": 1793210400000,
-   "r": "美",
-   "n": "聯準會利率決議",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "Federal Funds Rate",
-   "cur": "USD",
-   "fc": "4.00%",
-   "pv": "4.00%"
-  },
-  {
-   "d": "2026-10-29",
-   "t": "02:00",
-   "ts": 1793210400000,
-   "r": "美",
-   "n": "FOMC 聲明",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "FOMC Statement",
-   "cur": "USD"
-  },
-  {
-   "d": "2026-10-29",
-   "t": "02:30",
-   "ts": 1793212200000,
-   "r": "美",
-   "n": "FOMC 記者會",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "FOMC Press Conference",
-   "cur": "USD"
-  },
-  {
-   "d": "2026-10-29",
-   "t": "20:30",
-   "ts": 1793277000000,
-   "r": "美",
-   "n": "GDP 初值 季增",
-   "k": "data",
-   "imp": 3,
-   "ap": false,
-   "en": "Advance GDP q/q",
-   "cur": "USD",
-   "fc": "3.2%",
-   "pv": "1.5%"
-  },
-  {
-   "d": "2026-10-29",
-   "t": "20:30",
-   "ts": 1793277000000,
-   "r": "美",
-   "n": "核心 PCE 物價 月增",
-   "k": "data",
-   "imp": 3,
-   "ap": false,
-   "en": "Core PCE Price Index m/m",
-   "cur": "USD",
-   "fc": "0.3%",
-   "pv": "0.2%"
-  },
-  {
-   "d": "2026-10-29",
-   "t": "20:30",
-   "ts": 1793277000000,
-   "r": "美",
-   "n": "Advance GDP Price Index q/q",
-   "k": "data",
-   "imp": 2,
-   "ap": false,
-   "en": "Advance GDP Price Index q/q",
-   "cur": "USD",
-   "fc": "3.2%",
-   "pv": "6.2%"
-  },
-  {
-   "d": "2026-10-29",
-   "t": "20:30",
-   "ts": 1793277000000,
-   "r": "美",
-   "n": "初領失業救濟金",
-   "k": "data",
-   "imp": 2,
-   "ap": false,
-   "en": "Unemployment Claims",
-   "cur": "USD",
-   "fc": "198K",
-   "pv": "194K"
-  },
-  {
-   "d": "2026-10-29",
-   "t": "21:15",
-   "ts": 1793279700000,
-   "r": "歐",
-   "n": "歐洲央行利率決議",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "Main Refinancing Rate",
-   "cur": "EUR",
-   "fc": "2.65%",
-   "pv": "2.65%"
-  },
-  {
-   "d": "2026-10-29",
-   "t": "21:15",
-   "ts": 1793279700000,
-   "r": "歐",
-   "n": "貨幣政策聲明",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "Monetary Policy Statement",
-   "cur": "EUR"
-  },
-  {
-   "d": "2026-10-29",
-   "t": "21:45",
-   "ts": 1793281500000,
-   "r": "歐",
-   "n": "歐洲央行記者會",
-   "k": "cb",
-   "imp": 3,
-   "ap": false,
-   "en": "ECB Press Conference",
-   "cur": "EUR"
-  },
-  {
    "d": "2026-10-30",
    "t": "07:30",
    "ts": 1793316600000,
@@ -169,7 +37,6 @@
    "imp": 1,
    "ap": false,
    "code": "7867",
-   "ind": "居家生活",
    "px": 44.06
   },
   {
@@ -414,6 +281,19 @@
    "code": "4967",
    "ind": "半導體業",
    "s": "本公司召開法人說明會，說明營運成果及未來展望。"
+  },
+  {
+   "d": "2026-11-03",
+   "t": "14:00",
+   "ts": null,
+   "r": "台",
+   "n": "阿瘦（8443）法說會",
+   "k": "conf",
+   "imp": 1,
+   "ap": false,
+   "code": "8443",
+   "ind": "貿易百貨",
+   "s": "公司營運概況說明；本次採Microsoft Teams會議,欲報名者請將1.法人機構名稱2.參加者姓名3.Email信箱"
   },
   {
    "d": "2026-11-03",
@@ -1272,13 +1152,13 @@
    "n": "天皇誕生日"
   }
  ],
- "from": "2026-10-30",
- "to": "2026-11-27",
+ "from": "2026-10-31",
+ "to": "2026-11-28",
  "ff_until": "2026-10-30",
- "n": 79,
+ "n": 70,
  "errs": [
   "FF nextweek.json: HTTPError: 404 Client Error: Not Found for url: https://nfs.faireconomy.media/ff_calendar_nextweek.json"
  ],
  "src": "Forex Factory 週行事曆、FRED、證交所、交易所行事曆（holidays 套件）、公開資訊觀測站",
- "updatedAt": "2026-10-30T13:27:53Z"
+ "updatedAt": "2026-10-30T16:31:25Z"
 }
