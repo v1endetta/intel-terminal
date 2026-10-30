@@ -2016,18 +2016,19 @@
  },
  "auctions": [
   {
-   "date": "2026-09-22",
+   "date": "2026-10-26",
    "term": "2 年",
-   "y": 4.787,
-   "btc": 2.63,
-   "ind": 57.8,
-   "dlr": 13.2,
+   "y": 4.708,
+   "btc": 2.59,
+   "ind": 45.7,
+   "dlr": 13.0,
    "reopen": false,
-   "btc_avg": 2.6,
-   "ind_avg": 58.6,
+   "td": 1,
+   "btc_avg": 2.64,
+   "ind_avg": 58.33,
    "n_prev": 6,
    "stale": false,
-   "weak": false,
+   "weak": true,
    "strong": false
   },
   {
@@ -2038,6 +2039,7 @@
    "ind": 57.6,
    "dlr": 10.7,
    "reopen": false,
+   "td": 1,
    "btc_avg": 2.65,
    "ind_avg": 65.88,
    "n_prev": 6,
@@ -2046,30 +2048,32 @@
    "strong": false
   },
   {
-   "date": "2026-09-23",
+   "date": "2026-10-27",
    "term": "5 年",
-   "y": 5.033,
-   "btc": 2.21,
-   "ind": 54.3,
-   "dlr": 15.8,
+   "y": 4.845,
+   "btc": 2.33,
+   "ind": 60.0,
+   "dlr": 10.6,
    "reopen": false,
-   "btc_avg": 2.33,
-   "ind_avg": 65.23,
+   "td": 1,
+   "btc_avg": 2.31,
+   "ind_avg": 63.97,
    "n_prev": 6,
    "stale": false,
-   "weak": true,
+   "weak": false,
    "strong": false
   },
   {
-   "date": "2026-09-24",
+   "date": "2026-10-29",
    "term": "7 年",
-   "y": 5.085,
-   "btc": 2.42,
-   "ind": 57.2,
-   "dlr": 12.5,
+   "y": 4.894,
+   "btc": 2.46,
+   "ind": 57.8,
+   "dlr": 9.4,
    "reopen": false,
+   "td": 1,
    "btc_avg": 2.49,
-   "ind_avg": 64.65,
+   "ind_avg": 63.75,
    "n_prev": 6,
    "stale": false,
    "weak": true,
@@ -2083,6 +2087,7 @@
    "ind": 80.3,
    "dlr": 2.5,
    "reopen": true,
+   "td": 1,
    "btc_avg": 2.54,
    "ind_avg": 74.15,
    "n_prev": 6,
@@ -2091,17 +2096,18 @@
    "strong": true
   },
   {
-   "date": "2026-09-15",
+   "date": "2026-10-21",
    "term": "20 年",
-   "y": 5.42,
-   "btc": 2.57,
-   "ind": 52.5,
-   "dlr": 16.9,
+   "y": 5.469,
+   "btc": 2.73,
+   "ind": 58.2,
+   "dlr": 10.3,
    "reopen": true,
-   "btc_avg": 2.65,
-   "ind_avg": 67.98,
+   "td": 1,
+   "btc_avg": 2.62,
+   "ind_avg": 65.2,
    "n_prev": 6,
-   "stale": true,
+   "stale": false,
    "weak": true,
    "strong": false
   },
@@ -2113,6 +2119,7 @@
    "ind": 72.3,
    "dlr": 6.8,
    "reopen": true,
+   "td": 1,
    "btc_avg": 2.41,
    "ind_avg": 69.12,
    "n_prev": 6,
@@ -2123,13 +2130,54 @@
  ],
  "auc_recent": [
   {
+   "date": "2026-10-29",
+   "term": "7 年",
+   "y": 4.894,
+   "btc": 2.46,
+   "ind": 57.8,
+   "dlr": 9.4,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-10-27",
+   "term": "5 年",
+   "y": 4.845,
+   "btc": 2.33,
+   "ind": 60.0,
+   "dlr": 10.6,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-10-26",
+   "term": "2 年",
+   "y": 4.708,
+   "btc": 2.59,
+   "ind": 45.7,
+   "dlr": 13.0,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-10-21",
+   "term": "20 年",
+   "y": 5.469,
+   "btc": 2.73,
+   "ind": 58.2,
+   "dlr": 10.3,
+   "reopen": true,
+   "td": 1
+  },
+  {
    "date": "2026-10-08",
    "term": "30 年",
    "y": 5.618,
    "btc": 2.54,
    "ind": 72.3,
    "dlr": 6.8,
-   "reopen": true
+   "reopen": true,
+   "td": 1
   },
   {
    "date": "2026-10-07",
@@ -2138,7 +2186,8 @@
    "btc": 2.77,
    "ind": 80.3,
    "dlr": 2.5,
-   "reopen": true
+   "reopen": true,
+   "td": 1
   },
   {
    "date": "2026-10-06",
@@ -2147,7 +2196,8 @@
    "btc": 2.62,
    "ind": 57.6,
    "dlr": 10.7,
-   "reopen": false
+   "reopen": false,
+   "td": 1
   },
   {
    "date": "2026-09-24",
@@ -2156,7 +2206,8 @@
    "btc": 2.42,
    "ind": 57.2,
    "dlr": 12.5,
-   "reopen": false
+   "reopen": false,
+   "td": 1
   },
   {
    "date": "2026-09-23",
@@ -2165,7 +2216,8 @@
    "btc": 2.21,
    "ind": 54.3,
    "dlr": 15.8,
-   "reopen": false
+   "reopen": false,
+   "td": 1
   },
   {
    "date": "2026-09-22",
@@ -2174,7 +2226,8 @@
    "btc": 2.63,
    "ind": 57.8,
    "dlr": 13.2,
-   "reopen": false
+   "reopen": false,
+   "td": 1
   },
   {
    "date": "2026-09-15",
@@ -2183,7 +2236,8 @@
    "btc": 2.57,
    "ind": 52.5,
    "dlr": 16.9,
-   "reopen": true
+   "reopen": true,
+   "td": 1
   },
   {
    "date": "2026-09-10",
@@ -2192,46 +2246,11 @@
    "btc": 2.61,
    "ind": 79.5,
    "dlr": 2.2,
-   "reopen": true
-  },
-  {
-   "date": "2026-09-09",
-   "term": "10 年",
-   "y": 4.834,
-   "btc": 2.71,
-   "ind": 79.2,
-   "dlr": 4.3,
-   "reopen": true
-  },
-  {
-   "date": "2026-09-08",
-   "term": "3 年",
-   "y": 4.474,
-   "btc": 2.72,
-   "ind": 62.1,
-   "dlr": 10.9,
-   "reopen": false
-  },
-  {
-   "date": "2026-08-27",
-   "term": "7 年",
-   "y": 4.512,
-   "btc": 2.5,
-   "ind": 60.8,
-   "dlr": 12.3,
-   "reopen": false
-  },
-  {
-   "date": "2026-08-26",
-   "term": "5 年",
-   "y": 4.393,
-   "btc": 2.37,
-   "ind": 61.5,
-   "dlr": 10.0,
-   "reopen": false
+   "reopen": true,
+   "td": 1
   }
  ],
  "alerts": [],
  "errs": [],
- "updatedAt": "2026-10-30T22:21:25Z"
+ "updatedAt": "2026-10-30T22:39:12Z"
 }
