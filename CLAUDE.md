@@ -175,7 +175,7 @@ Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 a
 | 總經 | `aicycle` AI 循環 · `champions` 台灣隱形冠軍 · `twsectors` 台灣內需產業 · `dlead` dalta 領先指標 · `credit` 信用利差 · `exports` 出口結構 · `stress` 企業壓力 · `calendar`／`mktcal` · `liquidity`（p-liq） · `macro` · `gmacro` · `supply` · `consume` · `cards` · `lead` · `imports` · `housefc` · `house` · `demo` · `bizlife` · `cars` · `permits` · `renewal` 都更 · `prices` 物價細項 · `tourism` · `poly` · `veg`／`fruit`／`fish`／`meat` |
 | 走向 | `weekly`（weekly.py） · `chain` 主題鏈 · `ledger` 預測帳本 · `voice` 趨勢雷達 · `wiki` · `tech2` · `gap` 台灣還沒報 · `migration` · `births` · 地圖工具（圈地報告、住哪裡） |
 | 訊號 | `news`＋watch 關注領域 · `tenders`／`awards`／`tendermap` · `design` · `radar` 公司雷達 · `brands`／`taxreg` 新品牌 · `uspolicy` · `ossuse` · `clinics` · `aesthetic` 醫美 · `grants` · `crowd` · `aiwire` · `devpulse` · `tech` · `oss` · `lyst` · `media` · `think` · `jobs` · `corp` · `policy` · `ipr` · `secwords` |
-| 輿情 | `pop` · `gtop` 焦點新聞 · `worldnews` · `townnews` 鄉鎮新聞 · `youtube` · `attention` · `mood` 台灣情緒（Gemini 判讀 PTT、Cofacts、Mobile01、Bluesky） · `cofacts` · `polls` 民調 · `forums` Mobile01 · `ptt` · `social` Bluesky · `trends` |
+| 輿情 | `pop` · `appstore` App 排行 · `gtop` 焦點新聞 · `worldnews` · `townnews` 鄉鎮新聞 · `youtube` · `attention` · `mood` 台灣情緒（Gemini 判讀 PTT、Cofacts、Mobile01、Bluesky） · `cofacts` · `polls` 民調 · `forums` Mobile01 · `ptt` · `social` Bluesky · `trends` |
 | 台灣現場 | `geo`＋`mapfeed` 全台現場地圖 · `elect` 五都選戰 · `tw_pulse` · `roads` · `metro` · `weather`／`radar_wx`／`lightning`／`typhoon` · `alerts`（含停班停課） · `localnews` · `quake` · `power` · `airport`／`flights` · `plaact` 台海 · `cables` 海纜 · `pressure` 氣壓圖 · `cctv`（四都） · `oil` |
 | 資料庫 | BigQuery：授權、全文搜尋、時光機、走勢（`vault_push` 寫入） |
 
@@ -288,6 +288,7 @@ RI=999999 STEPS="wait|15000;js|(__story.openAt('總經','內需產業'),1);wait|
 | 狀態 | 項目 |
 |---|---|
 | ⏳ 待驗證 | 鄉鎮新聞（10/30 再修）：擋簡體字標題與來源（`TOWN_SIMP`），排除詞加路竹會、台電區處、新豐洲、三大園區。下一輪確認這幾類不再出現。已知漏網：標題沒寫縣市的跨縣市同名地標（台東「大溪－多良」被算成桃園大溪），發生率低，先不處理 |
+| ⏳ 待驗證 | App 排行 `appstore`（10/31 上線）：排名歷史存在 data 分支 `data/appstore_hist.json`（每天一筆、留 40 天，含各類別個數）。11/7 之後 7 天爬升才準，確認爬升與類別變化合理。下一步可能做「消費者有感」交叉面板（說 vs 買四格），等 Vin 看幾週資料再決定 |
 | ⏳ 待驗證 | 3D 卡片隨資料更新重畫（`refresh_patch.py`）還沒實測 |
 | ✅ 已驗證 | 停班停課 22 縣市全部抓到（每個地區第一列少一格的問題）；雨量沒下雨的縣市記 0 |
 | ✅ 已驗證 | 藝文活動：新北市不再被算成臺北市（10/30 新北市 18、臺北市 61） |
