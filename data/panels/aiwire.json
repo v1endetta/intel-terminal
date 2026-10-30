@@ -9,14 +9,6 @@
    "launch": true
   },
   {
-   "source": "Gemini",
-   "title": "You can now generate, preview, and edit documents, PDFs, presentations, spreadsheets, and ",
-   "url": "https://blog.google/innovation-and-ai/products/gemini-app/edit-files-directly/",
-   "at": "2026-10-29T16:15:00Z",
-   "vendor": "google",
-   "launch": true
-  },
-  {
    "source": "xAI",
    "title": "Introducing the SpaceX Super Intelligence Partner Network",
    "url": "https://x.ai/news/partnernetworkannouncement",
@@ -85,14 +77,6 @@
    "launch": false
   },
   {
-   "source": "Gemini",
-   "title": "How to use Gemini to update your resume",
-   "url": "https://blog.google/innovation-and-ai/products/gemini-app/update-resume-with-gemini/",
-   "at": "2026-10-29T11:33:00Z",
-   "vendor": "google",
-   "launch": false
-  },
-  {
    "source": "OpenAI",
    "title": "How we detect frontier model misalignment",
    "url": "https://openai.com/index/how-we-detect-frontier-model-misalignment",
@@ -106,22 +90,6 @@
    "url": "https://openai.com/index/ropes-gray-ai-diligence",
    "at": "2026-10-29T07:00:00Z",
    "vendor": "openai",
-   "launch": false
-  },
-  {
-   "source": "Gemini",
-   "title": "Dive into new topics with immersive explorations in the Gemini app.",
-   "url": "https://blog.google/innovation-and-ai/products/gemini-app/immersive-explorations-student-hub/",
-   "at": "2026-10-28T18:00:00Z",
-   "vendor": "google",
-   "launch": false
-  },
-  {
-   "source": "Gemini",
-   "title": "Gemini 4 Carbon: our next frontier model",
-   "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/",
-   "at": "2026-10-28T17:00:00Z",
-   "vendor": "google",
    "launch": false
   },
   {
@@ -168,8 +136,20 @@
    "official": true,
    "vendor": "anthropic",
    "launch": false
+  },
+  {
+   "source": "Anthropic",
+   "title": "Features",
+   "url": "https://www.anthropic.com/news/features",
+   "at": "",
+   "official": true,
+   "vendor": "anthropic",
+   "launch": false
   }
  ],
- "errs": [],
- "updatedAt": "2026-10-30T14:23:58Z"
+ "errs": [
+  "Google AI: HTTPError: 500 Server Error: Internal Server Error for url: https://blog.google/technology/ai/rss/",
+  "Gemini: HTTPError: 500 Server Error: Internal Server Error for url: https://blog.google/products/gemini/rss/"
+ ],
+ "updatedAt": "2026-10-30T14:40:06Z"
 }
