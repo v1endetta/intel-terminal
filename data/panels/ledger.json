@@ -63,9 +63,9 @@
   "veg_revert": {
    "cat": "生活成本",
    "desc": "兩週內漲超過 20% 的菜，再兩週會回落",
-   "open": 3,
-   "done": 2,
-   "hits": 2,
+   "open": 2,
+   "done": 3,
+   "hits": 3,
    "brier": 0.16,
    "bt_n": 32,
    "bt_rate": 0.59
@@ -201,17 +201,6 @@
    "prob": 0.75,
    "due": "2026-08",
    "status": "open"
-  },
-  {
-   "id": "2026-10-16-veg_revert-35",
-   "made": "2026-10-16",
-   "rule": "veg_revert",
-   "subject": "番茄",
-   "text": "番茄（159.7 元）兩週後會比現在便宜",
-   "prob": 0.6,
-   "due": "2026-10-30",
-   "status": "open",
-   "base": 159.7
   },
   {
    "id": "2026-10-11-lead_up-17",
@@ -655,9 +644,33 @@
    "op": ">",
    "target": 20,
    "rev": "r2"
+  },
+  {
+   "id": "2026-10-11-chain_gap-25",
+   "made": "2026-10-11",
+   "rule": "chain_gap",
+   "subject": "毛孩",
+   "text": "「毛孩」相關新店到 2027/04 年增高於現在（-11%），供給會跟上",
+   "prob": 0.5,
+   "due": "2027-04-11",
+   "status": "open",
+   "base": -11
   }
  ],
  "recent": [
+  {
+   "id": "2026-10-16-veg_revert-35",
+   "made": "2026-10-16",
+   "rule": "veg_revert",
+   "subject": "番茄",
+   "text": "番茄（159.7 元）兩週後會比現在便宜",
+   "prob": 0.6,
+   "due": "2026-10-30",
+   "status": "hit",
+   "base": 159.7,
+   "actual": "159.7 → 95.6 元/公斤",
+   "resolved": "2026-10-30"
+  },
   {
    "id": "2026-10-11-veg_revert-18",
    "made": "2026-10-11",
@@ -685,10 +698,10 @@
    "resolved": "2026-10-21"
   }
  ],
- "n_open": 56,
- "n_done": 2,
- "n_hit": 2,
+ "n_open": 55,
+ "n_done": 3,
+ "n_hit": 3,
  "gen_at": "2026-10-25",
  "bt_at": "2026-10-26",
- "updatedAt": "2026-10-30T10:21:55Z"
+ "updatedAt": "2026-10-30T10:43:38Z"
 }
