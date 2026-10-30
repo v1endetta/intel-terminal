@@ -9,7 +9,7 @@ cp "$R/index.html" "$W/site/index.html"
 if [ "$1" = build ]; then python3 "$R/lab/g/src/build.py" "$R/lab/g/src" && cp "$R/lab/g/src/index.html" "$W/site/lab/g/index.html"
 else cp "$R/lab/g/index.html" "$W/site/lab/g/index.html"; fi
 # 資料：data 分支最上層的 data/*.json（約 30 MB），網頁從 raw.githubusercontent.com 讀，截圖工具改導到這裡
-git -C "$R" fetch -q origin data
+git -C "$R" fetch -q --depth 1 origin +data:refs/remotes/origin/data
 for p in $(git -C "$R" ls-tree --name-only origin/data data/ | grep '\.json$'); do git -C "$R" show "origin/data:$p" > "$W/raw/$(basename "$p")"; done
 [ -d "$W/npm/node_modules/three" ] || (cd "$W/npm" && npm init -y >/dev/null && npm i -s three@0.160.0 topojson-client@3 world-atlas@2 >/dev/null)
 echo "ready: $W"

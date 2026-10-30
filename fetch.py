@@ -3585,6 +3585,84 @@ def p_pop():
     return {"label": "Spotify・Netflix・Apple Podcast・KKBOX・LINE TODAY", **out, "errs": errs}
 
 
+# ---------- App Store 台灣排行（Apple 官方榜單，免金鑰）：大家願意下載、願意花錢的 App；每天記一次排名算爬升 ----------
+APPSTORE_HIST = DATA / "appstore_hist.json"
+APPSTORE_CHARTS = [("free", "topfreeapplications", 100), ("gross", "topgrossingapplications", 100), ("paid", "toppaidapplications", 50)]
+
+
+def _as_feed(slug, n):
+    j = None
+    for i in range(2):  # 蘋果這台主機偶爾很慢，重試一次
+        try:
+            j = gjson(f"https://itunes.apple.com/tw/rss/{slug}/limit={n}/json", timeout=45); break
+        except Exception:  # noqa: BLE001
+            if i:
+                raise
+            time.sleep(3)
+    out = []
+    for i, e in enumerate((j.get("feed") or {}).get("entry") or []):
+        aid = ((e.get("id") or {}).get("attributes") or {}).get("im:id")
+        if not aid:
+            continue
+        out.append({"rank": i + 1, "id": aid, "name": ((e.get("im:name") or {}).get("label") or "")[:48],
+                    "dev": ((e.get("im:artist") or {}).get("label") or "")[:30],
+                    "genre": (((e.get("category") or {}).get("attributes") or {}).get("label") or ""),
+                    "url": (e.get("id") or {}).get("label") or ""})
+    if len(out) < 10:
+        raise RuntimeError(f"{slug}: only {len(out)}")
+    return out
+
+
+def p_appstore():
+    from collections import Counter
+    hist = json.loads(APPSTORE_HIST.read_text(encoding="utf-8")) if APPSTORE_HIST.exists() else {}
+    today = TODAY_TPE.isoformat()
+    charts, errs = {}, []
+    for key, slug, n in APPSTORE_CHARTS:
+        try:
+            charts[key] = _as_feed(slug, n)
+        except Exception as e:  # noqa: BLE001
+            errs.append(f"{key}: {safe_err(e)}")
+    if not charts:
+        raise RuntimeError("appstore: nothing " + "; ".join(errs)[:160])
+    snap = hist.get(today, {})
+    for k, rows in charts.items():
+        snap[k] = {r["id"]: r["rank"] for r in rows}
+        snap[k + "_g"] = dict(Counter(r["genre"] for r in rows))   # 當天各類別幾個（之後跟 7 天前比）
+    hist[today] = snap
+    hist = {d: hist[d] for d in sorted(hist)[-40:]}
+    write_json(APPSTORE_HIST, hist, separators=(",", ":"))
+    days = sorted(d for d in hist if d < today)
+    yday = days[-1] if days else None
+    wk_cut = (TODAY_TPE - timedelta(days=7)).isoformat()
+    base = ([d for d in days if d <= wk_cut] or days or [None])[-1]   # 7 天前的榜；歷史還不夠 7 天就用最早那天
+    base_days = (TODAY_TPE - datetime.fromisoformat(base).date()).days if base else 0
+    for k, rows in charts.items():
+        y, b = (hist.get(yday) or {}).get(k) or {}, (hist.get(base) or {}).get(k) or {}
+        for r in rows:
+            r["d1"] = (y[r["id"]] - r["rank"]) if r["id"] in y else ("new" if y else None)
+            r["d7"] = (b[r["id"]] - r["rank"]) if r["id"] in b else ("new" if b else None)
+    # 爬升最快：免費榜與營收榜前 100，名次進步最多；新進前 50 名另外列
+    climb, newc = [], []
+    for k in ("free", "gross"):
+        for r in charts.get(k) or []:
+            if isinstance(r["d7"], int) and r["d7"] >= 5:
+                climb.append({**r, "chart": k})
+            elif r["d7"] == "new" and r["rank"] <= 50:
+                newc.append({**r, "chart": k})
+    climb.sort(key=lambda r: (-r["d7"], r["rank"]))
+    newc.sort(key=lambda r: r["rank"])
+    # 類別占比（前 100 名裡各類幾個），跟 7 天前比
+    genres = {}
+    for k in ("free", "gross"):
+        now_c = Counter(r["genre"] for r in charts.get(k) or [])
+        prev_c = (hist.get(base) or {}).get(k + "_g")
+        genres[k] = [{"g": g, "n": c, "prev": (prev_c.get(g, 0) if prev_c is not None else None)} for g, c in now_c.most_common(8)]
+    trim = lambda rows, m: [{x: r[x] for x in ("rank", "id", "name", "dev", "genre", "url", "d1", "d7")} for r in rows[:m]]
+    return {"free": trim(charts.get("free", []), 25), "gross": trim(charts.get("gross", []), 25), "paid": trim(charts.get("paid", []), 15),
+            "climbers": climb[:12], "newcomers": newc[:10], "genres": genres, "base_days": base_days, "hist_days": len(hist), "errs": errs}
+
+
 # ---------- 國道・省道即時路況（彰化機房抓的高公局、公路局資料） ----------
 ROADS_GEO_PATH = DATA / "roads_geo.json"
 ROADS_LIVE_PATH = DATA / "roads_live.json"
@@ -13129,6 +13207,7 @@ DATA.mkdir(exist_ok=True)
 run("think", p_think, keep_if_fresh_hours=2)
 run("voice", p_voice, keep_if_fresh_hours=6)
 run("pop", p_pop, keep_if_fresh_hours=3)
+run("appstore", p_appstore, keep_if_fresh_hours=6)  # App Store 台灣三個榜；一天記一次排名算爬升
 run("roads", p_roads)
 run("cctv", p_cctv, keep_if_fresh_hours=12 if CCTV_PATH.exists() and '"tc"' in CCTV_PATH.read_text(encoding="utf-8") else 1)   # 攝影機清單（地圖車流視角）
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
