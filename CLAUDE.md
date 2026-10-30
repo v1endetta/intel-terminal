@@ -160,6 +160,8 @@ Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 a
 12. 企業壓力：減班連兩期增加，或退票比率創 12 個月新高
 13. dalta 領先指標確認轉折
 14. 主論點的推翻條件觸發
+15. 美債 10 年單日 ±15 個基點（財政部收盤值）
+16. 美債 10 減 2 年、10 減 3 個月轉正或倒掛（翻轉前要連 6 個交易日在另一邊，避免在 0 附近來回洗）
 
 ---
 
@@ -171,7 +173,7 @@ Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 a
 | 分頁 | 面板（run key → 終端機 id） |
 |---|---|
 | 總覽 | `theses` 論點追蹤 · `insights`／`insights_cat` 洞見（Gemini） · 摘要 brief |
-| 市場 | `pulse` 5 分鐘線 · `taiex` · `tw_market` · `taifex` · `fx` · `world` · `usbig` · `fear` 恐慌結構 · `sectors` **美股板塊** · `commodities`（p-cmdty，含海運） · `logistics` 全球物流 · `luxury`（p-lux） · `tw_stocks` · `revenue` · `mops` |
+| 市場 | `pulse` 5 分鐘線 · `taiex` · `tw_market` · `taifex` · `fx` · `world` · `usbig` · `ust` 美債殖利率 · `fear` 恐慌結構 · `sectors` **美股板塊** · `commodities`（p-cmdty，含海運） · `logistics` 全球物流 · `luxury`（p-lux） · `tw_stocks` · `revenue` · `mops` |
 | 總經 | `aicycle` AI 循環 · `champions` 台灣隱形冠軍 · `twsectors` 台灣內需產業 · `dlead` dalta 領先指標 · `credit` 信用利差 · `exports` 出口結構 · `stress` 企業壓力 · `calendar`／`mktcal` · `liquidity`（p-liq） · `macro` · `gmacro` · `supply` · `consume` · `cards` · `lead` · `imports` · `housefc` · `house` · `demo` · `bizlife` · `cars` · `permits` · `renewal` 都更 · `prices` 物價細項 · `tourism` · `poly` · `veg`／`fruit`／`fish`／`meat` |
 | 走向 | `weekly`（weekly.py） · `chain` 主題鏈 · `ledger` 預測帳本 · `voice` 趨勢雷達 · `wiki` · `tech2` · `gap` 台灣還沒報 · `migration` · `births` · 地圖工具（圈地報告、住哪裡） |
 | 訊號 | `news`＋watch 關注領域 · `tenders`／`awards`／`tendermap` · `design` · `radar` 公司雷達 · `brands`／`taxreg` 新品牌 · `uspolicy` · `ossuse` · `clinics` · `aesthetic` 醫美 · `grants` · `crowd` · `aiwire` · `devpulse` · `tech` · `oss` · `lyst` · `media` · `think` · `jobs` · `corp` · `policy` · `ipr` · `secwords` |
@@ -289,6 +291,7 @@ RI=999999 STEPS="wait|15000;js|(__story.openAt('總經','內需產業'),1);wait|
 |---|---|
 | ⏳ 待驗證 | 鄉鎮新聞（10/30 再修）：擋簡體字標題與來源（`TOWN_SIMP`），排除詞加路竹會、台電區處、新豐洲、三大園區。下一輪確認這幾類不再出現。已知漏網：標題沒寫縣市的跨縣市同名地標（台東「大溪－多良」被算成桃園大溪），發生率低，先不處理 |
 | ⏳ 待驗證 | App 排行 `appstore`（10/31 上線）：排名歷史存在 data 分支 `data/appstore_hist.json`（每天一筆、留 40 天，含各類別個數）。11/7 之後 7 天爬升才準，確認爬升與類別變化合理。下一步可能做「消費者有感」交叉面板（說 vs 買四格），等 Vin 看幾週資料再決定 |
+| ⏳ 待驗證 | 美債殖利率 `ust`（10/31 上線）：財政部名目＋實質曲線 CSV（去年整年快取在 data 分支 `data/ust_cache.json`，一週更新）、FRED 期限溢酬 THREEFYTP10、Yahoo ^MOVE（ICE 授權，只輸出 5 年百分位）、Fiscal Data 標售結果（排除抗通膨與浮動利率）。Slack 警報第 15、16 條；論點 t3 加「期限溢酬」、t13 加「10 年實質利率」證據。歷史序列在 `history.json` 的 `ust` 群組。確認第一個交易日的真實數值與標售判讀合理 |
 | ⏳ 待驗證 | 3D 卡片隨資料更新重畫（`refresh_patch.py`）還沒實測 |
 | ✅ 已驗證 | 停班停課 22 縣市全部抓到（每個地區第一列少一格的問題）；雨量沒下雨的縣市記 0 |
 | ✅ 已驗證 | 藝文活動：新北市不再被算成臺北市（10/30 新北市 18、臺北市 61） |

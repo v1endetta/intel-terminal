@@ -10465,6 +10465,173 @@ def p_fear():
     return {"items": items, "errs": errs[:3], "label": src, "regime": regime, "why": why, "tone": tone}
 
 
+# ---------- 美債殖利率：財政部官方曲線（比 FRED 早一天）、實質利率、期限溢酬（FRED）、MOVE（只給百分位）、標售結果 ----------
+UST_CACHE = DATA / "ust_cache.json"
+UST_TENORS = [("1M", "1 Mo"), ("3M", "3 Mo"), ("6M", "6 Mo"), ("1Y", "1 Yr"), ("2Y", "2 Yr"), ("3Y", "3 Yr"), ("5Y", "5 Yr"), ("7Y", "7 Yr"),
+              ("10Y", "10 Yr"), ("20Y", "20 Yr"), ("30Y", "30 Yr")]
+UST_AUC_TERMS = ["2-Year", "3-Year", "5-Year", "7-Year", "10-Year", "20-Year", "30-Year"]
+
+
+def _ust_csv(year, kind):
+    """財政部每日殖利率 CSV（kind：daily_treasury_yield_curve 名目／daily_treasury_real_yield_curve 實質）→ {日期: {欄位: 值}}"""
+    r = get(f"https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/{year}/all",
+            params={"type": kind, "field_tdr_date_value": str(year), "page": "", "_format": "csv"}, timeout=60)
+    rows = list(csv.reader(io.StringIO(r.text.lstrip("﻿"))))
+    if len(rows) < 2:
+        raise RuntimeError(f"treasury {kind} {year}: empty")
+    head = [h.strip() for h in rows[0]]
+    out = {}
+    for row in rows[1:]:
+        try:
+            d = datetime.strptime(row[0].strip(), "%m/%d/%Y").date().isoformat()
+        except Exception:  # noqa: BLE001
+            continue
+        out[d] = {h.upper(): num(v) for h, v in zip(head[1:], row[1:]) if num(v) is not None}
+    return out
+
+
+def _ust_auctions():
+    since = (TODAY_TPE - timedelta(days=420)).isoformat()
+    j = gjson("https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/auctions_query",
+              params={"sort": "-auction_date", "page[size]": "300", "filter": f"security_type:in:(Note,Bond),auction_date:gte:{since}"}, timeout=60)
+    rows = []
+    for a in j.get("data") or []:
+        btc = num(a.get("bid_to_cover_ratio"))
+        if btc is None or str(a.get("inflation_index_security")).lower() == "yes" or str(a.get("floating_rate")).lower() == "yes":
+            continue   # 還沒開標、抗通膨債、浮動利率都不算
+        term = a.get("original_security_term") or a.get("security_term") or ""
+        if term not in UST_AUC_TERMS:
+            continue
+        comp, ind = num(a.get("comp_accepted")) or num(a.get("total_accepted")), num(a.get("indirect_bidder_accepted"))
+        dlr = num(a.get("primary_dealer_accepted"))
+        rows.append({"date": a.get("auction_date"), "term": term.replace("-Year", " 年"), "y": num(a.get("high_yield")), "btc": round(btc, 2),
+                     "ind": round(ind / comp * 100, 1) if ind is not None and comp else None,
+                     "dlr": round(dlr / comp * 100, 1) if dlr is not None and comp else None, "reopen": str(a.get("reopening")).lower() == "yes"})
+    rows.sort(key=lambda r: r["date"], reverse=True)
+    latest, seen = [], set()
+    for r in rows:   # 每個天期最新一次，跟同天期前 6 次平均比
+        if r["term"] in seen:
+            continue
+        seen.add(r["term"])
+        prev = [x for x in rows if x["term"] == r["term"] and x["date"] < r["date"]][:6]
+        avg = lambda k: round(sum(x[k] for x in prev if x[k] is not None) / max(1, sum(1 for x in prev if x[k] is not None)), 2) if prev else None
+        r = {**r, "btc_avg": avg("btc"), "ind_avg": avg("ind"), "n_prev": len(prev)}
+        r["weak"] = bool(prev) and ((r["btc_avg"] is not None and r["btc"] < r["btc_avg"] - 0.15) or (r["ind"] is not None and r["ind_avg"] is not None and r["ind"] < r["ind_avg"] - 5))
+        r["strong"] = bool(prev) and not r["weak"] and r["btc_avg"] is not None and r["btc"] > r["btc_avg"] + 0.15
+        latest.append(r)
+    order = {t.replace("-Year", " 年"): i for i, t in enumerate(UST_AUC_TERMS)}
+    latest.sort(key=lambda r: order.get(r["term"], 99))
+    return latest, rows[:12]
+
+
+def p_ust():
+    errs = []
+    yr = TODAY_TPE.year
+    try:
+        cache = json.loads(UST_CACHE.read_text(encoding="utf-8")) if UST_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        cache = {}
+    nom, real = {}, {}
+    # 去年整年一週抓一次就好；今年每輪抓
+    if cache.get("year") != yr - 1 or (NOW - datetime.fromisoformat(cache.get("at", "2000-01-01T00:00:00+00:00"))).days >= 7:
+        try:
+            cache = {"year": yr - 1, "at": NOW.isoformat(), "nom": _ust_csv(yr - 1, "daily_treasury_yield_curve"),
+                     "real": _ust_csv(yr - 1, "daily_treasury_real_yield_curve")}
+            write_json(UST_CACHE, cache, separators=(",", ":"))
+        except Exception as e:  # noqa: BLE001
+            errs.append("去年曲線: " + safe_err(e))
+    nom.update(cache.get("nom") or {}); real.update(cache.get("real") or {})
+    nom.update(_ust_csv(yr, "daily_treasury_yield_curve"))
+    try:
+        real.update(_ust_csv(yr, "daily_treasury_real_yield_curve"))
+    except Exception as e:  # noqa: BLE001
+        errs.append("實質利率: " + safe_err(e))
+    days = sorted(d for d in nom if nom[d].get("10 YR") is not None)
+    if len(days) < 30:
+        raise RuntimeError(f"ust: only {len(days)} days")
+    cur = days[-1]
+    pick = lambda back: next((d for d in reversed(days) if d <= (date_of(cur) - timedelta(days=back)).isoformat()), days[0])
+    curve = lambda d: {"date": d, "v": [nom[d].get(col.upper()) for _, col in UST_TENORS]}
+    y10 = lambda d: nom[d].get("10 YR")
+    sp = lambda d, a: round(nom[d]["10 YR"] - nom[d][a], 2) if nom[d].get(a) is not None else None
+    one_y = [d for d in days if d >= (date_of(cur) - timedelta(days=372)).isoformat()]
+    spreads = [[d, sp(d, "2 YR"), sp(d, "3 MO")] for d in one_y]
+    def flip(idx):   # 正負號剛翻轉，而且翻之前連續 5 個交易日都是另一邊（避免在 0 附近來回洗）
+        s = [r[idx] for r in spreads if r[idx] is not None]
+        if len(s) < 7:
+            return None
+        if (s[-1] >= 0) != (s[-2] >= 0) and all((x >= 0) == (s[-2] >= 0) for x in s[-7:-1]):
+            return "轉正" if s[-1] >= 0 else "倒掛"
+        return None
+    def since(idx):   # 目前這一邊已經維持多久
+        s = [(r[0], r[idx]) for r in spreads if r[idx] is not None]
+        if not s:
+            return None
+        sign, start = s[-1][1] >= 0, None
+        for d, v in reversed(s):
+            if (v >= 0) != sign:
+                return start   # 翻到這一邊的第一天
+            start = d
+        return None   # 一整年都在同一邊
+    prev = days[-2]
+    d1bp = round((y10(cur) - y10(prev)) * 100)
+    # 10 年 = 實質利率 + 預期通膨（同一天的名目減實質）
+    rd = sorted(d for d in real if real[d].get("10 YR") is not None and d in nom)
+    rd1 = [d for d in rd if d >= (date_of(cur) - timedelta(days=372)).isoformat()]
+    decomp = [[d, real[d]["10 YR"], round(nom[d]["10 YR"] - real[d]["10 YR"], 2)] for d in rd1[::3]]
+    if rd1 and (not decomp or decomp[-1][0] != rd1[-1]):
+        d = rd1[-1]; decomp.append([d, real[d]["10 YR"], round(nom[d]["10 YR"] - real[d]["10 YR"], 2)])
+    m1 = pick(30)
+    rm1 = next((d for d in reversed(rd) if d <= m1), None)
+    drv = None
+    if rd and rm1:
+        dr, db = real[rd[-1]]["10 YR"] - real[rm1]["10 YR"], (nom[rd[-1]]["10 YR"] - real[rd[-1]]["10 YR"]) - (nom[rm1]["10 YR"] - real[rm1]["10 YR"])
+        drv = {"real_bp": round(dr * 100), "be_bp": round(db * 100)}
+    out = {"asof": cur, "tenors": [t for t, _ in UST_TENORS], "now": curve(cur), "m1": curve(m1), "y1": curve(pick(365)),
+           "y10": y10(cur), "d1bp": d1bp, "m1bp": round((y10(cur) - y10(m1)) * 100),
+           "s2": spreads[-1][1], "s3m": spreads[-1][2], "spreads": spreads, "s2_since": since(1), "s3m_since": since(2),
+           "real10": real[rd[-1]]["10 YR"] if rd else None, "be10": decomp[-1][2] if decomp else None, "decomp": decomp, "drv": drv}
+    for k, v in (("10y", out["y10"]), ("2s10s", out["s2"]), ("3m10y", out["s3m"]), ("real10", out["real10"]), ("be10", out["be10"])):
+        hist_put("ust", k, cur, v)
+    # 期限溢酬（紐約聯準會 ACM 模型，FRED）
+    if FRED_KEY:
+        try:
+            tp = fred("THREEFYTP10", n=400)
+            base = next((v for d, v in reversed(tp) if d <= (datetime.fromisoformat(tp[-1][0]) - timedelta(days=365)).date().isoformat()), None)
+            out["tp"] = {"v": round(tp[-1][1], 2), "asof": tp[-1][0], "chg1y": round(tp[-1][1] - base, 2) if base is not None else None,
+                         "series": [[d, round(v, 3)] for d, v in tp[-260::5]]}
+            hist_put("ust", "tp10", tp[-1][0], tp[-1][1])
+        except Exception as e:  # noqa: BLE001
+            errs.append("期限溢酬: " + safe_err(e))
+    # MOVE：ICE 授權的指數，只給 5 年百分位，不給原始值
+    try:
+        mv = [c for c in yahoo_daily("^MOVE", "5y")["closes"] if c]
+        rank = lambda x: round(sum(1 for c in mv if c <= x) / len(mv) * 100)
+        out["move"] = {"pct": rank(mv[-1]), "pct_m1": rank(mv[-22]) if len(mv) > 22 else None, "pct_w1": rank(mv[-6]) if len(mv) > 6 else None, "n": len(mv)}
+    except Exception as e:  # noqa: BLE001
+        errs.append("MOVE: " + safe_err(e))
+    try:   # 盤中 10 年（Yahoo，延遲報價）
+        q = yahoo_daily("^TNX", "5d")
+        out["live10"] = {"v": round(q["price"], 3), "asof": q["asOf"], "open": q["open"]}
+    except Exception as e:  # noqa: BLE001
+        errs.append("盤中: " + safe_err(e))
+    try:
+        out["auctions"], out["auc_recent"] = _ust_auctions()
+    except Exception as e:  # noqa: BLE001
+        errs.append("標售: " + safe_err(e))
+    # 警報條件（notify 讀）：10 年單日 ±15 個基點；10 減 2 年、10 減 3 個月轉正或倒掛
+    out["alerts"] = [a for a in [
+        {"key": f"ust10:{cur}", "title": f"美債 10 年單日 {'+' if d1bp > 0 else ''}{d1bp} 個基點", "body": f"{cur} 收 {y10(cur):.2f}%（前一交易日 {y10(prev):.2f}%）。"} if abs(d1bp) >= 15 else None,
+        *[{"key": f"ustflip:{nm}:{cur}", "title": f"美債殖利率曲線 {nm} {f}", "body": f"{cur}：{nm} {spreads[-1][i]:+.2f} 個百分點，前 6 個交易日都在另一邊。"}
+          for i, nm in ((1, "10 年減 2 年"), (2, "10 年減 3 個月")) for f in [flip(i)] if f]] if a]
+    out["errs"] = errs
+    return out
+
+
+def date_of(s):
+    return datetime.fromisoformat(s).date()
+
+
 # ---------- 全球總經（FRED） ----------
 GMACRO = [  # (group, label, series, kind) kind: yoy=指數換年增, level=直接值, pct=已是百分比
     ("美國", "CPI 年增", "CPIAUCSL", "yoy"), ("美國", "核心 PCE 年增", "PCEPILFE", "yoy"), ("美國", "失業率", "UNRATE", "pct"),
@@ -12512,6 +12679,7 @@ def p_theses():
     kill["t1"] = cut >= 2 or (lq.get("yoy") is not None and lq["yoy"] < 20)
 
     # t3 信用風險
+    UST = R("ust"); UTP = UST.get("tp") or {}
     CR = {r["id"]: r for r in (R("credit").get("rows") or [])}
     ccc, hy, ig = CR.get("BAMLH0A3HYC") or {}, CR.get("BAMLH0A0HYM2") or {}, CR.get("BAMLC0A0CM") or {}
     if ccc.get("pct") is not None:
@@ -12523,7 +12691,9 @@ def p_theses():
                 E("投資級利差", f"第 {ig.get('pct', '—')} 百分位", None if ig.get("pct") is None else (1 if ig["pct"] >= 80 else 0), "到 80 以上＝已擴散到體質好的公司"),
                 E("台灣退票金額比率", f"{SB.get('ratio_amt', '—')}%（{'創 12 個月新高' if SB.get('hi12') else '沒創新高'}，金額 3 月年增 {f1(SB.get('amt3_yoy'))}）",
                   None if not SB else (1 if SB.get("hi12") or (SB.get("amt3_yoy") or 0) >= 10 else 0)),
-                E("減班休息", f"{(SF.get('latest') or {}).get('v', '—')} 人（{'連兩期增加' if SF.get('up2') else '沒有連增'}）", None if not SF else (1 if SF.get("up2") else 0))]
+                E("減班休息", f"{(SF.get('latest') or {}).get('v', '—')} 人（{'連兩期增加' if SF.get('up2') else '沒有連增'}）", None if not SF else (1 if SF.get("up2") else 0)),
+                E("美債期限溢酬", "—" if not UTP else f"{UTP['v']:.2f}%（1 年 {f1(UTP.get('chg1y'), ' 個百分點')}）", None if not UTP or UTP.get("chg1y") is None else pos(UTP["chg1y"], 0.3, -0.2),
+                  "往上＝借長錢更貴，最弱的公司再融資最先撐不住")]
     kill["t3"] = ccc.get("pct") is not None and ccc["pct"] < 50
 
     # t2 非 AI 經濟
@@ -12588,7 +12758,9 @@ def p_theses():
                  E("景氣同時指標年增", f"{f1(coin_yoy)}（{cm[:4] + '/' + cm[4:] if cm else '—'}）", None),
                  E("股價減景氣的差距", f1(txg, " 個百分點"), pos(txg, 30, 10)),
                  E("dalta 領先指標", f"{DL.get('value', '—')}，3 個月 {f1(DL.get('chg3'), '')}", None if DL.get("chg3") is None else (1 if DL["chg3"] < 0 else -1), DL.get("status") or ""),
-                 E("離 1 年高點", f1(off), None, "回落 15% 以上＝差距正在被修正")]
+                 E("離 1 年高點", f1(off), None, "回落 15% 以上＝差距正在被修正"),
+                 E("美債 10 年實質利率", "—" if R("ust").get("real10") is None else f"{R('ust')['real10']:.2f}%", pos(R("ust").get("real10"), 2.0, 1.0),
+                   "實質利率高、股價還在漲＝估值更撐不住")]
     kill["t13"] = txg is not None and txg < 20
 
     # t5 供應鏈往美墨
@@ -13116,6 +13288,7 @@ run("sectors", p_sectors, keep_if_fresh_hours=0.5)
 run("fear", p_fear, keep_if_fresh_hours=0.5)
 run("commodities", p_commodities, keep_if_fresh_hours=3)
 run("credit", p_credit, keep_if_fresh_hours=6)  # 五個新面板放前面，避免排在最後被本輪時限略過。信用利差：FRED 每天收盤後更新一次
+run("ust", p_ust, keep_if_fresh_hours=3)  # 美債殖利率：財政部收盤後一天更新一次，3 小時檢查一次；論點會用到，要在 theses 前面
 run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Federal Register 每個工作日早上出刊
 run("exports", p_exports, keep_if_fresh_hours=24 if "nonee_yoy3" in json.dumps(load_prev("exports") or {}) else 0)  # 新增非電子出口時先重抓一次； 台灣出口結構：月資料，每月 9 日前後公布
 run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
@@ -13567,6 +13740,9 @@ def notify():
     if (stv.get("bounce") or {}).get("hi12"):
         b = stv["bounce"]
         cand.append((f"bounce:{b['month']}", False, f"退票金額比率 {b['ratio_amt']}% 創 12 個月新高", f"{b['month']} 存款不足退票金額比去年同月 {b.get('amt_yoy') or 0:+.0f}%。\n{link('企業壓力')}"))
+    # 15～16. 美債：10 年單日 ±15 個基點；10 減 2 年、10 減 3 個月轉正或倒掛
+    for al in (R("ust").get("alerts") or []):
+        cand.append((al["key"], False, al["title"], f"{al['body']}\n<{SITE}terminal/|在情報站看>"))
     # 14. 主論點的推翻條件觸發（同一次觸發只推一次；觀察與保留層不推）
     for t in (R("theses").get("rows") or []):
         if t.get("tier") == "main" and t.get("status") == "kill":
