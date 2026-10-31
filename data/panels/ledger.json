@@ -33,7 +33,7 @@
   "cards_hot": {
    "cat": "品類起落",
    "desc": "上個月最熱的刷卡類別，下個月仍比整體熱",
-   "open": 0,
+   "open": 1,
    "done": 1,
    "hits": 1,
    "brier": 0.062,
@@ -63,7 +63,7 @@
   "veg_revert": {
    "cat": "生活成本",
    "desc": "兩週內漲超過 20% 的菜，再兩週會回落",
-   "open": 2,
+   "open": 4,
    "done": 3,
    "hits": 3,
    "brier": 0.16,
@@ -73,7 +73,7 @@
   "elect_fav": {
    "cat": "事件機率",
    "desc": "預測市場看好的候選人當選",
-   "open": 4,
+   "open": 5,
    "done": 0,
    "hits": 0,
    "brier": null,
@@ -123,7 +123,7 @@
   "chain_gap": {
    "cat": "缺口會不會被填",
    "desc": "主題鏈判「缺口窗口」的主題，6 個月內新設店家年增比現在高（供給跟上）",
-   "open": 9,
+   "open": 10,
    "done": 0,
    "hits": 0,
    "brier": null,
@@ -193,6 +193,16 @@
  },
  "open": [
   {
+   "id": "2026-11-01-cards_hot-58",
+   "made": "2026-11-01",
+   "rule": "cards_hot",
+   "subject": "行",
+   "text": "刷卡「行」到 2026/09 仍比整體熱",
+   "prob": 0.75,
+   "due": "2026-09",
+   "status": "open"
+  },
+  {
    "id": "2026-10-11-lead_up-17",
    "made": "2026-10-11",
    "rule": "lead_up",
@@ -235,6 +245,28 @@
    "due": "2026-11-04",
    "status": "open",
    "base": 38.0
+  },
+  {
+   "id": "2026-11-01-veg_revert-59",
+   "made": "2026-11-01",
+   "rule": "veg_revert",
+   "subject": "青江菜",
+   "text": "青江菜（34.8 元）兩週後會比現在便宜",
+   "prob": 0.59,
+   "due": "2026-11-13",
+   "status": "open",
+   "base": 34.8
+  },
+  {
+   "id": "2026-11-01-veg_revert-60",
+   "made": "2026-11-01",
+   "rule": "veg_revert",
+   "subject": "茄子",
+   "text": "茄子（44.2 元）兩週後會比現在便宜",
+   "prob": 0.59,
+   "due": "2026-11-13",
+   "status": "open",
+   "base": 44.2
   },
   {
    "id": "2026-10-11-elect_fav-20",
@@ -283,6 +315,18 @@
    "status": "open",
    "en": "Lai Jui-lung",
    "slug": "kaohsiung-mayor-election-winner-20260813125857600"
+  },
+  {
+   "id": "2026-11-01-elect_fav-61",
+   "made": "2026-11-01",
+   "rule": "elect_fav",
+   "subject": "台南",
+   "text": "台南市長：陳亭妃 當選",
+   "prob": 0.91,
+   "due": "2026-11-29",
+   "status": "open",
+   "en": "Chen Ting-fei",
+   "slug": "tainan-mayor-election-winner-20260813125857500"
   },
   {
    "id": "2026-10-11-wiki_up-0",
@@ -606,56 +650,6 @@
    "op": ">",
    "target": -3,
    "rev": "r2"
-  },
-  {
-   "id": "2026-10-17-thesis-53",
-   "made": "2026-10-17",
-   "rule": "thesis",
-   "subject": "g2",
-   "text": "【中國內需弱】2027 年 3 月台灣對中港非機電出口近 3 月年增仍低於 5%",
-   "prob": 0.6,
-   "due": "2027-03-01",
-   "status": "open",
-   "metric": "cn_nonee",
-   "op": "<",
-   "target": 5,
-   "rev": "r2"
-  },
-  {
-   "id": "2026-10-17-thesis-38",
-   "made": "2026-10-17",
-   "rule": "thesis",
-   "subject": "t1",
-   "text": "【AI 資本支出到 2027 上半年不收手】雲端五大 2027 年第 1 季資本支出年增仍高於 20%",
-   "prob": 0.65,
-   "due": "2027-03-31",
-   "status": "open",
-   "metric": "ai_capex_yoy",
-   "op": ">",
-   "target": 20,
-   "rev": "r2"
-  },
-  {
-   "id": "2026-10-11-chain_gap-25",
-   "made": "2026-10-11",
-   "rule": "chain_gap",
-   "subject": "毛孩",
-   "text": "「毛孩」相關新店到 2027/04 年增高於現在（-11%），供給會跟上",
-   "prob": 0.5,
-   "due": "2027-04-11",
-   "status": "open",
-   "base": -11
-  },
-  {
-   "id": "2026-10-11-chain_gap-26",
-   "made": "2026-10-11",
-   "rule": "chain_gap",
-   "subject": "睡眠",
-   "text": "「睡眠」相關新店到 2027/04 年增高於現在（-13%），供給會跟上",
-   "prob": 0.5,
-   "due": "2027-04-11",
-   "status": "open",
-   "base": -13
   }
  ],
  "recent": [
@@ -711,10 +705,10 @@
    "resolved": "2026-10-21"
   }
  ],
- "n_open": 54,
+ "n_open": 59,
  "n_done": 4,
  "n_hit": 4,
- "gen_at": "2026-10-25",
+ "gen_at": "2026-11-01",
  "bt_at": "2026-10-26",
- "updatedAt": "2026-10-31T15:46:17Z"
+ "updatedAt": "2026-10-31T16:05:13Z"
 }
