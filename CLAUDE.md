@@ -3,7 +3,7 @@
 > 給接手的 Claude：這份是完整交接，開工前從頭讀一次。
 > - 這個 repo 是**公開**的：不要寫進任何客戶名、私人資料、金鑰值。
 > - 私人背景（決策紀錄、客戶雷達位置、排程）在 Vin 的記憶檔 `/areas/personal-intel-terminal.md`，不在這裡。
-> - 最後更新：2026-10-30。
+> - 最後更新：2026-11-02。
 
 ---
 
@@ -83,7 +83,7 @@ Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 a
 | data 分支 `data/history.json` | 各指標日序列（走勢圖、預測帳本、論點用），每序列最多約 400 點 |
 | data 分支 `data/panels/<id>.json` | 各面板單檔；`macro.json` 可手動維護 |
 | data 分支 `data/archive/YYYY-MM-DD.json` | 每日存檔：頭條、熱詞、PTT、OSS 等 |
-| data 分支 其他 `data/*.json` | 各面板的快取與中間序列，例如 `consume_series.json`、`polls_cache.json`、`geocode_cache.json` |
+| data 分支 其他 `data/*.json` | 各面板的快取與中間序列，例如 `consume_series.json`、`polls_cache.json`、`geocode_cache.json`、`appstore_hist.json`、`ust_cache.json`、`news_kw_cache.json` |
 
 `README.md` 已經過時，以這份為準。
 
@@ -285,13 +285,20 @@ RI=999999 STEPS="wait|15000;js|(__story.openAt('總經','內需產業'),1);wait|
 
 ---
 
-## 11. 待辦與已知問題（2026-10-30）
+## 11. 待辦與已知問題（2026-11-02）
 
 | 狀態 | 項目 |
 |---|---|
 | ⏳ 待驗證 | 鄉鎮新聞（10/30 再修）：擋簡體字標題與來源（`TOWN_SIMP`），排除詞加路竹會、台電區處、新豐洲、三大園區。下一輪確認這幾類不再出現。已知漏網：標題沒寫縣市的跨縣市同名地標（台東「大溪－多良」被算成桃園大溪），發生率低，先不處理 |
 | ⏳ 待驗證 | App 排行 `appstore`（10/31 上線）：排名歷史存在 data 分支 `data/appstore_hist.json`（每天一筆、留 40 天，含各類別個數）。11/7 之後 7 天爬升才準，確認爬升與類別變化合理。下一步可能做「消費者有感」交叉面板（說 vs 買四格），等 Vin 看幾週資料再決定 |
-| ⏳ 待驗證 | 美債殖利率 `ust`（10/31 上線）：財政部名目＋實質曲線 CSV（去年整年快取在 data 分支 `data/ust_cache.json`，一週更新）、FRED 期限溢酬 THREEFYTP10、Yahoo ^MOVE（ICE 授權，只輸出 5 年百分位）、Fiscal Data 標售結果（排除抗通膨與浮動利率）。Slack 警報第 15、16 條；論點 t3 加「期限溢酬」、t13 加「10 年實質利率」證據。歷史序列在 `history.json` 的 `ust` 群組。確認第一個交易日的真實數值與標售判讀合理 |
+| ✅ 已驗證 | 美債殖利率 `ust`（10/31 上線）：財政部名目＋實質曲線 CSV（去年整年快取 `data/ust_cache.json`）、FRED 期限溢酬 THREEFYTP10、Yahoo ^MOVE（ICE 授權，只輸出 5 年百分位）。標售：最近 90 天用 TreasuryDirect（開標當天就有；欄位是 `competitiveAuctionCloseDate`、`indirectBiddersCompetitiveParAwarded`、`subtotalCompetitiveParAwardedInsideOfOfferingAmount`、`inflationProtected`），Fiscal Data 要晚幾天才補，只拿來算前 6 次平均。Slack 第 15、16 條；論點 t3 期限溢酬、t13 實質利率。歷史在 `history.json` 的 `ust` 群組 |
+| ✅ 已修（11/2 全站檢查） | 趨勢雷達每輪刪掉設定裡已拿掉的關鍵字序列（舊設定曾含不該公開的詞）；data 分支 11/2 手動壓平清掉舊版本，並加 `.gitignore` 擋 `__pycache__` |
+| ✅ 已修（11/2） | 台北房價指數：data.taipei 改成 Big5 編碼，兩種都試；解析失敗沿用舊序列（10/30 曾被蓋成空的） |
+| ✅ 已修（11/2） | 台股：MIS 備援改用成交時間 `tlong` 當日期；`p_taiex` 每輪清掉週末與跟前一天完全相同的點（休市日重記） |
+| ✅ 已修（11/2） | 關注領域新聞查詢有 1 小時快取 `data/news_kw_cache.json`（每輪最多重抓 14 個）；`ipr` 上限 290 秒；Forex Factory 只留本週檔；金鑰掃描補 `SEC_CONTACT`；手機頁首不再橫向捲動 |
+| ⏳ 待驗證 | 經濟部統計處（外銷訂單 `lead`、零售指數 `supply`）對國外機房 Cloudflare 403：`ops/tw_relay.py` 的 `moea_daily` 每天代抓存 `relay/static/moea_orders`、`moea_retail`，`fetch.py` 的 `_moea_text()` 直接抓失敗就讀這份。零售 11/2 已恢復；外銷訂單等 `lead` 下次更新（24 小時一次）確認 `errs` 沒有 403 |
+| ⚠️ 已知 | 104 職缺：API 自 10/22 起總數一律回 1001（100 頁上限），各端點都一樣。`jobs`／`jobtowns` 數量停在 10/21 最後真實值並標 `frozen`，最新職缺列表照常更新。🎯 等 Vin 決定是否換來源（例如勞動部求才統計） |
+| ⚠️ 已知 | AI 廠商動態 `devpulse.diag` 寫「md got html」「0 entries」是正常的：markdown 版失敗後改讀網頁版，Gemini、DeepSeek、xAI 都有抓到 |
 | ⏳ 待驗證 | 3D 卡片隨資料更新重畫（`refresh_patch.py`）還沒實測 |
 | ✅ 已驗證 | 停班停課 22 縣市全部抓到（每個地區第一列少一格的問題）；雨量沒下雨的縣市記 0 |
 | ✅ 已驗證 | 藝文活動：新北市不再被算成臺北市（10/30 新北市 18、臺北市 61） |
