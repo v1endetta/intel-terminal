@@ -1,0 +1,611 @@
+{
+ "drewry": {
+  "lanes": [
+   {
+    "from": "Shanghai",
+    "to": "Los Angeles",
+    "chg": -6.0,
+    "v": 7514.0,
+    "name": "上海→洛杉磯"
+   },
+   {
+    "from": "Shanghai",
+    "to": "New York",
+    "chg": -5.0,
+    "v": 9631.0,
+    "name": "上海→紐約"
+   },
+   {
+    "from": "Shanghai",
+    "to": "Rotterdam",
+    "chg": 1.0,
+    "v": 3686.0,
+    "name": "上海→鹿特丹"
+   },
+   {
+    "from": "Shanghai",
+    "to": "Genoa",
+    "chg": 0.0,
+    "v": null,
+    "name": "上海→熱那亞"
+   }
+  ],
+  "wci": {
+   "name": "Drewry WCI",
+   "value": 4429.0,
+   "unit": "USD/40ft",
+   "date": "29 Oct 2026",
+   "chg_pct": -3.0,
+   "chg_label": "週%",
+   "spark": [
+    4468.0,
+    4434.0,
+    4351.0,
+    4485.0,
+    4585.0,
+    4429.0
+   ]
+  }
+ },
+ "fbx": [
+  {
+   "code": "FBX",
+   "name": "全球綜合",
+   "chg": -1.31
+  },
+  {
+   "code": "FBX01",
+   "name": "中國→美西",
+   "chg": -0.33
+  },
+  {
+   "code": "FBX02",
+   "name": "美西→中國",
+   "chg": -0.06
+  },
+  {
+   "code": "FBX03",
+   "name": "中國→美東",
+   "chg": -6.19
+  },
+  {
+   "code": "FBX04",
+   "name": "美東→中國",
+   "chg": -10.36
+  },
+  {
+   "code": "FBX11",
+   "name": "中國→北歐",
+   "chg": 1.23
+  },
+  {
+   "code": "FBX12",
+   "name": "北歐→中國",
+   "chg": 0.0
+  },
+  {
+   "code": "FBX13",
+   "name": "中國→地中海",
+   "chg": 2.88
+  },
+  {
+   "code": "FBX14",
+   "name": "地中海→中國",
+   "chg": 0.0
+  },
+  {
+   "code": "FBX21",
+   "name": "美東→北歐",
+   "chg": -3.88
+  },
+  {
+   "code": "FBX22",
+   "name": "北歐→美東",
+   "chg": 0.1
+  },
+  {
+   "code": "FBX24",
+   "name": "北歐→南美東",
+   "chg": 4.49
+  },
+  {
+   "code": "FBX26",
+   "name": "北歐→南美西",
+   "chg": -0.35
+  }
+ ],
+ "storms": [
+  {
+   "name": "MURASU",
+   "level": "Red",
+   "ll": [
+    82.6,
+    13.6
+   ],
+   "from": "2026-11-01T00:00",
+   "to": "2026-11-01T18:00",
+   "sev": "Tropical Storm (maximum wind speed of 130 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001346&episodeid=4&eventtype=TC",
+   "near": [
+    {
+     "port": "可倫坡",
+     "km": 798
+    }
+   ],
+   "id": "1001346-4"
+  },
+  {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    143.0,
+    22.0
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-11-01T18:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 241 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=38&eventtype=TC",
+   "near": [],
+   "id": "1001343-38"
+  }
+ ],
+ "ports": [
+  {
+   "name": "上海洋山",
+   "ll": [
+    122.07,
+    30.62
+   ]
+  },
+  {
+   "name": "寧波舟山",
+   "ll": [
+    121.85,
+    29.93
+   ]
+  },
+  {
+   "name": "深圳",
+   "ll": [
+    114.27,
+    22.57
+   ]
+  },
+  {
+   "name": "廣州南沙",
+   "ll": [
+    113.6,
+    22.75
+   ]
+  },
+  {
+   "name": "青島",
+   "ll": [
+    120.3,
+    36.07
+   ]
+  },
+  {
+   "name": "天津",
+   "ll": [
+    117.78,
+    38.98
+   ]
+  },
+  {
+   "name": "廈門",
+   "ll": [
+    118.07,
+    24.47
+   ]
+  },
+  {
+   "name": "香港",
+   "ll": [
+    114.15,
+    22.3
+   ]
+  },
+  {
+   "name": "高雄",
+   "ll": [
+    120.28,
+    22.6
+   ]
+  },
+  {
+   "name": "基隆／台北",
+   "ll": [
+    121.74,
+    25.15
+   ]
+  },
+  {
+   "name": "台中",
+   "ll": [
+    120.5,
+    24.27
+   ]
+  },
+  {
+   "name": "釜山",
+   "ll": [
+    129.05,
+    35.08
+   ]
+  },
+  {
+   "name": "東京灣",
+   "ll": [
+    139.8,
+    35.6
+   ]
+  },
+  {
+   "name": "大阪神戶",
+   "ll": [
+    135.2,
+    34.65
+   ]
+  },
+  {
+   "name": "新加坡",
+   "ll": [
+    103.8,
+    1.26
+   ]
+  },
+  {
+   "name": "巴生",
+   "ll": [
+    101.3,
+    3.0
+   ]
+  },
+  {
+   "name": "林查班",
+   "ll": [
+    100.88,
+    13.08
+   ]
+  },
+  {
+   "name": "胡志明／蓋梅",
+   "ll": [
+    107.03,
+    10.55
+   ]
+  },
+  {
+   "name": "馬尼拉",
+   "ll": [
+    120.95,
+    14.6
+   ]
+  },
+  {
+   "name": "可倫坡",
+   "ll": [
+    79.85,
+    6.95
+   ]
+  },
+  {
+   "name": "孟買新港",
+   "ll": [
+    72.95,
+    18.95
+   ]
+  },
+  {
+   "name": "杰貝阿里",
+   "ll": [
+    55.05,
+    25.01
+   ]
+  },
+  {
+   "name": "鹿特丹",
+   "ll": [
+    4.05,
+    51.95
+   ]
+  },
+  {
+   "name": "安特衛普",
+   "ll": [
+    4.3,
+    51.28
+   ]
+  },
+  {
+   "name": "漢堡",
+   "ll": [
+    9.95,
+    53.53
+   ]
+  },
+  {
+   "name": "洛杉磯／長灘",
+   "ll": [
+    -118.25,
+    33.74
+   ]
+  },
+  {
+   "name": "奧克蘭",
+   "ll": [
+    -122.3,
+    37.8
+   ]
+  },
+  {
+   "name": "西雅圖／塔科馬",
+   "ll": [
+    -122.4,
+    47.27
+   ]
+  },
+  {
+   "name": "溫哥華",
+   "ll": [
+    -123.1,
+    49.29
+   ]
+  },
+  {
+   "name": "曼薩尼約（墨）",
+   "ll": [
+    -104.3,
+    19.07
+   ]
+  },
+  {
+   "name": "拉薩羅卡德納斯（墨）",
+   "ll": [
+    -102.18,
+    17.94
+   ]
+  },
+  {
+   "name": "韋拉克魯斯（墨）",
+   "ll": [
+    -96.13,
+    19.2
+   ]
+  },
+  {
+   "name": "休士頓",
+   "ll": [
+    -95.0,
+    29.6
+   ]
+  },
+  {
+   "name": "薩凡納",
+   "ll": [
+    -81.1,
+    32.08
+   ]
+  },
+  {
+   "name": "紐約／紐澤西",
+   "ll": [
+    -74.1,
+    40.67
+   ]
+  },
+  {
+   "name": "巴拿馬運河",
+   "ll": [
+    -79.7,
+    9.1
+   ]
+  },
+  {
+   "name": "桑托斯",
+   "ll": [
+    -46.3,
+    -23.95
+   ]
+  }
+ ],
+ "news": [
+  {
+   "source": "The Loadstar",
+   "title": "News in Brief Podcast | Week 43 | Reliability, rates and port fee delay",
+   "url": "https://theloadstar.com/news-in-brief-podcast-week-43-reliability-rates-and-port-fee-delay/",
+   "at": "2026-11-02T01:00:48+08:00",
+   "hot": true,
+   "zh": "快訊 Podcast ｜第 43 週｜可靠度、運費與港口費延期"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Borderlands Mexico: Cabotage enforcements threatening cross-border trucking",
+   "url": "https://www.freightwaves.com/news/borderlands-mexico-cabotage-enforcements-threatening-cross-border-trucking",
+   "at": "2026-11-01T20:00:00+08:00",
+   "hot": true,
+   "zh": "墨西哥邊境：沿海貿易執法威脅跨境貨運"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Freight cycles are anything but regular",
+   "url": "https://www.freightwaves.com/news/freight-cycles-are-anything-but-regular",
+   "at": "2026-11-01T08:30:00+08:00",
+   "hot": false,
+   "zh": "貨運景氣循環一點也不規律"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "CNBC: Stock market rocked as investors dump tech shares",
+   "url": "https://theloadstar.com/cnbc-stock-market-rocked-as-investors-dump-tech-shares/",
+   "at": "2026-10-31T05:56:50+08:00",
+   "hot": false,
+   "zh": "CNBC：投資人拋售科技股，股市大地震"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Rail Rivalry: Schneider’s Bold Move to Norfolk Southern from CSX",
+   "url": "https://www.freightwaves.com/news/rail-rivalry-schneiders-bold-move-to-norfolk-southern-from-csx",
+   "at": "2026-10-31T02:42:39+08:00",
+   "hot": false,
+   "zh": "鐵路爭霸：施耐德從CSX改投諾福克南方航空的重大動作"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Unexpected Boom: Trailer Leasing Demand Hits Record Highs",
+   "url": "https://www.freightwaves.com/news/unexpected-boom-trailer-leasing-demand-hits-record-highs",
+   "at": "2026-10-31T02:40:16+08:00",
+   "hot": false,
+   "zh": "意外榮景：拖車租賃需求創下歷史新高"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "SAIA’s Record $982.5M Q3 Revenue | What’s Next?",
+   "url": "https://www.freightwaves.com/news/saias-record-982-5m-q3-revenue-whats-next",
+   "at": "2026-10-31T02:37:16+08:00",
+   "hot": false,
+   "zh": "SAIA第3季營收達9.825億美元創紀錄｜接下來呢？"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "TFI chief Bedard rips into its US LTL operations, promises change",
+   "url": "https://www.freightwaves.com/news/tfi-chief-bedard-rips-into-its-us-ltl-operations-promises-change",
+   "at": "2026-10-31T02:31:44+08:00",
+   "hot": false,
+   "zh": "TFI執行長貝達德砲轟美國零擔貨運業務，承諾將進行改革"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Beverage Distribution: Why Your SKU Count is Crushing Productivity",
+   "url": "https://www.freightwaves.com/news/beverage-distribution-why-your-sku-count-is-crushing-productivity",
+   "at": "2026-10-31T02:30:22+08:00",
+   "hot": false,
+   "zh": "飲料配送：為什麼你的品項數正在拖垮生產力"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Arkansas truck blitz nets 183 English violations, 44 arrests in 48 hours",
+   "url": "https://www.freightwaves.com/news/arkansas-truck-blitz-nets-183-english-violations-44-arrests-in-48-hours",
+   "at": "2026-10-31T02:06:57+08:00",
+   "hot": false,
+   "zh": "阿肯色州大舉攔查卡車，48小時內抓到183起英文能力違規、44人被捕"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "European postal operators gear up for surge in holiday volume",
+   "url": "https://www.freightwaves.com/news/european-postal-operators-gear-up-for-surge-in-holiday-volume",
+   "at": "2026-10-31T01:44:55+08:00",
+   "hot": false,
+   "zh": "歐洲郵政業者備戰，迎接假期貨量激增"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Covenant Logistics CEO expects double-digit truckload rate hikes in 2027",
+   "url": "https://www.freightwaves.com/news/covenant-logistics-ceo-expects-double-digit-truckload-rate-hikes-in-2027",
+   "at": "2026-10-31T01:32:06+08:00",
+   "hot": false,
+   "zh": "Covenant Logistics 執行長預期 2027 年整車運費將有雙位數漲幅"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Jett McCandless named first FreightTech Vanguard Award winner at F3",
+   "url": "https://www.freightwaves.com/news/jett-mccandless-named-first-freighttech-vanguard-award-winner-at-f3",
+   "at": "2026-10-30T23:22:26+08:00",
+   "hot": false,
+   "zh": "傑特·麥坎德利斯獲頒 F3 首屆貨運科技先鋒獎"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Safety Technology Is Only as Good as the Trust Behind It",
+   "url": "https://www.freightwaves.com/news/safety-technology-is-only-as-good-as-the-trust-behind-it",
+   "at": "2026-10-30T23:19:58+08:00",
+   "hot": false,
+   "zh": "安全科技的好壞 取決於背后的信任"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "USDA to fund 8 fertilizer manufacturing projects totaling more than $1.3B",
+   "url": "https://www.supplychaindive.com/news/usda-fund-8-fertilizer-manufacturing-projects-totaling-1-billion/873311/",
+   "at": "2026-10-30T22:52:00+08:00",
+   "hot": false,
+   "zh": "美國農業部將資助 8 個化肥製造專案 總金額超過 13 億美元"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "UPS aims to double RFID-labeled volume from customer locations",
+   "url": "https://www.supplychaindive.com/news/ups-aims-to-double-rfid-labeled-volume-from-customer-locations/872946/",
+   "at": "2026-10-30T22:45:39+08:00",
+   "hot": false,
+   "zh": "UPS 目標將客戶端的 RFID 標籤貨量增加一倍"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Walmart plans $400M Texas distribution center",
+   "url": "https://www.supplychaindive.com/news/walmart-plans-400m-texas-distribution-center/873218/",
+   "at": "2026-10-30T22:17:45+08:00",
+   "hot": false,
+   "zh": "沃爾瑪計劃在德州砸 4 億美元興建物流中心"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Newbuildings head for Asia-Latin America trades as volumes boom",
+   "url": "https://theloadstar.com/newbuildings-head-for-asia-latin-america-trades-as-volumes-boom/",
+   "at": "2026-10-30T22:10:23+08:00",
+   "hot": false,
+   "zh": "貨量大增！新造船湧入亞洲-拉丁美洲航線"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "EXCLUSIVE: CargoWise customs message delays leave forwarders waiting for clearance",
+   "url": "https://theloadstar.com/exclusive-cargowise-customs-message-delays-leave-forwarders-waiting-for-clearance/",
+   "at": "2026-10-30T21:54:01+08:00",
+   "hot": false,
+   "zh": "獨家：CargoWise報關訊息延誤，承攬業苦等通關"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Full planes and fond farewells: air cargo does Miami",
+   "url": "https://theloadstar.com/full-planes-and-fond-farewells-air-cargo-does-miami/",
+   "at": "2026-10-30T21:44:59+08:00",
+   "hot": false,
+   "zh": "班機全滿與依依不捨：空運聚焦邁阿密"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "A platform to challenge ‘death by a thousand [D&D] invoices’",
+   "url": "https://theloadstar.com/a-platform-to-challenge-death-by-a-thousand-dd-invoices/",
+   "at": "2026-10-30T21:22:44+08:00",
+   "hot": true,
+   "zh": "終結「無止盡D&D帳單」的全新平台"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Carriers’ November rate hikes ‘doomed’ say analysts, as demand goes flat",
+   "url": "https://theloadstar.com/carriers-november-rate-hikes-doomed-say-analysts-as-demand-goes-flat/",
+   "at": "2026-10-30T21:17:00+08:00",
+   "hot": true,
+   "zh": "需求平淡！分析師稱航商11月漲價「死路一條」"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "‘Supply chain transformation’: Walmart and tech leader Symbotic disclose multi-billion agreement",
+   "url": "https://theloadstar.com/supply-chain-transformation-walmart-and-tech-leader-symbotic-disclose-multi-billion-agreement/",
+   "at": "2026-10-30T20:10:45+08:00",
+   "hot": false,
+   "zh": "「供應鏈轉型」：沃爾瑪與科技巨頭 Symbotic 揭露數十億美元協議"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "LA/LB port complex braces for potential strike as labour contract expires",
+   "url": "https://theloadstar.com/la-lb-port-complex-braces-for-potential-strike-as-labour-contract-expires/",
+   "at": "2026-10-30T19:41:54+08:00",
+   "hot": true,
+   "zh": "洛杉磯／長堤港口群因勞動合約到期，正嚴陣以待潛在罷工危機"
+  }
+ ],
+ "threat": [],
+ "errs": [],
+ "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
+ "updatedAt": "2026-11-01T23:04:02Z"
+}
