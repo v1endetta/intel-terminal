@@ -324,6 +324,33 @@ def stats_daily(state, errs):
         gcs_put("relay/static/stats_summary.json.gz", gz({"at": NOW_ISO, "jobs": summ}))
 
 
+MOEA = {   # 經濟部統計處 2026-10 起對國外機房回 403：台灣 IP 每天代抓一次原始 CSV，fetch.py 抓不到時讀這份
+    "moea_orders": "https://service.moea.gov.tw/EE520/opendata/b.csv",
+    "moea_retail": "https://service.moea.gov.tw/EE520/opendata/%E7%B6%93%E6%BF%9F%E9%83%A8%E7%B5%B1%E8%A8%88%E8%99%95_%E6%89%B9%E7%99%BC%E3%80%81"
+                   "%E9%9B%B6%E5%94%AE%E5%8F%8A%E9%A4%90%E9%A3%B2%E6%A5%AD%E7%87%9F%E6%A5%AD%E9%A1%8D%E6%8C%87%E6%95%B8.csv",
+}
+
+
+def moea_daily(state, errs):
+    at = state.setdefault("moea_at", {})
+    for k, u in MOEA.items():
+        if time.time() - at.get(k, 0) < 86400:
+            continue
+        try:
+            b = get(u, 60)
+            try:
+                txt = b.decode("utf-8-sig")
+            except UnicodeDecodeError:
+                txt = b.decode("big5", errors="ignore")
+            if "<html" in txt[:500].lower() or len(txt) < 200:
+                raise RuntimeError(f"not csv ({len(txt)}b)")
+            gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "csv": txt}))
+            at[k] = time.time()
+        except Exception as e:  # noqa: BLE001
+            errs["moea:" + k] = repr(e)[:200]
+            at[k] = time.time() - 86400 + 6 * 3600   # 失敗的 6 小時後再試
+
+
 CITY_CCTV = {   # 縣市交通局的路口攝影機（原始檔照存，fetch.py 解析）
     "tc_cctv": "https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=695dc746-4b1e-4d1d-98a8-a894e7d8dc81",
     "tn_cctv": "https://trafficopendata.tainan.gov.tw/opendata/json/cctv/latest",
@@ -746,6 +773,11 @@ def main():
         stats_daily(state, errs)
     except Exception as e:  # noqa: BLE001
         errs["stats"] = repr(e)[:200]
+
+    try:
+        moea_daily(state, errs)
+    except Exception as e:  # noqa: BLE001
+        errs["moea"] = repr(e)[:200]
 
     try:
         tdcs_daily(state, errs)

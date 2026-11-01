@@ -321,7 +321,7 @@ tr+tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .ring svg{width:18px;height:18px;transform:rotate(-90deg)}
 .mbtn{background:none;border:1px solid var(--line2);border-radius:3px;color:var(--muted);font:11px var(--mono);padding:3px 8px;cursor:pointer}
 .mbtn:hover{color:var(--text);border-color:var(--muted)}
-@media (max-width:640px){.mast{flex-direction:column;gap:0}.mast .status{margin-left:0;padding-top:0;gap:10px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.mast .legend{display:none}.mast .status>*{flex:none}}
+@media (max-width:640px){.mast{flex-direction:column;flex-wrap:nowrap;gap:0}#vr-form select{max-width:100%;min-width:0}#vr-form{flex-wrap:wrap}.mast .status{margin-left:0;padding-top:0;gap:10px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.mast .legend{display:none}.mast .status>*{flex:none}}
 body[data-tab="overview"] .tape{display:none}
 body:not([data-tab="market"]) .movers{display:none!important}
 [data-tab-hide]{display:none!important}
@@ -1474,7 +1474,7 @@ function renderJobs(){const d=JOBS;if(!d)return;const mx=Math.max(...(d.cats||[]
   const mix=d.indMix||[],lat=d.latest||[];
   const chips=`<div class="chips" id="jb-chips"><button type="button" class="${JOBF?"":"on"}" data-jf="">全部<i>${lat.length}</i></button>${mix.map(([k,v])=>`<button type="button" class="${JOBF===k?"on":""}" data-jf="${esc(k)}">${esc(k)}<i>${v}</i></button>`).join("")}</div>`;
   const lt=lat.filter(x=>!JOBF||x.ind===JOBF).slice(0,30).map(x=>`<li><span class="t"><a href="${esc(safe(x.u))}" target="_blank" rel="noopener">${esc(x.t)}</a><span class="sub">${esc(x.co)} · ${esc(x.indd||x.ind)} · ${esc(x.place)}${x.sal&&x.sal[0]?` · ${(x.sal[0]/1000).toFixed(0)}K${x.sal[1]?"–"+(x.sal[1]/1000).toFixed(0)+"K":"+"}`:""}</span></span><span class="m">${esc((x.date||"").slice(4,6)+"/"+(x.date||"").slice(6,8))}</span></li>`).join("");
-  body("p-jobs").innerHTML=`<div class="jb-k"><div><div class="lbl">104 刊登中職缺</div><b class="num">${n(d.total).toLocaleString()}</b> ${cg(d.chg7)} <span class="sub">比 7 天前</span></div><div style="flex:1;max-width:260px">${mini(d.spark)}</div></div>
+  body("p-jobs").innerHTML=`<div class="jb-k"><div><div class="lbl">104 刊登中職缺</div><b class="num">${n(d.total).toLocaleString()}</b> ${d.frozen?`<span class="sub" style="color:var(--warn)">數量停在 ${esc(String(d.frozen).slice(5).replace("-","/"))}：104 已不提供真實總數，最新職缺列表照常更新</span>`:`${cg(d.chg7)} <span class="sub">比 7 天前</span>`}</div><div style="flex:1;max-width:260px">${mini(d.spark)}</div></div>
   <div class="nw nw3"><div><h3>職類</h3>${cats}</div><div><h3>縣市 · 前 12</h3><ul class="list">${ar}</ul></div><div><h3>最新職缺 · 依公司產業分類</h3>${chips}<ul class="list">${lt||'<li class="empty">這類目前沒有</li>'}</ul></div></div>`;
   setMeta("p-jobs",{...d,label:"104 全站"},8);}
 document.addEventListener("click",e=>{const b=e.target.closest("#jb-chips [data-jf]");if(!b)return;JOBF=b.dataset.jf;renderJobs();});
@@ -2222,7 +2222,7 @@ function panelCharts(P){
       p("text",{x:L+BW+96,y:y+14},x.topic||"");});}}}catch(e){console.warn("pcx poly",e);}
   /* 4. 104 職缺：比 7 天前哪些職類變多（總量表格在下面，這裡只看變化） */
   try{const J=P.jobs||{},all=(J.cats||[]).slice();if(all.length){const cs=all.filter(c=>c.chg7!=null&&isFinite(n(c.chg7)));
-    if(!cs.length){pcx("p-jobs",`104 刊登中 <em>${n(J.total).toLocaleString()}</em> 筆 <span style="color:var(--dim)">· 職類一週增減要累積 7 天才算得出來，算出來後這裡會畫「哪些職類變多、哪些變少」</span>`,760,0);}
+    if(!cs.length){pcx("p-jobs",`104 刊登中 <em>${n(J.total).toLocaleString()}</em> 筆 <span style="color:var(--dim)">· ${J.frozen?`數量停在 ${esc(String(J.frozen).slice(5).replace("-","/"))}：104 自 10/22 起不再提供真實總數，之後要換資料來源`:"職類一週增減要累積 7 天才算得出來，算出來後這裡會畫「哪些職類變多、哪些變少」"}</span>`,760,0);}
     else{const srt=cs.sort((a,b)=>n(b.chg7)-n(a.chg7)),pick=[...srt.slice(0,6),...srt.slice(-6).filter(x=>!srt.slice(0,6).includes(x))],mx=Math.max(1,...pick.map(c=>Math.abs(n(c.chg7)))),up=srt[0],dn=srt[srt.length-1];
       const p=pcx("p-jobs",`比 7 天前：<b>${esc(up.name)}</b> 增加最多（<em class="up">+${n(up.chg7).toLocaleString()}</em>）${n(dn.chg7)<0?`，<b>${esc(dn.name)}</b> 減少最多（<em class="down">${n(dn.chg7).toLocaleString()}</em>）`:""}`,760,pick.length*19+4);
       const L=200,C=L+230,BW=210;pick.forEach((c,i)=>{const y=i*19,v=n(c.chg7),w=Math.max(1.5,BW*Math.abs(v)/mx);p("text",{x:L-8,y:y+13,"text-anchor":"end",class:i<3?"hi":""},c.name.slice(0,14));
@@ -2752,7 +2752,7 @@ function render(P){
       $("#ib1jh").innerHTML=`104 職缺 · 哪個產業在搶人<span class="n">各產業刊登中職缺比 7 天前</span>`;jTxt=`104 職缺增加最快的是<b>${esc(up.cat)}</b>（<em class="${up.chg>=0?"up":"down"}">${up.chg>0?"+":""}${up.chg}%</em>）${dn.chg<0?`，<b>${esc(dn.cat)}</b> 在縮編（<em class="down">${dn.chg}%</em>）`:""}。`;}
     else{const t=JI.slice(0,10),mx=n(t[0].n),W=fitW("ib1j",520),L=W<420?100:118,rh=18;const p=draw("ib1j",W,t.length*rh+4);
       if(p)t.forEach((x,i)=>{const y=i*rh,w=Math.max(2,(W-L-70)*n(x.n)/mx);p("text",{x:L-8,y:y+12,"text-anchor":"end"},x.name);p("rect",{x:L,y:y+4,width:w,height:rh-8,rx:1.5,style:"fill:var(--blue);opacity:.75"});p("text",{x:L+w+6,y:y+12,class:"num"},(n(x.n)/1e4).toFixed(1)+"萬");});
-      $("#ib1jh").innerHTML=`104 職缺 · 各產業刊登中<span class="n">週增減累積 7 天後改畫「比 7 天前」</span>`;}}
+      const fz=(P.jobs||{}).frozen;$("#ib1jh").innerHTML=`104 職缺 · 各產業刊登中<span class="n">${fz?`停在 ${esc(String(fz).slice(5).replace("-","/"))}（104 已不提供真實總數）`:"週增減累積 7 天後改畫「比 7 天前」"}</span>`;}}
   if(jTxt)A1.jobs=jTxt;
   const EH=P.etfholders||{};
   if((EH.items||[]).length){const t=EH.items.slice(0,8),mx=n(t[0].n),W=fitW("ib1e",520),L=W<420?104:128,rh=18;const p=draw("ib1e",W,t.length*rh+4);

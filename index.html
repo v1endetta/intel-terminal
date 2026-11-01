@@ -2570,7 +2570,9 @@ function EXPLORE() {
       { n: "新公司", lens: "biz" },
       { n: "公司生滅", f: () => bizlifeCard() },
       { n: "新興生意", f: () => nicheCard() },
-      { n: "職缺", lens: "jobs", f: barsOf("各類職缺 7 天變化", () => (((P.jobs || {}).cats) || []).slice(0, 10).map(c => ({ name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) })), "訊號 · 全台 " + nf((P.jobs || {}).total || 0) + " 個職缺", "jobs") },
+      { n: "職缺", lens: "jobs", f: () => { const J = P.jobs || {}, fz = J.frozen ? String(J.frozen).slice(5).replace("-", "/") : "";   // 104 自 10/22 起不給真實總數：改畫各類數量
+          return barsOf(fz ? `各類職缺（停在 ${fz}）` : "各類職缺 7 天變化", () => (J.cats || []).slice(0, 10).map(c => fz ? { name: c.name, v: c.n, txt: nf(c.n) } : { name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) }),
+            "訊號 · 全台 " + nf(J.total || 0) + " 個職缺" + (fz ? "（104 已不提供總數）" : ""), "jobs", fz ? { signed: false } : undefined)(); } },
       { n: "補助徵件", f: () => grantsCard() },
       { n: "美國政策", f: () => uspolicyCard() },
       { n: "標案", lens: "tender", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },
@@ -3873,7 +3875,7 @@ const TW_VIEW = {
     navCounties(c => { const a = jobArea(c.name); if (!a) return { dim: true, op: 0.15 };
       return { col: B, op: 0.25 + 0.7 * Math.sqrt(a.n / mx), sub: `${(a.n / 1e3).toFixed(a.n >= 1e4 ? 0 : 1)}K ${pctTxt(a.chg7)}`, dot: pctCol(a.chg7), prio: 2 + a.n / mx * 4 }; });
     const j = P.jobs || {};
-    return { eyebrow: "台灣 · 104 刊登中職缺", title: "哪裡在找人？", big: `${(j.total || 0).toLocaleString("en-US")} 個`, chg: j.chg7 != null ? `7 天 ${pctTxt(j.chg7)}` : "", color: LENS.jobs.c,
+    return { eyebrow: "台灣 · 104 刊登中職缺", title: "哪裡在找人？", big: `${(j.total || 0).toLocaleString("en-US")} 個`, chg: j.frozen ? `停在 ${String(j.frozen).slice(5).replace("-", "/")} · 104 不再提供總數` : (j.chg7 != null ? `7 天 ${pctTxt(j.chg7)}` : ""), color: LENS.jobs.c,
       body: `<p class="why">各縣市刊登中的職缺數，綠＝7 天內變多、紅＝變少。新竹、嘉義的縣和市在 104 是合併計算。</p><ul class="lst nvl">${A.slice().sort((a, b) => b.n - a.n).map(a => `<li data-nc="${esc(a.counties[0])}" style="cursor:pointer"><span class="sdot" style="background:${pctCol(a.chg7)}"></span>${esc(a.name)}<span>${a.n.toLocaleString("en-US")} 個・7 天 ${pctTxt(a.chg7) || "—"}</span></li>`).join("")}</ul>` };
   },
   tender() {

@@ -263,7 +263,7 @@ const TW_VIEW = {
     navCounties(c => { const a = jobArea(c.name); if (!a) return { dim: true, op: 0.15 };
       return { col: B, op: 0.25 + 0.7 * Math.sqrt(a.n / mx), sub: `${(a.n / 1e3).toFixed(a.n >= 1e4 ? 0 : 1)}K ${pctTxt(a.chg7)}`, dot: pctCol(a.chg7), prio: 2 + a.n / mx * 4 }; });
     const j = P.jobs || {};
-    return { eyebrow: "台灣 · 104 刊登中職缺", title: "哪裡在找人？", big: `${(j.total || 0).toLocaleString("en-US")} 個`, chg: j.chg7 != null ? `7 天 ${pctTxt(j.chg7)}` : "", color: LENS.jobs.c,
+    return { eyebrow: "台灣 · 104 刊登中職缺", title: "哪裡在找人？", big: `${(j.total || 0).toLocaleString("en-US")} 個`, chg: j.frozen ? `停在 ${String(j.frozen).slice(5).replace("-", "/")} · 104 不再提供總數` : (j.chg7 != null ? `7 天 ${pctTxt(j.chg7)}` : ""), color: LENS.jobs.c,
       body: `<p class="why">各縣市刊登中的職缺數，綠＝7 天內變多、紅＝變少。新竹、嘉義的縣和市在 104 是合併計算。</p><ul class="lst nvl">${A.slice().sort((a, b) => b.n - a.n).map(a => `<li data-nc="${esc(a.counties[0])}" style="cursor:pointer"><span class="sdot" style="background:${pctCol(a.chg7)}"></span>${esc(a.name)}<span>${a.n.toLocaleString("en-US")} 個・7 天 ${pctTxt(a.chg7) || "—"}</span></li>`).join("")}</ul>` };
   },
   tender() {

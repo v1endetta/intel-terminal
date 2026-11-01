@@ -267,7 +267,9 @@ function EXPLORE() {
       { n: "新公司", lens: "biz" },
       { n: "公司生滅", f: () => bizlifeCard() },
       { n: "新興生意", f: () => nicheCard() },
-      { n: "職缺", lens: "jobs", f: barsOf("各類職缺 7 天變化", () => (((P.jobs || {}).cats) || []).slice(0, 10).map(c => ({ name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) })), "訊號 · 全台 " + nf((P.jobs || {}).total || 0) + " 個職缺", "jobs") },
+      { n: "職缺", lens: "jobs", f: () => { const J = P.jobs || {}, fz = J.frozen ? String(J.frozen).slice(5).replace("-", "/") : "";   // 104 自 10/22 起不給真實總數：改畫各類數量
+          return barsOf(fz ? `各類職缺（停在 ${fz}）` : "各類職缺 7 天變化", () => (J.cats || []).slice(0, 10).map(c => fz ? { name: c.name, v: c.n, txt: nf(c.n) } : { name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) }),
+            "訊號 · 全台 " + nf(J.total || 0) + " 個職缺" + (fz ? "（104 已不提供總數）" : ""), "jobs", fz ? { signed: false } : undefined)(); } },
       { n: "補助徵件", f: () => grantsCard() },
       { n: "美國政策", f: () => uspolicyCard() },
       { n: "標案", lens: "tender", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },

@@ -117,7 +117,7 @@ def load_prev(pid):
 RESULTS: dict[str, dict] = {}
 TIMES: dict[str, float] = {}  # 每個面板本輪花的秒數（效能檢查用）
 START_TS = time.time()
-PANEL_CAP = {"voice": 280, "pop": 150, "house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"ipr": 290, "voice": 280, "pop": 150, "house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -292,9 +292,15 @@ def p_taiex():
         "series": [v for _, v in series],
         "history": HISTORY.get("taiex", {}).get("TAIEX", [])[-60:],
     }
+    # 清掉假的歷史點：週末，以及跟前一個交易日完全一樣的值（休市日被 MIS 備援重記一次，10/17、10/23、10/31 都發生過）
+    ser = HISTORY.get("taiex", {}).get("TAIEX") or []
+    clean = [r for i, r in enumerate(ser) if datetime.fromisoformat(r[0]).weekday() < 5 and not (i and ser[i - 1][1] == r[1])]
+    if len(clean) != len(ser):
+        HISTORY["taiex"]["TAIEX"] = clean
+        out["history"] = clean[-60:]
     try:  # 日檔（FMTQIK）收盤後才更新：盤中與傍晚用 MIS 即時值
         q = twse_mis()
-        day = NOW.astimezone(TPE).strftime("%Y-%m-%d")
+        day = datetime.fromtimestamp(q["tlong"], TPE).strftime("%Y-%m-%d") if q.get("tlong") else ""   # 用報價自己的成交時間（沒有就不記）：台北過午夜後不會把週五收盤記成週六
         if q.get("price") and q.get("prev") and day > out["date"] and q.get("asOf") and (NOW.timestamp() - q["asOf"]) < 12 * 3600:
             out.update({"index": q["price"], "change": round(q["price"] - q["prev"], 2), "date": day,
                         "live": datetime.fromtimestamp(q["asOf"], TPE).strftime("%H:%M"), "value": None, "transactions": None})
@@ -2348,7 +2354,7 @@ def twse_mis():
         db = json.loads(INTRADAY_PATH.read_text(encoding="utf-8")) if INTRADAY_PATH.exists() else {}
         series = [p for _, p in (db.get("TWII") or {}).get("pts", [])]
     return {"price": price, "prev": prev, "chg_pct": (price - prev) / prev * 100 if prev else None,
-            "series": series, "asOf": tlong or int(NOW.timestamp()), "state": state}
+            "series": series, "asOf": tlong or int(NOW.timestamp()), "tlong": tlong, "state": state}
 
 
 MIS_DIAG: list = []
@@ -3008,6 +3014,21 @@ YB_AREAS = {"00": ("Taipei", "台北市"), "05": ("NewTaipei", "新北市"), "07
 _relay_cache: dict = {}
 
 
+def _moea_text(url, key, **kw):
+    """經濟部統計處：先直接抓；被擋（2026-10 起對國外機房 403）就讀台灣抓取站每天代抓的那份。"""
+    try:
+        raw = get(url, timeout=60, **kw).content
+        try:
+            return raw.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            return raw.decode("big5", errors="ignore")
+    except Exception as e:  # noqa: BLE001
+        txt = (relay_get("static/" + key) or {}).get("csv") or ""
+        if not txt:
+            raise RuntimeError(f"{key}: 直接抓 {safe_err(e)[:60]}；台灣抓取站也還沒有") from e
+        return txt
+
+
 def relay_get(name: str, max_age_min: float = 0):
     """讀 gs://<bucket>/relay/<name>.json.gz（latest/xxx 或 static/xxx）。max_age_min>0 時太舊就丟錯。"""
     if name not in _relay_cache:
@@ -3383,6 +3404,11 @@ def p_voice():
     """每個關鍵字三種訊號：搜尋熱度、討論量（依平台）、新聞量；附 30 天每日新聞量與自動判讀。"""
     cfg = json.loads(VOICE_KW_PATH.read_text(encoding="utf-8"))
     kws, groups = cfg["keywords"], cfg.get("groups") or {}
+    # 設定裡已經拿掉的關鍵字，歷史序列也一起刪（公開 repo：舊設定曾有不該公開的詞，不能留在 history.json）
+    live = {kw["k"] for kw in kws}
+    for g in ("voice_news",):
+        for k in [k for k in (HISTORY.get(g) or {}) if k not in live]:
+            del HISTORY[g][k]
     try:
         gt = relay_get("latest/gtrends", 60 * 24)
     except Exception as e:  # noqa: BLE001
@@ -4645,7 +4671,7 @@ def p_lead():
     except Exception as e:  # noqa: BLE001
         errs.append(f"領先指標: {safe_err(e)}")
     try:
-        txt = get("https://service.moea.gov.tw/EE520/opendata/b.csv", timeout=60).content.decode("utf-8-sig", "ignore")
+        txt = _moea_text("https://service.moea.gov.tw/EE520/opendata/b.csv", "moea_orders")
         s = {}
         for row in csv.reader(io.StringIO(txt)):
             if len(row) >= 3 and row[0] == "外銷訂單金額" and re.match(r"\d{5}$", row[1]):
@@ -5904,7 +5930,10 @@ def p_housefc():
             city.setdefault(area, {})[ym] = int(v)
     if len(vol) < 60:
         raise RuntimeError(f"housefc: 買賣棟數只有 {len(vol)} 個月")
-    raw = get("https://data.taipei/api/dataset/ce4ea2c6-6334-44f8-945a-5705492b187d/resource/02c7bb70-2113-4daf-81d3-5c14b9ae26df/download", timeout=60).content.decode("utf-8-sig", "replace")
+    rb = get("https://data.taipei/api/dataset/ce4ea2c6-6334-44f8-945a-5705492b187d/resource/02c7bb70-2113-4daf-81d3-5c14b9ae26df/download", timeout=60).content
+    raw = rb.decode("utf-8-sig", "replace")
+    if "全市" not in raw:   # 2026-10 起改成 Big5 編碼
+        raw = rb.decode("cp950", "replace")
     tpe = {}
     for row in csv.reader(io.StringIO(raw)):
         if len(row) > 2 and row[0] == "全市" and re.match(r"\d+/\d+$", row[1]):
@@ -5913,6 +5942,15 @@ def p_housefc():
                 tpe[f"{int(yy) + 1911}{int(mm):02d}"] = float(row[2])
             except ValueError:
                 pass
+    tpe_err = None
+    if len(tpe) < 24:   # 解析失敗不要把舊序列蓋成空的（10/30 就這樣被清掉過）
+        try:
+            old = json.loads(HOUSE_SERIES.read_text(encoding="utf-8")).get("tpe") or {}
+        except Exception:  # noqa: BLE001
+            old = {}
+        tpe_err = f"台北房價指數只解析到 {len(tpe)} 個月，沿用舊序列 {len(old)} 個月"
+        if len(old) > len(tpe):
+            tpe = old
     # 房貸（央行）：五大銀行新承做購屋貸款金額與利率（1997 起）、購置住宅貸款餘額年增率（1988 起）
     mort, mbal, merr = {}, {}, None
     try:
@@ -5941,7 +5979,7 @@ def p_housefc():
     cities = sorted([{"city": c, "n3": sum(s.get(_ym_add(vm, -i), 0) for i in range(3)), "yoy3": y3(s, vm)} for c, s in city.items()], key=lambda r: -r["n3"])
     return {"vol_month": vm, "vol": vol[vm], "vol_yoy3": y3(vol, vm), "vol_spark": [vol[k] for k in sorted(vol)[-24:]],
             "cities": cities, "tpe_month": tm, "tpe": tpe.get(tm), "tpe_6m": ch(6), "tpe_12m": ch(12), "tpe_spark": [tpe[k] for k in sorted(tpe)[-36:]],
-            **_mort_summary(mort, mbal), "mort_err": merr,
+            **_mort_summary(mort, mbal), "mort_err": merr, "tpe_err": tpe_err,
             "src": "內政部 建物所有權登記（買賣，月）· 臺北市地政局 住宅價格月指數（全市）· 中央銀行 五大銀行新承做購屋貸款、購置住宅貸款餘額"}
 
 
@@ -6735,6 +6773,18 @@ def p_jobtowns():
     today = NOW.astimezone(TPE).date().isoformat()
     tab = _j104_districts()
     rows, errs = [], []
+    _, tot = _j104()
+    if tot <= J104_CAP:   # 104 不再給真實數量：停在最後真實值，不再查 170 次
+        _jobs_clean()
+        for no, k in tab.items():
+            n, d = _jobs_last("town:" + k)
+            if n:
+                lo, la, c, t = TOWNS[k]
+                rows.append([c, t, n, None])
+        if not rows:
+            raise RuntimeError("jobtowns: 104 不再提供數量，也沒有舊值")
+        rows.sort(key=lambda r: -r[2])
+        return {"date": _jobs_last("total")[1] or today, "towns": rows, "scope": sorted(J104_TOWN_SCOPE), "errs": [], "frozen": True}
     for no, k in tab.items():
         try:
             _, n = _j104(area=no)
@@ -6761,11 +6811,37 @@ def _j104(**params):
     return j, int(((j.get("metadata") or {}).get("pagination") or {}).get("total") or 0)
 
 
+J104_CAP = 1001   # 2026-10-22 起 104 API 的總數一律回 1001（100 頁上限），不再是真實職缺數
+
+
+def _jobs_clean():
+    """清掉 104 改版後寫進歷史的假值（1001），各數字停在最後一個真實值。"""
+    for k, ser in (HISTORY.get("jobs") or {}).items():
+        ser[:] = [r for r in ser if r[1] != J104_CAP]
+
+
+def _jobs_last(key):
+    ser = (HISTORY.get("jobs") or {}).get(key) or []
+    return (ser[-1][1], ser[-1][0]) if ser else (None, None)
+
+
 def p_jobs():
     today = NOW.astimezone(TPE).date().isoformat()
     j, total = _j104()
     if not total:
         raise RuntimeError("104: no total")
+    _jobs_clean()
+    if total <= J104_CAP:   # 總數不再可信：數量類停在最後真實值，只更新最新職缺列表
+        total, frozen = _jobs_last("total")
+        fz = lambda key: _jobs_last(key)[0]
+        cats = [{"name": nm, "n": fz("cat:" + nm), "chg7": None, "spark": hist_get("jobs", "cat:" + nm, 30)} for _, nm in J104_CAT if fz("cat:" + nm)]
+        areas = [{"name": nm, "counties": cs, "n": fz("area:" + nm), "chg7": None} for _, nm, cs in J104_AREA if fz("area:" + nm)]
+        inds = [{"name": nm, "n": fz("ind:" + nm), "chg7": None, "spark": hist_get("jobs", "ind:" + nm, 30)} for nm in J104_IND.values() if fz("ind:" + nm)]
+        cats.sort(key=lambda x: -x["n"]); inds.sort(key=lambda x: -x["n"])
+        latest, ind_mix = _j104_latest(j)
+        return {"total": total, "chg7": None, "spark": hist_get("jobs", "total", 60), "cats": cats, "inds": inds, "areas": areas, "latest": latest[:90],
+                "indMix": sorted(ind_mix.items(), key=lambda x: -x[1]), "src": "104 人力銀行", "frozen": frozen,
+                "note": f"104 自 10/22 起不再提供真實職缺總數，數量停在 {frozen}；最新職缺列表照常更新"}
     hist_put("jobs", "total", today, total)
     def chg(key, v):
         h = HISTORY.get("jobs", {}).get(key, [])
@@ -6803,6 +6879,13 @@ def p_jobs():
             log("104 ind", name, e)
         time.sleep(0.6)
     inds.sort(key=lambda x: -x["n"])
+    latest, ind_mix = _j104_latest(j)
+    cats.sort(key=lambda x: -x["n"])
+    return {"total": total, "chg7": chg("total", total), "spark": hist_get("jobs", "total", 60), "cats": cats, "inds": inds, "areas": areas, "latest": latest[:90],
+            "indMix": sorted(ind_mix.items(), key=lambda x: -x[1]), "src": "104 人力銀行"}
+
+
+def _j104_latest(j):
     latest, seen = [], set()
     for page in (1, 2, 3):
         try:
@@ -6828,9 +6911,7 @@ def p_jobs():
     ind_mix: dict = {}
     for x in latest:
         ind_mix[x["ind"]] = ind_mix.get(x["ind"], 0) + 1
-    cats.sort(key=lambda x: -x["n"])
-    return {"total": total, "chg7": chg("total", total), "spark": hist_get("jobs", "total", 60), "cats": cats, "inds": inds, "areas": areas, "latest": latest[:90],
-            "indMix": sorted(ind_mix.items(), key=lambda x: -x[1]), "src": "104 人力銀行"}
+    return latest, ind_mix
 
 
 # ---------- 上市櫃重大訊息（證交所、櫃買中心）：分類、依公司地址上地圖 ----------
@@ -8751,6 +8832,9 @@ def p_insights():
             "src": "、".join(k for k in sig if k != "鄉鎮交叉") + "（程式算訊號、Gemini 寫句子；數字都對過原始資料）"}
 
 
+NEWS_KW_CACHE = DATA / "news_kw_cache.json"
+
+
 def p_news():
     NEWS_ERRS.clear(); HOT_POOL.clear()
     tw = []
@@ -8782,8 +8866,20 @@ def p_news():
         time.sleep(0.8)
         return out
     allq = list(dict.fromkeys(q for _, qs in NEWS_GROUPS for q in qs))
+    # 關注領域 40 多個查詢是每輪最大的成本（平均 115 秒）：每個查詢 1 小時內抓過就用快取，一輪最多重抓 14 個（最舊的先）
+    try:
+        kwc = json.loads(NEWS_KW_CACHE.read_text(encoding="utf-8")) if NEWS_KW_CACHE.exists() else {}
+    except Exception:  # noqa: BLE001
+        kwc = {}
+    now_ts = time.time()
+    due = sorted((q for q in allq if now_ts - (kwc.get(q) or {}).get("t", 0) > 3600), key=lambda q: (kwc.get(q) or {}).get("t", 0))[:14]
     with ThreadPoolExecutor(max_workers=3) as ex:
-        KW = dict(zip(allq, ex.map(_kwfetch, allq)))
+        for q, got in zip(due, ex.map(_kwfetch, due)):
+            if got or q not in kwc:   # 這次失敗就沿用上一份
+                kwc[q] = {"t": now_ts, "items": got}
+    kwc = {q: kwc[q] for q in allq if q in kwc}
+    write_json(NEWS_KW_CACHE, kwc, separators=(",", ":"))
+    KW = {q: (kwc.get(q) or {}).get("items") or [] for q in allq}
     for name, qs in NEWS_GROUPS:
         got, all7 = [], []
         for q in qs:
@@ -9136,7 +9232,7 @@ def _changelog(url, source, vendor, limit=4):
             if any(o["title"] == title for o in out):
                 continue
             d = _parse_date_any(DATE_LINE.match(l).group(1))
-            out.append({"source": source, "vendor": vendor, "date": l, "title": title[:140], "url": url, "at": d.isoformat().replace("+00:00", "Z") if d else ""})
+            out.append({"source": source, "vendor": vendor, "date": re.sub(r"^Date:\s*", "", l), "title": title[:140], "url": url, "at": d.isoformat().replace("+00:00", "Z") if d else ""})
     out.sort(key=lambda o: o.get("at") or "", reverse=True)  # 頁面可能先列棄用表，一律依日期新到舊
     return out[:limit]
 
@@ -10862,7 +10958,7 @@ def p_calendar():
 # ---------- 市場行事曆（像彭博的 ECO／休市表）：數據公布時間＋前值／預測、各交易所休市、結算日、法說會、新股 ----------
 # 免費、不用金鑰：Forex Factory 週行事曆 JSON（本週＋下週，有台北時間、重要性、前值、預測）
 # 休市：python holidays 套件的交易所行事曆（紐約、東京、香港、上海、首爾、倫敦、法蘭克福、新加坡）＋證交所官方休市表
-FF_WEEKS = ("https://nfs.faireconomy.media/ff_calendar_thisweek.json", "https://nfs.faireconomy.media/ff_calendar_nextweek.json")
+FF_WEEKS = ("https://nfs.faireconomy.media/ff_calendar_thisweek.json",)   # nextweek 檔 2026-10 起 404，拿掉
 FF_CUR = {"USD": "美", "EUR": "歐", "GBP": "英", "JPY": "日", "CNY": "中", "AUD": "澳", "CAD": "加", "CHF": "瑞士", "NZD": "紐"}
 FF_BASE = {
     "CPI": "CPI", "Core CPI": "核心 CPI", "PPI": "PPI", "Core PPI": "核心 PPI", "CPI Flash Estimate": "CPI 快報", "Core CPI Flash Estimate": "核心 CPI 快報",
@@ -11261,12 +11357,7 @@ def p_supply():
                 out[key] = {**prev, "stale": True}
     # 經濟部零售業營業額指數（分業別）→ 年增率
     try:
-        r = get(RETAIL_CSV, headers={"Referer": "https://data.gov.tw/"})
-        raw = r.content
-        try:
-            txt = raw.decode("utf-8-sig")
-        except UnicodeDecodeError:
-            txt = raw.decode("big5", errors="ignore")
+        txt = _moea_text(RETAIL_CSV, "moea_retail", headers={"Referer": "https://data.gov.tw/"})
         import csv as _csv
         rows = list(_csv.reader(txt.splitlines()))
         hdr = rows[0]
@@ -13375,8 +13466,8 @@ run("quake", p_quake)
 run("flights", p_flights)
 run("lightning", p_lightning, keep_if_fresh_hours=0.15)
 run("house", p_house, keep_if_fresh_hours=24 * 5 if RENT_PATH.exists() and '"shops"' in RENT_PATH.read_text(encoding="utf-8") and PRESALE_PATH.exists() else 0)   # 租金檔還沒有店面時，這輪重抓一次
-run("jobs", p_jobs, keep_if_fresh_hours=6)
-run("jobtowns", p_jobtowns, keep_if_fresh_hours=20)   # 六都＋新竹各區職缺，約 170 次 104 查詢，一天一次
+run("jobs", p_jobs, keep_if_fresh_hours=6 if '"frozen"' in json.dumps(load_prev("jobs") or {}) else 0)
+run("jobtowns", p_jobtowns, keep_if_fresh_hours=20 if '"frozen"' in json.dumps(load_prev("jobtowns") or {}) else 0)   # 六都＋新竹各區職缺，約 170 次 104 查詢，一天一次
 run("mops", p_mops, keep_if_fresh_hours=0.5)
 run("power", p_power, keep_if_fresh_hours=0.25)
 run("airport", p_airport, keep_if_fresh_hours=0.25)
@@ -13402,7 +13493,7 @@ run("secwords", p_secwords, keep_if_fresh_hours=24)
 
 DATA.mkdir(exist_ok=True)
 run("think", p_think, keep_if_fresh_hours=2)
-run("voice", p_voice, keep_if_fresh_hours=6)
+run("voice", p_voice, keep_if_fresh_hours=6 if not [k for k in (HISTORY.get("voice_news") or {}) if k not in {x["k"] for x in json.loads(VOICE_KW_PATH.read_text(encoding="utf-8"))["keywords"]}] else 0)  # 有該刪的舊序列就馬上重跑
 run("pop", p_pop, keep_if_fresh_hours=3)
 run("appstore", p_appstore, keep_if_fresh_hours=6)  # App Store 台灣三個榜；一天記一次排名算爬升
 run("roads", p_roads)
@@ -13412,7 +13503,7 @@ run("insights_cat", p_insights_cat, keep_if_fresh_hours=1)  # 各分類洞見：
 run("insights", p_insights, keep_if_fresh_hours=6 if (load_prev("insights") or {}).get("v") == 5 else 0)  # 本月洞見：6 小時重寫一次（一天約 4 次 Gemini），資料補齊後很快會反映
 run("geo", p_geo, keep_if_fresh_hours=0.15)  # 最重，放最後；超過軟性期限就沿用上一輪
 run("tw_pulse", p_tw_pulse)  # 吃地圖那輪的快取，幾乎不多打 API
-run("housefc", p_housefc, keep_if_fresh_hours=24)
+run("housefc", p_housefc, keep_if_fresh_hours=24 if '"tpe_err"' in json.dumps(load_prev("housefc") or {}) else 0)  # 台北房價指數 10/30 被清空過：新版第一次一定重抓
 run("demo", p_demo, keep_if_fresh_hours=24)
 run("bizlife", p_bizlife, keep_if_fresh_hours=24)
 run("births", p_births, keep_if_fresh_hours=24 if BIRTH_CACHE.exists() and len(json.loads(BIRTH_CACHE.read_text(encoding="utf-8") or "{}")) >= 25 else 0)  # 鄉鎮出生數：前幾輪每輪補 4 個月，補滿 25 個月後一天一次
