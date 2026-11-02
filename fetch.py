@@ -3029,18 +3029,113 @@ def _moea_text(url, key, **kw):
         return txt
 
 
-def relay_get(name: str, max_age_min: float = 0):
-    """讀 gs://<bucket>/relay/<name>.json.gz（latest/xxx 或 static/xxx）。max_age_min>0 時太舊就丟錯。"""
-    if name not in _relay_cache:
-        bucket, project = os.environ.get("GCP_BUCKET"), os.environ.get("GCP_PROJECT")
-        if not bucket or not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
-            raise RuntimeError("沒有 Google Cloud 憑證")
-        import gzip
-        from google.cloud import storage
+RELAY_LOCAL = Path(os.environ.get("RUNNER_TEMP") or "/tmp") / "relay_cache"   # 同一條迴圈（約 5 小時）內共用，不進 data 分支
+RELAY_USAGE = DATA / "relay_usage.json"
+
+
+def _relay_download(name: str):
+    """從 bucket 讀 relay/<name>.json.gz；不存在回 None。每次都算一次 Class B 讀取（免費額度每月 5 萬次）。"""
+    bucket, project = os.environ.get("GCP_BUCKET"), os.environ.get("GCP_PROJECT")
+    if not bucket or not os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
+        raise RuntimeError("沒有 Google Cloud 憑證")
+    import gzip
+    from google.cloud import storage
+    from google.api_core.exceptions import NotFound
+    try:
         raw = storage.Client(project=project).bucket(bucket).blob(f"relay/{name}.json.gz").download_as_bytes(timeout=60)
-        _relay_cache[name] = json.loads(gzip.decompress(raw))
+    except NotFound:
+        return None
+    _relay_cache["_reads"] = _relay_cache.get("_reads", 0) + 1
+    return json.loads(gzip.decompress(raw))
+
+
+def _relay_bundle():
+    """抓取站每輪寫一個 live.json.gz（即時資料＋各檔版本號＋這輪花幾秒）。
+    本機留一份：還沒到抓取站下一輪的時間就不重讀；新的一份缺了哪個來源（那輪抓失敗），沿用上一份那個來源（帶舊的時間，太舊照樣會被擋）。"""
+    if "_bundle" in _relay_cache:
+        return _relay_cache["_bundle"]
+    import gzip
+    RELAY_LOCAL.mkdir(parents=True, exist_ok=True)
+    lp = RELAY_LOCAL / "live.json.gz"
+    local = None
+    try:
+        local = json.loads(gzip.decompress(lp.read_bytes())) if lp.exists() else None
+    except Exception:  # noqa: BLE001
+        local = None
+    gap = 59 if NOW.astimezone(TPE).hour < 7 else 14   # 深夜抓取站只在整點跑
+    fresh = local and (NOW - datetime.fromisoformat(local["at"])).total_seconds() / 60 < gap
+    b = local
+    if not fresh:
+        try:
+            got = _relay_download("latest/live")
+        except Exception as e:  # noqa: BLE001
+            got = None
+            log("relay bundle", safe_err(e))
+        if got:
+            for k, d in ((local or {}).get("docs") or {}).items():
+                got["docs"].setdefault(k, d)
+            b = got
+            try:
+                lp.write_bytes(gzip.compress(json.dumps(b, ensure_ascii=False).encode("utf-8"), 1))
+            except Exception:  # noqa: BLE001
+                pass
+            _relay_usage_note(b.get("last") or {})
+    _relay_cache["_bundle"] = b
+    return b
+
+
+def _relay_usage_note(last: dict):
+    """記下抓取站每一輪的秒數與 GCS 讀寫次數（同一輪只記一次），給「雲端用量」估月用量。"""
+    at = last.get("at")
+    if not at:
+        return
+    try:
+        u = json.loads(RELAY_USAGE.read_text(encoding="utf-8")) if RELAY_USAGE.exists() else {}
+    except Exception:  # noqa: BLE001
+        u = {}
+    runs = u.setdefault("runs", [])
+    if any(r[0] == at for r in runs):
+        return
+    runs.append([at, last.get("sec"), (last.get("ops") or {}).get("a"), (last.get("ops") or {}).get("b"), last.get("sections") or {}])
+    u["runs"] = runs[-400:]
+    write_json(RELAY_USAGE, u)
+
+
+def relay_get(name: str, max_age_min: float = 0):
+    """讀抓取站的資料（latest/xxx 或 static/xxx）。max_age_min>0 時太舊就丟錯（深夜抓取站一小時一輪，自動放寬到 75 分鐘）。
+    即時資料從 live.json.gz 拿；其他檔看版本號，跟本機那份一樣就不重讀。"""
+    if name not in _relay_cache:
+        import gzip
+        d = None
+        b = _relay_bundle()
+        k = name.split("/", 1)[1]
+        if b and name.startswith("latest/") and k in (b.get("docs") or {}):
+            d = b["docs"][k]
+        else:
+            ver = ((b or {}).get("idx") or {}).get(name)
+            lp = RELAY_LOCAL / (name.replace("/", "__") + ".json.gz")
+            vp = lp.with_suffix(".ver")
+            if ver and lp.exists() and vp.exists() and vp.read_text() == ver:
+                try:
+                    d = json.loads(gzip.decompress(lp.read_bytes()))
+                except Exception:  # noqa: BLE001
+                    d = None
+            if d is None:
+                d = _relay_download(name)
+                if d is None:
+                    raise RuntimeError(f"relay {name} 不存在")
+                if ver:
+                    try:
+                        RELAY_LOCAL.mkdir(parents=True, exist_ok=True)
+                        lp.write_bytes(gzip.compress(json.dumps(d, ensure_ascii=False).encode("utf-8"), 1))
+                        vp.write_text(ver)
+                    except Exception:  # noqa: BLE001
+                        pass
+        _relay_cache[name] = d
     d = _relay_cache[name]
     if max_age_min:
+        if NOW.astimezone(TPE).hour < 7:
+            max_age_min = max(max_age_min, 75)
         try:
             age = (NOW - datetime.fromisoformat(d["at"])).total_seconds() / 60
         except Exception:  # noqa: BLE001
@@ -3952,7 +4047,7 @@ def p_roads():
     except Exception as e:  # noqa: BLE001
         errs.append("地圖路段: " + safe_err(e))
 
-    return {"label": "高公局・公路局（彰化機房每 5 分鐘）", "asOf": (fl.get("meta") or {}).get("UpdateTime") or fl.get("at"),
+    return {"label": "高公局・公路局（彰化機房每 15 分鐘）", "asOf": (fl.get("meta") or {}).get("UpdateTime") or fl.get("at"),
             "fw": {"strips": strips, "roads": roads, "jams": jams, "slow_km": slow_km, "slow_spark": hist_get("fw_road", "_slow_km", 48), "n": len(fw)},
             "thb": {**thb, "n": len(tl_rows), "jam_spark": hist_get("thb", "_jam", 48)},
             "etag": etag, "events": events[:80], "kinds": kinds, "cms": sorted(cms.values(), key=lambda c: -c["n"])[:30], "news": news[:30], "errs": errs}
@@ -7509,10 +7604,64 @@ def _dg_cpi_national():
     return None
 
 
+RELAY_RUNS_DAY = 17 * 4 + 7    # 07–23 點每 15 分鐘、深夜每小時
+RELAY_SKIP_DAY = 7 * 3         # 深夜非整點被叫醒、馬上結束的次數
+RELAY_BOOT_SEC = 10            # 每次啟動容器、下載程式的額外秒數（估計值，Cloud Run 也算錢）
+FREE = {"vcpu": 240_000, "gib": 450_000, "a": 5_000, "b": 50_000}
+
+
 def p_relay_stats():
-    """台灣抓取站「官方統計」那一段的狀態摘要：哪些抓到、哪些被擋（給除錯和找表號用）。"""
-    d = relay_get("static/stats_summary")
-    return {"at": d.get("at"), "jobs": d.get("jobs")}
+    """台灣抓取站的狀態與雲端用量估計：官方統計那一段抓到哪些；每輪花幾秒、各段幾秒；推估本月 Cloud Run 秒數與 GCS 讀寫次數 vs 免費額度。"""
+    out = {}
+    try:
+        d = relay_get("static/stats_summary")
+        out["jobs"] = d.get("jobs")
+    except Exception as e:  # noqa: BLE001
+        out["jobs_err"] = safe_err(e)[:80]
+    _relay_bundle()
+    try:
+        u = json.loads(RELAY_USAGE.read_text(encoding="utf-8")) if RELAY_USAGE.exists() else {}
+    except Exception:  # noqa: BLE001
+        u = {}
+    def _recent(r):
+        try:
+            return r[1] is not None and datetime.fromisoformat(r[0]) >= NOW - timedelta(days=3)
+        except Exception:  # noqa: BLE001
+            return False
+    runs = [r for r in u.get("runs") or [] if _recent(r)]
+    if not runs:
+        out["note"] = "還沒收到抓取站新版的用量紀錄"
+        return out
+    n = len(runs)
+    avg = lambda i: sum(float(r[i] or 0) for r in runs) / n
+    sec, a, b = avg(1), avg(2), avg(3)
+    secs: dict = {}
+    for r in runs:
+        for k, v in (r[4] or {}).items():
+            secs[k] = secs.get(k, 0) + float(v or 0)
+    vcpu = (sec + RELAY_BOOT_SEC) * RELAY_RUNS_DAY * 30 + RELAY_SKIP_DAY * RELAY_BOOT_SEC * 30
+    mon = NOW.astimezone(TPE).strftime("%Y-%m")
+    try:
+        vs = json.loads((DATA / "vault_state.json").read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        vs = {}
+    fetch_a = (vs.get("ops") or {}).get(mon, 0)
+    fetch_b = (u.get("fetch_reads") or {}).get(mon, 0)
+    day = NOW.astimezone(TPE).day
+    est = {
+        "vcpu": round(vcpu), "gib": round(vcpu),   # 記憶體 1 GiB，秒數相同
+        "a": round(a * RELAY_RUNS_DAY * 30 + fetch_a / max(day, 1) * 30 + 30),   # +30：門牌待辦等零星寫入
+        "b": round(b * RELAY_RUNS_DAY * 30 + fetch_b / max(day, 1) * 30),
+    }
+    out["relay"] = {"runs": n, "since": runs[0][0], "avg_sec": round(sec, 1), "max_sec": max(float(r[1] or 0) for r in runs),
+                    "sections": {k: round(v / n, 1) for k, v in sorted(secs.items(), key=lambda kv: -kv[1])},
+                    "avg_a": round(a, 2), "avg_b": round(b, 2), "last": runs[-1][0]}
+    out["fetch"] = {"vault_writes": fetch_a, "relay_reads": fetch_b, "month": mon, "day": day}
+    out["est"] = est
+    out["free"] = FREE
+    out["pct"] = {k: round(est[k] / FREE[k] * 100) for k in FREE}
+    out["assume"] = {"runs_day": RELAY_RUNS_DAY, "boot_sec": RELAY_BOOT_SEC}
+    return out
 
 
 def _dgc_wide(txt):
@@ -8141,8 +8290,13 @@ def p_geocode():
             k = addr_key(pt)
             if k not in K or K[k][2] != "門牌":
                 pend.setdefault(pt[0], set()).add(k)
-    try:
-        _gcs_put("relay/in/geo_pending.json.gz", gzip.compress(json.dumps({"at": NOW_ISO, "p": {c: sorted(v) for c, v in pend.items()}}, ensure_ascii=False).encode("utf-8")))
+    try:   # 待辦清單沒變就不重傳（GCS 寫入每月免費 5,000 次）
+        import hashlib
+        pj = json.dumps({c: sorted(v) for c, v in sorted(pend.items())}, ensure_ascii=False)
+        ph, hp = hashlib.sha1(pj.encode("utf-8")).hexdigest()[:16], DATA / "geo_pending.sha"
+        if not hp.exists() or hp.read_text().strip() != ph:
+            _gcs_put("relay/in/geo_pending.json.gz", gzip.compress(json.dumps({"at": NOW_ISO, "p": json.loads(pj)}, ensure_ascii=False).encode("utf-8")))
+            hp.write_text(ph)
     except Exception as e:  # noqa: BLE001
         errs.append("上傳待辦：" + safe_err(e)[:80])
     # 路段級：OpenStreetMap，一秒一筆、每輪限時，不搶整輪時間
@@ -8188,11 +8342,11 @@ def p_geocode():
     write_json(GEO_POINTS, {"at": NOW_ISO, "clinic_cols": ["經度", "緯度", "科別群", "特約起", "歇業日", "門牌級"], "clinic": cl,
                             "aes_cols": ["經度", "緯度", "類別", "醫師", "門牌級", "名稱"], "aes": ae}, separators=(",", ":"))
     relay_errs = {}
-    try:   # 台灣抓取站上一輪的錯誤（只留跟這裡有關的），方便遠端除錯
-        from google.cloud import storage
-        stt = json.loads(storage.Client(project=os.environ.get("GCP_PROJECT")).bucket(os.environ.get("GCP_BUCKET")).blob("relay/state.json").download_as_bytes(timeout=30))
-        relay_errs = {k: v for k, v in ((stt.get("last") or {}).get("errs") or {}).items() if re.match(r"geo|vill|mnd|tc_|tn_|city", k)}
-        relay_errs["_at"] = (stt.get("last") or {}).get("at"); relay_errs["_sec"] = (stt.get("last") or {}).get("sec"); relay_errs["_mnd"] = stt.get("mnd"); relay_errs["_vill"] = stt.get("vill"); relay_errs["_geob"] = {c: {kk: vv for kk, vv in v.items() if kk != "res"} for c, v in (stt.get("geob") or {}).items()}
+    try:   # 台灣抓取站上一輪的錯誤（只留跟這裡有關的），方便遠端除錯；從 live.json.gz 拿，不另外讀 state
+        bnd = _relay_bundle() or {}
+        last, stt = bnd.get("last") or {}, bnd.get("relay") or {}
+        relay_errs = {k: v for k, v in (last.get("errs") or {}).items() if re.match(r"geo|vill|mnd|tc_|tn_|city", k)}
+        relay_errs["_at"] = last.get("at"); relay_errs["_sec"] = last.get("sec"); relay_errs["_mnd"] = stt.get("mnd"); relay_errs["_vill"] = stt.get("vill"); relay_errs["_geob"] = stt.get("geob")
     except Exception as e:  # noqa: BLE001
         relay_errs = {"_err": safe_err(e)[:80]}
     return {"items": len(items), "located": n_ok, "doorplate": n_b, "relay": relay_errs, "pending_b": {c: len(v) for c, v in pend.items()}, "osm_queries": n_q, "b_done": b_done, "errs": errs[:4]}
@@ -13375,7 +13529,7 @@ run("etfholders", p_etfholders, keep_if_fresh_hours=12)
 run("corp", p_corp, keep_if_fresh_hours=6)
 run("policy", p_policy, keep_if_fresh_hours=6)
 run("grants", p_grants, keep_if_fresh_hours=6)  # 政府補助與徵件：一天約 4 次，只判讀新標題
-run("relay_stats", p_relay_stats, keep_if_fresh_hours=6)  # 抓取站官方統計的狀態摘要（除錯用）
+run("relay_stats", p_relay_stats, keep_if_fresh_hours=1 if '"est"' in json.dumps(load_prev("relay_stats") or {}) else 0)  # 抓取站官方統計的狀態摘要（除錯用）
 run("prices", p_prices, keep_if_fresh_hours=1)  # 物價細項：月資料；全國版由台灣抓取站代抓，台北市版當備援
 run("tourism", p_tourism, keep_if_fresh_hours=24)
 run("clinics", p_clinics, keep_if_fresh_hours=20 if NHI_CODES_PATH.exists() and CLINIC_ADDR.exists() else 0)  # 診所：健保名冊每天更新，一天抓一次
@@ -13618,24 +13772,27 @@ def vault_push():
             continue
         body = {k: v for k, v in doc.items() if k != "updatedAt"}
         add(pid, json.dumps(body, ensure_ascii=False, sort_keys=True), force=True)
-    if not lines:
-        return "nothing changed"
-    from google.cloud import storage
-    tpe = NOW.astimezone(TPE)
-    obj = f"raw/dt={tpe.strftime('%Y-%m-%d')}/{tpe.strftime('%H%M%S')}.ndjson.gz"
-    data = gzip.compress(("\n".join(lines) + "\n").encode("utf-8"), 9)
-    storage.Client(project=project).bucket(bucket).blob(obj).upload_from_string(data, content_type="application/gzip")
-    hashes.update(pending)
-    for name in pending:
-        kf[name] = time.time()
-    if items:
-        try:
-            iobj = obj.replace("raw/", "items/", 1)
-            storage.Client(project=project).bucket(bucket).blob(iobj).upload_from_string(gzip.compress(("\n".join(items) + "\n").encode("utf-8"), 9), content_type="application/gzip")
+    # 先寫進本機暫存，每 3 小時合併上傳一次（GCS 寫入每月免費 5,000 次；每輪都傳一個月要六千多次）
+    sys.path.insert(0, str(ROOT / "ops"))
+    import vault_spool
+    if lines or items:
+        vault_spool.append(lines, items)
+        hashes.update(pending)
+        for name in pending:
+            kf[name] = time.time()
+        if new_seen:
             with open(seen_p, "a", encoding="utf-8") as f:
                 f.write("\n".join(new_seen) + "\n")
-        except Exception as e:  # noqa: BLE001
-            log("vault items upload", safe_err(e))
+    flushed = 0
+    if vault_spool.due():
+        flushed = vault_spool.flush(project, bucket)
+        mon = NOW.astimezone(TPE).strftime("%Y-%m")
+        ops = state.setdefault("ops", {})
+        ops[mon] = ops.get(mon, 0) + flushed
+        state["ops"] = {k: v for k, v in sorted(ops.items())[-3:]}
+    if not lines and not flushed:
+        write_json(st_p, state, separators=(",", ":"))
+        return "nothing changed"
     if not state.get("bq_items"):
         try:
             from google.cloud import bigquery
@@ -13702,9 +13859,9 @@ def vault_push():
             state["bq_table"] = 1
         except Exception as e:  # noqa: BLE001
             log("vault bq", safe_err(e))
-    state["last"] = {"at": NOW_ISO, "obj": obj, "n": len(lines), "bytes": len(data), "items": len(items)}
+    state["last"] = {"at": NOW_ISO, "spooled": len(lines), "items": len(items), "flushed": flushed}
     write_json(st_p, state, separators=(",", ":"))
-    return f"{obj} {len(lines)} rows {len(data)} bytes"
+    return f"spooled {len(lines)} rows, {len(items)} items; flushed {flushed} objects"
 
 
 # ---------- 異常警報：不尋常的事才推到 Slack（平常不吵）。每天最多 2 則，地震與停班停課例外；深夜（23～07 時）只推地震與停班停課 ----------
@@ -13858,6 +14015,17 @@ try:
     log("vault:", vault_push())
 except Exception as e:  # noqa: BLE001
     log("vault failed:", safe_err(e))
+
+try:   # 這輪讀了抓取站幾次（GCS Class B），記月累計
+    if _relay_cache.get("_reads"):
+        _u = json.loads(RELAY_USAGE.read_text(encoding="utf-8")) if RELAY_USAGE.exists() else {}
+        _m = NOW.astimezone(TPE).strftime("%Y-%m")
+        _fr = _u.setdefault("fetch_reads", {})
+        _fr[_m] = _fr.get(_m, 0) + _relay_cache["_reads"]
+        _u["fetch_reads"] = dict(sorted(_fr.items())[-3:])
+        write_json(RELAY_USAGE, _u)
+except Exception as e:  # noqa: BLE001
+    log("relay usage", safe_err(e))
 
 ok = [k for k, v in RESULTS.items() if not v.get("error")]
 bad = [k for k, v in RESULTS.items() if v.get("error")]

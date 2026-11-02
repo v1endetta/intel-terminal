@@ -12,12 +12,12 @@ gcloud run jobs deploy tw-relay --image=docker.io/library/python:3.12-slim --reg
 gcloud run jobs delete tw-probe --region=$RG --quiet >/dev/null 2>&1 || true
 echo "== 3/5 授權排程器啟動它"
 gcloud run jobs add-iam-policy-binding tw-relay --region=$RG --member=serviceAccount:$SA --role=roles/run.invoker --format=none
-echo "== 4/5 設定每 5 分鐘一次"
+echo "== 4/5 設定每 15 分鐘一次（深夜非整點那幾次，程式會馬上結束）"
 URI="https://run.googleapis.com/v2/projects/$P/locations/$RG/jobs/tw-relay:run"
 if gcloud scheduler jobs describe tw-relay-5min --location=$RG >/dev/null 2>&1; then
-  gcloud scheduler jobs update http tw-relay-5min --location=$RG --schedule="*/5 * * * *" --time-zone=Asia/Taipei --uri="$URI" --http-method=POST --oauth-service-account-email=$SA --oauth-token-scope=https://www.googleapis.com/auth/cloud-platform --format=none
+  gcloud scheduler jobs update http tw-relay-5min --location=$RG --schedule="*/15 * * * *" --time-zone=Asia/Taipei --uri="$URI" --http-method=POST --oauth-service-account-email=$SA --oauth-token-scope=https://www.googleapis.com/auth/cloud-platform --format=none
 else
-  gcloud scheduler jobs create http tw-relay-5min --location=$RG --schedule="*/5 * * * *" --time-zone=Asia/Taipei --uri="$URI" --http-method=POST --oauth-service-account-email=$SA --oauth-token-scope=https://www.googleapis.com/auth/cloud-platform --format=none
+  gcloud scheduler jobs create http tw-relay-5min --location=$RG --schedule="*/15 * * * *" --time-zone=Asia/Taipei --uri="$URI" --http-method=POST --oauth-service-account-email=$SA --oauth-token-scope=https://www.googleapis.com/auth/cloud-platform --format=none
 fi
 echo "== 5/5 先手動跑一次（約 1 分鐘）"
 gcloud run jobs execute tw-relay --region=$RG --wait

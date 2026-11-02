@@ -1,6 +1,12 @@
-# 台灣抓取站：在 Google Cloud 彰化機房（asia-east1，台灣 IP）每 5 分鐘跑一次。
+# 台灣抓取站：在 Google Cloud 彰化機房（asia-east1，台灣 IP）每 15 分鐘被叫醒一次。
 # 只負責「抓 → 轉成精簡 JSON → 存進 intel-vault 的 bucket」，怎麼解讀交給 GitHub 上的 fetch.py。
 # Cloud Run job 每次執行都從 GitHub 讀這支最新版，所以改這裡不用重新部署。
+#
+# 省錢規則（2026-11：10 月曾超出免費額度）：
+# - 計費看「跑了幾秒」：即時路況、YouBike 每次都抓（並行，目標 30 秒內）；慢的工作依「第幾個 15 分鐘」輪班，每段有時限。
+# - 深夜 00–06 點只在整點跑。
+# - 寫檔（Class A）每月免費 5,000 次：即時資料合成一個檔 relay/latest/live.json.gz；
+#   其他檔內容沒變就不寫；state 沒變就不寫；原始存檔每 3 小時一份。
 import gzip, hashlib, json, os, re, time, urllib.parse, urllib.request, urllib.error
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
@@ -15,7 +21,6 @@ YB2 = "https://apis.youbike.com.tw/json/station-yb2.json"
 LIVE = {
     "fw_live": FW + "LiveTraffic.xml",            # 國道路段即時車速、旅行時間、壅塞等級
     "fw_events": FW + "LiveEvents.xml",           # 國道即時事件（事故、施工、管制）
-    "fw_1968": FW + "1min_incident_data_1968.xml",  # 1968 每分鐘事故
     "fw_news": FW + "News.xml",                   # 高公局路況新聞
     "fw_cms": FW + "CMSLive.xml",                 # 國道資訊看板即時內容
     "thb_live": THB + "section/livetrafficdata/LiveTrafficList.xml",  # 省道路段即時
@@ -46,7 +51,17 @@ T_START = time.time()
 TPE = timezone(timedelta(hours=8))
 NOW = datetime.now(TPE)
 NOW_ISO = NOW.replace(microsecond=0).isoformat()
+SLOT = NOW.minute // 15            # 這小時第幾個 15 分鐘（0–3），慢工作照這個輪班
+NIGHT = NOW.hour < 7               # 00–06 點只在整點跑
+HARD_END = T_START + 200           # Cloud Run 上限 240 秒，留餘裕
 _tok = {"v": None, "exp": 0}
+OPS = {"a": 0, "b": 0}             # 本輪 GCS 寫入（Class A）、讀取（Class B）次數
+SEC = {}                           # 本輪各段花的秒數
+_sec_end = [HARD_END]              # 目前這段的時限；get() 的 timeout 不會超過它
+
+
+def left():
+    return min(_sec_end[0], HARD_END) - time.time()
 
 
 def log(*a):
@@ -64,6 +79,7 @@ def token():
 
 
 def gcs_put(name, data, ctype="application/gzip"):
+    OPS["a"] += 1
     q = urllib.parse.quote(name, safe="")
     urllib.request.urlopen(urllib.request.Request(
         f"https://storage.googleapis.com/upload/storage/v1/b/{BUCKET}/o?uploadType=media&name={q}",
@@ -71,6 +87,7 @@ def gcs_put(name, data, ctype="application/gzip"):
 
 
 def gcs_get(name):
+    OPS["b"] += 1
     q = urllib.parse.quote(name, safe="")
     try:
         return urllib.request.urlopen(urllib.request.Request(
@@ -83,6 +100,7 @@ def gcs_get(name):
 
 
 def get(url, timeout=40):
+    timeout = max(3, min(timeout, left()))
     r = urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Encoding": "gzip"}), timeout=timeout)
     b = r.read()
     if r.headers.get("Content-Encoding") == "gzip" or b[:2] == b"\x1f\x8b":
@@ -165,6 +183,21 @@ def gz(obj):
     return gzip.compress(json.dumps(obj, ensure_ascii=False, separators=(",", ":")).encode("utf-8"), 9)
 
 
+STATE: dict = {}
+
+
+def put_doc(name, obj, ignore=()):
+    """存 relay/<name>.json.gz，但內容（不含 at）跟上次一樣就不寫。寫了就把版本記進 idx，fetch.py 用它判斷本機快取能不能用。"""
+    h = hashlib.sha1(json.dumps({k: v for k, v in obj.items() if k not in ignore}, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()[:16]
+    sh = STATE.setdefault("sh", {})
+    if sh.get(name) == h:
+        return False
+    gcs_put(f"relay/{name}.json.gz", gz({"at": NOW_ISO, **obj}))
+    sh[name] = h
+    STATE.setdefault("idx", {})[name] = NOW_ISO
+    return True
+
+
 def _gt_open(u, ck):
     """Trends 需要 NID cookie；被 429 時把回應帶的 cookie 收起來再試一次。"""
     for i in range(3):
@@ -223,6 +256,8 @@ def gtrends(state):
         except Exception as e:  # noqa: BLE001
             errs["_home"] = repr(e)[:160]
     for kw in todo:
+        if left() < 15:
+            break
         k, q = kw["k"], kw["q"]
         tried[k] = now
         try:
@@ -243,7 +278,7 @@ def gtrends(state):
     if ok:
         errs.pop("_home", None)
     state["gt_tried"] = {k: v for k, v in tried.items() if k in names}
-    gcs_put("relay/latest/gtrends.json.gz", gz({"at": NOW_ISO, "span": "today 5-y", "kw": kwd, "kat": kat, "errs": errs}))
+    put_doc("latest/gtrends", {"span": "today 5-y", "kw": kwd, "kat": kat, "errs": errs})
     log("gtrends", len(todo), "tried", ok, "ok", len(kwd), "have")
 
 
@@ -276,7 +311,7 @@ def stats_daily(state, errs):
     for k, u in stats_jobs().items():
         if time.time() - at.get(k, 0) < 86400:
             continue
-        if time.time() - t0 > 70 or n >= 3:   # Cloud Run 一次最多 240 秒，即時路況還要時間：每輪最多 3 項、70 秒，其餘下一輪（15 分鐘後）
+        if left() < 20 or n >= 3:   # 每輪最多 3 項、在這段時限內，其餘下一輪
             break
         n += 1
         rec = {"at": NOW_ISO, "url": u}
@@ -295,12 +330,12 @@ def stats_daily(state, errs):
                 ser = (((js.get("data") or {}).get("dataSets") or [{}])[0].get("series")) or {}
                 rec["n_series"] = len(ser)
                 rec["n_obs"] = sum(len((v or {}).get("observations") or {}) for v in ser.values())
-                gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "json": js}))
+                put_doc(f"static/{k}", {"src": u, "json": js})
                 at[k] = time.time() if rec["n_obs"] or k.startswith("dg_meta_") else time.time() - 86400 + 6 * 3600
             except ValueError:
                 if txt.lstrip()[:1] == '"' and "<html" not in txt[:500].lower():   # 匯出的 CSV（第一列是分類名稱、之後一列一個月份）
                     rec["kind"] = "csv"; rec["head"] = txt[:400]; rec["n_lines"] = txt.count("\n")
-                    gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "csv": txt}))
+                    put_doc(f"static/{k}", {"src": u, "csv": txt})
                     at[k] = time.time()
                     summ[k] = rec; changed = True
                     continue
@@ -310,7 +345,7 @@ def stats_daily(state, errs):
                 rec["head"] = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", body)).strip()[:600]
                 if k.endswith("_menu"):   # 目錄頁：留下所有功能代碼和名稱，之後找表號用
                     rec["funids"] = sorted(set(re.findall(r"funid=([A-Za-z0-9_]+)", txt)))[:600]
-                    gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "html": txt[:600000]}))
+                    put_doc(f"static/{k}", {"src": u, "html": txt[:600000]})
                     at[k] = time.time()
                 else:
                     at[k] = time.time() - 86400 + 6 * 3600
@@ -320,8 +355,8 @@ def stats_daily(state, errs):
             at[k] = time.time() - 86400 + 6 * 3600
         summ[k] = rec
         changed = True
-    if changed:
-        gcs_put("relay/static/stats_summary.json.gz", gz({"at": NOW_ISO, "jobs": summ}))
+    if changed:   # 摘要裡的 at／len 每天會變；只在內容（種類、列數、錯誤）變了才寫
+        put_doc("static/stats_summary", {"jobs": {k: {kk: vv for kk, vv in v.items() if kk not in ("at",)} for k, v in summ.items()}})
 
 
 MOEA = {   # 經濟部統計處 2026-10 起對國外機房回 403：台灣 IP 每天代抓一次原始 CSV，fetch.py 抓不到時讀這份
@@ -336,6 +371,8 @@ def moea_daily(state, errs):
     for k, u in MOEA.items():
         if time.time() - at.get(k, 0) < 86400:
             continue
+        if left() < 15:
+            break
         try:
             b = get(u, 60)
             try:
@@ -344,7 +381,7 @@ def moea_daily(state, errs):
                 txt = b.decode("big5", errors="ignore")
             if "<html" in txt[:500].lower() or len(txt) < 200:
                 raise RuntimeError(f"not csv ({len(txt)}b)")
-            gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "csv": txt}))
+            put_doc(f"static/{k}", {"src": u, "csv": txt})
             at[k] = time.time()
         except Exception as e:  # noqa: BLE001
             errs["moea:" + k] = repr(e)[:200]
@@ -362,12 +399,14 @@ def city_cctv(state, errs):
     for k, u in CITY_CCTV.items():
         if time.time() - at.get(k, 0) < 86400:
             continue
+        if left() < 15:
+            break
         try:
             b = get(u, 60)
             txt = b.decode("utf-8-sig", "replace")
             if "\ufffd" in txt[:2000]:
                 txt = b.decode("big5", "replace")
-            gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, "raw": txt[:4_000_000]}))
+            put_doc(f"static/{k}", {"src": u, "raw": txt[:4_000_000]})
             at[k] = time.time()
         except Exception as e:  # noqa: BLE001
             errs[k] = repr(e)[:200]
@@ -427,12 +466,12 @@ def _shp_dbf_centroids(zbytes):
 
 def villages_once(state, errs):
     st = state.setdefault("vill", {"done": 0, "try": 0})
-    if st.get("done") or time.time() - st.get("try", 0) < 6 * 3600:
+    if st.get("done") or time.time() - st.get("try", 0) < 6 * 3600 or left() < 60:
         return
     st["try"] = time.time()
     try:
         rows, flds = _shp_dbf_centroids(get(VILL_ZIP, 120))
-        gcs_put("relay/static/villages.json.gz", gz({"at": NOW_ISO, "src": "內政部國土測繪中心 村里界圖（TWD97經緯度），面積加權中心", "fields": flds, "v": rows}))
+        put_doc("static/villages", {"src": "內政部國土測繪中心 村里界圖（TWD97經緯度），面積加權中心", "fields": flds, "v": rows})
         st["done"] = time.time(); st["n"] = len(rows)
     except Exception as e:  # noqa: BLE001
         errs["villages"] = repr(e)[:200]
@@ -588,16 +627,19 @@ def _geo_scan(url, need, budget):
 
 
 def geo_b(state, errs):
-    if time.time() - T_START > 110:
+    if left() < 30:
         return
     raw = gcs_get("relay/in/geo_pending.json.gz")
     pend = (json.loads(gzip.decompress(raw)).get("p") or {}) if raw else {}
     if not pend:
         return
+    st = state.setdefault("geob", {})
+    if not any(c in GEO_DS and ks and not (st.get(c, {}).get("fin") and time.time() - st[c]["fin"] < 7 * 86400)
+               for c, ks in pend.items()):
+        return   # 每個縣市這週都掃過了，不用讀其他檔
     old = gcs_get("relay/static/geo_b.json.gz")
     res = json.loads(gzip.decompress(old)) if old else {"k": {}, "done": {}}
     K, done = res.setdefault("k", {}), res.setdefault("done", {})
-    st = state.setdefault("geob", {})
     tc = {}   # 鄉鎮中心（村里中心平均），同一門牌出現在不同鄉鎮時挑最近的
     try:
         vv = gcs_get("relay/static/villages.json.gz")
@@ -608,7 +650,7 @@ def geo_b(state, errs):
     tc = {k: (a[0] / a[2], a[1] / a[2]) for k, a in tc.items() if a[2]}
     changed = False
     for cty, keys in sorted(pend.items(), key=lambda kv: st.get(kv[0], {}).get("try", 0)):   # 輪流：最久沒試的縣市先
-        if cty not in GEO_DS or time.time() - T_START > 110:
+        if cty not in GEO_DS or left() < 30:
             continue
         need_keys = [k for k in keys if k not in K]
         cs = st.setdefault(cty, {"i": 0})
@@ -623,7 +665,7 @@ def geo_b(state, errs):
                 for k in need_keys:
                     p = k.split("|")
                     need.setdefault("|".join(p[2:]), []).append(k)
-                found = _geo_scan(cs["res"][cs["i"]], need, budget=max(20, 200 - (time.time() - T_START)))
+                found = _geo_scan(cs["res"][cs["i"]], need, budget=max(20, left() - 5))
                 for k, cands in found.items():
                     p = k.split("|"); ctr = tc.get(p[0] + p[1])
                     best = min(cands, key=lambda c: (c[0] - ctr[0]) ** 2 + (c[1] - ctr[1]) ** 2) if ctr else (cands[0] if len(cands) == 1 else None)
@@ -640,27 +682,25 @@ def geo_b(state, errs):
             changed = True
         break   # 一輪只處理一個縣市的一個檔
     if changed:
-        gcs_put("relay/static/geo_b.json.gz", gz({"at": NOW_ISO, "k": K, "done": done}))
+        put_doc("static/geo_b", {"k": K, "done": done})
 
 MND = "https://www.mnd.gov.tw/"
 
 
 def mnd_plaact(state, errs):
     """國防部「中共解放軍臺海周邊海、空域動態」：從美國抓常常逾時，改由台灣抓列表＋內文，存原始內文給 fetch.py 解析。
-    沒補齊前每輪都抓（每輪最多 12 篇、45 秒），補齊後一小時看一次有沒有新的。"""
-    st = state.setdefault("mnd", {"at": 0, "pages": 0})
+    由 main() 每小時叫一次（第 1 個 15 分鐘）；每次最多 12 篇。"""
+    st = state.setdefault("mnd", {"pages": 0})
+    st.pop("at", None)
     try:
         old = json.loads(gzip.decompress(gcs_get("relay/static/mnd_plaact.json.gz") or gz({"items": {}})))
     except Exception:  # noqa: BLE001
         old = {"items": {}}
     items = old.get("items") or {}
     backlog = st.get("pages", 0) < 22
-    if not backlog and time.time() - st.get("at", 0) < 3600:
-        return
-    t1 = time.time()
     entries = []
     for page in range(1, 23):
-        if time.time() - t1 > 25:
+        if left() < 25:
             break
         try:
             t = get(MND + "news/plaactlist" + (f"/{page}" if page > 1 else ""), 20).decode("utf-8", "replace")
@@ -677,7 +717,7 @@ def mnd_plaact(state, errs):
     for pid, dt, title in entries:
         if pid in items:
             continue
-        if n >= 12 or time.time() - t1 > 45:
+        if n >= 12 or left() < 10:
             break
         try:
             d = get(MND + f"news/plaact/{pid}", 20).decode("utf-8", "replace")
@@ -687,8 +727,7 @@ def mnd_plaact(state, errs):
         except Exception as e:  # noqa: BLE001
             errs["mnd_item"] = repr(e)[:160]
     keep = sorted(items, key=int)[-260:]
-    gcs_put("relay/static/mnd_plaact.json.gz", gz({"at": NOW_ISO, "items": {k: items[k] for k in keep}}))
-    st["at"] = time.time()
+    put_doc("static/mnd_plaact", {"items": {k: items[k] for k in keep}})
 
 
 # ---------- 國道貨運車流（高公局車輛偵測 TDCS M03A：每個門架每 5 分鐘、分車種的通過量）----------
@@ -733,20 +772,26 @@ def _tdcs_day(d):
 
 
 def tdcs_daily(state, errs):
-    t0 = time.time()
+    """每天補前一天＋歷史每週三。補齊之後一天只讀一次存檔（state["tdcs_day"] 記哪天已經沒事做）。"""
+    today = NOW.date().isoformat()
+    if state.get("tdcs_day") == today or NOW.hour < 3:
+        return
     store = json.loads(gzip.decompress(gcs_get("relay/static/tdcs_daily.json.gz") or gz({"days": {}}))).get("days", {})
     want = []
     y = (NOW - timedelta(days=1)).date()
-    if NOW.hour >= 3 and y.isoformat() not in store:
+    if y.isoformat() not in store:
         want.append(y)
     d = datetime(2021, 6, 23).date()   # 第一個有資料的週三
     while d < y - timedelta(days=6):
         if d.isoformat() not in store and state.get("tdcs_bad", {}).get(d.isoformat(), 0) < 3:
             want.append(d)
         d += timedelta(days=7)
+    if not want:
+        state["tdcs_day"] = today
+        return
     changed = False
     for d in want[:3]:
-        if time.time() - t0 > 55:
+        if left() < 45:
             break
         k = d.isoformat()
         try:
@@ -758,97 +803,115 @@ def tdcs_daily(state, errs):
                 errs["tdcs:" + k] = f"只有 {n} 個檔"
         except Exception as e:  # noqa: BLE001
             errs["tdcs:" + k] = repr(e)[:160]
-            bad = state.setdefault("tdcs_bad", {}); bad[k] = bad.get(k, 0) + 1
+            bad = state.setdefault("tdcs_bad", {}); bad[k] = bad.get(k, 0) + 1   # 失敗三次就不再試，免得每小時白跑
     if changed:
         gcs_put("relay/static/tdcs_daily.json.gz", gz({"at": NOW_ISO, "days": dict(sorted(store.items()))}))
+        STATE.setdefault("idx", {})["static/tdcs_daily"] = NOW_ISO
 
 
-def main():
-    t0 = time.time()
-    state = json.loads(gcs_get("relay/state.json") or b"{}")
-    hashes, static_at = state.setdefault("h", {}), state.setdefault("static_at", {})
-    docs, errs = {}, {}
-
-    try:   # 官方統計排最前面（自己限時 70 秒），免得被後面的即時路況吃掉時間
-        stats_daily(state, errs)
-    except Exception as e:  # noqa: BLE001
-        errs["stats"] = repr(e)[:200]
-
+def section(name, fn, budget, errs):
+    """跑一段慢工作：最多 budget 秒（get() 的 timeout 會被壓到剩下的時間），記下花了幾秒。"""
+    if left() < 20:
+        return
+    t = time.time()
+    _sec_end[0] = min(HARD_END, t + budget)
     try:
-        moea_daily(state, errs)
+        fn()
     except Exception as e:  # noqa: BLE001
-        errs["moea"] = repr(e)[:200]
+        errs[name] = repr(e)[:200]
+    finally:
+        _sec_end[0] = HARD_END
+        SEC[name] = round(time.time() - t, 1)
 
-    try:
-        tdcs_daily(state, errs)
-    except Exception as e:  # noqa: BLE001
-        errs["tdcs"] = repr(e)[:200]
 
-    try:
-        villages_once(state, errs)
-    except Exception as e:  # noqa: BLE001
-        errs["villages"] = repr(e)[:200]
-
-    try:
-        city_cctv(state, errs)
-    except Exception as e:  # noqa: BLE001
-        errs["city_cctv"] = repr(e)[:200]
-
-    try:
-        mnd_plaact(state, errs)
-    except Exception as e:  # noqa: BLE001
-        errs["mnd"] = repr(e)[:200]
-
-    try:
-        docs["yb"], yb_meta = youbike()
-        if time.time() - static_at.get("yb_meta", 0) > 86400:
-            gcs_put("relay/static/yb_meta.json.gz", gz({"at": NOW_ISO, **yb_meta}))
-            static_at["yb_meta"] = time.time()
-    except Exception as e:  # noqa: BLE001
-        errs["yb"] = repr(e)[:200]
-
-    for k, u in LIVE.items():
-        try:
-            docs[k] = parse_xml(get(u))
-        except Exception as e:  # noqa: BLE001
-            errs[k] = repr(e)[:200]
-
+def static_daily(state, errs):
+    static_at = state.setdefault("static_at", {})
     for k, u in STATIC.items():
         if time.time() - static_at.get(k, 0) < 86400:
             continue
+        if left() < 20:
+            break
         try:
-            gcs_put(f"relay/static/{k}.json.gz", gz({"at": NOW_ISO, "src": u, **parse_xml(get(u, 90))}))
+            put_doc(f"static/{k}", {"src": u, **parse_xml(get(u, 90))}, ignore=("meta",))   # meta 只有更新時間，不算內容變動
             static_at[k] = time.time()
         except Exception as e:  # noqa: BLE001
             errs[k] = repr(e)[:200]
-            static_at[k] = time.time() - 86400 + 6 * 3600   # 失敗的 6 小時後再試，不要每 5 分鐘白打
+            static_at[k] = time.time() - 86400 + 6 * 3600   # 失敗的 6 小時後再試
 
-    try:
-        gtrends(state)
-    except Exception as e:  # noqa: BLE001
-        errs["gtrends"] = repr(e)[:200]
 
-    try:
-        geo_b(state, errs)
-    except Exception as e:  # noqa: BLE001
-        errs["geo_b"] = repr(e)[:200]
+def fetch_live(errs):
+    """即時資料：全部同時抓（大部分時間在等對方伺服器，並行可以把等待疊在一起）。"""
+    from concurrent.futures import ThreadPoolExecutor
+    jobs = {k: (lambda u=u: parse_xml(get(u, 25))) for k, u in LIVE.items()}
+    jobs["yb"] = youbike
+    docs = {}
+    with ThreadPoolExecutor(len(jobs)) as ex:
+        futs = {k: ex.submit(f) for k, f in jobs.items()}
+        for k, f in futs.items():
+            try:
+                docs[k] = f.result()
+            except Exception as e:  # noqa: BLE001
+                errs[k] = repr(e)[:200]
+    if "yb" in docs:
+        docs["yb"], yb_meta = docs["yb"]
+        put_doc("static/yb_meta", yb_meta)
+    return docs
 
-    lines, changed = [], []
-    for k, d in docs.items():
-        body = json.dumps(d, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
-        gcs_put(f"relay/latest/{k}.json.gz", gz({"at": NOW_ISO, **d}))
-        h = hashlib.sha1(body.encode("utf-8")).hexdigest()
-        if hashes.get(k) != h:
-            hashes[k] = h
-            changed.append(k)
-            lines.append(json.dumps({"ts": NOW_ISO, "src": k, "doc": body}, ensure_ascii=False))
-    if lines:
-        obj = f"relay/raw/dt={NOW:%Y-%m-%d}/{NOW:%H%M%S}.ndjson.gz"
-        gcs_put(obj, gzip.compress(("\n".join(lines) + "\n").encode("utf-8"), 9))
-    state["last"] = {"at": NOW_ISO, "ok": sorted(docs), "changed": changed, "errs": errs,
-                     "rows": {k: len(d["rows"]) for k, d in docs.items()}, "sec": round(time.time() - t0, 1)}
-    gcs_put("relay/state.json", json.dumps(state, ensure_ascii=False).encode("utf-8"), "application/json")
-    log("done", json.dumps(state["last"], ensure_ascii=False))
+
+SEED = ["static/" + k for k in STATIC] + ["static/" + k for k in ("stats_summary", "moea_orders", "moea_retail", "tc_cctv", "tn_cctv",
+                                                                  "villages", "geo_b", "mnd_plaact", "tdcs_daily", "yb_meta",
+                                                                  "dgc2_cpi_basic", "dgc2_cpi_special", "dgc2_labor", "dgc2_sa",
+                                                                  "dgc2_gdp_q", "dgc2_gdp_q2")] + ["latest/gtrends"]
+
+
+def main():
+    global STATE
+    if NIGHT and SLOT:
+        log("night: skip (only on the hour)")
+        return
+    raw0 = gcs_get("relay/state.json") or b"{}"
+    state = STATE = json.loads(raw0)
+    for k in ("h", "last"):   # 舊版欄位：即時資料每輪都變，不再放 state（放 live.json.gz）
+        state.pop(k, None)
+    for k in SEED:            # 既有的檔先給一個固定版本號，fetch.py 才能快取；之後內容一變就換成寫入時間
+        state.setdefault("idx", {}).setdefault(k, "v0")
+    before = json.dumps(state, ensure_ascii=False, sort_keys=True)
+    errs = {}
+
+    t = time.time(); _sec_end[0] = T_START + 60
+    docs = fetch_live(errs)
+    _sec_end[0] = HARD_END; SEC["live"] = round(time.time() - t, 1)
+
+    # 慢工作輪班：每小時第 1 段國防部＋搜尋趨勢；第 2 段門牌（每 3 小時）＋國道車流；每段都看一下有沒有到期的每日工作
+    if SLOT == 1:
+        section("mnd", lambda: mnd_plaact(state, errs), 50, errs)
+        section("gtrends", lambda: gtrends(state), 70, errs)
+    if SLOT == 2:
+        section("tdcs", lambda: tdcs_daily(state, errs), 100, errs)
+        if NOW.hour % 3 == 0:
+            section("geo_b", lambda: geo_b(state, errs), 90, errs)
+    section("stats", lambda: stats_daily(state, errs), 60, errs)
+    section("moea", lambda: moea_daily(state, errs), 30, errs)
+    section("city_cctv", lambda: city_cctv(state, errs), 30, errs)
+    section("static", lambda: static_daily(state, errs), 60, errs)
+    section("villages", lambda: villages_once(state, errs), 150, errs)
+
+    last = {"at": NOW_ISO, "ok": sorted(docs), "errs": errs, "rows": {k: len(d["rows"]) for k, d in docs.items()},
+            "sec": round(time.time() - T_START, 1), "sections": {k: v for k, v in SEC.items() if v >= 0.1}}
+    if NOW.hour % 3 == 0 and SLOT == 0 and docs:   # 原始存檔（BigQuery tw_detail 表）：每 3 小時一份
+        lines = [json.dumps({"ts": NOW_ISO, "src": k, "doc": json.dumps(d, ensure_ascii=False, separators=(",", ":"), sort_keys=True)},
+                            ensure_ascii=False) for k, d in docs.items()]
+        gcs_put(f"relay/raw/dt={NOW:%Y-%m-%d}/{NOW:%H%M%S}.ndjson.gz", gzip.compress(("\n".join(lines) + "\n").encode("utf-8"), 9))
+    if json.dumps(state, ensure_ascii=False, sort_keys=True) != before:
+        gcs_put("relay/state.json", json.dumps(state, ensure_ascii=False).encode("utf-8"), "application/json")
+        last["state_saved"] = 1
+    last["ops"] = dict(OPS); last["ops"]["a"] += 1   # 含下面這次寫入
+    last["sec"] = round(time.time() - T_START, 1)
+    geob = {c: {kk: vv for kk, vv in v.items() if kk != "res"} for c, v in (state.get("geob") or {}).items()}
+    bundle = {"at": NOW_ISO, "docs": {k: {"at": NOW_ISO, **d} for k, d in docs.items()}, "idx": state.get("idx") or {},
+              "last": last, "relay": {"mnd": state.get("mnd"), "vill": state.get("vill"), "geob": geob}}
+    gcs_put("relay/latest/live.json.gz", gz(bundle))
+    log("done", json.dumps(last, ensure_ascii=False))
 
 
 main()

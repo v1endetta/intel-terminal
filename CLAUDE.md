@@ -52,10 +52,14 @@ GitHub Actions
 
 Google Cloud（專案 intel-vault-510704，免費層）
 ├─ Cloud Storage bucket intel-vault-510704-vault：每輪有變的面板整份存 raw/dt=YYYY-MM-DD/*.ndjson.gz
+│    （先寫在 Actions 機器暫存 ops/vault_spool.py，每 3 小時＋迴圈結束時合併上傳；GCS 寫入免費每月 5,000 次）
 ├─ BigQuery 外部表 intel.snapshots：終端機「資料庫」分頁用 Vin 的 Google 登入（OAuth）直接查
-└─ Cloud Run job tw-relay（asia-east1 彰化，台灣 IP，每 15 分鐘）：抓 GitHub 抓不到的台灣來源
+└─ Cloud Run job tw-relay（asia-east1 彰化，台灣 IP，每 15 分鐘；深夜 00–06 只有整點那次做事）：抓 GitHub 抓不到的台灣來源
      （國道與省道即時路況、eTag、YouBike、主計總處等官方統計）→ 存 bucket → fetch.py 讀
      ops/tw_relay.py 每次執行從 GitHub 讀最新版，改了不用重新部署
+     即時資料合成一個 relay/latest/live.json.gz（含各檔版本號 idx、這輪秒數與讀寫次數 last）；
+     其他檔內容沒變不寫；慢工作依「這小時第幾個 15 分鐘」輪班、每段有時限（見 main()）
+     fetch.py 的 relay_get() 讀 live.json.gz，靜態檔照 idx 版本號在 Actions 機器本機快取
 
 Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 artifact、提醒，見記憶檔
 ```
@@ -77,13 +81,13 @@ Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 a
 | `terminal/index.html` | 終端機（單檔，約 3,500 行） |
 | `classic/` | 舊版首頁（保留） |
 | `3d/` | 地形、材質、建築、航照等預烤素材 |
-| `ops/` | 預烤腳本（`bake_*.py`、Cloud Shell 用）、台灣抓取站 `tw_relay.py`、設定檔：`themes.json` 主題鏈、`wiki_topics.json`、`voice_keywords.json`、`polls.json` |
+| `ops/` | 預烤腳本（`bake_*.py`、Cloud Shell 用）、台灣抓取站 `tw_relay.py`、歷史資料庫暫存 `vault_spool.py`、設定檔：`themes.json` 主題鏈、`wiki_topics.json`、`voice_keywords.json`、`polls.json` |
 | `tw_counties.json`、`tw_towns.json` | 縣市、鄉鎮邊界 |
 | data 分支 `data/all.json` | 所有面板最新值（`panels.<id>`） |
 | data 分支 `data/history.json` | 各指標日序列（走勢圖、預測帳本、論點用），每序列最多約 400 點 |
 | data 分支 `data/panels/<id>.json` | 各面板單檔；`macro.json` 可手動維護 |
 | data 分支 `data/archive/YYYY-MM-DD.json` | 每日存檔：頭條、熱詞、PTT、OSS 等 |
-| data 分支 其他 `data/*.json` | 各面板的快取與中間序列，例如 `consume_series.json`、`polls_cache.json`、`geocode_cache.json`、`appstore_hist.json`、`ust_cache.json`、`news_kw_cache.json` |
+| data 分支 其他 `data/*.json` | 各面板的快取與中間序列，例如 `consume_series.json`、`polls_cache.json`、`geocode_cache.json`、`appstore_hist.json`、`ust_cache.json`、`news_kw_cache.json`、`relay_usage.json`（抓取站每輪秒數、讀寫次數）、`geo_pending.sha` |
 
 `README.md` 已經過時，以這份為準。
 
@@ -179,7 +183,7 @@ Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 a
 | 訊號 | `news`＋watch 關注領域 · `tenders`／`awards`／`tendermap` · `design` · `radar` 公司雷達 · `brands`／`taxreg` 新品牌 · `uspolicy` · `ossuse` · `clinics` · `aesthetic` 醫美 · `grants` · `crowd` · `aiwire` · `devpulse` · `tech` · `oss` · `lyst` · `media` · `think` · `corp` · `policy` · `ipr` · `secwords` |
 | 輿情 | `pop` · `appstore` App 排行 · `gtop` 焦點新聞 · `worldnews` · `townnews` 鄉鎮新聞 · `youtube` · `attention` · `mood` 台灣情緒（Gemini 判讀 PTT、Cofacts、Mobile01、Bluesky） · `cofacts` · `polls` 民調 · `forums` Mobile01 · `ptt` · `social` Bluesky · `trends` |
 | 台灣現場 | `geo`＋`mapfeed` 全台現場地圖 · `elect` 五都選戰 · `tw_pulse` · `roads` · `metro` · `weather`／`radar_wx`／`lightning`／`typhoon` · `alerts`（含停班停課） · `localnews` · `quake` · `power` · `airport`／`flights` · `plaact` 台海 · `cables` 海纜 · `pressure` 氣壓圖 · `cctv`（四都） · `oil` |
-| 資料庫 | BigQuery：授權、全文搜尋、時光機、走勢（`vault_push` 寫入） |
+| 資料庫 | BigQuery：授權、全文搜尋、時光機、走勢（`vault_push` 寫入）· `relay_stats` 雲端用量（p-cloud） |
 
 其他系統用的 run key：`villages`、`geocode`、`relay_stats`、`etfholders`、`attention`、`culture`（3D 地圖藝文點位）、`wiki`、`chain`。
 
@@ -300,6 +304,7 @@ RI=999999 STEPS="wait|15000;js|(__story.openAt('總經','內需產業'),1);wait|
 | ✅ 已拿掉（11/2，Vin 拍板） | 104 職缺：API 自 10/22 起總數一律回 1001，`jobs`／`jobtowns` 抓取、終端機面板、3D 晶片與地圖圖層、縣市卡、圈地報告的職缺列都拿掉；`fetch.py` 開頭會刪掉留下的面板檔與 `history.json` 的 `jobs` 群組。替代評估：1111 只有總數和關鍵字篩選、沒有地區、連續查約 30 次就 403；台灣就業通開放資料只給 1,000 筆不能分頁；518、yes123 沒有總數；Cake 被 Cloudflare 擋。都不接。終端機裡 `renderJobs` 等程式碼沒有資料就不會跑，留著無害 |
 | ⚠️ 已知 | AI 廠商動態 `devpulse.diag` 寫「md got html」「0 entries」是正常的：markdown 版失敗後改讀網頁版，Gemini、DeepSeek、xAI 都有抓到 |
 | ✅ 已驗證 | 誰在擴張 `labor`（11/2 上線，取代 104）：勞動部統計月報 xlsx（`statdb.mol.gov.tw/html/mon/{表號}.xlsx`，GitHub 讀得到）：26010 勞保投保人數按行業（最近 13 個月）、22120 廠商職位空缺按行業（每季）、24040 積欠工資墊償（月，官方的年增與今年累計年增直接讀表上那兩列）。自寫 `_xlsx_rows()` 讀 xlsx（沒裝 openpyxl）。判讀：投保年增 >1% 且職缺年增 >5% 擴張；職缺年增 >10% 但投保 ≤0.5% 缺工；歷史存 `labor_ins`、`labor_vac`、`labor_arrears`。月報其他可用的表：27010 就業保險按行業、22010～22110 勞動力與失業。下一步「勞動溫度計」合成指標還缺：主計總處加班工時與進入率（要從台灣抓取站試主計總處資料庫表號）、能源署產業用電（擋 GitHub，走台灣抓取站）。勞保開放資料（data.gov.tw 33369）與台電行業別售電（31966）一年才釋出一次，不用 |
+| ⏳ 待驗證 | **雲端費用修正（11/2，Vin 核准）**：10 月帳單 NT$23，主因抓取站每輪平均約 184 秒（慢工作全綁在每輪、大多在等政府網站）× 96 輪，加上每輪重寫 11 個檔（GCS 寫入 10.6 萬次，免費 5,000）。改法：抓取站即時資料並行抓、慢工作輪班限時、深夜每小時一輪、即時資料合成 `live.json.gz`、沒變不寫、`state.json` 沒變不寫、原始存檔每 3 小時；`fetch.py` 歷史資料庫改暫存每 3 小時上傳、門牌待辦沒變不傳、靜態檔本機快取。拿掉沒人用的 `fw_1968`。終端機「資料庫」分頁新增 `p-cloud` 雲端用量（`relay_stats` 面板）。目標：CPU 約 3–4 成、GCS 寫入 8 成以下。下一步：看 `p-cloud` 一兩天的實測；預算警示門檻請 Vin 在 Cloud Shell 確認 |
 | ⏳ 待驗證 | 3D 卡片隨資料更新重畫（`refresh_patch.py`）還沒實測 |
 | ✅ 已驗證 | 停班停課 22 縣市全部抓到（每個地區第一列少一格的問題）；雨量沒下雨的縣市記 0 |
 | ✅ 已驗證 | 藝文活動：新北市不再被算成臺北市（10/30 新北市 18、臺北市 61） |

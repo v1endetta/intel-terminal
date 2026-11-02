@@ -103,6 +103,13 @@ jobs:
             echo "next fetch in ${s}s"
             sleep "$s"
           done
+      # 歷史資料庫暫存：每 3 小時合併上傳一次，迴圈結束時把剩下的傳上去（GCS 寫入免費額度每月 5,000 次）
+      - name: Flush vault spool
+        if: ${{ always() && steps.gcp.outcome == 'success' }}
+        env:
+          GCP_PROJECT: intel-vault-510704
+          GCP_BUCKET: intel-vault-510704-vault
+        run: python ops/vault_spool.py
       - name: Start next loop
         if: ${{ !cancelled() }}
         env:
