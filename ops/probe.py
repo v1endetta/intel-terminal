@@ -14,7 +14,7 @@ for ds in ["31966", "33369", "33357"]:
     try:
         r = (S.get(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", timeout=40).json().get("result") or {})
         rep[ds] = {"title": r.get("title"), "modified": r.get("modifiedDate") or r.get("updated"), "n_dist": len(r.get("distribution") or []),
-                   "dist": [{"desc": d.get("resourceDescription"), "fmt": d.get("resourceFormat"), "url": d.get("resourceDownloadUrl")} for d in (r.get("distribution") or [])][:12]}
+                   "dist_all": [(d.get("resourceDescription"), d.get("resourceFormat"), d.get("resourceDownloadUrl")) for d in (r.get("distribution") or []) if d.get("resourceFormat") == "CSV"], "dist": [{"desc": d.get("resourceDescription"), "fmt": d.get("resourceFormat"), "url": d.get("resourceDownloadUrl")} for d in (r.get("distribution") or [])][:12]}
     except Exception as e:
         rep[ds] = {"err": str(e)[:200]}
 # 台電 ZIP
@@ -22,7 +22,7 @@ try:
     zu = next(d["url"] for d in rep["31966"]["dist"] if d["fmt"] == "ZIP")
     b = S.get(zu, timeout=180).content
     z = zipfile.ZipFile(io.BytesIO(b)); info = {"bytes": len(b), "files": [(f.filename, f.file_size) for f in z.infolist()][:20]}
-    f0 = next(f for f in z.infolist() if f.filename.lower().endswith((".csv", ".txt")))
+    f0 = next(f for f in z.infolist() if f.filename == "行業別售電_2025.csv")
     rows = list(csv.reader(io.StringIO(dec(z.read(f0)))))
     info["sample_file"] = f0.filename; info["n"] = len(rows); info["head"] = rows[:3]; info["tail"] = rows[-3:]
     info["col0_vals"] = sorted({r[0] for r in rows[1:] if r})[:40]
@@ -30,4 +30,13 @@ try:
     rep["taipower_zip"] = info
 except Exception as e:
     rep["taipower_zip"] = {"err": f"{type(e).__name__}: {str(e)[:200]}"}
+def peek(u):
+    rows = list(csv.reader(io.StringIO(dec(S.get(u, timeout=120).content))))
+    return {"n": len(rows), "head": rows[0][:26], "row1": rows[1][:26], "last": rows[-1][:26]}
+for ds in ("33369", "33357"):
+    try:
+        latest = rep[ds]["dist_all"][-1]
+        rep[ds + "_latest"] = {"desc": latest[0], "url": latest[2], **peek(latest[2])}
+    except Exception as e:
+        rep[ds + "_latest"] = {"err": str(e)[:200]}
 (OUT / "report.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding="utf-8")
