@@ -1,31 +1,44 @@
-"""暫時探測：104 的替代來源（政府職缺開放資料、其他求職網）能不能從 GitHub 讀、有沒有總數。用完刪掉。"""
-import json, sys, re
+"""暫時探測（第二輪）：台灣就業通職缺清單內容、1111 API 總數、518/yes123 是否有總數。用完刪掉。"""
+import json, sys, re, csv, io
 from pathlib import Path
+from collections import Counter
 import requests
 OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 dalta-intel/1.0"
 S = requests.Session(); S.headers.update({"User-Agent": UA, "Accept-Language": "zh-TW,zh;q=0.9"})
 rep = {}
-NUM = re.compile(r"(?:共|總共|找到|有)\s*([\d,]{3,})\s*(?:筆|個|份|則)|\"(?:total|totalCount|total_count|count|jobCount)\"\s*:\s*(\d{3,})")
-def t(name, url, params=None, headers=None):
-    try:
-        r = S.get(url, params=params, headers=headers or {}, timeout=40)
-        txt = r.text
-        info = {"status": r.status_code, "len": len(txt), "ctype": r.headers.get("content-type", "")[:40], "server": r.headers.get("server", "")[:20],
-                "challenge": bool(re.search(r"Just a moment|cf-chl|captcha|Access Denied", txt[:6000], re.I)),
-                "nums": [a or b for a, b in NUM.findall(txt)][:8], "title": (re.search(r"<title>(.*?)</title>", txt, re.S) or [None, ""])[1].strip()[:80]}
-        (OUT / f"{name}.txt").write_text(txt[:40000], encoding="utf-8")
-        rep[name] = info
-    except Exception as e:
-        rep[name] = {"err": f"{type(e).__name__}: {str(e)[:200]}"}
-    print(name, json.dumps(rep[name], ensure_ascii=False)[:400], flush=True)
-for ds in ("44062", "146545", "146546"):
-    t("gov_" + ds, f"https://data.gov.tw/api/v2/rest/dataset/{ds}")
-t("p1111", "https://www.1111.com.tw/search/job")
-t("p1111_api", "https://www.1111.com.tw/api/v1/search/jobs/", {"page": 1})
-t("p518", "https://www.518.com.tw/job-index.html")
-t("yes123", "https://www.yes123.com.tw/wk_index/joblist.asp")
-t("cake", "https://www.cake.me/jobs", {"location_list[0]": "Taiwan"})
-t("yourator", "https://www.yourator.co/api/v4/jobs", {"page": 1})
-t("taiwanjobs", "https://job.taiwanjobs.gov.tw/Internet/Index/job_search_list.aspx")
+def t(name, fn):
+    try: rep[name] = fn()
+    except Exception as e: rep[name] = {"err": f"{type(e).__name__}: {str(e)[:200]}"}
+    print(name, json.dumps(rep[name], ensure_ascii=False)[:700], flush=True)
+def mol():
+    r = S.get("https://apiservice.mol.gov.tw/OdService/download/A17000000J-030144-MKw", timeout=180)
+    b = r.content
+    for enc in ("utf-8-sig", "cp950"):
+        try: txt = b.decode(enc); break
+        except UnicodeDecodeError: continue
+    rows = list(csv.reader(io.StringIO(txt)))
+    hdr = rows[0] if rows else []
+    info = {"status": r.status_code, "bytes": len(b), "rows": len(rows) - 1, "header": hdr[:40], "sample": rows[1][:40] if len(rows) > 1 else None}
+    for col in hdr:
+        if re.search(r"日期|時間|刊登|更新", col):
+            i = hdr.index(col); vals = sorted(x[i] for x in rows[1:] if len(x) > i and x[i])
+            info.setdefault("dates", {})[col] = [vals[0] if vals else None, vals[-1] if vals else None]
+        if re.search(r"縣市|地區|工作地|行業|職類|產業", col):
+            i = hdr.index(col); info.setdefault("top", {})[col] = Counter(x[i][:6] for x in rows[1:] if len(x) > i).most_common(6)
+    return info
+t("mol_44062", mol)
+def j1111(**p):
+    r = S.get("https://www.1111.com.tw/api/v1/search/jobs/", params={"page": 1, **p}, timeout=40, headers={"Referer": "https://www.1111.com.tw/search/job"})
+    j = r.json(); pg = ((j.get("result") or {}).get("pagination") or {})
+    return {"status": r.status_code, "pagination": pg, "n": len((j.get("result") or {}).get("hits") or [])}
+t("1111_kw", lambda: j1111(ks="工程師"))
+t("1111_all", lambda: j1111(ks=""))
+t("1111_area", lambda: j1111(c0="100100"))
+t("1111_cat", lambda: j1111(d0="140000"))
+def html_tot(url):
+    r = S.get(url, timeout=40); t_ = re.sub(r"<[^>]+>", " ", r.text)
+    return {"status": r.status_code, "hits": re.findall(r"([\d,]{3,})\s*(?:筆|個職缺|份工作|個工作機會|筆職缺)", t_)[:6], "around": [re.sub(r"\s+", " ", t_[max(0, m.start() - 30):m.end() + 30]) for m in re.finditer(r"[共計]\s*[\d,]{3,}", t_)][:4]}
+t("518_list", lambda: html_tot("https://www.518.com.tw/job-index-P-1.html"))
+t("yes123_list", lambda: html_tot("https://www.yes123.com.tw/wk_index/joblist.asp?search_type=job"))
 (OUT / "report.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding="utf-8")
