@@ -114,36 +114,7 @@
    "chg": -0.35
   }
  ],
- "storms": [
-  {
-   "name": "MURASU",
-   "level": "Red",
-   "ll": [
-    80.7,
-    14.7
-   ],
-   "from": "2026-11-01T00:00",
-   "to": "2026-11-02T12:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 120 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001346&episodeid=7&eventtype=TC",
-   "near": [],
-   "id": "1001346-7"
-  },
-  {
-   "name": "IN-FA",
-   "level": "Green",
-   "ll": [
-    140.2,
-    23.0
-   ],
-   "from": "2026-10-25T06:00",
-   "to": "2026-11-02T12:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 241 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=41&eventtype=TC",
-   "near": [],
-   "id": "1001343-41"
-  }
- ],
+ "storms": [],
  "ports": [
   {
    "name": "上海洋山",
@@ -408,6 +379,22 @@
  "news": [
   {
    "source": "FreightWaves",
+   "title": "Grow Your Brokerage. Keep Profitability in Focus.",
+   "url": "https://www.freightwaves.com/news/grow-your-brokerage-keep-profitability-in-focus",
+   "at": "2026-11-03T00:43:38+08:00",
+   "hot": false,
+   "zh": "拓展經紀業務，聚焦獲利能力"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "October’s 55.5 manufacturing PMI beats expectations",
+   "url": "https://www.freightwaves.com/news/octobers-55-5-manufacturing-pmi-beats-expectations",
+   "at": "2026-11-03T00:41:27+08:00",
+   "hot": false,
+   "zh": "10月製造業PMI達55.5，優於預期"
+  },
+  {
+   "source": "FreightWaves",
    "title": "TrashLab raises $12M to automate waste haulers’ back offices",
    "url": "https://www.freightwaves.com/news/trashlab-raises-12m-ai-waste-haulers",
    "at": "2026-11-03T00:11:32+08:00",
@@ -520,11 +507,11 @@
   },
   {
    "source": "FreightWaves",
-   "title": "Flexport volumes up 40% as headcount grows only 5%",
+   "title": "Flexport forwarding volumes up 40% as headcount grows only 5%",
    "url": "https://www.freightwaves.com/news/flexport-volumes-up-40-ai-headcount",
    "at": "2026-11-02T20:00:00+08:00",
    "hot": false,
-   "zh": "Flexport 貨量大增 40%，員工人數僅增加 5%"
+   "zh": "Flexport貨運量大增40%，員工人數僅增加5%"
   },
   {
    "source": "The Loadstar",
@@ -581,26 +568,12 @@
    "at": "2026-11-02T18:00:00+08:00",
    "hot": false,
    "zh": "情境決定一切：供應商合約揭露了哪些供應鏈表現真相"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "AIT Worldwide snaps up Australian forwarder involved in Big tech buildout",
-   "url": "https://www.freightwaves.com/news/ait-worldwide-snaps-up-australian-forwarder-involved-in-big-tech-buildout",
-   "at": "2026-11-02T12:06:20+08:00",
-   "hot": false,
-   "zh": "AIT Worldwide併購參與大型科技建設的澳洲承攬商"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "Borderlands Mexico: Cabotage enforcements threatening cross-border trucking",
-   "url": "https://www.freightwaves.com/news/borderlands-mexico-cabotage-enforcements-threatening-cross-border-trucking",
-   "at": "2026-11-01T20:00:00+08:00",
-   "hot": true,
-   "zh": "墨西哥邊境：沿海貿易執法威脅跨境貨運"
   }
  ],
  "threat": [],
- "errs": [],
+ "errs": [
+  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
+ ],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-02T16:35:11Z"
+ "updatedAt": "2026-11-02T17:40:10Z"
 }
