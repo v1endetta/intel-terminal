@@ -114,7 +114,36 @@
    "chg": -0.35
   }
  ],
- "storms": [],
+ "storms": [
+  {
+   "name": "MURASU",
+   "level": "Red",
+   "ll": [
+    80.7,
+    14.7
+   ],
+   "from": "2026-11-01T00:00",
+   "to": "2026-11-02T12:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 120 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001346&episodeid=7&eventtype=TC",
+   "near": [],
+   "id": "1001346-7"
+  },
+  {
+   "name": "IN-FA",
+   "level": "Green",
+   "ll": [
+    140.2,
+    23.0
+   ],
+   "from": "2026-10-25T06:00",
+   "to": "2026-11-02T12:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 241 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=41&eventtype=TC",
+   "near": [],
+   "id": "1001343-41"
+  }
+ ],
  "ports": [
   {
    "name": "上海洋山",
@@ -379,6 +408,22 @@
  "news": [
   {
    "source": "FreightWaves",
+   "title": "Parcel shipping demand to increase 4% during holidays, ShipMatrix says",
+   "url": "https://www.freightwaves.com/news/parcel-shipping-demand-to-increase-4-during-holidays-shipmatrix-says",
+   "at": "2026-11-03T02:19:56+08:00",
+   "hot": false,
+   "zh": "ShipMatrix指出，假期包裹運輸需求將增加4%"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Manufacturing expands for 10th straight month, but Iran war weighs heavily",
+   "url": "https://www.supplychaindive.com/news/manufacturing-expands-for-10th-straight-month-but-iran-war-weighs-heavily/873468/",
+   "at": "2026-11-03T01:41:00+08:00",
+   "hot": false,
+   "zh": "製造業連續10個月擴張，但伊朗戰爭帶來沉重壓力"
+  },
+  {
+   "source": "FreightWaves",
    "title": "Grow Your Brokerage. Keep Profitability in Focus.",
    "url": "https://www.freightwaves.com/news/grow-your-brokerage-keep-profitability-in-focus",
    "at": "2026-11-03T00:43:38+08:00",
@@ -552,28 +597,10 @@
    "at": "2026-11-02T19:30:05+08:00",
    "hot": false,
    "zh": "SLOSCO：獅子山共和國最新的中資航運合資企業"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "Why more inventory won’t fix your supply chain’s fill rate",
-   "url": "https://www.supplychaindive.com/spons/why-more-inventory-wont-fix-your-supply-chains-fill-rate/873053/",
-   "at": "2026-11-02T18:00:00+08:00",
-   "hot": false,
-   "zh": "為什麼囤更多庫存救不了供應鏈的訂單滿足率"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "Context changes everything: what supplier contracts reveal about supply chain performance",
-   "url": "https://www.supplychaindive.com/spons/context-changes-everything-what-supplier-contracts-reveal-about-supply-cha/833693/",
-   "at": "2026-11-02T18:00:00+08:00",
-   "hot": false,
-   "zh": "情境決定一切：供應商合約揭露了哪些供應鏈表現真相"
   }
  ],
  "threat": [],
- "errs": [
-  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-02T17:40:10Z"
+ "updatedAt": "2026-11-02T18:41:27Z"
 }

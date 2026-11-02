@@ -7,7 +7,7 @@
    "url": "https://community.openai.com/t/lets-extend-the-codex-rate-limit-ourself-with-a-little-trick/1411709",
    "replies": 0,
    "likes": 5,
-   "views": 94,
+   "views": 95,
    "at": "2026-11-01T18:20:13Z"
   },
   {
@@ -17,7 +17,7 @@
    "url": "https://community.openai.com/t/delete-v1-organization-admin-api-keys-key-id-returns-404-with-empty-body-get-on-the-same-id-returns-200/1411757",
    "replies": 3,
    "likes": 17,
-   "views": 63,
+   "views": 64,
    "at": "2026-11-01T22:29:32Z"
   },
   {
@@ -27,7 +27,7 @@
    "url": "https://community.openai.com/t/why-chatgpt-has-become-less-useful-to-me/1411846",
    "replies": 1,
    "likes": 4,
-   "views": 78,
+   "views": 82,
    "at": "2026-11-02T05:13:11Z"
   },
   {
@@ -43,22 +43,12 @@
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "ChatGPT Image Generation Has Gotten Significantly Worse Since October 29th — Is Anyone Els",
-   "url": "https://community.openai.com/t/chatgpt-image-generation-has-gotten-significantly-worse-since-october-29th-is-anyone-else-experiencing-this/1411701",
-   "replies": 3,
-   "likes": 3,
-   "views": 200,
-   "at": "2026-11-01T17:52:01Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Google has done some work in Antigravity on 2.6.0 Update",
-   "url": "https://discuss.ai.google.dev/t/google-has-done-some-work-in-antigravity-on-2-6-0-update/197289",
-   "replies": 1,
-   "likes": 0,
-   "views": 84,
-   "at": "2026-11-01T17:39:40Z"
+   "title": "Why Shared ChatGPT and Codex Limits Could Disrupt Research, Code Review, and Continuous De",
+   "url": "https://community.openai.com/t/why-shared-chatgpt-and-codex-limits-could-disrupt-research-code-review-and-continuous-development/1411856",
+   "replies": 0,
+   "likes": 2,
+   "views": 65,
+   "at": "2026-11-02T05:40:04Z"
   },
   {
    "source": "Google AI 論壇",
@@ -67,7 +57,7 @@
    "url": "https://discuss.ai.google.dev/t/account-suspended-again-multi-agent-setup-calling-antigravity-cli/197297",
    "replies": 3,
    "likes": 0,
-   "views": 56,
+   "views": 59,
    "at": "2026-11-01T18:25:14Z"
   },
   {
@@ -77,7 +67,7 @@
    "url": "https://discuss.ai.google.dev/t/ai-studio-tts-returns-http-403-and-api-keys-shows-permission-denied/197454",
    "replies": 0,
    "likes": 1,
-   "views": 15,
+   "views": 16,
    "at": "2026-11-02T04:06:47Z"
   },
   {
@@ -87,7 +77,7 @@
    "url": "https://discuss.ai.google.dev/t/why-only-gemini-3-8-flash-on-antigravity-pro-plan-via-jio/197616",
    "replies": 1,
    "likes": 0,
-   "views": 36,
+   "views": 37,
    "at": "2026-11-02T07:31:06Z"
   },
   {
@@ -97,8 +87,18 @@
    "url": "https://discuss.ai.google.dev/t/previous-gemini-2-5-pro-usage-on-vertex-ai-does-it-qualify-for-legacy-gemini-developer-api-access/197503",
    "replies": 2,
    "likes": 0,
-   "views": 27,
+   "views": 28,
    "at": "2026-11-02T04:24:27Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "AI Studio app suspended for abuse - requesting review",
+   "url": "https://discuss.ai.google.dev/t/ai-studio-app-suspended-for-abuse-requesting-review/197547",
+   "replies": 2,
+   "likes": 0,
+   "views": 27,
+   "at": "2026-11-02T05:56:44Z"
   }
  ],
  "changelogs": [
@@ -177,6 +177,14 @@
   {
    "source": "Gemini changelog",
    "vendor": "google",
+   "date": "November 2, 2026",
+   "title": "{% id=\"11-02-2026\" %}",
+   "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
+   "at": "2026-11-02T00:00:00Z"
+  },
+  {
+   "source": "Gemini changelog",
+   "vendor": "google",
    "date": "October 30, 2026",
    "title": "{% id=\"10-30-2026\" %}",
    "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
@@ -197,14 +205,6 @@
    "title": "{% id=\"10-26-2026\" %}",
    "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
    "at": "2026-10-26T00:00:00Z"
-  },
-  {
-   "source": "Gemini changelog",
-   "vendor": "google",
-   "date": "October 13, 2026",
-   "title": "{% id=\"10-13-2026\" %}",
-   "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
-   "at": "2026-10-13T00:00:00Z"
   },
   {
    "source": "DeepSeek updates",
@@ -297,9 +297,9 @@
  ],
  "errs": [],
  "diag": [
-  "Gemini changelog md: got html 128660b",
+  "Gemini changelog md: got html 130400b",
   "DeepSeek updates md: 18816b 0 entries head='# Change Log\\n\\n***\\n\\n## Date: 2026-10-17\\n\\n### Opening up the i'",
   "xAI release notes md: 19458b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### Custom '"
  ],
- "updatedAt": "2026-11-02T17:40:10Z"
+ "updatedAt": "2026-11-02T18:41:27Z"
 }
