@@ -547,11 +547,11 @@
    "daily7": [
     3,
     9,
-    20,
-    46,
-    29,
-    13,
-    73
+    22,
+    44,
+    32,
+    15,
+    80
    ],
    "days7": [
     "2026-10-27",
@@ -647,12 +647,12 @@
     }
    ],
    "daily7": [
-    12,
-    19,
+    9,
+    21,
     12,
     14,
-    18,
-    40,
+    25,
+    41,
     9
    ],
    "days7": [
@@ -783,20 +783,6 @@
     "hot": false
    },
    {
-    "term": "Industry",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "CB Asia",
-     "Florida Hosp"
-    ],
-    "sample": {
-     "title": "Privacy and Data Governance in Healthcare: What the Industry",
-     "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxON3BKbkJpSlJtYjcwZjFLREhXVlhhWVhqOXlQbVN5dVVIaUJLZGZPV200dEJBM3RaQjQ3Q3A0bUpfc0VoODV2b0dMODF6UmR0TFVjRXNucF8xQy1HMWhwWmlZU3FkMzFlMWVBRl9rQ0NucUdGSHpmdEtHWFRoMlNBNjZfYThGWlFjS3RiM1I1TE9URjBtMG9WSW9LeGxBTTZqRWhxQXoyYVRGbEdhRldycmpTbnZkRE9aSGlNMjV5MA?oc=5"
-    },
-    "hot": false
-   },
-   {
     "term": "嚴密監控",
     "n": 2,
     "src": 2,
@@ -825,20 +811,6 @@
     "hot": false
    },
    {
-    "term": "Data",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "Florida Hosp",
-     "shattered.io"
-    ],
-    "sample": {
-     "title": "Data Breach Kills $50M Hospital Tender [2026]",
-     "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQbk00R3hvVGZzNmM0VFNnRUNTbjFpRFQtYW1IWUN5d1F0SjVSMzR5VkhCMG5HVm9pQlFOeXNLYnBGRUw5SFlISjlfWUJiZzZjSmxYVWhUakxLUlcwYUpQaDVpSmo3aXFTU1hjbkV1RzF0VGs0VzctTzl6blp0eVB1VEFZbEZDdURMLS05U0lpa3hiZw?oc=5"
-    },
-    "hot": false
-   },
-   {
     "term": "基因治療",
     "n": 2,
     "src": 2,
@@ -853,7 +825,35 @@
     "hot": false
    },
    {
+    "term": "蔣萬安",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "PTT",
+     "中央社"
+    ],
+    "sample": {
+     "title": "蔣萬安被質疑向貪腐低頭　柯文哲斥遭扣貪污帽",
+     "url": "https://www.cna.com.tw/news/aipl/202611020071.aspx"
+    },
+    "hot": false
+   },
+   {
     "term": "ADR",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "FTNN 新聞網",
+     "鉅亨網"
+    ],
+    "sample": {
+     "title": "費半崩跌7.2%、台積電ADR重挫近6%！台股最慘還沒到→還有更大的崩跌在後？",
+     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9IblZJLTZCMi1DSW90cTN1WWVqN3ZWMXo2UlRCNEhLcm1KX2xMOUxUX1ZSSmZjdllVc0g5RXEwTVV3X25PYVhlRmJpeU1QeE0?oc=5"
+    },
+    "hot": false
+   },
+   {
+    "term": "台積電",
     "n": 2,
     "src": 2,
     "sources": [
@@ -871,5 +871,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-02T05:15:27Z"
+ "updatedAt": "2026-11-02T05:38:06Z"
 }
