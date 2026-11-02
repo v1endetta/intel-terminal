@@ -1863,7 +1863,7 @@ const renderers={
       <text x="${(L+W-R)/2}" y="${H-8}" text-anchor="middle">討論熱度 →（新聞＋論壇＋媒體）</text>
       <text x="12" y="${(Tp+H-B)/2}" text-anchor="middle" transform="rotate(-90 12 ${(Tp+H-B)/2})">行為動能 →（排行爬升）</text>${dots}</svg>`;
     const ar=t=>t.talk_trend==="up"?'<span class="up">▲</span>':t.talk_trend==="down"?'<span class="down">▼</span>':"";
-    const item=t=>{const ev=(t.do||[]).slice(0,2).map(x=>`${esc(x.src)} ${esc(x.how)}`).join("・"),M=Object.entries(t.mentions||{}).map(([k,v])=>`${esc(k)} ${v}`).join("・");
+    const item=t=>{const ev=(t.do||[]).slice(0,2).map(x=>`${esc(x.src)} ${esc(x.how)}`).join("・"),S=t.social||{},M=[...Object.entries(t.mentions||{}).map(([k,v])=>`${esc(k)} ${v}`),S.Threads!=null?`Threads 每天 ${S.Threads} 篇`:"",S.Dcard!=null?`Dcard 7 天 ${S.Dcard} 篇`:""].filter(Boolean).join("・");
       const talk=[t.news7!=null?`新聞 7 天 ${t.news7}${t.news_capped?"+":""} 篇${ar(t)}`:"",M].filter(Boolean).join("・");
       return`<div class="it"><b>${esc(t.name)}</b><span class="cat">${esc(t.cat||"")}${t.days>1?`・連 ${t.days} 天`:""}</span><div class="ev">${ev||"排行上沒有"}${talk?`<br>${talk}`:""}</div></div>`;};
     const lists=["quiet","hit","new","hype"].map(k=>{const A=T.filter(t=>t.quad===k);return A.length?`<div class="q"><h4 style="color:${Q[k][2]}">${Q[k][0]} ${A.length}<span class="sub">　${Q[k][1]}</span></h4>${A.slice(0,6).map(item).join("")}</div>`:"";}).join("");

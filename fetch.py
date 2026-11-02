@@ -3883,6 +3883,9 @@ def p_wind():
         social = {}
     if social.get("date") and social["date"] < (NOW.astimezone(TPE).date() - timedelta(days=2)).isoformat():
         social = {}   # 兩天以上沒更新就不用
+    for h in (social.get("hot") or [])[:40]:   # Dcard 各板熱門、IG 探索頁推薦：排程已經歸納成話題（不含原文），當討論面的素材
+        if h.get("name"):
+            talk.append((str(h.get("src") or "社群")[:12], f"{str(h['name'])[:30]}（{int(h.get('n') or 1)} 則）"))
     do_txt = "\n".join(f"D{i}. [{x['src']}] {x['name']}（{x['how']}）" for i, x in enumerate(do))
     talk_txt = "\n".join(f"T{i}. [{s}] {ttl[:70]}" for i, (s, ttl) in enumerate(talk))
     prompt = f"""你在幫台灣的消費趨勢觀察站整理「這幾天台灣人在消費、在追什麼」。
@@ -3939,13 +3942,14 @@ B：
         for s, _ttl in tl:
             mentions[s] = mentions.get(s, 0) + 1
         soc = ((social.get("topics") or {}).get(name)) or {}
-        for k_, v_ in soc.items():
-            if isinstance(v_, (int, float)) and v_ > 0:
-                mentions[k_] = mentions.get(k_, 0) + int(v_)
+        th, dc = soc.get("Threads"), soc.get("Dcard")   # Threads：每天幾篇；Dcard：近 7 天幾篇
+        if isinstance(th, (int, float)) or isinstance(dc, (int, float)):
+            row["social"] = {k_: round(v_, 1) for k_, v_ in (("Threads", th), ("Dcard", dc)) if isinstance(v_, (int, float))}
         row["mentions"] = mentions
-        # 說：新聞量（對數，約 100 篇＝1）＋熱門標題與社群提及（每則 0.1，最多 0.4）
+        # 說：新聞量（對數，約 100 篇＝1）＋熱門標題提及（每則 0.1）＋社群（對數：Threads 一天 10 篇≈0.16、Dcard 7 天 10 篇≈0.16），兩者合計最多 0.4
         n7 = row.get("news7")
-        x_ = (math.log10(n7 + 1) / 2 if n7 is not None else 0.3) + min(0.4, 0.1 * sum(mentions.values()))
+        soc_s = 0.15 * math.log10((th or 0) + 1) + 0.15 * math.log10((dc or 0) + 1)
+        x_ = (math.log10(n7 + 1) / 2 if n7 is not None else 0.3) + min(0.4, 0.1 * sum(mentions.values()) + soc_s)
         row["x"] = round(min(1.0, x_), 2)
         if n7 is not None:
             p7 = row["news_p7"]
