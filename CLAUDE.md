@@ -176,12 +176,12 @@ Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 a
 | 市場 | `pulse` 5 分鐘線 · `taiex` · `tw_market` · `taifex` · `fx` · `world` · `usbig` · `ust` 美債殖利率 · `fear` 恐慌結構 · `sectors` **美股板塊** · `commodities`（p-cmdty，含海運） · `logistics` 全球物流 · `luxury`（p-lux） · `tw_stocks` · `revenue` · `mops` |
 | 總經 | `aicycle` AI 循環 · `champions` 台灣隱形冠軍 · `twsectors` 台灣內需產業 · `dlead` dalta 領先指標 · `credit` 信用利差 · `exports` 出口結構 · `stress` 企業壓力 · `calendar`／`mktcal` · `liquidity`（p-liq） · `macro` · `gmacro` · `supply` · `consume` · `cards` · `lead` · `imports` · `housefc` · `house` · `demo` · `bizlife` · `cars` · `permits` · `renewal` 都更 · `prices` 物價細項 · `tourism` · `poly` · `veg`／`fruit`／`fish`／`meat` |
 | 走向 | `weekly`（weekly.py） · `chain` 主題鏈 · `ledger` 預測帳本 · `voice` 趨勢雷達 · `wiki` · `tech2` · `gap` 台灣還沒報 · `migration` · `births` · 地圖工具（圈地報告、住哪裡） |
-| 訊號 | `news`＋watch 關注領域 · `tenders`／`awards`／`tendermap` · `design` · `radar` 公司雷達 · `brands`／`taxreg` 新品牌 · `uspolicy` · `ossuse` · `clinics` · `aesthetic` 醫美 · `grants` · `crowd` · `aiwire` · `devpulse` · `tech` · `oss` · `lyst` · `media` · `think` · `jobs` · `corp` · `policy` · `ipr` · `secwords` |
+| 訊號 | `news`＋watch 關注領域 · `tenders`／`awards`／`tendermap` · `design` · `radar` 公司雷達 · `brands`／`taxreg` 新品牌 · `uspolicy` · `ossuse` · `clinics` · `aesthetic` 醫美 · `grants` · `crowd` · `aiwire` · `devpulse` · `tech` · `oss` · `lyst` · `media` · `think` · `corp` · `policy` · `ipr` · `secwords` |
 | 輿情 | `pop` · `appstore` App 排行 · `gtop` 焦點新聞 · `worldnews` · `townnews` 鄉鎮新聞 · `youtube` · `attention` · `mood` 台灣情緒（Gemini 判讀 PTT、Cofacts、Mobile01、Bluesky） · `cofacts` · `polls` 民調 · `forums` Mobile01 · `ptt` · `social` Bluesky · `trends` |
 | 台灣現場 | `geo`＋`mapfeed` 全台現場地圖 · `elect` 五都選戰 · `tw_pulse` · `roads` · `metro` · `weather`／`radar_wx`／`lightning`／`typhoon` · `alerts`（含停班停課） · `localnews` · `quake` · `power` · `airport`／`flights` · `plaact` 台海 · `cables` 海纜 · `pressure` 氣壓圖 · `cctv`（四都） · `oil` |
 | 資料庫 | BigQuery：授權、全文搜尋、時光機、走勢（`vault_push` 寫入） |
 
-其他系統用的 run key：`villages`、`geocode`、`relay_stats`、`etfholders`、`attention`、`culture`（3D 地圖藝文點位）、`wiki`、`jobtowns`、`chain`。
+其他系統用的 run key：`villages`、`geocode`、`relay_stats`、`etfholders`、`attention`、`culture`（3D 地圖藝文點位）、`wiki`、`chain`。
 
 **命名陷阱**：`sectors` 是美股板塊。台灣內需產業是 `twsectors`／`p_tw_sectors`／`p-twsectors`／`P.twsectors`，以前撞名蓋掉過一次。
 
@@ -297,7 +297,7 @@ RI=999999 STEPS="wait|15000;js|(__story.openAt('總經','內需產業'),1);wait|
 | ✅ 已修（11/2） | 台股：MIS 備援改用成交時間 `tlong` 當日期；`p_taiex` 每輪清掉週末與跟前一天完全相同的點（休市日重記） |
 | ✅ 已修（11/2） | 關注領域新聞查詢有 1 小時快取 `data/news_kw_cache.json`（每輪最多重抓 14 個）；`ipr` 上限 290 秒；Forex Factory 只留本週檔；金鑰掃描補 `SEC_CONTACT`；手機頁首不再橫向捲動 |
 | ⏳ 待驗證 | 經濟部統計處（外銷訂單 `lead`、零售指數 `supply`）對國外機房 Cloudflare 403：`ops/tw_relay.py` 的 `moea_daily` 每天代抓存 `relay/static/moea_orders`、`moea_retail`，`fetch.py` 的 `_moea_text()` 直接抓失敗就讀這份。零售 11/2 已恢復；外銷訂單等 `lead` 下次更新（24 小時一次）確認 `errs` 沒有 403 |
-| ⚠️ 已知 | 104 職缺：API 自 10/22 起總數一律回 1001（100 頁上限），各端點都一樣。`jobs`／`jobtowns` 數量停在 10/21 最後真實值並標 `frozen`，最新職缺列表照常更新。🎯 等 Vin 決定是否換來源（例如勞動部求才統計） |
+| ✅ 已拿掉（11/2，Vin 拍板） | 104 職缺：API 自 10/22 起總數一律回 1001，`jobs`／`jobtowns` 抓取、終端機面板、3D 晶片與地圖圖層、縣市卡、圈地報告的職缺列都拿掉；`fetch.py` 開頭會刪掉留下的面板檔與 `history.json` 的 `jobs` 群組。替代評估：1111 只有總數和關鍵字篩選、沒有地區、連續查約 30 次就 403；台灣就業通開放資料只給 1,000 筆不能分頁；518、yes123 沒有總數；Cake 被 Cloudflare 擋。都不接。終端機裡 `renderJobs` 等程式碼沒有資料就不會跑，留著無害 |
 | ⚠️ 已知 | AI 廠商動態 `devpulse.diag` 寫「md got html」「0 entries」是正常的：markdown 版失敗後改讀網頁版，Gemini、DeepSeek、xAI 都有抓到 |
 | ⏳ 待驗證 | 3D 卡片隨資料更新重畫（`refresh_patch.py`）還沒實測 |
 | ✅ 已驗證 | 停班停課 22 縣市全部抓到（每個地區第一列少一格的問題）；雨量沒下雨的縣市記 0 |

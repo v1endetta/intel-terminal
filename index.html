@@ -2385,8 +2385,6 @@ function candidates() {
   for (const g of ["fish", "fruit", "meat"]) { const H = (ST.H || {})[g] || {}; for (const k in H) series({ cat: "總經", grp: g, link: "veg", src: "農漁產批發" }, hist(g, k), k + "價格", "元/公斤"); }
   series({ cat: "總經", grp: "liq", link: "liq", src: "紐約聯準銀行" }, ((P.liquidity || {}).rrp || {}).spark, "逆回購餘額", "十億美元", { scene: "globe", from: ["紐約"] });
   // 訊號
-  { const J = P.jobs || {}; series({ cat: "訊號", grp: "jobs", link: "jobs", src: "人力銀行職缺" }, J.spark, "全台職缺數", "個");
-    for (const c of (J.cats || [])) series({ cat: "訊號", grp: "jobs", link: "jobs", src: "人力銀行職缺" }, c.spark, c.name + "職缺", "個"); }
   // 走向
   for (const k of (((P.voice || {}).kw) || [])) series({ cat: "走向", grp: "voice", link: "voice", src: "Google 新聞收錄", partial: true, week: true, minMean: 40 }, k.news_daily, `「${k.k}」新聞量`, "則");
   // 輿情
@@ -2570,9 +2568,6 @@ function EXPLORE() {
       { n: "新公司", lens: "biz" },
       { n: "公司生滅", f: () => bizlifeCard() },
       { n: "新興生意", f: () => nicheCard() },
-      { n: "職缺", lens: "jobs", f: () => { const J = P.jobs || {}, fz = J.frozen ? String(J.frozen).slice(5).replace("-", "/") : "";   // 104 自 10/22 起不給真實總數：改畫各類數量
-          return barsOf(fz ? `各類職缺（停在 ${fz}）` : "各類職缺 7 天變化", () => (J.cats || []).slice(0, 10).map(c => fz ? { name: c.name, v: c.n, txt: nf(c.n) } : { name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) }),
-            "訊號 · 全台 " + nf(J.total || 0) + " 個職缺" + (fz ? "（104 已不提供總數）" : ""), "jobs", fz ? { signed: false } : undefined)(); } },
       { n: "補助徵件", f: () => grantsCard() },
       { n: "美國政策", f: () => uspolicyCard() },
       { n: "標案", lens: "tender", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },
@@ -2626,7 +2621,7 @@ const PROV = {
   "地震": ["quake", "氣象署", "即時", 60], "選戰": ["elect", "Polymarket 報價＋新聞", "彙整", 120], "電力": ["power", "台電", "即時", 30, p => p.asof],
   "航班": ["flights", "adsb.lol 即時位置＋桃園機場時刻表（空中位置依時刻推算）", "即時", 30],
   "lens:now": ["weather", "氣象署・高公局・公路局・文化部藝文資訊", "即時", 60], "lens:house": ["house", "內政部實價登錄", "每季", 129600, p => p.season],
-  "lens:biz": ["brands", "經濟部公司與商業登記，依地址歸到鄉鎮", "每月", 43200, p => p.month], "lens:jobs": ["jobs", "104 人力銀行刊登數", "每日", 1440],
+  "lens:biz": ["brands", "經濟部公司與商業登記，依地址歸到鄉鎮", "每月", 43200, p => p.month],
   "lens:tender": ["tendermap", "政府電子採購網（依發包機關歸類，不是工程地點）", "每日", 1440], "lens:news": ["mapfeed", "Google 新聞，依標題地名歸到鄉鎮", "彙整", 180],
   "lens:stock": ["mops", "證交所・櫃買中心重大訊息；總部位置依登記地址", "每日", 1440], "lens:elect": ["elect", "Polymarket 報價（只看不押）＋新聞", "彙整", 120], "lens:macro": ["macro", "國發會・主計總處・央行", "每月", 43200], "lens:mood": ["mood", "PTT・LINE 查證・新聞標題（AI 判讀）", "彙整", 180], "lens:power": ["power", "台電", "即時", 30, p => p.asof],
   "全球新聞": ["worldnews", "BBC・半島電視台・NPR・衛報・日經亞洲・南華早報・韓聯社・CNA・日本時報（Gemini 翻譯與判讀）", "彙整", 60],
@@ -2638,7 +2633,7 @@ const PROV = {
   "lens:aes": ["aesthetic", "衛福部醫事司 醫療機構與人員基本資料（全部機構，一年一版）對照健保特約名冊", "年資料", 10080, p => p.asof],
   "台海": ["plaact", "國防部 即時軍事動態（每天早上公布前 24 小時）", "每日", 1440, p => (p.latest || {}).date],
   "lens:cable": ["cables", "TeleGeography Submarine Cable Map（CC BY-NC-SA 3.0）＋Google 新聞", "每週", 10080],
-  "lens:area": ["migration", "內政部遷入遷出・經濟部公司登記・健保署與衛福部醫事機構名冊・實價登錄・104・Google 新聞（各項期間不同，見每一列）", "彙整", 1440],
+  "lens:area": ["migration", "內政部遷入遷出・經濟部公司登記・健保署與衛福部醫事機構名冊・實價登錄・Google 新聞（各項期間不同，見每一列）", "彙整", 1440],
   "lens:city": ["migration", "Ookla Speedtest 開放資料・OpenStreetMap・內政部戶政司・環境部・實價登錄租賃・健保署（每週計算）", "彙整", 10080],
   "lens:move": ["migration", "內政部戶政司 遷入遷出統計", "月資料", 1440],
   "洞見": ["insights_cat", "情報站各分類資料（程式整理、Gemini 寫句子）", "彙整", 360],
@@ -3649,7 +3644,7 @@ function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo
 const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="background:${dot}"></i>` : ""}<b>${esc(name)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`;
 // ---- 視角：下方選的分類決定地圖「看什麼」，拉近拉遠決定「看多細」 ----
 // 現場（預設）／房價／新公司／地方新聞；市場、走向這類沒有地點的資訊，地圖維持現場、只換卡片
-const LENS = { now: { n: "現場", c: "#ff9f0a" }, house: { n: "房價", c: "#64d2ff" }, biz: { n: "新公司", c: "#30d158" }, news: { n: "地方新聞", c: "#bf5af2" }, traffic: { n: "車流", c: "#ff9f0a" }, stock: { n: "個股", c: "#64d2ff" }, elect: { n: "選戰", c: "#bf5af2" }, macro: { n: "景氣", c: "#ff453a" }, mood: { n: "情緒", c: "#ffd60a" }, power: { n: "電力", c: "#30d158" }, jobs: { n: "職缺", c: "#5e9cff" }, tender: { n: "標案", c: "#ffd60a" } };
+const LENS = { now: { n: "現場", c: "#ff9f0a" }, house: { n: "房價", c: "#64d2ff" }, biz: { n: "新公司", c: "#30d158" }, news: { n: "地方新聞", c: "#bf5af2" }, traffic: { n: "車流", c: "#ff9f0a" }, stock: { n: "個股", c: "#64d2ff" }, elect: { n: "選戰", c: "#bf5af2" }, macro: { n: "景氣", c: "#ff453a" }, mood: { n: "情緒", c: "#ffd60a" }, power: { n: "電力", c: "#30d158" }, tender: { n: "標案", c: "#ffd60a" } };
 NAV.lens = "now"; NAV.quiet = null;
 function navSetLens(lens, keepCard) { NAV.lens = LENS[lens] ? lens : "now"; NAV.quiet = keepCard ? true : null; NAV.bare = false; NAV.key = ""; NAV.t = 0; }
 const p1 = v => (+v).toFixed(1);
@@ -4105,7 +4100,7 @@ const STREET_VIEW = {
 };
 // ---- 時間開關：「現況」看量，「變化」看跟上一期比（房價上季、新公司上月、標案前一週、職缺 7 天前） ----
 NAV.delta = false; NAV.hd = {};
-const DELTA_OK = { house: "比上季", biz: "比上月", tender: "比前一週", jobs: "比 7 天前" };
+const DELTA_OK = { house: "比上季", biz: "比上月", tender: "比前一週" };
 function houseDetail(cname) { const k = norm(cname).replace(/^台/, "臺"); if (NAV.hd[k] !== undefined) return NAV.hd[k]; NAV.hd[k] = null;
   fetch(RAW + "house/" + encodeURIComponent(k) + ".json?d=" + Math.floor(Date.now() / 864e5), { cache: "no-store" }).then(r => r.ok ? r.json() : false).then(j => { NAV.hd[k] = j || false; NAV.key = ""; }).catch(() => { NAV.hd[k] = false; });
   return null; }
@@ -4873,7 +4868,7 @@ document.addEventListener("click", e => {
 const INS_SRC_ZH = { taiex: "台股", tw_market: "法人", world: "全球股市", fx: "匯率", fear: "恐慌", commodities: "原物料", luxury: "精品", sectors: "類股", revenue: "營收",
   macro: "景氣", prices: "物價", veg: "菜價", oil: "油價", tourism: "觀光", liquidity: "美元流動性", consume: "消費", gmacro: "全球總經", house: "房價", cards: "刷卡", cars: "新車", permits: "建照", gap: "台灣還沒報", demo: "人口", bizlife: "公司生滅",
   weekly: "本週走向", voice: "趨勢雷達", chain: "主題鏈", wiki: "主題熱度", migration: "人口遷徙", attention: "注意力",
-  jobs: "職缺", taxreg: "新興生意", grants: "補助", tenders: "標案", radar: "公司雷達", clinics: "診所", brands: "新公司", aiwire: "AI 快線",
+  taxreg: "新興生意", grants: "補助", tenders: "標案", radar: "公司雷達", clinics: "診所", brands: "新公司", aiwire: "AI 快線",
   mood: "情緒", ptt: "PTT", trends: "熱搜", cofacts: "謠言", gtop: "焦點新聞", worldnews: "全球新聞",
   weather: "天氣", quake: "地震", power: "電力", alerts: "示警", plaact: "台海", cables: "海纜", airport: "機場", typhoon: "颱風" };
 function insCatCard(cat) {
@@ -5023,7 +5018,7 @@ const arFmt = (k, v) => v == null ? "—" : (AR[k].sgn && v > 0 ? "+" : v < 0 ? 
 const arNear = T => (NAV.towns || []).filter(t => t !== T && kmBetween(t.c, T.c) < 9).sort((a, b) => kmBetween(a.c, T.c) - kmBetween(b.c, T.c)).slice(0, 5);
 function arReport(T) {
   const out = [], near = arNear(T);
-  for (const k of ["move", "birth", "biz", "gone", "clinic", "aes", "house", "presale", "renewal", "rent", "shop", "jobs"].filter(k => AR[k])) {
+  for (const k of ["move", "birth", "biz", "gone", "clinic", "aes", "house", "presale", "renewal", "rent", "shop"].filter(k => AR[k])) {
     const R = AR[k].rows(T.county); if (!R.length) continue;
     const me = R.find(r => r.t === T.name), sorted = R.slice().sort((a, b) => b.v - a.v);
     const avg = R.reduce((a, r) => a + r.v, 0) / R.length;
@@ -5038,7 +5033,7 @@ TW_VIEW.area = () => {
   navCounties(c => ({ op: 0.3, sub: "", prio: /[市]$/.test(c.name) ? 1 : 0 }));
   navBiz();
   return { eyebrow: "區域報告", title: "這一區值不值得進？", big: "點一個縣市", color: LENS.area.c,
-    body: `<p class="why">選一個鄉鎮，就會列出那一區的人口流向、出生、新公司與解散、診所和醫美、房價、預售屋、都更、住家與店面租金、職缺、在地新聞，跟隔壁幾區、全縣市平均比，並標出在縣市裡排第幾。所有數字都是政府開放資料原值，沒有估算。</p><p class="why">點地圖上的縣市，或用上方 ⌕ 搜尋行政區。看到想留的，按「分享」就能把這一區的報告傳出去。</p>`
+    body: `<p class="why">選一個鄉鎮，就會列出那一區的人口流向、出生、新公司與解散、診所和醫美、房價、預售屋、都更、住家與店面租金、在地新聞，跟隔壁幾區、全縣市平均比，並標出在縣市裡排第幾。所有數字都是政府開放資料原值，沒有估算。</p><p class="why">點地圖上的縣市，或用上方 ⌕ 搜尋行政區。看到想留的，按「分享」就能把這一區的報告傳出去。</p>`
       + `<ul class="lst nvl">${rankRows(["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市"].map(k => [k, "點進去選區"]), "nc")}</ul>` };
 };
 CITY_VIEW.area = C => {

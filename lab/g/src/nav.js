@@ -37,7 +37,7 @@ function navLine(ring, col, op, lift) { const pts = ring.map(([lo, la]) => gp(lo
 const pill = (name, sub, dot) => `<span class="nvp">${dot ? `<i style="background:${dot}"></i>` : ""}<b>${esc(name)}</b>${sub ? `<em>${esc(sub)}</em>` : ""}</span>`;
 // ---- 視角：下方選的分類決定地圖「看什麼」，拉近拉遠決定「看多細」 ----
 // 現場（預設）／房價／新公司／地方新聞；市場、走向這類沒有地點的資訊，地圖維持現場、只換卡片
-const LENS = { now: { n: "現場", c: "#ff9f0a" }, house: { n: "房價", c: "#64d2ff" }, biz: { n: "新公司", c: "#30d158" }, news: { n: "地方新聞", c: "#bf5af2" }, traffic: { n: "車流", c: "#ff9f0a" }, stock: { n: "個股", c: "#64d2ff" }, elect: { n: "選戰", c: "#bf5af2" }, macro: { n: "景氣", c: "#ff453a" }, mood: { n: "情緒", c: "#ffd60a" }, power: { n: "電力", c: "#30d158" }, jobs: { n: "職缺", c: "#5e9cff" }, tender: { n: "標案", c: "#ffd60a" } };
+const LENS = { now: { n: "現場", c: "#ff9f0a" }, house: { n: "房價", c: "#64d2ff" }, biz: { n: "新公司", c: "#30d158" }, news: { n: "地方新聞", c: "#bf5af2" }, traffic: { n: "車流", c: "#ff9f0a" }, stock: { n: "個股", c: "#64d2ff" }, elect: { n: "選戰", c: "#bf5af2" }, macro: { n: "景氣", c: "#ff453a" }, mood: { n: "情緒", c: "#ffd60a" }, power: { n: "電力", c: "#30d158" }, tender: { n: "標案", c: "#ffd60a" } };
 NAV.lens = "now"; NAV.quiet = null;
 function navSetLens(lens, keepCard) { NAV.lens = LENS[lens] ? lens : "now"; NAV.quiet = keepCard ? true : null; NAV.bare = false; NAV.key = ""; NAV.t = 0; }
 const p1 = v => (+v).toFixed(1);
@@ -493,7 +493,7 @@ const STREET_VIEW = {
 };
 // ---- 時間開關：「現況」看量，「變化」看跟上一期比（房價上季、新公司上月、標案前一週、職缺 7 天前） ----
 NAV.delta = false; NAV.hd = {};
-const DELTA_OK = { house: "比上季", biz: "比上月", tender: "比前一週", jobs: "比 7 天前" };
+const DELTA_OK = { house: "比上季", biz: "比上月", tender: "比前一週" };
 function houseDetail(cname) { const k = norm(cname).replace(/^台/, "臺"); if (NAV.hd[k] !== undefined) return NAV.hd[k]; NAV.hd[k] = null;
   fetch(RAW + "house/" + encodeURIComponent(k) + ".json?d=" + Math.floor(Date.now() / 864e5), { cache: "no-store" }).then(r => r.ok ? r.json() : false).then(j => { NAV.hd[k] = j || false; NAV.key = ""; }).catch(() => { NAV.hd[k] = false; });
   return null; }

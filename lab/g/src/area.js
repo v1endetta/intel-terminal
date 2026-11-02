@@ -38,7 +38,7 @@ const arFmt = (k, v) => v == null ? "—" : (AR[k].sgn && v > 0 ? "+" : v < 0 ? 
 const arNear = T => (NAV.towns || []).filter(t => t !== T && kmBetween(t.c, T.c) < 9).sort((a, b) => kmBetween(a.c, T.c) - kmBetween(b.c, T.c)).slice(0, 5);
 function arReport(T) {
   const out = [], near = arNear(T);
-  for (const k of ["move", "birth", "biz", "gone", "clinic", "aes", "house", "presale", "renewal", "rent", "shop", "jobs"].filter(k => AR[k])) {
+  for (const k of ["move", "birth", "biz", "gone", "clinic", "aes", "house", "presale", "renewal", "rent", "shop"].filter(k => AR[k])) {
     const R = AR[k].rows(T.county); if (!R.length) continue;
     const me = R.find(r => r.t === T.name), sorted = R.slice().sort((a, b) => b.v - a.v);
     const avg = R.reduce((a, r) => a + r.v, 0) / R.length;
@@ -53,7 +53,7 @@ TW_VIEW.area = () => {
   navCounties(c => ({ op: 0.3, sub: "", prio: /[市]$/.test(c.name) ? 1 : 0 }));
   navBiz();
   return { eyebrow: "區域報告", title: "這一區值不值得進？", big: "點一個縣市", color: LENS.area.c,
-    body: `<p class="why">選一個鄉鎮，就會列出那一區的人口流向、出生、新公司與解散、診所和醫美、房價、預售屋、都更、住家與店面租金、職缺、在地新聞，跟隔壁幾區、全縣市平均比，並標出在縣市裡排第幾。所有數字都是政府開放資料原值，沒有估算。</p><p class="why">點地圖上的縣市，或用上方 ⌕ 搜尋行政區。看到想留的，按「分享」就能把這一區的報告傳出去。</p>`
+    body: `<p class="why">選一個鄉鎮，就會列出那一區的人口流向、出生、新公司與解散、診所和醫美、房價、預售屋、都更、住家與店面租金、在地新聞，跟隔壁幾區、全縣市平均比，並標出在縣市裡排第幾。所有數字都是政府開放資料原值，沒有估算。</p><p class="why">點地圖上的縣市，或用上方 ⌕ 搜尋行政區。看到想留的，按「分享」就能把這一區的報告傳出去。</p>`
       + `<ul class="lst nvl">${rankRows(["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市"].map(k => [k, "點進去選區"]), "nc")}</ul>` };
 };
 CITY_VIEW.area = C => {

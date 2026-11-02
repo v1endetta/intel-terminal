@@ -901,11 +901,6 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
     <div class="pf"><a href="https://data.moa.gov.tw/" target="_blank" rel="noopener">農業部開放資料</a><span>進口重量（各國加總），近 3 個月比去年同期 · 只涵蓋農業部列管的約 50 項主要農產品（飼料、肉、茶、蛋、蔬果等），不是全部進口 · 不到 20 公噸的品項不列</span></div>
   </section>
 
-  <section class="panel w12 cap" id="p-jobs">
-    <div class="ph"><h2>職缺溫度</h2><span class="zh">104 全站（不限產業）</span><span class="meta">排程</span></div>
-    <div class="pb"><div class="empty">等待排程寫入</div></div>
-    <div class="pf"><a href="https://www.104.com.tw/" target="_blank" rel="noopener">104 人力銀行</a><span>站上刊登中職缺總數、各職類與縣市 · 每 6 小時 · 漲跌＝比 7 天前（累積一週後才有）· 最新職缺依公司產業分類，有座標的上地圖（生活組「職缺」）</span></div>
-  </section>
 
   <div class="sec">總經 Macro</div>
 
@@ -973,7 +968,7 @@ main .panel.ib-open{box-shadow:inset 0 2px 0 var(--blue)}
 
   <section class="ibx ib-sig" id="ib-sig" aria-label="今日訊號"></section>
   <section class="ibx ib-band" id="ib1"><div class="ib-q"><span class="no">Q1 · 錢</span><h2>錢往哪裡流？</h2><p class="ans" id="ib1a">等待排程寫入</p><div class="ib-more" data-band="1"></div></div>
-    <div class="ib-body"><div class="ib-viz"><div class="ib-col-h">供給 · 誰在開店、搶人、擴張</div><h3 id="ib1xh">稅籍新開店 · 哪類小店在變多</h3><svg id="ib1x" role="img" aria-label="稅籍細類新開家數年增"></svg><h3 style="margin-top:14px" id="ib1jh">104 職缺 · 哪個產業在搶人<span class="n">比 7 天前</span></h3><svg id="ib1j" role="img" aria-label="各產業職缺週增減"></svg><h3 style="margin-top:14px" id="ib1ph">景氣 · 各產業 PMI／NMI<span class="n">50 以上＝擴張</span></h3><svg id="ib1p" role="img" aria-label="各產業採購經理人指數"></svg></div>
+    <div class="ib-body"><div class="ib-viz"><div class="ib-col-h">供給 · 誰在開店、搶人、擴張</div><h3 id="ib1xh">稅籍新開店 · 哪類小店在變多</h3><svg id="ib1x" role="img" aria-label="稅籍細類新開家數年增"></svg><h3 style="margin-top:14px" id="ib1ph">景氣 · 各產業 PMI／NMI<span class="n">50 以上＝擴張</span></h3><svg id="ib1p" role="img" aria-label="各產業採購經理人指數"></svg></div>
       <div class="ib-viz"><div class="ib-col-h">錢 · 營收、資金、預算往哪去</div><h3 id="ib1rh">上市櫃營收 · 各產業年增</h3><svg id="ib1r" role="img" aria-label="各產業營收年增"></svg><ul class="ib-top" id="ib1rl" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:14px" id="ib1eh">ETF 存股族 · 集保持有人數</h3><svg id="ib1e" role="img" aria-label="ETF 持有人數"></svg><h3 style="margin-top:14px">本週政府標案 · AI／長照／淨零／觀光／運動<span class="n">預算前 6 件</span></h3><svg id="ib1w" role="img" aria-label="標案預算"></svg><ul class="ib-top" id="ib1t"></ul></div></div></section>
   <section class="ibx ib-band" id="ib6"><div class="ib-q"><span class="no">Q2 · 企業</span><h2>誰要上市、誰易主、誰換跑道？</h2><p class="ans" id="ib6a">等待排程寫入</p></div>
     <div class="ib-body"><div class="ib-viz"><h3 id="ib6ih">即將掛牌 · 公開申購<span class="n">證交所抽籤日程</span></h3><ul class="ib-top" id="ib6i" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:14px" id="ib6qh">排隊上市櫃<span class="n">近 120 天送件</span></h3><ul class="ib-top" id="ib6q" style="border-top:0;padding-top:0"></ul><h3 style="margin-top:14px" id="ib6fh">法說會 · 未來 3 週<span class="n">消費相關產業優先</span></h3><ul class="ib-top ib-conf" id="ib6f" style="border-top:0;padding-top:0"></ul></div>
@@ -2128,7 +2123,6 @@ const renderers={
   house(d){try{applyWx();}catch(e){}renderHouse();},
   taifex(d){renderTaifex(d);},
   usbig(d){renderUsbig(d);},
-  jobs(d){JOBS=d;renderJobs();try{applyWx();}catch(e){}},
   mops(d){MOPS=d;renderMops();try{applyWx();}catch(e){}},
   typhoon(d){try{applyWx();}catch(e){}},
   culture(d){try{applyWx();}catch(e){}},
@@ -2346,7 +2340,7 @@ const parkColor=r=>r<0.1?"#F0524F":r<0.3?"#E0A23A":"#39B978";
 /* 圖層分三組：事件／天氣／生活；細項在「圖層」選單裡個別關 */
 const MAPL=[["news","新聞","event",["news"]],["alerts","示警","event",["alerts"]],["quake","地震","event",["quake"]],["typhoon","颱風","event",["ty-fill","ty-line","ty-pt"]],["county","縣市狀態","event",["county-fill","county-line"]],
   ["radar","雷達回波","wx",["radar"]],["rain","雨量站","wx",["rain"]],["temp","氣溫","wx",["temp"]],["lightning","閃電","wx",["lightning"]],
-  ["culture","藝文","life",["culture"]],["brands","新公司","life",["brands"]],["jobs","職缺","life",["jobs"]],["mops","重訊","life",["mops"]],["house","房價","life",["house"]],
+  ["culture","藝文","life",["culture"]],["brands","新公司","life",["brands"]],["mops","重訊","life",["mops"]],["house","房價","life",["house"]],
   ["roads","國道・省道車速","traffic",["roads-thb","roads-fw"]],["roadev","國道事件","traffic",["roadev"]],["bikes","YouBike","traffic",["bikes"]],["parking","停車場","traffic",["parking"]],["speed","台北市區車速","traffic",["speed","freeway"]],["flights","航班","traffic",["flights"]]];
 const GRP={event:"事件",traffic:"交通",wx:"天氣",life:"生活"};
 const MS=(()=>{let g={event:true,traffic:true,wx:false,life:false},off=[];try{const j=JSON.parse(localStorage.getItem("map:vis")||"null");if(j&&j.g){g=j.g;off=j.off||[];}}catch(e){}if(g.traffic===undefined)g.traffic=true;return{g,off:new Set(off)};})();
@@ -2595,7 +2589,7 @@ document.querySelectorAll(".panel.cap").forEach(p=>{const b=document.createEleme
 /* ================= 情報版 D：今日訊號＋四個問題帶 ================= */
 const IB=(()=>{
 const NS="http://www.w3.org/2000/svg";
-const BANDS={1:[["p-brands","新品牌雷達"],["p-jobs","104 職缺"],["p-crowd","集資雷達"],["p-tenders","標案"],["p-awards","決標"],["p-radar","公司雷達"],["p-grants","補助徵件"],["p-clinics","診所"],["p-aesthetic","醫美"]],
+const BANDS={1:[["p-brands","新品牌雷達"],["p-crowd","集資雷達"],["p-tenders","標案"],["p-awards","決標"],["p-radar","公司雷達"],["p-grants","補助徵件"],["p-clinics","診所"],["p-aesthetic","醫美"]],
   2:[["p-uspolicy","美國政策源頭"],["p-news","新聞"],["p-watch","關注領域"]],3:[["p-ossuse","AI 與開源動態"],["p-aiwire","AI 快線"],["p-devpulse","開發者動態"],["p-tech","科技社群"],["p-oss","開源雷達"]],4:[["p-media","時尚媒體"],["p-design","設計媒體"],["p-lyst","時尚熱度"]],5:[["p-think","智庫觀點"]]};
 let open=new Set();try{open=new Set(JSON.parse(localStorage.getItem("intel:ibopen")||"[]"));}catch(_){}try{if(!localStorage.getItem("intel:ibdef2")){open.add("p-ossuse");localStorage.setItem("intel:ibdef2","1");localStorage.setItem("intel:ibopen",JSON.stringify([...open]));}}catch(_){open.add("p-ossuse");}
 const save=()=>{try{localStorage.setItem("intel:ibopen",JSON.stringify([...open]));}catch(_){}};
@@ -2944,7 +2938,7 @@ const mbtn=$("#btn-motion");const syncBtn=()=>{mbtn.setAttribute("aria-pressed",
 
 /* ---------- tabs ---------- */
 const TABS=[["overview","總覽"],["market","市場"],["macro","總經"],["trend","走向"],["intel","訊號"],["social","輿情"],["live","台灣現場"],["vault","資料庫"]];
-const TAB_OF={"p-aicycle":"macro","p-champions":"macro","p-twsectors":"macro","p-dlead":"macro","p-credit":"macro","p-exports":"macro","p-stress":"macro","p-logistics":"market","p-uspolicy":"intel","p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-ust":"market","p-revenue":"market","p-mops":"market","p-jobs":"intel","p-house":"macro",
+const TAB_OF={"p-aicycle":"macro","p-champions":"macro","p-twsectors":"macro","p-dlead":"macro","p-credit":"macro","p-exports":"macro","p-stress":"macro","p-logistics":"market","p-uspolicy":"intel","p-pulse":"market","p-taiex":"market","p-fx":"market","p-world":"market","p-fear":"market","p-sectors":"market","p-cmdty":"market","p-lux":"market","p-tw-stocks":"market","p-poly":"macro","p-taifex":"market","p-usbig":"market","p-ust":"market","p-revenue":"market","p-mops":"market","p-house":"macro",
   "p-calendar":"macro","p-consume":"macro","p-liq":"macro","p-macro":"macro","p-gmacro":"macro","p-supply":"macro","p-veg":"macro","p-cards":"macro","p-lead":"macro","p-wiki":"trend","p-ledger":"trend","p-chain":"trend","p-weekly":"trend","p-tech2":"trend","p-imports":"macro","p-housefc":"macro","p-demo":"macro","p-bizlife":"macro","p-metro":"live",
   "ib-sig":"intel","ib-soc":"social","p-voice":"trend","p-pop":"social","p-appstore":"social","p-think":"intel","ib5":"intel","ib1":"intel","ib6":"intel","ib7":"intel","ib8":"intel","ib2":"intel","ib3":"intel","ib4":"intel","p-news":"intel","p-brands":"intel","p-crowd":"intel","p-watch":"intel","p-tenders":"intel","p-design":"intel","p-radar":"intel","p-aiwire":"intel","p-devpulse":"intel","p-awards":"intel","p-tech":"intel","p-oss":"intel","p-lyst":"intel","p-media":"intel",
   "p-mood":"social","p-attention":"social","p-ptt":"social","p-cofacts":"social","p-social":"social","p-youtube":"social","p-trends":"social",
@@ -3479,7 +3473,7 @@ function csv(rows,cols,name){const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000);}
 const err=(el,e)=>{el.innerHTML=`<div class="err">${esc(e.message||String(e))}</div>`;};
 /* ---- 搜尋 ---- */
-const GROUPS=[["","全部面板"],["news,mapfeed,localnews","新聞（全國＋地方）"],["mops","上市櫃重大訊息"],["jobs","104 職缺"],["poly","Polymarket"],["ptt,social,cofacts,trends,youtube,attention","輿情（PTT、社群、搜尋、YouTube）"],["aiwire,devpulse,tech,oss","AI 與科技"],["media,design,lyst,luxury","時尚與設計"],["brands,crowd,radar","新公司、集資、融資"],["tenders,awards","標案、決標"],["culture","藝文活動"],["alerts","災害示警"]];
+const GROUPS=[["","全部面板"],["news,mapfeed,localnews","新聞（全國＋地方）"],["mops","上市櫃重大訊息"],["jobs","104 職缺（10/21 停用，只剩舊資料）"],["poly","Polymarket"],["ptt,social,cofacts,trends,youtube,attention","輿情（PTT、社群、搜尋、YouTube）"],["aiwire,devpulse,tech,oss","AI 與科技"],["media,design,lyst,luxury","時尚與設計"],["brands,crowd,radar","新公司、集資、融資"],["tenders,awards","標案、決標"],["culture","藝文活動"],["alerts","災害示警"]];
 let lastSearch=[];
 async function search(){const out=$("#vs-out"),q=$("#vs-q").value.trim(),days=+$("#vs-r").value,ps=$("#vs-p").value;out.innerHTML='<div class="empty">查詢中…</div>';
   try{const pr={...range(days),q};let where="dt BETWEEN @d0 AND @d1";if(q)where+=" AND (CONTAINS_SUBSTR(title, @q) OR CONTAINS_SUBSTR(extra, @q))";if(ps){pr.ps=ps.split(",");where+=" AND panel IN UNNEST(@ps)";}

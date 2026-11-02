@@ -117,7 +117,7 @@ def load_prev(pid):
 RESULTS: dict[str, dict] = {}
 TIMES: dict[str, float] = {}  # 每個面板本輪花的秒數（效能檢查用）
 START_TS = time.time()
-PANEL_CAP = {"ipr": 290, "voice": 280, "pop": 150, "house": 290, "jobs": 150, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
+PANEL_CAP = {"ipr": 290, "voice": 280, "pop": 150, "house": 290, "mops": 120, "geo": 420, "news": 300, "aiwire": 120, "devpulse": 200, "social": 150, "radar": 150, "cofacts": 90, "threads_g": 300, "mood": 200, "macro": 200, "supply": 200, "tw_pulse": 150, "revenue": 200}
 SOFT_DEADLINE = START_TS + 660  # workflow 硬上限 900 秒，留 4 分鐘給收尾與 commit
 HISTORY: dict[str, dict[str, list]] = {}
 HIST_PATH = DATA / "history.json"
@@ -6705,215 +6705,6 @@ def p_house():
             "files": sorted(detail)}
 
 
-# ---------- 104 職缺：不限產業，依職類、縣市、產業分類 ----------
-J104 = "https://www.104.com.tw/jobs/search/api/jobs"
-J104_H = {"Referer": "https://www.104.com.tw/jobs/search/", "Accept": "application/json"}
-J104_CAT = [("2001000000", "經營／人資"), ("2002000000", "行政／總務／法務"), ("2003000000", "財會／金融"), ("2004000000", "行銷／企劃／專案"),
-            ("2005000000", "客服／門市／業務／貿易"), ("2006000000", "餐飲／旅遊／美容美髮"), ("2007000000", "資訊軟體"), ("2008000000", "研發"),
-            ("2009000000", "生產製造／品管"), ("2010000000", "操作／技術／維修"), ("2011000000", "物流／運輸"), ("2012000000", "營建／製圖"),
-            ("2013000000", "傳播藝術／設計"), ("2014000000", "文字／傳媒"), ("2015000000", "醫療／保健"), ("2016000000", "教育／輔導"),
-            ("2017000000", "軍警消／保全"), ("2018000000", "其他")]
-J104_AREA = [("6001001000", "台北市", ["臺北市"]), ("6001002000", "新北市", ["新北市"]), ("6001005000", "桃園市", ["桃園市"]), ("6001006000", "新竹縣市", ["新竹市", "新竹縣"]),
-             ("6001008000", "台中市", ["臺中市"]), ("6001014000", "台南市", ["臺南市"]), ("6001016000", "高雄市", ["高雄市"]), ("6001004000", "基隆市", ["基隆市"]),
-             ("6001003000", "宜蘭縣", ["宜蘭縣"]), ("6001007000", "苗栗縣", ["苗栗縣"]), ("6001010000", "彰化縣", ["彰化縣"]), ("6001011000", "南投縣", ["南投縣"]),
-             ("6001012000", "雲林縣", ["雲林縣"]), ("6001013000", "嘉義縣市", ["嘉義市", "嘉義縣"]), ("6001018000", "屏東縣", ["屏東縣"]), ("6001020000", "花蓮縣", ["花蓮縣"]),
-             ("6001019000", "台東縣", ["臺東縣"]), ("6001021000", "澎湖縣", ["澎湖縣"]), ("6001022000", "金門縣", ["金門縣"]), ("6001023000", "連江縣", ["連江縣"])]
-J104_IND = {"1001": "電子資訊／半導體", "1002": "一般製造", "1003": "批發零售", "1004": "金融保險", "1005": "文教", "1006": "大眾傳播", "1007": "旅遊休閒運動",
-            "1008": "法律會計顧問設計", "1009": "一般服務", "1010": "運輸物流", "1011": "營建不動產", "1012": "醫療保健", "1013": "政治宗教社福", "1014": "農林漁牧水電",
-            "1015": "礦業", "1016": "住宿餐飲"}
-
-
-J104_AREA_JSON = DATA / "j104_area.json"
-J104_TOWN_SCOPE = {"臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市", "新竹市", "新竹縣"}
-
-
-def _j104_districts():
-    """104 地區代碼 → 鄉鎮（六都＋新竹）。代碼表一週更新一次。"""
-    tab = None
-    if J104_AREA_JSON.exists() and time.time() - J104_AREA_JSON.stat().st_mtime < 7 * 86400:
-        try:
-            tab = json.loads(J104_AREA_JSON.read_text(encoding="utf-8"))
-        except Exception:  # noqa: BLE001
-            tab = None
-    if not tab:
-        raw = gjson("https://static.104.com.tw/category-tool/json/Area.json", timeout=30)
-        pairs = []
-        def walk(o):
-            if isinstance(o, dict):
-                no, des = str(o.get("no") or ""), o.get("des") or ""
-                if re.fullmatch(r"6001\d{6}", no) and des:
-                    pairs.append((no, des))
-                for v in o.values():
-                    walk(v)
-            elif isinstance(o, list):
-                for v in o:
-                    walk(v)
-        walk(raw)
-        par = {code: counties for code, _, counties in J104_AREA}
-        tab = {}
-        for no, des in pairs:
-            if no.endswith("000"):
-                continue
-            cs = par.get(no[:7] + "000") or []
-            d = des.replace("台", "臺")
-            for c in cs:
-                if c not in J104_TOWN_SCOPE:
-                    continue
-                k = d if d.startswith(c) else c + d
-                if k in TOWNS:
-                    tab[no] = k; break
-        if len(tab) < 50:
-            raise RuntimeError(f"104 area: only {len(tab)} districts matched")
-        write_json(J104_AREA_JSON, tab, separators=(",", ":"))
-    return tab
-
-
-def p_jobtowns():
-    """六都＋新竹各區刊登中的職缺數（每天一次），和 7 天前比。"""
-    today = NOW.astimezone(TPE).date().isoformat()
-    tab = _j104_districts()
-    rows, errs = [], []
-    _, tot = _j104()
-    if tot <= J104_CAP:   # 104 不再給真實數量：停在最後真實值，不再查 170 次
-        _jobs_clean()
-        for no, k in tab.items():
-            n, d = _jobs_last("town:" + k)
-            if n:
-                lo, la, c, t = TOWNS[k]
-                rows.append([c, t, n, None])
-        if not rows:
-            raise RuntimeError("jobtowns: 104 不再提供數量，也沒有舊值")
-        rows.sort(key=lambda r: -r[2])
-        return {"date": _jobs_last("total")[1] or today, "towns": rows, "scope": sorted(J104_TOWN_SCOPE), "errs": [], "frozen": True}
-    for no, k in tab.items():
-        try:
-            _, n = _j104(area=no)
-        except Exception as e:  # noqa: BLE001
-            errs.append(f"{k}: {safe_err(e)}")
-            if len(errs) > 8:
-                break
-            continue
-        hist_put("jobs", "town:" + k, today, n)
-        h = HISTORY.get("jobs", {}).get("town:" + k, [])
-        del h[:-30]   # 只需要一週前的值，各區的序列不用留太長
-        old = next((x for d, x in reversed(h) if d <= (NOW.astimezone(TPE).date() - timedelta(days=7)).isoformat()), None)
-        lo, la, c, t = TOWNS[k]
-        rows.append([c, t, n, round(100 * (n / old - 1), 1) if old else None])
-        time.sleep(0.6)
-    if not rows:
-        raise RuntimeError("jobtowns: nothing " + "; ".join(errs)[:160])
-    rows.sort(key=lambda r: -r[2])
-    return {"date": today, "towns": rows, "scope": sorted(J104_TOWN_SCOPE), "errs": errs[:4]}
-
-
-def _j104(**params):
-    j = gjson(J104, params={"page": 1, "pagesize": 30, **params}, headers=J104_H, timeout=30)
-    return j, int(((j.get("metadata") or {}).get("pagination") or {}).get("total") or 0)
-
-
-J104_CAP = 1001   # 2026-10-22 起 104 API 的總數一律回 1001（100 頁上限），不再是真實職缺數
-
-
-def _jobs_clean():
-    """清掉 104 改版後寫進歷史的假值（1001），各數字停在最後一個真實值。"""
-    for k, ser in (HISTORY.get("jobs") or {}).items():
-        ser[:] = [r for r in ser if r[1] != J104_CAP]
-
-
-def _jobs_last(key):
-    ser = (HISTORY.get("jobs") or {}).get(key) or []
-    return (ser[-1][1], ser[-1][0]) if ser else (None, None)
-
-
-def p_jobs():
-    today = NOW.astimezone(TPE).date().isoformat()
-    j, total = _j104()
-    if not total:
-        raise RuntimeError("104: no total")
-    _jobs_clean()
-    if total <= J104_CAP:   # 總數不再可信：數量類停在最後真實值，只更新最新職缺列表
-        total, frozen = _jobs_last("total")
-        fz = lambda key: _jobs_last(key)[0]
-        cats = [{"name": nm, "n": fz("cat:" + nm), "chg7": None, "spark": hist_get("jobs", "cat:" + nm, 30)} for _, nm in J104_CAT if fz("cat:" + nm)]
-        areas = [{"name": nm, "counties": cs, "n": fz("area:" + nm), "chg7": None} for _, nm, cs in J104_AREA if fz("area:" + nm)]
-        inds = [{"name": nm, "n": fz("ind:" + nm), "chg7": None, "spark": hist_get("jobs", "ind:" + nm, 30)} for nm in J104_IND.values() if fz("ind:" + nm)]
-        cats.sort(key=lambda x: -x["n"]); inds.sort(key=lambda x: -x["n"])
-        latest, ind_mix = _j104_latest(j)
-        return {"total": total, "chg7": None, "spark": hist_get("jobs", "total", 60), "cats": cats, "inds": inds, "areas": areas, "latest": latest[:90],
-                "indMix": sorted(ind_mix.items(), key=lambda x: -x[1]), "src": "104 人力銀行", "frozen": frozen,
-                "note": f"104 自 10/22 起不再提供真實職缺總數，數量停在 {frozen}；最新職缺列表照常更新"}
-    hist_put("jobs", "total", today, total)
-    def chg(key, v):
-        h = HISTORY.get("jobs", {}).get(key, [])
-        old = next((x for d, x in reversed(h) if d <= (NOW.astimezone(TPE).date() - timedelta(days=7)).isoformat()), None)
-        return round(100 * (v / old - 1), 1) if old else None
-    cats = []
-    for code, name in J104_CAT:
-        try:
-            _, n = _j104(jobcat=code)
-            hist_put("jobs", "cat:" + name, today, n)
-            cats.append({"name": name, "n": n, "chg7": chg("cat:" + name, n), "spark": hist_get("jobs", "cat:" + name, 30)})
-        except Exception as e:  # noqa: BLE001
-            log("104 cat", name, e)
-        time.sleep(0.6)
-    areas = []
-    for code, name, counties in J104_AREA:
-        try:
-            _, n = _j104(area=code)
-            hist_put("jobs", "area:" + name, today, n)
-            areas.append({"name": name, "counties": counties, "n": n, "chg7": chg("area:" + name, n)})
-        except Exception as e:  # noqa: BLE001
-            log("104 area", name, e)
-        time.sleep(0.6)
-    inds = []  # 各產業刊登中職缺（看哪個產業在搶人）
-    for code, name in J104_IND.items():
-        if name == "礦業":
-            continue
-        try:
-            _, n = _j104(indcat=code + "000000")
-            if not n or n >= total:  # 參數沒生效會回全站總數
-                continue
-            hist_put("jobs", "ind:" + name, today, n)
-            inds.append({"name": name, "n": n, "chg7": chg("ind:" + name, n), "spark": hist_get("jobs", "ind:" + name, 30)})
-        except Exception as e:  # noqa: BLE001
-            log("104 ind", name, e)
-        time.sleep(0.6)
-    inds.sort(key=lambda x: -x["n"])
-    latest, ind_mix = _j104_latest(j)
-    cats.sort(key=lambda x: -x["n"])
-    return {"total": total, "chg7": chg("total", total), "spark": hist_get("jobs", "total", 60), "cats": cats, "inds": inds, "areas": areas, "latest": latest[:90],
-            "indMix": sorted(ind_mix.items(), key=lambda x: -x[1]), "src": "104 人力銀行"}
-
-
-def _j104_latest(j):
-    latest, seen = [], set()
-    for page in (1, 2, 3):
-        try:
-            jj = j if page == 1 else gjson(J104, params={"page": page, "pagesize": 30}, headers=J104_H, timeout=30)
-        except Exception as e:  # noqa: BLE001
-            log("104 page", e); break
-        for x in jj.get("data") or []:
-            no = x.get("jobNo")
-            if not no or no in seen:
-                continue
-            seen.add(no)
-            lat, lon = num(x.get("lat")), num(x.get("lon"))
-            link = x.get("link") or {}
-            if isinstance(link, str):
-                m = re.search(r"'job':\s*'([^']+)'", link); link = {"job": m.group(1) if m else ""}
-            lo, hi = num(x.get("salaryLow")) or 0, num(x.get("salaryHigh")) or 0
-            latest.append({"t": (x.get("jobName") or "")[:60], "co": (x.get("custName") or "")[:30], "ind": J104_IND.get(str(x.get("coIndustry") or "")[:4], "其他"),
-                           "indd": (x.get("coIndustryDesc") or "")[:16], "place": (x.get("jobAddrNoDesc") or "")[:10], "date": x.get("appearDate") or "",
-                           "sal": [lo, hi if hi < 9999999 else 0], "u": link.get("job") or "",
-                           "ll": [round(lon, 4), round(lat, 4)] if lat and lon and 118 < lon < 123 and 21 < lat < 27 else None})
-        time.sleep(0.6)
-    latest.sort(key=lambda x: x["date"], reverse=True)
-    ind_mix: dict = {}
-    for x in latest:
-        ind_mix[x["ind"]] = ind_mix.get(x["ind"], 0) + 1
-    return latest, ind_mix
-
-
 # ---------- 上市櫃重大訊息（證交所、櫃買中心）：分類、依公司地址上地圖 ----------
 MOPS_SRC = [("上市", "https://openapi.twse.com.tw/v1/opendata/t187ap04_L", "https://openapi.twse.com.tw/v1/opendata/t187ap03_L"),
             ("上櫃", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap04_O", "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O")]
@@ -8584,7 +8375,7 @@ INS_CATS = {
     "市場": ["taiex", "tw_market", "world", "fx", "fear", "commodities", "luxury", "sectors", "revenue", "logistics", "aicycle"],
     "總經": ["macro", "prices", "veg", "oil", "tourism", "liquidity", "consume", "gmacro", "house", "cards", "cars", "permits", "renewal", "credit", "exports", "stress", "dlead"],
     "走向": ["weekly", "voice", "chain", "wiki", "migration", "attention", "demo", "gap"],
-    "訊號": ["jobs", "taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife", "ossuse", "uspolicy"],
+    "訊號": ["taxreg", "grants", "tenders", "radar", "clinics", "brands", "aiwire", "bizlife", "ossuse", "uspolicy"],
     "輿情": ["mood", "ptt", "trends", "cofacts", "gtop", "worldnews"],
     "現場": ["weather", "quake", "power", "alerts", "plaact", "cables", "airport", "typhoon"],
 }
@@ -9814,9 +9605,6 @@ def _wk_material():
     mt = R("metro")
     if mt:
         B["消費"].append(f"台北捷運 {mt.get('month')} 總運量年增 {f(mt.get('total_chg'))}%；成長最多站：" + "、".join(f"{r['st']} {f(r['chg'])}%" for r in (mt.get("up") or [])[:4]))
-    jb = R("jobs")
-    if jb:
-        B["消費"].append(f"104 職缺總數 {jb.get('total')}，7 天變化 {f(jb.get('chg7'))}%")
     ch = R("chain").get("rows") or []
     B["主題鏈（需求 vs 供給）"] = [f"{r['k']}：{r['verdict']}" + (f"（上週是{r['prev']}）" if r.get("prev") else "") + f"，{r['why']}；" + "、".join(f"{s['k']} {f(s['v'],0)}" for s in r["stages"] if s.get("v") is not None and s["k"] != "政策")
                              for r in ch if r["verdict"] != "觀察中"][:14]
@@ -13382,6 +13170,10 @@ def p_tw_sectors():
     return {"month": f"{last[:4]}-{last[4:]}", "rows": rows, "reg_win": TC.get("w6"),
             "src": "財政部電子發票各行業金額（近 3 月比去年同期）；財政部營業登記新設（近 6 月，已扣掉全體新設的變動）"}
 
+# 104 職缺 2026-11 拿掉（API 自 10/22 起總數一律回 1001）：清掉留下的面板檔與歷史，重複執行無害
+for _f in ("panels/jobs.json", "panels/jobtowns.json", "j104_area.json"):
+    (DATA / _f).unlink(missing_ok=True)
+HISTORY.pop("jobs", None)
 run("pulse", p_pulse)
 run("taiex", p_taiex)
 run("tw_market", p_tw_market, keep_if_fresh_hours=0.5)
@@ -13466,8 +13258,6 @@ run("quake", p_quake)
 run("flights", p_flights)
 run("lightning", p_lightning, keep_if_fresh_hours=0.15)
 run("house", p_house, keep_if_fresh_hours=24 * 5 if RENT_PATH.exists() and '"shops"' in RENT_PATH.read_text(encoding="utf-8") and PRESALE_PATH.exists() else 0)   # 租金檔還沒有店面時，這輪重抓一次
-run("jobs", p_jobs, keep_if_fresh_hours=6 if '"frozen"' in json.dumps(load_prev("jobs") or {}) else 0)
-run("jobtowns", p_jobtowns, keep_if_fresh_hours=20 if '"frozen"' in json.dumps(load_prev("jobtowns") or {}) else 0)   # 六都＋新竹各區職缺，約 170 次 104 查詢，一天一次
 run("mops", p_mops, keep_if_fresh_hours=0.5)
 run("power", p_power, keep_if_fresh_hours=0.25)
 run("airport", p_airport, keep_if_fresh_hours=0.25)

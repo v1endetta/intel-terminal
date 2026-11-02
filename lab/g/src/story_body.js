@@ -82,8 +82,6 @@ function candidates() {
   for (const g of ["fish", "fruit", "meat"]) { const H = (ST.H || {})[g] || {}; for (const k in H) series({ cat: "總經", grp: g, link: "veg", src: "農漁產批發" }, hist(g, k), k + "價格", "元/公斤"); }
   series({ cat: "總經", grp: "liq", link: "liq", src: "紐約聯準銀行" }, ((P.liquidity || {}).rrp || {}).spark, "逆回購餘額", "十億美元", { scene: "globe", from: ["紐約"] });
   // 訊號
-  { const J = P.jobs || {}; series({ cat: "訊號", grp: "jobs", link: "jobs", src: "人力銀行職缺" }, J.spark, "全台職缺數", "個");
-    for (const c of (J.cats || [])) series({ cat: "訊號", grp: "jobs", link: "jobs", src: "人力銀行職缺" }, c.spark, c.name + "職缺", "個"); }
   // 走向
   for (const k of (((P.voice || {}).kw) || [])) series({ cat: "走向", grp: "voice", link: "voice", src: "Google 新聞收錄", partial: true, week: true, minMean: 40 }, k.news_daily, `「${k.k}」新聞量`, "則");
   // 輿情
@@ -267,9 +265,6 @@ function EXPLORE() {
       { n: "新公司", lens: "biz" },
       { n: "公司生滅", f: () => bizlifeCard() },
       { n: "新興生意", f: () => nicheCard() },
-      { n: "職缺", lens: "jobs", f: () => { const J = P.jobs || {}, fz = J.frozen ? String(J.frozen).slice(5).replace("-", "/") : "";   // 104 自 10/22 起不給真實總數：改畫各類數量
-          return barsOf(fz ? `各類職缺（停在 ${fz}）` : "各類職缺 7 天變化", () => (J.cats || []).slice(0, 10).map(c => fz ? { name: c.name, v: c.n, txt: nf(c.n) } : { name: c.name, v: c.chg7, txt: pct(c.chg7 || 0, 1) }),
-            "訊號 · 全台 " + nf(J.total || 0) + " 個職缺" + (fz ? "（104 已不提供總數）" : ""), "jobs", fz ? { signed: false } : undefined)(); } },
       { n: "補助徵件", f: () => grantsCard() },
       { n: "美國政策", f: () => uspolicyCard() },
       { n: "標案", lens: "tender", f: listOf("政府標案", () => items("tenders").slice(0, 7).map(x => ({ t: x.title, s: `${x.unit} · ${x.budget ? nf(x.budget / 1e4) + " 萬" : ""}`, url: x.url })), "訊號", "tenders") },
@@ -323,7 +318,7 @@ const PROV = {
   "地震": ["quake", "氣象署", "即時", 60], "選戰": ["elect", "Polymarket 報價＋新聞", "彙整", 120], "電力": ["power", "台電", "即時", 30, p => p.asof],
   "航班": ["flights", "adsb.lol 即時位置＋桃園機場時刻表（空中位置依時刻推算）", "即時", 30],
   "lens:now": ["weather", "氣象署・高公局・公路局・文化部藝文資訊", "即時", 60], "lens:house": ["house", "內政部實價登錄", "每季", 129600, p => p.season],
-  "lens:biz": ["brands", "經濟部公司與商業登記，依地址歸到鄉鎮", "每月", 43200, p => p.month], "lens:jobs": ["jobs", "104 人力銀行刊登數", "每日", 1440],
+  "lens:biz": ["brands", "經濟部公司與商業登記，依地址歸到鄉鎮", "每月", 43200, p => p.month],
   "lens:tender": ["tendermap", "政府電子採購網（依發包機關歸類，不是工程地點）", "每日", 1440], "lens:news": ["mapfeed", "Google 新聞，依標題地名歸到鄉鎮", "彙整", 180],
   "lens:stock": ["mops", "證交所・櫃買中心重大訊息；總部位置依登記地址", "每日", 1440], "lens:elect": ["elect", "Polymarket 報價（只看不押）＋新聞", "彙整", 120], "lens:macro": ["macro", "國發會・主計總處・央行", "每月", 43200], "lens:mood": ["mood", "PTT・LINE 查證・新聞標題（AI 判讀）", "彙整", 180], "lens:power": ["power", "台電", "即時", 30, p => p.asof],
   "全球新聞": ["worldnews", "BBC・半島電視台・NPR・衛報・日經亞洲・南華早報・韓聯社・CNA・日本時報（Gemini 翻譯與判讀）", "彙整", 60],
@@ -335,7 +330,7 @@ const PROV = {
   "lens:aes": ["aesthetic", "衛福部醫事司 醫療機構與人員基本資料（全部機構，一年一版）對照健保特約名冊", "年資料", 10080, p => p.asof],
   "台海": ["plaact", "國防部 即時軍事動態（每天早上公布前 24 小時）", "每日", 1440, p => (p.latest || {}).date],
   "lens:cable": ["cables", "TeleGeography Submarine Cable Map（CC BY-NC-SA 3.0）＋Google 新聞", "每週", 10080],
-  "lens:area": ["migration", "內政部遷入遷出・經濟部公司登記・健保署與衛福部醫事機構名冊・實價登錄・104・Google 新聞（各項期間不同，見每一列）", "彙整", 1440],
+  "lens:area": ["migration", "內政部遷入遷出・經濟部公司登記・健保署與衛福部醫事機構名冊・實價登錄・Google 新聞（各項期間不同，見每一列）", "彙整", 1440],
   "lens:city": ["migration", "Ookla Speedtest 開放資料・OpenStreetMap・內政部戶政司・環境部・實價登錄租賃・健保署（每週計算）", "彙整", 10080],
   "lens:move": ["migration", "內政部戶政司 遷入遷出統計", "月資料", 1440],
   "洞見": ["insights_cat", "情報站各分類資料（程式整理、Gemini 寫句子）", "彙整", 360],
