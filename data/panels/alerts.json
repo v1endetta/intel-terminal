@@ -1,6 +1,17 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_extremely-rain_202611022056001",
+   "cat": "降雨",
+   "lvl": 2,
+   "area": [],
+   "text": "東北季風影響，今(2日)晚至明(3)日北海岸地區有局部大雨發生的機率，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-11-02T12:56:42Z",
+   "exp": "2026-11-03T11:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202611022056.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261102201840_0000",
    "cat": "水庫放流",
    "lvl": 2,
@@ -95,12 +106,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611020428.cap"
   }
  ],
- "n_total": 5,
+ "n_total": 6,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/11/02 20:38:15"
+  "updated": "2026/11/02 20:59:16"
  },
  "errs": [],
- "updatedAt": "2026-11-02T12:40:28Z"
+ "updatedAt": "2026-11-02T12:59:10Z"
 }
