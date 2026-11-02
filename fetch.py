@@ -3884,6 +3884,13 @@ def p_wind():
         social = {}
     if social.get("date") and social["date"] < (NOW.astimezone(TPE).date() - timedelta(days=2)).isoformat():
         social = {}   # 兩天以上沒更新就不用
+    if social:   # 跟推送前同一套檢查：不合格式的欄位直接丟掉
+        try:
+            sys.path.insert(0, str(ROOT / "ops"))
+            from social_check import clean as _social_clean
+            social = _social_clean(social)[0] or {}
+        except Exception as e:  # noqa: BLE001
+            log("wind social check", e); social = {}
     for h in (social.get("hot") or [])[:40]:   # Dcard 各板熱門、IG 探索頁推薦：排程已經歸納成話題（不含原文），當討論面的素材
         if h.get("name"):
             talk.append((str(h.get("src") or "社群")[:12], f"{str(h['name'])[:30]}（{int(h.get('n') or 1)} 則）"))
