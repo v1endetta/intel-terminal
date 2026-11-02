@@ -2583,6 +2583,10 @@ function EXPLORE() {
       { n: "地方新聞", lens: "news" },
       { n: "全球新聞", globe: 1, f: () => gxCard("wnews") },
       { n: "民調", f: () => pollsCard() },
+      { n: "消費風向", f: () => { const W = P.wind || {}, T = W.topics || [], q = W.quads || {};
+        const Q = [["quiet", "安靜成長", UPH, "排行在爬，沒人在講"], ["hit", "真流行", "#64d2ff", "排行在爬，大家也在講"], ["new", "剛冒出來", "#a8e6b8", "排行在爬，還不到 3 天"], ["hype", "只有聲量", YLH, "大家在講，排行上看不到"]];
+        const body = Q.map(([k, nm, c, d]) => { const A = T.filter(t => t.quad === k).slice(0, 4); return A.length ? `<p class="why" style="margin:12px 0 2px"><b style="color:${c}">${nm}</b>　<span style="opacity:.6">${d}</span></p>` + listHTML(A.map(t => ({ t: t.name, s: [(t.do || [])[0] ? `${t.do[0].src} ${t.do[0].how}` : "", t.news7 != null ? `新聞 7 天 ${t.news7} 篇` : ""].filter(Boolean).join("・") }))) : ""; }).join("");
+        return { html: sideHTML({ eyebrow: "輿情 · 消費風向", title: "排行在爬的，有沒有人在講", big: T.length ? `安靜成長 ${q.quiet || 0}` : "", chg: T.length ? `真流行 ${q.hit || 0}` : "", color: UPH, body: (W.line ? `<p class="why">${esc(W.line)}</p>` : "") + (body || '<p class="empty">還沒有話題</p>') + `<p class="why" style="opacity:.55;font-size:11px">${W.social_at ? "" : "IG、Threads、Dcard 還沒接上：年輕族群和女性的討論算不到。"}</p>`, foot: '<a href="/terminal/#p-wind">終端機 ›</a>' }) }; } },
       { n: "台灣情緒", lens: "mood", f: () => { const m = (P.mood || {}).taiwan || {}; return { html: sideHTML({ eyebrow: "輿情 · 社群情緒", title: "台灣人今天的心情", big: m.label || "", color: (m.score || 0) < 0 ? DNH : UPH, body: moodViz() + listHTML([{ t: m.line || "" }, ...(m.themes || []).map(t => ({ t: "· " + t }))]), foot: '<a href="/terminal/#p-mood">終端機 ›</a>' }) }; } },
       { n: "熱搜", f: listOf("Google 熱搜", () => items("trends").slice(0, 8).map(x => ({ t: x.title, s: x.traffic })), "輿情", "trends") },
       { n: "PTT", f: () => pttCard() },
@@ -2616,7 +2620,7 @@ const PROV = {
   "菜價": ["veg", "農業部批發市場行情", "每日", 1440, p => p.date], "油價": ["oil", "中油", "每週", 10080, p => p.effective], "景氣指標": ["macro", "主計總處・國發會・央行", "每月", 43200],
   "美元流動性": ["liquidity", "聯準會 FRED", "每日", 1440], "本週走向": ["weekly", "情報站彙整", "每週", 10080, p => p.week], "趨勢雷達": ["voice", "Google 趨勢・Google 新聞", "彙整", 360],
   "主題鏈": ["chain", "情報站彙整", "每週", 10080, p => p.week], "主題熱度": ["wiki", "維基百科瀏覽量", "每月", 43200, p => p.month], "AI 快線": ["aiwire", "各公司官網與新聞", "彙整", 120],
-  "公司雷達": ["radar", "情報站彙整", "彙整", 1440], "台灣情緒": ["mood", "PTT・Dcard・新聞標題", "彙整", 180], "PTT": ["ptt", "PTT 熱門文章", "彙整", 60],
+  "公司雷達": ["radar", "情報站彙整", "彙整", 1440], "台灣情緒": ["mood", "PTT・Mobile01・LINE 查證・Bluesky（AI 判讀）", "彙整", 180], "消費風向": ["wind", "App Store・Spotify・KKBOX・Netflix・票房・Google 熱搜 × Google 新聞・PTT・Mobile01・時尚媒體（AI 歸類）", "彙整", 480], "PTT": ["ptt", "PTT 熱門文章", "彙整", 60],
   "熱搜": ["trends", "Google 熱搜", "彙整", 120], "謠言": ["cofacts", "Cofacts 真的假的", "彙整", 180], "天氣": ["weather", "氣象署", "即時", 60],
   "地震": ["quake", "氣象署", "即時", 60], "選戰": ["elect", "Polymarket 報價＋新聞", "彙整", 120], "電力": ["power", "台電", "即時", 30, p => p.asof],
   "航班": ["flights", "adsb.lol 即時位置＋桃園機場時刻表（空中位置依時刻推算）", "即時", 30],

@@ -28,7 +28,7 @@ Vin 的個人情報站。網址 https://intel.daltatw.com：首頁是 3D 台灣�
 | 5 | **授權受限的數值**（ICE、FBX、DRAMeXchange 等）只顯示百分位或變化，不顯示原始值。 |
 | 6 | 公開站不能出現 Vin 的身體、訓練等個人資料。 |
 | 7 | **改程式前先逐項回報發現與方案，等 Vin 核准才動手**（「動手改程式前，先逐項回報…我核准後才開始改」）。核准後可以直接改、推、驗證。 |
-| 8 | 被網站擋（Dcard 擋 GitHub IP、Threads 要登入等）就不接，**不要繞過**；不要建議 TDX。 |
+| 8 | 被網站擋（Dcard 擋 GitHub IP、Threads 要登入等）就不接，**不要繞過**；不要建議 TDX。**唯一例外（11/3 Vin 同意）**：IG、Threads、Dcard 可以用 Claude 桌面 app 的內建瀏覽器（登入跟 Vin 的 Chrome 分開）加**副帳號**低量閱讀，一天一次；只存話題與次數，不存原文與帳號名。主帳號與 dalta 帳號不登入內建瀏覽器。 |
 | 9 | 省 Claude 額度：排程與自動化不要依賴 Vin 即時按確認；重活放 GitHub Actions，不放 Claude 排程。 |
 | 10 | 用語：繁體中文、台灣用語。**漲是綠色、跌是紅色**（不用台灣紅漲綠跌）。品牌名 **dalta 一律小寫**。比較性資訊用 Markdown 表格加 emoji（✅🎯⚠️）。 |
 
@@ -87,7 +87,7 @@ Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 a
 | data 分支 `data/history.json` | 各指標日序列（走勢圖、預測帳本、論點用），每序列最多約 400 點 |
 | data 分支 `data/panels/<id>.json` | 各面板單檔；`macro.json` 可手動維護 |
 | data 分支 `data/archive/YYYY-MM-DD.json` | 每日存檔：頭條、熱詞、PTT、OSS 等 |
-| data 分支 其他 `data/*.json` | 各面板的快取與中間序列，例如 `consume_series.json`、`polls_cache.json`、`geocode_cache.json`、`appstore_hist.json`、`ust_cache.json`、`news_kw_cache.json`、`relay_usage.json`（抓取站每輪秒數、讀寫次數）、`geo_pending.sha` |
+| data 分支 其他 `data/*.json` | 各面板的快取與中間序列，例如 `consume_series.json`、`polls_cache.json`、`geocode_cache.json`、`appstore_hist.json`、`ust_cache.json`、`news_kw_cache.json`、`wind_hist.json`（消費風向每日每話題的說／做分數，留 30 天）、`social_tw.json`（IG／Threads／Dcard 每日彙總，還沒接）、`relay_usage.json`（抓取站每輪秒數、讀寫次數）、`geo_pending.sha` |
 
 `README.md` 已經過時，以這份為準。
 
@@ -181,7 +181,7 @@ Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 a
 | 總經 | `aicycle` AI 循環 · `champions` 台灣隱形冠軍 · `twsectors` 台灣內需產業 · `labor` 誰在擴張 · `dlead` dalta 領先指標 · `credit` 信用利差 · `exports` 出口結構 · `stress` 企業壓力 · `calendar`／`mktcal` · `liquidity`（p-liq） · `macro` · `gmacro` · `supply` · `consume` · `cards` · `lead` · `imports` · `housefc` · `house` · `demo` · `bizlife` · `cars` · `permits` · `renewal` 都更 · `prices` 物價細項 · `tourism` · `poly` · `veg`／`fruit`／`fish`／`meat` |
 | 走向 | `weekly`（weekly.py） · `chain` 主題鏈 · `ledger` 預測帳本 · `voice` 趨勢雷達 · `wiki` · `tech2` · `gap` 台灣還沒報 · `migration` · `births` · 地圖工具（圈地報告、住哪裡） |
 | 訊號 | `news`＋watch 關注領域 · `tenders`／`awards`／`tendermap` · `design` · `radar` 公司雷達 · `brands`／`taxreg` 新品牌 · `uspolicy` · `ossuse` · `clinics` · `aesthetic` 醫美 · `grants` · `crowd` · `aiwire` · `devpulse` · `tech` · `oss` · `lyst` · `media` · `think` · `corp` · `policy` · `ipr` · `secwords` |
-| 輿情 | `pop` · `appstore` App 排行 · `gtop` 焦點新聞 · `worldnews` · `townnews` 鄉鎮新聞 · `youtube` · `attention` · `mood` 台灣情緒（Gemini 判讀 PTT、Cofacts、Mobile01、Bluesky） · `cofacts` · `polls` 民調 · `forums` Mobile01 · `ptt` · `social` Bluesky · `trends` |
+| 輿情 | `wind` 消費風向（說 vs 做四格） · `pop` · `appstore` App 排行 · `gtop` 焦點新聞 · `worldnews` · `townnews` 鄉鎮新聞 · `youtube` · `attention` · `mood` 台灣情緒（Gemini 判讀 PTT、Cofacts、Mobile01、Bluesky） · `cofacts` · `polls` 民調 · `forums` Mobile01 · `ptt` · `social` Bluesky · `trends` |
 | 台灣現場 | `geo`＋`mapfeed` 全台現場地圖 · `elect` 五都選戰 · `tw_pulse` · `roads` · `metro` · `weather`／`radar_wx`／`lightning`／`typhoon` · `alerts`（含停班停課） · `localnews` · `quake` · `power` · `airport`／`flights` · `plaact` 台海 · `cables` 海纜 · `pressure` 氣壓圖 · `cctv`（四都） · `oil` |
 | 資料庫 | BigQuery：授權、全文搜尋、時光機、走勢（`vault_push` 寫入）· `relay_stats` 雲端用量（p-cloud） |
 
@@ -305,6 +305,8 @@ RI=999999 STEPS="wait|15000;js|(__story.openAt('總經','內需產業'),1);wait|
 | ⚠️ 已知 | AI 廠商動態 `devpulse.diag` 寫「md got html」「0 entries」是正常的：markdown 版失敗後改讀網頁版，Gemini、DeepSeek、xAI 都有抓到 |
 | ✅ 已驗證 | 誰在擴張 `labor`（11/2 上線，取代 104）：勞動部統計月報 xlsx（`statdb.mol.gov.tw/html/mon/{表號}.xlsx`，GitHub 讀得到）：26010 勞保投保人數按行業（最近 13 個月）、22120 廠商職位空缺按行業（每季）、24040 積欠工資墊償（月，官方的年增與今年累計年增直接讀表上那兩列）。自寫 `_xlsx_rows()` 讀 xlsx（沒裝 openpyxl）。判讀：投保年增 >1% 且職缺年增 >5% 擴張；職缺年增 >10% 但投保 ≤0.5% 缺工；歷史存 `labor_ins`、`labor_vac`、`labor_arrears`。月報其他可用的表：27010 就業保險按行業、22010～22110 勞動力與失業。下一步「勞動溫度計」合成指標還缺：主計總處加班工時與進入率（要從台灣抓取站試主計總處資料庫表號）、能源署產業用電（擋 GitHub，走台灣抓取站）。勞保開放資料（data.gov.tw 33369）與台電行業別售電（31966）一年才釋出一次，不用 |
 | ⏳ 待驗證 | **雲端費用修正（11/2，Vin 核准）**：10 月帳單 NT$23，主因抓取站每輪平均約 184 秒（慢工作全綁在每輪、大多在等政府網站）× 96 輪，加上每輪重寫 11 個檔（GCS 寫入 10.6 萬次，免費 5,000）。改法：抓取站即時資料並行抓、慢工作輪班限時、深夜每小時一輪、即時資料合成 `live.json.gz`、沒變不寫、`state.json` 沒變不寫、原始存檔每 3 小時；`fetch.py` 歷史資料庫改暫存每 3 小時上傳、門牌待辦沒變不傳、靜態檔本機快取。拿掉沒人用的 `fw_1968`。終端機「資料庫」分頁新增 `p-cloud` 雲端用量（`relay_stats` 面板）。目標：CPU 約 3–4 成、GCS 寫入 8 成以下。11/2 實測：首輪 11.4 秒（一次性重寫 6 檔），之後每輪 1.4–2.2 秒、寫 1 次讀 1 次。`p-cloud` 的寫入估算前幾天會被首輪拉高，穩定後應約 2,250（抓取站）＋約 800（歷史資料庫）＋零星。抓取站 `relay_usage` 只記 fetch.py 有讀到的輪次，會漏幾輪，屬正常。亞洲出站流量（Cloud Run 彰化 → 美國 bucket）沒有免費額度，可降不可歸零，等 Vin 決定。下一步：11/4 看 `p-cloud` 穩定讀數；預算警示門檻請 Vin 在 Cloud Shell 確認 |
+| ⏳ 待驗證 | **消費風向 `wind`（11/3 上線，Vin 核准 C）**：做＝`_wind_do()` 從 appstore（新進、爬升 ≥10 名、前 3 名）、pop（Spotify 上榜 ≤10 天或升 ≥5、KKBOX 新進或升 ≥3、Netflix 上榜 ≤2 週）、attention 票房前 6、trends、YouTube 7 天內上架的熱門挑候選，w＝行為強度；說＝`_wind_talk()` 的 PTT、Mobile01、LINE TODAY、焦點新聞、時尚媒體標題。Gemini（1 次）把同一件事歸成話題並排除政治、社會案件、比賽結果、常駐大 App；每個話題再查 Google 新聞 `when:14d` 算近 7 天 vs 前 7 天。x＝log10(新聞+1)/2＋標題提及每則 0.1（上限 0.4）；y＝最強排行 w＋多一個來源 0.12。四格：hit 真流行（x≥.5、y≥.5）、quiet 安靜成長（y≥.5、x<.5 且近 7 天有 3 天以上）、new 剛冒出來（同上但未滿 3 天）、hype 只有聲量（x≥.5、不在任何榜上）；只在榜上沒在爬的（`_wind_onchart`）標 `static`，有人講算 hit、沒人講算 low。每 6 小時。終端機 `p-wind`（輿情第一段）、3D 輿情「消費風向」chip。待驗證：Gemini 歸類的品質、門檻 0.5 合不合理（新聞 10 篇≈0.52）、連 3 天的安靜成長在 11/6 後才會出現。下一步：IG／Threads／Dcard 每日彙總寫進 `social_tw.json`（格式 `{"date":"YYYY-MM-DD","topics":{"話題名":{"Threads":n,"Dcard":n,"IG":n}}}`，兩天沒更新就不用），等 Vin 在內建瀏覽器登入副帳號後試跑；中央大學消費者信心指數要探測，拿來回測 `mood` |
+| ⚠️ 已知 | Netflix 台灣週榜 `pop.netflix.week` 11/2 還停在 10/18 那週，比預期晚一週，待查是 Netflix 晚發還是抓取問題 |
 | ⏳ 待驗證 | 3D 卡片隨資料更新重畫（`refresh_patch.py`）還沒實測 |
 | ✅ 已驗證 | 停班停課 22 縣市全部抓到（每個地區第一列少一格的問題）；雨量沒下雨的縣市記 0 |
 | ✅ 已驗證 | 藝文活動：新北市不再被算成臺北市（10/30 新北市 18、臺北市 61） |

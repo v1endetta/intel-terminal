@@ -3784,6 +3784,203 @@ def p_appstore():
             "climbers": climb[:12], "newcomers": newc[:10], "genres": genres, "base_days": base_days, "hist_days": len(hist), "errs": errs}
 
 
+# ---------- 消費風向：說 vs 做。排行上正在爬的東西（做），對照有沒有人在討論（說），分成四格 ----------
+WIND_HIST = DATA / "wind_hist.json"      # 每天每個話題的 [說, 做]，留 30 天，算「連續幾天」
+WIND_SOCIAL = DATA / "social_tw.json"    # Threads／Dcard／IG 每日彙總（內建瀏覽器排程推上來，只有話題與次數）
+WIND_CATS = ["影視", "音樂", "App", "遊戲", "品牌商品", "飲食", "生活習慣", "活動", "人物"]
+
+
+def _wind_do():
+    """做：各排行正在爬升或新進榜的項目。w 是行為強度 0–1。"""
+    c = []
+    ap = load_prev("appstore") or {}
+    for x in (ap.get("newcomers") or [])[:8]:
+        c.append({"name": x["name"], "src": "App 營收" if x.get("chart") == "gross" else "App 下載", "how": f"新進榜第 {x['rank']} 名", "w": 0.9})
+    for x in (ap.get("climbers") or [])[:12]:
+        d = x.get("d7") if isinstance(x.get("d7"), int) else x.get("d1") if isinstance(x.get("d1"), int) else 0
+        if d >= 10:
+            c.append({"name": x["name"], "src": "App 營收" if x.get("chart") == "gross" else "App 下載", "how": f"爬升 {d} 名到第 {x['rank']}", "w": round(min(1, 0.45 + d / 100), 2)})
+    pop = load_prev("pop") or {}
+    for x in pop.get("spotify") or []:
+        mv = str(x.get("move") or "")
+        up = int(mv[1:]) if mv.startswith("+") and mv[1:].isdigit() else 0
+        if (x.get("days") or 99) <= 10 or up >= 5:
+            c.append({"name": f"{x.get('artist', '')} - {x.get('title', '')}", "src": "Spotify", "how": f"上榜 {int(x.get('days') or 0)} 天、第 {x['rank']} 名" if (x.get("days") or 99) <= 10 else f"升 {up} 名到第 {x['rank']}",
+                      "w": round(0.5 + (21 - x["rank"]) / 42, 2)})
+    for x in pop.get("kkbox") or []:
+        last = x.get("last")
+        if not last or last - x["rank"] >= 3:
+            c.append({"name": f"{x.get('artist', '')} - {x.get('title', '')}", "src": "KKBOX", "how": f"新進第 {x['rank']} 名" if not last else f"升 {last - x['rank']} 名到第 {x['rank']}",
+                      "w": round(0.5 + (21 - x["rank"]) / 42, 2)})
+    nf = pop.get("netflix") or {}
+    for kind, nm in (("tv", "Netflix 影集"), ("films", "Netflix 電影")):
+        for x in nf.get(kind) or []:
+            if (x.get("weeks") or 9) <= 2:
+                c.append({"name": x.get("show") or x.get("title"), "src": nm, "how": f"上榜第 {x.get('weeks')} 週、第 {x['rank']} 名", "w": round(0.5 + (11 - x["rank"]) / 20, 2)})
+    box = ((load_prev("attention") or {}).get("box") or {})
+    for i, x in enumerate((box.get("items") or [])[:6]):
+        c.append({"name": x["name"], "src": "電影票房", "how": f"本週票房第 {i + 1}（{round((x.get('week') or 0) / 1e4)} 萬）", "w": round(0.95 - i * 0.08, 2)})
+    for k, nm in (("free", "App 下載"), ("gross", "App 營收")):   # 已經在最上面的也算（第一名不會再爬）
+        for x in (ap.get(k) or [])[:3]:
+            c.append({"name": x["name"], "src": nm, "how": f"第 {x['rank']} 名", "w": round(0.8 - 0.05 * x["rank"], 2)})
+    for k, nm in (("spotify", "Spotify"), ("kkbox", "KKBOX")):
+        for x in (pop.get(k) or [])[:3]:
+            c.append({"name": f"{x.get('artist', '')} - {x.get('title', '')}", "src": nm, "how": f"第 {x['rank']} 名", "w": round(0.8 - 0.05 * x["rank"], 2)})
+    for x in ((load_prev("trends") or {}).get("items") or [])[:10]:
+        c.append({"name": x["title"], "src": "Google 熱搜", "how": f"搜尋 {x.get('traffic') or ''}".strip(), "w": 0.6})
+    cut = (NOW - timedelta(days=7)).isoformat().replace("+00:00", "Z")
+    for cat in ("music", "ent"):
+        for i, x in enumerate((((load_prev("youtube") or {}).get("tw") or {}).get(cat) or [])[:10]):
+            if (x.get("at") or "") >= cut:
+                c.append({"name": x["title"][:60], "src": "YouTube 熱門", "how": f"7 天內上架、發燒第 {i + 1}", "w": round(0.8 - i * 0.04, 2)})
+    best = {}
+    for x in c:   # 同一個來源的同一項只留最強的那筆
+        k = (x["src"], x["name"])
+        if k not in best or x["w"] > best[k]["w"]:
+            best[k] = x
+    return list(best.values())
+
+
+def _wind_onchart(name, q):
+    """只出現在討論面的話題：查它是不是其實在某個榜上（只是沒在爬）。"""
+    keys = [k.lower() for k in {name, q} if len(k) >= 2]
+    ap, pop = load_prev("appstore") or {}, load_prev("pop") or {}
+    rows = [("App 下載", x["rank"], x["name"]) for x in ap.get("free") or []] + [("App 營收", x["rank"], x["name"]) for x in ap.get("gross") or []]
+    rows += [(nm, x["rank"], f"{x.get('artist', '')} {x.get('title', '')}") for k, nm in (("spotify", "Spotify"), ("kkbox", "KKBOX")) for x in pop.get(k) or []]
+    rows += [("Netflix", x["rank"], f"{x.get('show', '')} {x.get('title', '')}") for k in ("tv", "films") for x in (pop.get("netflix") or {}).get(k) or []]
+    rows += [("電影票房", i + 1, x["name"]) for i, x in enumerate(((load_prev("attention") or {}).get("box") or {}).get("items") or [])]
+    for src, rk, txt in rows:
+        t = txt.lower()
+        if any(k in t for k in keys):
+            return {"src": src, "name": txt.strip(), "how": f"在榜上第 {rk} 名（沒有在爬）"}
+    return None
+
+
+def _wind_talk():
+    """說：公開討論的標題（PTT、Mobile01、LINE TODAY、Google 焦點新聞、時尚媒體）。"""
+    t = []
+    t += [("PTT", x["title"]) for x in ((load_prev("ptt") or {}).get("items") or [])[:30]]
+    t += [("Mobile01", x["title"]) for x in ((load_prev("forums") or {}).get("m01") or [])[:25]]
+    t += [("LINE TODAY", x["title"]) for x in ((load_prev("pop") or {}).get("line") or [])[:15]]
+    t += [("新聞焦點", x["t"]) for x in ((load_prev("gtop") or {}).get("items") or [])[:30]]
+    t += [("時尚媒體", x["title"]) for x in ((load_prev("media") or {}).get("items") or [])[:16]]
+    return t
+
+
+def p_wind():
+    import math
+    if not GEMINI_KEY:
+        raise RuntimeError("未設定 GEMINI_API_KEY")
+    t0 = time.time()
+    do, talk = _wind_do(), _wind_talk()
+    if len(do) < 8:
+        raise RuntimeError(f"wind: 排行素材不足（{len(do)}）")
+    hist = json.loads(WIND_HIST.read_text(encoding="utf-8")) if WIND_HIST.exists() else {}
+    known = sorted({k for d in sorted(hist)[-7:] for k in hist[d]})[:80]
+    try:
+        social = json.loads(WIND_SOCIAL.read_text(encoding="utf-8")) if WIND_SOCIAL.exists() else {}
+    except Exception:  # noqa: BLE001
+        social = {}
+    if social.get("date") and social["date"] < (NOW.astimezone(TPE).date() - timedelta(days=2)).isoformat():
+        social = {}   # 兩天以上沒更新就不用
+    do_txt = "\n".join(f"D{i}. [{x['src']}] {x['name']}（{x['how']}）" for i, x in enumerate(do))
+    talk_txt = "\n".join(f"T{i}. [{s}] {ttl[:70]}" for i, (s, ttl) in enumerate(talk))
+    prompt = f"""你在幫台灣的消費趨勢觀察站整理「這幾天台灣人在消費、在追什麼」。
+A 是行為面：各排行榜上正在爬升或剛進榜的項目（下載、收聽、觀看、票房、搜尋）。B 是討論面：論壇、新聞、時尚媒體的熱門標題。
+
+任務：找出跟消費、娛樂、生活風格有關的「話題」，一個話題是一件具體的事：一部作品、一個 App、一首歌或一位歌手的新作、一個品牌或商品、一種吃法或生活習慣、一個活動。
+- 同一件事出現在不同地方要合併成一個話題（例如同一部劇的 Netflix 排名、原聲帶、相關新聞）。
+- 只出現在 B 的話題也要列，只要它跟消費或生活風格有關。
+- 不要列：政治、選舉、社會案件、天災、股市個股、單純的體育比賽結果、政府服務（健保、報稅、兌獎這類季節性工具 App 也不要）、Gmail／LINE 這種常駐大 App。
+- 名稱用台灣常見的中文叫法（外國作品用台灣譯名，沒有就原文），2–12 字。
+- 這些是最近幾天用過的名稱，同一件事請沿用：{json.dumps(known, ensure_ascii=False)}
+- q 是拿去 Google 新聞搜尋的關鍵字，1–3 個詞，要能精準找到這件事（例如作品名，不要加「熱門」「討論」這種詞）。
+- 最多 24 個話題，依你判斷的重要性排序。
+
+A：
+{do_txt}
+
+B：
+{talk_txt}
+
+只輸出 JSON：
+{{"topics": [{{"name": "名稱", "q": "搜尋詞", "cat": "{'／'.join(WIND_CATS)} 其中一個", "do": ["D 編號"], "talk": ["T 編號"]}}],
+ "line": "一句 40 字內的判讀：這幾天台灣消費者的注意力往哪裡走。只根據上面的資料，不要用「不是…而是…」句型"}}"""
+    data, model = _gemini_json(prompt, max_tokens=7000, timeout=90, lite_first=True, max_models=3)
+    topics = []
+    d_idx = lambda s: int(s[1:]) if isinstance(s, str) and s[:1] == "D" and s[1:].isdigit() and int(s[1:]) < len(do) else None  # noqa: E731
+    t_idx = lambda s: int(s[1:]) if isinstance(s, str) and s[:1] == "T" and s[1:].isdigit() and int(s[1:]) < len(talk) else None  # noqa: E731
+    errs = []
+    for tp in (data.get("topics") or [])[:24]:
+        name = str(tp.get("name") or "").strip()[:20]
+        q = str(tp.get("q") or name).strip()[:40]
+        if not name:
+            continue
+        dl = [do[i] for i in map(d_idx, tp.get("do") or []) if i is not None]
+        tl = [talk[i] for i in map(t_idx, tp.get("talk") or []) if i is not None]
+        srcs = sorted({x["src"] for x in dl})
+        y = min(1.0, max([x["w"] for x in dl], default=0) + 0.12 * max(0, len(srcs) - 1))   # 做：最強的那個排行，多一個來源加一點
+        if not dl and (oc := _wind_onchart(name, q)):
+            dl, y = [oc], 0.5   # 在榜上但沒在爬：放在中線上；有人講就算真流行，沒人講就是還沒動，不算安靜成長
+        row = {"name": name, "q": q, "cat": tp.get("cat") if tp.get("cat") in WIND_CATS else "生活習慣",
+               "do": [{"src": x["src"], "name": x["name"], "how": x["how"]} for x in dl][:5],
+               "talk": [{"src": s, "title": ttl} for s, ttl in tl][:5], "y": round(y, 2), **({"static": True} if dl and dl[0]["how"].endswith("（沒有在爬）") else {})}
+        if time.time() - t0 < 150:   # 新聞篇數：近 7 天 vs 前 7 天（同一個時間窗、同一把尺，不同類別才比得起來）
+            try:
+                news = _gnews_full(" ".join(f'"{w}"' for w in q.split()) + " when:14d")
+                ats = [datetime.fromisoformat(x["at"].replace("Z", "+00:00")) for x in news]
+                n7 = sum(1 for a in ats if a >= NOW - timedelta(days=7))
+                row["news7"], row["news_p7"] = n7, sum(1 for a in ats if a < NOW - timedelta(days=7))
+                row["news_capped"] = len(news) >= 95
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{name} 新聞: {safe_err(e)}")
+            time.sleep(0.4)
+        mentions = {}
+        for s, _ttl in tl:
+            mentions[s] = mentions.get(s, 0) + 1
+        soc = ((social.get("topics") or {}).get(name)) or {}
+        for k_, v_ in soc.items():
+            if isinstance(v_, (int, float)) and v_ > 0:
+                mentions[k_] = mentions.get(k_, 0) + int(v_)
+        row["mentions"] = mentions
+        # 說：新聞量（對數，約 100 篇＝1）＋熱門標題與社群提及（每則 0.1，最多 0.4）
+        n7 = row.get("news7")
+        x_ = (math.log10(n7 + 1) / 2 if n7 is not None else 0.3) + min(0.4, 0.1 * sum(mentions.values()))
+        row["x"] = round(min(1.0, x_), 2)
+        if n7 is not None:
+            p7 = row["news_p7"]
+            row["talk_trend"] = "up" if n7 >= max(3, p7 * 1.5) else "down" if p7 >= max(3, n7 * 1.5) else "flat"
+        topics.append(row)
+    if not topics:
+        raise RuntimeError(f"wind: Gemini 沒有回話題（{model}）")
+    today = NOW.astimezone(TPE).date().isoformat()
+    hist[today] = {r["name"]: [r["x"], r["y"]] for r in topics}
+    hist = {d: hist[d] for d in sorted(hist)[-30:]}
+    write_json(WIND_HIST, hist, separators=(",", ":"))
+    last7 = sorted(hist)[-7:]
+    for r in topics:
+        seen = [hist[d][r["name"]] for d in last7 if r["name"] in hist[d]]
+        r["days"] = len(seen)
+        r["first"] = next((d for d in sorted(hist) if r["name"] in hist[d]), today)
+        quiet_days = sum(1 for xx, yy in seen if yy >= 0.5 and xx < 0.5)
+        if r.get("static"):
+            r["quad"] = "hit" if r["x"] >= 0.5 else "low"
+        elif r["y"] >= 0.5 and r["x"] >= 0.5:
+            r["quad"] = "hit"        # 真流行：大家在買在看，也在講
+        elif r["y"] >= 0.5:
+            r["quad"] = "quiet" if quiet_days >= 3 else "new"   # 安靜成長（連 3 天以上）／剛冒出來
+        elif r["x"] >= 0.5:
+            r["quad"] = "hype"       # 只有聲量：在講，但排行上看不到
+        else:
+            r["quad"] = "low"
+    order = {"quiet": 0, "hit": 1, "new": 2, "hype": 3, "low": 4}
+    topics.sort(key=lambda r: (order[r["quad"]], -(r["y"] + r["x"])))
+    quads = {k: sum(1 for r in topics if r["quad"] == k) for k in order}
+    return {"label": "排行（做）× 討論（說）", "line": str(data.get("line") or "")[:60], "topics": topics, "quads": quads,
+            "src_do": sorted({x["src"] for x in do}), "src_talk": sorted({s for s, _ in talk}) + (["社群（Threads・Dcard・IG）"] if social else []),
+            "social_at": social.get("date"), "hist_days": len(hist), "model": model, "errs": errs[:8]}
+
+
 # ---------- 國道・省道即時路況（彰化機房抓的高公局、公路局資料） ----------
 ROADS_GEO_PATH = DATA / "roads_geo.json"
 ROADS_LIVE_PATH = DATA / "roads_live.json"
@@ -13608,6 +13805,7 @@ run("think", p_think, keep_if_fresh_hours=2)
 run("voice", p_voice, keep_if_fresh_hours=6 if not [k for k in (HISTORY.get("voice_news") or {}) if k not in {x["k"] for x in json.loads(VOICE_KW_PATH.read_text(encoding="utf-8"))["keywords"]}] else 0)  # 有該刪的舊序列就馬上重跑
 run("pop", p_pop, keep_if_fresh_hours=3)
 run("appstore", p_appstore, keep_if_fresh_hours=6)  # App Store 台灣三個榜；一天記一次排名算爬升
+run("wind", p_wind, keep_if_fresh_hours=6)  # 消費風向：吃 pop、appstore、attention、trends、youtube、ptt、forums、gtop、media 的結果；6 小時一次（Gemini 1 次＋Google 新聞約 24 次）
 run("roads", p_roads)
 run("cctv", p_cctv, keep_if_fresh_hours=12 if CCTV_PATH.exists() and '"tc"' in CCTV_PATH.read_text(encoding="utf-8") else 1)   # 攝影機清單（地圖車流視角）
 run("mapfeed", p_mapfeed, cheap=True)  # 吃本輪其他面板的結果，不打外部 API
