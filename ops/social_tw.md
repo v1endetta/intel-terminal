@@ -16,40 +16,46 @@
 
 ## 1. 話題清單
 
-讀 `https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/panels/wind.json`，取 `topics` 裡 quad 不是 `low` 的前 10 個（照原順序）。每個話題用 `name`（寫回 JSON 的鍵）和 `q`（搜尋詞）。
+讀 `https://raw.githubusercontent.com/v1endetta/intel-terminal/data/data/panels/wind.json`，取 `topics` 裡 quad 不是 `low` 的前 10 個（照原順序）。每個話題用 `name`（寫回 JSON 的鍵）。搜尋詞＝`name` 把「：·〈〉《》「」」換成空白；比對用的詞（TOKS）＝搜尋詞用空白切開、轉小寫。
+
+**`browser_batch` 整批有 50 秒上限**（11/3 試跑實測）：Threads 一批最多 3 個話題、Dcard 一批最多 3 頁，超過會中斷。
 
 ## 2. Threads：每天幾篇
 
-每個話題：導到 `https://www.threads.com/search?q=<q 編碼>&serp_type=default&filter=recent`，再執行：
+每個話題：導到 `https://www.threads.com/search?q=<搜尋詞編碼>&serp_type=default&filter=recent`，執行（K 換成話題名、TOKS 換成比對詞陣列）：
 
 ```js
-const sl=ms=>new Promise(r=>setTimeout(r,ms)); await sl(3000);
-const seen=new Set(), now=Date.now(), grab=()=>document.querySelectorAll('time[datetime]').forEach(x=>seen.add(x.getAttribute('datetime')));
-for(let i=0;i<12;i++){grab(); const t=[...seen].map(Date.parse); if(t.length>=40||(t.length&&now-Math.min(...t)>6048e5))break; window.scrollBy(0,innerHeight*0.9); await sl(1500+Math.random()*800);}
-grab(); const t=[...seen].map(Date.parse).filter(x=>now-x<6048e5), span=t.length?(now-Math.min(...t))/36e5:0;
-({n:t.length, perDay:+(t.length/Math.max(span,24)*24).toFixed(1), login:/登入|Log in/.test(document.title)})
+const sl=ms=>new Promise(r=>setTimeout(r,ms)); await sl(2000); const toks=TOKS;
+const seen=new Map(), now=Date.now(), grab=()=>document.querySelectorAll('time[datetime]').forEach(x=>{const c=x.closest('[data-pressable-container]'); const s=(c?c.innerText:'').toLowerCase(); seen.set(x.getAttribute('datetime'), !c||toks.every(t=>s.includes(t)));});
+for(let i=0;i<6;i++){grab(); const t=[...seen.keys()].map(Date.parse); if(t.length>=40||(t.length&&now-Math.min(...t)>6048e5))break; window.scrollBy(0,innerHeight*0.9); await sl(1000+Math.random()*400);}
+grab(); const t=[...seen].filter(([k,ok])=>ok).map(([k])=>Date.parse(k)).filter(x=>now-x<6048e5), span=t.length?(now-Math.min(...t))/36e5:0;
+({k:K, n:t.length, spanH:+span.toFixed(1), perDay:t.length>=3?+Math.min(999,t.length/Math.max(span,1)*24).toFixed(1):+(t.length/7).toFixed(1), login:/登入|Log in/.test(document.title)})
 ```
 
-`perDay` 就是 Threads 的值。列表是虛擬捲動，所以要邊捲邊收集時間。5 個話題一批，分兩批。
+`perDay` 就是 Threads 的值：用「收集到的貼文跨了幾小時」換算每天幾篇（Threads 一次只載入十幾篇，熱門話題十幾篇可能只跨 3–5 小時）。列表是虛擬捲動，要邊捲邊收集；只算內文含全部比對詞的貼文（Threads 搜尋會拆字）。
 
-## 3. Dcard：近 7 天幾篇
+## 3. Dcard：近 7 天幾篇（最多 5 個話題）
 
-每個話題：導到 `https://www.dcard.tw/search?query=<q 編碼>&sort=created`，執行（把 Q 換成 q）：
+**Dcard 會擋太快的連續瀏覽**（11/3 試跑：約 12 頁連續載入後跳出 Cloudflare「需要確認您的連線是安全的」）。所以：只查前 5 個話題、每頁等 8 秒再算、一批 3 頁；任何一頁標題含「確認您的連線」「請稍候」「Just a moment」，Dcard 今天整個停掉，已拿到的數字照用，不要重試、不要繞過。
+
+每個話題：導到 `https://www.dcard.tw/search?query=<搜尋詞編碼>&sort=created`，執行：
 
 ```js
-await new Promise(r=>setTimeout(r,2500)); const q=Q, now=Date.now();
-({n7:[...document.querySelectorAll('article')].filter(a=>a.innerText.includes(q)&&now-Date.parse(a.querySelector('time[datetime]')?.getAttribute('datetime')||0)<6048e5).length})
+await new Promise(r=>setTimeout(r,8000)); const toks=TOKS, now=Date.now();
+const cf=/確認您的連線|請稍候|Just a moment/.test(document.title);
+({k:K, cf, n7:cf?null:[...document.querySelectorAll('article')].filter(a=>{const s=a.innerText.toLowerCase(); return toks.every(t=>s.includes(t))&&now-Date.parse(a.querySelector('time[datetime]')?.getAttribute('datetime')||0)<6048e5}).length})
 ```
 
-Dcard 搜尋會拆字，所以要再確認文章裡真的有完整的詞。
+Dcard 搜尋會拆字，所以要確認文章裡有全部比對詞。
 
-## 4. Dcard 各板熱門
+## 4. Dcard 各板熱門（3 個板）
 
-板：`makeup` 美妝、`dressup` 穿搭、`food` 美食、`buyonline` 網購、`girl` 女孩、`fitness` 健身。導到 `https://www.dcard.tw/f/<板>?tab=popular`，執行：
+板：`makeup` 美妝、`dressup` 穿搭、`buyonline` 網購（Dcard 有被擋的話跳過）。導到 `https://www.dcard.tw/f/<板>?tab=popular`，執行：
 
 ```js
-await new Promise(r=>setTimeout(r,2500)); const now=Date.now();
-[...document.querySelectorAll('article')].map(a=>({h:(a.querySelector('h2,h3')?.innerText||'').slice(0,50), d:(now-Date.parse(a.querySelector('time[datetime]')?.getAttribute('datetime')||0))/864e5})).filter(x=>x.h&&x.d<3).map(x=>x.h)
+await new Promise(r=>setTimeout(r,8000)); const now=Date.now();
+const cf=/確認您的連線|請稍候|Just a moment/.test(document.title);
+({cf, t:cf?[]:[...document.querySelectorAll('article')].map(a=>({h:(a.querySelector('h2,h3')?.innerText||'').slice(0,50), d:(now-Date.parse(a.querySelector('time[datetime]')?.getAttribute('datetime')||0))/864e5})).filter(x=>x.h&&x.d<3).map(x=>x.h)})
 ```
 
 ## 5. IG 探索頁
@@ -62,7 +68,7 @@ for(let i=0;i<3;i++){document.querySelectorAll('a[href*="/p/"],a[href*="/reel/"]
 [...seen.values()].filter(Boolean)
 ```
 
-這是演算法推給這個帳號的內容（帳號追蹤的是各類台灣大眾帳號），代表「平台在推什麼」，不是全台灣在討論什麼。
+這是演算法推給這個帳號的內容（帳號追蹤的是各類台灣大眾帳號），代表「平台在推什麼」，不是全台灣在討論什麼。帳號還沒追蹤名單上的帳號前，探索頁內容很雜、只載入幾則，讀到少於 5 則就把 ig 記成實際數字、不放進 hot。
 
 ## 6. 歸納與寫檔
 
