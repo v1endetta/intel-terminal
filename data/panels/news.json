@@ -76,16 +76,23 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "Ikea among shops affected by fridge cyber-hacks – Europe live",
-   "url": "https://www.theguardian.com/world/live/2026/nov/02/ukraine-russia-emergency-warning-systems-hack-zelenskyy-streeting-eu-latest-news-updates",
-   "at": "2026-11-02T16:17:14Z",
+   "title": "Shop fridges and freezers across Europe hit by fresh suspected cyber-attack",
+   "url": "https://www.theguardian.com/world/2026/nov/02/supermarket-freezers-across-europe-hit-by-second-suspected-cyber-attack",
+   "at": "2026-11-02T16:39:20Z",
    "sec": "World news"
   },
   {
    "source": "Guardian",
-   "title": "Supermarket freezers across Europe hit by second suspected cyber-attack",
-   "url": "https://www.theguardian.com/world/2026/nov/02/supermarket-freezers-across-europe-hit-by-second-suspected-cyber-attack",
-   "at": "2026-11-02T15:45:05Z",
+   "title": "Oil price falls amid hope of a breakthrough to end Iran war",
+   "url": "https://www.theguardian.com/business/2026/nov/02/oil-price-falls-amid-hope-of-a-breakthrough-to-end-iran-war",
+   "at": "2026-11-02T16:37:24Z",
+   "sec": "Business"
+  },
+  {
+   "source": "Guardian",
+   "title": "Ikea among shops affected by fridge cyber-hacks – Europe live",
+   "url": "https://www.theguardian.com/world/live/2026/nov/02/ukraine-russia-emergency-warning-systems-hack-zelenskyy-streeting-eu-latest-news-updates",
+   "at": "2026-11-02T16:17:14Z",
    "sec": "World news"
   },
   {
@@ -145,13 +152,6 @@
    "title": "Uganda begins withdrawing troops from Somalia after 20 years",
    "url": "https://www.bbc.co.uk/news/articles/c8zxlqxwed4do?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-02T12:05:34Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "Hackers send fake nuclear threat alert to Ukraine emergency app",
-   "url": "https://www.theguardian.com/world/2026/nov/02/hackers-fake-nuclear-chemical-threat-alert-kyiv-ukraine-emergency-app",
-   "at": "2026-11-02T11:11:28Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -759,21 +759,6 @@
     "hot": true
    },
    {
-    "term": "ChatGPT",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "OpenAI 論壇",
-     "TechCrunch",
-     "Yahoo 財經"
-    ],
-    "sample": {
-     "title": "科技｜OpenAI下月起ChatGPT與Codex共用額度 改按Token計用量",
-     "url": "https://news.google.com/rss/articles/CBMiswJBVV95cUxOaTFrNzRHT0tGX0l2LS1hZVhfQy03MWtaV0EwSF82TVkweDc3eEgxc1B6dTdFUGlMMEpDMl9RMDVVay04ZHhHRHA2V0M4THVKaUZaQ3pvRGpmczFmSFdpRXZiLXlZaU1tam9DeWlReWZvNmtJUm9hSDZsWlQ1XzJJMkpUTndSTld0cGxFRDd3SlRJUjc5ZVdDLVRuakRHZjhLYjk1eURZSXpHdXlGZlR1dEhvNGlfbWFNb3RrRmRaNmV0Nm9MX180MXY0WWR1NTFNVlhVcFVXbWJKekxTWDlKZUVRUHlOM0YxM194M2xsQm5xRWdpSXNydUt2TmYxNXI2bi1TdnF1SHVtUll4STJFWkNWQUNsWFRWRmEwNHJLUnVCMUt5d2h2azR3MkZjMVFvNU9Z?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "台積電",
     "n": 3,
     "src": 3,
@@ -875,11 +860,25 @@
      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9TR2wtcXpIZEJFUlBBNkJJclFrbU0xSDVlTTFMczZobDU3SFhtcWhzQjJ2V3FMNDRweEZ1MFRNb205ZUx5bzF0YlgyVDR3amFGZThIVDZmR3czUlNZS3VXVExlVERpVXYyR2oweEJLZk8?oc=5"
     },
     "hot": false
+   },
+   {
+    "term": "Russian",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "BBC",
+     "LinkedIn"
+    ],
+    "sample": {
+     "title": "Fake nuclear warnings issued after Ukrainian and Russian air",
+     "url": "https://www.bbc.co.uk/news/articles/c51kdy1ew7zvo?at_medium=RSS&at_campaign=rss"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: KeyError: 'timeline'"
  ],
- "updatedAt": "2026-11-02T16:21:47Z"
+ "updatedAt": "2026-11-02T16:42:00Z"
 }
