@@ -75,17 +75,17 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": " Crypto ‘scammers on overdrive’ as Binance customers pull billions from accounts after $6.",
+   "url": "https://www.theguardian.com/business/live/2026/nov/02/crypto-scam-binance-billion-hack-business-live-latest-updates-news",
+   "at": "2026-11-02T08:44:57Z",
+   "sec": "Business"
+  },
+  {
    "source": "BBC",
    "title": "Ryanair may freeze workers' pay and raise fares on higher fuel prices",
    "url": "https://www.bbc.co.uk/news/articles/cr0qkve1x224o?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-02T08:33:57Z"
-  },
-  {
-   "source": "Guardian",
-   "title": " Crypto ‘scammers on overdrive’ as Binance customers pull billions from accounts after $6.",
-   "url": "https://www.theguardian.com/business/live/2026/nov/02/crypto-scam-binance-billion-hack-business-live-latest-updates-news",
-   "at": "2026-11-02T08:32:40Z",
-   "sec": "Business"
   },
   {
    "source": "BBC",
@@ -632,24 +632,24 @@
      "kw": "獨立書店 OR 誠品"
     },
     {
-     "source": "蕃新聞",
-     "title": "北加州台灣客家會辦艾草粄DIY 吸引逾60人親子參與",
-     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBxVEpKSUEyRV92eXV4cTBxcGd1R0s4UlZXb0pGaExVd2F2d2lBYjAyN3lNcFRlSG9vWGxGOWdtNXF0Tng4UjRIWlNvN01BcnJqVEE?oc=5",
-     "at": "2026-10-29T05:40:16Z",
-     "kw": "灣區 OR 舊金山 OR 加州 台灣人"
-    },
-    {
      "source": "UDN",
      "title": "翔愛協會連2年捐200萬 助北屯27校急難學童安心就學",
      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9FVGdfQVhKLUlXcFpKMk9ud3hGZl9tNy1ST0ktc0NzQmpXWERGTkp3djNzUmpTQlRLdjJkYnZJNWMyLTNkd0VodEdGb0tFT3Jt0gFWQVVfeXFMTzVKVFlfM1d6czNPbnZzODl2aDBBLTdNRjVyb3BfYnBnT25fVkhWbmxiYlF2ZEkyelJwNUs3d1ZRSGxrcWUyNFhyUkRGdFNRMXo2TUwtZ2c?oc=5",
      "at": "2026-11-02T06:54:31Z",
      "kw": "潭子 OR 台中 北屯"
+    },
+    {
+     "source": "Facebook",
+     "title": "【林口廟宇過火20多人腳燒傷 醫示警「3狀況」恐已傷深層組織】 光聽就好痛。 （#起啵）",
+     "url": "https://news.google.com/rss/articles/CBMi1wNBVV95cUxNMGFoV2M1TzA3NndNZ3RvMkRPX0FYQWRqVUl6b0FYSjNHTlBxS0h6ckJDZFc5WXRUS3dkM3ZsWThHVWJrSHBTNU5BeE9VR2p0RUItVGZhUU8tR185TUREZTlPckJPTTVHbDZUbUg4SGFnbmVTNXRzMTY3OGJRaDlOeTlDY01ucFJnV2Z1V1AycGdRNHdQMDhwRTB0MkxjV0pmWGhHYVNyRl9MR2tRMGdKYksxaUM2WWdUN3dBaXZKU3ZXLVZydjdxQ3JnMnBwRG82OTRod2o3VTl0clRSTlprYjIwVmRoeVBrZXFYMEdLdzZIdE8tQTk5UWFvcXlBYzlGcHhHN0xOWFlsZlpGMGFDdFBqREFQQktFc0t5MDNWVGw2M1dfU29EQmlkWkZPcVFwY2RDekFoUG9jUGVhU3dwLXpjb3g2RmJ6LXJ3VUpOc2pIN0YwOHVjV2RXYXFvTUlqX01zb2VCMTVXZHl4dl9xQjFTenI3TG1aeGVPS3dYMlpxR1ZHbWstTzJCTWtfOGpPalV5MngzRVlOb1dLNXZ4emtYRVJVaWIwUDRvMVB6OGNxWVcxeHNOQTV4dHBicXdqZUpFRjJyZ1doRWQtS2FBUi1RWXZ2STg?oc=5",
+     "at": "2026-11-02T02:23:31Z",
+     "kw": "廟宇 OR 媽祖 OR 民間信仰"
     }
    ],
    "daily7": [
-    9,
-    18,
-    13,
+    10,
+    19,
+    12,
     14,
     26,
     41,
@@ -757,7 +757,7 @@
     "hot": true
    },
    {
-    "term": "期中選舉",
+    "term": "國期中選",
     "n": 3,
     "src": 3,
     "sources": [
@@ -876,7 +876,7 @@
   ]
  },
  "errs": [
-  "gdelt: KeyError: 'timeline'"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-02T08:35:44Z"
+ "updatedAt": "2026-11-02T08:54:02Z"
 }
