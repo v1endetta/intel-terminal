@@ -3788,6 +3788,7 @@ def p_appstore():
 WIND_HIST = DATA / "wind_hist.json"      # 每天每個話題的 [說, 做]，留 30 天，算「連續幾天」
 WIND_SOCIAL = DATA / "social_tw.json"    # Threads／Dcard／IG 每日彙總（內建瀏覽器排程推上來，只有話題與次數）
 WIND_CATS = ["影視", "音樂", "App", "遊戲", "品牌商品", "飲食", "生活習慣", "活動", "人物"]
+WIND_CHART_CATS = {"影視", "音樂", "App", "遊戲"}   # 有排行可以對照的類別；其他類別（實體商品、飲食…）沒有銷售榜，不在榜上不代表沒人買
 
 
 def _wind_do():
@@ -3898,7 +3899,7 @@ A 是行為面：各排行榜上正在爬升或剛進榜的項目（下載、收
 - 名稱用台灣常見的中文叫法（外國作品用台灣譯名，沒有就原文），2–12 字。
 - 這些是最近幾天用過的名稱，同一件事請沿用：{json.dumps(known, ensure_ascii=False)}
 - q 是拿去 Google 新聞搜尋的關鍵字，1–3 個詞，要能精準找到這件事（例如作品名，不要加「熱門」「討論」這種詞）。
-- 最多 24 個話題，依你判斷的重要性排序。
+- 盡量涵蓋 A 裡每一種來源（App、音樂、Netflix、票房、YouTube、熱搜）各至少 1–2 個，再加上 B 裡的消費話題；目標 16–24 個話題，依你判斷的重要性排序。
 
 A：
 {do_txt}
@@ -3973,11 +3974,13 @@ B：
             r["quad"] = "hit"        # 真流行：大家在買在看，也在講
         elif r["y"] >= 0.5:
             r["quad"] = "quiet" if quiet_days >= 3 else "new"   # 安靜成長（連 3 天以上）／剛冒出來
-        elif r["x"] >= 0.5:
+        elif r["x"] >= 0.5 and r["cat"] in WIND_CHART_CATS:
             r["quad"] = "hype"       # 只有聲量：在講，但排行上看不到
+        elif r["x"] >= 0.5:
+            r["quad"] = "talk"       # 有在講，但這類東西沒有銷售榜可對照（實體商品、飲食、生活習慣）
         else:
             r["quad"] = "low"
-    order = {"quiet": 0, "hit": 1, "new": 2, "hype": 3, "low": 4}
+    order = {"quiet": 0, "hit": 1, "new": 2, "hype": 3, "talk": 4, "low": 5}
     topics.sort(key=lambda r: (order[r["quad"]], -(r["y"] + r["x"])))
     quads = {k: sum(1 for r in topics if r["quad"] == k) for k in order}
     return {"label": "排行（做）× 討論（說）", "line": str(data.get("line") or "")[:60], "topics": topics, "quads": quads,
