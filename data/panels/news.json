@@ -788,6 +788,21 @@
     "hot": true
    },
    {
+    "term": "ChatGPT",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "OpenAI 論壇",
+     "TechCrunch",
+     "Yahoo 財經"
+    ],
+    "sample": {
+     "title": "科技｜OpenAI下月起ChatGPT與Codex共用額度 改按Token計用量",
+     "url": "https://news.google.com/rss/articles/CBMiswJBVV95cUxOaTFrNzRHT0tGX0l2LS1hZVhfQy03MWtaV0EwSF82TVkweDc3eEgxc1B6dTdFUGlMMEpDMl9RMDVVay04ZHhHRHA2V0M4THVKaUZaQ3pvRGpmczFmSFdpRXZiLXlZaU1tam9DeWlReWZvNmtJUm9hSDZsWlQ1XzJJMkpUTndSTld0cGxFRDd3SlRJUjc5ZVdDLVRuakRHZjhLYjk1eURZSXpHdXlGZlR1dEhvNGlfbWFNb3RrRmRaNmV0Nm9MX180MXY0WWR1NTFNVlhVcFVXbWJKekxTWDlKZUVRUHlOM0YxM194M2xsQm5xRWdpSXNydUt2TmYxNXI2bi1TdnF1SHVtUll4STJFWkNWQUNsWFRWRmEwNHJLUnVCMUt5d2h2azR3MkZjMVFvNU9Z?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "OpenAI",
     "n": 3,
     "src": 3,
@@ -799,21 +814,6 @@
     "sample": {
      "title": "科技｜OpenAI下月起ChatGPT與Codex共用額度 改按Token計用量",
      "url": "https://news.google.com/rss/articles/CBMiswJBVV95cUxOaTFrNzRHT0tGX0l2LS1hZVhfQy03MWtaV0EwSF82TVkweDc3eEgxc1B6dTdFUGlMMEpDMl9RMDVVay04ZHhHRHA2V0M4THVKaUZaQ3pvRGpmczFmSFdpRXZiLXlZaU1tam9DeWlReWZvNmtJUm9hSDZsWlQ1XzJJMkpUTndSTld0cGxFRDd3SlRJUjc5ZVdDLVRuakRHZjhLYjk1eURZSXpHdXlGZlR1dEhvNGlfbWFNb3RrRmRaNmV0Nm9MX180MXY0WWR1NTFNVlhVcFVXbWJKekxTWDlKZUVRUHlOM0YxM194M2xsQm5xRWdpSXNydUt2TmYxNXI2bi1TdnF1SHVtUll4STJFWkNWQUNsWFRWRmEwNHJLUnVCMUt5d2h2azR3MkZjMVFvNU9Z?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "Claude",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "Fierce Healt",
-     "HN",
-     "TechNews 科技新"
-    ],
-    "sample": {
-     "title": "Athenahealth launches tool to bring patient health records i",
-     "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQMU9mUnA3eGNRaE42VV9SdE5yWFpwUVBWazdiNFV2QmpsWFY5V1hrdV9wMEJiUFIxamVLaXNLNmNTczRGRHZkMWlDT0JWUkhhZExkc25BeWhxNDN2TThXcUszN3dVcU5VS3NCbzUySmRva0NjRmFHVmNfTXhRTWlUYWswVzNzRjRjQ3JKbk9pX2tKM2d1cHlQUWRBSDZfblZSTkV5Z2VzRnJJVTNVem05VmUwTzE3OGE1dXVZN0JJMlQydHpHUS1tVVR3?oc=5"
     },
     "hot": true
    },
@@ -880,7 +880,7 @@
   ]
  },
  "errs": [
-  "gdelt: KeyError: 'timeline'"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-02T15:13:51Z"
+ "updatedAt": "2026-11-02T15:29:41Z"
 }
