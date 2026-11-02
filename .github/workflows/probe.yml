@@ -1,0 +1,27 @@
+name: probe
+# 暫時探測（嘖嘖、Lyst），結果推到 probe-out 分支；用完刪掉這個檔與 ops/probe.py
+on:
+  push:
+    branches: [main]
+    paths: [ops/probe.py, .github/workflows/probe.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests curl_cffi
+      - run: python ops/probe.py /tmp/probe
+      - name: push results
+        run: |
+          cd /tmp/probe
+          git init -q -b probe-out
+          git config user.name "intel-bot"; git config user.email "intel-bot@users.noreply.github.com"
+          git add -A && git commit -qm "probe $(date -u +%FT%TZ)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" probe-out
