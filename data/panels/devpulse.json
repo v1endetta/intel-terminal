@@ -3,21 +3,11 @@
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "Let's extend the codex rate limit ourself with a little trick",
-   "url": "https://community.openai.com/t/lets-extend-the-codex-rate-limit-ourself-with-a-little-trick/1411709",
-   "replies": 0,
-   "likes": 5,
-   "views": 95,
-   "at": "2026-11-01T18:20:13Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
    "title": "DELETE /v1/organization/admin_api_keys/{key_id} returns 404 with empty body (GET on the sa",
    "url": "https://community.openai.com/t/delete-v1-organization-admin-api-keys-key-id-returns-404-with-empty-body-get-on-the-same-id-returns-200/1411757",
    "replies": 3,
    "likes": 17,
-   "views": 64,
+   "views": 65,
    "at": "2026-11-01T22:29:32Z"
   },
   {
@@ -27,7 +17,7 @@
    "url": "https://community.openai.com/t/why-chatgpt-has-become-less-useful-to-me/1411846",
    "replies": 1,
    "likes": 4,
-   "views": 82,
+   "views": 84,
    "at": "2026-11-02T05:13:11Z"
   },
   {
@@ -37,7 +27,7 @@
    "url": "https://community.openai.com/t/the-hidden-tokens-in-your-agent-harness/1411729",
    "replies": 8,
    "likes": 8,
-   "views": 89,
+   "views": 93,
    "at": "2026-11-01T19:47:40Z"
   },
   {
@@ -47,18 +37,18 @@
    "url": "https://community.openai.com/t/why-shared-chatgpt-and-codex-limits-could-disrupt-research-code-review-and-continuous-development/1411856",
    "replies": 0,
    "likes": 2,
-   "views": 65,
+   "views": 66,
    "at": "2026-11-02T05:40:04Z"
   },
   {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Account suspended again: Multi-agent setup calling Antigravity CLI",
-   "url": "https://discuss.ai.google.dev/t/account-suspended-again-multi-agent-setup-calling-antigravity-cli/197297",
-   "replies": 3,
-   "likes": 0,
-   "views": 59,
-   "at": "2026-11-01T18:25:14Z"
+   "source": "OpenAI 論壇",
+   "vendor": "openai",
+   "title": "Export ChatGPT Answers and Conversations as PDF",
+   "url": "https://community.openai.com/t/export-chatgpt-answers-and-conversations-as-pdf/1411736",
+   "replies": 0,
+   "likes": 2,
+   "views": 42,
+   "at": "2026-11-01T19:52:10Z"
   },
   {
    "source": "Google AI 論壇",
@@ -67,7 +57,7 @@
    "url": "https://discuss.ai.google.dev/t/ai-studio-tts-returns-http-403-and-api-keys-shows-permission-denied/197454",
    "replies": 0,
    "likes": 1,
-   "views": 16,
+   "views": 17,
    "at": "2026-11-02T04:06:47Z"
   },
   {
@@ -77,7 +67,7 @@
    "url": "https://discuss.ai.google.dev/t/why-only-gemini-3-8-flash-on-antigravity-pro-plan-via-jio/197616",
    "replies": 1,
    "likes": 0,
-   "views": 37,
+   "views": 41,
    "at": "2026-11-02T07:31:06Z"
   },
   {
@@ -87,8 +77,18 @@
    "url": "https://discuss.ai.google.dev/t/previous-gemini-2-5-pro-usage-on-vertex-ai-does-it-qualify-for-legacy-gemini-developer-api-access/197503",
    "replies": 2,
    "likes": 0,
-   "views": 28,
+   "views": 29,
    "at": "2026-11-02T04:24:27Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "Gemini API 401 ACCESS_TOKEN_TYPE_UNSUPPORTED with AI Studio AQ authorization key",
+   "url": "https://discuss.ai.google.dev/t/gemini-api-401-access-token-type-unsupported-with-ai-studio-aq-authorization-key/197473",
+   "replies": 2,
+   "likes": 0,
+   "views": 28,
+   "at": "2026-11-02T04:08:45Z"
   },
   {
    "source": "Google AI 論壇",
@@ -97,7 +97,7 @@
    "url": "https://discuss.ai.google.dev/t/ai-studio-app-suspended-for-abuse-requesting-review/197547",
    "replies": 2,
    "likes": 0,
-   "views": 27,
+   "views": 29,
    "at": "2026-11-02T05:56:44Z"
   }
  ],
@@ -141,6 +141,15 @@
   {
    "source": "Claude release notes",
    "vendor": "anthropic",
+   "date": "November 2, 2026",
+   "kind": null,
+   "title": "Long conversations and agent loops on the Messages API can now send smaller requests and get a lower time to first token with message thread",
+   "url": "https://platform.claude.com/docs/en/release-notes/overview",
+   "at": "2026-11-02T00:00:00Z"
+  },
+  {
+   "source": "Claude release notes",
+   "vendor": "anthropic",
    "date": "October 30, 2026",
    "kind": null,
    "title": "We’ve deprecated fast mode for Claude Opus 4.8, with removal on November 30, 2026.",
@@ -164,15 +173,6 @@
    "title": "We’ve raised the maximum request size for the Messages API and the Token Counting API from 32 MB to 128 MB on the first-party Claude API.",
    "url": "https://platform.claude.com/docs/en/release-notes/overview",
    "at": "2026-10-28T00:00:00Z"
-  },
-  {
-   "source": "Claude release notes",
-   "vendor": "anthropic",
-   "date": "October 23, 2026",
-   "kind": null,
-   "title": "The Claude Tag API is available in beta for Claude Enterprise organizations with the experimental-claude-tag-2026-10-21 beta header.",
-   "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-10-23T00:00:00Z"
   },
   {
    "source": "Gemini changelog",
@@ -297,9 +297,9 @@
  ],
  "errs": [],
  "diag": [
-  "Gemini changelog md: got html 130400b",
+  "Gemini changelog md: got html 130411b",
   "DeepSeek updates md: 18816b 0 entries head='# Change Log\\n\\n***\\n\\n## Date: 2026-10-17\\n\\n### Opening up the i'",
   "xAI release notes md: 19458b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### Custom '"
  ],
- "updatedAt": "2026-11-02T18:41:27Z"
+ "updatedAt": "2026-11-02T19:47:42Z"
 }
