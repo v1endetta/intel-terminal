@@ -1,42 +1,28 @@
-"""暫時探測：台電行業別售電量 ZIP 內容、勞保資料集的所有資源（有沒有往年）。用完刪掉。"""
-import json, sys, csv, io, zipfile
+"""暫時探測：勞動部月報 6-1 有沒有 xls、主計總處薪資調查的檔案清單。用完刪掉。"""
+import json, sys, re
 from pathlib import Path
 import requests
 OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
 S = requests.Session(); S.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 dalta-intel/1.0", "Accept-Language": "zh-TW,zh;q=0.9"})
 rep = {}
-def dec(b):
-    for enc in ("utf-8-sig", "cp950"):
-        try: return b.decode(enc)
-        except UnicodeDecodeError: pass
-    return b.decode("utf-8", "replace")
-for ds in ["31966", "33369", "33357"]:
+def hit(name, url):
     try:
-        r = (S.get(f"https://data.gov.tw/api/v2/rest/dataset/{ds}", timeout=40).json().get("result") or {})
-        rep[ds] = {"title": r.get("title"), "modified": r.get("modifiedDate") or r.get("updated"), "n_dist": len(r.get("distribution") or []),
-                   "dist_all": [(d.get("resourceDescription"), d.get("resourceFormat"), d.get("resourceDownloadUrl")) for d in (r.get("distribution") or []) if d.get("resourceFormat") == "CSV"], "dist": [{"desc": d.get("resourceDescription"), "fmt": d.get("resourceFormat"), "url": d.get("resourceDownloadUrl")} for d in (r.get("distribution") or [])][:12]}
+        r = S.get(url, timeout=60)
+        rep[name] = {"status": r.status_code, "ctype": r.headers.get("content-type", "")[:50], "len": len(r.content), "server": r.headers.get("server", "")[:20]}
+        if "html" in rep[name]["ctype"]:
+            t = r.text
+            rep[name]["title"] = (re.search(r"<title>(.*?)</title>", t, re.S) or [None, ""])[1].strip()[:80]
+            rep[name]["links"] = sorted(set(re.findall(r'href="([^"]+\.(?:xlsx?|ods|csv|pdf))"', t, re.I)))[:40]
+            rep[name]["links2"] = sorted(set(re.findall(r'href="([^"]*(?:Download|download|dl\.asp|File)[^"]*)"', t)))[:30]
+            (OUT / f"{name}.html").write_text(t[:200000], encoding="utf-8")
+        else:
+            (OUT / f"{name}.bin").write_bytes(r.content[:3_000_000])
     except Exception as e:
-        rep[ds] = {"err": str(e)[:200]}
-# 台電 ZIP
-try:
-    zu = next(d["url"] for d in rep["31966"]["dist"] if d["fmt"] == "ZIP")
-    b = S.get(zu, timeout=180).content
-    z = zipfile.ZipFile(io.BytesIO(b)); info = {"bytes": len(b), "files": [(f.filename, f.file_size) for f in z.infolist()][:20]}
-    f0 = next(f for f in z.infolist() if f.filename == "行業別售電_2025.csv")
-    rows = list(csv.reader(io.StringIO(dec(z.read(f0)))))
-    info["sample_file"] = f0.filename; info["n"] = len(rows); info["head"] = rows[:3]; info["tail"] = rows[-3:]
-    info["col0_vals"] = sorted({r[0] for r in rows[1:] if r})[:40]
-    info["col1_vals"] = sorted({r[1] for r in rows[1:] if len(r) > 1})[:60]
-    rep["taipower_zip"] = info
-except Exception as e:
-    rep["taipower_zip"] = {"err": f"{type(e).__name__}: {str(e)[:200]}"}
-def peek(u):
-    rows = list(csv.reader(io.StringIO(dec(S.get(u, timeout=120).content))))
-    return {"n": len(rows), "head": rows[0][:26], "row1": rows[1][:26], "last": rows[-1][:26]}
-for ds in ("33369", "33357"):
-    try:
-        latest = rep[ds]["dist_all"][-1]
-        rep[ds + "_latest"] = {"desc": latest[0], "url": latest[2], **peek(latest[2])}
-    except Exception as e:
-        rep[ds + "_latest"] = {"err": str(e)[:200]}
+        rep[name] = {"err": f"{type(e).__name__}: {str(e)[:200]}"}
+    print(name, json.dumps(rep[name], ensure_ascii=False)[:600], flush=True)
+for ext in ("xls", "xlsx", "ods", "csv"):
+    hit(f"mol26010_{ext}", f"https://statdb.mol.gov.tw/html/mon/26010.{ext}")
+hit("mol26010_pdf", "https://statdb.mol.gov.tw/html/mon/26010.pdf")
+hit("mol_mon_index", "https://statdb.mol.gov.tw/statis/jspProxy.aspx?sys=100&kind=10&type=1&funid=q13011")
+hit("dgbas_2712", "https://www.stat.gov.tw/cl.aspx?n=2712")
 (OUT / "report.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding="utf-8")
