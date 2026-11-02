@@ -76,9 +76,27 @@
  "intl": [
   {
    "source": "BBC",
-   "title": "Russian bombing kills 24 people at Ukraine aid centre, Kyiv says",
+   "title": "Russian bombing kills 26 people at Ukraine aid centre, Kyiv says",
    "url": "https://www.bbc.co.uk/news/articles/cjy56dndlyz0o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-02T19:37:10Z"
+   "at": "2026-11-02T20:23:12Z"
+  },
+  {
+   "source": "BBC",
+   "title": "Man guilty of stealing cash from farm owned by South African president",
+   "url": "https://www.bbc.co.uk/news/articles/c9vgrvpk4l6eo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-02T20:08:51Z"
+  },
+  {
+   "source": "BBC",
+   "title": "Copilot in deadly Florida jet crash identified in reports as 20-year-old",
+   "url": "https://www.bbc.co.uk/news/articles/cm369yy7lw73o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-02T19:58:34Z"
+  },
+  {
+   "source": "BBC",
+   "title": "Trump to remove Rwanda and South Africa from US trade deal",
+   "url": "https://www.bbc.co.uk/news/articles/c9j346xg0mkvo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-02T19:33:10Z"
   },
   {
    "source": "BBC",
@@ -130,27 +148,6 @@
    "title": "Oil price falls amid hope of a breakthrough to end Iran war",
    "url": "https://www.theguardian.com/business/2026/nov/02/oil-price-falls-amid-hope-of-a-breakthrough-to-end-iran-war",
    "at": "2026-11-02T17:14:23Z",
-   "sec": "Business"
-  },
-  {
-   "source": "Guardian",
-   "title": "Shop fridges and freezers across Europe hit by fresh suspected cyber-attack",
-   "url": "https://www.theguardian.com/world/2026/nov/02/supermarket-freezers-across-europe-hit-by-second-suspected-cyber-attack",
-   "at": "2026-11-02T16:39:20Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Ikea among shops affected by fridge cyber-hacks – Europe live",
-   "url": "https://www.theguardian.com/world/live/2026/nov/02/ukraine-russia-emergency-warning-systems-hack-zelenskyy-streeting-eu-latest-news-updates",
-   "at": "2026-11-02T16:17:14Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Binance releases proof of reserves data for ten cryptocurrencies; oil tumbles amid hopes o",
-   "url": "https://www.theguardian.com/business/live/2026/nov/02/crypto-scam-binance-billion-hack-business-live-latest-updates-news",
-   "at": "2026-11-02T15:07:29Z",
    "sec": "Business"
   }
  ],
@@ -835,20 +832,6 @@
     "hot": false
    },
    {
-    "term": "需求",
-    "n": 3,
-    "src": 2,
-    "sources": [
-     "中央社",
-     "索引新聞"
-    ],
-    "sample": {
-     "title": "吳誠文：南科新園區明年啟動程序　因應1奈米晶圓廠建置需求",
-     "url": "https://www.cna.com.tw/news/afe/202611020319.aspx"
-    },
-    "hot": false
-   },
-   {
     "term": "Grid Protectors",
     "n": 2,
     "src": 2,
@@ -875,11 +858,25 @@
      "url": "https://x.ai/news/x-subscription"
     },
     "hot": false
+   },
+   {
+    "term": "Florida",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "BBC",
+     "Intelligent"
+    ],
+    "sample": {
+     "title": "Copilot in deadly Florida jet crash identified in reports as",
+     "url": "https://www.bbc.co.uk/news/articles/cm369yy7lw73o?at_medium=RSS&at_campaign=rss"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-02T20:06:09Z"
+ "updatedAt": "2026-11-02T20:30:26Z"
 }
