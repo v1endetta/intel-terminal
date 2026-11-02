@@ -174,7 +174,7 @@ Claude 端（不在 repo）：情報站晨間判讀排程、客戶雷達私人 a
 |---|---|
 | 總覽 | `theses` 論點追蹤 · `insights`／`insights_cat` 洞見（Gemini） · 摘要 brief |
 | 市場 | `pulse` 5 分鐘線 · `taiex` · `tw_market` · `taifex` · `fx` · `world` · `usbig` · `ust` 美債殖利率 · `fear` 恐慌結構 · `sectors` **美股板塊** · `commodities`（p-cmdty，含海運） · `logistics` 全球物流 · `luxury`（p-lux） · `tw_stocks` · `revenue` · `mops` |
-| 總經 | `aicycle` AI 循環 · `champions` 台灣隱形冠軍 · `twsectors` 台灣內需產業 · `dlead` dalta 領先指標 · `credit` 信用利差 · `exports` 出口結構 · `stress` 企業壓力 · `calendar`／`mktcal` · `liquidity`（p-liq） · `macro` · `gmacro` · `supply` · `consume` · `cards` · `lead` · `imports` · `housefc` · `house` · `demo` · `bizlife` · `cars` · `permits` · `renewal` 都更 · `prices` 物價細項 · `tourism` · `poly` · `veg`／`fruit`／`fish`／`meat` |
+| 總經 | `aicycle` AI 循環 · `champions` 台灣隱形冠軍 · `twsectors` 台灣內需產業 · `labor` 誰在擴張 · `dlead` dalta 領先指標 · `credit` 信用利差 · `exports` 出口結構 · `stress` 企業壓力 · `calendar`／`mktcal` · `liquidity`（p-liq） · `macro` · `gmacro` · `supply` · `consume` · `cards` · `lead` · `imports` · `housefc` · `house` · `demo` · `bizlife` · `cars` · `permits` · `renewal` 都更 · `prices` 物價細項 · `tourism` · `poly` · `veg`／`fruit`／`fish`／`meat` |
 | 走向 | `weekly`（weekly.py） · `chain` 主題鏈 · `ledger` 預測帳本 · `voice` 趨勢雷達 · `wiki` · `tech2` · `gap` 台灣還沒報 · `migration` · `births` · 地圖工具（圈地報告、住哪裡） |
 | 訊號 | `news`＋watch 關注領域 · `tenders`／`awards`／`tendermap` · `design` · `radar` 公司雷達 · `brands`／`taxreg` 新品牌 · `uspolicy` · `ossuse` · `clinics` · `aesthetic` 醫美 · `grants` · `crowd` · `aiwire` · `devpulse` · `tech` · `oss` · `lyst` · `media` · `think` · `corp` · `policy` · `ipr` · `secwords` |
 | 輿情 | `pop` · `appstore` App 排行 · `gtop` 焦點新聞 · `worldnews` · `townnews` 鄉鎮新聞 · `youtube` · `attention` · `mood` 台灣情緒（Gemini 判讀 PTT、Cofacts、Mobile01、Bluesky） · `cofacts` · `polls` 民調 · `forums` Mobile01 · `ptt` · `social` Bluesky · `trends` |
@@ -299,6 +299,7 @@ RI=999999 STEPS="wait|15000;js|(__story.openAt('總經','內需產業'),1);wait|
 | ⏳ 待驗證 | 經濟部統計處（外銷訂單 `lead`、零售指數 `supply`）對國外機房 Cloudflare 403：`ops/tw_relay.py` 的 `moea_daily` 每天代抓存 `relay/static/moea_orders`、`moea_retail`，`fetch.py` 的 `_moea_text()` 直接抓失敗就讀這份。零售 11/2 已恢復；外銷訂單等 `lead` 下次更新（24 小時一次）確認 `errs` 沒有 403 |
 | ✅ 已拿掉（11/2，Vin 拍板） | 104 職缺：API 自 10/22 起總數一律回 1001，`jobs`／`jobtowns` 抓取、終端機面板、3D 晶片與地圖圖層、縣市卡、圈地報告的職缺列都拿掉；`fetch.py` 開頭會刪掉留下的面板檔與 `history.json` 的 `jobs` 群組。替代評估：1111 只有總數和關鍵字篩選、沒有地區、連續查約 30 次就 403；台灣就業通開放資料只給 1,000 筆不能分頁；518、yes123 沒有總數；Cake 被 Cloudflare 擋。都不接。終端機裡 `renderJobs` 等程式碼沒有資料就不會跑，留著無害 |
 | ⚠️ 已知 | AI 廠商動態 `devpulse.diag` 寫「md got html」「0 entries」是正常的：markdown 版失敗後改讀網頁版，Gemini、DeepSeek、xAI 都有抓到 |
+| ⏳ 待驗證 | 誰在擴張 `labor`（11/2 上線，取代 104）：勞動部統計月報 xlsx（`statdb.mol.gov.tw/html/mon/{表號}.xlsx`，GitHub 讀得到）：26010 勞保投保人數按行業（最近 13 個月）、22120 廠商職位空缺按行業（每季）、24040 積欠工資墊償（月，官方的年增與今年累計年增直接讀表上那兩列）。自寫 `_xlsx_rows()` 讀 xlsx（沒裝 openpyxl）。判讀：投保年增 >1% 且職缺年增 >5% 擴張；職缺年增 >10% 但投保 ≤0.5% 缺工；歷史存 `labor_ins`、`labor_vac`、`labor_arrears`。月報其他可用的表：27010 就業保險按行業、22010～22110 勞動力與失業。下一步「勞動溫度計」合成指標還缺：主計總處加班工時與進入率（要從台灣抓取站試主計總處資料庫表號）、能源署產業用電（擋 GitHub，走台灣抓取站）。勞保開放資料（data.gov.tw 33369）與台電行業別售電（31966）一年才釋出一次，不用 |
 | ⏳ 待驗證 | 3D 卡片隨資料更新重畫（`refresh_patch.py`）還沒實測 |
 | ✅ 已驗證 | 停班停課 22 縣市全部抓到（每個地區第一列少一格的問題）；雨量沒下雨的縣市記 0 |
 | ✅ 已驗證 | 藝文活動：新北市不再被算成臺北市（10/30 新北市 18、臺北市 61） |

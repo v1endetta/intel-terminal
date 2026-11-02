@@ -11938,6 +11938,173 @@ def p_exports():
             "src": "財政部統計資料庫（出口按國家×主要貨品、出口按主要貨品）、財政部進出口貿易值國別總表（開放資料，較晚更新）"}
 
 
+# ---------- 誰在擴張（勞動硬數據，克強式）：勞保投保人數（月）、職位空缺（季）、積欠工資墊償（月），勞動部統計月報 xlsx ----------
+# 2026-11 拿掉 104 後的替代：不看求職網刊登，看真的有在上班、有投保的人和官方調查的職缺
+MOL_MON = "https://statdb.mol.gov.tw/html/mon/{}.xlsx"
+_XM = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
+
+
+def _xlsx_rows(b: bytes):
+    """最小的 xlsx 讀取（不用 openpyxl）：第一張工作表 → [{欄字母: 字串}]。"""
+    z = zipfile.ZipFile(io.BytesIO(b))
+    ss = []
+    if "xl/sharedStrings.xml" in z.namelist():
+        ss = ["".join(t.text or "" for t in si.iter(_XM + "t")) for si in ET.fromstring(z.read("xl/sharedStrings.xml")).findall(_XM + "si")]
+    sheet = sorted(n for n in z.namelist() if n.startswith("xl/worksheets/sheet"))[0]
+    rows = []
+    for r in ET.fromstring(z.read(sheet)).iter(_XM + "row"):
+        d = {}
+        for c in r.findall(_XM + "c"):
+            v = c.find(_XM + "v")
+            x = v.text if v is not None else ""
+            if c.get("t") == "s" and x:
+                x = ss[int(x)]
+            d[re.sub(r"\d", "", c.get("r"))] = x or ""
+        rows.append(d)
+    return rows
+
+
+_nz = lambda s: re.sub(r"[\s　]+", "", str(s or "")).replace("；強制性社會安全", "")
+
+
+def _mol_ym_rows(rows, col_a="A"):
+    """月報的列標籤：「114年底」「8月底」「115年3月底」「115年」「  8月」→ 依序帶出年份，回傳 [(YYYY-MM, row)]；年度彙總列略過。"""
+    out, yr = [], None
+    for d in rows:
+        lab = _nz(d.get(col_a))
+        m = re.match(r"^(\d{2,3})年(?:底)?$", lab)
+        if m:
+            yr = int(m.group(1)) + 1911; continue
+        m = re.match(r"^(?:(\d{2,3})年)?(\d{1,2})月(?:底)?$", lab)
+        if m:
+            if m.group(1):
+                yr = int(m.group(1)) + 1911
+            if yr:
+                out.append((f"{yr}-{int(m.group(2)):02d}", d))
+    return out
+
+
+def _mol_heads(rows, must):
+    """找到含 must 的表頭列，回傳 {欄字母: 行業名}（同一列有兩段表也一起收）。"""
+    for d in rows:
+        if any(must in _nz(v) for v in d.values()):
+            return {k: _nz(v) for k, v in d.items() if _nz(v) and not _nz(v).startswith("年月底別")}
+    return {}
+
+
+def _col_next(c):
+    n = 0
+    for ch in c:
+        n = n * 26 + ord(ch) - 64
+    n += 1
+    s = ""
+    while n:
+        n, r = divmod(n - 1, 26); s = chr(65 + r) + s
+    return s
+
+
+def p_labor():
+    errs = []
+    # 1) 勞保投保人數－按行業（表 6-1）：最近 13 個月的月底人數
+    ins_rows = _xlsx_rows(get(MOL_MON.format("26010"), timeout=60).content)
+    heads = _mol_heads(ins_rows, "總計")
+    ym = _mol_ym_rows(ins_rows)
+    if len(ym) < 13:
+        raise RuntimeError(f"labor: 投保表只有 {len(ym)} 個月")
+    ins = {}   # 行業 → {YYYY-MM: 人數}
+    for col, name in heads.items():
+        pc = _col_next(col)   # 人數在「單位數」的下一欄
+        for k, d in ym:
+            v = num(d.get(pc))
+            if v:
+                ins.setdefault(name, {})[k] = v
+    last = max(k for k, _ in ym)
+    prev = sorted(k for k, _ in ym)[-2]
+    ly = f"{int(last[:4]) - 1}{last[4:]}"
+    pct = lambda a, b: round((a / b - 1) * 100, 2) if a and b else None
+    for name, s in ins.items():
+        for k, v in s.items():
+            hist_put("labor_ins", name, k, v)
+    # 2) 職位空缺－按行業（表 2-12，每季）
+    vac, vac_rate, vlast, vly = {}, {}, None, None
+    try:
+        vr = _xlsx_rows(get(MOL_MON.format("22120"), timeout=60).content)
+        vh = _mol_heads(vr, "總計")
+        vym = _mol_ym_rows(vr)
+        for col, name in vh.items():
+            rc = _col_next(col)
+            for k, d in vym:
+                v = num(d.get(col))
+                if v is not None:
+                    vac.setdefault(name, {})[k] = v
+                    vac_rate.setdefault(name, {})[k] = num(d.get(rc))
+        vlast = max(k for k, _ in vym)
+        vly = f"{int(vlast[:4]) - 1}{vlast[4:]}"
+        for name, s in vac.items():
+            for k, v in s.items():
+                hist_put("labor_vac", name, k, v)
+    except Exception as e:  # noqa: BLE001
+        errs.append("職位空缺: " + safe_err(e))
+    rows = []
+    for name, s in ins.items():
+        if name == "總計":
+            continue
+        v_s, r_s = vac.get(name) or {}, vac_rate.get(name) or {}
+        iy, im = pct(s.get(last), s.get(ly)), pct(s.get(last), s.get(prev))
+        vy = pct(v_s.get(vlast), v_s.get(vly)) if vlast else None
+        if iy is None:
+            verdict = ""
+        elif vy is not None and iy > 1 and vy > 5:
+            verdict = "擴張"
+        elif vy is not None and vy > 10 and iy <= 0.5:
+            verdict = "缺工"        # 職缺變多、人卻沒增加：招不到人
+        elif iy < -1 and (vy is None or vy < -5):
+            verdict = "收縮"
+        elif iy > 1:
+            verdict = "加人"
+        elif iy < -1:
+            verdict = "減人"
+        else:
+            verdict = "持平"
+        rows.append({"name": name, "ins": s.get(last), "ins_yoy": iy, "ins_mom": im,
+                     "spark": [s[k] for k in sorted(s)][-13:], "vac": v_s.get(vlast), "vac_yoy": vy, "vac_rate": r_s.get(vlast), "verdict": verdict})
+    rows.sort(key=lambda r: -(r["ins_yoy"] if r["ins_yoy"] is not None else -99))
+    tot, vt = ins.get("總計") or {}, vac.get("總計") or {}
+    total = {"ins": tot.get(last), "ins_yoy": pct(tot.get(last), tot.get(ly)), "ins_mom": pct(tot.get(last), tot.get(prev)),
+             "spark": [tot[k] for k in sorted(tot)][-13:], "vac": vt.get(vlast) if vlast else None,
+             "vac_yoy": pct(vt.get(vlast), vt.get(vly)) if vlast else None, "vac_rate": (vac_rate.get("總計") or {}).get(vlast) if vlast else None,
+             "vac_series": [[k, vt[k]] for k in sorted(vt)][-12:]}
+    # 3) 積欠工資墊償（表 4-4，每月）：公司付不出薪水、基金先墊付
+    arrears = None
+    try:
+        ar_raw = _xlsx_rows(get(MOL_MON.format("24040"), timeout=60).content)
+        ar = _mol_ym_rows(ar_raw)
+        offi = {}   # 表上官方算好的比較（%）：本月與上年同月、本年累計與上年同期
+        for d in ar_raw:
+            lab = _nz(d.get("A"))
+            if lab.startswith("本月與上年同月比較"):
+                offi["yoy"] = num(d.get("D"))
+            elif lab.startswith("本年累計與上年同期比較"):
+                offi["ytd_yoy"] = num(d.get("D"))
+        ser = {k: {"units": num(d.get("C")), "persons": num(d.get("D")), "amt": num(d.get("E"))} for k, d in ar if num(d.get("D")) is not None}
+        for k, v in ser.items():
+            hist_put("labor_arrears", "persons", k, v["persons"]); hist_put("labor_arrears", "units", k, v["units"])
+        h = dict(HISTORY.get("labor_arrears", {}).get("persons", []))   # 表上只有最近 13 個月；累積歷史才能比更早
+        am = max(ser)
+        aly = f"{int(am[:4]) - 1}{am[4:]}"
+        ytd = sum((ser.get(f"{am[:4]}-{m:02d}") or {}).get("persons") or 0 for m in range(1, int(am[5:]) + 1))
+        yoy = offi.get("yoy") if offi.get("yoy") is not None else pct(ser[am]["persons"], (ser.get(aly) or {}).get("persons") or h.get(aly))
+        arrears = {"month": am, **ser[am], "yoy": yoy, "ytd": ytd, "ytd_yoy": offi.get("ytd_yoy"),
+                   "series": [[k, ser[k]["persons"], ser[k]["units"]] for k in sorted(ser)][-13:]}
+    except Exception as e:  # noqa: BLE001
+        errs.append("積欠工資墊償: " + safe_err(e))
+    cnt = {}
+    for r in rows:
+        cnt[r["verdict"]] = cnt.get(r["verdict"], 0) + 1
+    return {"asof_ins": last, "asof_vac": vlast, "total": total, "rows": rows, "verdicts": cnt, "arrears": arrears, "errs": errs,
+            "src": "勞動部統計月報：表 6-1 勞保投保人數（按行業）、表 2-12 廠商職位空缺（每季）、表 4-4 積欠工資墊償"}
+
+
 # ---------- 企業壓力：退票（央行）＋ 減班休息（勞動部每月兩次公布；官方沒有結構化資料，從新聞標題抽數字） ----------
 def p_stress():
     errs, out = [], {}
@@ -13199,6 +13366,7 @@ run("ust", p_ust, keep_if_fresh_hours=3 if '"td"' in json.dumps(load_prev("ust")
 run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Federal Register 每個工作日早上出刊
 run("exports", p_exports, keep_if_fresh_hours=24 if "nonee_yoy3" in json.dumps(load_prev("exports") or {}) else 0)  # 新增非電子出口時先重抓一次； 台灣出口結構：月資料，每月 9 日前後公布
 run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
+run("labor", p_labor, keep_if_fresh_hours=24)  # 誰在擴張：勞動部統計月報（投保人數、職位空缺、積欠工資墊償），月資料一天看一次就好
 run("logistics", p_logistics, keep_if_fresh_hours=1)  # 全球物流：風暴要即時，運價週／日資料
 run("aicycle", p_aicycle, keep_if_fresh_hours=6)
 run("champions", p_champions, keep_if_fresh_hours=12)  # 台灣隱形冠軍：月營收，半天抓一次  # AI 循環：資本支出一季一次、營收每月、DRAM 每日
