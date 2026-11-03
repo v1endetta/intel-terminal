@@ -1,13 +1,148 @@
 {
- "alerts": [],
- "n_total": 0,
+ "alerts": [
+  {
+   "id": "CWA-Weather_strong-wind_202611031054001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "桃園市",
+    "屏東縣",
+    "澎湖縣"
+   ],
+   "text": "東北風偏強，3日上午至晚上桃園市、屏東縣、澎湖縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-11-03T02:54:24Z",
+   "exp": "2026-11-03T22:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611031054.cap"
+  },
+  {
+   "id": "CWA-Weather_extremely-rain_202611031042001",
+   "cat": "降雨",
+   "lvl": 2,
+   "area": [
+    "宜蘭縣",
+    "花蓮縣",
+    "臺東縣"
+   ],
+   "text": "東北季風影響，今(3)日宜蘭、花蓮及臺東地區有局部大雨發生的機率，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-11-03T02:42:27Z",
+   "exp": "2026-11-03T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202611031042.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261103101840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "雲林縣",
+    "嘉義縣"
+   ],
+   "text": "水利署訊湖山水庫:(洩洪至北港溪):自由溢流,影響範圍:雲林縣，古坑鄉、虎尾鎮、水林鄉、斗六市、莿桐鄉、土庫鎮、斗南鎮、北港鎮、元長鄉、口湖鄉、大埤鄉；嘉義縣，新港鄉、溪口鄉、六腳鄉、東石鄉",
+   "src": "水利署",
+   "at": "2026-11-03T02:18:40Z",
+   "exp": "2026-11-03T13:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261103101840_0001.cap"
+  },
+  {
+   "id": "WRA_ReservoirWarn_20261103100840_0001",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "新竹市",
+    "新竹縣"
+   ],
+   "text": "水利署訊寶山第二水庫:(洩洪至石井溪):自由溢流,影響範圍:新竹縣，寶山鄉、峨眉鄉；新竹市，東區、北區、香山區",
+   "src": "水利署",
+   "at": "2026-11-03T02:08:40Z",
+   "exp": "2026-11-03T13:09:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261103100840_0001.cap"
+  },
+  {
+   "id": "CWA-Weather_strong-wind_202611030432001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "屏東縣",
+    "澎湖縣"
+   ],
+   "text": "東北風偏強，3日晨至晚上苗栗縣、臺中市、彰化縣、屏東縣、澎湖縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-11-02T20:32:16Z",
+   "exp": "2026-11-03T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611030432.cap"
+  },
+  {
+   "id": "CWA-Weather_strong-wind_202611022224001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "桃園市",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "屏東縣",
+    "澎湖縣",
+    "連江縣"
+   ],
+   "text": "東北風偏強，2日晚上至3日晚上桃園市、苗栗縣、臺中市、彰化縣、屏東縣、澎湖縣、連江縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-11-02T14:24:50Z",
+   "exp": "2026-11-03T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611022224.cap"
+  },
+  {
+   "id": "CWA-Weather_strong-wind_202611021642001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "桃園市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "屏東縣",
+    "澎湖縣",
+    "金門縣",
+    "連江縣"
+   ],
+   "text": "東北風偏強，2日下午至3日晚上桃園市、新竹縣、苗栗縣、臺中市、彰化縣、屏東縣、澎湖縣、金門縣、連江縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-11-02T08:42:47Z",
+   "exp": "2026-11-03T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611021642.cap"
+  },
+  {
+   "id": "CWA-Weather_strong-wind_202611021032001",
+   "cat": "強風",
+   "lvl": 2,
+   "area": [
+    "桃園市",
+    "新竹縣",
+    "苗栗縣",
+    "臺中市",
+    "彰化縣",
+    "屏東縣",
+    "澎湖縣",
+    "金門縣",
+    "連江縣"
+   ],
+   "text": "東北風增強，2日上午至3日晚上桃園市、新竹縣、苗栗縣、臺中市、彰化縣、屏東縣、澎湖縣、金門縣、連江縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-11-02T02:32:52Z",
+   "exp": "2026-11-03T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611021032.cap"
+  }
+ ],
+ "n_total": 8,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/11/03 11:13:24"
+  "updated": "2026/11/03 11:31:15"
  },
- "errs": [
-  "災害示警: ConnectionError: HTTPSConnectionPool(host='alerts.ncdr.nat.gov.tw', port=443): Max retries exceeded with url: /RssAtomFeed.ashx (Caused by NewConnectionError(\"HTTPSConnection(ho"
- ],
- "updatedAt": "2026-11-03T03:20:47Z"
+ "errs": [],
+ "updatedAt": "2026-11-03T03:36:55Z"
 }
