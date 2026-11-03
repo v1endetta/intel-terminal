@@ -1,6 +1,6 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的注意力高度聚焦在熱門遊戲新作、電影票房強片以及各大品牌的雙11購物優惠與新品上市話題上。",
+ "line": "這幾天台灣消費者的注意力主要集中在熱門電影票房、強檔遊戲更新、音樂新作以及年末時尚美妝與聖誕倒數月曆話題。",
  "topics": [
   {
    "name": "泥面人",
@@ -15,12 +15,16 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 25,
-   "news_p7": 35,
+   "news7": 28,
+   "news_p7": 44,
    "news_capped": false,
+   "social": {
+    "Threads": 45.1,
+    "Dcard": 4
+   },
    "mentions": {},
-   "x": 0.71,
-   "talk_trend": "flat",
+   "x": 1.0,
+   "talk_trend": "down",
    "days": 1,
    "first": "2026-11-03",
    "quad": "hit"
@@ -41,8 +45,12 @@
    "news7": 18,
    "news_p7": 24,
    "news_capped": false,
+   "social": {
+    "Threads": 15.4,
+    "Dcard": 1
+   },
    "mentions": {},
-   "x": 0.64,
+   "x": 0.87,
    "talk_trend": "flat",
    "days": 1,
    "first": "2026-11-03",
@@ -64,39 +72,13 @@
    "news7": 19,
    "news_p7": 0,
    "news_capped": false,
-   "mentions": {},
-   "x": 0.65,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-03",
-   "quad": "hit"
-  },
-  {
-   "name": "薩爾達傳說：時之笛重製版",
-   "q": "薩爾達傳說 時之笛重製版",
-   "cat": "遊戲",
-   "do": [
-    {
-     "src": "Google 熱搜",
-     "name": "薩爾達",
-     "how": "搜尋 500+"
-    }
-   ],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "《薩爾達傳說：時之笛重製版》確定登陸Switch 2！青沼英二坦言感到緊張，同步推主題主機與控制器"
-    }
-   ],
-   "y": 0.6,
-   "news7": 8,
-   "news_p7": 9,
-   "news_capped": false,
-   "mentions": {
-    "新聞焦點": 1
+   "social": {
+    "Threads": 73,
+    "Dcard": 2
    },
-   "x": 0.58,
-   "talk_trend": "flat",
+   "mentions": {},
+   "x": 1.0,
+   "talk_trend": "up",
    "days": 1,
    "first": "2026-11-03",
    "quad": "hit"
@@ -117,16 +99,48 @@
    "news7": 8,
    "news_p7": 9,
    "news_capped": false,
+   "social": {
+    "Threads": 19.8,
+    "Dcard": 3
+   },
    "mentions": {},
-   "x": 0.48,
+   "x": 0.77,
    "talk_trend": "flat",
    "days": 1,
    "first": "2026-11-03",
-   "quad": "new"
+   "quad": "hit"
+  },
+  {
+   "name": "薩爾達傳說：時之笛重製版",
+   "q": "薩爾達傳說 時之笛重製版",
+   "cat": "遊戲",
+   "do": [],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "《薩爾達傳說：時之笛重製版》確定登陸Switch 2！青沼英二坦言感到緊張，同步推主題主機與控制器"
+    }
+   ],
+   "y": 0.0,
+   "news7": 8,
+   "news_p7": 9,
+   "news_capped": false,
+   "social": {
+    "Threads": 37.6,
+    "Dcard": 0
+   },
+   "mentions": {
+    "新聞焦點": 1
+   },
+   "x": 0.82,
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-03",
+   "quad": "hype"
   },
   {
    "name": "聖誕倒數月曆",
-   "q": "聖誕倒數月曆 2026",
+   "q": "聖誕倒數月曆",
    "cat": "品牌商品",
    "do": [],
    "talk": [
@@ -136,17 +150,21 @@
     }
    ],
    "y": 0.0,
-   "news7": 22,
+   "news7": 20,
    "news_p7": 14,
    "news_capped": false,
+   "social": {
+    "Threads": 56.6,
+    "Dcard": 0
+   },
    "mentions": {
     "時尚媒體": 1
    },
-   "x": 0.78,
-   "talk_trend": "up",
+   "x": 1.0,
+   "talk_trend": "flat",
    "days": 1,
    "first": "2026-11-03",
-   "quad": "hype"
+   "quad": "talk"
   },
   {
    "name": "Gentle Monster",
@@ -160,85 +178,76 @@
     }
    ],
    "y": 0.0,
-   "news7": 16,
+   "news7": 15,
    "news_p7": 4,
    "news_capped": false,
+   "social": {
+    "Threads": 70.6,
+    "Dcard": 1
+   },
    "mentions": {
     "時尚媒體": 1
    },
-   "x": 0.72,
+   "x": 1.0,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-03",
-   "quad": "hype"
+   "quad": "talk"
   },
   {
    "name": "DJI Osmo Pocket",
    "q": "DJI Osmo Pocket",
    "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "DJI Osmo Pocket 4P 珠光白登場，Pocket 系列台灣年銷售朝 8 萬台邁進！"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 14,
+   "news7": 15,
    "news_p7": 2,
    "news_capped": false,
-   "mentions": {
-    "Mobile01": 1
+   "social": {
+    "Threads": 91.7,
+    "Dcard": 0
    },
-   "x": 0.69,
+   "mentions": {},
+   "x": 0.9,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-03",
-   "quad": "hype"
+   "quad": "talk"
   },
   {
    "name": "Honda CB400",
    "q": "Honda CB400",
    "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "Honda CB400/CB400R E-Clutch正式售價出爐！39.9萬/43.9萬經典回歸！"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
    "news7": 8,
    "news_p7": 2,
    "news_capped": false,
-   "mentions": {
-    "Mobile01": 1
+   "social": {
+    "Threads": 4.1,
+    "Dcard": 0
    },
+   "mentions": {},
    "x": 0.58,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-03",
-   "quad": "hype"
+   "quad": "talk"
   },
   {
    "name": "石頭科技掃拖機器人",
-   "q": "Roborock 石頭 雙11",
+   "q": "石頭科技掃拖機器人",
    "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "Roborock 石頭雙11智慧生活節優惠公布！Saros 20 系列旗艦掃拖機器人線省超過 3.5 萬元！指定機型最低 3 折起"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
    "news7": 4,
    "news_p7": 0,
    "news_capped": false,
-   "mentions": {
-    "Mobile01": 1
-   },
-   "x": 0.45,
+   "mentions": {},
+   "x": 0.35,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-03",
@@ -248,8 +257,9 @@
  "quads": {
   "quiet": 0,
   "hit": 4,
-  "new": 1,
-  "hype": 4,
+  "new": 0,
+  "hype": 1,
+  "talk": 4,
   "low": 1
  },
  "src_do": [
@@ -268,11 +278,12 @@
   "Mobile01",
   "PTT",
   "新聞焦點",
-  "時尚媒體"
+  "時尚媒體",
+  "社群（Threads・Dcard・IG）"
  ],
- "social_at": null,
+ "social_at": "2026-11-03",
  "hist_days": 1,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-02T18:49:05Z"
+ "updatedAt": "2026-11-03T00:59:04Z"
 }
