@@ -641,7 +641,7 @@
     8,
     12,
     15,
-    29,
+    28,
     31,
     2
    ],
@@ -875,7 +875,7 @@
   ]
  },
  "errs": [
-  "gdelt: KeyError: 'timeline'"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-03T00:19:22Z"
+ "updatedAt": "2026-11-03T00:37:21Z"
 }
