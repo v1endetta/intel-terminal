@@ -1011,32 +1011,32 @@
   }
  },
  "relay": {
-  "runs": 71,
+  "runs": 75,
   "since": "2026-11-02T15:50:13+08:00",
-  "avg_sec": 4.8,
+  "avg_sec": 5.0,
   "max_sec": 62.7,
   "sections": {
-   "gtrends": 1.7,
+   "gtrends": 1.6,
    "live": 1.2,
-   "mnd": 0.6,
+   "mnd": 0.9,
    "static": 0.2,
    "geo_b": 0.0
   },
-  "avg_a": 1.34,
-  "avg_b": 1.45,
-  "last": "2026-11-03T17:00:14+08:00"
+  "avg_a": 1.32,
+  "avg_b": 1.48,
+  "last": "2026-11-03T18:15:24+08:00"
  },
  "fetch": {
-  "vault_writes": 10,
-  "relay_reads": 160,
+  "vault_writes": 12,
+  "relay_reads": 164,
   "month": "2026-11",
   "day": 3
  },
  "est": {
-  "vcpu": 39708,
-  "gib": 39708,
-  "a": 3141,
-  "b": 4864
+  "vcpu": 40113,
+  "gib": 40113,
+  "a": 3120,
+  "b": 4970
  },
  "free": {
   "vcpu": 240000,
@@ -1047,12 +1047,12 @@
  "pct": {
   "vcpu": 17,
   "gib": 9,
-  "a": 63,
+  "a": 62,
   "b": 10
  },
  "assume": {
   "runs_day": 75,
   "boot_sec": 10
  },
- "updatedAt": "2026-11-03T09:00:05Z"
+ "updatedAt": "2026-11-03T10:17:09Z"
 }
