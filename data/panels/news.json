@@ -547,13 +547,13 @@
     }
    ],
    "daily7": [
-    8,
-    8,
+    10,
+    9,
+    1,
     2,
-    3,
-    30,
-    106,
-    51
+    23,
+    103,
+    56
    ],
    "days7": [
     "2026-10-29",
@@ -598,8 +598,8 @@
     }
    ],
    "daily7": [
-    9,
-    9,
+    7,
+    8,
     2,
     2,
     8,
@@ -634,26 +634,26 @@
      "kw": "獨立書店 OR 誠品"
     },
     {
+     "source": "蕃新聞",
+     "title": "北加州台灣客家會辦艾草粄DIY 吸引逾60人親子參與",
+     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBxVEpKSUEyRV92eXV4cTBxcGd1R0s4UlZXb0pGaExVd2F2d2lBYjAyN3lNcFRlSG9vWGxGOWdtNXF0Tng4UjRIWlNvN01BcnJqVEE?oc=5",
+     "at": "2026-10-29T05:40:16Z",
+     "kw": "灣區 OR 舊金山 OR 加州 台灣人"
+    },
+    {
      "source": "udn 女子漾",
      "title": "台中北屯住宿【中科大飯店】鄰近文心崇德捷運站、洲際棒球場。入住超酷恐龍主題四人房，台中親子住宿推薦。",
      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5Ud0dHVUk2QnpXQXpKOFQ0dzJ0dFBfR2xrZWVyUnFqUkpEVXlfcFhpZUdwZXdUdmhCSVg3QXNjcmZWaGtMTVdHaV9VOU9WNGNvUFNtTXlBamVPbDl3dVRNSFRR?oc=5",
      "at": "2026-11-03T07:42:22Z",
      "kw": "潭子 OR 台中 北屯"
-    },
-    {
-     "source": "新頭條",
-     "title": "走讀北港百年風華 從媽祖信仰探索糖業與老街記憶",
-     "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE80T1B2UVFTU3IzanY3ZXUzdFRmeUlBSjBteThTOWJoRk9qU3BPSFh5WTJfYkxBeG5qQlZzSVBhU3NWaXVqOEMydndTaXJyYlQtV2RwTQ?oc=5",
-     "at": "2026-11-03T07:52:36Z",
-     "kw": "廟宇 OR 媽祖 OR 民間信仰"
     }
    ],
    "daily7": [
     9,
     8,
-    10,
-    27,
+    9,
     24,
+    20,
     38,
     1
    ],
@@ -824,6 +824,21 @@
     "hot": true
    },
    {
+    "term": "Data",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "SecurityWeek",
+     "TechCrunch",
+     "The HIPAA Jo"
+    ],
+    "sample": {
+     "title": "Marathon Health Data Breach Reportedly Affects 5.7 Million I",
+     "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1xTmNsMXByNmh4MzJPa29PTUJOOE9ubmxoQ1EtRDZ5UGpEY1lfcExBT1FDY3gwMk4waFA3WmUtMnd6MlFCR1RwOUI2U3hqMUM0U3JZZGk3ZzNhTWprRTR6LTRLUUJQR3hw?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "ADR",
     "n": 3,
     "src": 3,
@@ -865,25 +880,11 @@
      "url": "https://www.cna.com.tw/news/aipl/202611030337.aspx"
     },
     "hot": false
-   },
-   {
-    "term": "Breach",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "The HIPAA Jo",
-     "The Hacker N"
-    ],
-    "sample": {
-     "title": "Cognitive Health Technologies Data Breach Affects 49,500 Ind",
-     "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5La3pRNlYySUVWN21oUW1aRnFsSXBrNnBxckxKcjBtQjZyR3pCZmVCcU1Hc0pOcGVrU0xJaHJUQzZFeGJ1VTh6RVhSbE85Q1NXbmRRbnNfemY2X2FSYkRuLVNNWk1XUHNDUmdjc0Q2dVhRX0FCUmg3R2ZyZw?oc=5"
-    },
-    "hot": false
    }
   ]
  },
  "errs": [
-  "gdelt: ReadTimeout: HTTPSConnectionPool(host='api.gdeltproject.org', port=443): Read timed out. (read timeout=25)"
+  "gdelt: IndexError: list index out of range"
  ],
- "updatedAt": "2026-11-03T22:59:37Z"
+ "updatedAt": "2026-11-03T23:17:10Z"
 }
