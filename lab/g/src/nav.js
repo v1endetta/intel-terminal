@@ -68,7 +68,7 @@ const navOutline = C => { for (const r of C.rings) if (r.length > 30) navLine(r,
 const townPills = (ts, skip) => { for (const t of ts) if (!skip.has(t.name)) addLabel(pill(t.name), gp(t.c[0], t.c[1], 1.5), "nv dim", "nav", -2); };
 const rankRows = (rows, attr) => rows.map(([k, sub, dot], i) => `<li data-${attr}="${esc(k)}" style="cursor:pointer">${dot ? `<span class="sdot" style="background:${dot}"></span>` : `${i + 1}. `}${esc(norm(k))}<span>${esc(sub)}</span></li>`).join("");
 const wxLine = C => { const W = ((P.weather || {}).items || []).find(w => norm(C.name).startsWith(norm(w.city))), warn = ((P.weather || {}).warnings || []).filter(w => sameC(w.where, C.name)).map(w => w.what);
-  return W || warn.length ? `<p class="why">${W ? `${esc(W.weather)} ${(+W.temp).toFixed(1)}°C` : ""}${warn.length ? `・<b style="color:#ff9f0a">${esc(warn.join("、"))}</b>` : ""}</p>` : ""; };
+  return W || warn.length ? `<p class="why">${W ? `${esc(W.weather)} ${tC(W.temp)}` : ""}${warn.length ? `・<b style="color:#ff9f0a">${esc(warn.join("、"))}</b>` : ""}</p>` : ""; };
 const BRANDS = () => ((P.mapfeed || {}).brands) || [];
 const NEWS_AG = /俄新社|中新社|法新社|新華社|共同社|路透社?|美聯社|韓聯社|塔斯社|德新社/;   // 「據俄新社」被誤認成台中新社區之類的國際新聞，不放在地圖上
 // 地方新聞排序：「值不值得知道」（開店、建設、交通、活動、政策、災害 3 分；政治口水 1 分；社會案件 0 分）為主，越舊越後面（每 12 小時約扣 1 分）

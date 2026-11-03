@@ -33,7 +33,7 @@ addLabel = function (html, pos, cls, group, prio, info) { const L = _addLabel0(h
 // 天氣：氣象署測站＋縣市預報＋警特報
 function wxInfo(it, c) {
   const f = (it.forecast || []).slice(0, 2), warn = (((P.weather || {}).warnings) || []).filter(w => norm(w.where) === norm(c.name));
-  return { html: `<i class="lp-k" style="color:#64d2ff">天氣・氣象署 ${esc(it.station || "")}站</i><b>${esc(norm(c.name))} ${(+it.temp).toFixed(1)}°C ${esc(it.weather && it.weather !== "-99" ? it.weather : "")}</b>`
+  return { html: `<i class="lp-k" style="color:#64d2ff">天氣・氣象署 ${esc(it.station || "")}站</i><b>${esc(norm(c.name))} ${tC(it.temp)} ${esc(it.weather && it.weather !== "-99" ? it.weather : "")}</b>`
     + `<p>濕度 ${it.rh ?? "—"}%・風 ${it.wind ?? "—"} m/s・今天雨量 ${it.rain24h ?? 0} mm${it.uv != null ? "・紫外線 " + it.uv : ""}</p>`
     + f.map(x => `<p>${esc(x.start)} 起：${esc(x.wx)}，${esc(x.minT)}–${esc(x.maxT)}°C，降雨機率 ${esc(x.pop)}%</p>`).join("")
     + (warn.length ? `<p style="color:#ff9f0a">${warn.map(w => esc(w.what + (w.level || ""))).join("、")}</p>` : "")

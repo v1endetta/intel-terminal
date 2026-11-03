@@ -8,7 +8,7 @@ const INTRO_SLOW = +(new URLSearchParams(location.search).get("slow") || 1);   /
 const INTRO_CAM = { tgt: V(0, 0, -20), pos: MOBILE ? V(0, 2300, 900) : V(-120, 1900, 1300) };
 const easeIO = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
 function introChips() {
-  const L = [], add = (o) => L.push(o);
+  const L = [], add = (o) => { if (typeof o.v === "number" && isFinite(o.v)) L.push(o); };   // 空值（測站暫時沒資料）不上島，免得動畫報錯
   // 有地點的
   for (const it of ((P.weather || {}).items || [])) { const c = COUNTIES.find(c => norm(c.name).startsWith(norm(it.city))); if (c && isFinite(it.temp)) add({ geo: c.c, v: it.temp, dec: 0, unit: "°", lab: it.city, color: NEU }); }
   const perCity = {}, towns = (((P.house || {}).towns) || []).filter(t => t[4] > 0 && t[5] >= 20).sort((a, b) => b[5] - a[5]).filter(t => (perCity[t[2]] = (perCity[t[2]] || 0) + 1) <= 2).slice(0, 18);   // 每個縣市最多兩個鄉鎮，免得全擠在台北

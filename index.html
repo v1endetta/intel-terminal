@@ -2307,7 +2307,8 @@ const meanAbs = a => a.reduce((s, v) => s + Math.abs(v), 0) / Math.max(1, a.leng
 const diffs = a => a.slice(1).map((v, i) => v - a[i]);
 const clean = a => (a || []).map(Number).filter(v => isFinite(v));
 const hist = (k, s) => clean((((ST.H || {})[k] || {})[s] || []).map(x => x[1]));
-const nf = v => { const a = Math.abs(v); return a >= 10000 ? Math.round(v).toLocaleString("en-US") : a >= 1000 ? v.toLocaleString("en-US", { maximumFractionDigits: 0 }) : a >= 100 ? v.toFixed(1) : a >= 10 ? v.toFixed(2) : v.toFixed(a >= 1 ? 2 : 3); };
+const tC = v => typeof v === "number" && isFinite(v) ? v.toFixed(1) + "°C" : "—";   // 氣溫：測站暫時沒資料（空值）時顯示「—」，不要當成 0 度
+const nf = v => { if (typeof v !== "number" || !isFinite(v)) return "—"; const a = Math.abs(v); return a >= 10000 ? Math.round(v).toLocaleString("en-US") : a >= 1000 ? v.toLocaleString("en-US", { maximumFractionDigits: 0 }) : a >= 100 ? v.toFixed(1) : a >= 10 ? v.toFixed(2) : v.toFixed(a >= 1 ? 2 : 3); };
 const pct = (v, d = 2) => `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(d)}%`;
 const UPH = "#30d158", DNH = "#ff453a", NEU = "#f5f5f7", YLH = "#ffd60a";
 const tone = v => v > 0 ? UPH : v < 0 ? DNH : NEU;
@@ -2597,7 +2598,7 @@ function EXPLORE() {
       { n: "此刻", lens: "now" },
       { n: "天氣", f: layer("wx", "天氣與雷達", "現場 · 氣象署", () => { const W = P.weather || {}, warn = W.warnings || [];
         return (warn.length ? `<p class="why"><b style="color:#ff9f0a">${esc([...new Set(warn.map(w => w.what))].join("、"))}</b>：${esc(warn.map(w => norm(w.where)).join("、"))}</p>` : `<p class="why">目前沒有天氣特報。</p>`)
-          + listHTML((W.items || []).map(w => ({ t: `${w.city}　${(+w.temp).toFixed(1)}°C　${w.weather || ""}`, s: `${w.forecast && w.forecast[0] ? `接下來 ${w.forecast[0].wx}・降雨 ${w.forecast[0].pop}%` : ""}${w.rain24h ? `・24 小時雨量 ${w.rain24h} mm` : ""}` }))); }) },
+          + listHTML((W.items || []).map(w => ({ t: `${w.city}　${tC(w.temp)}　${w.weather || ""}`, s: `${w.forecast && w.forecast[0] ? `接下來 ${w.forecast[0].wx}・降雨 ${w.forecast[0].pop}%` : ""}${w.rain24h ? `・24 小時雨量 ${w.rain24h} mm` : ""}` }))); }) },
       { n: "地震", f: layer("quake", "顯著地震", "現場 · 氣象署", () => listHTML((((P.quake || {}).items) || []).slice(0, 8).map(q => ({ t: `M${q.mag}　${(q.loc || "").replace(/\s+/g, " ").replace(/\s*\(.*\)/, "")}`, s: `${q.intensity ? "最大震度 " + q.intensity + "・" : ""}深 ${q.depth} 公里・${new Date(q.at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })}`, url: q.url })))) },
       { n: "停班停課", lens: "stop" },
       { n: "電力", lens: "power", f: () => { const pw = P.power || {}; return lineOf("備轉容量率", pw.spark, (pw.reserve_pct || 0) < 10 ? "#ff9f0a" : UPH, "現場 · 台電", "power", nf(pw.reserve_pct || 0) + "%", "燈號" + (pw.level || ""))(); } },
@@ -2732,8 +2733,8 @@ async function buildStory() {
   top.forEach((t, i) => { const sc = sceneFor(t, i);
     CH.push({ name: t.cat, g: sc.g, cam: sc.cam, globe: sc.globe, layer: sc.layer, geo: sc.geo, side: storySide(t, i),
       dom: `<div class="eyebrow">0${i + 1} / 五件事 · ${esc(t.name)}</div><h2 style="color:${t.color}">${esc(t.big)}</h2><p>${esc(t.say)}</p><p class="why"><b>為什麼看這個</b>${esc(t.why)}</p>` }); });
-  { const W = (P.weather || {}).items || [], hot = W.reduce((a, b) => (b.temp > (a ? a.temp : -99) ? b : a), null), cold = W.reduce((a, b) => (b.temp < (a ? a.temp : 99) ? b : a), null);
-    const rain = W.filter(x => (x.rain1h || 0) > 0).map(x => x.city), warn = ((P.radar_wx || {}).warnings || []);
+  { const WA = (P.weather || {}).items || [], W = WA.filter(x => typeof x.temp === "number" && isFinite(x.temp)), hot = W.reduce((a, b) => (b.temp > (a ? a.temp : -99) ? b : a), null), cold = W.reduce((a, b) => (b.temp < (a ? a.temp : 99) ? b : a), null);
+    const rain = WA.filter(x => (x.rain1h || 0) > 0).map(x => x.city), warn = ((P.radar_wx || {}).warnings || []);
     CH.push({ name: "此刻", g: new THREE.Group(), cam: ISLAND, layer: "wx",
       dom: `<div class="eyebrow">06 / 現場</div><h2>此刻的台灣</h2><p>${hot ? `最熱的是${esc(hot.city)} ${nf(hot.temp)}°，最涼的是${esc(cold.city)} ${nf(cold.temp)}°。` : ""}${rain.length ? `${esc(rain.join("、"))}正在下雨。` : "這一小時全台沒有測站下雨。"}${warn.length ? `${esc(warn[0].what)}${esc(warn[0].level || "")}影響 ${warn.length} 個縣市。` : ""}</p>` }); }
   CH.push({ name: "自己逛", g: new THREE.Group(), cam: ISLAND, explore: true, cls: "last",
@@ -2819,7 +2820,7 @@ const INTRO_SLOW = +(new URLSearchParams(location.search).get("slow") || 1);   /
 const INTRO_CAM = { tgt: V(0, 0, -20), pos: MOBILE ? V(0, 2300, 900) : V(-120, 1900, 1300) };
 const easeIO = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
 function introChips() {
-  const L = [], add = (o) => L.push(o);
+  const L = [], add = (o) => { if (typeof o.v === "number" && isFinite(o.v)) L.push(o); };   // 空值（測站暫時沒資料）不上島，免得動畫報錯
   // 有地點的
   for (const it of ((P.weather || {}).items || [])) { const c = COUNTIES.find(c => norm(c.name).startsWith(norm(it.city))); if (c && isFinite(it.temp)) add({ geo: c.c, v: it.temp, dec: 0, unit: "°", lab: it.city, color: NEU }); }
   const perCity = {}, towns = (((P.house || {}).towns) || []).filter(t => t[4] > 0 && t[5] >= 20).sort((a, b) => b[5] - a[5]).filter(t => (perCity[t[2]] = (perCity[t[2]] || 0) + 1) <= 2).slice(0, MOBILE ? 6 : 18);   // 每個縣市最多兩個鄉鎮，免得全擠在台北
@@ -3679,7 +3680,7 @@ const navOutline = C => { for (const r of C.rings) if (r.length > 30) navLine(r,
 const townPills = (ts, skip) => { for (const t of ts) if (!skip.has(t.name)) addLabel(pill(t.name), gp(t.c[0], t.c[1], 1.5), "nv dim", "nav", -2); };
 const rankRows = (rows, attr) => rows.map(([k, sub, dot], i) => `<li data-${attr}="${esc(k)}" style="cursor:pointer">${dot ? `<span class="sdot" style="background:${dot}"></span>` : `${i + 1}. `}${esc(norm(k))}<span>${esc(sub)}</span></li>`).join("");
 const wxLine = C => { const W = ((P.weather || {}).items || []).find(w => norm(C.name).startsWith(norm(w.city))), warn = ((P.weather || {}).warnings || []).filter(w => sameC(w.where, C.name)).map(w => w.what);
-  return W || warn.length ? `<p class="why">${W ? `${esc(W.weather)} ${(+W.temp).toFixed(1)}°C` : ""}${warn.length ? `・<b style="color:#ff9f0a">${esc(warn.join("、"))}</b>` : ""}</p>` : ""; };
+  return W || warn.length ? `<p class="why">${W ? `${esc(W.weather)} ${tC(W.temp)}` : ""}${warn.length ? `・<b style="color:#ff9f0a">${esc(warn.join("、"))}</b>` : ""}</p>` : ""; };
 const BRANDS = () => ((P.mapfeed || {}).brands) || [];
 const NEWS_AG = /俄新社|中新社|法新社|新華社|共同社|路透社?|美聯社|韓聯社|塔斯社|德新社/;   // 「據俄新社」被誤認成台中新社區之類的國際新聞，不放在地圖上
 // 地方新聞排序：「值不值得知道」（開店、建設、交通、活動、政策、災害 3 分；政治口水 1 分；社會案件 0 分）為主，越舊越後面（每 12 小時約扣 1 分）
@@ -4564,7 +4565,7 @@ addLabel = function (html, pos, cls, group, prio, info) { const L = _addLabel0(h
 // 天氣：氣象署測站＋縣市預報＋警特報
 function wxInfo(it, c) {
   const f = (it.forecast || []).slice(0, 2), warn = (((P.weather || {}).warnings) || []).filter(w => norm(w.where) === norm(c.name));
-  return { html: `<i class="lp-k" style="color:#64d2ff">天氣・氣象署 ${esc(it.station || "")}站</i><b>${esc(norm(c.name))} ${(+it.temp).toFixed(1)}°C ${esc(it.weather && it.weather !== "-99" ? it.weather : "")}</b>`
+  return { html: `<i class="lp-k" style="color:#64d2ff">天氣・氣象署 ${esc(it.station || "")}站</i><b>${esc(norm(c.name))} ${tC(it.temp)} ${esc(it.weather && it.weather !== "-99" ? it.weather : "")}</b>`
     + `<p>濕度 ${it.rh ?? "—"}%・風 ${it.wind ?? "—"} m/s・今天雨量 ${it.rain24h ?? 0} mm${it.uv != null ? "・紫外線 " + it.uv : ""}</p>`
     + f.map(x => `<p>${esc(x.start)} 起：${esc(x.wx)}，${esc(x.minT)}–${esc(x.maxT)}°C，降雨機率 ${esc(x.pop)}%</p>`).join("")
     + (warn.length ? `<p style="color:#ff9f0a">${warn.map(w => esc(w.what + (w.level || ""))).join("、")}</p>` : "")

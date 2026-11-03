@@ -2457,7 +2457,10 @@ def p_weather():
     rain = {st["StationName"]: st for st in cwa("O-A0002-001").get("Station", [])}
     fc = {loc["locationName"]: loc for loc in cwa("F-C0032-001").get("location", [])}
     for label, county, cands in WX_CITIES:
-        o = next((manned[c] for c in cands if c in manned), None) or next((auto[c] for c in cands if c in auto), {})
+        # 第一順位的測站偶爾回無效氣溫（-99），就換下一個候選站；全部都沒有才用第一個有回應的站
+        _ok = lambda st: _cwa_num((st.get("WeatherElement") or {}).get("AirTemperature")) is not None  # noqa: E731
+        o = next((pool[c] for pool in (manned, auto) for c in cands if c in pool and _ok(pool[c])), None) \
+            or next((manned[c] for c in cands if c in manned), None) or next((auto[c] for c in cands if c in auto), {})
         st_name = o.get("StationName", cands[0])
         we = o.get("WeatherElement", {})
         r = next((rain[c] for c in cands if c in rain), {}).get("RainfallElement", {})
