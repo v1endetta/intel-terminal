@@ -114,36 +114,7 @@
    "chg": -0.35
   }
  ],
- "storms": [
-  {
-   "name": "MURASU",
-   "level": "Red",
-   "ll": [
-    80.3,
-    15.5
-   ],
-   "from": "2026-11-01T00:00",
-   "to": "2026-11-03T00:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 157 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001346&episodeid=9&eventtype=TC",
-   "near": [],
-   "id": "1001346-9"
-  },
-  {
-   "name": "IN-FA",
-   "level": "Green",
-   "ll": [
-    139.3,
-    23.1
-   ],
-   "from": "2026-10-25T06:00",
-   "to": "2026-11-03T00:00",
-   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 241 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001343&episodeid=43&eventtype=TC",
-   "near": [],
-   "id": "1001343-43"
-  }
- ],
+ "storms": [],
  "ports": [
   {
    "name": "上海洋山",
@@ -407,6 +378,14 @@
  ],
  "news": [
   {
+   "source": "The Loadstar",
+   "title": "Ryder acquires Efficiency Enterprises",
+   "url": "https://theloadstar.com/ryder-acquires-efficiency-enterprises/",
+   "at": "2026-11-03T16:13:58+08:00",
+   "hot": false,
+   "zh": "萊德併購 Efficiency Enterprises"
+  },
+  {
    "source": "FreightWaves",
    "title": "230-plus immigrants arrested in crackdown targeting unauthorized CDL holders",
    "url": "https://www.freightwaves.com/news/230-plus-immigrants-arrested-in-crackdown-targeting-unauthorized-cdl-holders",
@@ -589,18 +568,12 @@
    "at": "2026-11-02T20:06:00+08:00",
    "hot": false,
    "zh": "Runnings 結合 AI 整合需求預測與補貨作業"
-  },
-  {
-   "source": "The Loadstar",
-   "title": "When silence becomes evidence: CPKC demands end to UP-NS merger review",
-   "url": "https://theloadstar.com/when-silence-becomes-evidence-cpkc-demands-an-end-to-the-up-ns-merger-review/",
-   "at": "2026-11-02T19:58:57+08:00",
-   "hot": false,
-   "zh": "當沉默成證據：CPKC要求終止聯合太平洋與諾福克南方併購審查"
   }
  ],
  "threat": [],
- "errs": [],
+ "errs": [
+  "GDACS: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+ ],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-03T07:44:28Z"
+ "updatedAt": "2026-11-03T09:00:05Z"
 }
