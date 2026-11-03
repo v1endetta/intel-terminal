@@ -537,18 +537,18 @@
      "source": "GovTech",
      "title": "Columbia University Opens Claims for 3.1M Affected by Data Breach",
      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNVDVUSW1GUWpoOThRSHlFcXJkMUZ1ZjdmVmNnbUY1ZUhvdW5YWHRfWTNfTkJmcWZHUE9DazRLVDE3RV9YREY3TEcwcGFITERuX0JSRmg5QTZCd295c0dzTUg5WmpoREJQSmNFaHJRa2NBQ25wR0xDaUh3XzlROUNEalFlYzg0eE4tMzBVUy1GTVlld0JHR19BZk5Ld0xRRUVmdTBpRDQ4bjJjTnNKQXc?oc=5",
-     "at": "2026-11-02T22:09:06Z",
+     "at": "2026-11-02T22:09:55Z",
      "kw": "en:cybersecurity breach OR ransomware OR \"zero-day\""
     }
    ],
    "daily7": [
-    8,
-    12,
+    10,
     14,
-    18,
-    7,
-    101,
-    50
+    14,
+    13,
+    6,
+    93,
+    55
    ],
    "days7": [
     "2026-10-28",
@@ -593,13 +593,13 @@
     }
    ],
    "daily7": [
-    4,
-    15,
+    6,
+    16,
     12,
     4,
     1,
-    11,
-    4
+    12,
+    3
    ],
    "days7": [
     "2026-10-28",
@@ -644,12 +644,12 @@
     }
    ],
    "daily7": [
-    14,
-    9,
+    7,
+    8,
     12,
-    18,
-    32,
-    33,
+    15,
+    29,
+    31,
     2
    ],
    "days7": [
@@ -757,6 +757,22 @@
     "hot": true
    },
    {
+    "term": "OpenAI",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "ARCH雅趣",
+     "OpenAI",
+     "The Next Web",
+     "富途牛牛"
+    ],
+    "sample": {
+     "title": "OpenAI：推出電網保護計劃。",
+     "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxON3pkeGJWYzlUZzRQUFBjbm1zNU51d0hQNkFLdE9wc1pHUVJ6MEFBb09WLS1BLWs1cGFVTmlPM01qbVJDVGU1UkhhWnMteWhzUVExbW5CZ2s5UWFJUWx2ZDJtc2hFV0lZbTR4QmwyRmhaV1B1eEtpOTdSX2piYTlRRFBmTVMxbEV6UmFOMHNCSQ?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "ADR",
     "n": 4,
     "src": 4,
@@ -800,21 +816,6 @@
     "sample": {
      "title": "Anthropic 為僱主推出 AI「成績單」，Claude 支出引發關注",
      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFAxZEo2ZXkzMDl6WHlFVC1oUW0xcHB1OFNzSWZQU2J0RGs0UDd2X2dUZlNtbDE4bzYzSWFCMklidXZQbEZyS1k1ZTlTN0JKQnd5Q0xFMWNGcTN4QmMxWjhVaXBjS3k2T1NYUjJUb3NrUi1JM3Jhb2JSNU13?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "OpenAI",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "ARCH雅趣",
-     "The Next Web",
-     "富途牛牛"
-    ],
-    "sample": {
-     "title": "OpenAI：推出電網保護計劃。",
-     "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxON3pkeGJWYzlUZzRQUFBjbm1zNU51d0hQNkFLdE9wc1pHUVJ6MEFBb09WLS1BLWs1cGFVTmlPM01qbVJDVGU1UkhhWnMteWhzUVExbW5CZ2s5UWFJUWx2ZDJtc2hFV0lZbTR4QmwyRmhaV1B1eEtpOTdSX2piYTlRRFBmTVMxbEV6UmFOMHNCSQ?oc=5"
     },
     "hot": true
    },
@@ -880,7 +881,7 @@
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: KeyError: 'timeline'"
  ],
- "updatedAt": "2026-11-02T23:38:54Z"
+ "updatedAt": "2026-11-02T23:57:10Z"
 }
