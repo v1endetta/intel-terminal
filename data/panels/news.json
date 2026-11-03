@@ -851,7 +851,7 @@
     "hot": true
    },
    {
-    "term": "攻擊",
+    "term": "應變",
     "n": 3,
     "src": 3,
     "sources": [
@@ -883,7 +883,7 @@
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: IndexError: list index out of range"
  ],
- "updatedAt": "2026-11-03T19:02:55Z"
+ "updatedAt": "2026-11-03T19:22:58Z"
 }
