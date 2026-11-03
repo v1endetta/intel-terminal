@@ -75,6 +75,12 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Spanish transport minister resigns days after deadly train crash",
+   "url": "https://www.bbc.co.uk/news/articles/c6wydqd4yxdyo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-03T20:36:14Z"
+  },
+  {
    "source": "Guardian",
    "title": "Hackers behind $6.3bn Binance heist ‘used malware and bogus job interviews’",
    "url": "https://www.theguardian.com/business/2026/nov/03/hackers-63bn-binance-heist-malware-bogus-job-interviews-cryptocurrency",
@@ -110,7 +116,7 @@
   },
   {
    "source": "Guardian",
-   "title": "UK makes huge aid cuts to Commonwealth nations despite warm words at Chogm summit",
+   "title": "UK makes huge aid cuts to Commonwealth nations despite warm words at Chogm",
    "url": "https://www.theguardian.com/world/2026/nov/03/uk-cuts-aid-commonwealth-countries-despite-warm-words-at-chogm-summit",
    "at": "2026-11-03T17:49:57Z",
    "sec": "World news"
@@ -148,12 +154,6 @@
    "url": "https://www.theguardian.com/business/2026/nov/03/primark-brings-forward-home-deliveries-plan-by-two-years-after-profits-slide",
    "at": "2026-11-03T16:40:18Z",
    "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "Binance says fake job interviews used as part of $6.3bn crypto hack",
-   "url": "https://www.bbc.co.uk/news/articles/ck5ynwz9gy67o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-03T16:19:29Z"
   }
  ],
  "groups": [
@@ -649,12 +649,12 @@
     }
    ],
    "daily7": [
-    9,
+    10,
     9,
     10,
     27,
     23,
-    39,
+    38,
     1
    ],
    "days7": [
@@ -727,24 +727,6 @@
   },
   "hot": [
    {
-    "term": "資安",
-    "n": 6,
-    "src": 6,
-    "sources": [
-     "ARCH雅趣",
-     "TechNews 科技新",
-     "iThome",
-     "中時新聞網",
-     "公視新聞",
-     "工商時報"
-    ],
-    "sample": {
-     "title": "【資安日報】11月3日，歐洲7國逾115家超市冷凍設備遭駭客操控，遠端調高溫度導致食品損失",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9rNlhQMS1FSS1OcWpHbEZ0WWdUNmlLR0ZFNjFJWUd4S21EdUhzZEU5ZEFDS2l2dnJoUUY2SWc2UUNVM3lxblEyLWtNaUd4dw?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "CrowdStrike",
     "n": 4,
     "src": 4,
@@ -777,59 +759,14 @@
     "hot": true
    },
    {
-    "term": "一次看",
+    "term": "資安",
     "n": 4,
     "src": 4,
     "sources": [
-     "BEAUTY美人圈",
-     "公視",
-     "公視新聞",
-     "數位時代"
-    ],
-    "sample": {
-     "title": "美國期中選舉3日登場 選戰重點一次看",
-     "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE0zb1R6bjdXb3hDT29vb2JnMGxOV3ZBODUyX3plb0VKNlZ5WFJyQi1JdWdfbjlnRG1tVlpQZThJVTNvSm5MRUNZ?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "期中選舉",
-    "n": 5,
-    "src": 3,
-    "sources": [
-     "中央社",
-     "公視",
-     "數位時代"
-    ],
-    "sample": {
-     "title": "市場關注美國期中選舉　歐股收低",
-     "url": "https://www.cna.com.tw/news/afe/202611040007.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "國期中選",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "中央社",
-     "公視",
-     "數位時代"
-    ],
-    "sample": {
-     "title": "市場關注美國期中選舉　歐股收低",
-     "url": "https://www.cna.com.tw/news/afe/202611040007.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "駭客",
-    "n": 3,
-    "src": 3,
-    "sources": [
      "ARCH雅趣",
      "iThome",
-     "公視新聞"
+     "中時新聞網",
+     "工商時報"
     ],
     "sample": {
      "title": "【資安日報】11月3日，歐洲7國逾115家超市冷凍設備遭駭客操控，遠端調高溫度導致食品損失",
@@ -838,33 +775,19 @@
     "hot": true
    },
    {
-    "term": "攻擊",
-    "n": 3,
+    "term": "期中選舉",
+    "n": 4,
     "src": 3,
     "sources": [
-     "ARCH雅趣",
-     "TechNews 科技新",
-     "中時新聞網"
+     "中央社",
+     "公視",
+     "數位時代"
     ],
     "sample": {
-     "title": "AI 攻擊威脅升高，數發部成立跨部會資安應變小組",
-     "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE53cllFVjFkb0JRamZwMENUaGY2R1J5QlF4SkFtMy1BNmQ3S0M2WmxFM1NhWG9VcURua0g4Zk1FR0RmZjJFVld6TlJuaWNheUNxa1NhZ05EQjd0Q0FMUjR4cW1SYkg?oc=5"
+     "title": "市場關注美國期中選舉　歐股收低",
+     "url": "https://www.cna.com.tw/news/afe/202611040007.aspx"
     },
     "hot": true
-   },
-   {
-    "term": "Google",
-    "n": 3,
-    "src": 2,
-    "sources": [
-     "HN",
-     "TechCrunch"
-    ],
-    "sample": {
-     "title": "Google will let schools disable its AI tools, but not withou",
-     "url": "https://techcrunch.com/2026/11/03/google-will-let-schools-disable-its-ai-tools-but-not-without-sacrificing-search/"
-    },
-    "hot": false
    },
    {
     "term": "Seven",
@@ -879,11 +802,81 @@
      "url": "https://www.theguardian.com/world/live/2026/nov/03/zelenskyy-berlin-merz-europe-sweden-spain-france-belgium-poland-latest-news"
     },
     "hot": false
+   },
+   {
+    "term": "國防部",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "中央社",
+     "公視新聞"
+    ],
+    "sample": {
+     "title": "國防部：軍備局增建13條火炸藥、武器等產線強化韌性",
+     "url": "https://www.cna.com.tw/news/aipl/202611030337.aspx"
+    },
+    "hot": false
+   },
+   {
+    "term": "Anthropic",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "Anthropic",
+     "TechCrunch"
+    ],
+    "sample": {
+     "title": "Anthropic is still grappling with the economics of compute",
+     "url": "https://techcrunch.com/2026/11/03/anthropic-is-still-grappling-with-the-economics-of-compute/"
+    },
+    "hot": false
+   },
+   {
+    "term": "European",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "Cybersecurit",
+     "Guardian"
+    ],
+    "sample": {
+     "title": "Seven reported bomb threats against European flights confirm",
+     "url": "https://www.theguardian.com/world/live/2026/nov/03/zelenskyy-berlin-merz-europe-sweden-spain-france-belgium-poland-latest-news"
+    },
+    "hot": false
+   },
+   {
+    "term": "Security",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "AskTraders.c",
+     "The Tech Buz"
+    ],
+    "sample": {
+     "title": "CrowdStrike Drops $500M on AI Security Duo as Agent Market E",
+     "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPbGpGSVdBT1RCMW5qRGNlR01MZXBEQWlkSHBXTEowOURwUnplWTNTeHJ5RldGdHFmSUZnRTVXRDhWcjZGMDc0ZVA3OWJZd3Vnb0UzUndXekxkMEkybWpWSlVwdnd4SkdsQXU3ekczSEdEbG94OExadzAwWlJkZkRLcFFndW5RbTg1MWg2aURRSjB0YXZDcG5WS05XY095V2hn?oc=5"
+    },
+    "hot": false
+   },
+   {
+    "term": "Program",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "Data Center",
+     "the Electric"
+    ],
+    "sample": {
+     "title": "OpenAI launches 'Grid Protectors Program' to reduce data cen",
+     "url": "https://news.google.com/rss/articles/CBMioANBVV95cUxPTmZSekx2RkIxTzZXS2MxZU1XZ3IxZlFzRm9QMm1BT203SzlIYktsT1RfWkhFRjQyN0IyMGdHOW1naHRMOFhONThiZm5QdWpmbWlNdGpiMGtpdVpwREF0ZWw2NHNMVm9zVUM4MWxyeXRDaUcyeUFfZ2RzbGNybnN5ZFhCX05LSENGNUtIdWFZbmlIRVVqN0toX25PVGNPN3loU0F1b1NpNWdZV0gzSGQ0UGNWelZ0ZXg5VWFCZkpCLWJQenhFbjVPa0lYVC1HVXJjYXVXM19oSVFZUHVzTEFDcFR5NWozUXVaOTk4SWZlcXVuQUlBUEc2MWhScjF2THI4OTV2LWdZUVNOdzhyRk5VWGxIQk5ab0NnSDZwM3dQemtNODJuYjRqR0p5SXJsMF9KNGdwYU5hT2lKbW1HUHk1cHFkWVJTbTA4aWI1RFl6ZWN4bmgzdHZ6Q0dRNjl4UnRSWk5FbUI2anFUcm1iY241Z1JFTXdHWkptTmZNVFRtaUNzbFdrME9RZkFUZWx0Wi1mX3dXczNYY1hObTdJVGs5eA?oc=5"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
-  "gdelt: IndexError: list index out of range"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-03T20:14:57Z"
+ "updatedAt": "2026-11-03T20:36:46Z"
 }
