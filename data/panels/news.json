@@ -822,6 +822,21 @@
     "hot": true
    },
    {
+    "term": "Claude",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "BigGo 財經",
+     "Business Ins",
+     "HN"
+    ],
+    "sample": {
+     "title": "Anthropic 為僱主推出 AI「成績單」，Claude 支出引發關注",
+     "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFAxZEo2ZXkzMDl6WHlFVC1oUW0xcHB1OFNzSWZQU2J0RGs0UDd2X2dUZlNtbDE4bzYzSWFCMklidXZQbEZyS1k1ZTlTN0JKQnd5Q0xFMWNGcTN4QmMxWjhVaXBjS3k2T1NYUjJUb3NrUi1JM3Jhb2JSNU13?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "美股",
     "n": 3,
     "src": 3,
@@ -863,25 +878,11 @@
      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNc1pKZUtGNEFuUUROMnh5OXlCVmRGYm1xS1hiTVZfVWh4WXR5TVFfclUzOGxVV1NZcWpUdngwaWszOGUxVEYzaERsNms2ZEJ5UXlsLTJETm1pS0w0VXJpVF82U29rR19VMU9IT0ItV2VZUlNuc3pZYnhoSVpBTTJuNzJua2RZNkFSR2c?oc=5"
     },
     "hot": false
-   },
-   {
-    "term": "Claude",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "BigGo 財經",
-     "Business Ins"
-    ],
-    "sample": {
-     "title": "Anthropic 為僱主推出 AI「成績單」，Claude 支出引發關注",
-     "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFAxZEo2ZXkzMDl6WHlFVC1oUW0xcHB1OFNzSWZQU2J0RGs0UDd2X2dUZlNtbDE4bzYzSWFCMklidXZQbEZyS1k1ZTlTN0JKQnd5Q0xFMWNGcTN4QmMxWjhVaXBjS3k2T1NYUjJUb3NrUi1JM3Jhb2JSNU13?oc=5"
-    },
-    "hot": false
    }
   ]
  },
  "errs": [
-  "gdelt: KeyError: 'timeline'"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-03T01:34:34Z"
+ "updatedAt": "2026-11-03T01:54:43Z"
 }
