@@ -1,10 +1,33 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的目光主要聚焦在熱門電影票房、影音串流話題與車市新車銷售動態。",
+ "line": "這幾天台灣消費者的注意力主要集中在熱門電影票房、音樂新作發燒影片及各類生活風格話題。",
  "topics": [
   {
+   "name": "理想混蛋",
+   "q": "理想混蛋 高雄",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "YouTube 熱門",
+     "name": "Seishun Sick (Kaohsiung Version)",
+     "how": "7 天內上架、發燒第 5"
+    }
+   ],
+   "talk": [],
+   "y": 0.64,
+   "news7": 4,
+   "news_p7": 4,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.35,
+   "talk_trend": "flat",
+   "days": 3,
+   "first": "2026-11-03",
+   "quad": "quiet"
+  },
+  {
    "name": "泥面人",
-   "q": "泥面人 電影",
+   "q": "泥面人 票房",
    "cat": "影視",
    "do": [
     {
@@ -15,17 +38,17 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 12,
-   "news_p7": 43,
+   "news7": 6,
+   "news_p7": 13,
    "news_capped": false,
    "social": {
     "Threads": 45.1,
     "Dcard": 4
    },
    "mentions": {},
-   "x": 0.91,
+   "x": 0.78,
    "talk_trend": "down",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-03",
    "quad": "hit"
   },
@@ -52,13 +75,13 @@
    "mentions": {},
    "x": 0.99,
    "talk_trend": "up",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-03",
    "quad": "hit"
   },
   {
    "name": "惡靈古堡：爆發夜",
-   "q": "惡靈古堡 爆發夜",
+   "q": "惡靈古堡 爆發夜 票房",
    "cat": "影視",
    "do": [
     {
@@ -69,17 +92,17 @@
    ],
    "talk": [],
    "y": 0.87,
-   "news7": 9,
-   "news_p7": 7,
+   "news7": 8,
+   "news_p7": 5,
    "news_capped": false,
    "social": {
     "Threads": 15.4,
     "Dcard": 1
    },
    "mentions": {},
-   "x": 0.73,
-   "talk_trend": "flat",
-   "days": 2,
+   "x": 0.7,
+   "talk_trend": "up",
+   "days": 3,
    "first": "2026-11-03",
    "quad": "hit"
   },
@@ -91,18 +114,18 @@
     {
      "src": "YouTube 熱門",
      "name": "G.E.M.鄧紫棋【自由的你 Free to Be You】Official Music Video",
-     "how": "7 天內上架、發燒第 5"
+     "how": "7 天內上架、發燒第 6"
     }
    ],
    "talk": [],
-   "y": 0.64,
-   "news7": 33,
+   "y": 0.6,
+   "news7": 32,
    "news_p7": 3,
    "news_capped": false,
    "mentions": {},
-   "x": 0.77,
+   "x": 0.76,
    "talk_trend": "up",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-03",
    "quad": "hit"
   },
@@ -120,41 +143,13 @@
    "talk": [],
    "y": 0.5,
    "static": true,
-   "news7": 49,
-   "news_p7": 51,
-   "news_capped": true,
-   "mentions": {},
-   "x": 0.85,
-   "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-03",
-   "quad": "hit"
-  },
-  {
-   "name": "明日方舟",
-   "q": "明日方舟",
-   "cat": "遊戲",
-   "do": [
-    {
-     "src": "App 營收",
-     "name": "明日方舟",
-     "how": "在榜上第 23 名（沒有在爬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.5,
-   "static": true,
-   "news7": 7,
-   "news_p7": 11,
+   "news7": 38,
+   "news_p7": 28,
    "news_capped": false,
-   "social": {
-    "Threads": 19.8,
-    "Dcard": 3
-   },
    "mentions": {},
-   "x": 0.74,
-   "talk_trend": "down",
-   "days": 2,
+   "x": 0.8,
+   "talk_trend": "flat",
+   "days": 3,
    "first": "2026-11-03",
    "quad": "hit"
   },
@@ -177,95 +172,75 @@
    "mentions": {},
    "x": 0.0,
    "talk_trend": "flat",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-03",
    "quad": "new"
   },
   {
    "name": "薩爾達傳說：時之笛重製版",
-   "q": "薩爾達傳說 時之笛重製版",
+   "q": "薩爾達傳說 時之笛",
    "cat": "遊戲",
    "do": [],
-   "talk": [],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "《薩爾達傳說時之笛》開發人員訪談回顧經典名作誕生的轉捩點《The Legend of Zelda: Ocarina of Time》"
+    }
+   ],
    "y": 0.0,
-   "news7": 11,
-   "news_p7": 6,
+   "news7": 50,
+   "news_p7": 16,
    "news_capped": false,
    "social": {
     "Threads": 37.6,
     "Dcard": 0
    },
-   "mentions": {},
-   "x": 0.78,
+   "mentions": {
+    "新聞焦點": 1
+   },
+   "x": 1.0,
    "talk_trend": "up",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-03",
    "quad": "hype"
   },
   {
-   "name": "Toyota",
-   "q": "Toyota 新車 銷量",
+   "name": "明日方舟",
+   "q": "明日方舟",
+   "cat": "遊戲",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 7,
+   "news_p7": 11,
+   "news_capped": false,
+   "social": {
+    "Threads": 19.8,
+    "Dcard": 3
+   },
+   "mentions": {},
+   "x": 0.74,
+   "talk_trend": "down",
+   "days": 3,
+   "first": "2026-11-03",
+   "quad": "hype"
+  },
+  {
+   "name": "Zara Home",
+   "q": "Zara Home",
    "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[新聞] 台灣10月新車銷量「TOYOTA神車重回領先」"
-    },
-    {
-     "src": "PTT",
-     "title": "[心得] 2026 RAV4 PHEV 靜謐灰 快滿月"
-    },
-    {
-     "src": "Mobile01",
-     "title": "新的Toyota Crown也太帥了吧..."
-    },
-    {
-     "src": "Mobile01",
-     "title": "2026 TOYOTA RUN台北寵物場登場！毛孩一起跑、黃阿瑪驚喜助陣！"
-    },
-    {
-     "src": "Mobile01",
-     "title": "油電車還能更省！Toyota新世代1.5升四缸引擎曝光燃油效率目標提升逾15%"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 15,
-   "news_p7": 1,
+   "news7": 11,
+   "news_p7": 0,
    "news_capped": false,
-   "mentions": {
-    "PTT": 2,
-    "Mobile01": 3
-   },
-   "x": 1.0,
+   "mentions": {},
+   "x": 0.54,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-03",
    "quad": "talk"
-  },
-  {
-   "name": "理想混蛋",
-   "q": "理想混蛋",
-   "cat": "音樂",
-   "do": [
-    {
-     "src": "KKBOX",
-     "name": "理想混蛋 (Bestards) 離開的一路上",
-     "how": "在榜上第 18 名（沒有在爬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.5,
-   "static": true,
-   "news7": 6,
-   "news_p7": 1,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.42,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-03",
-   "quad": "low"
   },
   {
    "name": "Fenty Beauty",
@@ -280,7 +255,7 @@
    "mentions": {},
    "x": 0.42,
    "talk_trend": "up",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-03",
    "quad": "low"
   },
@@ -297,7 +272,7 @@
    "mentions": {},
    "x": 0.24,
    "talk_trend": "down",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-03",
    "quad": "low"
   },
@@ -306,26 +281,15 @@
    "q": "桌上型洗碗機",
    "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "【長期分享】時間給出的滿意答案！Panasonic VX 系列三位愛用者深度體驗報告"
-    },
-    {
-     "src": "Mobile01",
-     "title": "廚房檯面被小家電佔滿，有人後悔沒做電器收納櫃嗎？"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
    "news7": 0,
    "news_p7": 3,
    "news_capped": false,
-   "mentions": {
-    "Mobile01": 2
-   },
-   "x": 0.2,
+   "mentions": {},
+   "x": 0.0,
    "talk_trend": "down",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-03",
    "quad": "low"
   },
@@ -342,18 +306,18 @@
    "mentions": {},
    "x": 0.0,
    "talk_trend": "down",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-03",
    "quad": "low"
   }
  ],
  "quads": {
-  "quiet": 0,
-  "hit": 6,
+  "quiet": 1,
+  "hit": 5,
   "new": 1,
-  "hype": 1,
+  "hype": 2,
   "talk": 1,
-  "low": 5
+  "low": 4
  },
  "src_do": [
   "App 下載",
@@ -375,8 +339,8 @@
   "社群（Threads・Dcard・IG）"
  ],
  "social_at": "2026-11-03",
- "hist_days": 2,
+ "hist_days": 3,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-04T13:28:01Z"
+ "updatedAt": "2026-11-04T19:29:33Z"
 }
