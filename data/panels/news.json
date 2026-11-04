@@ -268,10 +268,10 @@
      "kw": "OpenAI OR Anthropic OR DeepMind 發布 OR 推出"
     },
     {
-     "source": "遠見雜誌",
-     "title": "Gemini Skill怎麼用？Gem退場後的新功能、3應用實測教學",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBIcEM3RGVGdHJRRHRmdHMwLXkzQjdwdDJ5NXQ2UGg0MHpzZm01c3M2Z2dTNDNkVWlBa0VSQTVpbGUyaGg2RHljYl94M1QxZw?oc=5",
-     "at": "2026-10-30T07:00:00Z",
+     "source": "104職場力",
+     "title": "Claude企業版3大新功能上線！「智慧報告」看懂公司AI用在哪、花多少",
+     "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE83d1V5R1BzNmd6Zkd6YnlVV3VxWi1XTTdhTE9PN3pEbi11eElmRkhYNXlKbVRpZFJvOVMzTnNESzVmWmh1TDZ2Z1ZrNDZlRVNaRVFzQm5GbVRTNGdD?oc=5",
+     "at": "2026-10-29T09:17:23Z",
      "kw": "ChatGPT OR Claude OR Gemini 新功能 OR 新模型"
     },
     {
@@ -292,7 +292,7 @@
    "daily7": [
     4,
     1,
-    9,
+    8,
     22,
     30,
     29,
@@ -845,20 +845,6 @@
     "hot": false
    },
    {
-    "term": "永豐",
-    "n": 3,
-    "src": 2,
-    "sources": [
-     "PTT",
-     "iThome"
-    ],
-    "sample": {
-     "title": "永豐銀行異常轉帳確認為駭客攻擊，供應商安全設定漏洞遭利用",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBXZ1lIUTFya21wUEFHVS1CUmRySnFmSzJPTUVFZFZ4WGhVNENKZEtaNWxDYVc0X3lGejZFTnkwbnF6RWRpUEpkVUVCSkh2dw?oc=5"
-    },
-    "hot": false
-   },
-   {
     "term": "CrowdStrike",
     "n": 2,
     "src": 2,
@@ -871,11 +857,25 @@
      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPOEZycnRWRE10cl9qaWc1Z1prM2E4cHNqRUdOTzFNdDdNQVdxY2dmRFNxRm52OHA0azdFTlN3NnVwLUVsbTVDQU9JNTZxUlBqS3lYZUdzV3BHR1M0b3ZjQ0F2STNKbXVnWFduN1BqUEdobENNcHB5TW1zWEEydHhGQ1lfVFhBSVBLdWNxRjY2SDIySmZpZlR5N0NCUE5zS1RFZUF6VWdpcXd0Z2h5UnhGcHJJeGI5SlVId0ttR1h1bEE3dlYtVXZZRnotUmVqak0?oc=5"
     },
     "hot": false
+   },
+   {
+    "term": "Investing",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "Anthropic",
+     "股市報價& 財經新聞"
+    ],
+    "sample": {
+     "title": "亞洲寬頻探索業務重組及品牌重塑方案 作者 Investing.com - Investing.com 香港",
+     "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE4xa1FiSENwbWFobUFyVlpwb1JDQWdld0d2bWdjNGNxZ1JvaDNjT29Ba29iVmpnYlFFcEdhYVhXMERRSDBfaW9iS1ctbHcwekpGUU5tT2xpcHlSdko5QzZuUFVGdFl6WXE5QkZIeXg1bXc?oc=5"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: IndexError: list index out of range"
  ],
- "updatedAt": "2026-11-04T20:31:32Z"
+ "updatedAt": "2026-11-04T20:53:36Z"
 }
