@@ -653,7 +653,7 @@
     20,
     26,
     36,
-    2
+    3
    ],
    "days7": [
     "2026-10-30",
@@ -874,7 +874,7 @@
   ]
  },
  "errs": [
-  "gdelt: IndexError: list index out of range"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-04T23:10:58Z"
+ "updatedAt": "2026-11-04T23:29:01Z"
 }
