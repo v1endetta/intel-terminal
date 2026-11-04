@@ -76,6 +76,13 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "Mother and daughter both killed in grizzly bear attack, Canadian authorities confirm ",
+   "url": "https://www.theguardian.com/world/2026/nov/04/canada-bear-attack-mother-daughter-killed",
+   "at": "2026-11-04T19:42:47Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
    "title": "British healthcare worker with Ebola evacuated from DR Congo to UK",
    "url": "https://www.theguardian.com/world/2026/nov/04/british-healthcare-worker-ebola-evacuated-drc-to-uk-document-shows",
    "at": "2026-11-04T18:18:37Z",
@@ -145,13 +152,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/04/spains-deadly-train-crashes-have-damaged-public-trust-in-the-system",
    "at": "2026-11-04T15:40:37Z",
    "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Don’t let Poundland owner maximise its return at our expense, suppliers say",
-   "url": "https://www.theguardian.com/business/2026/nov/04/poundland-suppliers-facing-losses-gordon-brothers",
-   "at": "2026-11-04T15:31:45Z",
-   "sec": "Business"
   }
  ],
  "groups": [
@@ -239,10 +239,10 @@
     }
    ],
    "daily7": [
-    1,
-    1,
+    4,
+    3,
     0,
-    0,
+    1,
     5,
     5,
     0
@@ -268,10 +268,10 @@
      "kw": "OpenAI OR Anthropic OR DeepMind 發布 OR 推出"
     },
     {
-     "source": "104職場力",
-     "title": "Claude企業版3大新功能上線！「智慧報告」看懂公司AI用在哪、花多少",
-     "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE83d1V5R1BzNmd6Zkd6YnlVV3VxWi1XTTdhTE9PN3pEbi11eElmRkhYNXlKbVRpZFJvOVMzTnNESzVmWmh1TDZ2Z1ZrNDZlRVNaRVFzQm5GbVRTNGdD?oc=5",
-     "at": "2026-10-29T09:17:23Z",
+     "source": "遠見雜誌",
+     "title": "Gemini Skill怎麼用？Gem退場後的新功能、3應用實測教學",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBIcEM3RGVGdHJRRHRmdHMwLXkzQjdwdDJ5NXQ2UGg0MHpzZm01c3M2Z2dTNDNkVWlBa0VSQTVpbGUyaGg2RHljYl94M1QxZw?oc=5",
+     "at": "2026-10-30T07:00:00Z",
      "kw": "ChatGPT OR Claude OR Gemini 新功能 OR 新模型"
     },
     {
@@ -877,7 +877,7 @@
   ]
  },
  "errs": [
-  "gdelt: IndexError: list index out of range"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-04T19:29:33Z"
+ "updatedAt": "2026-11-04T19:52:24Z"
 }
