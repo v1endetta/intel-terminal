@@ -78,8 +78,14 @@
    "source": "Guardian",
    "title": "Zelenskyy says 40 now confirmed dead after ‘insane’ Russian attack on school – Europe live",
    "url": "https://www.theguardian.com/world/live/2026/nov/04/eu-ukraine-russia-france-germany-us-nato-europe-latest-news",
-   "at": "2026-11-04T14:53:32Z",
+   "at": "2026-11-04T15:11:01Z",
    "sec": "World news"
+  },
+  {
+   "source": "BBC",
+   "title": "Zelensky gives Melania Trump Ukraine's highest award after Oleshky ceasefire",
+   "url": "https://www.bbc.co.uk/news/articles/cm87zvpzwq0no?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-04T15:01:10Z"
   },
   {
    "source": "Guardian",
@@ -147,12 +153,6 @@
    "url": "https://www.theguardian.com/business/2026/nov/04/m-and-s-recover-from-cyber-attack-profits-bounce-back",
    "at": "2026-11-04T12:34:30Z",
    "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "Iran's chief negotiator says Americans voted 'no to war'",
-   "url": "https://www.bbc.co.uk/news/articles/c6d934npl9y8o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-04T12:21:21Z"
   }
  ],
  "groups": [
@@ -726,6 +726,22 @@
   },
   "hot": [
    {
+    "term": "OpenAI",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "HN",
+     "Meet創業小聚",
+     "OpenAI",
+     "鉅亨號"
+    ],
+    "sample": {
+     "title": "OpenAI發佈AGI新標準！價值1.7兆美元，接管全球80億人類",
+     "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFAxYmhGYU5HV3ZjNDhnNXdVVGJqVkRvNVVSNC0yU3lpQWxwQ0cxUWhPby1WTWVFSHkxWF8yeDNONTlvUFlfWXlSaQ?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "永豐",
     "n": 4,
     "src": 4,
@@ -770,21 +786,6 @@
     "sample": {
      "title": "誠品聯名SOU．SOU貓系新品 包袋背面藏尾巴、11/9起開賣",
      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE9TR0gwZ215alFWVEhrbjVwREZQOHZMUWRqaGFqdk5fbkxRYm9NUVAteDRTaTRsZ2lYeUk4cm5yc2hiemVwOXBzOQ?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "OpenAI",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "HN",
-     "Meet創業小聚",
-     "鉅亨號"
-    ],
-    "sample": {
-     "title": "OpenAI發佈AGI新標準！價值1.7兆美元，接管全球80億人類",
-     "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFAxYmhGYU5HV3ZjNDhnNXdVVGJqVkRvNVVSNC0yU3lpQWxwQ0cxUWhPby1WTWVFSHkxWF8yeDNONTlvUFlfWXlSaQ?oc=5"
     },
     "hot": true
    },
@@ -864,7 +865,7 @@
     "hot": true
    },
    {
-    "term": "開源",
+    "term": "騰訊",
     "n": 3,
     "src": 3,
     "sources": [
@@ -881,7 +882,7 @@
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: IndexError: list index out of range"
  ],
- "updatedAt": "2026-11-04T14:59:17Z"
+ "updatedAt": "2026-11-04T15:14:34Z"
 }
