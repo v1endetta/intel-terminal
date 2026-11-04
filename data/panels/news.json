@@ -76,6 +76,19 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "US stocks rise, dollar slides as investors digest Democrats’ midterm victories",
+   "url": "https://www.theguardian.com/business/2026/nov/04/us-dollar-slides-democrats-midterm-election-win-growth-fears",
+   "at": "2026-11-04T16:38:28Z",
+   "sec": "Business"
+  },
+  {
+   "source": "BBC",
+   "title": "Israel's president begins consultations with parties after election deadlock",
+   "url": "https://www.bbc.co.uk/news/articles/c6z98z5z91ppo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-04T16:18:21Z"
+  },
+  {
+   "source": "Guardian",
    "title": "US stock markets and government bonds rally while dollar falls after Democrats secure Cong",
    "url": "https://www.theguardian.com/business/live/2026/nov/04/dollar-falls-while-gold-us-treasury-bonds-rally-markets-react-democrats-midterm-election-victory-marks-spencer-latest-live-updates",
    "at": "2026-11-04T16:11:26Z",
@@ -83,23 +96,10 @@
   },
   {
    "source": "Guardian",
-   "title": "Zelenskyy says 40 now confirmed dead after ‘insane’ Russian attack on school – Europe live",
+   "title": "Zelenskyy says 40 now confirmed dead after ‘insane’ Russian attack on school – as it happe",
    "url": "https://www.theguardian.com/world/live/2026/nov/04/eu-ukraine-russia-france-germany-us-nato-europe-latest-news",
    "at": "2026-11-04T16:09:19Z",
    "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "US stocks rise, dollar slides as investors digest Democrats’ midterm victory",
-   "url": "https://www.theguardian.com/business/2026/nov/04/us-dollar-slides-democrats-midterm-election-win-growth-fears",
-   "at": "2026-11-04T16:08:12Z",
-   "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "Israel's president to begin consultations with parties after election deadlock",
-   "url": "https://www.bbc.co.uk/news/articles/c6z98z5z91ppo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-04T15:45:45Z"
   },
   {
    "source": "Guardian",
@@ -241,7 +241,7 @@
     }
    ],
    "daily7": [
-    3,
+    1,
     1,
     0,
     0,
@@ -788,21 +788,6 @@
     "hot": true
    },
    {
-    "term": "台積電",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "中央社",
-     "今周刊",
-     "永豐金證券"
-    ],
-    "sample": {
-     "title": "台積電盤中零股交易金額居冠　元大台灣50成交股數最多",
-     "url": "https://www.cna.com.tw/news/afe/202611040360.aspx"
-    },
-    "hot": true
-   },
-   {
     "term": "SOU",
     "n": 3,
     "src": 3,
@@ -848,7 +833,7 @@
     "hot": true
    },
    {
-    "term": "新品",
+    "term": "誠品",
     "n": 3,
     "src": 3,
     "sources": [
@@ -875,11 +860,25 @@
      "url": "https://www.cna.com.tw/news/afe/202611040360.aspx"
     },
     "hot": false
+   },
+   {
+    "term": "設備",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "iThome",
+     "中央社"
+    ],
+    "sample": {
+     "title": "志聖換股增持視動至75.06%　布局先進封裝設備軟體",
+     "url": "https://www.cna.com.tw/news/afe/202611040353.aspx"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-04T16:11:40Z"
+ "updatedAt": "2026-11-04T16:39:59Z"
 }
