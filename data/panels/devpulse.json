@@ -3,21 +3,11 @@
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "Waste of money? Make it better please",
-   "url": "https://community.openai.com/t/waste-of-money-make-it-better-please/1412232",
-   "replies": 4,
-   "likes": 11,
-   "views": 105,
-   "at": "2026-11-03T00:09:27Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
    "title": "Weight Space Programming (or How to Write LLM Weights Directly using an LLM)",
    "url": "https://community.openai.com/t/weight-space-programming-or-how-to-write-llm-weights-directly-using-an-llm/1412375",
    "replies": 1,
    "likes": 2,
-   "views": 694,
+   "views": 729,
    "at": "2026-11-03T11:40:38Z"
   },
   {
@@ -33,22 +23,32 @@
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
+   "title": "Model shutdown dates have been added to the API models endpoint",
+   "url": "https://community.openai.com/t/model-shutdown-dates-have-been-added-to-the-api-models-endpoint/1412409",
+   "replies": 0,
+   "likes": 2,
+   "views": 41,
+   "at": "2026-11-03T13:31:14Z"
+  },
+  {
+   "source": "OpenAI 論壇",
+   "vendor": "openai",
    "title": "ChatGPT Plus Family – 6 Members, $40/Month, Annual Plan & Private Accounts",
    "url": "https://community.openai.com/t/chatgpt-plus-family-6-members-40-month-annual-plan-private-accounts/1412390",
    "replies": 0,
    "likes": 2,
-   "views": 40,
+   "views": 42,
    "at": "2026-11-03T12:23:34Z"
   },
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "Model shutdown dates have been added to the API models endpoint",
-   "url": "https://community.openai.com/t/model-shutdown-dates-have-been-added-to-the-api-models-endpoint/1412409",
-   "replies": 0,
+   "title": "Feedback Regarding ChatGPT's Free Users",
+   "url": "https://community.openai.com/t/feedback-regarding-chatgpts-free-users/1412441",
+   "replies": 1,
    "likes": 2,
-   "views": 40,
-   "at": "2026-11-03T13:31:14Z"
+   "views": 70,
+   "at": "2026-11-03T15:34:17Z"
   },
   {
    "source": "Google AI 論壇",
@@ -57,7 +57,7 @@
    "url": "https://discuss.ai.google.dev/t/critical-blocker-antigravity-ide-v2-5-5-broken-as-of-nov-3-2026-bundled-language-server-certificate-expired/197906",
    "replies": 3,
    "likes": 8,
-   "views": 245,
+   "views": 254,
    "at": "2026-11-03T07:17:20Z"
   },
   {
@@ -67,7 +67,7 @@
    "url": "https://discuss.ai.google.dev/t/antigravity-2-5-5-certificate-has-expired-error/197821",
    "replies": 7,
    "likes": 0,
-   "views": 154,
+   "views": 164,
    "at": "2026-11-03T03:57:02Z"
   },
   {
@@ -77,7 +77,7 @@
    "url": "https://discuss.ai.google.dev/t/gemini-3-8-flash-slow-again-on-nov-3-repeated-503-capacity-errors-and-3-minute-waits/197975",
    "replies": 2,
    "likes": 1,
-   "views": 86,
+   "views": 93,
    "at": "2026-11-03T14:29:14Z"
   },
   {
@@ -87,7 +87,7 @@
    "url": "https://discuss.ai.google.dev/t/facing-agent-execution-terminated-due-to-an-error-issue-today-03-11-2026/197907",
    "replies": 2,
    "likes": 0,
-   "views": 107,
+   "views": 109,
    "at": "2026-11-03T07:17:42Z"
   },
   {
@@ -97,11 +97,20 @@
    "url": "https://discuss.ai.google.dev/t/gemini-3-8-flash/197978",
    "replies": 2,
    "likes": 2,
-   "views": 65,
+   "views": 67,
    "at": "2026-11-03T15:02:44Z"
   }
  ],
  "changelogs": [
+  {
+   "source": "OpenAI changelog",
+   "vendor": "openai",
+   "date": "Nov 6",
+   "kind": "Update",
+   "title": "Released GPT-4 Turbo Preview, updated GPT-3.5 Turbo, GPT-4 Turbo with Vision, Assistants API, DALL·E 3 in the API, and text-to-speech API",
+   "url": "https://developers.openai.com/api/docs/changelog",
+   "at": "2026-11-06T00:00:00Z"
+  },
   {
    "source": "OpenAI changelog",
    "vendor": "openai",
@@ -128,15 +137,6 @@
    "title": "Added five new voice types in the Realtime API and Chat Completions API.",
    "url": "https://developers.openai.com/api/docs/changelog",
    "at": "2026-10-30T00:00:00Z"
-  },
-  {
-   "source": "OpenAI changelog",
-   "vendor": "openai",
-   "date": "Oct 29",
-   "kind": "Feature",
-   "title": "gpt-oss-safeguard-120b and gpt-oss-safeguard-20b are safety reasoning models built-upon gpt-oss.",
-   "url": "https://developers.openai.com/api/docs/changelog",
-   "at": "2026-10-29T00:00:00Z"
   },
   {
    "source": "Claude release notes",
@@ -273,6 +273,14 @@
   {
    "source": "claude-code release",
    "vendor": "anthropic",
+   "date": "2026-11-04",
+   "title": "v2.1.318",
+   "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.318",
+   "at": "2026-11-04T00:01:03Z"
+  },
+  {
+   "source": "claude-code release",
+   "vendor": "anthropic",
    "date": "2026-11-03",
    "title": "v2.1.317",
    "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.317",
@@ -285,21 +293,13 @@
    "title": "v2.1.316",
    "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.316",
    "at": "2026-10-31T01:01:35Z"
-  },
-  {
-   "source": "claude-code release",
-   "vendor": "anthropic",
-   "date": "2026-10-30",
-   "title": "v2.1.314",
-   "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.314",
-   "at": "2026-10-30T01:06:26Z"
   }
  ],
  "errs": [],
  "diag": [
-  "Gemini changelog md: got html 130330b",
+  "Gemini changelog md: got html 130353b",
   "DeepSeek updates md: 18816b 0 entries head='# Change Log\\n\\n***\\n\\n## Date: 2026-10-17\\n\\n### Opening up the i'",
   "xAI release notes md: 19458b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## October\\n\\n### Custom '"
  ],
- "updatedAt": "2026-11-03T23:52:13Z"
+ "updatedAt": "2026-11-04T01:10:40Z"
 }

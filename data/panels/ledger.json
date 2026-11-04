@@ -63,10 +63,10 @@
   "veg_revert": {
    "cat": "生活成本",
    "desc": "兩週內漲超過 20% 的菜，再兩週會回落",
-   "open": 4,
-   "done": 3,
+   "open": 2,
+   "done": 5,
    "hits": 3,
-   "brier": 0.16,
+   "brier": 0.303,
    "bt_n": 59,
    "bt_rate": 0.54
   },
@@ -223,28 +223,6 @@
    "due": "2026-11",
    "status": "open",
    "base": 106.4711496
-  },
-  {
-   "id": "2026-10-25-veg_revert-54",
-   "made": "2026-10-25",
-   "rule": "veg_revert",
-   "subject": "小白菜",
-   "text": "小白菜（22.2 元）兩週後會比現在便宜",
-   "prob": 0.72,
-   "due": "2026-11-04",
-   "status": "open",
-   "base": 22.2
-  },
-  {
-   "id": "2026-10-25-veg_revert-55",
-   "made": "2026-10-25",
-   "rule": "veg_revert",
-   "subject": "空心菜",
-   "text": "空心菜（38.0 元）兩週後會比現在便宜",
-   "prob": 0.72,
-   "due": "2026-11-04",
-   "status": "open",
-   "base": 38.0
   },
   {
    "id": "2026-11-01-veg_revert-59",
@@ -647,9 +625,63 @@
    "prob": 0.54,
    "due": "2027-03",
    "status": "open"
+  },
+  {
+   "id": "2026-10-17-thesis-48",
+   "made": "2026-10-17",
+   "rule": "thesis",
+   "subject": "t7",
+   "text": "【房市量縮價撐】2027 年 3 月台北房價指數半年跌幅不超過 3%",
+   "prob": 0.7,
+   "due": "2027-03-01",
+   "status": "open",
+   "metric": "tpe6",
+   "op": ">",
+   "target": -3,
+   "rev": "r2"
+  },
+  {
+   "id": "2026-10-17-thesis-53",
+   "made": "2026-10-17",
+   "rule": "thesis",
+   "subject": "g2",
+   "text": "【中國內需弱】2027 年 3 月台灣對中港非機電出口近 3 月年增仍低於 5%",
+   "prob": 0.6,
+   "due": "2027-03-01",
+   "status": "open",
+   "metric": "cn_nonee",
+   "op": "<",
+   "target": 5,
+   "rev": "r2"
   }
  ],
  "recent": [
+  {
+   "id": "2026-10-25-veg_revert-54",
+   "made": "2026-10-25",
+   "rule": "veg_revert",
+   "subject": "小白菜",
+   "text": "小白菜（22.2 元）兩週後會比現在便宜",
+   "prob": 0.72,
+   "due": "2026-11-04",
+   "status": "miss",
+   "base": 22.2,
+   "actual": "22.2 → 43.1 元/公斤",
+   "resolved": "2026-11-04"
+  },
+  {
+   "id": "2026-10-25-veg_revert-55",
+   "made": "2026-10-25",
+   "rule": "veg_revert",
+   "subject": "空心菜",
+   "text": "空心菜（38.0 元）兩週後會比現在便宜",
+   "prob": 0.72,
+   "due": "2026-11-04",
+   "status": "miss",
+   "base": 38.0,
+   "actual": "38.0 → 50.4 元/公斤",
+   "resolved": "2026-11-04"
+  },
   {
    "id": "2026-10-11-cards_hot-16",
    "made": "2026-10-11",
@@ -702,10 +734,10 @@
    "resolved": "2026-10-21"
   }
  ],
- "n_open": 60,
- "n_done": 4,
+ "n_open": 58,
+ "n_done": 6,
  "n_hit": 4,
  "gen_at": "2026-11-01",
  "bt_at": "2026-11-02",
- "updatedAt": "2026-11-04T00:52:02Z"
+ "updatedAt": "2026-11-04T01:10:40Z"
 }
