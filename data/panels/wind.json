@@ -1,10 +1,10 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的注意力高度集中在熱門電影票房、音樂新作發燒榜以及新車上市與居家收納話題。",
+ "line": "這幾天台灣消費者的目光主要聚焦在熱門電影票房、影音串流話題與車市新車銷售動態。",
  "topics": [
   {
    "name": "泥面人",
-   "q": "泥面人",
+   "q": "泥面人 電影",
    "cat": "影視",
    "do": [
     {
@@ -15,15 +15,15 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 11,
-   "news_p7": 45,
+   "news7": 12,
+   "news_p7": 43,
    "news_capped": false,
    "social": {
     "Threads": 45.1,
     "Dcard": 4
    },
    "mentions": {},
-   "x": 0.89,
+   "x": 0.91,
    "talk_trend": "down",
    "days": 2,
    "first": "2026-11-03",
@@ -69,15 +69,15 @@
    ],
    "talk": [],
    "y": 0.87,
-   "news7": 8,
-   "news_p7": 8,
+   "news7": 9,
+   "news_p7": 7,
    "news_capped": false,
    "social": {
     "Threads": 15.4,
     "Dcard": 1
    },
    "mentions": {},
-   "x": 0.7,
+   "x": 0.73,
    "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-03",
@@ -97,33 +97,10 @@
    "talk": [],
    "y": 0.64,
    "news7": 33,
-   "news_p7": 5,
+   "news_p7": 3,
    "news_capped": false,
    "mentions": {},
    "x": 0.77,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-03",
-   "quad": "hit"
-  },
-  {
-   "name": "黃奇斌",
-   "q": "黃奇斌 咱到遮就為止",
-   "cat": "音樂",
-   "do": [
-    {
-     "src": "YouTube 熱門",
-     "name": "黃奇斌 Ng KiPin - 咱到遮就為止 We Go as Far as Here｜Official Music Vi",
-     "how": "7 天內上架、發燒第 3"
-    }
-   ],
-   "talk": [],
-   "y": 0.72,
-   "news7": 23,
-   "news_p7": 2,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.69,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-03",
@@ -143,11 +120,11 @@
    "talk": [],
    "y": 0.5,
    "static": true,
-   "news7": 46,
-   "news_p7": 54,
+   "news7": 49,
+   "news_p7": 51,
    "news_capped": true,
    "mentions": {},
-   "x": 0.84,
+   "x": 0.85,
    "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-03",
@@ -161,42 +138,65 @@
     {
      "src": "App 營收",
      "name": "明日方舟",
-     "how": "在榜上第 15 名（沒有在爬）"
+     "how": "在榜上第 23 名（沒有在爬）"
     }
    ],
    "talk": [],
    "y": 0.5,
    "static": true,
-   "news7": 6,
-   "news_p7": 10,
+   "news7": 7,
+   "news_p7": 11,
    "news_capped": false,
    "social": {
     "Threads": 19.8,
     "Dcard": 3
    },
    "mentions": {},
-   "x": 0.71,
+   "x": 0.74,
    "talk_trend": "down",
    "days": 2,
    "first": "2026-11-03",
    "quad": "hit"
   },
   {
+   "name": "黃奇斌",
+   "q": "黃奇斌 閣愛妳一擺",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "EggPlantEgg - 閣愛妳一擺",
+     "how": "升 6 名到第 19"
+    }
+   ],
+   "talk": [],
+   "y": 0.55,
+   "news7": 0,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.0,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-03",
+   "quad": "new"
+  },
+  {
    "name": "薩爾達傳說：時之笛重製版",
-   "q": "薩爾達傳說 時之笛",
+   "q": "薩爾達傳說 時之笛重製版",
    "cat": "遊戲",
    "do": [],
    "talk": [],
    "y": 0.0,
-   "news7": 48,
-   "news_p7": 20,
+   "news7": 11,
+   "news_p7": 6,
    "news_capped": false,
    "social": {
     "Threads": 37.6,
     "Dcard": 0
    },
    "mentions": {},
-   "x": 1.0,
+   "x": 0.78,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-03",
@@ -204,7 +204,7 @@
   },
   {
    "name": "Toyota",
-   "q": "Toyota 新車銷量",
+   "q": "Toyota 新車 銷量",
    "cat": "品牌商品",
    "do": [],
    "talk": [
@@ -219,34 +219,25 @@
     {
      "src": "Mobile01",
      "title": "新的Toyota Crown也太帥了吧..."
+    },
+    {
+     "src": "Mobile01",
+     "title": "2026 TOYOTA RUN台北寵物場登場！毛孩一起跑、黃阿瑪驚喜助陣！"
+    },
+    {
+     "src": "Mobile01",
+     "title": "油電車還能更省！Toyota新世代1.5升四缸引擎曝光燃油效率目標提升逾15%"
     }
    ],
    "y": 0.0,
-   "news7": 20,
-   "news_p7": 2,
+   "news7": 15,
+   "news_p7": 1,
    "news_capped": false,
    "mentions": {
     "PTT": 2,
-    "Mobile01": 1
+    "Mobile01": 3
    },
-   "x": 0.96,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-03",
-   "quad": "talk"
-  },
-  {
-   "name": "Zara Home",
-   "q": "Zara Home",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 10,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.52,
+   "x": 1.0,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-03",
@@ -266,11 +257,11 @@
    "talk": [],
    "y": 0.5,
    "static": true,
-   "news7": 5,
+   "news7": 6,
    "news_p7": 1,
    "news_capped": false,
    "mentions": {},
-   "x": 0.39,
+   "x": 0.42,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-03",
@@ -283,11 +274,11 @@
    "do": [],
    "talk": [],
    "y": 0.0,
-   "news7": 8,
-   "news_p7": 1,
+   "news7": 6,
+   "news_p7": 3,
    "news_capped": false,
    "mentions": {},
-   "x": 0.48,
+   "x": 0.42,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-03",
@@ -298,20 +289,13 @@
    "q": "風衣外套 穿搭",
    "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "蔡燦得51歲穿搭像少女！5個減齡穿搭重點，寬鬆不顯老、長裙更時髦"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 1,
-   "news_p7": 4,
+   "news7": 2,
+   "news_p7": 3,
    "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.25,
+   "mentions": {},
+   "x": 0.24,
    "talk_trend": "down",
    "days": 2,
    "first": "2026-11-03",
@@ -319,10 +303,14 @@
   },
   {
    "name": "桌上型洗碗機",
-   "q": "電器收納櫃 洗碗機",
-   "cat": "生活習慣",
+   "q": "桌上型洗碗機",
+   "cat": "品牌商品",
    "do": [],
    "talk": [
+    {
+     "src": "Mobile01",
+     "title": "【長期分享】時間給出的滿意答案！Panasonic VX 系列三位愛用者深度體驗報告"
+    },
     {
      "src": "Mobile01",
      "title": "廚房檯面被小家電佔滿，有人後悔沒做電器收納櫃嗎？"
@@ -330,13 +318,13 @@
    ],
    "y": 0.0,
    "news7": 0,
-   "news_p7": 0,
+   "news_p7": 3,
    "news_capped": false,
    "mentions": {
-    "Mobile01": 1
+    "Mobile01": 2
    },
-   "x": 0.1,
-   "talk_trend": "flat",
+   "x": 0.2,
+   "talk_trend": "down",
    "days": 2,
    "first": "2026-11-03",
    "quad": "low"
@@ -361,10 +349,10 @@
  ],
  "quads": {
   "quiet": 0,
-  "hit": 7,
-  "new": 0,
+  "hit": 6,
+  "new": 1,
   "hype": 1,
-  "talk": 2,
+  "talk": 1,
   "low": 5
  },
  "src_do": [
@@ -390,5 +378,5 @@
  "hist_days": 2,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-04T07:26:41Z"
+ "updatedAt": "2026-11-04T13:28:01Z"
 }
