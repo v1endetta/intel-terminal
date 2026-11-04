@@ -1,13 +1,26 @@
 {
- "alerts": [],
- "n_total": 0,
+ "alerts": [
+  {
+   "id": "WRA_ReservoirWarn_20261104141840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "新竹市",
+    "新竹縣"
+   ],
+   "text": "水利署訊寶山第二水庫:(放水至石井溪):自由溢流,影響範圍:新竹縣，寶山鄉、峨眉鄉；新竹市，東區、北區、香山區",
+   "src": "水利署",
+   "at": "2026-11-04T06:18:40Z",
+   "exp": "2026-11-04T17:19:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261104141840_0000.cap"
+  }
+ ],
+ "n_total": 1,
  "stopwork": {
   "items": [],
   "none": true,
   "updated": "2026/11/04 14:35:15"
  },
- "errs": [
-  "災害示警: SSLError: HTTPSConnectionPool(host='alerts.ncdr.nat.gov.tw', port=443): Max retries exceeded with url: /RssAtomFeed.ashx (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPEC"
- ],
- "updatedAt": "2026-11-04T06:39:07Z"
+ "errs": [],
+ "updatedAt": "2026-11-04T06:48:30Z"
 }
