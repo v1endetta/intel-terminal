@@ -3900,6 +3900,33 @@ def _social_pull():
     return None
 
 
+def _wind_norm(s):
+    return re.sub(r"[\s\W_]+", "", str(s).lower())
+
+
+def _wind_soc_match(name, topics, used):
+    """社群數字對到話題：先比完全相同，再比去掉大小寫、標點、空白後一個包含另一個（較短的至少 2 個中文字或 3 個英數字）。每筆只用一次。"""
+    n = _wind_norm(name)
+    if not n:
+        return {}
+    best, best_len = None, 0
+    for k in topics:
+        if k in used:
+            continue
+        m = _wind_norm(k)
+        if not m:
+            continue
+        if m == n:
+            best = k; break
+        short = m if len(m) <= len(n) else n
+        if (m in n or n in m) and len(short) >= (3 if short.isascii() else 2) and len(short) > best_len:
+            best, best_len = k, len(short)
+    if best is None:
+        return {}
+    used.add(best)
+    return topics[best] or {}
+
+
 def p_wind():
     import math
     if not GEMINI_KEY:
@@ -3924,6 +3951,8 @@ def p_wind():
             social = _social_clean(social)[0] or {}
         except Exception as e:  # noqa: BLE001
             log("wind social check", e); social = {}
+    soc_names = list((social.get("topics") or {}).keys())
+    known = (soc_names + [k for k in known if k not in soc_names])[:80]   # 社群排程查過的名稱放最前面，Gemini 沿用才接得上
     for h in (social.get("hot") or [])[:40]:   # Dcard 各板熱門、IG 探索頁推薦：排程已經歸納成話題（不含原文），當討論面的素材
         if h.get("name"):
             talk.append((str(h.get("src") or "社群")[:12], f"{str(h['name'])[:30]}（{int(h.get('n') or 1)} 則）"))
@@ -3955,6 +3984,7 @@ B：
     d_idx = lambda s: int(s[1:]) if isinstance(s, str) and s[:1] == "D" and s[1:].isdigit() and int(s[1:]) < len(do) else None  # noqa: E731
     t_idx = lambda s: int(s[1:]) if isinstance(s, str) and s[:1] == "T" and s[1:].isdigit() and int(s[1:]) < len(talk) else None  # noqa: E731
     errs = [pull_err] if pull_err else []
+    soc_used = set()
     for tp in (data.get("topics") or [])[:24]:
         name = str(tp.get("name") or "").strip()[:20]
         q = str(tp.get("q") or name).strip()[:40]
@@ -3982,7 +4012,7 @@ B：
         mentions = {}
         for s, _ttl in tl:
             mentions[s] = mentions.get(s, 0) + 1
-        soc = ((social.get("topics") or {}).get(name)) or {}
+        soc = _wind_soc_match(name, social.get("topics") or {}, soc_used)
         th, dc = soc.get("Threads"), soc.get("Dcard")   # Threads：每天幾篇；Dcard：近 7 天幾篇
         if isinstance(th, (int, float)) or isinstance(dc, (int, float)):
             row["social"] = {k_: round(v_, 1) for k_, v_ in (("Threads", th), ("Dcard", dc)) if isinstance(v_, (int, float))}
