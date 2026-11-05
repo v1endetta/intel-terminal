@@ -17,18 +17,8 @@
    "url": "https://community.openai.com/t/responses-api-with-gpt-image-2-gives-complexity-low-is-not-supported-after-gpt-image-2-6-launch-with-temporary-hack/1412952",
    "replies": 3,
    "likes": 10,
-   "views": 133,
+   "views": 137,
    "at": "2026-11-05T03:22:05Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "The People Behind the Petition — A Thank You to Monday’s International Community",
-   "url": "https://community.openai.com/t/the-people-behind-the-petition-a-thank-you-to-monday-s-international-community/1412821",
-   "replies": 5,
-   "likes": 8,
-   "views": 64,
-   "at": "2026-11-04T16:33:21Z"
   },
   {
    "source": "OpenAI 論壇",
@@ -37,7 +27,7 @@
    "url": "https://community.openai.com/t/chatgpt-showing-context-window-full-in-long-conversations-difficulty-continuing-existing-projects/1413032",
    "replies": 0,
    "likes": 1,
-   "views": 273,
+   "views": 317,
    "at": "2026-11-05T08:19:14Z"
   },
   {
@@ -47,8 +37,18 @@
    "url": "https://community.openai.com/t/using-work-on-chatgpt-web-not-app/1413057",
    "replies": 7,
    "likes": 20,
-   "views": 25,
+   "views": 29,
    "at": "2026-11-05T09:49:59Z"
+  },
+  {
+   "source": "OpenAI 論壇",
+   "vendor": "openai",
+   "title": "'Context window full' after a few messages",
+   "url": "https://community.openai.com/t/context-window-full-after-a-few-messages/1412910",
+   "replies": 6,
+   "likes": 2,
+   "views": 225,
+   "at": "2026-11-05T00:36:12Z"
   },
   {
    "source": "Google AI 論壇",
@@ -56,8 +56,8 @@
    "title": "Google AI Pro (5 TB) can be activated for 24 months at US$0.00 with no device and no payme",
    "url": "https://discuss.ai.google.dev/t/google-ai-pro-5-tb-can-be-activated-for-24-months-at-us-0-00-with-no-device-and-no-payment-public-automation-tool/198354",
    "replies": 0,
-   "likes": 1,
-   "views": 642,
+   "likes": 2,
+   "views": 762,
    "at": "2026-11-05T08:09:17Z"
   },
   {
@@ -67,7 +67,7 @@
    "url": "https://discuss.ai.google.dev/t/critical-performance-issue-gemini-3-8-flash-extremely-slow-in-antigravity-ide/198333",
    "replies": 2,
    "likes": 0,
-   "views": 197,
+   "views": 209,
    "at": "2026-11-05T06:50:53Z"
   },
   {
@@ -77,7 +77,7 @@
    "url": "https://discuss.ai.google.dev/t/gemini-3-8-flash-stuck-on-working-indefinitely-for-2-days-while-gemini-4-argon-low-works-fast/198327",
    "replies": 1,
    "likes": 1,
-   "views": 124,
+   "views": 131,
    "at": "2026-11-05T06:16:34Z"
   },
   {
@@ -87,18 +87,18 @@
    "url": "https://discuss.ai.google.dev/t/persistent-http-503-error-on-gemini-3-8-flash-medium-account-specific-issue/198323",
    "replies": 3,
    "likes": 0,
-   "views": 71,
+   "views": 73,
    "at": "2026-11-05T06:07:14Z"
   },
   {
    "source": "Google AI 論壇",
    "vendor": "google",
-   "title": "Selecting Gemini 4 Argon in agy CLI drains standard Gemini quota instead of Argon weekly l",
-   "url": "https://discuss.ai.google.dev/t/selecting-gemini-4-argon-in-agy-cli-drains-standard-gemini-quota-instead-of-argon-weekly-limit/198304",
+   "title": "Gemini 3.8 Flash model almost unavailable in Antigravity",
+   "url": "https://discuss.ai.google.dev/t/gemini-3-8-flash-model-almost-unavailable-in-antigravity/198366",
    "replies": 2,
-   "likes": 0,
-   "views": 80,
-   "at": "2026-11-05T04:39:58Z"
+   "likes": 1,
+   "views": 56,
+   "at": "2026-11-05T09:13:49Z"
   }
  ],
  "changelogs": [
@@ -110,6 +110,15 @@
    "title": "Released GPT-4 Turbo Preview, updated GPT-3.5 Turbo, GPT-4 Turbo with Vision, Assistants API, DALL·E 3 in the API, and text-to-speech API",
    "url": "https://developers.openai.com/api/docs/changelog",
    "at": "2026-11-06T00:00:00Z"
+  },
+  {
+   "source": "OpenAI changelog",
+   "vendor": "openai",
+   "date": "Nov 5",
+   "kind": "Feature",
+   "title": "Use GPT-6-Cyber to investigate vulnerabilities, reproduce them in an authorized test environment, and verify fixes.",
+   "url": "https://developers.openai.com/api/docs/changelog",
+   "at": "2026-11-05T00:00:00Z"
   },
   {
    "source": "OpenAI changelog",
@@ -130,13 +139,13 @@
    "at": "2026-11-04T00:00:00Z"
   },
   {
-   "source": "OpenAI changelog",
-   "vendor": "openai",
-   "date": "Oct 30",
-   "kind": "Feature",
-   "title": "Released GPT-6 Rosalind, bringing specialized biological reasoning with scientific tool use to complex life sciences research.",
-   "url": "https://developers.openai.com/api/docs/changelog",
-   "at": "2026-10-30T00:00:00Z"
+   "source": "Claude release notes",
+   "vendor": "anthropic",
+   "date": "November 5, 2026",
+   "kind": null,
+   "title": "You can now set up an IP allowlist for your organization in the Claude Console, in beta.",
+   "url": "https://platform.claude.com/docs/en/release-notes/overview",
+   "at": "2026-11-05T00:00:00Z"
   },
   {
    "source": "Claude release notes",
@@ -164,15 +173,6 @@
    "title": "We’ve deprecated fast mode for Claude Opus 4.8, with removal on November 30, 2026.",
    "url": "https://platform.claude.com/docs/en/release-notes/overview",
    "at": "2026-10-30T00:00:00Z"
-  },
-  {
-   "source": "Claude release notes",
-   "vendor": "anthropic",
-   "date": "October 29, 2026",
-   "kind": null,
-   "title": "We’ve launched the Usage and Cost Analytics API in beta with the analytics-usage-cost-2026-08-24 beta header.",
-   "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-10-29T00:00:00Z"
   },
   {
    "source": "Gemini changelog",
@@ -297,9 +297,9 @@
  ],
  "errs": [],
  "diag": [
-  "Gemini changelog md: got html 132842b",
+  "Gemini changelog md: got html 133793b",
   "DeepSeek updates md: 18816b 0 entries head='# Change Log\\n\\n***\\n\\n## Date: 2026-10-17\\n\\n### Opening up the i'",
   "xAI release notes md: 19971b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## November\\n\\n### grok-i'"
  ],
- "updatedAt": "2026-11-05T16:29:44Z"
+ "updatedAt": "2026-11-05T17:33:08Z"
 }
