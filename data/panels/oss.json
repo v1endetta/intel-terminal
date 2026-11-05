@@ -1,4 +1,96 @@
 {
+ "trending": [
+  {
+   "name": "NVIDIA/auto-ontology",
+   "url": "https://github.com/NVIDIA/auto-ontology",
+   "desc": "Star NVIDIA / auto-ontology Auto Ontology is a Python framework for building semantic, graph-based reasoning l",
+   "lang": "Python",
+   "stars": 6151.0,
+   "today": 2050.0,
+   "zh": "描述太少，看不出用途"
+  },
+  {
+   "name": "max-sixty/worktrunk",
+   "url": "https://github.com/max-sixty/worktrunk",
+   "desc": "Star max-sixty / worktrunk Worktrunk is a CLI for Git worktree management, designed for parallel AI agent work",
+   "lang": "Rust",
+   "stars": 11274.0,
+   "today": 531.0,
+   "zh": "管理 Git 多工作樹，支援 AI 同步執行多個任務"
+  },
+  {
+   "name": "mattpocock/skills",
+   "url": "https://github.com/mattpocock/skills",
+   "desc": "Sponsor Star mattpocock / skills Skills for Real Engineers. Straight from my .agents directory.",
+   "lang": "Shell",
+   "stars": 313983.0,
+   "today": 1379.0,
+   "zh": "給 AI 助理現成擴充能力，幫忙分擔工程師雜事"
+  },
+  {
+   "name": "floci-io/floci",
+   "url": "https://github.com/floci-io/floci",
+   "desc": "Sponsor Star floci-io / floci Light, fluffy, and always free - The AWS Local Emulator alternative",
+   "lang": "Java",
+   "stars": 29942.0,
+   "today": 1090.0,
+   "zh": "像免費的 AWS 本地模擬器，測試雲端服務更方便"
+  },
+  {
+   "name": "thedotmack/claude-mem",
+   "url": "https://github.com/thedotmack/claude-mem",
+   "desc": "Sponsor Star thedotmack / claude-mem Persistent Context Across Sessions for Every Agent – Captures everything ",
+   "lang": "TypeScript",
+   "stars": 113226.0,
+   "today": 1172.0,
+   "zh": "讓 Claude 跨對話記住你講過的話與歷史紀錄"
+  },
+  {
+   "name": "vercel-labs/agent-desktop",
+   "url": "https://github.com/vercel-labs/agent-desktop",
+   "desc": "Star vercel-labs / agent-desktop Computer use CLI for AI agents",
+   "lang": "Rust",
+   "stars": 16001.0,
+   "today": 2470.0,
+   "zh": "讓 AI 助理直接在你的電腦畫面上操作各種軟體"
+  },
+  {
+   "name": "github/spec-kit",
+   "url": "https://github.com/github/spec-kit",
+   "desc": "Star github / spec-kit 💫 Toolkit to help you get started with SDD or any other process!",
+   "lang": "Python",
+   "stars": 147588.0,
+   "today": 808.0,
+   "zh": "描述太少，看不出用途"
+  },
+  {
+   "name": "The-PR-Agent/pr-agent",
+   "url": "https://github.com/The-PR-Agent/pr-agent",
+   "desc": "Star The-PR-Agent / pr-agent 🚀 PR Agent: The Original Open-Source PR Reviewer. This project is not the Qodo fr",
+   "lang": "Python",
+   "stars": 14974.0,
+   "today": 280.0,
+   "zh": "自動幫你檢查程式碼更新並寫好說明"
+  },
+  {
+   "name": "harry0703/MoneyPrinterTurbo",
+   "url": "https://github.com/harry0703/MoneyPrinterTurbo",
+   "desc": "Star harry0703 / MoneyPrinterTurbo 利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or",
+   "lang": "Python",
+   "stars": 139478.0,
+   "today": 617.0,
+   "zh": "輸入主題就自動生成高畫質短影片"
+  },
+  {
+   "name": "garrytan/gstack",
+   "url": "https://github.com/garrytan/gstack",
+   "desc": "Star garrytan / gstack Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve as CEO, Design",
+   "lang": "TypeScript",
+   "stars": 139578.0,
+   "today": 290.0,
+   "zh": "複製 AI 創業投資人的高效工作設定與流程"
+  }
+ ],
  "zh_ver": "v2",
  "zh_tries": {},
  "zh_cache": {
@@ -170,51 +262,51 @@
  "spaces": [
   {
    "id": "kulkas2pintu/wan777",
-   "likes": 1303,
+   "likes": 1305,
    "sdk": "gradio",
    "url": "https://huggingface.co/spaces/kulkas2pintu/wan777"
   },
   {
    "id": "speridlabs/idol",
-   "likes": 132,
+   "likes": 134,
    "sdk": "gradio",
    "url": "https://huggingface.co/spaces/speridlabs/idol"
   },
   {
-   "id": "hugging-apps/bfs-best-face-swap",
-   "likes": 760,
-   "sdk": "gradio",
-   "url": "https://huggingface.co/spaces/hugging-apps/bfs-best-face-swap"
-  },
-  {
-   "id": "fendouai/free-ai-humanizer",
-   "likes": 190,
-   "sdk": "static",
-   "url": "https://huggingface.co/spaces/fendouai/free-ai-humanizer"
-  },
-  {
    "id": "LiquidAI/LFM3-Omni-2B-WebGPU",
-   "likes": 107,
+   "likes": 108,
    "sdk": "static",
    "url": "https://huggingface.co/spaces/LiquidAI/LFM3-Omni-2B-WebGPU"
   },
   {
+   "id": "hugging-apps/bfs-best-face-swap",
+   "likes": 761,
+   "sdk": "gradio",
+   "url": "https://huggingface.co/spaces/hugging-apps/bfs-best-face-swap"
+  },
+  {
    "id": "nvidia/simready-central",
-   "likes": 375,
+   "likes": 376,
    "sdk": "docker",
    "url": "https://huggingface.co/spaces/nvidia/simready-central"
   },
   {
    "id": "linoyts/qwen-image-2-1-realtime",
-   "likes": 168,
+   "likes": 169,
    "sdk": "gradio",
    "url": "https://huggingface.co/spaces/linoyts/qwen-image-2-1-realtime"
   },
   {
    "id": "JCisHERE/wan2-2-i2v-v3",
-   "likes": 212,
+   "likes": 214,
    "sdk": "gradio",
    "url": "https://huggingface.co/spaces/JCisHERE/wan2-2-i2v-v3"
+  },
+  {
+   "id": "briaai/Fibo-2.0-editing",
+   "likes": 221,
+   "sdk": "gradio",
+   "url": "https://huggingface.co/spaces/briaai/Fibo-2.0-editing"
   }
  ],
  "releases": [
@@ -259,8 +351,6 @@
    "at": "2026-10-24T14:16:43Z"
   }
  ],
- "errs": [
-  "GitHub Trending: HTTPError: 504 Server Error: Gateway Time-out for url: https://github.com/trending?since=daily"
- ],
- "updatedAt": "2026-11-05T09:04:57Z"
+ "errs": [],
+ "updatedAt": "2026-11-05T10:08:33Z"
 }
