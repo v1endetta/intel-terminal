@@ -1,33 +1,10 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的注意力主要集中在熱門電影票房、音樂新作發燒影片及各類生活風格話題。",
+ "line": "這幾天台灣消費者聚焦於全新上市的熱門遊戲大作、強檔電影票房以及追星音樂話題，同時社群也高度關注美股走勢與生活風格消費資訊",
  "topics": [
   {
-   "name": "理想混蛋",
-   "q": "理想混蛋 高雄",
-   "cat": "音樂",
-   "do": [
-    {
-     "src": "YouTube 熱門",
-     "name": "Seishun Sick (Kaohsiung Version)",
-     "how": "7 天內上架、發燒第 5"
-    }
-   ],
-   "talk": [],
-   "y": 0.64,
-   "news7": 4,
-   "news_p7": 4,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.35,
-   "talk_trend": "flat",
-   "days": 3,
-   "first": "2026-11-03",
-   "quad": "quiet"
-  },
-  {
    "name": "泥面人",
-   "q": "泥面人 票房",
+   "q": "泥面人 電影",
    "cat": "影視",
    "do": [
     {
@@ -38,15 +15,15 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 6,
-   "news_p7": 13,
+   "news7": 11,
+   "news_p7": 42,
    "news_capped": false,
    "social": {
     "Threads": 45.1,
     "Dcard": 4
    },
    "mentions": {},
-   "x": 0.78,
+   "x": 0.89,
    "talk_trend": "down",
    "days": 3,
    "first": "2026-11-03",
@@ -81,7 +58,7 @@
   },
   {
    "name": "惡靈古堡：爆發夜",
-   "q": "惡靈古堡 爆發夜 票房",
+   "q": "惡靈古堡 爆發夜",
    "cat": "影視",
    "do": [
     {
@@ -92,15 +69,15 @@
    ],
    "talk": [],
    "y": 0.87,
-   "news7": 8,
-   "news_p7": 5,
+   "news7": 9,
+   "news_p7": 6,
    "news_capped": false,
    "social": {
     "Threads": 15.4,
     "Dcard": 1
    },
    "mentions": {},
-   "x": 0.7,
+   "x": 0.73,
    "talk_trend": "up",
    "days": 3,
    "first": "2026-11-03",
@@ -120,7 +97,7 @@
    "talk": [],
    "y": 0.6,
    "news7": 32,
-   "news_p7": 3,
+   "news_p7": 2,
    "news_capped": false,
    "mentions": {},
    "x": 0.76,
@@ -144,7 +121,7 @@
    "y": 0.5,
    "static": true,
    "news7": 38,
-   "news_p7": 28,
+   "news_p7": 30,
    "news_capped": false,
    "mentions": {},
    "x": 0.8,
@@ -155,41 +132,42 @@
   },
   {
    "name": "黃奇斌",
-   "q": "黃奇斌 閣愛妳一擺",
-   "cat": "音樂",
+   "q": "黃奇斌",
+   "cat": "人物",
    "do": [
     {
      "src": "Spotify",
-     "name": "EggPlantEgg - 閣愛妳一擺",
-     "how": "升 6 名到第 19"
+     "name": "黃奇斌 若無你我欲去佗位",
+     "how": "在榜上第 13 名（沒有在爬）"
     }
    ],
    "talk": [],
-   "y": 0.55,
-   "news7": 0,
+   "y": 0.5,
+   "static": true,
+   "news7": 35,
    "news_p7": 0,
    "news_capped": false,
    "mentions": {},
-   "x": 0.0,
-   "talk_trend": "flat",
+   "x": 0.78,
+   "talk_trend": "up",
    "days": 3,
    "first": "2026-11-03",
-   "quad": "new"
+   "quad": "hit"
   },
   {
    "name": "薩爾達傳說：時之笛重製版",
-   "q": "薩爾達傳說 時之笛",
+   "q": "薩爾達傳說 時之笛重製版",
    "cat": "遊戲",
    "do": [],
    "talk": [
     {
      "src": "新聞焦點",
-     "title": "《薩爾達傳說時之笛》開發人員訪談回顧經典名作誕生的轉捩點《The Legend of Zelda: Ocarina of Time》"
+     "title": "薩爾達傳說：時之笛重製版今日登場Switch 2 經典煥新迎接挑戰"
     }
    ],
    "y": 0.0,
-   "news7": 50,
-   "news_p7": 16,
+   "news7": 13,
+   "news_p7": 7,
    "news_capped": false,
    "social": {
     "Threads": 37.6,
@@ -198,7 +176,7 @@
    "mentions": {
     "新聞焦點": 1
    },
-   "x": 1.0,
+   "x": 0.91,
    "talk_trend": "up",
    "days": 3,
    "first": "2026-11-03",
@@ -226,6 +204,23 @@
    "quad": "hype"
   },
   {
+   "name": "Toyota",
+   "q": "Toyota",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 76,
+   "news_p7": 24,
+   "news_capped": true,
+   "mentions": {},
+   "x": 0.94,
+   "talk_trend": "up",
+   "days": 3,
+   "first": "2026-11-03",
+   "quad": "talk"
+  },
+  {
    "name": "Zara Home",
    "q": "Zara Home",
    "cat": "品牌商品",
@@ -241,6 +236,30 @@
    "days": 2,
    "first": "2026-11-03",
    "quad": "talk"
+  },
+  {
+   "name": "理想混蛋",
+   "q": "理想混蛋",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "KKBOX",
+     "name": "理想混蛋 (Bestards) 離開的一路上",
+     "how": "在榜上第 18 名（沒有在爬）"
+    }
+   ],
+   "talk": [],
+   "y": 0.5,
+   "static": true,
+   "news7": 7,
+   "news_p7": 1,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.45,
+   "talk_trend": "up",
+   "days": 3,
+   "first": "2026-11-03",
+   "quad": "low"
   },
   {
    "name": "Fenty Beauty",
@@ -261,16 +280,33 @@
   },
   {
    "name": "風衣外套",
-   "q": "風衣外套 穿搭",
+   "q": "風衣外套",
    "cat": "品牌商品",
    "do": [],
    "talk": [],
    "y": 0.0,
-   "news7": 2,
-   "news_p7": 3,
+   "news7": 4,
+   "news_p7": 5,
    "news_capped": false,
    "mentions": {},
-   "x": 0.24,
+   "x": 0.35,
+   "talk_trend": "flat",
+   "days": 3,
+   "first": "2026-11-03",
+   "quad": "low"
+  },
+  {
+   "name": "羅技 MX Master 4",
+   "q": "羅技 MX Master 4",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 0,
+   "news_p7": 5,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.0,
    "talk_trend": "down",
    "days": 3,
    "first": "2026-11-03",
@@ -292,32 +328,15 @@
    "days": 3,
    "first": "2026-11-03",
    "quad": "low"
-  },
-  {
-   "name": "羅技 MX Master 4",
-   "q": "羅技 MX Master 4",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 0,
-   "news_p7": 5,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.0,
-   "talk_trend": "down",
-   "days": 3,
-   "first": "2026-11-03",
-   "quad": "low"
   }
  ],
  "quads": {
-  "quiet": 1,
-  "hit": 5,
-  "new": 1,
+  "quiet": 0,
+  "hit": 6,
+  "new": 0,
   "hype": 2,
-  "talk": 1,
-  "low": 4
+  "talk": 2,
+  "low": 5
  },
  "src_do": [
   "App 下載",
@@ -342,5 +361,5 @@
  "hist_days": 3,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-04T19:29:33Z"
+ "updatedAt": "2026-11-05T01:31:11Z"
 }
