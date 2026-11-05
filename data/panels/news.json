@@ -625,10 +625,10 @@
      "kw": "廟宇 OR 媽祖 OR 民間信仰"
     },
     {
-     "source": "立報傳媒",
-     "title": "誠品聯名SOU．SOU貓系新品 包袋背面藏尾巴、11/9起開賣",
-     "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE9TR0gwZ215alFWVEhrbjVwREZQOHZMUWRqaGFqdk5fbkxRYm9NUVAteDRTaTRsZ2lYeUk4cm5yc2hiemVwOXBzOQ?oc=5",
-     "at": "2026-11-04T14:33:11Z",
+     "source": "風傳媒",
+     "title": "台灣新百貨公司來了！「近5000坪大商場、高鐵機捷都可到，交通很方便」， 最快開幕時間曝",
+     "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE54a284WmVqY2lKY1hUbUF1U1FjZFk0TnhEZllDU2RabC14N1duRFNuaGh3UkhxSkMxLUVuM3FKSzZ1ZWdXd3R1MUY1VjlUUzNl?oc=5",
+     "at": "2026-11-05T01:30:00Z",
      "kw": "獨立書店 OR 誠品"
     },
     {
@@ -653,7 +653,7 @@
     16,
     27,
     36,
-    4
+    6
    ],
    "days7": [
     "2026-10-30",
@@ -809,22 +809,6 @@
     "hot": true
    },
    {
-    "term": "民主",
-    "n": 5,
-    "src": 4,
-    "sources": [
-     "PTT",
-     "中央社",
-     "公視",
-     "數位時代"
-    ],
-    "sample": {
-     "title": "川普稱若民主黨贏得期中選舉 恐動用權力當「否決先生」",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1Jazc4RlY4Y1pId1hCV0lwRVhPWHBmZ3dBcTNXdFZqVXVmQmNLU2xVNXVuZDYyeHJIaGZqV09UX3VJVG41ODlDQi1XcFRhdlk?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "ADR",
     "n": 4,
     "src": 4,
@@ -885,11 +869,26 @@
      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1Jazc4RlY4Y1pId1hCV0lwRVhPWHBmZ3dBcTNXdFZqVXVmQmNLU2xVNXVuZDYyeHJIaGZqV09UX3VJVG41ODlDQi1XcFRhdlk?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "ChatGPT",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "TradingView",
+     "富途牛牛",
+     "硬是要學"
+    ],
+    "sample": {
+     "title": "OpenAI 推出 Images 2.6：ChatGPT 能做GIF 動畫，生成速度快50%，API 新增Flare 與",
+     "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPakpUZjBYZXMxT3RLcEV2allMcThudEFrUFJSak51TG40WFRpOHlGeVhzdFI5VFFhN2VEQ0JFRlRXRE9PVDFxVHVpN2NaTzFWZ2d6VnFGbGxtcEg5TTNCVlN6WV9qNDRKRlNiRm1mOTNqenV1SHlHc0F4WTN2NGhBcEw1bzRJUGJRODkw?oc=5"
+    },
+    "hot": true
    }
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: ReadTimeout: HTTPSConnectionPool(host='api.gdeltproject.org', port=443): Read timed out. (read timeout=25)"
  ],
- "updatedAt": "2026-11-05T01:43:07Z"
+ "updatedAt": "2026-11-05T01:58:34Z"
 }
