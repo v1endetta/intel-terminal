@@ -3790,6 +3790,7 @@ def p_appstore():
 # ---------- 消費風向：說 vs 做。排行上正在爬的東西（做），對照有沒有人在討論（說），分成四格 ----------
 WIND_HIST = DATA / "wind_hist.json"      # 每天每個話題的 [說, 做]，留 30 天，算「連續幾天」
 WIND_SOCIAL = DATA / "social_tw.json"    # Threads／Dcard／IG 每日彙總（內建瀏覽器排程推上來，只有話題與次數）
+SOCIAL_DRIVE_ID = "12V6fU471QIjZvacXmZQNwvL8b1R-KuhE"   # 社群彙總的中轉檔：排程寫在它的「說明」欄；只分享給 Actions 的服務帳號 intel-writer
 WIND_CATS = ["影視", "音樂", "App", "遊戲", "品牌商品", "飲食", "生活習慣", "活動", "人物"]
 WIND_CHART_CATS = {"影視", "音樂", "App", "遊戲"}   # 有排行可以對照的類別；其他類別（實體商品、飲食…）沒有銷售榜，不在榜上不代表沒人買
 
@@ -3871,6 +3872,34 @@ def _wind_talk():
     return t
 
 
+def _social_pull():
+    """綁電腦的 Claude 排程沒有 GitHub 推送權限，所以把當天彙總寫進 Drive 檔的說明欄；
+    這裡用 Actions 的 GCP 服務帳號讀回來，經 ops/social_check.py 同一套規則過濾，日期比現有的新才存。回傳錯誤字串或 None。"""
+    try:
+        import google.auth
+        from google.auth.transport.requests import Request
+        creds, _ = google.auth.default(scopes=["https://www.googleapis.com/auth/drive.readonly"])
+        creds.refresh(Request())
+        r = requests.get(f"https://www.googleapis.com/drive/v3/files/{SOCIAL_DRIVE_ID}", params={"fields": "description,modifiedTime"},
+                         headers={"Authorization": f"Bearer {creds.token}"}, timeout=20)
+        r.raise_for_status()
+        d = json.loads(r.json().get("description") or "{}")
+        sys.path.insert(0, str(ROOT / "ops"))
+        from social_check import clean as _social_clean
+        d = _social_clean(d)[0]
+    except Exception as e:  # noqa: BLE001
+        return f"社群中轉: {safe_err(e)}"
+    if not d:
+        return "社群中轉: 格式不符"
+    try:
+        old = json.loads(WIND_SOCIAL.read_text(encoding="utf-8")).get("date", "") if WIND_SOCIAL.exists() else ""
+    except Exception:  # noqa: BLE001
+        old = ""
+    if d["date"] >= old:
+        write_json(WIND_SOCIAL, d)
+    return None
+
+
 def p_wind():
     import math
     if not GEMINI_KEY:
@@ -3879,6 +3908,7 @@ def p_wind():
     do, talk = _wind_do(), _wind_talk()
     if len(do) < 8:
         raise RuntimeError(f"wind: 排行素材不足（{len(do)}）")
+    pull_err = _social_pull() if os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") else None
     hist = json.loads(WIND_HIST.read_text(encoding="utf-8")) if WIND_HIST.exists() else {}
     known = sorted({k for d in sorted(hist)[-7:] for k in hist[d]})[:80]
     try:
@@ -3924,7 +3954,7 @@ B：
     topics = []
     d_idx = lambda s: int(s[1:]) if isinstance(s, str) and s[:1] == "D" and s[1:].isdigit() and int(s[1:]) < len(do) else None  # noqa: E731
     t_idx = lambda s: int(s[1:]) if isinstance(s, str) and s[:1] == "T" and s[1:].isdigit() and int(s[1:]) < len(talk) else None  # noqa: E731
-    errs = []
+    errs = [pull_err] if pull_err else []
     for tp in (data.get("topics") or [])[:24]:
         name = str(tp.get("name") or "").strip()[:20]
         q = str(tp.get("q") or name).strip()[:40]
