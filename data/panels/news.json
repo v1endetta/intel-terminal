@@ -76,9 +76,9 @@
  "intl": [
   {
    "source": "BBC",
-   "title": "Nvidia and SpaceX lose billions in market value as tech and AI stocks plummet",
+   "title": "Major tech stocks plunge as US midterms add to fears of AI slowdown",
    "url": "https://www.bbc.co.uk/news/articles/cmn04705rd8jo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-05T21:25:57Z"
+   "at": "2026-11-05T21:56:00Z"
   },
   {
    "source": "BBC",
@@ -717,16 +717,16 @@
   },
   "hot": [
    {
-    "term": "OpenAI",
+    "term": "GPT",
     "n": 7,
-    "src": 7,
+    "src": 6,
     "sources": [
-     "CNBC",
+     "HN",
+     "OpenAI changelog",
      "Reuters",
-     "TechCrunch",
-     "The American",
      "The Register",
-     "TradingView"
+     "TradingView",
+     "鉅亨網"
     ],
     "sample": {
      "title": "OpenAI發布GPT-6 Cyber：專攻網路安全漏洞，風險評級升至「關鍵」",
@@ -735,13 +735,13 @@
     "hot": true
    },
    {
-    "term": "GPT",
-    "n": 7,
+    "term": "OpenAI",
+    "n": 6,
     "src": 6,
     "sources": [
-     "HN",
-     "OpenAI changelog",
      "Reuters",
+     "TechCrunch",
+     "The American",
      "The Register",
      "TradingView",
      "鉅亨網"
@@ -786,7 +786,7 @@
     "hot": true
    },
    {
-    "term": "ADR",
+    "term": "台積電",
     "n": 4,
     "src": 4,
     "sources": [
@@ -802,7 +802,7 @@
     "hot": true
    },
    {
-    "term": "台積電",
+    "term": "ADR",
     "n": 4,
     "src": 4,
     "sources": [
@@ -882,5 +882,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-05T21:41:34Z"
+ "updatedAt": "2026-11-05T22:00:55Z"
 }
