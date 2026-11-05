@@ -650,9 +650,9 @@
     6,
     9,
     15,
-    20,
+    19,
     27,
-    38,
+    37,
     4
    ],
    "days7": [
@@ -822,13 +822,13 @@
     "hot": true
    },
    {
-    "term": "民主",
+    "term": "川普",
     "n": 4,
     "src": 3,
     "sources": [
      "PTT",
-     "中央社",
-     "公視"
+     "公視",
+     "風傳媒"
     ],
     "sample": {
      "title": "川普稱若民主黨贏得期中選舉 恐動用權力當「否決先生」",
@@ -837,13 +837,13 @@
     "hot": true
    },
    {
-    "term": "川普",
+    "term": "民主",
     "n": 4,
     "src": 3,
     "sources": [
      "PTT",
-     "公視",
-     "風傳媒"
+     "中央社",
+     "公視"
     ],
     "sample": {
      "title": "川普稱若民主黨贏得期中選舉 恐動用權力當「否決先生」",
@@ -884,7 +884,7 @@
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: IndexError: list index out of range"
  ],
- "updatedAt": "2026-11-05T00:26:22Z"
+ "updatedAt": "2026-11-05T00:45:45Z"
 }
