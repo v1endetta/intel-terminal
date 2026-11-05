@@ -76,16 +76,23 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "British Ebola patient evacuated from DR Congo arrives at London hospital",
-   "url": "https://www.theguardian.com/world/2026/nov/05/british-ebola-patient-evacuated-drc-arrives-london-hospital",
-   "at": "2026-11-05T20:30:11Z",
-   "sec": "World news"
+   "title": "Nasdaq sees worst day in 18 months as investors bet on AI slowdown after Democrats’ electi",
+   "url": "https://www.theguardian.com/business/2026/nov/05/nasdaq-heading-for-worst-day-in-18-months-as-wall-street-sustains-widespread-losses",
+   "at": "2026-11-05T21:23:18Z",
+   "sec": "Business"
   },
   {
    "source": "BBC",
    "title": "California governor commutes death sentences for all 548 people on death row",
    "url": "https://www.bbc.co.uk/news/articles/cqrkyyd2j8mvo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-05T20:28:38Z"
+   "at": "2026-11-05T21:08:34Z"
+  },
+  {
+   "source": "Guardian",
+   "title": "British Ebola patient evacuated from DR Congo arrives at London hospital",
+   "url": "https://www.theguardian.com/world/2026/nov/05/british-ebola-patient-evacuated-drc-arrives-london-hospital",
+   "at": "2026-11-05T20:30:11Z",
+   "sec": "World news"
   },
   {
    "source": "BBC",
@@ -111,13 +118,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/05/paraguay-president-santiago-pena-resigns",
    "at": "2026-11-05T18:48:07Z",
    "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "US tech shares fall sharply as investors bet on AI slowdown after Democrats’ election triu",
-   "url": "https://www.theguardian.com/business/2026/nov/05/nasdaq-heading-for-worst-day-in-18-months-as-wall-street-sustains-widespread-losses",
-   "at": "2026-11-05T18:44:25Z",
-   "sec": "Business"
   },
   {
    "source": "Guardian",
@@ -540,10 +540,10 @@
     1,
     1,
     2,
-    19,
-    37,
-    127,
-    17
+    20,
+    39,
+    125,
+    18
    ],
    "days7": [
     "2026-10-31",
@@ -590,10 +590,10 @@
    "daily7": [
     1,
     0,
-    4,
+    5,
     13,
-    14,
-    10,
+    11,
+    11,
     0
    ],
    "days7": [
@@ -639,12 +639,12 @@
     }
    ],
    "daily7": [
-    6,
+    5,
     8,
     17,
     20,
     32,
-    51,
+    50,
     0
    ],
    "days7": [
@@ -754,10 +754,9 @@
    },
    {
     "term": "Cyber",
-    "n": 6,
-    "src": 6,
+    "n": 5,
+    "src": 5,
     "sources": [
-     "ClassAction.",
      "HN",
      "Reuters",
      "The Register",
@@ -771,18 +770,18 @@
     "hot": true
    },
    {
-    "term": "選舉",
-    "n": 6,
+    "term": "資安",
+    "n": 5,
     "src": 4,
     "sources": [
-     "LINE TODAY",
-     "Wiki",
+     "CMoney投資網誌",
+     "iThome",
      "中央社",
-     "數位時代"
+     "天下雜誌"
     ],
     "sample": {
-     "title": "歐股多收黑　美期中選舉結果一度激勵盤中創高",
-     "url": "https://www.cna.com.tw/news/afe/202611060005.aspx"
+     "title": "英國：網攻利用系統既有弱點　迴避資安投資代價更高",
+     "url": "https://www.cna.com.tw/news/aopl/202611050338.aspx"
     },
     "hot": true
    },
@@ -819,27 +818,11 @@
     "hot": true
    },
    {
-    "term": "資安",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "CMoney投資網誌",
-     "iThome",
-     "中央社",
-     "天下雜誌"
-    ],
-    "sample": {
-     "title": "英國：網攻利用系統既有弱點　迴避資安投資代價更高",
-     "url": "https://www.cna.com.tw/news/aopl/202611050338.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "期中選舉",
-    "n": 4,
+    "term": "選舉",
+    "n": 5,
     "src": 3,
     "sources": [
-     "LINE TODAY",
+     "Wiki",
      "中央社",
      "數位時代"
     ],
@@ -865,24 +848,38 @@
     "hot": true
    },
    {
-    "term": "Gemini",
+    "term": "美股",
     "n": 3,
     "src": 3,
     "sources": [
-     "Gemini",
-     "Google AI",
-     "Google AI 論壇"
+     "CMoney",
+     "中央社",
+     "鏈新聞 ABMedia"
     ],
     "sample": {
-     "title": "Gemini Omni 1.2 Flash: Fast and cost-effective with longer c",
-     "url": "https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/"
+     "title": "美國期中選舉後市場回歸平靜　美股開盤走勢不一",
+     "url": "https://www.cna.com.tw/news/afe/202611050352.aspx"
     },
     "hot": true
+   },
+   {
+    "term": "Anthropic",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "Anthropic",
+     "流動日報"
+    ],
+    "sample": {
+     "title": "Anthropic 為 Claude 推出 Personal Finance 美國付費訂戶即日起可用",
+     "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPNm15MnEyV1ZwSXVBYUMtM3ZmN2xKQVlDR2J4WUlDOWpVMHBSQ1U2N25IVnRnQU05WktGN2xwemV0RzhDaF9uWkN1UVJMVE1aU05DU1lmWmxFNGs3Q1htbWhGd1I5WE5hZVg0WkdqYW13MW5sQzdURFdtM0FHMUtraHU1OHEwaGFpMWsw?oc=5"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-05T21:04:55Z"
+ "updatedAt": "2026-11-05T21:22:43Z"
 }
