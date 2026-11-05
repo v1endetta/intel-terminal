@@ -3,56 +3,56 @@
   {
    "name": "deepseek-ai/dsh-superagent-prototype",
    "url": "https://github.com/deepseek-ai/dsh-superagent-prototype",
-   "stars": 18901,
+   "stars": 18922,
    "lang": "TypeScript",
    "desc": "Towards a More Autonomous Agent System"
   },
   {
    "name": "storytold/craft-anything",
    "url": "https://github.com/storytold/craft-anything",
-   "stars": 12960,
+   "stars": 13032,
    "lang": "Rust",
    "desc": "Craft Anything: understand how any software works, and craft your own."
   },
   {
    "name": "patch-gg/pixelfx",
    "url": "https://github.com/patch-gg/pixelfx",
-   "stars": 4888,
+   "stars": 4898,
    "lang": "JavaScript",
    "desc": "244 pixel art effects, every one a small piece of code. Plus a Claude Code skill to make y"
   },
   {
    "name": "KKKKhazix/agent-autoloop",
    "url": "https://github.com/KKKKhazix/agent-autoloop",
-   "stars": 2846,
+   "stars": 2867,
    "lang": "TypeScript",
    "desc": "让你的命令行 Agent 在后台自己接活、自己跟进到底；平时不烦你，遇到拿不准的事才发卡片找你拍板。"
   },
   {
    "name": "Verlintas/NOIR",
    "url": "https://github.com/Verlintas/NOIR",
-   "stars": 2210,
+   "stars": 2221,
    "lang": "Kotlin",
    "desc": "手机隐私审计：用 adb 扫出 Android 应用的权限、上报端点与数据流向，并给出可回滚的处置。Desktop Android leak audit: permissions,"
   },
   {
    "name": "elvarofficial/teardown",
    "url": "https://github.com/elvarofficial/teardown",
-   "stars": 1968,
+   "stars": 1975,
    "lang": "JavaScript",
    "desc": "A Claude Code skill that turns any machine into a 3D simulator you can take apart"
   },
   {
    "name": "caru-ini/stack-diagram",
    "url": "https://github.com/caru-ini/stack-diagram",
-   "stars": 1786,
+   "stars": 1789,
    "lang": "TypeScript",
    "desc": "Agent skill: describe your stack in a sentence, get an architecture diagram with official "
   },
   {
    "name": "govijr/terminal-mac",
    "url": "https://github.com/govijr/terminal-mac",
-   "stars": 1685,
+   "stars": 1696,
    "lang": "Swift",
    "desc": "Entire MacOS running in your terminal."
   }
@@ -61,13 +61,19 @@
   {
    "id": "nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
    "downloads": 44939,
-   "likes": 3013,
+   "likes": 3014,
    "task": "automatic-speech-recognition"
+  },
+  {
+   "id": "moonshotai/Kimi-K3.1-Pro",
+   "downloads": 797,
+   "likes": 626,
+   "task": "image-text-to-text"
   },
   {
    "id": "speridlabs/idol",
    "downloads": 14613,
-   "likes": 643,
+   "likes": 647,
    "task": "image-to-3d"
   },
   {
@@ -77,9 +83,9 @@
    "task": "image-text-to-text"
   },
   {
-   "id": "moonshotai/Kimi-K3.1-Pro",
-   "downloads": 797,
-   "likes": 610,
+   "id": "mistralai/Mistral-Large-4-1T-A52B",
+   "downloads": 8200,
+   "likes": 1593,
    "task": "image-text-to-text"
   },
   {
@@ -89,21 +95,15 @@
    "task": "text-generation"
   },
   {
-   "id": "mistralai/Mistral-Large-4-1T-A52B",
-   "downloads": 8200,
-   "likes": 1592,
-   "task": "image-text-to-text"
-  },
-  {
    "id": "Pika-Labs/Pika-H3-Flex",
    "downloads": 749,
-   "likes": 433,
+   "likes": 435,
    "task": "image-to-video"
   },
   {
    "id": "Lightricks/LTX-2.5",
    "downloads": 2493402,
-   "likes": 10634,
+   "likes": 10637,
    "task": "image-to-video"
   }
  ],
@@ -111,36 +111,36 @@
   {
    "title": "Tell HN: Gemini trains on chat history, even for subscribers (personal accounts)",
    "url": "https://news.ycombinator.com/item?id=50363461",
-   "score": 653,
+   "score": 656,
    "comments": 168,
    "hot": true
   },
   {
    "title": "Nvidia RTX Spark encrypted firmware slows inference speed to 35% on Linux",
    "url": "https://www.mindstudio.ai/blog/linux-nvidia-rtx-spark-laptop",
-   "score": 597,
-   "comments": 276,
+   "score": 598,
+   "comments": 277,
    "hot": true
   },
   {
    "title": "Kimi K3.1 Pro model weights are out",
    "url": "https://huggingface.co/moonshotai/Kimi-K3.1-Pro",
-   "score": 474,
-   "comments": 134,
+   "score": 482,
+   "comments": 136,
    "hot": true
   },
   {
    "title": "Ripple-65B Preview: U.S. Open-Weight SOTA on Agentic Coding",
    "url": "https://www.ricursive.com/ripple",
-   "score": 274,
+   "score": 276,
    "comments": 99,
    "hot": true
   },
   {
    "title": "Ask HN: What's your current AI agentic setup?",
    "url": "https://news.ycombinator.com/item?id=50366117",
-   "score": 259,
-   "comments": 251,
+   "score": 266,
+   "comments": 262,
    "hot": true
   },
   {
@@ -153,17 +153,17 @@
   {
    "title": "Progress on provable inference for large language models",
    "url": "https://www.anthropic.com/research/provable-inference",
-   "score": 206,
-   "comments": 91,
+   "score": 207,
+   "comments": 93,
    "hot": true
   },
   {
    "title": "Conductor is joining Meta",
    "url": "https://www.conductor.build/announcement",
-   "score": 159,
+   "score": 160,
    "comments": 174,
    "hot": true
   }
  ],
- "updatedAt": "2026-11-05T06:54:35Z"
+ "updatedAt": "2026-11-05T07:15:18Z"
 }

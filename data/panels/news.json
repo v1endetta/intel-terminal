@@ -75,6 +75,13 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Ministers to target ‘wild west’ of e-bikes blocking pavements",
+   "url": "https://www.theguardian.com/world/2026/nov/05/e-bikes-blocking-pavements-department-for-transport",
+   "at": "2026-11-05T07:00:57Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "Joshua Wong, face of Hong Kong's pro-democracy protests, jailed for 10 years",
    "url": "https://www.bbc.co.uk/news/articles/cwp9g3rlp8jlo?at_medium=RSS&at_campaign=rss",
@@ -147,13 +154,6 @@
    "title": "Pope Leo hosts Bob Dylan at official residence in Rome",
    "url": "https://www.bbc.co.uk/news/articles/cm0e035n13ylo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-05T02:09:23Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "UK and Caribbean to begin ‘dialogue’ within next year after slavery reparations call",
-   "url": "https://www.theguardian.com/world/2026/nov/04/debt-relief-aid-no-replacement-slavery-reparations-uk-told-caribbean",
-   "at": "2026-11-04T23:51:58Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -655,7 +655,7 @@
     12,
     26,
     34,
-    25
+    26
    ],
    "days7": [
     "2026-10-30",
@@ -876,24 +876,25 @@
     "hot": true
    },
    {
-    "term": "ETF",
+    "term": "半導體",
     "n": 4,
     "src": 3,
     "sources": [
-     "BigGo 財經",
-     "UDN",
-     "工商時報"
+     "LINE TODAY",
+     "Yahoo新聞",
+     "數位時代",
+     "風傳媒"
     ],
     "sample": {
-     "title": "0050明明還上漲…報酬6.99％、正二00631L僅賺1.55％！清流君揭績效落後3大原因| 存股族愛ETF | 股市",
-     "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5ydnhkS01lZFlwbWdzSGtldk1ORHUwS001TTBHV3FJaS1sM2pDTVg2MDJPZjA5U3dfc2V2NW9NUE5GbzhiWGZRZ0Y1SWdmb3VNdFYw?oc=5"
+     "title": "2026美國期中選舉結果：民主黨拿下參眾兩院！川普關稅、半導體產業會受影響嗎？ | 數位時代",
+     "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFA2eHdFS3VsYUNyYUhYbkNKRVVRVzZMRzlrUmVYdUdrREdTdFViR2VMWVY5Y3o3WUlJS3hmQ3psbmk3WGw4UTBfUTFhNEY1bnl4NGpsU1ZB?oc=5"
     },
     "hot": true
    }
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: IndexError: list index out of range"
  ],
- "updatedAt": "2026-11-05T06:54:35Z"
+ "updatedAt": "2026-11-05T07:15:18Z"
 }
