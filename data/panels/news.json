@@ -540,10 +540,10 @@
     1,
     1,
     2,
-    19,
-    41,
+    18,
+    43,
     116,
-    25
+    27
    ],
    "days7": [
     "2026-10-31",
@@ -566,10 +566,10 @@
      "kw": "生技 新藥 OR 生技 募資 OR 生技 授權"
     },
     {
-     "source": "股市報價& 財經新聞",
-     "title": "Genprex基因療法數據顯示與細胞修復維護機制存在關聯 作者 Investing.com - Investing.com 香港",
-     "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9tdkkzcS04Y0x0dy00ckhuYjRFdEU2cGRRYy1LQU9pNnA2REFReVhuOGZCMHNxYl9nSjRaRHduSVBhQXlMeWFrSjBHY2FXc2pkU1RDbGctU3JyQXpsbTU2U21PaENXUUtIQkhHV1JUcXU?oc=5",
-     "at": "2026-11-05T12:49:53Z",
+     "source": "台灣好新聞",
+     "title": "癌症免疫治療新載體開發 清華團隊拓展再生醫學領域",
+     "url": "https://news.google.com/rss/articles/CBMi5gJBVV95cUxOSnpRRmlUWFl3YUtocjNLekFlQjFWVE1LMWFTSUh5dWRmYUkyM1k2TzRaWjA5MGl3NVNMWndvUGJVM1ViMWlzVDdIS0pLS1J0WXdLS3BwY3FmdXIxRXpkOEFNV3M5cmFqVVZPZXJnY0VfTVpxRUQtOV9VVlJrY3FXYUdTMUhZdG9ZMTNpLXQ5bThZaWZLRUJBMVFSeTgxbmJFRVB4X1lfOXk1am1pVVhuNDhkUjJfTk1yd2J5NWJHTkp5UHNpdTJqRXNHLTFQYzZJZS1oNjhYV0NKdVR1SXpnLWtZWmE2ZXhlMlFhajcwUldkTGtqNGdSdWkwREFqSXBwYm1VYmFvaWN1Y3dPSEp3a21Ia2wyNklvSExmaDFkX1M4MV9ZeUd1Ty01VE5YMnpnTGdXOHR5SDBqQW9TbDVPTVkycXBkbTJGTjdhaHJheFFQYnFoVlVJZV84UVVTTUVVVkFfc0xB?oc=5",
+     "at": "2026-11-05T04:35:49Z",
      "kw": "細胞治療 OR 基因治療 OR 再生醫療 OR 外泌體"
     },
     {
@@ -590,10 +590,10 @@
    "daily7": [
     1,
     0,
-    3,
+    2,
     13,
     11,
-    12,
+    10,
     0
    ],
    "days7": [
@@ -641,7 +641,7 @@
    "daily7": [
     4,
     8,
-    16,
+    13,
     20,
     31,
     49,
@@ -774,6 +774,23 @@
     "hot": true
    },
    {
+    "term": "美股",
+    "n": 6,
+    "src": 5,
+    "sources": [
+     "PTT",
+     "中央社",
+     "壹蘋新聞網",
+     "自由財經",
+     "鉅亨網"
+    ],
+    "sample": {
+     "title": "美期中選舉引發AI投資疑慮　美股收盤重挫",
+     "url": "https://www.cna.com.tw/news/afe/202611060013.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "Claude",
     "n": 5,
     "src": 5,
@@ -808,23 +825,7 @@
     "hot": true
    },
    {
-    "term": "美股",
-    "n": 5,
-    "src": 4,
-    "sources": [
-     "中央社",
-     "壹蘋新聞網",
-     "自由財經",
-     "鉅亨網"
-    ],
-    "sample": {
-     "title": "美期中選舉引發AI投資疑慮　美股收盤重挫",
-     "url": "https://www.cna.com.tw/news/afe/202611060013.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "道瓊狂",
+    "term": "ADR",
     "n": 4,
     "src": 4,
     "sources": [
@@ -840,7 +841,7 @@
     "hot": true
    },
    {
-    "term": "ADR",
+    "term": "台積電",
     "n": 4,
     "src": 4,
     "sources": [
@@ -902,6 +903,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-05T23:27:11Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-05T23:48:23Z"
 }
