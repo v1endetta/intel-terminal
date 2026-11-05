@@ -1,40 +1,7 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "台灣消費者近期聚焦雙11購物與週年慶優惠，同時對遊戲新作、影視話題及旅遊體驗展現高度關注。",
+ "line": "這幾天台灣消費者聚焦於雙11購物節優惠、美妝品牌週年慶檔期、熱門手遊改版及影視新作討論。",
  "topics": [
-  {
-   "name": "薩爾達傳說：時之笛重製版",
-   "q": "薩爾達傳說 時之笛 重製版",
-   "cat": "遊戲",
-   "do": [
-    {
-     "src": "電影票房",
-     "name": "泥面人",
-     "how": "本週票房第 1（3129 萬）"
-    }
-   ],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "《薩爾達傳說 時之笛》跨越時空的完美巧合！重製版盲選挑配音員 竟找到跟28年前同一位"
-    }
-   ],
-   "y": 0.95,
-   "news7": 41,
-   "news_p7": 11,
-   "news_capped": false,
-   "social": {
-    "Threads": 0
-   },
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 0.91,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-03",
-   "quad": "hit"
-  },
   {
    "name": "泥面人",
    "q": "泥面人 電影",
@@ -48,15 +15,15 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 9,
-   "news_p7": 43,
+   "news7": 10,
+   "news_p7": 32,
    "news_capped": false,
    "social": {
     "Threads": 29.3,
     "Dcard": 1
    },
    "mentions": {},
-   "x": 0.77,
+   "x": 0.79,
    "talk_trend": "down",
    "days": 3,
    "first": "2026-11-03",
@@ -64,23 +31,23 @@
   },
   {
    "name": "勝利女神：妮姬",
-   "q": "勝利女神 妮姬",
+   "q": "勝利女神妮姬",
    "cat": "遊戲",
    "do": [
     {
      "src": "App 營收",
      "name": "勝利女神：妮姬",
-     "how": "爬升 45 名到第 9"
+     "how": "爬升 49 名到第 5"
     }
    ],
    "talk": [],
-   "y": 0.9,
-   "news7": 28,
-   "news_p7": 19,
+   "y": 0.94,
+   "news7": 33,
+   "news_p7": 14,
    "news_capped": false,
    "mentions": {},
-   "x": 0.73,
-   "talk_trend": "flat",
+   "x": 0.77,
+   "talk_trend": "up",
    "days": 1,
    "first": "2026-11-05",
    "quad": "hit"
@@ -88,7 +55,7 @@
   {
    "name": "鄧紫棋",
    "q": "鄧紫棋 自由的你",
-   "cat": "人物",
+   "cat": "音樂",
    "do": [
     {
      "src": "YouTube 熱門",
@@ -98,8 +65,8 @@
    ],
    "talk": [],
    "y": 0.6,
-   "news7": 33,
-   "news_p7": 2,
+   "news7": 29,
+   "news_p7": 1,
    "news_capped": false,
    "social": {
     "Threads": 137.8,
@@ -125,15 +92,15 @@
    ],
    "talk": [],
    "y": 0.87,
-   "news7": 8,
-   "news_p7": 5,
+   "news7": 9,
+   "news_p7": 6,
    "news_capped": false,
    "social": {
     "Threads": 14.8,
     "Dcard": 1
    },
    "mentions": {},
-   "x": 0.7,
+   "x": 0.72,
    "talk_trend": "up",
    "days": 3,
    "first": "2026-11-03",
@@ -158,7 +125,7 @@
    "talk": [],
    "y": 0.76,
    "news7": 18,
-   "news_p7": 5,
+   "news_p7": 4,
    "news_capped": false,
    "mentions": {},
    "x": 0.64,
@@ -168,9 +135,39 @@
    "quad": "hit"
   },
   {
+   "name": "麥當勞",
+   "q": "麥當勞 app週年慶",
+   "cat": "品牌商品",
+   "do": [
+    {
+     "src": "YouTube 熱門",
+     "name": "台美麥當勞大對比 根本是兩個世界⁉️🤯",
+     "how": "7 天內上架、發燒第 5"
+    }
+   ],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] 麥當勞app週年慶刮刮樂"
+    }
+   ],
+   "y": 0.64,
+   "news7": 17,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 0.73,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-05",
+   "quad": "hit"
+  },
+  {
    "name": "黃奇斌",
    "q": "黃奇斌 若無你我欲去佗位",
-   "cat": "人物",
+   "cat": "音樂",
    "do": [
     {
      "src": "KKBOX",
@@ -195,70 +192,40 @@
   },
   {
    "name": "Klook",
-   "q": "Klook 旅遊",
+   "q": "Klook",
    "cat": "App",
    "do": [
     {
      "src": "App 下載",
      "name": "Klook - 全球旅遊＆玩樂體驗預訂平台",
-     "how": "爬升 32 名到第 28"
+     "how": "爬升 20 名到第 40"
     }
    ],
    "talk": [],
-   "y": 0.77,
-   "news7": 9,
-   "news_p7": 7,
+   "y": 0.65,
+   "news7": 18,
+   "news_p7": 21,
    "news_capped": false,
    "mentions": {},
-   "x": 0.5,
+   "x": 0.64,
    "talk_trend": "flat",
    "days": 1,
    "first": "2026-11-05",
    "quad": "hit"
   },
   {
-   "name": "麥當勞",
-   "q": "麥當勞 App 刮刮樂",
-   "cat": "品牌商品",
-   "do": [
-    {
-     "src": "YouTube 熱門",
-     "name": "台美麥當勞大對比 根本是兩個世界⁉️🤯",
-     "how": "7 天內上架、發燒第 6"
-    }
-   ],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[情報] 麥當勞app週年慶刮刮樂"
-    }
-   ],
-   "y": 0.6,
-   "news7": 3,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {
-    "PTT": 1
-   },
-   "x": 0.4,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-05",
-   "quad": "new"
-  },
-  {
    "name": "簡單記帳",
-   "q": "簡單記帳 App",
+   "q": "簡單記帳",
    "cat": "App",
    "do": [
     {
      "src": "App 下載",
      "name": "簡單記帳 - 天天掌握生活收支",
-     "how": "爬升 53 名到第 34"
+     "how": "爬升 70 名到第 17"
     }
    ],
    "talk": [],
-   "y": 0.98,
+   "y": 1.0,
    "news7": 0,
    "news_p7": 0,
    "news_capped": false,
@@ -270,26 +237,49 @@
    "quad": "new"
   },
   {
+   "name": "薩爾達傳說：時之笛重製版",
+   "q": "薩爾達傳說 時之笛 重製版",
+   "cat": "影視",
+   "do": [],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "《薩爾達傳說 時之笛》重製版重回神作地位！剛推出就空降今年評分冠軍 接下來輪《GTA6》挑戰？"
+    }
+   ],
+   "y": 0.0,
+   "news7": 46,
+   "news_p7": 10,
+   "news_capped": false,
+   "social": {
+    "Threads": 0
+   },
+   "mentions": {
+    "新聞焦點": 1
+   },
+   "x": 0.94,
+   "talk_trend": "up",
+   "days": 3,
+   "first": "2026-11-03",
+   "quad": "hype"
+  },
+  {
    "name": "週年慶",
-   "q": "百貨 週年慶",
-   "cat": "活動",
+   "q": "週年慶",
+   "cat": "品牌商品",
    "do": [],
    "talk": [
     {
      "src": "Dcard 美妝",
      "title": "週年慶（2 則）"
-    },
-    {
-     "src": "Dcard 美妝",
-     "title": "海洋拉娜海購節（2 則）"
     }
    ],
    "y": 0.0,
-   "news7": 40,
-   "news_p7": 19,
-   "news_capped": false,
+   "news7": 85,
+   "news_p7": 15,
+   "news_capped": true,
    "mentions": {
-    "Dcard 美妝": 2
+    "Dcard 美妝": 1
    },
    "x": 1.0,
    "talk_trend": "up",
@@ -298,9 +288,45 @@
    "quad": "talk"
   },
   {
+   "name": "Toyota",
+   "q": "Toyota 新車",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[整理] 50-150萬新車ADAS先進駕駛輔助系統"
+    },
+    {
+     "src": "PTT",
+     "title": "[問題] Model Y RWD vs Crown sport vs CLA"
+    },
+    {
+     "src": "Mobile01",
+     "title": "多花40萬只為了從2.5自然進氣油電升級2.4渦輪油電值得嗎？"
+    }
+   ],
+   "y": 0.0,
+   "news7": 28,
+   "news_p7": 14,
+   "news_capped": false,
+   "social": {
+    "Threads": 336
+   },
+   "mentions": {
+    "PTT": 2,
+    "Mobile01": 1
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 3,
+   "first": "2026-11-03",
+   "quad": "talk"
+  },
+  {
    "name": "momo雙11",
-   "q": "momo 雙11 組隊",
-   "cat": "活動",
+   "q": "momo雙11",
+   "cat": "品牌商品",
    "do": [],
    "talk": [
     {
@@ -313,122 +339,80 @@
     }
    ],
    "y": 0.0,
-   "news7": 7,
-   "news_p7": 2,
+   "news7": 22,
+   "news_p7": 11,
    "news_capped": false,
    "mentions": {
     "Dcard 網購": 2
    },
-   "x": 0.65,
+   "x": 0.88,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-05",
+   "quad": "talk"
+  },
+  {
+   "name": "Zara Home",
+   "q": "Zara Home",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 11,
+   "news_p7": 0,
+   "news_capped": false,
+   "social": {
+    "Threads": 17.4
+   },
+   "mentions": {},
+   "x": 0.73,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-03",
    "quad": "talk"
   },
   {
    "name": "BAO BAO ISSEY MIYAKE",
-   "q": "BAO BAO ISSEY MIYAKE 台中",
+   "q": "BAO BAO ISSEY MIYAKE",
    "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "11月限定，BAO BAO ISSEY MIYAKE VIOLA 台中快閃特展！"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 6,
+   "news7": 7,
    "news_p7": 0,
    "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.52,
+   "mentions": {},
+   "x": 0.45,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-05",
-   "quad": "talk"
-  },
-  {
-   "name": "日本滑雪",
-   "q": "日本滑雪 住宿推薦",
-   "cat": "生活習慣",
-   "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "2026/27「日本滑雪住宿推薦」：連年獲獎最佳滑雪度假村、賽事級雪場、世界遺產雪地巡遊，滑雪、泡湯、購物一次滿足"
-    }
-   ],
-   "y": 0.0,
-   "news7": 2,
-   "news_p7": 2,
-   "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.34,
-   "talk_trend": "flat",
-   "days": 1,
-   "first": "2026-11-05",
    "quad": "low"
   },
   {
-   "name": "MSC亞細亞號",
-   "q": "MSC亞細亞號 郵輪",
-   "cat": "生活習慣",
+   "name": "Fenty Beauty",
+   "q": "Fenty Beauty",
+   "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "全新旗艦級郵輪「MSC亞細亞號」12月首航，地中海熱門景點一次收藏！海上最大Venchi巧克力體驗中心、Eataly美食市集、50米高空海上鞦韆，9大亮點搶先解鎖"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 1,
-   "news_p7": 0,
+   "news7": 4,
+   "news_p7": 5,
    "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.25,
+   "mentions": {},
+   "x": 0.35,
    "talk_trend": "flat",
-   "days": 1,
-   "first": "2026-11-05",
-   "quad": "low"
-  },
-  {
-   "name": "薏仁",
-   "q": "薏仁 功效",
-   "cat": "飲食",
-   "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "吃「薏仁」會美白？關於薏仁營養好處與飲食禁忌，吃對有助減肥美白，4款消水腫薏仁食譜跟著試試看"
-    }
-   ],
-   "y": 0.0,
-   "news7": 0,
-   "news_p7": 3,
-   "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.1,
-   "talk_trend": "down",
-   "days": 1,
-   "first": "2026-11-05",
+   "days": 3,
+   "first": "2026-11-03",
    "quad": "low"
   }
  ],
  "quads": {
   "quiet": 0,
   "hit": 8,
-  "new": 2,
-  "hype": 0,
-  "talk": 3,
-  "low": 3
+  "new": 1,
+  "hype": 1,
+  "talk": 4,
+  "low": 2
  },
  "src_do": [
   "App 下載",
@@ -453,7 +437,7 @@
  ],
  "social_at": "2026-11-05",
  "hist_days": 3,
- "model": "gemini-3.1-flash-lite",
+ "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-05T07:35:18Z"
+ "updatedAt": "2026-11-05T13:36:37Z"
 }
