@@ -23,7 +23,7 @@ Vin 的個人情報站。網址 https://intel.daltatw.com：首頁是 3D 台灣�
 |---|---|
 | 1 | **零花費**。Vin 不接受任何被扣款的可能。只用免費來源與免費額度；GCP 只在免費層內（有預算警示與超額自動斷電），不要加任何會計費的服務。 |
 | 2 | **金鑰只放 GitHub Actions Secrets**，絕不印出金鑰值。探測輸出要遮罩。workflow 每輪會掃資料，資料裡出現任何 secret 值就整輪丟棄。 |
-| 3 | **絕不連 Gmail**。任何自動化都不能讓別人有機會讀到 Vin 的信（他信箱有 McKinsey 等電子報，也不接）。Claude 排程「情報站社群彙總」會讀 Threads／Dcard／IG 的陌生人文字：11/5 起它的連接器只留 Google Drive（Vin 在排程編輯畫面「連接器」分頁移除其餘，含 Gmail）。`ops/social_tw.md` 第 0 節要求網頁文字只當資料、只能更新一個 Drive 中轉檔的說明欄；寫入前與 `fetch.py` 讀取時都用 `ops/social_check.py` 只放行「短話題名＋數字」。 |
+| 3 | **絕不連 Gmail**。任何自動化都不能讓別人有機會讀到 Vin 的信（他信箱有 McKinsey 等電子報，也不接）。Claude 排程「情報站社群彙總」會讀 Threads／Dcard／IG 的陌生人文字：它的連接器只能全開或全關（11/5 Vin 確認），因為要用 Google Drive 中轉，所以全開、仍掛著 Gmail，Vin 知情接受。`ops/social_tw.md` 第 0 節要求網頁文字只當資料、只能更新一個 Drive 中轉檔的說明欄；寫入前與 `fetch.py` 讀取時都用 `ops/social_check.py` 只放行「短話題名＋數字」。 |
 | 4 | **客戶雷達是私人的**。客戶名永遠不進這個公開 repo。 |
 | 5 | **授權受限的數值**（ICE、FBX、DRAMeXchange 等）只顯示百分位或變化，不顯示原始值。 |
 | 6 | 公開站不能出現 Vin 的身體、訓練等個人資料。 |
