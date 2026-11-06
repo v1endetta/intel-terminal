@@ -47,30 +47,6 @@
    "title": "台股重挫失守4萬點　國安基金：若失序不排除召開臨時會",
    "url": "https://www.cna.com.tw/news/afe/202611060051.aspx",
    "at": "2026-11-06T02:12:07Z"
-  },
-  {
-   "source": "公視",
-   "title": "冰箱被改為解凍模式 歐洲多國超市系統遭駭客攻擊",
-   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBOaUdzbG5jcHluRWNNNXhQQTU0LTVDZ0Q2X01GQTlNcUh6bmZDcFRSTGxtVWNybU9Ub1ZMVXRMTmcxQktka2sxQTlZcUhVR2c?oc=5",
-   "at": "2026-11-05T05:41:23Z"
-  },
-  {
-   "source": "公視",
-   "title": "彰化工廠大量化學溶劑燃燒 員工背部30%二度燒燙傷送醫",
-   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1lR0V6dGJCMEZJOHFya0ZqV1lOUl81T0JZcjdQZVE3d1dtR0NYRUt3VXpmV0EtMnNUUUhZMzRfalBTRDdaaUZqTVlsYVc1eWc?oc=5",
-   "at": "2026-11-04T23:34:07Z"
-  },
-  {
-   "source": "公視",
-   "title": "奧德賽號停航駛離柬埔寨 住客變賣房產環遊世界認賠千萬",
-   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE16ZDZIejNuRjBjbXd0NU9iaU5RWE5YSGtWMEhSRVBuVVZid0dURkZPU3NIOEJYTWxCUS1OZWRIbkZya1FlME5uQlVPSmZvRjg?oc=5",
-   "at": "2026-11-04T12:10:09Z"
-  },
-  {
-   "source": "公視",
-   "title": "美國36州長改選 喬治亞州誕生首位非裔女州長｜20261104 公視午間新聞 ｜ 公視新聞 PNN",
-   "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5yZkdXbXVDN0szNGhiVURTZWRLb1ZvSkVKbExmTWI4TFBabURFRWt3ZkFFN2hLTFNPMXYtZXJDZHBGN3FRV0Q2S1NFRQ?oc=5",
-   "at": "2026-11-04T06:21:13Z"
   }
  ],
  "intl": [
@@ -811,7 +787,7 @@
     "hot": true
    },
    {
-    "term": "ADR",
+    "term": "台積電",
     "n": 4,
     "src": 4,
     "sources": [
@@ -827,7 +803,7 @@
     "hot": true
    },
    {
-    "term": "台積電",
+    "term": "ADR",
     "n": 4,
     "src": 4,
     "sources": [
@@ -906,6 +882,10 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-06T03:36:58Z"
+ "errs": [
+  "pts gnews: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=site%3Anews.pts.org.tw&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
+  "kw 紀念幣 OR 錢幣 拍賣: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E7%B4%80%E5%BF%B5%E5%B9%A3+OR+%E9%8C%A2%E5%B9%A3+%E6%8B%8D%E8%B3%A3&hl=zh-T",
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-06T03:55:34Z"
 }
