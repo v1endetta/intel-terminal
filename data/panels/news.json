@@ -640,7 +640,7 @@
     }
    ],
    "daily7": [
-    6,
+    7,
     9,
     16,
     24,
@@ -714,27 +714,27 @@
    "en": [
     {
      "title": "Abdul El-Sayed",
-     "views": 1413749,
+     "views": 808705,
      "url": "https://en.wikipedia.org/wiki/Abdul_El-Sayed"
     },
     {
+     "title": "Russell Brand",
+     "views": 571124,
+     "url": "https://en.wikipedia.org/wiki/Russell_Brand"
+    },
+    {
      "title": "James Talarico",
-     "views": 1256040,
+     "views": 359575,
      "url": "https://en.wikipedia.org/wiki/James_Talarico"
     },
     {
-     "title": "Gina Hinojosa",
-     "views": 1242354,
-     "url": "https://en.wikipedia.org/wiki/Gina_Hinojosa"
-    },
-    {
      "title": "2026 United States elections",
-     "views": 1153444,
+     "views": 356470,
      "url": "https://en.wikipedia.org/wiki/2026_United_States_elections"
     },
     {
      "title": "Jon Ossoff",
-     "views": 611863,
+     "views": 325378,
      "url": "https://en.wikipedia.org/wiki/Jon_Ossoff"
     }
    ]
@@ -805,7 +805,7 @@
     "hot": true
    },
    {
-    "term": "漲逾",
+    "term": "美股",
     "n": 3,
     "src": 2,
     "sources": [
@@ -820,7 +820,7 @@
     "hot": false
    },
    {
-    "term": "永豐",
+    "term": "供應",
     "n": 3,
     "src": 2,
     "sources": [
@@ -834,7 +834,7 @@
     "hot": false
    },
    {
-    "term": "供應",
+    "term": "永豐",
     "n": 3,
     "src": 2,
     "sources": [
@@ -891,6 +891,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-06T19:14:26Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-06T19:29:30Z"
 }
