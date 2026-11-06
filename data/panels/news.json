@@ -75,10 +75,17 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Global stocks fall amid ‘big worries over AI’ after Democrats’ midterms triumph",
+   "url": "https://www.theguardian.com/business/2026/nov/06/global-stocks-plunge-amid-ai-slowdown-fears-after-democrats-midterm-triumph",
+   "at": "2026-11-06T21:23:54Z",
+   "sec": "Business"
+  },
+  {
    "source": "BBC",
    "title": "AI stocks climb after trillions wiped from market values",
    "url": "https://www.bbc.co.uk/news/articles/c35ynnpzdq51o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-06T19:37:10Z"
+   "at": "2026-11-06T21:06:25Z"
   },
   {
    "source": "Guardian",
@@ -89,7 +96,7 @@
   },
   {
    "source": "Guardian",
-   "title": "US tech stocks recovering on Wall Street after worst day in 19 months – as it happened",
+   "title": "US tech stocks post modest recovery on Wall Street after worst day in 19 months – as it ha",
    "url": "https://www.theguardian.com/business/live/2026/nov/06/global-stocks-tumble-ai-panic-markets-democrats-midterms-success-jobs-oil-dollar-latest-news-updates",
    "at": "2026-11-06T17:28:11Z",
    "sec": "Business"
@@ -126,13 +133,6 @@
    "title": "US tech stock rout: is the AI bubble bursting?",
    "url": "https://www.theguardian.com/technology/2026/nov/06/us-tech-stock-ai-bubble-bursting-market-meltdown-explainer",
    "at": "2026-11-06T16:09:18Z",
-   "sec": "Business"
-  },
-  {
-   "source": "Guardian",
-   "title": "Global stocks fall amid ‘big worries over AI’ after Democrats’ midterms triumph",
-   "url": "https://www.theguardian.com/business/2026/nov/06/global-stocks-plunge-amid-ai-slowdown-fears-after-democrats-midterm-triumph",
-   "at": "2026-11-06T15:48:36Z",
    "sec": "Business"
   },
   {
@@ -540,11 +540,11 @@
    "daily7": [
     1,
     1,
-    9,
-    24,
-    47,
-    111,
-    19
+    11,
+    21,
+    49,
+    105,
+    23
    ],
    "days7": [
     "2026-11-01",
@@ -640,12 +640,12 @@
     }
    ],
    "daily7": [
-    6,
-    9,
+    7,
+    10,
     16,
-    24,
+    25,
     46,
-    20,
+    21,
     2
    ],
    "days7": [
@@ -760,7 +760,7 @@
    },
    {
     "term": "Anthropic",
-    "n": 6,
+    "n": 7,
     "src": 5,
     "sources": [
      "Anthropic",
@@ -855,6 +855,21 @@
     "hot": true
    },
    {
+    "term": "供應",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "PTT",
+     "iThome",
+     "自由財經"
+    ],
+    "sample": {
+     "title": "【資安週報】1102～1106，電商服務供應鏈資安風波多家同時延燒、永豐銀行異常轉帳確認為資安事件",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5LYWxZeVhqMUFnTWxtU1A1VU1KdmdGejV5WHpTUWswRV8yTDVMQ0w4YVlnRTBueE9CXzBXOWNqTjdLdnlIRktxcnpQV2Zidw?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "美股開盤",
     "n": 3,
     "src": 2,
@@ -882,26 +897,11 @@
      "url": "https://www.cna.com.tw/news/aipl/202611060355.aspx"
     },
     "hot": false
-   },
-   {
-    "term": "漲逾",
-    "n": 3,
-    "src": 2,
-    "sources": [
-     "ETtoday財經雲",
-     "Facebook",
-     "中央社"
-    ],
-    "sample": {
-     "title": "美股多開高那指漲逾1.2%　晶片股反彈",
-     "url": "https://www.cna.com.tw/news/afe/202611060358.aspx"
-    },
-    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-06T21:04:27Z"
+ "updatedAt": "2026-11-06T21:22:46Z"
 }
