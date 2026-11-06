@@ -51,6 +51,13 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "More than 40 pilot whales die after mass stranding in New Zealand’s North Island",
+   "url": "https://www.theguardian.com/world/2026/nov/06/pilot-whales-dead-stranded-new-zealand-north-island",
+   "at": "2026-11-06T04:45:33Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "Trump signs order preventing future presidents from changing Oval Office",
    "url": "https://www.bbc.co.uk/news/articles/cmy0eeg101djo?at_medium=RSS&at_campaign=rss",
@@ -121,12 +128,6 @@
    "url": "https://www.theguardian.com/business/2026/nov/05/bank-of-england-raises-interest-rates-first-increase-for-more-than-three-years",
    "at": "2026-11-05T18:00:28Z",
    "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "French protests see numbers surge as unions join strikes over high cost of living",
-   "url": "https://www.bbc.co.uk/news/articles/ckx2qzv835pgo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-05T17:59:53Z"
   }
  ],
  "groups": [
@@ -636,10 +637,10 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 2.689,
-   "vol_ratio": 1.26,
-   "tone": -0.18,
-   "tone_at": "2026-11-06T03:36:58Z",
+   "vol": 2.834,
+   "vol_ratio": 1.33,
+   "tone": -0.08,
+   "tone_at": "2026-11-06T05:03:52Z",
    "spark": [
     1.86,
     1.44,
@@ -654,9 +655,9 @@
     2.235,
     2.299,
     2.299,
-    2.689
+    2.834
    ],
-   "at": "2026-11-06T04:45:50Z"
+   "at": "2026-11-06T05:03:52Z"
   },
   "wiki": {
    "zh": [
@@ -717,11 +718,10 @@
   "hot": [
    {
     "term": "Claude",
-    "n": 6,
-    "src": 6,
+    "n": 5,
+    "src": 5,
     "sources": [
      "HN",
-     "OrcaRouter",
      "TechCrunch",
      "iThome",
      "富途牛牛",
@@ -735,13 +735,12 @@
    },
    {
     "term": "OpenAI",
-    "n": 7,
-    "src": 5,
+    "n": 6,
+    "src": 4,
     "sources": [
      "Reuters",
      "SiliconANGLE",
      "TechCrunch",
-     "The Register",
      "VentureBeat",
      "鉅亨網"
     ],
@@ -753,15 +752,15 @@
    },
    {
     "term": "GPT",
-    "n": 7,
-    "src": 5,
+    "n": 6,
+    "src": 4,
     "sources": [
      "HN",
      "OpenAI changelog",
      "Reuters",
      "SiliconANGLE",
-     "The Register",
-     "VentureBeat"
+     "VentureBeat",
+     "鉅亨網"
     ],
     "sample": {
      "title": "OpenAI推出GPT-6 Cyber 獲評網路安全「關鍵級」能力",
@@ -786,18 +785,18 @@
     "hot": true
    },
    {
-    "term": "台積電",
+    "term": "ETF",
     "n": 4,
     "src": 4,
     "sources": [
-     "Yahoo股市",
-     "經濟日報",
-     "自由財經",
-     "鉅亨網"
+     "ETtoday財經雲",
+     "PTT",
+     "UDN",
+     "股市報價& 財經新聞"
     ],
     "sample": {
-     "title": "科技股慘遭血洗！道瓊狂殺1833點、費半重摔12% 台積電ADR崩破10%、台指期夜盤跌到3萬8",
-     "url": "https://news.google.com/rss/articles/CBMizgNBVV95cUxQdkxTR2Nkd0F2Q3NyLWpuYlVvaWw0aTBYbE1ZNDdrQkFaV1R3OGxDbDlOSi10X29OcUlxQ1RMc0dENmk0SFFXOG9pVmpCV09CNGhvMkVLc1NhODdHR2VGeTJuMEE1QXNzVG5oSTM4cWlSYnd2eU52b3J2YmNuNXg0UkFCb1JqbHcwVjhDQWlKS3M2di0xSEE5NEM3MUE2Y2YzeXdhcTNBcFE5SlJWNEN6Z24ydVotdXZHelZJdmNHaXFRTmp1ZTJRV2UyM0Q5bEU2NTFIMjZOcnZXTHdHWEVWdkh6RlhLUk1udTNHeUNsMjVBc1o3cmJ5dVR3Y0Q0VmpWWkJEU3Q2Y0VEU2FxWFBkVy1od21CUWJKc01SRmlhR2YzQ2ZudElNOTExMldYVmltNVk1OTc4SlM0OXBHUkYzRndzSzN3ZWozcWFFR0phS1pLTzFGNEZLNW83MzBBU0lHdmF3M1RlNjVSMlQ0X3FQb3phdkgwNFMwaFlaQWpuNENqaWhoVG1Bd1c3UVRrOVN3UElFRWtkaURKUEZVdWhnWEI1c2p4MDJSTFRoWURscHpIbXp0MDMxRWVjazBqemNEVmFlVi1WYlJhU09PZGc?oc=5"
+     "title": "台股暴跌正二ETF卻被搶到溢價！00631L飆5.04％ 富邦、群益正二也超過3％",
+     "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9MX2h4aGVwOERMRkNfRXZ4eGk1OVhSRmgxVzhDMnBFMnJaMndleXF0N09aMmdvOGVRUXp3YzFtN0hJVWtIUEo2azRnWm1rLXFuUm4w0gFYQVVfeXFMTWlCSTRCWVpOSGp2RHB4bG1PNDBOLTlqWmFxcW9qbTVzaDVrWncwSVV3Ukhmd0VqYWh5UmJRR0llZ2cxX0dYcFJTY2lXNHV6eDJQRDRWR1cxTQ?oc=5"
     },
     "hot": true
    },
@@ -818,19 +817,18 @@
     "hot": true
    },
    {
-    "term": "Cyber",
-    "n": 5,
-    "src": 3,
+    "term": "台積電",
+    "n": 4,
+    "src": 4,
     "sources": [
-     "Reuters",
-     "SiliconANGLE",
-     "The Register",
-     "VentureBeat",
+     "Yahoo股市",
+     "經濟日報",
+     "自由財經",
      "鉅亨網"
     ],
     "sample": {
-     "title": "OpenAI推出GPT-6 Cyber 獲評網路安全「關鍵級」能力",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9VWEhPRWFHYUVadGZrNjlIcXRBa1FaYWwxSHNOTXlOZ1NpaEFDQ29Zb0txcHJJWXBMVjQ0RW85NDE1Q1UyU2RBYzN3MTJDdUE?oc=5"
+     "title": "科技股慘遭血洗！道瓊狂殺1833點、費半重摔12% 台積電ADR崩破10%、台指期夜盤跌到3萬8",
+     "url": "https://news.google.com/rss/articles/CBMizgNBVV95cUxQdkxTR2Nkd0F2Q3NyLWpuYlVvaWw0aTBYbE1ZNDdrQkFaV1R3OGxDbDlOSi10X29OcUlxQ1RMc0dENmk0SFFXOG9pVmpCV09CNGhvMkVLc1NhODdHR2VGeTJuMEE1QXNzVG5oSTM4cWlSYnd2eU52b3J2YmNuNXg0UkFCb1JqbHcwVjhDQWlKS3M2di0xSEE5NEM3MUE2Y2YzeXdhcTNBcFE5SlJWNEN6Z24ydVotdXZHelZJdmNHaXFRTmp1ZTJRV2UyM0Q5bEU2NTFIMjZOcnZXTHdHWEVWdkh6RlhLUk1udTNHeUNsMjVBc1o3cmJ5dVR3Y0Q0VmpWWkJEU3Q2Y0VEU2FxWFBkVy1od21CUWJKc01SRmlhR2YzQ2ZudElNOTExMldYVmltNVk1OTc4SlM0OXBHUkYzRndzSzN3ZWozcWFFR0phS1pLTzFGNEZLNW83MzBBU0lHdmF3M1RlNjVSMlQ0X3FQb3phdkgwNFMwaFlaQWpuNENqaWhoVG1Bd1c3UVRrOVN3UElFRWtkaURKUEZVdWhnWEI1c2p4MDJSTFRoWURscHpIbXp0MDMxRWVjazBqemNEVmFlVi1WYlJhU09PZGc?oc=5"
     },
     "hot": true
    },
@@ -865,17 +863,17 @@
     "hot": true
    },
    {
-    "term": "ETF",
+    "term": "道瓊狂",
     "n": 3,
     "src": 3,
     "sources": [
-     "ETtoday財經雲",
-     "UDN",
-     "股市報價& 財經新聞"
+     "Yahoo股市",
+     "自由財經",
+     "鉅亨網"
     ],
     "sample": {
-     "title": "台股暴跌正二ETF卻被搶到溢價！00631L飆5.04％ 富邦、群益正二也超過3％",
-     "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9MX2h4aGVwOERMRkNfRXZ4eGk1OVhSRmgxVzhDMnBFMnJaMndleXF0N09aMmdvOGVRUXp3YzFtN0hJVWtIUEo2azRnWm1rLXFuUm4w0gFYQVVfeXFMTWlCSTRCWVpOSGp2RHB4bG1PNDBOLTlqWmFxcW9qbTVzaDVrWncwSVV3Ukhmd0VqYWh5UmJRR0llZ2cxX0dYcFJTY2lXNHV6eDJQRDRWR1cxTQ?oc=5"
+     "title": "科技股慘遭血洗！道瓊狂殺1833點、費半重摔12% 台積電ADR崩破10%、台指期夜盤跌到3萬8",
+     "url": "https://news.google.com/rss/articles/CBMizgNBVV95cUxQdkxTR2Nkd0F2Q3NyLWpuYlVvaWw0aTBYbE1ZNDdrQkFaV1R3OGxDbDlOSi10X29OcUlxQ1RMc0dENmk0SFFXOG9pVmpCV09CNGhvMkVLc1NhODdHR2VGeTJuMEE1QXNzVG5oSTM4cWlSYnd2eU52b3J2YmNuNXg0UkFCb1JqbHcwVjhDQWlKS3M2di0xSEE5NEM3MUE2Y2YzeXdhcTNBcFE5SlJWNEN6Z24ydVotdXZHelZJdmNHaXFRTmp1ZTJRV2UyM0Q5bEU2NTFIMjZOcnZXTHdHWEVWdkh6RlhLUk1udTNHeUNsMjVBc1o3cmJ5dVR3Y0Q0VmpWWkJEU3Q2Y0VEU2FxWFBkVy1od21CUWJKc01SRmlhR2YzQ2ZudElNOTExMldYVmltNVk1OTc4SlM0OXBHUkYzRndzSzN3ZWozcWFFR0phS1pLTzFGNEZLNW83MzBBU0lHdmF3M1RlNjVSMlQ0X3FQb3phdkgwNFMwaFlaQWpuNENqaWhoVG1Bd1c3UVRrOVN3UElFRWtkaURKUEZVdWhnWEI1c2p4MDJSTFRoWURscHpIbXp0MDMxRWVjazBqemNEVmFlVi1WYlJhU09PZGc?oc=5"
     },
     "hot": true
    }
@@ -883,13 +881,13 @@
  },
  "errs": [
   "pts gnews: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=site%3Anews.pts.org.tw&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
-  "kw en:OpenAI OR Anthropic OR \"Google DeepMind\" launches OR announces OR releases: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=OpenAI+OR+Anthropic+OR+%22Google+DeepMind%22+launches+OR+announces+OR+releas",
   "kw en:\"AI agent\" OR agentic launch: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%22AI+agent%22+OR+agentic+launch&hl=en-US&gl=US&ceid=US%3Aen",
+  "kw en:OpenAI OR Anthropic OR \"Google DeepMind\" launches OR announces OR releases: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=OpenAI+OR+Anthropic+OR+%22Google+DeepMind%22+launches+OR+announces+OR+releas",
   "kw 紀念幣 OR 錢幣 拍賣: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E7%B4%80%E5%BF%B5%E5%B9%A3+OR+%E9%8C%A2%E5%B9%A3+%E6%8B%8D%E8%B3%A3&hl=zh-T",
-  "kw Sora OR Runway OR Kling 影片: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=Sora+OR+Runway+OR+Kling+%E5%BD%B1%E7%89%87&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
   "kw 生成式AI 廣告 OR 生成式AI 版權: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E7%94%9F%E6%88%90%E5%BC%8FAI+%E5%BB%A3%E5%91%8A+OR+%E7%94%9F%E6%88%90%E5%BC",
+  "kw Sora OR Runway OR Kling 影片: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=Sora+OR+Runway+OR+Kling+%E5%BD%B1%E7%89%87&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
   "kw Figma OR Canva 新功能: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=Figma+OR+Canva+%E6%96%B0%E5%8A%9F%E8%83%BD&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
   "kw 開源模型 OR Ollama OR 本地部署: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E9%96%8B%E6%BA%90%E6%A8%A1%E5%9E%8B+OR+Ollama+OR+%E6%9C%AC%E5%9C%B0%E9%83%A"
  ],
- "updatedAt": "2026-11-06T04:45:50Z"
+ "updatedAt": "2026-11-06T05:03:52Z"
 }
