@@ -1,6 +1,19 @@
 {
  "alerts": [
   {
+   "id": "CWA-EQ115077-2026-1106-083741",
+   "cat": "地震",
+   "lvl": 3,
+   "area": [
+    "臺東縣"
+   ],
+   "text": "11/06 08:37臺東縣太麻里鄉發生規模4.4有感地震，最大震度臺東縣太麻里3級。",
+   "src": "中央氣象署",
+   "at": "2026-11-06T00:41:04Z",
+   "exp": "2026-11-06T09:41:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Earthquake/CWA-EQ115077-2026-1106-083741.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261106081840_0000",
    "cat": "水庫放流",
    "lvl": 2,
@@ -15,7 +28,7 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261106081840_0000.cap"
   },
   {
-   "id": "THB-Bobe_631_23877_42873_20261106054009",
+   "id": "THB-Bobe_631_23877_42872_20261106051705",
    "cat": "道路封閉",
    "lvl": 2,
    "area": [
@@ -23,9 +36,9 @@
    ],
    "text": "臺南市 下營區 台84線 15K+0~15K+0。受損狀況/管制原因: 1大貨車1自小客追撞事故。",
    "src": "交通部公路局",
-   "at": "2026-11-05T21:40:09Z",
-   "exp": "2026-11-06T08:32:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_631_23877_42873_20261106054009.cap"
+   "at": "2026-11-05T21:17:05Z",
+   "exp": "2026-11-06T09:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/THB/2026/roadClose/THB-Bobe_631_23877_42872_20261106051705.cap"
   },
   {
    "id": "CWA-Weather_strong-wind_202611060433001",
@@ -98,12 +111,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611051053.cap"
   }
  ],
- "n_total": 5,
+ "n_total": 6,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/11/06 08:26:18"
+  "updated": "2026/11/06 08:44:15"
  },
  "errs": [],
- "updatedAt": "2026-11-06T00:30:36Z"
+ "updatedAt": "2026-11-06T00:50:46Z"
 }
