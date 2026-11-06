@@ -645,8 +645,8 @@
     16,
     24,
     46,
-    21,
-    1
+    20,
+    2
    ],
    "days7": [
     "2026-11-01",
@@ -855,6 +855,21 @@
     "hot": true
    },
    {
+    "term": "GPT",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "OpenAI 論壇",
+     "Technology O",
+     "The Hacker N"
+    ],
+    "sample": {
+     "title": "OpenAI Launches GPT-6 Cyber After AI Helps Find 81 Firefox F",
+     "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPX2ZfWDZjZ0ZiM2VHMU5CWDFwNFdZR093TTh1RUVYN3h2NkRVWnBCdEUyWkhTOUhBMEd5di13STkxVlBCTXlMcFJTS2tZS20wT1lkOE03UGd2VnpkSG1Sb2F1cWtISFB5UEFJY2RhT19DV3N3djNmaEI0SDVWUVlTbg?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "美股開盤",
     "n": 3,
     "src": 2,
@@ -883,25 +898,11 @@
      "url": "https://www.cna.com.tw/news/afe/202611060358.aspx"
     },
     "hot": false
-   },
-   {
-    "term": "永豐",
-    "n": 3,
-    "src": 2,
-    "sources": [
-     "PTT",
-     "iThome"
-    ],
-    "sample": {
-     "title": "【資安週報】1102～1106，電商服務供應鏈資安風波多家同時延燒、永豐銀行異常轉帳確認為資安事件",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5LYWxZeVhqMUFnTWxtU1A1VU1KdmdGejV5WHpTUWswRV8yTDVMQ0w4YVlnRTBueE9CXzBXOWNqTjdLdnlIRktxcnpQV2Zidw?oc=5"
-    },
-    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-06T20:23:55Z"
+ "updatedAt": "2026-11-06T20:44:26Z"
 }
