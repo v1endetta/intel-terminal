@@ -76,6 +76,13 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "US tech stocks open higher on Wall Street after worst day in 19 months – business live",
+   "url": "https://www.theguardian.com/business/live/2026/nov/06/global-stocks-tumble-ai-panic-markets-democrats-midterms-success-jobs-oil-dollar-latest-news-updates",
+   "at": "2026-11-06T16:49:05Z",
+   "sec": "Business"
+  },
+  {
+   "source": "Guardian",
    "title": "Israel’s election and self-definition invite questions | Letters",
    "url": "https://www.theguardian.com/world/2026/nov/06/israels-election-and-self-definition-invite-questions",
    "at": "2026-11-06T16:38:52Z",
@@ -93,13 +100,6 @@
    "title": "AI stocks climb after trillions wiped from market values",
    "url": "https://www.bbc.co.uk/news/articles/c35ynnpzdq51o?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-06T16:23:16Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "US tech stocks open higher on Wall Street after worst day in 19 months – business live",
-   "url": "https://www.theguardian.com/business/live/2026/nov/06/global-stocks-tumble-ai-panic-markets-democrats-midterms-success-jobs-oil-dollar-latest-news-updates",
-   "at": "2026-11-06T16:13:35Z",
-   "sec": "Business"
   },
   {
    "source": "Guardian",
@@ -879,7 +879,7 @@
     "hot": false
    },
    {
-    "term": "供應",
+    "term": "永豐",
     "n": 3,
     "src": 2,
     "sources": [
@@ -894,6 +894,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-06T16:43:41Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-06T16:58:56Z"
 }
