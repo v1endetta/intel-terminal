@@ -56,12 +56,6 @@
   },
   {
    "source": "公視",
-   "title": "法國國家血液銀行遭駭 儲存冷凍庫溫度調高至110℃",
-   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE40aWY2RUhuajRUSTZ5SUtNS19LSnhtdVhOcTFxOHZmQ2doc05Ub1k1bDdaQUFIbEJkbmhnT3R6TzVBbWJiWTFPVDRrQlc0ejA?oc=5",
-   "at": "2026-11-05T00:06:04Z"
-  },
-  {
-   "source": "公視",
    "title": "彰化工廠大量化學溶劑燃燒 員工背部30%二度燒燙傷送醫",
    "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1lR0V6dGJCMEZJOHFya0ZqV1lOUl81T0JZcjdQZVE3d1dtR0NYRUt3VXpmV0EtMnNUUUhZMzRfalBTRDdaaUZqTVlsYVc1eWc?oc=5",
    "at": "2026-11-04T23:34:07Z"
@@ -71,6 +65,12 @@
    "title": "靠AI寫程式竊23萬筆個資轉賣 高雄警逮1嫌估不法所得逾270萬",
    "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE0xT0FPVU1VT1FDcVMtQnphSDhFZTBPeW1lekExWlp3NHpVNDlOeDNLR1J5U2FPZXlEMVpWUWlTTTlZRUJIbVdYTEJwR2RYb1E?oc=5",
    "at": "2026-11-04T09:43:06Z"
+  },
+  {
+   "source": "公視",
+   "title": "松下湖口廠深夜起火 釀5傷、仍有2人失聯",
+   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFB5U01zc2t4LUpuajBRbnFyVFhWeGp5UXN6dEt4OC13VG95U3Ixbl9GWjgyYjMwaWx1V0VXc1FVWVBWcm1BUzZBNTZ1MGRoU1U?oc=5",
+   "at": "2026-11-04T05:38:00Z"
   }
  ],
  "intl": [
@@ -234,8 +234,8 @@
    ],
    "daily7": [
     0,
-    2,
-    2,
+    4,
+    1,
     2,
     3,
     6,
@@ -269,10 +269,10 @@
      "kw": "ChatGPT OR Claude OR Gemini 新功能 OR 新模型"
     },
     {
-     "source": "焦點時報",
-     "title": "首創 AI 代理人管理辦法！敏實科大領跑智慧轉型 打造 AI Agent 大學",
-     "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTFA0SUtwYUtrUk1pT0FSZ0RwdXpSTXg3aVBlUUs1M3hWdzA4bjhvZ2V3NndrYWUxeHhEZmVkVTRzal9YSnMwUjVTZjBWSTFHRnd2MThDNk11bw?oc=5",
-     "at": "2026-11-06T04:27:53Z",
+     "source": "CMoney投資網誌",
+     "title": "標題 : Compass搶先卡位AI搜屋潮！Reffkin：智慧代理正繞過傳統門戶直導Compass.com",
+     "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNMUZWZE5Fd0ZCaGo2ZEk2aHFYSko3WTNfRXVsaVgxcEg3QVIzbmdJcms4aGg0anBGZlVtazNMNFAxZnVNaGZqT0YybHo0ejNoRV9JR2JvUHZucGxoczh4eTJMNmVXSjg1T2JLQ25TZkQ4dGNCd29GdUwtRHZiSHRHSDQ2ZHp0WDJDMXZMdm9B?oc=5",
+     "at": "2026-11-06T23:11:54Z",
      "kw": "AI agent OR AI 代理人 OR 智慧代理"
     },
     {
@@ -290,7 +290,7 @@
     16,
     27,
     67,
-    8
+    10
    ],
    "days7": [
     "2026-11-01",
@@ -809,7 +809,7 @@
     "hot": true
    },
    {
-    "term": "美股",
+    "term": "費半",
     "n": 4,
     "src": 4,
     "sources": [
@@ -900,6 +900,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-07T00:02:43Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-07T00:23:11Z"
 }

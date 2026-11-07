@@ -1,16 +1,16 @@
 {
  "rates": {
-  "EFFR": {
-   "value": 3.88,
-   "date": "2026-11-05"
-  },
   "SOFR": {
    "value": 3.92,
    "date": "2026-11-05"
   },
+  "EFFR": {
+   "value": 3.88,
+   "date": "2026-11-05"
+  },
   "IORB": {
    "value": 3.9,
-   "date": "2026-11-06"
+   "date": "2026-11-09"
   }
  },
  "sofr_iorb": 0.02,
@@ -195,6 +195,8 @@
   ],
   "chg4w": -74.3
  },
- "errs": [],
- "updatedAt": "2026-11-06T21:22:46Z"
+ "errs": [
+  "NY Fed rates: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+ ],
+ "updatedAt": "2026-11-07T00:23:11Z"
 }
