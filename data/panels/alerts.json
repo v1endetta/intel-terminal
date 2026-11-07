@@ -1,6 +1,20 @@
 {
  "alerts": [
   {
+   "id": "WRA_ReservoirWarn_20261107230840_0000",
+   "cat": "水庫放流",
+   "lvl": 2,
+   "area": [
+    "新竹市",
+    "新竹縣"
+   ],
+   "text": "水利署訊寶山第二水庫:(放水至石井溪):自由溢流,影響範圍:新竹縣，寶山鄉、峨眉鄉；新竹市，東區、北區、香山區",
+   "src": "水利署",
+   "at": "2026-11-07T15:08:40Z",
+   "exp": "2026-11-08T02:09:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261107230840_0000.cap"
+  },
+  {
    "id": "CWA-Weather_extremely-rain_202611072236001",
    "cat": "降雨",
    "lvl": 2,
@@ -32,20 +46,6 @@
    "at": "2026-11-07T14:29:36Z",
    "exp": "2026-11-08T23:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611072229.cap"
-  },
-  {
-   "id": "WRA_ReservoirWarn_20261107210840_0000",
-   "cat": "水庫放流",
-   "lvl": 2,
-   "area": [
-    "新竹市",
-    "新竹縣"
-   ],
-   "text": "水利署訊寶山第二水庫:(放水至石井溪):自由溢流,影響範圍:新竹縣，寶山鄉、峨眉鄉；新竹市，東區、北區、香山區",
-   "src": "水利署",
-   "at": "2026-11-07T13:08:40Z",
-   "exp": "2026-11-08T00:09:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/WRA/2026/ReservoirDis/WRA_ReservoirWarn_20261107210840_0000.cap"
   },
   {
    "id": "CWA-Weather_extremely-rain_202611071916001",
@@ -143,103 +143,14 @@
    "at": "2026-11-07T02:14:41Z",
    "exp": "2026-11-08T00:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202611071014.cap"
-  },
-  {
-   "id": "CWA-Weather_strong-wind_202611070425001",
-   "cat": "強風",
-   "lvl": 2,
-   "area": [
-    "新北市",
-    "桃園市",
-    "新竹市",
-    "新竹縣",
-    "屏東縣",
-    "臺東縣",
-    "澎湖縣",
-    "連江縣"
-   ],
-   "text": "東北風偏強，7日晨至7日晚上新北市、桃園市、新竹市、新竹縣、屏東縣、臺東縣(含蘭嶼、綠島)、澎湖縣、連江縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
-   "src": "中央氣象署",
-   "at": "2026-11-06T20:25:40Z",
-   "exp": "2026-11-07T23:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611070425.cap"
-  },
-  {
-   "id": "CWA-Weather_strong-wind_202611062225001",
-   "cat": "強風",
-   "lvl": 2,
-   "area": [
-    "新北市",
-    "桃園市",
-    "新竹市",
-    "新竹縣",
-    "雲林縣",
-    "屏東縣",
-    "臺東縣",
-    "澎湖縣",
-    "連江縣"
-   ],
-   "text": "東北風偏強，6日晚上至7日晚上新北市、桃園市、新竹市、新竹縣、雲林縣、屏東縣、臺東縣(含蘭嶼、綠島)、澎湖縣、連江縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
-   "src": "中央氣象署",
-   "at": "2026-11-06T14:25:59Z",
-   "exp": "2026-11-07T23:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611062225.cap"
-  },
-  {
-   "id": "CWA-Weather_strong-wind_202611061630001",
-   "cat": "強風",
-   "lvl": 2,
-   "area": [
-    "新北市",
-    "桃園市",
-    "新竹市",
-    "新竹縣",
-    "苗栗縣",
-    "臺中市",
-    "彰化縣",
-    "雲林縣",
-    "屏東縣",
-    "臺東縣",
-    "澎湖縣",
-    "連江縣"
-   ],
-   "text": "東北風偏強，6日下午至7日晚上新北市、桃園市、新竹市、新竹縣、苗栗縣、臺中市、彰化縣、雲林縣、屏東縣、臺東縣(含蘭嶼、綠島)、澎湖縣、連江縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
-   "src": "中央氣象署",
-   "at": "2026-11-06T08:30:14Z",
-   "exp": "2026-11-07T23:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611061630.cap"
-  },
-  {
-   "id": "CWA-Weather_strong-wind_202611061031001",
-   "cat": "強風",
-   "lvl": 2,
-   "area": [
-    "新北市",
-    "桃園市",
-    "新竹市",
-    "新竹縣",
-    "苗栗縣",
-    "臺中市",
-    "彰化縣",
-    "雲林縣",
-    "屏東縣",
-    "臺東縣",
-    "澎湖縣",
-    "連江縣"
-   ],
-   "text": "東北風偏強，6日上午至7日晚上新北市、桃園市、新竹市、新竹縣、苗栗縣、臺中市、彰化縣、雲林縣、屏東縣、臺東縣(含蘭嶼、綠島)、澎湖縣、連江縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。",
-   "src": "中央氣象署",
-   "at": "2026-11-06T02:31:23Z",
-   "exp": "2026-11-07T23:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611061031.cap"
   }
  ],
- "n_total": 13,
+ "n_total": 9,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/11/07 22:35:15"
+  "updated": "2026/11/07 23:23:15"
  },
  "errs": [],
- "updatedAt": "2026-11-07T14:42:09Z"
+ "updatedAt": "2026-11-07T15:23:54Z"
 }
