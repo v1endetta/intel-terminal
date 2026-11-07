@@ -1,113 +1,5 @@
 {
- "drewry": {
-  "lanes": [
-   {
-    "from": "Shanghai",
-    "to": "New York",
-    "chg": -3.0,
-    "v": 9303.0,
-    "name": "上海→紐約"
-   },
-   {
-    "from": "Shanghai",
-    "to": "Rotterdam",
-    "chg": -2.0,
-    "v": 3615.0,
-    "name": "上海→鹿特丹"
-   },
-   {
-    "from": "Shanghai",
-    "to": "Genoa",
-    "chg": 0.0,
-    "v": null,
-    "name": "上海→熱那亞"
-   }
-  ],
-  "wci": {
-   "name": "Drewry WCI",
-   "value": 4389.0,
-   "unit": "USD/40ft",
-   "date": "05 Nov 2026",
-   "chg_pct": -1.0,
-   "chg_label": "週%",
-   "spark": [
-    4468.0,
-    4434.0,
-    4351.0,
-    4485.0,
-    4585.0,
-    4429.0,
-    4389.0
-   ]
-  }
- },
- "fbx": [
-  {
-   "code": "FBX",
-   "name": "全球綜合",
-   "chg": -1.75
-  },
-  {
-   "code": "FBX01",
-   "name": "中國→美西",
-   "chg": -1.14
-  },
-  {
-   "code": "FBX02",
-   "name": "美西→中國",
-   "chg": -9.59
-  },
-  {
-   "code": "FBX03",
-   "name": "中國→美東",
-   "chg": -2.04
-  },
-  {
-   "code": "FBX04",
-   "name": "美東→中國",
-   "chg": 7.61
-  },
-  {
-   "code": "FBX11",
-   "name": "中國→北歐",
-   "chg": -4.8
-  },
-  {
-   "code": "FBX12",
-   "name": "北歐→中國",
-   "chg": 30.61
-  },
-  {
-   "code": "FBX13",
-   "name": "中國→地中海",
-   "chg": -1.17
-  },
-  {
-   "code": "FBX14",
-   "name": "地中海→中國",
-   "chg": 0.0
-  },
-  {
-   "code": "FBX21",
-   "name": "美東→北歐",
-   "chg": -19.57
-  },
-  {
-   "code": "FBX22",
-   "name": "北歐→美東",
-   "chg": -3.87
-  },
-  {
-   "code": "FBX24",
-   "name": "北歐→南美東",
-   "chg": -3.47
-  },
-  {
-   "code": "FBX26",
-   "name": "北歐→南美西",
-   "chg": -0.29
-  }
- ],
+ "fbx": [],
  "storms": [],
  "ports": [
   {
@@ -566,8 +458,10 @@
  ],
  "threat": [],
  "errs": [
-  "GDACS: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+  "Drewry: HTTPError: 429 Client Error:  for url: https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry",
+  "FBX：頁面格式變了，沒抓到數字",
+  "GDACS: ConnectTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Max retries exceeded with url: /gdacsapi/api/events/geteventlist/SEARCH?eventlist=TC&alertlevel=Green%3BOra"
  ],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-07T18:59:41Z"
+ "updatedAt": "2026-11-07T20:01:39Z"
 }
