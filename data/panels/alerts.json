@@ -1,6 +1,19 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_extremely-rain_202611071014001",
+   "cat": "降雨",
+   "lvl": 2,
+   "area": [
+    "宜蘭縣"
+   ],
+   "text": "東北季風影響，今(7)日宜蘭山區有局部大雨發生的機率，山區請慎防坍方及落石。",
+   "src": "中央氣象署",
+   "at": "2026-11-07T02:14:41Z",
+   "exp": "2026-11-08T00:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202611071014.cap"
+  },
+  {
    "id": "WRA_ReservoirWarn_20261107091840_0000",
    "cat": "水庫放流",
    "lvl": 2,
@@ -33,19 +46,6 @@
    "at": "2026-11-06T20:25:40Z",
    "exp": "2026-11-07T23:00:00+08:00",
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611070425.cap"
-  },
-  {
-   "id": "CWA-Weather_extremely-rain_202611070007001",
-   "cat": "降雨",
-   "lvl": 2,
-   "area": [
-    "宜蘭縣"
-   ],
-   "text": "東北季風影響，今(7)日宜蘭山區有局部大雨發生的機率，請注意。",
-   "src": "中央氣象署",
-   "at": "2026-11-06T16:07:16Z",
-   "exp": "2026-11-07T11:00:00+08:00",
-   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202611070007.cap"
   },
   {
    "id": "CWA-Weather_strong-wind_202611062225001",
@@ -134,8 +134,8 @@
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/11/07 10:07:15"
+  "updated": "2026/11/07 10:28:16"
  },
  "errs": [],
- "updatedAt": "2026-11-07T02:06:06Z"
+ "updatedAt": "2026-11-07T02:28:45Z"
 }
