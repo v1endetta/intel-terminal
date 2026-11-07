@@ -1,6 +1,12 @@
 {
  "tw": [
   {
+   "source": "中央社",
+   "title": "老人福利法修法　卓榮泰：樂於再與立院協商",
+   "url": "https://www.cna.com.tw/news/aipl/202611070080.aspx",
+   "at": "2026-11-07T05:46:39Z"
+  },
+  {
    "source": "公視",
    "title": "20261107 公視午間新聞完整版（無網路版權內容除外）｜今立冬北部降溫有雨下週更強東北季風下探16℃ ｜ 公視新聞PNN",
    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE40azd2UFFvTld0Qmd6OTJFMFo3cDZSZkNUMV9FdVlQUk14dnI4UksxTVpiLXJaeVAtWG1TQnM2VzFLU0xqN0FsMUNTbw?oc=5",
@@ -44,12 +50,6 @@
   },
   {
    "source": "中央社",
-   "title": "貝里斯觀光部長訪台　盼推廣旅遊、強化人才培育",
-   "url": "https://www.cna.com.tw/news/aipl/202611070044.aspx",
-   "at": "2026-11-07T03:07:18Z"
-  },
-  {
-   "source": "中央社",
    "title": "新台幣逆勢強彈現止貶曙光？專家：反轉仍有長路",
    "url": "https://www.cna.com.tw/news/afe/202611070039.aspx",
    "at": "2026-11-07T02:43:07Z"
@@ -78,7 +78,7 @@
    "source": "Guardian",
    "title": "NZ election 2026 live results: count on as National and Labour battle it out in knife-edge",
    "url": "https://www.theguardian.com/world/live/2026/nov/07/nz-general-election-2026-live-updates-results-new-zealand-polls",
-   "at": "2026-11-07T06:39:18Z",
+   "at": "2026-11-07T06:54:53Z",
    "sec": "World news"
   },
   {
@@ -290,7 +290,7 @@
     9,
     14,
     28,
-    61,
+    60,
     17
    ],
    "days7": [
@@ -646,8 +646,8 @@
     11,
     13,
     20,
-    43,
-    19,
+    42,
+    18,
     8
    ],
    "days7": [
@@ -895,6 +895,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-07T06:38:39Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-07T06:56:58Z"
 }
