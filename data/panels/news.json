@@ -76,16 +76,16 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "Six dead after gunman opens fire ‘at random’ in Kraków market square",
-   "url": "https://www.theguardian.com/world/2026/nov/07/krakow-poland-shooting-market-square-deaths-gunman",
-   "at": "2026-11-07T17:17:23Z",
+   "title": "Kraków shooting latest updates: six killed and more than a dozen injured, police say",
+   "url": "https://www.theguardian.com/world/live/2026/nov/07/krakow-shooting-poland-latest-news-updates",
+   "at": "2026-11-07T17:25:50Z",
    "sec": "World news"
   },
   {
    "source": "Guardian",
-   "title": "Kraków shooting latest updates: six killed and more than a dozen injured, police say",
-   "url": "https://www.theguardian.com/world/live/2026/nov/07/krakow-shooting-poland-latest-news-updates",
-   "at": "2026-11-07T17:11:29Z",
+   "title": "Six dead after gunman opens fire ‘at random’ in Kraków market square",
+   "url": "https://www.theguardian.com/world/2026/nov/07/krakow-poland-shooting-market-square-deaths-gunman",
+   "at": "2026-11-07T17:17:23Z",
    "sec": "World news"
   },
   {
@@ -797,7 +797,21 @@
     "hot": false
    },
    {
-    "term": "沈伯洋車",
+    "term": "沈伯洋",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "PTT",
+     "中央社"
+    ],
+    "sample": {
+     "title": "台荷民主論壇談假訊息　沈伯洋：意在摧毀信任、台歐應合作防禦",
+     "url": "https://www.cna.com.tw/news/aipl/202611070213.aspx"
+    },
+    "hot": false
+   },
+   {
+    "term": "伯洋車掃",
     "n": 2,
     "src": 2,
     "sources": [
@@ -865,23 +879,11 @@
      "url": "https://news.google.com/rss/articles/CBMivgJBVV95cUxPZEZucXZWT0I3TDEzUl9zRTdGdjJDUHJZRGZ4M3BHTUo1STV4NmdqUVVETUFsdFg1YnhhZEJTRGstTi1NY1RYdlVPWUtwR0JUWlpHMDRpY01TZGZQZTdDdFI0RlNMZVZUZHFUU01LeWZTbDRJVWg3NkhTY3hkUFhUVGlqVTlIWkkzcUQtYXFXczV1RWlWMEVwRUVhbll3X19GWWNRZzBqbmJqeGxuUl9ORFBSR290TkVhLXg2VkpVQ3RCNmlfdHlzeU9xQzE5NnQ2OE11QjlkeHJMTV85LVhMVlBHb01jXzJVbmt1TGVkX19ISGNHZ1BkZnVqQVVQQUVCMnhEdWk0SXdvaEJMX1pkVFFBY0ZvUl94amdPT2RKNFpRendnanhlbGcxQVFkY2liaVd1R3FJWTJqdlJvQkE?oc=5"
     },
     "hot": false
-   },
-   {
-    "term": "神盾盃",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "經濟日報",
-     "自由軍武頻道"
-    ],
-    "sample": {
-     "title": "中科院「神盾盃」資安競賽　國內外頂尖資安團隊攻防較勁",
-     "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1ldnhra1RZS2dJTDhabUhzNmJETk1DTWNYSUwtSWxKWGNlSG9vVE1yR0YtWDF2bUk1dmJyX2JybzFFdEN1RFpmMlRObnpCVjVfQVV2eUhKVEUxQdIBX0FVX3lxTE02OEFiS2dEWXR4YWtPZjNsM2hkdllQS1E4VENuUHg3SEZuc1VuZ0NfS0xBRUJNTG5aRWdRM2RTdm0za3A1SFNGRGxCQlVjcUNLQzBSZ3ZSQ3JLTjlEOHFn?oc=5"
-    },
-    "hot": false
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-07T17:20:51Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-07T17:40:04Z"
 }
