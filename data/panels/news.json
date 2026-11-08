@@ -279,7 +279,7 @@
    "daily7": [
     3,
     7,
-    23,
+    22,
     55,
     18,
     3,
@@ -612,10 +612,10 @@
      "kw": "廟宇 OR 媽祖 OR 民間信仰"
     },
     {
-     "source": "上報Up Media",
-     "title": "誠品× SOU．SOU 聯名全新花色周邊獨家開賣造型地墊、大象杯、「暹羅貓」刺繡收納包等可愛要收",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9xeFpXYUtBendUdFcydnE2ZEp5Rm9JbFF1LTBXaTdoMnBIT09vdXFBdVdlZlVnelMxa1RqY3VZMVZnTmw2NklEc3FXeDdCNlgxaWFydUtGRFhxb0pmUmJv?oc=5",
-     "at": "2026-11-08T08:00:00Z",
+     "source": "風傳媒",
+     "title": "台灣有11間新百貨公司來了！全台最大6.2萬坪、誠品3000坪， 最新開幕時間地址一次看",
+     "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5YWVIyOTF0bHAxa1pMSy1zWnktMmg3WE4xOS11aVY0UTdQazBJWU5UdWxKeUhzWXdVUjR1d0JOcHF4UXczZE9wdTlnTU96cXk2?oc=5",
+     "at": "2026-11-08T20:16:44Z",
      "kw": "獨立書店 OR 誠品"
     },
     {
@@ -849,20 +849,6 @@
     "hot": false
    },
    {
-    "term": "CEO",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "PTT",
-     "TechCrunch"
-    ],
-    "sample": {
-     "title": "Nvidia will investigate CEO Jensen Huang’s relationship with",
-     "url": "https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/"
-    },
-    "hot": false
-   },
-   {
     "term": "竹北",
     "n": 2,
     "src": 2,
@@ -875,9 +861,25 @@
      "url": "https://www.cna.com.tw/news/aipl/202611080188.aspx"
     },
     "hot": false
+   },
+   {
+    "term": "廠商",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "中央社",
+     "電腦王阿達"
+    ],
+    "sample": {
+     "title": "太空產業博覽會台南登場　112家廠商齊聚展實力",
+     "url": "https://www.cna.com.tw/news/afe/202611080174.aspx"
+    },
+    "hot": false
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-08T21:21:59Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-08T21:45:11Z"
 }
