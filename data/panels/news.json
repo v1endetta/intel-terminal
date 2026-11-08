@@ -8,6 +8,12 @@
   },
   {
    "source": "中央社",
+   "title": "龔明鑫節目上為買股吵架？經濟部澄清：詐騙內容",
+   "url": "https://www.cna.com.tw/news/afe/202611080041.aspx",
+   "at": "2026-11-08T03:05:24Z"
+  },
+  {
+   "source": "中央社",
    "title": "國銀金檢揪7大類缺失　金管會盯人頭戶審查不實",
    "url": "https://www.cna.com.tw/news/afe/202611080028.aspx",
    "at": "2026-11-08T02:51:57Z"
@@ -41,12 +47,6 @@
    "title": "台灣關閉巴紐駐處　美國務院：北京對台恫嚇又一例證",
    "url": "https://www.cna.com.tw/news/aipl/202611080006.aspx",
    "at": "2026-11-07T20:31:01Z"
-  },
-  {
-   "source": "中央社",
-   "title": "幣安財務長將離職　支付平台Airwallex高層接任",
-   "url": "https://www.cna.com.tw/news/aopl/202611080004.aspx",
-   "at": "2026-11-07T19:19:55Z"
   },
   {
    "source": "公視",
@@ -247,10 +247,10 @@
    "name": "AI 大廠與模型",
    "items": [
     {
-     "source": "T客邦",
-     "title": "OpenAI 推出 Images 2.6 模型：生成速度快 50%、支援動態 GIF， 免費就能用",
-     "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE84NXJRUjJfMzM3alp6Tm42NVVISEgyd3ZhNVdTR3RoNWF5aGNPaFRRdVUza2Q2OEpiM1BTR0hwejVPUE1FTk5jZ05wSnZVendleTZmaVpHN3JTQ3pjRG9rSzRhSENfSm0zN1piMndHNnBYWTBhaWJUMkZR?oc=5",
-     "at": "2026-11-06T06:30:00Z",
+     "source": "鉅亨號",
+     "title": "OpenAI新融資到帳110億美元，不及原計畫一半",
+     "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1KMERUeFMzUHBjQTdfWmRxYXduRzgyc0dlQmdBdE1qcDA4d0xBaGtjOGMyMFNEWmwxcUpBMnV6RmktbjdFb3dnaQ?oc=5",
+     "at": "2026-11-08T04:19:18Z",
      "kw": "OpenAI OR Anthropic OR DeepMind 發布 OR 推出"
     },
     {
@@ -277,12 +277,12 @@
    ],
    "daily7": [
     5,
-    7,
+    6,
     9,
-    19,
+    20,
     56,
     15,
-    0
+    1
    ],
    "days7": [
     "2026-11-02",
@@ -639,7 +639,7 @@
     28,
     19,
     29,
-    1
+    2
    ],
    "days7": [
     "2026-11-02",
@@ -779,21 +779,6 @@
     "hot": true
    },
    {
-    "term": "財務",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "Yahoo股市",
-     "中央社",
-     "美股放大鏡"
-    ],
-    "sample": {
-     "title": "幣安財務長將離職　支付平台Airwallex高層接任",
-     "url": "https://www.cna.com.tw/news/aopl/202611080004.aspx"
-    },
-    "hot": true
-   },
-   {
     "term": "周一",
     "n": 3,
     "src": 3,
@@ -839,20 +824,6 @@
     "hot": false
    },
    {
-    "term": "Airwallex",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "Yahoo股市",
-     "中央社"
-    ],
-    "sample": {
-     "title": "幣安財務長將離職　支付平台Airwallex高層接任",
-     "url": "https://www.cna.com.tw/news/aopl/202611080004.aspx"
-    },
-    "hot": false
-   },
-   {
     "term": "Paraguay",
     "n": 2,
     "src": 2,
@@ -879,9 +850,39 @@
      "url": "https://www.bbc.co.uk/news/articles/cmy8367lj5xlo?at_medium=RSS&at_campaign=rss"
     },
     "hot": false
+   },
+   {
+    "term": "反彈",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "UDN",
+     "中央社"
+    ],
+    "sample": {
+     "title": "台股1個月以來急跌萬點　法人：不宜貿然搶反彈",
+     "url": "https://www.cna.com.tw/news/afe/202611080026.aspx"
+    },
+    "hot": false
+   },
+   {
+    "term": "估值",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "中央社",
+     "美股放大鏡"
+    ],
+    "sample": {
+     "title": "美國AI監管疑慮升高　投信：亞洲科技股面臨估值壓力",
+     "url": "https://www.cna.com.tw/news/afe/202611080016.aspx"
+    },
+    "hot": false
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-08T04:05:33Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-08T04:25:46Z"
 }
