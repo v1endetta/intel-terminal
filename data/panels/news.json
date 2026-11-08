@@ -634,13 +634,13 @@
     }
    ],
    "daily7": [
-    14,
+    13,
     20,
     31,
     17,
     27,
     15,
-    0
+    1
    ],
    "days7": [
     "2026-11-03",
@@ -655,8 +655,8 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.282,
-   "vol_ratio": 0.57,
+   "vol": 1.198,
+   "vol_ratio": 0.53,
    "tone": 0.35,
    "tone_at": "2026-11-08T19:16:11Z",
    "spark": [
@@ -673,9 +673,9 @@
     2.82,
     1.945,
     1.182,
-    1.282
+    1.198
    ],
-   "at": "2026-11-08T19:37:27Z"
+   "at": "2026-11-08T20:16:20Z"
   },
   "wiki": {
    "zh": [
@@ -864,8 +864,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-08T19:53:52Z"
+ "errs": [],
+ "updatedAt": "2026-11-08T20:16:20Z"
 }
