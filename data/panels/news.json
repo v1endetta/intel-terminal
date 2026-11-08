@@ -383,7 +383,7 @@
     2,
     18,
     60,
-    52,
+    53,
     15,
     1
    ],
@@ -430,11 +430,11 @@
     }
    ],
    "daily7": [
-    7,
+    6,
     13,
-    18,
-    10,
     21,
+    10,
+    22,
     20,
     1
    ],
@@ -455,7 +455,7 @@
      "source": "中時新聞網",
      "title": "愛馬仕把凱莉包、馬蹄鐵收進彩妝盒- 時尚消費- 中國時報",
      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE03VUY2OVY4eTlNZE9OWHBuNzd0TTlGeHh1aE9NUVFpb0w0ak9NbWNrZUk2UDZhV3JMTzlKMEd4UDFza2RuZnhROTlzVVVBWS1zbURPSkZsRWRqSFNzNjRvUk1fYTRwWktXUVhB?oc=5",
-     "at": "2026-11-08T20:10:00Z",
+     "at": "2026-11-08T20:15:15Z",
      "kw": "LVMH OR Kering OR Hermès OR 愛馬仕"
     },
     {
@@ -835,20 +835,6 @@
     "hot": false
    },
    {
-    "term": "愛馬仕",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "中時新聞網",
-     "鏡週刊Mirror Me"
-    ],
-    "sample": {
-     "title": "愛馬仕把凱莉包、馬蹄鐵收進彩妝盒- 時尚消費- 中國時報",
-     "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE03VUY2OVY4eTlNZE9OWHBuNzd0TTlGeHh1aE9NUVFpb0w0ak9NbWNrZUk2UDZhV3JMTzlKMEd4UDFza2RuZnhROTlzVVVBWS1zbURPSkZsRWRqSFNzNjRvUk1fYTRwWktXUVhB?oc=5"
-    },
-    "hot": false
-   },
-   {
     "term": "竹北",
     "n": 2,
     "src": 2,
@@ -875,11 +861,25 @@
      "url": "https://www.cna.com.tw/news/afe/202611080174.aspx"
     },
     "hot": false
+   },
+   {
+    "term": "大量",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "PTT",
+     "電腦王阿達"
+    ],
+    "sample": {
+     "title": "歐洲超市、血庫冰箱大量被駭事件真相曝光！駭客沒用 AI，靠廠商說明書裡寫的預設密碼",
+     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9Qd0xudUxFa3FmeTN1eThLczVtaDdfSGl4Smt4ZUF3MkVVbk5feWh1eEN2bXdHYzl6QjZHSElQUk9vc1dOZ1owWlRaeTdIam9lZUE?oc=5"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-08T21:45:11Z"
+ "updatedAt": "2026-11-08T22:03:29Z"
 }
