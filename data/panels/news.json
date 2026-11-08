@@ -657,10 +657,10 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.004,
-   "vol_ratio": 0.41,
-   "tone": 0.41,
-   "tone_at": "2026-11-08T12:33:58Z",
+   "vol": 1.182,
+   "vol_ratio": 0.48,
+   "tone": 0.48,
+   "tone_at": "2026-11-08T13:55:29Z",
    "spark": [
     1.803,
     2.082,
@@ -675,9 +675,9 @@
     2.299,
     2.82,
     1.945,
-    1.004
+    1.182
    ],
-   "at": "2026-11-08T12:33:58Z"
+   "at": "2026-11-08T13:55:29Z"
   },
   "wiki": {
    "zh": [
@@ -856,7 +856,7 @@
     "hot": false
    },
    {
-    "term": "擬孤立台",
+    "term": "模擬孤立",
     "n": 2,
     "src": 2,
     "sources": [
@@ -885,8 +885,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-08T13:34:57Z"
+ "errs": [],
+ "updatedAt": "2026-11-08T13:55:29Z"
 }
