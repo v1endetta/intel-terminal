@@ -75,6 +75,12 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Surgeon having lunch near Krakow shooting undoubtedly saved officer's life, colleague says",
+   "url": "https://www.bbc.co.uk/news/articles/c5x2vw4e1gx1o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-08T23:34:18Z"
+  },
+  {
    "source": "Guardian",
    "title": "Two police officers hailed as heroes for confronting Kraków gunman",
    "url": "https://www.theguardian.com/world/2026/nov/08/two-police-officers-heroes-confronting-krakow-gunman-poland",
@@ -86,12 +92,6 @@
    "title": "Seven dead and more than 100 injured after trains collide in Egypt",
    "url": "https://www.bbc.co.uk/news/articles/cwvgr20mmmevo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-08T19:58:02Z"
-  },
-  {
-   "source": "BBC",
-   "title": "Surgeon having lunch near Krakow shooting undoubtedly saved officer's life, colleague says",
-   "url": "https://www.bbc.co.uk/news/articles/c5x2vw4e1gx1o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-08T18:22:53Z"
   },
   {
    "source": "Guardian",
@@ -636,9 +636,9 @@
    "daily7": [
     13,
     21,
-    33,
+    34,
     15,
-    27,
+    26,
     16,
     1
    ],
@@ -864,6 +864,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-08T23:21:20Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-08T23:39:49Z"
 }
