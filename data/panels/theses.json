@@ -441,16 +441,16 @@
    "title": "貨櫃運價年底前上漲",
    "claim": "Drewry WCI 到年底高於 10 月中（4,485 美元）",
    "kill_txt": "WCI 比起始值低 15% 以上",
-   "status": "mixed",
-   "score": 0,
-   "n": 2,
-   "since": "2026-11-08",
-   "days": 1,
+   "status": "weak",
+   "score": -1,
+   "n": 5,
+   "since": "2026-10-31",
+   "days": 9,
    "ev": [
     {
      "name": "Drewry WCI",
-     "txt": "—",
-     "s": null,
+     "txt": "4,389 美元／40 呎（起始 4,485）",
+     "s": 0,
      "note": ""
     },
     {
@@ -461,14 +461,14 @@
     },
     {
      "name": "Freightos FBX 全球",
-     "txt": "—",
-     "s": null,
+     "txt": "-1.8%",
+     "s": 0,
      "note": ""
     },
     {
      "name": "Drewry 主要航線",
-     "txt": "0 條漲、0 條跌",
-     "s": null,
+     "txt": "0 條漲、2 條跌",
+     "s": -1,
      "note": ""
     },
     {
@@ -481,6 +481,14 @@
    "hint": null,
    "q_start": "ok",
    "q_score0": 3,
+   "gauge": {
+    "now": 4389.0,
+    "kill": 3812.25,
+    "side": 1,
+    "label": "Drewry WCI",
+    "unit": "",
+    "d": 0
+   },
    "pred": {
     "text": "2026/12/31 Drewry WCI 高於現在（4,389）",
     "due": "2026-12-31",
@@ -1153,5 +1161,5 @@
  "next_review": "2027-01-01",
  "review": null,
  "src": "全部用情報站其他面板的資料自動判斷；美元指數、日圓、費半、加權指數來自 Yahoo Finance",
- "updatedAt": "2026-11-08T00:46:24Z"
+ "updatedAt": "2026-11-08T01:05:28Z"
 }
