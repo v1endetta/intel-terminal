@@ -75,6 +75,13 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Ukraine war briefing: Russia ramping up attacks to ‘pressure’ Kyiv at trilateral talks, Ze",
+   "url": "https://www.theguardian.com/world/2026/nov/08/ukraine-war-briefing-russia-ramping-up-attacks-to-pressure-kyiv-at-trilateral-talks-zelenskyy-says",
+   "at": "2026-11-08T04:10:42Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "Houthis say at least 33 killed in Saudi air strike",
    "url": "https://www.bbc.co.uk/news/articles/c65yn1v99ypmo?at_medium=RSS&at_campaign=rss",
@@ -146,12 +153,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/07/paraguay-ueno-bank-collapse-santiago-pena",
    "at": "2026-11-07T19:00:43Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "US offers $20m reward for information about Iran's nuclear programme",
-   "url": "https://www.bbc.co.uk/news/articles/c6d091ev3p0jo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-07T18:14:38Z"
   }
  ],
  "groups": [
@@ -635,8 +636,8 @@
    "daily7": [
     5,
     13,
-    19,
-    28,
+    20,
+    29,
     19,
     29,
     2
@@ -749,7 +750,7 @@
     "hot": true
    },
    {
-    "term": "ADR",
+    "term": "台積電",
     "n": 3,
     "src": 3,
     "sources": [
@@ -764,7 +765,7 @@
     "hot": true
    },
    {
-    "term": "台積電",
+    "term": "ADR",
     "n": 3,
     "src": 3,
     "sources": [
@@ -884,5 +885,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-08T04:25:46Z"
+ "updatedAt": "2026-11-08T04:43:26Z"
 }
