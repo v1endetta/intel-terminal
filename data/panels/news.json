@@ -78,14 +78,14 @@
    "source": "Guardian",
    "title": "Nvidia shares fall after ‘honeytrap’ investigation launched, as China denies spying claims",
    "url": "https://www.theguardian.com/business/live/2026/nov/09/nvidia-jensen-huang-scandal-investigation-ai-industry-tech-stocks-recovery-slump-latest-news-updates",
-   "at": "2026-11-09T11:17:22Z",
+   "at": "2026-11-09T11:42:12Z",
    "sec": "Business"
   },
   {
    "source": "Guardian",
    "title": "Poland’s justice minister says investigation into Kraków shooting will aim to establish if",
    "url": "https://www.theguardian.com/world/live/2026/nov/09/polands-krakow-attack-ukraine-russia-france-germany-europe-latest-news",
-   "at": "2026-11-09T11:09:40Z",
+   "at": "2026-11-09T11:39:16Z",
    "sec": "World news"
   },
   {
@@ -232,7 +232,7 @@
     3,
     0,
     0,
-    4
+    3
    ],
    "days7": [
     "2026-11-03",
@@ -255,17 +255,17 @@
      "kw": "OpenAI OR Anthropic OR DeepMind 發布 OR 推出"
     },
     {
-     "source": "電腦王阿達",
-     "title": "Gemini 新功能「Canvas」可幫你自動產生旅行行程，無需重新開始",
-     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBZUVZSUXRYS3Z6QTY4Qzd3Z0sxelYzRHIzeHkwMl9rcmlPU1hrTVlON1YxajRBMWlIZDJ1QUg5ekt5MEFhU3U5TVpEU3UyVklFWFE?oc=5",
-     "at": "2026-11-09T04:44:19Z",
+     "source": "CMoney",
+     "title": "Gemini 新功能「Canvas」可幫你自動產生旅行行程，無需重新開始- 股市爆料同學會",
+     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBUOXF6QUo4b1AwZU9va2oyOWgtaXBHTTlPUnBMUjdWN21za1BBOWo3SVRjVWVjcnBKbjdySS1rMVI3dDlCMzdpdVhETVVPaGNhZlNJV3h3dkg?oc=5",
+     "at": "2026-11-09T04:44:31Z",
      "kw": "ChatGPT OR Claude OR Gemini 新功能 OR 新模型"
     },
     {
-     "source": "蕃新聞",
-     "title": "打造AI Agent智慧大學 敏實科大勇奪卓越經營品質獎",
-     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1OQmpRazMyQlppb2c2YW90ZkxoNS0tQ0QyLXZneVQ4VHdfRU1WZl9WUi1uZ2pFZ0xkWGxfU05Uc1JCbUtnRVVVdHQwTmFJblYwU2c?oc=5",
-     "at": "2026-11-09T09:49:16Z",
+     "source": "iThome",
+     "title": "Perplexity推出Teammates，支援多個常駐AI代理人分工協作",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1MekMzRXdHVEdZN2FZajNmWm5tWkdWQzhMNDF6NUlCNF8zTmVuMERvemVZMi13QTJObURIWEZSQlBjemViVW9PUHhpbEdhQQ?oc=5",
+     "at": "2026-11-09T04:57:16Z",
      "kw": "AI agent OR AI 代理人 OR 智慧代理"
     },
     {
@@ -279,11 +279,11 @@
    "daily7": [
     2,
     2,
-    13,
+    11,
     49,
     17,
     2,
-    19
+    20
    ],
    "days7": [
     "2026-11-03",
@@ -637,10 +637,10 @@
     10,
     13,
     22,
-    8,
+    9,
     26,
     10,
-    24
+    25
    ],
    "days7": [
     "2026-11-03",
@@ -815,24 +815,26 @@
     "hot": false
    },
    {
-    "term": "國安",
+    "term": "Gemini",
     "n": 3,
     "src": 2,
     "sources": [
-     "PTT",
-     "商業周刊"
+     "CMoney",
+     "Google AI 論壇",
+     "電腦王阿達"
     ],
     "sample": {
-     "title": "商周-台股要止跌了？台積電ADR大漲6.33%、國安基金護盤，投顧點名看3指標 - 商業周刊",
-     "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBtWnZmQmw0OEZkcU5hZGd1UXFyZGVORE0zUjFQTW5FeUJXWnNrRzB3ejZSb1lJTnFUTlZwYnVXSndwVFVjN3cydlFNTWxNZ01GT244dEJ1eWN4QVUySlRfckFNQW1NQQ?oc=5"
+     "title": "Gemini 新功能「Canvas」可幫你自動產生旅行行程，無需重新開始",
+     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBZUVZSUXRYS3Z6QTY4Qzd3Z0sxelYzRHIzeHkwMl9rcmlPU1hrTVlON1YxajRBMWlIZDJ1QUg5ekt5MEFhU3U5TVpEU3UyVklFWFE?oc=5"
     },
     "hot": false
    }
   ]
  },
  "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json",
   "wiki zh: HTTPError: 404 Client Error: Not Found for url: https://wikimedia.org/api/rest_v1/metrics/pageviews/top/zh.wikipedia/all-access/2026/11/07",
   "wiki en: HTTPError: 404 Client Error: Not Found for url: https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/2026/11/07"
  ],
- "updatedAt": "2026-11-09T11:23:09Z"
+ "updatedAt": "2026-11-09T11:42:34Z"
 }
