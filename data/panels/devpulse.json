@@ -5,9 +5,9 @@
    "vendor": "openai",
    "title": "ChatGPT Is Becoming Increasingly Difficult to Use for Sustained Research – Conversation Cl",
    "url": "https://community.openai.com/t/chatgpt-is-becoming-increasingly-difficult-to-use-for-sustained-research-conversation-closures-library-restrictions-and-recurring-model-behavior-problems/1414307",
-   "replies": 0,
-   "likes": 3,
-   "views": 66,
+   "replies": 1,
+   "likes": 4,
+   "views": 72,
    "at": "2026-11-09T05:26:19Z"
   },
   {
@@ -17,7 +17,7 @@
    "url": "https://community.openai.com/t/context-window-full-after-15-messages/1414251",
    "replies": 1,
    "likes": 4,
-   "views": 189,
+   "views": 198,
    "at": "2026-11-08T22:33:07Z"
   },
   {
@@ -27,7 +27,7 @@
    "url": "https://community.openai.com/t/codex-ambassadors-november-2026-application-results-notification-timeline/1414374",
    "replies": 1,
    "likes": 7,
-   "views": 40,
+   "views": 41,
    "at": "2026-11-09T10:31:04Z"
   },
   {
@@ -37,7 +37,7 @@
    "url": "https://community.openai.com/t/i-pay-200-month-for-gpt-6-astra-why-does-openais-own-usage-dashboard-show-extensive-gpt-5-6-luna-activity/1414487",
    "replies": 1,
    "likes": 4,
-   "views": 32,
+   "views": 39,
    "at": "2026-11-09T16:03:50Z"
   },
   {
@@ -57,18 +57,8 @@
    "url": "https://discuss.ai.google.dev/t/gemini-3-8-flash-is-burning-tokens-fast-with-many-file-reads/199173",
    "replies": 4,
    "likes": 8,
-   "views": 62,
+   "views": 69,
    "at": "2026-11-09T06:37:19Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Restore the Legacy Real-Time File Editing and Review Experience from v2.5.5",
-   "url": "https://discuss.ai.google.dev/t/restore-the-legacy-real-time-file-editing-and-review-experience-from-v2-5-5/199056",
-   "replies": 1,
-   "likes": 2,
-   "views": 40,
-   "at": "2026-11-08T17:54:06Z"
   },
   {
    "source": "Google AI 論壇",
@@ -83,22 +73,32 @@
   {
    "source": "Google AI 論壇",
    "vendor": "google",
-   "title": "Top 5 chats completely bricked on infinite loading / \"Lost connection to the language serv",
-   "url": "https://discuss.ai.google.dev/t/top-5-chats-completely-bricked-on-infinite-loading-lost-connection-to-the-language-server/199062",
-   "replies": 2,
-   "likes": 1,
-   "views": 68,
-   "at": "2026-11-08T18:59:09Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
    "title": "[Appeal] Google Antigravity Service Disabled",
    "url": "https://discuss.ai.google.dev/t/appeal-google-antigravity-service-disabled/199195",
    "replies": 1,
    "likes": 0,
-   "views": 57,
+   "views": 65,
    "at": "2026-11-09T07:51:18Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "Gemini-3.8-live: Turkish speech flatter and less consistent than 2.5 native audio (same vo",
+   "url": "https://discuss.ai.google.dev/t/gemini-3-8-live-turkish-speech-flatter-and-less-consistent-than-2-5-native-audio-same-voice/199256",
+   "replies": 0,
+   "likes": 1,
+   "views": 13,
+   "at": "2026-11-09T13:12:38Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "False Positive ToS Restriction on Official Client",
+   "url": "https://discuss.ai.google.dev/t/false-positive-tos-restriction-on-official-client/199082",
+   "replies": 2,
+   "likes": 0,
+   "views": 37,
+   "at": "2026-11-08T23:46:57Z"
   }
  ],
  "changelogs": [
@@ -141,6 +141,15 @@
   {
    "source": "Claude release notes",
    "vendor": "anthropic",
+   "date": "November 9, 2026",
+   "kind": null,
+   "title": "We’ve launched Claude Fable 5.2 (claude-fable-5-2), built for demanding reasoning and long-horizon agentic work.",
+   "url": "https://platform.claude.com/docs/en/release-notes/overview",
+   "at": "2026-11-09T00:00:00Z"
+  },
+  {
+   "source": "Claude release notes",
+   "vendor": "anthropic",
    "date": "November 5, 2026",
    "kind": null,
    "title": "You can now set up an IP allowlist for your organization in the Claude Console, in beta.",
@@ -164,15 +173,6 @@
    "title": "Long conversations and agent loops on the Messages API can now send smaller requests and get a lower time to first token with message thread",
    "url": "https://platform.claude.com/docs/en/release-notes/overview",
    "at": "2026-11-02T00:00:00Z"
-  },
-  {
-   "source": "Claude release notes",
-   "vendor": "anthropic",
-   "date": "October 30, 2026",
-   "kind": null,
-   "title": "We’ve deprecated fast mode for Claude Opus 4.8, with removal on November 30, 2026.",
-   "url": "https://platform.claude.com/docs/en/release-notes/overview",
-   "at": "2026-10-30T00:00:00Z"
   },
   {
    "source": "Gemini changelog",
@@ -273,6 +273,14 @@
   {
    "source": "claude-code release",
    "vendor": "anthropic",
+   "date": "2026-11-09",
+   "title": "v2.1.321",
+   "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.321",
+   "at": "2026-11-09T19:22:30Z"
+  },
+  {
+   "source": "claude-code release",
+   "vendor": "anthropic",
    "date": "2026-11-06",
    "title": "v2.1.319",
    "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.319",
@@ -285,21 +293,13 @@
    "title": "v2.1.318",
    "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.318",
    "at": "2026-11-04T00:01:03Z"
-  },
-  {
-   "source": "claude-code release",
-   "vendor": "anthropic",
-   "date": "2026-11-03",
-   "title": "v2.1.317",
-   "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.317",
-   "at": "2026-11-03T01:25:46Z"
   }
  ],
  "errs": [],
  "diag": [
-  "Gemini changelog md: got html 134564b",
+  "Gemini changelog md: got html 134584b",
   "DeepSeek updates md: 18816b 0 entries head='# Change Log\\n\\n***\\n\\n## Date: 2026-10-17\\n\\n### Opening up the i'",
   "xAI release notes md: 19971b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## November\\n\\n### grok-i'"
  ],
- "updatedAt": "2026-11-09T18:04:27Z"
+ "updatedAt": "2026-11-09T19:22:03Z"
 }
