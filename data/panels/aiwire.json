@@ -9,14 +9,6 @@
    "launch": true
   },
   {
-   "source": "Google AI",
-   "title": "The latest AI news we announced in October 2026",
-   "url": "https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-october-2026/",
-   "at": "2026-11-02T17:45:00Z",
-   "vendor": "google",
-   "launch": true
-  },
-  {
    "source": "xAI",
    "title": "Introducing the SpaceX Super Intelligence Partner Network",
    "url": "https://x.ai/news/partnernetworkannouncement",
@@ -92,27 +84,11 @@
    "launch": false
   },
   {
-   "source": "Google AI",
-   "title": "Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips",
-   "url": "https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/",
-   "at": "2026-11-05T17:00:00Z",
-   "vendor": "google",
-   "launch": false
-  },
-  {
    "source": "OpenAI",
    "title": "Australian universities are creating AI-native graduates",
    "url": "https://openai.com/index/australian-universities-ai-native-graduates",
    "at": "2026-11-05T17:00:00Z",
    "vendor": "openai",
-   "launch": false
-  },
-  {
-   "source": "Gemini",
-   "title": "Transform a quick drawing into a live app with Gemini.",
-   "url": "https://blog.google/innovation-and-ai/products/gemini-app/turn-drawings-into-apps-gemini/",
-   "at": "2026-11-05T17:00:00Z",
-   "vendor": "google",
    "launch": false
   },
   {
@@ -161,6 +137,9 @@
    "launch": false
   }
  ],
- "errs": [],
- "updatedAt": "2026-11-08T23:39:49Z"
+ "errs": [
+  "Google AI: HTTPError: 500 Server Error: Internal Server Error for url: https://blog.google/technology/ai/rss/",
+  "Gemini: HTTPError: 500 Server Error: Internal Server Error for url: https://blog.google/products/gemini/rss/"
+ ],
+ "updatedAt": "2026-11-08T23:59:02Z"
 }
