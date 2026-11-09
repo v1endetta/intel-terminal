@@ -41,7 +41,73 @@
    ]
   }
  },
- "fbx": [],
+ "fbx": [
+  {
+   "code": "FBX",
+   "name": "全球綜合",
+   "chg": -1.75
+  },
+  {
+   "code": "FBX01",
+   "name": "中國→美西",
+   "chg": -1.14
+  },
+  {
+   "code": "FBX02",
+   "name": "美西→中國",
+   "chg": -9.59
+  },
+  {
+   "code": "FBX03",
+   "name": "中國→美東",
+   "chg": -2.04
+  },
+  {
+   "code": "FBX04",
+   "name": "美東→中國",
+   "chg": 7.61
+  },
+  {
+   "code": "FBX11",
+   "name": "中國→北歐",
+   "chg": -4.8
+  },
+  {
+   "code": "FBX12",
+   "name": "北歐→中國",
+   "chg": 30.61
+  },
+  {
+   "code": "FBX13",
+   "name": "中國→地中海",
+   "chg": -1.17
+  },
+  {
+   "code": "FBX14",
+   "name": "地中海→中國",
+   "chg": 0.0
+  },
+  {
+   "code": "FBX21",
+   "name": "美東→北歐",
+   "chg": -19.57
+  },
+  {
+   "code": "FBX22",
+   "name": "北歐→美東",
+   "chg": -3.87
+  },
+  {
+   "code": "FBX24",
+   "name": "北歐→南美東",
+   "chg": -3.47
+  },
+  {
+   "code": "FBX26",
+   "name": "北歐→南美西",
+   "chg": -0.29
+  }
+ ],
  "storms": [
   {
    "name": "PENA",
@@ -350,6 +416,46 @@
  "news": [
   {
    "source": "FreightWaves",
+   "title": "What trucking can still get from a lame-duck Congress before Jan. 3",
+   "url": "https://www.freightwaves.com/news/what-trucking-can-still-get-from-a-lame-duck-congress-before-jan-3",
+   "at": "2026-11-10T01:48:45+08:00",
+   "hot": false,
+   "zh": "美國國會跛鴨期結束前，貨運業還能爭取到什麼？"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "HMM Platinum general average adds to cargo woes, as search for refuge drags on",
+   "url": "https://theloadstar.com/hmm-platinum-general-average-adds-to-cargo-woes-as-search-for-refuge-drags-on/",
+   "at": "2026-11-10T01:14:18+08:00",
+   "hot": true,
+   "zh": "HMM Platinum 宣告共同海損雪上加霜，避難港尋找工作陷入膠著"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "AI scales the work. Experts make it count.",
+   "url": "https://www.freightwaves.com/news/ai-scales-the-work-experts-make-it-count",
+   "at": "2026-11-10T01:14:01+08:00",
+   "hot": false,
+   "zh": "AI 擴大工作規模，專家讓成效看得見"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Bangkok airport cargo congestion frustrates freight forwarders",
+   "url": "https://www.freightwaves.com/news/bangkok-airport-cargo-congestion-frustrates-freight-forwarders",
+   "at": "2026-11-10T00:08:23+08:00",
+   "hot": true,
+   "zh": "曼谷機場貨運壅塞，讓貨代業者大感頭痛"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Zipline raises $1.5B, plans US drone manufacturing expansion",
+   "url": "https://www.supplychaindive.com/news/zipline-raises-15b-plans-us-drone-manufacturing-expansion/874009/",
+   "at": "2026-11-10T00:01:00+08:00",
+   "hot": false,
+   "zh": "Zipline 募資 15 億美元，計畫擴大美國無人機製造"
+  },
+  {
+   "source": "FreightWaves",
    "title": "SONAR National Insights Expands With Flatbed and LTL Data",
    "url": "https://www.freightwaves.com/news/sonar-national-insights-expands-with-flatbed-and-ltl-data",
    "at": "2026-11-09T23:48:27+08:00",
@@ -469,14 +575,6 @@
    "zh": "短打新聞Podcast｜第44週｜港口堵塞、蘇伊士運河復航與跨太平洋運力吃緊"
   },
   {
-   "source": "The Loadstar",
-   "title": "BBC: Tech giant Nvidia to investigate CEO’s affair with suspected Chinese spy",
-   "url": "https://theloadstar.com/bbc-tech-giant-nvidia-to-investigate-ceos-affair-with-suspected-chinese-spy/",
-   "at": "2026-11-09T14:17:29+08:00",
-   "hot": false,
-   "zh": "BBC：科技巨頭輝達將調查執行長與疑似中國間諜的外遇事件"
-  },
-  {
    "source": "FreightWaves",
    "title": "Borderlands Mexico: US foreign-trade zones push to fix USMCA tariff obstacles",
    "url": "https://www.freightwaves.com/news/borderlands-mexico-us-foreign-trade-zones-push-to-fix-usmca-tariff-obstacles",
@@ -507,44 +605,10 @@
    "at": "2026-11-07T20:16:29+08:00",
    "hot": false,
    "zh": "公路詐欺報告指出：40%的貨物失竊與通訊遭駭有關"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "Why Aviation Automation Still Hasn’t Reached Small Planes",
-   "url": "https://www.freightwaves.com/news/why-aviation-automation-still-hasnt-reached-small-planes",
-   "at": "2026-11-07T04:01:15+08:00",
-   "hot": false,
-   "zh": "為什麼航空自動化仍未普及到小型飛機"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "UP CEO’s rate threat adds wrinkle to Norfolk Southern merger process",
-   "url": "https://www.supplychaindive.com/news/up-ceos-rate-threat-adds-wrinkle-to-norfolk-southern-merger-process/874006/",
-   "at": "2026-11-07T03:49:00+08:00",
-   "hot": false,
-   "zh": "聯管執行長費率威脅為諾福克南方併購案增添變數"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "PS Logistics expands Tennessee flatbed presence with Roane acquisition",
-   "url": "https://www.freightwaves.com/news/ps-logistics-expands-tennessee-flatbed-presence-with-roane-acquisition",
-   "at": "2026-11-07T02:21:58+08:00",
-   "hot": false,
-   "zh": "PS Logistics 收購 Roane，擴大田納西州平板貨車業務"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "CBP seizes 1,000-plus pounds of meth in produce truck at Texas border",
-   "url": "https://www.freightwaves.com/news/cbp-seizes-1000-plus-pounds-of-meth-in-produce-truck-at-texas-border",
-   "at": "2026-11-07T02:12:59+08:00",
-   "hot": false,
-   "zh": "美國海關在德州邊境農產品卡車查獲逾千磅安非他命"
   }
  ],
  "threat": [],
- "errs": [
-  "FBX：頁面格式變了，沒抓到數字"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-09T15:53:09Z"
+ "updatedAt": "2026-11-09T18:04:27Z"
 }

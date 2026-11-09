@@ -81,7 +81,7 @@
   {
    "board": "Stock",
    "title": "[情報] 2308台達電10月營收 M+14.17% Y+30.12%",
-   "push": 77,
+   "push": 79,
    "url": "https://www.ptt.cc/bbs/Stock/M.1794223103.A.E85.html",
    "date": "11/09"
   },
@@ -95,7 +95,7 @@
   {
    "board": "Stock",
    "title": "[新聞] 消息人士:特朗普同意伊拉克停戰協議",
-   "push": 68,
+   "push": 73,
    "url": "https://www.ptt.cc/bbs/Stock/M.1794229729.A.F3A.html",
    "date": "11/09"
   },
@@ -112,6 +112,13 @@
    "push": 66,
    "url": "https://www.ptt.cc/bbs/car/M.1794107349.A.149.html",
    "date": "11/08"
+  },
+  {
+   "board": "HatePolitics",
+   "title": "[討論] 深綠 鐵票的那群(x) 狂熱的那群(o)",
+   "push": 61,
+   "url": "https://www.ptt.cc/bbs/HatePolitics/M.1794245699.A.922.html",
+   "date": "11/10"
   },
   {
    "board": "Tech_Job",
@@ -149,25 +156,18 @@
    "date": "11/07"
   },
   {
+   "board": "Lifeismoney",
+   "title": "[情報] 2026年全台捐血贈品",
+   "push": 46,
+   "url": "https://www.ptt.cc/bbs/Lifeismoney/M.1767366026.A.B74.html",
+   "date": "1/02"
+  },
+  {
    "board": "car",
    "title": "[新聞] Cybertruck銷量慘澹！2027逐步停產",
    "push": 46,
    "url": "https://www.ptt.cc/bbs/car/M.1794048340.A.C96.html",
    "date": "11/07"
-  },
-  {
-   "board": "Tech_Job",
-   "title": "[新聞] 高通宣布全球大裁員！11月發通知　CEO認",
-   "push": 46,
-   "url": "https://www.ptt.cc/bbs/Tech_Job/M.1792964667.A.DB5.html",
-   "date": "10/26"
-  },
-  {
-   "board": "Stock",
-   "title": "[新聞] 不甩台股飆漲！外資再倒貨900億　台積電",
-   "push": 45,
-   "url": "https://www.ptt.cc/bbs/Stock/M.1794227054.A.FAC.html",
-   "date": "11/09"
   }
  ],
  "boards": [
@@ -175,14 +175,13 @@
    "board": "Gossiping",
    "zh": "八卦",
    "facet": "大眾",
-   "n": 26,
-   "today": 10,
-   "heat": 210,
+   "n": 31,
+   "today": 29,
+   "heat": 315,
    "boom": 1,
    "boo": 0,
    "mood": 0.81,
    "spark": [
-    205,
     228,
     241,
     274,
@@ -229,7 +228,8 @@
     232,
     294,
     223,
-    210
+    210,
+    315
    ],
    "top": [
     {
@@ -242,7 +242,7 @@
     {
      "board": "Gossiping",
      "title": "[爆卦] PTT即將大改版？",
-     "push": 32,
+     "push": 36,
      "url": "https://www.ptt.cc/bbs/Gossiping/M.1794222490.A.F82.html",
      "date": "11/09"
     }
@@ -252,14 +252,13 @@
    "board": "HatePolitics",
    "zh": "政黑",
    "facet": "政治",
-   "n": 27,
-   "today": 16,
-   "heat": 83,
+   "n": 32,
+   "today": 32,
+   "heat": 277,
    "boom": 0,
-   "boo": 0,
-   "mood": 0.74,
+   "boo": 1,
+   "mood": 0.72,
    "spark": [
-    247,
     273,
     305,
     324,
@@ -306,22 +305,44 @@
     127,
     357,
     276,
-    83
+    83,
+    277
    ],
-   "top": []
+   "top": [
+    {
+     "board": "HatePolitics",
+     "title": "[討論] 深綠 鐵票的那群(x) 狂熱的那群(o)",
+     "push": 61,
+     "url": "https://www.ptt.cc/bbs/HatePolitics/M.1794245699.A.922.html",
+     "date": "11/10"
+    },
+    {
+     "board": "HatePolitics",
+     "title": "[討論] 快笑死 G8 G9脆上發瘋開戰艾利莎莎啦",
+     "push": 42,
+     "url": "https://www.ptt.cc/bbs/HatePolitics/M.1794243452.A.C5E.html",
+     "date": "11/10"
+    },
+    {
+     "board": "HatePolitics",
+     "title": "[黑特] 我強烈建議綠營所有聖潔仔發動拒投票運動",
+     "push": 41,
+     "url": "https://www.ptt.cc/bbs/HatePolitics/M.1794242438.A.C77.html",
+     "date": "11/10"
+    }
+   ]
   },
   {
    "board": "Stock",
    "zh": "股板",
    "facet": "市場",
-   "n": 20,
-   "today": 0,
-   "heat": 712,
+   "n": 22,
+   "today": 2,
+   "heat": 756,
    "boom": 3,
    "boo": 0,
    "mood": 1.0,
    "spark": [
-    1715,
     874,
     892,
     896,
@@ -368,7 +389,8 @@
     862,
     1009,
     1102,
-    712
+    712,
+    756
    ],
    "top": [
     {
@@ -400,12 +422,11 @@
    "facet": "生活",
    "n": 30,
    "today": 1,
-   "heat": 115,
+   "heat": 114,
    "boom": 0,
    "boo": 0,
    "mood": 0.83,
    "spark": [
-    82,
     83,
     83,
     85,
@@ -452,7 +473,8 @@
     112,
     114,
     115,
-    115
+    115,
+    114
    ],
    "top": []
   },
@@ -462,12 +484,11 @@
    "facet": "消費",
    "n": 31,
    "today": 0,
-   "heat": 1000,
+   "heat": 1013,
    "boom": 4,
    "boo": 0,
-   "mood": 0.87,
+   "mood": 0.9,
    "spark": [
-    673,
     680,
     691,
     701,
@@ -514,7 +535,8 @@
     983,
     987,
     994,
-    1000
+    1000,
+    1013
    ],
    "top": [
     {
@@ -546,12 +568,11 @@
    "facet": "消費",
    "n": 28,
    "today": 0,
-   "heat": 250,
+   "heat": 254,
    "boom": 0,
    "boo": 0,
    "mood": 0.71,
    "spark": [
-    396,
     399,
     399,
     401,
@@ -598,13 +619,14 @@
     238,
     243,
     246,
-    250
+    250,
+    254
    ],
    "top": [
     {
      "board": "home-sale",
      "title": "Re: [閒聊] 對於無限都更，只有我樂觀其成嗎？",
-     "push": 30,
+     "push": 31,
      "url": "https://www.ptt.cc/bbs/home-sale/M.1794206125.A.36B.html",
      "date": "11/09"
     }
@@ -616,12 +638,11 @@
    "facet": "消費",
    "n": 34,
    "today": 0,
-   "heat": 901,
+   "heat": 908,
    "boom": 1,
    "boo": 0,
    "mood": 0.97,
    "spark": [
-    548,
     549,
     550,
     554,
@@ -668,7 +689,8 @@
     885,
     890,
     898,
-    901
+    901,
+    908
    ],
    "top": [
     {
@@ -705,7 +727,6 @@
    "boo": 0,
    "mood": 0.72,
    "spark": [
-    99,
     99,
     99,
     99,
@@ -752,6 +773,7 @@
     107,
     107,
     107,
+    107,
     107
    ],
    "top": []
@@ -767,7 +789,6 @@
    "boo": 0,
    "mood": 0.95,
    "spark": [
-    336,
     337,
     339,
     341,
@@ -812,6 +833,7 @@
     570,
     570,
     571,
+    563,
     563,
     563,
     563
@@ -862,7 +884,6 @@
     199,
     199,
     199,
-    199,
     200,
     200,
     200,
@@ -888,6 +909,7 @@
     200,
     200,
     200,
+    203,
     203,
     203,
     203,
@@ -919,7 +941,6 @@
     288,
     288,
     288,
-    288,
     289,
     289,
     289,
@@ -959,6 +980,7 @@
     290,
     290,
     290,
+    288,
     288,
     288
    ],
@@ -969,13 +991,12 @@
    "zh": "電影",
    "facet": "文化",
    "n": 21,
-   "today": 1,
-   "heat": 123,
+   "today": 2,
+   "heat": 141,
    "boom": 0,
    "boo": 0,
-   "mood": 0.57,
+   "mood": 0.71,
    "spark": [
-    248,
     256,
     261,
     266,
@@ -1022,7 +1043,8 @@
     243,
     251,
     259,
-    123
+    123,
+    141
    ],
    "top": []
   }
@@ -1038,10 +1060,10 @@
   {
    "board": "Gossiping",
    "title": "[爆卦] PTT即將大改版？",
-   "push": 32,
+   "push": 36,
    "url": "https://www.ptt.cc/bbs/Gossiping/M.1794222490.A.F82.html",
    "date": "11/09"
   }
  ],
- "updatedAt": "2026-11-09T16:24:34Z"
+ "updatedAt": "2026-11-09T18:04:27Z"
 }
