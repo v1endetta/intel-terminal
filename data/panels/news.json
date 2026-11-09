@@ -1,6 +1,12 @@
 {
  "tw": [
   {
+   "source": "中央社",
+   "title": "黃仁勳坦承出軌將遭調查　分析師：輝達股價承壓",
+   "url": "https://www.cna.com.tw/news/aopl/202611090030.aspx",
+   "at": "2026-11-09T02:28:34Z"
+  },
+  {
    "source": "公視",
    "title": "20261109 公視早安新聞 完整版（無網路版權內容除外）｜藥局倒閉潮去年減少近247家 不敵缺換藥、房租人事上漲",
    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9KUWJwZ0Z5bTBIdmlDY01VV19icEl3RkdVeHFlSTZ6b0d5R0U4SFI3WHhCenJyQzVGVDdfMTN3bmhPUUpWdVhPRlJKSQ?oc=5",
@@ -47,12 +53,6 @@
    "title": "美科技股止跌國安基金進場　投顧：台股多空交戰",
    "url": "https://www.cna.com.tw/news/afe/202611090012.aspx",
    "at": "2026-11-09T00:34:54Z"
-  },
-  {
-   "source": "中央社",
-   "title": "中國罕見3戰區水面兵力協同行動　分析：營造隨時能孤立台灣印象",
-   "url": "https://www.cna.com.tw/news/aipl/202611090007.aspx",
-   "at": "2026-11-08T22:53:41Z"
   },
   {
    "source": "公視",
@@ -741,6 +741,21 @@
     "hot": true
    },
    {
+    "term": "多空",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "UDN",
+     "中央社",
+     "台灣好新聞"
+    ],
+    "sample": {
+     "title": "美科技股止跌國安基金進場　投顧：台股多空交戰",
+     "url": "https://www.cna.com.tw/news/afe/202611090012.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "投顧",
     "n": 3,
     "src": 3,
@@ -771,21 +786,6 @@
     "hot": true
    },
    {
-    "term": "多空",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "UDN",
-     "中央社",
-     "台灣好新聞"
-    ],
-    "sample": {
-     "title": "美科技股止跌國安基金進場　投顧：台股多空交戰",
-     "url": "https://www.cna.com.tw/news/afe/202611090012.aspx"
-    },
-    "hot": true
-   },
-   {
     "term": "全台",
     "n": 3,
     "src": 3,
@@ -801,25 +801,25 @@
     "hot": true
    },
    {
-    "term": "黃仁勳",
-    "n": 5,
-    "src": 2,
-    "sources": [
-     "PTT",
-     "中央社"
-    ],
-    "sample": {
-     "title": "川普稱輝達執行長黃仁勳「為人正直」　盼外界聽取其說法",
-     "url": "https://www.cna.com.tw/news/aopl/202611090014.aspx"
-    },
-    "hot": false
-   },
-   {
     "term": "Anthropic",
     "n": 3,
     "src": 2,
     "sources": [
      "Anthropic",
+     "Meet創業小聚"
+    ],
+    "sample": {
+     "title": "說好不碰法律卻推Claude for Legal，Anthropic現在讓AI新創又愛又怕？",
+     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFA4bkNCTnl4Y21hUzBzclRIUkY4TldTdHNIUTBLaXNmSkNFV1BWNWtVOXRfLUpFS1FmZjFFdjNibVExZ1U2azFfc2huQWZpVGN1SmY5YWN3MTc?oc=5"
+    },
+    "hot": false
+   },
+   {
+    "term": "Claude",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "HN",
      "Meet創業小聚"
     ],
     "sample": {
@@ -835,5 +835,5 @@
   "wiki zh: HTTPError: 404 Client Error: Not Found for url: https://wikimedia.org/api/rest_v1/metrics/pageviews/top/zh.wikipedia/all-access/2026/11/07",
   "wiki en: HTTPError: 404 Client Error: Not Found for url: https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/2026/11/07"
  ],
- "updatedAt": "2026-11-09T02:52:18Z"
+ "updatedAt": "2026-11-09T03:07:49Z"
 }
