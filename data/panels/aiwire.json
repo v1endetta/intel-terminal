@@ -9,7 +9,7 @@
    "launch": true
   },
   {
-   "source": "Google AI",
+   "source": "Gemini",
    "title": "The latest AI news we announced in October 2026",
    "url": "https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-october-2026/",
    "at": "2026-11-02T17:45:00Z",
@@ -45,9 +45,9 @@
   },
   {
    "source": "TechCrunch",
-   "title": "Nvidia will investigate CEO Jensen Huang’s relationship with possible Chinese spy",
-   "url": "https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/",
-   "at": "2026-11-08T21:00:11Z",
+   "title": "Is Jensen Huang’s job on the line? Yale’s Jeffrey Sonnenfeld estimates it’s “about a 50-50",
+   "url": "https://techcrunch.com/2026/11/08/is-jensen-huangs-job-on-the-line-yales-jeffrey-sonnenfeld-estimates-its-about-a-50-50/",
+   "at": "2026-11-09T05:26:29Z",
    "vendor": "",
    "launch": false
   },
@@ -92,7 +92,7 @@
    "launch": false
   },
   {
-   "source": "Google AI",
+   "source": "Gemini",
    "title": "Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips",
    "url": "https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/",
    "at": "2026-11-05T17:00:00Z",
@@ -161,6 +161,8 @@
    "launch": false
   }
  ],
- "errs": [],
- "updatedAt": "2026-11-09T05:13:02Z"
+ "errs": [
+  "Google AI: ReadTimeout: HTTPSConnectionPool(host='blog.google', port=443): Read timed out. (read timeout=25)"
+ ],
+ "updatedAt": "2026-11-09T05:30:13Z"
 }
