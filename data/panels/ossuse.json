@@ -35,23 +35,6 @@
    "gh": null
   },
   {
-   "name": "vllm-project/vllm",
-   "url": "https://github.com/vllm-project/vllm",
-   "src": "GitHub",
-   "zh": "高吞吐量與記憶體優化的LLM推論與服務引擎",
-   "why": "作為大模型部署的工業級基礎設施，持續引領推論效能優化標準",
-   "ease": "要寫程式",
-   "cat": "開發工具",
-   "sig": 3,
-   "stars": 95530.0,
-   "gain": 1445.0,
-   "gain_w": true,
-   "first": "2026-10-20T15:28:41.187488+00:00",
-   "org": null,
-   "day": null,
-   "gh": null
-  },
-  {
    "name": "vercel-labs/agent-browser",
    "url": "https://github.com/vercel-labs/agent-browser",
    "src": "GitHub",
@@ -94,7 +77,7 @@
    "ease": "要寫程式",
    "cat": "語言模型",
    "sig": 3,
-   "stars": 1638,
+   "stars": 1639,
    "gain": null,
    "gain_w": null,
    "first": "2026-10-29T19:42:16.436427+00:00",
@@ -307,23 +290,6 @@
    "gh": null
   },
   {
-   "name": "anthropics/claude-plugins-official",
-   "url": "https://github.com/anthropics/claude-plugins-official",
-   "src": "GitHub",
-   "zh": "Anthropic 官方管理的 Claude Code 高品質外掛目錄。",
-   "why": "顯示 Anthropic 正式建立其開發者工具的官方生態系。",
-   "ease": "要寫程式",
-   "cat": "開發工具",
-   "sig": 2,
-   "stars": 44607.0,
-   "gain": 2245.0,
-   "gain_w": true,
-   "first": "2026-10-15T13:25:32.674254+00:00",
-   "org": null,
-   "day": null,
-   "gh": null
-  },
-  {
    "name": "AstrBotDevs/AstrBot",
    "url": "https://github.com/AstrBotDevs/AstrBot",
    "src": "GitHub",
@@ -509,6 +475,40 @@
    "org": null,
    "day": null,
    "gh": null
+  },
+  {
+   "name": "FlashML-org/FreeToken",
+   "url": "https://github.com/FlashML-org/FreeToken",
+   "src": "GitHub",
+   "zh": "將資料中心規模模型推論帶到個人電腦的工具",
+   "why": "降低大型模型本地執行的門檻，反映邊緣運算與消費級硬體推論能力的顯著提升",
+   "ease": "要寫程式",
+   "cat": "開發工具",
+   "sig": 2,
+   "stars": 16375.0,
+   "gain": 653.0,
+   "gain_w": false,
+   "first": "2026-11-01T15:09:32.703828+00:00",
+   "org": null,
+   "day": null,
+   "gh": null
+  },
+  {
+   "name": "garrytan/gstack",
+   "url": "https://github.com/garrytan/gstack",
+   "src": "GitHub",
+   "zh": "知名創投家配置的Claude Code工具集",
+   "why": "反映開發者社群高度關注高效率AI代理人開發環境的配置標準",
+   "ease": "下載安裝",
+   "cat": "開發工具",
+   "sig": 2,
+   "stars": 140104.0,
+   "gain": 612.0,
+   "gain_w": false,
+   "first": "2026-11-04T16:56:09.432177+00:00",
+   "org": null,
+   "day": null,
+   "gh": null
   }
  ],
  "papers": [
@@ -528,23 +528,6 @@
    "org": "University of Illinois at Urbana-Champaign",
    "day": "2026-10-20",
    "gh": "https://github.com/ASTRAL-Group/benchmark-difficulty-measure"
-  },
-  {
-   "name": "PDRVLA: A Vision-Language-Action Model with Physical Dynamics Representations",
-   "url": "https://huggingface.co/papers/2610.37381",
-   "src": "論文",
-   "zh": "讓機器人懂物理規律，動作更流暢自然",
-   "why": "結合物理動態預測模組，讓機器人不用耗時生成影片也能快速做出準確動作",
-   "ease": null,
-   "cat": "機器人與硬體",
-   "sig": null,
-   "stars": 156,
-   "gain": null,
-   "gain_w": null,
-   "first": "2026-10-28T06:46:17.944679+00:00",
-   "org": "",
-   "day": "2026-10-26",
-   "gh": ""
   },
   {
    "name": "OmniShowcase: Omnidirectional Subject-Consistent Video Generation from Multi-View Images",
@@ -640,7 +623,7 @@
    "ease": null,
    "cat": "AI agent",
    "sig": null,
-   "stars": 118,
+   "stars": 119,
    "gain": null,
    "gain_w": null,
    "first": "2026-11-06T11:56:11.965117+00:00",
@@ -657,7 +640,7 @@
    "ease": null,
    "cat": "機器人與硬體",
    "sig": null,
-   "stars": 106,
+   "stars": 108,
    "gain": null,
    "gain_w": null,
    "first": "2026-11-06T05:50:16.575053+00:00",
@@ -742,7 +725,7 @@
    "ease": null,
    "cat": "機器人與硬體",
    "sig": null,
-   "stars": 92,
+   "stars": 94,
    "gain": null,
    "gain_w": null,
    "first": "2026-11-06T11:56:11.965117+00:00",
@@ -766,12 +749,32 @@
    "org": "Xiaomi Research",
    "day": "2026-10-27",
    "gh": ""
+  },
+  {
+   "name": "Turns Matter: Advancing Streaming Video RL via Turn-Level Credit",
+   "url": "https://huggingface.co/papers/2611.06728",
+   "src": "論文",
+   "zh": "提升AI即時看影片的反應能力",
+   "why": "能更準確抓出影片中的關鍵互動時刻，讓AI做決策時表現更好",
+   "ease": null,
+   "cat": "影像影片",
+   "sig": null,
+   "stars": 91,
+   "gain": null,
+   "gain_w": null,
+   "first": "2026-11-05T11:33:01.910009+00:00",
+   "org": "",
+   "day": "2026-11-03",
+   "gh": "https://github.com/XD111ds/turn-wise-rl"
   }
  ],
- "n_seen": 288,
- "n_judged": 288,
- "n_papers": 302,
- "errs": [],
+ "n_seen": 284,
+ "n_judged": 284,
+ "n_papers": 297,
+ "errs": [
+  "GitHub weekly: HTTPError: 504 Server Error: Gateway Time-out for url: https://github.com/trending?since=weekly",
+  "GitHub daily: HTTPError: 504 Server Error: Gateway Time-out for url: https://github.com/trending?since=daily"
+ ],
  "src": "GitHub Trending（每日、每週）、Hugging Face 熱門模型與 Spaces（近 14 天）、HF Daily Papers（近 7 天）；重要性由 Gemini 依對市場的意義判讀",
- "updatedAt": "2026-11-09T01:22:09Z"
+ "updatedAt": "2026-11-09T07:27:40Z"
 }
