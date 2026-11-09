@@ -108,7 +108,50 @@
    "chg": -0.29
   }
  ],
- "storms": [],
+ "storms": [
+  {
+   "name": "PENA",
+   "level": "Green",
+   "ll": [
+    -158.4,
+    11.3
+   ],
+   "from": "2026-11-06T21:00",
+   "to": "2026-11-09T09:00",
+   "sev": "Tropical Storm (maximum wind speed of 93 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001348&episodeid=11&eventtype=TC",
+   "near": [],
+   "id": "1001348-11"
+  },
+  {
+   "name": "CEMPAKA",
+   "level": "Green",
+   "ll": [
+    134.9,
+    24.0
+   ],
+   "from": "2026-11-06T06:00",
+   "to": "2026-11-09T06:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 167 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001347&episodeid=13&eventtype=TC",
+   "near": [],
+   "id": "1001347-13"
+  },
+  {
+   "name": "02-20262027",
+   "level": "Green",
+   "ll": [
+    50.54,
+    -11.8
+   ],
+   "from": "2026-11-07T06:00",
+   "to": "2026-11-08T12:00",
+   "sev": "Low (maximum wind speed of 63 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001349&episodeid=6&eventtype=TC",
+   "near": [],
+   "id": "1001349-6"
+  }
+ ],
  "ports": [
   {
    "name": "上海洋山",
@@ -565,9 +608,7 @@
   }
  ],
  "threat": [],
- "errs": [
-  "GDACS: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-09T09:35:50Z"
+ "updatedAt": "2026-11-09T10:40:31Z"
 }
