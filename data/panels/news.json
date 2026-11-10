@@ -50,9 +50,9 @@
   },
   {
    "source": "公視",
-   "title": "歐洲移民危機升溫 非洲移民船難釀39死｜20261110 公視早安新聞 ｜ 公視新聞 PNN",
-   "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1jcnJwQVFDdDVBLTE4b0xPTEVnRk50UDByTF9mbllHRWc3S1A0SC1YOTlzam5IbHY3bkJzWU5kSE5GdkZyMk9DVk9YZw?oc=5",
-   "at": "2026-11-10T01:00:47Z"
+   "title": "高雄反空污遊行 籲市長候選人承諾降PM2.5濃度",
+   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFA1eFp1VUxsQkRtUWhIZV9DN2M3NDNDdHFudkx2UnluNTg5Q2N4UlV0cHF5RE8tdnlzOGFXeVp5UGVTUWZ4bUh6S3RRRVl2c0E?oc=5",
+   "at": "2026-11-08T11:28:15Z"
   },
   {
    "source": "公視",
@@ -83,15 +83,15 @@
   },
   {
    "source": "Guardian",
-   "title": "Young people in UK hit by ‘low-gear economy’, warns Bank of England deputy",
-   "url": "https://www.theguardian.com/business/2026/nov/10/young-people-uk-economy-bank-of-england-clare-lombardelli",
+   "title": "EU manufacturers could give up on competing with China by 2030, warns commerce chief",
+   "url": "https://www.theguardian.com/business/2026/nov/10/eu-manufacturers-china-jens-eskelund",
    "at": "2026-11-10T06:00:30Z",
    "sec": "Business"
   },
   {
    "source": "Guardian",
-   "title": "EU manufacturers could give up on competing with China by 2030, warns commerce chief",
-   "url": "https://www.theguardian.com/business/2026/nov/10/eu-manufacturers-china-jens-eskelund",
+   "title": "Young people in UK hit by ‘low-gear economy’, warns Bank of England deputy",
+   "url": "https://www.theguardian.com/business/2026/nov/10/young-people-uk-economy-bank-of-england-clare-lombardelli",
    "at": "2026-11-10T06:00:30Z",
    "sec": "Business"
   },
@@ -136,6 +136,12 @@
   },
   {
    "source": "BBC",
+   "title": "'Cruise for life' ship seized in Singapore",
+   "url": "https://www.bbc.co.uk/news/articles/cqr7y7myer53o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-10T01:49:06Z"
+  },
+  {
+   "source": "BBC",
    "title": "Republican congressman to force impeachment vote on Defence Secretary Hegseth",
    "url": "https://www.bbc.co.uk/news/articles/cwr5y58jjp8ro?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-10T01:38:49Z"
@@ -146,12 +152,6 @@
    "url": "https://www.theguardian.com/business/2026/nov/10/qantas-850-job-cuts-outsource-work-to-india-ai-overhaul",
    "at": "2026-11-10T01:34:47Z",
    "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "Epstein associate who still runs model agency 'put me in danger' says abuse survivor",
-   "url": "https://www.bbc.co.uk/news/articles/cm86z6w59gggo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-10T00:14:03Z"
   }
  ],
  "groups": [
@@ -633,7 +633,7 @@
     }
    ],
    "daily7": [
-    11,
+    12,
     22,
     8,
     24,
@@ -804,9 +804,10 @@
    },
    {
     "term": "台積電",
-    "n": 5,
-    "src": 4,
+    "n": 6,
+    "src": 5,
     "sources": [
+     "PTT",
      "中央社",
      "壹蘋新聞網",
      "工商時報",
@@ -896,6 +897,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-10T06:02:04Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-10T06:22:44Z"
 }
