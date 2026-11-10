@@ -627,7 +627,7 @@
      "source": "591新聞",
      "title": "台中房市逆勢成長！三大屯區交易量年增57.6%",
      "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBaQzkyb3g4OU9rXzh0dHNtaWoxOWZ5SmNXbnA2VGNkdlRoVC00Z05rR2hkckdtNDBSekVQTFNDUGFGejFnWjVBNEtB0gFPQVVfeXFMTk11Y29OeE9MYXJ5WUVOWDdhYzZZOFNwRy1uU3NoWGhta3JOMDF3cWhlcmEtX0dYNVQtVjE2TEZDa2RZZG9FOVd1UUZqNzdkaw?oc=5",
-     "at": "2026-11-10T07:28:39Z",
+     "at": "2026-11-10T10:59:13Z",
      "kw": "潭子 OR 台中 北屯"
     }
    ],
@@ -768,6 +768,23 @@
     "hot": true
    },
    {
+    "term": "Claude",
+    "n": 5,
+    "src": 5,
+    "sources": [
+     "HN",
+     "Mashable",
+     "Mashdigi",
+     "TechCrunch",
+     "鉅亨號"
+    ],
+    "sample": {
+     "title": "Claude Fable 5.2 為什麼讓開發者退訂 Adobe？解析 1000 個 AI 代理如何 8 天手搓作業系統",
+     "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE8yU1BOb2gybWUwcFNJXzA5Q08xcHBoeXB2NlpIeXI4VnNPRUloM0hJOEI3NTNOamdlbVZGczRFNG1UNnF2TWRjcGxBNTZYdnRrRVQwZDJFbDdwSzNJTlZHcWtxV0w2LTdFYU1WNmZvdy1CbmFH?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "Gemini",
     "n": 5,
     "src": 4,
@@ -784,22 +801,6 @@
     "hot": true
    },
    {
-    "term": "Claude",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "HN",
-     "Mashable",
-     "Mashdigi",
-     "鉅亨號"
-    ],
-    "sample": {
-     "title": "Claude Fable 5.2 為什麼讓開發者退訂 Adobe？解析 1000 個 AI 代理如何 8 天手搓作業系統",
-     "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE8yU1BOb2gybWUwcFNJXzA5Q08xcHBoeXB2NlpIeXI4VnNPRUloM0hJOEI3NTNOamdlbVZGczRFNG1UNnF2TWRjcGxBNTZYdnRrRVQwZDJFbDdwSzNJTlZHcWtxV0w2LTdFYU1WNmZvdy1CbmFH?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "聯準會",
     "n": 4,
     "src": 4,
@@ -812,22 +813,6 @@
     "sample": {
      "title": "美國10月CPI高於市場預期　聯準會升息壓力增",
      "url": "https://www.cna.com.tw/news/aopl/202611100366.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "IPO",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "TechCrunch",
-     "The Defiant",
-     "中央社",
-     "鉅亨號"
-    ],
-    "sample": {
-     "title": "Anthropic將在美IPO　估值上看1.4兆美元",
-     "url": "https://www.cna.com.tw/news/aopl/202611100361.aspx"
     },
     "hot": true
    },
@@ -892,9 +877,26 @@
      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE8yU1BOb2gybWUwcFNJXzA5Q08xcHBoeXB2NlpIeXI4VnNPRUloM0hJOEI3NTNOamdlbVZGczRFNG1UNnF2TWRjcGxBNTZYdnRrRVQwZDJFbDdwSzNJTlZHcWtxV0w2LTdFYU1WNmZvdy1CbmFH?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "Adobe",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Google AI",
+     "INT",
+     "Mashdigi"
+    ],
+    "sample": {
+     "title": "Claude Fable 5.2 為什麼讓開發者退訂 Adobe？解析 1000 個 AI 代理如何 8 天手搓作業系統",
+     "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE8yU1BOb2gybWUwcFNJXzA5Q08xcHBoeXB2NlpIeXI4VnNPRUloM0hJOEI3NTNOamdlbVZGczRFNG1UNnF2TWRjcGxBNTZYdnRrRVQwZDJFbDdwSzNJTlZHcWtxV0w2LTdFYU1WNmZvdy1CbmFH?oc=5"
+    },
+    "hot": true
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-10T17:30:16Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-10T17:45:21Z"
 }
