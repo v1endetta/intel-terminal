@@ -109,6 +109,18 @@
    "tw_n": 0
   },
   {
+   "zh": "洞爺湖溫泉推出私人專用滑雪場包場服務",
+   "what": "滑雪場提供高隱私的私人貸切服務，滿足高端客群的大自然獨佔體驗。",
+   "cat": "旅遊",
+   "kw": "滑雪場包場",
+   "land": "台灣無天然雪場，需移轉至室內滑雪場或高山度假村包棟模式。",
+   "src": "PR TIMES",
+   "url": "https://prtimes.jp/main/html/rd/p/000000357.000165726.html",
+   "at": "2026-10-29T08:41:54Z",
+   "score": 2,
+   "tw_n": 0
+  },
+  {
    "zh": "大阪大學新創推出自發光植物體驗型展覽",
    "what": "將基因改造的自發光植物應用於商業空間展示，創造永續的未來光源。",
    "cat": "家居設計",
@@ -152,6 +164,18 @@
    "land": "",
    "src": "PR TIMES",
    "url": "https://prtimes.jp/main/html/rd/p/000000277.000145928.html",
+   "at": "2026-10-28T20:40:02Z",
+   "score": 2,
+   "tw_n": 0
+  },
+  {
+   "zh": "推出全球分散型團隊的薪資支付解決方案，解決跨國出金與合規痛點",
+   "what": "針對遠距與跨國團隊設計的全方位薪資與全球合規支付工具。",
+   "cat": "科技商業模式",
+   "kw": "全球薪資支付",
+   "land": "台灣外匯管制及勞基法跨國薪資規範",
+   "src": "PR TIMES",
+   "url": "https://prtimes.jp/main/html/rd/p/000000011.000189471.html",
    "at": "2026-10-28T20:40:02Z",
    "score": 2,
    "tw_n": 0
@@ -335,30 +359,6 @@
    "at": "2026-10-28T06:15:26Z",
    "score": 2,
    "tw_n": 0
-  },
-  {
-   "zh": "推出將異質商品數據自動轉換格式的自助新方案",
-   "what": "讓用戶能自助式將各種不同格式的商品數據轉化為標準格式輸出。",
-   "cat": "科技商業模式",
-   "kw": "商品數據清理工具",
-   "land": "企業導入自動化資料清洗的習慣與資料標準化需求。",
-   "src": "PR TIMES",
-   "url": "https://prtimes.jp/main/html/rd/p/000000130.000068652.html",
-   "at": "2026-10-28T04:15:23Z",
-   "score": 2,
-   "tw_n": 0
-  },
-  {
-   "zh": "將優化呼吸訓練打造成健康美學的新象徵",
-   "what": "把鼻腔呼吸訓練包裝成兼具健康與潮流的生活風格單品。",
-   "cat": "美妝保健",
-   "kw": "鼻腔呼吸法",
-   "land": "台灣消費者對呼吸輔具多視為醫療器材，難以直接轉化為潮流生活財。",
-   "src": "Glossy",
-   "url": "https://www.glossy.co/beauty/wellness/can-intake-turn-optimized-breathing-into-a-wellness-status-symbol-camino-partners-is-betting-on-it/?utm_campaign=glossydis&utm_medium=rss&utm_source=general-rss",
-   "at": "2026-10-28T04:00:00Z",
-   "score": 2,
-   "tw_n": 0
   }
  ],
  "known": [
@@ -480,12 +480,14 @@
    "url": "https://www.modernretail.co/operations/what-doordashs-proposed-acquisition-of-instacart-means-for-uber-amazon-and-the-rest-of-the-quick-commerce-space/?utm_campaign=modernretaildis&utm_medium=rss&utm_source=general-rss",
    "at": "2026-11-02T15:00:00Z",
    "score": 3,
-   "tw_n": 12
+   "tw_n": 11
   }
  ],
- "n_read": 4558,
- "n_new": 442,
- "errs": [],
+ "n_read": 4491,
+ "n_new": 434,
+ "errs": [
+  "判讀: RuntimeError: gemini-3.8-flash 503 This model is currently experiencing high demand. Spikes in demand are usually temporary. "
+ ],
  "src": "PR TIMES、FASHIONSNAP、WWDJAPAN、Glossy、Wallpaper*、Modern Retail、Retail Dive、Skift、彭博科技；新意與關鍵字由 Gemini 判讀，台灣報導數查 Google 新聞（台灣繁中，近 30 天）",
- "updatedAt": "2026-11-10T07:37:11Z"
+ "updatedAt": "2026-11-10T10:56:15Z"
 }
