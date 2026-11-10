@@ -76,6 +76,12 @@
  "intl": [
   {
    "source": "BBC",
+   "title": "Malaysia's disgraced former PM leaves jail for house arrest after embezzling millions",
+   "url": "https://www.bbc.co.uk/news/articles/cxnv0v4yln7do?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-10T18:33:51Z"
+  },
+  {
+   "source": "BBC",
    "title": "Anti-homosexuality laws in Trinidad and Tobago overturned",
    "url": "https://www.bbc.co.uk/news/articles/cm0e0evlpp87o?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-10T18:04:18Z"
@@ -139,12 +145,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/10/friedrich-merz-accused-blackmail-ukraine-aid-eu-budget",
    "at": "2026-11-10T16:44:27Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Arrests made in Mohamed Al Fayed probe in France, police say",
-   "url": "https://www.bbc.co.uk/news/articles/ck1wvwyrd4ywo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-10T16:19:48Z"
   },
   {
    "source": "BBC",
@@ -246,10 +246,10 @@
    "name": "AI 大廠與模型",
    "items": [
     {
-     "source": "Mashdigi",
-     "title": "Claude Fable 5.2 為什麼讓開發者退訂 Adobe？解析 1000 個 AI 代理如何 8 天手搓作業系統",
-     "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE8yU1BOb2gybWUwcFNJXzA5Q08xcHBoeXB2NlpIeXI4VnNPRUloM0hJOEI3NTNOamdlbVZGczRFNG1UNnF2TWRjcGxBNTZYdnRrRVQwZDJFbDdwSzNJTlZHcWtxV0w2LTdFYU1WNmZvdy1CbmFH?oc=5",
-     "at": "2026-11-10T12:33:12Z",
+     "source": "鉅亨網",
+     "title": "Office地盤遭搶攻！Claude推出辦公新工具 微軟股價盤中急跌3%",
+     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBfbHNDTTBrMGlJdnJ0UGZ3T2lPc05WNHJNWVZMbTFBcVdLQ2loV3hDX25ubG1IcWY1eGM1UlNYOFgzUE5TRjhOcFR3ck9aWFE?oc=5",
+     "at": "2026-11-10T18:16:31Z",
      "kw": "OpenAI OR Anthropic OR DeepMind 發布 OR 推出"
     },
     {
@@ -280,8 +280,8 @@
     2,
     0,
     21,
-    73,
-    10
+    72,
+    16
    ],
    "days7": [
     "2026-11-05",
@@ -654,7 +654,7 @@
  "signals": {
   "gdelt": {
    "vol": 3.105,
-   "vol_ratio": 1.86,
+   "vol_ratio": 1.83,
    "tone": 0.45,
    "tone_at": "2026-11-10T16:49:12Z",
    "spark": [
@@ -673,7 +673,7 @@
     3.105,
     3.105
    ],
-   "at": "2026-11-10T18:07:28Z"
+   "at": "2026-11-10T18:41:16Z"
   },
   "wiki": {
    "zh": [
@@ -733,14 +733,33 @@
   },
   "hot": [
    {
+    "term": "Claude",
+    "n": 8,
+    "src": 7,
+    "sources": [
+     "HN",
+     "Mashable",
+     "Mashdigi",
+     "TechCrunch",
+     "TradingView",
+     "鉅亨網"
+    ],
+    "sample": {
+     "title": "Anthropic推出Claude Sheets、白板等办公工具",
+     "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE40bEh5azJaM2k0UTBiOWo4bnlBbUxMaHBtTkI3X1ZjZXNIRkFYdEZtR0VFY1VMR1Q2OTNFX2kxUWxHLXhGRHlWY05OSzZ1NC1YeDR1ZzNhbmdCSlREUGdwMEVRajQwdw?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "Anthropic",
-    "n": 6,
-    "src": 5,
+    "n": 7,
+    "src": 6,
     "sources": [
      "Anthropic",
      "Mashable",
      "TechCrunch",
      "The Defiant",
+     "TradingView",
      "中央社"
     ],
     "sample": {
@@ -750,30 +769,14 @@
     "hot": true
    },
    {
-    "term": "Claude",
-    "n": 6,
-    "src": 5,
-    "sources": [
-     "HN",
-     "Mashable",
-     "Mashdigi",
-     "TechCrunch",
-     "鉅亨號"
-    ],
-    "sample": {
-     "title": "Claude Fable 5.2 為什麼讓開發者退訂 Adobe？解析 1000 個 AI 代理如何 8 天手搓作業系統",
-     "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE8yU1BOb2gybWUwcFNJXzA5Q08xcHBoeXB2NlpIeXI4VnNPRUloM0hJOEI3NTNOamdlbVZGczRFNG1UNnF2TWRjcGxBNTZYdnRrRVQwZDJFbDdwSzNJTlZHcWtxV0w2LTdFYU1WNmZvdy1CbmFH?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "Google",
-    "n": 6,
-    "src": 5,
+    "n": 7,
+    "src": 6,
     "sources": [
      "Forbes",
      "Google AI",
      "Google AI 論壇",
+     "HN",
      "TechCrunch",
      "數位時代"
     ],
@@ -893,8 +896,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-10T18:24:34Z"
+ "errs": [],
+ "updatedAt": "2026-11-10T18:41:16Z"
 }
