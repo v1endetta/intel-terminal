@@ -110,6 +110,20 @@
  ],
  "storms": [
   {
+   "name": "PENA",
+   "level": "Green",
+   "ll": [
+    -165.2,
+    10.8
+   ],
+   "from": "2026-11-06T21:00",
+   "to": "2026-11-10T21:00",
+   "sev": "Tropical Storm (maximum wind speed of 93 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001348&episodeid=17&eventtype=TC",
+   "near": [],
+   "id": "1001348-17"
+  },
+  {
    "name": "CEMPAKA",
    "level": "Green",
    "ll": [
@@ -122,20 +136,6 @@
    "url": "https://www.gdacs.org/report.aspx?eventid=1001347&episodeid=19&eventtype=TC",
    "near": [],
    "id": "1001347-19"
-  },
-  {
-   "name": "PENA",
-   "level": "Green",
-   "ll": [
-    -164.7,
-    11.1
-   ],
-   "from": "2026-11-06T21:00",
-   "to": "2026-11-10T15:00",
-   "sev": "Tropical Storm (maximum wind speed of 93 km/h)",
-   "url": "https://www.gdacs.org/report.aspx?eventid=1001348&episodeid=16&eventtype=TC",
-   "near": [],
-   "id": "1001348-16"
   }
  ],
  "ports": [
@@ -402,6 +402,14 @@
  "news": [
   {
    "source": "FreightWaves",
+   "title": "Inside Kuebix AI: A Shipper TMS Rebuilt Around Executable AI",
+   "url": "https://www.freightwaves.com/news/inside-kuebix-ai-a-shipper-tms-rebuilt-around-executable-ai",
+   "at": "2026-11-11T04:54:21+08:00",
+   "hot": false,
+   "zh": "深入解析 Kuebix AI：圍繞可執行AI重建的貨主運輸管理系統"
+  },
+  {
+   "source": "FreightWaves",
    "title": "Uber Freight cuts 80 jobs while hiring nearly 300 in growth push",
    "url": "https://www.freightwaves.com/news/uber-freight-cuts-80-jobs-while-hiring-nearly-300-in-growth-push",
    "at": "2026-11-11T04:15:00+08:00",
@@ -505,14 +513,6 @@
    "zh": "2027年北美先進清潔運輸博覽會議程聚焦柴油與車隊成本"
   },
   {
-   "source": "FreightWaves",
-   "title": "Lineage sees cold storage inventories stabilize after capacity reductions",
-   "url": "https://www.freightwaves.com/news/lineage-sees-cold-storage-inventories-stabilize-after-capacity-reductions",
-   "at": "2026-11-10T23:47:17+08:00",
-   "hot": false,
-   "zh": "Lineage 看到產能縮減後冷藏庫存趨於穩定"
-  },
-  {
    "source": "Supply Chain Dive",
    "title": "Canada Goose will revisit pricing to blunt tariffs next year, CFO says",
    "url": "https://www.supplychaindive.com/news/canada-goose-will-revisit-pricing-to-blunt-tariffs-next-year-cfo-says/874196/",
@@ -596,5 +596,5 @@
  "threat": [],
  "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-10T20:19:52Z"
+ "updatedAt": "2026-11-10T21:22:40Z"
 }
