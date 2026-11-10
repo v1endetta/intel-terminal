@@ -1,40 +1,64 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的注意力集中在串流平台訂閱優惠、速食店APP折扣以及車市與餐飲聯名話題上。",
+ "line": "這幾天台灣消費者的注意力集中在串流影音新片追看、熱門手遊與App活躍度，以及百貨優惠與車市話題。",
  "topics": [
   {
-   "name": "momo雙11",
-   "q": "PChome 雙11",
-   "cat": "品牌商品",
+   "name": "Netflix",
+   "q": "Netflix",
+   "cat": "影視",
    "do": [
     {
-     "src": "App 下載",
-     "name": "PChome24h購物 l 每天一起變更好",
-     "how": "爬升 46 名到第 39"
+     "src": "Netflix 影集",
+     "name": "Driving Mom Crazy",
+     "how": "上榜第 2 週、第 2 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Dead-End Job",
+     "how": "上榜第 1 週、第 4 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Midnight Diner",
+     "how": "上榜第 1 週、第 7 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Cyberpunk: Edgerunners",
+     "how": "上榜第 2 週、第 8 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Lupin",
+     "how": "上榜第 1 週、第 10 名"
     }
    ],
    "talk": [
     {
-     "src": "PTT",
-     "title": "[情報] 分眾 PChome 雙11狂購-指定會員100 p"
+     "src": "時尚媒體",
+     "title": "Netflix《有人剛好提起我嗎？》6大必追亮點！宮藤官九郎攜手影帝役所廣司，顛覆人生的荒謬悲喜劇"
     }
    ],
-   "y": 0.91,
-   "news7": 45,
-   "news_p7": 29,
-   "news_capped": false,
-   "mentions": {
-    "PTT": 1
+   "y": 1.0,
+   "news7": 77,
+   "news_p7": 23,
+   "news_capped": true,
+   "social": {
+    "Threads": 360,
+    "Dcard": 30
    },
-   "x": 0.93,
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 1.0,
    "talk_trend": "up",
-   "days": 5,
-   "first": "2026-11-05",
+   "days": 2,
+   "first": "2026-11-09",
    "quad": "hit"
   },
   {
    "name": "麥當勞",
-   "q": "麥當勞 APP 優惠",
+   "q": "麥當勞",
    "cat": "品牌商品",
    "do": [
     {
@@ -50,9 +74,9 @@
     }
    ],
    "y": 0.76,
-   "news7": 17,
-   "news_p7": 7,
-   "news_capped": false,
+   "news7": 65,
+   "news_p7": 35,
+   "news_capped": true,
    "social": {
     "Threads": 15.9,
     "Dcard": 30
@@ -79,15 +103,15 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 5,
-   "news_p7": 23,
+   "news7": 6,
+   "news_p7": 22,
    "news_capped": false,
    "social": {
     "Threads": 56.4,
     "Dcard": 2
    },
    "mentions": {},
-   "x": 0.72,
+   "x": 0.76,
    "talk_trend": "down",
    "days": 6,
    "first": "2026-11-03",
@@ -95,29 +119,105 @@
   },
   {
    "name": "Klook",
-   "q": "Klook 優惠",
+   "q": "Klook",
    "cat": "App",
    "do": [
     {
      "src": "App 下載",
      "name": "Klook - 全球旅遊＆玩樂體驗預訂平台",
-     "how": "爬升 23 名到第 35"
+     "how": "爬升 24 名到第 34"
     }
    ],
    "talk": [],
-   "y": 0.68,
-   "news7": 13,
-   "news_p7": 9,
+   "y": 0.69,
+   "news7": 23,
+   "news_p7": 24,
    "news_capped": false,
    "social": {
     "Threads": 193.4,
     "Dcard": 28
    },
    "mentions": {},
-   "x": 0.97,
+   "x": 1.0,
    "talk_trend": "flat",
    "days": 5,
    "first": "2026-11-05",
+   "quad": "hit"
+  },
+  {
+   "name": "HBO Max",
+   "q": "HBO Max",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "HBO Max：串流播放電視節目和電影",
+     "how": "新進榜第 12 名"
+    }
+   ],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] HBO MAX高級1年1490"
+    }
+   ],
+   "y": 0.9,
+   "news7": 16,
+   "news_p7": 5,
+   "news_capped": false,
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 0.72,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-09",
+   "quad": "hit"
+  },
+  {
+   "name": "Spotify",
+   "q": "Spotify 排行",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "ILLIT - You're Under Arrest",
+     "how": "上榜 2 天、第 4 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "艾薇 Ivy - 不愛就不愛",
+     "how": "升 5 名到第 10"
+    },
+    {
+     "src": "Spotify",
+     "name": "BESTie - Love Options",
+     "how": "第 1 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "A2O - NEON (w/ A2O LITE)",
+     "how": "第 2 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "Jess Lee - 甲乙丙丁 - 你我怎么两清",
+     "how": "第 3 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.9,
+   "news7": 4,
+   "news_p7": 4,
+   "news_capped": false,
+   "social": {
+    "Threads": 288
+   },
+   "mentions": {},
+   "x": 0.72,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-09",
    "quad": "hit"
   },
   {
@@ -128,68 +228,65 @@
     {
      "src": "App 營收",
      "name": "勝利女神：妮姬",
-     "how": "爬升 23 名到第 21"
+     "how": "爬升 24 名到第 20"
     }
    ],
    "talk": [],
-   "y": 0.68,
-   "news7": 37,
-   "news_p7": 12,
+   "y": 0.69,
+   "news7": 35,
+   "news_p7": 11,
    "news_capped": false,
    "mentions": {},
-   "x": 0.79,
+   "x": 0.78,
    "talk_trend": "up",
    "days": 5,
    "first": "2026-11-05",
    "quad": "hit"
   },
   {
-   "name": "HBO Max",
-   "q": "HBO Max 台灣",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "HBO Max：串流播放電視節目和電影",
-     "how": "新進榜第 11 名"
-    }
-   ],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[情報] HBO MAX高級1年1490"
-    }
-   ],
-   "y": 0.9,
-   "news7": 2,
-   "news_p7": 3,
-   "news_capped": false,
-   "mentions": {
-    "PTT": 1
-   },
-   "x": 0.34,
-   "talk_trend": "down",
-   "days": 2,
-   "first": "2026-11-09",
-   "quad": "new"
-  },
-  {
-   "name": "王品",
-   "q": "王品 寶可夢",
+   "name": "Tesla Cybertruck",
+   "q": "Cybertruck",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
-     "src": "時尚媒體",
-     "title": "王品×寶可夢聯名登場！品田牧場、石二鍋、12mini限定餐點、主題門市整理"
+     "src": "Mobile01",
+     "title": "國外論壇有發起拯救cybertruck停產的連署書，歡迎加入"
     }
    ],
    "y": 0.0,
-   "news7": 24,
+   "news7": 99,
    "news_p7": 1,
-   "news_capped": false,
+   "news_capped": true,
    "social": {
-    "Threads": 34.6
+    "Threads": 135.8
+   },
+   "mentions": {
+    "Mobile01": 1
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-09",
+   "quad": "talk"
+  },
+  {
+   "name": "金馬獎",
+   "q": "金馬獎",
+   "cat": "活動",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "【2026金馬獎】「最佳劇情片」入圍解析：《狂忘警探》阮經天演出黑色荒誕、《雙囍》是集體創傷治療"
+    }
+   ],
+   "y": 0.0,
+   "news7": 84,
+   "news_p7": 16,
+   "news_capped": true,
+   "social": {
+    "Threads": 41.8
    },
    "mentions": {
     "時尚媒體": 1
@@ -201,112 +298,61 @@
    "quad": "talk"
   },
   {
-   "name": "Apple",
-   "q": "Apple watchOS",
-   "cat": "品牌商品",
+   "name": "週年慶",
+   "q": "百貨 週年慶",
+   "cat": "活動",
    "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "Apple 發佈 watchOS 27.2.1 及 visionOS 27.2.1 修復安全問題"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 9,
-   "news_p7": 3,
+   "news7": 46,
+   "news_p7": 16,
    "news_capped": false,
-   "social": {
-    "Threads": 288
-   },
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 0.9,
+   "mentions": {},
+   "x": 0.84,
    "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-10",
+   "days": 5,
+   "first": "2026-11-05",
    "quad": "talk"
   },
   {
-   "name": "Tesla Cybertruck",
-   "q": "Cybertruck 台灣",
-   "cat": "品牌商品",
+   "name": "鄧紫棋",
+   "q": "鄧紫棋",
+   "cat": "人物",
    "do": [],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[新聞] Cybertruck銷量慘澹！2027逐步停產"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 5,
-   "news_p7": 0,
+   "news7": 10,
+   "news_p7": 26,
    "news_capped": false,
-   "social": {
-    "Threads": 135.8
-   },
-   "mentions": {
-    "PTT": 1
-   },
-   "x": 0.79,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-09",
+   "mentions": {},
+   "x": 0.52,
+   "talk_trend": "down",
+   "days": 7,
+   "first": "2026-11-03",
    "quad": "talk"
   },
   {
-   "name": "Apple",
-   "q": "Apple watchOS",
-   "cat": "品牌商品",
+   "name": "風衣外套",
+   "q": "風衣外套 穿搭",
+   "cat": "生活習慣",
    "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "Apple 發佈 watchOS 27.2.1 及 visionOS 27.2.1 修復安全問題"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 9,
-   "news_p7": 3,
+   "news7": 3,
+   "news_p7": 5,
    "news_capped": false,
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 0.6,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-10",
-   "quad": "talk"
-  },
-  {
-   "name": "血源詛咒",
-   "q": "血源詛咒 周邊",
-   "cat": "遊戲",
-   "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "FANTHFUL《血源詛咒》「鋸肉刀」主題官方授權周邊新品即日起開放預購《Bloodborne》"
-    }
-   ],
-   "y": 0.0,
-   "news7": 4,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 0.45,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-09",
+   "mentions": {},
+   "x": 0.3,
+   "talk_trend": "down",
+   "days": 5,
+   "first": "2026-11-03",
    "quad": "low"
   }
  ],
  "quads": {
   "quiet": 0,
-  "hit": 5,
-  "new": 1,
+  "hit": 7,
+  "new": 0,
   "hype": 0,
   "talk": 4,
   "low": 1
@@ -334,5 +380,5 @@
  "hist_days": 8,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-09T21:38:56Z"
+ "updatedAt": "2026-11-10T03:39:26Z"
 }
