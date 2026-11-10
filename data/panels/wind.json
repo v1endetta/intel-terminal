@@ -1,7 +1,110 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的目光高度聚焦在串流影音平台新上架作品、熱門手遊改版及各大通路與品牌的限時優惠活動。",
+ "line": "這幾天台灣消費者的注意力集中在雙11購物優惠、串流影音上線、熱門手遊更新與新車發表等生活娛樂話題。",
  "topics": [
+  {
+   "name": "HBO Max",
+   "q": "HBO Max",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "HBO Max：串流播放電視節目和電影",
+     "how": "新進榜第 11 名"
+    }
+   ],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] HBO MAX高級1年1490"
+    }
+   ],
+   "y": 0.9,
+   "news7": 23,
+   "news_p7": 4,
+   "news_capped": false,
+   "social": {
+    "Threads": 288,
+    "Dcard": 7
+   },
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-09",
+   "quad": "hit"
+  },
+  {
+   "name": "momo雙11",
+   "q": "momo 雙11",
+   "cat": "品牌商品",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "PChome24h購物 l 每天一起變更好",
+     "how": "爬升 55 名到第 30"
+    },
+    {
+     "src": "App 下載",
+     "name": "momo購物 l 值得信賴的購物首選",
+     "how": "爬升 17 名到第 16"
+    }
+   ],
+   "talk": [
+    {
+     "src": "Dcard 網購",
+     "title": "Momo（3 則）"
+    }
+   ],
+   "y": 1.0,
+   "news7": 26,
+   "news_p7": 17,
+   "news_capped": false,
+   "mentions": {
+    "Dcard 網購": 1
+   },
+   "x": 0.82,
+   "talk_trend": "up",
+   "days": 5,
+   "first": "2026-11-05",
+   "quad": "hit"
+  },
+  {
+   "name": "麥當勞",
+   "q": "麥當勞APP",
+   "cat": "品牌商品",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "麥當勞APP",
+     "how": "爬升 30 名到第 4"
+    }
+   ],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] 麥當勞APP優惠碼"
+    }
+   ],
+   "y": 0.75,
+   "news7": 26,
+   "news_p7": 13,
+   "news_capped": false,
+   "social": {
+    "Threads": 336,
+    "Dcard": 30
+   },
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 6,
+   "first": "2026-11-05",
+   "quad": "hit"
+  },
   {
    "name": "泥面人",
    "q": "泥面人 電影",
@@ -15,79 +118,18 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 8,
-   "news_p7": 11,
+   "news7": 7,
+   "news_p7": 13,
    "news_capped": false,
    "social": {
-    "Threads": 56.4,
+    "Threads": 33.5,
     "Dcard": 2
    },
    "mentions": {},
-   "x": 0.81,
-   "talk_trend": "flat",
+   "x": 0.75,
+   "talk_trend": "down",
    "days": 6,
    "first": "2026-11-03",
-   "quad": "hit"
-  },
-  {
-   "name": "麥當勞",
-   "q": "麥當勞 APP 優惠碼",
-   "cat": "品牌商品",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "麥當勞APP",
-     "how": "爬升 31 名到第 3"
-    }
-   ],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[情報] 麥當勞APP優惠碼"
-    }
-   ],
-   "y": 0.76,
-   "news7": 8,
-   "news_p7": 2,
-   "news_capped": false,
-   "social": {
-    "Threads": 15.9,
-    "Dcard": 30
-   },
-   "mentions": {
-    "PTT": 1
-   },
-   "x": 0.88,
-   "talk_trend": "up",
-   "days": 6,
-   "first": "2026-11-05",
-   "quad": "hit"
-  },
-  {
-   "name": "Klook",
-   "q": "Klook 優惠",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "Klook - 全球旅遊＆玩樂體驗預訂平台",
-     "how": "爬升 20 名到第 38"
-    }
-   ],
-   "talk": [],
-   "y": 0.65,
-   "news7": 11,
-   "news_p7": 8,
-   "news_capped": false,
-   "social": {
-    "Threads": 193.4,
-    "Dcard": 28
-   },
-   "mentions": {},
-   "x": 0.94,
-   "talk_trend": "flat",
-   "days": 5,
-   "first": "2026-11-05",
    "quad": "hit"
   },
   {
@@ -103,44 +145,53 @@
    ],
    "talk": [],
    "y": 0.68,
-   "news7": 34,
-   "news_p7": 12,
+   "news7": 33,
+   "news_p7": 11,
    "news_capped": false,
+   "social": {
+    "Threads": 37.4,
+    "Dcard": 0
+   },
    "mentions": {},
-   "x": 0.77,
+   "x": 1.0,
    "talk_trend": "up",
    "days": 5,
    "first": "2026-11-05",
    "quad": "hit"
   },
   {
-   "name": "HBO Max",
-   "q": "HBO Max 台灣",
-   "cat": "App",
+   "name": "台積電",
+   "q": "台積公司 季配息",
+   "cat": "品牌商品",
    "do": [
     {
-     "src": "App 下載",
-     "name": "HBO Max：串流播放電視節目和電影",
-     "how": "新進榜第 15 名"
+     "src": "Google 熱搜",
+     "name": "台灣積體電路製造股份有限公司",
+     "how": "搜尋 2000+"
     }
    ],
    "talk": [
     {
      "src": "PTT",
-     "title": "[情報] HBO MAX高級1年1490"
+     "title": "[情報] 台積公司董事會決議(季配息升至9元)"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "台積電Q3配息調升至每股9元、再創新高 明年4/8發股利"
     }
    ],
-   "y": 0.9,
+   "y": 0.6,
    "news7": 2,
-   "news_p7": 3,
+   "news_p7": 0,
    "news_capped": false,
    "mentions": {
-    "PTT": 1
+    "PTT": 1,
+    "新聞焦點": 1
    },
-   "x": 0.34,
-   "talk_trend": "down",
-   "days": 2,
-   "first": "2026-11-09",
+   "x": 0.44,
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-10",
    "quad": "new"
   },
   {
@@ -155,131 +206,248 @@
     }
    ],
    "y": 0.0,
-   "news7": 33,
-   "news_p7": 9,
+   "news7": 32,
+   "news_p7": 10,
    "news_capped": false,
+   "social": {
+    "Threads": 0
+   },
    "mentions": {
     "新聞焦點": 1
    },
-   "x": 0.87,
+   "x": 0.86,
    "talk_trend": "up",
    "days": 7,
    "first": "2026-11-03",
    "quad": "hype"
   },
   {
-   "name": "鄧紫棋",
-   "q": "鄧紫棋",
-   "cat": "音樂",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 9,
-   "news_p7": 27,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.5,
-   "talk_trend": "down",
-   "days": 7,
-   "first": "2026-11-03",
-   "quad": "hype"
-  },
-  {
-   "name": "Tesla Cybertruck",
-   "q": "Tesla Cybertruck 台灣",
+   "name": "特斯拉",
+   "q": "Cybertruck",
    "cat": "品牌商品",
    "do": [],
-   "talk": [],
+   "talk": [
+    {
+     "src": "Mobile01",
+     "title": "國外論壇有發起拯救cybertruck停產的連署書，歡迎加入"
+    }
+   ],
    "y": 0.0,
-   "news7": 7,
+   "news7": 99,
    "news_p7": 1,
-   "news_capped": false,
-   "social": {
-    "Threads": 135.8
+   "news_capped": true,
+   "mentions": {
+    "Mobile01": 1
    },
-   "mentions": {},
-   "x": 0.77,
+   "x": 1.0,
    "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-09",
+   "days": 1,
+   "first": "2026-11-10",
    "quad": "talk"
   },
   {
-   "name": "BAO BAO ISSEY MIYAKE",
-   "q": "BAO BAO ISSEY MIYAKE",
+   "name": "小米",
+   "q": "小米18 Pro",
    "cat": "品牌商品",
    "do": [],
-   "talk": [],
+   "talk": [
+    {
+     "src": "Mobile01",
+     "title": "小米18 Pro背螢幕應用討論"
+    }
+   ],
    "y": 0.0,
-   "news7": 10,
+   "news7": 19,
+   "news_p7": 12,
+   "news_capped": false,
+   "mentions": {
+    "Mobile01": 1
+   },
+   "x": 0.75,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-10",
+   "quad": "talk"
+  },
+  {
+   "name": "AAA頒獎典禮",
+   "q": "AAA頒獎典禮 台灣",
+   "cat": "活動",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "2026 AAA頒獎典禮完整資訊！連兩天卡司陣容、轉播平台、主持人資訊，趙雨凡、子瑜等5位台灣小孩全回來了"
+    }
+   ],
+   "y": 0.0,
+   "news7": 12,
+   "news_p7": 4,
+   "news_capped": false,
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 0.66,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-10",
+   "quad": "talk"
+  },
+  {
+   "name": "統一集團",
+   "q": "亞洲肯德基 統一",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[新聞] 傳統一企業擬收購亞洲肯德基、必勝客 路"
+    },
+    {
+     "src": "PTT",
+     "title": "Re: [情報] 11/7-11/11 統一雲端開心卡 1200元贈80點"
+    }
+   ],
+   "y": 0.0,
+   "news7": 7,
    "news_p7": 0,
    "news_capped": false,
-   "mentions": {},
-   "x": 0.52,
+   "mentions": {
+    "PTT": 2
+   },
+   "x": 0.65,
    "talk_trend": "up",
-   "days": 5,
-   "first": "2026-11-05",
+   "days": 1,
+   "first": "2026-11-10",
    "quad": "talk"
   },
   {
    "name": "理想混蛋",
    "q": "理想混蛋",
    "cat": "音樂",
-   "do": [],
+   "do": [
+    {
+     "src": "YouTube 熱門",
+     "name": "理想混蛋 Bestards【大概也只能是思念 To Where I Cannot Follow】Official Mus",
+     "how": "7 天內上架、發燒第 10"
+    }
+   ],
    "talk": [],
-   "y": 0.0,
-   "news7": 6,
-   "news_p7": 4,
+   "y": 0.44,
+   "news7": 7,
+   "news_p7": 3,
    "news_capped": false,
    "mentions": {},
-   "x": 0.42,
+   "x": 0.45,
    "talk_trend": "up",
    "days": 6,
    "first": "2026-11-03",
    "quad": "low"
   },
   {
-   "name": "Zara Home",
-   "q": "Zara Home 台灣",
+   "name": "Calvin Klein",
+   "q": "BTS 柾國 Calvin Klein",
    "cat": "品牌商品",
    "do": [],
-   "talk": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "BTS 柾國 Jung Kook 穿上 Calvin Klein 2026 節日系列！解鎖私服造型同款穿搭"
+    }
+   ],
    "y": 0.0,
-   "news7": 2,
-   "news_p7": 3,
+   "news7": 5,
+   "news_p7": 2,
    "news_capped": false,
-   "mentions": {},
-   "x": 0.24,
-   "talk_trend": "down",
-   "days": 5,
-   "first": "2026-11-03",
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 0.49,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-10",
    "quad": "low"
   },
   {
-   "name": "Fenty Beauty",
-   "q": "Fenty Beauty 台灣",
+   "name": "YAMAHA",
+   "q": "YAMAHA MT-09 SP",
    "cat": "品牌商品",
    "do": [],
-   "talk": [],
+   "talk": [
+    {
+     "src": "Mobile01",
+     "title": "年底就能交車！YAMAHA MT-09 SP 建議售價 54.8 萬元，首批限量 60 台預計 12 月交車！"
+    }
+   ],
    "y": 0.0,
-   "news7": 0,
-   "news_p7": 5,
+   "news7": 4,
+   "news_p7": 1,
    "news_capped": false,
-   "mentions": {},
-   "x": 0.0,
-   "talk_trend": "down",
-   "days": 6,
-   "first": "2026-11-03",
+   "mentions": {
+    "Mobile01": 1
+   },
+   "x": 0.45,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-10",
+   "quad": "low"
+  },
+  {
+   "name": "酉鬼啤酒",
+   "q": "酉鬼啤酒 7週年",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "酉鬼啤酒7週年：一杯啤酒如何成為台灣文化的創意實驗室？"
+    }
+   ],
+   "y": 0.0,
+   "news7": 1,
+   "news_p7": 2,
+   "news_capped": false,
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 0.25,
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-10",
+   "quad": "low"
+  },
+  {
+   "name": "OSOI",
+   "q": "OSOI Duty Bag",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "韓國人氣品牌OSOI邁入10週年！全新「Duty Bag」疊加美學登場，同步首爾漢南洞旗艦店盛大揭幕"
+    }
+   ],
+   "y": 0.0,
+   "news7": 1,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 0.25,
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-10",
    "quad": "low"
   }
  ],
  "quads": {
   "quiet": 0,
-  "hit": 4,
+  "hit": 5,
   "new": 1,
-  "hype": 2,
-  "talk": 2,
-  "low": 3
+  "hype": 1,
+  "talk": 4,
+  "low": 5
  },
  "src_do": [
   "App 下載",
@@ -293,6 +461,7 @@
   "電影票房"
  ],
  "src_talk": [
+  "Dcard 網購",
   "LINE TODAY",
   "Mobile01",
   "PTT",
@@ -300,9 +469,9 @@
   "時尚媒體",
   "社群（Threads・Dcard・IG）"
  ],
- "social_at": "2026-11-09",
+ "social_at": "2026-11-10",
  "hist_days": 8,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-10T09:42:52Z"
+ "updatedAt": "2026-11-10T15:43:40Z"
 }
