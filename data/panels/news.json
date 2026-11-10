@@ -406,13 +406,6 @@
      "kw": "台海 OR 共機 OR 軍演"
     },
     {
-     "source": "公視新聞",
-     "title": "美國引用301條款課徵新關稅 台灣與歐盟稅率10%",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1VdXZKeUt6ZENrWW9XTklVbnhVWnBTRkVBYzNJZU1zZjlrQ1dfZURjOUlGQjE5dFpWNnNueXNMTElqWndEcE0xMVVjaUZ4YlU?oc=5",
-     "at": "2026-11-04T08:00:00Z",
-     "kw": "關稅 台灣 OR 232條款"
-    },
-    {
      "source": "CMoney投資網誌",
      "title": "「晶片門」燃爆華府：Nvidia捲入間諜風暴，AI出口管制全面升級在即",
      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxORTFfZ2RycTJQOG1lWEVGcXFXTHAtck0wRllSUUpRcE9qeG1tRXgyaXh0VFRDd2tnNEJZdmJWaC1sTHFCUXpkZXVpNlBSd0xqNTFIRm5lRHNtVzdrQnFQSU9kam12dTNxY3B6aWhJTXQxUFdDY2NQM2E1cVFrbk9XXzFBQVNzOW1xcDl5QzR3?oc=5",
@@ -425,6 +418,13 @@
      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9rZmFyMWdZdmVSeWx0N1RJdDB4bXB4N1E5VUVaNGdSRVZpMGVDT191QzduajdNNVE1bnM1MkM1dlM0bEFzdWhPWWI2U1ZGREZWcEHSAVdBVV95cUxOblFQNWNrRllYMTdMQWU3U2NNbHhSRTg3blpkT2Vtc3JscFduTUdkdEtUQXNIYVBxcnU4NlROZDNDZG9HUFZkaWsybXJvWXpWU01HWG11Mkk?oc=5",
      "at": "2026-11-10T16:00:00Z",
      "kw": "台海 OR 共機 OR 軍演"
+    },
+    {
+     "source": "BigGo 財經",
+     "title": "美國出口管制與AI投資雙重夾擊，半導體設備四巨頭中國營收佔比急墜",
+     "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBGbV9abURHaUMyNmp1VnNNOHc3WW5OUkJBeXpUOXM3ZWt6MG1hell3U0U0NlpBVFJoV1d2STVFNnVyeTRuZDlsVDExYXg0ekpmSHowUjVRR1FTdm0wd2RNMVk2VzFFczUzLThJS3pONGJmMktDdDltQ1dR?oc=5",
+     "at": "2026-11-09T16:25:00Z",
+     "kw": "半導體 出口管制 OR 晶片法案"
     }
    ],
    "daily7": [
@@ -530,13 +530,13 @@
     }
    ],
    "daily7": [
-    10,
-    7,
+    6,
+    6,
     4,
-    4,
-    27,
-    111,
-    43
+    2,
+    26,
+    107,
+    48
    ],
    "days7": [
     "2026-11-05",
@@ -583,11 +583,11 @@
    "daily7": [
     2,
     0,
-    1,
+    0,
     0,
     6,
     7,
-    6
+    8
    ],
    "days7": [
     "2026-11-05",
@@ -893,6 +893,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-10T22:44:59Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-10T23:05:02Z"
 }
