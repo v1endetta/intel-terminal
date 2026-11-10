@@ -76,6 +76,12 @@
  "intl": [
   {
    "source": "BBC",
+   "title": "Meghan's father Thomas Markle detained for allegedly cutting off ankle monitor, officials ",
+   "url": "https://www.bbc.co.uk/news/articles/c9j3433zy4vro?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-10T20:53:33Z"
+  },
+  {
+   "source": "BBC",
    "title": "Nvidia hires major New York law firm to investigate Jensen Huang affair",
    "url": "https://www.bbc.co.uk/news/articles/ck1wvwwl3x0go?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-10T20:40:13Z"
@@ -145,13 +151,6 @@
    "url": "https://www.theguardian.com/business/live/2026/nov/10/nvidia-shareholder-lawsuit-jensen-huang-relationship-suspected-chinese-spy-fbi-trump-bank-of-england-latest-news-updates",
    "at": "2026-11-10T17:12:54Z",
    "sec": "Business"
-  },
-  {
-   "source": "Guardian",
-   "title": "Russia-Ukraine talks ‘very productive,’ says US’s Rubio – as it happened",
-   "url": "https://www.theguardian.com/world/live/2026/nov/10/ukraine-russia-war-us-talks-abu-dhabi-europe-latest-news-updates",
-   "at": "2026-11-10T17:05:05Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -229,7 +228,7 @@
     2,
     0,
     0,
-    2,
+    1,
     5,
     0
    ],
@@ -281,7 +280,7 @@
     2,
     1,
     21,
-    72,
+    73,
     31
    ],
    "days7": [
@@ -536,8 +535,8 @@
     4,
     3,
     27,
-    135,
-    22
+    122,
+    34
    ],
    "days7": [
     "2026-11-05",
@@ -735,7 +734,7 @@
   "hot": [
    {
     "term": "Anthropic",
-    "n": 10,
+    "n": 11,
     "src": 8,
     "sources": [
      "Anthropic",
@@ -753,14 +752,13 @@
    },
    {
     "term": "ChatGPT",
-    "n": 6,
-    "src": 6,
+    "n": 5,
+    "src": 5,
     "sources": [
      "BigGo 財經",
      "HN",
      "OpenAI",
      "OpenAI 論壇",
-     "TechCrunch",
      "TradingView"
     ],
     "sample": {
@@ -799,38 +797,6 @@
     "sample": {
      "title": "趕在IPO前，Claude最強模型空降！賓大教授感慨“幾乎達到AGI”",
      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE92YmZnWi1ubFhWc1p6UDFIcE85S2k0eWN4ajJQbDdJZnExYWFSUjkxcnROWGRGMEhGd01GXzF5cll6WU9xTFlNYg?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "Gemini",
-    "n": 5,
-    "src": 4,
-    "sources": [
-     "ETtoday AI科技",
-     "Gemini",
-     "Google AI",
-     "HN"
-    ],
-    "sample": {
-     "title": "小心被 AI 出賣！Gemini 新功能堪稱「爆料神器」 2 招秒清記憶",
-     "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5OZU5IMVowN2ZGQzI0eWhtOTdBeThkVnhtZlN1OE1vUVFWMG1wNm9sYmZWbE9HbnpwQ3dhU2xXRmY3dC1oZ3B3VmRnc9IBSkFVX3lxTE4wdUhiWkNMYVFReExTa0dPWEpMUGp0cEU4SjZRa1pKUW13SVpNMW5FZTVhLWdla0xpV1MxTy1sTHN5RE9TWHhBTl9B?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "Google",
-    "n": 5,
-    "src": 4,
-    "sources": [
-     "Forbes",
-     "Google AI",
-     "TechCrunch",
-     "數位時代"
-    ],
-    "sample": {
-     "title": "專為AI代理人而生！Google發表TPU 8tx與8i Max系統，一年連發四款TPU挑戰輝達",
-     "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1NSGREcU5jMXg5R1RHaVZULXc2Vnl3OHRRU3AxOHdaYmpESTdKaEI1QXh6cHg3dE52MU51Y1V5dGRVRl85MVhpQkNKdXN2clV0S2h3blNqSmNZYlk5dUZVcl9OTDFWODNLdzFDbmZUUGg3R3pHZFE?oc=5"
     },
     "hot": true
    },
@@ -883,6 +849,36 @@
     "hot": true
    },
    {
+    "term": "Gemini",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "ETtoday AI科技",
+     "Gemini",
+     "Google AI"
+    ],
+    "sample": {
+     "title": "小心被 AI 出賣！Gemini 新功能堪稱「爆料神器」 2 招秒清記憶",
+     "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5OZU5IMVowN2ZGQzI0eWhtOTdBeThkVnhtZlN1OE1vUVFWMG1wNm9sYmZWbE9HbnpwQ3dhU2xXRmY3dC1oZ3B3VmRnc9IBSkFVX3lxTE4wdUhiWkNMYVFReExTa0dPWEpMUGp0cEU4SjZRa1pKUW13SVpNMW5FZTVhLWdla0xpV1MxTy1sTHN5RE9TWHhBTl9B?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "Google",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "Forbes",
+     "Google AI",
+     "數位時代"
+    ],
+    "sample": {
+     "title": "專為AI代理人而生！Google發表TPU 8tx與8i Max系統，一年連發四款TPU挑戰輝達",
+     "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1NSGREcU5jMXg5R1RHaVZULXc2Vnl3OHRRU3AxOHdaYmpESTdKaEI1QXh6cHg3dE52MU51Y1V5dGRVRl85MVhpQkNKdXN2clV0S2h3blNqSmNZYlk5dUZVcl9OTDFWODNLdzFDbmZUUGg3R3pHZFE?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "黃仁勳",
     "n": 4,
     "src": 3,
@@ -902,5 +898,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-10T20:43:47Z"
+ "updatedAt": "2026-11-10T21:03:57Z"
 }
