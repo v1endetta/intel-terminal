@@ -824,6 +824,39 @@ def section(name, fn, budget, errs):
         SEC[name] = round(time.time() - t, 1)
 
 
+def insinfo_probe(state, errs):
+    """暫時探測（2026-11-11，Vin 同意用台灣 IP）：保險業公開資訊觀測站只開放台灣連線，看首頁與再保險相關頁的結構。成功一次就不再跑；確認完整段刪掉。"""
+    if state.get("insinfo_probe_ok") or time.time() - state.get("insinfo_probe_try", 0) < 6 * 3600:
+        return
+    state["insinfo_probe_try"] = time.time()
+    from urllib.parse import urljoin, urlparse
+    pages, seen, queue = [], set(), ["https://ins-info.ib.gov.tw/"]
+    while queue and len(pages) < 10 and left() > 15:
+        u = queue.pop(0)
+        if u in seen:
+            continue
+        seen.add(u)
+        try:
+            b = get(u, 30)
+            for enc in ("utf-8", "big5"):
+                try:
+                    h = b.decode(enc); break
+                except UnicodeDecodeError:
+                    h = b.decode("utf-8", "replace")
+            pages.append({"url": u, "len": len(b), "html": h[:150000]})
+            for l, t in re.findall(r'<a\b[^>]*href=["\']([^"\'#]+)["\'][^>]*>(.*?)</a>', h, re.S | re.I):
+                lu = urljoin(u, l.strip())
+                if urlparse(lu).netloc == "ins-info.ib.gov.tw" and re.search("再保|公開資訊|財務|業務", re.sub(r"<[^>]+>", "", t) + lu):
+                    queue.append(lu)
+        except Exception as e:  # noqa: BLE001
+            pages.append({"url": u, "err": repr(e)[:200]})
+    put_doc("static/insinfo_probe", {"pages": pages})
+    if any("html" in x for x in pages):
+        state["insinfo_probe_ok"] = 1
+    else:
+        errs["insinfo_probe"] = (pages[0].get("err") if pages else "no page")
+
+
 def static_daily(state, errs):
     static_at = state.setdefault("static_at", {})
     for k, u in STATIC.items():
@@ -895,6 +928,7 @@ def main():
     section("city_cctv", lambda: city_cctv(state, errs), 30, errs)
     section("static", lambda: static_daily(state, errs), 60, errs)
     section("villages", lambda: villages_once(state, errs), 150, errs)
+    section("insinfo_probe", lambda: insinfo_probe(state, errs), 60, errs)   # 暫時探測，確認完刪掉
 
     last = {"at": NOW_ISO, "ok": sorted(docs), "errs": errs, "rows": {k: len(d["rows"]) for k, d in docs.items()},
             "sec": round(time.time() - T_START, 1), "sections": {k: v for k, v in SEC.items() if v >= 0.1}}

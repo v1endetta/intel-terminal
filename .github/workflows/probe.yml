@@ -1,0 +1,26 @@
+name: probe
+# 暫時探測：把台灣抓取站存的保險業公開資訊觀測站頁面拉回來看；用完刪掉
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  id-token: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/896764575828/locations/global/workloadIdentityPools/github/providers/intel-terminal
+          service_account: intel-writer@intel-vault-510704.iam.gserviceaccount.com
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: pull
+        run: |
+          mkdir -p /tmp/probe && cd /tmp/probe
+          gcloud storage cp gs://intel-vault-510704-vault/relay/static/insinfo_probe.json.gz . || echo missing > missing.txt
+          gcloud storage cat gs://intel-vault-510704-vault/relay/latest/live.json.gz | gunzip | python3 -c "import json,sys;d=json.load(sys.stdin);print(json.dumps(d['last'],ensure_ascii=False))" > last.json || true
+          git init -q -b probe-out
+          git config user.name "intel-bot"; git config user.email "intel-bot@users.noreply.github.com"
+          git add -A && git commit -qm "probe $(date -u +%FT%TZ)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" probe-out
