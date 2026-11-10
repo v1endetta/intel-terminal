@@ -117,7 +117,7 @@
    "draw": "2026-11-10",
    "list": "2026-11-16",
    "price": 249.65,
-   "rate": 0.0,
+   "rate": 2.37,
    "ind": "其他電子業"
   },
   {
@@ -1408,6 +1408,30 @@
    "routine": false
   },
   {
+   "code": "2855",
+   "name": "統一證",
+   "mk": "上市",
+   "date": "2026-11-11",
+   "time": "14:00",
+   "place": "本次為中文線上法說會",
+   "summary": "說明本公司115年Q3財務暨營運報告",
+   "ind": "金融保險",
+   "cons": false,
+   "routine": false
+  },
+  {
+   "code": "2882",
+   "name": "國泰金",
+   "mk": "上市",
+   "date": "2026-11-11",
+   "time": "14:00",
+   "place": "台北",
+   "summary": "本公司受邀參加BofA證券舉辦之投資人會議，說明公司營運狀況。",
+   "ind": "金融保險",
+   "cons": false,
+   "routine": true
+  },
+  {
    "code": "2884",
    "name": "玉山金",
    "mk": "上市",
@@ -1716,6 +1740,18 @@
    "place": "台北遠東香格里拉飯店",
    "summary": "本公司受邀參加永豐金證券匯立分公司舉辦之法人說明會，說明本公司業務簡介及現況說明",
    "ind": "電腦及週邊設備業",
+   "cons": false,
+   "routine": true
+  },
+  {
+   "code": "3591",
+   "name": "艾笛森",
+   "mk": "上市",
+   "date": "2026-11-12",
+   "time": "14:00",
+   "place": "線上法人說明會",
+   "summary": "本公司受邀參加國泰證券所舉辦之法人說明會，說明本公司115年第三季營運成果及近期營運展望",
+   "ind": "光電業",
    "cons": false,
    "routine": true
   },
@@ -2246,46 +2282,10 @@
    "ind": "電子零組件業",
    "cons": false,
    "routine": true
-  },
-  {
-   "code": "6103",
-   "name": "合邦",
-   "mk": "上櫃",
-   "date": "2026-11-13",
-   "time": "16:00",
-   "place": "線上法說會",
-   "summary": "本公司受邀參加元大證券舉辦之線上法說會，說明本公司之營運狀況及展望",
-   "ind": "半導體業",
-   "cons": false,
-   "routine": true
-  },
-  {
-   "code": "6274",
-   "name": "台燿",
-   "mk": "上櫃",
-   "date": "2026-11-13",
-   "time": "10:00",
-   "place": "JW Marriott Hotel, HK",
-   "summary": "受邀參加中民國證券櫃檯買中心及凱基證券聯合舉行TPEx l KGI Hong Kong Corporate Day",
-   "ind": "電子零組件業",
-   "cons": false,
-   "routine": true
-  },
-  {
-   "code": "6446",
-   "name": "藥華藥",
-   "mk": "上市",
-   "date": "2026-11-16",
-   "time": "17:00",
-   "place": "倫敦",
-   "summary": "本公司受邀參加傑富瑞(Jefferies)舉辦之法說會「Jefferies London Healthcare Conference」，說明本公司之營運概況。",
-   "ind": "生技醫療業",
-   "cons": true,
-   "routine": true
   }
  ],
- "conf_n": 200,
+ "conf_n": 203,
  "src": "證交所／櫃買中心 OpenAPI（公開申購、申請上市櫃、經營權及營業範圍異動專區）＋ 公開資訊觀測站 法人說明會一覽表",
  "errs": [],
- "updatedAt": "2026-11-09T20:54:40Z"
+ "updatedAt": "2026-11-10T02:58:18Z"
 }
