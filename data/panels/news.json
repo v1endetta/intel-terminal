@@ -280,8 +280,8 @@
     2,
     1,
     21,
-    73,
-    31
+    72,
+    30
    ],
    "days7": [
     "2026-11-05",
@@ -380,10 +380,10 @@
     5,
     9,
     10,
-    10,
-    28,
-    55,
-    4
+    11,
+    27,
+    56,
+    5
    ],
    "days7": [
     "2026-11-05",
@@ -432,7 +432,7 @@
     2,
     10,
     14,
-    20,
+    21,
     40,
     4
    ],
@@ -482,7 +482,7 @@
     9,
     11,
     7,
-    4,
+    3,
     9,
     16,
     1
@@ -863,32 +863,33 @@
     "hot": true
    },
    {
-    "term": "Google",
+    "term": "利率",
     "n": 4,
     "src": 3,
     "sources": [
-     "Forbes",
-     "Google AI",
-     "數位時代"
+     "www.tmgm.com",
+     "中央社",
+     "工商時報",
+     "自由財經"
     ],
     "sample": {
-     "title": "專為AI代理人而生！Google發表TPU 8tx與8i Max系統，一年連發四款TPU挑戰輝達",
-     "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1NSGREcU5jMXg5R1RHaVZULXc2Vnl3OHRRU3AxOHdaYmpESTdKaEI1QXh6cHg3dE52MU51Y1V5dGRVRl85MVhpQkNKdXN2clV0S2h3blNqSmNZYlk5dUZVcl9OTDFWODNLdzFDbmZUUGg3R3pHZFE?oc=5"
+     "title": "通膨高於預期　美債殖利率全面跳升、12月恐升息2碼",
+     "url": "https://www.cna.com.tw/news/afe/202611110004.aspx"
     },
     "hot": true
    },
    {
-    "term": "黃仁勳",
-    "n": 4,
+    "term": "聯準會",
+    "n": 3,
     "src": 3,
     "sources": [
-     "Wiki",
+     "www.tmgm.com",
      "中央社",
-     "公視"
+     "鉅亨網"
     ],
     "sample": {
-     "title": "黃仁勳出軌拖累輝達重挫逾6%　市值急縮落後蘋果與微軟",
-     "url": "https://www.cna.com.tw/news/afe/202611110005.aspx"
+     "title": "美國10月CPI高於市場預期　聯準會升息壓力增",
+     "url": "https://www.cna.com.tw/news/aopl/202611100366.aspx"
     },
     "hot": true
    }
@@ -897,5 +898,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-10T21:22:40Z"
+ "updatedAt": "2026-11-10T21:43:02Z"
 }
