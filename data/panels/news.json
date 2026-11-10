@@ -2,6 +2,12 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "8艘共艦1艘公務船擾台　國軍嚴密監控",
+   "url": "https://www.cna.com.tw/news/aipl/202611100030.aspx",
+   "at": "2026-11-10T01:13:38Z"
+  },
+  {
+   "source": "中央社",
    "title": "美科技股回神　法人：政策護航台股現技術面反彈跡象",
    "url": "https://www.cna.com.tw/news/afe/202611100024.aspx",
    "at": "2026-11-10T00:36:25Z"
@@ -43,12 +49,6 @@
    "at": "2026-11-09T10:17:47Z"
   },
   {
-   "source": "中央社",
-   "title": "何欣純啟動車隊掃街　江啟臣妻合體蔣萬安妻搶攻市場",
-   "url": "https://www.cna.com.tw/news/aipl/202611090220.aspx",
-   "at": "2026-11-09T10:04:30Z"
-  },
-  {
    "source": "公視",
    "title": "蔣萬安、沈伯洋母雞帶小雞出席同黨候選人活動造勢｜20261108 公視午間新聞｜ 公視新聞PNN",
    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBhSE1hLXdCVEtiVl9ObFRlZkFtVmpubFJ2cGxia2V2WmtqU2ZMTkpjcFRlR01wU2wtcGFHWFdRTXQzWUJXUUNYWFF0OA?oc=5",
@@ -76,6 +76,25 @@
  "intl": [
   {
    "source": "BBC",
+   "title": "Qantas to outsource 850 local jobs with most roles moving to India",
+   "url": "https://www.bbc.co.uk/news/articles/cry838v4qzvyo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-10T01:55:22Z"
+  },
+  {
+   "source": "Guardian",
+   "title": "Ukraine war briefing: battlefield gains bolstering Kyiv’s hand in US-led peace talks, Zele",
+   "url": "https://www.theguardian.com/world/2026/nov/10/ukraine-war-briefing-battlefield-gains-bolstering-kyivs-hand-in-us-led-peace-talks-zelenskyy-says",
+   "at": "2026-11-10T01:51:06Z",
+   "sec": "World news"
+  },
+  {
+   "source": "BBC",
+   "title": "Trump says FBI investigating Nvidia boss's affair with alleged Chinese spy",
+   "url": "https://www.bbc.co.uk/news/articles/cqg7x7dpvym8o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-10T01:44:53Z"
+  },
+  {
+   "source": "BBC",
    "title": "Republican congressman to force impeachment vote on Defence Secretary Hegseth",
    "url": "https://www.bbc.co.uk/news/articles/cwr5y58jjp8ro?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-10T01:38:49Z"
@@ -86,12 +105,6 @@
    "url": "https://www.theguardian.com/business/2026/nov/10/qantas-850-job-cuts-outsource-work-to-india-ai-overhaul",
    "at": "2026-11-10T01:34:47Z",
    "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "Trump says FBI investigating Nvidia boss's affair with alleged Chinese spy",
-   "url": "https://www.bbc.co.uk/news/articles/cqg7x7dpvym8o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-10T01:22:10Z"
   },
   {
    "source": "BBC",
@@ -111,12 +124,6 @@
    "url": "https://www.theguardian.com/business/live/2026/nov/09/nvidia-jensen-huang-scandal-investigation-ai-industry-tech-stocks-recovery-slump-latest-news-updates",
    "at": "2026-11-09T21:14:02Z",
    "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "Turkey steel factory blast kills at least 17 people",
-   "url": "https://www.bbc.co.uk/news/articles/cq2d6d5z9y5jo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-09T20:42:04Z"
   },
   {
    "source": "BBC",
@@ -142,13 +149,6 @@
    "title": "Russia's leading independent newspaper closes after eviction",
    "url": "https://www.bbc.co.uk/news/videos/cvrlylj9r11go?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-09T18:08:07Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "‘I know what it’s like to fight’- France’s most popular sportsman says he’s running for pr",
-   "url": "https://www.theguardian.com/world/2026/nov/09/judo-star-teddy-riner-plan-france-presidential-election",
-   "at": "2026-11-09T17:42:51Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -843,7 +843,7 @@
     "hot": true
    },
    {
-    "term": "ADR",
+    "term": "台積電",
     "n": 3,
     "src": 3,
     "sources": [
@@ -858,7 +858,7 @@
     "hot": true
    },
    {
-    "term": "台積電",
+    "term": "ADR",
     "n": 3,
     "src": 3,
     "sources": [
@@ -889,6 +889,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-10T01:38:20Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-10T01:59:52Z"
 }
