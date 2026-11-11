@@ -2,6 +2,18 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "赴美參與世台實習計畫　台青年盼返台貢獻國際經驗",
+   "url": "https://www.cna.com.tw/news/aipl/202611110029.aspx",
+   "at": "2026-11-11T00:56:32Z"
+  },
+  {
+   "source": "中央社",
+   "title": "彭啓明投書巴西媒體　政學界聲援台灣參與COP31",
+   "url": "https://www.cna.com.tw/news/aipl/202611110024.aspx",
+   "at": "2026-11-11T00:34:21Z"
+  },
+  {
+   "source": "中央社",
    "title": "漢來美食委外線上商城訂單資料外洩　啟動應變機制",
    "url": "https://www.cna.com.tw/news/afe/202611110023.aspx",
    "at": "2026-11-11T00:34:19Z"
@@ -37,18 +49,6 @@
    "at": "2026-11-10T22:00:48Z"
   },
   {
-   "source": "中央社",
-   "title": "外媒指立陶宛要求代表處更名　立國議員批政府拿台灣當對中籌碼",
-   "url": "https://www.cna.com.tw/news/aipl/202611100374.aspx",
-   "at": "2026-11-10T15:40:14Z"
-  },
-  {
-   "source": "中央社",
-   "title": "台馬經貿會議傳遭擱置　大馬業界：獲知延後非取消",
-   "url": "https://www.cna.com.tw/news/aipl/202611100364.aspx",
-   "at": "2026-11-10T14:13:49Z"
-  },
-  {
    "source": "公視",
    "title": "20261110 公視手語新聞 完整版｜黃仁勳疑遭共諜鎖定 邱垂正:中共經典作法 ｜ 公視新聞 PNN",
    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE12UmZ6SmcwTENQWUpJc3c0REpRTzh1RmhBQXdfTElKZmdZV01LVkJuZzhZZ3h3QjZJcXdUUUd5Rm11ckFKd3F2OTh0NA?oc=5",
@@ -76,15 +76,15 @@
  "intl": [
   {
    "source": "BBC",
-   "title": "Three Iran-backed suspects plotted attacks including RAF Fairford incident, US says",
-   "url": "https://www.bbc.co.uk/news/articles/c3rryrryk59zo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-11T01:01:20Z"
+   "title": "US House blocks bid to impeach Defence Secretary Pete Hegseth, for now",
+   "url": "https://www.bbc.co.uk/news/articles/cxly4y5jzl0qo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-11T01:14:40Z"
   },
   {
    "source": "BBC",
-   "title": "US House blocks bid to impeach Defence Secretary Pete Hegseth, for now",
-   "url": "https://www.bbc.co.uk/news/articles/cxly4y5jzl0qo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-11T00:38:33Z"
+   "title": "Three Iran-backed suspects plotted attacks including RAF Fairford incident, US says",
+   "url": "https://www.bbc.co.uk/news/articles/c3rryrryk59zo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-11T01:01:20Z"
   },
   {
    "source": "BBC",
@@ -750,6 +750,23 @@
     "hot": true
    },
    {
+    "term": "輝達",
+    "n": 6,
+    "src": 5,
+    "sources": [
+     "PTT",
+     "中央社",
+     "台視全球資訊網",
+     "旺得富理財網",
+     "自由財經"
+    ],
+    "sample": {
+     "title": "黃仁勳緋聞牽出中國間諜疑雲　輝達股價連兩日重挫",
+     "url": "https://www.cna.com.tw/news/aopl/202611110022.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "ADR",
     "n": 5,
     "src": 5,
@@ -763,23 +780,6 @@
     "sample": {
      "title": "00631L 元大台灣50正2 - 台🐔ADR續強，明天9am大盤跳空續📈📈📈，#「今日... - 股市爆料同學會",
      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5HTkQxVnhXbXd5VkxfdGt0QWxveUpPTnk5NjAza1k5d0dub2stSEYtbzFNY1dTeEdMd1BHaDlWZS16bzdQdm9RY0JpMjQ4V0I4VmFHajFUWlI?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "輝達",
-    "n": 5,
-    "src": 5,
-    "sources": [
-     "PTT",
-     "中央社",
-     "台視全球資訊網",
-     "旺得富理財網",
-     "自由財經"
-    ],
-    "sample": {
-     "title": "黃仁勳緋聞牽出中國間諜疑雲　輝達股價連兩日重挫",
-     "url": "https://www.cna.com.tw/news/aopl/202611110022.aspx"
     },
     "hot": true
    },
@@ -898,6 +898,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-11T01:04:45Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-11T01:25:04Z"
 }
