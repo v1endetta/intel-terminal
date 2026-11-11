@@ -5,9 +5,9 @@
    "vendor": "openai",
    "title": "Keep Standard Voice Mode!",
    "url": "https://community.openai.com/t/keep-standard-voice-mode/1414888",
-   "replies": 68,
-   "likes": 306,
-   "views": 209,
+   "replies": 72,
+   "likes": 317,
+   "views": 240,
    "at": "2026-11-10T22:53:40Z"
   },
   {
@@ -17,7 +17,7 @@
    "url": "https://community.openai.com/t/introducing-businesses-in-chatgpt-in-beta/1414865",
    "replies": 9,
    "likes": 12,
-   "views": 2065,
+   "views": 2180,
    "at": "2026-11-10T21:16:54Z"
   },
   {
@@ -27,7 +27,7 @@
    "url": "https://community.openai.com/t/urgent-payment-successful-but-credits-not-added-to-account/1415066",
    "replies": 9,
    "likes": 3,
-   "views": 88,
+   "views": 97,
    "at": "2026-11-11T10:54:47Z"
   },
   {
@@ -37,18 +37,18 @@
    "url": "https://community.openai.com/t/the-gpt-6-1-sol-model-requires-a-newer-version-of-codex-please-upgrade-to-the-latest-app-or-cli-and-try-again/1414891",
    "replies": 7,
    "likes": 5,
-   "views": 597,
+   "views": 606,
    "at": "2026-11-10T23:03:07Z"
   },
   {
    "source": "OpenAI 論壇",
    "vendor": "openai",
-   "title": "Is this actually going to stay ('Context Window/Chat memory full)?",
-   "url": "https://community.openai.com/t/is-this-actually-going-to-stay-context-window-chat-memory-full/1414793",
-   "replies": 1,
-   "likes": 3,
-   "views": 102,
-   "at": "2026-11-10T17:09:52Z"
+   "title": "GPT-Image-2.6 cost calculator is wrong, underestimating new multipled costs",
+   "url": "https://community.openai.com/t/gpt-image-2-6-cost-calculator-is-wrong-underestimating-new-multipled-costs/1415123",
+   "replies": 0,
+   "likes": 2,
+   "views": 25,
+   "at": "2026-11-11T12:55:16Z"
   },
   {
    "source": "Google AI 論壇",
@@ -57,8 +57,18 @@
    "url": "https://discuss.ai.google.dev/t/swarm-architecture-insights-how-vibes-plug-anticipated-the-multi-agent-patterns-in-gemini-carbon-4-agy-desktop-2-31-0/199474",
    "replies": 2,
    "likes": 2,
-   "views": 86,
+   "views": 92,
    "at": "2026-11-10T19:17:11Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "Invalid UTF-8 / unpaired surrogates persisted in conversation state permanently break the ",
+   "url": "https://discuss.ai.google.dev/t/invalid-utf-8-unpaired-surrogates-persisted-in-conversation-state-permanently-break-the-session-and-crash-agent-execution-via-google-protobuf-value-desktop-2-29-0/199507",
+   "replies": 2,
+   "likes": 1,
+   "views": 32,
+   "at": "2026-11-11T00:10:22Z"
   },
   {
    "source": "Google AI 論壇",
@@ -77,7 +87,7 @@
    "url": "https://discuss.ai.google.dev/t/antigravity-model-unavailable-retrying-in-3s-attempt-1-9/199572",
    "replies": 1,
    "likes": 0,
-   "views": 46,
+   "views": 48,
    "at": "2026-11-11T06:46:47Z"
   },
   {
@@ -89,16 +99,6 @@
    "likes": 0,
    "views": 37,
    "at": "2026-11-10T21:26:38Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Model unavailable...after 300+ seconds... keeps repeating (draining quota?) [CARBON]",
-   "url": "https://discuss.ai.google.dev/t/model-unavailable-after-300-seconds-keeps-repeating-draining-quota-carbon/199502",
-   "replies": 1,
-   "likes": 0,
-   "views": 49,
-   "at": "2026-11-10T22:44:44Z"
   }
  ],
  "changelogs": [
@@ -177,6 +177,14 @@
   {
    "source": "Gemini changelog",
    "vendor": "google",
+   "date": "November 11, 2026",
+   "title": "{% id=\"11-11-2026\" %}",
+   "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
+   "at": "2026-11-11T00:00:00Z"
+  },
+  {
+   "source": "Gemini changelog",
+   "vendor": "google",
    "date": "November 10, 2026",
    "title": "{% id=\"11-10-2026\" %}",
    "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
@@ -197,14 +205,6 @@
    "title": ", API requests to `gemini-embedding-2-preview` route to",
    "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
    "at": "2026-11-06T00:00:00Z"
-  },
-  {
-   "source": "Gemini changelog",
-   "vendor": "google",
-   "date": "November 5, 2026",
-   "title": "{% id=\"11-05-2026\" %}",
-   "url": "https://ai.google.dev/gemini-api/docs/changelog?hl=en",
-   "at": "2026-11-05T00:00:00Z"
   },
   {
    "source": "DeepSeek updates",
@@ -297,9 +297,9 @@
  ],
  "errs": [],
  "diag": [
-  "Gemini changelog md: got html 134313b",
+  "Gemini changelog md: got html 134922b",
   "DeepSeek updates md: 18816b 0 entries head='# Change Log\\n\\n***\\n\\n## Date: 2026-10-17\\n\\n### Opening up the i'",
   "xAI release notes md: 19971b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## November\\n\\n### grok-i'"
  ],
- "updatedAt": "2026-11-11T16:59:57Z"
+ "updatedAt": "2026-11-11T18:08:17Z"
 }
