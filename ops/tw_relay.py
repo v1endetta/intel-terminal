@@ -824,77 +824,6 @@ def section(name, fn, budget, errs):
         SEC[name] = round(time.time() - t, 1)
 
 
-INSINFO = "https://ins-info.ib.gov.tw/customer/"
-
-
-def _html_tables(h):
-    """把 HTML 裡每個 <table> 轉成「列 × 格」的純文字。"""
-    import html as _h
-    out = []
-    for t in re.findall(r"<table\b.*?</table>", h, re.S | re.I):
-        rows = []
-        for tr in re.findall(r"<tr\b.*?</tr>", t, re.S | re.I):
-            cells = [re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", c))).strip()
-                     for c in re.findall(r"<t[hd]\b[^>]*>(.*?)</t[hd]>", tr, re.S | re.I)]
-            if any(cells):
-                rows.append(cells)
-        if rows:
-            out.append(rows[:400])
-    return out
-
-
-def _insinfo_query(page, fields):
-    """保險業公開資訊觀測站的查詢頁是 ASP.NET 表單：先開頁拿隱藏欄位，再帶條件送出。"""
-    import http.cookiejar
-    op = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
-    hd = {"User-Agent": UA}
-    h = op.open(urllib.request.Request(INSINFO + page, headers=hd), timeout=max(3, min(30, left()))).read().decode("utf-8", "replace")
-    form = dict(re.findall(r'<input type="hidden" name="([^"]+)"[^>]*value="([^"]*)"', h))
-    form.update(fields)
-    form["btnQuery"] = "查詢"
-    body = urllib.parse.urlencode(form).encode()
-    r = op.open(urllib.request.Request(INSINFO + page, data=body, headers={**hd, "Content-Type": "application/x-www-form-urlencoded",
-                                                                         "Referer": INSINFO + page}), timeout=max(3, min(40, left())))
-    return [t for t in _html_tables(r.read().decode("utf-8", "replace")) if len(t) > 2]
-
-
-def insinfo_weekly(state, errs):
-    """保險業公開資訊觀測站（只開放台灣 IP）：產險、壽險財務業務指標（每季，看各公司自留率等）、產險業務概況（每年）。
-    每 7 天查一次；從最新一季往回找到有資料的那季。失敗 6 小時後再試。"""
-    if time.time() - state.get("insinfo_at", 0) < 7 * 86400:
-        return
-    state["insinfo_at"] = time.time() - 7 * 86400 + 6 * 3600
-    y = NOW.year - 1911
-    quarters = [(yy, q) for yy in (y, y - 1) for q in (4, 3, 2, 1)]
-    out = {}
-    for key, page in (("p_ind", "RPT-06161601.aspx"), ("l_ind", "RPT-06161610.aspx")):
-        for yy, q in quarters:
-            if left() < 15:
-                break
-            try:
-                tb = _insinfo_query(page, {"ddlComapnyName": "0", "DropDownList_BYear": str(yy), "DropDownList_BQuarter": str(q)})
-            except Exception as e:  # noqa: BLE001
-                errs["insinfo:" + key] = repr(e)[:160]
-                break
-            if tb:
-                out[key] = {"y": yy, "q": q, "tables": tb}
-                break
-    for yy in (y - 1, y - 2):
-        if left() < 15:
-            break
-        try:
-            tb = _insinfo_query("RPT-07010801.aspx", {"ddlComapnyName": "0", "DropDownList_BYear": str(yy), "DropDownList_EYear": str(yy)})
-        except Exception as e:  # noqa: BLE001
-            errs["insinfo:p_biz"] = repr(e)[:160]
-            break
-        if tb:
-            out["p_biz"] = {"y": yy, "tables": tb}
-            break
-    if out:
-        put_doc("static/insinfo", out)
-    if len(out) == 3:
-        state["insinfo_at"] = time.time()
-
 
 def static_daily(state, errs):
     static_at = state.setdefault("static_at", {})
@@ -967,8 +896,6 @@ def main():
     section("city_cctv", lambda: city_cctv(state, errs), 30, errs)
     section("static", lambda: static_daily(state, errs), 60, errs)
     section("villages", lambda: villages_once(state, errs), 150, errs)
-    if SLOT == 3:
-        section("insinfo", lambda: insinfo_weekly(state, errs), 90, errs)
 
     last = {"at": NOW_ISO, "ok": sorted(docs), "errs": errs, "rows": {k: len(d["rows"]) for k, d in docs.items()},
             "sec": round(time.time() - T_START, 1), "sections": {k: v for k, v in SEC.items() if v >= 0.1}}
