@@ -893,6 +893,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-11T03:26:50Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-11T03:46:01Z"
 }
