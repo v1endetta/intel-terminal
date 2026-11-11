@@ -76,6 +76,20 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "Poundland owner extracted millions when chain was on ‘knife-edge’, MPs say",
+   "url": "https://www.theguardian.com/business/2026/nov/11/poundland-owner-chain-mps-claim-high-court",
+   "at": "2026-11-11T19:10:26Z",
+   "sec": "Business"
+  },
+  {
+   "source": "Guardian",
+   "title": "Double amputee marathon runner criticises Badenoch for ‘weaponising his success’",
+   "url": "https://www.theguardian.com/sport/2026/nov/11/double-amputee-runner-richard-whitehead-badenoch-weaponising-success-welfare",
+   "at": "2026-11-11T19:07:36Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
    "title": "Millions join Spain’s first general strike in 14 years in protest at housing costs",
    "url": "https://www.theguardian.com/world/2026/nov/11/spain-general-strike-housing-costs",
    "at": "2026-11-11T18:51:02Z",
@@ -139,18 +153,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/11/ukraine-talks-in-abu-dhabi-bring-progress-on-prisoners-but-not-on-peace",
    "at": "2026-11-11T17:03:43Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "US Treasury Secretary Scott Bessent relocated after alleged Iranian threats",
-   "url": "https://www.bbc.co.uk/news/articles/cqr7gr0010r2o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-11T16:45:11Z"
-  },
-  {
-   "source": "BBC",
-   "title": "Indonesia's vice president resigns amid signs ruling alliance is fraying",
-   "url": "https://www.bbc.co.uk/news/articles/cmvgxgz87qqro?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-11T16:38:07Z"
   }
  ],
  "groups": [
@@ -647,9 +649,9 @@
  "signals": {
   "gdelt": {
    "vol": 3.018,
-   "vol_ratio": 1.13,
+   "vol_ratio": 1.09,
    "tone": 0.59,
-   "tone_at": "2026-11-11T17:07:34Z",
+   "tone_at": "2026-11-11T19:27:39Z",
    "spark": [
     2.038,
     1.986,
@@ -666,7 +668,7 @@
     3.018,
     3.018
    ],
-   "at": "2026-11-11T18:50:31Z"
+   "at": "2026-11-11T19:27:39Z"
   },
   "wiki": {
    "zh": [
@@ -776,6 +778,21 @@
     "hot": true
    },
    {
+    "term": "Anthropic",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "Anthropic",
+     "Mashable",
+     "數位時代"
+    ],
+    "sample": {
+     "title": "IPO前夕發表AI辦公套件！Anthropic推出Claude Sheets，正面挑戰微軟與Google",
+     "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNUElacWxJV2YtTkpFWjRoa1NhOGo3T0tjQnplSGNIRkljUEJCOFRyd2Y0MThSRU9KM0RtNTZDX1VpbVBwZmV4a0VPUVl6M3hLUV9GNzZHSnktZjhYbzIwZ1dvR0MxWlY4VENGMzA3aEwydVFiVWNkdVZTcUpTRkhNS0puRkZqUQ?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "網攻",
     "n": 4,
     "src": 3,
@@ -806,11 +823,11 @@
     "hot": true
    },
    {
-    "term": "Anthropic",
+    "term": "Claude",
     "n": 3,
     "src": 3,
     "sources": [
-     "Anthropic",
+     "HN",
      "Mashable",
      "數位時代"
     ],
@@ -827,21 +844,6 @@
     "sources": [
      "HN",
      "SiliconANGLE",
-     "數位時代"
-    ],
-    "sample": {
-     "title": "IPO前夕發表AI辦公套件！Anthropic推出Claude Sheets，正面挑戰微軟與Google",
-     "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNUElacWxJV2YtTkpFWjRoa1NhOGo3T0tjQnplSGNIRkljUEJCOFRyd2Y0MThSRU9KM0RtNTZDX1VpbVBwZmV4a0VPUVl6M3hLUV9GNzZHSnktZjhYbzIwZ1dvR0MxWlY4VENGMzA3aEwydVFiVWNkdVZTcUpTRkhNS0puRkZqUQ?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "Claude",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "HN",
-     "Mashable",
      "數位時代"
     ],
     "sample": {
@@ -882,8 +884,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-11T19:10:17Z"
+ "errs": [],
+ "updatedAt": "2026-11-11T19:27:39Z"
 }
