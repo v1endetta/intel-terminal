@@ -76,6 +76,12 @@
  "intl": [
   {
    "source": "BBC",
+   "title": "Russia-Ukraine talks turn to post-war security but end without breakthrough",
+   "url": "https://www.bbc.co.uk/news/articles/ck792we7zrz4o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-11T18:04:58Z"
+  },
+  {
+   "source": "BBC",
    "title": "Spain sees widespread disruption in first general strike for 14 years",
    "url": "https://www.bbc.co.uk/news/articles/cwvg25nypmrvo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-11T17:44:32Z"
@@ -126,12 +132,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/11/is-the-us-blue-wave-a-turning-point-for-europe-too",
    "at": "2026-11-11T15:40:52Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Russia-Ukraine talks turn to post-war security but end without breakthrough",
-   "url": "https://www.bbc.co.uk/news/articles/ck792we7zrz4o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-11T15:05:11Z"
   },
   {
    "source": "Guardian",
@@ -807,6 +807,21 @@
     "hot": true
    },
    {
+    "term": "Gemini",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Gemini",
+     "Google AI",
+     "股市報價& 財經新聞"
+    ],
+    "sample": {
+     "title": "谷歌內部測試Gemini 4新模型Hydrogen，主打速度與效率 作者 Investing.com - Investi",
+     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9zM0ZTWW5TbGFHNUJaY2ZVakxBWjQ3NjFyTmNwUzd3M29XNVBJYVU5RjBJQ2ZhZVR4YmZ4Uk1aWDZFaWtjR3B6cE0wVU5uY0FubkdVMW9FXzltM3Aza21TTFI0S3YwZklrYTN0UHZSWlBlYWh1aDB3?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "Meta",
     "n": 3,
     "src": 3,
@@ -822,7 +837,7 @@
     "hot": true
    },
    {
-    "term": "台積電",
+    "term": "ADR",
     "n": 3,
     "src": 3,
     "sources": [
@@ -837,7 +852,7 @@
     "hot": true
    },
    {
-    "term": "ADR",
+    "term": "台積電",
     "n": 3,
     "src": 3,
     "sources": [
@@ -865,26 +880,11 @@
      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9WRWVlWEFubXBRV1ljUWE3MFlhOTVuNHFjOEVKZG5PVm1iajJBSTNrOFp3ZVljV0pHUl82b1dfeHFwWm1TcmU0X3dZMWtXYUhvREtlWFFqRlRCaEVDM1V6SkpjNVA?oc=5"
     },
     "hot": true
-   },
-   {
-    "term": "網攻",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "CIO Taiwan",
-     "LINE TODAY",
-     "moda — 數位發展部"
-    ],
-    "sample": {
-     "title": "AI網攻席捲全球！數發部公布個資防禦五大行動與對抗機制 | 太報",
-     "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1hUmo2bWhxS2hZS2k0bjVpSnlhQ0ptd29aTkVOZkJZLWxHaDJWbXhHOWtqWjhJdmR6QXdMMGpKbmpzc0MwV0JCWWhTSXh6Vy1pdTg3Q0l3?oc=5"
-    },
-    "hot": true
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-11T17:59:43Z"
+ "updatedAt": "2026-11-11T18:16:04Z"
 }
