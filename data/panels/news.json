@@ -76,17 +76,24 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "Nvidia’s value tumbles by $430bn since spy allegations, as major US law firm hired to inve",
+   "url": "https://www.theguardian.com/business/live/2026/nov/11/nvidia-spy-allegations-us-law-firm-hired-investigation-stock-markets-pound-dollar-ftse-nasdaq-latest-news-updates",
+   "at": "2026-11-11T13:19:52Z",
+   "sec": "Business"
+  },
+  {
+   "source": "Guardian",
+   "title": "Nissan reduces petrol car production as EV sales boom in China",
+   "url": "https://www.theguardian.com/business/2026/nov/11/nissan-reduces-petrol-car-production-as-ev-sales-boom-in-china",
+   "at": "2026-11-11T13:11:58Z",
+   "sec": "Business"
+  },
+  {
+   "source": "Guardian",
    "title": "US envoys to meet Putin and Zelenskyy separately after peace talks see some progress - Eur",
    "url": "https://www.theguardian.com/world/live/2026/nov/11/europe-ukraine-russia-us-talks-abu-dhabi-zelenskyy-latest-news-updates",
    "at": "2026-11-11T13:07:01Z",
    "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Nvidia’s value tumbles by $430bn since spy allegations, as major US law firm hired to inve",
-   "url": "https://www.theguardian.com/business/live/2026/nov/11/nvidia-spy-allegations-us-law-firm-hired-investigation-stock-markets-pound-dollar-ftse-nasdaq-latest-news-updates",
-   "at": "2026-11-11T13:01:32Z",
-   "sec": "Business"
   },
   {
    "source": "BBC",
@@ -146,13 +153,6 @@
    "title": "US House blocks bid to impeach Defence Secretary Pete Hegseth, for now",
    "url": "https://www.bbc.co.uk/news/articles/cxly4y5jzl0qo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-11T11:47:22Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "Democrats’ US election sweep brings the price of their promised social contract into focus",
-   "url": "https://www.theguardian.com/business/2026/nov/11/democrats-election-medicaid-costs",
-   "at": "2026-11-11T11:00:46Z",
-   "sec": "Business"
   }
  ],
  "groups": [
@@ -656,9 +656,9 @@
  "signals": {
   "gdelt": {
    "vol": 3.018,
-   "vol_ratio": 1.31,
+   "vol_ratio": 1.29,
    "tone": 0.59,
-   "tone_at": "2026-11-11T07:21:49Z",
+   "tone_at": "2026-11-11T13:26:32Z",
    "spark": [
     1.855,
     2.038,
@@ -675,7 +675,7 @@
     3.105,
     3.018
    ],
-   "at": "2026-11-11T12:48:39Z"
+   "at": "2026-11-11T13:26:32Z"
   },
   "wiki": {
    "zh": [
@@ -801,6 +801,21 @@
     "hot": true
    },
    {
+    "term": "黃仁勳",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "PTT",
+     "Wiki",
+     "中央社"
+    ],
+    "sample": {
+     "title": "黃仁勳爭議牽動東南亞晶片供應鏈監管　泰專家：資料中心受考驗",
+     "url": "https://www.cna.com.tw/news/afe/202611110321.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "Google",
     "n": 3,
     "src": 3,
@@ -827,21 +842,6 @@
     "sample": {
      "title": "整合案源、工班與 AI 設計 曜生活打造「室內設計界的 Uber」",
      "url": "https://news.google.com/rss/articles/CBMimANBVV95cUxNcW5BTG02RWplZDNhMF9jaHVuMEZmME5MdG5oVXc4Mk1hMDJuSU5qTW42MGFNMkt3cjREU0N3eXoyb1cyV0VTSE54M29tS01jRzA2b1RpSG5XQ3ExYkdBWDRTaUtZT0laOU1LVkFHSW1HYm5xdU1QSTZiMnJRdWFENVRmWkNqcDNreURUcmduYnlBYnA3Z25QWUFSQWpaYWFzY1NwWDhIZDFURG1oeEF1THhsZWdJTmJWcFhwc1FRV3lMd21aa0FVbl9WdURvS3g5eHZoN1p6WUJJNWZpOVNHLTNTbEFPZkt5cENjUnJScE9fWDJhZWdiX2tKZDhEYklYWHVCVXRKbWhjS2J5UEZkZjNSV3FLLTFVZndKYUhjZ0djRTJia19TMDNBX1pobDhHSjU5M3JjNnhuMDlfdzRLUjFYNGU1Z2JWQjVPVkdrVjllUkd1R0lpcG9XSHhWU1g4Qk90eDhWcDR3WjdScEpjcWt6ME5ZbHZyOUxGYW5PYmQzVXJ6dUpGZWdKNEZuUHlfTXR6MDNseXI?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "黃仁勳",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "PTT",
-     "Wiki",
-     "中央社"
-    ],
-    "sample": {
-     "title": "黃仁勳爭議牽動東南亞晶片供應鏈監管　泰專家：資料中心受考驗",
-     "url": "https://www.cna.com.tw/news/afe/202611110321.aspx"
     },
     "hot": true
    },
@@ -892,8 +892,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-11T13:09:57Z"
+ "errs": [],
+ "updatedAt": "2026-11-11T13:26:32Z"
 }
