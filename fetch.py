@@ -12533,6 +12533,315 @@ def p_labor():
             "src": "勞動部統計月報：表 6-1 勞保投保人數（按行業）、表 2-12 廠商職位空缺（每季）、表 4-4 積欠工資墊償"}
 
 
+# ---------- 保險流向：人在買什麼保險（壽險公會月報）、保險公司把風險分給誰（保發中心年報、觀測站季報） ----------
+TII_API = "https://openapi.tii.org.tw/TIIOPENDATA/API/CSV_EXPORT?TableID="
+_RID = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id"
+
+
+def _col_i(c):
+    n = 0
+    for ch in c:
+        n = n * 26 + ord(ch) - 64
+    return n
+
+
+def _xlsx_book(b: bytes):
+    """xlsx 全部工作表 → {表名: [{欄字母: 字串}]}（_xlsx_rows 只讀第一張）。"""
+    z = zipfile.ZipFile(io.BytesIO(b))
+    ss = []
+    if "xl/sharedStrings.xml" in z.namelist():
+        ss = ["".join(t.text or "" for t in si.iter(_XM + "t")) for si in ET.fromstring(z.read("xl/sharedStrings.xml")).findall(_XM + "si")]
+    rid = {r.get("Id"): r.get("Target") for r in ET.fromstring(z.read("xl/_rels/workbook.xml.rels"))}
+    out = {}
+    for sh in ET.fromstring(z.read("xl/workbook.xml")).iter(_XM + "sheet"):
+        t = rid.get(sh.get(_RID)) or ""
+        path = t.lstrip("/") if t.startswith("/") else "xl/" + t
+        if path not in z.namelist():
+            continue
+        rows = []
+        for r in ET.fromstring(z.read(path)).iter(_XM + "row"):
+            d = {}
+            for c in r.findall(_XM + "c"):
+                if c.get("t") == "inlineStr":
+                    x = "".join(t.text or "" for t in c.iter(_XM + "t"))
+                else:
+                    v = c.find(_XM + "v")
+                    x = v.text if v is not None else ""
+                    if c.get("t") == "s" and x:
+                        x = ss[int(x)]
+                d[re.sub(r"\d", "", c.get("r"))] = x or ""
+            rows.append(d)
+        out[sh.get("name")] = rows
+    return out
+
+
+_LIA_ROW = re.compile(r"^(?:(\S.*?)\s+)?(傳統型|投資型|小\s*計|總\s*計)\s+(-?[\d,]+)\s+(-?[\d,]+)\s+(-?[\d.]+)\s*$")
+
+
+def _lia_table(block):
+    """壽險公會業績統計的表格（pypdf 抽出的文字）：{分組: {傳統型/投資型/小計/總計: [今年累計, 去年同期, 成長率]}}。"""
+    out, grp = {}, None
+    for ln in block.splitlines():
+        s = ln.strip()
+        if not s:
+            continue
+        m = _LIA_ROW.match(s)
+        if m:
+            g = re.sub(r"\s+", "", m.group(1)) if m.group(1) else grp
+            if m.group(1):
+                grp = g
+            out.setdefault(g or "", {})[re.sub(r"\s+", "", m.group(2))] = [num(m.group(3)), num(m.group(4)), num(m.group(5))]
+        elif re.fullmatch(r"[一-鿿 ]{2,6}", s):
+            grp = re.sub(r"\s+", "", s)
+    return out
+
+
+def _lia_parse(txt):
+    m = re.search(r"(\d{3})\s*年\s*1\s*[~～\-－]\s*(\d{1,2})\s*月\s*壽險業?績統計", txt)
+    if not m:
+        raise RuntimeError("壽險公會月報：找不到期間")
+    ym = f"{int(m.group(1)) + 1911}-{int(m.group(2)):02d}"
+    parts = re.split(r"保費收入統計表\s*（含非保險合約）", txt, maxsplit=1)
+    core, incl = parts[0], (parts[1] if len(parts) > 1 else "")
+
+    def seg(s, a, b=None):
+        if a not in s:
+            return ""
+        s = s.split(a, 1)[1]
+        return s.split(b, 1)[0] if b else s
+    t1 = _lia_table(seg(core, "保費收入統計表", "各險別"))
+    t2 = _lia_table(seg(core, "各險別初年度保費收入統計表", "綜觀"))
+    if not t1.get("初年度") or not t2:
+        raise RuntimeError("壽險公會月報：表格解析失敗")
+    ch, chp = {}, {}
+    for ln in seg(core, "來源別統計表", "").splitlines():
+        r = re.match(r"^\s*(保費收入|個人壽險|個人年金|投資型保險|個人傷害、健康)\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)", ln)
+        if r:
+            ch[r.group(1)] = [num(r.group(i)) for i in range(2, 6)]
+    i1 = _lia_table(incl.split("各險別", 1)[0]) if incl else {}
+    i2 = _lia_table(seg(incl, "各險別初年度保費收入統計表", "")) if incl else {}
+    fy = t1["初年度"]
+    lines = []
+    for g, k, nm in (("壽險", "傳統型", "傳統壽險"), ("壽險", "投資型", "投資型壽險"), ("年金險", "投資型", "投資型年金"), ("年金險", "傳統型", "傳統年金"),
+                     ("健康險", "傳統型", "健康險"), ("傷害險", "傳統型", "傷害險")):
+        v = (t2.get(g) or {}).get(k)
+        if v:
+            lines.append({"name": nm, "cur": v[0], "ly": v[1], "g": v[2]})
+    tot = ch.get("保費收入")
+    out = {"ym": ym, "unit": "百萬元",
+           "fy": {k: {"cur": v[0], "ly": v[1], "g": v[2]} for k, v in fy.items()},
+           "renew": {k: {"cur": v[0], "ly": v[1], "g": v[2]} for k, v in (t1.get("續年度") or {}).items()},
+           "total": {k: {"cur": v[0], "ly": v[1], "g": v[2]} for k, v in (t1.get("合計") or {}).items()},
+           "lines": lines,
+           "channel": ({"names": ["壽險公司自己的業務員", "銀行與銀行系經代", "傳統經紀人、代理人"], "total": tot,
+                        "rows": {k: v for k, v in ch.items() if k != "保費收入"}} if tot else None)}
+    if i1.get("初年度"):
+        out["fy_incl"] = {k: {"cur": v[0], "ly": v[1], "g": v[2]} for k, v in i1["初年度"].items()}
+        a = (i2.get("年金險") or {}).get("投資型")
+        if a:
+            out["annuity_inv_incl"] = {"cur": a[0], "ly": a[1], "g": a[2]}
+    return out
+
+
+def _tii_lines(rows):
+    """保發中心保費統計表：表頭列有「險 別」，下一列是項目；資料列第一格是「114年」。回傳 {險別: {年: [簽單, 再保費收入, 再保費支出, 自留]}}。"""
+    res, hdr = {}, {}
+    for d in rows:
+        cells = {c: str(v).strip() for c, v in d.items() if str(v).strip()}
+        if any(_nz(v) == "險別" for v in cells.values()):
+            hdr = {}
+            for c, v in cells.items():
+                nm = re.split(r"\s{2,}|\s+(?=[A-Za-z(（])", v)[0].strip()
+                if _nz(nm) in ("險別", "") or re.match(r"[A-Za-z]", nm):
+                    continue
+                hdr[_col_i(c)] = (c, _nz(nm))
+            continue
+        if not hdr:
+            continue
+        yl = {_col_i(c): int(m.group(1)) + 1911 for c, v in cells.items() if (m := re.match(r"^(\d{3})年$", _nz(v)))}
+        if not yl:
+            continue
+        for ci, (c, nm) in hdr.items():
+            left = [k for k in yl if k < ci]
+            if not left:
+                continue
+            y = yl[max(left)]
+            vals = [num(d.get(_i2col(ci + j))) for j in range(4)]
+            if vals[0] is not None:
+                res.setdefault(nm, {})[y] = vals
+    return res
+
+
+def _i2col(n):
+    s = ""
+    while n:
+        n, r = divmod(n - 1, 26)
+        s = chr(65 + r) + s
+    return s
+
+
+def _tii_companies(rows):
+    """各公司保費（本國／外商工作表）：公司名在 A 欄、合計的簽單／再保費收入／再保費支出／自留在 B–E。"""
+    out = []
+    for d in rows:
+        nm = _nz(d.get("A"))
+        if not nm or re.search(r"公司|項目|險別|^\d{3}年$|註", nm):
+            continue
+        v = [num(d.get(c)) for c in "BCDE"]
+        if v[0] is None or v[2] is None:
+            continue
+        out.append({"name": nm, "direct": v[0], "re_in": v[1] or 0, "ceded": v[2], "retained": v[3]})
+    return out
+
+
+def p_insure():
+    errs, out = [], {}
+    prev = load_prev("insure") or {}
+    # 1) 人在買什麼保險：壽險公會「壽險業業績統計」PDF（每月約 20 號公布 1 月到上個月的累計）
+    try:
+        h = get("https://www.lia-roc.org.tw/?catg_id=10", timeout=40).text
+        url = next((m.group(1) for m in re.finditer(r'<a\b[^>]*href="([^"]+?\.pdf)"[^>]*>(.*?)</a>', h, re.S)
+                    if "壽險業業績統計" in re.sub(r"<[^>]+>", "", m.group(0))), None)
+        if not url:
+            raise RuntimeError("找不到壽險業業績統計連結")
+        if (prev.get("life") or {}).get("url") == url and (prev.get("life") or {}).get("fy"):
+            out["life"] = prev["life"]
+        else:
+            import pypdf
+            rd = pypdf.PdfReader(io.BytesIO(get(url, timeout=60).content))
+            life = _lia_parse("\n".join((p.extract_text() or "") for p in rd.pages))
+            life["url"] = url
+            out["life"] = life
+        L = out["life"]
+        ym = L["ym"]
+        for k in ("傳統型", "投資型", "小計"):
+            hist_put("insure", "fy_" + {"傳統型": "trad", "投資型": "inv", "小計": "total"}[k], ym, (L["fy"].get(k) or {}).get("cur"))
+        if L.get("channel"):
+            t = L["channel"]["total"]
+            for i, k in enumerate(("self", "bank", "broker")):
+                hist_put("insure", "ch_" + k, ym, round(t[i] / t[3] * 100, 2) if t[3] else None)
+        # 單月＝這個月累計減上個月累計（同一年才減；1 月本身就是單月）
+        def monthly(key):
+            s = dict(HISTORY.get("insure", {}).get(key, []))
+            res = []
+            for k in sorted(s):
+                y, m = int(k[:4]), int(k[5:])
+                pk = f"{y}-{m - 1:02d}"
+                if m == 1:
+                    res.append([k, s[k]])
+                elif pk in s:
+                    res.append([k, round(s[k] - s[pk], 1)])
+            return res[-13:]
+        L["monthly"] = {"total": monthly("fy_total"), "inv": monthly("fy_inv")}
+    except Exception as e:  # noqa: BLE001
+        errs.append("壽險公會月報: " + safe_err(e))
+        if prev.get("life"):
+            out["life"] = prev["life"]
+    # 2) 壽險公司的錢放哪：保發中心開放資料 I171 人身保險業資金運用（每月）
+    try:
+        rows = list(csv.DictReader(io.StringIO(get(TII_API + "I171", timeout=60).content.decode("utf-8-sig", "replace"))))
+        mon = [r for r in rows if (r.get("月") or "").strip()]
+        yr = sorted((r for r in rows if not (r.get("月") or "").strip() and (r.get("年") or "").isdigit()), key=lambda r: r["年"])
+        last = max(mon, key=lambda r: (r["年"], r["月"]))
+        ye = yr[-1] if yr else None
+        k = f"{last['年']}-{int(last['月']):02d}"
+        pick = lambda r, f: num((r or {}).get(f + "_占率"))
+        out["funds"] = {"ym": k, "ye": ye and ye["年"], "total": num(last.get("資金運用總額_金額")),
+                        "items": [{"name": nm, "now": pick(last, f), "ye": pick(ye, f)} for nm, f in
+                                  (("國外投資", "國外投資"), ("股票", "股票"), ("國內公債", "公債及國庫券"), ("公司債", "公司債"),
+                                   ("不動產", "不動產"), ("保單貸款", "壽險貸款"), ("放款", "放款"), ("銀行存款", "銀行存款"))]}
+        hist_put("insure", "foreign_share", k, pick(last, "國外投資"))
+        hist_put("insure", "stock_share", k, pick(last, "股票"))
+        for r in yr[-12:]:
+            hist_put("insure", "foreign_share", f"{r['年']}-12", pick(r, "國外投資"))
+        out["funds"]["foreign_series"] = HISTORY.get("insure", {}).get("foreign_share", [])[-24:]
+    except Exception as e:  # noqa: BLE001
+        errs.append("資金運用: " + safe_err(e))
+    # 3) 地震險投保率：I26 住宅地震保險（每月）
+    try:
+        rows = list(csv.DictReader(io.StringIO(get(TII_API + "I26", timeout=60).content.decode("utf-8-sig", "replace"))))
+        mon = sorted(((f"{r['年']}-{int(r['月']):02d}", r) for r in rows if (r.get("月") or "").strip()), key=lambda x: x[0])
+        for k, r in mon:
+            hist_put("insure", "quake_rate", k, num(r.get("投保率")))
+        k, r = mon[-1]
+        ly = dict(mon).get(f"{int(k[:4]) - 1}{k[4:]}")
+        out["quake"] = {"ym": k, "rate": num(r.get("投保率")), "rate_ly": num((ly or {}).get("投保率")), "policies": num(r.get("有效件數")),
+                        "series": [[a, num(b.get("投保率"))] for a, b in mon][-24:]}
+    except Exception as e:  # noqa: BLE001
+        errs.append("地震險: " + safe_err(e))
+    # 4) 保險公司把風險分出去多少：保發中心統計年報 6-1 產險保費統計表（每年 7 月）
+    try:
+        h = get("https://www.tii.org.tw/tii/information/information1/000006.html", timeout=40).text
+        m = re.search(r'href="([^"]*/files/6-1[^"]*\.xlsx)"', h)
+        if not m:
+            raise RuntimeError("找不到 6-1 保費統計表")
+        url = "https://www.tii.org.tw" + m.group(1) if m.group(1).startswith("/") else m.group(1)
+        if (prev.get("pc") or {}).get("url") == url and (prev.get("pc") or {}).get("lines"):
+            out["pc"] = prev["pc"]
+        else:
+            book = _xlsx_book(get(url, timeout=90).content)
+            tot = next((v for k, v in book.items() if "總表" in k), None)
+            L = _tii_lines(tot or [])
+            if not L.get("合計"):
+                raise RuntimeError("6-1 總表解析失敗")
+            y = max(L["合計"])
+            share = lambda v: round(v[2] / (v[0] + v[1]) * 100, 1) if v and (v[0] + v[1]) else None
+            lines = []
+            for nm, s in L.items():
+                v, pv = s.get(y), s.get(y - 1)
+                if not v or nm == "合計" or (v[0] or 0) + (v[1] or 0) < 3e5:   # 一年不到 3 億的小險種略過
+                    continue
+                lines.append({"name": nm, "prem": v[0] + v[1], "ceded": v[2], "share": share(v), "share_ly": share(pv)})
+            lines.sort(key=lambda x: -x["ceded"])
+            cos = []
+            for k, rows in book.items():
+                if "本國" in k or "外商" in k:
+                    for c in _tii_companies(rows):
+                        g = c["direct"] + c["re_in"]
+                        if g > 0:
+                            cos.append({"name": c["name"], "foreign": "外商" in k, "prem": g, "ceded": c["ceded"], "share": round(c["ceded"] / g * 100, 1)})
+            cos.sort(key=lambda x: -x["prem"])
+            t, tp = L["合計"][y], L["合計"].get(y - 1)
+            out["pc"] = {"url": url, "year": y, "total": {"direct": t[0], "re_in": t[1], "ceded": t[2], "retained": t[3], "share": share(t), "share_ly": share(tp)},
+                         "lines": lines, "companies": cos}
+        hist_put("insure", "pc_ceded_share", f"{out['pc']['year']}-12", out["pc"]["total"]["share"])
+    except Exception as e:  # noqa: BLE001
+        errs.append("產險保費統計表: " + safe_err(e))
+        if prev.get("pc"):
+            out["pc"] = prev["pc"]
+    # 5) 在台灣註冊的專業再保公司收了多少：K01 再保費統計表（每年）
+    try:
+        rows = list(csv.DictReader(io.StringIO(get(TII_API.replace("TIIOPENDATA", "TIIOpenData") + "K01", timeout=60).content.decode("utf-8-sig", "replace"))))
+        rows = sorted((r for r in rows if (r.get("西元年") or "").isdigit()), key=lambda r: r["西元年"])
+        r, rp = rows[-1], (rows[-2] if len(rows) > 1 else None)
+        f = lambda x, k: num((x or {}).get(k))
+        life_in = (f(r, "人壽保險再保費收入") or 0) + (f(r, "（傷害險，健康險及學生團體險）再保費收入") or 0)
+        out["re"] = {"year": int(r["西元年"]), "in": f(r, "再保費收入合計"), "in_ly": f(rp, "再保費收入合計"), "life_in": life_in,
+                     "nonlife_in": (f(r, "再保費收入合計") or 0) - life_in,
+                     "lines": [{"name": nm, "in": f(r, nm + "再保費收入")} for nm in ("火災保險", "汽車保險", "其他財產保險", "貨物運輸保險", "船體保險", "人壽保險")]
+                     + [{"name": "傷害、健康險", "in": f(r, "（傷害險，健康險及學生團體險）再保費收入")}]}
+        pc = out.get("pc") or {}
+        if pc.get("year") == out["re"]["year"]:
+            T = pc["total"]
+            # 估算：產險公司分出的再保費，扣掉在台註冊專業再保收的產險部分、扣掉產險公司之間互相收的，剩下的流向沒在台灣註冊的再保公司（多半在海外）
+            off = T["ceded"] - out["re"]["nonlife_in"] - T["re_in"]
+            out["re"]["offshore_est"] = {"amt": off, "share": round(off / T["ceded"] * 100) if T["ceded"] else None}
+    except Exception as e:  # noqa: BLE001
+        errs.append("專業再保: " + safe_err(e))
+    # 6) 中再保（台灣唯一本土專業再保）月營收
+    try:
+        r = next((x for x in gjson("https://openapi.twse.com.tw/v1/opendata/t187ap05_L") if x.get("公司代號") == "2851"), None)
+        if r:
+            out["centralre"] = {"ym": roc_ym(r.get("資料年月")), "rev": num(r.get("營業收入-當月營收")), "yoy": num(r.get("營業收入-去年同月增減(%)")),
+                                "ytd_yoy": num(r.get("累計營業收入-前期比較增減(%)"))}
+    except Exception as e:  # noqa: BLE001
+        errs.append("中再保營收: " + safe_err(e))
+    if not (out.get("life") or out.get("pc")):
+        raise RuntimeError("; ".join(errs)[:300])
+    out["errs"] = errs
+    out["src"] = "壽險公會壽險業業績統計（每月）、保發中心開放資料 I171／I26／K01、保發中心統計年報 6-1、證交所月營收、保險業公開資訊觀測站"
+    return out
+
 # ---------- 企業壓力：退票（央行）＋ 減班休息（勞動部每月兩次公布；官方沒有結構化資料，從新聞標題抽數字） ----------
 def p_stress():
     errs, out = [], {}
@@ -13795,6 +14104,7 @@ run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Feder
 run("exports", p_exports, keep_if_fresh_hours=24 if "nonee_yoy3" in json.dumps(load_prev("exports") or {}) else 0)  # 新增非電子出口時先重抓一次； 台灣出口結構：月資料，每月 9 日前後公布
 run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
 run("labor", p_labor, keep_if_fresh_hours=24)  # 誰在擴張：勞動部統計月報（投保人數、職位空缺、積欠工資墊償），月資料一天看一次就好
+run("insure", p_insure, keep_if_fresh_hours=24)  # 保險流向：壽險公會月報（每月 20 號左右）、保發中心開放資料與年報；一天看一次就好
 run("logistics", p_logistics, keep_if_fresh_hours=1)  # 全球物流：風暴要即時，運價週／日資料
 run("aicycle", p_aicycle, keep_if_fresh_hours=6)
 run("champions", p_champions, keep_if_fresh_hours=12)  # 台灣隱形冠軍：月營收，半天抓一次  # AI 循環：資本支出一季一次、營收每月、DRAM 每日
