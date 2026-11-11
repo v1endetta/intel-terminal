@@ -623,10 +623,10 @@
      "kw": "灣區 OR 舊金山 OR 加州 台灣人"
     },
     {
-     "source": "壹蘋新聞網",
-     "title": "台中1-10月房市移轉年減7.4% 「三大屯區」逆勢展現剛性支撐力",
-     "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOR0NYbWtSdTVMYTY5Wnc5RVdJay1NeHJLN0xRQkt0R2ZfRnJ1dkRyQVdidGU4d3hESTk0NkFsc09qMTBTT1FaeDFEdTQ5YjF1TVFxMGJMQ0tuLS0ycVNWeW1EalFlVGhyaFlSMHJsekcteUZJbUFtUHltSGp0dFRxYjhoSQ?oc=5",
-     "at": "2026-11-10T23:50:00Z",
+     "source": "好房網News",
+     "title": "七期到十四期建設接力！台中三屯區房市逆勢突圍",
+     "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE93LWdTaExSQVRRUmdKZFRrUERhZzY3QUZVVDFkdS1Fb1dXeU16MEE3RWlFSUd4QWJCMWRyYmF6Tm5DSFoxWEdqZzNNbWVKa3VNZ2JYUzhVR2dqZEpydUI3N05ORkRjQjVBcFdZ0gFwQVVfeXFMTUJwWEwyRE52SG9Sc1RWaGhOazBOc3hzUE1jZ0RVdjNSaHdkaUNEUDY2eXFCR3RnUk5ZWUVPenYxS0lCXzExLWp2U2t5S3d6MHZtMjlJNkdQRHJqU2drb0RSdDdEZ2VGYjloYUxIM0V4QQ?oc=5",
+     "at": "2026-11-11T00:15:00Z",
      "kw": "潭子 OR 台中 北屯"
     }
    ],
@@ -637,7 +637,7 @@
     8,
     33,
     40,
-    7
+    8
    ],
    "days7": [
     "2026-11-05",
@@ -652,8 +652,8 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 3.02,
-   "vol_ratio": 1.66,
+   "vol": 2.988,
+   "vol_ratio": 1.52,
    "tone": 0.45,
    "tone_at": "2026-11-10T22:02:41Z",
    "spark": [
@@ -670,9 +670,9 @@
     1.182,
     1.971,
     3.105,
-    3.02
+    2.988
    ],
-   "at": "2026-11-11T01:04:45Z"
+   "at": "2026-11-11T02:33:58Z"
   },
   "wiki": {
    "zh": [
@@ -750,29 +750,12 @@
     "hot": true
    },
    {
-    "term": "台積",
+    "term": "台積電",
     "n": 6,
     "src": 6,
     "sources": [
      "ETtoday財經雲",
      "PTT",
-     "Yahoo新聞",
-     "中央社",
-     "經濟日報",
-     "自由財經"
-    ],
-    "sample": {
-     "title": "台積電漲45元　台股漲逾600點早盤衝高後回落",
-     "url": "https://www.cna.com.tw/news/afe/202611110037.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "台積電",
-    "n": 5,
-    "src": 5,
-    "sources": [
-     "ETtoday財經雲",
      "Yahoo新聞",
      "中央社",
      "經濟日報",
@@ -894,11 +877,24 @@
      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE1oZVB2VEctNHNCckYxWmtyRmZUcEt3Z24zNGVwdUFNb21xRS0yTVVmaGtHY1FzQWFaUWt1b3EyX3AtSWVFR2pvZlhhTXNYU2pMVU9lUWR6OTZmS0MwNkZB0gFkQVVfeXFMTmNxYWRwczU0V0xzTTZvclVaZHZsNHg5elJhbEFWb3VXM3QzY2c3SGdJTmFhT0tFWUNOc09IVVNTUTNHekd6S08yemxGSDZnUmJWSml4UFM0cFc4dUc2aU9CQi1BSA?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "Microsoft",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Business Ins",
+     "PYMNTS.com",
+     "Redmondmag.c"
+    ],
+    "sample": {
+     "title": "Anthropic 推出可與 Office 競爭的工具後 Microsoft 股價下跌",
+     "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9TcVV4YnZrNG9UbWZfUzlIdWtvVGFTM0JuejhpZzZwbkJFc1RjYWw0TzNnaFdqWkV1MDBMS1ZCZWIzb1VpSlFmVzBsejBRZVV5aWtTV3d3?oc=5"
+    },
+    "hot": true
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-11T02:15:11Z"
+ "errs": [],
+ "updatedAt": "2026-11-11T02:33:58Z"
 }
