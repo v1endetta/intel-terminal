@@ -9,30 +9,6 @@
    "launch": true
   },
   {
-   "source": "Gemini",
-   "title": "Introducing the Multimodal Knowledge Agent benchmark",
-   "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/multimodal-knowledge-agent-benchmark/",
-   "at": "2026-11-10T16:00:00Z",
-   "vendor": "google",
-   "launch": true
-  },
-  {
-   "source": "Gemini",
-   "title": "Gemini 4 Carbon is now available",
-   "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/",
-   "at": "2026-11-10T16:00:00Z",
-   "vendor": "google",
-   "launch": true
-  },
-  {
-   "source": "Google AI",
-   "title": "Google Cloud launches Gemini for healthcare.",
-   "url": "https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/gemini-for-healthcare/",
-   "at": "2026-11-10T13:00:00Z",
-   "vendor": "google",
-   "launch": true
-  },
-  {
    "source": "OpenAI",
    "title": "Introducing Businesses in ChatGPT",
    "url": "https://openai.com/index/introducing-businesses-chatgpt",
@@ -134,30 +110,6 @@
    "launch": false
   },
   {
-   "source": "Google AI",
-   "title": "Gemini Intelligence: New features, on more devices",
-   "url": "https://blog.google/products-and-platforms/platforms/android/gemini-intelligence-november-features-devices/",
-   "at": "2026-11-10T19:00:00Z",
-   "vendor": "google",
-   "launch": false
-  },
-  {
-   "source": "Google AI",
-   "title": "We’re bringing Adobe’s creative and productivity tools closer to your everyday Google apps",
-   "url": "https://blog.google/company-news/inside-google/company-announcements/adobe-google-partnership-integration/",
-   "at": "2026-11-10T14:00:00Z",
-   "vendor": "google",
-   "launch": false
-  },
-  {
-   "source": "Google AI",
-   "title": "Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips",
-   "url": "https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/",
-   "at": "2026-11-05T17:00:00Z",
-   "vendor": "google",
-   "launch": false
-  },
-  {
    "source": "xAI",
    "title": "Giving every team a data scientist with Grok Bot",
    "url": "https://x.ai/news/data-bot",
@@ -165,8 +117,38 @@
    "official": true,
    "vendor": "xai",
    "launch": false
+  },
+  {
+   "source": "xAI",
+   "title": "Your next sales teammate should be a Grok Bot",
+   "url": "https://x.ai/news/grok-bot-sales",
+   "at": "2026-10-27T00:00:00Z",
+   "official": true,
+   "vendor": "xai",
+   "launch": false
+  },
+  {
+   "source": "Anthropic",
+   "title": "Investing in the public benefit We’re committing a portion of Anthropic’s shares to the An",
+   "url": "https://www.anthropic.com/news/public-benefit-fund",
+   "at": "",
+   "official": true,
+   "vendor": "anthropic",
+   "launch": false
+  },
+  {
+   "source": "Anthropic",
+   "title": "Anthropic files S-1 with the SEC for proposed initial public offering Today, Anthropic, PB",
+   "url": "https://www.anthropic.com/news/s1-sec",
+   "at": "",
+   "official": true,
+   "vendor": "anthropic",
+   "launch": false
   }
  ],
- "errs": [],
- "updatedAt": "2026-11-11T06:17:48Z"
+ "errs": [
+  "Google AI: ReadTimeout: HTTPSConnectionPool(host='blog.google', port=443): Read timed out. (read timeout=25)",
+  "Gemini: ReadTimeout: HTTPSConnectionPool(host='blog.google', port=443): Read timed out. (read timeout=25)"
+ ],
+ "updatedAt": "2026-11-11T06:36:32Z"
 }
