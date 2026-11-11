@@ -2,11 +2,11 @@
  "label": "推文 ≥30",
  "items": [
   {
-   "board": "Stock",
-   "title": "[閒聊] 2026/11/11 盤後閒聊",
+   "board": "Gossiping",
+   "title": "[爆卦] 竹北系列",
    "push": 100,
-   "url": "https://www.ptt.cc/bbs/Stock/M.1794376807.A.A28.html",
-   "date": "11/11"
+   "url": "https://www.ptt.cc/bbs/Gossiping/M.1794153327.A.25A.html",
+   "date": "11/08"
   },
   {
    "board": "Stock",
@@ -45,6 +45,13 @@
   },
   {
    "board": "Stock",
+   "title": "[閒聊] 2026/11/11 盤後閒聊",
+   "push": 99,
+   "url": "https://www.ptt.cc/bbs/Stock/M.1794376807.A.A28.html",
+   "date": "11/11"
+  },
+  {
+   "board": "Stock",
    "title": "[新聞] 黃仁勳認外遇隔天照常上班！輝達員工震",
    "push": 98,
    "url": "https://www.ptt.cc/bbs/Stock/M.1794400773.A.D20.html",
@@ -53,7 +60,7 @@
   {
    "board": "Stock",
    "title": "[標的] nvda 多",
-   "push": 90,
+   "push": 92,
    "url": "https://www.ptt.cc/bbs/Stock/M.1794404773.A.D4B.html",
    "date": "11/11"
   },
@@ -93,9 +100,16 @@
    "date": "11/11"
   },
   {
+   "board": "Gossiping",
+   "title": "[爆卦] PTT即將大改版？",
+   "push": 53,
+   "url": "https://www.ptt.cc/bbs/Gossiping/M.1794222490.A.F82.html",
+   "date": "11/09"
+  },
+  {
    "board": "Stock",
    "title": "[新聞] 2028年量產？馬斯克Terafab啟動採購，每",
-   "push": 52,
+   "push": 53,
    "url": "https://www.ptt.cc/bbs/Stock/M.1794403373.A.3BF.html",
    "date": "11/11"
   },
@@ -144,7 +158,7 @@
   {
    "board": "home-sale",
    "title": "[閒聊] 現在買房能翻身嗎？",
-   "push": 42,
+   "push": 43,
    "url": "https://www.ptt.cc/bbs/home-sale/M.1794395912.A.944.html",
    "date": "11/11"
   },
@@ -154,35 +168,97 @@
    "push": 39,
    "url": "https://www.ptt.cc/bbs/Lifeismoney/M.1790784012.A.E9A.html",
    "date": "10/01"
-  },
-  {
-   "board": "car",
-   "title": "Re: [閒聊] 為何豪華品牌Lexus形象 沒被8+9染指？",
-   "push": 38,
-   "url": "https://www.ptt.cc/bbs/car/M.1794308254.A.A63.html",
-   "date": "11/10"
-  },
-  {
-   "board": "WomenTalk",
-   "title": "[閒聊] 台灣有女生44歲還在生小孩",
-   "push": 37,
-   "url": "https://www.ptt.cc/bbs/WomenTalk/M.1794125426.A.CFA.html",
-   "date": "11/08"
   }
  ],
  "boards": [
   {
-   "board": "HatePolitics",
-   "zh": "政黑",
-   "facet": "政治",
-   "n": 28,
-   "today": 28,
-   "heat": 86,
-   "boom": 0,
+   "board": "Gossiping",
+   "zh": "八卦",
+   "facet": "大眾",
+   "n": 24,
+   "today": 22,
+   "heat": 220,
+   "boom": 1,
    "boo": 0,
    "mood": 0.75,
    "spark": [
-    192,
+    277,
+    258,
+    367,
+    357,
+    262,
+    235,
+    306,
+    268,
+    414,
+    279,
+    313,
+    202,
+    320,
+    315,
+    343,
+    322,
+    250,
+    348,
+    235,
+    255,
+    188,
+    194,
+    215,
+    220,
+    215,
+    280,
+    344,
+    316,
+    239,
+    293,
+    325,
+    311,
+    317,
+    332,
+    389,
+    300,
+    412,
+    258,
+    336,
+    179,
+    282,
+    261,
+    262,
+    375,
+    308,
+    229,
+    242,
+    220
+   ],
+   "top": [
+    {
+     "board": "Gossiping",
+     "title": "[爆卦] 竹北系列",
+     "push": 100,
+     "url": "https://www.ptt.cc/bbs/Gossiping/M.1794153327.A.25A.html",
+     "date": "11/08"
+    },
+    {
+     "board": "Gossiping",
+     "title": "[爆卦] PTT即將大改版？",
+     "push": 53,
+     "url": "https://www.ptt.cc/bbs/Gossiping/M.1794222490.A.F82.html",
+     "date": "11/09"
+    }
+   ]
+  },
+  {
+   "board": "HatePolitics",
+   "zh": "政黑",
+   "facet": "政治",
+   "n": 30,
+   "today": 30,
+   "heat": 91,
+   "boom": 0,
+   "boo": 0,
+   "mood": 0.67,
+   "spark": [
     204,
     86,
     168,
@@ -229,7 +305,8 @@
     182,
     63,
     79,
-    86
+    86,
+    91
    ],
    "top": []
   },
@@ -239,12 +316,11 @@
    "facet": "市場",
    "n": 22,
    "today": 2,
-   "heat": 782,
-   "boom": 3,
+   "heat": 786,
+   "boom": 2,
    "boo": 0,
    "mood": 1.0,
    "spark": [
-    784,
     801,
     870,
     967,
@@ -291,16 +367,10 @@
     756,
     768,
     782,
-    782
+    782,
+    786
    ],
    "top": [
-    {
-     "board": "Stock",
-     "title": "[閒聊] 2026/11/11 盤後閒聊",
-     "push": 100,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1794376807.A.A28.html",
-     "date": "11/11"
-    },
     {
      "board": "Stock",
      "title": "[情報] 世界主要股市年漲幅排行11/11",
@@ -314,6 +384,13 @@
      "push": 100,
      "url": "https://www.ptt.cc/bbs/Stock/M.1794402729.A.D40.html",
      "date": "11/11"
+    },
+    {
+     "board": "Stock",
+     "title": "[閒聊] 2026/11/11 盤後閒聊",
+     "push": 99,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1794376807.A.A28.html",
+     "date": "11/11"
     }
    ]
   },
@@ -323,12 +400,11 @@
    "facet": "生活",
    "n": 38,
    "today": 1,
-   "heat": 178,
+   "heat": 179,
    "boom": 0,
    "boo": 0,
    "mood": 0.79,
    "spark": [
-    115,
     115,
     114,
     114,
@@ -375,7 +451,8 @@
     177,
     177,
     177,
-    178
+    178,
+    179
    ],
    "top": [
     {
@@ -398,7 +475,6 @@
    "boo": 0,
    "mood": 0.96,
    "spark": [
-    1017,
     1017,
     1024,
     1029,
@@ -445,6 +521,7 @@
     660,
     668,
     670,
+    668,
     668
    ],
    "top": [
@@ -477,12 +554,11 @@
    "facet": "消費",
    "n": 25,
    "today": 0,
-   "heat": 261,
+   "heat": 264,
    "boom": 0,
    "boo": 0,
    "mood": 0.56,
    "spark": [
-    255,
     261,
     267,
     277,
@@ -529,7 +605,8 @@
     260,
     261,
     260,
-    261
+    261,
+    264
    ],
    "top": [
     {
@@ -542,7 +619,7 @@
     {
      "board": "home-sale",
      "title": "[閒聊] 現在買房能翻身嗎？",
-     "push": 42,
+     "push": 43,
      "url": "https://www.ptt.cc/bbs/home-sale/M.1794395912.A.944.html",
      "date": "11/11"
     },
@@ -561,12 +638,11 @@
    "facet": "消費",
    "n": 38,
    "today": 0,
-   "heat": 885,
+   "heat": 886,
    "boom": 1,
    "boo": 0,
    "mood": 1.0,
    "spark": [
-    912,
     913,
     919,
     928,
@@ -613,7 +689,8 @@
     881,
     880,
     882,
-    885
+    885,
+    886
    ],
    "top": [
     {
@@ -650,7 +727,6 @@
    "boo": 0,
    "mood": 0.73,
    "spark": [
-    107,
     107,
     107,
     107,
@@ -697,6 +773,7 @@
     117,
     117,
     117,
+    117,
     117
    ],
    "top": []
@@ -712,7 +789,6 @@
    "boo": 0,
    "mood": 0.92,
    "spark": [
-    565,
     565,
     566,
     569,
@@ -759,6 +835,7 @@
     348,
     351,
     352,
+    354,
     354
    ],
    "top": [
@@ -795,7 +872,6 @@
     203,
     203,
     203,
-    203,
     204,
     204,
     204,
@@ -818,6 +894,7 @@
     204,
     204,
     204,
+    206,
     206,
     206,
     206,
@@ -851,7 +928,6 @@
    "boo": 0,
    "mood": 0.9,
    "spark": [
-    288,
     288,
     288,
     288,
@@ -898,6 +974,7 @@
     294,
     294,
     294,
+    294,
     294
    ],
    "top": []
@@ -908,12 +985,11 @@
    "facet": "文化",
    "n": 19,
    "today": 4,
-   "heat": 51,
+   "heat": 50,
    "boom": 0,
    "boo": 0,
    "mood": 0.53,
    "spark": [
-    178,
     178,
     191,
     203,
@@ -960,11 +1036,27 @@
     48,
     50,
     50,
-    51
+    51,
+    50
    ],
    "top": []
   }
  ],
- "breaking": [],
- "updatedAt": "2026-11-11T20:59:43Z"
+ "breaking": [
+  {
+   "board": "Gossiping",
+   "title": "[爆卦] 竹北系列",
+   "push": 100,
+   "url": "https://www.ptt.cc/bbs/Gossiping/M.1794153327.A.25A.html",
+   "date": "11/08"
+  },
+  {
+   "board": "Gossiping",
+   "title": "[爆卦] PTT即將大改版？",
+   "push": 53,
+   "url": "https://www.ptt.cc/bbs/Gossiping/M.1794222490.A.F82.html",
+   "date": "11/09"
+  }
+ ],
+ "updatedAt": "2026-11-11T21:38:11Z"
 }
