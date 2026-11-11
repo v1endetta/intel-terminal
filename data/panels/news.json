@@ -76,9 +76,16 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "Ukraine’s Zelenskyy ‘happy’ with US envoys’ approach as Russia talks enter second day – Eu",
+   "url": "https://www.theguardian.com/world/live/2026/nov/11/europe-ukraine-russia-us-talks-abu-dhabi-zelenskyy-latest-news-updates",
+   "at": "2026-11-11T10:11:46Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
    "title": "Nvidia’s value tumbles by $430bn since spy allegations, as major US law firm hired to inve",
    "url": "https://www.theguardian.com/business/live/2026/nov/11/nvidia-spy-allegations-us-law-firm-hired-investigation-stock-markets-pound-dollar-ftse-nasdaq-latest-news-updates",
-   "at": "2026-11-11T09:42:24Z",
+   "at": "2026-11-11T10:07:51Z",
    "sec": "Business"
   },
   {
@@ -86,13 +93,6 @@
    "title": "Germany reportedly bans Chinese drones at military bases over security concerns",
    "url": "https://www.theguardian.com/world/2026/nov/11/germany-bans-chinese-drones-military-bases-spying-security",
    "at": "2026-11-11T09:41:05Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Ukraine’s Zelenskyy ‘happy’ with US envoys’ approach as Russia talks enter second day – Eu",
-   "url": "https://www.theguardian.com/world/live/2026/nov/11/europe-ukraine-russia-us-talks-abu-dhabi-zelenskyy-latest-news-updates",
-   "at": "2026-11-11T09:33:06Z",
    "sec": "World news"
   },
   {
@@ -630,9 +630,9 @@
    "daily7": [
     12,
     7,
-    20,
-    9,
-    31,
+    19,
+    8,
+    30,
     35,
     29
    ],
@@ -650,7 +650,7 @@
  "signals": {
   "gdelt": {
    "vol": 3.018,
-   "vol_ratio": 1.34,
+   "vol_ratio": 1.33,
    "tone": 0.59,
    "tone_at": "2026-11-11T07:21:49Z",
    "spark": [
@@ -669,7 +669,7 @@
     3.105,
     3.018
    ],
-   "at": "2026-11-11T09:09:46Z"
+   "at": "2026-11-11T10:12:16Z"
   },
   "wiki": {
    "zh": [
@@ -886,8 +886,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-11T09:51:50Z"
+ "errs": [],
+ "updatedAt": "2026-11-11T10:12:16Z"
 }

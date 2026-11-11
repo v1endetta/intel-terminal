@@ -1,64 +1,10 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者聚焦於串流影音新上榜作品、遊戲熱度爬升，以及雙11檔期與企業收購話題。",
+ "line": "台灣消費者近期聚焦雙11購物節優惠、熱門手遊營收排行，以及影視娛樂與時尚穿搭話題。",
  "topics": [
   {
-   "name": "HBO Max",
-   "q": "HBO Max",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "HBO Max：串流播放電視節目和電影",
-     "how": "新進榜第 13 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.9,
-   "news7": 24,
-   "news_p7": 4,
-   "news_capped": false,
-   "social": {
-    "Threads": 288,
-    "Dcard": 7
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-09",
-   "quad": "hit"
-  },
-  {
-   "name": "勝利女神：妮姬",
-   "q": "勝利女神 妮姬",
-   "cat": "遊戲",
-   "do": [
-    {
-     "src": "App 營收",
-     "name": "勝利女神：妮姬",
-     "how": "爬升 32 名到第 22"
-    }
-   ],
-   "talk": [],
-   "y": 0.77,
-   "news7": 33,
-   "news_p7": 16,
-   "news_capped": false,
-   "social": {
-    "Threads": 37.4,
-    "Dcard": 0
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 6,
-   "first": "2026-11-05",
-   "quad": "hit"
-  },
-  {
    "name": "泥面人",
-   "q": "泥面人",
+   "q": "泥面人 電影",
    "cat": "影視",
    "do": [
     {
@@ -69,24 +15,136 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 9,
-   "news_p7": 14,
+   "news7": 8,
+   "news_p7": 13,
    "news_capped": false,
    "social": {
     "Threads": 33.5,
     "Dcard": 2
    },
    "mentions": {},
-   "x": 0.8,
+   "x": 0.78,
    "talk_trend": "down",
    "days": 6,
    "first": "2026-11-03",
    "quad": "hit"
   },
   {
+   "name": "勝利女神：妮姬",
+   "q": "勝利女神：妮姬",
+   "cat": "遊戲",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "勝利女神：妮姬",
+     "how": "爬升 27 名到第 27"
+    }
+   ],
+   "talk": [],
+   "y": 0.72,
+   "news7": 27,
+   "news_p7": 22,
+   "news_capped": false,
+   "social": {
+    "Threads": 37.4,
+    "Dcard": 0
+   },
+   "mentions": {},
+   "x": 0.96,
+   "talk_trend": "flat",
+   "days": 6,
+   "first": "2026-11-05",
+   "quad": "hit"
+  },
+  {
+   "name": "Klook",
+   "q": "Klook 優惠",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "Klook - 全球旅遊＆玩樂體驗預訂平台",
+     "how": "爬升 22 名到第 38"
+    }
+   ],
+   "talk": [],
+   "y": 0.67,
+   "news7": 17,
+   "news_p7": 4,
+   "news_capped": false,
+   "social": {
+    "Threads": 288,
+    "Dcard": 29
+   },
+   "mentions": {},
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 5,
+   "first": "2026-11-05",
+   "quad": "hit"
+  },
+  {
+   "name": "蝦皮購物",
+   "q": "蝦皮 雙11",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "蝦皮購物 | 花得更少買得更好",
+     "how": "爬升 23 名到第 23"
+    }
+   ],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] 蝦皮11/11優惠整理"
+    },
+    {
+     "src": "Dcard 網購",
+     "title": "蝦皮（5 則）"
+    }
+   ],
+   "y": 0.68,
+   "news7": 36,
+   "news_p7": 5,
+   "news_capped": false,
+   "mentions": {
+    "PTT": 1,
+    "Dcard 網購": 1
+   },
+   "x": 0.98,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-11",
+   "quad": "hit"
+  },
+  {
+   "name": "崩壞：星穹鐵道",
+   "q": "崩壞：星穹鐵道",
+   "cat": "遊戲",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "崩壞：星穹鐵道",
+     "how": "新進榜第 2 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.9,
+   "news7": 22,
+   "news_p7": 9,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.68,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-11",
+   "quad": "hit"
+  },
+  {
    "name": "momo雙11",
-   "q": "momo購物",
-   "cat": "品牌商品",
+   "q": "momo雙11 優惠",
+   "cat": "活動",
    "do": [
     {
      "src": "App 下載",
@@ -94,69 +152,232 @@
      "how": "爬升 30 名到第 7"
     }
    ],
-   "talk": [],
+   "talk": [
+    {
+     "src": "Dcard 網購",
+     "title": "雙11（3 則）"
+    },
+    {
+     "src": "Dcard 網購",
+     "title": "Momo（3 則）"
+    }
+   ],
    "y": 0.75,
    "news7": 16,
-   "news_p7": 9,
+   "news_p7": 13,
    "news_capped": false,
-   "mentions": {},
-   "x": 0.62,
-   "talk_trend": "up",
+   "mentions": {
+    "Dcard 網購": 2
+   },
+   "x": 0.82,
+   "talk_trend": "flat",
    "days": 6,
    "first": "2026-11-05",
    "quad": "hit"
   },
   {
+   "name": "HBO Max",
+   "q": "HBO Max 台灣",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "HBO Max：串流播放電視節目和電影",
+     "how": "新進榜第 13 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.9,
+   "news7": 2,
+   "news_p7": 3,
+   "news_capped": false,
+   "social": {
+    "Threads": 288,
+    "Dcard": 7
+   },
+   "mentions": {},
+   "x": 0.64,
+   "talk_trend": "down",
+   "days": 3,
+   "first": "2026-11-09",
+   "quad": "hit"
+  },
+  {
+   "name": "卡厄思夢境",
+   "q": "卡厄思夢境 更新",
+   "cat": "遊戲",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "卡厄思夢境",
+     "how": "爬升 46 名到第 47"
+    }
+   ],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "《卡厄思夢境》釋出「銀河系災害」第 5 季第二波內容更新開放「大龜裂」雙軌模式與新戰鬥員「布蕾茲貝爾」"
+    }
+   ],
+   "y": 0.91,
+   "news7": 8,
+   "news_p7": 4,
+   "news_capped": false,
+   "mentions": {
+    "新聞焦點": 1
+   },
+   "x": 0.58,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-11",
+   "quad": "hit"
+  },
+  {
+   "name": "薩爾達傳說：時之笛重製版",
+   "q": "時之笛 AI 重製",
+   "cat": "遊戲",
+   "do": [],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "惹任天堂法務部？Google高層用AI移植《時之笛》新作 玩家怒轟：毫無道德底線"
+    }
+   ],
+   "y": 0.0,
+   "news7": 7,
+   "news_p7": 3,
+   "news_capped": false,
+   "social": {
+    "Threads": 0
+   },
+   "mentions": {
+    "新聞焦點": 1
+   },
+   "x": 0.55,
+   "talk_trend": "up",
+   "days": 7,
+   "first": "2026-11-03",
+   "quad": "hype"
+  },
+  {
    "name": "台積電",
-   "q": "台積電 季配息",
+   "q": "台積電 股價",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
      "src": "PTT",
-     "title": "[情報] 台積公司董事會決議(季配息升至9元)"
+     "title": "[情報] 台股前十大漲點紀錄(今天第六名)"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "台股雙11不打折 台積電勁揚110元強拉高大盤收漲1,545點"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "美股收盤》升息機率提高、輝達再挫5.47％ 美股收黑 台積電ADR漲2.02％"
     }
    ],
    "y": 0.0,
-   "news7": 40,
-   "news_p7": 0,
+   "news7": 35,
+   "news_p7": 12,
    "news_capped": false,
    "mentions": {
-    "PTT": 1
+    "PTT": 1,
+    "新聞焦點": 2
    },
-   "x": 0.91,
+   "x": 1.0,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-10",
    "quad": "talk"
   },
   {
-   "name": "統一集團",
-   "q": "統一企業 肯德基 必勝客",
+   "name": "鄧紫棋",
+   "q": "鄧紫棋",
+   "cat": "人物",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 10,
+   "news_p7": 28,
+   "news_capped": false,
+   "social": {
+    "Threads": 92.1
+   },
+   "mentions": {},
+   "x": 0.82,
+   "talk_trend": "down",
+   "days": 6,
+   "first": "2026-11-03",
+   "quad": "talk"
+  },
+  {
+   "name": "Tesla Cybertruck",
+   "q": "Tesla Cybertruck 台灣",
    "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 6,
+   "news_p7": 1,
+   "news_capped": false,
+   "social": {
+    "Threads": 75.3
+   },
+   "mentions": {},
+   "x": 0.7,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-09",
+   "quad": "talk"
+  },
+  {
+   "name": "BAO BAO ISSEY MIYAKE",
+   "q": "BAO BAO ISSEY MIYAKE",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 10,
+   "news_p7": 1,
+   "news_capped": false,
+   "social": {
+    "Threads": 4
+   },
+   "mentions": {},
+   "x": 0.63,
+   "talk_trend": "up",
+   "days": 5,
+   "first": "2026-11-05",
+   "quad": "talk"
+  },
+  {
+   "name": "風衣外套",
+   "q": "風衣外套 穿搭",
+   "cat": "生活習慣",
    "do": [],
    "talk": [
     {
-     "src": "PTT",
-     "title": "[新聞] 傳統一企業擬收購亞洲肯德基、必勝客 路"
+     "src": "時尚媒體",
+     "title": "穿梭170年的英倫風雨：Burberry以經典風衣與格紋，定格城市街頭風格詩篇"
     },
     {
-     "src": "Mobile01",
-     "title": "統一企業傳出要買下肯德基、必勝客！交易金額上看130億元"
+     "src": "時尚媒體",
+     "title": "2026秋冬「短風衣」穿搭5款推薦！宋慧喬、Kazuha都穿上，搭配公式時髦又有好比例"
     }
    ],
    "y": 0.0,
-   "news7": 16,
-   "news_p7": 0,
+   "news7": 4,
+   "news_p7": 5,
    "news_capped": false,
    "mentions": {
-    "PTT": 1,
-    "Mobile01": 1
+    "時尚媒體": 2
    },
-   "x": 0.82,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-10",
+   "x": 0.55,
+   "talk_trend": "flat",
+   "days": 4,
+   "first": "2026-11-03",
    "quad": "talk"
   },
   {
@@ -173,7 +394,7 @@
    "talk": [],
    "y": 0.44,
    "news7": 7,
-   "news_p7": 3,
+   "news_p7": 2,
    "news_capped": false,
    "mentions": {},
    "x": 0.45,
@@ -183,25 +404,18 @@
    "quad": "low"
   },
   {
-   "name": "Calvin Klein",
-   "q": "Calvin Klein BTS 柾國",
+   "name": "小米",
+   "q": "小米 新品",
    "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "BTS 柾國 Jung Kook 穿上 Calvin Klein 2026 節日系列！解鎖私服造型同款穿搭"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 5,
-   "news_p7": 4,
+   "news7": 8,
+   "news_p7": 3,
    "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.49,
-   "talk_trend": "flat",
+   "mentions": {},
+   "x": 0.48,
+   "talk_trend": "up",
    "days": 2,
    "first": "2026-11-10",
    "quad": "low"
@@ -218,38 +432,31 @@
     }
    ],
    "y": 0.0,
-   "news7": 4,
-   "news_p7": 3,
+   "news7": 3,
+   "news_p7": 2,
    "news_capped": false,
    "mentions": {
     "Mobile01": 1
    },
-   "x": 0.45,
-   "talk_trend": "flat",
+   "x": 0.4,
+   "talk_trend": "up",
    "days": 4,
    "first": "2026-11-03",
    "quad": "low"
   },
   {
-   "name": "OSOI",
-   "q": "OSOI Duty Bag",
-   "cat": "品牌商品",
+   "name": "酉鬼啤酒",
+   "q": "酉鬼啤酒",
+   "cat": "飲食",
    "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "韓國人氣品牌OSOI邁入10週年！全新「Duty Bag」疊加美學登場，同步首爾漢南洞旗艦店盛大揭幕"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
    "news7": 1,
-   "news_p7": 0,
+   "news_p7": 9,
    "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.25,
-   "talk_trend": "flat",
+   "mentions": {},
+   "x": 0.15,
+   "talk_trend": "down",
    "days": 2,
    "first": "2026-11-10",
    "quad": "low"
@@ -257,10 +464,10 @@
  ],
  "quads": {
   "quiet": 0,
-  "hit": 4,
+  "hit": 8,
   "new": 0,
-  "hype": 0,
-  "talk": 2,
+  "hype": 1,
+  "talk": 5,
   "low": 4
  },
  "src_do": [
@@ -285,7 +492,7 @@
  ],
  "social_at": "2026-11-10",
  "hist_days": 9,
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3.1-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-11T04:05:30Z"
+ "updatedAt": "2026-11-11T10:12:16Z"
 }
