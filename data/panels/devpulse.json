@@ -1,56 +1,6 @@
 {
  "forums": [
   {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Codex ambassador application",
-   "url": "https://community.openai.com/t/codex-ambassador-application/1415413",
-   "replies": 7,
-   "likes": 29,
-   "views": 57,
-   "at": "2026-11-12T07:28:32Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "[BUG] UI Glitch: Legacy Memory Panel fails to pass all data's, and \"Context Window Full\" b",
-   "url": "https://community.openai.com/t/bug-ui-glitch-legacy-memory-panel-fails-to-pass-all-datas-and-context-window-full-blocking-conversation-since-nov-6/1415349",
-   "replies": 0,
-   "likes": 3,
-   "views": 49,
-   "at": "2026-11-12T00:18:05Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Why Not Let Users Choose Their Preferred ChatGPT Model?",
-   "url": "https://community.openai.com/t/why-not-let-users-choose-their-preferred-chatgpt-model/1415350",
-   "replies": 4,
-   "likes": 5,
-   "views": 62,
-   "at": "2026-11-12T00:31:59Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Contact Sam Altman for a Junior Year project",
-   "url": "https://community.openai.com/t/contact-sam-altman-for-a-junior-year-project/1415271",
-   "replies": 1,
-   "likes": 5,
-   "views": 30,
-   "at": "2026-11-11T19:30:55Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Fully Customizable Sidebar, Navigation, and Workspace Organization Across ChatGPT",
-   "url": "https://community.openai.com/t/fully-customizable-sidebar-navigation-and-workspace-organization-across-chatgpt/1415346",
-   "replies": 2,
-   "likes": 3,
-   "views": 42,
-   "at": "2026-11-12T00:16:29Z"
-  },
-  {
    "source": "Google AI 論壇",
    "vendor": "google",
    "title": "A Heartfelt Thank You to the Jules Team — and a Request for Developer Support",
@@ -73,6 +23,16 @@
   {
    "source": "Google AI 論壇",
    "vendor": "google",
+   "title": "Title: Gemini 3.1 Pro Preview daily token quota not resetting after 00:00 Pacific Time",
+   "url": "https://discuss.ai.google.dev/t/title-gemini-3-1-pro-preview-daily-token-quota-not-resetting-after-00-00-pacific-time/199806",
+   "replies": 4,
+   "likes": 4,
+   "views": 53,
+   "at": "2026-11-12T11:38:06Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
    "title": "Remote Projects capability lost upon restart; requires manual sign-out and sign-in cycle",
    "url": "https://discuss.ai.google.dev/t/remote-projects-capability-lost-upon-restart-requires-manual-sign-out-and-sign-in-cycle/199666",
    "replies": 5,
@@ -84,21 +44,11 @@
    "source": "Google AI 論壇",
    "vendor": "google",
    "title": "Request for manual review - account verification required, device verification keeps faili",
-   "url": "https://discuss.ai.google.dev/t/request-for-manual-review-account-verification-required-device-verification-keeps-failing/199653",
+   "url": "https://discuss.ai.google.dev/t/request-for-manual-review-account-verification-required-device-verification-keeps-failing-nov-12-2026/199741",
    "replies": 1,
-   "likes": 0,
-   "views": 74,
-   "at": "2026-11-11T13:51:03Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Title: Gemini 3.1 Pro Preview daily token quota not resetting after 00:00 Pacific Time",
-   "url": "https://discuss.ai.google.dev/t/title-gemini-3-1-pro-preview-daily-token-quota-not-resetting-after-00-00-pacific-time/199806",
-   "replies": 3,
-   "likes": 2,
-   "views": 37,
-   "at": "2026-11-12T11:38:06Z"
+   "likes": 1,
+   "views": 41,
+   "at": "2026-11-12T04:02:31Z"
   }
  ],
  "changelogs": [
@@ -295,11 +245,13 @@
    "at": "2026-11-06T17:04:01Z"
   }
  ],
- "errs": [],
+ "errs": [
+  "OpenAI 論壇: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+ ],
  "diag": [
-  "Gemini changelog md: got html 134902b",
+  "Gemini changelog md: got html 134951b",
   "DeepSeek updates md: 18816b 0 entries head='# Change Log\\n\\n***\\n\\n## Date: 2026-10-17\\n\\n### Opening up the i'",
   "xAI release notes md: 19971b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## November\\n\\n### grok-i'"
  ],
- "updatedAt": "2026-11-12T14:07:23Z"
+ "updatedAt": "2026-11-12T15:13:12Z"
 }
