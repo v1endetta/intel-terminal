@@ -1,6 +1,6 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "台灣消費者近期聚焦於熱門遊戲改版與影視話題，同時對科技新品、百貨週年慶及名人動態保持高度關注。",
+ "line": "本週台灣消費焦點集中於黃仁勳辭職引發的市場震盪，同時雙11購物節與影視娛樂話題持續發酵。",
  "topics": [
   {
    "name": "崩壞：星穹鐵道",
@@ -10,23 +10,53 @@
     {
      "src": "App 營收",
      "name": "崩壞：星穹鐵道",
-     "how": "新進榜第 5 名"
+     "how": "新進榜第 6 名"
     }
    ],
    "talk": [],
    "y": 0.9,
-   "news7": 27,
-   "news_p7": 13,
+   "news7": 25,
+   "news_p7": 15,
    "news_capped": false,
    "social": {
-    "Threads": 168,
+    "Threads": 216,
     "Dcard": 2
    },
    "mentions": {},
    "x": 1.0,
    "talk_trend": "up",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-11",
+   "quad": "hit"
+  },
+  {
+   "name": "Disney+",
+   "q": "Disney+",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "Disney+",
+     "how": "新進榜第 2 名"
+    }
+   ],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "《復仇者聯盟：終局之戰》加碼版將於Disney+上線！內容新增4分鐘隱藏彩蛋、《復聯5》片段搶先公開"
+    }
+   ],
+   "y": 0.9,
+   "news7": 83,
+   "news_p7": 17,
+   "news_capped": true,
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-13",
    "quad": "hit"
   },
   {
@@ -42,15 +72,15 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 9,
+   "news7": 10,
    "news_p7": 10,
    "news_capped": false,
    "social": {
-    "Threads": 90.7,
+    "Threads": 70.3,
     "Dcard": 3
    },
    "mentions": {},
-   "x": 0.88,
+   "x": 0.89,
    "talk_trend": "flat",
    "days": 6,
    "first": "2026-11-03",
@@ -58,132 +88,140 @@
   },
   {
    "name": "黃仁勳",
-   "q": "黃仁勳",
+   "q": "黃仁勳 辭職",
    "cat": "人物",
    "do": [
     {
      "src": "YouTube 熱門",
      "name": "黃仁勳坦承婚外情　在台灣與黃樂親密舉動曝｜民視新聞｜",
-     "how": "7 天內上架、發燒第 1"
+     "how": "7 天內上架、發燒第 2"
     }
    ],
    "talk": [
     {
      "src": "PTT",
-     "title": "[新聞] 黃仁勳下台聲浪升高！美兩黨議員促辭職"
+     "title": "[情報] 川普點名庫克應接任輝達執行長"
     },
     {
      "src": "PTT",
-     "title": "[新聞] 黃仁勳再爆不倫！扯上48歲女副總裁 輝達"
+     "title": "[新聞] 美國眾議院回應黃仁勳請辭"
     },
     {
-     "src": "LINE TODAY",
-     "title": "對象不只一位？黃仁勳外遇風波始末"
+     "src": "PTT",
+     "title": "[情報] 黃仁勳辭職"
     },
     {
-     "src": "新聞焦點",
-     "title": "黃仁勳若下台亞股殺血海！台灣巨頭曝險36％最危險 名單一次看"
+     "src": "PTT",
+     "title": "[情報] 輝達宣布執行長異動 由財務長暫代"
     },
     {
-     "src": "時尚媒體",
-     "title": "Lori Mills 不只是黃仁勳老婆！從矽谷工程師到基金會總裁的人生轉折"
+     "src": "PTT",
+     "title": "[新聞] 快訊／輝達震撼宣布：黃仁勳辭職立即生效"
     }
    ],
-   "y": 0.8,
+   "y": 0.76,
    "news7": 100,
    "news_p7": 0,
    "news_capped": true,
+   "social": {
+    "Threads": 40,
+    "Dcard": 29
+   },
    "mentions": {
-    "PTT": 2,
+    "PTT": 9,
+    "Mobile01": 2,
     "LINE TODAY": 1,
-    "新聞焦點": 1,
-    "時尚媒體": 1
+    "新聞焦點": 3,
+    "時尚媒體": 3
    },
    "x": 1.0,
    "talk_trend": "up",
-   "days": 1,
+   "days": 2,
    "first": "2026-11-12",
    "quad": "hit"
   },
   {
-   "name": "卡厄思夢境",
-   "q": "卡厄思夢境",
-   "cat": "遊戲",
+   "name": "HBO Max",
+   "q": "HBO Max",
+   "cat": "App",
    "do": [
     {
-     "src": "App 營收",
-     "name": "卡厄思夢境",
-     "how": "爬升 35 名到第 39"
+     "src": "App 下載",
+     "name": "HBO Max：串流播放電視節目和電影",
+     "how": "新進榜第 14 名"
     }
    ],
    "talk": [],
-   "y": 0.8,
-   "news7": 13,
-   "news_p7": 11,
+   "y": 0.9,
+   "news7": 26,
+   "news_p7": 4,
    "news_capped": false,
-   "social": {
-    "Threads": 1.7
-   },
    "mentions": {},
-   "x": 0.64,
-   "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-11",
+   "x": 0.72,
+   "talk_trend": "up",
+   "days": 4,
+   "first": "2026-11-09",
    "quad": "hit"
   },
   {
-   "name": "Dior",
-   "q": "Dior 香氛蠟燭",
-   "cat": "品牌商品",
+   "name": "momo雙11",
+   "q": "momo 雙11",
+   "cat": "活動",
    "do": [
     {
-     "src": "Spotify",
-     "name": "DIOR 大穎 欲落未落",
-     "how": "在榜上第 6 名（沒有在爬）"
+     "src": "App 下載",
+     "name": "PChome24h購物 l 每天一起變更好",
+     "how": "爬升 31 名到第 30"
     }
    ],
    "talk": [
     {
-     "src": "時尚媒體",
-     "title": "Dior 把巴黎總店搬來了？蒙田大道30 號化身香氛蠟燭，以薑餅暖香點亮居家氛圍，再用香氛身體精油延續迷人香氣！"
+     "src": "Mobile01",
+     "title": "網家遊戲點卡雙11折扣懶人包(GTA6預購+點卡)"
     }
    ],
-   "y": 0.5,
-   "static": true,
-   "news7": 7,
-   "news_p7": 2,
+   "y": 0.76,
+   "news7": 30,
+   "news_p7": 17,
    "news_capped": false,
    "mentions": {
-    "時尚媒體": 1
+    "Mobile01": 1
    },
-   "x": 0.55,
+   "x": 0.85,
    "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-12",
+   "days": 5,
+   "first": "2026-11-05",
    "quad": "hit"
   },
   {
-   "name": "理想混蛋",
-   "q": "理想混蛋 大概也只能是思念",
-   "cat": "音樂",
+   "name": "UNIQLO TW",
+   "q": "UNIQLO 發熱衣",
+   "cat": "品牌商品",
    "do": [
     {
-     "src": "YouTube 熱門",
-     "name": "理想混蛋 Bestards【大概也只能是思念 To Where I Cannot Follow】Official Mus",
-     "how": "7 天內上架、發燒第 5"
+     "src": "App 下載",
+     "name": "UNIQLO TW",
+     "how": "爬升 56 名到第 38"
     }
    ],
-   "talk": [],
-   "y": 0.64,
-   "news7": 1,
-   "news_p7": 0,
+   "talk": [
+    {
+     "src": "Dcard 穿搭",
+     "title": "Uniqlo 發熱衣（1 則）"
+    }
+   ],
+   "y": 1.0,
+   "news7": 6,
+   "news_p7": 12,
    "news_capped": false,
-   "mentions": {},
-   "x": 0.15,
-   "talk_trend": "flat",
-   "days": 7,
-   "first": "2026-11-03",
-   "quad": "new"
+   "mentions": {
+    "Dcard 穿搭": 1
+   },
+   "x": 0.52,
+   "talk_trend": "down",
+   "days": 1,
+   "first": "2026-11-13",
+   "quad": "hit"
   },
   {
    "name": "黃奇斌",
@@ -201,45 +239,19 @@
    "news7": 0,
    "news_p7": 12,
    "news_capped": false,
+   "social": {
+    "Threads": 11.3
+   },
    "mentions": {},
-   "x": 0.0,
+   "x": 0.16,
    "talk_trend": "down",
    "days": 4,
    "first": "2026-11-03",
    "quad": "new"
   },
   {
-   "name": "再婚皇后",
-   "q": "再婚皇后 韓劇",
-   "cat": "影視",
-   "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "李浚赫特別出演《再婚皇后》造型曝光！ 王室禮服被嫌醜 ，網喊：還我白色制服"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "《再婚皇后》申敏兒是誰？42歲從韓劇女神變身霸氣皇后！出道28年代表作、與金宇彬10年愛情長跑一次認識"
-    }
-   ],
-   "y": 0.0,
-   "news7": 43,
-   "news_p7": 21,
-   "news_capped": false,
-   "mentions": {
-    "新聞焦點": 1,
-    "時尚媒體": 1
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-12",
-   "quad": "hype"
-  },
-  {
    "name": "薩爾達傳說：時之笛重製版",
-   "q": "The Legend of Zelda Ocarina of Time 重製版",
+   "q": "薩爾達傳說 時之笛 重製版",
    "cat": "遊戲",
    "do": [],
    "talk": [
@@ -249,44 +261,71 @@
     }
    ],
    "y": 0.0,
-   "news7": 38,
-   "news_p7": 13,
-   "news_capped": false,
+   "news7": 66,
+   "news_p7": 34,
+   "news_capped": true,
    "social": {
     "Threads": 0
    },
    "mentions": {
     "新聞焦點": 1
    },
-   "x": 0.9,
+   "x": 1.0,
    "talk_trend": "up",
    "days": 7,
    "first": "2026-11-03",
    "quad": "hype"
   },
   {
-   "name": "魔鬼的計謀",
-   "q": "魔鬼的計謀3",
+   "name": "再婚皇后",
+   "q": "再婚皇后 李浚赫",
    "cat": "影視",
    "do": [],
    "talk": [
     {
-     "src": "時尚媒體",
-     "title": "韓綜《魔鬼的計謀3》回來了！6大線上看亮點：找回歷屆冠軍同台，神童驚呼「規則完全不同了」？"
+     "src": "新聞焦點",
+     "title": "李浚赫特別出演《再婚皇后》造型曝光！ 王室禮服被嫌醜 ，網喊：還我白色制服"
     }
    ],
    "y": 0.0,
-   "news7": 33,
-   "news_p7": 7,
+   "news7": 8,
+   "news_p7": 0,
    "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
+   "social": {
+    "Threads": 14.8
    },
-   "x": 0.87,
+   "mentions": {
+    "新聞焦點": 1
+   },
+   "x": 0.76,
    "talk_trend": "up",
-   "days": 1,
+   "days": 2,
    "first": "2026-11-12",
    "quad": "hype"
+  },
+  {
+   "name": "木村拓哉",
+   "q": "木村拓哉 抵台",
+   "cat": "人物",
+   "do": [],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "（直擊）木村拓哉抵台800人瘋了！天王罕見開放媒體堵麥 明54歲生日喊期待"
+    }
+   ],
+   "y": 0.0,
+   "news7": 42,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "新聞焦點": 1
+   },
+   "x": 0.92,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-13",
+   "quad": "talk"
   },
   {
    "name": "Google Pixel Tag",
@@ -300,112 +339,68 @@
     }
    ],
    "y": 0.0,
-   "news7": 31,
+   "news7": 32,
    "news_p7": 0,
    "news_capped": false,
    "mentions": {
     "Mobile01": 1
    },
-   "x": 0.85,
+   "x": 0.86,
    "talk_trend": "up",
-   "days": 1,
+   "days": 2,
    "first": "2026-11-12",
-   "quad": "talk"
-  },
-  {
-   "name": "週年慶",
-   "q": "百貨 週年慶",
-   "cat": "活動",
-   "do": [],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[集中] 未滿1元集點抽獎資訊集中文"
-    }
-   ],
-   "y": 0.0,
-   "news7": 29,
-   "news_p7": 19,
-   "news_capped": false,
-   "mentions": {
-    "PTT": 1
-   },
-   "x": 0.84,
-   "talk_trend": "up",
-   "days": 4,
-   "first": "2026-11-05",
    "quad": "talk"
   },
   {
    "name": "全家霜淇淋",
-   "q": "全家 崔始源 霜淇淋",
+   "q": "全家 霜淇淋",
    "cat": "飲食",
    "do": [],
    "talk": [
     {
-     "src": "時尚媒體",
-     "title": "全家買冰送崔始源小卡！2款限量7萬張怎麼拿？櫻桃巧克力霜淇淋晚間29元"
+     "src": "PTT",
+     "title": "[情報] 全家行動購1111 開app送50"
+    },
+    {
+     "src": "PTT",
+     "title": "[情報] 全家發熱衣-3件399，4件799"
     }
    ],
    "y": 0.0,
-   "news7": 8,
-   "news_p7": 7,
+   "news7": 19,
+   "news_p7": 16,
    "news_capped": false,
    "mentions": {
-    "時尚媒體": 1
+    "PTT": 2
    },
-   "x": 0.58,
+   "x": 0.85,
    "talk_trend": "flat",
-   "days": 1,
+   "days": 2,
    "first": "2026-11-12",
    "quad": "talk"
   },
   {
-   "name": "魔獸世界",
-   "q": "魔獸世界 典藏版",
-   "cat": "遊戲",
+   "name": "風衣外套",
+   "q": "風衣外套 穿搭",
+   "cat": "生活習慣",
    "do": [],
    "talk": [
     {
-     "src": "Mobile01",
-     "title": "《魔獸世界：永恆》典藏版開箱｜「矮人獵人與熊」雕像重現初代經典！"
+     "src": "時尚媒體",
+     "title": "一件帽T就能穿出6種秋冬風格！從仿皮草大衣到經典風衣，超模示範最時髦的疊穿技巧"
     }
    ],
    "y": 0.0,
-   "news7": 4,
-   "news_p7": 2,
+   "news7": 5,
+   "news_p7": 3,
    "news_capped": false,
    "mentions": {
-    "Mobile01": 1
+    "時尚媒體": 1
    },
-   "x": 0.45,
+   "x": 0.49,
    "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-12",
-   "quad": "low"
-  },
-  {
-   "name": "HUAWEI FreeBuds Neo",
-   "q": "HUAWEI FreeBuds Neo",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "HUAWEI FreeBuds Neo 真無線耳機｜短柄造型輕巧，空間音訊有料！"
-    }
-   ],
-   "y": 0.0,
-   "news7": 3,
-   "news_p7": 1,
-   "news_capped": false,
-   "mentions": {
-    "Mobile01": 1
-   },
-   "x": 0.4,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-12",
+   "days": 4,
+   "first": "2026-11-03",
    "quad": "low"
   },
   {
@@ -428,16 +423,40 @@
    },
    "x": 0.1,
    "talk_trend": "flat",
-   "days": 1,
+   "days": 2,
    "first": "2026-11-12",
+   "quad": "low"
+  },
+  {
+   "name": "AESTURA",
+   "q": "AESTURA 神經醯胺乳霜",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "韓國保養品牌AESTURA登台！Olive Young冠軍乳霜「神經醯胺乳霜」紅什麼？明星商品一次看"
+    }
+   ],
+   "y": 0.0,
+   "news7": 0,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 0.1,
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-13",
    "quad": "low"
   }
  ],
  "quads": {
   "quiet": 0,
-  "hit": 5,
-  "new": 2,
-  "hype": 3,
+  "hit": 7,
+  "new": 1,
+  "hype": 2,
   "talk": 3,
   "low": 3
  },
@@ -453,6 +472,7 @@
   "電影票房"
  ],
  "src_talk": [
+  "Dcard 穿搭",
   "LINE TODAY",
   "Mobile01",
   "PTT",
@@ -460,9 +480,9 @@
   "時尚媒體",
   "社群（Threads・Dcard・IG）"
  ],
- "social_at": "2026-11-11",
- "hist_days": 10,
+ "social_at": "2026-11-12",
+ "hist_days": 11,
  "model": "gemini-3.1-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-12T10:31:36Z"
+ "updatedAt": "2026-11-12T16:34:15Z"
 }
