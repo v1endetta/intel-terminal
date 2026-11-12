@@ -76,7 +76,7 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "Putin says Russia will target foreign troops deployed to Ukraine",
+   "title": "Putin takes hard line in US talks as Ukraine says Starlink disrupted again",
    "url": "https://www.theguardian.com/world/2026/nov/12/vladimir-putin-russia-target-foreign-troops-ukraine-elon-musk-starlink",
    "at": "2026-11-12T17:26:51Z",
    "sec": "World news"
@@ -252,21 +252,21 @@
      "kw": "AI agent OR AI 代理人 OR 智慧代理"
     },
     {
-     "source": "Fortune",
-     "title": "Anthropic launches new suits of AI office productivity tools in run up to IPO",
-     "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPNlhCX21hbUtQSkR5SExrZVI2c09icmNlRkJ3bDlON3B1UUVpbkx2VnAwcXhzbzI5Z3lJUGlnUG1SUVFlczFUd0RHZG0wclNNNEp4MmgzZGtYVEJ4UDJrY3dJblRXMFFFOGI1T2VaZzFqWXRoMHVfTEctSE5wVEhLcVk5ZkdIRUpvMVAtZjV2NzMzTWxjUlVWRzRheDNQYTdCYWRUaA?oc=5",
-     "at": "2026-11-10T19:07:00Z",
+     "source": "marketscreen",
+     "title": "Anthropic Launches Claude for Manufacturing",
+     "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPRlpDQjRpNE5IcUlHXzhxN3hNTW1kMkExdUdqWkFTMTlOcGRnMWFweVE0bGE2eUtyeFN1VUgza3lPOUtUem5rR3JHRkJ2dC1UdXkzazdIREh0ZmVnc0oyQy14RFZmRnFxMDdFSE5vdUpIZTRtSDY0cmw2WThCY3RVWmM0M3oyLS1aUURPZExfMndFMm9ZVHNaSE5nU3o?oc=5",
+     "at": "2026-11-12T17:36:26Z",
      "kw": "en:OpenAI OR Anthropic OR \"Google DeepMind\" launches OR announces OR releases"
     }
    ],
    "daily7": [
     0,
     0,
-    12,
-    52,
-    66,
-    46,
-    4
+    11,
+    51,
+    64,
+    44,
+    8
    ],
    "days7": [
     "2026-11-07",
@@ -366,8 +366,8 @@
     1,
     10,
     28,
-    59,
-    65,
+    58,
+    64,
     0
    ],
    "days7": [
@@ -413,13 +413,13 @@
     }
    ],
    "daily7": [
-    0,
-    2,
+    1,
+    3,
     13,
-    20,
-    15,
-    44,
-    0
+    21,
+    16,
+    41,
+    1
    ],
    "days7": [
     "2026-11-07",
@@ -517,11 +517,11 @@
    "daily7": [
     1,
     1,
-    3,
-    22,
-    36,
-    119,
-    15
+    1,
+    21,
+    35,
+    120,
+    17
    ],
    "days7": [
     "2026-11-07",
@@ -735,19 +735,19 @@
     "hot": true
    },
    {
-    "term": "資安",
-    "n": 5,
+    "term": "Anthropic",
+    "n": 7,
     "src": 5,
     "sources": [
-     "ETtoday新聞雲",
-     "NOWnews今日新聞",
-     "Yahoo股市",
-     "中央社",
-     "中央社 CNA"
+     "Anthropic",
+     "Business Ins",
+     "HN",
+     "Manufacturin",
+     "marketscreen"
     ],
     "sample": {
-     "title": "AI資安需求續旺　中華資安：明年營運審慎樂觀",
-     "url": "https://www.cna.com.tw/news/afe/202611120382.aspx"
+     "title": "Anthropic 推出全新 Claude 工具協助製造商緩解勞動力短缺",
+     "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1mWVdXOUgzV3hJV3k1YnRyT0dKQkc1M08wVmp6X2tJWGFUazBkb3R5bW5VS05EZEhlUkFsczloNG1lZ3Fya3lCcEN1RFpPSWFxQ1pYdFpB?oc=5"
     },
     "hot": true
    },
@@ -785,6 +785,38 @@
     "hot": true
    },
    {
+    "term": "Claude",
+    "n": 5,
+    "src": 4,
+    "sources": [
+     "Business Ins",
+     "Manufacturin",
+     "marketscreen",
+     "三立新聞網SETN.co"
+    ],
+    "sample": {
+     "title": "Anthropic 推出全新 Claude 工具協助製造商緩解勞動力短缺",
+     "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1mWVdXOUgzV3hJV3k1YnRyT0dKQkc1M08wVmp6X2tJWGFUazBkb3R5bW5VS05EZEhlUkFsczloNG1lZ3Fya3lCcEN1RFpPSWFxQ1pYdFpB?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "Gemini",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "Gemini",
+     "Google AI",
+     "Google AI 論壇",
+     "HN"
+    ],
+    "sample": {
+     "title": "Google Search gets a major upgrade with Gemini 4 Hydrogen",
+     "url": "https://blog.google/products-and-platforms/products/search/gemini-4-hydrogen-search-upgrade/"
+    },
+    "hot": true
+   },
+   {
     "term": "ADR",
     "n": 4,
     "src": 4,
@@ -817,47 +849,18 @@
     "hot": true
    },
    {
-    "term": "Anthropic",
+    "term": "資安",
     "n": 4,
-    "src": 3,
-    "sources": [
-     "Anthropic",
-     "Business Ins",
-     "HN"
-    ],
-    "sample": {
-     "title": "Anthropic 推出全新 Claude 工具協助製造商緩解勞動力短缺",
-     "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1mWVdXOUgzV3hJV3k1YnRyT0dKQkc1M08wVmp6X2tJWGFUazBkb3R5bW5VS05EZEhlUkFsczloNG1lZ3Fya3lCcEN1RFpPSWFxQ1pYdFpB?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "Gemini",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "Gemini",
-     "Google AI 論壇",
-     "HN"
-    ],
-    "sample": {
-     "title": "Get quick answers from Gemini on any website.",
-     "url": "https://blog.google/innovation-and-ai/products/gemini-app/research-with-gemini-in-chrome/"
-    },
-    "hot": true
-   },
-   {
-    "term": "資安署",
-    "n": 3,
-    "src": 3,
+    "src": 4,
     "sources": [
      "ETtoday新聞雲",
-     "NOWnews今日新聞",
+     "Yahoo股市",
+     "中央社",
      "中央社 CNA"
     ],
     "sample": {
-     "title": "資安署：駭客用AI網攻成趨勢約800萬筆個資受影響| 政治",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5xSnZZQ1VXQmU4T1lyaF9qN1JVTVh6bktHbnBxSWVoUWM0UkFyM0ZXNjJBRG01VmhuQktxYXNqZk1DM2lFUzhabXZaQnNGeEZnRDdxd2UxVFN1R003YjF3?oc=5"
+     "title": "AI資安需求續旺　中華資安：明年營運審慎樂觀",
+     "url": "https://www.cna.com.tw/news/afe/202611120382.aspx"
     },
     "hot": true
    },
@@ -881,5 +884,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-12T17:46:22Z"
+ "updatedAt": "2026-11-12T18:02:56Z"
 }
