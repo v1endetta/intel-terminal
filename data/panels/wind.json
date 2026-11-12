@@ -1,11 +1,11 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的目光高度集中在串流影音新作、遊戲重製話題以及各類電商與週年慶的購物優惠上。",
+ "line": "這幾天台灣消費者聚焦於新上映的電影、熱門手遊排行與串流影音動態，同時關注雙11購物優惠與車市新品討論。",
  "topics": [
   {
    "name": "崩壞：星穹鐵道",
    "q": "崩壞 星穹鐵道",
-   "cat": "App",
+   "cat": "遊戲",
    "do": [
     {
      "src": "App 營收",
@@ -15,8 +15,8 @@
    ],
    "talk": [],
    "y": 0.9,
-   "news7": 21,
-   "news_p7": 10,
+   "news7": 22,
+   "news_p7": 12,
    "news_capped": false,
    "social": {
     "Threads": 168,
@@ -42,16 +42,16 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 9,
-   "news_p7": 12,
+   "news7": 8,
+   "news_p7": 13,
    "news_capped": false,
    "social": {
     "Threads": 90.7,
     "Dcard": 3
    },
    "mentions": {},
-   "x": 0.88,
-   "talk_trend": "flat",
+   "x": 0.86,
+   "talk_trend": "down",
    "days": 6,
    "first": "2026-11-03",
    "quad": "hit"
@@ -59,17 +59,17 @@
   {
    "name": "蝦皮購物",
    "q": "蝦皮購物",
-   "cat": "品牌商品",
+   "cat": "App",
    "do": [
     {
      "src": "App 下載",
      "name": "蝦皮購物 | 花得更少買得更好",
-     "how": "爬升 34 名到第 17"
+     "how": "爬升 30 名到第 21"
     }
    ],
    "talk": [],
-   "y": 0.79,
-   "news7": 25,
+   "y": 0.75,
+   "news7": 28,
    "news_p7": 9,
    "news_capped": false,
    "social": {
@@ -86,7 +86,7 @@
   {
    "name": "卡厄思夢境",
    "q": "卡厄思夢境",
-   "cat": "App",
+   "cat": "遊戲",
    "do": [
     {
      "src": "App 營收",
@@ -96,14 +96,14 @@
    ],
    "talk": [],
    "y": 0.93,
-   "news7": 21,
-   "news_p7": 6,
+   "news7": 19,
+   "news_p7": 8,
    "news_capped": false,
    "social": {
     "Threads": 1.7
    },
    "mentions": {},
-   "x": 0.74,
+   "x": 0.72,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-11",
@@ -142,11 +142,44 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 21,
-   "news_p7": 28,
+   "news7": 19,
+   "news_p7": 29,
    "news_capped": false,
    "mentions": {},
-   "x": 0.67,
+   "x": 0.65,
+   "talk_trend": "down",
+   "days": 2,
+   "first": "2026-11-09",
+   "quad": "hit"
+  },
+  {
+   "name": "Spotify",
+   "q": "Spotify",
+   "cat": "App",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "ILLIT - You're Under Arrest",
+     "how": "上榜 5 天、第 5 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "RESCENE - With",
+     "how": "上榜 8 天、第 11 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "Amazing Show - 愛情的大壞蛋",
+     "how": "升 7 名到第 19"
+    }
+   ],
+   "talk": [],
+   "y": 0.88,
+   "news7": 19,
+   "news_p7": 15,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.65,
    "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-09",
@@ -166,11 +199,11 @@
    "talk": [],
    "y": 0.5,
    "static": true,
-   "news7": 66,
-   "news_p7": 34,
+   "news7": 63,
+   "news_p7": 37,
    "news_capped": true,
    "mentions": {},
-   "x": 0.91,
+   "x": 0.9,
    "talk_trend": "up",
    "days": 6,
    "first": "2026-11-05",
@@ -179,16 +212,16 @@
   {
    "name": "momo購物",
    "q": "momo購物",
-   "cat": "品牌商品",
+   "cat": "App",
    "do": [
     {
      "src": "App 下載",
      "name": "momo購物 l 值得信賴的購物首選",
-     "how": "爬升 29 名到第 7"
+     "how": "爬升 28 名到第 8"
     }
    ],
    "talk": [],
-   "y": 0.74,
+   "y": 0.73,
    "news7": 15,
    "news_p7": 11,
    "news_capped": false,
@@ -200,175 +233,102 @@
    "quad": "hit"
   },
   {
-   "name": "Spotify",
-   "q": "Spotify 熱門",
-   "cat": "音樂",
+   "name": "Google",
+   "q": "Google 熱搜",
+   "cat": "活動",
    "do": [
     {
-     "src": "Spotify",
-     "name": "ILLIT - You're Under Arrest",
-     "how": "上榜 4 天、第 4 名"
+     "src": "Google 熱搜",
+     "name": "阿爾佩倫·申京",
+     "how": "搜尋 100+"
     },
     {
-     "src": "Spotify",
-     "name": "BESTie - Love Options",
-     "how": "第 1 名"
+     "src": "Google 熱搜",
+     "name": "賽揚獎",
+     "how": "搜尋 100+"
     },
     {
-     "src": "Spotify",
-     "name": "A2O - NEON (w/ A2O LITE)",
-     "how": "第 2 名"
-    },
-    {
-     "src": "Spotify",
-     "name": "Jess Lee - 甲乙丙丁 - 你我怎么两清",
-     "how": "第 3 名"
+     "src": "Google 熱搜",
+     "name": "史蒂芬·柯瑞",
+     "how": "搜尋 500+"
     }
    ],
    "talk": [],
-   "y": 0.9,
-   "news7": 5,
-   "news_p7": 6,
+   "y": 0.6,
+   "news7": 7,
+   "news_p7": 3,
    "news_capped": false,
    "mentions": {},
-   "x": 0.39,
-   "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-09",
+   "x": 0.45,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-12",
    "quad": "new"
   },
   {
-   "name": "理想混蛋",
-   "q": "理想混蛋 大概也只能是思念",
+   "name": "黃奇斌",
+   "q": "黃奇斌 若無你我欲去佗位",
    "cat": "音樂",
    "do": [
     {
-     "src": "YouTube 熱門",
-     "name": "理想混蛋 Bestards【大概也只能是思念 To Where I Cannot Follow】Official Mus",
-     "how": "7 天內上架、發燒第 8"
+     "src": "KKBOX",
+     "name": "黃奇斌 - 若無你我欲去佗位",
+     "how": "升 3 名到第 17"
     }
    ],
    "talk": [],
-   "y": 0.52,
-   "news7": 1,
-   "news_p7": 0,
+   "y": 0.6,
+   "news7": 0,
+   "news_p7": 12,
    "news_capped": false,
    "mentions": {},
-   "x": 0.15,
-   "talk_trend": "flat",
-   "days": 7,
+   "x": 0.0,
+   "talk_trend": "down",
+   "days": 4,
    "first": "2026-11-03",
    "quad": "new"
   },
   {
    "name": "薩爾達傳說：時之笛重製版",
-   "q": "薩爾達傳說 時之笛重製版",
+   "q": "薩爾達傳說 時之笛",
    "cat": "遊戲",
    "do": [],
    "talk": [
     {
      "src": "新聞焦點",
-     "title": "《薩爾達傳說：時之笛重製版》Switch 2 上市引發全球「陶笛大賽」，連長笛語音輸入、聯合公園神曲都出來了"
+     "title": "任天堂《薩爾達傳説:時之笛》上市4天銷量創紀錄"
     }
    ],
    "y": 0.0,
-   "news7": 32,
-   "news_p7": 12,
-   "news_capped": false,
+   "news7": 80,
+   "news_p7": 20,
+   "news_capped": true,
    "social": {
     "Threads": 0
    },
    "mentions": {
     "新聞焦點": 1
    },
-   "x": 0.86,
+   "x": 1.0,
    "talk_trend": "up",
    "days": 7,
    "first": "2026-11-03",
    "quad": "hype"
   },
   {
-   "name": "Uber Eats",
-   "q": "Uber Eats",
-   "cat": "App",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 48,
-   "news_p7": 11,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.85,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-12",
-   "quad": "hype"
-  },
-  {
-   "name": "神隱少女",
-   "q": "神隱少女 重返大銀幕",
-   "cat": "影視",
-   "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "《神隱少女》25 周年重返大銀幕全新預告公開11/27 在台上映《Spirited Away》"
-    }
-   ],
-   "y": 0.0,
-   "news7": 20,
-   "news_p7": 2,
-   "news_capped": false,
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 0.76,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-12",
-   "quad": "hype"
-  },
-  {
-   "name": "台積電",
-   "q": "台積電",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "美股｜CPI炙熱 4大指數齊黑 輝達再跌逾5％ 台積ADR漲2％"
-    }
-   ],
-   "y": 0.0,
-   "news7": 94,
-   "news_p7": 6,
-   "news_capped": true,
-   "social": {
-    "Threads": 312
-   },
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-10",
-   "quad": "talk"
-  },
-  {
    "name": "特斯拉",
-   "q": "特斯拉 馬斯克",
+   "q": "特斯拉 Cybertruck",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
      "src": "PTT",
-     "title": "[新聞] 2028年量產？馬斯克Terafab啟動採購，每"
+     "title": "[請益] 如果老黃辭職去馬斯克公司？"
     }
    ],
    "y": 0.0,
-   "news7": 89,
-   "news_p7": 11,
+   "news7": 100,
+   "news_p7": 0,
    "news_capped": true,
    "mentions": {
     "PTT": 1
@@ -380,59 +340,83 @@
    "quad": "talk"
   },
   {
+   "name": "Uber Eats",
+   "q": "Uber Eats",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] foodpanda雙11半年優惠"
+    }
+   ],
+   "y": 0.0,
+   "news7": 46,
+   "news_p7": 10,
+   "news_capped": false,
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 0.94,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-12",
+   "quad": "talk"
+  },
+  {
    "name": "JISOO",
-   "q": "JISOO Coachella",
+   "q": "JISOO 科切拉音樂節",
    "cat": "人物",
    "do": [],
    "talk": [
     {
      "src": "時尚媒體",
-     "title": "2027 Coachella卡司陣容公開！Jisoo solo演唱，NCT、BABYMONSTER確定出演"
+     "title": "2027 科切拉音樂節：完整演出陣容、日期、門票 ⋯⋯ Dua Lipa、瑪丹娜、JISOO 都參戰！"
     }
    ],
    "y": 0.0,
-   "news7": 9,
+   "news7": 7,
    "news_p7": 0,
    "news_capped": false,
    "mentions": {
     "時尚媒體": 1
    },
-   "x": 0.6,
+   "x": 0.55,
    "talk_trend": "up",
    "days": 4,
    "first": "2026-11-05",
    "quad": "talk"
   },
   {
-   "name": "週年慶",
-   "q": "週年慶 Panasonic",
-   "cat": "品牌商品",
+   "name": "魔獸世界",
+   "q": "魔獸世界 永恆 典藏版",
+   "cat": "遊戲",
    "do": [],
    "talk": [
     {
      "src": "Mobile01",
-     "title": "趁周年慶敗了 Panasonic EH-NC80，長髮人真實心得分享"
+     "title": "《魔獸世界：永恆》典藏版開箱｜「矮人獵人與熊」雕像重現初代經典！"
     }
    ],
    "y": 0.0,
-   "news7": 2,
-   "news_p7": 4,
+   "news7": 4,
+   "news_p7": 3,
    "news_capped": false,
    "mentions": {
     "Mobile01": 1
    },
-   "x": 0.34,
-   "talk_trend": "down",
-   "days": 4,
-   "first": "2026-11-05",
+   "x": 0.45,
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-12",
    "quad": "low"
   }
  ],
  "quads": {
   "quiet": 0,
-  "hit": 7,
+  "hit": 8,
   "new": 2,
-  "hype": 3,
+  "hype": 1,
   "talk": 3,
   "low": 1
  },
@@ -459,5 +443,5 @@
  "hist_days": 10,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-11T22:18:49Z"
+ "updatedAt": "2026-11-12T04:21:27Z"
 }
