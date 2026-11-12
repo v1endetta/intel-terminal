@@ -12848,6 +12848,8 @@ def p_insure():
         r = next((x for x in gjson("https://openapi.twse.com.tw/v1/opendata/t187ap05_L") if x.get("公司代號") == "2851"), None)
         if r:
             out["centralre"] = {"ym": roc_ym(r.get("資料年月")), "rev": num(r.get("營業收入-當月營收")), "yoy": num(r.get("營業收入-去年同月增減(%)"))}
+        elif prev.get("centralre"):   # 每月初證交所清單換月，公司還沒申報時查不到，沿用上個月
+            out["centralre"] = prev["centralre"]
     except Exception as e:  # noqa: BLE001
         errs.append("中再保營收: " + safe_err(e))
     if not (out.get("life") or out.get("pc")):
