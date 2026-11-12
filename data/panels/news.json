@@ -75,6 +75,19 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Pope Leo gets rapturous welcome in Peru: ‘This visit is like a big party’",
+   "url": "https://www.theguardian.com/world/2026/nov/12/pope-leo-peru-visit",
+   "at": "2026-11-12T19:00:32Z",
+   "sec": "World news"
+  },
+  {
+   "source": "BBC",
+   "title": "Hegseth awards medal to war memorial guard who reprimanded him and group",
+   "url": "https://www.bbc.co.uk/news/articles/cmvg2r3dq7xno?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-12T18:47:35Z"
+  },
+  {
    "source": "BBC",
    "title": "US envoys head to meet Zelensky after talks with Putin in Moscow",
    "url": "https://www.bbc.co.uk/news/articles/cwrkgmymk55zo?at_medium=RSS&at_campaign=rss",
@@ -108,12 +121,6 @@
    "at": "2026-11-12T16:54:12Z"
   },
   {
-   "source": "BBC",
-   "title": "Pentagon backs war memorial guard who reprimanded Hegseth's group",
-   "url": "https://www.bbc.co.uk/news/articles/cmvg2r3dq7xno?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-12T16:52:53Z"
-  },
-  {
    "source": "Guardian",
    "title": "UK car industry to press EU for two-year delay to Brexit EV tariffs",
    "url": "https://www.theguardian.com/business/2026/nov/12/uk-car-industry-rules-of-origin-brexit-ev-tariffs-eu",
@@ -145,12 +152,6 @@
    "title": "'We've got to run': Inside ruined Ukraine power plant under constant drone threat",
    "url": "https://www.bbc.co.uk/news/videos/cm93rp3gxn6qo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-12T13:02:46Z"
-  },
-  {
-   "source": "BBC",
-   "title": "Democrat Scott Colom makes history as Mississippi's first black senator since 19th Century",
-   "url": "https://www.bbc.co.uk/news/articles/cw7vppyr80eeo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-12T12:56:55Z"
   }
  ],
  "groups": [
@@ -161,7 +162,7 @@
     0,
     0,
     0,
-    1,
+    0,
     0,
     0,
     0
@@ -248,7 +249,7 @@
      "source": "TechNews 科技新",
      "title": "侯永清提出使用 AI 三心法，以防企業面臨 AI 失控狀態",
      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQalcxLTI4MmNfOXVwYjREZGV1V2FFdFkwa3ZEN0VKSjRveTJJTmdyMHkxOV9xQ1FoYTZoNk8xZ0ZZZ3Y5UE44UHZVY2Ixc1RhVld2ZHUyU1lUaTlYalBWODljTDd3cEI0VWlnRFoxdEZSSmo4Q3FVOEl4UUhsc1NMMmFHRkdxZTl2QWF4LUZ5dlRfc0lZM01DUXUycWxDeVVjdS02OFZuZGFwQkV4OWVkWDRlVERGelR4Qy00Y3pDbThKOHJxTTM0eUUtNA?oc=5",
-     "at": "2026-11-12T17:14:49Z",
+     "at": "2026-11-12T18:51:56Z",
      "kw": "AI agent OR AI 代理人 OR 智慧代理"
     },
     {
@@ -263,9 +264,9 @@
     0,
     0,
     11,
-    51,
-    64,
-    44,
+    50,
+    65,
+    45,
     8
    ],
    "days7": [
@@ -785,7 +786,7 @@
    },
    {
     "term": "Gemini",
-    "n": 5,
+    "n": 4,
     "src": 4,
     "sources": [
      "Gemini",
@@ -833,7 +834,7 @@
    },
    {
     "term": "Hydrogen",
-    "n": 5,
+    "n": 4,
     "src": 3,
     "sources": [
      "Gemini",
@@ -862,8 +863,8 @@
     "hot": true
    },
    {
-    "term": "黃仁勳辭",
-    "n": 4,
+    "term": "執行長",
+    "n": 5,
     "src": 2,
     "sources": [
      "PTT",
@@ -877,6 +878,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-12T18:46:55Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-12T19:05:08Z"
 }
