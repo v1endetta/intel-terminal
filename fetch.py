@@ -12621,6 +12621,13 @@ def _lia_parse(txt):
     i1 = _lia_table(incl.split("各險別", 1)[0]) if incl else {}
     i2 = _lia_table(seg(incl, "各險別初年度保費收入統計表", "")) if incl else {}
     fy = t1["初年度"]
+    # 自我驗算：公會改版面時數字可能錯位。傳統型＋投資型要等於小計、各險別加總要等於初年度小計，不符就整份不用（沿用上次）
+    for a, b in ((fy.get("傳統型"), fy.get("投資型")),):
+        if not (a and b and fy.get("小計")) or abs(a[0] + b[0] - fy["小計"][0]) > 3 or abs(a[1] + b[1] - fy["小計"][1]) > 3:
+            raise RuntimeError("壽險公會月報：傳統型＋投資型不等於小計")
+    ln_sum = sum((v or [0])[0] or 0 for gn, g in t2.items() if gn != "合計" for k, v in g.items() if k in ("傳統型", "投資型"))
+    if abs(ln_sum - fy["小計"][0]) > max(6, fy["小計"][0] * 0.001):
+        raise RuntimeError("壽險公會月報：各險別加總不等於初年度小計")
     lines = []
     for g, k, nm in (("壽險", "傳統型", "傳統壽險"), ("壽險", "投資型", "投資型壽險"), ("年金險", "投資型", "投資型年金"), ("年金險", "傳統型", "傳統年金"),
                      ("健康險", "傳統型", "健康險"), ("傷害險", "傳統型", "傷害險")):
@@ -12733,6 +12740,10 @@ def p_insure():
                     res.append([k, round(s[k] - s[pk], 1)])
             return res[-13:]
         L["monthly"] = {"total": monthly("fy_total"), "inv": monthly("fy_inv")}
+        ft, fi = L["fy"].get("小計") or {}, L["fy"].get("投資型") or {}
+        L["inv_share"] = round(fi["cur"] / ft["cur"] * 100, 1) if ft.get("cur") and fi.get("cur") is not None else None
+        L["inv_share_ly"] = round(fi["ly"] / ft["ly"] * 100, 1) if ft.get("ly") and fi.get("ly") is not None else None
+        hist_put("insure", "inv_share", ym, L["inv_share"])
     except Exception as e:  # noqa: BLE001
         errs.append("壽險公會月報: " + safe_err(e))
         if prev.get("life"):
@@ -12752,9 +12763,12 @@ def p_insure():
                                    ("不動產", "不動產"), ("保單貸款", "壽險貸款"), ("放款", "放款"), ("銀行存款", "銀行存款"))]}
         hist_put("insure", "foreign_share", k, pick(last, "國外投資"))
         hist_put("insure", "stock_share", k, pick(last, "股票"))
-        for r in yr[-12:]:
-            hist_put("insure", "foreign_share", f"{r['年']}-12", pick(r, "國外投資"))
-        out["funds"]["foreign_series"] = HISTORY.get("insure", {}).get("foreign_share", [])[-24:]
+        # 年底值另外放（跟月值接在同一條線，間距不等會看錯斜率）；11/11 那版混進月序列的 2025 以前年底值清掉
+        G = HISTORY.get("insure", {})
+        if G.get("foreign_share"):
+            G["foreign_share"] = [x for x in G["foreign_share"] if not (x[0].endswith("-12") and x[0][:4] <= "2025")]
+        out["funds"]["foreign_series"] = G.get("foreign_share", [])[-24:]
+        out["funds"]["years"] = [[int(r["年"]), pick(r, "國外投資"), pick(r, "股票")] for r in yr[-12:]]
     except Exception as e:  # noqa: BLE001
         errs.append("資金運用: " + safe_err(e))
     # 3) 地震險投保率：I26 住宅地震保險（每月）
@@ -12825,21 +12839,21 @@ def p_insure():
             T = pc["total"]
             # 估算：產險公司分出的再保費，扣掉在台註冊專業再保收的產險部分、扣掉產險公司之間互相收的，剩下的流向沒在台灣註冊的再保公司（多半在海外）
             off = T["ceded"] - out["re"]["nonlife_in"] - T["re_in"]
-            out["re"]["offshore_est"] = {"amt": off, "share": round(off / T["ceded"] * 100) if T["ceded"] else None}
+            # 這是下限：在台專業再保收的錢裡有海外來的業務，而且它們自己還會再轉分到海外，兩者都讓真實比例更高
+            out["re"]["offshore_est"] = {"amt": off, "share": round(off / T["ceded"] * 100) if T["ceded"] else None, "floor": True}
     except Exception as e:  # noqa: BLE001
         errs.append("專業再保: " + safe_err(e))
     # 6) 中再保（台灣唯一本土專業再保）月營收
     try:
         r = next((x for x in gjson("https://openapi.twse.com.tw/v1/opendata/t187ap05_L") if x.get("公司代號") == "2851"), None)
         if r:
-            out["centralre"] = {"ym": roc_ym(r.get("資料年月")), "rev": num(r.get("營業收入-當月營收")), "yoy": num(r.get("營業收入-去年同月增減(%)")),
-                                "ytd_yoy": num(r.get("累計營業收入-前期比較增減(%)"))}
+            out["centralre"] = {"ym": roc_ym(r.get("資料年月")), "rev": num(r.get("營業收入-當月營收")), "yoy": num(r.get("營業收入-去年同月增減(%)"))}
     except Exception as e:  # noqa: BLE001
         errs.append("中再保營收: " + safe_err(e))
     if not (out.get("life") or out.get("pc")):
         raise RuntimeError("; ".join(errs)[:300])
     out["errs"] = errs
-    out["src"] = "壽險公會壽險業業績統計（每月）、保發中心開放資料 I171／I26／K01、保發中心統計年報 6-1、證交所月營收、保險業公開資訊觀測站"
+    out["src"] = "壽險公會壽險業業績統計（每月）、保發中心開放資料 I171／I26／K01、保發中心統計年報 6-1、證交所月營收"
     return out
 
 # ---------- 企業壓力：退票（央行）＋ 減班休息（勞動部每月兩次公布；官方沒有結構化資料，從新聞標題抽數字） ----------
@@ -13568,6 +13582,13 @@ def p_theses():
                  E("離 1 年高點", f1(off), None, "回落 15% 以上＝差距正在被修正"),
                  E("美債 10 年實質利率", "—" if R("ust").get("real10") is None else f"{R('ust')['real10']:.2f}%", pos(R("ust").get("real10"), 2.0, 1.0),
                    "實質利率高、股價還在漲＝估值更撐不住")]
+    INS = R("insure"); _fi = {x.get("name"): x for x in ((INS.get("funds") or {}).get("items") or [])}; _st = _fi.get("股票") or {}
+    _std = None if _st.get("now") is None or _st.get("ye") is None else round(_st["now"] - _st["ye"], 1)
+    _ivs, _ivl = (INS.get("life") or {}).get("inv_share"), (INS.get("life") or {}).get("inv_share_ly")
+    ev["t13"] += [E("壽險資金的股票占比", "—" if _std is None else f"{_st['now']:.1f}%（比去年底 {_std:+.1f} 點）", pos(_std, 1.0, -1.0),
+                    "保險公司把錢搬進股市＝資金推著股價走，不是獲利"),
+                  E("新保單裡投資型占比", "—" if _ivs is None else f"{_ivs:.0f}%" + ("" if _ivl is None else f"（去年同期 {_ivl:.0f}%）"), pos(_ivs, 30, 15),
+                    "一般人透過保險追股市的程度")]
     kill["t13"] = txg is not None and txg < 20
 
     # t5 供應鏈往美墨
@@ -14104,7 +14125,7 @@ run("uspolicy", p_uspolicy, keep_if_fresh_hours=2)  # 美國政策源頭：Feder
 run("exports", p_exports, keep_if_fresh_hours=24 if "nonee_yoy3" in json.dumps(load_prev("exports") or {}) else 0)  # 新增非電子出口時先重抓一次； 台灣出口結構：月資料，每月 9 日前後公布
 run("stress", p_stress, keep_if_fresh_hours=12)  # 企業壓力：退票月資料、減班每月兩次
 run("labor", p_labor, keep_if_fresh_hours=24)  # 誰在擴張：勞動部統計月報（投保人數、職位空缺、積欠工資墊償），月資料一天看一次就好
-run("insure", p_insure, keep_if_fresh_hours=24)  # 保險流向：壽險公會月報（每月 20 號左右）、保發中心開放資料與年報；一天看一次就好
+run("insure", p_insure, keep_if_fresh_hours=1 if (load_prev("insure") or {}).get("errs") or "inv_share" not in ((load_prev("insure") or {}).get("life") or {}) else 24)  # 保險流向：壽險公會月報（每月 20 號左右）、保發中心開放資料與年報；一天看一次就好
 run("logistics", p_logistics, keep_if_fresh_hours=1)  # 全球物流：風暴要即時，運價週／日資料
 run("aicycle", p_aicycle, keep_if_fresh_hours=6)
 run("champions", p_champions, keep_if_fresh_hours=12)  # 台灣隱形冠軍：月營收，半天抓一次  # AI 循環：資本支出一季一次、營收每月、DRAM 每日
