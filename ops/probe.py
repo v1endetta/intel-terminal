@@ -29,33 +29,19 @@ def grab(tag, url, binary=False, keep=400000):
         time.sleep(1.2)
 
 
-# 1) 保發中心：開放資料目錄（找解約、保單貸款、產險月資料）、年報人身保險給付表、季指標
-for u in ("https://openapi.tii.org.tw/", "https://openapi.tii.org.tw/TIIOPENDATA/", "https://openapi.tii.org.tw/TIIOPENDATA/swagger/v1/swagger.json",
-          "https://openapi.tii.org.tw/swagger/v1/swagger.json", "https://openapi.tii.org.tw/TIIOPENDATA/swagger/index.html"):
-    grab("tiiapi_%d" % len(idx), u)
-for i in list(range(13505, 13530)) + list(range(14495, 14520)):
-    r = grab(f"dg_{i}", f"https://data.gov.tw/api/v2/rest/dataset/{i}", keep=20000)
-for n in range(1, 11):
-    r = grab(f"tiiyb_{n:02d}", f"https://www.tii.org.tw/tii/information/information1/{n:06d}.html")
-    if r is not None and r.ok:
-        for m in re.finditer(r'href="([^"]*/files/(?:7-2|5-2|3-life)[^"]*\.xlsx?)"', r.text):
-            u = urllib.parse.urljoin(r.url, m.group(1))
-            grab("tiifile_" + re.sub(r"[^0-9A-Za-z.-]", "_", u.rsplit("/", 1)[1])[:40].rsplit(".", 1)[0], u, binary=True)
-grab("tiipivot", "https://pivot.tii.org.tw/")
-grab("tiistat", "https://www.tii.org.tw/tii/information/information2/")
-# 2) 保險局新聞稿（每月保險業損益、淨值、外匯價格變動準備金）
-for t, u in (("ib_news", "https://www.ib.gov.tw/ch/home.jsp?id=239&parentpath=0,2,238"), ("ib_stat", "https://www.ib.gov.tw/ch/home.jsp?id=48&parentpath=0,4"),
-             ("fsc_rss", "https://www.fsc.gov.tw/RSS/Messages?serno=201202290009&language=chinese"), ("fsc_news", "https://www.fsc.gov.tw/ch/home.jsp?id=96&parentpath=0,2"),
-             ("ib_rss", "https://www.ib.gov.tw/RSS/Messages?serno=201202290009&language=chinese")):
-    r = grab(t, u)
-    if t == "ib_news" and r is not None and r.ok:
-        hits = [m for m in re.finditer(r'href="([^"]+)"[^>]*>([^<]*(?:損益|淨值|外匯價格|保費收入)[^<]*)<', r.text)][:3]
-        for k, m in enumerate(hits):
-            grab(f"ib_news_item{k}", urllib.parse.urljoin(r.url, m.group(1).replace("&amp;", "&")))
-# 3) 債券 ETF 規模、國際債發行
-for t, u in (("tpex_swagger", "https://www.tpex.org.tw/openapi/swagger.json"), ("twse_swagger", "https://openapi.twse.com.tw/v1/swagger.json"),
-             ("sitca_etf", "https://www.sitca.org.tw/ROC/Industry/IN2629.aspx?pid=IN22601_04"), ("sitca_home", "https://www.sitca.org.tw/ROC/Industry/IN2000.aspx"),
-             ("tpex_bondetf", "https://www.tpex.org.tw/zh-tw/bond/info/statistics-etf.html"), ("tpex_intl", "https://www.tpex.org.tw/zh-tw/bond/info/statistics/intl-bond.html")):
-    grab(t, u, keep=3_000_000 if "swagger" in t else 400000)
+# 第二輪：保發中心開放資料各表（找月資料：資產負債、損益、給付／解約、產險保費）
+API = "https://openapi.tii.org.tw/TIIOPENDATA/API/CSV_EXPORT?TableID="
+ids = ["I%02d" % n for n in range(1, 46)] + ["I13", "I14", "I15_1", "I15_2", "I15_3", "I16", "I161", "I162", "I17", "I171", "I172", "I31", "A01", "A02", "K01", "K02", "K03"]
+for t in dict.fromkeys(ids):
+    grab("tii_" + t, API + t, keep=60000)
+for t, u in (("tpex_iss10", "https://www.tpex.org.tw/openapi/v1/bond_ISSBD10_data"), ("tpex_iss11", "https://www.tpex.org.tw/openapi/v1/bond_ISSBD11_data"),
+             ("tpex_intl_org", "https://www.tpex.org.tw/openapi/v1/tpex_international_bond_issue_org"),
+             ("sitca_2105", "https://www.sitca.org.tw/ROC/Industry/IN2105.aspx"), ("sitca_2106", "https://www.sitca.org.tw/ROC/Industry/IN2106.aspx"),
+             ("sitca_2201", "https://www.sitca.org.tw/ROC/Industry/IN2201.aspx"), ("sitca_2213", "https://www.sitca.org.tw/ROC/Industry/IN2213.aspx"),
+             ("sitca_menu", "https://www.sitca.org.tw/ROC/Industry/IN2001.aspx"),
+             ("fsc_kw", "https://www.fsc.gov.tw/ch/home.jsp?id=96&parentpath=0,2&mcustomize=news_list.jsp&keyword=" + urllib.parse.quote("保險業損益")),
+             ("ib_kw", "https://www.ib.gov.tw/ch/home.jsp?id=239&parentpath=0,2,238&mcustomize=news_list.jsp&keyword=" + urllib.parse.quote("損益")),
+             ("ib_p2", "https://www.ib.gov.tw/ch/home.jsp?id=239&parentpath=0,2,238&page=2&pagesize=50"), ("ib_p50", "https://www.ib.gov.tw/ch/home.jsp?id=239&parentpath=0,2,238&pagesize=100")):
+    grab(t, u, keep=300000)
 json.dump(idx, open(os.path.join(OUT, "index.json"), "w"), ensure_ascii=False, indent=1)
 print(len(idx), "requests")
