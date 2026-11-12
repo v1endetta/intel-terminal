@@ -75,6 +75,12 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Democrat Scott Colom seals historic win in Mississippi Senate race",
+   "url": "https://www.bbc.co.uk/news/articles/cw7vppyr80eeo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-12T03:57:58Z"
+  },
+  {
    "source": "Guardian",
    "title": "‘He’s the hottest thing right now’: how a $1 scarf seller became Seoul’s biggest attractio",
    "url": "https://www.theguardian.com/world/ng-interactive/2026/nov/12/how-namdaemun-scarf-man-became-seouls-biggest-attraction",
@@ -96,15 +102,9 @@
   },
   {
    "source": "BBC",
-   "title": "New York building collapse kills one person and injures 12",
+   "title": "Survivor pulled from rubble of deadly building collapse in New York",
    "url": "https://www.bbc.co.uk/news/videos/c60rkwjj7x7go?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-12T02:33:12Z"
-  },
-  {
-   "source": "BBC",
-   "title": "Democrat Scott Colom seals historic win in Mississippi Senate race",
-   "url": "https://www.bbc.co.uk/news/articles/cw7vppyr80eeo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-12T02:09:08Z"
   },
   {
    "source": "Guardian",
@@ -752,7 +752,7 @@
     "hot": true
    },
    {
-    "term": "ADR",
+    "term": "台積電",
     "n": 4,
     "src": 4,
     "sources": [
@@ -768,7 +768,7 @@
     "hot": true
    },
    {
-    "term": "台積電",
+    "term": "ADR",
     "n": 4,
     "src": 4,
     "sources": [
@@ -815,6 +815,21 @@
     "hot": true
    },
    {
+    "term": "黃仁勳",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "PTT",
+     "Wiki",
+     "中央社"
+    ],
+    "sample": {
+     "title": "結縭41年隱身幕後助創業　黃仁勳外遇讓妻子洛莉受關注",
+     "url": "https://www.cna.com.tw/news/afe/202611120059.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "Google",
     "n": 3,
     "src": 3,
@@ -826,21 +841,6 @@
     "sample": {
      "title": "OpenAI Businesses in ChatGPT挑戰Google、Meta線上商家平臺服務",
      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE10andXbUhJWTJWaHNhcXk0UlFFemMxVDNzU2ZWTWdESGtkWGZJbTdvT1ZtOGVwZWlqZDB0NHpQU3pGVGF5SDRFRDJaQ0Jqdw?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "黃仁勳",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "PTT",
-     "Wiki",
-     "中央社"
-    ],
-    "sample": {
-     "title": "結縭41年隱身幕後助創業　黃仁勳外遇讓妻子洛莉受關注",
-     "url": "https://www.cna.com.tw/news/afe/202611120059.aspx"
     },
     "hot": true
    },
@@ -894,5 +894,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-12T03:43:44Z"
+ "updatedAt": "2026-11-12T03:59:27Z"
 }
