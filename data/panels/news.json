@@ -264,10 +264,10 @@
    "daily7": [
     0,
     0,
-    9,
-    49,
+    8,
+    48,
     62,
-    42,
+    43,
     34
    ],
    "days7": [
@@ -658,7 +658,7 @@
     3.438,
     4.38
    ],
-   "at": "2026-11-13T07:17:30Z"
+   "at": "2026-11-13T08:00:34Z"
   },
   "wiki": {
    "zh": [
@@ -723,7 +723,7 @@
     "src": 5,
     "sources": [
      "CMoney",
-     "ETtoday AI科技",
+     "ETtoday新聞雲",
      "Google AI 論壇",
      "HN",
      "自由電子報3C科技"
@@ -735,28 +735,12 @@
     "hot": true
    },
    {
-    "term": "Hydrogen",
-    "n": 6,
-    "src": 4,
-    "sources": [
-     "CMoney",
-     "ETtoday AI科技",
-     "Google AI 論壇",
-     "HN"
-    ],
-    "sample": {
-     "title": "Google新模型Gemini 4 Hydrogen登場　速度快2.5倍、所有人免費用",
-     "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9rczFXTERUNGwzUzJOaE9IeDRyUmNZbG84Ykd5ZUkxbjU0YkFKSnhManIxWmczRlpnQ20wYXVSWk5Jb0Y5N2JSUERlZ9IBSkFVX3lxTE9iSXJDQzdyalVOckpmem9yT1ZBLXBEUVZaaFZEVzJHT2ZaSnUtZzlENndrLTVBM1JIRjhpV1VBUGJCZDVobmFjMEVB?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "Google",
     "n": 5,
-    "src": 4,
+    "src": 5,
     "sources": [
      "CMoney",
-     "ETtoday AI科技",
+     "ETtoday新聞雲",
      "Google AI 論壇",
      "動區動趨",
      "自由電子報3C科技"
@@ -830,6 +814,21 @@
     "hot": true
    },
    {
+    "term": "Hydrogen",
+    "n": 5,
+    "src": 3,
+    "sources": [
+     "CMoney",
+     "Google AI 論壇",
+     "HN"
+    ],
+    "sample": {
+     "title": "Google 新模型 Gemini 4 Hydrogen 登場：Token 省 23%、全面導入搜尋與 Workspac",
+     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE05LTZMSmpfZnpZVnF2MUVIV05fcDY0NmQ1LTNtTGpUNURuVWtFUzlta1ZqbW1tcGRWUHhPR3pVaTFjU2RVLTkyZTIwdDRBT2c2X2M3Ri1veTU?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "Anthropic",
     "n": 4,
     "src": 3,
@@ -876,8 +875,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-13T07:37:51Z"
+ "errs": [],
+ "updatedAt": "2026-11-13T08:00:34Z"
 }
