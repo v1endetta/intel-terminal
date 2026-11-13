@@ -14,20 +14,13 @@
    "cat": "經濟",
    "tw": 4,
    "why": "輝達高層異動牽動台灣半導體供應鏈與台積電代工表現。",
-   "n_src": 5,
+   "n_src": 3,
    "srcs": [
     "BBC",
-    "南華早報",
     "日本時報",
-    "Guardian",
-    "日經亞洲"
+    "Guardian"
    ],
    "also": [
-    {
-     "src": "南華早報",
-     "url": "https://www.scmp.com/news/china/diplomacy/article/3374270/jensen-huangs-departure-may-signal-tighter-us-controls-ai-chip-exports-china",
-     "en": "Jensen Huang’s departure may signal tighter US controls on AI chip exports to China"
-    },
     {
      "src": "日本時報",
      "url": "https://www.japantimes.co.jp/business/2026/11/13/companies/nvidia-huang-ousted/",
@@ -39,14 +32,14 @@
      "en": "The rise and fall of Jensen Huang - how the tech superstar became mired in scandal"
     },
     {
-     "src": "BBC 商業",
-     "url": "https://www.bbc.co.uk/news/articles/cqgm37dv20e8o?at_medium=RSS&at_campaign=rss",
-     "en": "Who is Nvidia's interim CEO Colette Kress - and who could take over permanently?"
-    },
-    {
      "src": "日本時報",
      "url": "https://www.japantimes.co.jp/business/2026/11/12/nvidia-supply-chain-asia/",
      "en": "Nvidia’s Asian supply chain prepares for life after Huang"
+    },
+    {
+     "src": "Guardian",
+     "url": "https://www.theguardian.com/world/2026/nov/12/thursday-briefing-what-we-do-and-dont-know-about-alice-huang-and-the-nvidia-affair",
+     "en": "Thursday briefing: What we do (and don’t) know about Alice Huang and the Nvidia affair"
     }
    ]
   },
@@ -55,7 +48,7 @@
    "en": "Putin takes hard line in US talks as Ukraine says Starlink disrupted again",
    "src": "Guardian",
    "url": "https://www.theguardian.com/world/2026/nov/12/vladimir-putin-russia-target-foreign-troops-ukraine-elon-musk-starlink",
-   "at": "2026-11-12T23:06:39Z",
+   "at": "2026-11-12T22:26:37Z",
    "place": "俄羅斯",
    "ll": [
     37.62,
@@ -64,29 +57,22 @@
    "cat": "政治",
    "tw": 2,
    "why": "地緣政治衝突影響全球能源與原物料價格波動，牽動台灣經濟。",
-   "n_src": 5,
+   "n_src": 3,
    "srcs": [
-    "彭博市場",
     "Guardian",
     "BBC",
-    "南華早報",
     "NPR"
    ],
    "also": [
-    {
-     "src": "彭博市場",
-     "url": "https://www.bloomberg.com/news/articles/2026-11-12/zelenskyy-hails-progress-after-witkoff-kushner-meet-putin",
-     "en": "Zelenskyy Hails Progress after Witkoff, Kushner Meet Putin"
-    },
     {
      "src": "BBC",
      "url": "https://www.bbc.co.uk/news/articles/cwrkgmymk55zo?at_medium=RSS&at_campaign=rss",
      "en": "US envoys meet Zelensky in Dublin after talks with Putin in Moscow"
     },
     {
-     "src": "南華早報",
-     "url": "https://www.scmp.com/news/world/russia-central-asia/article/3374265/putin-indicates-he-will-not-compromise-ukraine-meeting-us-envoys",
-     "en": "Putin indicates he will not compromise on Ukraine in meeting with US envoys"
+     "src": "Guardian",
+     "url": "https://www.theguardian.com/world/live/2026/nov/12/us-envoys-in-moscow-meeting-putin-abu-dhabi-trilateral-ukraine-ceasefire-talks-latest-news-updates",
+     "en": "New talks with Russia, Ukraine and European countries agreed, US says - as it happened"
     },
     {
      "src": "NPR",
@@ -114,10 +100,9 @@
    "cat": "政治",
    "tw": 1,
    "why": "",
-   "n_src": 5,
+   "n_src": 4,
    "srcs": [
     "Guardian",
-    "彭博市場",
     "NPR",
     "CNA 新加坡",
     "日本時報"
@@ -127,11 +112,6 @@
      "src": "Guardian",
      "url": "https://www.theguardian.com/world/2026/nov/13/indonesia-vice-president-diploma-resignation-explained",
      "en": "Did Indonesia’s vice-president just resign because he didn’t have a high school diploma? "
-    },
-    {
-     "src": "彭博市場",
-     "url": "https://www.bloomberg.com/news/articles/2026-11-12/jokowi-era-fades-in-indonesia-with-son-forced-out-as-prabowo-s-vice-president",
-     "en": "Jokowi Era Fades in Indonesia With Son Forced Out as Prabowo’s Vice President"
     },
     {
      "src": "NPR",
@@ -151,11 +131,31 @@
    ]
   },
   {
+   "t": "黃仁勳卸任？分析：恐暗示美國將對中國收緊AI晶片出口管制",
+   "en": "Jensen Huang’s departure may signal tighter US controls on AI chip exports to China",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/china/diplomacy/article/3374270/jensen-huangs-departure-may-signal-tighter-us-controls-ai-chip-exports-china",
+   "at": "2026-11-12T22:35:06Z",
+   "place": "美國",
+   "ll": [
+    -95.71,
+    37.09
+   ],
+   "cat": "科技",
+   "tw": 3,
+   "why": "牽動台灣半導體產業鏈與AI晶片出口政策。",
+   "n_src": 1,
+   "srcs": [
+    "南華早報"
+   ],
+   "also": []
+  },
+  {
    "t": "以色列空襲加薩醫院，釀6死含醫師與兒童",
    "en": "An Israeli strike on a Gaza hospital kills 6 people, including a doctor and a child",
    "src": "NPR",
    "url": "https://www.npr.org/2026/11/12/nx-s1-6038339/israeli-strike-gaza-hospital",
-   "at": "2026-11-12T22:33:00Z",
+   "at": "2026-11-12T16:54:12Z",
    "place": "加薩走廊",
    "ll": [
     34.31,
@@ -166,16 +166,11 @@
    "why": "中東衝突升級影響全球油價與航運安全，間接衝擊台灣物價。",
    "n_src": 3,
    "srcs": [
-    "NPR",
     "BBC",
-    "Guardian"
+    "Guardian",
+    "NPR"
    ],
    "also": [
-    {
-     "src": "NPR",
-     "url": "https://www.npr.org/2026/11/12/nx-s1-6038879/israeli-air-strike-on-gaza-hospital-kills-six-including-surgeon",
-     "en": "Israeli air strike on Gaza hospital kills six, including surgeon"
-    },
     {
      "src": "BBC",
      "url": "https://www.bbc.co.uk/news/articles/ckzd9p7e4eqeo?at_medium=RSS&at_campaign=rss",
@@ -189,21 +184,28 @@
    ]
   },
   {
-   "t": "輝達震撼彈後，亞洲股市開盤預期微幅走高",
-   "en": "Asian Stocks to Edge Higher After Nvidia Shakeup: Markets Wrap",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-11-12/stock-market-today-dow-s-p-live-updates",
-   "at": "2026-11-12T22:17:13Z",
+   "t": "微軟爆發連線問題，用戶回報傳出大當機",
+   "en": "Microsoft users report outages amid tech giant 'connectivity issues'",
+   "src": "BBC 商業",
+   "url": "https://www.bbc.co.uk/news/articles/c5gm3g9ldz8xo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-12T21:03:09Z",
    "place": "",
    "ll": null,
-   "cat": "經濟",
-   "tw": 3,
-   "why": "輝達消息影響台股半導體類股走勢與整體市場投資信心。",
-   "n_src": 1,
+   "cat": "科技",
+   "tw": 2,
+   "why": "微軟全球服務異常，影響台灣企業與用戶運作。",
+   "n_src": 2,
    "srcs": [
-    "彭博市場"
+    "Al Jazeera",
+    "BBC"
    ],
-   "also": []
+   "also": [
+    {
+     "src": "Al Jazeera",
+     "url": "https://www.aljazeera.com/news/2026/11/12/microsoft-outage-hits-tens-of-thousands-of-users?traffic_source=rss",
+     "en": "Microsoft outage hits tens of thousands of users"
+    }
+   ]
   },
   {
    "t": "戴利：需更多升息以冷卻通膨",
@@ -226,59 +228,141 @@
    "also": []
   },
   {
-   "t": "研究顯示：劇烈價格波動暴露港股壓力",
-   "en": "Wild Price Swings Expose Stress in Hong Kong Stocks, Study Shows",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-11-12/wild-price-swings-expose-stress-in-hong-kong-stocks-study-shows",
-   "at": "2026-11-12T23:30:00Z",
+   "t": "馬來西亞與新加坡急起直追，香港AI資料中心優勢漸失",
+   "en": "Why Hong Kong is losing ground in AI data centre race as Malaysia, Singapore advance",
+   "src": "南華早報",
+   "url": "https://www.scmp.com/news/hong-kong/hong-kong-economy/article/3374262/why-hong-kong-losing-ground-ai-data-centre-race-malaysia-singapore-advance",
+   "at": "2026-11-13T00:30:05Z",
    "place": "香港",
    "ll": [
     114.17,
     22.32
    ],
-   "cat": "經濟",
+   "cat": "科技",
    "tw": 2,
-   "why": "港股波動可能間接影響亞股投資氣氛與外資動向。",
+   "why": "星馬競爭AI資料中心，影響區域科技佈局。",
    "n_src": 1,
    "srcs": [
-    "彭博市場"
+    "南華早報"
    ],
    "also": []
   },
   {
-   "t": "油市最新動態與分析",
-   "en": "Latest Oil Market News and Analysis for Nov. 13",
+   "t": "輝達高層異動激勵，首爾股市開盤大漲",
+   "en": "(LEAD) Seoul shares start sharply higher following Nvidia's leadership change",
+   "src": "韓聯社",
+   "url": "https://en.yna.co.kr/view/AEN20261113001051320",
+   "at": "2026-11-13T00:29:31Z",
+   "place": "南韓首爾",
+   "ll": [
+    126.98,
+    37.57
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "輝達相關變動牽動台股科技供應鏈走向。",
+   "n_src": 1,
+   "srcs": [
+    "韓聯社"
+   ],
+   "also": [
+    {
+     "src": "韓聯社",
+     "url": "https://en.yna.co.kr/view/AEN20261113001000320",
+     "en": "Seoul shares start sharply higher following Nvidia's leadership change"
+    },
+    {
+     "src": "韓聯社",
+     "url": "https://en.yna.co.kr/view/AEN20261113000900320",
+     "en": "(URGENT) Seoul shares start higher following Nvidia's leadership change"
+    }
+   ]
+  },
+  {
+   "t": "專家：輝達面臨執行長問題並非一般企業危機",
+   "en": "Nvidia Is Not a Normal Company Having a CEO Issue: Everson",
    "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-11-12/latest-oil-market-news-and-analysis-for-nov-13",
-   "at": "2026-11-12T23:02:09Z",
+   "url": "https://www.bloomberg.com/news/videos/2026-11-13/nvda-is-not-a-normal-company-having-a-ceo-issue-everson-video",
+   "at": "2026-11-13T00:19:02Z",
    "place": "",
    "ll": null,
    "cat": "經濟",
    "tw": 2,
-   "why": "國際油價波動會牽動台灣國內油價與能源進口成本。",
+   "why": "輝達高層動向牽動台灣半導體供應鏈神經。",
    "n_src": 1,
    "srcs": [
     "彭博市場"
    ],
+   "also": [
+    {
+     "src": "彭博市場",
+     "url": "https://www.bloomberg.com/news/videos/2026-11-13/charles-elson-on-nvidia-s-corporate-governance-structure-video",
+     "en": "Charles Elson on Nvidia’s Corporate Governance Structure"
+    },
+    {
+     "src": "彭博市場",
+     "url": "https://www.bloomberg.com/news/videos/2026-11-12/minow-boards-need-to-be-careful-about-personal-hacking-video",
+     "en": "Jensen Is Not the Only Executive To Have a Relationship With a Spy: Nell Minow"
+    }
+   ]
+  },
+  {
+   "t": "傳三星正洽購資料中心散熱大廠莫迪恩",
+   "en": "Samsung in talks to buy data center cooling firm Modine, Bloomberg News reports",
+   "src": "CNA 新加坡",
+   "url": "https://www.channelnewsasia.com/business/samsung-in-talks-buy-data-center-cooling-firm-modine-bloomberg-news-reports-6547876",
+   "at": "2026-11-13T00:12:00Z",
+   "place": "南韓首爾",
+   "ll": [
+    126.98,
+    37.57
+   ],
+   "cat": "經濟",
+   "tw": 2,
+   "why": "資料中心散熱併購案影響全球伺服器供應鏈。",
+   "n_src": 1,
+   "srcs": [
+    "CNA 新加坡"
+   ],
    "also": []
   },
   {
-   "t": "聯準會官員哈馬克：有必要實施更嚴格的利率政策",
-   "en": "Fed’s Hammack Says More Restrictive Rates Are Needed",
+   "t": "聯準會威廉斯：通膨依舊過高，仍須努力",
+   "en": "Fed’s Williams Says Inflation ‘Far Too High,’ Work to Do",
    "src": "彭博經濟",
-   "url": "https://www.bloomberg.com/news/articles/2026-11-12/fed-s-hammack-says-more-restrictive-rates-are-needed",
-   "at": "2026-11-12T14:31:52Z",
-   "place": "美國",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-13/fed-s-williams-says-inflation-far-too-high-still-work-to-do",
+   "at": "2026-11-13T00:05:34Z",
+   "place": "美國華盛頓",
    "ll": [
     -77.04,
     38.9
    ],
    "cat": "經濟",
-   "tw": 3,
-   "why": "美國利率政策牽動全球資金流向，影響台灣央行決策及台股資金動能。",
+   "tw": 2,
+   "why": "美國利率政策牽動外資動向與台幣匯率。",
    "n_src": 1,
    "srcs": [
     "彭博經濟"
+   ],
+   "also": []
+  },
+  {
+   "t": "川普稱波灣盟友力促暫停對伊朗打擊",
+   "en": "Iran war live: Trump says Gulf allies urged pause in Iran strikes",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news/liveblog/2026/11/13/iran-war-live-riyadh-china-discuss-houthis-as-group-claims-aramco-attacks?traffic_source=rss",
+   "at": "2026-11-13T00:00:26Z",
+   "place": "美國華盛頓",
+   "ll": [
+    -77.04,
+    38.9
+   ],
+   "cat": "政治",
+   "tw": 2,
+   "why": "中東局勢牽動全球能源價格與地緣政治。",
+   "n_src": 1,
+   "srcs": [
+    "Al Jazeera"
    ],
    "also": []
   },
@@ -303,26 +387,6 @@
    "also": []
   },
   {
-   "t": "中國國家主席習近平稱台灣「統一」必然發生，歷史不可阻擋",
-   "en": "Chinese President Xi Jinping says Taiwan 'reunification' must happen as history cannot be ",
-   "src": "CNA 新加坡",
-   "url": "https://www.channelnewsasia.com/east-asia/china-xi-jinping-taiwan-reunification-history-6544911",
-   "at": "2026-11-12T05:52:00Z",
-   "place": "中國北京",
-   "ll": [
-    116.41,
-    39.9
-   ],
-   "cat": "政治",
-   "tw": 4,
-   "why": "中共領導人涉台言論直接牽動兩岸局勢與區域安全。",
-   "n_src": 1,
-   "srcs": [
-    "CNA 新加坡"
-   ],
-   "also": []
-  },
-  {
    "t": "輝達尋找黃仁勳接班人：內部人士、勁敵與川普人選",
    "en": "Nvidia’s hunt for Jensen Huang’s successor: insiders, rivals and a Trump pick",
    "src": "南華早報",
@@ -339,26 +403,6 @@
    "n_src": 1,
    "srcs": [
     "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "韓元走強、油價下跌 韓國10月進口物價再度下滑",
-   "en": "Import prices fall again in Oct. on stronger S. Korean won, lower oil prices",
-   "src": "韓聯社",
-   "url": "https://en.yna.co.kr/view/AEN20261112010000320",
-   "at": "2026-11-12T21:00:08Z",
-   "place": "南韓首爾",
-   "ll": [
-    126.98,
-    37.57
-   ],
-   "cat": "經濟",
-   "tw": 2,
-   "why": "南韓為台灣出口主要競爭對手，其進口成本變動影響產業競爭力。",
-   "n_src": 1,
-   "srcs": [
-    "韓聯社"
    ],
    "also": []
   },
@@ -403,39 +447,19 @@
    "also": []
   },
   {
-   "t": "AI熱潮推升風險，全球貿易隱憂加劇",
-   "en": "World Trade’s Achilles’ Heel Grows as AI Boom Fuels Risks",
-   "src": "彭博經濟",
-   "url": "https://www.bloomberg.com/news/newsletters/2026-11-12/world-trade-s-achilles-heel-grows-as-ai-boom-fuels-risks",
-   "at": "2026-11-12T12:00:01Z",
-   "place": "美國",
-   "ll": [
-    -95.71,
-    37.09
-   ],
-   "cat": "經濟",
-   "tw": 3,
-   "why": "AI帶動全球供應鏈與貿易結構改變，牽動台灣科技製造業的出口與布局。",
-   "n_src": 1,
-   "srcs": [
-    "彭博經濟"
-   ],
-   "also": []
-  },
-  {
-   "t": "幣安：北韓駭客攻擊造成的資產損失已全數補償",
-   "en": "Binance says all asset losses from N. Korea-linked cyberattack covered",
+   "t": "南韓總統李在明將於東協峰會與泰國、菲律賓領袖會談",
+   "en": "Lee to hold bilateral talks with Thai, Philippine leaders at ASEAN summit",
    "src": "韓聯社",
-   "url": "https://en.yna.co.kr/view/AEN20261113000200315",
-   "at": "2026-11-12T19:40:38Z",
-   "place": "南韓",
+   "url": "https://en.yna.co.kr/view/AEN20261113001700315",
+   "at": "2026-11-13T00:50:54Z",
+   "place": "寮國萬象",
    "ll": [
-    126.98,
-    37.57
+    102.63,
+    17.98
    ],
-   "cat": "科技",
-   "tw": 2,
-   "why": "加密貨幣資安事件影響台灣投資人權益與數位資產監管政策。",
+   "cat": "政治",
+   "tw": 1,
+   "why": "",
    "n_src": 1,
    "srcs": [
     "韓聯社"
@@ -443,22 +467,133 @@
    "also": []
   },
   {
-   "t": "美方稱已同意與俄烏及歐洲國家展開新會談",
-   "en": "New talks with Russia, Ukraine and European countries agreed, US says - as it happened",
-   "src": "Guardian",
-   "url": "https://www.theguardian.com/world/live/2026/nov/12/us-envoys-in-moscow-meeting-putin-abu-dhabi-trilateral-ukraine-ceasefire-talks-latest-news-updates",
-   "at": "2026-11-12T17:17:55Z",
-   "place": "美國",
+   "t": "太陽能廠減產無礙，白銀市場仍供不應求",
+   "en": "Silver Market Set for Deficit Even as Solar Makers Cut Back",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-13/silver-market-set-for-deficit-even-as-solar-makers-cut-back",
+   "at": "2026-11-13T00:30:00Z",
+   "place": "",
+   "ll": null,
+   "cat": "經濟",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "匯豐預期人民幣使用量攀升，全球支付佔有率或將倍增",
+   "en": "Yuan May Double Global Payment Share as Usage Climbs, HSBC Says",
+   "src": "彭博經濟",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-13/yuan-may-double-global-payment-share-as-usage-climbs-hsbc-says",
+   "at": "2026-11-13T00:26:18Z",
+   "place": "英國倫敦",
+   "ll": [
+    -0.13,
+    51.51
+   ],
+   "cat": "經濟",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "彭博經濟"
+   ],
+   "also": []
+  },
+  {
+   "t": "房地產AI行銷夯，如何界定優化與誤導？",
+   "en": "The rise of 'housefishing' - when does using AI go from enhancing to misleading?",
+   "src": "BBC 商業",
+   "url": "https://www.bbc.co.uk/news/articles/cm62y0wrnz9zo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-13T00:13:35Z",
+   "place": "",
+   "ll": null,
+   "cat": "科技",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "BBC"
+   ],
+   "also": []
+  },
+  {
+   "t": "輝達風波餘波盪漾，中國概念股漲勢面臨現實考驗",
+   "en": "China Internet Stock Gains Face Reality Check in Nvidia Fallout",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-13/china-internet-stock-gains-face-reality-check-in-nvidia-fallout",
+   "at": "2026-11-13T00:07:02Z",
+   "place": "中國北京",
+   "ll": [
+    116.41,
+    39.9
+   ],
+   "cat": "經濟",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "貝森特視終結「稅收花招」為削減美國赤字選項",
+   "en": "Bessent Sees Ending ‘Tax Gimmicks’ as Option to Trim US Deficit",
+   "src": "彭博經濟",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-13/bessent-sees-ending-tax-gimmicks-as-option-to-trim-us-deficit",
+   "at": "2026-11-13T00:00:14Z",
+   "place": "美國華盛頓",
    "ll": [
     -77.04,
     38.9
    ],
-   "cat": "政治",
-   "tw": 2,
-   "why": "國際外交談判牽動區域局勢，間接影響全球金融市場穩定。",
+   "cat": "經濟",
+   "tw": 1,
+   "why": "",
    "n_src": 1,
    "srcs": [
-    "Guardian"
+    "彭博經濟"
+   ],
+   "also": []
+  },
+  {
+   "t": "升息預期增溫，金價維持跌勢逼近一年低點",
+   "en": "Gold Holds Drop to Near One-Year Low as Rate-Hike Bets Increase",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-12/gold-holds-drop-to-near-one-year-low-as-rate-hike-bets-increase",
+   "at": "2026-11-12T23:58:45Z",
+   "place": "",
+   "ll": null,
+   "cat": "經濟",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "彭博市場"
+   ],
+   "also": []
+  },
+  {
+   "t": "安理會延長制裁之際，葉門青年運動再襲沙烏地阿拉伯",
+   "en": "Yemen’s Houthis renew strikes on Saudi Arabia as UNSC extends sanctions",
+   "src": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news/2026/11/12/yemens-houthis-renew-strikes-on-saudi-arabia-as-unsc-extends-sanctions?traffic_source=rss",
+   "at": "2026-11-12T23:52:38Z",
+   "place": "葉門薩那",
+   "ll": [
+    44.19,
+    15.37
+   ],
+   "cat": "戰爭衝突",
+   "tw": 1,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "Al Jazeera"
    ],
    "also": []
   },
@@ -483,6 +618,46 @@
    "also": []
   },
   {
+   "t": "擔憂晶片禁令擴大，中國AI企業急搶輝達產能",
+   "en": "Chinese AI firms rush to secure Nvidia chip capacity as scandal stirs fear of curbs",
+   "src": "日本時報",
+   "url": "https://www.japantimes.co.jp/business/2026/11/12/tech/china-ai-nvidia-spy-us-chip-curbs/",
+   "at": "2026-11-12T07:27:00Z",
+   "place": "中國",
+   "ll": [
+    116.41,
+    39.9
+   ],
+   "cat": "科技",
+   "tw": 3,
+   "why": "中國搶購輝達晶片牽動全球AI供應鏈與台灣半導體競爭。",
+   "n_src": 1,
+   "srcs": [
+    "日本時報"
+   ],
+   "also": []
+  },
+  {
+   "t": "誰是輝達代理執行長柯蕾絲？誰可能接任正式職位？",
+   "en": "Who is Nvidia's interim CEO Colette Kress - and who could take over permanently?",
+   "src": "BBC 商業",
+   "url": "https://www.bbc.co.uk/news/articles/cqgm37dv20e8o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-12T15:10:32Z",
+   "place": "美國",
+   "ll": [
+    -95.71,
+    37.09
+   ],
+   "cat": "科技",
+   "tw": 2,
+   "why": "輝達高層人事變動影響全球AI產業策略，與台灣供應鏈關係密切。",
+   "n_src": 1,
+   "srcs": [
+    "BBC"
+   ],
+   "also": []
+  },
+  {
    "t": "氣候脆弱國家在聯合國COP31峰會敦促立即採取行動",
    "en": "Climate-vulnerable nations urge immediate action at UN Cop31 summit",
    "src": "南華早報",
@@ -499,43 +674,6 @@
    "n_src": 1,
    "srcs": [
     "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "美眾院通過法案，保護小企業免受外國敵對勢力影響",
-   "en": "U.S. House passes bill to protect small businesses from foreign adversaries, including N. ",
-   "src": "韓聯社",
-   "url": "https://en.yna.co.kr/view/AEN20261112012600315",
-   "at": "2026-11-12T15:00:24Z",
-   "place": "美國",
-   "ll": [
-    -77.01,
-    38.89
-   ],
-   "cat": "政治",
-   "tw": 2,
-   "why": "美方加強對外資審查，可能間接影響台灣企業在美投資與供應鏈布局。",
-   "n_src": 1,
-   "srcs": [
-    "韓聯社"
-   ],
-   "also": []
-  },
-  {
-   "t": "微軟系統大當機 數萬名用戶受影響",
-   "en": "Microsoft outage hits tens of thousands of users",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/11/12/microsoft-outage-hits-tens-of-thousands-of-users?traffic_source=rss",
-   "at": "2026-11-12T21:03:09Z",
-   "place": "",
-   "ll": null,
-   "cat": "科技",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
    ],
    "also": []
   },
@@ -600,46 +738,6 @@
    "also": []
   },
   {
-   "t": "歐洲都柏林會議聚焦區域安全，應對混合戰威脅",
-   "en": "Regional security dominates European talks in Dublin amid hybrid attacks",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/11/12/regional-security-dominates-european-talks-in-dublin-amid-hybrid-attacks?traffic_source=rss",
-   "at": "2026-11-12T20:12:21Z",
-   "place": "愛爾蘭",
-   "ll": [
-    -6.26,
-    53.35
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
-   ],
-   "also": []
-  },
-  {
-   "t": "美國民主黨齊聚丹佛，辯論期中選舉後黨內未來",
-   "en": "Democrats gather in Denver to debate party’s future after US midterm wins",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/11/12/democrats-gather-in-denver-to-debate-partys-future-after-us-midterm-wins?traffic_source=rss",
-   "at": "2026-11-12T20:10:31Z",
-   "place": "美國",
-   "ll": [
-    -104.99,
-    39.74
-   ],
-   "cat": "政治",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
-   ],
-   "also": []
-  },
-  {
    "t": "阿波羅全球管理與軟銀合作，促成對OpenAI史無前例的投資",
    "en": "How Apollo’s SoftBank ties unlocked an unprecedented OpenAI bet",
    "src": "日本時報",
@@ -700,46 +798,6 @@
    "also": []
   },
   {
-   "t": "德國否認馬克宏與梅爾茲就歐洲央行職位達成協議",
-   "en": "Germany Denies Report Macron, Merz Agree on de Cos for ECB Job",
-   "src": "彭博經濟",
-   "url": "https://www.bloomberg.com/news/articles/2026-11-12/macron-merz-agree-de-cos-should-succeed-lagarde-le-point-says",
-   "at": "2026-11-12T16:40:27Z",
-   "place": "德國",
-   "ll": [
-    10.45,
-    51.17
-   ],
-   "cat": "經濟",
-   "tw": 1,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博經濟"
-   ],
-   "also": []
-  },
-  {
-   "t": "分析：輝達風波與美期中選舉失利 如何影響川普對中手牌",
-   "en": "How Nvidia scandal, US midterm losses could affect Trump’s hand with Xi - and what it mean",
-   "src": "CNA 新加坡",
-   "url": "https://www.channelnewsasia.com/east-asia/trump-xi-apec-nvidia-scandal-us-midterms-6545226",
-   "at": "2026-11-12T08:06:00Z",
-   "place": "美國",
-   "ll": [
-    -77.04,
-    38.9
-   ],
-   "cat": "政治",
-   "tw": 2,
-   "why": "美中角力與科技政策牽動台海安全及半導體產業走向。",
-   "n_src": 1,
-   "srcs": [
-    "CNA 新加坡"
-   ],
-   "also": []
-  },
-  {
    "t": "Meta與Line助台灣打擊網路詐騙",
    "en": "Meta, chat app Line help Taiwan combat online fraud",
    "src": "日經亞洲",
@@ -760,95 +818,35 @@
    "also": []
   },
   {
-   "t": "美議員：國會本可阻止極速網路存取",
-   "en": "Congress Could Have Prevented Megaspeed Access: McGuire",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/videos/2026-11-12/congress-could-have-prevented-megaspeed-access-mcguire-video",
-   "at": "2026-11-12T23:36:51Z",
-   "place": "美國華盛頓",
+   "t": "北韓自1948年來首度更改國旗長寬比例",
+   "en": "N. Korea changes national flag's aspect ratio for 1st time since 1948",
+   "src": "韓聯社",
+   "url": "https://en.yna.co.kr/view/AEN20261113001800315",
+   "at": "2026-11-13T00:50:08Z",
+   "place": "北韓平壤",
    "ll": [
-    -77.04,
-    38.9
+    125.76,
+    39.04
    ],
    "cat": "政治",
    "tw": 0,
    "why": "",
    "n_src": 1,
    "srcs": [
-    "彭博市場"
+    "韓聯社"
    ],
    "also": []
   },
   {
-   "t": "「我是你父親」黑武士光劍拍賣，近500萬美元售出",
-   "en": "Darth Vader’s lightsaber used in ‘I am your father’ duel sells for nearly US$5 million",
-   "src": "南華早報",
-   "url": "https://www.scmp.com/news/world/europe/article/3374272/darth-vaders-lightsaber-used-i-am-your-father-duel-sells-nearly-us5-million",
-   "at": "2026-11-12T23:32:29Z",
-   "place": "美國洛杉磯",
-   "ll": [
-    -118.24,
-    34.05
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "南華早報"
-   ],
-   "also": []
-  },
-  {
-   "t": "俄羅斯法院以叛國罪判處人權律師12年徒刑",
-   "en": "Russian court jails rights lawyer for 12 years on treason charge",
-   "src": "Al Jazeera",
-   "url": "https://www.aljazeera.com/news/2026/11/12/russian-court-jails-rights-lawyer-for-12-years-on-treason-charge?traffic_source=rss",
-   "at": "2026-11-12T23:18:50Z",
-   "place": "俄羅斯莫斯科",
-   "ll": [
-    37.62,
-    55.76
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "Al Jazeera"
-   ],
-   "also": []
-  },
-  {
-   "t": "秘魯近四年来首度升息",
-   "en": "Peru Lifts Interest Rate for First Time in Nearly Four Years",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-11-12/peru-raises-interest-rates-for-first-time-in-nearly-four-years",
-   "at": "2026-11-12T23:04:02Z",
-   "place": "秘魯利馬",
-   "ll": [
-    -77.04,
-    -12.05
-   ],
-   "cat": "經濟",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "彭博市場"
-   ],
-   "also": []
-  },
-  {
-   "t": "美國成屋銷售跌至2010年以來最低水準",
-   "en": "Sales of Existing US Homes Tumble to Lowest Level Since 2010",
+   "t": "德國否認馬克宏與梅爾茲就歐洲央行職位達成協議",
+   "en": "Germany Denies Report Macron, Merz Agree on de Cos for ECB Job",
    "src": "彭博經濟",
-   "url": "https://www.bloomberg.com/news/articles/2026-11-12/sales-of-existing-us-homes-tumble-to-lowest-level-since-2010",
-   "at": "2026-11-12T15:00:00Z",
-   "place": "美國",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-12/macron-merz-agree-de-cos-should-succeed-lagarde-le-point-says",
+   "at": "2026-11-12T16:40:27Z",
+   "place": "德國",
    "ll": [
-    -95.71,
-    37.09
+    10.45,
+    51.17
    ],
    "cat": "經濟",
    "tw": 1,
@@ -860,17 +858,37 @@
    "also": []
   },
   {
-   "t": "曾打造總理虛擬人的馬來西亞數位新星深陷債務",
-   "en": "Ex-Malaysia Digital Star That Built PM’s Avatar Is Mired in Debt",
-   "src": "彭博市場",
-   "url": "https://www.bloomberg.com/news/articles/2026-11-12/ex-malaysia-digital-star-that-built-pm-s-avatar-is-mired-in-debt",
-   "at": "2026-11-12T23:00:00Z",
-   "place": "馬來西亞吉隆坡",
+   "t": "南韓連鎖炸雞BBQ進軍非洲，開設首家分店",
+   "en": "Genesis BBQ opens first outlet in Africa",
+   "src": "韓聯社",
+   "url": "https://en.yna.co.kr/view/AEN20261113001500320",
+   "at": "2026-11-13T00:39:39Z",
+   "place": "摩洛哥",
    "ll": [
-    101.69,
-    3.14
+    -7.09,
+    31.79
    ],
-   "cat": "科技",
+   "cat": "經濟",
+   "tw": 0,
+   "why": "",
+   "n_src": 1,
+   "srcs": [
+    "韓聯社"
+   ],
+   "also": []
+  },
+  {
+   "t": "利率走向分歧，澳洲公債殖利率跌破美國水準",
+   "en": "Australia Bond Yield Falls Below US Peer as Rate Paths Diverge",
+   "src": "彭博市場",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-13/australia-bond-yield-falls-below-us-peer-as-rate-paths-diverge",
+   "at": "2026-11-13T00:24:14Z",
+   "place": "澳洲雪梨",
+   "ll": [
+    151.21,
+    -33.87
+   ],
+   "cat": "經濟",
    "tw": 0,
    "why": "",
    "n_src": 1,
@@ -878,32 +896,12 @@
     "彭博市場"
    ],
    "also": []
-  },
-  {
-   "t": "密爾本評論：部分25歲以下年輕人應減少社會福利",
-   "en": "Some under-25s should get fewer benefits, Milburn review to say",
-   "src": "BBC 商業",
-   "url": "https://www.bbc.co.uk/news/articles/cwn70l1628l0o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-12T22:51:18Z",
-   "place": "英國",
-   "ll": [
-    -0.13,
-    51.51
-   ],
-   "cat": "社會",
-   "tw": 0,
-   "why": "",
-   "n_src": 1,
-   "srcs": [
-    "BBC"
-   ],
-   "also": []
   }
  ],
  "n_zh": 40,
- "n_tw": 8,
+ "n_tw": 6,
  "n_big": 4,
  "errs": [],
  "src": "BBC、半島電視台、NPR、衛報、日經亞洲、南華早報、韓聯社、CNA、日本時報、彭博；中文翻譯、地點與「對台灣的影響」由 Gemini 判斷",
- "updatedAt": "2026-11-12T23:46:23Z"
+ "updatedAt": "2026-11-13T00:50:53Z"
 }
