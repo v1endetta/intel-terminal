@@ -76,16 +76,16 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "Flights grounded at all US airports due to air traffic control ‘communication issue’, tran",
+   "title": "Flights grounded at all US airports due to communications outage as Trump administration l",
    "url": "https://www.theguardian.com/us-news/live/2026/nov/13/us-politics-latest-news-updates-democrats-republicans-donald-trump-van-hollen-chuck-schumer",
-   "at": "2026-11-13T22:05:57Z",
+   "at": "2026-11-13T22:26:12Z",
    "sec": "World news"
   },
   {
    "source": "Guardian",
-   "title": "FAA issues nationwide ground-stop order, delaying or canceling nearly 7,000 flights",
+   "title": "Nationwide FAA ground stop: nearly 7,000 flights delayed or canceled at airports across th",
    "url": "https://www.theguardian.com/world/2026/nov/13/faa-nationwide-ground-stop-flights",
-   "at": "2026-11-13T21:44:48Z",
+   "at": "2026-11-13T22:22:51Z",
    "sec": "World news"
   },
   {
@@ -519,9 +519,9 @@
     1,
     6,
     11,
-    37,
-    117,
-    34
+    38,
+    113,
+    36
    ],
    "days7": [
     "2026-11-08",
@@ -570,7 +570,7 @@
     4,
     1,
     6,
-    13,
+    11,
     10,
     5
    ],
@@ -618,9 +618,9 @@
    ],
    "daily7": [
     3,
-    12,
+    16,
     21,
-    28,
+    29,
     25,
     28,
     0
@@ -696,15 +696,15 @@
   "hot": [
    {
     "term": "ChatGPT",
-    "n": 8,
-    "src": 7,
+    "n": 7,
+    "src": 6,
     "sources": [
      "BigGo 財經",
      "CNBC",
-     "OpenAI 論壇",
      "Reuters",
      "TechCrunch",
-     "TradingView"
+     "TradingView",
+     "動區動趨"
     ],
     "sample": {
      "title": "OpenAI 推出 ChatGPT Wallet：dots 可代購，每筆仍要生物辨識核准",
@@ -714,15 +714,15 @@
    },
    {
     "term": "OpenAI",
-    "n": 6,
-    "src": 5,
+    "n": 7,
+    "src": 6,
     "sources": [
      "BigGo 財經",
      "CNBC",
+     "HN",
      "Reuters",
      "TradingView",
-     "動區動趨",
-     "鏈新聞 ABMedia"
+     "動區動趨"
     ],
     "sample": {
      "title": "OpenAI 推出 ChatGPT Wallet：dots 可代購，每筆仍要生物辨識核准",
@@ -857,5 +857,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-13T22:05:39Z"
+ "updatedAt": "2026-11-13T22:27:04Z"
 }
