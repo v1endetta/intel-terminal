@@ -75,6 +75,19 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "What we know about the global Microsoft outage",
+   "url": "https://www.bbc.co.uk/news/articles/cwvg238zrnm5o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-13T12:09:57Z"
+  },
+  {
+   "source": "Guardian",
+   "title": "Iran says it destroyed US military radar in Bahrain in retaliatory strike",
+   "url": "https://www.theguardian.com/world/2026/nov/13/iran-us-radar-bahrain-sirik-hormuz",
+   "at": "2026-11-13T12:07:13Z",
+   "sec": "World news"
+  },
+  {
    "source": "Guardian",
    "title": "Leaders meet in Dublin amid search for lead EU negotiator for peace talks with Russia - Eu",
    "url": "https://www.theguardian.com/world/live/2026/nov/13/eu-leaders-negotiations-ukraine-russia-dublin-ai-summit-kushner-witkoff-latest-news-updates",
@@ -87,12 +100,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/13/russia-strikes-hospital-central-kyiv-spacex-starshield-system-fails",
    "at": "2026-11-13T11:24:30Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "What we know about the global Microsoft outage",
-   "url": "https://www.bbc.co.uk/news/articles/cwvg238zrnm5o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-13T10:53:40Z"
   },
   {
    "source": "BBC",
@@ -146,13 +153,6 @@
    "title": "Ex-Nvidia CEO Jensen Huang summoned to testify before Congress about affair with alleged C",
    "url": "https://www.bbc.co.uk/news/articles/cmq5vd1wdgz6o?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-13T03:57:01Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "Pope Leo gets rapturous welcome on return to Peru: ‘This visit is like a big party’",
-   "url": "https://www.theguardian.com/world/2026/nov/12/pope-leo-peru-visit",
-   "at": "2026-11-13T03:53:40Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -265,10 +265,10 @@
     0,
     0,
     8,
-    42,
+    41,
     61,
-    40,
-    41
+    38,
+    42
    ],
    "days7": [
     "2026-11-07",
@@ -817,21 +817,6 @@
     "hot": true
    },
    {
-    "term": "Claude",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "BigGo 財經",
-     "HN",
-     "動區動趨"
-    ],
-    "sample": {
-     "title": "Anthropic推出「Claude Meetings」，AI「Claude」可列席會議、同步產出檔案",
-     "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFB6WHJHWDZuOHNhMkZCbDNYNWRYUFQtV1BsNVhTTkliQXpRYzRYNXlIeUNhMkZ4UWc4VVZJNk9Fb282Y0RoYnpXVTRiR3hyQzQ4c3QxRVN1WGE5anNneU82TGYtZVgzOHZEZkhqempld0s3TE1LWks5SG5B?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "消費宗教",
     "n": 3,
     "src": 3,
@@ -875,11 +860,26 @@
      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBfSE4yTDYzX004Z1ZRbDl1U3dHaThEWVRWWW9GV2wwWkZBSlRqdWJGRG9ZVnI0cFhkYUpodkVQTlUtMVdJWkJyVnhOVFhrNDJsaW55ZXI4ZEZLT092ejZv0gFkQVVfeXFMTzJwZER4SkZRU1U1OFZ4RUlyczhTcHBGM2Zoam95MG1Nd0Z2VjNvekJWSmpkSGgzb0hZQTNXcFk3YmlNdkNYQkx0cnFBbVpLMGh1Yk1odmlQMWs2TXJ4M2lVMnJIaA?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "全面",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "CMoney",
+     "Facebook",
+     "東森新聞"
+    ],
+    "sample": {
+     "title": "Google 新模型 Gemini 4 Hydrogen 登場：Token 省 23%、全面導入搜尋與 Workspac",
+     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE05LTZMSmpfZnpZVnF2MUVIV05fcDY0NmQ1LTNtTGpUNURuVWtFUzlta1ZqbW1tcGRWUHhPR3pVaTFjU2RVLTkyZTIwdDRBT2c2X2M3Ri1veTU?oc=5"
+    },
+    "hot": true
    }
   ]
  },
  "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+  "gdelt: RuntimeError: gdelt empty"
  ],
- "updatedAt": "2026-11-13T12:06:25Z"
+ "updatedAt": "2026-11-13T12:26:41Z"
 }
