@@ -75,6 +75,13 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "FAA issues nationwide ground-stop order, delaying or canceling nearly 7,000 flights",
+   "url": "https://www.theguardian.com/world/2026/nov/13/faa-nationwide-ground-stop-flights",
+   "at": "2026-11-13T21:44:48Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "Microsoft 'deeply sorry' for global outage after almost 24 hours of disruption",
    "url": "https://www.bbc.co.uk/news/articles/c6rrg51rkz09o?at_medium=RSS&at_campaign=rss",
@@ -144,13 +151,6 @@
    "url": "https://www.theguardian.com/business/2026/nov/13/jaguar-land-rover-quarterly-loss-electric-cars-job-cuts",
    "at": "2026-11-13T16:22:16Z",
    "sec": "Business"
-  },
-  {
-   "source": "Guardian",
-   "title": "UK-EU deal will ‘dissolve’ £60m a year of costs for plant trade, says Angela Eagle",
-   "url": "https://www.theguardian.com/business/2026/nov/13/uk-eu-deal-plant-trade-angela-eagle",
-   "at": "2026-11-13T16:00:19Z",
-   "sec": "Business"
   }
  ],
  "groups": [
@@ -213,7 +213,7 @@
     0,
     1,
     2,
-    1,
+    0,
     5,
     0
    ],
@@ -262,11 +262,11 @@
    "daily7": [
     0,
     8,
-    23,
-    51,
+    21,
+    48,
     35,
     47,
-    9
+    10
    ],
    "days7": [
     "2026-11-08",
@@ -714,15 +714,15 @@
    },
    {
     "term": "OpenAI",
-    "n": 7,
-    "src": 6,
+    "n": 6,
+    "src": 5,
     "sources": [
      "BigGo 財經",
      "CNBC",
-     "HN",
      "Reuters",
      "TradingView",
-     "動區動趨"
+     "動區動趨",
+     "鏈新聞 ABMedia"
     ],
     "sample": {
      "title": "OpenAI 推出 ChatGPT Wallet：dots 可代購，每筆仍要生物辨識核准",
@@ -743,22 +743,6 @@
     "sample": {
      "title": "Nvidia scandal fallout widens as Trump's treasury secretary ",
      "url": "https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss"
-    },
-    "hot": true
-   },
-   {
-    "term": "蔣萬安",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "ETtoday新聞雲",
-     "Newtalk新聞",
-     "UDN",
-     "中央社"
-    ],
-    "sample": {
-     "title": "赴饒河夜市掃街拜票　蔣萬安走訪東發號用餐致意",
-     "url": "https://www.cna.com.tw/news/aipl/202611130327.aspx"
     },
     "hot": true
    },
@@ -824,17 +808,17 @@
     "hot": true
    },
    {
-    "term": "消費宗教",
+    "term": "蔣萬安",
     "n": 3,
     "src": 3,
     "sources": [
-     "ETtoday新聞雲",
      "Newtalk新聞",
-     "UDN"
+     "UDN",
+     "中央社"
     ],
     "sample": {
-     "title": "曹興誠稱北市是菩薩與邪靈對決蔣萬安轟：消費宗教、製造仇恨| 政治",
-     "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE03UDFiR1kxWTAyalNySTE2ZWd0OXc2VkZ6SnlEckkyRldlUnZIbVI0aW9fbV95VWI1cm5tZ2lsY3VTM2RZN3BNRVUtUTM5M1FSR1N5dUNDTmhsZG8?oc=5"
+     "title": "赴饒河夜市掃街拜票　蔣萬安走訪東發號用餐致意",
+     "url": "https://www.cna.com.tw/news/aipl/202611130327.aspx"
     },
     "hot": true
    },
@@ -851,11 +835,25 @@
      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOWGw3UFZ0ZUxYWk1VSm9nMXJUNkVIamQxQ1VsVlMtOElpV3ozckEwRWRlVkdrZUdDSkZwV1ZpODQtV1RYR2MxM0Z1UUo1LW9fSXBtZ3RJZ1RkT2hJRnJMQU5KRVZiQ3ZVSFBvM09sNG4taThSb3VKcjdiaEtGTWRDXw?oc=5"
     },
     "hot": false
+   },
+   {
+    "term": "Ukraine",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "BBC",
+     "Guardian"
+    ],
+    "sample": {
+     "title": "Russia is ‘setting traps’ in Ukraine talks, EU foreign polic",
+     "url": "https://www.theguardian.com/world/2026/nov/13/russia-ukraine-talks-kaja-kallas-eu-foreign-policy-dublin-summit"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
-  "gdelt: RuntimeError: gdelt empty"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-13T21:23:56Z"
+ "updatedAt": "2026-11-13T21:44:49Z"
 }
