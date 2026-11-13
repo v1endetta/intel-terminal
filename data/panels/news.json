@@ -75,6 +75,13 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Russia is ‘setting traps’ in Ukraine talks, EU foreign policy chief warns",
+   "url": "https://www.theguardian.com/world/2026/nov/13/russia-ukraine-talks-kaja-kallas-eu-foreign-policy-dublin-summit",
+   "at": "2026-11-13T20:38:25Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "Nvidia scandal fallout widens as Trump's treasury secretary blames cabinet colleague",
    "url": "https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss",
@@ -144,13 +151,6 @@
    "title": "German spies handed new powers to tackle 'hybrid threats' from abroad",
    "url": "https://www.bbc.co.uk/news/articles/c6jre3z03w4go?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-13T15:42:52Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "Pope Leo gets rapturous welcome on return to Peru: ‘This visit is like a big party’",
-   "url": "https://www.theguardian.com/world/2026/nov/12/pope-leo-peru-visit",
-   "at": "2026-11-13T14:36:51Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -619,7 +619,7 @@
    "daily7": [
     4,
     15,
-    21,
+    22,
     29,
     26,
     26,
@@ -696,8 +696,8 @@
   "hot": [
    {
     "term": "ChatGPT",
-    "n": 8,
-    "src": 7,
+    "n": 9,
+    "src": 8,
     "sources": [
      "BigGo 財經",
      "CNBC",
@@ -727,6 +727,21 @@
     "sample": {
      "title": "OpenAI 推出 ChatGPT Wallet：dots 可代購，每筆仍要生物辨識核准",
      "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPMUJUbmhNVEtJSGZtRVRzZEF2Ty1sRDh2Z3VUYlpLbUYyWERQdTV5d3E2YjJlTmtja2hnZGFES3VuT2pBRko2a2VZWGZ3cEc5ZmgxdTFMbEs5Zk1FUDZ4Q0oyZjJQMUttOGxDWjFxV1dfRHd5b3lOQUZ1ZG0xLVdNT1ZWQjI?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "輝達",
+    "n": 6,
+    "src": 3,
+    "sources": [
+     "CMoney投資網誌",
+     "PTT",
+     "中央社"
+    ],
+    "sample": {
+     "title": "黃仁勳卸任輝達執行長重創科技股　歐股漲跌互見",
+     "url": "https://www.cna.com.tw/news/afe/202611140002.aspx"
     },
     "hot": true
    },
@@ -762,6 +777,21 @@
     "hot": true
    },
    {
+    "term": "黃仁勳",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "PTT",
+     "Wiki",
+     "中央社"
+    ],
+    "sample": {
+     "title": "黃仁勳卸任輝達執行長重創科技股　歐股漲跌互見",
+     "url": "https://www.cna.com.tw/news/afe/202611140002.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "Nvidia",
     "n": 3,
     "src": 3,
@@ -773,21 +803,6 @@
     "sample": {
      "title": "Nvidia scandal fallout widens as Trump's treasury secretary ",
      "url": "https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss"
-    },
-    "hot": true
-   },
-   {
-    "term": "Gemini",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "Gemini",
-     "Google AI 論壇",
-     "HN"
-    ],
-    "sample": {
-     "title": "Connect Google Wallet to Gemini for personal finance insight",
-     "url": "https://blog.google/innovation-and-ai/products/gemini-app/google-wallet-gemini-app/"
     },
     "hot": true
    },
@@ -807,20 +822,6 @@
     "hot": true
    },
    {
-    "term": "輝達",
-    "n": 4,
-    "src": 2,
-    "sources": [
-     "CMoney投資網誌",
-     "中央社"
-    ],
-    "sample": {
-     "title": "黃仁勳卸任輝達執行長重創科技股　歐股漲跌互見",
-     "url": "https://www.cna.com.tw/news/afe/202611140002.aspx"
-    },
-    "hot": false
-   },
-   {
     "term": "Anthropic",
     "n": 3,
     "src": 2,
@@ -835,16 +836,16 @@
     "hot": false
    },
    {
-    "term": "Pope Leo",
-    "n": 2,
+    "term": "Ukraine",
+    "n": 3,
     "src": 2,
     "sources": [
      "BBC",
      "Guardian"
     ],
     "sample": {
-     "title": "The Peruvian city that has embraced Pope Leo as one of its o",
-     "url": "https://www.bbc.co.uk/news/articles/cwg7l8n7dx5mo?at_medium=RSS&at_campaign=rss"
+     "title": "Russia is ‘setting traps’ in Ukraine talks, EU foreign polic",
+     "url": "https://www.theguardian.com/world/2026/nov/13/russia-ukraine-talks-kaja-kallas-eu-foreign-policy-dublin-summit"
     },
     "hot": false
    }
@@ -853,5 +854,5 @@
  "errs": [
   "gdelt: RuntimeError: gdelt empty"
  ],
- "updatedAt": "2026-11-13T20:25:50Z"
+ "updatedAt": "2026-11-13T20:42:56Z"
 }
