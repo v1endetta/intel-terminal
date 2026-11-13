@@ -696,8 +696,8 @@
   "hot": [
    {
     "term": "ChatGPT",
-    "n": 9,
-    "src": 8,
+    "n": 8,
+    "src": 7,
     "sources": [
      "BigGo 財經",
      "CNBC",
@@ -727,22 +727,6 @@
     "sample": {
      "title": "OpenAI推出ChatGPT錢包，「dots」AI代理可代客下單購物",
      "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1hN1g2ZmttelRkVUJpZm1fTmUzMkpEVUwzdHlRaHhVbU5qMG50QkhrcXpLZVpjSlJNc3ZyM1h4N3F4MUF5b3NlS2lSczVET0dHc254T0hqX1lONUxDVld2T2M1dEx6VDlEY0lhM1dlRlBjcmI0UDVoWUFB?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "Nvidia",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "BBC",
-     "CMoney投資網誌",
-     "HN",
-     "TechCrunch"
-    ],
-    "sample": {
-     "title": "Nvidia scandal fallout widens as Trump's treasury secretary ",
-     "url": "https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss"
     },
     "hot": true
    },
@@ -824,6 +808,21 @@
     "hot": true
    },
    {
+    "term": "Nvidia",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "BBC",
+     "CMoney投資網誌",
+     "TechCrunch"
+    ],
+    "sample": {
+     "title": "Nvidia scandal fallout widens as Trump's treasury secretary ",
+     "url": "https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss"
+    },
+    "hot": true
+   },
+   {
     "term": "Wallet",
     "n": 3,
     "src": 3,
@@ -858,5 +857,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-13T19:12:14Z"
+ "updatedAt": "2026-11-13T19:30:49Z"
 }
