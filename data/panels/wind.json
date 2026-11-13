@@ -1,22 +1,92 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的目光高度聚焦在科技界震撼彈黃仁勳動向、冬季服飾穿搭與熱門影視娛樂話題。",
+ "line": "這幾天台灣消費者的注意力主要集中在串流影音新作、科技名人動態以及換季保暖服飾的穿搭討論。",
  "topics": [
   {
+   "name": "Netflix",
+   "q": "Netflix",
+   "cat": "App",
+   "do": [
+    {
+     "src": "Netflix 影集",
+     "name": "Dead-End Job",
+     "how": "上榜第 2 週、第 2 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Midnight Diner",
+     "how": "上榜第 2 週、第 7 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Sunshine Through the Rain",
+     "how": "上榜第 1 週、第 8 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Firefly Wedding",
+     "how": "上榜第 2 週、第 9 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Lupin",
+     "how": "上榜第 2 週、第 10 名"
+    }
+   ],
+   "talk": [],
+   "y": 1.0,
+   "news7": 80,
+   "news_p7": 20,
+   "news_capped": true,
+   "mentions": {},
+   "x": 0.95,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-09",
+   "quad": "hit"
+  },
+  {
+   "name": "泥面人",
+   "q": "泥面人",
+   "cat": "影視",
+   "do": [
+    {
+     "src": "電影票房",
+     "name": "泥面人",
+     "how": "本週票房第 1（962 萬）"
+    }
+   ],
+   "talk": [],
+   "y": 0.95,
+   "news7": 14,
+   "news_p7": 12,
+   "news_capped": false,
+   "social": {
+    "Threads": 70.3,
+    "Dcard": 3
+   },
+   "mentions": {},
+   "x": 0.96,
+   "talk_trend": "flat",
+   "days": 6,
+   "first": "2026-11-03",
+   "quad": "hit"
+  },
+  {
    "name": "崩壞：星穹鐵道",
-   "q": "崩壞 星穹鐵道",
+   "q": "崩壞星穹鐵道",
    "cat": "遊戲",
    "do": [
     {
      "src": "App 營收",
      "name": "崩壞：星穹鐵道",
-     "how": "新進榜第 7 名"
+     "how": "新進榜第 9 名"
     }
    ],
    "talk": [],
    "y": 0.9,
    "news7": 25,
-   "news_p7": 13,
+   "news_p7": 12,
    "news_capped": false,
    "social": {
     "Threads": 216,
@@ -30,33 +100,6 @@
    "quad": "hit"
   },
   {
-   "name": "泥面人",
-   "q": "泥面人 電影",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "電影票房",
-     "name": "泥面人",
-     "how": "本週票房第 1（962 萬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.95,
-   "news7": 11,
-   "news_p7": 9,
-   "news_capped": false,
-   "social": {
-    "Threads": 70.3,
-    "Dcard": 3
-   },
-   "mentions": {},
-   "x": 0.91,
-   "talk_trend": "flat",
-   "days": 6,
-   "first": "2026-11-03",
-   "quad": "hit"
-  },
-  {
    "name": "Disney+",
    "q": "Disney+",
    "cat": "App",
@@ -64,16 +107,16 @@
     {
      "src": "App 營收",
      "name": "Disney+",
-     "how": "新進榜第 3 名"
+     "how": "新進榜第 4 名"
     }
    ],
    "talk": [],
    "y": 0.9,
-   "news7": 81,
-   "news_p7": 19,
+   "news7": 79,
+   "news_p7": 21,
    "news_capped": true,
    "mentions": {},
-   "x": 0.96,
+   "x": 0.95,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-13",
@@ -81,7 +124,7 @@
   },
   {
    "name": "黃仁勳",
-   "q": "黃仁勳 辭職",
+   "q": "黃仁勳",
    "cat": "人物",
    "do": [
     {
@@ -93,23 +136,23 @@
    "talk": [
     {
      "src": "PTT",
-     "title": "[新聞] 痛罵自己「爛透了」 黃仁勳無條件投降"
-    },
-    {
-     "src": "PTT",
-     "title": "[新聞] 黃仁勳紅粉知己是間諜？ 美司法部長：我"
-    },
-    {
-     "src": "PTT",
-     "title": "[情報] 路透社：黃仁勳傳與二名員工有親密關係"
-    },
-    {
-     "src": "PTT",
      "title": "[情報] 黃仁勳辭職"
     },
     {
      "src": "PTT",
-     "title": "[新聞] 黃仁勳離開輝達 最痛的卻是中國？外媒專"
+     "title": "[請益] 老黃下台是利空出盡了嗎?"
+    },
+    {
+     "src": "Mobile01",
+     "title": "11/13 黃仁勳下台就只是政治鬥爭"
+    },
+    {
+     "src": "Mobile01",
+     "title": "黃仁勳落難，怎麼台股反而漲？"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "直到最後一刻仍力挺留任！川普親曝黃仁勳辭職後來電：他正經歷地獄般煎熬 最愧對妻子與家庭"
     }
    ],
    "y": 0.76,
@@ -121,10 +164,39 @@
     "Dcard": 29
    },
    "mentions": {
-    "PTT": 8,
-    "Mobile01": 1,
-    "新聞焦點": 5,
-    "時尚媒體": 3
+    "PTT": 2,
+    "Mobile01": 2,
+    "新聞焦點": 3
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-12",
+   "quad": "hit"
+  },
+  {
+   "name": "Google Pixel Tag",
+   "q": "Google Gemini",
+   "cat": "品牌商品",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "Meta AI",
+     "how": "第 3 名"
+    }
+   ],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[新聞] Google推出全新Gemini 4 Hydrogen 反應快"
+    }
+   ],
+   "y": 0.65,
+   "news7": 89,
+   "news_p7": 11,
+   "news_capped": true,
+   "mentions": {
+    "PTT": 1
    },
    "x": 1.0,
    "talk_trend": "up",
@@ -145,198 +217,112 @@
    ],
    "talk": [],
    "y": 0.9,
-   "news7": 25,
-   "news_p7": 3,
+   "news7": 23,
+   "news_p7": 7,
    "news_capped": false,
    "mentions": {},
-   "x": 0.71,
+   "x": 0.69,
    "talk_trend": "up",
    "days": 4,
    "first": "2026-11-09",
    "quad": "hit"
   },
   {
-   "name": "麥當勞",
-   "q": "麥當勞",
-   "cat": "飲食",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "麥當勞APP",
-     "how": "在榜上第 8 名（沒有在爬）"
-    }
-   ],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "早餐食草魚糜,消夜煮酸菜魚"
-    }
-   ],
-   "y": 0.5,
-   "static": true,
-   "news7": 68,
-   "news_p7": 32,
-   "news_capped": true,
-   "mentions": {
-    "Mobile01": 1
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 5,
-   "first": "2026-11-05",
-   "quad": "hit"
-  },
-  {
-   "name": "蝦皮購物",
-   "q": "蝦皮購物",
+   "name": "Spotify",
+   "q": "Spotify",
    "cat": "App",
    "do": [
     {
-     "src": "App 下載",
-     "name": "蝦皮賣家中心",
-     "how": "爬升 24 名到第 30"
+     "src": "Spotify",
+     "name": "ILLIT - You're Under Arrest",
+     "how": "上榜 6 天、第 4 名"
     },
     {
-     "src": "App 下載",
-     "name": "蝦皮購物 | 花得更少買得更好",
-     "how": "爬升 23 名到第 26"
+     "src": "Spotify",
+     "name": "Khalil Fong - 特別的人",
+     "how": "升 5 名到第 9"
+    },
+    {
+     "src": "Spotify",
+     "name": "Stefanie Sun - 我懷念的",
+     "how": "升 7 名到第 11"
+    },
+    {
+     "src": "Spotify",
+     "name": "RESCENE - With",
+     "how": "上榜 9 天、第 13 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "BESTie - Love Options",
+     "how": "第 1 名"
     }
    ],
    "talk": [],
-   "y": 0.69,
-   "news7": 31,
-   "news_p7": 9,
+   "y": 0.9,
+   "news7": 13,
+   "news_p7": 16,
    "news_capped": false,
    "mentions": {},
-   "x": 0.75,
-   "talk_trend": "up",
+   "x": 0.57,
+   "talk_trend": "flat",
    "days": 2,
-   "first": "2026-11-11",
-   "quad": "hit"
-  },
-  {
-   "name": "拓元",
-   "q": "拓元 售票",
-   "cat": "App",
-   "do": [
-    {
-     "src": "Google 熱搜",
-     "name": "拓元",
-     "how": "搜尋 500+"
-    }
-   ],
-   "talk": [],
-   "y": 0.6,
-   "news7": 22,
-   "news_p7": 13,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.68,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-13",
-   "quad": "hit"
-  },
-  {
-   "name": "火球祭",
-   "q": "火球祭",
-   "cat": "活動",
-   "do": [
-    {
-     "src": "Google 熱搜",
-     "name": "火球祭",
-     "how": "搜尋 100+"
-    }
-   ],
-   "talk": [],
-   "y": 0.6,
-   "news7": 14,
-   "news_p7": 2,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.59,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-13",
+   "first": "2026-11-09",
    "quad": "hit"
   },
   {
    "name": "UNIQLO TW",
    "q": "UNIQLO TW",
-   "cat": "品牌商品",
+   "cat": "App",
    "do": [
     {
      "src": "App 下載",
      "name": "UNIQLO TW",
-     "how": "爬升 21 名到第 73"
+     "how": "爬升 22 名到第 72"
     }
    ],
-   "talk": [
-    {
-     "src": "Dcard 穿搭",
-     "title": "Uniqlo 發熱衣（1 則）"
-    }
-   ],
-   "y": 0.66,
-   "news7": 5,
-   "news_p7": 11,
+   "talk": [],
+   "y": 0.67,
+   "news7": 1,
+   "news_p7": 10,
    "news_capped": false,
-   "mentions": {
-    "Dcard 穿搭": 1
-   },
-   "x": 0.49,
+   "mentions": {},
+   "x": 0.15,
    "talk_trend": "down",
    "days": 1,
    "first": "2026-11-13",
    "quad": "new"
   },
   {
-   "name": "神隱少女",
-   "q": "神隱少女 重映",
+   "name": "魔鬼的計謀",
+   "q": "魔鬼的計謀",
    "cat": "影視",
    "do": [],
    "talk": [
     {
      "src": "時尚媒體",
-     "title": "《神隱少女》25周年11/27重映！湯婆婆簽約網站、限量海報與書籤領取方式一次看"
-    }
-   ],
-   "y": 0.0,
-   "news7": 11,
-   "news_p7": 1,
-   "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.64,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-13",
-   "quad": "hype"
-  },
-  {
-   "name": "特斯拉",
-   "q": "特斯拉",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
+     "title": "《魔鬼的計謀3》河錫辰淘汰了嗎？首屆冠軍有望復活？消失3年去哪了？高智商男神魅力再掀話題"
+    },
     {
-     "src": "PTT",
-     "title": "[閒聊] 純電cla為什麼雷聲大雨點這麼小？"
+     "src": "時尚媒體",
+     "title": "《魔鬼的計謀3》線上看參賽者IG名單！張東民、河錫辰、鄭賢奎16位卡司介紹，Netflix上線時間一次看"
     }
    ],
    "y": 0.0,
-   "news7": 92,
-   "news_p7": 8,
-   "news_capped": true,
+   "news7": 29,
+   "news_p7": 2,
+   "news_capped": false,
+   "social": {
+    "Threads": 11.7
+   },
    "mentions": {
-    "PTT": 1
+    "時尚媒體": 2
    },
    "x": 1.0,
    "talk_trend": "up",
    "days": 2,
-   "first": "2026-11-10",
-   "quad": "talk"
+   "first": "2026-11-12",
+   "quad": "hype"
   },
   {
    "name": "羽絨外套",
@@ -345,26 +331,55 @@
    "do": [],
    "talk": [
     {
+     "src": "時尚媒體",
+     "title": "lululemon 2026冬季外套系列登場！文佳煐、車俊煥演繹Wunder Puff羽絨外套全新頂級保暖科技"
+    },
+    {
      "src": "Dcard 穿搭",
      "title": "羽絨外套（2 則）"
     }
    ],
    "y": 0.0,
    "news7": 24,
-   "news_p7": 20,
+   "news_p7": 12,
    "news_capped": false,
    "mentions": {
+    "時尚媒體": 1,
     "Dcard 穿搭": 1
    },
-   "x": 0.8,
-   "talk_trend": "flat",
+   "x": 0.9,
+   "talk_trend": "up",
    "days": 1,
    "first": "2026-11-13",
    "quad": "talk"
   },
   {
+   "name": "Toyota Crown Sport P",
+   "q": "Toyota Crown",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "獻給日系奢華的情書：TOYOTA 全新世代 CROWN 家族正式抵台發表"
+    }
+   ],
+   "y": 0.0,
+   "news7": 26,
+   "news_p7": 22,
+   "news_capped": false,
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 0.82,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-09",
+   "quad": "talk"
+  },
+  {
    "name": "Loewe",
-   "q": "Loewe 聖誕夜驚魂",
+   "q": "Loewe",
    "cat": "品牌商品",
    "do": [],
    "talk": [
@@ -374,51 +389,27 @@
     }
    ],
    "y": 0.0,
-   "news7": 10,
-   "news_p7": 0,
+   "news7": 19,
+   "news_p7": 3,
    "news_capped": false,
    "mentions": {
     "時尚媒體": 1
    },
-   "x": 0.62,
+   "x": 0.75,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-13",
    "quad": "talk"
   },
   {
-   "name": "微星 RTX 5080",
-   "q": "微星 40周年",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "微星 40 周年 DRACO EPIC EDITION 天龍座套組開箱 以頂級規格打造龍魂極致效能"
-    }
-   ],
-   "y": 0.0,
-   "news7": 2,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {
-    "Mobile01": 1
-   },
-   "x": 0.34,
-   "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-09",
-   "quad": "low"
-  },
-  {
    "name": "全家發熱衣",
-   "q": "全家 發熱衣",
+   "q": "全家發熱衣",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
-     "src": "PTT",
-     "title": "[情報] 全家行動購1111 開app送50"
+     "src": "Dcard 穿搭",
+     "title": "Uniqlo 發熱衣（1 則）"
     }
    ],
    "y": 0.0,
@@ -426,7 +417,7 @@
    "news_p7": 0,
    "news_capped": false,
    "mentions": {
-    "PTT": 1
+    "Dcard 穿搭": 1
    },
    "x": 0.1,
    "talk_trend": "flat",
@@ -437,11 +428,11 @@
  ],
  "quads": {
   "quiet": 0,
-  "hit": 9,
+  "hit": 8,
   "new": 1,
   "hype": 1,
   "talk": 3,
-  "low": 2
+  "low": 1
  },
  "src_do": [
   "App 下載",
@@ -467,5 +458,5 @@
  "hist_days": 11,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-13T04:46:16Z"
+ "updatedAt": "2026-11-13T11:01:55Z"
 }
