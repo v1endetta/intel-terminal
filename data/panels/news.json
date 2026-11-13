@@ -75,6 +75,12 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Why is Microsoft's outage lasting so long and will emails be lost?",
+   "url": "https://www.bbc.co.uk/news/articles/cwvg238zrnm5o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-13T18:36:57Z"
+  },
+  {
    "source": "Guardian",
    "title": "If Gen Z are asked to go to war, it might not be in the way they expect | Brief letters",
    "url": "https://www.theguardian.com/world/2026/nov/13/if-gen-z-are-asked-to-go-to-war-it-might-not-be-in-the-way-they-expect",
@@ -87,12 +93,6 @@
    "url": "https://www.theguardian.com/business/2026/nov/12/home-sales-october-low",
    "at": "2026-11-13T17:20:32Z",
    "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "Why is Microsoft's outage lasting so long and will emails be lost?",
-   "url": "https://www.bbc.co.uk/news/articles/cwvg238zrnm5o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-13T17:12:46Z"
   },
   {
    "source": "BBC",
@@ -264,10 +264,10 @@
     0,
     8,
     28,
-    51,
+    50,
     35,
-    44,
-    6
+    45,
+    7
    ],
    "days7": [
     "2026-11-08",
@@ -348,10 +348,10 @@
      "kw": "聯準會 利率 OR FOMC"
     },
     {
-     "source": "CMoney",
-     "title": "2330 台積電 - 台積電 ADR 收黑與輝達遭查利空夾擊，大盤緊盯散熱止穩與MSCI 換股賣壓- 股市爆料同學會",
-     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFB6RkpqSlFfaUVZQlhTSlk0cnAyWUREYjFjaEpmT0ltUXk1MkpuT2tadDlQSkxtd19Lc3RRMXhLM2NySW5mcXZHQkFVVWJjcUZZWkhMaXVEUHY?oc=5",
-     "at": "2026-11-13T02:17:11Z",
+     "source": "經濟日報",
+     "title": "台積電ADR跌1.9% 台指期反彈548點",
+     "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5vYzZmSHo1aDRGR0hVWklldEw1NTBQX3Vkc2tXd2gwNE1yeHI4ekR6TzZmanppSUtIUUlXTVpMc01CME15NXI1eS1TMjJpQWF3T1Jmc3ZyWWMzUmJM0gFiQVVfeXFMTXMxMWZheG1NQ2c0aUY1UERQMWxlZUFKSFpFV1JRUlRCTERxNHY3SHVJcEhhMFNSaWpudl9XQnVjeUp2THpJakhWeWpIREZkX0dXWXQ0SzNvTXlGSWVZbHk5dXc?oc=5",
+     "at": "2026-11-12T23:28:36Z",
      "kw": "台積電 法說 OR 台積電 ADR"
     },
     {
@@ -366,10 +366,10 @@
     1,
     10,
     10,
-    35,
+    33,
     50,
-    42,
-    4
+    40,
+    6
    ],
    "days7": [
     "2026-11-08",
@@ -519,10 +519,10 @@
     0,
     1,
     8,
-    18,
+    15,
     42,
-    131,
-    8
+    125,
+    16
    ],
    "days7": [
     "2026-11-08",
@@ -697,8 +697,8 @@
   "hot": [
    {
     "term": "ChatGPT",
-    "n": 8,
-    "src": 7,
+    "n": 9,
+    "src": 8,
     "sources": [
      "BigGo 財經",
      "CNBC",
@@ -779,21 +779,6 @@
     "hot": true
    },
    {
-    "term": "Anthropic",
-    "n": 4,
-    "src": 3,
-    "sources": [
-     "Anthropic",
-     "HN",
-     "Mashable"
-    ],
-    "sample": {
-     "title": "Anthropic announces Claude Fable 5.2 and Mythos 5.2. They'e ",
-     "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOWGw3UFZ0ZUxYWk1VSm9nMXJUNkVIamQxQ1VsVlMtOElpV3ozckEwRWRlVkdrZUdDSkZwV1ZpODQtV1RYR2MxM0Z1UUo1LW9fSXBtZ3RJZ1RkT2hJRnJMQU5KRVZiQ3ZVSFBvM09sNG4taThSb3VKcjdiaEtGTWRDXw?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "Gemini",
     "n": 4,
     "src": 3,
@@ -852,11 +837,26 @@
      "url": "https://openai.com/index/introducing-chatgpt-wallet"
     },
     "hot": true
+   },
+   {
+    "term": "消費宗教",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Facebook",
+     "UDN",
+     "中天新聞網"
+    ],
+    "sample": {
+     "title": "選戰扯媽祖？曹興誠稱北市「菩薩對抗邪靈」 蔣萬安反擊轟：消費宗教| 2026九合一選舉",
+     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5xSV85ekl4NWRSdkNYN19QZ1FkZEdnOXJqa051MDh3SFNHdTNIQlM3SkxuMDdFTkZRWEs2c09WbjI3SGFPaEdxUlBrOUMzanFCZ29EV0h0YUY?oc=5"
+    },
+    "hot": true
    }
   ]
  },
  "errs": [
   "gdelt: RuntimeError: gdelt empty"
  ],
- "updatedAt": "2026-11-13T18:21:31Z"
+ "updatedAt": "2026-11-13T18:37:51Z"
 }
