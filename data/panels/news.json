@@ -75,6 +75,12 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Why is Microsoft's outage lasting so long and will emails be lost?",
+   "url": "https://www.bbc.co.uk/news/articles/cwvg238zrnm5o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-13T17:12:46Z"
+  },
+  {
    "source": "Guardian",
    "title": "Europe should not walk into Russia’s ‘traps’ on Ukraine talks, EU’s foreign policy chief K",
    "url": "https://www.theguardian.com/world/live/2026/nov/13/eu-leaders-negotiations-ukraine-russia-dublin-ai-summit-kushner-witkoff-latest-news-updates",
@@ -108,12 +114,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/13/ireland-banned-books-room-censorship",
    "at": "2026-11-13T14:25:24Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Why is the Microsoft outage lasting so long?",
-   "url": "https://www.bbc.co.uk/news/articles/cwvg238zrnm5o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-13T14:21:26Z"
   },
   {
    "source": "Guardian",
@@ -624,7 +624,7 @@
     3,
     15,
     21,
-    28,
+    29,
     27,
     25,
     0
@@ -806,6 +806,36 @@
     "hot": true
    },
    {
+    "term": "輝達",
+    "n": 5,
+    "src": 3,
+    "sources": [
+     "CMoney投資網誌",
+     "PTT",
+     "中央社"
+    ],
+    "sample": {
+     "title": "美股早盤漲跌互見　輝達賣壓持續再跌逾2%",
+     "url": "https://www.cna.com.tw/news/afe/202611130334.aspx"
+    },
+    "hot": true
+   },
+   {
+    "term": "Gemini",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "Gemini",
+     "Google AI 論壇",
+     "HN"
+    ],
+    "sample": {
+     "title": "Connect Google Wallet to Gemini for personal finance insight",
+     "url": "https://blog.google/innovation-and-ai/products/gemini-app/google-wallet-gemini-app/"
+    },
+    "hot": true
+   },
+   {
     "term": "黃仁勳",
     "n": 4,
     "src": 3,
@@ -821,17 +851,17 @@
     "hot": true
    },
    {
-    "term": "輝達",
-    "n": 4,
+    "term": "Wallet",
+    "n": 3,
     "src": 3,
     "sources": [
-     "CMoney投資網誌",
-     "PTT",
-     "中央社"
+     "Gemini",
+     "OpenAI",
+     "TechCrunch"
     ],
     "sample": {
-     "title": "美股早盤漲跌互見　輝達賣壓持續再跌逾2%",
-     "url": "https://www.cna.com.tw/news/afe/202611130334.aspx"
+     "title": "Introducing ChatGPT Wallet",
+     "url": "https://openai.com/index/introducing-chatgpt-wallet"
     },
     "hot": true
    },
@@ -849,40 +879,11 @@
      "url": "https://www.cna.com.tw/news/aipl/202611130327.aspx"
     },
     "hot": true
-   },
-   {
-    "term": "媽祖",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "17news民生好報",
-     "UDN",
-     "中天新聞網"
-    ],
-    "sample": {
-     "title": "選戰扯媽祖？曹興誠稱北市「菩薩對抗邪靈」 蔣萬安反擊轟：消費宗教",
-     "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5oZWVVYWxVRHdPUWZyeEFleDhBWGktLURseHRqVC1CNXdlQ2hCTHJ4M2JIMWNoeW9zTWZRV3RrbmpSb2MzcUthdFY2dlpzVDFXd3NB0gFYQVVfeXFMTmRaS2hfMVY0T2FhVFplUTZicTFncWVTdVQ5SnoyMjlkbVRnSnkzdjZobExSeVFpVXhhNkpnWm92dG1hRUItSXZJZFZfN2s5UGJlS2xxSjVZag?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "Hydrogen",
-    "n": 3,
-    "src": 2,
-    "sources": [
-     "Google AI 論壇",
-     "HN"
-    ],
-    "sample": {
-     "title": "Unfair Restriction of Gemini 4 Hydrogen for Jio-Bundled Goog",
-     "url": "https://discuss.ai.google.dev/t/unfair-restriction-of-gemini-4-hydrogen-for-jio-bundled-google-ai-pro-subscribers-in-antigravity/200156"
-    },
-    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: RuntimeError: gdelt empty"
  ],
- "updatedAt": "2026-11-13T16:52:40Z"
+ "updatedAt": "2026-11-13T17:11:55Z"
 }
