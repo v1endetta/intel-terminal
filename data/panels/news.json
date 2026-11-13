@@ -76,6 +76,13 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "If Gen Z are asked to go to war, it might not be in the way they expect | Brief letters",
+   "url": "https://www.theguardian.com/world/2026/nov/13/if-gen-z-are-asked-to-go-to-war-it-might-not-be-in-the-way-they-expect",
+   "at": "2026-11-13T17:52:28Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
    "title": "Home sales hit 16-year low in October amid soaring mortgage rates",
    "url": "https://www.theguardian.com/business/2026/nov/12/home-sales-october-low",
    "at": "2026-11-13T17:20:32Z",
@@ -145,13 +152,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/13/ireland-banned-books-room-censorship",
    "at": "2026-11-13T14:25:24Z",
    "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Russia is ‘setting traps’ in Ukraine talks, EU foreign policy chief warns",
-   "url": "https://www.theguardian.com/world/2026/nov/13/russia-ukraine-talks-kaja-kallas-eu-foreign-policy-dublin-summit",
-   "at": "2026-11-13T14:14:44Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -213,7 +213,7 @@
     0,
     0,
     1,
-    3,
+    2,
     2,
     4,
     0
@@ -246,10 +246,10 @@
      "kw": "ChatGPT OR Claude OR Gemini 新功能 OR 新模型"
     },
     {
-     "source": "TechNews 科技新",
-     "title": "華碩打造「代理人電腦」生態系，PC 變身全天候 AI 助理",
-     "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFB6WU5jN05mbUpfcXdxWDJjWVlmakswcUNHTFRBUWE1QUprVy1JR3ZKZHZsb0UzNXlERUZjZFc4blhBVzdXeXBUa2hJdjNPcEQwUzhLSTA2ZXRqY1hoNEZtaXBqQmJzLVBiWmw0aHBn?oc=5",
-     "at": "2026-11-13T02:17:16Z",
+     "source": "商傳媒",
+     "title": "從《鉛筆》寓言看AI未來：哈佛教授勾勒智慧代理社會挑戰",
+     "url": "https://news.google.com/rss/articles/CBMiigNBVV95cUxPdjR3bHZNLV9vOFl2c1ZqNG5LeG9MR0lSYk1IdVJnQnRVX3R4RmVRcUI1RkQwTjhBYnlaN3ZRNFFhMklzY3NsQnVxX2JnWVVLOXozemg2Wmt5Q2F1anA4TG5GUHgtV3A0aFZWR0lITDZiWmZpMS00bkFQT2gzd0YyblEzSXV1b1pJQ3FFTzVzNlltSE5IYmJONlVKN2VsLVpWRDkwb3RrOWluN0NEVHNab3hkbTYtQ1lNeE1maGtXYVl1Q1BveTJhMi14bXhCXzlWZ3RwSnV3Zm5VQ0xrQlVSNmdjUWdIcjc4ZERZSW5QbXVfSjNDYWQzM0JPMU80Qk1IZlk2NWNIOGtLRFZWMUxZY0hEOGVLaXo3NGF3c21BQjVrazgzc0xVeHFncVdQVHUtdGZkZjBhYm85OTZNWUVnZENGNFpJVlhqckJXYmJ4N3pQNi1ZVjB6Q193WVRsY3VFVHVrNDEzZW9GUUptUmQ5SGVzWUtONXhJMVhYQVdHN2lXakFrZ0ZZcEp3?oc=5",
+     "at": "2026-11-13T17:07:52Z",
      "kw": "AI agent OR AI 代理人 OR 智慧代理"
     },
     {
@@ -263,11 +263,11 @@
    "daily7": [
     0,
     8,
-    30,
+    28,
     51,
     35,
     44,
-    5
+    6
    ],
    "days7": [
     "2026-11-08",
@@ -732,22 +732,6 @@
     "hot": true
    },
    {
-    "term": "黃仁勳",
-    "n": 5,
-    "src": 4,
-    "sources": [
-     "PTT",
-     "Wiki",
-     "中央社",
-     "自由財經"
-    ],
-    "sample": {
-     "title": "黃仁勳卸任輝達執行長重創科技股　歐股漲跌互見",
-     "url": "https://www.cna.com.tw/news/afe/202611140002.aspx"
-    },
-    "hot": true
-   },
-   {
     "term": "蔣萬安",
     "n": 4,
     "src": 4,
@@ -825,6 +809,21 @@
     "hot": true
    },
    {
+    "term": "黃仁勳",
+    "n": 4,
+    "src": 3,
+    "sources": [
+     "PTT",
+     "Wiki",
+     "中央社"
+    ],
+    "sample": {
+     "title": "黃仁勳卸任輝達執行長重創科技股　歐股漲跌互見",
+     "url": "https://www.cna.com.tw/news/afe/202611140002.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "Nvidia",
     "n": 3,
     "src": 3,
@@ -857,7 +856,7 @@
   ]
  },
  "errs": [
-  "gdelt: RuntimeError: gdelt empty"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-13T17:47:24Z"
+ "updatedAt": "2026-11-13T18:02:44Z"
 }
