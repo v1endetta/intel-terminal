@@ -76,6 +76,13 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "Flights grounded at all US airports due to air traffic control ‘communication issue’, tran",
+   "url": "https://www.theguardian.com/us-news/live/2026/nov/13/us-politics-latest-news-updates-democrats-republicans-donald-trump-van-hollen-chuck-schumer",
+   "at": "2026-11-13T22:05:57Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
    "title": "FAA issues nationwide ground-stop order, delaying or canceling nearly 7,000 flights",
    "url": "https://www.theguardian.com/world/2026/nov/13/faa-nationwide-ground-stop-flights",
    "at": "2026-11-13T21:44:48Z",
@@ -144,13 +151,6 @@
    "url": "https://www.theguardian.com/world/live/2026/nov/13/eu-leaders-negotiations-ukraine-russia-dublin-ai-summit-kushner-witkoff-latest-news-updates",
    "at": "2026-11-13T16:39:34Z",
    "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Jaguar Land Rover reports £451m quarterly loss after cutting 4,000 jobs",
-   "url": "https://www.theguardian.com/business/2026/nov/13/jaguar-land-rover-quarterly-loss-electric-cars-job-cuts",
-   "at": "2026-11-13T16:22:16Z",
-   "sec": "Business"
   }
  ],
  "groups": [
@@ -264,9 +264,9 @@
     8,
     21,
     48,
-    35,
-    47,
-    10
+    34,
+    45,
+    11
    ],
    "days7": [
     "2026-11-08",
@@ -314,7 +314,7 @@
     0,
     0,
     0,
-    1,
+    2,
     0,
     6,
     0
@@ -347,10 +347,10 @@
      "kw": "聯準會 利率 OR FOMC"
     },
     {
-     "source": "經濟日報",
-     "title": "台積電ADR跌1.9% 台指期反彈548點",
-     "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5vYzZmSHo1aDRGR0hVWklldEw1NTBQX3Vkc2tXd2gwNE1yeHI4ekR6TzZmanppSUtIUUlXTVpMc01CME15NXI1eS1TMjJpQWF3T1Jmc3ZyWWMzUmJM0gFiQVVfeXFMTXMxMWZheG1NQ2c0aUY1UERQMWxlZUFKSFpFV1JRUlRCTERxNHY3SHVJcEhhMFNSaWpudl9XQnVjeUp2THpJakhWeWpIREZkX0dXWXQ0SzNvTXlGSWVZbHk5dXc?oc=5",
-     "at": "2026-11-12T23:28:36Z",
+     "source": "自由財經",
+     "title": "美股收盤》黃仁勳風暴輝達續跌！拖累科技股 台積電ADR跌近2％",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5BNG94OUpqbTFaRHFlMkdxWE5tbjg0dGRNN2Q0WE5SLXoxTTVKR3dfM3dkUEtBTDdYRm9zcThua3JPOV91dXBmU0tPb3hoQzNpR0JaNXJJbjc1Y1NLekcw?oc=5",
+     "at": "2026-11-13T21:48:43Z",
      "kw": "台積電 法說 OR 台積電 ADR"
     },
     {
@@ -368,7 +368,7 @@
     35,
     51,
     41,
-    6
+    8
    ],
    "days7": [
     "2026-11-08",
@@ -417,9 +417,9 @@
     10,
     19,
     13,
-    31,
+    30,
     24,
-    0
+    1
    ],
    "days7": [
     "2026-11-08",
@@ -469,7 +469,7 @@
     12,
     11,
     6,
-    8,
+    7,
     0
    ],
    "days7": [
@@ -518,10 +518,10 @@
     0,
     1,
     6,
-    12,
+    11,
     37,
-    119,
-    32
+    117,
+    34
    ],
    "days7": [
     "2026-11-08",
@@ -622,7 +622,7 @@
     21,
     28,
     25,
-    27,
+    28,
     0
    ],
    "days7": [
@@ -731,6 +731,38 @@
     "hot": true
    },
    {
+    "term": "輝達",
+    "n": 7,
+    "src": 4,
+    "sources": [
+     "CMoney投資網誌",
+     "PTT",
+     "中央社",
+     "自由財經"
+    ],
+    "sample": {
+     "title": "金融時報：輝達尋找新掌門人　安謀執行長哈斯列接班名單",
+     "url": "https://www.cna.com.tw/news/ait/202611140004.aspx"
+    },
+    "hot": true
+   },
+   {
+    "term": "黃仁勳",
+    "n": 5,
+    "src": 4,
+    "sources": [
+     "PTT",
+     "Wiki",
+     "中央社",
+     "自由財經"
+    ],
+    "sample": {
+     "title": "黃仁勳卸任輝達執行長重創科技股　歐股漲跌互見",
+     "url": "https://www.cna.com.tw/news/afe/202611140002.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "Nvidia",
     "n": 4,
     "src": 4,
@@ -743,21 +775,6 @@
     "sample": {
      "title": "Nvidia scandal fallout widens as Trump's treasury secretary ",
      "url": "https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss"
-    },
-    "hot": true
-   },
-   {
-    "term": "輝達",
-    "n": 6,
-    "src": 3,
-    "sources": [
-     "CMoney投資網誌",
-     "PTT",
-     "中央社"
-    ],
-    "sample": {
-     "title": "金融時報：輝達尋找新掌門人　安謀執行長哈斯列接班名單",
-     "url": "https://www.cna.com.tw/news/ait/202611140004.aspx"
     },
     "hot": true
    },
@@ -793,32 +810,17 @@
     "hot": true
    },
    {
-    "term": "黃仁勳",
-    "n": 4,
-    "src": 3,
-    "sources": [
-     "PTT",
-     "Wiki",
-     "中央社"
-    ],
-    "sample": {
-     "title": "黃仁勳卸任輝達執行長重創科技股　歐股漲跌互見",
-     "url": "https://www.cna.com.tw/news/afe/202611140002.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "蔣萬安",
+    "term": "美股",
     "n": 3,
     "src": 3,
     "sources": [
-     "Newtalk新聞",
-     "UDN",
-     "中央社"
+     "PTT",
+     "中央社",
+     "自由財經"
     ],
     "sample": {
-     "title": "赴饒河夜市掃街拜票　蔣萬安走訪東發號用餐致意",
-     "url": "https://www.cna.com.tw/news/aipl/202611130327.aspx"
+     "title": "美股早盤漲跌互見　輝達賣壓持續再跌逾2%",
+     "url": "https://www.cna.com.tw/news/afe/202611130334.aspx"
     },
     "hot": true
    },
@@ -855,5 +857,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-13T21:44:49Z"
+ "updatedAt": "2026-11-13T22:05:39Z"
 }
