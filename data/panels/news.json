@@ -76,6 +76,13 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "‘They’ve cut all entry-level jobs’: unlikely seaside town on frontline of AI threat",
+   "url": "https://www.theguardian.com/business/2026/nov/13/ai-uk-finance-jobs-bournemouth-tech",
+   "at": "2026-11-13T06:00:11Z",
+   "sec": "Business"
+  },
+  {
+   "source": "Guardian",
    "title": "More than 60% of Germany’s female soldiers report harassment or abuse",
    "url": "https://www.theguardian.com/world/2026/nov/13/more-than-60-of-germanys-female-soldiers-report-harassment-or-abuse",
    "at": "2026-11-13T05:00:09Z",
@@ -145,13 +152,6 @@
    "title": "Did Indonesia’s vice-president just resign because he didn’t have a high school diploma? ",
    "url": "https://www.theguardian.com/world/2026/nov/13/indonesia-vice-president-diploma-resignation-explained",
    "at": "2026-11-12T23:05:02Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Putin takes hard line in US talks as Ukraine says Starlink disrupted again",
-   "url": "https://www.theguardian.com/world/2026/nov/12/vladimir-putin-russia-target-foreign-troops-ukraine-elon-musk-starlink",
-   "at": "2026-11-12T22:26:37Z",
    "sec": "World news"
   }
  ],
@@ -625,7 +625,7 @@
     26,
     27,
     30,
-    10
+    9
    ],
    "days7": [
     "2026-11-07",
@@ -642,8 +642,8 @@
   "gdelt": {
    "vol": 3.581,
    "vol_ratio": 1.13,
-   "tone": 0.39,
-   "tone_at": "2026-11-13T03:02:35Z",
+   "tone": 0.38,
+   "tone_at": "2026-11-13T06:15:23Z",
    "spark": [
     1.986,
     2.082,
@@ -660,7 +660,7 @@
     3.438,
     3.581
    ],
-   "at": "2026-11-13T05:37:39Z"
+   "at": "2026-11-13T06:15:23Z"
   },
   "wiki": {
    "zh": [
@@ -721,15 +721,14 @@
   "hot": [
    {
     "term": "Gemini",
-    "n": 8,
-    "src": 7,
+    "n": 6,
+    "src": 5,
     "sources": [
      "CMoney",
      "ETtoday AI科技",
-     "Gemini",
-     "Google AI",
      "Google AI 論壇",
-     "HN"
+     "HN",
+     "自由電子報3C科技"
     ],
     "sample": {
      "title": "Google搜尋更聰明！複雜問題一次問　Gemini新模型全球上線",
@@ -739,13 +738,11 @@
    },
    {
     "term": "Hydrogen",
-    "n": 8,
-    "src": 6,
+    "n": 5,
+    "src": 4,
     "sources": [
      "CMoney",
      "ETtoday AI科技",
-     "Gemini",
-     "Google AI",
      "Google AI 論壇",
      "HN"
     ],
@@ -757,12 +754,11 @@
    },
    {
     "term": "Google",
-    "n": 6,
-    "src": 5,
+    "n": 5,
+    "src": 4,
     "sources": [
      "CMoney",
      "ETtoday AI科技",
-     "Google AI",
      "Google AI 論壇",
      "動區動趨",
      "自由電子報3C科技"
@@ -791,7 +787,7 @@
    },
    {
     "term": "黃仁勳",
-    "n": 14,
+    "n": 10,
     "src": 3,
     "sources": [
      "PTT",
@@ -806,7 +802,7 @@
    },
    {
     "term": "輝達",
-    "n": 7,
+    "n": 6,
     "src": 3,
     "sources": [
      "CMoney",
@@ -881,8 +877,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-13T05:57:37Z"
+ "errs": [],
+ "updatedAt": "2026-11-13T06:15:23Z"
 }
