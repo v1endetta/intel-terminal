@@ -1,78 +1,39 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者聚焦於科技界震撼彈、強檔影劇上線及季節交替的保暖與車市消費話題。",
+ "line": "這幾天台灣消費者的目光高度聚焦於科技界人事震盪、串流影音話題作以及季節交替的實用保暖商品。",
  "topics": [
   {
    "name": "Disney+",
    "q": "Disney+",
-   "cat": "App",
+   "cat": "影視",
    "do": [
     {
      "src": "App 營收",
      "name": "Disney+",
-     "how": "新進榜第 4 名"
+     "how": "新進榜第 7 名"
     }
    ],
-   "talk": [],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "Disney+《再婚皇后》朱智勛又在雷！一大地雷行為劇迷齊喊「渣到沒救了」要李鍾碩加把勁"
+    }
+   ],
    "y": 0.9,
-   "news7": 76,
-   "news_p7": 24,
+   "news7": 75,
+   "news_p7": 25,
    "news_capped": true,
    "social": {
     "Threads": 0.3,
     "Dcard": 7
    },
-   "mentions": {},
+   "mentions": {
+    "新聞焦點": 1
+   },
    "x": 1.0,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-13",
-   "quad": "hit"
-  },
-  {
-   "name": "Spotify",
-   "q": "Spotify",
-   "cat": "App",
-   "do": [
-    {
-     "src": "Spotify",
-     "name": "ILLIT - You're Under Arrest",
-     "how": "上榜 6 天、第 4 名"
-    },
-    {
-     "src": "Spotify",
-     "name": "Khalil Fong - 特別的人",
-     "how": "升 5 名到第 9"
-    },
-    {
-     "src": "Spotify",
-     "name": "Stefanie Sun - 我懷念的",
-     "how": "升 7 名到第 11"
-    },
-    {
-     "src": "Spotify",
-     "name": "RESCENE - With",
-     "how": "上榜 9 天、第 13 名"
-    },
-    {
-     "src": "Spotify",
-     "name": "BESTie - Love Options",
-     "how": "第 1 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.9,
-   "news7": 15,
-   "news_p7": 16,
-   "news_capped": false,
-   "social": {
-    "Threads": 312
-   },
-   "mentions": {},
-   "x": 0.98,
-   "talk_trend": "flat",
-   "days": 3,
-   "first": "2026-11-09",
    "quad": "hit"
   },
   {
@@ -83,102 +44,28 @@
     {
      "src": "App 營收",
      "name": "崩壞：星穹鐵道",
-     "how": "新進榜第 9 名"
+     "how": "新進榜第 11 名"
     }
    ],
    "talk": [],
    "y": 0.9,
-   "news7": 25,
-   "news_p7": 14,
+   "news7": 23,
+   "news_p7": 16,
    "news_capped": false,
    "social": {
     "Threads": 13.5,
     "Dcard": 3
    },
    "mentions": {},
-   "x": 0.97,
-   "talk_trend": "up",
+   "x": 0.95,
+   "talk_trend": "flat",
    "days": 4,
    "first": "2026-11-11",
    "quad": "hit"
   },
   {
-   "name": "Netflix",
-   "q": "Netflix 影集 電影",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "Netflix 影集",
-     "name": "Dead-End Job",
-     "how": "上榜第 2 週、第 2 名"
-    },
-    {
-     "src": "Netflix 影集",
-     "name": "Midnight Diner",
-     "how": "上榜第 2 週、第 7 名"
-    },
-    {
-     "src": "Netflix 影集",
-     "name": "Sunshine Through the Rain",
-     "how": "上榜第 1 週、第 8 名"
-    },
-    {
-     "src": "Netflix 影集",
-     "name": "Firefly Wedding",
-     "how": "上榜第 2 週、第 9 名"
-    },
-    {
-     "src": "Netflix 影集",
-     "name": "Lupin",
-     "how": "上榜第 2 週、第 10 名"
-    }
-   ],
-   "talk": [],
-   "y": 1.0,
-   "news7": 6,
-   "news_p7": 14,
-   "news_capped": false,
-   "social": {
-    "Threads": 12.8,
-    "Dcard": 30
-   },
-   "mentions": {},
-   "x": 0.82,
-   "talk_trend": "down",
-   "days": 3,
-   "first": "2026-11-09",
-   "quad": "hit"
-  },
-  {
-   "name": "泥面人",
-   "q": "泥面人 電影",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "電影票房",
-     "name": "泥面人",
-     "how": "本週票房第 1（962 萬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.95,
-   "news7": 9,
-   "news_p7": 11,
-   "news_capped": false,
-   "social": {
-    "Threads": 40.3,
-    "Dcard": 3
-   },
-   "mentions": {},
-   "x": 0.83,
-   "talk_trend": "flat",
-   "days": 6,
-   "first": "2026-11-03",
-   "quad": "hit"
-  },
-  {
    "name": "黃仁勳",
-   "q": "黃仁勳 辭職",
+   "q": "黃仁勳",
    "cat": "人物",
    "do": [
     {
@@ -206,7 +93,7 @@
     },
     {
      "src": "新聞焦點",
-     "title": "黃仁勳辭職輝達台灣總部生變？ 蔣萬安：有簽訂完整合約"
+     "title": "黃仁勳突卸輝達執行長震撼矽谷 Twitter前CEO預測他3年後王者歸來"
     }
    ],
    "y": 0.72,
@@ -220,7 +107,7 @@
    "mentions": {
     "PTT": 2,
     "Mobile01": 2,
-    "新聞焦點": 3
+    "新聞焦點": 7
    },
    "x": 1.0,
    "talk_trend": "up",
@@ -229,32 +116,132 @@
    "quad": "hit"
   },
   {
+   "name": "Spotify",
+   "q": "Spotify 台灣",
+   "cat": "App",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "RESCENE - With",
+     "how": "上榜 10 天、第 15 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "BESTie - Love Options",
+     "how": "第 1 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "A2O - NEON (w/ A2O LITE)",
+     "how": "第 2 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "Jess Lee - 甲乙丙丁 - 你我怎么两清",
+     "how": "第 3 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.75,
+   "news7": 5,
+   "news_p7": 3,
+   "news_capped": false,
+   "social": {
+    "Threads": 312
+   },
+   "mentions": {},
+   "x": 0.76,
+   "talk_trend": "up",
+   "days": 3,
+   "first": "2026-11-09",
+   "quad": "hit"
+  },
+  {
+   "name": "泥面人",
+   "q": "泥面人電影",
+   "cat": "影視",
+   "do": [
+    {
+     "src": "電影票房",
+     "name": "泥面人",
+     "how": "本週票房第 1（962 萬）"
+    }
+   ],
+   "talk": [],
+   "y": 0.95,
+   "news7": 0,
+   "news_p7": 1,
+   "news_capped": false,
+   "social": {
+    "Threads": 40.3,
+    "Dcard": 3
+   },
+   "mentions": {},
+   "x": 0.33,
+   "talk_trend": "flat",
+   "days": 6,
+   "first": "2026-11-03",
+   "quad": "new"
+  },
+  {
    "name": "再婚皇后",
-   "q": "再婚皇后 崔代勳",
+   "q": "再婚皇后",
    "cat": "影視",
    "do": [],
    "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "Disney+《再婚皇后》朱智勛又在雷！一大地雷行為劇迷齊喊「渣到沒救了」要李鍾碩加把勁"
+    },
     {
      "src": "時尚媒體",
      "title": "最強綠葉崔代勳出演《再婚皇后》帥出新高度！哈洗大叔不搞笑其實很有魅力，更多帥氣模樣一次看"
     }
    ],
    "y": 0.0,
-   "news7": 5,
-   "news_p7": 3,
-   "news_capped": false,
+   "news7": 83,
+   "news_p7": 17,
+   "news_capped": true,
    "mentions": {
+    "新聞焦點": 1,
     "時尚媒體": 1
    },
-   "x": 0.49,
+   "x": 1.0,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-12",
-   "quad": "low"
+   "quad": "hype"
   },
   {
-   "name": "Toyota Crown Sport P",
-   "q": "Toyota CROWN 家族",
+   "name": "魔鬼的計謀",
+   "q": "魔鬼的計謀",
+   "cat": "影視",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "《魔鬼的計謀3》線上看成員IG名單！張東民、河錫辰、鄭賢奎16位卡司介紹，Netflix上線時間一次看"
+    }
+   ],
+   "y": 0.0,
+   "news7": 33,
+   "news_p7": 4,
+   "news_capped": false,
+   "social": {
+    "Threads": 264
+   },
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 3,
+   "first": "2026-11-12",
+   "quad": "hype"
+  },
+  {
+   "name": "Toyota",
+   "q": "TOYOTA CROWN",
    "cat": "品牌商品",
    "do": [],
    "talk": [
@@ -264,17 +251,41 @@
     }
    ],
    "y": 0.0,
-   "news7": 5,
-   "news_p7": 4,
+   "news7": 23,
+   "news_p7": 25,
    "news_capped": false,
    "mentions": {
     "時尚媒體": 1
    },
-   "x": 0.49,
+   "x": 0.79,
    "talk_trend": "flat",
-   "days": 3,
-   "first": "2026-11-09",
-   "quad": "low"
+   "days": 2,
+   "first": "2026-11-03",
+   "quad": "talk"
+  },
+  {
+   "name": "特斯拉",
+   "q": "Tesla Model Y",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "Mobile01",
+     "title": "下個月交車 Model Y，前擋貼金屬膜還是無金屬冰鑽？會影響 Keyless嗎？"
+    }
+   ],
+   "y": 0.0,
+   "news7": 6,
+   "news_p7": 5,
+   "news_capped": false,
+   "mentions": {
+    "Mobile01": 1
+   },
+   "x": 0.52,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-10",
+   "quad": "talk"
   },
   {
    "name": "全家發熱衣",
@@ -303,11 +314,11 @@
  ],
  "quads": {
   "quiet": 0,
-  "hit": 6,
-  "new": 0,
-  "hype": 0,
-  "talk": 0,
-  "low": 3
+  "hit": 4,
+  "new": 1,
+  "hype": 2,
+  "talk": 2,
+  "low": 1
  },
  "src_do": [
   "App 下載",
@@ -332,5 +343,5 @@
  "hist_days": 12,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-13T17:02:22Z"
+ "updatedAt": "2026-11-13T23:07:49Z"
 }
