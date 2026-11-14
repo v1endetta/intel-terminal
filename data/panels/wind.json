@@ -1,11 +1,11 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的目光高度聚焦於科技界人事震盪、串流影音話題作以及季節交替的實用保暖商品。",
+ "line": "這幾天台灣消費者的注意力高度集中在影視娛樂作品、話題名人動態以及季節性穿搭與生活展覽活動上。",
  "topics": [
   {
    "name": "Disney+",
    "q": "Disney+",
-   "cat": "影視",
+   "cat": "App",
    "do": [
     {
      "src": "App 營收",
@@ -13,23 +13,16 @@
      "how": "新進榜第 7 名"
     }
    ],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "Disney+《再婚皇后》朱智勛又在雷！一大地雷行為劇迷齊喊「渣到沒救了」要李鍾碩加把勁"
-    }
-   ],
+   "talk": [],
    "y": 0.9,
-   "news7": 75,
-   "news_p7": 25,
+   "news7": 78,
+   "news_p7": 22,
    "news_capped": true,
    "social": {
     "Threads": 0.3,
     "Dcard": 7
    },
-   "mentions": {
-    "新聞焦點": 1
-   },
+   "mentions": {},
    "x": 1.0,
    "talk_trend": "up",
    "days": 2,
@@ -44,12 +37,12 @@
     {
      "src": "App 營收",
      "name": "崩壞：星穹鐵道",
-     "how": "新進榜第 11 名"
+     "how": "新進榜第 12 名"
     }
    ],
    "talk": [],
    "y": 0.9,
-   "news7": 23,
+   "news7": 25,
    "news_p7": 16,
    "news_capped": false,
    "social": {
@@ -57,108 +50,15 @@
     "Dcard": 3
    },
    "mentions": {},
-   "x": 0.95,
-   "talk_trend": "flat",
+   "x": 0.97,
+   "talk_trend": "up",
    "days": 4,
    "first": "2026-11-11",
    "quad": "hit"
   },
   {
-   "name": "黃仁勳",
-   "q": "黃仁勳",
-   "cat": "人物",
-   "do": [
-    {
-     "src": "YouTube 熱門",
-     "name": "黃仁勳坦承婚外情　在台灣與黃樂親密舉動曝｜民視新聞｜",
-     "how": "7 天內上架、發燒第 3"
-    }
-   ],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[情報] 黃仁勳辭職"
-    },
-    {
-     "src": "PTT",
-     "title": "Re: [新聞] 黃仁勳坦承與中國女間諜有婚外情 輝達"
-    },
-    {
-     "src": "Mobile01",
-     "title": "11/13 黃仁勳下台就只是政治鬥爭"
-    },
-    {
-     "src": "Mobile01",
-     "title": "黃仁勳落難，怎麼台股反而漲？"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "黃仁勳突卸輝達執行長震撼矽谷 Twitter前CEO預測他3年後王者歸來"
-    }
-   ],
-   "y": 0.72,
-   "news7": 100,
-   "news_p7": 0,
-   "news_capped": true,
-   "social": {
-    "Threads": 22.9,
-    "Dcard": 29
-   },
-   "mentions": {
-    "PTT": 2,
-    "Mobile01": 2,
-    "新聞焦點": 7
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-12",
-   "quad": "hit"
-  },
-  {
-   "name": "Spotify",
-   "q": "Spotify 台灣",
-   "cat": "App",
-   "do": [
-    {
-     "src": "Spotify",
-     "name": "RESCENE - With",
-     "how": "上榜 10 天、第 15 名"
-    },
-    {
-     "src": "Spotify",
-     "name": "BESTie - Love Options",
-     "how": "第 1 名"
-    },
-    {
-     "src": "Spotify",
-     "name": "A2O - NEON (w/ A2O LITE)",
-     "how": "第 2 名"
-    },
-    {
-     "src": "Spotify",
-     "name": "Jess Lee - 甲乙丙丁 - 你我怎么两清",
-     "how": "第 3 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.75,
-   "news7": 5,
-   "news_p7": 3,
-   "news_capped": false,
-   "social": {
-    "Threads": 312
-   },
-   "mentions": {},
-   "x": 0.76,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-09",
-   "quad": "hit"
-  },
-  {
    "name": "泥面人",
-   "q": "泥面人電影",
+   "q": "泥面人 電影",
    "cat": "影視",
    "do": [
     {
@@ -169,48 +69,70 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 0,
-   "news_p7": 1,
+   "news7": 10,
+   "news_p7": 10,
    "news_capped": false,
    "social": {
     "Threads": 40.3,
     "Dcard": 3
    },
    "mentions": {},
-   "x": 0.33,
+   "x": 0.85,
    "talk_trend": "flat",
    "days": 6,
    "first": "2026-11-03",
-   "quad": "new"
+   "quad": "hit"
   },
   {
-   "name": "再婚皇后",
-   "q": "再婚皇后",
-   "cat": "影視",
-   "do": [],
-   "talk": [
+   "name": "黃仁勳",
+   "q": "黃仁勳",
+   "cat": "人物",
+   "do": [
     {
-     "src": "新聞焦點",
-     "title": "Disney+《再婚皇后》朱智勛又在雷！一大地雷行為劇迷齊喊「渣到沒救了」要李鍾碩加把勁"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "最強綠葉崔代勳出演《再婚皇后》帥出新高度！哈洗大叔不搞笑其實很有魅力，更多帥氣模樣一次看"
+     "src": "YouTube 熱門",
+     "name": "黃仁勳坦承婚外情　在台灣與黃樂親密舉動曝｜民視新聞｜",
+     "how": "7 天內上架、發燒第 7"
     }
    ],
-   "y": 0.0,
-   "news7": 83,
-   "news_p7": 17,
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[新聞] 美股開盤「費半重挫」！AI股倒一片…輝達"
+    },
+    {
+     "src": "PTT",
+     "title": "[新聞] 黃仁勳下台掀反彈！馬斯克挺請願復職 億"
+    },
+    {
+     "src": "PTT",
+     "title": "[情報] 黃仁勳辭職"
+    },
+    {
+     "src": "PTT",
+     "title": "R: [新聞] 黃仁勳坦承與中國女間諜有婚外情 輝達"
+    },
+    {
+     "src": "PTT",
+     "title": "Re: [新聞] 黃仁勳坦承與中國女間諜有婚外情 輝達"
+    }
+   ],
+   "y": 0.56,
+   "news7": 99,
+   "news_p7": 1,
    "news_capped": true,
+   "social": {
+    "Threads": 22.9,
+    "Dcard": 29
+   },
    "mentions": {
-    "新聞焦點": 1,
-    "時尚媒體": 1
+    "PTT": 5,
+    "新聞焦點": 8
    },
    "x": 1.0,
    "talk_trend": "up",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-12",
-   "quad": "hype"
+   "quad": "hit"
   },
   {
    "name": "魔鬼的計謀",
@@ -224,7 +146,7 @@
     }
    ],
    "y": 0.0,
-   "news7": 33,
+   "news7": 32,
    "news_p7": 4,
    "news_capped": false,
    "social": {
@@ -240,7 +162,55 @@
    "quad": "hype"
   },
   {
-   "name": "Toyota",
+   "name": "再婚皇后",
+   "q": "再婚皇后",
+   "cat": "影視",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "最強綠葉崔代勳出演《再婚皇后》帥出新高度！哈洗大叔不搞笑其實很有魅力，更多帥氣模樣一次看"
+    }
+   ],
+   "y": 0.0,
+   "news7": 75,
+   "news_p7": 25,
+   "news_capped": true,
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-12",
+   "quad": "hype"
+  },
+  {
+   "name": "木村拓哉",
+   "q": "木村拓哉 台北",
+   "cat": "人物",
+   "do": [],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "木村拓哉首在台開個唱吸萬人！謝台粉陪過54歲獻「15字超暖告白」 林志玲送禮：永遠的HERO"
+    }
+   ],
+   "y": 0.0,
+   "news7": 48,
+   "news_p7": 2,
+   "news_capped": false,
+   "mentions": {
+    "新聞焦點": 1
+   },
+   "x": 0.95,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-14",
+   "quad": "talk"
+  },
+  {
+   "name": "TOYOTA",
    "q": "TOYOTA CROWN",
    "cat": "品牌商品",
    "do": [],
@@ -252,39 +222,39 @@
    ],
    "y": 0.0,
    "news7": 23,
-   "news_p7": 25,
+   "news_p7": 24,
    "news_capped": false,
    "mentions": {
     "時尚媒體": 1
    },
    "x": 0.79,
    "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-03",
+   "days": 1,
+   "first": "2026-11-14",
    "quad": "talk"
   },
   {
-   "name": "特斯拉",
-   "q": "Tesla Model Y",
-   "cat": "品牌商品",
+   "name": "亞洲手創暨生活展",
+   "q": "亞洲手創暨生活展",
+   "cat": "活動",
    "do": [],
    "talk": [
     {
-     "src": "Mobile01",
-     "title": "下個月交車 Model Y，前擋貼金屬膜還是無金屬冰鑽？會影響 Keyless嗎？"
+     "src": "時尚媒體",
+     "title": "2026年11月週末靈感清單！本月活動攻略：「島國禮作」、「亞洲手創暨生活展」接連展開。必逛市集、看展覽一次安排"
     }
    ],
    "y": 0.0,
    "news7": 6,
-   "news_p7": 5,
+   "news_p7": 0,
    "news_capped": false,
    "mentions": {
-    "Mobile01": 1
+    "時尚媒體": 1
    },
    "x": 0.52,
-   "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-10",
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-14",
    "quad": "talk"
   },
   {
@@ -315,9 +285,9 @@
  "quads": {
   "quiet": 0,
   "hit": 4,
-  "new": 1,
+  "new": 0,
   "hype": 2,
-  "talk": 2,
+  "talk": 3,
   "low": 1
  },
  "src_do": [
@@ -343,5 +313,5 @@
  "hist_days": 12,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-13T23:07:49Z"
+ "updatedAt": "2026-11-14T05:30:03Z"
 }
