@@ -1011,33 +1011,33 @@
   }
  },
  "relay": {
-  "runs": 184,
-  "since": "2026-11-11T15:20:16+08:00",
-  "avg_sec": 6.3,
-  "max_sec": 72.5,
+  "runs": 183,
+  "since": "2026-11-11T16:45:09+08:00",
+  "avg_sec": 6.7,
+  "max_sec": 84.9,
   "sections": {
    "live": 1.6,
    "mnd": 1.5,
-   "geo_b": 1.3,
-   "gtrends": 0.8,
-   "static": 0.0,
+   "geo_b": 1.4,
+   "gtrends": 1.2,
+   "static": 0.1,
    "city_cctv": 0.0
   },
-  "avg_a": 1.27,
-  "avg_b": 1.58,
-  "last": "2026-11-14T15:15:17+08:00"
+  "avg_a": 1.3,
+  "avg_b": 1.57,
+  "last": "2026-11-14T16:35:28+08:00"
  },
  "fetch": {
   "vault_writes": 128,
-  "relay_reads": 1637,
+  "relay_reads": 1641,
   "month": "2026-11",
   "day": 14
  },
  "est": {
-  "vcpu": 42948,
-  "gib": 42948,
-  "a": 3166,
-  "b": 7054
+  "vcpu": 43812,
+  "gib": 43812,
+  "a": 3231,
+  "b": 7045
  },
  "free": {
   "vcpu": 240000,
@@ -1048,12 +1048,12 @@
  "pct": {
   "vcpu": 18,
   "gib": 10,
-  "a": 63,
+  "a": 65,
   "b": 14
  },
  "assume": {
   "runs_day": 75,
   "boot_sec": 10
  },
- "updatedAt": "2026-11-14T07:15:00Z"
+ "updatedAt": "2026-11-14T08:35:54Z"
 }
