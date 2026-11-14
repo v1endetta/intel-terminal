@@ -19,30 +19,6 @@
    "launch": true
   },
   {
-   "source": "Gemini",
-   "title": "Introducing Gemini 4 Hydrogen",
-   "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
-   "at": "2026-11-12T18:00:00Z",
-   "vendor": "google",
-   "launch": true
-  },
-  {
-   "source": "Gemini",
-   "title": "Introducing the Multimodal Knowledge Agent benchmark",
-   "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/multimodal-knowledge-agent-benchmark/",
-   "at": "2026-11-10T16:00:00Z",
-   "vendor": "google",
-   "launch": true
-  },
-  {
-   "source": "Google AI",
-   "title": "Google Cloud launches Gemini for healthcare.",
-   "url": "https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/gemini-for-healthcare/",
-   "at": "2026-11-10T13:00:00Z",
-   "vendor": "google",
-   "launch": true
-  },
-  {
    "source": "HF",
    "title": "模型更新 deepseek-ai/DeepSeek-V4.1-Flash-1017",
    "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017",
@@ -103,14 +79,6 @@
    "launch": false
   },
   {
-   "source": "Gemini",
-   "title": "Connect Google Wallet to Gemini for personal finance insights",
-   "url": "https://blog.google/innovation-and-ai/products/gemini-app/google-wallet-gemini-app/",
-   "at": "2026-11-13T17:00:00Z",
-   "vendor": "google",
-   "launch": false
-  },
-  {
    "source": "TechCrunch",
    "title": "ChatGPT’s new Wallet lets AI agents shop and check out for you",
    "url": "https://techcrunch.com/2026/11/13/chatgpts-new-wallet-lets-ai-agents-shop-and-check-out-for-you/",
@@ -135,11 +103,11 @@
    "launch": false
   },
   {
-   "source": "Google AI",
-   "title": "Google Search gets a major upgrade with Gemini 4 Hydrogen",
-   "url": "https://blog.google/products-and-platforms/products/search/gemini-4-hydrogen-search-upgrade/",
-   "at": "2026-11-12T18:00:00Z",
-   "vendor": "google",
+   "source": "OpenAI",
+   "title": "Gondola doubles revenue as its team builds more with Codex",
+   "url": "https://openai.com/business/customer-stories/gondola",
+   "at": "2026-11-12T12:00:00Z",
+   "vendor": "openai",
    "launch": false
   },
   {
@@ -168,8 +136,20 @@
    "official": true,
    "vendor": "anthropic",
    "launch": false
+  },
+  {
+   "source": "Anthropic",
+   "title": "Anthropic files S-1 with the SEC for proposed initial public offering Today, Anthropic, PB",
+   "url": "https://www.anthropic.com/news/s1-sec",
+   "at": "",
+   "official": true,
+   "vendor": "anthropic",
+   "launch": false
   }
  ],
- "errs": [],
- "updatedAt": "2026-11-14T12:33:45Z"
+ "errs": [
+  "Google AI: ReadTimeout: HTTPSConnectionPool(host='blog.google', port=443): Read timed out. (read timeout=25)",
+  "Gemini: ReadTimeout: HTTPSConnectionPool(host='blog.google', port=443): Read timed out. (read timeout=25)"
+ ],
+ "updatedAt": "2026-11-14T12:53:59Z"
 }
