@@ -195,9 +195,9 @@
      "at": "2026-11-11T08:06:04Z"
     }
    ],
-   "n_news7": 3,
+   "n_news7": 4,
    "n_hn7": 0,
-   "n_bsky1": 3,
+   "n_bsky1": 0,
    "hn_top": null,
    "score": 12,
    "spark": [
@@ -257,16 +257,6 @@
    "source": "citybiz"
   },
   {
-   "company": "Plurai",
-   "amount": 13.0,
-   "stage": "種子",
-   "cat": "AI 助理",
-   "title": "Plurai raises $13M seed to stress-test AI agents before launch",
-   "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQYUtUTDQtdEFnaEtjZ1VneTB2WWlsS3E0MldFZ1Vnd3dVM2E0UlA5WWVMbUl2MWE2blE2RC1TMnVHaFc4WDdJdGJGTXBmWWI0X2F0SWlSMkZ5Sk1seGdQbEFtSHJ5ekhfMjJjRmwxWGVJTExzSGNNMFVKeVVwaTFTWmhrVllNMVQ4ZnRGTDR1OHB4cjRYaWJZcmFEQQ?oc=5",
-   "at": "2026-11-12T05:32:48Z",
-   "source": "Dealroom"
-  },
-  {
    "company": "Biomatter",
    "amount": 18.0,
    "stage": "A 輪",
@@ -297,6 +287,16 @@
    "source": "The American"
   },
   {
+   "company": "Plurai",
+   "amount": 13.0,
+   "stage": "種子",
+   "cat": "AI 助理",
+   "title": "Plurai Raises $13M Seed and Opens AI Agent Simulation Platform",
+   "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNQ0pXcURfYUx2a18weG5PY29FS1VWYlRpeWVJMzdMWENiQnFybWlYaXdlNXU3YkF1Q2V6VHJJcnRBeVlkYURoLWQ4dEV2TUpsMnRETkREVXBWSWlNS0xIV2pnQmxtVHNMRTJla2dUSmU2bHhuWlN3RUVMUHA3VlpKY2U2OWJEcVE3YjAw?oc=5",
+   "at": "2026-11-11T15:45:03Z",
+   "source": "Unite.AI"
+  },
+  {
    "company": "Bay",
    "amount": 37.0,
    "stage": "A 輪",
@@ -305,13 +305,23 @@
    "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPRkpZc2VvOWRFZUs5b2NNRHRURW8ydzBQbngxYVc3OXVDZ25wQWxMTDJXNjNZM2hFUUZGNlZIYzdRajloYzZ1TGotajg2X0c1T1RLX3pQcmwxTWhqNnNnU2plTEtuMU9PaHJJMjg2ckFSRHBXV0V3MGE4V3VzU3p6NlRralNMN3BHM2Nn?oc=5",
    "at": "2026-11-10T23:46:04Z",
    "source": "Unite.AI"
+  },
+  {
+   "company": "Oyster Therapeutics",
+   "amount": 60.0,
+   "stage": "A 輪",
+   "cat": "生技",
+   "title": "Oyster Therapeutics Raises $60M in Series A Financing",
+   "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxONVk3MkZHY3lMR3lNbVpPa0pPalhiYmZsZF9HUTE0OGhxN20zdXp1SENEbm1QejNzc2xDNnBNLTUtOTNNdE11YVYwUlRQYS1RR0FuV2tqclRvdkdnVFR2WlItTjZBbjZQYkJUVTlaSnBqcEVvMzF4djA3OENnSGNVRFJ0SEdLUDBtOFBJWTJMYU5iSkk?oc=5",
+   "at": "2026-11-10T15:49:47Z",
+   "source": "FinSMEs"
   }
  ],
  "showhn": [
   {
    "title": "Show HN: AgentRun – open-source, Self-improving Managed Agents",
    "points": 134,
-   "comments": 37,
+   "comments": 39,
    "url": "https://github.com/Parcha-ai/agentrun/blob/main/README.md",
    "hn": "https://news.ycombinator.com/item?id=50471650",
    "at": "2026-11-12T18:15:48Z",
@@ -320,9 +330,11 @@
  ],
  "ph": [],
  "errs": [
-  "bsky Instinct: RuntimeError: bsky 504 '<!doctype html>\\n<html lang=\"en-us\">",
-  "bsky Flora: RuntimeError: bsky 504 '<!doctype html>\\n<html lang=\"en-us\">",
-  "bsky Flick: RuntimeError: bsky 504 '<!doctype html>\\n<html lang=\"en-us\">"
+  "bsky Instinct: RuntimeError: bsky 500 '{\"error\":\"InternalServerError\",\"mess",
+  "bsky Moda: RuntimeError: bsky 500 '{\"error\":\"InternalServerError\",\"mess",
+  "bsky Flora: RuntimeError: bsky 500 '{\"error\":\"InternalServerError\",\"mess",
+  "bsky Flick: RuntimeError: bsky 500 '{\"error\":\"InternalServerError\",\"mess",
+  "bsky Fish Audio: RuntimeError: bsky 500 '{\"error\":\"InternalServerError\",\"mess"
  ],
- "updatedAt": "2026-11-14T00:30:22Z"
+ "updatedAt": "2026-11-14T02:40:10Z"
 }
