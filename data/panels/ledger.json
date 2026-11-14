@@ -63,7 +63,7 @@
   "veg_revert": {
    "cat": "生活成本",
    "desc": "兩週內漲超過 20% 的菜，再兩週會回落",
-   "open": 2,
+   "open": 5,
    "done": 7,
    "hits": 3,
    "brier": 0.316,
@@ -245,6 +245,39 @@
    "due": "2026-11-20",
    "status": "open",
    "base": 60.9
+  },
+  {
+   "id": "2026-11-15-veg_revert-69",
+   "made": "2026-11-15",
+   "rule": "veg_revert",
+   "subject": "青江菜",
+   "text": "青江菜（48.5 元）兩週後會比現在便宜",
+   "prob": 0.54,
+   "due": "2026-11-27",
+   "status": "open",
+   "base": 48.5
+  },
+  {
+   "id": "2026-11-15-veg_revert-70",
+   "made": "2026-11-15",
+   "rule": "veg_revert",
+   "subject": "萵苣",
+   "text": "萵苣（52.9 元）兩週後會比現在便宜",
+   "prob": 0.54,
+   "due": "2026-11-27",
+   "status": "open",
+   "base": 52.9
+  },
+  {
+   "id": "2026-11-15-veg_revert-71",
+   "made": "2026-11-15",
+   "rule": "veg_revert",
+   "subject": "菠菜",
+   "text": "菠菜（65.3 元）兩週後會比現在便宜",
+   "prob": 0.54,
+   "due": "2026-11-27",
+   "status": "open",
+   "base": 65.3
   },
   {
    "id": "2026-10-11-elect_fav-20",
@@ -615,44 +648,6 @@
    "prob": 0.54,
    "due": "2027-03",
    "status": "open"
-  },
-  {
-   "id": "2026-10-11-wiki_abroad-15",
-   "made": "2026-10-11",
-   "rule": "wiki_abroad",
-   "subject": "生成式人工智慧",
-   "text": "「生成式人工智慧」國外先熱，台灣到 2027/03 也會轉熱",
-   "prob": 0.54,
-   "due": "2027-03",
-   "status": "open"
-  },
-  {
-   "id": "2026-10-17-thesis-48",
-   "made": "2026-10-17",
-   "rule": "thesis",
-   "subject": "t7",
-   "text": "【房市量縮價撐】2027 年 3 月台北房價指數半年跌幅不超過 3%",
-   "prob": 0.7,
-   "due": "2027-03-01",
-   "status": "open",
-   "metric": "tpe6",
-   "op": ">",
-   "target": -3,
-   "rev": "r2"
-  },
-  {
-   "id": "2026-10-17-thesis-53",
-   "made": "2026-10-17",
-   "rule": "thesis",
-   "subject": "g2",
-   "text": "【中國內需弱】2027 年 3 月台灣對中港非機電出口近 3 月年增仍低於 5%",
-   "prob": 0.6,
-   "due": "2027-03-01",
-   "status": "open",
-   "metric": "cn_nonee",
-   "op": "<",
-   "target": 5,
-   "rev": "r2"
   }
  ],
  "recent": [
@@ -760,10 +755,10 @@
    "resolved": "2026-10-21"
   }
  ],
- "n_open": 61,
+ "n_open": 64,
  "n_done": 8,
  "n_hit": 4,
- "gen_at": "2026-11-08",
+ "gen_at": "2026-11-15",
  "bt_at": "2026-11-09",
- "updatedAt": "2026-11-14T15:47:51Z"
+ "updatedAt": "2026-11-14T16:04:00Z"
 }
