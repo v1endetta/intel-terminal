@@ -63,17 +63,17 @@
       313,
       301,
       350,
-      213
+      266
      ],
-     "n14": 4364,
+     "n14": 4417,
      "topics": [
       [
        "觀光／城市活動",
-       152
+       161
       ],
       [
        "交通建設",
-       99
+       100
       ],
       [
        "能源／環境",
@@ -81,7 +81,7 @@
       ],
       [
        "運動／文化",
-       59
+       64
       ]
      ]
     },
@@ -144,9 +144,9 @@
       364,
       266,
       325,
-      232
+      274
      ],
-     "n14": 4304,
+     "n14": 4346,
      "topics": [
       [
        "運動／文化",
@@ -158,7 +158,7 @@
       ],
       [
        "產業／AI 科技",
-       53
+       60
       ],
       [
        "交通建設",
@@ -167,8 +167,8 @@
      ]
     }
    ],
-   "vol": 6678816,
-   "vol24": 141364,
+   "vol": 6679898,
+   "vol24": 141957,
    "rel": "可信",
    "url": "https://polymarket.com/event/taipei-mayor-election-winner-20260813125857100",
    "polls": [
@@ -353,9 +353,9 @@
       164,
       152,
       80,
-      108
+      128
      ],
-     "n14": 1865,
+     "n14": 1885,
      "topics": [
       [
        "交通建設",
@@ -376,8 +376,8 @@
      ]
     }
    ],
-   "vol": 603184,
-   "vol24": 35795,
+   "vol": 603196,
+   "vol24": 35767,
    "rel": "可信",
    "url": "https://polymarket.com/event/new-taipei-mayor-election-winner-20260813125857200",
    "polls": [
@@ -461,11 +461,11 @@
       75,
       71,
       52,
-      98,
-      92,
-      30
+      99,
+      93,
+      40
      ],
-     "n14": 1039,
+     "n14": 1051,
      "topics": [
       [
        "醫療／健康",
@@ -544,9 +544,9 @@
       48,
       134,
       107,
-      64
+      78
      ],
-     "n14": 1024,
+     "n14": 1038,
      "topics": [
       [
        "醫療／健康",
@@ -562,7 +562,7 @@
       ],
       [
        "運動／文化",
-       60
+       65
       ]
      ]
     }
@@ -671,10 +671,10 @@
       21,
       22,
       56,
-      120,
-      59
+      121,
+      61
      ],
-     "n14": 500,
+     "n14": 503,
      "topics": [
       [
        "補助／發錢",
@@ -960,15 +960,15 @@
       143,
       69,
       76,
-      80,
+      82,
       76,
-      27
+      32
      ],
-     "n14": 1316,
+     "n14": 1323,
      "topics": [
       [
        "觀光／城市活動",
-       108
+       109
       ],
       [
        "教育／青年",
@@ -986,7 +986,7 @@
     }
    ],
    "vol": 277839,
-   "vol24": 6235,
+   "vol24": 6140,
    "rel": "普通",
    "url": "https://polymarket.com/event/kaohsiung-mayor-election-winner-20260813125857600",
    "polls": [
@@ -1048,7 +1048,7 @@
   },
   {
    "topic": "產業／AI 科技",
-   "score": 0.74,
+   "score": 0.75,
    "cities": [
     "台中",
     "台北",
@@ -1099,7 +1099,7 @@
   },
   {
    "topic": "交通建設",
-   "score": 0.53,
+   "score": 0.52,
    "cities": [
     "台北",
     "新北",
@@ -1142,7 +1142,11 @@
   "2026-11-19"
  ],
  "pollsAt": "2026-10-11",
- "errs": [],
+ "errs": [
+  "新聞 蘇巧慧: HTTPError: 429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=%22%E8%98%87%E5%B7%A7%E6%85%A7%22&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
+  "新聞 謝龍介: HTTPError: 429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=%22%E8%AC%9D%E9%BE%8D%E4%BB%8B%22&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
+  "新聞 賴瑞隆: HTTPError: 429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=%22%E8%B3%B4%E7%91%9E%E9%9A%86%22&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant"
+ ],
  "src": "Polymarket 公開報價（只看不押）＋ 情報站收進來的新聞與 PTT 標題 ＋ 手動整理民調",
- "updatedAt": "2026-11-19T13:36:24Z"
+ "updatedAt": "2026-11-19T14:14:06Z"
 }
