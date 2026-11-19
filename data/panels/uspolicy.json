@@ -1,6 +1,16 @@
 {
  "items": [
   {
+   "src": "BIS",
+   "kind": "規則",
+   "title": "Addressing Remote Access to Advanced Semiconductors",
+   "date": "2026-11-19",
+   "url": "https://www.federalregister.gov/documents/2026/11/19/2026-23529/addressing-remote-access-to-advanced-semiconductors",
+   "hot": true,
+   "tw": false,
+   "zh": "因應遠端存取先進半導體問題"
+  },
+  {
    "src": "USTR 新聞稿",
    "kind": "新聞稿",
    "title": "Ambassador Greer Champions America First Trade Policy in Virtual Remarks for the Responsible Business Alliance’s Annual Conference",
@@ -389,16 +399,6 @@
    "hot": false,
    "tw": false,
    "zh": "出口管理條例下給予阿拉伯聯合大公國之加強優惠待遇"
-  },
-  {
-   "src": "BIS",
-   "kind": "公告",
-   "title": "Notice of Request for Public Comments on Section 232 National Security Investigation of Anthracite Coal",
-   "date": "2026-07-07",
-   "url": "https://www.federalregister.gov/documents/2026/07/07/2026-13663/notice-of-request-for-public-comments-on-section-232-national-security-investigation-of-anthracite",
-   "hot": true,
-   "tw": false,
-   "zh": "關於232條款無煙煤國家安全調查之公眾評論徵求公告"
   }
  ],
  "bills": [
@@ -580,6 +580,22 @@
   },
   {
    "src": "國會",
+   "kind": "參院法案 3301",
+   "title": "Chip EQUIP Act",
+   "date": "2026-11-18",
+   "action": "Committee on Commerce, Science, and Transportation. Ordered to be reported with an amendment in the nature of a substitute favorably.",
+   "url": "https://www.congress.gov/bill/119th-congress/senate-bill/3301",
+   "tw": false,
+   "hot": true,
+   "first": "2026-10-16",
+   "moved": true,
+   "active": true,
+   "id": "senate-bill-3301",
+   "zh": "晶片裝備法案",
+   "action_zh": "參議院商務、科學暨運輸委員會無異議通過提出修正替代案"
+  },
+  {
+   "src": "國會",
    "kind": "參院法案 5728",
    "title": "A bill to withdraw normal trade relations treatment with respect to the products of the People's Republic of China, and for other purposes.",
    "date": "2026-11-17",
@@ -673,28 +689,12 @@
    "id": "house-bill-6275",
    "zh": "中國AI實力報告法案",
    "action_zh": "經唱名表決以 47 比 0 通過修正後交付審查報告"
-  },
-  {
-   "src": "國會",
-   "kind": "參院法案 3301",
-   "title": "Chip EQUIP Act",
-   "date": "2025-12-02",
-   "action": "Read twice and referred to the Committee on Commerce, Science, and Transportation.",
-   "url": "https://www.congress.gov/bill/119th-congress/senate-bill/3301",
-   "tw": false,
-   "hot": true,
-   "first": "2026-10-16",
-   "moved": false,
-   "active": false,
-   "id": "senate-bill-3301",
-   "zh": "晶片裝備法案",
-   "action_zh": "二次朗讀並交議商務、科學暨運輸委員會"
   }
  ],
- "n_week": 8,
- "n_hot_week": 6,
+ "n_week": 9,
+ "n_hot_week": 7,
  "congress": true,
  "errs": [],
  "src": "Federal Register API（USTR、商務部 BIS、ITA，依關鍵字篩）、USTR 新聞稿 RSS、Congress.gov API",
- "updatedAt": "2026-11-19T10:03:19Z"
+ "updatedAt": "2026-11-19T12:15:30Z"
 }
