@@ -76,23 +76,23 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "Apec summit live: Trump, Xi and Putin make ‘peace declaration’ but talks end without clear",
-   "url": "https://www.theguardian.com/world/live/2026/nov/19/apec-summit-trump-xi-putin-meeting-shenzhen-china",
-   "at": "2026-11-19T14:05:57Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
    "title": "Anthropic shares expected to jump when trading begins after raising $81bn in record IPO – ",
    "url": "https://www.theguardian.com/business/live/2026/nov/19/anthropic-float-stock-market-nasdaq-raises-81bn-record-ipo-latest-news-updates",
-   "at": "2026-11-19T14:05:55Z",
+   "at": "2026-11-19T14:20:26Z",
    "sec": "Business"
   },
   {
    "source": "Guardian",
    "title": "Ukraine’s allies meet in Berlin with air defence, energy and financial support on the agen",
    "url": "https://www.theguardian.com/world/live/2026/nov/19/russia-ukraine-war-coalition-of-the-willing-europe-latest-news-updates",
-   "at": "2026-11-19T14:04:17Z",
+   "at": "2026-11-19T14:18:29Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
+   "title": "Apec summit live: Trump, Xi and Putin make ‘peace declaration’ but talks end without clear",
+   "url": "https://www.theguardian.com/world/live/2026/nov/19/apec-summit-trump-xi-putin-meeting-shenzhen-china",
+   "at": "2026-11-19T14:18:04Z",
    "sec": "World news"
   },
   {
@@ -283,8 +283,8 @@
     2,
     10,
     29,
-    60,
-    68
+    59,
+    67
    ],
    "days7": [
     "2026-11-13",
@@ -433,11 +433,11 @@
    "daily7": [
     0,
     1,
-    7,
-    17,
+    8,
+    16,
     29,
-    26,
-    26
+    25,
+    28
    ],
    "days7": [
     "2026-11-13",
@@ -467,9 +467,9 @@
      "kw": "\"quiet luxury\" OR 老錢風 穿搭"
     },
     {
-     "source": "ETtoday新聞雲",
-     "title": "Balenciaga創意總監閃電離職！Pierpaolo Piccioli上任僅16個月就分手",
-     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE8yYW03WXBEZnJIRGJVX0VuQmJTRktZOU1uYWpIVi0xZEcwVzE2N2N1dEZVZ1pXY0hmV0Z1Z3F6b0FTWk1RVENoZXhBVURxbDVFdkE?oc=5",
+     "source": "Vogue Taiwan",
+     "title": "時尚圈再迎人事動盪！Balenciaga創意總監Pierpaolo Piccioli上任僅3季宣布告別，開雲集團將公布新任人選",
+     "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1PTFF5SXNkNXpWRHQ2dU43bzJsclR3Qk93UUJzOHNMNDBoNnh0a21TdDFhUnUzWDIyQVNrX29DaHJyR0hrbG91N1c2M1pXR0oyeThDenN4WW5KOVJTOUR1bmJTN0tjdHc1T3lwdERCWkVITlZLVWFvb0J4d2JpQQ?oc=5",
      "at": "2026-11-06T08:00:00Z",
      "kw": "時裝週 OR 創意總監 上任"
     },
@@ -588,7 +588,7 @@
     6,
     2,
     9,
-    11,
+    10,
     10,
     17
    ],
@@ -880,7 +880,7 @@
   ]
  },
  "errs": [
-  "gdelt: IndexError: list index out of range"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-19T14:02:00Z"
+ "updatedAt": "2026-11-19T14:21:35Z"
 }
