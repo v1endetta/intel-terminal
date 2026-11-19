@@ -78,8 +78,21 @@
    "source": "Guardian",
    "title": "Ukraine allies warn ‘Yalta format’ will not bring about peace – Europe live",
    "url": "https://www.theguardian.com/world/live/2026/nov/19/russia-ukraine-war-coalition-of-the-willing-europe-latest-news-updates",
-   "at": "2026-11-19T17:27:36Z",
+   "at": "2026-11-19T17:40:33Z",
    "sec": "World news"
+  },
+  {
+   "source": "BBC",
+   "title": "Trump, Putin and Xi release 'peace declaration' after historic meeting",
+   "url": "https://www.bbc.co.uk/news/articles/c623j4ln97x7o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-19T17:38:22Z"
+  },
+  {
+   "source": "Guardian",
+   "title": "Anthropic valued at $2tn as shares begin trading at $111.50 each – business live",
+   "url": "https://www.theguardian.com/business/live/2026/nov/19/anthropic-float-stock-market-nasdaq-raises-81bn-record-ipo-latest-news-updates",
+   "at": "2026-11-19T17:37:29Z",
+   "sec": "Business"
   },
   {
    "source": "BBC",
@@ -100,13 +113,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/19/china-russia-us-agree-peace-statement-no-mention-ukraine-iran-wars",
    "at": "2026-11-19T17:13:23Z",
    "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Anthropic valued at $2tn as shares begin trading at $111.50 each – business live",
-   "url": "https://www.theguardian.com/business/live/2026/nov/19/anthropic-float-stock-market-nasdaq-raises-81bn-record-ipo-latest-news-updates",
-   "at": "2026-11-19T16:58:51Z",
-   "sec": "Business"
   },
   {
    "source": "BBC",
@@ -140,12 +146,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/19/new-page-in-history-xi-trump-and-putin-summit-was-more-of-a-footnote",
    "at": "2026-11-19T15:35:01Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Trump, Putin and Xi release 'peace declaration' after historic meeting",
-   "url": "https://www.bbc.co.uk/news/articles/c623j4ln97x7o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-19T15:23:34Z"
   },
   {
    "source": "Guardian",
@@ -639,7 +639,7 @@
     21,
     25,
     20,
-    54,
+    53,
     2
    ],
    "days7": [
@@ -713,7 +713,7 @@
   "hot": [
    {
     "term": "Anthropic",
-    "n": 10,
+    "n": 9,
     "src": 8,
     "sources": [
      "Anthropic",
@@ -870,7 +870,7 @@
   ]
  },
  "errs": [
-  "gdelt: IndexError: list index out of range"
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-19T17:27:04Z"
+ "updatedAt": "2026-11-19T17:42:05Z"
 }
