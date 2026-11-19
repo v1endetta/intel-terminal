@@ -1,0 +1,608 @@
+{
+ "drewry": {
+  "lanes": [
+   {
+    "from": "Shanghai",
+    "to": "New York",
+    "chg": -3.0,
+    "v": 9020.0,
+    "name": "上海→紐約"
+   },
+   {
+    "from": "Shanghai",
+    "to": "Los Angeles",
+    "chg": -2.0,
+    "v": 7416.0,
+    "name": "上海→洛杉磯"
+   },
+   {
+    "from": "Shanghai",
+    "to": "Rotterdam",
+    "chg": -3.0,
+    "v": 3504.0,
+    "name": "上海→鹿特丹"
+   },
+   {
+    "from": "Shanghai",
+    "to": "Genoa",
+    "chg": 0.0,
+    "v": null,
+    "name": "上海→熱那亞"
+   }
+  ],
+  "wci": {
+   "name": "Drewry WCI",
+   "value": 4305.0,
+   "unit": "USD/40ft",
+   "date": "12 Nov 2026",
+   "chg_pct": -2.0,
+   "chg_label": "週%",
+   "spark": [
+    4468.0,
+    4434.0,
+    4351.0,
+    4485.0,
+    4585.0,
+    4429.0,
+    4389.0,
+    4305.0
+   ]
+  }
+ },
+ "fbx": [
+  {
+   "code": "FBX",
+   "name": "全球綜合",
+   "chg": 0.97
+  },
+  {
+   "code": "FBX01",
+   "name": "中國→美西",
+   "chg": 2.59
+  },
+  {
+   "code": "FBX02",
+   "name": "美西→中國",
+   "chg": 0.26
+  },
+  {
+   "code": "FBX03",
+   "name": "中國→美東",
+   "chg": 1.44
+  },
+  {
+   "code": "FBX04",
+   "name": "美東→中國",
+   "chg": -10.13
+  },
+  {
+   "code": "FBX11",
+   "name": "中國→北歐",
+   "chg": -0.46
+  },
+  {
+   "code": "FBX12",
+   "name": "北歐→中國",
+   "chg": 0.31
+  },
+  {
+   "code": "FBX13",
+   "name": "中國→地中海",
+   "chg": -0.68
+  },
+  {
+   "code": "FBX14",
+   "name": "地中海→中國",
+   "chg": 0.0
+  },
+  {
+   "code": "FBX21",
+   "name": "美東→北歐",
+   "chg": 2.33
+  },
+  {
+   "code": "FBX22",
+   "name": "北歐→美東",
+   "chg": -1.21
+  },
+  {
+   "code": "FBX24",
+   "name": "北歐→南美東",
+   "chg": -10.1
+  },
+  {
+   "code": "FBX26",
+   "name": "北歐→南美西",
+   "chg": -0.04
+  }
+ ],
+ "storms": [
+  {
+   "name": "AKVAN",
+   "level": "Orange",
+   "ll": [
+    85.4,
+    15.1
+   ],
+   "from": "2026-11-16T18:00",
+   "to": "2026-11-19T06:00",
+   "sev": "Tropical Storm (maximum wind speed of 83 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001351&episodeid=11&eventtype=TC",
+   "near": [],
+   "id": "1001351-11"
+  },
+  {
+   "name": "XAVIER",
+   "level": "Green",
+   "ll": [
+    -163.2,
+    -10.6
+   ],
+   "from": "2026-11-15T06:00",
+   "to": "2026-11-19T06:00",
+   "sev": "Hurricane/Typhoon > 74 mph (maximum wind speed of 241 km/h)",
+   "url": "https://www.gdacs.org/report.aspx?eventid=1001350&episodeid=9&eventtype=TC",
+   "near": [],
+   "id": "1001350-9"
+  }
+ ],
+ "ports": [
+  {
+   "name": "上海洋山",
+   "ll": [
+    122.07,
+    30.62
+   ]
+  },
+  {
+   "name": "寧波舟山",
+   "ll": [
+    121.85,
+    29.93
+   ]
+  },
+  {
+   "name": "深圳",
+   "ll": [
+    114.27,
+    22.57
+   ]
+  },
+  {
+   "name": "廣州南沙",
+   "ll": [
+    113.6,
+    22.75
+   ]
+  },
+  {
+   "name": "青島",
+   "ll": [
+    120.3,
+    36.07
+   ]
+  },
+  {
+   "name": "天津",
+   "ll": [
+    117.78,
+    38.98
+   ]
+  },
+  {
+   "name": "廈門",
+   "ll": [
+    118.07,
+    24.47
+   ]
+  },
+  {
+   "name": "香港",
+   "ll": [
+    114.15,
+    22.3
+   ]
+  },
+  {
+   "name": "高雄",
+   "ll": [
+    120.28,
+    22.6
+   ]
+  },
+  {
+   "name": "基隆／台北",
+   "ll": [
+    121.74,
+    25.15
+   ]
+  },
+  {
+   "name": "台中",
+   "ll": [
+    120.5,
+    24.27
+   ]
+  },
+  {
+   "name": "釜山",
+   "ll": [
+    129.05,
+    35.08
+   ]
+  },
+  {
+   "name": "東京灣",
+   "ll": [
+    139.8,
+    35.6
+   ]
+  },
+  {
+   "name": "大阪神戶",
+   "ll": [
+    135.2,
+    34.65
+   ]
+  },
+  {
+   "name": "新加坡",
+   "ll": [
+    103.8,
+    1.26
+   ]
+  },
+  {
+   "name": "巴生",
+   "ll": [
+    101.3,
+    3.0
+   ]
+  },
+  {
+   "name": "林查班",
+   "ll": [
+    100.88,
+    13.08
+   ]
+  },
+  {
+   "name": "胡志明／蓋梅",
+   "ll": [
+    107.03,
+    10.55
+   ]
+  },
+  {
+   "name": "馬尼拉",
+   "ll": [
+    120.95,
+    14.6
+   ]
+  },
+  {
+   "name": "可倫坡",
+   "ll": [
+    79.85,
+    6.95
+   ]
+  },
+  {
+   "name": "孟買新港",
+   "ll": [
+    72.95,
+    18.95
+   ]
+  },
+  {
+   "name": "杰貝阿里",
+   "ll": [
+    55.05,
+    25.01
+   ]
+  },
+  {
+   "name": "鹿特丹",
+   "ll": [
+    4.05,
+    51.95
+   ]
+  },
+  {
+   "name": "安特衛普",
+   "ll": [
+    4.3,
+    51.28
+   ]
+  },
+  {
+   "name": "漢堡",
+   "ll": [
+    9.95,
+    53.53
+   ]
+  },
+  {
+   "name": "洛杉磯／長灘",
+   "ll": [
+    -118.25,
+    33.74
+   ]
+  },
+  {
+   "name": "奧克蘭",
+   "ll": [
+    -122.3,
+    37.8
+   ]
+  },
+  {
+   "name": "西雅圖／塔科馬",
+   "ll": [
+    -122.4,
+    47.27
+   ]
+  },
+  {
+   "name": "溫哥華",
+   "ll": [
+    -123.1,
+    49.29
+   ]
+  },
+  {
+   "name": "曼薩尼約（墨）",
+   "ll": [
+    -104.3,
+    19.07
+   ]
+  },
+  {
+   "name": "拉薩羅卡德納斯（墨）",
+   "ll": [
+    -102.18,
+    17.94
+   ]
+  },
+  {
+   "name": "韋拉克魯斯（墨）",
+   "ll": [
+    -96.13,
+    19.2
+   ]
+  },
+  {
+   "name": "休士頓",
+   "ll": [
+    -95.0,
+    29.6
+   ]
+  },
+  {
+   "name": "薩凡納",
+   "ll": [
+    -81.1,
+    32.08
+   ]
+  },
+  {
+   "name": "紐約／紐澤西",
+   "ll": [
+    -74.1,
+    40.67
+   ]
+  },
+  {
+   "name": "巴拿馬運河",
+   "ll": [
+    -79.7,
+    9.1
+   ]
+  },
+  {
+   "name": "桑托斯",
+   "ll": [
+    -46.3,
+    -23.95
+   ]
+  }
+ ],
+ "news": [
+  {
+   "source": "FreightWaves",
+   "title": "LA-Long Beach port strike risk grows as employers say ILWU talks stalled",
+   "url": "https://www.freightwaves.com/news/la-long-beach-port-strike-risk-grows-as-employers-say-ilwu-talks-stalled",
+   "at": "2026-11-19T06:37:39+08:00",
+   "hot": true,
+   "zh": "資方稱ILWU談判陷入僵局，洛杉磯與長堤港罷工風險升高"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "From more footage to more focus: Find your fleet’s videosafety stage",
+   "url": "https://www.freightwaves.com/news/from-more-footage-to-more-focus-find-your-fleets-videosafety-stage",
+   "at": "2026-11-19T04:02:46+08:00",
+   "hot": false,
+   "zh": "從更多畫面到更多專注：找出你車隊的視訊安全階段"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Why Truckload Rates Feel Disappointing Despite Strong Numbers",
+   "url": "https://www.freightwaves.com/news/why-truckload-rates-feel-disappointing-despite-strong-numbers",
+   "at": "2026-11-19T03:50:07+08:00",
+   "hot": false,
+   "zh": "數據表現強勁，為什麼整車運輸費率卻讓人失望"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Port of LA Crushes Records: 5M Containers in 5 Months!",
+   "url": "https://www.freightwaves.com/news/port-of-la-crushes-records-5m-containers-in-5-months",
+   "at": "2026-11-19T03:34:42+08:00",
+   "hot": true,
+   "zh": "洛杉磯港打破紀錄：5個月完成500萬個貨櫃！"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "AI for Logistics: Why 81% of AI Projects Fail",
+   "url": "https://www.freightwaves.com/news/ai-for-logistics-why-81-of-ai-projects-fail",
+   "at": "2026-11-19T03:34:09+08:00",
+   "hot": false,
+   "zh": "物流AI：為什麼81%的AI專案會失敗"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "ATA spells out short- and long-term solutions to halt ELD fraud",
+   "url": "https://www.freightwaves.com/news/ata-spells-out-short-and-long-term-solutions-to-halt-eld-fraud",
+   "at": "2026-11-19T03:12:53+08:00",
+   "hot": false,
+   "zh": "ATA提出遏止電子日誌詐欺的长短期解決方案"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Trucking Spot Rates Defy Fuel Costs: An Unexpected Market Move",
+   "url": "https://www.freightwaves.com/news/trucking-spot-rates-defy-fuel-costs-an-unexpected-market-move",
+   "at": "2026-11-19T03:10:17+08:00",
+   "hot": true,
+   "zh": "貨運即期費率逆勢走揚：一場意料之外的市場變局"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Rail Freight Fraud: Organized Crime’s New Tactic?",
+   "url": "https://www.freightwaves.com/news/rail-freight-fraud-organized-crimes-new-tactic",
+   "at": "2026-11-19T03:09:49+08:00",
+   "hot": false,
+   "zh": "鐵路貨運詐欺：有組織犯罪的新手法？"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Trucking Economy in 2024: A K-Shape Threatens Consumer Demand",
+   "url": "https://www.freightwaves.com/news/trucking-economy-in-2024-a-k-shape-threatens-consumer-demand",
+   "at": "2026-11-19T02:58:39+08:00",
+   "hot": false,
+   "zh": "2024貨運經濟：K型復甦威脅消費者需求"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Diesel: Are Sky-High Prices Finally Over?",
+   "url": "https://www.freightwaves.com/news/diesel-are-sky-high-prices-finally-over",
+   "at": "2026-11-19T02:52:43+08:00",
+   "hot": false,
+   "zh": "柴油：天價時代終於要結束了嗎？"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "ABF Freight workers uncover $1.5M drug shipment headed to Ohio",
+   "url": "https://www.freightwaves.com/news/abf-freight-workers-uncover-1-5m-drug-shipment-headed-to-ohio",
+   "at": "2026-11-19T02:51:32+08:00",
+   "hot": false,
+   "zh": "ABF Freight員工查獲價值150万美元运往俄亥俄州的毒品"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "DHL Forwarding launches first-ever dedicated freighter service for India",
+   "url": "https://www.freightwaves.com/news/dhl-forwarding-launches-first-ever-dedicated-freighter-service-for-india",
+   "at": "2026-11-19T01:37:49+08:00",
+   "hot": false,
+   "zh": "DHL貨運推出史上首個印度專用貨機航班"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Amazon’s first Puerto Rico delivery station speeds up shipping",
+   "url": "https://www.supplychaindive.com/news/amazons-first-puerto-rico-delivery-station-speeds-up-shipping/874996/",
+   "at": "2026-11-19T01:35:00+08:00",
+   "hot": false,
+   "zh": "亞馬遜首座波多黎各配送站加快出貨速度"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Starbucks inventory availability at ‘all-time high’ with daily deliveries, CEO says",
+   "url": "https://www.supplychaindive.com/news/starbucks-inventory-availability-at-all-time-high-with-daily-deliveries/874923/",
+   "at": "2026-11-18T23:38:15+08:00",
+   "hot": false,
+   "zh": "執行長表示：星巴克每日配送讓庫存充足率創下歷史新高"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Jim Beam won’t resume production at flagship distillery next year",
+   "url": "https://www.supplychaindive.com/news/jim-beam-wont-resume-production-at-flagship-distillery-next-year/875019/",
+   "at": "2026-11-18T22:25:00+08:00",
+   "hot": false,
+   "zh": "占邊威士忌旗艦蒸餾廠明年將不會恢復生產"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Expeditors: ‘Built to outperform through any cycle’ – Investor Day Live",
+   "url": "https://theloadstar.com/expeditors-built-to-outperform-through-any-cycle/",
+   "at": "2026-11-18T22:15:08+08:00",
+   "hot": false,
+   "zh": "康斐爾：「為在各種景氣循環中勝出而生」－投資人日現場直擊"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Transatlantic airfreight rates at highest level for four years",
+   "url": "https://theloadstar.com/transatlantic-airfreight-rates-at-highest-level-for-four-years/",
+   "at": "2026-11-18T21:10:27+08:00",
+   "hot": true,
+   "zh": "跨大西洋空運費率創四年來新高"
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "PepsiCo improves deforestation-free sourcing for key commodities",
+   "url": "https://www.supplychaindive.com/news/pepsico-improves-deforestation-free-sourcing-for-key-commodities/874963/",
+   "at": "2026-11-18T20:59:00+08:00",
+   "hot": false,
+   "zh": "百事公司改善主要商品的無砍伐森林採購"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "MSC plans to triple capacity at its Aysaport transhipment hub",
+   "url": "https://theloadstar.com/msc-plans-to-triple-capacity-at-its-aysaport-transhipment-hub/",
+   "at": "2026-11-18T20:56:30+08:00",
+   "hot": true,
+   "zh": "地中海航運計畫將艾薩港轉運樞紐的運能提高三倍"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "EasyPost to go public on Nasdaq through combination with American Drive",
+   "url": "https://theloadstar.com/easypost-to-go-public-on-nasdaq-through-combination-with-american-drive/",
+   "at": "2026-11-18T20:54:13+08:00",
+   "hot": false,
+   "zh": "EasyPost將與American Drive合併在那斯達克上市"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Black Friday bundles test retail margins as EU parcel charges bite",
+   "url": "https://theloadstar.com/black-friday-bundles-test-retail-margins-as-eu-parcel-charges-bite/",
+   "at": "2026-11-18T20:37:54+08:00",
+   "hot": false,
+   "zh": "歐盟包裹費衝擊下，黑色星期五組合包促銷考驗零售利潤"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Project cargo boom in Asia hobbled by inadequate infrastructure",
+   "url": "https://theloadstar.com/project-cargo-boom-in-asia-hobbled-by-inadequate-infrastructure/",
+   "at": "2026-11-18T20:16:34+08:00",
+   "hot": false,
+   "zh": "亞洲專案貨物熱潮受累於基礎設施不足"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "CargoWise has more challengers. But how much choice do forwarders really have?",
+   "url": "https://theloadstar.com/cargowise-has-more-challengers-but-how-much-choice-do-forwarders-really-have/",
+   "at": "2026-11-18T19:55:22+08:00",
+   "hot": false,
+   "zh": "CargoWise面臨更多挑戰者，但貨運承攬業者的選擇真的多嗎？"
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Kuehne + Nagel – how AI calling becomes a data mine",
+   "url": "https://theloadstar.com/kuehne-nagel-how-ai-calling-becomes-a-data-mine/",
+   "at": "2026-11-18T19:46:26+08:00",
+   "hot": false,
+   "zh": "德迅：AI語音通話如何成為數據金礦"
+  }
+ ],
+ "threat": [],
+ "errs": [],
+ "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
+ "updatedAt": "2026-11-19T08:35:55Z"
+}
