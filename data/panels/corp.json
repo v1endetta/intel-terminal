@@ -153,7 +153,7 @@
    "draw": "2026-11-20",
    "list": "2026-11-26",
    "price": 201.11,
-   "rate": 0.0,
+   "rate": 1.08,
    "ind": "電機機械"
   },
   {
@@ -1205,6 +1205,18 @@
    "routine": true
   },
   {
+   "code": "2613",
+   "name": "中櫃",
+   "mk": "上市",
+   "date": "2026-11-20",
+   "time": "15:00",
+   "place": "線上法人說明會",
+   "summary": "本公司受邀參加富邦證券舉辦之線上法人說明會，說明115年第三季營運概況",
+   "ind": "航運業",
+   "cons": false,
+   "routine": true
+  },
+  {
    "code": "2616",
    "name": "山隆",
    "mk": "上市",
@@ -1805,6 +1817,18 @@
    "routine": true
   },
   {
+   "code": "1446",
+   "name": "宏和",
+   "mk": "上市",
+   "date": "2026-11-24",
+   "time": "16:00",
+   "place": "線上法說會",
+   "summary": "本公司受邀參加元大證券舉辦之線上法說會，報告本公司 營運狀況。",
+   "ind": "紡織纖維",
+   "cons": true,
+   "routine": true
+  },
+  {
    "code": "7765",
    "name": "中華資安",
    "mk": "上市",
@@ -2259,34 +2283,12 @@
    "ind": "觀光餐旅",
    "cons": true,
    "routine": true
-  },
-  {
-   "code": "1101",
-   "name": "台泥",
-   "mk": "上市",
-   "date": "2026-11-25",
-   "time": "14:30",
-   "place": "台北市中山北路2段113號3樓士敏廳",
-   "summary": "公司簡介、所屬產業概況、營運成果及未來展望說明",
-   "ind": "水泥工業",
-   "cons": false,
-   "routine": false
-  },
-  {
-   "code": "1305",
-   "name": "華夏",
-   "mk": "上市",
-   "date": "2026-11-25",
-   "time": "14:30",
-   "place": "台北市信義區信義路五段7號1樓(臺灣證券交易所…",
-   "summary": "(1)2026年Q3回顧及Q4展望 (2)公司2026年前3季財務資訊",
-   "ind": "塑膠工業",
-   "cons": false,
-   "routine": false
   }
  ],
- "conf_n": 184,
+ "conf_n": 186,
  "src": "證交所／櫃買中心 OpenAPI（公開申購、申請上市櫃、經營權及營業範圍異動專區）＋ 公開資訊觀測站 法人說明會一覽表",
- "errs": [],
- "updatedAt": "2026-11-19T19:54:06Z"
+ "errs": [
+  "法說會上櫃12月: ConnectionError: HTTPSConnectionPool(host='mopsov.twse.com.tw', port=443): Max retries exceeded with url: /mops/web/ajax_t100sb02_1?encodeURIComponent=1&step=1&firstin=1&off=1&T"
+ ],
+ "updatedAt": "2026-11-20T01:57:23Z"
 }
