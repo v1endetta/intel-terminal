@@ -637,7 +637,7 @@
     22,
     16,
     49,
-    36
+    37
    ],
    "days7": [
     "2026-11-14",
@@ -768,23 +768,6 @@
     "hot": true
    },
    {
-    "term": "Gemini",
-    "n": 6,
-    "src": 5,
-    "sources": [
-     "Gemini",
-     "Google AI",
-     "HN",
-     "TechNews 科技新",
-     "iThome"
-    ],
-    "sample": {
-     "title": "Google跟進OpenAI、Anthropic，Gemini開始支援Mac電腦操作",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1udmxnS2dVMlZ4dUNyamkzOGp6dEhRVkF6aF9OTEI3SEtvYmRFQ2xNUUlVazFUT3JKYlRTeWdXVTkyTnkwb2pFMTl6NDQxdw?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "台積電",
     "n": 5,
     "src": 5,
@@ -798,6 +781,22 @@
     "sample": {
      "title": "傳暫停中國16奈米以下訂單　台積電：遵循適用法令",
      "url": "https://www.cna.com.tw/news/afe/202611200096.aspx"
+    },
+    "hot": true
+   },
+   {
+    "term": "Gemini",
+    "n": 5,
+    "src": 4,
+    "sources": [
+     "Gemini",
+     "HN",
+     "TechNews 科技新",
+     "iThome"
+    ],
+    "sample": {
+     "title": "Google跟進OpenAI、Anthropic，Gemini開始支援Mac電腦操作",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1udmxnS2dVMlZ4dUNyamkzOGp6dEhRVkF6aF9OTEI3SEtvYmRFQ2xNUUlVazFUT3JKYlRTeWdXVTkyTnkwb2pFMTl6NDQxdw?oc=5"
     },
     "hot": true
    },
@@ -893,6 +892,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-20T05:43:40Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-20T06:02:33Z"
 }
