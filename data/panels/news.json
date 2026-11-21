@@ -484,7 +484,7 @@
     3,
     4,
     2,
-    6,
+    5,
     1,
     0
    ],
@@ -531,13 +531,13 @@
     }
    ],
    "daily7": [
-    0,
-    3,
-    6,
+    1,
+    4,
+    7,
     42,
-    73,
+    70,
     86,
-    0
+    7
    ],
    "days7": [
     "2026-11-16",
@@ -735,7 +735,7 @@
   "hot": [
    {
     "term": "資安",
-    "n": 6,
+    "n": 7,
     "src": 5,
     "sources": [
      "BigGo 財經",
@@ -781,21 +781,6 @@
     "hot": true
    },
    {
-    "term": "漏洞",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "CMoney投資網誌",
-     "自由財經",
-     "風傳媒"
-    ],
-    "sample": {
-     "title": "下班國際線》AI找漏洞、個資外洩一次爆發！簡立峰點名防詐關鍵：連媽媽都要對暗號| 林庭瑤 | 新聞",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE92SDYxN1hyUFNyXzNLcGRXVUo4T1JkOThoUmFoQjE4MUYzdG9QdHlQNTlvQjV3bS1CbTdmZGsyMlZTVjNBMExsZXZxbUJsQQ?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "北屯",
     "n": 3,
     "src": 3,
@@ -835,6 +820,20 @@
     "sample": {
      "title": "FBI reportedly investigating apparent hack of its criminal d",
      "url": "https://www.bbc.co.uk/news/articles/cvze7de86pk3o?at_medium=RSS&at_campaign=rss"
+    },
+    "hot": false
+   },
+   {
+    "term": "資安署",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "CMoney投資網誌",
+     "自由財經"
+    ],
+    "sample": {
+     "title": "全球常用網站伺服器軟體爆重大漏洞！資安署示警",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFAwMV91a1g4RHdXczJsdnR2QnpIMFNUUmFDdE5BQ01nb2VDbzd3YnBpeUVLVHVGTkZpQzVZSVhEd0stQjFNZTE2cjgycW5XclotRnRWTjBmdHJoT0oxT1Mw0gFkQVVfeXFMTVIyTHROQk5xSmlTa0RueE5vX0ZES0JmTDlGZVFqQkI3OHZlN2NaaTlURVpzanlubVFYeFpOTF9TRko3NVp3a2FvajdCR3cteWpCdE9GOThyUlVjd2xoUnlBV1NnVQ?oc=5"
     },
     "hot": false
    },
@@ -885,5 +884,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-21T17:02:35Z"
+ "updatedAt": "2026-11-21T17:21:20Z"
 }
