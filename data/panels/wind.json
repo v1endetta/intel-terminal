@@ -1,7 +1,61 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者聚焦於電影票房強檔、金馬獎頒獎盛事，以及串流音樂與熱門App的追看與使用。",
+ "line": "台灣消費者近期聚焦於熱門電影票房、AI應用工具與App，同時關注品牌優惠與健康生活趨勢。",
  "topics": [
+  {
+   "name": "哥吉拉-0.0",
+   "q": "哥吉拉-0.0",
+   "cat": "影視",
+   "do": [
+    {
+     "src": "電影票房",
+     "name": "哥吉拉-0.0",
+     "how": "本週票房第 1（7482 萬）"
+    }
+   ],
+   "talk": [],
+   "y": 0.95,
+   "news7": 23,
+   "news_p7": 50,
+   "news_capped": false,
+   "social": {
+    "Threads": 165.2,
+    "Dcard": 1
+   },
+   "mentions": {},
+   "x": 1.0,
+   "talk_trend": "down",
+   "days": 5,
+   "first": "2026-11-17",
+   "quad": "hit"
+  },
+  {
+   "name": "多鄰國",
+   "q": "多鄰國",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "多鄰國 - 極速學外語",
+     "how": "爬升 50 名到第 27"
+    }
+   ],
+   "talk": [],
+   "y": 0.95,
+   "news7": 16,
+   "news_p7": 5,
+   "news_capped": false,
+   "social": {
+    "Threads": 192,
+    "Dcard": 1
+   },
+   "mentions": {},
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 5,
+   "first": "2026-11-17",
+   "quad": "hit"
+  },
   {
    "name": "五月天",
    "q": "五月天 阿信 棠棣賦",
@@ -10,16 +64,16 @@
     {
      "src": "KKBOX",
      "name": "五月天 阿信 (Ashin) - 棠棣賦 - 電視劇《兩京十五日》主題曲/片頭曲",
-     "how": "升 8 名到第 3"
+     "how": "第 3 名"
     },
     {
      "src": "YouTube 熱門",
      "name": "五月天阿信 Ashin [ 棠棣賦 Blood Beyond Blood ] Official Music Video｜",
-     "how": "7 天內上架、發燒第 7"
+     "how": "7 天內上架、發燒第 5"
     }
    ],
    "talk": [],
-   "y": 1.0,
+   "y": 0.77,
    "news7": 34,
    "news_p7": 0,
    "news_capped": false,
@@ -32,60 +86,6 @@
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-20",
-   "quad": "hit"
-  },
-  {
-   "name": "多鄰國",
-   "q": "多鄰國",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "多鄰國 - 極速學外語",
-     "how": "爬升 54 名到第 23"
-    }
-   ],
-   "talk": [],
-   "y": 0.99,
-   "news7": 15,
-   "news_p7": 5,
-   "news_capped": false,
-   "social": {
-    "Threads": 192,
-    "Dcard": 1
-   },
-   "mentions": {},
-   "x": 0.99,
-   "talk_trend": "up",
-   "days": 5,
-   "first": "2026-11-17",
-   "quad": "hit"
-  },
-  {
-   "name": "哥吉拉-0.0",
-   "q": "哥吉拉-0.0 票房",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "電影票房",
-     "name": "哥吉拉-0.0",
-     "how": "本週票房第 1（7482 萬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.95,
-   "news7": 7,
-   "news_p7": 38,
-   "news_capped": false,
-   "social": {
-    "Threads": 165.2,
-    "Dcard": 1
-   },
-   "mentions": {},
-   "x": 0.83,
-   "talk_trend": "down",
-   "days": 5,
-   "first": "2026-11-17",
    "quad": "hit"
   },
   {
@@ -116,37 +116,14 @@
    "quad": "hit"
   },
   {
-   "name": "魔鬼的計謀",
-   "q": "魔鬼的計謀 Netflix",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "Netflix 影集",
-     "name": "The Devil's Plan",
-     "how": "上榜第 1 週、第 6 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.75,
-   "news7": 20,
-   "news_p7": 17,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.66,
-   "talk_trend": "flat",
-   "days": 4,
-   "first": "2026-11-12",
-   "quad": "hit"
-  },
-  {
    "name": "麥當勞",
-   "q": "麥當勞 雞塊 買一送一",
-   "cat": "品牌商品",
+   "q": "麥當勞 優惠",
+   "cat": "飲食",
    "do": [
     {
      "src": "App 下載",
      "name": "麥當勞APP",
-     "how": "在榜上第 4 名（沒有在爬）"
+     "how": "在榜上第 5 名（沒有在爬）"
     }
    ],
    "talk": [
@@ -157,8 +134,8 @@
    ],
    "y": 0.5,
    "static": true,
-   "news7": 7,
-   "news_p7": 16,
+   "news7": 15,
+   "news_p7": 37,
    "news_capped": false,
    "social": {
     "Threads": 52.4,
@@ -167,10 +144,33 @@
    "mentions": {
     "PTT": 1
    },
-   "x": 0.85,
+   "x": 1.0,
    "talk_trend": "down",
    "days": 3,
    "first": "2026-11-05",
+   "quad": "hit"
+  },
+  {
+   "name": "魔鬼的計謀",
+   "q": "魔鬼的計謀",
+   "cat": "影視",
+   "do": [
+    {
+     "src": "Netflix 影集",
+     "name": "The Devil's Plan",
+     "how": "上榜第 1 週、第 6 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.75,
+   "news7": 25,
+   "news_p7": 21,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.71,
+   "talk_trend": "flat",
+   "days": 4,
+   "first": "2026-11-12",
    "quad": "hit"
   },
   {
@@ -187,7 +187,7 @@
    "talk": [],
    "y": 0.79,
    "news7": 4,
-   "news_p7": 13,
+   "news_p7": 12,
    "news_capped": false,
    "social": {
     "Threads": 12.7
@@ -200,161 +200,119 @@
    "quad": "hit"
   },
   {
-   "name": "Netflix",
-   "q": "Netflix 排行",
-   "cat": "影視",
+   "name": "Dior",
+   "q": "Dior",
+   "cat": "品牌商品",
    "do": [
     {
-     "src": "Netflix 影集",
-     "name": "Miracles of the ER",
-     "how": "上榜第 1 週、第 1 名"
-    },
-    {
-     "src": "Netflix 影集",
-     "name": "Sunshine Through the Rain",
-     "how": "上榜第 2 週、第 5 名"
-    },
-    {
-     "src": "Netflix 電影",
-     "name": "One Year to Live, Buy a Man",
-     "how": "上榜第 2 週、第 1 名"
-    },
-    {
-     "src": "Netflix 電影",
-     "name": "Salli",
-     "how": "上榜第 2 週、第 2 名"
-    },
-    {
-     "src": "Netflix 電影",
-     "name": "Possible Love",
-     "how": "上榜第 2 週、第 3 名"
+     "src": "Spotify",
+     "name": "DIOR 大穎 欲落未落",
+     "how": "在榜上第 16 名（沒有在爬）"
     }
    ],
    "talk": [],
-   "y": 1.0,
-   "news7": 8,
-   "news_p7": 8,
+   "y": 0.5,
+   "static": true,
+   "news7": 35,
+   "news_p7": 17,
    "news_capped": false,
    "mentions": {},
-   "x": 0.48,
-   "talk_trend": "flat",
+   "x": 0.78,
+   "talk_trend": "up",
    "days": 2,
-   "first": "2026-11-09",
+   "first": "2026-11-12",
+   "quad": "hit"
+  },
+  {
+   "name": "Pokémon GO",
+   "q": "駒刀小兵社群日",
+   "cat": "遊戲",
+   "do": [
+    {
+     "src": "Google 熱搜",
+     "name": "駒刀小兵社群日",
+     "how": "搜尋 200+"
+    }
+   ],
+   "talk": [],
+   "y": 0.6,
+   "news7": 5,
+   "news_p7": 4,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.39,
+   "talk_trend": "flat",
+   "days": 3,
+   "first": "2026-11-14",
    "quad": "new"
   },
   {
-   "name": "Spotify",
-   "q": "Spotify 排行",
+   "name": "Blackmagic Camera",
+   "q": "Blackmagic Camera App",
    "cat": "App",
    "do": [
     {
-     "src": "Spotify",
-     "name": "ILLIT - 체포하겠어",
-     "how": "上榜 7 天、第 4 名"
-    },
-    {
-     "src": "Spotify",
-     "name": "BTS - SWIM",
-     "how": "升 27 名到第 8"
-    },
-    {
-     "src": "Spotify",
-     "name": "Crowd Lu - 幾分之幾 - 電影主題曲",
-     "how": "升 16 名到第 12"
-    },
-    {
-     "src": "Spotify",
-     "name": "A-Mei Chang - 連名帶姓",
-     "how": "升 23 名到第 14"
-    },
-    {
-     "src": "Spotify",
-     "name": "EggPlantEgg - 閣愛妳一擺",
-     "how": "升 7 名到第 16"
+     "src": "App 下載",
+     "name": "Blackmagic Camera",
+     "how": "新進榜第 3 名"
     }
    ],
    "talk": [],
    "y": 0.9,
-   "news7": 1,
-   "news_p7": 5,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.15,
-   "talk_trend": "down",
-   "days": 3,
-   "first": "2026-11-09",
-   "quad": "new"
-  },
-  {
-   "name": "Dior",
-   "q": "Dior 大穎",
-   "cat": "品牌商品",
-   "do": [
-    {
-     "src": "KKBOX",
-     "name": "DIOR 大穎 - 欲落未落",
-     "how": "第 2 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.7,
    "news7": 0,
-   "news_p7": 1,
+   "news_p7": 0,
    "news_capped": false,
    "mentions": {},
    "x": 0.0,
    "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-12",
+   "days": 1,
+   "first": "2026-11-21",
    "quad": "new"
   },
   {
-   "name": "Disney+",
-   "q": "Disney+",
-   "cat": "影視",
+   "name": "勝利女神：妮姬",
+   "q": "勝利女神：妮姬",
+   "cat": "遊戲",
    "do": [],
    "talk": [],
    "y": 0.0,
-   "news7": 82,
-   "news_p7": 10,
+   "news7": 10,
+   "news_p7": 17,
    "news_capped": false,
    "mentions": {},
-   "x": 0.96,
-   "talk_trend": "up",
-   "days": 5,
-   "first": "2026-11-13",
+   "x": 0.52,
+   "talk_trend": "down",
+   "days": 2,
+   "first": "2026-11-05",
    "quad": "hype"
   },
   {
-   "name": "金馬獎",
-   "q": "金馬獎 63",
-   "cat": "活動",
+   "name": "黃仁勳",
+   "q": "黃仁勳",
+   "cat": "人物",
    "do": [],
    "talk": [
     {
-     "src": "新聞焦點",
-     "title": "金馬63／金馬獎完整攻略！從入圍排行到頒獎嘉賓　必看重點全整理"
+     "src": "PTT",
+     "title": "[新聞] 紐時追打黃仁勳！揭露羞辱員工內幕 威脅"
     },
     {
-     "src": "時尚媒體",
-     "title": "2026金馬獎｜金馬63華麗頒獎人李安、奉俊昊、舒華全來了，得獎名單、表演來賓、線上直播平台、入圍資訊一次看！"
+     "src": "新聞焦點",
+     "title": "談黃仁勳⋯暗示華僑都是北京間諜引陸使館抗議 法媒致歉了"
     }
    ],
    "y": 0.0,
-   "news7": 53,
-   "news_p7": 47,
+   "news7": 76,
+   "news_p7": 24,
    "news_capped": true,
-   "social": {
-    "Threads": 240
-   },
    "mentions": {
-    "新聞焦點": 1,
-    "時尚媒體": 1
+    "PTT": 1,
+    "新聞焦點": 1
    },
    "x": 1.0,
-   "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-20",
+   "talk_trend": "up",
+   "days": 6,
+   "first": "2026-11-12",
    "quad": "talk"
   },
   {
@@ -385,53 +343,30 @@
    "quad": "talk"
   },
   {
-   "name": "黃仁勳",
-   "q": "黃仁勳 輝達",
-   "cat": "人物",
+   "name": "金馬獎",
+   "q": "金馬獎",
+   "cat": "活動",
    "do": [],
    "talk": [
     {
-     "src": "新聞焦點",
-     "title": "輝達晶片風暴延燒華府！彭斯痛批黃仁勳「不該回鍋」　點名美商務部長需下台負責"
+     "src": "LINE TODAY",
+     "title": "《大濛》趙公道變金馬主持！柯煒林明晚獨挑大梁"
     },
     {
      "src": "新聞焦點",
-     "title": "貝萊德霍爾：黃金是AI時代的分散投資選擇"
+     "title": "金馬63／演完《周處》仍陷恐懼心魔！阮經天驚吐「去年才決心當演員」 現場突斷片遭劉冠廷虧：還在演"
     }
    ],
    "y": 0.0,
-   "news7": 73,
-   "news_p7": 27,
+   "news7": 83,
+   "news_p7": 17,
    "news_capped": true,
-   "mentions": {
-    "新聞焦點": 2
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 6,
-   "first": "2026-11-12",
-   "quad": "talk"
-  },
-  {
-   "name": "蔡依林",
-   "q": "蔡依林 大巨蛋",
-   "cat": "人物",
-   "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "手殘黨不想搶實名制了！台哥大續約5G 1599直接送蔡依林大巨蛋6990門票兩張"
-    }
-   ],
-   "y": 0.0,
-   "news7": 79,
-   "news_p7": 0,
-   "news_capped": false,
    "social": {
-    "Threads": 44.1
+    "Threads": 240
    },
    "mentions": {
-    "Mobile01": 1
+    "LINE TODAY": 1,
+    "新聞焦點": 1
    },
    "x": 1.0,
    "talk_trend": "up",
@@ -440,36 +375,101 @@
    "quad": "talk"
   },
   {
-   "name": "小米",
-   "q": "小米遊戲平板 降價",
+   "name": "蔡依林",
+   "q": "蔡依林",
+   "cat": "人物",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 95,
+   "news_p7": 0,
+   "news_capped": true,
+   "social": {
+    "Threads": 44.1
+   },
+   "mentions": {},
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-20",
+   "quad": "talk"
+  },
+  {
+   "name": "特斯拉",
+   "q": "特斯拉",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
-     "src": "新聞焦點",
-     "title": "8.8吋小米遊戲平板降價更便宜！Xiaomi Pad Mini通路最低價格一次看(2026.11)"
+     "src": "PTT",
+     "title": "[新聞] 《交通》電動車免公路養管費 交部擬117年"
+    },
+    {
+     "src": "PTT",
+     "title": "[閒聊] 電車為何沒啥小車的選項"
+    }
+   ],
+   "y": 0.0,
+   "news7": 83,
+   "news_p7": 17,
+   "news_capped": true,
+   "mentions": {
+    "PTT": 2
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-10",
+   "quad": "talk"
+  },
+  {
+   "name": "小米",
+   "q": "小米",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 88,
+   "news_p7": 12,
+   "news_capped": true,
+   "mentions": {},
+   "x": 0.97,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-10",
+   "quad": "talk"
+  },
+  {
+   "name": "10-10-10走路法",
+   "q": "10-10-10走路法",
+   "cat": "生活習慣",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "飯後散步真的有效？「10-10-10走路法」研究揭：有助降低餐後血糖！"
     }
    ],
    "y": 0.0,
    "news7": 4,
-   "news_p7": 0,
+   "news_p7": 4,
    "news_capped": false,
    "mentions": {
-    "新聞焦點": 1
+    "時尚媒體": 1
    },
    "x": 0.45,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-10",
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-21",
    "quad": "low"
   }
  ],
  "quads": {
   "quiet": 0,
-  "hit": 7,
-  "new": 3,
+  "hit": 8,
+  "new": 2,
   "hype": 1,
-  "talk": 4,
+  "talk": 6,
   "low": 1
  },
  "src_do": [
@@ -494,7 +494,7 @@
  ],
  "social_at": "2026-11-20",
  "hist_days": 19,
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3.1-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-21T00:59:13Z"
+ "updatedAt": "2026-11-21T07:12:53Z"
 }
