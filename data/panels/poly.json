@@ -6,7 +6,7 @@
     {
      "title": "Fed Decision in December?",
      "slug": "fed-decision-in-december-20260729232808632",
-     "vol24h": 3502644,
+     "vol24h": 3530736,
      "end": "2026-12-10",
      "multi": true,
      "outs": [
@@ -18,14 +18,14 @@
       },
       {
        "name": "No change",
-       "yes": 8.0,
-       "d1": 4.2,
+       "yes": 8.2,
+       "d1": 4.5,
        "zh": "維持不變"
       },
       {
        "name": "50+ bps increase",
        "yes": 1.8,
-       "d1": -2.3,
+       "d1": -2.2,
        "zh": "升息 50 個基點以上"
       }
      ],
@@ -34,7 +34,7 @@
     {
      "title": "Fed Decision in January?",
      "slug": "fed-decision-in-january-20260729233815502",
-     "vol24h": 190819,
+     "vol24h": 187113,
      "end": "2027-01-28",
      "multi": true,
      "outs": [
@@ -46,8 +46,8 @@
       },
       {
        "name": "25 bps increase",
-       "yes": 47.5,
-       "d1": -14.0,
+       "yes": 46.5,
+       "d1": -15.0,
        "zh": "升息 25 個基點"
       },
       {
@@ -62,7 +62,7 @@
     {
      "title": "Another Fed rate hike in 2026?",
      "slug": "another-fed-rate-hike-in-2026",
-     "vol24h": 114824,
+     "vol24h": 105828,
      "end": "2026-12-10",
      "multi": false,
      "outs": [
@@ -82,7 +82,7 @@
     {
      "title": "Largest Company end of December 2026?",
      "slug": "largest-company-end-of-december-2026",
-     "vol24h": 80663,
+     "vol24h": 80438,
      "end": "2027-01-01",
      "multi": true,
      "outs": [
@@ -94,7 +94,7 @@
       },
       {
        "name": "NVIDIA",
-       "yes": 3.4,
+       "yes": 3.5,
        "d1": -1.1,
        "zh": "輝達"
       },
@@ -108,57 +108,20 @@
      "zh": "2026年12月底市值最大的公司是哪家？"
     },
     {
-     "title": "Fed decisions (Sep–Dec)",
-     "slug": "fed-decisions-sepdec",
-     "vol24h": 72871,
-     "end": "2026-12-09",
+     "title": "How many Fed rate cuts in 2026?",
+     "slug": "how-many-fed-rate-cuts-in-2026",
+     "vol24h": 73246,
+     "end": "2027-01-01",
      "multi": true,
      "outs": [
       {
-       "name": "Hike–Pause–Hike",
-       "yes": 91.1,
-       "d1": -5.6,
-       "zh": "升息－暫停－升息"
-      },
-      {
-       "name": "Hike–Pause–Pause",
-       "yes": 7.8,
-       "d1": 5.1,
-       "zh": "升息－暫停－暫停"
-      },
-      {
-       "name": "Other",
-       "yes": 0.8,
-       "d1": 0.2,
-       "zh": "其他"
+       "name": "0 (0 bps)",
+       "yes": 98.3,
+       "d1": null,
+       "zh": "0 次（0 個基點）"
       }
      ],
-     "zh": "聯準會決策（9至12月）"
-    },
-    {
-     "title": "South Africa Annual Inflation 2026",
-     "slug": "south-africa-annual-inflation-2026",
-     "vol24h": 5654,
-     "end": "2027-01-21",
-     "multi": true,
-     "outs": [
-      {
-       "name": "4.7-5.0%",
-       "yes": 61.2,
-       "d1": 22.7
-      },
-      {
-       "name": ">5.0%",
-       "yes": 26.4,
-       "d1": -14.0
-      },
-      {
-       "name": "4.4-4.7%",
-       "yes": 11.6,
-       "d1": -4.7
-      }
-     ],
-     "zh": "2026年南非全年通膨率"
+     "zh": "2026 年聯準會會降息幾次？"
     },
     {
      "title": "How high will inflation get in 2026?",
@@ -169,14 +132,14 @@
      "outs": [
       {
        "name": "Above 4.5%",
-       "yes": 5.5,
-       "d1": 0.6,
+       "yes": 5.3,
+       "d1": 0.4,
        "zh": "高於 4.5%"
       },
       {
        "name": "Above 5%",
        "yes": 3.1,
-       "d1": 0.1,
+       "d1": -0.7,
        "zh": "高於 5%"
       },
       {
@@ -187,6 +150,31 @@
       }
      ],
      "zh": "2026年通膨率會升多高？"
+    },
+    {
+     "title": "South Africa Annual Inflation 2026",
+     "slug": "south-africa-annual-inflation-2026",
+     "vol24h": 4978,
+     "end": "2027-01-21",
+     "multi": true,
+     "outs": [
+      {
+       "name": "4.7-5.0%",
+       "yes": 61.5,
+       "d1": 14.4
+      },
+      {
+       "name": ">5.0%",
+       "yes": 26.6,
+       "d1": -1.1
+      },
+      {
+       "name": "4.4-4.7%",
+       "yes": 10.9,
+       "d1": -5.3
+      }
+     ],
+     "zh": "2026年南非全年通膨率"
     }
    ]
   },
@@ -196,7 +184,7 @@
     {
      "title": "Will China invade Taiwan by end of 2026?",
      "slug": "will-china-invade-taiwan-before-2027",
-     "vol24h": 375180,
+     "vol24h": 365680,
      "end": "2027-01-01",
      "multi": false,
      "outs": [
@@ -211,7 +199,7 @@
     {
      "title": "Will China invade Taiwan by December 31, 2027?",
      "slug": "will-china-invade-taiwan-by-december-31-2027",
-     "vol24h": 51106,
+     "vol24h": 51217,
      "end": "2028-01-01",
      "multi": false,
      "outs": [
@@ -246,7 +234,7 @@
     {
      "title": "Taipei Mayor Election Winner",
      "slug": "taipei-mayor-election-winner-20260813125857100",
-     "vol24h": 172243,
+     "vol24h": 172713,
      "end": "2026-11-29",
      "multi": true,
      "outs": [
@@ -268,7 +256,7 @@
     {
      "title": "Hsinchu City Mayor Election Winner",
      "slug": "hsinchu-city-mayor-election-winner-20260813135716400",
-     "vol24h": 12805,
+     "vol24h": 13347,
      "end": "2026-11-29",
      "multi": true,
      "outs": [
@@ -297,7 +285,7 @@
       {
        "name": "Su Chiao-hui",
        "yes": 59.5,
-       "d1": 0.5,
+       "d1": 1.0,
        "zh": "蘇巧慧"
       },
       {
@@ -317,20 +305,20 @@
     {
      "title": "Israel x Iran ceasefire continues through...?",
      "slug": "israel-x-iran-ceasefire-continues-throughptptpt-20260716224448963",
-     "vol24h": 1487879,
+     "vol24h": 1505450,
      "end": "2026-12-31",
      "multi": true,
      "outs": [
       {
        "name": "November 22",
-       "yes": 96.6,
-       "d1": 1.1,
+       "yes": 96.4,
+       "d1": 0.9,
        "zh": "11月22日"
       },
       {
        "name": "November 30",
        "yes": 84.5,
-       "d1": null,
+       "d1": -1.0,
        "zh": "11月30日"
       },
       {
@@ -345,7 +333,7 @@
     {
      "title": "Will the U.S. invade Iran before 2027?",
      "slug": "will-the-us-invade-iran-before-2027",
-     "vol24h": 184846,
+     "vol24h": 186768,
      "end": "2027-01-01",
      "multi": false,
      "outs": [
@@ -360,26 +348,26 @@
     {
      "title": "Prime Minister of Israel after the next election?",
      "slug": "who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
-     "vol24h": 184049,
+     "vol24h": 184305,
      "end": "2026-10-28",
      "multi": true,
      "outs": [
       {
        "name": "Gadi Eizenkot",
-       "yes": 64.6,
-       "d1": 2.1,
+       "yes": 64.8,
+       "d1": 2.5,
        "zh": "加迪·艾森科特"
       },
       {
        "name": "Benjamin Netanyahu",
-       "yes": 19.8,
-       "d1": -1.7,
+       "yes": 20.2,
+       "d1": -0.9,
        "zh": "班傑明·納坦雅胡"
       },
       {
        "name": "Naftali Bennett",
        "yes": 5.1,
-       "d1": -1.5,
+       "d1": -1.4,
        "zh": "納夫塔利·班奈特"
       }
      ],
@@ -388,7 +376,7 @@
     {
      "title": "Will the Iranian regime fall before 2027?",
      "slug": "will-the-iranian-regime-fall-by-the-end-of-2026",
-     "vol24h": 88706,
+     "vol24h": 86373,
      "end": "2027-01-01",
      "multi": false,
      "outs": [
@@ -403,20 +391,20 @@
     {
      "title": "Netanyahu out by...?",
      "slug": "netanyahu-out-before-2027",
-     "vol24h": 58561,
+     "vol24h": 58911,
      "end": "2027-01-01",
      "multi": true,
      "outs": [
       {
        "name": "June 30, 2027",
-       "yes": 69.0,
-       "d1": 2.5,
+       "yes": 69.5,
+       "d1": 3.0,
        "zh": "2027 年 6 月 30 日"
       },
       {
        "name": "March 31, 2027",
-       "yes": 68.5,
-       "d1": 6.0,
+       "yes": 67.0,
+       "d1": 4.5,
        "zh": "2027年3月31日"
       },
       {
@@ -431,20 +419,20 @@
     {
      "title": "NATO x Russia military clash by...?",
      "slug": "nato-x-russia-military-clash-in-2025",
-     "vol24h": 134788,
+     "vol24h": 128692,
      "end": "2027-01-03",
      "multi": true,
      "outs": [
       {
        "name": "December 31",
        "yes": 9.5,
-       "d1": -0.5,
+       "d1": -2.0,
        "zh": "12 月 31 日"
       },
       {
        "name": "November 30",
        "yes": 4.0,
-       "d1": 0.5,
+       "d1": 0.9,
        "zh": "11月30日"
       }
      ],
@@ -453,7 +441,7 @@
     {
      "title": "Russia x Ukraine ceasefire agreement by...?",
      "slug": "russia-x-ukraine-ceasefire-agreement-by",
-     "vol24h": 87577,
+     "vol24h": 87341,
      "end": "2027-07-01",
      "multi": true,
      "outs": [
@@ -486,26 +474,26 @@
     {
      "title": "Will Anthropic’s valuation hit __ by December 31?",
      "slug": "will-anthropics-valuation-hit-by-december-31",
-     "vol24h": 314876,
+     "vol24h": 310517,
      "end": "2027-01-05",
      "multi": true,
      "outs": [
       {
        "name": "↓$1.0T",
-       "yes": 66.0,
-       "d1": 7.5,
+       "yes": 66.5,
+       "d1": 10.0,
        "zh": "↓1.0兆美元"
       },
       {
        "name": "↑$1.6T",
        "yes": 32.0,
-       "d1": -3.0,
+       "d1": null,
        "zh": "↑1.6兆美元"
       },
       {
        "name": "↓$800B",
-       "yes": 25.2,
-       "d1": 2.1,
+       "yes": 25.5,
+       "d1": 5.1,
        "zh": "↓8,000億美元"
       }
      ],
@@ -514,27 +502,27 @@
     {
      "title": "Which math problems will AI solve in 2026?",
      "slug": "which-math-problems-will-ai-solve-in-2026",
-     "vol24h": 82079,
+     "vol24h": 86772,
      "end": "2027-01-01",
      "multi": true,
      "outs": [
       {
        "name": "Riemann Hypothesis",
-       "yes": 73.5,
-       "d1": 67.0,
+       "yes": 77.5,
+       "d1": 71.0,
        "zh": "黎曼猜想"
       },
       {
        "name": "Ramsey Number R(5,5)",
-       "yes": 23.0,
-       "d1": 3.0,
+       "yes": 24.5,
+       "d1": 7.5,
        "zh": "拉姆齊數 R(5,5)"
       },
       {
-       "name": "Strong Goldbach Conjecture",
-       "yes": 21.5,
-       "d1": 17.0,
-       "zh": "強哥德巴赫猜想"
+       "name": "Hodge Conjecture",
+       "yes": 22.0,
+       "d1": 12.5,
+       "zh": "霍奇猜想"
       }
      ],
      "zh": "AI會在2026年解決哪些數學問題？"
@@ -542,7 +530,7 @@
     {
      "title": "Anthropic closes below IPO price ($83) by...?",
      "slug": "anthropic-closes-below-ipo-price-by",
-     "vol24h": 48438,
+     "vol24h": 55736,
      "end": "2027-04-01",
      "multi": true,
      "outs": [
@@ -554,7 +542,7 @@
       },
       {
        "name": "December 31",
-       "yes": 79.5,
+       "yes": 80.0,
        "d1": null,
        "zh": "12 月 31 日"
       },
@@ -570,7 +558,7 @@
     {
      "title": "Jensen Huang rejoins NVIDIA by...?",
      "slug": "jensen-huang-rejoins-nvidia-byptptpt",
-     "vol24h": 449917,
+     "vol24h": 454059,
      "end": "2028-01-01",
      "multi": true,
      "outs": [
@@ -583,13 +571,13 @@
       {
        "name": "March 31, 2027",
        "yes": 17.5,
-       "d1": 3.5,
+       "d1": 4.0,
        "zh": "2027年3月31日"
       },
       {
        "name": "December 31, 2026",
-       "yes": 5.5,
-       "d1": 0.4,
+       "yes": 5.3,
+       "d1": 0.2,
        "zh": "2026年12月31日"
       }
      ],
@@ -598,7 +586,7 @@
     {
      "title": "Next CEO of NVIDIA?",
      "slug": "next-ceo-of-nvidia",
-     "vol24h": 309674,
+     "vol24h": 306313,
      "end": "2029-01-01",
      "multi": true,
      "outs": [
@@ -616,8 +604,8 @@
       },
       {
        "name": "Jensen Huang (No Change)",
-       "yes": 10.8,
-       "d1": -0.2,
+       "yes": 10.7,
+       "d1": -0.4,
        "zh": "黃仁勳（沒有變動）"
       }
      ],
@@ -631,52 +619,24 @@
     {
      "title": "Next Senate Majority Leader?",
      "slug": "next-senate-majority-leader-485",
-     "vol24h": 61974,
+     "vol24h": 61825,
      "end": "2026-11-04",
      "multi": true,
      "outs": [
       {
        "name": "Chuck Schumer",
-       "yes": 93.5,
-       "d1": -1.0,
+       "yes": 92.5,
+       "d1": -2.0,
        "zh": "查克·舒默"
       },
       {
        "name": "Chris Van Hollen",
-       "yes": 6.3,
-       "d1": 1.1,
+       "yes": 7.0,
+       "d1": 1.6,
        "zh": "克里斯·范荷倫"
       }
      ],
      "zh": "誰會是下一任參議院多數黨領袖？"
-    },
-    {
-     "title": "MI-06 House Election Margin of Victory",
-     "slug": "mi-06-house-margin-of-victory-2026",
-     "vol24h": 8008,
-     "end": "2026-11-04",
-     "multi": true,
-     "outs": [
-      {
-       "name": "Democrat 45-50%",
-       "yes": 0.5,
-       "d1": -0.9,
-       "zh": "民主黨贏 45-50%"
-      },
-      {
-       "name": "Democrat 30-35%",
-       "yes": 0.5,
-       "d1": -2.1,
-       "zh": "民主黨贏 30-35%"
-      },
-      {
-       "name": "Democrat 25-30%",
-       "yes": 0.5,
-       "d1": -0.8,
-       "zh": "民主黨贏 25-30%"
-      }
-     ],
-     "zh": "密西根州第 6 選區眾議員選舉勝出差距"
     },
     {
      "title": "2026 Midterms: House Popular Vote Margin of Victory",
@@ -687,7 +647,7 @@
      "outs": [
       {
        "name": "Democrats 14-16%",
-       "yes": 91.9,
+       "yes": 92.0,
        "d1": -1.2,
        "zh": "民主黨領先 14-16%"
       },
@@ -699,6 +659,28 @@
       }
      ],
      "zh": "2026期中選舉：眾議院全國得票率差距"
+    },
+    {
+     "title": "Arkansas Senate Election Margin of Victory",
+     "slug": "arkansas-senate-margin-of-victory-2026",
+     "vol24h": 5967,
+     "end": "2026-11-04",
+     "multi": true,
+     "outs": [
+      {
+       "name": "Republican 10-15%",
+       "yes": 53.8,
+       "d1": 2.1,
+       "zh": "共和黨贏 10-15%"
+      },
+      {
+       "name": "Republican 20-25%",
+       "yes": 45.1,
+       "d1": 17.2,
+       "zh": "共和黨贏 20-25%"
+      }
+     ],
+     "zh": "阿肯色州參議選戰勝出差距"
     }
    ]
   },
@@ -708,24 +690,24 @@
     {
      "title": "What price will Bitcoin hit in 2026?",
      "slug": "what-price-will-bitcoin-hit-before-2027",
-     "vol24h": 2265121,
+     "vol24h": 2276120,
      "end": "2027-01-01",
      "multi": true,
      "outs": [
       {
        "name": "↓ 55,000",
-       "yes": 71.0,
-       "d1": 25.5
+       "yes": 70.5,
+       "d1": 29.0
       },
       {
        "name": "↓ 50,000",
-       "yes": 43.2,
-       "d1": 18.3
+       "yes": 43.6,
+       "d1": 18.8
       },
       {
        "name": "↓ 45,000",
        "yes": 22.1,
-       "d1": 11.2
+       "d1": 11.1
       }
      ],
      "zh": "比特幣在 2026 年會達到什麼價格？"
@@ -733,19 +715,19 @@
     {
      "title": "What price will Bitcoin hit in November?",
      "slug": "what-price-will-bitcoin-hit-in-november-2026",
-     "vol24h": 1253756,
+     "vol24h": 1289673,
      "end": "2026-12-01",
      "multi": true,
      "outs": [
       {
        "name": "↑ 60,000",
-       "yes": 69.0,
+       "yes": 67.5,
        "d1": null
       },
       {
        "name": "↓ 55,000",
-       "yes": 59.9,
-       "d1": 40.0
+       "yes": 58.9,
+       "d1": 39.6
       },
       {
        "name": "↑ 62,500",
@@ -764,7 +746,7 @@
    "slug": "fed-decision-in-december-20260729232808632",
    "yes": 89.5,
    "d1": -3.0,
-   "vol24h": 3502644,
+   "vol24h": 3530736,
    "end": "2026-12-10",
    "topic": "Fed／利率",
    "zh": "12月聯準會決議？— 升息25基點"
@@ -772,9 +754,9 @@
   {
    "question": "What price will Bitcoin hit in 2026? — ↓ 55,000",
    "slug": "what-price-will-bitcoin-hit-before-2027",
-   "yes": 71.0,
-   "d1": 25.5,
-   "vol24h": 2265121,
+   "yes": 70.5,
+   "d1": 29.0,
+   "vol24h": 2276120,
    "end": "2027-01-01",
    "topic": "加密貨幣",
    "zh": "比特幣在 2026 年會達到什麼價格？ — ↓ 55,000"
@@ -782,9 +764,9 @@
   {
    "question": "Israel x Iran ceasefire continues through...? — November 22",
    "slug": "israel-x-iran-ceasefire-continues-throughptptpt-20260716224448963",
-   "yes": 96.6,
-   "d1": 1.1,
-   "vol24h": 1487879,
+   "yes": 96.4,
+   "d1": 0.9,
+   "vol24h": 1505450,
    "end": "2026-12-31",
    "topic": "地緣政治",
    "zh": "以伊停火協議持續到...? — 11月22日"
@@ -792,9 +774,9 @@
   {
    "question": "What price will Bitcoin hit in November? — ↑ 60,000",
    "slug": "what-price-will-bitcoin-hit-in-november-2026",
-   "yes": 69.0,
+   "yes": 67.5,
    "d1": null,
-   "vol24h": 1253756,
+   "vol24h": 1289673,
    "end": "2026-12-01",
    "topic": "加密貨幣",
    "zh": "比特幣11月會漲到多少？ — ↑ 60,000"
@@ -804,7 +786,7 @@
    "slug": "jensen-huang-rejoins-nvidia-byptptpt",
    "yes": 30.5,
    "d1": 4.0,
-   "vol24h": 449917,
+   "vol24h": 454059,
    "end": "2028-01-01",
    "topic": "AI／科技",
    "zh": "黃仁勳在 2027 年 12 月 31 日之前重回輝達？"
@@ -814,7 +796,7 @@
    "slug": "will-china-invade-taiwan-before-2027",
    "yes": 2.1,
    "d1": 0.5,
-   "vol24h": 375180,
+   "vol24h": 365680,
    "end": "2027-01-01",
    "topic": "台海／中國",
    "zh": "中國會在 2026 年底前侵略台灣嗎？"
@@ -822,9 +804,9 @@
   {
    "question": "Will Anthropic’s valuation hit __ by December 31? — ↓$1.0T",
    "slug": "will-anthropics-valuation-hit-by-december-31",
-   "yes": 66.0,
-   "d1": 7.5,
-   "vol24h": 314876,
+   "yes": 66.5,
+   "d1": 10.0,
+   "vol24h": 310517,
    "end": "2027-01-05",
    "topic": "AI／科技",
    "zh": "Anthropic 估值會在 12 月 31 日前達到 __ 嗎？ — ↓$1.0T"
@@ -834,7 +816,7 @@
    "slug": "next-ceo-of-nvidia",
    "yes": 25.1,
    "d1": -0.9,
-   "vol24h": 309674,
+   "vol24h": 306313,
    "end": "2029-01-01",
    "topic": "AI／科技",
    "zh": "NVIDIA（輝達）下一任執行長？— 雷恩·哈斯 (Rene Haas)"
@@ -844,7 +826,7 @@
    "slug": "fed-decision-in-january-20260729233815502",
    "yes": 47.5,
    "d1": 10.0,
-   "vol24h": 190819,
+   "vol24h": 187113,
    "end": "2027-01-28",
    "topic": "Fed／利率",
    "zh": "聯準會一月會利率決議？ — 利率不變"
@@ -854,7 +836,7 @@
    "slug": "will-the-us-invade-iran-before-2027",
    "yes": 7.5,
    "d1": 1.0,
-   "vol24h": 184846,
+   "vol24h": 186768,
    "end": "2027-01-01",
    "topic": "地緣政治",
    "zh": "美國會在 2027 年前進攻伊朗嗎？"
@@ -862,9 +844,9 @@
   {
    "question": "Prime Minister of Israel after the next election? — Gadi Eizenkot",
    "slug": "who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
-   "yes": 64.6,
-   "d1": 2.1,
-   "vol24h": 184049,
+   "yes": 64.8,
+   "d1": 2.5,
+   "vol24h": 184305,
    "end": "2026-10-28",
    "topic": "地緣政治",
    "zh": "下屆大選後的以色列總理？— 加迪·艾森科特"
@@ -874,7 +856,7 @@
    "slug": "taipei-mayor-election-winner-20260813125857100",
    "yes": 65.5,
    "d1": 4.0,
-   "vol24h": 172243,
+   "vol24h": 172713,
    "end": "2026-11-29",
    "topic": "台灣選舉",
    "zh": "台北市長選舉勝出者 — 蔣萬安"
@@ -883,8 +865,8 @@
    "question": "NATO x Russia military clash by...? — December 31",
    "slug": "nato-x-russia-military-clash-in-2025",
    "yes": 9.5,
-   "d1": -0.5,
-   "vol24h": 134788,
+   "d1": -2.0,
+   "vol24h": 128692,
    "end": "2027-01-03",
    "topic": "地緣政治",
    "zh": "北約與俄羅斯何時發生軍事衝突？— 12月31日"
@@ -894,27 +876,17 @@
    "slug": "another-fed-rate-hike-in-2026",
    "yes": 90.5,
    "d1": -5.9,
-   "vol24h": 114824,
+   "vol24h": 105828,
    "end": "2026-12-10",
    "topic": "Fed／利率",
    "zh": "2026 年聯準會還會再升息嗎？"
-  },
-  {
-   "question": "Will the Iranian regime fall before 2027?",
-   "slug": "will-the-iranian-regime-fall-by-the-end-of-2026",
-   "yes": 2.6,
-   "d1": 0.1,
-   "vol24h": 88706,
-   "end": "2027-01-01",
-   "topic": "地緣政治",
-   "zh": "伊朗政權会在 2027 年前倒台嗎？"
   },
   {
    "question": "Russia x Ukraine ceasefire agreement by...? — October 31, 2027",
    "slug": "russia-x-ukraine-ceasefire-agreement-by",
    "yes": 67.5,
    "d1": 1.5,
-   "vol24h": 87577,
+   "vol24h": 87341,
    "end": "2027-07-01",
    "topic": "地緣政治",
    "zh": "俄烏會在何時前達成停火協議？— 2027 年 10 月 31 日"
@@ -922,39 +894,49 @@
   {
    "question": "Which math problems will AI solve in 2026? — Riemann Hypothesis",
    "slug": "which-math-problems-will-ai-solve-in-2026",
-   "yes": 73.5,
-   "d1": 67.0,
-   "vol24h": 82079,
+   "yes": 77.5,
+   "d1": 71.0,
+   "vol24h": 86772,
    "end": "2027-01-01",
    "topic": "AI／科技",
    "zh": "AI會在2026年解決哪些數學問題？ — 黎曼猜想"
+  },
+  {
+   "question": "Will the Iranian regime fall before 2027?",
+   "slug": "will-the-iranian-regime-fall-by-the-end-of-2026",
+   "yes": 2.6,
+   "d1": 0.1,
+   "vol24h": 86373,
+   "end": "2027-01-01",
+   "topic": "地緣政治",
+   "zh": "伊朗政權会在 2027 年前倒台嗎？"
   },
   {
    "question": "Largest Company end of December 2026? — Apple",
    "slug": "largest-company-end-of-december-2026",
    "yes": 93.4,
    "d1": 0.2,
-   "vol24h": 80663,
+   "vol24h": 80438,
    "end": "2027-01-01",
    "topic": "經濟／通膨",
    "zh": "2026年12月底市值最大的公司？— 蘋果"
   },
   {
-   "question": "Fed decisions (Sep–Dec) — Hike–Pause–Hike",
-   "slug": "fed-decisions-sepdec",
-   "yes": 91.1,
-   "d1": -5.6,
-   "vol24h": 72871,
-   "end": "2026-12-09",
+   "question": "How many Fed rate cuts in 2026? — 0 (0 bps)",
+   "slug": "how-many-fed-rate-cuts-in-2026",
+   "yes": 98.3,
+   "d1": null,
+   "vol24h": 73246,
+   "end": "2027-01-01",
    "topic": "經濟／通膨",
-   "zh": "聯準會決策（9至12月） — 升息－暫停－升息"
+   "zh": "2026年聯準會降息幾次？— 0次（0基點）"
   },
   {
    "question": "Next Senate Majority Leader? — Chuck Schumer",
    "slug": "next-senate-majority-leader-485",
-   "yes": 93.5,
-   "d1": -1.0,
-   "vol24h": 61974,
+   "yes": 92.5,
+   "d1": -2.0,
+   "vol24h": 61825,
    "end": "2026-11-04",
    "topic": "美國期中選舉",
    "zh": "誰會是下一任參議院多數黨領袖？ — 查克·舒默"
@@ -962,32 +944,32 @@
   {
    "question": "Netanyahu out by...? — June 30, 2027",
    "slug": "netanyahu-out-before-2027",
-   "yes": 69.0,
-   "d1": 2.5,
-   "vol24h": 58561,
+   "yes": 69.5,
+   "d1": 3.0,
+   "vol24h": 58911,
    "end": "2027-01-01",
    "topic": "地緣政治",
    "zh": "納坦雅胡會在 2027年6月30日前下台嗎？"
-  },
-  {
-   "question": "Will China invade Taiwan by December 31, 2027?",
-   "slug": "will-china-invade-taiwan-by-december-31-2027",
-   "yes": 8.5,
-   "d1": 1.0,
-   "vol24h": 51106,
-   "end": "2028-01-01",
-   "topic": "台海／中國",
-   "zh": "中國會在 2027年12月31日以前武力犯台嗎？"
   },
   {
    "question": "Anthropic closes below IPO price ($83) by...? — March 31",
    "slug": "anthropic-closes-below-ipo-price-by",
    "yes": 87.4,
    "d1": null,
-   "vol24h": 48438,
+   "vol24h": 55736,
    "end": "2027-04-01",
    "topic": "AI／科技",
    "zh": "Anthropic 會在何時前收在 IPO 價格（$83）以下？— 3 月 31 日"
+  },
+  {
+   "question": "Will China invade Taiwan by December 31, 2027?",
+   "slug": "will-china-invade-taiwan-by-december-31-2027",
+   "yes": 8.5,
+   "d1": 1.0,
+   "vol24h": 51217,
+   "end": "2028-01-01",
+   "topic": "台海／中國",
+   "zh": "中國會在 2027年12月31日以前武力犯台嗎？"
   },
   {
    "question": "Will China blockade Taiwan in 2026?",
@@ -1004,7 +986,7 @@
    "slug": "hsinchu-city-mayor-election-winner-20260813135716400",
    "yes": 90.0,
    "d1": 0.5,
-   "vol24h": 12805,
+   "vol24h": 13347,
    "end": "2026-11-29",
    "topic": "台灣選舉",
    "zh": "新竹市長選舉贏家 — 高虹安"
@@ -1013,26 +995,16 @@
    "question": "New Taipei Mayor Election Winner — Su Chiao-hui",
    "slug": "new-taipei-mayor-election-winner-20260813125857200",
    "yes": 59.5,
-   "d1": 0.5,
+   "d1": 1.0,
    "vol24h": 11837,
    "end": "2026-11-29",
    "topic": "台灣選舉",
    "zh": "新北市長選舉贏家 — 蘇巧慧"
   },
   {
-   "question": "MI-06 House Election Margin of Victory — Democrat 45-50%",
-   "slug": "mi-06-house-margin-of-victory-2026",
-   "yes": 0.5,
-   "d1": -0.9,
-   "vol24h": 8008,
-   "end": "2026-11-04",
-   "topic": "美國期中選舉",
-   "zh": "密西根州第 6 選區眾議員選舉勝出差距 — 民主黨贏 45-50%"
-  },
-  {
    "question": "2026 Midterms: House Popular Vote Margin of Victory — Democrats 14-16%",
    "slug": "2026-midterms-house-popular-vote-margin-of-victory-224",
-   "yes": 91.9,
+   "yes": 92.0,
    "d1": -1.2,
    "vol24h": 7893,
    "end": "2026-11-04",
@@ -1040,25 +1012,35 @@
    "zh": "2026期中選舉：眾議院全國得票率差距 — 民主黨領先 14-16%"
   },
   {
-   "question": "South Africa Annual Inflation 2026 — 4.7-5.0%",
-   "slug": "south-africa-annual-inflation-2026",
-   "yes": 61.2,
-   "d1": 22.7,
-   "vol24h": 5654,
-   "end": "2027-01-21",
-   "topic": "經濟／通膨",
-   "zh": "2026年南非全年通膨率 — 4.7-5.0%"
+   "question": "Arkansas Senate Election Margin of Victory — Republican 10-15%",
+   "slug": "arkansas-senate-margin-of-victory-2026",
+   "yes": 53.8,
+   "d1": 2.1,
+   "vol24h": 5967,
+   "end": "2026-11-04",
+   "topic": "美國期中選舉",
+   "zh": "阿肯色州參議選戰勝出差距 — 共和黨贏 10-15%"
   },
   {
    "question": "How high will inflation get in 2026? — Above 4.5%",
    "slug": "how-high-will-inflation-get-in-2026",
-   "yes": 5.5,
-   "d1": 0.6,
+   "yes": 5.3,
+   "d1": 0.4,
    "vol24h": 5130,
    "end": "2027-02-01",
    "topic": "經濟／通膨",
    "zh": "2026年通膨率會升多高？ — 高於 4.5%"
+  },
+  {
+   "question": "South Africa Annual Inflation 2026 — 4.7-5.0%",
+   "slug": "south-africa-annual-inflation-2026",
+   "yes": 61.5,
+   "d1": 14.4,
+   "vol24h": 4978,
+   "end": "2027-01-21",
+   "topic": "經濟／通膨",
+   "zh": "2026年南非全年通膨率 — 4.7-5.0%"
   }
  ],
- "updatedAt": "2026-11-21T10:00:08Z"
+ "updatedAt": "2026-11-21T10:40:08Z"
 }
