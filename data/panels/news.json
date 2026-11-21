@@ -159,9 +159,9 @@
    "name": "廣告與代理商",
    "items": [
     {
-     "source": "ETtoday AI科技",
+     "source": "ETtoday新聞雲",
      "title": "CLICKFORCE獲OpenAI授權　成台灣ChatGPT廣告代理商",
-     "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBmcWFGSTcxWHE4cmNTQUFjSWZUSV8zOWdzcVdHMXItYnR6VldVVzRQT3hNcHRrQTRQV2VYOHBIYW9uMWw0MlNlcVI4TdIBSkFVX3lxTFBrZDB3eWdsc2taQjFNTW1XUjdiaTBCLWNaLW4tdnhLalI4R1AtSVM4SUF2ZWZ6cUJnb1JPNko2MUNtcEwyaHVKd1F3?oc=5",
+     "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9lNXZJMnFlbzBwSUlUODV3cTdNek5mcS16Yy12NHI0RmFmSTRkdG9uLW5NMnJ4eFo2NG1NQ0IzQl9QanJpbDJvaGhfc9IBS0FVX3lxTE9lNXZJMnFlbzBwSUlUODV3cTdNek5mcS16Yy12NHI0RmFmSTRkdG9uLW5NMnJ4eFo2NG1NQ0IzQl9QanJpbDJvaGhfcw?oc=5",
      "at": "2026-11-20T09:53:00Z",
      "kw": "\"廣告代理商\""
     },
@@ -279,7 +279,7 @@
     1,
     3,
     8,
-    48,
+    47,
     55,
     54,
     20
@@ -327,10 +327,10 @@
     }
    ],
    "daily7": [
-    3,
     0,
-    4,
-    5,
+    0,
+    1,
+    2,
     2,
     6,
     5
@@ -380,9 +380,9 @@
    "daily7": [
     2,
     7,
-    5,
-    7,
-    38,
+    6,
+    10,
+    39,
     49,
     34
    ],
@@ -891,6 +891,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-21T14:23:09Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-21T14:42:29Z"
 }
