@@ -76,15 +76,21 @@
  "intl": [
   {
    "source": "BBC",
-   "title": "Mexican drug lord on FBI's 10 most wanted list arrested in shoot-out",
-   "url": "https://www.bbc.co.uk/news/articles/ckz749ey0r75o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-21T21:05:29Z"
+   "title": "Fight over fossil fuels leaves COP31 climate talks in deadlock",
+   "url": "https://www.bbc.co.uk/news/articles/c6ly5w40eg07o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-21T22:19:43Z"
   },
   {
    "source": "BBC",
-   "title": "Fight over fossil fuels leaves COP31 climate talks in deadlock",
-   "url": "https://www.bbc.co.uk/news/articles/c6ly5w40eg07o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-21T19:33:49Z"
+   "title": "Lock of former US President George Washington's hair sells for $4,000",
+   "url": "https://www.bbc.co.uk/news/articles/cwe9k23dpz0do?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-21T22:01:19Z"
+  },
+  {
+   "source": "BBC",
+   "title": "Mexican drug lord on FBI's 10 most wanted list arrested in shoot-out",
+   "url": "https://www.bbc.co.uk/news/articles/ckz749ey0r75o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-21T21:05:29Z"
   },
   {
    "source": "BBC",
@@ -144,13 +150,6 @@
    "title": "Denmark accuses Russia of plotting to assassinate US-Ukrainian rapper",
    "url": "https://www.bbc.co.uk/news/articles/cmde1lj4yjxno?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-21T10:26:36Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "‘So what if there’s a hole? It hasn’t collapsed’: Kyiv residents unbothered by Russian att",
-   "url": "https://www.theguardian.com/world/2026/nov/21/kyiv-russian-attacks-bridges",
-   "at": "2026-11-21T05:00:50Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -633,7 +632,7 @@
    ],
    "daily7": [
     4,
-    11,
+    12,
     11,
     34,
     36,
@@ -806,34 +805,6 @@
     "hot": false
    },
    {
-    "term": "Ukrainian",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "BBC",
-     "Guardian"
-    ],
-    "sample": {
-     "title": "Denmark to expel Russian diplomat over alleged plot to kill ",
-     "url": "https://www.theguardian.com/world/2026/nov/20/denmark-russian-diplomat-us-ukrainian-rapper-attempted-killing"
-    },
-    "hot": false
-   },
-   {
-    "term": "Denmark",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "BBC",
-     "Guardian"
-    ],
-    "sample": {
-     "title": "Denmark to expel Russian diplomat over alleged plot to kill ",
-     "url": "https://www.theguardian.com/world/2026/nov/20/denmark-russian-diplomat-us-ukrainian-rapper-attempted-killing"
-    },
-    "hot": false
-   },
-   {
     "term": "ChatGPT",
     "n": 2,
     "src": 2,
@@ -874,11 +845,39 @@
      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5KTERiSXZnU1RMemxMOS14M0UxVnIzODM5UFR1VXduczNfUkdmRjhoZ3V5ZmktazdBQXZXa2E2LS1vUTZLM19MRzk0YVA1UQ?oc=5"
     },
     "hot": false
+   },
+   {
+    "term": "投資",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "iThome",
+     "中央社"
+    ],
+    "sample": {
+     "title": "宜蘭縣長選舉政見會　藍綠互質疑對方投資有爭議",
+     "url": "https://www.cna.com.tw/news/aipl/202611210227.aspx"
+    },
+    "hot": false
+   },
+   {
+    "term": "洋流",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "PTT",
+     "中央社"
+    ],
+    "sample": {
+     "title": "賴清德：洋流慧聚3意義　區域共榮帶領台灣進步發展",
+     "url": "https://www.cna.com.tw/news/aipl/202611210224.aspx"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-21T22:17:49Z"
+ "updatedAt": "2026-11-21T22:36:32Z"
 }
