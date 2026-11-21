@@ -2,34 +2,6 @@
  "label": "推文 ≥30",
  "items": [
   {
-   "board": "Gossiping",
-   "title": "[新聞] 藍委站台民眾黨　開罵「沈伯洋就是人渣」",
-   "push": 100,
-   "url": "https://www.ptt.cc/bbs/Gossiping/M.1795266201.A.8A9.html",
-   "date": "11/21"
-  },
-  {
-   "board": "HatePolitics",
-   "title": "[LIVE] 民眾黨決勝之夜蔣萬安柯文哲 直播討論區",
-   "push": 100,
-   "url": "https://www.ptt.cc/bbs/HatePolitics/M.1795252665.A.009.html",
-   "date": "11/21"
-  },
-  {
-   "board": "HatePolitics",
-   "title": "[LIVE] 蘇巧慧X沈伯洋 三重造勢 直播討論區",
-   "push": 100,
-   "url": "https://www.ptt.cc/bbs/HatePolitics/M.1795253033.A.410.html",
-   "date": "11/21"
-  },
-  {
-   "board": "Stock",
-   "title": "[閒聊] 2026/11/20 盤後閒聊",
-   "push": 100,
-   "url": "https://www.ptt.cc/bbs/Stock/M.1795154416.A.EEA.html",
-   "date": "11/20"
-  },
-  {
    "board": "Stock",
    "title": "[請益] 這次大跌體感有金融海嘯強嗎？",
    "push": 100,
@@ -59,16 +31,23 @@
   },
   {
    "board": "Stock",
-   "title": "[新聞] 非常時期 財政部督導公股銀行不抽銀根",
+   "title": "[閒聊] 2026/11/20 盤後閒聊",
    "push": 99,
-   "url": "https://www.ptt.cc/bbs/Stock/M.1795259269.A.156.html",
-   "date": "11/21"
+   "url": "https://www.ptt.cc/bbs/Stock/M.1795154416.A.EEA.html",
+   "date": "11/20"
   },
   {
    "board": "Stock",
    "title": "[請益] 為何要護盤  護盤的意義是什麼？",
-   "push": 98,
+   "push": 99,
    "url": "https://www.ptt.cc/bbs/Stock/M.1795254603.A.FFA.html",
+   "date": "11/21"
+  },
+  {
+   "board": "Stock",
+   "title": "[新聞] 非常時期 財政部督導公股銀行不抽銀根",
+   "push": 99,
+   "url": "https://www.ptt.cc/bbs/Stock/M.1795259269.A.156.html",
    "date": "11/21"
   },
   {
@@ -81,7 +60,7 @@
   {
    "board": "Stock",
    "title": "[新聞] 川普要黃仁勳「好好道歉」！再催輝達讓他",
-   "push": 84,
+   "push": 91,
    "url": "https://www.ptt.cc/bbs/Stock/M.1795261640.A.BF4.html",
    "date": "11/21"
   },
@@ -107,6 +86,13 @@
    "date": "11/20"
   },
   {
+   "board": "Stock",
+   "title": "Re: [請益] 這次大跌體感有金融海嘯強嗎？",
+   "push": 67,
+   "url": "https://www.ptt.cc/bbs/Stock/M.1795267939.A.BF0.html",
+   "date": "11/21"
+  },
+  {
    "board": "Tech_Job",
    "title": "[請益] 想在竹北成家立業 年收要多少",
    "push": 64,
@@ -119,6 +105,13 @@
    "push": 62,
    "url": "https://www.ptt.cc/bbs/car/M.1795064082.A.F7C.html",
    "date": "11/19"
+  },
+  {
+   "board": "Stock",
+   "title": "[新聞] 華爾街替黃仁勳標價「1兆美元」！輝達趕",
+   "push": 61,
+   "url": "https://www.ptt.cc/bbs/Stock/M.1795257610.A.8B3.html",
+   "date": "11/21"
   },
   {
    "board": "home-sale",
@@ -142,13 +135,6 @@
    "date": "11/21"
   },
   {
-   "board": "Stock",
-   "title": "[新聞] 華爾街替黃仁勳標價「1兆美元」！輝達趕",
-   "push": 56,
-   "url": "https://www.ptt.cc/bbs/Stock/M.1795257610.A.8B3.html",
-   "date": "11/21"
-  },
-  {
    "board": "car",
    "title": "[新聞] Ford Territory27年式95.9萬起上市!影音",
    "push": 56,
@@ -168,6 +154,20 @@
    "push": 53,
    "url": "https://www.ptt.cc/bbs/Lifeismoney/M.1795148379.A.C95.html",
    "date": "11/20"
+  },
+  {
+   "board": "Stock",
+   "title": "[新聞] 救台股！國安基金：跨部會維護股市穩定 請投資人保",
+   "push": 49,
+   "url": "https://www.ptt.cc/bbs/Stock/M.1795255044.A.C3A.html",
+   "date": "11/21"
+  },
+  {
+   "board": "Lifeismoney",
+   "title": "[情報] 2026年全台捐血贈品",
+   "push": 48,
+   "url": "https://www.ptt.cc/bbs/Lifeismoney/M.1767366026.A.B74.html",
+   "date": "1/02"
   }
  ],
  "boards": [
@@ -175,14 +175,13 @@
    "board": "Gossiping",
    "zh": "八卦",
    "facet": "大眾",
-   "n": 25,
-   "today": 24,
-   "heat": 223,
-   "boom": 1,
-   "boo": 1,
-   "mood": 0.72,
+   "n": 39,
+   "today": 38,
+   "heat": 158,
+   "boom": 0,
+   "boo": 0,
+   "mood": 0.64,
    "spark": [
-    47,
     193,
     92,
     58,
@@ -229,30 +228,22 @@
     200,
     168,
     192,
-    223
+    223,
+    158
    ],
-   "top": [
-    {
-     "board": "Gossiping",
-     "title": "[新聞] 藍委站台民眾黨　開罵「沈伯洋就是人渣」",
-     "push": 100,
-     "url": "https://www.ptt.cc/bbs/Gossiping/M.1795266201.A.8A9.html",
-     "date": "11/21"
-    }
-   ]
+   "top": []
   },
   {
    "board": "HatePolitics",
    "zh": "政黑",
    "facet": "政治",
-   "n": 30,
-   "today": 30,
-   "heat": 323,
-   "boom": 2,
+   "n": 25,
+   "today": 25,
+   "heat": 110,
+   "boom": 0,
    "boo": 0,
-   "mood": 0.77,
+   "mood": 0.76,
    "spark": [
-    160,
     246,
     234,
     163,
@@ -299,37 +290,22 @@
     217,
     319,
     545,
-    323
+    323,
+    110
    ],
-   "top": [
-    {
-     "board": "HatePolitics",
-     "title": "[LIVE] 民眾黨決勝之夜蔣萬安柯文哲 直播討論區",
-     "push": 100,
-     "url": "https://www.ptt.cc/bbs/HatePolitics/M.1795252665.A.009.html",
-     "date": "11/21"
-    },
-    {
-     "board": "HatePolitics",
-     "title": "[LIVE] 蘇巧慧X沈伯洋 三重造勢 直播討論區",
-     "push": 100,
-     "url": "https://www.ptt.cc/bbs/HatePolitics/M.1795253033.A.410.html",
-     "date": "11/21"
-    }
-   ]
+   "top": []
   },
   {
    "board": "Stock",
    "zh": "股板",
    "facet": "市場",
-   "n": 27,
-   "today": 26,
-   "heat": 1000,
-   "boom": 2,
+   "n": 31,
+   "today": 30,
+   "heat": 1166,
+   "boom": 1,
    "boo": 0,
-   "mood": 0.96,
+   "mood": 0.97,
    "spark": [
-    883,
     1010,
     1176,
     1219,
@@ -376,16 +352,10 @@
     555,
     819,
     837,
-    1000
+    1000,
+    1166
    ],
    "top": [
-    {
-     "board": "Stock",
-     "title": "[閒聊] 2026/11/20 盤後閒聊",
-     "push": 100,
-     "url": "https://www.ptt.cc/bbs/Stock/M.1795154416.A.EEA.html",
-     "date": "11/20"
-    },
     {
      "board": "Stock",
      "title": "[請益] 這次大跌體感有金融海嘯強嗎？",
@@ -399,6 +369,13 @@
      "push": 99,
      "url": "https://www.ptt.cc/bbs/Stock/M.1795263951.A.466.html",
      "date": "11/21"
+    },
+    {
+     "board": "Stock",
+     "title": "[閒聊] 2026/11/20 盤後閒聊",
+     "push": 99,
+     "url": "https://www.ptt.cc/bbs/Stock/M.1795154416.A.EEA.html",
+     "date": "11/20"
     }
    ]
   },
@@ -408,12 +385,11 @@
    "facet": "生活",
    "n": 28,
    "today": 1,
-   "heat": 164,
+   "heat": 165,
    "boom": 0,
    "boo": 0,
    "mood": 0.86,
    "spark": [
-    103,
     103,
     103,
     103,
@@ -460,7 +436,8 @@
     154,
     155,
     162,
-    164
+    164,
+    165
    ],
    "top": [
     {
@@ -478,12 +455,11 @@
    "facet": "消費",
    "n": 40,
    "today": 6,
-   "heat": 1031,
+   "heat": 1051,
    "boom": 2,
    "boo": 0,
    "mood": 0.93,
    "spark": [
-    1280,
     1293,
     1304,
     1305,
@@ -530,7 +506,8 @@
     989,
     993,
     1020,
-    1031
+    1031,
+    1051
    ],
    "top": [
     {
@@ -560,14 +537,13 @@
    "board": "home-sale",
    "zh": "房產",
    "facet": "消費",
-   "n": 34,
-   "today": 19,
-   "heat": 514,
+   "n": 37,
+   "today": 22,
+   "heat": 522,
    "boom": 0,
    "boo": 0,
-   "mood": 0.79,
+   "mood": 0.81,
    "spark": [
-    236,
     253,
     270,
     277,
@@ -614,7 +590,8 @@
     463,
     482,
     493,
-    514
+    514,
+    522
    ],
    "top": [
     {
@@ -646,12 +623,11 @@
    "facet": "消費",
    "n": 29,
    "today": 7,
-   "heat": 726,
+   "heat": 685,
    "boom": 0,
    "boo": 0,
    "mood": 0.93,
    "spark": [
-    918,
     934,
     942,
     950,
@@ -698,7 +674,8 @@
     714,
     714,
     722,
-    726
+    726,
+    685
    ],
    "top": [
     {
@@ -781,7 +758,7 @@
     133,
     133,
     133,
-    133,
+    134,
     134
    ],
    "top": []
@@ -792,12 +769,11 @@
    "facet": "職場",
    "n": 33,
    "today": 3,
-   "heat": 462,
+   "heat": 466,
    "boom": 0,
    "boo": 0,
    "mood": 0.94,
    "spark": [
-    369,
     369,
     368,
     368,
@@ -844,7 +820,8 @@
     451,
     457,
     456,
-    462
+    462,
+    466
    ],
    "top": [
     {
@@ -1000,12 +977,11 @@
    "facet": "文化",
    "n": 36,
    "today": 12,
-   "heat": 218,
+   "heat": 220,
    "boom": 0,
    "boo": 3,
-   "mood": 0.58,
+   "mood": 0.64,
    "spark": [
-    328,
     339,
     350,
     353,
@@ -1052,7 +1028,8 @@
     201,
     201,
     216,
-    218
+    218,
+    220
    ],
    "top": [
     {
@@ -1066,5 +1043,5 @@
   }
  ],
  "breaking": [],
- "updatedAt": "2026-11-21T13:42:44Z"
+ "updatedAt": "2026-11-21T14:23:09Z"
 }
