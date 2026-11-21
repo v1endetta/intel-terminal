@@ -278,7 +278,7 @@
     1,
     5,
     10,
-    47,
+    49,
     53,
     57,
     11
@@ -326,10 +326,10 @@
     }
    ],
    "daily7": [
-    3,
     0,
-    4,
-    5,
+    0,
+    1,
+    2,
     2,
     5,
     2
@@ -380,7 +380,7 @@
     1,
     2,
     1,
-    6,
+    7,
     33,
     48,
     28
@@ -766,22 +766,6 @@
     "hot": true
    },
    {
-    "term": "台積電",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "CMoney投資網誌",
-     "Facebook",
-     "Yahoo新聞",
-     "流動日報"
-    ],
-    "sample": {
-     "title": "【美股開盤「AI股續跌」！台積電ADR慘崩4.50％】 （#大表哥）",
-     "url": "https://news.google.com/rss/articles/CBMipwJBVV95cUxQdF9waXptdDlRWDg1bjlzcHhWNjkyQWFNX0dweldUNlM5ZTdtMnlIZE9FZ2lxc2lvSWZXUHI1MWVtX2RnOVRxRlZYaDJZbXlWaXV4TVpvRzBzeFhkRjBzVWE2Z2NIQ2FzYnpPcVBmb1l4RVhJS2hfMDU5OUxKNkgwS01yWUdWTUNoSnRpZy1LMTNPcGMydFVUSUdHQWJBVmMzRkJseVp1b3NzS0FrTEx3VlRyb09aM05mcENUWExqLUdGb3MzbHJjVDd3bTdoX3htaXdXUWtaWlhxS2ZmVnFvYmRVYk5OemZTMEFRSVNhQXd0cGhId0pla29HQzVPelZHbnU2UW1GRXZDR2hKajh6NDFhTkpTeDJWUWIwOFp0dmt0bF82Wmhj?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "CrowdStrike",
     "n": 4,
     "src": 3,
@@ -827,13 +811,13 @@
     "hot": true
    },
    {
-    "term": "ADR",
+    "term": "台積電",
     "n": 3,
     "src": 3,
     "sources": [
      "CMoney投資網誌",
      "Facebook",
-     "Yahoo新聞"
+     "流動日報"
     ],
     "sample": {
      "title": "【美股開盤「AI股續跌」！台積電ADR慘崩4.50％】 （#大表哥）",
@@ -884,11 +868,25 @@
      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPV25yZ3VSMV85ZlpHejdjSWsyVE52SmRCQkhfT2hUY1dmLVRzb1FfWVVVcUxObmdRLTZUM3pDODVMbHRJd29xT2JWWWVQTkNZd0FrMVRWSTFHVlpjT2trUjlOS1BHblFPOTRNV2R4OE5xS1pkUml4ZTF2b2ZHRldXdFZ3?oc=5"
     },
     "hot": false
+   },
+   {
+    "term": "French",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "BBC",
+     "Guardian"
+    ],
+    "sample": {
+     "title": "French police officers sentenced for beating of music produc",
+     "url": "https://www.bbc.co.uk/news/articles/ck9d7e9wvvweo?at_medium=RSS&at_campaign=rss"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-21T04:20:51Z"
+ "updatedAt": "2026-11-21T04:42:47Z"
 }
