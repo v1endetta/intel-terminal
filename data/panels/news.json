@@ -2,6 +2,12 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "AI股賣壓擴散美股重挫　標普500與道瓊陷入修正",
+   "url": "https://www.cna.com.tw/news/afe/202611210047.aspx",
+   "at": "2026-11-21T02:33:33Z"
+  },
+  {
+   "source": "中央社",
    "title": "智慧製造研發計畫促投資逾154億　經部助攻高階工具機自主化",
    "url": "https://www.cna.com.tw/news/afe/202611210042.aspx",
    "at": "2026-11-21T01:54:22Z"
@@ -41,12 +47,6 @@
    "title": "義大利參院副議長、跨黨派議員　挺台參與國際刑警組織",
    "url": "https://www.cna.com.tw/news/aipl/202611210023.aspx",
    "at": "2026-11-20T23:35:39Z"
-  },
-  {
-   "source": "中央社",
-   "title": "輝達重挫14%連7週收黑　創金融危機後最長紀錄",
-   "url": "https://www.cna.com.tw/news/afe/202611210020.aspx",
-   "at": "2026-11-20T22:46:30Z"
   },
   {
    "source": "公視",
@@ -278,9 +278,9 @@
     1,
     5,
     11,
-    49,
+    48,
     52,
-    58,
+    57,
     10
    ],
    "days7": [
@@ -312,9 +312,9 @@
     },
     {
      "source": "Techritual",
-     "title": "Ollama – 離線運行的本地 LLM 解決方案",
-     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFB6OXZsU09PWlJLaF9wc3BDQWJMOFZ2RHpaeE9LcllmanBZLWNDYjIyNmF2aEo0N3hzX3VDOVc2YVB2WlBmSTZBN2ZycFZ5dWwxZ2QxRjVFMUs?oc=5",
-     "at": "2026-11-20T18:00:00Z",
+     "title": "Ollama – 本地化 AI 模型實現私密聊天",
+     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1aQndTajRXc2lRZ2RFYUg0NGY0UTljcnlYRnZLY21ZdmNrNjZ2ektCaktVM0o3Ml9KVEF5VzhHQjRWUHFPRV9iZnhKMTJPMkhWUXBrTXdCUWw?oc=5",
+     "at": "2026-11-21T02:00:00Z",
      "kw": "開源模型 OR Ollama OR 本地部署"
     },
     {
@@ -326,13 +326,13 @@
     }
    ],
    "daily7": [
+    3,
     0,
-    0,
-    1,
-    2,
+    4,
+    5,
     2,
     5,
-    1
+    2
    ],
    "days7": [
     "2026-11-15",
@@ -380,10 +380,10 @@
     1,
     2,
     1,
-    9,
-    35,
-    49,
-    24
+    6,
+    33,
+    48,
+    26
    ],
    "days7": [
     "2026-11-15",
@@ -430,9 +430,9 @@
    "daily7": [
     2,
     11,
-    27,
-    20,
-    25,
+    24,
+    19,
+    24,
     21,
     11
    ],
@@ -653,8 +653,8 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 3.013,
-   "vol_ratio": 1.41,
+   "vol": 3.13,
+   "vol_ratio": 1.49,
    "tone": 0.81,
    "tone_at": "2026-11-21T02:43:02Z",
    "spark": [
@@ -671,9 +671,9 @@
     0.585,
     0.327,
     2.754,
-    3.013
+    3.13
    ],
-   "at": "2026-11-21T03:04:23Z"
+   "at": "2026-11-21T03:26:43Z"
   },
   "wiki": {
    "zh": [
@@ -749,22 +749,6 @@
     "hot": true
    },
    {
-    "term": "台積電",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "Facebook",
-     "PTT",
-     "流動日報",
-     "自由財經"
-    ],
-    "sample": {
-     "title": "AI拋售未止血！費半、台積電ADR跌逾4％ 那斯達克今年漲幅縮至1％",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBGVjBkVTlOTVJTd0RQc2lQRVZPa2tEZVZUVUJVZFhuNG16WU1MMVhBVzhrU3pLZWZ1bkdBR0V0bTYyRFA0YllfYXF6TEJzeGs4QWMwM0Q5dFA0TS1CS0hR0gFkQVVfeXFMTkpTaHB0T1pFdG9qLVJzRnpkRzdZTjFHcHpNY2FfdEVMSU5KTUhMUFJsQjBmNjI3OFFtYm9faWhRUHRvSE8tOURlNUxuRDBHNlZfRk4xSUFiX1Y4RjRLbFVLZUNZUg?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "資安",
     "n": 4,
     "src": 3,
@@ -781,17 +765,17 @@
     "hot": true
    },
    {
-    "term": "輝達",
+    "term": "台積電",
     "n": 3,
     "src": 3,
     "sources": [
+     "Facebook",
      "PTT",
-     "中央社",
-     "鉅亨網"
+     "流動日報"
     ],
     "sample": {
-     "title": "輝達重挫14%連7週收黑　創金融危機後最長紀錄",
-     "url": "https://www.cna.com.tw/news/afe/202611210020.aspx"
+     "title": "【美股開盤「AI股續跌」！台積電ADR慘崩4.50％】 （#大表哥）",
+     "url": "https://news.google.com/rss/articles/CBMipwJBVV95cUxQdF9waXptdDlRWDg1bjlzcHhWNjkyQWFNX0dweldUNlM5ZTdtMnlIZE9FZ2lxc2lvSWZXUHI1MWVtX2RnOVRxRlZYaDJZbXlWaXV4TVpvRzBzeFhkRjBzVWE2Z2NIQ2FzYnpPcVBmb1l4RVhJS2hfMDU5OUxKNkgwS01yWUdWTUNoSnRpZy1LMTNPcGMydFVUSUdHQWJBVmMzRkJseVp1b3NzS0FrTEx3VlRyb09aM05mcENUWExqLUdGb3MzbHJjVDd3bTdoX3htaXdXUWtaWlhxS2ZmVnFvYmRVYk5OemZTMEFRSVNhQXd0cGhId0pla29HQzVPelZHbnU2UW1GRXZDR2hKajh6NDFhTkpTeDJWUWIwOFp0dmt0bF82Wmhj?oc=5"
     },
     "hot": true
    },
@@ -879,9 +863,23 @@
      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPTmVDYTZUREJqSXNfUTdZTVBQX1FFcElHVW10aW9zVUstVGNiX2ZFalZpckFkZDVFeVg3YllaeUI5M1RfbGd1QXJQQTF6Q2NUZFZZSmpyTTRCZUluQXQyRTIzVmREeklBYlV5anhnT090bnZMWXBydXBCbnk5WnpndFQ1SGNaY0wzYjhkMm1rWUxmMEhJT2hsSWhuU2ZNOUZnS2V4elFKSlVGZFFuRDlYOEdfdzgydHdiVjU1eWx3SjZpenZydUtn?oc=5"
     },
     "hot": false
+   },
+   {
+    "term": "股重挫",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "PTT",
+     "中央社"
+    ],
+    "sample": {
+     "title": "AI股賣壓擴散美股重挫　標普500與道瓊陷入修正",
+     "url": "https://www.cna.com.tw/news/afe/202611210047.aspx"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [],
- "updatedAt": "2026-11-21T03:04:23Z"
+ "updatedAt": "2026-11-21T03:26:43Z"
 }
