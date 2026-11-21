@@ -1,6 +1,6 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的目光聚焦於電影票房榜首作、金馬盛事與演唱會預告，同時社群熱議冬日穿搭單品與速食優惠活動。",
+ "line": "這幾天台灣消費者聚焦於電影票房強檔、金馬獎頒獎盛事，以及串流音樂與熱門App的追看與使用。",
  "topics": [
   {
    "name": "五月天",
@@ -20,7 +20,7 @@
    ],
    "talk": [],
    "y": 1.0,
-   "news7": 33,
+   "news7": 34,
    "news_p7": 0,
    "news_capped": false,
    "social": {
@@ -42,11 +42,11 @@
     {
      "src": "App 下載",
      "name": "多鄰國 - 極速學外語",
-     "how": "爬升 52 名到第 25"
+     "how": "爬升 54 名到第 23"
     }
    ],
    "talk": [],
-   "y": 0.97,
+   "y": 0.99,
    "news7": 15,
    "news_p7": 5,
    "news_capped": false,
@@ -74,52 +74,45 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 6,
-   "news_p7": 34,
+   "news7": 7,
+   "news_p7": 38,
    "news_capped": false,
    "social": {
     "Threads": 165.2,
     "Dcard": 1
    },
    "mentions": {},
-   "x": 0.8,
+   "x": 0.83,
    "talk_trend": "down",
    "days": 5,
    "first": "2026-11-17",
    "quad": "hit"
   },
   {
-   "name": "麥當勞",
-   "q": "麥當勞 APP 買一送一",
-   "cat": "品牌商品",
+   "name": "ChatGPT",
+   "q": "ChatGPT",
+   "cat": "App",
    "do": [
     {
-     "src": "App 下載",
-     "name": "麥當勞APP",
-     "how": "第 3 名"
+     "src": "App 營收",
+     "name": "ChatGPT",
+     "how": "第 1 名"
     }
    ],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[情報] 麥當勞APP領券十塊雞塊買一送一"
-    }
-   ],
-   "y": 0.65,
-   "news7": 7,
-   "news_p7": 17,
-   "news_capped": false,
+   "talk": [],
+   "y": 0.75,
+   "news7": 76,
+   "news_p7": 24,
+   "news_capped": true,
    "social": {
-    "Threads": 52.4,
+    "Threads": 102.6,
     "Dcard": 30
    },
-   "mentions": {
-    "PTT": 1
-   },
-   "x": 0.85,
-   "talk_trend": "down",
-   "days": 3,
-   "first": "2026-11-05",
+   "mentions": {},
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 7,
+   "first": "2026-11-14",
    "quad": "hit"
   },
   {
@@ -135,41 +128,49 @@
    ],
    "talk": [],
    "y": 0.75,
-   "news7": 21,
-   "news_p7": 15,
+   "news7": 20,
+   "news_p7": 17,
    "news_capped": false,
    "mentions": {},
-   "x": 0.67,
+   "x": 0.66,
    "talk_trend": "flat",
    "days": 4,
    "first": "2026-11-12",
    "quad": "hit"
   },
   {
-   "name": "ChatGPT",
-   "q": "ChatGPT App",
-   "cat": "App",
+   "name": "麥當勞",
+   "q": "麥當勞 雞塊 買一送一",
+   "cat": "品牌商品",
    "do": [
     {
-     "src": "App 營收",
-     "name": "ChatGPT",
-     "how": "第 1 名"
+     "src": "App 下載",
+     "name": "麥當勞APP",
+     "how": "在榜上第 4 名（沒有在爬）"
     }
    ],
-   "talk": [],
-   "y": 0.75,
-   "news7": 2,
-   "news_p7": 7,
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] 麥當勞APP領券十塊雞塊買一送一"
+    }
+   ],
+   "y": 0.5,
+   "static": true,
+   "news7": 7,
+   "news_p7": 16,
    "news_capped": false,
    "social": {
-    "Threads": 102.6,
+    "Threads": 52.4,
     "Dcard": 30
    },
-   "mentions": {},
-   "x": 0.64,
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 0.85,
    "talk_trend": "down",
-   "days": 7,
-   "first": "2026-11-14",
+   "days": 3,
+   "first": "2026-11-05",
    "quad": "hit"
   },
   {
@@ -186,7 +187,7 @@
    "talk": [],
    "y": 0.79,
    "news7": 4,
-   "news_p7": 14,
+   "news_p7": 13,
    "news_capped": false,
    "social": {
     "Threads": 12.7
@@ -199,31 +200,130 @@
    "quad": "hit"
   },
   {
-   "name": "蔡依林",
-   "q": "蔡依林 大巨蛋 演唱會",
-   "cat": "人物",
-   "do": [],
-   "talk": [
+   "name": "Netflix",
+   "q": "Netflix 排行",
+   "cat": "影視",
+   "do": [
     {
-     "src": "新聞焦點",
-     "title": "蔡依林2027重返大巨蛋開唱！官方公布時間票價 一口氣唱6場全面實名制"
+     "src": "Netflix 影集",
+     "name": "Miracles of the ER",
+     "how": "上榜第 1 週、第 1 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Sunshine Through the Rain",
+     "how": "上榜第 2 週、第 5 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "One Year to Live, Buy a Man",
+     "how": "上榜第 2 週、第 1 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "Salli",
+     "how": "上榜第 2 週、第 2 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "Possible Love",
+     "how": "上榜第 2 週、第 3 名"
     }
    ],
-   "y": 0.0,
-   "news7": 73,
-   "news_p7": 0,
+   "talk": [],
+   "y": 1.0,
+   "news7": 8,
+   "news_p7": 8,
    "news_capped": false,
-   "social": {
-    "Threads": 44.1
-   },
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 1.0,
-   "talk_trend": "up",
+   "mentions": {},
+   "x": 0.48,
+   "talk_trend": "flat",
    "days": 2,
-   "first": "2026-11-20",
-   "quad": "talk"
+   "first": "2026-11-09",
+   "quad": "new"
+  },
+  {
+   "name": "Spotify",
+   "q": "Spotify 排行",
+   "cat": "App",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "ILLIT - 체포하겠어",
+     "how": "上榜 7 天、第 4 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "BTS - SWIM",
+     "how": "升 27 名到第 8"
+    },
+    {
+     "src": "Spotify",
+     "name": "Crowd Lu - 幾分之幾 - 電影主題曲",
+     "how": "升 16 名到第 12"
+    },
+    {
+     "src": "Spotify",
+     "name": "A-Mei Chang - 連名帶姓",
+     "how": "升 23 名到第 14"
+    },
+    {
+     "src": "Spotify",
+     "name": "EggPlantEgg - 閣愛妳一擺",
+     "how": "升 7 名到第 16"
+    }
+   ],
+   "talk": [],
+   "y": 0.9,
+   "news7": 1,
+   "news_p7": 5,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.15,
+   "talk_trend": "down",
+   "days": 3,
+   "first": "2026-11-09",
+   "quad": "new"
+  },
+  {
+   "name": "Dior",
+   "q": "Dior 大穎",
+   "cat": "品牌商品",
+   "do": [
+    {
+     "src": "KKBOX",
+     "name": "DIOR 大穎 - 欲落未落",
+     "how": "第 2 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.7,
+   "news7": 0,
+   "news_p7": 1,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.0,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-12",
+   "quad": "new"
+  },
+  {
+   "name": "Disney+",
+   "q": "Disney+",
+   "cat": "影視",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 82,
+   "news_p7": 10,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.96,
+   "talk_trend": "up",
+   "days": 5,
+   "first": "2026-11-13",
+   "quad": "hype"
   },
   {
    "name": "金馬獎",
@@ -241,9 +341,9 @@
     }
    ],
    "y": 0.0,
-   "news7": 39,
-   "news_p7": 16,
-   "news_capped": false,
+   "news7": 53,
+   "news_p7": 47,
+   "news_capped": true,
    "social": {
     "Threads": 240
    },
@@ -252,7 +352,7 @@
     "時尚媒體": 1
    },
    "x": 1.0,
-   "talk_trend": "up",
+   "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-20",
    "quad": "talk"
@@ -285,157 +385,92 @@
    "quad": "talk"
   },
   {
-   "name": "AAA頒獎典禮",
-   "q": "2026 MAMA 直播",
-   "cat": "活動",
+   "name": "黃仁勳",
+   "q": "黃仁勳 輝達",
+   "cat": "人物",
    "do": [],
    "talk": [
     {
      "src": "新聞焦點",
-     "title": "2026 MAMA直播線上看！出席陣容、表演卡司、入圍名單懶人包：Bigbang領軍不能錯過"
+     "title": "輝達晶片風暴延燒華府！彭斯痛批黃仁勳「不該回鍋」　點名美商務部長需下台負責"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "貝萊德霍爾：黃金是AI時代的分散投資選擇"
     }
    ],
    "y": 0.0,
-   "news7": 40,
-   "news_p7": 2,
-   "news_capped": false,
+   "news7": 73,
+   "news_p7": 27,
+   "news_capped": true,
    "mentions": {
-    "新聞焦點": 1
+    "新聞焦點": 2
    },
-   "x": 0.91,
+   "x": 1.0,
    "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-10",
+   "days": 6,
+   "first": "2026-11-12",
    "quad": "talk"
   },
   {
-   "name": "Sony MDR-3R",
-   "q": "Sony MDR-3R",
-   "cat": "品牌商品",
+   "name": "蔡依林",
+   "q": "蔡依林 大巨蛋",
+   "cat": "人物",
    "do": [],
    "talk": [
     {
      "src": "Mobile01",
-     "title": "Sony MDR-3R 搶先試聽｜橫跨 47 年的聲音傳承，重新感受有線聆聽的純粹魅力！"
+     "title": "手殘黨不想搶實名制了！台哥大續約5G 1599直接送蔡依林大巨蛋6990門票兩張"
     }
    ],
    "y": 0.0,
-   "news7": 22,
-   "news_p7": 17,
+   "news7": 79,
+   "news_p7": 0,
    "news_capped": false,
+   "social": {
+    "Threads": 44.1
+   },
    "mentions": {
     "Mobile01": 1
    },
-   "x": 0.78,
-   "talk_trend": "flat",
+   "x": 1.0,
+   "talk_trend": "up",
    "days": 2,
    "first": "2026-11-20",
    "quad": "talk"
   },
   {
-   "name": "亞洲手創暨生活展",
-   "q": "森之市 珈琲與花物語",
-   "cat": "活動",
-   "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "2026年11月週末靈感清單｜北中南聖誕造景登場、森之市《珈琲與花物語・南迴篇》台南開催、台中國家歌劇院「上下游 風的餐桌」風味市集……必逛市集、手作體驗一次安排"
-    }
-   ],
-   "y": 0.0,
-   "news7": 9,
-   "news_p7": 1,
-   "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.6,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-14",
-   "quad": "talk"
-  },
-  {
-   "name": "UNIQLO TW",
-   "q": "UNIQLO 發熱衣",
+   "name": "小米",
+   "q": "小米遊戲平板 降價",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
-     "src": "時尚媒體",
-     "title": "【Threads上紅什麼】Uniqlo捲邊發熱衣、亨利領發熱衣內搭超好看！今冬3款Uniqlo發熱衣新品推薦"
+     "src": "新聞焦點",
+     "title": "8.8吋小米遊戲平板降價更便宜！Xiaomi Pad Mini通路最低價格一次看(2026.11)"
     }
    ],
    "y": 0.0,
    "news7": 4,
-   "news_p7": 5,
-   "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.45,
-   "talk_trend": "flat",
-   "days": 3,
-   "first": "2026-11-13",
-   "quad": "low"
-  },
-  {
-   "name": "拉亞漢堡",
-   "q": "拉亞漢堡 真三國無雙",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "拉亞漢堡×《真・三國無雙》寵物頭套開箱｜三款造型出陣「喵牢關」，誰最神似本尊？"
-    }
-   ],
-   "y": 0.0,
-   "news7": 3,
-   "news_p7": 6,
-   "news_capped": false,
-   "mentions": {
-    "Mobile01": 1
-   },
-   "x": 0.4,
-   "talk_trend": "down",
-   "days": 2,
-   "first": "2026-11-20",
-   "quad": "low"
-  },
-  {
-   "name": "Panasonic",
-   "q": "Panasonic 髮肌護理女王機",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "Panasonic nanocare ULTIMATE 髮肌護理女王機 EH-NC80 ｜新世代高滲透奈米水離子、智慧溫控科技"
-    }
-   ],
-   "y": 0.0,
-   "news7": 0,
    "news_p7": 0,
    "news_capped": false,
    "mentions": {
-    "Mobile01": 1
+    "新聞焦點": 1
    },
-   "x": 0.1,
-   "talk_trend": "flat",
+   "x": 0.45,
+   "talk_trend": "up",
    "days": 2,
-   "first": "2026-11-20",
+   "first": "2026-11-10",
    "quad": "low"
   }
  ],
  "quads": {
   "quiet": 0,
   "hit": 7,
-  "new": 0,
-  "hype": 0,
-  "talk": 6,
-  "low": 3
+  "new": 3,
+  "hype": 1,
+  "talk": 4,
+  "low": 1
  },
  "src_do": [
   "App 下載",
@@ -461,5 +496,5 @@
  "hist_days": 19,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-20T18:57:26Z"
+ "updatedAt": "2026-11-21T00:59:13Z"
 }
