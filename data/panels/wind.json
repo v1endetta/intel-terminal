@@ -1,39 +1,7 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的注意力高度集中在金馬獎頒獎典禮、熱門電影票房、影音串流話題以及保健生活新知上。",
+ "line": "這幾天消費者的注意力高度集中在金馬獎頒獎典禮盛況、熱門電影票房與串流影音話題上。",
  "topics": [
-  {
-   "name": "ChatGPT",
-   "q": "ChatGPT",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 營收",
-     "name": "Google Gemini",
-     "how": "爬升 55 名到第 7"
-    },
-    {
-     "src": "App 營收",
-     "name": "ChatGPT",
-     "how": "第 1 名"
-    }
-   ],
-   "talk": [],
-   "y": 1.0,
-   "news7": 79,
-   "news_p7": 21,
-   "news_capped": true,
-   "social": {
-    "Threads": 72,
-    "Dcard": 30
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 7,
-   "first": "2026-11-14",
-   "quad": "hit"
-  },
   {
    "name": "Netflix",
    "q": "Netflix",
@@ -67,11 +35,12 @@
    ],
    "talk": [],
    "y": 1.0,
-   "news7": 76,
-   "news_p7": 24,
+   "news7": 77,
+   "news_p7": 23,
    "news_capped": true,
    "social": {
-    "Threads": 5.6
+    "Threads": 96,
+    "Dcard": 30
    },
    "mentions": {},
    "x": 1.0,
@@ -81,8 +50,58 @@
    "quad": "hit"
   },
   {
+   "name": "金馬獎",
+   "q": "金馬獎",
+   "cat": "活動",
+   "do": [
+    {
+     "src": "Netflix 電影",
+     "name": "Salli",
+     "how": "上榜第 2 週、第 2 名"
+    }
+   ],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "金馬獎5大亮點一次看李安奉俊昊攜手頒獎、怪物新人吸睛| 娛樂"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "金馬／紅毯10美出爐！舒華首登金馬自帶仙氣 舒淇透視薄紗超辣"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "何曼希首登金馬紅毯　橘裙配570萬元珠寶、典禮換黑西裝"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "2026金馬獎／翁倩玉奪女配角獎、《我們不是什麼》江𤒹生摘男配角！得獎名單、直播平台、紅毯星光一次看（不斷更新）"
+    },
+    {
+     "src": "時尚媒體",
+     "title": "2026金馬獎得獎名單一次看！金馬63完整名單（不斷更新）"
+    }
+   ],
+   "y": 0.95,
+   "news7": 91,
+   "news_p7": 9,
+   "news_capped": true,
+   "social": {
+    "Threads": 32.4
+   },
+   "mentions": {
+    "新聞焦點": 4,
+    "時尚媒體": 13
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 3,
+   "first": "2026-11-20",
+   "quad": "hit"
+  },
+  {
    "name": "哥吉拉-0.0",
-   "q": "哥吉拉-0.0",
+   "q": "哥吉拉 0.0",
    "cat": "影視",
    "do": [
     {
@@ -93,11 +112,11 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 19,
-   "news_p7": 45,
+   "news7": 20,
+   "news_p7": 43,
    "news_capped": false,
    "social": {
-    "Threads": 96,
+    "Threads": 72,
     "Dcard": 1
    },
    "mentions": {},
@@ -105,38 +124,6 @@
    "talk_trend": "down",
    "days": 6,
    "first": "2026-11-17",
-   "quad": "hit"
-  },
-  {
-   "name": "五月天",
-   "q": "五月天 阿信",
-   "cat": "音樂",
-   "do": [
-    {
-     "src": "KKBOX",
-     "name": "五月天 阿信 (Ashin) - 棠棣賦 - 電視劇《兩京十五日》主題曲/片頭曲",
-     "how": "第 3 名"
-    },
-    {
-     "src": "YouTube 熱門",
-     "name": "五月天阿信 Ashin [ 棠棣賦 Blood Beyond Blood ] Official Music Video｜",
-     "how": "7 天內上架、發燒第 5"
-    }
-   ],
-   "talk": [],
-   "y": 0.77,
-   "news7": 40,
-   "news_p7": 2,
-   "news_capped": false,
-   "social": {
-    "Threads": 226.3,
-    "Dcard": 5
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-20",
    "quad": "hit"
   },
   {
@@ -172,86 +159,77 @@
    ],
    "talk": [],
    "y": 0.79,
-   "news7": 18,
-   "news_p7": 12,
+   "news7": 17,
+   "news_p7": 13,
    "news_capped": false,
    "social": {
-    "Threads": 96
+    "Threads": 72,
+    "Dcard": 3
    },
    "mentions": {},
-   "x": 0.94,
-   "talk_trend": "up",
+   "x": 1.0,
+   "talk_trend": "flat",
    "days": 4,
    "first": "2026-11-09",
    "quad": "hit"
   },
   {
-   "name": "黃仁勳",
-   "q": "黃仁勳",
-   "cat": "人物",
+   "name": "五月天",
+   "q": "五月天 阿信 棠棣賦",
+   "cat": "音樂",
    "do": [
     {
-     "src": "Google 熱搜",
-     "name": "矽 盾",
-     "how": "搜尋 2000+"
-    }
-   ],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[新聞] 川普力挺黃仁勳回鍋遭拒！《WIRED》揭董"
+     "src": "KKBOX",
+     "name": "五月天 阿信 (Ashin) - 棠棣賦 - 電視劇《兩京十五日》主題曲/片頭曲",
+     "how": "第 3 名"
     },
     {
-     "src": "PTT",
-     "title": "[討論] 瘋了吧 女財務長接任NV CEO?"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "黃仁勳重掌輝達有解？美媒點出「5大反擊手段」 持股3.58%能否成功翻盤"
+     "src": "YouTube 熱門",
+     "name": "五月天阿信 Ashin [ 棠棣賦 Blood Beyond Blood ] Official Music Video｜",
+     "how": "7 天內上架、發燒第 5"
     }
    ],
-   "y": 0.6,
-   "news7": 84,
-   "news_p7": 16,
-   "news_capped": true,
-   "mentions": {
-    "PTT": 2,
-    "新聞焦點": 1
+   "talk": [],
+   "y": 0.77,
+   "news7": 40,
+   "news_p7": 0,
+   "news_capped": false,
+   "social": {
+    "Threads": 312,
+    "Dcard": 6
    },
+   "mentions": {},
    "x": 1.0,
    "talk_trend": "up",
-   "days": 6,
-   "first": "2026-11-12",
+   "days": 3,
+   "first": "2026-11-20",
    "quad": "hit"
   },
   {
-   "name": "徐亨",
-   "q": "徐亨",
-   "cat": "人物",
+   "name": "ChatGPT",
+   "q": "ChatGPT",
+   "cat": "App",
    "do": [
     {
-     "src": "Google 熱搜",
-     "name": "徐亨",
-     "how": "搜尋 200+"
+     "src": "App 營收",
+     "name": "ChatGPT",
+     "how": "第 1 名"
     }
    ],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "欠債2億又罹腦瘤！徐亨不願坐等工作 宣布最後一戰：還活著的時間拚了"
-    }
-   ],
-   "y": 0.6,
-   "news7": 46,
-   "news_p7": 9,
-   "news_capped": false,
-   "mentions": {
-    "新聞焦點": 1
+   "talk": [],
+   "y": 0.75,
+   "news7": 78,
+   "news_p7": 22,
+   "news_capped": true,
+   "social": {
+    "Threads": 96,
+    "Dcard": 29
    },
-   "x": 0.94,
+   "mentions": {},
+   "x": 1.0,
    "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-22",
+   "days": 7,
+   "first": "2026-11-14",
    "quad": "hit"
   },
   {
@@ -262,92 +240,136 @@
     {
      "src": "App 營收",
      "name": "Pokémon GO",
-     "how": "第 3 名"
+     "how": "在榜上第 5 名（沒有在爬）"
     }
    ],
    "talk": [],
-   "y": 0.65,
-   "news7": 51,
-   "news_p7": 26,
+   "y": 0.5,
+   "static": true,
+   "news7": 47,
+   "news_p7": 27,
    "news_capped": false,
    "social": {
-    "Threads": 0.1,
-    "Dcard": 0
+    "Threads": 0.1
    },
    "mentions": {},
-   "x": 0.86,
+   "x": 0.85,
    "talk_trend": "up",
    "days": 3,
    "first": "2026-11-14",
    "quad": "hit"
   },
   {
-   "name": "多鄰國",
-   "q": "Blackmagic Camera",
-   "cat": "App",
+   "name": "Dior",
+   "q": "DIOR 大穎",
+   "cat": "品牌商品",
    "do": [
     {
-     "src": "App 下載",
-     "name": "Blackmagic Camera",
-     "how": "新進榜第 2 名"
+     "src": "KKBOX",
+     "name": "DIOR 大穎 - 欲落未落",
+     "how": "第 2 名"
+    },
+    {
+     "src": "YouTube 熱門",
+     "name": "DIOR大穎 & 郭家瑋TREVOR - 我以為我們會結婚 - （Official MV）",
+     "how": "7 天內上架、發燒第 2"
     }
    ],
    "talk": [],
-   "y": 0.9,
-   "news7": 2,
-   "news_p7": 0,
+   "y": 0.88,
+   "news7": 0,
+   "news_p7": 1,
    "news_capped": false,
-   "social": {
-    "Threads": 0.1,
-    "Dcard": 2
-   },
    "mentions": {},
-   "x": 0.32,
+   "x": 0.0,
    "talk_trend": "flat",
-   "days": 6,
-   "first": "2026-11-17",
+   "days": 2,
+   "first": "2026-11-12",
    "quad": "new"
   },
   {
-   "name": "金馬獎",
-   "q": "金馬獎",
-   "cat": "活動",
+   "name": "黃仁勳",
+   "q": "黃仁勳 英特爾",
+   "cat": "人物",
    "do": [],
    "talk": [
     {
-     "src": "LINE TODAY",
-     "title": "最狂頒獎陣容！劉嘉玲、舒淇拚紅毯最美"
-    },
-    {
      "src": "新聞焦點",
-     "title": "金馬63／最狂頒獎陣容！劉嘉玲、舒華拚紅毯最美舒淇《女孩》10項入圍先拿影評人獎典禮4大亮點一次看"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎｜金馬63完整得獎名單一覽！（不斷更新）"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎｜金馬63主持人、得獎者、超大咖頒獎嘉賓、表演來賓、線上直播平台、入圍資訊一次看！"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎｜金馬63頒獎典禮亮點！(不斷更新）"
+     "title": "黃仁勳若空降死對頭英特爾...台積電、鴻海恐被迫選邊站「外媒另揭500億美元復仇大計」下一步呼聲最高竟是賈伯斯劇本"
     }
    ],
    "y": 0.0,
-   "news7": 84,
-   "news_p7": 16,
-   "news_capped": true,
+   "news7": 33,
+   "news_p7": 4,
+   "news_capped": false,
+   "social": {
+    "Threads": 17.4
+   },
    "mentions": {
-    "LINE TODAY": 1,
-    "新聞焦點": 1,
-    "時尚媒體": 5
+    "新聞焦點": 1
    },
    "x": 1.0,
    "talk_trend": "up",
+   "days": 6,
+   "first": "2026-11-12",
+   "quad": "talk"
+  },
+  {
+   "name": "Tesla",
+   "q": "Tesla",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[閒聊] 電車為何沒啥小車的選項"
+    }
+   ],
+   "y": 0.0,
+   "news7": 61,
+   "news_p7": 39,
+   "news_capped": true,
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-18",
+   "quad": "talk"
+  },
+  {
+   "name": "小米",
+   "q": "小米",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 89,
+   "news_p7": 11,
+   "news_capped": true,
+   "mentions": {},
+   "x": 0.98,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-10",
+   "quad": "talk"
+  },
+  {
+   "name": "UNIQLO TW",
+   "q": "UNIQLO",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 48,
+   "news_p7": 26,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.85,
+   "talk_trend": "up",
    "days": 3,
-   "first": "2026-11-20",
+   "first": "2026-11-13",
    "quad": "talk"
   },
   {
@@ -362,122 +384,60 @@
     }
    ],
    "y": 0.0,
-   "news7": 28,
+   "news7": 27,
    "news_p7": 3,
    "news_capped": false,
    "mentions": {
     "時尚媒體": 1
    },
-   "x": 0.83,
+   "x": 0.82,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-22",
    "quad": "talk"
   },
   {
-   "name": "Toyota",
-   "q": "Toyota Crown Sport",
+   "name": "Sony MDR-3R",
+   "q": "Sony MDR-3R",
    "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "Crown Sport 實車試乘，真的有帥！"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 12,
-   "news_p7": 17,
+   "news7": 23,
+   "news_p7": 13,
    "news_capped": false,
-   "mentions": {
-    "Mobile01": 1
-   },
-   "x": 0.66,
-   "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-03",
-   "quad": "talk"
-  },
-  {
-   "name": "小米",
-   "q": "石頭科技 掃地機器人",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "石頭家電淪孤兒 掃地機器人還在賣維修就斷炊石頭科技售後不理挨告"
-    }
-   ],
-   "y": 0.0,
-   "news7": 9,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {
-    "Mobile01": 1
-   },
-   "x": 0.6,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-10",
-   "quad": "talk"
-  },
-  {
-   "name": "10-10-10走路法",
-   "q": "10-10-10走路法",
-   "cat": "生活習慣",
-   "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "飯後散步真的有效？「10-10-10走路法」研究揭：有助降低餐後血糖！"
-    }
-   ],
-   "y": 0.0,
-   "news7": 5,
-   "news_p7": 5,
-   "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.49,
-   "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-21",
-   "quad": "low"
-  },
-  {
-   "name": "胡瓜",
-   "q": "胡瓜 顧安生",
-   "cat": "人物",
-   "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "胡錦哭心碎送走顧安生！李四端憔悴拒受訪「說不出話」"
-    }
-   ],
-   "y": 0.0,
-   "news7": 5,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 0.49,
+   "mentions": {},
+   "x": 0.69,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-20",
+   "quad": "talk"
+  },
+  {
+   "name": "全家發熱衣",
+   "q": "全家 發熱衣",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 1,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.15,
+   "talk_trend": "flat",
+   "days": 5,
+   "first": "2026-11-13",
    "quad": "low"
   }
  ],
  "quads": {
   "quiet": 0,
-  "hit": 8,
+  "hit": 7,
   "new": 1,
   "hype": 0,
-  "talk": 4,
-  "low": 2
+  "talk": 6,
+  "low": 1
  },
  "src_do": [
   "App 下載",
@@ -498,9 +458,9 @@
   "時尚媒體",
   "社群（Threads・Dcard・IG）"
  ],
- "social_at": "2026-11-21",
+ "social_at": "2026-11-22",
  "hist_days": 20,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-22T07:41:34Z"
+ "updatedAt": "2026-11-22T13:54:54Z"
 }
