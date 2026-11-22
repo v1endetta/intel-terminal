@@ -76,6 +76,18 @@
  "intl": [
   {
    "source": "BBC",
+   "title": "South Korea education minister resigns over exam cheating scandal",
+   "url": "https://www.bbc.co.uk/news/articles/cw3dgk29d37no?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-22T09:20:45Z"
+  },
+  {
+   "source": "BBC",
+   "title": "Italian jeweller and businessman Paolo Bulgari dies aged 89",
+   "url": "https://www.bbc.co.uk/news/articles/c8e39qk5vrpdo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-22T07:12:41Z"
+  },
+  {
+   "source": "BBC",
    "title": "New draft deal aims to avert collapse of talks at COP31 climate summit",
    "url": "https://www.bbc.co.uk/news/articles/cq7827z2841zo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-22T06:54:06Z"
@@ -137,20 +149,6 @@
    "title": "Zelensky says Crimean Bridge strikes 'fair response' as he meets UK's Streeting",
    "url": "https://www.bbc.co.uk/news/articles/c6wy0qj7w5zqo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-21T13:17:38Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "‘Little room for error’: what a debt-laden cloud computing company says about the AI boom",
-   "url": "https://www.theguardian.com/business/2026/nov/21/debt-laden-cloud-computing-company-coreweave-ai-boom",
-   "at": "2026-11-21T13:00:01Z",
-   "sec": "Business"
-  },
-  {
-   "source": "Guardian",
-   "title": "Mark Carney is so popular he can get away with a lot. Will it last if the Trump spell brea",
-   "url": "https://www.theguardian.com/world/2026/nov/21/mark-carney-popular-will-it-last-trump-spell-breaks-canada",
-   "at": "2026-11-21T12:00:58Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -883,6 +881,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-22T09:17:51Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-22T09:38:44Z"
 }
