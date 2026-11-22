@@ -2,6 +2,18 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "比特幣跌至2年低點後反彈　漲逾8%回升至近6萬美元",
+   "url": "https://www.cna.com.tw/news/aopl/202611220017.aspx",
+   "at": "2026-11-22T01:06:10Z"
+  },
+  {
+   "source": "中央社",
+   "title": "北美台商齊聚田納西州　新任州長當選人：台美往來更緊密",
+   "url": "https://www.cna.com.tw/news/aopl/202611220016.aspx",
+   "at": "2026-11-22T00:59:08Z"
+  },
+  {
+   "source": "中央社",
    "title": "亞馬遜抗衡輝達　傳砸2470億收購AI新銳Decart",
    "url": "https://www.cna.com.tw/news/afe/202611220015.aspx",
    "at": "2026-11-22T00:44:05Z"
@@ -35,18 +47,6 @@
    "title": "周佳琪造勢鄭麗文力挺　喊屏東縣市長都過關",
    "url": "https://www.cna.com.tw/news/aipl/202611210223.aspx",
    "at": "2026-11-21T14:09:07Z"
-  },
-  {
-   "source": "中央社",
-   "title": "柯志恩合體韓國瑜鳳山造勢　承諾當選拆光電板",
-   "url": "https://www.cna.com.tw/news/aipl/202611210222.aspx",
-   "at": "2026-11-21T14:06:05Z"
-  },
-  {
-   "source": "中央社",
-   "title": "菲律賓台商組織整合　共享資源提升競爭力",
-   "url": "https://www.cna.com.tw/news/afe/202611210216.aspx",
-   "at": "2026-11-21T13:45:52Z"
   },
   {
    "source": "公視",
@@ -274,12 +274,12 @@
     }
    ],
    "daily7": [
-    4,
-    6,
+    5,
+    11,
     40,
     53,
-    56,
-    18,
+    53,
+    17,
     3
    ],
    "days7": [
@@ -310,10 +310,10 @@
      "kw": "Figma OR Canva 新功能"
     },
     {
-     "source": "Techritual",
-     "title": "Ollama – 本地運行的人工智能對話助手",
-     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE84YUp0SkwzVHR6YmdPVVMxMzlrekNsUDk4d2VHRklWaHVUMWJEcUlMWWFkSS1hOXMxc2lwNmJGTk05VjRmem1qcXRHcXREdWM4MjFJdE5vMUE?oc=5",
-     "at": "2026-11-21T12:00:00Z",
+     "source": "風火輪傳媒有限公司",
+     "title": "國產開源大模型下載量突破100億次，引領全球開源生態",
+     "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9URUVJTkZiWC1mcldJWWR2Y1AwQ2JUT1Nma2ltSVlZT2ZWVFBWajRiN1ZwYk8wMUJVZGdRQmpTY2F2aGUtY0lHX2hhaDdHYmowYXBncjlGN1Zub280ZGR2OHdhWlZ6M21ST2kzWWRBeFdWc3RO?oc=5",
+     "at": "2026-11-21T12:11:55Z",
      "kw": "開源模型 OR Ollama OR 本地部署"
     },
     {
@@ -326,11 +326,11 @@
    ],
    "daily7": [
     0,
-    1,
-    2,
-    2,
-    7,
+    4,
     5,
+    2,
+    8,
+    6,
     0
    ],
    "days7": [
@@ -378,10 +378,10 @@
    "daily7": [
     2,
     0,
-    3,
+    4,
     34,
     49,
-    32,
+    31,
     4
    ],
    "days7": [
@@ -580,8 +580,8 @@
     }
    ],
    "daily7": [
-    6,
-    9,
+    5,
+    10,
     13,
     9,
     13,
@@ -764,7 +764,7 @@
    },
    {
     "term": "輝達",
-    "n": 4,
+    "n": 3,
     "src": 2,
     "sources": [
      "PTT",
@@ -788,20 +788,6 @@
     "sample": {
      "title": "併購狂潮再起？從資安到能源 逾百億美元交易重塑全球產業版圖",
      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPU2ZEWjh6cVptdlJqVlNocXJOdVlIZEN3TFR6aHY1VVZEcXRxQlF0cU9Zdi1fam93TkpsWWlXR3FQNndaRmhpY0t1Y1dJRVFPS2xNUUt5S1NXRVBNcWtwU1NsdTcwcW1OT2VnMGhUb29CWW1YQndfbmhSSWlsbFFfcXI0TTlhQ0NCaS1QaWZ3?oc=5"
-    },
-    "hot": false
-   },
-   {
-    "term": "柯志恩",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "Facebook",
-     "中央社"
-    ],
-    "sample": {
-     "title": "柯志恩合體韓國瑜鳳山造勢　承諾當選拆光電板",
-     "url": "https://www.cna.com.tw/news/aipl/202611210222.aspx"
     },
     "hot": false
    },
@@ -863,6 +849,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-22T01:32:09Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-22T01:55:05Z"
 }
