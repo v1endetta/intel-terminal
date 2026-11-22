@@ -89,6 +89,12 @@
   },
   {
    "source": "BBC",
+   "title": "US Army to detonate tonnes of unstable explosives in Iowa despite court order",
+   "url": "https://www.bbc.co.uk/news/articles/cvglrx764gdxo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-22T18:29:46Z"
+  },
+  {
+   "source": "BBC",
    "title": "COP31 fails to reach major climate deal as talks expose deep divisions",
    "url": "https://www.bbc.co.uk/news/articles/cqwy06zrd26lo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-22T18:17:59Z"
@@ -145,12 +151,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/22/the-football-superstar-turned-booktuber-who-made-an-obscure-tolstoy-novella-a-belated-bestseller",
    "at": "2026-11-22T15:00:29Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Three killed and dozens missing after fire at Indonesian factory",
-   "url": "https://www.bbc.co.uk/news/articles/cw8dvg5pgm0eo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-22T14:05:20Z"
   }
  ],
  "groups": [
@@ -276,9 +276,9 @@
    ],
    "daily7": [
     7,
-    33,
-    38,
-    57,
+    32,
+    39,
+    56,
     22,
     10,
     0
@@ -380,9 +380,9 @@
     4,
     5,
     18,
-    49,
-    28,
-    17,
+    42,
+    27,
+    15,
     0
    ],
    "days7": [
@@ -581,9 +581,9 @@
     }
    ],
    "daily7": [
+    6,
     7,
-    10,
-    13,
+    12,
     7,
     8,
     2,
@@ -875,6 +875,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-22T19:00:18Z"
+ "errs": [
+  "gdelt: ReadTimeout: HTTPSConnectionPool(host='api.gdeltproject.org', port=443): Read timed out. (read timeout=25)"
+ ],
+ "updatedAt": "2026-11-22T19:20:05Z"
 }
