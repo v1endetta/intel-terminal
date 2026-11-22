@@ -75,6 +75,20 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Blast on Russian ship in Benghazi a suspected drone attack, say Libyan authorities",
+   "url": "https://www.theguardian.com/world/2026/nov/22/blast-russian-ship-suspected-drone-attack-benghazi-libya",
+   "at": "2026-11-22T16:55:49Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
+   "title": "Let refugees work and contribute to our society | Letters",
+   "url": "https://www.theguardian.com/world/2026/nov/22/let-refugees-work-and-contribute-to-our-society",
+   "at": "2026-11-22T16:51:20Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "Explosion on Russian ship at Libya port caused by suspected drone attack, officials say",
    "url": "https://www.bbc.co.uk/news/articles/cr894gjz0j0yo?at_medium=RSS&at_campaign=rss",
@@ -125,7 +139,7 @@
    "source": "Guardian",
    "title": "South Korean minister quits after AI cheating scandal engulfs university exams",
    "url": "https://www.theguardian.com/world/2026/nov/22/south-korea-education-minister-resigns-after-ai-cheating-scandal-engulfs-university-exams",
-   "at": "2026-11-22T12:12:08Z",
+   "at": "2026-11-22T12:12:07Z",
    "sec": "World news"
   },
   {
@@ -140,19 +154,6 @@
    "url": "https://www.theguardian.com/business/2026/nov/22/looming-uk-winter-spawns-double-headache-for-andy-burnham",
    "at": "2026-11-22T11:24:22Z",
    "sec": "Business"
-  },
-  {
-   "source": "Guardian",
-   "title": "UK-EU food deal hailed by British firms: ‘We’re pretty aligned anyway’",
-   "url": "https://www.theguardian.com/business/2026/nov/22/uk-eu-food-sps-deal-brexit-checks",
-   "at": "2026-11-22T11:00:24Z",
-   "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "South Korea education minister resigns over exam cheating scandal",
-   "url": "https://www.bbc.co.uk/news/articles/cw3dgk29d37no?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-22T09:20:45Z"
   }
  ],
  "groups": [
@@ -655,10 +656,10 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.491,
-   "vol_ratio": 0.61,
-   "tone": 1.01,
-   "tone_at": "2026-11-22T15:21:16Z",
+   "vol": 1.549,
+   "vol_ratio": 0.64,
+   "tone": 0.84,
+   "tone_at": "2026-11-22T17:04:57Z",
    "spark": [
     2.82,
     1.945,
@@ -673,9 +674,9 @@
     2.754,
     1.65,
     1.491,
-    1.491
+    1.549
    ],
-   "at": "2026-11-22T16:06:05Z"
+   "at": "2026-11-22T17:04:57Z"
   },
   "wiki": {
    "zh": [
@@ -809,7 +810,7 @@
     "hot": false
    },
    {
-    "term": "South",
+    "term": "Russian",
     "n": 2,
     "src": 2,
     "sources": [
@@ -817,8 +818,8 @@
      "Guardian"
     ],
     "sample": {
-     "title": "South Korean minister quits after AI cheating scandal engulf",
-     "url": "https://www.theguardian.com/world/2026/nov/22/south-korea-education-minister-resigns-after-ai-cheating-scandal-engulfs-university-exams"
+     "title": "Blast on Russian ship in Benghazi a suspected drone attack, ",
+     "url": "https://www.theguardian.com/world/2026/nov/22/blast-russian-ship-suspected-drone-attack-benghazi-libya"
     },
     "hot": false
    },
@@ -865,23 +866,21 @@
     "hot": false
    },
    {
-    "term": "筆會員",
+    "term": "特斯拉",
     "n": 2,
     "src": 2,
     "sources": [
-     "BigGo 財經",
-     "自由財經"
+     "PTT",
+     "中央社"
     ],
     "sample": {
-     "title": "日本唱片商Tower Records 1100萬筆會員個資外洩",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE13Q01QaWZCVFdlbVNLTHVkWVo4Tk4wck1nR1FNaDN2bkVycTJkaVFod2xaalBIdVMyWjZPLWJ4MWYzemVyNldPWGhCcHRuU0xyNEZfandEU1lCNU96OTBJ0gFkQVVfeXFMTTRUckI2eUMzU3llOFJtTnMxSlRnNzBjV3g0a1FtUUhhOVF3UmxMZ3o4NTR2eGs3SXJzN2JHQl9VNXc5TU5DeVRwQk04ZHdWUDQ2TUhaRThqNFVBcjRQZ0tvS3RWNQ?oc=5"
+     "title": "上海產特斯拉熱銷  韓自中國進口汽車逆差創新高",
+     "url": "https://www.cna.com.tw/news/acn/202611220179.aspx"
     },
     "hot": false
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-22T16:43:39Z"
+ "errs": [],
+ "updatedAt": "2026-11-22T17:04:57Z"
 }
