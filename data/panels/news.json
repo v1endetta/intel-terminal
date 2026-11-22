@@ -75,6 +75,13 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "South Korea education minister resigns after AI cheating scandal engulfs university exams",
+   "url": "https://www.theguardian.com/world/2026/nov/22/south-korea-education-minister-resigns-after-ai-cheating-scandal-engulfs-university-exams",
+   "at": "2026-11-22T12:12:08Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "Russia-bound ship still on fire after attack in Gulf of Finland",
    "url": "https://www.bbc.co.uk/news/articles/cj752ddve27ko?at_medium=RSS&at_campaign=rss",
@@ -82,7 +89,7 @@
   },
   {
    "source": "Guardian",
-   "title": "The looming UK winter may spawn a double headache for Andy Burnham",
+   "title": "The looming UK winter may spawn a double headache for Andy Burnham | Richard Partington",
    "url": "https://www.theguardian.com/business/2026/nov/22/looming-uk-winter-spawns-double-headache-for-andy-burnham",
    "at": "2026-11-22T11:24:22Z",
    "sec": "Business"
@@ -93,12 +100,6 @@
    "url": "https://www.theguardian.com/business/2026/nov/22/uk-eu-food-sps-deal-brexit-checks",
    "at": "2026-11-22T11:00:24Z",
    "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "South Korea education minister resigns over exam cheating scandal",
-   "url": "https://www.bbc.co.uk/news/articles/cw3dgk29d37no?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-22T09:20:45Z"
   },
   {
    "source": "BBC",
@@ -279,7 +280,7 @@
     8,
     39,
     43,
-    50,
+    52,
     22,
     6
    ],
@@ -380,10 +381,10 @@
     2,
     0,
     4,
-    22,
+    21,
     47,
     30,
-    12
+    13
    ],
    "days7": [
     "2026-11-16",
@@ -796,21 +797,6 @@
     "hot": true
    },
    {
-    "term": "暴跌",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "PTT",
-     "旺得富理財網",
-     "鉅亨網"
-    ],
-    "sample": {
-     "title": "2018年劇本重演？美股暴跌 投資人質疑聯準會緊縮政策",
-     "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1LQXdiQzQ3dGZGczBOMnRCX1czcjV1b29wTlRXbG4tLUMwd0N0ZDJWVEdQT3NoSWRtRzVCbFl4WTdDUWlRcmNWRUpERl9PNWc?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "禮物",
     "n": 3,
     "src": 3,
@@ -881,9 +867,26 @@
      "url": "https://www.cna.com.tw/news/aipl/202611220160.aspx"
     },
     "hot": false
+   },
+   {
+    "term": "台海",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "Yahoo新聞",
+     "自由軍武頻道",
+     "風傳媒"
+    ],
+    "sample": {
+     "title": "強化台海監偵 首批MQ-9B無人機下月可望正式接裝",
+     "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5WZG9oakJVel8zZXQ2Tm5qbUJqdng3dFVIbHh4NnNCQ3g4d0xxS1hDWXR0YXJmUWFNdXlreFBTeUNMMm9NS1YzcXV3Yzlvc0FPdlg4UFp4VGs3ak82M1VGbtIBZkFVX3lxTE5zbFhCR2dMNVVDNnFISEp0Q2MtSmFNQ1c1VjdZRFJPSkY0QjJjLVN5TU1talp1dDdhMVBnaUxZbTRIU09WcjFIVGx1cy1HdE1IT0tpNDRVbmxfSWhsSmVrU21nSUFDUQ?oc=5"
+    },
+    "hot": false
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-22T12:02:36Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-22T12:24:08Z"
 }
