@@ -75,6 +75,13 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Russian warship sinks in Benghazi after suspected Ukrainian drone attack",
+   "url": "https://www.theguardian.com/world/2026/nov/22/blast-russian-ship-suspected-drone-attack-benghazi-libya",
+   "at": "2026-11-22T21:33:44Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "Explosion on Russian ship at Libya port caused by suspected drone attack, officials say",
    "url": "https://www.bbc.co.uk/news/articles/cr894gjz0j0yo?at_medium=RSS&at_campaign=rss",
@@ -91,13 +98,6 @@
    "title": "What's next after no deal at COP31 climate talks?",
    "url": "https://www.bbc.co.uk/news/videos/cr1ewge81q4qo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-22T18:57:24Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "Russian ship hit in Benghazi by suspected Ukrainian drone attack, say Libyan officials ",
-   "url": "https://www.theguardian.com/world/2026/nov/22/blast-russian-ship-suspected-drone-attack-benghazi-libya",
-   "at": "2026-11-22T18:50:56Z",
-   "sec": "World news"
   },
   {
    "source": "BBC",
@@ -281,21 +281,21 @@
      "kw": "AI agent OR AI 代理人 OR 智慧代理"
     },
     {
-     "source": "Data Center ",
-     "title": "Anthropic launches IPO at $83 per share",
-     "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNWTNZUHE5ZXdtVlVxZjNtMnd1X3M5NG1oUUhlTWNHSGd0dnRuVzZsa0hmekNNTUVVM1k0VFRvZDNPNk5jN2pTYnlqTW1TWnhVLTQzWUotS0Nham50SUJFZ1NjT1BCeU9EU0M0RTVKTmhqeEF3bGllRzBIUWczakM0QV9zQjlKWFVpVWc?oc=5",
-     "at": "2026-11-19T16:21:28Z",
+     "source": "Robotics & A",
+     "title": "Anthropic launches Claude for Manufacturing to automate administrative and engineering wor",
+     "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxOY3lXYWhjdlk4eFo5OEllXzdkTDhnYWowOUFSZlNLakdEdXoxeG8xZTZjcWVMYWxxVTJCdEUycHZBdjhyMy1UUU9tcU9lMlFIb0t3cG85X1hNSWJLaGxnNEtSbVkyak0xLTJQVmNjSmwtQW80NVdGWU9sUmh0TGJhdWFLOTFRM1BONnZSOFE2YXpDREpxN2RIdnU0WXBGOTNtZ1dwNUVnTHpCOHdfU3VfVlRSVklsZ096TzBLNFlzUnFQVjJ3c0lJNHl3U0d0cGNPWkFYQTdfV01tRlZqYUJ2aHFGNXQwVlhX?oc=5",
+     "at": "2026-11-22T21:07:47Z",
      "kw": "en:OpenAI OR Anthropic OR \"Google DeepMind\" launches OR announces OR releases"
     }
    ],
    "daily7": [
     7,
-    35,
-    41,
-    57,
+    33,
+    40,
+    56,
     22,
     10,
-    0
+    2
    ],
    "days7": [
     "2026-11-17",
@@ -344,7 +344,7 @@
     2,
     2,
     1,
-    3,
+    2,
     0,
     1
    ],
@@ -394,9 +394,9 @@
     4,
     4,
     14,
-    47,
+    46,
     27,
-    17,
+    18,
     0
    ],
    "days7": [
@@ -596,10 +596,10 @@
    ],
    "daily7": [
     6,
-    8,
+    7,
     7,
     5,
-    8,
+    7,
     2,
     1
    ],
@@ -646,10 +646,10 @@
     }
    ],
    "daily7": [
-    6,
+    5,
     4,
     26,
-    34,
+    35,
     32,
     36,
     5
@@ -748,17 +748,18 @@
   "hot": [
    {
     "term": "Anthropic",
-    "n": 3,
-    "src": 2,
+    "n": 4,
+    "src": 3,
     "sources": [
      "Anthropic",
-     "HN"
+     "HN",
+     "Robotics & A"
     ],
     "sample": {
-     "title": "Anthropic announces closing of initial public offering, incl",
-     "url": "https://www.anthropic.com/news/ipo-close"
+     "title": "Anthropic launches Claude for Manufacturing to automate admi",
+     "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxOY3lXYWhjdlk4eFo5OEllXzdkTDhnYWowOUFSZlNLakdEdXoxeG8xZTZjcWVMYWxxVTJCdEUycHZBdjhyMy1UUU9tcU9lMlFIb0t3cG85X1hNSWJLaGxnNEtSbVkyak0xLTJQVmNjSmwtQW80NVdGWU9sUmh0TGJhdWFLOTFRM1BONnZSOFE2YXpDREpxN2RIdnU0WXBGOTNtZ1dwNUVnTHpCOHdfU3VfVlRSVklsZ096TzBLNFlzUnFQVjJ3c0lJNHl3U0d0cGNPWkFYQTdfV01tRlZqYUJ2aHFGNXQwVlhX?oc=5"
     },
-    "hot": false
+    "hot": true
    },
    {
     "term": "Russian",
@@ -769,8 +770,8 @@
      "Guardian"
     ],
     "sample": {
-     "title": "Explosion on Russian ship at Libya port caused by suspected ",
-     "url": "https://www.bbc.co.uk/news/articles/cr894gjz0j0yo?at_medium=RSS&at_campaign=rss"
+     "title": "Russian warship sinks in Benghazi after suspected Ukrainian ",
+     "url": "https://www.theguardian.com/world/2026/nov/22/blast-russian-ship-suspected-drone-attack-benghazi-libya"
     },
     "hot": false
    },
@@ -859,20 +860,6 @@
     "hot": false
    },
    {
-    "term": "預告",
-    "n": 2,
-    "src": 2,
-    "sources": [
-     "PTT",
-     "自由時報"
-    ],
-    "sample": {
-     "title": "Google預告Gemini 4還有新模型，Gemini 5 Krypton傳聞再起",
-     "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9ZbTdnaGFGZE5DWEdDR0NVbWZXMEhvd05hVXJodHEyYWo5N2VlWTlxMVBQNXM2Vy1hcW9FcVkxQXJTVElNSG0zZ2RKQnpSYUpjdnV2c3RNWjgtc3ZIXzdWQVZldEJSemNISEZn0gFwQVVfeXFMT1lkdWhDZlQ3YTRfcmhxNzIxRUtTb2NDU19zeEozQzBqSTUyY21FejlTempUdkpqazVmM0MzdWl3YWlpeVlwOHVRNTd6UVBoQnFaSEZzb3Ayb0Rjd0Myc2oxWGtSUl92M1VGWFJOaUIwQQ?oc=5"
-    },
-    "hot": false
-   },
-   {
     "term": "有新",
     "n": 2,
     "src": 2,
@@ -885,9 +872,25 @@
      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9ZbTdnaGFGZE5DWEdDR0NVbWZXMEhvd05hVXJodHEyYWo5N2VlWTlxMVBQNXM2Vy1hcW9FcVkxQXJTVElNSG0zZ2RKQnpSYUpjdnV2c3RNWjgtc3ZIXzdWQVZldEJSemNISEZn0gFwQVVfeXFMT1lkdWhDZlQ3YTRfcmhxNzIxRUtTb2NDU19zeEozQzBqSTUyY21FejlTempUdkpqazVmM0MzdWl3YWlpeVlwOHVRNTd6UVBoQnFaSEZzb3Ayb0Rjd0Myc2oxWGtSUl92M1VGWFJOaUIwQQ?oc=5"
     },
     "hot": false
+   },
+   {
+    "term": "預告",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "PTT",
+     "自由時報"
+    ],
+    "sample": {
+     "title": "Google預告Gemini 4還有新模型，Gemini 5 Krypton傳聞再起",
+     "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9ZbTdnaGFGZE5DWEdDR0NVbWZXMEhvd05hVXJodHEyYWo5N2VlWTlxMVBQNXM2Vy1hcW9FcVkxQXJTVElNSG0zZ2RKQnpSYUpjdnV2c3RNWjgtc3ZIXzdWQVZldEJSemNISEZn0gFwQVVfeXFMT1lkdWhDZlQ3YTRfcmhxNzIxRUtTb2NDU19zeEozQzBqSTUyY21FejlTempUdkpqazVmM0MzdWl3YWlpeVlwOHVRNTd6UVBoQnFaSEZzb3Ayb0Rjd0Myc2oxWGtSUl92M1VGWFJOaUIwQQ?oc=5"
+    },
+    "hot": false
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-22T21:24:40Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-22T21:42:48Z"
 }
