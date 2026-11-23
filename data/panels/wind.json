@@ -1,32 +1,80 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的注意力主要集中在串流影音週年慶、話題餐飲新品上市、電動車款升級與金馬獎得獎影人的討論上。",
+ "line": "這幾天台灣消費者的注意力高度聚焦在熱門影視娛樂新作、話題人物動態以及科技與App應用的更新討論上。",
  "topics": [
   {
-   "name": "哥吉拉-0.0",
-   "q": "哥吉拉-0.0",
+   "name": "Disney+",
+   "q": "Disney+",
    "cat": "影視",
    "do": [
     {
-     "src": "電影票房",
-     "name": "哥吉拉-0.0",
-     "how": "本週票房第 1（7482 萬）"
+     "src": "Netflix 影集",
+     "name": "Miracles of the ER",
+     "how": "上榜第 1 週、第 1 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Sunshine Through the Rain",
+     "how": "上榜第 2 週、第 5 名"
     }
    ],
    "talk": [],
-   "y": 0.95,
-   "news7": 16,
-   "news_p7": 31,
-   "news_capped": false,
+   "y": 1.0,
+   "news7": 86,
+   "news_p7": 14,
+   "news_capped": true,
    "social": {
-    "Threads": 72,
-    "Dcard": 1
+    "Threads": 0,
+    "Dcard": 4
    },
    "mentions": {},
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 4,
+   "first": "2026-11-13",
+   "quad": "hit"
+  },
+  {
+   "name": "Netflix",
+   "q": "Netflix",
+   "cat": "影視",
+   "do": [
+    {
+     "src": "Netflix 影集",
+     "name": "The Devil's Plan",
+     "how": "上榜第 1 週、第 6 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "One Year to Live, Buy a Man",
+     "how": "上榜第 2 週、第 1 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "Salli",
+     "how": "上榜第 2 週、第 2 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "Possible Love",
+     "how": "上榜第 2 週、第 3 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "The Adventure",
+     "how": "上榜第 2 週、第 4 名"
+    }
+   ],
+   "talk": [],
+   "y": 1.0,
+   "news7": 76,
+   "news_p7": 24,
+   "news_capped": true,
+   "mentions": {},
    "x": 0.94,
-   "talk_trend": "down",
-   "days": 7,
-   "first": "2026-11-17",
+   "talk_trend": "up",
+   "days": 4,
+   "first": "2026-11-09",
    "quad": "hit"
   },
   {
@@ -42,8 +90,8 @@
    ],
    "talk": [],
    "y": 0.75,
-   "news7": 76,
-   "news_p7": 24,
+   "news7": 75,
+   "news_p7": 25,
    "news_capped": true,
    "social": {
     "Threads": 96,
@@ -64,83 +112,194 @@
     {
      "src": "App 下載",
      "name": "多鄰國 - 極速學外語",
-     "how": "爬升 56 名到第 9"
+     "how": "爬升 57 名到第 8"
     }
    ],
    "talk": [],
    "y": 1.0,
    "news7": 14,
-   "news_p7": 7,
+   "news_p7": 8,
    "news_capped": false,
    "social": {
-    "Threads": 0.3
+    "Threads": 0.3,
+    "Dcard": 4
    },
    "mentions": {},
-   "x": 0.61,
+   "x": 0.71,
    "talk_trend": "up",
    "days": 6,
    "first": "2026-11-17",
    "quad": "hit"
   },
   {
-   "name": "麥當勞",
-   "q": "麥當勞 霸牛堡",
-   "cat": "飲食",
+   "name": "哥吉拉-0.0",
+   "q": "哥吉拉-0.0",
+   "cat": "影視",
    "do": [
     {
-     "src": "App 下載",
-     "name": "麥當勞APP",
-     "how": "在榜上第 10 名（沒有在爬）"
+     "src": "電影票房",
+     "name": "哥吉拉-0.0",
+     "how": "本週票房第 1（2133 萬）"
     }
    ],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "麥當勞史上最大牛肉漢堡「霸牛堡」11/25回歸！價格、販售日期一次看"
-    }
-   ],
-   "y": 0.5,
-   "static": true,
-   "news7": 16,
-   "news_p7": 0,
+   "talk": [],
+   "y": 0.95,
+   "news7": 17,
+   "news_p7": 33,
    "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
+   "social": {
+    "Threads": 0.3,
+    "Dcard": 1
    },
-   "x": 0.72,
-   "talk_trend": "up",
-   "days": 4,
-   "first": "2026-11-05",
+   "mentions": {},
+   "x": 0.69,
+   "talk_trend": "down",
+   "days": 7,
+   "first": "2026-11-17",
    "quad": "hit"
   },
   {
-   "name": "Disney+",
-   "q": "Disney+ 台灣",
-   "cat": "影視",
-   "do": [],
-   "talk": [
+   "name": "黃仁勳",
+   "q": "黃仁勳",
+   "cat": "人物",
+   "do": [
     {
-     "src": "Mobile01",
-     "title": "Disney+ 登台五週年！ 持續拓展全球影視內容，同步整合線下娛樂生態系統"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "Disney+ 登台五週年 3 大追劇趨勢！韓華語內容佔近六成，《MOVING 異能》第二季、宋祖兒《新聊齋》即將上線"
+     "src": "Google 熱搜",
+     "name": "00919 配 息",
+     "how": "搜尋 5000+"
     }
    ],
-   "y": 0.0,
-   "news7": 31,
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[新聞] 黃仁勳回鍋華府炸鍋！ 參院轟「魯莽決定"
+    },
+    {
+     "src": "PTT",
+     "title": "[問卦] Jensen回鍋，誰最氣憤？"
+    },
+    {
+     "src": "PTT",
+     "title": "Re: [新聞] 黃仁勳王者歸來喊「等不及上班」　輝達"
+    },
+    {
+     "src": "PTT",
+     "title": "Re: [新聞] 黃仁勳王者歸來喊「等不及上班」　輝達"
+    },
+    {
+     "src": "PTT",
+     "title": "[情報] 大翻盤、輝達董事會恢復黃仁勳職務 輝達"
+    }
+   ],
+   "y": 0.6,
+   "news7": 98,
+   "news_p7": 2,
+   "news_capped": true,
+   "mentions": {
+    "PTT": 5,
+    "Mobile01": 4,
+    "新聞焦點": 1,
+    "時尚媒體": 2
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 5,
+   "first": "2026-11-12",
+   "quad": "hit"
+  },
+  {
+   "name": "Spotify",
+   "q": "Spotify",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "BIGBANG - GiiiRIP",
+     "how": "上榜 2 天、第 5 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "Ronghao Li - 對等關係 (w/ A-Mei Chang)",
+     "how": "升 11 名到第 9"
+    },
+    {
+     "src": "Spotify",
+     "name": "ILLIT - 체포하겠어",
+     "how": "上榜 10 天、第 10 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "Crowd Lu - 幾分之幾 - 電影主題曲",
+     "how": "升 7 名到第 14"
+    },
+    {
+     "src": "Spotify",
+     "name": "Justin Bieber - Beauty And A Beat (w/ Nicki Minaj)",
+     "how": "升 9 名到第 15"
+    }
+   ],
+   "talk": [],
+   "y": 0.88,
+   "news7": 14,
+   "news_p7": 15,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.59,
+   "talk_trend": "flat",
+   "days": 4,
+   "first": "2026-11-09",
+   "quad": "hit"
+  },
+  {
+   "name": "五月天",
+   "q": "五月天阿信 棠棣賦",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "YouTube 熱門",
+     "name": "五月天阿信 Ashin [ 棠棣賦 Blood Beyond Blood ] Official Music Video｜",
+     "how": "7 天內上架、發燒第 5"
+    }
+   ],
+   "talk": [],
+   "y": 0.64,
+   "news7": 36,
    "news_p7": 0,
    "news_capped": false,
-   "mentions": {
-    "Mobile01": 1,
-    "時尚媒體": 1
-   },
-   "x": 0.95,
+   "mentions": {},
+   "x": 0.78,
    "talk_trend": "up",
    "days": 4,
-   "first": "2026-11-13",
-   "quad": "hype"
+   "first": "2026-11-20",
+   "quad": "hit"
+  },
+  {
+   "name": "Dior",
+   "q": "Dior 大穎",
+   "cat": "品牌商品",
+   "do": [
+    {
+     "src": "KKBOX",
+     "name": "DIOR 大穎 - 欲落未落",
+     "how": "第 2 名"
+    },
+    {
+     "src": "YouTube 熱門",
+     "name": "DIOR大穎 & 郭家瑋TREVOR - 我以為我們會結婚 - （Official MV）",
+     "how": "7 天內上架、發燒第 2"
+    }
+   ],
+   "talk": [],
+   "y": 0.88,
+   "news7": 0,
+   "news_p7": 1,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.0,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-12",
+   "quad": "new"
   },
   {
    "name": "劉冠廷",
@@ -150,19 +309,22 @@
    "talk": [
     {
      "src": "新聞焦點",
-     "title": "劉冠廷奪金馬影帝堅持表演抬頭挺胸喊：我是演員| 娛樂"
+     "title": "金馬獎劉冠廷、袁澧林稱帝后舒淇奪新導演獎| 娛樂"
     }
    ],
    "y": 0.0,
    "news7": 100,
    "news_p7": 0,
    "news_capped": true,
+   "social": {
+    "Threads": 72
+   },
    "mentions": {
     "新聞焦點": 1
    },
    "x": 1.0,
    "talk_trend": "up",
-   "days": 1,
+   "days": 2,
    "first": "2026-11-23",
    "quad": "talk"
   },
@@ -174,54 +336,79 @@
    "talk": [
     {
      "src": "時尚媒體",
-     "title": "HOT SPOT｜全台最難訂Buffet「島語」大巨蛋店11/26開幕！11/21開放訂位，餐價、攻略一次看"
+     "title": "「島語」台北大巨蛋店開幕！全新限定料理、必吃菜色與價格搶先看"
     }
    ],
    "y": 0.0,
-   "news7": 43,
+   "news7": 57,
    "news_p7": 0,
    "news_capped": false,
+   "social": {
+    "Threads": 96
+   },
    "mentions": {
     "時尚媒體": 1
    },
-   "x": 0.92,
+   "x": 1.0,
    "talk_trend": "up",
-   "days": 1,
+   "days": 2,
    "first": "2026-11-23",
    "quad": "talk"
   },
   {
+   "name": "小米",
+   "q": "小米",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 93,
+   "news_p7": 7,
+   "news_capped": true,
+   "mentions": {},
+   "x": 0.99,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-10",
+   "quad": "talk"
+  },
+  {
    "name": "Tesla",
-   "q": "Tesla Model Y Juniper",
+   "q": "Tesla 12月 新介面",
    "cat": "品牌商品",
    "do": [],
    "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] Tesla特斯拉12月上線新介面（GTA 6)"
+    },
     {
      "src": "Mobile01",
      "title": "【心得】新歡與舊愛！從舊款 Model Y Performance 換到 Juniper RWD，3 個月 2,300km 真實對比"
     }
    ],
    "y": 0.0,
-   "news7": 0,
+   "news7": 8,
    "news_p7": 0,
    "news_capped": false,
    "mentions": {
+    "PTT": 1,
     "Mobile01": 1
    },
-   "x": 0.1,
-   "talk_trend": "flat",
-   "days": 3,
+   "x": 0.68,
+   "talk_trend": "up",
+   "days": 4,
    "first": "2026-11-18",
-   "quad": "low"
+   "quad": "talk"
   }
  ],
  "quads": {
   "quiet": 0,
-  "hit": 4,
-  "new": 0,
-  "hype": 1,
-  "talk": 2,
-  "low": 1
+  "hit": 8,
+  "new": 1,
+  "hype": 0,
+  "talk": 4,
+  "low": 0
  },
  "src_do": [
   "App 下載",
@@ -235,6 +422,9 @@
   "電影票房"
  ],
  "src_talk": [
+  "Dcard 穿搭",
+  "Dcard 網購",
+  "Dcard 美妝",
   "LINE TODAY",
   "Mobile01",
   "PTT",
@@ -242,10 +432,9 @@
   "時尚媒體",
   "社群（Threads・Dcard・IG）"
  ],
- "social_at": "2026-11-22",
- "hist_days": 21,
+ "social_at": "2026-11-23",
+ "hist_days": 22,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-23T09:43:25Z",
- "error": "2026-11-23T17:00:09Z RuntimeError: gemini-3.8-flash 429 You exceeded your current quota, please check your plan and billing details. For more info"
+ "updatedAt": "2026-11-23T18:04:47Z"
 }
