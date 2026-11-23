@@ -1,43 +1,42 @@
 {
  "taiwan": {
-  "score": 0.2,
-  "label": "關注與期待",
+  "score": 0.4,
+  "label": "關注股市",
   "themes": [
    "黃仁勳回歸",
-   "消費優惠",
-   "政治口水"
+   "股市與科技",
+   "生活優惠"
   ],
-  "line": "台灣人聚焦輝達股價回升與各類消費折扣，對政治議題則保持冷眼旁觀態度。"
+  "line": "台灣人今天高度關注輝達黃仁勳回歸帶動的股市話題，搭配日常省錢資訊與謠言查證。"
  },
  "overseas": {
   "score": -0.3,
-  "label": "焦慮與動盪",
+  "label": "焦慮不安",
   "themes": [
-   "川普政策",
-   "裁員潮",
-   "科技併購"
+   "關稅與通膨",
+   "企業裁員",
+   "政治不滿"
   ],
-  "line": "海外輿論對川普政策帶來的經濟不確定性及企業裁員潮感到擔憂。"
+  "line": "國外社群聚焦於經濟通膨、關稅政策以及科技業裁員帶來的負面情緒。"
  },
  "sources": {
   "PTT": {
    "score": 0.3,
-   "note": "關注股市與消費情報"
+   "note": "聚焦股市輝達與省錢情報"
   },
   "Mobile01": {
-   "score": 0.4,
-   "note": "熱議輝達與車輛資訊"
+   "score": 0.5,
+   "note": "熱烈討論黃仁勳回歸與台股"
   },
   "LINE": {
    "score": -0.2,
-   "note": "充斥詐騙與謠言查證"
+   "note": "充斥詐騙與政治攻擊謠言"
   }
  },
- "watch": "密切留意輝達股價波動對台股及科技產業的後續影響。",
+ "watch": "盯緊輝達後續股價波動與台灣股市走向。",
  "_grounding": [],
- "model": "gemini-3.1-flash-lite",
+ "model": "gemini-3.5-flash-lite",
  "spark_tw": [
-  -0.4,
   -0.6,
   -0.6,
   -0.3,
@@ -108,10 +107,10 @@
   0.2,
   0.3,
   0.4,
-  0.2
+  0.2,
+  0.4
  ],
  "spark_os": [
-  -0.2,
   -0.3,
   -0.4,
   -0.2,
@@ -182,6 +181,7 @@
   -0.2,
   -0.4,
   -0.2,
+  -0.3,
   -0.3
  ],
  "n_inputs": {
@@ -192,6 +192,5 @@
   "Bluesky（國外）": 14
  },
  "missing": "Dcard、Threads、IG（年輕族群、女性）還沒涵蓋",
- "updatedAt": "2026-11-23T19:56:44Z",
- "error": "2026-11-23T22:07:04Z RuntimeError: gemini-3.6-flash 429 You exceeded your current quota, please check your plan and billing details. For more info"
+ "updatedAt": "2026-11-23T23:08:29Z"
 }
