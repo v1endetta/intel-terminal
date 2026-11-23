@@ -78,7 +78,7 @@
    "source": "Guardian",
    "title": "Nvidia shares surge more than 30% on Jensen Huang‘s return, adding $1tn to company value –",
    "url": "https://www.theguardian.com/business/live/2026/nov/23/tech-sell-off-ai-stock-market-support-measures-deployed-south-korea-taiwan-china-ftse-nasdaq-latest-news-updates",
-   "at": "2026-11-23T19:55:39Z",
+   "at": "2026-11-23T20:22:40Z",
    "sec": "Business"
   },
   {
@@ -268,21 +268,21 @@
      "kw": "AI agent OR AI 代理人 OR 智慧代理"
     },
     {
-     "source": "Unite.AI",
-     "title": "Anthropic Launches Zero-Retention Enterprise Frontier Safeguards Beta",
-     "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxNdGU1TTVERW90dUNDNVlSV3BPYlpvdWY4QkY3LThITDRvSVU2eUFaUjEwOC1semxjTHU5WVZsazNjd0poTE9XMXd4VEM1aDhOWngyWWVaUHJ5YWJNd3lVMlpPM09TT05KYlpsczlsbjlMbnM4ckRDZk1iUTZ6VkNqdXJKd2U4aXZ2Q2lTU01JcG9ia3l1QVE?oc=5",
-     "at": "2026-11-23T18:20:04Z",
+     "source": "Reuters",
+     "title": "Anthropic launches Claude Ship to help developers ship code faster",
+     "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNVURIRFNoWllBMDkzLVhtNFloSkdUTFZ2ZmZWN2pMMm52ckI0N1dXT3pVX0VDa3NZYW1YNW5NMVlVdkJCSXVTTGJVc0RxVVNndnhCdTA2dDRIVFIyempCd0MxTEc4SzJoTHJsZGVNTTNDRUlmN1RWb0tzRWRzX2RBZzFkLTlFQkF3VllOUV9ReHg0VHQ4cWtld3psMWpiYTVDZER3UUJ0cXpseWpj?oc=5",
+     "at": "2026-11-23T20:05:43Z",
      "kw": "en:OpenAI OR Anthropic OR \"Google DeepMind\" launches OR announces OR releases"
     }
    ],
    "daily7": [
-    10,
+    8,
     19,
-    34,
-    15,
+    33,
+    14,
     7,
     48,
-    11
+    14
    ],
    "days7": [
     "2026-11-18",
@@ -378,12 +378,12 @@
     }
    ],
    "daily7": [
-    5,
-    4,
-    10,
-    18,
-    15,
-    54,
+    3,
+    6,
+    9,
+    16,
+    14,
+    52,
     5
    ],
    "days7": [
@@ -432,7 +432,7 @@
     7,
     18,
     16,
-    28,
+    27,
     11,
     14,
     1
@@ -584,10 +584,10 @@
    "daily7": [
     10,
     6,
-    5,
     4,
-    3,
-    10,
+    4,
+    4,
+    9,
     3
    ],
    "days7": [
@@ -637,8 +637,8 @@
     9,
     25,
     26,
-    29,
-    39,
+    27,
+    40,
     3
    ],
    "days7": [
@@ -770,6 +770,24 @@
     "hot": true
    },
    {
+    "term": "Anthropic",
+    "n": 7,
+    "src": 6,
+    "sources": [
+     "Anthropic",
+     "CMoney投資網誌",
+     "ETF Database",
+     "Pensions & I",
+     "Reuters",
+     "TradingView"
+    ],
+    "sample": {
+     "title": "Anthropic 推出 Claude Ship，助力開發者更快發布代碼",
+     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBTdzkzTGFnSExfUXNTeFdwM1BkcDZhZ0JycEI3WVZpS18yOXZDY2dDdkZ6R3BsTTF4dExSZ2RKbFJOeVp4bHVzb1FWZFZ1UGJQNktXWDRuOENmX2xLLWFPRXJ3SVI5aHVld2Y5SXZFS2NiMGNFZXQ4?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "黃仁勳",
     "n": 12,
     "src": 5,
@@ -783,23 +801,6 @@
     "sample": {
      "title": "黃仁勳喊迫不及待復工　社群帳號改回輝達創辦人暨執行長",
      "url": "https://www.cna.com.tw/news/aopl/202611240005.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "Anthropic",
-    "n": 6,
-    "src": 5,
-    "sources": [
-     "Anthropic",
-     "CMoney投資網誌",
-     "ETF Database",
-     "TradingView",
-     "Unite.AI"
-    ],
-    "sample": {
-     "title": "Anthropic 推出 Claude Ship，助力開發者更快發布代碼",
-     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBTdzkzTGFnSExfUXNTeFdwM1BkcDZhZ0JycEI3WVZpS18yOXZDY2dDdkZ6R3BsTTF4dExSZ2RKbFJOeVp4bHVzb1FWZFZ1UGJQNktXWDRuOENmX2xLLWFPRXJ3SVI5aHVld2Y5SXZFS2NiMGNFZXQ4?oc=5"
     },
     "hot": true
    },
@@ -903,5 +904,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-23T20:09:05Z"
+ "updatedAt": "2026-11-23T20:25:05Z"
 }
