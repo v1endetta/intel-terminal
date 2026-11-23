@@ -1,52 +1,32 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的目光高度聚焦於金馬獎得獎話題與影視娛樂動態，同時關注科技大佬動向及串流與實用 App 的使用熱潮。",
+ "line": "這幾天台灣消費者的注意力主要集中在串流影音週年慶、話題餐飲新品上市、電動車款升級與金馬獎得獎影人的討論上。",
  "topics": [
   {
-   "name": "Netflix",
-   "q": "Netflix 排行榜",
+   "name": "哥吉拉-0.0",
+   "q": "哥吉拉-0.0",
    "cat": "影視",
    "do": [
     {
-     "src": "Netflix 影集",
-     "name": "Miracles of the ER",
-     "how": "上榜第 1 週、第 1 名"
-    },
-    {
-     "src": "Netflix 影集",
-     "name": "Sunshine Through the Rain",
-     "how": "上榜第 2 週、第 5 名"
-    },
-    {
-     "src": "Netflix 影集",
-     "name": "The Devil's Plan",
-     "how": "上榜第 1 週、第 6 名"
-    },
-    {
-     "src": "Netflix 電影",
-     "name": "One Year to Live, Buy a Man",
-     "how": "上榜第 2 週、第 1 名"
-    },
-    {
-     "src": "Netflix 電影",
-     "name": "Salli",
-     "how": "上榜第 2 週、第 2 名"
+     "src": "電影票房",
+     "name": "哥吉拉-0.0",
+     "how": "本週票房第 1（7482 萬）"
     }
    ],
    "talk": [],
-   "y": 1.0,
-   "news7": 21,
-   "news_p7": 15,
+   "y": 0.95,
+   "news7": 16,
+   "news_p7": 31,
    "news_capped": false,
    "social": {
-    "Threads": 96,
-    "Dcard": 30
+    "Threads": 72,
+    "Dcard": 1
    },
    "mentions": {},
-   "x": 1.0,
-   "talk_trend": "flat",
-   "days": 4,
-   "first": "2026-11-09",
+   "x": 0.94,
+   "talk_trend": "down",
+   "days": 7,
+   "first": "2026-11-17",
    "quad": "hit"
   },
   {
@@ -62,8 +42,8 @@
    ],
    "talk": [],
    "y": 0.75,
-   "news7": 75,
-   "news_p7": 25,
+   "news7": 76,
+   "news_p7": 24,
    "news_capped": true,
    "social": {
     "Threads": 96,
@@ -77,283 +57,100 @@
    "quad": "hit"
   },
   {
-   "name": "哥吉拉-0.0",
-   "q": "哥吉拉 票房",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "電影票房",
-     "name": "哥吉拉-0.0",
-     "how": "本週票房第 1（7482 萬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.95,
-   "news7": 5,
-   "news_p7": 32,
-   "news_capped": false,
-   "social": {
-    "Threads": 72,
-    "Dcard": 1
-   },
-   "mentions": {},
-   "x": 0.71,
-   "talk_trend": "down",
-   "days": 7,
-   "first": "2026-11-17",
-   "quad": "hit"
-  },
-  {
-   "name": "五月天",
-   "q": "五月天 阿信 棠棣賦",
-   "cat": "音樂",
-   "do": [
-    {
-     "src": "YouTube 熱門",
-     "name": "五月天阿信 Ashin [ 棠棣賦 Blood Beyond Blood ] Official Music Video｜",
-     "how": "7 天內上架、發燒第 5"
-    }
-   ],
-   "talk": [],
-   "y": 0.64,
-   "news7": 38,
-   "news_p7": 0,
-   "news_capped": false,
-   "social": {
-    "Threads": 312,
-    "Dcard": 6
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 4,
-   "first": "2026-11-20",
-   "quad": "hit"
-  },
-  {
-   "name": "Spotify",
-   "q": "Spotify 排行榜",
-   "cat": "App",
-   "do": [
-    {
-     "src": "Spotify",
-     "name": "BIGBANG - GiiiRIP",
-     "how": "上榜 2 天、第 5 名"
-    },
-    {
-     "src": "Spotify",
-     "name": "Ronghao Li - 對等關係 (w/ A-Mei Chang)",
-     "how": "升 11 名到第 9"
-    },
-    {
-     "src": "Spotify",
-     "name": "ILLIT - 체포하겠어",
-     "how": "上榜 10 天、第 10 名"
-    },
-    {
-     "src": "Spotify",
-     "name": "Crowd Lu - 幾分之幾 - 電影主題曲",
-     "how": "升 7 名到第 14"
-    },
-    {
-     "src": "Spotify",
-     "name": "Justin Bieber - Beauty And A Beat (w/ Nicki Minaj)",
-     "how": "升 9 名到第 15"
-    }
-   ],
-   "talk": [],
-   "y": 0.88,
-   "news7": 2,
-   "news_p7": 5,
-   "news_capped": false,
-   "social": {
-    "Threads": 72,
-    "Dcard": 3
-   },
-   "mentions": {},
-   "x": 0.61,
-   "talk_trend": "down",
-   "days": 4,
-   "first": "2026-11-09",
-   "quad": "hit"
-  },
-  {
-   "name": "麥當勞",
-   "q": "麥當勞 優惠",
-   "cat": "品牌商品",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "麥當勞APP",
-     "how": "在榜上第 8 名（沒有在爬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.5,
-   "static": true,
-   "news7": 15,
-   "news_p7": 28,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.6,
-   "talk_trend": "down",
-   "days": 4,
-   "first": "2026-11-05",
-   "quad": "hit"
-  },
-  {
    "name": "多鄰國",
-   "q": "多鄰國 學外語",
+   "q": "多鄰國",
    "cat": "App",
    "do": [
     {
      "src": "App 下載",
      "name": "多鄰國 - 極速學外語",
-     "how": "爬升 41 名到第 24"
+     "how": "爬升 56 名到第 9"
     }
    ],
    "talk": [],
-   "y": 0.86,
-   "news7": 1,
-   "news_p7": 2,
+   "y": 1.0,
+   "news7": 14,
+   "news_p7": 7,
    "news_capped": false,
    "social": {
     "Threads": 0.3
    },
    "mentions": {},
-   "x": 0.17,
-   "talk_trend": "flat",
+   "x": 0.61,
+   "talk_trend": "up",
    "days": 6,
    "first": "2026-11-17",
-   "quad": "new"
+   "quad": "hit"
+  },
+  {
+   "name": "麥當勞",
+   "q": "麥當勞 霸牛堡",
+   "cat": "飲食",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "麥當勞APP",
+     "how": "在榜上第 10 名（沒有在爬）"
+    }
+   ],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "麥當勞史上最大牛肉漢堡「霸牛堡」11/25回歸！價格、販售日期一次看"
+    }
+   ],
+   "y": 0.5,
+   "static": true,
+   "news7": 16,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 0.72,
+   "talk_trend": "up",
+   "days": 4,
+   "first": "2026-11-05",
+   "quad": "hit"
   },
   {
    "name": "Disney+",
-   "q": "Disney+",
+   "q": "Disney+ 台灣",
    "cat": "影視",
    "do": [],
-   "talk": [],
+   "talk": [
+    {
+     "src": "Mobile01",
+     "title": "Disney+ 登台五週年！ 持續拓展全球影視內容，同步整合線下娛樂生態系統"
+    },
+    {
+     "src": "時尚媒體",
+     "title": "Disney+ 登台五週年 3 大追劇趨勢！韓華語內容佔近六成，《MOVING 異能》第二季、宋祖兒《新聊齋》即將上線"
+    }
+   ],
    "y": 0.0,
-   "news7": 88,
-   "news_p7": 12,
-   "news_capped": true,
-   "mentions": {},
-   "x": 0.97,
+   "news7": 31,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "Mobile01": 1,
+    "時尚媒體": 1
+   },
+   "x": 0.95,
    "talk_trend": "up",
    "days": 4,
    "first": "2026-11-13",
    "quad": "hype"
   },
   {
-   "name": "金馬獎",
-   "q": "金馬獎 得獎名單",
-   "cat": "活動",
-   "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "金馬獎劉冠廷、袁澧林稱帝后舒淇奪新導演獎| 娛樂"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "金馬時尚／舒淇無懸念奪網友票選「紅毯最美」！菊地凜子霸氣紅裙緊追"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎得獎名單一次看！舒淇奪新導演，劉冠廷袁澧林封金馬63帝后"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎｜金馬63頒獎典禮亮點！舒淇淚謝侯孝賢、李安的眼神暗號、Zendaya驚喜現身、劉嘉玲揭林青霞往事、劉冠廷喊話演員抬頭挺胸"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎｜金馬63完整得獎名單一覽！舒淇從李安手中拿新導演爆哭，劉冠廷《雙囍》影帝、袁澧林《第四幕》影后"
-    }
-   ],
-   "y": 0.0,
-   "news7": 99,
-   "news_p7": 1,
-   "news_capped": true,
-   "social": {
-    "Threads": 32.4
-   },
-   "mentions": {
-    "新聞焦點": 2,
-    "時尚媒體": 8
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 4,
-   "first": "2026-11-20",
-   "quad": "talk"
-  },
-  {
-   "name": "舒淇",
-   "q": "舒淇 金馬獎",
-   "cat": "人物",
-   "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "金馬獎劉冠廷、袁澧林稱帝后舒淇奪新導演獎| 娛樂"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "金馬時尚／舒淇無懸念奪網友票選「紅毯最美」！菊地凜子霸氣紅裙緊追"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎得獎名單一次看！舒淇奪新導演，劉冠廷袁澧林封金馬63帝后"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎｜金馬63頒獎典禮亮點！舒淇淚謝侯孝賢、李安的眼神暗號、Zendaya驚喜現身、劉嘉玲揭林青霞往事、劉冠廷喊話演員抬頭挺胸"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎｜金馬63完整得獎名單一覽！舒淇從李安手中拿新導演爆哭，劉冠廷《雙囍》影帝、袁澧林《第四幕》影后"
-    }
-   ],
-   "y": 0.0,
-   "news7": 98,
-   "news_p7": 2,
-   "news_capped": true,
-   "mentions": {
-    "新聞焦點": 2,
-    "時尚媒體": 5
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-23",
-   "quad": "talk"
-  },
-  {
    "name": "劉冠廷",
-   "q": "劉冠廷 影帝",
+   "q": "劉冠廷 金馬獎",
    "cat": "人物",
    "do": [],
    "talk": [
     {
      "src": "新聞焦點",
-     "title": "金馬獎劉冠廷、袁澧林稱帝后舒淇奪新導演獎| 娛樂"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎得獎名單一次看！舒淇奪新導演，劉冠廷袁澧林封金馬63帝后"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎｜金馬63頒獎典禮亮點！舒淇淚謝侯孝賢、李安的眼神暗號、Zendaya驚喜現身、劉嘉玲揭林青霞往事、劉冠廷喊話演員抬頭挺胸"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬獎｜金馬63完整得獎名單一覽！舒淇從李安手中拿新導演爆哭，劉冠廷《雙囍》影帝、袁澧林《第四幕》影后"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "2026金馬紅毯的珠寶腕錶造型細節！舒華、舒淇、劉冠廷、福士蒼汰..."
+     "title": "劉冠廷奪金馬影帝堅持表演抬頭挺胸喊：我是演員| 娛樂"
     }
    ],
    "y": 0.0,
@@ -361,8 +158,7 @@
    "news_p7": 0,
    "news_capped": true,
    "mentions": {
-    "新聞焦點": 1,
-    "時尚媒體": 5
+    "新聞焦點": 1
    },
    "x": 1.0,
    "talk_trend": "up",
@@ -371,138 +167,60 @@
    "quad": "talk"
   },
   {
-   "name": "黃仁勳",
-   "q": "黃仁勳 輝達",
-   "cat": "人物",
-   "do": [],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[新聞] 貝森特的幽默：黃仁勳現在就是外部人士"
-    },
-    {
-     "src": "PTT",
-     "title": "[新聞] 矽谷大老接連來電 黃仁勳獲勸「拚了」"
-    },
-    {
-     "src": "PTT",
-     "title": "[新聞] 黃仁勳回歸？　美財長：他已是外部人士"
-    },
-    {
-     "src": "PTT",
-     "title": "[新聞] 矽谷大老搶救黃仁勳！諾貝爾得主轟：科技"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "貝森特：黃仁勳能否重返輝達視責任歸屬 再點名台灣晶片集中風險"
-    }
-   ],
-   "y": 0.0,
-   "news7": 81,
-   "news_p7": 19,
-   "news_capped": true,
-   "social": {
-    "Threads": 17.4
-   },
-   "mentions": {
-    "PTT": 4,
-    "新聞焦點": 1
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 6,
-   "first": "2026-11-12",
-   "quad": "talk"
-  },
-  {
-   "name": "特斯拉",
-   "q": "特斯拉 馬斯克",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "馬斯克警告：AI 數據中心領域將有超過 200 家企業面臨併購潮或直接倒閉"
-    }
-   ],
-   "y": 0.0,
-   "news7": 84,
-   "news_p7": 16,
-   "news_capped": true,
-   "mentions": {
-    "Mobile01": 1
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-10",
-   "quad": "talk"
-  },
-  {
-   "name": "IU",
-   "q": "IU 演唱會 高雄 台北",
-   "cat": "活動",
+   "name": "島語",
+   "q": "島語 大巨蛋",
+   "cat": "飲食",
    "do": [],
    "talk": [
     {
      "src": "時尚媒體",
-     "title": "IU宣布2027世巡場次！2月高雄世運、4月臺北大巨蛋開唱"
+     "title": "HOT SPOT｜全台最難訂Buffet「島語」大巨蛋店11/26開幕！11/21開放訂位，餐價、攻略一次看"
     }
    ],
    "y": 0.0,
-   "news7": 25,
+   "news7": 43,
    "news_p7": 0,
    "news_capped": false,
    "mentions": {
     "時尚媒體": 1
    },
-   "x": 0.81,
+   "x": 0.92,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-23",
    "quad": "talk"
   },
   {
-   "name": "UNIQLO TW",
-   "q": "UNIQLO 台灣",
+   "name": "Tesla",
+   "q": "Tesla Model Y Juniper",
    "cat": "品牌商品",
    "do": [],
-   "talk": [],
+   "talk": [
+    {
+     "src": "Mobile01",
+     "title": "【心得】新歡與舊愛！從舊款 Model Y Performance 換到 Juniper RWD，3 個月 2,300km 真實對比"
+    }
+   ],
    "y": 0.0,
-   "news7": 11,
-   "news_p7": 12,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.54,
-   "talk_trend": "flat",
-   "days": 4,
-   "first": "2026-11-13",
-   "quad": "talk"
-  },
-  {
-   "name": "全家發熱衣",
-   "q": "全家 發熱衣",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 1,
+   "news7": 0,
    "news_p7": 0,
    "news_capped": false,
-   "mentions": {},
-   "x": 0.15,
+   "mentions": {
+    "Mobile01": 1
+   },
+   "x": 0.1,
    "talk_trend": "flat",
-   "days": 5,
-   "first": "2026-11-13",
+   "days": 3,
+   "first": "2026-11-18",
    "quad": "low"
   }
  ],
  "quads": {
   "quiet": 0,
-  "hit": 6,
-  "new": 1,
+  "hit": 4,
+  "new": 0,
   "hype": 1,
-  "talk": 7,
+  "talk": 2,
   "low": 1
  },
  "src_do": [
@@ -528,6 +246,5 @@
  "hist_days": 21,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-23T02:08:00Z",
- "error": "2026-11-23T08:31:01Z AttributeError: 'list' object has no attribute 'get'"
+ "updatedAt": "2026-11-23T09:43:25Z"
 }
