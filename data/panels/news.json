@@ -633,10 +633,10 @@
    "daily7": [
     6,
     5,
-    25,
+    24,
     29,
     30,
-    32,
+    31,
     10
    ],
    "days7": [
@@ -796,36 +796,6 @@
     "hot": true
    },
    {
-    "term": "韓股",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "PTT",
-     "中央社",
-     "股市報價& 財經新聞"
-    ],
-    "sample": {
-     "title": "全球AI信心危機延燒　韓股重挫跌回年初水準",
-     "url": "https://www.cna.com.tw/news/afe/202611230042.aspx"
-    },
-    "hot": true
-   },
-   {
-    "term": "科技",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "PTT",
-     "Yahoo 財經",
-     "中央社"
-    ],
-    "sample": {
-     "title": "台灣醫療科技展　佳世達推AI醫療與健康照護4大看點",
-     "url": "https://www.cna.com.tw/news/afe/202611230032.aspx"
-    },
-    "hot": true
-   },
-   {
     "term": "嚴密監控",
     "n": 4,
     "src": 2,
@@ -884,11 +854,39 @@
      "url": "https://www.bbc.co.uk/news/articles/cqdr15l32d3go?at_medium=RSS&at_campaign=rss"
     },
     "hot": false
+   },
+   {
+    "term": "Inkling",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "HN",
+     "電腦王阿達"
+    ],
+    "sample": {
+     "title": "美國開源模型的新希望？ Inkling 2 Mini 能力追平Qwen3.8-27B",
+     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5YLUdhQV9aY3NNUWVvekx2TmhfeUk1MnhIdXkyUXE2TlR3Y2ZPa0ROMXJMbFowUW5LUWdxXzNxSmhvUHhETzFUQ3Axb0l6RDBzdUE?oc=5"
+    },
+    "hot": false
+   },
+   {
+    "term": "Zscaler",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "CMoney",
+     "MoneyDJ"
+    ],
+    "sample": {
+     "title": "資安重磅併購再現？傳CrowdStrike洽購Zscaler",
+     "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOYWh6OTI5d2QyUjN3WGtWYmtjTEJReFlBUzBmY1FPX2FpYUM4LUZ5RnI4dlBDVXU4WEZMZUpMNy04ckJSNlhhZ1pDdGNyemk1M21XakRKSVpQVlhnMHcwYjZJNVFHQnM1Q1JwNTFYQ0hYMUFjaEJQdGhockptbkhpNGFiUGNBcXNLVE1VaFhHMDlGQQ?oc=5"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-23T04:14:36Z"
+ "updatedAt": "2026-11-23T04:32:14Z"
 }
