@@ -75,10 +75,17 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Natural beauty made this New Zealand tourist village. Now it threatens its existence",
+   "url": "https://www.theguardian.com/world/2026/nov/24/nz-franz-josef-village-facing-catastrophic-flooding-and-deaths-waiho-river",
+   "at": "2026-11-23T23:30:00Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "US to blacklist Asian AI firm Megaspeed after Nvidia scandal",
    "url": "https://www.bbc.co.uk/news/articles/cv98xpg5dg5zo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-23T22:45:51Z"
+   "at": "2026-11-23T23:16:08Z"
   },
   {
    "source": "Guardian",
@@ -144,13 +151,6 @@
    "title": "EU sanctions package intended to ‘keep pressure’ on Russia and ‘strike harder’ at its abil",
    "url": "https://www.theguardian.com/world/live/2026/nov/23/russia-ukraine-war-zelenskyy-libya-benghazi-drone-attack-ship-merkury-un-nato-europe-latest-news-updates",
    "at": "2026-11-23T16:42:56Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Leaked data shows more than 1,000 Russian military suicides during Ukraine war",
-   "url": "https://www.theguardian.com/world/2026/nov/23/leaked-data-shows-more-than-1000-russian-military-suicides-during-ukraine-war",
-   "at": "2026-11-23T16:00:51Z",
    "sec": "World news"
   }
  ],
@@ -749,7 +749,7 @@
   "hot": [
    {
     "term": "輝達",
-    "n": 14,
+    "n": 15,
     "src": 7,
     "sources": [
      "CMoney投資網誌",
@@ -803,7 +803,7 @@
    },
    {
     "term": "黃仁勳",
-    "n": 12,
+    "n": 13,
     "src": 5,
     "sources": [
      "PTT",
@@ -867,22 +867,6 @@
     "hot": true
    },
    {
-    "term": "ETF",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "CMoney投資網誌",
-     "FTNN 新聞網",
-     "Pensions & I",
-     "TradingView"
-    ],
-    "sample": {
-     "title": "Anthropic IPO triggers wave of leveraged and inverse ETF lau",
-     "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbXFfOUpTNG1ZclMtTzZMbVhxdmI1RTFqSjg0dTd2TGpQWmpuM0JtLUlJcHlvREREVXc5Q25UTzczYWM4ZXZPSElveEZ0UmI0M0V4YUxOLU44eUxpTWc3bFk5cC1HeHJJbGs2Ulk3U3JJYjR6SnlGZTI3OVJiTlN4dUhZSVh0QXkwSFFHd2lDYzktOVRvTldtRkphRzB1MUtyR0czWWJVX1dSekJVcXIyU3Z4eExmcHNa?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "併購",
     "n": 4,
     "src": 4,
@@ -913,9 +897,26 @@
      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBTdzkzTGFnSExfUXNTeFdwM1BkcDZhZ0JycEI3WVZpS18yOXZDY2dDdkZ6R3BsTTF4dExSZ2RKbFJOeVp4bHVzb1FWZFZ1UGJQNktXWDRuOENmX2xLLWFPRXJ3SVI5aHVld2Y5SXZFS2NiMGNFZXQ4?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "OpenAI",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "HN",
+     "OpenAI",
+     "WSJ"
+    ],
+    "sample": {
+     "title": "Cisco, OpenAI Launch Project to Safeguard Agentic AI",
+     "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQQWRzSVl5NXdtMlRvTWxOYmItRm53SkNyVGdNOVhPSkZGMV82cHJhdWNYeDRrLVlUaUxPTC1QX0IyX2d4UkNKTkF1NVd3d21tcUc5QWk4Wm1qUWl3QlVxOFBJV3lpaWxreUxWaEdpRXZpR29YcUpsa1dJYkVGMDh4a0llVUZJaDBYa3ZsbWNR?oc=5"
+    },
+    "hot": true
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-23T23:08:29Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-23T23:30:21Z"
 }
