@@ -1554,6 +1554,18 @@
    "routine": true
   },
   {
+   "code": "1504",
+   "name": "東元",
+   "mk": "上市",
+   "date": "2026-11-24",
+   "time": "10:00",
+   "place": "W Hotel",
+   "summary": "本公司受邀參加Citi舉辦之 Taiwan Corporate Day，並就本公司營運狀況做一說明。",
+   "ind": "電機機械",
+   "cons": false,
+   "routine": true
+  },
+  {
    "code": "1590",
    "name": "亞德客-KY",
    "mk": "上市",
@@ -1574,6 +1586,18 @@
    "place": "臺灣證券交易所1樓資訊展示中心(台北市信義路五…",
    "summary": "營運報告",
    "ind": "電器電纜",
+   "cons": false,
+   "routine": false
+  },
+  {
+   "code": "2020",
+   "name": "美亞",
+   "mk": "上市",
+   "date": "2026-11-24",
+   "time": "14:00",
+   "place": "線上法說會：https://youtube.c…",
+   "summary": "本公司115年第4次財務業務相關資訊報告",
+   "ind": "鋼鐵工業",
    "cons": false,
    "routine": false
   },
@@ -1830,6 +1854,18 @@
    "routine": false
   },
   {
+   "code": "8499",
+   "name": "鼎炫-KY",
+   "mk": "上市",
+   "date": "2026-11-24",
+   "time": "14:30",
+   "place": "元大金融廣場 3樓B廳(台北市仁愛路三段157…",
+   "summary": "本公司受邀參加元大證券法人說明會，說明公司營運成果以及未來展望。",
+   "ind": "其他電子業",
+   "cons": false,
+   "routine": true
+  },
+  {
    "code": "8996",
    "name": "高力",
    "mk": "上市",
@@ -1898,6 +1934,18 @@
    "place": "Webex線上舉辦",
    "summary": "本公司受邀參加國泰證券舉辦之線上法說會，說明本公司115第3季營運成果",
    "ind": "其他電子業",
+   "cons": false,
+   "routine": true
+  },
+  {
+   "code": "3615",
+   "name": "安可",
+   "mk": "上櫃",
+   "date": "2026-11-24",
+   "time": "14:00",
+   "place": "台北市中山區樂群三路128號7樓(國票金控大樓)",
+   "summary": "本公司受邀參加國票綜合證券舉辦之法人說明會，說明本公司營運概況",
+   "ind": "光電業",
    "cons": false,
    "routine": true
   },
@@ -2212,58 +2260,12 @@
    "ind": "鋼鐵工業",
    "cons": false,
    "routine": true
-  },
-  {
-   "code": "5302",
-   "name": "太欣",
-   "mk": "上櫃",
-   "date": "2026-11-25",
-   "time": "15:00",
-   "place": "線上法說會",
-   "summary": "本公司受邀參加玉山證券舉辦之法人說明會，說明財務業務狀況。",
-   "ind": "半導體業",
-   "cons": false,
-   "routine": true
-  },
-  {
-   "code": "6982",
-   "name": "大井泵浦",
-   "mk": "上櫃",
-   "date": "2026-11-25",
-   "time": "14:30",
-   "place": "台北市中山區明水路700號2樓",
-   "summary": "本公司受邀參加凱基證券舉辦之法人說明會，說明本公司營運概況及未來展望。",
-   "ind": "電機機械",
-   "cons": false,
-   "routine": true
-  },
-  {
-   "code": "2762",
-   "name": "世界健身-KY",
-   "mk": "上市",
-   "date": "2026-11-26",
-   "time": "14:30",
-   "place": "線上會議室",
-   "summary": "本公司受邀請參加富邦證券舉辦之法人說明會，簡介本公司第三季營運績效。",
-   "ind": "運動休閒",
-   "cons": true,
-   "routine": true
-  },
-  {
-   "code": "4911",
-   "name": "德英",
-   "mk": "上櫃",
-   "date": "2026-11-26",
-   "time": "14:30",
-   "place": "線上法人說明會",
-   "summary": "本公司受邀參加華南永昌證券舉辦之線上法人說明會，說明本公司新藥臨床試驗與經營現況",
-   "ind": "生技醫療業",
-   "cons": true,
-   "routine": true
   }
  ],
- "conf_n": 186,
+ "conf_n": 191,
  "src": "證交所／櫃買中心 OpenAPI（公開申購、申請上市櫃、經營權及營業範圍異動專區）＋ 公開資訊觀測站 法人說明會一覽表",
- "errs": [],
- "updatedAt": "2026-11-22T21:05:28Z"
+ "errs": [
+  "法說會上櫃12月: ConnectionError: HTTPSConnectionPool(host='mopsov.twse.com.tw', port=443): Max retries exceeded with url: /mops/web/ajax_t100sb02_1?encodeURIComponent=1&step=1&firstin=1&off=1&T"
+ ],
+ "updatedAt": "2026-11-23T03:09:24Z"
 }
