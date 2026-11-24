@@ -43,7 +43,73 @@
    ]
   }
  },
- "fbx": [],
+ "fbx": [
+  {
+   "code": "FBX",
+   "name": "全球綜合",
+   "chg": 0.06
+  },
+  {
+   "code": "FBX01",
+   "name": "中國→美西",
+   "chg": -5.6
+  },
+  {
+   "code": "FBX02",
+   "name": "美西→中國",
+   "chg": 4.61
+  },
+  {
+   "code": "FBX03",
+   "name": "中國→美東",
+   "chg": 0.06
+  },
+  {
+   "code": "FBX04",
+   "name": "美東→中國",
+   "chg": 1.77
+  },
+  {
+   "code": "FBX11",
+   "name": "中國→北歐",
+   "chg": -0.96
+  },
+  {
+   "code": "FBX12",
+   "name": "北歐→中國",
+   "chg": 3.01
+  },
+  {
+   "code": "FBX13",
+   "name": "中國→地中海",
+   "chg": 20.2
+  },
+  {
+   "code": "FBX14",
+   "name": "地中海→中國",
+   "chg": 0.0
+  },
+  {
+   "code": "FBX21",
+   "name": "美東→北歐",
+   "chg": 3.39
+  },
+  {
+   "code": "FBX22",
+   "name": "北歐→美東",
+   "chg": -3.08
+  },
+  {
+   "code": "FBX24",
+   "name": "北歐→南美東",
+   "chg": -4.29
+  },
+  {
+   "code": "FBX26",
+   "name": "北歐→南美西",
+   "chg": -2.18
+  }
+ ],
  "storms": [
   {
    "name": "03-20262027",
@@ -338,6 +404,46 @@
  "news": [
   {
    "source": "FreightWaves",
+   "title": "Largest US-based port terminal operator appoints Maersk veteran as CEO",
+   "url": "https://www.freightwaves.com/news/largest-us-port-terminal-operator-appoints-maersk-veteran-as-ceo",
+   "at": "2026-11-24T23:07:12+08:00",
+   "hot": true,
+   "zh": ""
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Tropical Smoothie powers expansion with strong supplier relationships, data strategy",
+   "url": "https://www.supplychaindive.com/news/tropical-smoothie-powers-expansion-with-strong-supplier-relationships-data/875588/",
+   "at": "2026-11-24T23:01:00+08:00",
+   "hot": false,
+   "zh": ""
+  },
+  {
+   "source": "The Loadstar",
+   "title": "Flexibility the ‘real commercial value’ for shippers facing disruption",
+   "url": "https://theloadstar.com/flexibility-the-real-commercial-value-for-shippers-facing-disruption/",
+   "at": "2026-11-24T23:00:50+08:00",
+   "hot": true,
+   "zh": ""
+  },
+  {
+   "source": "Supply Chain Dive",
+   "title": "Amazon enlists customers in fight against NYC delivery worker bill",
+   "url": "https://www.supplychaindive.com/news/amazon-enlists-customers-in-fight-against-nyc-delivery-worker-bill/875500/",
+   "at": "2026-11-24T22:50:45+08:00",
+   "hot": false,
+   "zh": ""
+  },
+  {
+   "source": "FreightWaves",
+   "title": "Uber Freight makes a very public break with Gartner’s Quadrant",
+   "url": "https://www.freightwaves.com/news/uber-freight-makes-a-very-public-break-with-gartners-quadrant",
+   "at": "2026-11-24T22:50:09+08:00",
+   "hot": false,
+   "zh": ""
+  },
+  {
+   "source": "FreightWaves",
    "title": "Air cargo’s squeeze makes the case for AI-driven cargo technology",
    "url": "https://www.freightwaves.com/news/air-cargos-squeeze-makes-the-case-for-ai-driven-cargo-technology",
    "at": "2026-11-24T22:13:00+08:00",
@@ -487,52 +593,10 @@
    "at": "2026-11-23T23:22:50+08:00",
    "hot": true,
    "zh": "檢方揭露港口數百万美元走私案的貨車作案手法"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "Walgreens scales micro-fulfillment strategy with Pennsylvania site",
-   "url": "https://www.supplychaindive.com/news/walgreens-scales-micro-fulfillment-strategy-with-pennsylvania-site/875245/",
-   "at": "2026-11-23T23:19:16+08:00",
-   "hot": false,
-   "zh": "華格林透過賓州據點擴大微型物流中心策略"
-  },
-  {
-   "source": "Supply Chain Dive",
-   "title": "Tractor Supply boosts same-day delivery options",
-   "url": "https://www.supplychaindive.com/news/tractor-supply-boosts-same-day-delivery-options/875304/",
-   "at": "2026-11-23T23:06:22+08:00",
-   "hot": false,
-   "zh": "農具供應商 Tractor Supply 增加當日配送選項"
-  },
-  {
-   "source": "The Loadstar",
-   "title": "New and expanding trade flows give African airfreight sector a boost",
-   "url": "https://theloadstar.com/new-and-expanding-trade-flows-give-african-airfreight-sector-a-boost/",
-   "at": "2026-11-23T23:00:28+08:00",
-   "hot": true,
-   "zh": "新興與擴大的貿易流向為非洲航空貨運業注入動能"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "C.H. Robinson: no evidence of racketeering, wants RICO case moved",
-   "url": "https://www.freightwaves.com/news/c-h-robinson-no-evidence-of-racketeering-wants-rico-case-moved",
-   "at": "2026-11-23T22:47:38+08:00",
-   "hot": false,
-   "zh": "羅賓遜全球物流：無勒索證據，要求移轉反勒索案審理"
-  },
-  {
-   "source": "FreightWaves",
-   "title": "Asia–US East Coast ocean freight rates top $10,000, up 300% from a year ago",
-   "url": "https://www.freightwaves.com/news/asia-us-east-coast-ocean-freight-rates-top-10000-up-300-from-a-year-ago",
-   "at": "2026-11-23T22:35:03+08:00",
-   "hot": true,
-   "zh": "亞洲至美國東岸海運費突破 1 萬美元，較去年同期飆漲 300%"
   }
  ],
  "threat": [],
- "errs": [
-  "FBX：頁面格式變了，沒抓到數字"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-24T14:16:45Z"
+ "updatedAt": "2026-11-24T15:17:39Z"
 }
