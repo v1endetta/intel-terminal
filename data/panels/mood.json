@@ -1,43 +1,42 @@
 {
  "taiwan": {
-  "score": 0.2,
-  "label": "關注日常",
+  "score": -0.2,
+  "label": "擔憂觀望",
   "themes": [
-   "股市行情",
-   "生活優惠",
-   "交通安全"
+   "股市震盪",
+   "關稅衝擊",
+   "生活資訊"
   ],
-  "line": "台灣人今天聚焦股市動態與生活省錢資訊，網路討論氣氛平穩。"
+  "line": "台灣人今天關注股市震盪與美國關稅動向，同時留意生活優惠與謠言。"
  },
  "overseas": {
-  "score": -0.2,
-  "label": "憂慮",
+  "score": -0.3,
+  "label": "不滿焦慮",
   "themes": [
    "關稅政策",
-   "科技裁員",
-   "AI安全"
+   "科技股動態",
+   "通膨壓力"
   ],
-  "line": "海外英文社群聚焦川普關稅、企業裁員潮以及人工智慧模型的安全性。"
+  "line": "海外網友主要討論關稅政策帶來的負面衝擊以及科技股與通膨表現。"
  },
  "sources": {
   "PTT": {
-   "score": 0.1,
-   "note": "股民關注盤勢與黃仁勳動向"
+   "score": -0.4,
+   "note": "股市震盪與關稅話題引起恐慌"
   },
   "Mobile01": {
-   "score": 0.2,
-   "note": "車房開箱與生活家電討論"
+   "score": 0.1,
+   "note": "生活家電與日常討論為主"
   },
   "LINE": {
-   "score": -0.3,
-   "note": "流傳詐騙與政治謠言"
+   "score": -0.2,
+   "note": "各類生活謠言與詐騙訊息流傳"
   }
  },
- "watch": "盯緊股市波動與LINE流傳的查證訊息",
+ "watch": "盯緊台股夜盤與美股關稅政策的後續發展。",
  "_grounding": [],
  "model": "gemini-3.5-flash-lite",
  "spark_tw": [
-  -0.6,
   -0.4,
   -0.6,
   -0.6,
@@ -108,10 +107,10 @@
   -0.2,
   0.2,
   -0.2,
-  0.2
+  0.2,
+  -0.2
  ],
  "spark_os": [
-  -0.3,
   -0.3,
   -0.5,
   -0.4,
@@ -182,7 +181,8 @@
   -0.1,
   -0.2,
   -0.3,
-  -0.2
+  -0.2,
+  -0.3
  ],
  "n_inputs": {
   "PTT": 24,
@@ -192,6 +192,5 @@
   "Bluesky（國外）": 14
  },
  "missing": "Dcard、Threads、IG（年輕族群、女性）還沒涵蓋",
- "updatedAt": "2026-11-24T12:03:15Z",
- "error": "2026-11-24T15:17:39Z RuntimeError: gemini-3.6-flash 503 This model is currently experiencing high demand. Spikes in demand are usually temporary. "
+ "updatedAt": "2026-11-24T16:19:29Z"
 }
