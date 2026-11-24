@@ -1,10 +1,53 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "本週台灣消費者聚焦黃仁勳回歸輝達的財經話題，同時熱衷於電影票房、音樂新作及各類數位 App 的下載與應用。",
+ "line": "這幾天台灣消費者的注意力集中在串流影視新片、旅遊優惠、科技話題與熱門3C與穿搭新品的討論上",
  "topics": [
   {
+   "name": "Spotify",
+   "q": "Spotify 熱門排行榜",
+   "cat": "App",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "BIGBANG - GiiiRIP",
+     "how": "上榜 3 天、第 5 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "HWASA - Good Goodbye",
+     "how": "升 43 名到第 18"
+    },
+    {
+     "src": "Spotify",
+     "name": "Leehom Wang - 愛錯",
+     "how": "升 10 名到第 20"
+    },
+    {
+     "src": "Spotify",
+     "name": "BESTie - Love Options",
+     "how": "第 1 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "Jess Lee - 甲乙丙丁 - 你我怎么两清",
+     "how": "第 2 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.88,
+   "news7": 0,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.0,
+   "talk_trend": "flat",
+   "days": 4,
+   "first": "2026-11-09",
+   "quad": "quiet"
+  },
+  {
    "name": "ChatGPT",
-   "q": "ChatGPT App",
+   "q": "ChatGPT 營收",
    "cat": "App",
    "do": [
     {
@@ -15,8 +58,8 @@
    ],
    "talk": [],
    "y": 0.75,
-   "news7": 27,
-   "news_p7": 17,
+   "news7": 18,
+   "news_p7": 30,
    "news_capped": false,
    "social": {
     "Threads": 96,
@@ -24,7 +67,7 @@
    },
    "mentions": {},
    "x": 1.0,
-   "talk_trend": "up",
+   "talk_trend": "down",
    "days": 7,
    "first": "2026-11-14",
    "quad": "hit"
@@ -58,43 +101,8 @@
    "quad": "hit"
   },
   {
-   "name": "麥當勞",
-   "q": "麥當勞 優惠",
-   "cat": "飲食",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "麥當勞APP",
-     "how": "在榜上第 15 名（沒有在爬）"
-    }
-   ],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "Line逛逛領卷買美式咖啡$9"
-    }
-   ],
-   "y": 0.5,
-   "static": true,
-   "news7": 24,
-   "news_p7": 30,
-   "news_capped": false,
-   "social": {
-    "Threads": 96,
-    "Dcard": 30
-   },
-   "mentions": {
-    "PTT": 1
-   },
-   "x": 1.0,
-   "talk_trend": "flat",
-   "days": 5,
-   "first": "2026-11-05",
-   "quad": "hit"
-  },
-  {
    "name": "哥吉拉-0.0",
-   "q": "哥吉拉-0.0 票房",
+   "q": "哥吉拉 0.0 票房",
    "cat": "影視",
    "do": [
     {
@@ -105,52 +113,72 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 8,
-   "news_p7": 21,
+   "news7": 13,
+   "news_p7": 26,
    "news_capped": false,
    "social": {
     "Threads": 0.3,
     "Dcard": 1
    },
    "mentions": {},
-   "x": 0.54,
+   "x": 0.64,
    "talk_trend": "down",
    "days": 7,
    "first": "2026-11-17",
    "quad": "hit"
   },
   {
-   "name": "魔鬼的計謀",
-   "q": "魔鬼的計謀 Netflix",
+   "name": "Netflix",
+   "q": "Netflix 影集 電影 排行榜",
    "cat": "影視",
    "do": [
     {
      "src": "Netflix 影集",
+     "name": "Miracles of the ER",
+     "how": "上榜第 1 週、第 1 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Sunshine Through the Rain",
+     "how": "上榜第 2 週、第 5 名"
+    },
+    {
+     "src": "Netflix 影集",
      "name": "The Devil's Plan",
      "how": "上榜第 1 週、第 6 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "One Year to Live, Buy a Man",
+     "how": "上榜第 2 週、第 1 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "Salli",
+     "how": "上榜第 2 週、第 2 名"
     }
    ],
    "talk": [],
-   "y": 0.75,
-   "news7": 12,
-   "news_p7": 23,
+   "y": 1.0,
+   "news7": 7,
+   "news_p7": 3,
    "news_capped": false,
    "mentions": {},
-   "x": 0.56,
-   "talk_trend": "down",
-   "days": 2,
-   "first": "2026-11-12",
-   "quad": "hit"
+   "x": 0.45,
+   "talk_trend": "up",
+   "days": 4,
+   "first": "2026-11-09",
+   "quad": "new"
   },
   {
    "name": "樂天旅遊",
-   "q": "Rakuten Travel 優惠",
+   "q": "樂天旅遊 日本訂房",
    "cat": "品牌商品",
    "do": [
     {
      "src": "App 下載",
      "name": "Rakuten Travel: Hotel Booking",
-     "how": "新進榜第 7 名"
+     "how": "新進榜第 12 名"
     }
    ],
    "talk": [
@@ -160,43 +188,36 @@
     }
    ],
    "y": 0.9,
-   "news7": 4,
-   "news_p7": 3,
+   "news7": 1,
+   "news_p7": 0,
    "news_capped": false,
    "mentions": {
     "PTT": 1
    },
-   "x": 0.45,
+   "x": 0.25,
    "talk_trend": "flat",
    "days": 1,
    "first": "2026-11-24",
    "quad": "new"
   },
   {
-   "name": "天堂M",
-   "q": "天堂M 改版",
-   "cat": "遊戲",
+   "name": "Blackmagic Camera",
+   "q": "Blackmagic Camera",
+   "cat": "App",
    "do": [
     {
-     "src": "App 營收",
-     "name": "天堂M",
-     "how": "爬升 26 名到第 60"
+     "src": "App 下載",
+     "name": "Blackmagic Camera",
+     "how": "新進榜第 3 名"
     }
    ],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "天堂M 台韓版同步改版直播，打鑽打寶的時機又到了"
-    }
-   ],
-   "y": 0.71,
-   "news7": 2,
-   "news_p7": 2,
+   "talk": [],
+   "y": 0.9,
+   "news7": 1,
+   "news_p7": 1,
    "news_capped": false,
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 0.34,
+   "mentions": {},
+   "x": 0.15,
    "talk_trend": "flat",
    "days": 1,
    "first": "2026-11-24",
@@ -204,7 +225,7 @@
   },
   {
    "name": "Dior",
-   "q": "Dior 大穎",
+   "q": "大穎 我以為我們會結婚",
    "cat": "音樂",
    "do": [
     {
@@ -226,7 +247,7 @@
    "talk": [],
    "y": 0.98,
    "news7": 0,
-   "news_p7": 1,
+   "news_p7": 0,
    "news_capped": false,
    "mentions": {},
    "x": 0.0,
@@ -236,54 +257,8 @@
    "quad": "new"
   },
   {
-   "name": "Blackmagic Camera",
-   "q": "Blackmagic Camera App",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "Blackmagic Camera",
-     "how": "新進榜第 2 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.9,
-   "news7": 0,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.0,
-   "talk_trend": "flat",
-   "days": 1,
-   "first": "2026-11-24",
-   "quad": "new"
-  },
-  {
-   "name": "我的貓會後空翻",
-   "q": "陳華 我的貓會後空翻",
-   "cat": "音樂",
-   "do": [
-    {
-     "src": "KKBOX",
-     "name": "陳華 - 我的貓會後空翻",
-     "how": "升 3 名到第 5"
-    }
-   ],
-   "talk": [],
-   "y": 0.88,
-   "news7": 0,
-   "news_p7": 6,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.0,
-   "talk_trend": "down",
-   "days": 2,
-   "first": "2026-11-17",
-   "quad": "new"
-  },
-  {
    "name": "復仇者聯盟",
-   "q": "復仇者聯盟5 預告",
+   "q": "復仇者聯盟 末日崛起",
    "cat": "影視",
    "do": [],
    "talk": [
@@ -293,47 +268,18 @@
     },
     {
      "src": "時尚媒體",
-     "title": "肯德基聯名《復仇者聯盟》今天開賣！全新「末日漢堡」登場 99元加購5款漫威盲盒公仔"
+     "title": "《復仇者聯盟：末日崛起》終極預告釋出：復仇者聯盟、驚奇4超人、X戰警三大宇宙結合！上映時間、劇情一次看"
     }
    ],
    "y": 0.0,
-   "news7": 20,
-   "news_p7": 0,
+   "news7": 71,
+   "news_p7": 13,
    "news_capped": false,
    "mentions": {
     "PTT": 1,
     "時尚媒體": 1
    },
-   "x": 0.86,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-24",
-   "quad": "hype"
-  },
-  {
-   "name": "GTA6",
-   "q": "GTA6 彩蛋",
-   "cat": "遊戲",
-   "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "《GTA6》神秘紀念碑引發全新解謎潮！「奇利耶德山之謎」再現雷奧奈達"
-    },
-    {
-     "src": "時尚媒體",
-     "title": "《GTA 6》致敬彩蛋！阿湯哥《捍衛戰士：獨行俠》酒吧、基地、角色 ⋯⋯ 你發現了嗎？"
-    }
-   ],
-   "y": 0.0,
-   "news7": 17,
-   "news_p7": 1,
-   "news_capped": false,
-   "mentions": {
-    "新聞焦點": 1,
-    "時尚媒體": 1
-   },
-   "x": 0.83,
+   "x": 1.0,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-24",
@@ -341,38 +287,33 @@
   },
   {
    "name": "黃仁勳",
-   "q": "黃仁勳 輝達 回鍋",
+   "q": "黃仁勳",
    "cat": "人物",
    "do": [],
    "talk": [
     {
      "src": "PTT",
-     "title": "[新聞] 黃仁勳重返輝達！馬斯克談患難見真情："
+     "title": "[新聞] 黃仁勳回歸帶旺台股！00988A卻逆勢走弱"
     },
     {
      "src": "PTT",
-     "title": "[新聞] 黃仁勳回輝達內幕！傳盟友遊說川普："
+     "title": "[情報] 大翻盤、輝達董事會恢復黃仁勳職務 輝達"
     },
     {
      "src": "PTT",
-     "title": "Re: [新聞] 黃仁勳回輝達內幕！傳盟友遊說川普："
+     "title": "[新聞] 空頭崩潰！《大賣空》本尊貝瑞反對黃仁"
     },
     {
-     "src": "PTT",
-     "title": "[新聞] 輝達暴漲逾30%！　川普持股單日最高「大"
-    },
-    {
-     "src": "PTT",
-     "title": "[新聞] 黃仁勳復職不代表風波落幕！美參院、加州"
+     "src": "時尚媒體",
+     "title": "黃仁勳重返輝達穿什麼？捨棄招牌皮衣，換上「哈靈頓夾克」的低調回歸"
     }
    ],
    "y": 0.0,
-   "news7": 93,
-   "news_p7": 7,
+   "news7": 88,
+   "news_p7": 12,
    "news_capped": true,
    "mentions": {
-    "PTT": 6,
-    "新聞焦點": 4,
+    "PTT": 3,
     "時尚媒體": 1
    },
    "x": 1.0,
@@ -382,72 +323,151 @@
    "quad": "talk"
   },
   {
-   "name": "金馬獎",
-   "q": "金馬63 周邊",
-   "cat": "活動",
+   "name": "蔡依林",
+   "q": "蔡依林",
+   "cat": "人物",
    "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "影迷必收限量周邊！FIJI Water攜手金馬63，聯名抱枕入手方式一次看"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 46,
-   "news_p7": 10,
+   "news7": 89,
+   "news_p7": 1,
    "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.94,
+   "mentions": {},
+   "x": 0.98,
    "talk_trend": "up",
-   "days": 4,
+   "days": 2,
    "first": "2026-11-20",
    "quad": "talk"
   },
   {
-   "name": "10-10-10走路法",
-   "q": "10-10-10走路法",
-   "cat": "生活習慣",
+   "name": "CASETiFY",
+   "q": "CASETiFY 寶可夢",
+   "cat": "品牌商品",
    "do": [],
    "talk": [
     {
      "src": "時尚媒體",
-     "title": "睡前5分鐘「強行關機」助眠操！躺在床上做5個動作、每招20下，放鬆腰背、幫助入睡"
+     "title": "CASETiFY寶可夢30週年聯名太欠收藏！手機殼中的寶可夢會動、像素皮卡丘真的會發光、精靈球耳機殼超可愛"
     }
    ],
    "y": 0.0,
    "news7": 6,
-   "news_p7": 4,
+   "news_p7": 1,
    "news_capped": false,
    "mentions": {
     "時尚媒體": 1
    },
    "x": 0.52,
    "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-21",
+   "days": 1,
+   "first": "2026-11-24",
    "quad": "talk"
   },
   {
+   "name": "全聯",
+   "q": "全聯 午夜音樂盒",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] 全聯：可樂果燒番麥、蒜味香腸買一送一"
+    },
+    {
+     "src": "時尚媒體",
+     "title": "全聯的音樂怎麼變成電子舞曲？《午夜音樂盒》在白晝之夜響起"
+    }
+   ],
+   "y": 0.0,
+   "news7": 1,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "PTT": 1,
+    "時尚媒體": 1
+   },
+   "x": 0.35,
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-24",
+   "quad": "low"
+  },
+  {
+   "name": "Toyota",
+   "q": "Toyota CC ACC",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[整理] 50-150萬新車ADAS先進駕駛輔助系統"
+    },
+    {
+     "src": "PTT",
+     "title": "[閒聊] 該收40萬 acc不穩的toyota cc嗎??"
+    },
+    {
+     "src": "Mobile01",
+     "title": "Sienta七人座換胎，求推薦滿載不晃的胎"
+    }
+   ],
+   "y": 0.0,
+   "news7": 0,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "PTT": 2,
+    "Mobile01": 1
+   },
+   "x": 0.3,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-03",
+   "quad": "low"
+  },
+  {
+   "name": "全家發熱衣",
+   "q": "全家 發熱衣",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] PChome24h綁定uniopen會員送30點"
+    }
+   ],
+   "y": 0.0,
+   "news7": 1,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 0.25,
+   "talk_trend": "flat",
+   "days": 4,
+   "first": "2026-11-13",
+   "quad": "low"
+  },
+  {
    "name": "Panasonic",
-   "q": "Panasonic 冷氣",
+   "q": "Panasonic LUMIX TZ300",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
      "src": "Mobile01",
-     "title": "秋冬換冷氣請益(內有選手)"
+     "title": "【盲狙先生傳128】Panasonic LUMIX TZ300 新品體驗會 | 24-360mm高畫質長焦拍攝，輕便小巧的隨身砲再一發!!❤️"
     }
    ],
    "y": 0.0,
-   "news7": 2,
-   "news_p7": 2,
+   "news7": 0,
+   "news_p7": 0,
    "news_capped": false,
    "mentions": {
     "Mobile01": 1
    },
-   "x": 0.34,
+   "x": 0.1,
    "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-20",
@@ -455,12 +475,12 @@
   }
  ],
  "quads": {
-  "quiet": 0,
-  "hit": 5,
-  "new": 5,
-  "hype": 2,
+  "quiet": 1,
+  "hit": 3,
+  "new": 4,
+  "hype": 1,
   "talk": 3,
-  "low": 1
+  "low": 4
  },
  "src_do": [
   "App 下載",
@@ -485,7 +505,7 @@
  ],
  "social_at": "2026-11-23",
  "hist_days": 22,
- "model": "gemini-3.1-flash-lite",
+ "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-24T06:20:59Z"
+ "updatedAt": "2026-11-24T12:22:35Z"
 }
