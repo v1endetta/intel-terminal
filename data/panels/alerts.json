@@ -1,6 +1,19 @@
 {
  "alerts": [
   {
+   "id": "CWA-Weather_extremely-rain_202611241627001",
+   "cat": "降雨",
+   "lvl": 2,
+   "area": [
+    "基隆市"
+   ],
+   "text": "東北季風影響，今(24)日基隆北海岸及大臺北山區有局部大雨發生的機率，請注意。",
+   "src": "中央氣象署",
+   "at": "2026-11-24T08:27:27Z",
+   "exp": "2026-11-24T23:00:00+08:00",
+   "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_RAIN/fifows_extremely-rain_202611241627.cap"
+  },
+  {
    "id": "CWA-Weather_strong-wind_202611241033001",
    "cat": "強風",
    "lvl": 2,
@@ -125,12 +138,12 @@
    "url": "https://alerts.ncdr.nat.gov.tw/Capstorage/CWA/2026/Weather_warnings_WIND/fifows_strong-wind_202611231025.cap"
   }
  ],
- "n_total": 5,
+ "n_total": 6,
  "stopwork": {
   "items": [],
   "none": true,
-  "updated": "2026/11/24 16:10:15"
+  "updated": "2026/11/24 16:25:15"
  },
  "errs": [],
- "updatedAt": "2026-11-24T08:08:32Z"
+ "updatedAt": "2026-11-24T08:30:21Z"
 }
