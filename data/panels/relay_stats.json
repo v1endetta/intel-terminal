@@ -983,10 +983,10 @@
   },
   "dgc2_labor": {
    "url": "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sys=220&kind=21&type=0&outmode=12&compmode=00&outkind=3&deflst=2&ymf=11301&ymt=11512&funid=A040101020&cycle=1",
-   "len": 64254,
+   "len": 66219,
    "kind": "csv",
    "head": "\"勞動力\",\"就業者\",\"失業者\",\"非勞動力\"\r\n\"113年1月/ 合計/ 合計\",\"     11,587\",\"        397\",\"      8,243\"\r\n\"113年1月/ 合計/ 　國小及以下\",\"        431\",\"          1\",\"      1,801\"\r\n\"113年1月/ 合計/ 　國中\",\"      1,026\",\"         30\",\"        874\"\r\n\"113年1月/ 合計/ 　高級中等(高中、高職)\",\"      3,476\",\"        111\",\"      2,261\"\r\n\"113年1月/ 合計/ 　專科\",\"      1,666\",\"         45\",\"        669\"\r\n\"113年1月/ 合計/ 　大學及以上\",\"      4,988\",\"        210\",\"      2,",
-   "n_lines": 794
+   "n_lines": 818
   },
   "dgc2_sa": {
    "url": "https://nstatdb.dgbas.gov.tw/dgbasAll/webMain.aspx?sys=220&kind=21&type=0&outmode=12&compmode=00&outkind=3&deflst=2&ymf=11301&ymt=11512&funid=A030601015&cycle=1",
@@ -1012,7 +1012,7 @@
  },
  "relay": {
   "runs": 179,
-  "since": "2026-11-21T08:20:27+08:00",
+  "since": "2026-11-21T09:20:07+08:00",
   "avg_sec": 4.2,
   "max_sec": 67.5,
   "sections": {
@@ -1026,20 +1026,20 @@
    "stats": 0.0
   },
   "avg_a": 1.21,
-  "avg_b": 1.57,
-  "last": "2026-11-24T08:05:12+08:00"
+  "avg_b": 1.56,
+  "last": "2026-11-24T09:10:11+08:00"
  },
  "fetch": {
-  "vault_writes": 230,
-  "relay_reads": 2979,
+  "vault_writes": 232,
+  "relay_reads": 2982,
   "month": "2026-11",
   "day": 24
  },
  "est": {
-  "vcpu": 38216,
-  "gib": 38216,
-  "a": 3045,
-  "b": 7256
+  "vcpu": 38161,
+  "gib": 38161,
+  "a": 3048,
+  "b": 7234
  },
  "free": {
   "vcpu": 240000,
@@ -1051,11 +1051,11 @@
   "vcpu": 16,
   "gib": 8,
   "a": 61,
-  "b": 15
+  "b": 14
  },
  "assume": {
   "runs_day": 75,
   "boot_sec": 10
  },
- "updatedAt": "2026-11-24T00:09:36Z"
+ "updatedAt": "2026-11-24T01:12:31Z"
 }
