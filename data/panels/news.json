@@ -75,17 +75,17 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Indian government has 'lost the plot', says 'cockroach' leader barred from UK flight",
+   "url": "https://www.bbc.co.uk/news/articles/cm5y1ezx2gqyo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-24T18:07:46Z"
+  },
+  {
    "source": "Guardian",
    "title": "Israel attempts to jail Palestinian student at Hebrew University without trial",
    "url": "https://www.theguardian.com/world/2026/nov/24/israel-jail-palestinian-student-mahdi-tounsi-hebrew-university-without-trial",
    "at": "2026-11-24T18:02:53Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Indian government has 'lost the plot', says 'cockroach' leader barred from UK flight",
-   "url": "https://www.bbc.co.uk/news/articles/cm5y1ezx2gqyo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-24T18:02:27Z"
   },
   {
    "source": "Guardian",
@@ -575,19 +575,19 @@
     },
     {
      "source": "European Bio",
-     "title": "AI drug discovery’s new bottleneck is the lab",
-     "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxNUEFFQXlUdWpBNTFPUHdIU3JDZ25xZXZDeU9RbWRRQTgzWnktZUtXZ1c0cXNzLUh0aHl5Mmd0WDEwaXRDamVhOUh2dllLVnJvdkNlS3RXRWExREZpWGlkN0tsUjAxNVZ6QndIeEhxdHRHRGZmSHJsUVdLOV9ENlF5SVNESHR6NmY2V056RWRXTDVGbXAzMEE?oc=5",
-     "at": "2026-11-23T12:51:33Z",
+     "title": "Boltz raises $110M after 50-fold surge in AI usage",
+     "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQd1FqX0diSXoxbXRsMUZONXRqNzdKR0x1ZEp4d2FuZlRha0hiNmoxRkZqZmlaQzVnS29RN016NHB5N2JOcXNvX3JpaDYtcGNEdzl3NENHYjBydUdMaTVLYVc3aGtOZTRCNWpuUmd3Q0JxSzludWw0dDhnNTBkdlpBWmhTOEVDRzRwT05wQkxZaDhTQm9HcHc1WTFFWDZhQQ?oc=5",
+     "at": "2026-11-19T16:43:09Z",
      "kw": "en:biotech raises OR \"drug discovery\" AI"
     }
    ],
    "daily7": [
     12,
-    6,
+    7,
     5,
     0,
-    6,
-    13,
+    5,
+    14,
     1
    ],
    "days7": [
@@ -656,6 +656,8 @@
   "gdelt": {
    "vol": 3.013,
    "vol_ratio": 2.07,
+   "tone": 0.74,
+   "tone_at": "2026-11-24T18:19:57Z",
    "spark": [
     1.182,
     1.971,
@@ -672,7 +674,7 @@
     3.013,
     3.013
    ],
-   "at": "2026-11-24T17:48:23Z"
+   "at": "2026-11-24T18:19:57Z"
   },
   "wiki": {
    "zh": [
@@ -803,7 +805,7 @@
    },
    {
     "term": "黃仁勳",
-    "n": 6,
+    "n": 7,
     "src": 4,
     "sources": [
      "Facebook",
@@ -814,22 +816,6 @@
     "sample": {
      "title": "川普稱說服輝達迎黃仁勳回歸 美國跨黨派議員批無視國安風險",
      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE0yRG5JTmRRTUhZR21RakRPOEFfZm1nNjYtZ0RaM2Rha0hIRWduLUdRT3VSaUcyQjJidnZwYlJDWTdzeWx3UVkydVNveElBdXc?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "IPO",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "Guardian",
-     "HN",
-     "財訊",
-     "鉅亨網"
-    ],
-    "sample": {
-     "title": "Tech sell-off resumes as Nvidia shares drop 5% and Anthropic",
-     "url": "https://www.theguardian.com/business/live/2026/nov/24/jensen-huang-nvidia-stock-markets-ai-trade-us-political-backlash-donald-trump-latest-news-updates"
     },
     "hot": true
    },
@@ -851,7 +837,7 @@
    },
    {
     "term": "Nvidia",
-    "n": 4,
+    "n": 5,
     "src": 3,
     "sources": [
      "BBC",
@@ -893,11 +879,24 @@
      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE0yRG5JTmRRTUhZR21RakRPOEFfZm1nNjYtZ0RaM2Rha0hIRWduLUdRT3VSaUcyQjJidnZwYlJDWTdzeWx3UVkydVNveElBdXc?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "IPO",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Guardian",
+     "財訊",
+     "鉅亨網"
+    ],
+    "sample": {
+     "title": "Tech sell-off resumes as Nvidia shares drop 5% and Anthropic",
+     "url": "https://www.theguardian.com/business/live/2026/nov/24/jensen-huang-nvidia-stock-markets-ai-trade-us-political-backlash-donald-trump-latest-news-updates"
+    },
+    "hot": true
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-24T18:04:10Z"
+ "errs": [],
+ "updatedAt": "2026-11-24T18:19:57Z"
 }
