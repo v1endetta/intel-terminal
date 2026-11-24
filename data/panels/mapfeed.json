@@ -6272,18 +6272,16 @@
   },
   {
    "ll": [
-    121.4309,
-    25.0461
+    121.4286,
+    25.0449
    ],
    "place": "新北市新莊區",
    "lvl": "town",
-   "t": "宋楚瑜偕蕭夙玲參拜新莊昭聖宮媽祖　盛讚蕭深耕地方16年籲鄉親支持",
+   "t": "宋楚瑜偕蕭夙玲參拜新莊昭聖宮媽祖 盛讚深耕地方16年籲鄉親支持",
    "u": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFA5YTdiUmswMlMxY2VBNDlreExxdDlxNklsWTJ3NHVURTZ6U0hGbXRIcnNJZzk1b1JUSG1pQlJxbThPcjFOOTN0YnhTUFVpd3BxTzJv0gFYQVVfeXFMT3VZQ0M5WW13TTQ1eWFDb3JRNlA2WGlaNmF2STM2R0NaSjQyQnBMVHpNcGpBNVRUcGN0QlNDT2k5VnJoU2xBTmlwSjltLTlCbmludmxRcy1QdQ?oc=5",
    "s": "UDN",
    "at": "2026-11-24T04:49:04Z",
-   "k": "news",
-   "v": 1,
-   "kc": "政治"
+   "k": "news"
   },
   {
    "ll": [
@@ -6314,21 +6312,6 @@
    "k": "news",
    "v": 3,
    "kc": "交通"
-  },
-  {
-   "ll": [
-    121.4068,
-    24.8926
-   ],
-   "place": "新北市三峽區",
-   "lvl": "town",
-   "t": "粉紅超跑「白沙屯媽祖」即將登陸新北！繞行三峽、鶯歌老街，祈福路線看這篇",
-   "u": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9xRE1TVlJlRjBZZUZuYjNkWlJtcDRDOWI3dllIQVptU1BuVzFTNGxINGFGdkNQX1NGUkV0azZGLXVPX1RLYmlobkRiUnpOMlgxaTY5SjQ4VQ?oc=5",
-   "s": "食尚玩家",
-   "at": "2026-11-24T04:00:00Z",
-   "k": "news",
-   "v": 2,
-   "kc": "活動"
   }
  ],
  "alerts": [
@@ -7025,9 +7008,11 @@
    "ban": "61987519"
   }
  ],
- "n_town": 272,
- "n": 422,
- "n_scored": 422,
- "errs": [],
- "updatedAt": "2026-11-24T05:56:22Z"
+ "n_town": 271,
+ "n": 421,
+ "n_scored": 420,
+ "errs": [
+  "地方新聞評分: RuntimeError: gemini-3.1-flash-lite 503 This model is currently experiencing high demand. Spikes in demand are usually temporary. "
+ ],
+ "updatedAt": "2026-11-24T06:20:59Z"
 }
