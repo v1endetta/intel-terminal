@@ -1,63 +1,13 @@
 {
  "forums": [
   {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Please Keep GPT-5.6 Sol Available as a Legacy Model",
-   "url": "https://community.openai.com/t/please-keep-gpt-5-6-sol-available-as-a-legacy-model/1419909",
-   "replies": 31,
-   "likes": 139,
-   "views": 397,
-   "at": "2026-11-24T00:28:17Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Please do not retire GPT-5.6 Sol — or I will cancel my subscription",
-   "url": "https://community.openai.com/t/please-do-not-retire-gpt-5-6-sol-or-i-will-cancel-my-subscription/1419942",
-   "replies": 15,
-   "likes": 102,
-   "views": 354,
-   "at": "2026-11-24T02:52:27Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "GPT-6.2 destroyed what made ChatGPT feel alive",
-   "url": "https://community.openai.com/t/gpt-6-2-destroyed-what-made-chatgpt-feel-alive/1419938",
-   "replies": 9,
-   "likes": 58,
-   "views": 711,
-   "at": "2026-11-24T02:16:51Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Keep GPT-5.6 Sol available as a Legacy model for paying users",
-   "url": "https://community.openai.com/t/keep-gpt-5-6-sol-available-as-a-legacy-model-for-paying-users/1420121",
-   "replies": 7,
-   "likes": 35,
-   "views": 126,
-   "at": "2026-11-24T12:51:10Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Please consider keeping 5.6 (and possibly 5.5 too)",
-   "url": "https://community.openai.com/t/please-consider-keeping-5-6-and-possibly-5-5-too/1419907",
-   "replies": 3,
-   "likes": 26,
-   "views": 142,
-   "at": "2026-11-24T00:17:21Z"
-  },
-  {
    "source": "Google AI 論壇",
    "vendor": "google",
    "title": "Jio Google AI Pro Subscribers Losing Gemini 3.8 Flash on November 30 — What Model Replaces",
    "url": "https://discuss.ai.google.dev/t/jio-google-ai-pro-subscribers-losing-gemini-3-8-flash-on-november-30-what-model-replaces-it-in-antigravity/204450",
-   "replies": 12,
+   "replies": 13,
    "likes": 41,
-   "views": 1653,
+   "views": 1666,
    "at": "2026-11-24T00:08:51Z"
   },
   {
@@ -67,7 +17,7 @@
    "url": "https://discuss.ai.google.dev/t/what-alternative-will-be-available-for-jio-subscription-users-after-gemini-3-8-flash-deprecation/204591",
    "replies": 9,
    "likes": 10,
-   "views": 221,
+   "views": 227,
    "at": "2026-11-24T06:03:54Z"
   },
   {
@@ -77,18 +27,8 @@
    "url": "https://discuss.ai.google.dev/t/jio-google-ai-pro-subscribers-losing-gemini-3-8-flash-on-nov-30-gemini-4-hydrogen-still-locked/204551",
    "replies": 4,
    "likes": 16,
-   "views": 879,
+   "views": 902,
    "at": "2026-11-24T04:37:53Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "Jio Google AI Pro users: Gemini 4 Hydrogen access and Gemini 3.8 Flash removal on November",
-   "url": "https://discuss.ai.google.dev/t/jio-google-ai-pro-users-gemini-4-hydrogen-access-and-gemini-3-8-flash-removal-on-november-30/204421",
-   "replies": 2,
-   "likes": 4,
-   "views": 280,
-   "at": "2026-11-23T21:33:33Z"
   },
   {
    "source": "Google AI 論壇",
@@ -97,8 +37,18 @@
    "url": "https://discuss.ai.google.dev/t/google-ai-pro-account-experiencing-503-errors-and-incorrect-daily-quota-exhaustion/204725",
    "replies": 0,
    "likes": 2,
-   "views": 42,
+   "views": 44,
    "at": "2026-11-24T10:57:54Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "AI Studio flagged my account for some inexplicable reason, and now I'm not even allowed to",
+   "url": "https://discuss.ai.google.dev/t/ai-studio-flagged-my-account-for-some-inexplicable-reason-and-now-im-not-even-allowed-to-use-the-entire-gemini-service/204759",
+   "replies": 0,
+   "likes": 2,
+   "views": 38,
+   "at": "2026-11-24T11:52:39Z"
   }
  ],
  "changelogs": [
@@ -295,11 +245,13 @@
    "at": "2026-11-19T22:14:41Z"
   }
  ],
- "errs": [],
+ "errs": [
+  "OpenAI 論壇: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+ ],
  "diag": [
-  "Gemini changelog md: got html 141917b",
+  "Gemini changelog md: got html 142020b",
   "DeepSeek updates md: 21527b 0 entries head='# Change Log\\n\\n***\\n\\n## Date: 2026-11-13\\n\\n### Releasing the fu'",
   "xAI release notes md: 20155b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## November\\n\\n### grok-b'"
  ],
- "updatedAt": "2026-11-24T21:42:06Z"
+ "updatedAt": "2026-11-24T22:49:02Z"
 }
