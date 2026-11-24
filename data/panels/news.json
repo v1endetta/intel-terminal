@@ -75,6 +75,19 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Land mine casualties soar in Syria, two years after war",
+   "url": "https://www.bbc.co.uk/news/articles/c893rl37ywdgo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-24T15:17:28Z"
+  },
+  {
+   "source": "Guardian",
+   "title": "Italy expresses concern to Ukraine over Libya ship attacks – Europe live",
+   "url": "https://www.theguardian.com/world/live/2026/nov/24/russia-ukraine-poland-drone-patriots-latest-news-updates",
+   "at": "2026-11-24T15:15:22Z",
+   "sec": "World news"
+  },
+  {
    "source": "Guardian",
    "title": "Tech sell-off resumes as Nvidia shares drop 5% and Anthropic tumbles below IPO price – bus",
    "url": "https://www.theguardian.com/business/live/2026/nov/24/jensen-huang-nvidia-stock-markets-ai-trade-us-political-backlash-donald-trump-latest-news-updates",
@@ -86,13 +99,6 @@
    "title": "Gaza issues meningitis epidemic alert after steep rise in cases",
    "url": "https://www.theguardian.com/world/2026/nov/24/gaza-meningitis-epidemic-alert",
    "at": "2026-11-24T14:51:18Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Italy expresses concern to Ukraine over Libya ship attacks – Europe live",
-   "url": "https://www.theguardian.com/world/live/2026/nov/24/russia-ukraine-poland-drone-patriots-latest-news-updates",
-   "at": "2026-11-24T14:43:50Z",
    "sec": "World news"
   },
   {
@@ -128,12 +134,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/24/pope-francis-gates-of-hell-clerical-sexual-abuse-scandal-diary-excerpts-reveal",
    "at": "2026-11-24T11:49:46Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Car bomb tears through Colombian city wounding more than 20",
-   "url": "https://www.bbc.co.uk/news/articles/cjqlq2n4np7do?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-24T11:45:52Z"
   },
   {
    "source": "BBC",
@@ -753,23 +753,6 @@
     "hot": true
    },
    {
-    "term": "生醫",
-    "n": 5,
-    "src": 5,
-    "sources": [
-     "Yahoo股市",
-     "中央社",
-     "巴士的報",
-     "財訊",
-     "鉅亨網"
-    ],
-    "sample": {
-     "title": "國發會：生醫納戰略產業規劃　2030年營業額拚兆元",
-     "url": "https://www.cna.com.tw/news/afe/202611240300.aspx"
-    },
-    "hot": true
-   },
-   {
     "term": "Claude Ship",
     "n": 4,
     "src": 4,
@@ -782,6 +765,22 @@
     "sample": {
      "title": "Anthropic 推出 Claude Ship，由 AI Agent 審查、修正，再依團隊政策核准 PR",
      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPdHVCc3AyWFl1ZDViMlNsN1VvdmRCVWFYNDlRMV82alhvQmxXZWtTN1JtQlFvQlpGMUtXem90VE9VU1BiTXlaZ3h2bXA3bURBU1pkd0JIMW1QVkt2QWlmd3NNUTZMc0EtMi1vN2s1WURGZWVxVDZCemJfUUdMeU9SRDc1QWE3dk5zM19lNWJXN2NIdHQxUGc?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "生醫",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "Yahoo股市",
+     "中央社",
+     "財訊",
+     "鉅亨網"
+    ],
+    "sample": {
+     "title": "國發會：生醫納戰略產業規劃　2030年營業額拚兆元",
+     "url": "https://www.cna.com.tw/news/afe/202611240300.aspx"
     },
     "hot": true
    },
@@ -851,7 +850,7 @@
    },
    {
     "term": "黃仁勳",
-    "n": 6,
+    "n": 7,
     "src": 3,
     "sources": [
      "Facebook",
@@ -899,5 +898,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-24T15:08:34Z"
+ "updatedAt": "2026-11-24T15:30:07Z"
 }
