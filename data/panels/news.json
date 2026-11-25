@@ -76,16 +76,29 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "UK food inflation could hit 5% next year, Bank of England says",
-   "url": "https://www.theguardian.com/business/2026/nov/25/uk-food-inflation-sharp-rise-next-year-mounting-cost-pressures-bank-of-england",
-   "at": "2026-11-25T19:25:57Z",
-   "sec": "Business"
+   "title": "Lululemon founder stuns Canadian women’s leadership conference with sexist comments",
+   "url": "https://www.theguardian.com/world/2026/nov/25/lululemon-founder-comments-canada-womens-leadership-conference",
+   "at": "2026-11-25T19:57:49Z",
+   "sec": "World news"
   },
   {
    "source": "BBC",
    "title": "US Army says controlled blast of explosives in Iowa was 'huge success'",
    "url": "https://www.bbc.co.uk/news/articles/cwg7l5ve251ko?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-25T19:23:03Z"
+   "at": "2026-11-25T19:54:52Z"
+  },
+  {
+   "source": "BBC",
+   "title": "Israeli judges recommend dropping most serious charges against Netanyahu",
+   "url": "https://www.bbc.co.uk/news/articles/cxj05mv723r2o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-25T19:47:39Z"
+  },
+  {
+   "source": "Guardian",
+   "title": "UK food inflation could hit 5% next year, Bank of England says",
+   "url": "https://www.theguardian.com/business/2026/nov/25/uk-food-inflation-sharp-rise-next-year-mounting-cost-pressures-bank-of-england",
+   "at": "2026-11-25T19:25:57Z",
+   "sec": "Business"
   },
   {
    "source": "Guardian",
@@ -139,19 +152,6 @@
    "url": "https://www.theguardian.com/business/live/2026/nov/25/rise-energy-bills-britain-2166-impossible-high-millions-households-stocks-tumble-as-ai-rally-fizzles-live-updates",
    "at": "2026-11-25T17:19:11Z",
    "sec": "Business"
-  },
-  {
-   "source": "BBC",
-   "title": "US announces new tariffs on host of countries including China",
-   "url": "https://www.bbc.co.uk/news/articles/c893r9ke5p97o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-25T16:21:34Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "‘Russia wants more than Ukraine,’ Germany’s Merz warns – as it happened",
-   "url": "https://www.theguardian.com/world/live/2026/nov/25/ukraine-russia-energy-strikes-mark-rutte-donald-trump-friedrich-merz-germany-latest-news-updates",
-   "at": "2026-11-25T16:20:53Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -669,7 +669,7 @@
  "signals": {
   "gdelt": {
    "vol": 2.39,
-   "vol_ratio": 0.9,
+   "vol_ratio": 0.87,
    "tone": -0.09,
    "tone_at": "2026-11-25T18:23:36Z",
    "spark": [
@@ -688,7 +688,7 @@
     2.39,
     2.39
    ],
-   "at": "2026-11-25T19:26:17Z"
+   "at": "2026-11-25T20:02:00Z"
   },
   "wiki": {
    "zh": [
@@ -843,6 +843,21 @@
     "hot": true
    },
    {
+    "term": "Anthropic",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "Anthropic",
+     "HN",
+     "TechCrunch"
+    ],
+    "sample": {
+     "title": "Anthropic announces closing of initial public offering, incl",
+     "url": "https://www.anthropic.com/news/ipo-close"
+    },
+    "hot": true
+   },
+   {
     "term": "出爐",
     "n": 3,
     "src": 3,
@@ -873,21 +888,6 @@
     "hot": true
    },
    {
-    "term": "軍演",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "RFI",
-     "Rti 中央廣播電臺",
-     "自由軍武頻道"
-    ],
-    "sample": {
-     "title": "中國百艦不是在搞大軍演？美智庫揭多線部署真正目的",
-     "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBYN1ZIOG9GUk5Uc1o3QlFLUXo0b0k1cXRPdnU0Q1VNRGQxT3ZDSkJRYWRpdHlSeUYwRU9paGozOXZFeXNKWG1yNk1KZ2lHenVNakFSdXRDUFB1d000QnduONIBZkFVX3lxTE5ldE5vcFR2cTVLWnA2alNudWlhUjd6UUUtQkpzNVgtekZ1NTYyMU1SOHplQXdFNHlHeFhjZHBOSnVYQXJPc28xc3RSa0xXX2VlVi01dE1CUVZwZHZDZGZRWmMwQTZRQQ?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "貿易",
     "n": 3,
     "src": 3,
@@ -904,8 +904,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-25T19:42:36Z"
+ "errs": [],
+ "updatedAt": "2026-11-25T20:02:00Z"
 }
