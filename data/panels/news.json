@@ -76,6 +76,12 @@
  "intl": [
   {
    "source": "BBC",
+   "title": "Thirty-one killed in massive fire as fuel tanker crashes on Cairo highway",
+   "url": "https://www.bbc.co.uk/news/articles/cqy7rn30v314o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-25T22:18:06Z"
+  },
+  {
+   "source": "BBC",
    "title": "North Korea expels Swiss diplomat in sanctions row",
    "url": "https://www.bbc.co.uk/news/articles/cq0l34e4kkr5o?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-25T21:51:17Z"
@@ -85,12 +91,6 @@
    "title": "US stocks fall further as fears over AI intensify",
    "url": "https://www.bbc.co.uk/news/articles/cq0md8g14zryo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-25T21:43:18Z"
-  },
-  {
-   "source": "BBC",
-   "title": "At least 30 killed in massive fire as fuel tanker crashes on Cairo highway",
-   "url": "https://www.bbc.co.uk/news/articles/cqy7rn30v314o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-25T21:25:14Z"
   },
   {
    "source": "Guardian",
@@ -649,9 +649,9 @@
     8,
     17,
     18,
-    28,
+    29,
     24,
-    36,
+    35,
     3
    ],
    "days7": [
@@ -667,8 +667,8 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 2.55,
-   "vol_ratio": 0.95,
+   "vol": 2.861,
+   "vol_ratio": 1.13,
    "tone": -0.09,
    "tone_at": "2026-11-25T18:23:36Z",
    "spark": [
@@ -685,9 +685,9 @@
     1.314,
     3.013,
     2.39,
-    2.55
+    2.861
    ],
-   "at": "2026-11-25T21:04:28Z"
+   "at": "2026-11-25T22:24:32Z"
   },
   "wiki": {
    "zh": [
@@ -833,12 +833,12 @@
     "src": 3,
     "sources": [
      "Newtalk新聞",
-     "Rti 中央廣播電臺",
+     "元丰傳媒",
      "自由時報"
     ],
     "sample": {
-     "title": "台中市長選戰／陪何欣純車掃 「實實」蔡英文籲每人拉10票",
-     "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5yME05VzRDaVNzdmNVNjNOa0pFNUNUVzlrcUR2b3p5WHU4UklYSThwSzZqZ1NVaExLa0dwWGJnbGktR2NXbkpkYWZCZzd1UjV0aHo0WEhFU1U?oc=5"
+     "title": "黃金72小時直搗盧秀燕北屯本命區 何欣純團結之夜：8年台中問題被忽視",
+     "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5zaEMyd0RpQkI0bVBRRGxpb0YwWnFHaGt3ZmFUNnFyOGdTSjN0bmZhTi15TEktVUtZOERmWUhqandPUUV3dHRFZmRhektPSnlocTh6bkZ6WXQ4Q2Y2NHpDTVpBeWJTVmxER1HSAW9BVV95cUxORkxVZk9sVVRROFJGOUVTajlKS083OWRYVE5jTVFac21sYmtTVHA3N1BmakxuODM0NHhfSS11V29SelhCNnJManRXMmRGb09UOXhhWnBvdG1RZzlBR2JpdU5OdmgzbTJDaERvd0V6RTQ?oc=5"
     },
     "hot": true
    },
@@ -888,23 +888,21 @@
     "hot": true
    },
    {
-    "term": "稅率",
+    "term": "GPT",
     "n": 3,
     "src": 2,
     "sources": [
-     "中央社",
-     "太報 TaiSounds"
+     "HN",
+     "R&D World"
     ],
     "sample": {
-     "title": "美301調查　政院：台灣建議稅率15%不疊加級別最低",
-     "url": "https://www.cna.com.tw/news/aipl/202611260005.aspx"
+     "title": "GPT-6.2 protein design yields binders for five targets",
+     "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNc0YtaF9OcnZ6STlwV1dBYlRzUzY3NGtFVWlwQUFJT1hmRkN3MVdaOE5Rc2dWbWV4WXRPbHJpdWNNR3RKdXM5UFZONHVPQmFiVGJ4bjl3QmJoeEFYcVJGSGw4bGs4dHFSVmhkZW9zZXpocDNUZ0lvdFZpR2dUVm5iZHZVaDVvNHItODBqVWdCWk5YWXdLMlhJQTM0Q09FOGs?oc=5"
     },
     "hot": false
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-25T22:05:17Z"
+ "errs": [],
+ "updatedAt": "2026-11-25T22:24:32Z"
 }
