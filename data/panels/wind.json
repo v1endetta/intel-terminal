@@ -1,7 +1,137 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者聚焦於輝達黃仁勳動態、熱門影視作品與音樂，同時關注旅遊優惠與AI應用工具。",
+ "line": "這幾天台灣消費者的目光高度聚焦在娛樂影音串流、熱門音樂新作與科技話題上。",
  "topics": [
+  {
+   "name": "Dior",
+   "q": "Dior 大穎",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "KKBOX",
+     "name": "DIOR 大穎 - 我以為我們會結婚",
+     "how": "升 15 名到第 6"
+    },
+    {
+     "src": "KKBOX",
+     "name": "DIOR 大穎 - 欲落未落",
+     "how": "第 2 名"
+    },
+    {
+     "src": "YouTube 熱門",
+     "name": "DIOR大穎 & 郭家瑋TREVOR - 我以為我們會結婚 - （Official MV）",
+     "how": "7 天內上架、發燒第 2"
+    }
+   ],
+   "talk": [],
+   "y": 0.98,
+   "news7": 0,
+   "news_p7": 1,
+   "news_capped": false,
+   "social": {
+    "Threads": 96
+   },
+   "mentions": {},
+   "x": 0.3,
+   "talk_trend": "flat",
+   "days": 3,
+   "first": "2026-11-12",
+   "quad": "quiet"
+  },
+  {
+   "name": "Netflix",
+   "q": "Netflix",
+   "cat": "影視",
+   "do": [
+    {
+     "src": "Netflix 影集",
+     "name": "Miracles of the ER",
+     "how": "上榜第 2 週、第 1 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "The Devil's Plan",
+     "how": "上榜第 2 週、第 5 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "The Blue Road",
+     "how": "上榜第 1 週、第 6 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Tomb Raider King",
+     "how": "上榜第 1 週、第 10 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "Guarding Stars",
+     "how": "上榜第 1 週、第 4 名"
+    }
+   ],
+   "talk": [],
+   "y": 1.0,
+   "news7": 80,
+   "news_p7": 20,
+   "news_capped": true,
+   "social": {
+    "Threads": 72,
+    "Dcard": 30
+   },
+   "mentions": {},
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 5,
+   "first": "2026-11-09",
+   "quad": "hit"
+  },
+  {
+   "name": "Spotify",
+   "q": "Spotify",
+   "cat": "App",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "BIGBANG - GiiiRIP",
+     "how": "上榜 4 天、第 4 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "BTS - Body to Body",
+     "how": "升 6 名到第 11"
+    },
+    {
+     "src": "Spotify",
+     "name": "BTS - Dynamite",
+     "how": "升 7 名到第 16"
+    },
+    {
+     "src": "Spotify",
+     "name": "BESTie - Love Options",
+     "how": "第 1 名"
+    },
+    {
+     "src": "Spotify",
+     "name": "Jess Lee - 甲乙丙丁 - 你我怎么两清",
+     "how": "第 2 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.9,
+   "news7": 16,
+   "news_p7": 18,
+   "news_capped": false,
+   "social": {
+    "Threads": 96,
+    "Dcard": 5
+   },
+   "mentions": {},
+   "x": 1.0,
+   "talk_trend": "flat",
+   "days": 5,
+   "first": "2026-11-09",
+   "quad": "hit"
+  },
   {
    "name": "Google Gemini",
    "q": "Google Gemini",
@@ -10,22 +140,15 @@
     {
      "src": "App 營收",
      "name": "Google Gemini",
-     "how": "爬升 50 名到第 8"
+     "how": "爬升 45 名到第 8"
     }
    ],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[情報] google ai pro 黑五半價"
-    }
-   ],
-   "y": 0.95,
-   "news7": 99,
-   "news_p7": 1,
+   "talk": [],
+   "y": 0.9,
+   "news7": 98,
+   "news_p7": 2,
    "news_capped": true,
-   "mentions": {
-    "PTT": 1
-   },
+   "mentions": {},
    "x": 1.0,
    "talk_trend": "up",
    "days": 1,
@@ -34,7 +157,7 @@
   },
   {
    "name": "五月天",
-   "q": "五月天 阿信 棠棣賦",
+   "q": "五月天",
    "cat": "音樂",
    "do": [
     {
@@ -48,16 +171,23 @@
      "how": "7 天內上架、發燒第 5"
     }
    ],
-   "talk": [],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "邀歌迷慶生 五月天阿信無預警宣布攻蛋！開賣時間曝光了"
+    }
+   ],
    "y": 0.77,
-   "news7": 48,
-   "news_p7": 0,
+   "news7": 91,
+   "news_p7": 1,
    "news_capped": false,
    "social": {
     "Threads": 264,
     "Dcard": 6
    },
-   "mentions": {},
+   "mentions": {
+    "新聞焦點": 1
+   },
    "x": 1.0,
    "talk_trend": "up",
    "days": 5,
@@ -104,76 +234,18 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 23,
-   "news_p7": 32,
+   "news7": 22,
+   "news_p7": 30,
    "news_capped": false,
    "social": {
     "Threads": 0.3,
     "Dcard": 0
    },
    "mentions": {},
-   "x": 0.71,
+   "x": 0.7,
    "talk_trend": "flat",
    "days": 7,
    "first": "2026-11-17",
-   "quad": "hit"
-  },
-  {
-   "name": "壽司郎",
-   "q": "壽司郎",
-   "cat": "飲食",
-   "do": [
-    {
-     "src": "Google 熱搜",
-     "name": "壽司郎",
-     "how": "搜尋 100+"
-    }
-   ],
-   "talk": [],
-   "y": 0.6,
-   "news7": 81,
-   "news_p7": 16,
-   "news_capped": true,
-   "mentions": {},
-   "x": 0.96,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-25",
-   "quad": "hit"
-  },
-  {
-   "name": "佐藤輝明",
-   "q": "佐藤輝明",
-   "cat": "人物",
-   "do": [
-    {
-     "src": "Google 熱搜",
-     "name": "teruaki sato",
-     "how": "搜尋 100+"
-    },
-    {
-     "src": "Google 熱搜",
-     "name": "佐藤輝明",
-     "how": "搜尋 500+"
-    }
-   ],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "MLB》封館日期逼近 傳洋基等7隊有意延攬佐藤輝明"
-    }
-   ],
-   "y": 0.6,
-   "news7": 31,
-   "news_p7": 17,
-   "news_capped": false,
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 0.85,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-25",
    "quad": "hit"
   },
   {
@@ -184,17 +256,17 @@
     {
      "src": "Netflix 影集",
      "name": "The Devil's Plan",
-     "how": "上榜第 1 週、第 6 名"
+     "how": "上榜第 2 週、第 5 名"
     }
    ],
    "talk": [],
-   "y": 0.75,
-   "news7": 18,
-   "news_p7": 28,
+   "y": 0.8,
+   "news7": 24,
+   "news_p7": 31,
    "news_capped": false,
    "mentions": {},
-   "x": 0.64,
-   "talk_trend": "down",
+   "x": 0.7,
+   "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-12",
    "quad": "hit"
@@ -233,11 +305,11 @@
     {
      "src": "App 營收",
      "name": "MapleStory Worlds - 楓之谷世界",
-     "how": "爬升 34 名到第 6"
+     "how": "爬升 39 名到第 5"
     }
    ],
    "talk": [],
-   "y": 0.79,
+   "y": 0.84,
    "news7": 6,
    "news_p7": 2,
    "news_capped": false,
@@ -273,10 +345,14 @@
   },
   {
    "name": "黃仁勳",
-   "q": "黃仁勳 輝達",
+   "q": "黃仁勳",
    "cat": "人物",
    "do": [],
    "talk": [
+    {
+     "src": "PTT",
+     "title": "[新聞] 老黃: NVDA不需要接班人計劃"
+    },
     {
      "src": "PTT",
      "title": "[新聞] 黃仁勳回鍋恐有變數！美媒示警：輝達恐被"
@@ -292,52 +368,24 @@
     {
      "src": "PTT",
      "title": "[情報] 大翻盤、輝達董事會恢復黃仁勳職務 輝達"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "黃仁勳回任輝達！CNN揭董事會重大失職 耶魯學者批應全體辭職"
     }
    ],
    "y": 0.0,
-   "news7": 93,
-   "news_p7": 7,
+   "news7": 97,
+   "news_p7": 3,
    "news_capped": true,
    "social": {
     "Threads": 5.3
    },
    "mentions": {
-    "PTT": 4,
-    "新聞焦點": 1,
+    "PTT": 5,
+    "新聞焦點": 3,
     "時尚媒體": 1
    },
    "x": 1.0,
    "talk_trend": "up",
    "days": 5,
    "first": "2026-11-12",
-   "quad": "talk"
-  },
-  {
-   "name": "劉冠廷",
-   "q": "金馬獎 劉冠廷",
-   "cat": "人物",
-   "do": [],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "金馬63》金馬獎收視王出爐！不是舒淇、劉冠廷 「他」一登台飆破2.44"
-    }
-   ],
-   "y": 0.0,
-   "news7": 100,
-   "news_p7": 0,
-   "news_capped": true,
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-23",
    "quad": "talk"
   },
   {
@@ -352,13 +400,13 @@
     }
    ],
    "y": 0.0,
-   "news7": 28,
-   "news_p7": 72,
+   "news7": 29,
+   "news_p7": 71,
    "news_capped": true,
    "mentions": {
     "時尚媒體": 1
    },
-   "x": 0.83,
+   "x": 0.84,
    "talk_trend": "down",
    "days": 4,
    "first": "2026-11-17",
@@ -366,7 +414,7 @@
   },
   {
    "name": "樂天旅遊",
-   "q": "樂天旅遊 日本訂房",
+   "q": "樂天旅遊",
    "cat": "品牌商品",
    "do": [],
    "talk": [
@@ -376,8 +424,8 @@
     }
    ],
    "y": 0.0,
-   "news7": 1,
-   "news_p7": 0,
+   "news7": 7,
+   "news_p7": 3,
    "news_capped": false,
    "social": {
     "Threads": 19.2
@@ -385,35 +433,28 @@
    "mentions": {
     "PTT": 1
    },
-   "x": 0.45,
-   "talk_trend": "flat",
+   "x": 0.75,
+   "talk_trend": "up",
    "days": 2,
    "first": "2026-11-24",
-   "quad": "low"
+   "quad": "talk"
   },
   {
-   "name": "全聯",
-   "q": "全聯 午夜音樂盒",
+   "name": "CASETiFY",
+   "q": "CASETiFY",
    "cat": "品牌商品",
    "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "全聯的音樂怎麼變成電子舞曲？《午夜音樂盒》在白晝之夜響起"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 1,
-   "news_p7": 0,
+   "news7": 22,
+   "news_p7": 15,
    "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.25,
+   "mentions": {},
+   "x": 0.68,
    "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-24",
-   "quad": "low"
+   "quad": "talk"
   },
   {
    "name": "Hoka Bondi 9",
@@ -441,12 +482,12 @@
   }
  ],
  "quads": {
-  "quiet": 0,
+  "quiet": 1,
   "hit": 7,
   "new": 3,
   "hype": 0,
-  "talk": 3,
-  "low": 3
+  "talk": 4,
+  "low": 1
  },
  "src_do": [
   "App 下載",
@@ -471,7 +512,7 @@
  ],
  "social_at": "2026-11-24",
  "hist_days": 23,
- "model": "gemini-3.1-flash-lite",
+ "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-24T19:30:30Z"
+ "updatedAt": "2026-11-25T01:35:56Z"
 }
