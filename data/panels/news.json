@@ -75,6 +75,13 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Why is France fighting Vanuatu over two uninhabited islands in the Pacific? ",
+   "url": "https://www.theguardian.com/world/2026/nov/25/why-is-france-fighting-vanuatu-uninhabited-pacific-islands-icj",
+   "at": "2026-11-24T23:47:38Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "Huawei found guilty of stealing trade secrets but acquitted of racketeering",
    "url": "https://www.bbc.co.uk/news/articles/cmy49ngydqzpo?at_medium=RSS&at_campaign=rss",
@@ -145,13 +152,6 @@
    "url": "https://www.theguardian.com/business/2026/nov/24/uk-eu-made-in-europe-trade-cars-tariffs",
    "at": "2026-11-24T16:09:12Z",
    "sec": "Business"
-  },
-  {
-   "source": "Guardian",
-   "title": "More than 300 Russians killed as Moscow props up Mali’s junta, leaked data reveals",
-   "url": "https://www.theguardian.com/world/2026/nov/24/russian-fighters-killed-in-mali-africa-leaked-data",
-   "at": "2026-11-24T16:00:50Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -233,7 +233,7 @@
    ],
    "daily7": [
     4,
-    5,
+    3,
     0,
     0,
     4,
@@ -283,12 +283,12 @@
     }
    ],
    "daily7": [
+    18,
     9,
-    8,
     7,
     6,
-    33,
-    84,
+    32,
+    86,
     10
    ],
    "days7": [
@@ -370,10 +370,10 @@
      "kw": "聯準會 利率 OR FOMC"
     },
     {
-     "source": "自由財經",
-     "title": "美股收盤》川普擬加徵關稅 輝達回跌、費半慘摔 台積電ADR挫3.91％",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBud0NQWmcydWtNQVVVMGNPdFJvcXVCbHQzNzlkdktkOEF6NVJ2NU5zVkxDT3lQVGJkWHd2aklMWVZ1cVlYbXJOR1kybFd1aHRLVWJPa08wSEZZSk1FSFZF0gFkQVVfeXFMTXB6Nl9PNVhleHZBbUpja2gtRnozYWtELUZuRFZtVlhHZFprVy0zdzNCTWdYWWNWc3RucmlqeGF4TWdwWjFCTlJwWVEyazhjbGlpOU42cTFLS0tSa1BRMFJMVk5yTg?oc=5",
-     "at": "2026-11-24T22:36:07Z",
+     "source": "UDN",
+     "title": "台積電ADR跌近4% 台指期夜盤重摔1,842點",
+     "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1INVZiSVlpMmQwMElYWHozZHk0QmxYSTZldTV3SVR5c2E1Mm95ODM0OUpESWNYTXQ2NGpQVnZPdi12VkdISVlONWRnWkhIeURy?oc=5",
+     "at": "2026-11-24T23:33:29Z",
      "kw": "台積電 法說 OR 台積電 ADR"
     },
     {
@@ -386,12 +386,12 @@
    ],
    "daily7": [
     4,
-    8,
+    7,
     10,
     6,
     40,
     52,
-    10
+    14
    ],
    "days7": [
     "2026-11-19",
@@ -437,7 +437,7 @@
    ],
    "daily7": [
     9,
-    12,
+    11,
     21,
     9,
     12,
@@ -641,7 +641,7 @@
    ],
    "daily7": [
     10,
-    13,
+    14,
     17,
     22,
     32,
@@ -760,8 +760,8 @@
    },
    {
     "term": "Anthropic",
-    "n": 7,
-    "src": 6,
+    "n": 8,
+    "src": 7,
     "sources": [
      "Anthropic",
      "BigGo 財經",
@@ -812,12 +812,11 @@
    },
    {
     "term": "資安",
-    "n": 5,
-    "src": 5,
+    "n": 4,
+    "src": 4,
     "sources": [
      "TechOrange 科",
      "iThome",
-     "僑新聞",
      "商傳媒",
      "端傳媒Initium M"
     ],
@@ -908,5 +907,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-24T23:45:39Z"
+ "updatedAt": "2026-11-25T00:04:54Z"
 }
