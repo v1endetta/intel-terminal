@@ -1,16 +1,16 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "台灣消費者近期聚焦於熱門影視作品與遊戲，同時對AI應用、科技新品及旅遊優惠展現高度興趣。",
+ "line": "台灣消費者近期聚焦AI科技趨勢與黃仁勳相關話題，同時熱衷於影視新作、遊戲體驗及品牌促銷活動。",
  "topics": [
   {
    "name": "Google Gemini",
-   "q": "Google Gemini App",
+   "q": "Google Gemini",
    "cat": "App",
    "do": [
     {
      "src": "App 營收",
      "name": "Google Gemini",
-     "how": "爬升 45 名到第 8"
+     "how": "爬升 44 名到第 9"
     }
    ],
    "talk": [
@@ -19,15 +19,15 @@
      "title": "[情報] google ai pro 黑五半價"
     }
    ],
-   "y": 0.9,
-   "news7": 47,
-   "news_p7": 38,
-   "news_capped": false,
+   "y": 0.89,
+   "news7": 88,
+   "news_p7": 12,
+   "news_capped": true,
    "mentions": {
     "PTT": 1
    },
-   "x": 0.94,
-   "talk_trend": "flat",
+   "x": 1.0,
+   "talk_trend": "up",
    "days": 1,
    "first": "2026-11-25",
    "quad": "hit"
@@ -45,8 +45,8 @@
    ],
    "talk": [],
    "y": 0.75,
-   "news7": 78,
-   "news_p7": 22,
+   "news7": 82,
+   "news_p7": 17,
    "news_capped": true,
    "social": {
     "Threads": 96,
@@ -57,6 +57,33 @@
    "talk_trend": "up",
    "days": 7,
    "first": "2026-11-14",
+   "quad": "hit"
+  },
+  {
+   "name": "哥吉拉-0.0",
+   "q": "哥吉拉-0.0",
+   "cat": "影視",
+   "do": [
+    {
+     "src": "電影票房",
+     "name": "哥吉拉-0.0",
+     "how": "本週票房第 1（2133 萬）"
+    }
+   ],
+   "talk": [],
+   "y": 0.95,
+   "news7": 26,
+   "news_p7": 30,
+   "news_capped": false,
+   "social": {
+    "Threads": 0.3,
+    "Dcard": 0
+   },
+   "mentions": {},
+   "x": 0.73,
+   "talk_trend": "flat",
+   "days": 7,
+   "first": "2026-11-17",
    "quad": "hit"
   },
   {
@@ -77,54 +104,42 @@
    ],
    "talk": [],
    "y": 1.0,
-   "news7": 24,
+   "news7": 16,
    "news_p7": 0,
    "news_capped": false,
    "mentions": {},
-   "x": 0.7,
+   "x": 0.62,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-25",
    "quad": "hit"
   },
   {
-   "name": "五月天",
-   "q": "五月天 阿信",
-   "cat": "人物",
+   "name": "魔鬼的計謀",
+   "q": "魔鬼的計謀",
+   "cat": "影視",
    "do": [
     {
-     "src": "KKBOX",
-     "name": "五月天 阿信 (Ashin) 棠棣賦 - 電視劇《兩京十五日》主題曲/片頭曲",
-     "how": "在榜上第 4 名（沒有在爬）"
+     "src": "Netflix 影集",
+     "name": "The Devil's Plan",
+     "how": "上榜第 2 週、第 5 名"
     }
    ],
-   "talk": [
-    {
-     "src": "新聞焦點",
-     "title": "阿信單飛團員全換了！練團不見五月天身影…獨唱〈突然好想你〉洩心聲"
-    }
-   ],
-   "y": 0.5,
-   "static": true,
-   "news7": 61,
-   "news_p7": 8,
+   "talk": [],
+   "y": 0.8,
+   "news7": 24,
+   "news_p7": 29,
    "news_capped": false,
-   "social": {
-    "Threads": 264,
-    "Dcard": 6
-   },
-   "mentions": {
-    "新聞焦點": 1
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 5,
-   "first": "2026-11-20",
+   "mentions": {},
+   "x": 0.7,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-12",
    "quad": "hit"
   },
   {
    "name": "DIOR 大穎",
-   "q": "DIOR 大穎 我以為我們會結婚",
+   "q": "DIOR 大穎",
    "cat": "音樂",
    "do": [
     {
@@ -146,7 +161,7 @@
    "talk": [],
    "y": 1.0,
    "news7": 1,
-   "news_p7": 0,
+   "news_p7": 1,
    "news_capped": false,
    "social": {
     "Threads": 96
@@ -159,53 +174,26 @@
    "quad": "new"
   },
   {
-   "name": "哥吉拉-0.0",
-   "q": "哥吉拉-0.0 票房",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "電影票房",
-     "name": "哥吉拉-0.0",
-     "how": "本週票房第 1（2133 萬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.95,
-   "news7": 7,
-   "news_p7": 20,
-   "news_capped": false,
-   "social": {
-    "Threads": 0.3,
-    "Dcard": 0
-   },
-   "mentions": {},
-   "x": 0.47,
-   "talk_trend": "down",
-   "days": 7,
-   "first": "2026-11-17",
-   "quad": "new"
-  },
-  {
    "name": "Blackmagic Camera",
-   "q": "Blackmagic Camera App",
+   "q": "Blackmagic Camera",
    "cat": "App",
    "do": [
     {
      "src": "App 下載",
      "name": "Blackmagic Camera",
-     "how": "新進榜第 4 名"
+     "how": "新進榜第 6 名"
     }
    ],
    "talk": [],
    "y": 0.9,
-   "news7": 1,
-   "news_p7": 0,
+   "news7": 2,
+   "news_p7": 2,
    "news_capped": false,
    "social": {
     "Threads": 44.4
    },
    "mentions": {},
-   "x": 0.4,
+   "x": 0.49,
    "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-24",
@@ -213,53 +201,26 @@
   },
   {
    "name": "MapleStory Worlds",
-   "q": "MapleStory Worlds 楓之谷世界",
+   "q": "MapleStory Worlds",
    "cat": "遊戲",
    "do": [
     {
      "src": "App 營收",
      "name": "MapleStory Worlds - 楓之谷世界",
-     "how": "爬升 39 名到第 5"
+     "how": "爬升 38 名到第 6"
     }
    ],
    "talk": [],
-   "y": 0.84,
-   "news7": 6,
-   "news_p7": 1,
+   "y": 0.83,
+   "news7": 7,
+   "news_p7": 0,
    "news_capped": false,
    "mentions": {},
-   "x": 0.42,
+   "x": 0.45,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-25",
    "quad": "new"
-  },
-  {
-   "name": "復仇者聯盟",
-   "q": "復仇者聯盟 末日崛起",
-   "cat": "影視",
-   "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "《復仇者聯盟：末日崛起》終極預告 10 大隱藏細節：三位女巫是誰、Steve Rogers 兒子為何重要？"
-    }
-   ],
-   "y": 0.0,
-   "news7": 86,
-   "news_p7": 12,
-   "news_capped": true,
-   "social": {
-    "Threads": 96
-   },
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-24",
-   "quad": "hype"
   },
   {
    "name": "定海",
@@ -277,14 +238,14 @@
     }
    ],
    "y": 0.0,
-   "news7": 3,
+   "news7": 4,
    "news_p7": 0,
    "news_capped": false,
    "mentions": {
     "Mobile01": 1,
     "新聞焦點": 1
    },
-   "x": 0.5,
+   "x": 0.55,
    "talk_trend": "up",
    "days": 1,
    "first": "2026-11-25",
@@ -292,33 +253,41 @@
   },
   {
    "name": "黃仁勳",
-   "q": "黃仁勳 輝達",
+   "q": "黃仁勳",
    "cat": "人物",
    "do": [],
    "talk": [
     {
      "src": "PTT",
-     "title": "[新聞] 黃仁勳回歸行情沒了？鼎泰豐候位數掛零"
+     "title": "Re: [新聞]金融巨鱷盯上AI泡沫！索羅斯基金Q3狠砍輝達"
+    },
+    {
+     "src": "PTT",
+     "title": "Re: [新聞]金融巨鱷盯上AI泡沫！索羅斯基金Q3狠砍輝達"
     },
     {
      "src": "新聞焦點",
-     "title": "黃仁勳稱輝達無須接班計畫 川普不排除政府入股"
+     "title": "川普救回黃仁勳惹議！共和黨人士也警告：選民受夠雙重標準"
     },
     {
      "src": "新聞焦點",
-     "title": "昨天回4萬是人道走廊？分析師預言台股很快破底：黃仁勳被架空"
+     "title": "黃仁勳回歸行情熄火引台股血崩近2千點！AI權值股全倒、外資提款1236億網示警：明天韭留美日"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "為何台灣不能沒有黃仁勳？謝金河揭關鍵：讓台廠告別「毛三到四」苦日子- 證券"
     }
    ],
    "y": 0.0,
-   "news7": 88,
-   "news_p7": 12,
+   "news7": 80,
+   "news_p7": 20,
    "news_capped": true,
    "social": {
     "Threads": 5.3
    },
    "mentions": {
-    "PTT": 1,
-    "新聞焦點": 2
+    "PTT": 2,
+    "新聞焦點": 5
    },
    "x": 1.0,
    "talk_trend": "up",
@@ -328,10 +297,14 @@
   },
   {
    "name": "小米",
-   "q": "小米 18 Pro",
+   "q": "小米18 Pro",
    "cat": "品牌商品",
    "do": [],
    "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] 台灣小米 Xiaomi18 Pro Max 早鳥44999起"
+    },
     {
      "src": "Mobile01",
      "title": "Xiaomi 18 Pro 系列在台開賣｜39,999 元直升 512GB，舊換新最高再折 5 千元！"
@@ -342,10 +315,11 @@
     }
    ],
    "y": 0.0,
-   "news7": 76,
-   "news_p7": 24,
-   "news_capped": true,
+   "news7": 54,
+   "news_p7": 30,
+   "news_capped": false,
    "mentions": {
+    "PTT": 1,
     "Mobile01": 2
    },
    "x": 1.0,
@@ -355,56 +329,66 @@
    "quad": "talk"
   },
   {
-   "name": "羅伯派汀森",
-   "q": "羅伯派汀森 007",
+   "name": "胡瓜",
+   "q": "胡瓜",
    "cat": "人物",
    "do": [],
    "talk": [
     {
-     "src": "時尚媒體",
-     "title": "《沙丘3》拍完接下《007》！導演丹尼維勒納夫理想中的龐德有哪些特質？羅伯派汀森正式接任007"
+     "src": "新聞焦點",
+     "title": "新下面一位快破27萬訂閱胡瓜「1手勢」發聲：何懼從頭再來| 星聞"
     }
    ],
    "y": 0.0,
-   "news7": 33,
-   "news_p7": 67,
+   "news7": 91,
+   "news_p7": 9,
    "news_capped": true,
    "mentions": {
-    "時尚媒體": 1
+    "新聞焦點": 1
    },
-   "x": 0.87,
-   "talk_trend": "down",
-   "days": 4,
-   "first": "2026-11-17",
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-20",
    "quad": "talk"
   },
   {
-   "name": "Pokémon GO",
-   "q": "寶可夢中心 曼谷",
-   "cat": "活動",
+   "name": "蔡依林",
+   "q": "蔡依林",
+   "cat": "人物",
    "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "曼谷寶可夢中心12/1開幕！完整朝聖攻略整理：日本海外最大分店、泰拳皮卡丘萌翻，20多款限定商品必買"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 7,
-   "news_p7": 2,
-   "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.55,
+   "news7": 100,
+   "news_p7": 0,
+   "news_capped": true,
+   "mentions": {},
+   "x": 1.0,
    "talk_trend": "up",
    "days": 3,
-   "first": "2026-11-14",
+   "first": "2026-11-20",
+   "quad": "talk"
+  },
+  {
+   "name": "劉冠廷",
+   "q": "劉冠廷",
+   "cat": "人物",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 100,
+   "news_p7": 0,
+   "news_capped": true,
+   "mentions": {},
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-23",
    "quad": "talk"
   },
   {
    "name": "樂天旅遊",
-   "q": "樂天旅遊 日本訂房",
+   "q": "樂天旅遊",
    "cat": "品牌商品",
    "do": [],
    "talk": [
@@ -414,8 +398,8 @@
     }
    ],
    "y": 0.0,
-   "news7": 1,
-   "news_p7": 0,
+   "news7": 4,
+   "news_p7": 5,
    "news_capped": false,
    "social": {
     "Threads": 19.2
@@ -423,11 +407,11 @@
    "mentions": {
     "PTT": 1
    },
-   "x": 0.45,
+   "x": 0.65,
    "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-24",
-   "quad": "low"
+   "quad": "talk"
   },
   {
    "name": "Hoka Bondi 9",
@@ -456,11 +440,11 @@
  ],
  "quads": {
   "quiet": 0,
-  "hit": 4,
-  "new": 4,
-  "hype": 2,
-  "talk": 4,
-  "low": 2
+  "hit": 5,
+  "new": 3,
+  "hype": 1,
+  "talk": 6,
+  "low": 1
  },
  "src_do": [
   "App 下載",
@@ -487,5 +471,5 @@
  "hist_days": 23,
  "model": "gemini-3.1-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-25T07:38:20Z"
+ "updatedAt": "2026-11-25T13:48:45Z"
 }
