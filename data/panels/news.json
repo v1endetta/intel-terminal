@@ -76,6 +76,13 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "Inflation rate jumps to 4.9% as Australia’s cost-of-living crisis intensifies ",
+   "url": "https://www.theguardian.com/business/2026/nov/25/inflation-rate-australia-october-figures",
+   "at": "2026-11-25T00:32:06Z",
+   "sec": "Business"
+  },
+  {
+   "source": "Guardian",
    "title": "Why is France fighting Vanuatu over two uninhabited islands in the Pacific? ",
    "url": "https://www.theguardian.com/world/2026/nov/25/why-is-france-fighting-vanuatu-uninhabited-pacific-islands-icj",
    "at": "2026-11-24T23:47:38Z",
@@ -145,13 +152,6 @@
    "url": "https://www.theguardian.com/world/live/2026/nov/24/russia-ukraine-poland-drone-patriots-latest-news-updates",
    "at": "2026-11-24T16:24:49Z",
    "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Irish plan offers Burnham breakthrough on Made in Europe",
-   "url": "https://www.theguardian.com/business/2026/nov/24/uk-eu-made-in-europe-trade-cars-tariffs",
-   "at": "2026-11-24T16:09:12Z",
-   "sec": "Business"
   }
  ],
  "groups": [
@@ -661,8 +661,8 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 2.58,
-   "vol_ratio": 1.79,
+   "vol": 2.404,
+   "vol_ratio": 1.59,
    "tone": 0.21,
    "tone_at": "2026-11-24T23:26:07Z",
    "spark": [
@@ -679,9 +679,9 @@
     1.491,
     1.314,
     3.013,
-    2.58
+    2.404
    ],
-   "at": "2026-11-25T00:23:53Z"
+   "at": "2026-11-25T00:40:31Z"
   },
   "wiki": {
    "zh": [
@@ -811,18 +811,18 @@
     "hot": true
    },
    {
-    "term": "資安",
+    "term": "台積電",
     "n": 4,
     "src": 4,
     "sources": [
-     "TechOrange 科",
-     "iThome",
-     "商傳媒",
-     "端傳媒Initium M"
+     "PTT",
+     "TradingView",
+     "UDN",
+     "自由財經"
     ],
     "sample": {
-     "title": "【科技早餐】OpenAI 聯手 Cisco 推出開源資安工具！測試不重啟服務就能阻擋漏洞攻擊",
-     "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTFBUQTJ3MjFXY3MwTGZFQ3VDU0dyRExVSjIwdU5lYi12UUJvbERVUC0zMFoxVFAzQVlOUWRGeEZpYXFPWUJGSEtmOGtJdmVDU3YyRGgzb2JJWS1NY1BTQUNWeTEzYWpJeHdMOEdkUFBoYWMySEVyRjNzLS1sTU8?oc=5"
+     "title": "美股收盤》川普擬加徵關稅 輝達回跌、費半慘摔 台積電ADR挫3.91％",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBud0NQWmcydWtNQVVVMGNPdFJvcXVCbHQzNzlkdktkOEF6NVJ2NU5zVkxDT3lQVGJkWHd2aklMWVZ1cVlYbXJOR1kybFd1aHRLVWJPa08wSEZZSk1FSFZF0gFkQVVfeXFMTXB6Nl9PNVhleHZBbUpja2gtRnozYWtELUZuRFZtVlhHZFprVy0zdzNCTWdYWWNWc3RucmlqeGF4TWdwWjFCTlJwWVEyazhjbGlpOU42cTFLS0tSa1BRMFJMVk5yTg?oc=5"
     },
     "hot": true
    },
@@ -835,6 +835,22 @@
      "CMoney投資網誌",
      "TechOrange 科",
      "TradingView"
+    ],
+    "sample": {
+     "title": "【科技早餐】OpenAI 聯手 Cisco 推出開源資安工具！測試不重啟服務就能阻擋漏洞攻擊",
+     "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTFBUQTJ3MjFXY3MwTGZFQ3VDU0dyRExVSjIwdU5lYi12UUJvbERVUC0zMFoxVFAzQVlOUWRGeEZpYXFPWUJGSEtmOGtJdmVDU3YyRGgzb2JJWS1NY1BTQUNWeTEzYWpJeHdMOEdkUFBoYWMySEVyRjNzLS1sTU8?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "資安",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "TechOrange 科",
+     "iThome",
+     "商傳媒",
+     "端傳媒Initium M"
     ],
     "sample": {
      "title": "【科技早餐】OpenAI 聯手 Cisco 推出開源資安工具！測試不重啟服務就能阻擋漏洞攻擊",
@@ -886,24 +902,9 @@
      "url": "https://www.bbc.co.uk/news/articles/crpdw1qx7jgxo?at_medium=RSS&at_campaign=rss"
     },
     "hot": true
-   },
-   {
-    "term": "開源模型",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "BigGo 財經",
-     "CMoney投資網誌",
-     "TradingView"
-    ],
-    "sample": {
-     "title": "《焦點》Anthropic跌破發行價，中國開源模型崛起加劇AI競爭壓力",
-     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE00MzRGdk1Kd2VLWmRnWWZDRTdqWlktTC1LY1lRSHRkN1c1NUNnc2FHUmlQcjJWbHM0MlBQdVNJcmZsZGRHSS0xVGhLYThidGNCZzZwSm9qSURKbU9Md2ljdkdWRlJrbVNOeEo4clNyU3hSRUt0bDlF?oc=5"
-    },
-    "hot": true
    }
   ]
  },
  "errs": [],
- "updatedAt": "2026-11-25T00:23:53Z"
+ "updatedAt": "2026-11-25T00:40:31Z"
 }
