@@ -1,63 +1,13 @@
 {
  "forums": [
   {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Keep GPT-5.6 Sol available as a Legacy model for paying users",
-   "url": "https://community.openai.com/t/keep-gpt-5-6-sol-available-as-a-legacy-model-for-paying-users/1420121",
-   "replies": 13,
-   "likes": 54,
-   "views": 204,
-   "at": "2026-11-24T12:51:10Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Request: Keep GPT-5.6 Sol as a Paid Legacy Model",
-   "url": "https://community.openai.com/t/request-keep-gpt-5-6-sol-as-a-paid-legacy-model/1420109",
-   "replies": 3,
-   "likes": 13,
-   "views": 60,
-   "at": "2026-11-24T12:46:05Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Please Keep GPT-5.6 Sol Available — I Will Cancel My ChatGPT Plus Subscription If It Is Re",
-   "url": "https://community.openai.com/t/please-keep-gpt-5-6-sol-available-i-will-cancel-my-chatgpt-plus-subscription-if-it-is-retired/1420248",
-   "replies": 0,
-   "likes": 5,
-   "views": 30,
-   "at": "2026-11-24T18:46:03Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "Please reconsider retiring GPT-5.6 Sol. ",
-   "url": "https://community.openai.com/t/please-reconsider-retiring-gpt-5-6-sol/1420253",
-   "replies": 3,
-   "likes": 6,
-   "views": 72,
-   "at": "2026-11-24T18:47:16Z"
-  },
-  {
-   "source": "OpenAI 論壇",
-   "vendor": "openai",
-   "title": "GPT-5.6 Sol: Model Retirement Should Require Functional Parity",
-   "url": "https://community.openai.com/t/gpt-5-6-sol-model-retirement-should-require-functional-parity/1420421",
-   "replies": 2,
-   "likes": 7,
-   "views": 77,
-   "at": "2026-11-24T22:36:41Z"
-  },
-  {
    "source": "Google AI 論壇",
    "vendor": "google",
    "title": "What Alternative Will Be Available for Jio Subscription Users After Gemini 3.8 Flash Depre",
    "url": "https://discuss.ai.google.dev/t/what-alternative-will-be-available-for-jio-subscription-users-after-gemini-3-8-flash-deprecation/204591",
    "replies": 9,
    "likes": 11,
-   "views": 245,
+   "views": 251,
    "at": "2026-11-24T06:03:54Z"
   },
   {
@@ -67,7 +17,7 @@
    "url": "https://discuss.ai.google.dev/t/jio-google-ai-pro-subscribers-losing-gemini-3-8-flash-on-nov-30-gemini-4-hydrogen-still-locked/204551",
    "replies": 5,
    "likes": 16,
-   "views": 1002,
+   "views": 1023,
    "at": "2026-11-24T04:37:53Z"
   },
   {
@@ -76,19 +26,9 @@
    "title": "Google AI Pro Account Experiencing 503 Errors and Incorrect Daily Quota Exhaustion",
    "url": "https://discuss.ai.google.dev/t/google-ai-pro-account-experiencing-503-errors-and-incorrect-daily-quota-exhaustion/204725",
    "replies": 0,
-   "likes": 2,
-   "views": 48,
+   "likes": 3,
+   "views": 50,
    "at": "2026-11-24T10:57:54Z"
-  },
-  {
-   "source": "Google AI 論壇",
-   "vendor": "google",
-   "title": "AI Studio flagged my account for some inexplicable reason, and now I'm not even allowed to",
-   "url": "https://discuss.ai.google.dev/t/ai-studio-flagged-my-account-for-some-inexplicable-reason-and-now-im-not-even-allowed-to-use-the-entire-gemini-service/204759",
-   "replies": 0,
-   "likes": 2,
-   "views": 44,
-   "at": "2026-11-24T11:52:39Z"
   },
   {
    "source": "Google AI 論壇",
@@ -97,8 +37,18 @@
    "url": "https://discuss.ai.google.dev/t/bug-switching-reasoning-effort-high-medium-xhigh-on-the-same-model-family-invalidates-100-of-prompt-cache/204584",
    "replies": 0,
    "likes": 0,
-   "views": 1199,
+   "views": 1221,
    "at": "2026-11-24T05:38:30Z"
+  },
+  {
+   "source": "Google AI 論壇",
+   "vendor": "google",
+   "title": "[BUG] Google AI Studio Build Mode Stuck in Endless Loading – Account-Specific Issue Across",
+   "url": "https://discuss.ai.google.dev/t/bug-google-ai-studio-build-mode-stuck-in-endless-loading-account-specific-issue-across-all-models/204787",
+   "replies": 0,
+   "likes": 2,
+   "views": 38,
+   "at": "2026-11-24T13:07:18Z"
   }
  ],
  "changelogs": [
@@ -295,11 +245,13 @@
    "at": "2026-11-20T22:32:56Z"
   }
  ],
- "errs": [],
+ "errs": [
+  "OpenAI 論壇: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+ ],
  "diag": [
-  "Gemini changelog md: got html 142000b",
+  "Gemini changelog md: got html 142020b",
   "DeepSeek updates md: 21527b 0 entries head='# Change Log\\n\\n***\\n\\n## Date: 2026-11-13\\n\\n### Releasing the fu'",
   "xAI release notes md: 20155b 0 entries head='#### Release Notes\\n\\n# Release Notes\\n\\n## November\\n\\n### grok-b'"
  ],
- "updatedAt": "2026-11-25T03:23:58Z"
+ "updatedAt": "2026-11-25T04:30:44Z"
 }
