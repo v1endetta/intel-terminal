@@ -2,6 +2,18 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "何欣純台中團結之夜  總統籲市民讓對手留立法院服務",
+   "url": "https://www.cna.com.tw/news/aipl/202611250330.aspx",
+   "at": "2026-11-25T13:47:03Z"
+  },
+  {
+   "source": "中央社",
+   "title": "蔡英文蕭美琴站台　挺陳品安拚苗栗首位女縣長",
+   "url": "https://www.cna.com.tw/news/aipl/202611250325.aspx",
+   "at": "2026-11-25T13:38:50Z"
+  },
+  {
+   "source": "中央社",
    "title": "歐元區商店支付調查　刷卡占比首度超越現金",
    "url": "https://www.cna.com.tw/news/aopl/202611250321.aspx",
    "at": "2026-11-25T13:16:39Z"
@@ -37,18 +49,6 @@
    "at": "2026-11-25T12:37:17Z"
   },
   {
-   "source": "中央社",
-   "title": "台灣民主實驗室：理事長無給職　經費不曾用於政治活動",
-   "url": "https://www.cna.com.tw/news/aipl/202611250309.aspx",
-   "at": "2026-11-25T12:37:13Z"
-  },
-  {
-   "source": "中央社",
-   "title": "游盈隆視察北市選務　有信心28日午夜12時前完成開票",
-   "url": "https://www.cna.com.tw/news/aipl/202611250307.aspx",
-   "at": "2026-11-25T12:35:09Z"
-  },
-  {
    "source": "公視",
    "title": "新北非法聚賭十八骰仔警揪雙北市長選舉賭盤案外案｜20261125 公視晚間新聞｜ 公視新聞PNN",
    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFB4Z3NZZzN6ODh1VDZaWWpkWnFPcVBXWTg5QW1CQk02Znh2S0JsVHFkS21RMVZIdVJNTjZBeTRWbkRvcXNNOUtQVHJoaw?oc=5",
@@ -78,14 +78,21 @@
    "source": "Guardian",
    "title": "US proposes new tariffs on 14 trading partners, including China, Japan and the EU – busine",
    "url": "https://www.theguardian.com/business/live/2026/nov/25/rise-energy-bills-britain-2166-impossible-high-millions-households-stocks-tumble-as-ai-rally-fizzles-live-updates",
-   "at": "2026-11-25T14:16:54Z",
+   "at": "2026-11-25T14:42:51Z",
    "sec": "Business"
   },
   {
    "source": "Guardian",
    "title": "‘Russia wants more than Ukraine,’ Germany’s Merz warns – Europe live",
    "url": "https://www.theguardian.com/world/live/2026/nov/25/ukraine-russia-energy-strikes-mark-rutte-donald-trump-friedrich-merz-germany-latest-news-updates",
-   "at": "2026-11-25T14:06:29Z",
+   "at": "2026-11-25T14:38:19Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
+   "title": "China sends first foreign astronaut to ISS rival as it globalises space operations",
+   "url": "https://www.theguardian.com/science/2026/nov/25/china-sends-first-pakistani-astronaut-into-space",
+   "at": "2026-11-25T14:18:29Z",
    "sec": "World news"
   },
   {
@@ -148,13 +155,6 @@
    "title": "Russia's own figures show it has lost nearly 500,000 people in Ukraine war",
    "url": "https://www.bbc.co.uk/news/articles/cmx27g533zwyo?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-25T12:21:49Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "UK embassy in Japan warns of rise in drink spiking and credit card fraud at Tokyo bars",
-   "url": "https://www.theguardian.com/world/2026/nov/25/british-embassy-tokyo-warning-tourists-drink-spiking-credit-card-fraud",
-   "at": "2026-11-25T11:59:22Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -653,10 +653,10 @@
     3,
     7,
     17,
-    23,
+    21,
     31,
     25,
-    25
+    28
    ],
    "days7": [
     "2026-11-19",
@@ -691,7 +691,7 @@
     3.013,
     2.39
    ],
-   "at": "2026-11-25T14:23:22Z"
+   "at": "2026-11-25T14:43:58Z"
   },
   "wiki": {
    "zh": [
@@ -768,6 +768,22 @@
     "hot": true
    },
    {
+    "term": "何欣純",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "UDN",
+     "中央社",
+     "元丰傳媒",
+     "自由時報"
+    ],
+    "sample": {
+     "title": "何欣純台中團結之夜  總統籲市民讓對手留立法院服務",
+     "url": "https://www.cna.com.tw/news/aipl/202611250330.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "台積電",
     "n": 4,
     "src": 4,
@@ -796,21 +812,6 @@
     "sample": {
      "title": "中國百艦不是在搞大軍演？美智庫揭多線部署真正目的",
      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBYN1ZIOG9GUk5Uc1o3QlFLUXo0b0k1cXRPdnU0Q1VNRGQxT3ZDSkJRYWRpdHlSeUYwRU9paGozOXZFeXNKWG1yNk1KZ2lHenVNakFSdXRDUFB1d000QnduONIBZkFVX3lxTE5ldE5vcFR2cTVLWnA2alNudWlhUjd6UUUtQkpzNVgtekZ1NTYyMU1SOHplQXdFNHlHeFhjZHBOSnVYQXJPc28xc3RSa0xXX2VlVi01dE1CUVZwZHZDZGZRWmMwQTZRQQ?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "資安",
-    "n": 4,
-    "src": 3,
-    "sources": [
-     "iThome",
-     "僑新聞",
-     "財訊"
-    ],
-    "sample": {
-     "title": "因應AI網攻威脅，資安署強調遭駭及早通知上下游，並要提升漏洞處置效率及復原速度",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1TM3VfRjdRMTdUa200aThPTlZmM1huLTF0NVdBVFhoS3JZLWVUTl9XOGZSZm5TQ002M1JTTTY3LXFMbXBQbVpVZk9BY3pMQQ?oc=5"
     },
     "hot": true
    },
@@ -845,6 +846,21 @@
     "hot": true
    },
    {
+    "term": "團結",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "中央社",
+     "元丰傳媒",
+     "自由時報"
+    ],
+    "sample": {
+     "title": "何欣純台中團結之夜  總統籲市民讓對手留立法院服務",
+     "url": "https://www.cna.com.tw/news/aipl/202611250330.aspx"
+    },
+    "hot": true
+   },
+   {
     "term": "生醫",
     "n": 3,
     "src": 3,
@@ -860,49 +876,35 @@
     "hot": true
    },
    {
-    "term": "Claude",
-    "n": 3,
+    "term": "Jensen Huang",
+    "n": 2,
     "src": 2,
     "sources": [
-     "自由電子報3C科技",
-     "鉅亨號"
+     "HN",
+     "TechCrunch"
     ],
     "sample": {
-     "title": "Anthropic 推出桌面新功能：讓 Claude 生成內容一鍵變身獨立軟體",
-     "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE5PMy03Qlpnam0tOUNIeDEwLTJaNkpXSTRJZ0k1T0I0QnVQVThhczREOHBsUEJSVDZuVTBudVh0cDZYZUttWDJ5cw?oc=5"
+     "title": "The questions Jensen Huang and Nvidia will still have to ans",
+     "url": "https://techcrunch.com/2026/11/25/the-questions-jensen-huang-and-nvidia-will-still-have-to-answer-about-megaspeed/"
     },
     "hot": false
    },
    {
-    "term": "完成",
-    "n": 3,
+    "term": "Ukraine",
+    "n": 2,
     "src": 2,
     "sources": [
-     "iThome",
-     "中央社"
+     "BBC",
+     "Guardian"
     ],
     "sample": {
-     "title": "福衛八號第2顆衛星完成運送前審查　預計12/28起運赴美",
-     "url": "https://www.cna.com.tw/news/ait/202611250314.aspx"
-    },
-    "hot": false
-   },
-   {
-    "term": "新功",
-    "n": 3,
-    "src": 2,
-    "sources": [
-     "自由電子報3C科技",
-     "鉅亨號"
-    ],
-    "sample": {
-     "title": "Anthropic 推出桌面新功能：讓 Claude 生成內容一鍵變身獨立軟體",
-     "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE5PMy03Qlpnam0tOUNIeDEwLTJaNkpXSTRJZ0k1T0I0QnVQVThhczREOHBsUEJSVDZuVTBudVh0cDZYZUttWDJ5cw?oc=5"
+     "title": "‘Russia wants more than Ukraine,’ Germany’s Merz warns – Eur",
+     "url": "https://www.theguardian.com/world/live/2026/nov/25/ukraine-russia-energy-strikes-mark-rutte-donald-trump-friedrich-merz-germany-latest-news-updates"
     },
     "hot": false
    }
   ]
  },
  "errs": [],
- "updatedAt": "2026-11-25T14:23:22Z"
+ "updatedAt": "2026-11-25T14:43:58Z"
 }
