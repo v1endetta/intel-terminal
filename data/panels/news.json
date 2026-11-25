@@ -2,6 +2,30 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "台股早盤重挫逾2000點　失守4萬點關卡跌破年線",
+   "url": "https://www.cna.com.tw/news/afe/202611250031.aspx",
+   "at": "2026-11-25T01:27:06Z"
+  },
+  {
+   "source": "中央社",
+   "title": "台股開盤跌138.44點",
+   "url": "https://www.cna.com.tw/news/afe/202611250025.aspx",
+   "at": "2026-11-25T01:08:53Z"
+  },
+  {
+   "source": "中央社",
+   "title": "新台幣開盤貶2.1分　早盤逼近33元關卡",
+   "url": "https://www.cna.com.tw/news/afe/202611250023.aspx",
+   "at": "2026-11-25T01:06:49Z"
+  },
+  {
+   "source": "中央社",
+   "title": "費半挫7.88%台指期夜盤跌逾1800點　台股強彈後面臨壓力",
+   "url": "https://www.cna.com.tw/news/afe/202611250020.aspx",
+   "at": "2026-11-25T00:28:42Z"
+  },
+  {
+   "source": "中央社",
    "title": "黃仁勳向輝達員工致歉  坦承違反行為準則、接受心理治療",
    "url": "https://www.cna.com.tw/news/aopl/202611250012.aspx",
    "at": "2026-11-24T22:22:20Z"
@@ -11,30 +35,6 @@
    "title": "AI熱潮前景不明　美股多收跌、輝達股價下挫近6%",
    "url": "https://www.cna.com.tw/news/afe/202611250011.aspx",
    "at": "2026-11-24T22:09:18Z"
-  },
-  {
-   "source": "中央社",
-   "title": "荷莫茲海峽頻傳油輪遇襲　國際油價小升",
-   "url": "https://www.cna.com.tw/news/afe/202611250009.aspx",
-   "at": "2026-11-24T21:03:13Z"
-  },
-  {
-   "source": "中央社",
-   "title": "Shein遭美指控誤導消費者　傳將支付1億美元和解",
-   "url": "https://www.cna.com.tw/news/aopl/202611250006.aspx",
-   "at": "2026-11-24T19:32:05Z"
-  },
-  {
-   "source": "中央社",
-   "title": "受美國關稅消息拖累　歐洲股市收盤下跌",
-   "url": "https://www.cna.com.tw/news/afe/202611250003.aspx",
-   "at": "2026-11-24T17:20:56Z"
-  },
-  {
-   "source": "中央社",
-   "title": "傳美國準備調高對中國與其他國家關稅　最快本週公布",
-   "url": "https://www.cna.com.tw/news/aopl/202611250002.aspx",
-   "at": "2026-11-24T16:19:50Z"
   },
   {
    "source": "中央社",
@@ -76,7 +76,14 @@
  "intl": [
   {
    "source": "Guardian",
-   "title": "Inflation rate jumps to 4.9% as Australia’s cost-of-living crisis intensifies ",
+   "title": "Australia’s security pact with Solomon Islands a blow to China’s influence in the Pacific",
+   "url": "https://www.theguardian.com/world/2026/nov/25/australia-solomon-islands-treaty-blow-to-china-pacific-influence",
+   "at": "2026-11-25T01:51:02Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
+   "title": "Inflation rate jumps to 4.9% as Australia’s cost-of-living crisis intensifies",
    "url": "https://www.theguardian.com/business/2026/nov/25/inflation-rate-australia-october-figures",
    "at": "2026-11-25T01:42:07Z",
    "sec": "Business"
@@ -145,13 +152,6 @@
    "title": "French ex-President Sarkozy and wife Carla Bruni to face trial",
    "url": "https://www.bbc.co.uk/news/articles/c65y17pwv1z7o?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-24T16:49:07Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "Italy expresses concern to Ukraine over Libya ship attacks – as it happened",
-   "url": "https://www.theguardian.com/world/live/2026/nov/24/russia-ukraine-poland-drone-patriots-latest-news-updates",
-   "at": "2026-11-24T16:24:49Z",
-   "sec": "World news"
   }
  ],
  "groups": [
@@ -661,8 +661,8 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 2.36,
-   "vol_ratio": 1.48,
+   "vol": 2.387,
+   "vol_ratio": 1.49,
    "tone": 0.19,
    "tone_at": "2026-11-25T01:21:43Z",
    "spark": [
@@ -679,9 +679,9 @@
     1.491,
     1.314,
     3.013,
-    2.36
+    2.387
    ],
-   "at": "2026-11-25T01:42:16Z"
+   "at": "2026-11-25T01:57:21Z"
   },
   "wiki": {
    "zh": [
@@ -760,25 +760,25 @@
    },
    {
     "term": "關稅",
-    "n": 10,
-    "src": 7,
+    "n": 8,
+    "src": 6,
     "sources": [
      "MoneyDJ",
      "PTT",
      "Yahoo新聞",
-     "中央社",
      "永豐金證券",
-     "自由財經"
+     "自由財經",
+     "鉅亨網"
     ],
     "sample": {
-     "title": "受美國關稅消息拖累　歐洲股市收盤下跌",
-     "url": "https://www.cna.com.tw/news/afe/202611250003.aspx"
+     "title": "美股收盤》川普擬加徵關稅 輝達回跌、費半慘摔 台積電ADR挫3.91％",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBud0NQWmcydWtNQVVVMGNPdFJvcXVCbHQzNzlkdktkOEF6NVJ2NU5zVkxDT3lQVGJkWHd2aklMWVZ1cVlYbXJOR1kybFd1aHRLVWJPa08wSEZZSk1FSFZF0gFkQVVfeXFMTXB6Nl9PNVhleHZBbUpja2gtRnozYWtELUZuRFZtVlhHZFprVy0zdzNCTWdYWWNWc3RucmlqeGF4TWdwWjFCTlJwWVEyazhjbGlpOU42cTFLS0tSa1BRMFJMVk5yTg?oc=5"
     },
     "hot": true
    },
    {
     "term": "川普",
-    "n": 6,
+    "n": 7,
     "src": 5,
     "sources": [
      "MoneyDJ",
@@ -829,7 +829,7 @@
    },
    {
     "term": "黃仁勳",
-    "n": 7,
+    "n": 6,
     "src": 4,
     "sources": [
      "PTT",
@@ -892,23 +892,23 @@
     "hot": true
    },
    {
-    "term": "資安",
+    "term": "費半",
     "n": 4,
     "src": 4,
     "sources": [
-     "iThome",
-     "中央社 CNA",
-     "商傳媒",
-     "端傳媒Initium M"
+     "Yahoo股市",
+     "中央社",
+     "工商時報",
+     "自由財經"
     ],
     "sample": {
-     "title": "美國FCC擬強化物聯網資安標章制度，獲認證產品每3年須更新認證",
-     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE8wbloxZE9lLWhnNV9JVzBJeFEwd3FHQlJDbE1KbFNfNVE0M1VCV0pCVzJzbU9Xc2dCR1dUczZFeHpENEtlWkVJSnNBMXRfZw?oc=5"
+     "title": "費半挫7.88%台指期夜盤跌逾1800點　台股強彈後面臨壓力",
+     "url": "https://www.cna.com.tw/news/afe/202611250020.aspx"
     },
     "hot": true
    }
   ]
  },
  "errs": [],
- "updatedAt": "2026-11-25T01:42:16Z"
+ "updatedAt": "2026-11-25T01:57:21Z"
 }
