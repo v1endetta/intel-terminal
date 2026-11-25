@@ -1,43 +1,42 @@
 {
  "taiwan": {
   "score": -0.4,
-  "label": "股市焦慮",
+  "label": "焦慮不安",
   "themes": [
-   "台積電暴跌",
-   "美股與關稅衝擊",
-   "AI泡沫疑慮"
+   "台股重挫",
+   "政治謠言",
+   "生活優惠"
   ],
-  "line": "台股重挫與國際關稅壓力讓PTT股民哀號，中年族群充滿焦慮與觀望。"
+  "line": "股市大跌引發投資人恐慌，同時LINE群組充斥各類政治與詐騙謠言，社會氛圍顯得浮躁不安。"
  },
  "overseas": {
-  "score": -0.5,
-  "label": "疲憊不安",
+  "score": -0.3,
+  "label": "悲觀憂慮",
   "themes": [
-   "關稅政策",
-   "通膨壓力",
-   "科技業裁員"
+   "關稅衝擊",
+   "AI泡沫",
+   "裁員潮"
   ],
-  "line": "海外社群對川普關稅、通膨及科技業裁員潮感到疲憊與不安。"
+  "line": "對川普關稅政策及AI產業泡沫化感到擔憂，並持續關注全球通膨與企業裁員帶來的經濟壓力。"
  },
  "sources": {
   "PTT": {
    "score": -0.6,
-   "note": "台積電暴跌與關稅引發恐慌"
+   "note": "股市大跌，投資人情緒低迷且焦慮"
   },
   "Mobile01": {
    "score": 0.1,
-   "note": "開箱與車市討論維持日常"
+   "note": "車房3C討論為主，股市討論偏向觀望"
   },
   "LINE": {
-   "score": -0.3,
-   "note": "詐騙與假訊息流竄令人擔憂"
+   "score": -0.5,
+   "note": "謠言與詐騙訊息多，引發民眾疑慮"
   }
  },
- "watch": "盯緊台股續航力與美股科技股走勢。",
+ "watch": "台股後續走勢與川普關稅政策對市場的實質影響。",
  "_grounding": [],
- "model": "gemini-3.5-flash-lite",
+ "model": "gemini-3.1-flash-lite",
  "spark_tw": [
-  -0.4,
   -0.4,
   -0.3,
   -0.2,
@@ -108,10 +107,10 @@
   -0.4,
   -0.3,
   -0.3,
+  -0.4,
   -0.4
  ],
  "spark_os": [
-  -0.3,
   -0.5,
   -0.2,
   -0.3,
@@ -182,16 +181,16 @@
   -0.5,
   -0.2,
   -0.2,
-  -0.5
+  -0.5,
+  -0.3
  ],
  "n_inputs": {
   "PTT": 24,
   "LINE（Cofacts）": 15,
   "Threads": 0,
-  "Mobile01": 20,
+  "Mobile01": 21,
   "Bluesky（國外）": 10
  },
  "missing": "Dcard、Threads、IG（年輕族群、女性）還沒涵蓋",
- "updatedAt": "2026-11-25T04:30:44Z",
- "error": "2026-11-25T05:37:46Z RuntimeError: gemini-3.6-flash 429 You exceeded your current quota, please check your plan and billing details. For more info"
+ "updatedAt": "2026-11-25T06:54:57Z"
 }
