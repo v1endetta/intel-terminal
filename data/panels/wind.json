@@ -1,90 +1,32 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "台灣消費者近期聚焦AI科技趨勢與黃仁勳相關話題，同時熱衷於影視新作、遊戲體驗及品牌促銷活動。",
+ "line": "關注金馬獎後續話題與院線新片，同時追蹤AI應用特惠與旗艦新機預購熱潮。",
  "topics": [
   {
-   "name": "Google Gemini",
-   "q": "Google Gemini",
+   "name": "Blackmagic Camera",
+   "q": "Blackmagic Camera",
    "cat": "App",
    "do": [
     {
-     "src": "App 營收",
-     "name": "Google Gemini",
-     "how": "爬升 44 名到第 9"
-    }
-   ],
-   "talk": [
-    {
-     "src": "PTT",
-     "title": "[情報] google ai pro 黑五半價"
-    }
-   ],
-   "y": 0.89,
-   "news7": 88,
-   "news_p7": 12,
-   "news_capped": true,
-   "mentions": {
-    "PTT": 1
-   },
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-25",
-   "quad": "hit"
-  },
-  {
-   "name": "ChatGPT",
-   "q": "ChatGPT",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 營收",
-     "name": "ChatGPT",
-     "how": "第 1 名"
+     "src": "App 下載",
+     "name": "Blackmagic Camera",
+     "how": "新進榜第 11 名"
     }
    ],
    "talk": [],
-   "y": 0.75,
-   "news7": 82,
-   "news_p7": 17,
-   "news_capped": true,
-   "social": {
-    "Threads": 96,
-    "Dcard": 29
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 7,
-   "first": "2026-11-14",
-   "quad": "hit"
-  },
-  {
-   "name": "哥吉拉-0.0",
-   "q": "哥吉拉-0.0",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "電影票房",
-     "name": "哥吉拉-0.0",
-     "how": "本週票房第 1（2133 萬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.95,
-   "news7": 26,
-   "news_p7": 30,
+   "y": 0.9,
+   "news7": 2,
+   "news_p7": 2,
    "news_capped": false,
    "social": {
-    "Threads": 0.3,
-    "Dcard": 0
+    "Threads": 19.3
    },
    "mentions": {},
-   "x": 0.73,
+   "x": 0.43,
    "talk_trend": "flat",
-   "days": 7,
-   "first": "2026-11-17",
-   "quad": "hit"
+   "days": 3,
+   "first": "2026-11-24",
+   "quad": "quiet"
   },
   {
    "name": "BIGBANG",
@@ -107,39 +49,231 @@
    "news7": 16,
    "news_p7": 0,
    "news_capped": false,
+   "social": {
+    "Threads": 105.3,
+    "Dcard": 2
+   },
    "mentions": {},
-   "x": 0.62,
+   "x": 0.99,
    "talk_trend": "up",
-   "days": 1,
+   "days": 2,
    "first": "2026-11-25",
    "quad": "hit"
   },
   {
-   "name": "魔鬼的計謀",
-   "q": "魔鬼的計謀",
+   "name": "哥吉拉-0.0",
+   "q": "哥吉拉-0.0",
    "cat": "影視",
    "do": [
     {
-     "src": "Netflix 影集",
-     "name": "The Devil's Plan",
-     "how": "上榜第 2 週、第 5 名"
+     "src": "電影票房",
+     "name": "哥吉拉-0.0",
+     "how": "本週票房第 1（2133 萬）"
     }
    ],
    "talk": [],
-   "y": 0.8,
-   "news7": 24,
-   "news_p7": 29,
+   "y": 0.95,
+   "news7": 32,
+   "news_p7": 42,
    "news_capped": false,
+   "social": {
+    "Threads": 205.3,
+    "Dcard": 0
+   },
    "mentions": {},
-   "x": 0.7,
+   "x": 1.0,
    "talk_trend": "flat",
-   "days": 2,
-   "first": "2026-11-12",
+   "days": 7,
+   "first": "2026-11-17",
    "quad": "hit"
   },
   {
+   "name": "Google Gemini",
+   "q": "Google Gemini",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "Google Gemini",
+     "how": "爬升 43 名到第 10"
+    }
+   ],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] google ai pro 黑五半價"
+    }
+   ],
+   "y": 0.88,
+   "news7": 93,
+   "news_p7": 7,
+   "news_capped": true,
+   "social": {
+    "Threads": 264,
+    "Dcard": 11
+   },
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-25",
+   "quad": "hit"
+  },
+  {
+   "name": "ChatGPT",
+   "q": "ChatGPT",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "ChatGPT",
+     "how": "第 1 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.75,
+   "news7": 82,
+   "news_p7": 17,
+   "news_capped": true,
+   "social": {
+    "Threads": 216,
+    "Dcard": 29
+   },
+   "mentions": {},
+   "x": 1.0,
+   "talk_trend": "up",
+   "days": 7,
+   "first": "2026-11-14",
+   "quad": "hit"
+  },
+  {
+   "name": "名偵探柯南",
+   "q": "名偵探柯南 第30號殺人事件",
+   "cat": "影視",
+   "do": [
+    {
+     "src": "電影票房",
+     "name": "名偵探柯南 第30號殺人事件",
+     "how": "本週票房第 2（763 萬）"
+    }
+   ],
+   "talk": [],
+   "y": 0.87,
+   "news7": 29,
+   "news_p7": 6,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.74,
+   "talk_trend": "up",
+   "days": 1,
+   "first": "2026-11-26",
+   "quad": "hit"
+  },
+  {
+   "name": "紅果短劇",
+   "q": "紅果短劇",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "紅果短劇 - 好內容多品類隨心看",
+     "how": "第 1 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.75,
+   "news7": 27,
+   "news_p7": 40,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.72,
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-26",
+   "quad": "hit"
+  },
+  {
+   "name": "BESTie",
+   "q": "BESTie Love Options",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "BESTie - Love Options",
+     "how": "第 1 名"
+    },
+    {
+     "src": "YouTube 熱門",
+     "name": "베스티(BESTie) - 연애의 조건(Love Options) | Suit Dance | 수트댄스 | Per",
+     "how": "7 天內上架、發燒第 3"
+    }
+   ],
+   "talk": [],
+   "y": 0.87,
+   "news7": 6,
+   "news_p7": 19,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.42,
+   "talk_trend": "down",
+   "days": 1,
+   "first": "2026-11-26",
+   "quad": "new"
+  },
+  {
+   "name": "MapleStory Worlds",
+   "q": "MapleStory Worlds",
+   "cat": "遊戲",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "MapleStory Worlds - 楓之谷世界",
+     "how": "爬升 38 名到第 6"
+    }
+   ],
+   "talk": [],
+   "y": 0.83,
+   "news7": 7,
+   "news_p7": 0,
+   "news_capped": false,
+   "social": {
+    "Threads": 0
+   },
+   "mentions": {},
+   "x": 0.45,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-25",
+   "quad": "new"
+  },
+  {
+   "name": "瑪奇 Mobile",
+   "q": "瑪奇 Mobile",
+   "cat": "遊戲",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "瑪奇 Mobile",
+     "how": "爬升 85 名到第 8"
+    }
+   ],
+   "talk": [],
+   "y": 1.0,
+   "news7": 2,
+   "news_p7": 3,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.24,
+   "talk_trend": "down",
+   "days": 1,
+   "first": "2026-11-26",
+   "quad": "new"
+  },
+  {
    "name": "DIOR 大穎",
-   "q": "DIOR 大穎",
+   "q": "DIOR 大穎 我以為我們會結婚",
    "cat": "音樂",
    "do": [
     {
@@ -161,143 +295,132 @@
    "talk": [],
    "y": 1.0,
    "news7": 1,
-   "news_p7": 1,
+   "news_p7": 0,
    "news_capped": false,
    "social": {
-    "Threads": 96
+    "Threads": 1
    },
    "mentions": {},
-   "x": 0.45,
+   "x": 0.2,
    "talk_trend": "flat",
-   "days": 1,
+   "days": 2,
    "first": "2026-11-25",
    "quad": "new"
   },
   {
-   "name": "Blackmagic Camera",
-   "q": "Blackmagic Camera",
-   "cat": "App",
+   "name": "魔鬼的計謀",
+   "q": "The Devil's Plan",
+   "cat": "影視",
    "do": [
     {
-     "src": "App 下載",
-     "name": "Blackmagic Camera",
-     "how": "新進榜第 6 名"
+     "src": "Netflix 影集",
+     "name": "The Devil's Plan",
+     "how": "上榜第 2 週、第 5 名"
     }
    ],
    "talk": [],
-   "y": 0.9,
-   "news7": 2,
-   "news_p7": 2,
+   "y": 0.8,
+   "news7": 1,
+   "news_p7": 5,
    "news_capped": false,
    "social": {
-    "Threads": 44.4
+    "Threads": 13.6,
+    "Dcard": 1
    },
    "mentions": {},
-   "x": 0.49,
-   "talk_trend": "flat",
+   "x": 0.37,
+   "talk_trend": "down",
    "days": 2,
-   "first": "2026-11-24",
+   "first": "2026-11-12",
    "quad": "new"
   },
   {
-   "name": "MapleStory Worlds",
-   "q": "MapleStory Worlds",
-   "cat": "遊戲",
+   "name": "李佳薇",
+   "q": "李佳薇 甲乙丙丁",
+   "cat": "音樂",
    "do": [
     {
-     "src": "App 營收",
-     "name": "MapleStory Worlds - 楓之谷世界",
-     "how": "爬升 38 名到第 6"
+     "src": "Spotify",
+     "name": "Jess Lee - 甲乙丙丁 - 你我怎么两清",
+     "how": "第 2 名"
+    },
+    {
+     "src": "KKBOX",
+     "name": "李佳薇 (Jess Lee) - 甲乙丙丁Strangers - 你我怎麼兩清",
+     "how": "第 1 名"
     }
    ],
    "talk": [],
-   "y": 0.83,
-   "news7": 7,
+   "y": 0.87,
+   "news7": 3,
    "news_p7": 0,
    "news_capped": false,
    "mentions": {},
-   "x": 0.45,
+   "x": 0.3,
    "talk_trend": "up",
    "days": 1,
-   "first": "2026-11-25",
+   "first": "2026-11-26",
    "quad": "new"
   },
   {
-   "name": "定海",
-   "q": "定海 遊戲",
-   "cat": "遊戲",
+   "name": "魅惑",
+   "q": "魅惑 秀智 金宣虎",
+   "cat": "影視",
    "do": [],
    "talk": [
     {
-     "src": "Mobile01",
-     "title": "傑仕登首款自研動作 RPG 遊戲《定海》12/3 登 Steam，雙武器迎戰《山海經》異獸！"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "傑仕登自研ARPG 新作《定海》公布發售日培育自身能力、勇闖山海經神話世界《テイカイ》"
+     "src": "時尚媒體",
+     "title": "秀智、金宣虎主演血色唯美韓劇《魅惑》！秀智化身冷艷吸血鬼，劇情、上線時間一次看"
     }
    ],
    "y": 0.0,
-   "news7": 4,
-   "news_p7": 0,
+   "news7": 23,
+   "news_p7": 1,
    "news_capped": false,
    "mentions": {
-    "Mobile01": 1,
-    "新聞焦點": 1
+    "時尚媒體": 1
    },
-   "x": 0.55,
+   "x": 0.79,
    "talk_trend": "up",
    "days": 1,
-   "first": "2026-11-25",
+   "first": "2026-11-26",
    "quad": "hype"
   },
   {
-   "name": "黃仁勳",
-   "q": "黃仁勳",
-   "cat": "人物",
+   "name": "金馬獎",
+   "q": "金馬獎",
+   "cat": "活動",
    "do": [],
    "talk": [
     {
-     "src": "PTT",
-     "title": "Re: [新聞]金融巨鱷盯上AI泡沫！索羅斯基金Q3狠砍輝達"
-    },
-    {
-     "src": "PTT",
-     "title": "Re: [新聞]金融巨鱷盯上AI泡沫！索羅斯基金Q3狠砍輝達"
+     "src": "新聞焦點",
+     "title": "新科金馬影后袁澧林入行11年辛酸史！從文青女神、合約官司到勇敢揭露演藝圈性騷擾"
     },
     {
      "src": "新聞焦點",
-     "title": "川普救回黃仁勳惹議！共和黨人士也警告：選民受夠雙重標準"
+     "title": "翁倩玉奪金馬獎「秒收日本天后訊息」！忙到身體發警訊 連喊：我要休息"
     },
     {
      "src": "新聞焦點",
-     "title": "黃仁勳回歸行情熄火引台股血崩近2千點！AI權值股全倒、外資提款1236億網示警：明天韭留美日"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "為何台灣不能沒有黃仁勳？謝金河揭關鍵：讓台廠告別「毛三到四」苦日子- 證券"
+     "title": "金馬紅毯／神仙級頒獎組合！李安：心一直在台灣真實心聲曝光| 戲劇"
     }
    ],
    "y": 0.0,
-   "news7": 80,
-   "news_p7": 20,
+   "news7": 95,
+   "news_p7": 5,
    "news_capped": true,
-   "social": {
-    "Threads": 5.3
-   },
    "mentions": {
-    "PTT": 2,
-    "新聞焦點": 5
+    "新聞焦點": 3
    },
    "x": 1.0,
    "talk_trend": "up",
-   "days": 5,
-   "first": "2026-11-12",
+   "days": 4,
+   "first": "2026-11-20",
    "quad": "talk"
   },
   {
    "name": "小米",
-   "q": "小米18 Pro",
+   "q": "Xiaomi 18 Pro Max",
    "cat": "品牌商品",
    "do": [],
    "talk": [
@@ -307,89 +430,62 @@
     },
     {
      "src": "Mobile01",
-     "title": "Xiaomi 18 Pro 系列在台開賣｜39,999 元直升 512GB，舊換新最高再折 5 千元！"
+     "title": "Xiaomi 18 Pro Max背螢幕有配AI翻譯功能嗎？"
     },
     {
      "src": "Mobile01",
-     "title": "小米18 Pro 系列台灣售價公布 首銷256直接升512"
+     "title": "xiaomi 18 pro max 1Tb跟S26 Ultra 1Tb哪支好呢"
     }
    ],
    "y": 0.0,
-   "news7": 54,
-   "news_p7": 30,
-   "news_capped": false,
+   "news7": 46,
+   "news_p7": 54,
+   "news_capped": true,
    "mentions": {
     "PTT": 1,
     "Mobile01": 2
    },
    "x": 1.0,
-   "talk_trend": "up",
-   "days": 2,
+   "talk_trend": "flat",
+   "days": 3,
    "first": "2026-11-10",
    "quad": "talk"
   },
   {
-   "name": "胡瓜",
-   "q": "胡瓜",
+   "name": "黃仁勳",
+   "q": "黃仁勳",
    "cat": "人物",
    "do": [],
    "talk": [
     {
      "src": "新聞焦點",
-     "title": "新下面一位快破27萬訂閱胡瓜「1手勢」發聲：何懼從頭再來| 星聞"
+     "title": "矽谷贏了、MAGA怒了！川普救回黃仁勳內幕曝 掀共和黨內鬨"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "黃仁勳回鍋難消AI融資疑慮！CoreWeave公司債創新低 未來5年違約機率估68%"
     }
    ],
    "y": 0.0,
-   "news7": 91,
-   "news_p7": 9,
+   "news7": 82,
+   "news_p7": 18,
    "news_capped": true,
+   "social": {
+    "Threads": 57.5
+   },
    "mentions": {
-    "新聞焦點": 1
+    "新聞焦點": 2
    },
    "x": 1.0,
    "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-20",
-   "quad": "talk"
-  },
-  {
-   "name": "蔡依林",
-   "q": "蔡依林",
-   "cat": "人物",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 100,
-   "news_p7": 0,
-   "news_capped": true,
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-20",
-   "quad": "talk"
-  },
-  {
-   "name": "劉冠廷",
-   "q": "劉冠廷",
-   "cat": "人物",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 100,
-   "news_p7": 0,
-   "news_capped": true,
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-23",
+   "days": 5,
+   "first": "2026-11-12",
    "quad": "talk"
   },
   {
    "name": "樂天旅遊",
    "q": "樂天旅遊",
-   "cat": "品牌商品",
+   "cat": "生活習慣",
    "do": [],
    "talk": [
     {
@@ -401,49 +497,22 @@
    "news7": 4,
    "news_p7": 5,
    "news_capped": false,
-   "social": {
-    "Threads": 19.2
-   },
    "mentions": {
     "PTT": 1
    },
-   "x": 0.65,
+   "x": 0.45,
    "talk_trend": "flat",
-   "days": 2,
+   "days": 3,
    "first": "2026-11-24",
-   "quad": "talk"
-  },
-  {
-   "name": "Hoka Bondi 9",
-   "q": "Hoka Bondi 9",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
-    {
-     "src": "Dcard 網購",
-     "title": "Hoka Bondi 9（1 則）"
-    }
-   ],
-   "y": 0.0,
-   "news7": 1,
-   "news_p7": 4,
-   "news_capped": false,
-   "mentions": {
-    "Dcard 網購": 1
-   },
-   "x": 0.25,
-   "talk_trend": "down",
-   "days": 1,
-   "first": "2026-11-25",
    "quad": "low"
   }
  ],
  "quads": {
-  "quiet": 0,
-  "hit": 5,
-  "new": 3,
+  "quiet": 1,
+  "hit": 6,
+  "new": 6,
   "hype": 1,
-  "talk": 6,
+  "talk": 3,
   "low": 1
  },
  "src_do": [
@@ -459,7 +528,6 @@
  ],
  "src_talk": [
   "Dcard 穿搭",
-  "Dcard 網購",
   "Dcard 美妝",
   "Mobile01",
   "PTT",
@@ -467,9 +535,9 @@
   "時尚媒體",
   "社群（Threads・Dcard・IG）"
  ],
- "social_at": "2026-11-24",
- "hist_days": 23,
- "model": "gemini-3.1-flash-lite",
+ "social_at": "2026-11-25",
+ "hist_days": 24,
+ "model": "gemini-3.8-flash",
  "errs": [],
- "updatedAt": "2026-11-25T13:48:45Z"
+ "updatedAt": "2026-11-25T19:51:04Z"
 }
