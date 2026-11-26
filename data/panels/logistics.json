@@ -44,73 +44,7 @@
    ]
   }
  },
- "fbx": [
-  {
-   "code": "FBX",
-   "name": "全球綜合",
-   "chg": 0.06
-  },
-  {
-   "code": "FBX01",
-   "name": "中國→美西",
-   "chg": -5.6
-  },
-  {
-   "code": "FBX02",
-   "name": "美西→中國",
-   "chg": 4.61
-  },
-  {
-   "code": "FBX03",
-   "name": "中國→美東",
-   "chg": 0.06
-  },
-  {
-   "code": "FBX04",
-   "name": "美東→中國",
-   "chg": 1.77
-  },
-  {
-   "code": "FBX11",
-   "name": "中國→北歐",
-   "chg": -0.96
-  },
-  {
-   "code": "FBX12",
-   "name": "北歐→中國",
-   "chg": 3.01
-  },
-  {
-   "code": "FBX13",
-   "name": "中國→地中海",
-   "chg": 20.2
-  },
-  {
-   "code": "FBX14",
-   "name": "地中海→中國",
-   "chg": 0.0
-  },
-  {
-   "code": "FBX21",
-   "name": "美東→北歐",
-   "chg": 3.39
-  },
-  {
-   "code": "FBX22",
-   "name": "北歐→美東",
-   "chg": -3.08
-  },
-  {
-   "code": "FBX24",
-   "name": "北歐→南美東",
-   "chg": -4.29
-  },
-  {
-   "code": "FBX26",
-   "name": "北歐→南美西",
-   "chg": -2.18
-  }
- ],
+ "fbx": [],
  "storms": [],
  "ports": [
   {
@@ -568,7 +502,9 @@
   }
  ],
  "threat": [],
- "errs": [],
+ "errs": [
+  "FBX：頁面格式變了，沒抓到數字"
+ ],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-26T19:18:58Z"
+ "updatedAt": "2026-11-26T20:26:15Z"
 }
