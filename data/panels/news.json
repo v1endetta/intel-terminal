@@ -76,6 +76,13 @@
  "intl": [
   {
    "source": "Guardian",
+   "title": "‘Trapped in grief’: wife of Japanese journalist detained by Russia pleads for his release",
+   "url": "https://www.theguardian.com/world/2026/nov/26/japanese-journalist-yuki-imai-detained-in-russia-wife-pleads-his-release",
+   "at": "2026-11-26T05:16:17Z",
+   "sec": "World news"
+  },
+  {
+   "source": "Guardian",
    "title": "UK to invest £9.5m in Ukraine windfarm to bolster war-hit energy system",
    "url": "https://www.theguardian.com/business/2026/nov/26/uk-to-invest-95m-in-ukraine-windfarm-war-hit-energy-system",
    "at": "2026-11-26T05:00:46Z",
@@ -143,13 +150,6 @@
    "title": "All hostages rescued after Colombian security forces storm supermarket, police say",
    "url": "https://www.theguardian.com/world/2026/nov/25/hostages-freed-colombia-security-forces-storm-cartagena-supermarket",
    "at": "2026-11-25T20:20:23Z",
-   "sec": "World news"
-  },
-  {
-   "source": "Guardian",
-   "title": "Lululemon founder stuns Canadian women’s leadership conference with sexist comments",
-   "url": "https://www.theguardian.com/world/2026/nov/25/lululemon-founder-comments-canada-womens-leadership-conference",
-   "at": "2026-11-25T19:57:49Z",
    "sec": "World news"
   }
  ],
@@ -652,7 +652,7 @@
     29,
     22,
     26,
-    15
+    16
    ],
    "days7": [
     "2026-11-20",
@@ -795,21 +795,6 @@
     "hot": true
    },
    {
-    "term": "GPT",
-    "n": 4,
-    "src": 3,
-    "sources": [
-     "HN",
-     "OpenAI 論壇",
-     "R&D World"
-    ],
-    "sample": {
-     "title": "GPT-6.2 protein design yields binders for five targets",
-     "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNc0YtaF9OcnZ6STlwV1dBYlRzUzY3NGtFVWlwQUFJT1hmRkN3MVdaOE5Rc2dWbWV4WXRPbHJpdWNNR3RKdXM5UFZONHVPQmFiVGJ4bjl3QmJoeEFYcVJGSGw4bGs4dHFSVmhkZW9zZXpocDNUZ0lvdFZpR2dUVm5iZHZVaDVvNHItODBqVWdCWk5YWXdLMlhJQTM0Q09FOGs?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "OpenAI",
     "n": 3,
     "src": 3,
@@ -885,7 +870,22 @@
     "hot": true
    },
    {
-    "term": "駭客",
+    "term": "資安",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "CIO Taiwan",
+     "iThome",
+     "鉅亨網"
+    ],
+    "sample": {
+     "title": "英國NCSC示警AI輔助網路攻擊顯著增加，駭客數分鐘內就可能利用企業既有資安弱點",
+     "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTFBucmVVdXItZEpncjlKZHdhdG1wUV9CS1AwVVVVallyWDdSMmRpTVdMQlN1cWRUWi13WDBEMXVfWUJoX3YycS0xLUt3UkR5UQ?oc=5"
+    },
+    "hot": true
+   },
+   {
+    "term": "攻擊",
     "n": 3,
     "src": 3,
     "sources": [
@@ -904,5 +904,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-26T05:16:17Z"
+ "updatedAt": "2026-11-26T05:31:23Z"
 }
