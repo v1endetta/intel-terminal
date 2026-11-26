@@ -1,6 +1,6 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者聚焦於串流影視熱播、AI應用與旅遊優惠等生活消費話題。",
+ "line": "這幾天台灣消費者的注意力高度集中在強檔電影票房、串流熱門影音作品與各類季節性購物優惠折扣。",
  "topics": [
   {
    "name": "BIGBANG",
@@ -47,8 +47,8 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 25,
-   "news_p7": 30,
+   "news7": 37,
+   "news_p7": 36,
    "news_capped": false,
    "social": {
     "Threads": 205.3,
@@ -63,68 +63,36 @@
   },
   {
    "name": "Google Gemini",
-   "q": "Google Gemini",
+   "q": "Google Gemini 黑五",
    "cat": "App",
    "do": [
     {
      "src": "App 營收",
      "name": "Google Gemini",
-     "how": "爬升 39 名到第 10"
+     "how": "爬升 36 名到第 13"
     }
    ],
    "talk": [
     {
      "src": "PTT",
      "title": "[情報] google ai pro 黑五半價"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "Google打響AI價格戰！Gemini 4 Neon便宜25%直逼頂尖模型 Anthropic面臨壓力"
     }
    ],
-   "y": 0.84,
-   "news7": 87,
-   "news_p7": 13,
-   "news_capped": true,
+   "y": 0.81,
+   "news7": 22,
+   "news_p7": 2,
+   "news_capped": false,
    "social": {
     "Threads": 264,
     "Dcard": 11
    },
    "mentions": {
-    "PTT": 1,
-    "新聞焦點": 1
+    "PTT": 1
    },
    "x": 1.0,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-25",
-   "quad": "hit"
-  },
-  {
-   "name": "ChatGPT",
-   "q": "ChatGPT",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 營收",
-     "name": "ChatGPT",
-     "how": "第 1 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.75,
-   "news7": 51,
-   "news_p7": 49,
-   "news_capped": true,
-   "social": {
-    "Threads": 216,
-    "Dcard": 29
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "flat",
-   "days": 7,
-   "first": "2026-11-14",
    "quad": "hit"
   },
   {
@@ -140,7 +108,7 @@
    ],
    "talk": [],
    "y": 0.8,
-   "news7": 18,
+   "news7": 21,
    "news_p7": 25,
    "news_capped": false,
    "social": {
@@ -148,39 +116,15 @@
     "Dcard": 1
    },
    "mentions": {},
-   "x": 0.86,
+   "x": 0.89,
    "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-12",
    "quad": "hit"
   },
   {
-   "name": "麥當勞",
-   "q": "麥當勞",
-   "cat": "飲食",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "麥當勞APP",
-     "how": "在榜上第 23 名（沒有在爬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.5,
-   "static": true,
-   "news7": 79,
-   "news_p7": 14,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.95,
-   "talk_trend": "up",
-   "days": 4,
-   "first": "2026-11-05",
-   "quad": "hit"
-  },
-  {
    "name": "名偵探柯南",
-   "q": "名偵探柯南 票房",
+   "q": "名偵探柯南 第30號殺人事件",
    "cat": "影視",
    "do": [
     {
@@ -191,141 +135,134 @@
    ],
    "talk": [],
    "y": 0.87,
-   "news7": 8,
-   "news_p7": 10,
+   "news7": 29,
+   "news_p7": 7,
    "news_capped": false,
    "mentions": {},
-   "x": 0.48,
-   "talk_trend": "flat",
+   "x": 0.74,
+   "talk_trend": "up",
    "days": 1,
    "first": "2026-11-26",
-   "quad": "new"
+   "quad": "hit"
   },
   {
-   "name": "Coach",
-   "q": "Coach 折扣",
-   "cat": "品牌商品",
+   "name": "ChatGPT",
+   "q": "ChatGPT 我是誰",
+   "cat": "App",
    "do": [
     {
-     "src": "Google 熱搜",
-     "name": "coach",
-     "how": "搜尋 100+"
+     "src": "App 營收",
+     "name": "ChatGPT",
+     "how": "第 1 名"
     }
    ],
-   "talk": [
-    {
-     "src": "Dcard 穿搭",
-     "title": "Coach折扣（1 則）"
-    }
-   ],
-   "y": 0.6,
-   "news7": 3,
-   "news_p7": 3,
-   "news_capped": false,
-   "mentions": {
-    "Dcard 穿搭": 1
-   },
-   "x": 0.4,
-   "talk_trend": "flat",
-   "days": 1,
-   "first": "2026-11-26",
-   "quad": "new"
-  },
-  {
-   "name": "Disney+",
-   "q": "Disney+",
-   "cat": "影視",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 67,
-   "news_p7": 33,
-   "news_capped": true,
-   "mentions": {},
-   "x": 0.92,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-13",
-   "quad": "hype"
-  },
-  {
-   "name": "魅力",
-   "q": "魅惑 秀智 金宣虎",
-   "cat": "影視",
-   "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "秀智、金宣虎主演血色唯美韓劇《魅惑》！秀智化身冷艷吸血鬼，劇情、上線時間一次看"
-    }
-   ],
-   "y": 0.0,
-   "news7": 23,
-   "news_p7": 1,
-   "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.79,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-26",
-   "quad": "hype"
-  },
-  {
-   "name": "定海",
-   "q": "定海 遊戲",
-   "cat": "遊戲",
-   "do": [],
    "talk": [
     {
      "src": "新聞焦點",
-     "title": "傑仕登自研動作 RPG Roguelike《定海》發售日定為 12 月 3 日"
+     "title": "ChatGPT到底有多懂你？「我是誰」指令爆紅　網友看完喊太催淚"
     }
    ],
-   "y": 0.0,
-   "news7": 6,
+   "y": 0.75,
+   "news7": 4,
    "news_p7": 0,
    "news_capped": false,
    "social": {
-    "Threads": 0.1
+    "Threads": 216,
+    "Dcard": 29
    },
    "mentions": {
     "新聞焦點": 1
    },
-   "x": 0.53,
+   "x": 0.75,
+   "talk_trend": "up",
+   "days": 7,
+   "first": "2026-11-14",
+   "quad": "hit"
+  },
+  {
+   "name": "MapleStory Worlds",
+   "q": "MapleStory Worlds",
+   "cat": "遊戲",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "MapleStory Worlds - 楓之谷世界",
+     "how": "爬升 37 名到第 8"
+    }
+   ],
+   "talk": [],
+   "y": 0.82,
+   "news7": 8,
+   "news_p7": 0,
+   "news_capped": false,
+   "social": {
+    "Threads": 0
+   },
+   "mentions": {},
+   "x": 0.48,
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-25",
-   "quad": "hype"
+   "quad": "new"
+  },
+  {
+   "name": "DIOR 大穎",
+   "q": "DIOR 大穎 郭家瑋",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "郭家瑋 - 過了幾天(合唱版) (w/ DIOR 大穎)",
+     "how": "升 12 名到第 18"
+    },
+    {
+     "src": "KKBOX",
+     "name": "DIOR 大穎 - 我以為我們會結婚",
+     "how": "第 2 名"
+    },
+    {
+     "src": "YouTube 熱門",
+     "name": "DIOR大穎 & 郭家瑋TREVOR - 我以為我們會結婚 - （Official MV）",
+     "how": "7 天內上架、發燒第 2"
+    }
+   ],
+   "talk": [],
+   "y": 1.0,
+   "news7": 1,
+   "news_p7": 0,
+   "news_capped": false,
+   "social": {
+    "Threads": 1
+   },
+   "mentions": {},
+   "x": 0.2,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-25",
+   "quad": "new"
   },
   {
    "name": "黃仁勳",
-   "q": "黃仁勳",
+   "q": "黃仁勳 騎重機",
    "cat": "人物",
    "do": [],
    "talk": [
     {
-     "src": "PTT",
-     "title": "[新聞] 驚！黃仁勳又爆外遇？傳回鍋前向董事會自"
-    },
-    {
      "src": "新聞焦點",
-     "title": "川普政府如何判定黃仁勳不構成國安威脅？《路透》揭評估內幕"
+     "title": "黃仁勳「失業11天」在幹嘛？曾私訊好友想騎重機橫越美國"
     }
    ],
    "y": 0.0,
-   "news7": 98,
-   "news_p7": 2,
-   "news_capped": true,
+   "news7": 15,
+   "news_p7": 0,
+   "news_capped": false,
    "social": {
     "Threads": 57.5
    },
    "mentions": {
-    "PTT": 1,
     "新聞焦點": 1
    },
-   "x": 1.0,
+   "x": 0.97,
    "talk_trend": "up",
    "days": 5,
    "first": "2026-11-12",
@@ -343,41 +280,89 @@
     }
    ],
    "y": 0.0,
-   "news7": 31,
+   "news7": 27,
    "news_p7": 14,
    "news_capped": false,
    "mentions": {
     "Dcard 穿搭": 1
    },
-   "x": 0.85,
+   "x": 0.82,
    "talk_trend": "up",
    "days": 4,
    "first": "2026-11-13",
    "quad": "talk"
   },
   {
-   "name": "全聯",
-   "q": "全聯 發票中獎",
+   "name": "Toyota",
+   "q": "Toyota HILUX",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
-     "src": "新聞焦點",
-     "title": "統一發票千萬獎4大通路開出7張花10元買飲品抱走大獎| 產經"
+     "src": "Mobile01",
+     "title": "【影音試駕】TOYOTA HILUX，溫柔硬漢反差萌，舒適越野我都能！"
     }
    ],
    "y": 0.0,
-   "news7": 23,
+   "news7": 4,
+   "news_p7": 4,
+   "news_capped": false,
+   "mentions": {
+    "Mobile01": 1
+   },
+   "x": 0.45,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-03",
+   "quad": "low"
+  },
+  {
+   "name": "Coach",
+   "q": "Coach 折扣",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "Dcard 穿搭",
+     "title": "Coach折扣（1 則）"
+    }
+   ],
+   "y": 0.0,
+   "news7": 2,
    "news_p7": 5,
    "news_capped": false,
    "mentions": {
-    "新聞焦點": 1
+    "Dcard 穿搭": 1
    },
-   "x": 0.79,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-24",
-   "quad": "talk"
+   "x": 0.34,
+   "talk_trend": "down",
+   "days": 1,
+   "first": "2026-11-26",
+   "quad": "low"
+  },
+  {
+   "name": "Sony MDR-3R",
+   "q": "Sony Hello Kitty",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "Mobile01",
+     "title": "科技與可愛的跨界相遇！Sony x Hello Kitty 限定聯名套組開箱"
+    }
+   ],
+   "y": 0.0,
+   "news7": 2,
+   "news_p7": 1,
+   "news_capped": false,
+   "mentions": {
+    "Mobile01": 1
+   },
+   "x": 0.34,
+   "talk_trend": "flat",
+   "days": 3,
+   "first": "2026-11-20",
+   "quad": "low"
   },
   {
    "name": "樂天旅遊",
@@ -404,14 +389,31 @@
    "quad": "low"
   },
   {
-   "name": "小米",
-   "q": "Xiaomi18 Pro Max",
+   "name": "全家發熱衣",
+   "q": "全家 發熱衣",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 1,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {},
+   "x": 0.15,
+   "talk_trend": "flat",
+   "days": 4,
+   "first": "2026-11-13",
+   "quad": "low"
+  },
+  {
+   "name": "Panasonic",
+   "q": "Panasonic nanocare 吹風機",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
-     "src": "PTT",
-     "title": "[情報] 台灣小米 Xiaomi18 Pro Max 早鳥44999起"
+     "src": "Mobile01",
+     "title": "Panasonic nanocare EH-NB70 公主機｜史上最小巧奈米水離子吹風機，給秀髮更多水潤感"
     }
    ],
    "y": 0.0,
@@ -419,12 +421,12 @@
    "news_p7": 0,
    "news_capped": false,
    "mentions": {
-    "PTT": 1
+    "Mobile01": 1
    },
    "x": 0.1,
    "talk_trend": "flat",
    "days": 3,
-   "first": "2026-11-10",
+   "first": "2026-11-20",
    "quad": "low"
   }
  ],
@@ -432,9 +434,9 @@
   "quiet": 0,
   "hit": 6,
   "new": 2,
-  "hype": 3,
-  "talk": 3,
-  "low": 2
+  "hype": 0,
+  "talk": 2,
+  "low": 6
  },
  "src_do": [
   "App 下載",
@@ -450,6 +452,7 @@
  "src_talk": [
   "Dcard 穿搭",
   "Dcard 美妝",
+  "LINE TODAY",
   "Mobile01",
   "PTT",
   "新聞焦點",
@@ -460,5 +463,5 @@
  "hist_days": 24,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-26T01:51:34Z"
+ "updatedAt": "2026-11-26T08:57:34Z"
 }
