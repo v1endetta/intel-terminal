@@ -4,22 +4,22 @@
    {
     "from": "Shanghai",
     "to": "New York",
-    "chg": -9.0,
-    "v": 8194.0,
+    "chg": -7.0,
+    "v": 7615.0,
     "name": "上海→紐約"
    },
    {
     "from": "Shanghai",
     "to": "Los Angeles",
-    "chg": -5.0,
-    "v": 7026.0,
+    "chg": -8.0,
+    "v": 6437.0,
     "name": "上海→洛杉磯"
    },
    {
     "from": "Shanghai",
     "to": "Genoa",
-    "chg": 6.0,
-    "v": 4436.0,
+    "chg": 8.0,
+    "v": 4802.0,
     "name": "上海→熱那亞"
    }
   ],
@@ -374,6 +374,22 @@
  ],
  "news": [
   {
+   "source": "FreightWaves",
+   "title": "Déjà vu in Miami as FedEx MD-11 freighter overshoots runway",
+   "url": "https://www.freightwaves.com/news/deja-vu-in-miami-as-fedex-md-11-freighter-overshoots-runway",
+   "at": "2026-11-26T23:36:05+08:00",
+   "hot": false,
+   "zh": "邁阿密似曾相識一幕：聯準會聯邦快遞MD-11貨機衝出跑道"
+  },
+  {
+   "source": "FreightWaves",
+   "title": "5 non-domiciled drivers want CDLs reinstated as battle separately moves through courts",
+   "url": "https://www.freightwaves.com/news/5-non-domiciled-drivers-want-cdls-reinstated-as-battle-separately-moves-through-courts",
+   "at": "2026-11-26T23:28:28+08:00",
+   "hot": false,
+   "zh": "5名非當地居民司機要求恢復商用駕照，官司各自進入法院審理"
+  },
+  {
    "source": "The Loadstar",
    "title": "Green shipping needs global, rather than costlier regional, rules",
    "url": "https://theloadstar.com/green-shipping-needs-global-rather-than-costlier-regional-rules/",
@@ -548,26 +564,12 @@
    "at": "2026-11-25T20:43:26+08:00",
    "hot": true,
    "zh": "APM Terminals 計畫擴建鹿特丹馬斯弗拉克特二期，產能增加 140 萬 TEU"
-  },
-  {
-   "source": "The Loadstar",
-   "title": "Maersk warns of UK logistics bottlenecks as port congestion persists globally",
-   "url": "https://theloadstar.com/maersk-warns-of-uk-logistics-bottlenecks-as-port-congestion-persists-globally/",
-   "at": "2026-11-25T20:41:59+08:00",
-   "hot": true,
-   "zh": "全球港口擁堵持續，馬士基警告英國物流將出現瓶頸"
-  },
-  {
-   "source": "The Loadstar",
-   "title": "Cargo owners will foot the bill for IMO net-zero framework, warns FMC chair",
-   "url": "https://theloadstar.com/cargo-owners-will-foot-the-bill-for-imo-net-zero-framework-warns-fmc-chair/",
-   "at": "2026-11-25T20:34:29+08:00",
-   "hot": false,
-   "zh": "FMC 主席警告：貨主將負擔 IMO 淨零架構的費用"
   }
  ],
  "threat": [],
- "errs": [],
+ "errs": [
+  "GDACS: ReadTimeout: HTTPSConnectionPool(host='www.gdacs.org', port=443): Read timed out. (read timeout=40)"
+ ],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-26T15:00:16Z"
+ "updatedAt": "2026-11-26T16:04:39Z"
 }
