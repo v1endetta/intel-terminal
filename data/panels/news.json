@@ -634,9 +634,9 @@
     },
     {
      "source": "迷誠品",
-     "title": "香港誠品暢銷榜BestSellers｜第370期",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9RLTNhek93dk9RMGRTV0lGUXBqenc5WnY1R1AtcG5VYkhWVmxzaVBFNDRvRlVkWmV2ODdTMzk3bHFTQ0lGNGhwODZvdS1BTmxXbDVndW9jUTNBZ1ZiTDVN?oc=5",
-     "at": "2026-11-26T09:41:43Z",
+     "title": "香港诚品畅销榜BestSellers｜第370期",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE4wdGFlQUk5YkZPRFgtWTBXQkc0NS0wRTFoWGd3R05FRHdqbnZHLXIwclN6MGNMazdWLW1YeTZxYnZaN0hFc2NCaWJfUDJJZXdxR2xYd2ZuV2Mxc0xIbUFR?oc=5",
+     "at": "2026-11-26T09:45:56Z",
      "kw": "獨立書店 OR 誠品"
     },
     {
@@ -650,10 +650,10 @@
    "daily7": [
     13,
     13,
-    21,
     19,
+    20,
     23,
-    38,
+    39,
     3
    ],
    "days7": [
@@ -780,21 +780,6 @@
     "hot": true
    },
    {
-    "term": "沈伯洋",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "PTT",
-     "Wiki",
-     "中央社"
-    ],
-    "sample": {
-     "title": "蔡英文稱沈伯洋「雞婆」適合當市長　直播對談吸27萬人",
-     "url": "https://www.cna.com.tw/news/aipl/202611260319.aspx"
-    },
-    "hot": true
-   },
-   {
     "term": "資安",
     "n": 3,
     "src": 3,
@@ -808,6 +793,20 @@
      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9RTm84amgxY0pncFRsR3hrMEJzZTg4N3JHalhyV1NuNGdlYnN2bXI0N0VXSHFmT0l3cFJGMVlwaDA0X0dwRE5OYlU2emt4dw?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "Claude",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "HN",
+     "Mashdigi"
+    ],
+    "sample": {
+     "title": "Claude桌面版App佈局軟體生態！Anthropic執行長預言個人化訂製App時代來臨",
+     "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1nSkZadEJwdHM2V2xQSUVFb3UzbkhRWFNZdUViMXl3OUhiNmhMYURzTkN2S2VKcl9QMG01ZnhEUXo2aVBOaGU4c1o2ay04NlliNm5QbjZaakNoQkIzb3ZVVnpUVXlxZVRjblB4d1BLSzlHOVFoeDcw?oc=5"
+    },
+    "hot": false
    },
    {
     "term": "排行",
@@ -880,16 +879,16 @@
     "hot": false
    },
    {
-    "term": "賴清德",
+    "term": "沈伯洋",
     "n": 2,
     "src": 2,
     "sources": [
-     "中央社",
-     "台中日報"
+     "Wiki",
+     "中央社"
     ],
     "sample": {
-     "title": "黃世杰中壢造勢晚會　賴清德力挺能為桃園找到新動力",
-     "url": "https://www.cna.com.tw/news/aipl/202611260305.aspx"
+     "title": "蔡英文稱沈伯洋「雞婆」適合當市長　直播對談吸27萬人",
+     "url": "https://www.cna.com.tw/news/aipl/202611260319.aspx"
     },
     "hot": false
    }
@@ -898,5 +897,5 @@
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-26T23:18:19Z"
+ "updatedAt": "2026-11-26T23:37:21Z"
 }
