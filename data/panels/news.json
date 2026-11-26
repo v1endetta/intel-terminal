@@ -75,6 +75,12 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Two Italians killed in strike in Kuwait, as Iran denies responsibility",
+   "url": "https://www.bbc.co.uk/news/articles/c39w9y5dx4k5o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-26T19:27:45Z"
+  },
+  {
    "source": "Guardian",
    "title": "Major East Midlands road projects shelved to divert funding to defence",
    "url": "https://www.theguardian.com/world/2026/nov/26/major-east-midlands-road-projects-shelved-to-divert-funding-to-defence",
@@ -103,12 +109,6 @@
    "sec": "World news"
   },
   {
-   "source": "BBC",
-   "title": "Two Italians killed in strike in Kuwait, as Iran denies responsibility",
-   "url": "https://www.bbc.co.uk/news/articles/c39w9y5dx4k5o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-26T17:54:22Z"
-  },
-  {
    "source": "Guardian",
    "title": "EU leaders wrestle over Ukraine aid as potential Le Pen victory sparks fear",
    "url": "https://www.theguardian.com/world/2026/nov/26/eu-leaders-braced-for-clashes-over-ukraine-aid-at-budget-talks",
@@ -130,12 +130,6 @@
    "sec": "Business"
   },
   {
-   "source": "BBC",
-   "title": "More than 1,000 flights cancelled or delayed in US as weather disrupts Thanksgiving travel",
-   "url": "https://www.bbc.co.uk/news/articles/ckm2mz3prq77o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-26T17:38:56Z"
-  },
-  {
    "source": "Guardian",
    "title": "Trump says he wants Putin to ‘pull back all military aggression’ in Europe – as it happene",
    "url": "https://www.theguardian.com/world/live/2026/nov/26/eu-budget-summit-ukraine-russia-spain-serbia-elections-latest-news-updates",
@@ -155,6 +149,12 @@
    "url": "https://www.theguardian.com/business/live/2026/nov/26/nvidia-chip-shipments-south-east-asia-stock-dentists-live-updates",
    "at": "2026-11-26T15:27:39Z",
    "sec": "Business"
+  },
+  {
+   "source": "BBC",
+   "title": "Diesel tanker carrying up to 7,000 tonnes capsizes near Ibiza, killing one",
+   "url": "https://www.bbc.co.uk/news/articles/c9gklryvj24do?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-26T15:17:18Z"
   }
  ],
  "groups": [
@@ -636,9 +636,9 @@
     },
     {
      "source": "迷誠品",
-     "title": "香港誠品暢銷榜BestSellers｜第370期",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9RLTNhek93dk9RMGRTV0lGUXBqenc5WnY1R1AtcG5VYkhWVmxzaVBFNDRvRlVkWmV2ODdTMzk3bHFTQ0lGNGhwODZvdS1BTmxXbDVndW9jUTNBZ1ZiTDVN?oc=5",
-     "at": "2026-11-26T09:41:43Z",
+     "title": "香港诚品畅销榜BestSellers｜第370期",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE4wdGFlQUk5YkZPRFgtWTBXQkc0NS0wRTFoWGd3R05FRHdqbnZHLXIwclN6MGNMazdWLW1YeTZxYnZaN0hFc2NCaWJfUDJJZXdxR2xYd2ZuV2Mxc0xIbUFR?oc=5",
+     "at": "2026-11-26T09:45:56Z",
      "kw": "獨立書店 OR 誠品"
     },
     {
@@ -652,7 +652,7 @@
    "daily7": [
     8,
     11,
-    19,
+    18,
     19,
     28,
     41,
@@ -903,6 +903,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-26T19:27:21Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-26T19:44:26Z"
 }
