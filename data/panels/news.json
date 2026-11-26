@@ -96,15 +96,15 @@
   },
   {
    "source": "BBC",
-   "title": "Thirty-one killed in massive fire as fuel tanker crashes on Cairo highway",
-   "url": "https://www.bbc.co.uk/news/articles/cqy7rn30v314o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-25T22:18:06Z"
+   "title": "Macy's postpones Thanksgiving parade due to weather",
+   "url": "https://www.bbc.co.uk/news/articles/cwkgr38l2g9yo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-25T23:57:03Z"
   },
   {
    "source": "BBC",
-   "title": "North Korea expels Swiss diplomat in sanctions row",
-   "url": "https://www.bbc.co.uk/news/articles/cq0l34e4kkr5o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-25T21:51:17Z"
+   "title": "Thirty-one killed in massive fire as fuel tanker crashes on Cairo highway",
+   "url": "https://www.bbc.co.uk/news/articles/cqy7rn30v314o?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-25T22:18:06Z"
   },
   {
    "source": "BBC",
@@ -654,8 +654,8 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 3.483,
-   "vol_ratio": 1.47,
+   "vol": 3.598,
+   "vol_ratio": 1.52,
    "tone": 0.41,
    "tone_at": "2026-11-25T23:26:20Z",
    "spark": [
@@ -672,9 +672,9 @@
     1.314,
     3.013,
     2.39,
-    3.483
+    3.598
    ],
-   "at": "2026-11-26T00:31:26Z"
+   "at": "2026-11-26T00:51:06Z"
   },
   "wiki": {
    "zh": [
@@ -752,18 +752,34 @@
     "hot": true
    },
    {
-    "term": "美股",
+    "term": "稅率",
     "n": 5,
     "src": 4,
     "sources": [
      "PTT",
      "中央社",
+     "中央社 CNA",
+     "太報 TaiSounds"
+    ],
+    "sample": {
+     "title": "美301調查台灣建議稅率15%　鄭麗君8時30分說明",
+     "url": "https://www.cna.com.tw/news/aipl/202611260015.aspx"
+    },
+    "hot": true
+   },
+   {
+    "term": "台積電",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "UDN",
+     "短新聞SHOTNEWS",
      "自由時報",
      "鉅亨網"
     ],
     "sample": {
-     "title": "科技股逢賣壓　美股多收黑",
-     "url": "https://www.cna.com.tw/news/afe/202611260013.aspx"
+     "title": "台積電ADR收盤跌近2% 台指期反彈274點",
+     "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE80bkRLcE01aG9Cd3ZSeWdFUGRmNmF6T1Itd3MzOXFkUDVEYWJUU3VRVldsR2hoZHlpTXJCbDJXNjFQdm4tR0paNmctYUk4TWQy?oc=5"
     },
     "hot": true
    },
@@ -784,18 +800,18 @@
     "hot": true
    },
    {
-    "term": "台積電",
+    "term": "美股",
     "n": 4,
     "src": 4,
     "sources": [
-     "UDN",
-     "短新聞SHOTNEWS",
+     "PTT",
+     "中央社",
      "自由時報",
      "鉅亨網"
     ],
     "sample": {
-     "title": "台積電ADR收盤跌近2% 台指期反彈274點",
-     "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE80bkRLcE01aG9Cd3ZSeWdFUGRmNmF6T1Itd3MzOXFkUDVEYWJUU3VRVldsR2hoZHlpTXJCbDJXNjFQdm4tR0paNmctYUk4TWQy?oc=5"
+     "title": "科技股逢賣壓　美股多收黑",
+     "url": "https://www.cna.com.tw/news/afe/202611260013.aspx"
     },
     "hot": true
    },
@@ -831,21 +847,6 @@
     "hot": true
    },
    {
-    "term": "稅率",
-    "n": 4,
-    "src": 3,
-    "sources": [
-     "中央社",
-     "中央社 CNA",
-     "太報 TaiSounds"
-    ],
-    "sample": {
-     "title": "美301調查台灣建議稅率15%　鄭麗君8時30分說明",
-     "url": "https://www.cna.com.tw/news/aipl/202611260015.aspx"
-    },
-    "hot": true
-   },
-   {
     "term": "新關稅",
     "n": 3,
     "src": 3,
@@ -876,22 +877,21 @@
     "hot": true
    },
    {
-    "term": "川普",
+    "term": "議稅率",
     "n": 3,
-    "src": 3,
+    "src": 2,
     "sources": [
-     "PTT",
-     "Yahoo新聞",
-     "鉅亨網"
+     "中央社",
+     "中央社 CNA"
     ],
     "sample": {
-     "title": "川普新關稅 台灣課15％",
-     "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNZDFTOXFMN0VKTzFNaEpVOW5wUDdPVm01aGozYVdSZU5lcHVmNENsM2FzaGdZUTNiam0yUXlGLVBMYl9MZ09NUFNpQmZKc21OVFZLYXhnUjFsM1YwbUVfbzU2QktJTVVOYWl4aWpzZ25yS3RJbnhXblNjSWV6SnJNU2NKTXgtQ1N1dnJuNzQ0aWlkWUVQN2VlMkptaEJpMTd5WUdmNGcyaTFzSndyMDNLcWViQUZYUDQ?oc=5"
+     "title": "美301調查台灣建議稅率15%　鄭麗君8時30分說明",
+     "url": "https://www.cna.com.tw/news/aipl/202611260015.aspx"
     },
-    "hot": true
+    "hot": false
    }
   ]
  },
  "errs": [],
- "updatedAt": "2026-11-26T00:31:26Z"
+ "updatedAt": "2026-11-26T00:51:06Z"
 }
