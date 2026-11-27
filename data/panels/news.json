@@ -75,6 +75,19 @@
  ],
  "intl": [
   {
+   "source": "BBC",
+   "title": "Hundreds of thousands still without power after storms hit US on Thanksgiving",
+   "url": "https://www.bbc.co.uk/news/articles/cre3dj5n7dpwo?at_medium=RSS&at_campaign=rss",
+   "at": "2026-11-27T14:49:59Z"
+  },
+  {
+   "source": "Guardian",
+   "title": "‘Mass-casualty event’ in Europe possible amid rise in Russian sabotage, says thinktank",
+   "url": "https://www.theguardian.com/world/2026/nov/27/mass-casualty-event-europe-possible-russian-sabotage-says-thinktank",
+   "at": "2026-11-27T14:46:27Z",
+   "sec": "World news"
+  },
+  {
    "source": "Guardian",
    "title": "Europe joins global stock market rally as AI trade rebounds - business live",
    "url": "https://www.theguardian.com/business/live/2026/nov/27/uk-bank-tax-borrowers-savers-andrew-bailey-stocks-economy-businses-news-live-updates-latest",
@@ -100,12 +113,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/27/israeli-justice-system-judges-call-drop-netanyahu-charges",
    "at": "2026-11-27T10:48:29Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Hundreds of thousands still without power after storms hit US on Thanksgiving",
-   "url": "https://www.bbc.co.uk/news/articles/cre3dj5n7dpwo?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-27T10:26:28Z"
   },
   {
    "source": "BBC",
@@ -144,13 +151,6 @@
    "title": "Italy's former police chief rejected mafia inquiry allegations before death",
    "url": "https://www.bbc.co.uk/news/articles/c69q8yjj1v0po?at_medium=RSS&at_campaign=rss",
    "at": "2026-11-27T07:28:10Z"
-  },
-  {
-   "source": "Guardian",
-   "title": "‘If the bot gets it wrong, who’s liable?’ Retailers enter the unknown with AI shopping ass",
-   "url": "https://www.theguardian.com/business/2026/nov/27/retailers-ai-shopping-assistants-black-friday-brands-meta-muse",
-   "at": "2026-11-27T07:00:56Z",
-   "sec": "Business"
   }
  ],
  "groups": [
@@ -667,8 +667,8 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 2.282,
-   "vol_ratio": 0.8,
+   "vol": 2.251,
+   "vol_ratio": 0.79,
    "tone": 0.55,
    "tone_at": "2026-11-27T14:19:59Z",
    "spark": [
@@ -685,9 +685,9 @@
     3.013,
     2.39,
     3.688,
-    2.282
+    2.251
    ],
-   "at": "2026-11-27T14:19:59Z"
+   "at": "2026-11-27T14:54:26Z"
   },
   "wiki": {
    "zh": [
@@ -747,22 +747,6 @@
   },
   "hot": [
    {
-    "term": "OpenAI",
-    "n": 5,
-    "src": 4,
-    "sources": [
-     "CIO Taiwan",
-     "HN",
-     "IT PRO Magaz",
-     "OpenAI 論壇"
-    ],
-    "sample": {
-     "title": "思科與OpenAI攜手推出Shirudo 守護代理式AI安全",
-     "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTFBidThVN19TUEpFYThkUkpXb0xTZDcwRzBNVzNrR0FzaHNSeHRncW9WcVJndUdxRTZxMEdsVUV6andqcWhX?oc=5"
-    },
-    "hot": true
-   },
-   {
     "term": "Anthropic",
     "n": 4,
     "src": 4,
@@ -779,6 +763,22 @@
     "hot": true
    },
    {
+    "term": "OpenAI",
+    "n": 4,
+    "src": 4,
+    "sources": [
+     "CIO Taiwan",
+     "HN",
+     "IT PRO Magaz",
+     "OpenAI 論壇"
+    ],
+    "sample": {
+     "title": "思科與OpenAI攜手推出Shirudo 守護代理式AI安全",
+     "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTFBidThVN19TUEpFYThkUkpXb0xTZDcwRzBNVzNrR0FzaHNSeHRncW9WcVJndUdxRTZxMEdsVUV6andqcWhX?oc=5"
+    },
+    "hot": true
+   },
+   {
     "term": "計師品牌",
     "n": 4,
     "src": 4,
@@ -791,22 +791,6 @@
     "sample": {
      "title": "東京人氣設計師品牌 CULLNI 首度登台！進駐信義 A9，全球獨家限定單品同步亮相",
      "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBYalBtcmw5MXlaWUJZUjZ1SHZFeWZiOW1WbWQyY2x3MzV4OTlUOHpkYi1MdmFnc2M3UFYxZFlrd0t0alB5djVFNFZ2MjROazRYd1F0MEV4d3FVdHZu0gFiQVVfeXFMTXVWbVotRnRxeVZ6QVBZNXlyb1p0SlpKUlhTOEQ3dC1Gblh6V0p1eUFKVlV5RExCNk1ITjNFU3N0cEdWLWhTdGRHOGQ0SHdqNG1VeHlpUE9RZ193cDF6OTk1N2c?oc=5"
-    },
-    "hot": true
-   },
-   {
-    "term": "共機",
-    "n": 4,
-    "src": 4,
-    "sources": [
-     "Facebook",
-     "台視新聞網",
-     "大紀元",
-     "自由軍武頻道"
-    ],
-    "sample": {
-     "title": "【快訊／投票日前一天！中共解放軍出動 今早30架共機出海擾台】 投票日前一天！我們是要準備投票啦，不知道對岸在忙什麼..",
-     "url": "https://news.google.com/rss/articles/CBMi0wVBVV95cUxNNEJmRFNnUm1WbWxFVmJIaGkzYl9obWVsbFdUY0dCamVXeHNjUllIZTV3MV9zNFpUb0d2REQ0SVhCMnFVS3FibjRNa21KYVhueEdaeXcySzFlTFZWeVM0eThDMDRUYVdhb3dhbDFqbjc4WHZfUTZpNTlldVZrQ3NTMVJNSTVvbE5rTHlQaE16OFNKNGtxYWl3aFhWTVloN2dtTEE2cFdNZXFjWG0wTndlNUttYWRtQ1NOak5HYk84TXBrVXBXaU5MNG9KNHBPWjN1bWxmX090QlB3aDZlQVFDQWI0YXkyQWJjUGlIUGVwdFR5dUFZbG9MdzJkUTJhMm9CSUR3WXpMXzJ3UmxKbXFMZTJ5emVGUEN1Ni1hYU5Oc3VfUWUyWjQyYm5fWjJjSE13a0VlRjczRTZCWlduaW8wa1NTV3RlV3g0aUFvdGZfbTY1RkdybDFrMTdUV1pfQVhJU2ozeUZEUHlwTDI3NGZrbUhpT2R1X0pqSmhScUF3M2VXdUpMeFR6OFdSVlhlOE1vV08yMlJfRHBKaEVMTmEwNkZvanl4X2lZLWRNcHFTOUxUQ1VPV2swNFVESlgyWEJnbVBMWTVmangwdGhYczFVVldRWjRtNndlYy1fckVMRjRBc1RVSk1oaTBkWXRQcUxLVm1IX1o5eUdXd2FGbFVIcHVjWkNxY0RRVkNHcGtITHk4eTZUNnFZN3RwWmdmOGFDM3BSWnRYbTlOdzIwdm9pY3JLZmZuNmJwZmxDNEU4aXhiaVd0VVJ2ZmMxMzlrblNfZnRXYmw3dW5nbDJhSzB0dUNLQ1hLQ0NieHE3V2RWanJtNDlaRHh5ZEoyTG9zS1I0MHhXUFZYbGU3RUFWZk1Sem12Zm83bmtOTkltRjFTRjZVRUxZeGJmd0JJcXM1c2liS3QtY2xIaHlQbjFXdGFrbXphaDB5cjBvNC1GdHhIY1NpdkU?oc=5"
     },
     "hot": true
    },
@@ -900,11 +884,24 @@
      "url": "https://news.google.com/rss/articles/CBMi0wVBVV95cUxNNEJmRFNnUm1WbWxFVmJIaGkzYl9obWVsbFdUY0dCamVXeHNjUllIZTV3MV9zNFpUb0d2REQ0SVhCMnFVS3FibjRNa21KYVhueEdaeXcySzFlTFZWeVM0eThDMDRUYVdhb3dhbDFqbjc4WHZfUTZpNTlldVZrQ3NTMVJNSTVvbE5rTHlQaE16OFNKNGtxYWl3aFhWTVloN2dtTEE2cFdNZXFjWG0wTndlNUttYWRtQ1NOak5HYk84TXBrVXBXaU5MNG9KNHBPWjN1bWxmX090QlB3aDZlQVFDQWI0YXkyQWJjUGlIUGVwdFR5dUFZbG9MdzJkUTJhMm9CSUR3WXpMXzJ3UmxKbXFMZTJ5emVGUEN1Ni1hYU5Oc3VfUWUyWjQyYm5fWjJjSE13a0VlRjczRTZCWlduaW8wa1NTV3RlV3g0aUFvdGZfbTY1RkdybDFrMTdUV1pfQVhJU2ozeUZEUHlwTDI3NGZrbUhpT2R1X0pqSmhScUF3M2VXdUpMeFR6OFdSVlhlOE1vV08yMlJfRHBKaEVMTmEwNkZvanl4X2lZLWRNcHFTOUxUQ1VPV2swNFVESlgyWEJnbVBMWTVmangwdGhYczFVVldRWjRtNndlYy1fckVMRjRBc1RVSk1oaTBkWXRQcUxLVm1IX1o5eUdXd2FGbFVIcHVjWkNxY0RRVkNHcGtITHk4eTZUNnFZN3RwWmdmOGFDM3BSWnRYbTlOdzIwdm9pY3JLZmZuNmJwZmxDNEU4aXhiaVd0VVJ2ZmMxMzlrblNfZnRXYmw3dW5nbDJhSzB0dUNLQ1hLQ0NieHE3V2RWanJtNDlaRHh5ZEoyTG9zS1I0MHhXUFZYbGU3RUFWZk1Sem12Zm83bmtOTkltRjFTRjZVRUxZeGJmd0JJcXM1c2liS3QtY2xIaHlQbjFXdGFrbXphaDB5cjBvNC1GdHhIY1NpdkU?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "媽祖",
+    "n": 3,
+    "src": 3,
+    "sources": [
+     "NOWnews今日新聞",
+     "Yahoo新聞",
+     "自由時報"
+    ],
+    "sample": {
+     "title": "已辦200年「同安寮十二庄請媽祖」活動民眾不熟　由來、規矩先看",
+     "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFA5c3ZFdkx6NEtLZElWcVFzUVdDNUlCMlBLQUNudWgwekU1ZG12aFZlOVFRN242ZTVBOWFCTFVMUVc1T0dPdWY0SDhuY0JIbEdsQ1HSAVJBVV95cUxQOXN2RXZMejRLS2RJVnFRc1FXQzVJQjJQS0FDbnVoMHpFNWRtdmhWZTlRUTduNmU1QTlhQkxVTFFXNU9HT3VmNEg4bmNCSGxHbENR?oc=5"
+    },
+    "hot": true
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-27T14:38:19Z"
+ "errs": [],
+ "updatedAt": "2026-11-27T14:54:26Z"
 }
