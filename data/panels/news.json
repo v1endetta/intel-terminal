@@ -75,6 +75,13 @@
  ],
  "intl": [
   {
+   "source": "Guardian",
+   "title": "Race hate exploded in this Spanish town last year. Now its residents are bracing for more",
+   "url": "https://www.theguardian.com/world/2026/nov/27/spain-migrants-election-vox-far-right-europe",
+   "at": "2026-11-27T05:00:55Z",
+   "sec": "World news"
+  },
+  {
    "source": "BBC",
    "title": "New Zealand's ruling coalition falls short of parliamentary majority by one seat",
    "url": "https://www.bbc.co.uk/news/articles/c670278qk879o?at_medium=RSS&at_campaign=rss",
@@ -146,12 +153,6 @@
    "url": "https://www.theguardian.com/world/2026/nov/26/gaza-ministry-schoolchildren-killed-this-month-israel-strikes",
    "at": "2026-11-26T20:33:07Z",
    "sec": "World news"
-  },
-  {
-   "source": "BBC",
-   "title": "Watch: Roofs torn off and streets under water as severe weather hits US",
-   "url": "https://www.bbc.co.uk/news/videos/cq808d704m22o?at_medium=RSS&at_campaign=rss",
-   "at": "2026-11-26T19:26:16Z"
   }
  ],
  "groups": [
@@ -898,6 +899,8 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-27T04:47:38Z"
+ "errs": [
+  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
+ ],
+ "updatedAt": "2026-11-27T05:07:12Z"
 }
