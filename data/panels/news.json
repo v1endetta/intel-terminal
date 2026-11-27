@@ -47,30 +47,6 @@
    "title": "九合一選舉明登場　台電動員逾3000人確保供電穩定",
    "url": "https://www.cna.com.tw/news/aipl/202611270123.aspx",
    "at": "2026-11-27T06:46:17Z"
-  },
-  {
-   "source": "公視",
-   "title": "【#PLive】美國公布301條款調查結果 行政院記者會說明 現場直播",
-   "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBXOXVQYjAxdDhkNFBsX0FLenZ3d3FUcmRIbXV0M05wZGdpVk1lZlhqOFdoSHVNM2R1OEZIZFlFUm82YlowWHF5RkNoaw?oc=5",
-   "at": "2026-11-26T16:17:01Z"
-  },
-  {
-   "source": "公視",
-   "title": "新北前議員蔡明堂涉為兒賄選遭聲押 檢方查扣2715萬現金",
-   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9aQnFJNXhLX1RUMGJZZ2RzRFJxaloyR1ZPR0Q1R01NZEN6bG1mS19kdEUtM0t1dVBocFhZTjJIaXNtR1AxT3NhVVBPdzBaelk?oc=5",
-   "at": "2026-11-26T07:34:45Z"
-  },
-  {
-   "source": "公視",
-   "title": "受少子化衝擊日偏鄉鐵道陷虧損 部分路段擬廢線改公車接駁",
-   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBGZm4xYU1WU2lKUWpkbUVZOXFNT0NGU01fZ1ZtVldaU25TSFljNk4xQ01hQzhERHpSN1NnNGhBbmJZWUc3dWkxZVFiY0VvM0U?oc=5",
-   "at": "2026-11-25T12:27:03Z"
-  },
-  {
-   "source": "公視",
-   "title": "南韓發現俄軍機入侵防空識別區 擬召見武官表達抗議",
-   "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5LYWNUcjNtdWJQQWxRWDZkUFNTb0VKeGtHcFZRdGZYMmtTNnJNUjdMbGZrbFpDVm4zT3NRYXc3eEdxU3hKbGZaMW1rdjE5ZUk?oc=5",
-   "at": "2026-11-24T03:27:00Z"
   }
  ],
  "intl": [
@@ -78,14 +54,14 @@
    "source": "Guardian",
    "title": "UK’s bank tax hike could hit borrowers and savers, Bank of England governor warns – busine",
    "url": "https://www.theguardian.com/business/live/2026/nov/27/uk-bank-tax-borrowers-savers-andrew-bailey-stocks-economy-businses-news-live-updates-latest",
-   "at": "2026-11-27T09:38:39Z",
+   "at": "2026-11-27T09:59:12Z",
    "sec": "Business"
   },
   {
    "source": "Guardian",
    "title": "Trump calling Putin ‘friend’ like declaring friendship with Hitler during WW2, Zelenskyy s",
    "url": "https://www.theguardian.com/world/live/2026/nov/27/zelenskyy-putin-trump-comments-russia-ukraine-latest-news-updates",
-   "at": "2026-11-27T09:36:03Z",
+   "at": "2026-11-27T09:42:32Z",
    "sec": "World news"
   },
   {
@@ -813,7 +789,7 @@
     "hot": true
    },
    {
-    "term": "合一選舉",
+    "term": "九合一選",
     "n": 3,
     "src": 3,
     "sources": [
@@ -904,6 +880,15 @@
    }
   ]
  },
- "errs": [],
- "updatedAt": "2026-11-27T09:36:03Z"
+ "errs": [
+  "pts gnews: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=site%3Anews.pts.org.tw&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
+  "kw en:\"AI agent\" OR agentic launch: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%22AI+agent%22+OR+agentic+launch&hl=en-US&gl=US&ceid=US%3Aen",
+  "kw ChatGPT OR Claude OR Gemini 新功能 OR 新模型: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=ChatGPT+OR+Claude+OR+Gemini+%E6%96%B0%E5%8A%9F%E8%83%BD+OR+%E6%96%B0%E6%A8%A",
+  "kw 獨立書店 OR 誠品: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E7%8D%A8%E7%AB%8B%E6%9B%B8%E5%BA%97+OR+%E8%AA%A0%E5%93%81&hl=zh-TW&gl=TW&ce",
+  "kw 關稅 台灣 OR 232條款: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%E9%97%9C%E7%A8%85+%E5%8F%B0%E7%81%A3+OR+232%E6%A2%9D%E6%AC%BE&hl=zh-TW&gl=T",
+  "kw Figma OR Canva 新功能: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=Figma+OR+Canva+%E6%96%B0%E5%8A%9F%E8%83%BD&hl=zh-TW&gl=TW&ceid=TW%3Azh-Hant",
+  "kw LVMH OR Kering OR Hermès OR 愛馬仕: HTTPError: 503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=LVMH+OR+Kering+OR+Herm%C3%A8s+OR+%E6%84%9B%E9%A6%AC%E4%BB%95&hl=zh-TW&gl=TW&",
+  "kw \"quiet luxury\" OR 老錢風 穿搭: HTTPError: HTTP Error 503: "
+ ],
+ "updatedAt": "2026-11-27T09:58:47Z"
 }
