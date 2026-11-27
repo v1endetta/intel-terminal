@@ -2,6 +2,12 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "AI股帶領科技股跌深勁彈　美股收紅",
+   "url": "https://www.cna.com.tw/news/afe/202611280006.aspx",
+   "at": "2026-11-27T20:02:43Z"
+  },
+  {
+   "source": "中央社",
    "title": "科技股續漲帶動　歐股收紅結束震盪一週",
    "url": "https://www.cna.com.tw/news/afe/202611280003.aspx",
    "at": "2026-11-27T17:33:34Z"
@@ -41,12 +47,6 @@
    "title": "蘇巧慧選前之夜湧逾5萬人 賴總統喊「讓李四川退休」",
    "url": "https://www.cna.com.tw/news/aipl/202611270278.aspx",
    "at": "2026-11-27T14:27:58Z"
-  },
-  {
-   "source": "中央社",
-   "title": "蔡英文致謝小水滴小水獺　新世代選民讓選舉更有溫度",
-   "url": "https://www.cna.com.tw/news/aipl/202611270277.aspx",
-   "at": "2026-11-27T14:18:56Z"
   },
   {
    "source": "公視",
@@ -234,7 +234,7 @@
     0,
     5,
     2,
-    4,
+    3,
     12,
     0
    ],
@@ -282,10 +282,10 @@
    ],
    "daily7": [
     1,
-    8,
-    49,
-    37,
-    27,
+    9,
+    47,
+    36,
+    26,
     21,
     4
    ],
@@ -384,10 +384,10 @@
    ],
    "daily7": [
     4,
-    12,
-    14,
-    33,
-    27,
+    13,
+    15,
+    35,
+    28,
     25,
     2
    ],
@@ -434,13 +434,13 @@
     }
    ],
    "daily7": [
-    5,
+    4,
     7,
     12,
     40,
     57,
     50,
-    1
+    2
    ],
    "days7": [
     "2026-11-22",
@@ -643,8 +643,8 @@
     13,
     22,
     30,
-    40,
-    1
+    39,
+    2
    ],
    "days7": [
     "2026-11-22",
@@ -660,7 +660,7 @@
  "signals": {
   "gdelt": {
    "vol": 2.349,
-   "vol_ratio": 0.84,
+   "vol_ratio": 0.82,
    "tone": 0.57,
    "tone_at": "2026-11-27T19:50:41Z",
    "spark": [
@@ -679,7 +679,7 @@
     2.251,
     2.349
    ],
-   "at": "2026-11-27T19:50:41Z"
+   "at": "2026-11-27T20:29:03Z"
   },
   "wiki": {
    "zh": [
@@ -758,7 +758,7 @@
    },
    {
     "term": "美股",
-    "n": 5,
+    "n": 6,
     "src": 5,
     "sources": [
      "BigGo 財經",
@@ -768,8 +768,8 @@
      "自由財經"
     ],
     "sample": {
-     "title": "美股早盤走高　那指漲逾1.5%",
-     "url": "https://www.cna.com.tw/news/afe/202611270287.aspx"
+     "title": "AI股帶領科技股跌深勁彈　美股收紅",
+     "url": "https://www.cna.com.tw/news/afe/202611280006.aspx"
     },
     "hot": true
    },
@@ -790,7 +790,7 @@
     "hot": true
    },
    {
-    "term": "台積電",
+    "term": "ADR",
     "n": 4,
     "src": 4,
     "sources": [
@@ -806,7 +806,7 @@
     "hot": true
    },
    {
-    "term": "ADR",
+    "term": "台積電",
     "n": 4,
     "src": 4,
     "sources": [
@@ -852,21 +852,6 @@
     "hot": true
    },
    {
-    "term": "選舉",
-    "n": 3,
-    "src": 3,
-    "sources": [
-     "中央社",
-     "大紀元",
-     "自由時報"
-    ],
-    "sample": {
-     "title": "蔡英文致謝小水滴小水獺　新世代選民讓選舉更有溫度",
-     "url": "https://www.cna.com.tw/news/aipl/202611270277.aspx"
-    },
-    "hot": true
-   },
-   {
     "term": "交易",
     "n": 3,
     "src": 3,
@@ -895,11 +880,23 @@
      "url": "https://news.google.com/rss/articles/CBMi-gJBVV95cUxPd2RzZUp6NWVBcVZnVEo0eHJSMW10aXk3SWN0Vm9VVkZvSVI3eXRVVFVtdmR4UHNXdzNSamhjSlh4WE1RaWRqd2FnNGkxSlVsNkRHcVRSNnZvUENzLWJJQTRYbG41Slp5dzhyWkI0UVU1blZxLUszWkJRcXhHQk1FRlMzd09XZ0VyS1Y4eWllRGw3ZDY3Wm0yMEJaV29zYlpKbDFaczc5WWVhZnMyT3dqVlh0N2JiV1Q1MGREVnF2TWlHeVFqQzlVcUJINzk4UVdmQU9TcGFqb0lCQVJCc3ZqUkdacjk5TG51c3NNMWVVcGpJd2F3Q0c2YjNjME9pSWlsUk1ySnNNQU1meVM2U1JfZXZXQXhNVTB3QWYwWkZMMW9xUFBmYVRFSWtsSXRBNjVyZmxXN2Z4emdPY1R6cTBvd0NtWmdNanlzUXA5RXdwZXV2ZFVJa3M4d2hwT25yLVNxdVlGWGpCdGJsTXo3dlRqcjE5NUlEdjZ2clE?oc=5"
     },
     "hot": true
+   },
+   {
+    "term": "Anthropic",
+    "n": 3,
+    "src": 2,
+    "sources": [
+     "Anthropic",
+     "Crypto Brief"
+    ],
+    "sample": {
+     "title": "Harbor Capital launches Anthropic AI Lab Ecosystem ETF, with",
+     "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBTal8zSmR2dVdnSy1jQS1oRk5zNWhqeUJOdDdPRUZNSXV6OXZQbnVVWUU3UnB3WWJKYWNKOGc5VHR1UjgybHd3U1U0VFNoa0RUUzdDNVA1TlpDSGQ1RlFiQnNRQVpiTlFBVHA4Q0hKdV9LT1FCanNqWTFB?oc=5"
+    },
+    "hot": false
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-27T20:11:51Z"
+ "errs": [],
+ "updatedAt": "2026-11-27T20:29:03Z"
 }
