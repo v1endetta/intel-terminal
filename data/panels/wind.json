@@ -1,64 +1,10 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "台灣消費者近期聚焦電影票房強檔、串流影視熱門作，並關注科技新品與聯名商品消費資訊。",
+ "line": "這幾天台灣消費者的注意力集中在熱門電影票房、串流影音話題、AI應用軟體以及旅遊與3C產品的討論上。",
  "topics": [
   {
-   "name": "哥吉拉-0.0",
-   "q": "哥吉拉-0.0 電影",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "電影票房",
-     "name": "哥吉拉-0.0",
-     "how": "本週票房第 1（2133 萬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.95,
-   "news7": 18,
-   "news_p7": 26,
-   "news_capped": false,
-   "social": {
-    "Threads": 120,
-    "Dcard": 0
-   },
-   "mentions": {},
-   "x": 0.95,
-   "talk_trend": "flat",
-   "days": 7,
-   "first": "2026-11-17",
-   "quad": "hit"
-  },
-  {
-   "name": "Google Gemini",
-   "q": "Google Gemini",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 營收",
-     "name": "Google Gemini",
-     "how": "爬升 43 名到第 6"
-    }
-   ],
-   "talk": [],
-   "y": 0.88,
-   "news7": 75,
-   "news_p7": 25,
-   "news_capped": true,
-   "social": {
-    "Threads": 264,
-    "Dcard": 9
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 4,
-   "first": "2026-11-25",
-   "quad": "hit"
-  },
-  {
    "name": "名偵探柯南",
-   "q": "名偵探柯南 第30號殺人事件",
+   "q": "名偵探柯南 電影",
    "cat": "影視",
    "do": [
     {
@@ -69,8 +15,8 @@
    ],
    "talk": [],
    "y": 0.87,
-   "news7": 28,
-   "news_p7": 8,
+   "news7": 36,
+   "news_p7": 10,
    "news_capped": false,
    "social": {
     "Threads": 149.9,
@@ -81,33 +27,6 @@
    "talk_trend": "up",
    "days": 2,
    "first": "2026-11-27",
-   "quad": "hit"
-  },
-  {
-   "name": "ChatGPT",
-   "q": "ChatGPT",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 營收",
-     "name": "ChatGPT",
-     "how": "第 1 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.75,
-   "news7": 74,
-   "news_p7": 25,
-   "news_capped": true,
-   "social": {
-    "Threads": 456,
-    "Dcard": 30
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 7,
-   "first": "2026-11-14",
    "quad": "hit"
   },
   {
@@ -123,18 +42,99 @@
    ],
    "talk": [],
    "y": 0.9,
-   "news7": 11,
-   "news_p7": 8,
+   "news7": 27,
+   "news_p7": 9,
    "news_capped": false,
    "social": {
     "Threads": 3.3,
     "Dcard": 3
    },
    "mentions": {},
-   "x": 0.72,
+   "x": 0.91,
+   "talk_trend": "up",
+   "days": 4,
+   "first": "2026-11-25",
+   "quad": "hit"
+  },
+  {
+   "name": "哥吉拉-0.0",
+   "q": "哥吉拉-0.0 票房",
+   "cat": "影視",
+   "do": [
+    {
+     "src": "電影票房",
+     "name": "哥吉拉-0.0",
+     "how": "本週票房第 1（2133 萬）"
+    }
+   ],
+   "talk": [],
+   "y": 0.95,
+   "news7": 9,
+   "news_p7": 12,
+   "news_capped": false,
+   "social": {
+    "Threads": 120,
+    "Dcard": 0
+   },
+   "mentions": {},
+   "x": 0.81,
+   "talk_trend": "flat",
+   "days": 7,
+   "first": "2026-11-17",
+   "quad": "hit"
+  },
+  {
+   "name": "Google Gemini",
+   "q": "Google Gemini App",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "Google Gemini",
+     "how": "爬升 31 名到第 6"
+    }
+   ],
+   "talk": [],
+   "y": 0.76,
+   "news7": 25,
+   "news_p7": 28,
+   "news_capped": false,
+   "social": {
+    "Threads": 264,
+    "Dcard": 9
+   },
+   "mentions": {},
+   "x": 1.0,
    "talk_trend": "flat",
    "days": 4,
    "first": "2026-11-25",
+   "quad": "hit"
+  },
+  {
+   "name": "ChatGPT",
+   "q": "ChatGPT 營收",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "ChatGPT",
+     "how": "第 1 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.75,
+   "news7": 7,
+   "news_p7": 9,
+   "news_capped": false,
+   "social": {
+    "Threads": 456,
+    "Dcard": 30
+   },
+   "mentions": {},
+   "x": 0.85,
+   "talk_trend": "flat",
+   "days": 7,
+   "first": "2026-11-14",
    "quad": "hit"
   },
   {
@@ -150,122 +150,45 @@
    ],
    "talk": [],
    "y": 0.8,
-   "news7": 25,
-   "news_p7": 21,
+   "news7": 22,
+   "news_p7": 20,
    "news_capped": false,
    "mentions": {},
-   "x": 0.71,
+   "x": 0.68,
    "talk_trend": "flat",
    "days": 2,
    "first": "2026-11-12",
    "quad": "hit"
   },
   {
-   "name": "麥當勞",
-   "q": "麥當勞",
-   "cat": "飲食",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "麥當勞APP",
-     "how": "在榜上第 14 名（沒有在爬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.5,
-   "static": true,
-   "news7": 79,
-   "news_p7": 21,
-   "news_capped": true,
-   "mentions": {},
-   "x": 0.95,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-05",
-   "quad": "hit"
-  },
-  {
-   "name": "DIOR 大穎",
-   "q": "DIOR 大穎 我以為我們會結婚",
-   "cat": "音樂",
-   "do": [
-    {
-     "src": "Spotify",
-     "name": "郭家瑋 - 過了幾天(合唱版) (w/ DIOR 大穎)",
-     "how": "升 6 名到第 12"
-    },
-    {
-     "src": "KKBOX",
-     "name": "DIOR 大穎 - 我以為我們會結婚",
-     "how": "第 2 名"
-    },
-    {
-     "src": "KKBOX",
-     "name": "DIOR 大穎 - 欲落未落",
-     "how": "第 3 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.83,
-   "news7": 14,
-   "news_p7": 0,
-   "news_capped": false,
-   "social": {
-    "Threads": 0
-   },
-   "mentions": {},
-   "x": 0.59,
-   "talk_trend": "up",
-   "days": 4,
-   "first": "2026-11-25",
-   "quad": "hit"
-  },
-  {
-   "name": "MapleStory Worlds",
-   "q": "MapleStory Worlds 楓之谷世界",
-   "cat": "遊戲",
-   "do": [
-    {
-     "src": "App 營收",
-     "name": "MapleStory Worlds - 楓之谷世界",
-     "how": "爬升 43 名到第 12"
-    }
-   ],
-   "talk": [],
-   "y": 0.88,
-   "news7": 5,
-   "news_p7": 3,
-   "news_capped": false,
-   "social": {
-    "Threads": 0
-   },
-   "mentions": {},
-   "x": 0.39,
-   "talk_trend": "up",
-   "days": 4,
-   "first": "2026-11-25",
-   "quad": "new"
-  },
-  {
    "name": "黃仁勳",
-   "q": "黃仁勳",
+   "q": "黃仁勳 輝達",
    "cat": "人物",
    "do": [],
    "talk": [
     {
+     "src": "PTT",
+     "title": "[新聞] 黃仁勳才剛回歸輝達　同款座機預計28日"
+    },
+    {
      "src": "新聞焦點",
      "title": "川普：黃仁勳有一點中國血統 若未復職恐遭北京挖角掌華為"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "黃仁勳重掌輝達 命理師看面相驚吐：2027年恐陷官司"
     }
    ],
    "y": 0.0,
-   "news7": 75,
-   "news_p7": 25,
+   "news7": 81,
+   "news_p7": 19,
    "news_capped": true,
    "social": {
     "Threads": 264
    },
    "mentions": {
-    "新聞焦點": 1
+    "PTT": 1,
+    "新聞焦點": 2
    },
    "x": 1.0,
    "talk_trend": "up",
@@ -274,107 +197,32 @@
    "quad": "talk"
   },
   {
-   "name": "全聯",
-   "q": "全聯",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 87,
-   "news_p7": 11,
-   "news_capped": true,
-   "mentions": {},
-   "x": 0.97,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-24",
-   "quad": "talk"
-  },
-  {
-   "name": "小米",
-   "q": "Xiaomi 18 Pro Max",
+   "name": "Toyota",
+   "q": "Toyota Rav4",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
      "src": "PTT",
-     "title": "[情報] 台灣小米 Xiaomi18 Pro Max 早鳥44999起"
+     "title": "[閒聊] Rav4 旗艦版 or PHEV？"
     }
    ],
    "y": 0.0,
-   "news7": 29,
-   "news_p7": 71,
-   "news_capped": true,
+   "news7": 13,
+   "news_p7": 25,
+   "news_capped": false,
    "mentions": {
     "PTT": 1
    },
-   "x": 0.84,
+   "x": 0.67,
    "talk_trend": "down",
-   "days": 3,
-   "first": "2026-11-10",
+   "days": 4,
+   "first": "2026-11-03",
    "quad": "talk"
-  },
-  {
-   "name": "CASETiFY",
-   "q": "CASETiFY 寶可夢",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
-    {
-     "src": "時尚媒體",
-     "title": "CASETiFY聯名寶可夢12/1開賣！30週年搖搖手機殼、皮卡丘發光吊飾必收"
-    }
-   ],
-   "y": 0.0,
-   "news7": 18,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {
-    "時尚媒體": 1
-   },
-   "x": 0.74,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-24",
-   "quad": "talk"
-  },
-  {
-   "name": "多鄰國",
-   "q": "多鄰國",
-   "cat": "App",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 5,
-   "news_p7": 14,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.39,
-   "talk_trend": "down",
-   "days": 2,
-   "first": "2026-11-17",
-   "quad": "low"
-  },
-  {
-   "name": "樂天旅遊",
-   "q": "樂天旅遊",
-   "cat": "生活習慣",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 3,
-   "news_p7": 7,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.3,
-   "talk_trend": "down",
-   "days": 3,
-   "first": "2026-11-24",
-   "quad": "low"
   },
   {
    "name": "Panasonic",
-   "q": "Panasonic IH電子鍋",
+   "q": "Panasonic 電子鍋",
    "cat": "品牌商品",
    "do": [],
    "talk": [
@@ -395,14 +243,62 @@
    "days": 4,
    "first": "2026-11-20",
    "quad": "low"
+  },
+  {
+   "name": "樂天旅遊",
+   "q": "樂天旅遊 日本訂房",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "Re: [情報] 樂天旅遊 日本訂房 每單都折1200元"
+    }
+   ],
+   "y": 0.0,
+   "news7": 0,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 0.1,
+   "talk_trend": "flat",
+   "days": 3,
+   "first": "2026-11-24",
+   "quad": "low"
+  },
+  {
+   "name": "小米",
+   "q": "小米 Xiaomi18 Pro Max",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "PTT",
+     "title": "[情報] 台灣小米 Xiaomi18 Pro Max 早鳥44999起"
+    }
+   ],
+   "y": 0.0,
+   "news7": 0,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "PTT": 1
+   },
+   "x": 0.1,
+   "talk_trend": "flat",
+   "days": 3,
+   "first": "2026-11-10",
+   "quad": "low"
   }
  ],
  "quads": {
   "quiet": 0,
-  "hit": 8,
-  "new": 1,
+  "hit": 6,
+  "new": 0,
   "hype": 0,
-  "talk": 4,
+  "talk": 2,
   "low": 3
  },
  "src_do": [
@@ -426,7 +322,7 @@
  ],
  "social_at": "2026-11-27",
  "hist_days": 26,
- "model": "gemini-3.1-flash-lite",
+ "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-27T16:14:00Z"
+ "updatedAt": "2026-11-27T22:18:44Z"
 }
