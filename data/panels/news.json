@@ -2,6 +2,30 @@
  "tw": [
   {
    "source": "中央社",
+   "title": "台股早盤漲逾200點後震盪　權值股穩盤衛星題材股勁揚",
+   "url": "https://www.cna.com.tw/news/afe/202611270029.aspx",
+   "at": "2026-11-27T01:15:49Z"
+  },
+  {
+   "source": "中央社",
+   "title": "新台幣開盤升2.7分　為32.92元",
+   "url": "https://www.cna.com.tw/news/afe/202611270026.aspx",
+   "at": "2026-11-27T01:07:43Z"
+  },
+  {
+   "source": "中央社",
+   "title": "台股開盤漲16.76點",
+   "url": "https://www.cna.com.tw/news/afe/202611270024.aspx",
+   "at": "2026-11-27T01:06:39Z"
+  },
+  {
+   "source": "中央社",
+   "title": "台積電德國廠估2027年底投產　德勒斯登台灣社群擴大",
+   "url": "https://www.cna.com.tw/news/afe/202611270023.aspx",
+   "at": "2026-11-27T00:50:36Z"
+  },
+  {
+   "source": "中央社",
    "title": "美股休市台積電期貨上揚　台股拚緩步墊高",
    "url": "https://www.cna.com.tw/news/afe/202611270018.aspx",
    "at": "2026-11-26T23:53:24Z"
@@ -19,18 +43,6 @@
    "at": "2026-11-26T22:13:07Z"
   },
   {
-   "source": "中央社",
-   "title": "中東供應疑慮再起　布倫特原油收高",
-   "url": "https://www.cna.com.tw/news/afe/202611270009.aspx",
-   "at": "2026-11-26T19:42:58Z"
-  },
-  {
-   "source": "中央社",
-   "title": "科技股回穩　歐股隨亞股走揚收高",
-   "url": "https://www.cna.com.tw/news/afe/202611270004.aspx",
-   "at": "2026-11-26T17:32:46Z"
-  },
-  {
    "source": "公視",
    "title": "【#PLive】美國公布301條款調查結果 行政院記者會說明 現場直播",
    "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBXOXVQYjAxdDhkNFBsX0FLenZ3d3FUcmRIbXV0M05wZGdpVk1lZlhqOFdoSHVNM2R1OEZIZFlFUm82YlowWHF5RkNoaw?oc=5",
@@ -41,18 +53,6 @@
    "title": "蔡英文稱沈伯洋「雞婆」適合當市長　直播對談吸27萬人",
    "url": "https://www.cna.com.tw/news/aipl/202611260319.aspx",
    "at": "2026-11-26T14:54:28Z"
-  },
-  {
-   "source": "中央社",
-   "title": "挺善樑造勢晚會　謝國樑細數政績盼再給4年",
-   "url": "https://www.cna.com.tw/news/aipl/202611260312.aspx",
-   "at": "2026-11-26T14:08:12Z"
-  },
-  {
-   "source": "中央社",
-   "title": "張啓楷造勢黃國昌、鄭麗文站台　王美惠邀市民參與選前之夜",
-   "url": "https://www.cna.com.tw/news/aipl/202611260308.aspx",
-   "at": "2026-11-26T14:02:03Z"
   },
   {
    "source": "公視",
@@ -653,7 +653,7 @@
     21,
     18,
     24,
-    37,
+    39,
     4
    ],
    "days7": [
@@ -840,20 +840,6 @@
     "hot": false
    },
    {
-    "term": "股票",
-    "n": 3,
-    "src": 2,
-    "sources": [
-     "CMoney投資網誌",
-     "PTT"
-    ],
-    "sample": {
-     "title": "瘋玩槓桿ETF！AI股風暴下的「單一股票基金」狂潮，華爾街警告散戶正走鋼索",
-     "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQbzRVZkZWbk1EOEpwUWlJMkFlY2FUY3pUeW5fQ2hjUUt3Q0dqNDBFRExGSHFMeHc3TDZ4eXJreFpHN2pPY2lxQjlrRkl5SHNkZGlTY0JKVHUtMWRyLXZDdnJNWnZIQlFmS0lKbllTVFNQMGZ5cGJabW5HN3ZEbjJ5LUpPT3ZzNmxlX2c0WjJB?oc=5"
-    },
-    "hot": false
-   },
-   {
     "term": "Russia",
     "n": 2,
     "src": 2,
@@ -894,11 +880,25 @@
      "url": "https://www.bbc.co.uk/news/articles/ckm2mz3prq77o?at_medium=RSS&at_campaign=rss"
     },
     "hot": false
+   },
+   {
+    "term": "ASML",
+    "n": 2,
+    "src": 2,
+    "sources": [
+     "PTT",
+     "TechNews 科技新"
+    ],
+    "sample": {
+     "title": "不願任由美國擺布，荷蘭反對擴大 ASML 出口限制",
+     "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNSHlHaTE2NU82M1BTQVhQS2lsRzE0cFpMZjFtb3g0OHBVV3poQVlWQ2FhcnZzY3EtaHI4dHl5eU44WUxyXzFnTEFFdE5OY2YwblI5YTdrdTJqWGJpb1VYMC1TLWc4YXNCcjBnVm1iOXhET0g0RnZKa1FlZ2NicF9STVIyeUhZZFlwb2cyWHl4YmRKQjMtYU5TRndWNExDVk5GWG9PZ0xpZTJkOVU?oc=5"
+    },
+    "hot": false
    }
   ]
  },
  "errs": [
   "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
  ],
- "updatedAt": "2026-11-27T01:18:55Z"
+ "updatedAt": "2026-11-27T01:35:41Z"
 }
