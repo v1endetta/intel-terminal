@@ -2014,9 +2014,243 @@
   "asof": "2026-11-25",
   "open": false
  },
- "alerts": [],
- "errs": [
-  "標售: HTTPError: 504 Server Error: Gateway Time-out for url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/auctions_query?sort=-auction_date&p"
+ "auctions": [
+  {
+   "date": "2026-11-23",
+   "term": "2 年",
+   "y": 4.7,
+   "btc": 2.65,
+   "ind": 51.5,
+   "dlr": 10.4,
+   "reopen": false,
+   "td": 1,
+   "btc_avg": 2.63,
+   "ind_avg": 56.53,
+   "n_prev": 6,
+   "stale": false,
+   "weak": true,
+   "strong": false
+  },
+  {
+   "date": "2026-11-09",
+   "term": "3 年",
+   "y": 4.627,
+   "btc": 2.53,
+   "ind": 55.5,
+   "dlr": 9.5,
+   "reopen": false,
+   "td": 1,
+   "btc_avg": 2.64,
+   "ind_avg": 63.02,
+   "n_prev": 6,
+   "stale": false,
+   "weak": true,
+   "strong": false
+  },
+  {
+   "date": "2026-11-24",
+   "term": "5 年",
+   "y": 4.719,
+   "btc": 2.37,
+   "ind": 54.3,
+   "dlr": 9.0,
+   "reopen": false,
+   "td": 1,
+   "btc_avg": 2.31,
+   "ind_avg": 61.92,
+   "n_prev": 6,
+   "stale": false,
+   "weak": true,
+   "strong": false
+  },
+  {
+   "date": "2026-11-25",
+   "term": "7 年",
+   "y": 4.708,
+   "btc": 2.43,
+   "ind": 58.2,
+   "dlr": 8.6,
+   "reopen": false,
+   "td": 1,
+   "btc_avg": 2.48,
+   "ind_avg": 63.65,
+   "n_prev": 6,
+   "stale": false,
+   "weak": true,
+   "strong": false
+  },
+  {
+   "date": "2026-11-10",
+   "term": "10 年",
+   "y": 5.02,
+   "btc": 2.46,
+   "ind": 61.2,
+   "dlr": 9.8,
+   "reopen": false,
+   "td": 1,
+   "btc_avg": 2.6,
+   "ind_avg": 76.65,
+   "n_prev": 6,
+   "stale": false,
+   "weak": true,
+   "strong": false
+  },
+  {
+   "date": "2026-11-18",
+   "term": "20 年",
+   "y": 5.459,
+   "btc": 2.63,
+   "ind": 60.2,
+   "dlr": 13.1,
+   "reopen": false,
+   "td": 1,
+   "btc_avg": 2.63,
+   "ind_avg": 63.67,
+   "n_prev": 6,
+   "stale": false,
+   "weak": false,
+   "strong": false
+  },
+  {
+   "date": "2026-11-12",
+   "term": "30 年",
+   "y": 5.441,
+   "btc": 2.36,
+   "ind": 68.1,
+   "dlr": 11.4,
+   "reopen": false,
+   "td": 1,
+   "btc_avg": 2.44,
+   "ind_avg": 70.48,
+   "n_prev": 6,
+   "stale": false,
+   "weak": false,
+   "strong": false
+  }
  ],
- "updatedAt": "2026-11-27T04:32:17Z"
+ "auc_recent": [
+  {
+   "date": "2026-11-25",
+   "term": "7 年",
+   "y": 4.708,
+   "btc": 2.43,
+   "ind": 58.2,
+   "dlr": 8.6,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-11-24",
+   "term": "5 年",
+   "y": 4.719,
+   "btc": 2.37,
+   "ind": 54.3,
+   "dlr": 9.0,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-11-23",
+   "term": "2 年",
+   "y": 4.7,
+   "btc": 2.65,
+   "ind": 51.5,
+   "dlr": 10.4,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-11-18",
+   "term": "20 年",
+   "y": 5.459,
+   "btc": 2.63,
+   "ind": 60.2,
+   "dlr": 13.1,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-11-12",
+   "term": "30 年",
+   "y": 5.441,
+   "btc": 2.36,
+   "ind": 68.1,
+   "dlr": 11.4,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-11-10",
+   "term": "10 年",
+   "y": 5.02,
+   "btc": 2.46,
+   "ind": 61.2,
+   "dlr": 9.8,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-11-09",
+   "term": "3 年",
+   "y": 4.627,
+   "btc": 2.53,
+   "ind": 55.5,
+   "dlr": 9.5,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-10-29",
+   "term": "7 年",
+   "y": 4.894,
+   "btc": 2.46,
+   "ind": 57.8,
+   "dlr": 9.4,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-10-27",
+   "term": "5 年",
+   "y": 4.845,
+   "btc": 2.33,
+   "ind": 60.0,
+   "dlr": 10.6,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-10-26",
+   "term": "2 年",
+   "y": 4.708,
+   "btc": 2.59,
+   "ind": 45.7,
+   "dlr": 13.0,
+   "reopen": false,
+   "td": 1
+  },
+  {
+   "date": "2026-10-21",
+   "term": "20 年",
+   "y": 5.469,
+   "btc": 2.73,
+   "ind": 58.2,
+   "dlr": 10.3,
+   "reopen": true,
+   "td": 1
+  },
+  {
+   "date": "2026-10-08",
+   "term": "30 年",
+   "y": 5.618,
+   "btc": 2.54,
+   "ind": 72.3,
+   "dlr": 6.8,
+   "reopen": true,
+   "td": 1
+  }
+ ],
+ "alerts": [],
+ "errs": [],
+ "updatedAt": "2026-11-27T04:40:23Z"
 }
