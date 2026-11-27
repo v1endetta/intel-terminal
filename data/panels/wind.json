@@ -1,42 +1,33 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的注意力高度集中在熱門電影票房、串流音樂新曲排行榜以及各類網購平台的優惠與美妝穿搭討論。",
+ "line": "這幾天台灣消費者注意力聚焦在熱門電影票房、串流影音新上架作品、強檔音樂單曲，以及各類網購優惠與3C美妝話題。",
  "topics": [
   {
-   "name": "DIOR 大穎",
-   "q": "DIOR 大穎 我以為我們會結婚",
-   "cat": "音樂",
+   "name": "哥吉拉-0.0",
+   "q": "哥吉拉-0.0",
+   "cat": "影視",
    "do": [
     {
-     "src": "Spotify",
-     "name": "郭家瑋 - 過了幾天(合唱版) (w/ DIOR 大穎)",
-     "how": "升 6 名到第 12"
-    },
-    {
-     "src": "KKBOX",
-     "name": "DIOR 大穎 - 我以為我們會結婚",
-     "how": "第 2 名"
-    },
-    {
-     "src": "YouTube 熱門",
-     "name": "DIOR大穎 & 郭家瑋TREVOR - 我以為我們會結婚 - （Official MV）",
-     "how": "7 天內上架、發燒第 2"
+     "src": "電影票房",
+     "name": "哥吉拉-0.0",
+     "how": "本週票房第 1（2133 萬）"
     }
    ],
    "talk": [],
-   "y": 1.0,
-   "news7": 1,
-   "news_p7": 0,
+   "y": 0.95,
+   "news7": 29,
+   "news_p7": 24,
    "news_capped": false,
    "social": {
-    "Threads": 0.1
+    "Threads": 74.1,
+    "Dcard": 0
    },
    "mentions": {},
-   "x": 0.16,
+   "x": 1.0,
    "talk_trend": "flat",
-   "days": 3,
-   "first": "2026-11-25",
-   "quad": "quiet"
+   "days": 7,
+   "first": "2026-11-17",
+   "quad": "hit"
   },
   {
    "name": "BIGBANG",
@@ -47,17 +38,12 @@
      "src": "Spotify",
      "name": "BIGBANG - GiiiRIP",
      "how": "上榜 6 天、第 4 名"
-    },
-    {
-     "src": "YouTube 熱門",
-     "name": "GiiiRIP",
-     "how": "7 天內上架、發燒第 1"
     }
    ],
    "talk": [],
-   "y": 1.0,
-   "news7": 31,
-   "news_p7": 0,
+   "y": 0.9,
+   "news7": 26,
+   "news_p7": 7,
    "news_capped": false,
    "social": {
     "Threads": 264,
@@ -71,33 +57,6 @@
    "quad": "hit"
   },
   {
-   "name": "名偵探柯南",
-   "q": "名偵探柯南 電影",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "電影票房",
-     "name": "名偵探柯南 第30號殺人事件",
-     "how": "本週票房第 2（763 萬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.87,
-   "news7": 20,
-   "news_p7": 8,
-   "news_capped": false,
-   "social": {
-    "Threads": 194.1,
-    "Dcard": 4
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "up",
-   "days": 1,
-   "first": "2026-11-27",
-   "quad": "hit"
-  },
-  {
    "name": "Google Gemini",
    "q": "Google Gemini",
    "cat": "App",
@@ -105,13 +64,13 @@
     {
      "src": "App 營收",
      "name": "Google Gemini",
-     "how": "爬升 39 名到第 10"
+     "how": "爬升 43 名到第 6"
     }
    ],
    "talk": [],
-   "y": 0.84,
-   "news7": 72,
-   "news_p7": 28,
+   "y": 0.88,
+   "news7": 74,
+   "news_p7": 26,
    "news_capped": true,
    "social": {
     "Threads": 456,
@@ -125,30 +84,30 @@
    "quad": "hit"
   },
   {
-   "name": "哥吉拉-0.0",
-   "q": "哥吉拉-0.0 票房",
+   "name": "名偵探柯南",
+   "q": "名偵探柯南",
    "cat": "影視",
    "do": [
     {
      "src": "電影票房",
-     "name": "哥吉拉-0.0",
-     "how": "本週票房第 1（2133 萬）"
+     "name": "名偵探柯南 第30號殺人事件",
+     "how": "本週票房第 2（763 萬）"
     }
    ],
    "talk": [],
-   "y": 0.95,
-   "news7": 10,
-   "news_p7": 15,
+   "y": 0.87,
+   "news7": 27,
+   "news_p7": 28,
    "news_capped": false,
    "social": {
-    "Threads": 74.1,
-    "Dcard": 0
+    "Threads": 194.1,
+    "Dcard": 4
    },
    "mentions": {},
-   "x": 0.8,
-   "talk_trend": "down",
-   "days": 7,
-   "first": "2026-11-17",
+   "x": 1.0,
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-27",
    "quad": "hit"
   },
   {
@@ -164,22 +123,70 @@
    ],
    "talk": [],
    "y": 0.75,
-   "news7": 77,
-   "news_p7": 22,
+   "news7": 51,
+   "news_p7": 49,
    "news_capped": true,
    "social": {
     "Threads": 44.5
    },
    "mentions": {},
    "x": 1.0,
-   "talk_trend": "up",
+   "talk_trend": "flat",
    "days": 7,
    "first": "2026-11-14",
    "quad": "hit"
   },
   {
-   "name": "Netflix",
-   "q": "Netflix 影集 榜",
+   "name": "DIOR 大穎",
+   "q": "大穎 郭家瑋 我以為我們會結婚",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "郭家瑋 - 過了幾天(合唱版) (w/ DIOR 大穎)",
+     "how": "升 6 名到第 12"
+    },
+    {
+     "src": "KKBOX",
+     "name": "DIOR 大穎 - 我以為我們會結婚",
+     "how": "第 2 名"
+    },
+    {
+     "src": "KKBOX",
+     "name": "DIOR 大穎 - 欲落未落",
+     "how": "第 3 名"
+    },
+    {
+     "src": "YouTube 熱門",
+     "name": "DIOR大穎 & 郭家瑋TREVOR - 我以為我們會結婚 - （Official MV）",
+     "how": "7 天內上架、發燒第 2"
+    }
+   ],
+   "talk": [
+    {
+     "src": "新聞焦點",
+     "title": "〈在加納共和國離婚〉大穎渴望婚姻！認了「以為會結婚」 為感情陷低潮"
+    }
+   ],
+   "y": 1.0,
+   "news7": 9,
+   "news_p7": 0,
+   "news_capped": false,
+   "social": {
+    "Threads": 0.1
+   },
+   "mentions": {
+    "新聞焦點": 1
+   },
+   "x": 0.61,
+   "talk_trend": "up",
+   "days": 3,
+   "first": "2026-11-25",
+   "quad": "hit"
+  },
+  {
+   "name": "Disney+",
+   "q": "Disney+ 影集",
    "cat": "影視",
    "do": [
     {
@@ -191,31 +198,51 @@
      "src": "Netflix 影集",
      "name": "The Devil's Plan",
      "how": "上榜第 2 週、第 5 名"
-    },
+    }
+   ],
+   "talk": [
     {
-     "src": "Netflix 影集",
-     "name": "The Blue Road",
-     "how": "上榜第 1 週、第 6 名"
-    },
-    {
-     "src": "Netflix 影集",
-     "name": "Tomb Raider King",
-     "how": "上榜第 1 週、第 10 名"
-    },
+     "src": "新聞焦點",
+     "title": "「第二季我演定了！」李世榮《再婚皇后》結局挺孕肚，吐心聲：一定要登上皇后之位"
+    }
+   ],
+   "y": 1.0,
+   "news7": 9,
+   "news_p7": 13,
+   "news_capped": false,
+   "mentions": {
+    "新聞焦點": 1
+   },
+   "x": 0.6,
+   "talk_trend": "flat",
+   "days": 4,
+   "first": "2026-11-13",
+   "quad": "hit"
+  },
+  {
+   "name": "Netflix",
+   "q": "Netflix 電影",
+   "cat": "影視",
+   "do": [
     {
      "src": "Netflix 電影",
      "name": "Guarding Stars",
      "how": "上榜第 1 週、第 4 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "Never Surrender",
+     "how": "上榜第 2 週、第 5 名"
     }
    ],
    "talk": [],
-   "y": 1.0,
-   "news7": 10,
-   "news_p7": 20,
+   "y": 0.85,
+   "news7": 15,
+   "news_p7": 18,
    "news_capped": false,
    "mentions": {},
-   "x": 0.52,
-   "talk_trend": "down",
+   "x": 0.6,
+   "talk_trend": "flat",
    "days": 4,
    "first": "2026-11-09",
    "quad": "hit"
@@ -228,11 +255,11 @@
     {
      "src": "App 營收",
      "name": "MapleStory Worlds - 楓之谷世界",
-     "how": "爬升 47 名到第 8"
+     "how": "爬升 45 名到第 10"
     }
    ],
    "talk": [],
-   "y": 0.92,
+   "y": 0.9,
    "news7": 5,
    "news_p7": 3,
    "news_capped": false,
@@ -247,90 +274,6 @@
    "quad": "hit"
   },
   {
-   "name": "五月天",
-   "q": "五月天 阿信 棠棣賦",
-   "cat": "音樂",
-   "do": [
-    {
-     "src": "KKBOX",
-     "name": "五月天 阿信 (Ashin) - 棠棣賦 - 電視劇《兩京十五日》主題曲/片頭曲",
-     "how": "第 3 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.65,
-   "news7": 11,
-   "news_p7": 23,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.54,
-   "talk_trend": "down",
-   "days": 5,
-   "first": "2026-11-20",
-   "quad": "hit"
-  },
-  {
-   "name": "Dior",
-   "q": "Dior 聖誕限定",
-   "cat": "品牌商品",
-   "do": [
-    {
-     "src": "Spotify",
-     "name": "郭家瑋 過了幾天(合唱版) (w/ DIOR 大穎)",
-     "how": "在榜上第 12 名（沒有在爬）"
-    }
-   ],
-   "talk": [
-    {
-     "src": "Dcard 美妝",
-     "title": "Dior 聖誕限定（1 則）"
-    }
-   ],
-   "y": 0.5,
-   "static": true,
-   "news7": 6,
-   "news_p7": 10,
-   "news_capped": false,
-   "mentions": {
-    "Dcard 美妝": 1
-   },
-   "x": 0.52,
-   "talk_trend": "down",
-   "days": 4,
-   "first": "2026-11-12",
-   "quad": "hit"
-  },
-  {
-   "name": "Coupang 酷澎購物-隔日到貨天天低",
-   "q": "酷澎 優惠",
-   "cat": "App",
-   "do": [
-    {
-     "src": "App 下載",
-     "name": "Coupang 酷澎購物-隔日到貨天天低價",
-     "how": "爬升 24 名到第 21"
-    }
-   ],
-   "talk": [
-    {
-     "src": "Dcard 網購",
-     "title": "酷澎優惠（1 則）"
-    }
-   ],
-   "y": 0.69,
-   "news7": 2,
-   "news_p7": 3,
-   "news_capped": false,
-   "mentions": {
-    "Dcard 網購": 1
-   },
-   "x": 0.34,
-   "talk_trend": "down",
-   "days": 1,
-   "first": "2026-11-27",
-   "quad": "new"
-  },
-  {
    "name": "黃仁勳",
    "q": "黃仁勳 輝達",
    "cat": "人物",
@@ -338,22 +281,18 @@
    "talk": [
     {
      "src": "新聞焦點",
-     "title": "黃仁勳重掌輝達！丹尼餐廳也忙「復位」急喊：你的位子還留著"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "黃仁勳重掌 CEO 後第一個重磅政策 輝達傳停止出貨東南亞四國"
+     "title": "中國 AI 算力需求有多強？美國新規掀輝達 B300 求售潮"
     }
    ],
    "y": 0.0,
-   "news7": 88,
-   "news_p7": 12,
+   "news7": 91,
+   "news_p7": 9,
    "news_capped": true,
    "social": {
     "Threads": 456
    },
    "mentions": {
-    "新聞焦點": 2
+    "新聞焦點": 1
    },
    "x": 1.0,
    "talk_trend": "up",
@@ -362,28 +301,83 @@
    "quad": "talk"
   },
   {
-   "name": "小米",
-   "q": "小米 Xiaomi 18",
+   "name": "CASETiFY",
+   "q": "CASETiFY 寶可夢",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "CASETiFY聯名寶可夢12/1開賣！30週年搖搖手機殼、皮卡丘發光吊飾必收"
+    }
+   ],
+   "y": 0.0,
+   "news7": 18,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 0.74,
+   "talk_trend": "up",
+   "days": 2,
+   "first": "2026-11-24",
+   "quad": "talk"
+  },
+  {
+   "name": "Toyota",
+   "q": "Toyota Rav4",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
      "src": "PTT",
-     "title": "[情報] 台灣小米 Xiaomi18 Pro Max 早鳥44999起"
+     "title": "[閒聊] Rav4 旗艦版 or PHEV？"
     }
    ],
    "y": 0.0,
-   "news7": 34,
-   "news_p7": 40,
+   "news7": 14,
+   "news_p7": 21,
    "news_capped": false,
    "mentions": {
     "PTT": 1
    },
-   "x": 0.87,
-   "talk_trend": "flat",
+   "x": 0.69,
+   "talk_trend": "down",
    "days": 3,
-   "first": "2026-11-10",
+   "first": "2026-11-03",
    "quad": "talk"
+  },
+  {
+   "name": "Coupang 酷澎購物-隔日到貨天天低",
+   "q": "酷澎 優惠",
+   "cat": "品牌商品",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "Coupang 酷澎購物-隔日到貨天天低價",
+     "how": "在榜上第 24 名（沒有在爬）"
+    }
+   ],
+   "talk": [
+    {
+     "src": "Dcard 網購",
+     "title": "酷澎優惠（1 則）"
+    }
+   ],
+   "y": 0.5,
+   "static": true,
+   "news7": 2,
+   "news_p7": 2,
+   "news_capped": false,
+   "mentions": {
+    "Dcard 網購": 1
+   },
+   "x": 0.34,
+   "talk_trend": "flat",
+   "days": 1,
+   "first": "2026-11-27",
+   "quad": "low"
   },
   {
    "name": "UNIQLO TW",
@@ -397,8 +391,8 @@
     }
    ],
    "y": 0.0,
-   "news7": 14,
-   "news_p7": 20,
+   "news7": 2,
+   "news_p7": 12,
    "news_capped": false,
    "social": {
     "Threads": 0.1
@@ -406,45 +400,21 @@
    "mentions": {
     "Dcard 穿搭": 1
    },
-   "x": 0.69,
-   "talk_trend": "flat",
+   "x": 0.34,
+   "talk_trend": "down",
    "days": 4,
    "first": "2026-11-13",
-   "quad": "talk"
+   "quad": "low"
   },
   {
-   "name": "Coach",
-   "q": "Coach 折扣",
+   "name": "Panasonic",
+   "q": "Panasonic 可變壓力 IH 電子鍋",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
-     "src": "Dcard 穿搭",
-     "title": "Coach 折扣季（1 則）"
-    }
-   ],
-   "y": 0.0,
-   "news7": 2,
-   "news_p7": 3,
-   "news_capped": false,
-   "mentions": {
-    "Dcard 穿搭": 1
-   },
-   "x": 0.34,
-   "talk_trend": "down",
-   "days": 2,
-   "first": "2026-11-26",
-   "quad": "low"
-  },
-  {
-   "name": "Pokémon GO",
-   "q": "寶可夢卡牌 冰之石",
-   "cat": "遊戲",
-   "do": [],
-   "talk": [
-    {
      "src": "Mobile01",
-     "title": "《冰之石：絆之進化》11月26日 正式上線 最新寶可夢卡牌手遊 | 禮包碼、兌換碼、虛寶碼 | 踏入冰封大陸 收集稀有幻獸 透過冰之石解鎖多種進化型態 獨創絆之共鳴、雙獸合體技能"
+     "title": "Panasonic 可變壓力 IH 電子鍋 SR-S10ND｜4 種米飯口感隨心選，從日常白飯到炊飯都能輕鬆料理"
     }
    ],
    "y": 0.0,
@@ -457,17 +427,41 @@
    "x": 0.25,
    "talk_trend": "flat",
    "days": 3,
-   "first": "2026-11-14",
+   "first": "2026-11-20",
+   "quad": "low"
+  },
+  {
+   "name": "Coach",
+   "q": "Coach 折扣季",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [
+    {
+     "src": "Dcard 穿搭",
+     "title": "Coach 折扣季（1 則）"
+    }
+   ],
+   "y": 0.0,
+   "news7": 0,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "Dcard 穿搭": 1
+   },
+   "x": 0.1,
+   "talk_trend": "flat",
+   "days": 2,
+   "first": "2026-11-26",
    "quad": "low"
   }
  ],
  "quads": {
-  "quiet": 1,
+  "quiet": 0,
   "hit": 9,
-  "new": 1,
+  "new": 0,
   "hype": 0,
   "talk": 3,
-  "low": 2
+  "low": 4
  },
  "src_do": [
   "App 下載",
@@ -495,6 +489,5 @@
  "hist_days": 25,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-27T03:06:58Z",
- "error": "2026-11-27T09:13:00Z AttributeError: 'list' object has no attribute 'get'"
+ "updatedAt": "2026-11-27T10:13:27Z"
 }
