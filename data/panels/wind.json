@@ -1,16 +1,16 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的目光聚焦於熱門電影票房、串流音樂新曲排行榜以及各大網購與品牌的最新優惠動態。",
+ "line": "這幾天台灣消費者的注意力高度集中在熱門電影票房、串流音樂新曲排行榜以及各類網購平台的優惠與美妝穿搭討論。",
  "topics": [
   {
    "name": "DIOR 大穎",
-   "q": "大穎 我以為我們會結婚",
+   "q": "DIOR 大穎 我以為我們會結婚",
    "cat": "音樂",
    "do": [
     {
      "src": "Spotify",
      "name": "郭家瑋 - 過了幾天(合唱版) (w/ DIOR 大穎)",
-     "how": "升 12 名到第 18"
+     "how": "升 6 名到第 12"
     },
     {
      "src": "KKBOX",
@@ -46,7 +46,7 @@
     {
      "src": "Spotify",
      "name": "BIGBANG - GiiiRIP",
-     "how": "上榜 5 天、第 4 名"
+     "how": "上榜 6 天、第 4 名"
     },
     {
      "src": "YouTube 熱門",
@@ -56,7 +56,7 @@
    ],
    "talk": [],
    "y": 1.0,
-   "news7": 30,
+   "news7": 31,
    "news_p7": 0,
    "news_capped": false,
    "social": {
@@ -71,35 +71,8 @@
    "quad": "hit"
   },
   {
-   "name": "哥吉拉-0.0",
-   "q": "哥吉拉 0.0",
-   "cat": "影視",
-   "do": [
-    {
-     "src": "電影票房",
-     "name": "哥吉拉-0.0",
-     "how": "本週票房第 1（2133 萬）"
-    }
-   ],
-   "talk": [],
-   "y": 0.95,
-   "news7": 37,
-   "news_p7": 36,
-   "news_capped": false,
-   "social": {
-    "Threads": 74.1,
-    "Dcard": 0
-   },
-   "mentions": {},
-   "x": 1.0,
-   "talk_trend": "flat",
-   "days": 7,
-   "first": "2026-11-17",
-   "quad": "hit"
-  },
-  {
    "name": "名偵探柯南",
-   "q": "名偵探柯南",
+   "q": "名偵探柯南 電影",
    "cat": "影視",
    "do": [
     {
@@ -110,8 +83,8 @@
    ],
    "talk": [],
    "y": 0.87,
-   "news7": 33,
-   "news_p7": 22,
+   "news7": 20,
+   "news_p7": 8,
    "news_capped": false,
    "social": {
     "Threads": 194.1,
@@ -137,8 +110,8 @@
    ],
    "talk": [],
    "y": 0.84,
-   "news7": 71,
-   "news_p7": 29,
+   "news7": 72,
+   "news_p7": 28,
    "news_capped": true,
    "social": {
     "Threads": 456,
@@ -149,6 +122,33 @@
    "talk_trend": "up",
    "days": 3,
    "first": "2026-11-25",
+   "quad": "hit"
+  },
+  {
+   "name": "哥吉拉-0.0",
+   "q": "哥吉拉-0.0 票房",
+   "cat": "影視",
+   "do": [
+    {
+     "src": "電影票房",
+     "name": "哥吉拉-0.0",
+     "how": "本週票房第 1（2133 萬）"
+    }
+   ],
+   "talk": [],
+   "y": 0.95,
+   "news7": 10,
+   "news_p7": 15,
+   "news_capped": false,
+   "social": {
+    "Threads": 74.1,
+    "Dcard": 0
+   },
+   "mentions": {},
+   "x": 0.8,
+   "talk_trend": "down",
+   "days": 7,
+   "first": "2026-11-17",
    "quad": "hit"
   },
   {
@@ -178,26 +178,46 @@
    "quad": "hit"
   },
   {
-   "name": "五月天",
-   "q": "五月天 阿信",
-   "cat": "音樂",
+   "name": "Netflix",
+   "q": "Netflix 影集 榜",
+   "cat": "影視",
    "do": [
     {
-     "src": "KKBOX",
-     "name": "五月天 阿信 (Ashin) - 棠棣賦 - 電視劇《兩京十五日》主題曲/片頭曲",
-     "how": "第 3 名"
+     "src": "Netflix 影集",
+     "name": "Miracles of the ER",
+     "how": "上榜第 2 週、第 1 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "The Devil's Plan",
+     "how": "上榜第 2 週、第 5 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "The Blue Road",
+     "how": "上榜第 1 週、第 6 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Tomb Raider King",
+     "how": "上榜第 1 週、第 10 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "Guarding Stars",
+     "how": "上榜第 1 週、第 4 名"
     }
    ],
    "talk": [],
-   "y": 0.65,
-   "news7": 71,
-   "news_p7": 29,
-   "news_capped": true,
+   "y": 1.0,
+   "news7": 10,
+   "news_p7": 20,
+   "news_capped": false,
    "mentions": {},
-   "x": 0.93,
-   "talk_trend": "up",
-   "days": 5,
-   "first": "2026-11-20",
+   "x": 0.52,
+   "talk_trend": "down",
+   "days": 4,
+   "first": "2026-11-09",
    "quad": "hit"
   },
   {
@@ -227,42 +247,113 @@
    "quad": "hit"
   },
   {
-   "name": "Pokémon GO",
-   "q": "Pokémon GO",
-   "cat": "遊戲",
-   "do": [],
+   "name": "五月天",
+   "q": "五月天 阿信 棠棣賦",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "KKBOX",
+     "name": "五月天 阿信 (Ashin) - 棠棣賦 - 電視劇《兩京十五日》主題曲/片頭曲",
+     "how": "第 3 名"
+    }
+   ],
    "talk": [],
-   "y": 0.0,
-   "news7": 41,
-   "news_p7": 59,
-   "news_capped": true,
+   "y": 0.65,
+   "news7": 11,
+   "news_p7": 23,
+   "news_capped": false,
    "mentions": {},
-   "x": 0.81,
-   "talk_trend": "flat",
-   "days": 3,
-   "first": "2026-11-14",
-   "quad": "hype"
+   "x": 0.54,
+   "talk_trend": "down",
+   "days": 5,
+   "first": "2026-11-20",
+   "quad": "hit"
+  },
+  {
+   "name": "Dior",
+   "q": "Dior 聖誕限定",
+   "cat": "品牌商品",
+   "do": [
+    {
+     "src": "Spotify",
+     "name": "郭家瑋 過了幾天(合唱版) (w/ DIOR 大穎)",
+     "how": "在榜上第 12 名（沒有在爬）"
+    }
+   ],
+   "talk": [
+    {
+     "src": "Dcard 美妝",
+     "title": "Dior 聖誕限定（1 則）"
+    }
+   ],
+   "y": 0.5,
+   "static": true,
+   "news7": 6,
+   "news_p7": 10,
+   "news_capped": false,
+   "mentions": {
+    "Dcard 美妝": 1
+   },
+   "x": 0.52,
+   "talk_trend": "down",
+   "days": 4,
+   "first": "2026-11-12",
+   "quad": "hit"
+  },
+  {
+   "name": "Coupang 酷澎購物-隔日到貨天天低",
+   "q": "酷澎 優惠",
+   "cat": "App",
+   "do": [
+    {
+     "src": "App 下載",
+     "name": "Coupang 酷澎購物-隔日到貨天天低價",
+     "how": "爬升 24 名到第 21"
+    }
+   ],
+   "talk": [
+    {
+     "src": "Dcard 網購",
+     "title": "酷澎優惠（1 則）"
+    }
+   ],
+   "y": 0.69,
+   "news7": 2,
+   "news_p7": 3,
+   "news_capped": false,
+   "mentions": {
+    "Dcard 網購": 1
+   },
+   "x": 0.34,
+   "talk_trend": "down",
+   "days": 1,
+   "first": "2026-11-27",
+   "quad": "new"
   },
   {
    "name": "黃仁勳",
-   "q": "黃仁勳",
+   "q": "黃仁勳 輝達",
    "cat": "人物",
    "do": [],
    "talk": [
     {
      "src": "新聞焦點",
-     "title": "川普：黃仁勳有一點中國血統 若未復職恐遭北京挖角掌華為"
+     "title": "黃仁勳重掌輝達！丹尼餐廳也忙「復位」急喊：你的位子還留著"
+    },
+    {
+     "src": "新聞焦點",
+     "title": "黃仁勳重掌 CEO 後第一個重磅政策 輝達傳停止出貨東南亞四國"
     }
    ],
    "y": 0.0,
-   "news7": 89,
-   "news_p7": 11,
+   "news7": 88,
+   "news_p7": 12,
    "news_capped": true,
    "social": {
     "Threads": 456
    },
    "mentions": {
-    "新聞焦點": 1
+    "新聞焦點": 2
    },
    "x": 1.0,
    "talk_trend": "up",
@@ -272,72 +363,26 @@
   },
   {
    "name": "小米",
-   "q": "小米 Xiaomi 18 Pro Max",
+   "q": "小米 Xiaomi 18",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
      "src": "PTT",
      "title": "[情報] 台灣小米 Xiaomi18 Pro Max 早鳥44999起"
-    },
-    {
-     "src": "Mobile01",
-     "title": "Xiaomi 18 Pro Max小米官網說0103前256GB免費升級512GB?收到卻是256GB?"
     }
    ],
    "y": 0.0,
-   "news7": 30,
-   "news_p7": 49,
+   "news7": 34,
+   "news_p7": 40,
    "news_capped": false,
    "mentions": {
-    "PTT": 1,
-    "Mobile01": 1
+    "PTT": 1
    },
-   "x": 0.95,
-   "talk_trend": "down",
+   "x": 0.87,
+   "talk_trend": "flat",
    "days": 3,
    "first": "2026-11-10",
-   "quad": "talk"
-  },
-  {
-   "name": "胡瓜",
-   "q": "胡瓜",
-   "cat": "人物",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 60,
-   "news_p7": 40,
-   "news_capped": true,
-   "mentions": {},
-   "x": 0.89,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-20",
-   "quad": "talk"
-  },
-  {
-   "name": "Toyota",
-   "q": "Toyota Sienna",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "Toyota Sienna 新年式北美發表｜升級TSS 4.0與油電動力系統！"
-    }
-   ],
-   "y": 0.0,
-   "news7": 11,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {
-    "Mobile01": 1
-   },
-   "x": 0.64,
-   "talk_trend": "up",
-   "days": 3,
-   "first": "2026-11-03",
    "quad": "talk"
   },
   {
@@ -352,37 +397,24 @@
     }
    ],
    "y": 0.0,
+   "news7": 14,
+   "news_p7": 20,
+   "news_capped": false,
    "social": {
     "Threads": 0.1
    },
    "mentions": {
     "Dcard 穿搭": 1
    },
-   "x": 0.41,
+   "x": 0.69,
+   "talk_trend": "flat",
    "days": 4,
    "first": "2026-11-13",
-   "quad": "low"
-  },
-  {
-   "name": "全家發熱衣",
-   "q": "全家 發熱衣",
-   "cat": "品牌商品",
-   "do": [],
-   "talk": [],
-   "y": 0.0,
-   "news7": 1,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {},
-   "x": 0.15,
-   "talk_trend": "flat",
-   "days": 3,
-   "first": "2026-11-13",
-   "quad": "low"
+   "quad": "talk"
   },
   {
    "name": "Coach",
-   "q": "Coach 折扣季",
+   "q": "Coach 折扣",
    "cat": "品牌商品",
    "do": [],
    "talk": [
@@ -392,26 +424,50 @@
     }
    ],
    "y": 0.0,
-   "news7": 0,
-   "news_p7": 0,
+   "news7": 2,
+   "news_p7": 3,
    "news_capped": false,
    "mentions": {
     "Dcard 穿搭": 1
    },
-   "x": 0.1,
-   "talk_trend": "flat",
+   "x": 0.34,
+   "talk_trend": "down",
    "days": 2,
    "first": "2026-11-26",
+   "quad": "low"
+  },
+  {
+   "name": "Pokémon GO",
+   "q": "寶可夢卡牌 冰之石",
+   "cat": "遊戲",
+   "do": [],
+   "talk": [
+    {
+     "src": "Mobile01",
+     "title": "《冰之石：絆之進化》11月26日 正式上線 最新寶可夢卡牌手遊 | 禮包碼、兌換碼、虛寶碼 | 踏入冰封大陸 收集稀有幻獸 透過冰之石解鎖多種進化型態 獨創絆之共鳴、雙獸合體技能"
+    }
+   ],
+   "y": 0.0,
+   "news7": 1,
+   "news_p7": 0,
+   "news_capped": false,
+   "mentions": {
+    "Mobile01": 1
+   },
+   "x": 0.25,
+   "talk_trend": "flat",
+   "days": 3,
+   "first": "2026-11-14",
    "quad": "low"
   }
  ],
  "quads": {
   "quiet": 1,
-  "hit": 7,
-  "new": 0,
-  "hype": 1,
-  "talk": 4,
-  "low": 3
+  "hit": 9,
+  "new": 1,
+  "hype": 0,
+  "talk": 3,
+  "low": 2
  },
  "src_do": [
   "App 下載",
@@ -438,8 +494,6 @@
  "social_at": "2026-11-26",
  "hist_days": 25,
  "model": "gemini-3.5-flash-lite",
- "errs": [
-  "UNIQLO TW 新聞: HTTPError: 429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=%22UNIQLO%22+%22%E7%A9%BF%E6%90%AD%22+when%3A14d&hl=zh-TW&gl=TW&ceid=TW%3Azh-H"
- ],
- "updatedAt": "2026-11-26T21:03:01Z"
+ "errs": [],
+ "updatedAt": "2026-11-27T03:06:58Z"
 }
