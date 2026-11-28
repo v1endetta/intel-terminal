@@ -44,7 +44,73 @@
    ]
   }
  },
- "fbx": [],
+ "fbx": [
+  {
+   "code": "FBX",
+   "name": "全球綜合",
+   "chg": -2.58
+  },
+  {
+   "code": "FBX01",
+   "name": "中國→美西",
+   "chg": -6.38
+  },
+  {
+   "code": "FBX02",
+   "name": "美西→中國",
+   "chg": -3.3
+  },
+  {
+   "code": "FBX03",
+   "name": "中國→美東",
+   "chg": -8.12
+  },
+  {
+   "code": "FBX04",
+   "name": "美東→中國",
+   "chg": -4.45
+  },
+  {
+   "code": "FBX11",
+   "name": "中國→北歐",
+   "chg": 4.39
+  },
+  {
+   "code": "FBX12",
+   "name": "北歐→中國",
+   "chg": -0.45
+  },
+  {
+   "code": "FBX13",
+   "name": "中國→地中海",
+   "chg": 7.48
+  },
+  {
+   "code": "FBX14",
+   "name": "地中海→中國",
+   "chg": 8.82
+  },
+  {
+   "code": "FBX21",
+   "name": "美東→北歐",
+   "chg": 1.84
+  },
+  {
+   "code": "FBX22",
+   "name": "北歐→美東",
+   "chg": -0.57
+  },
+  {
+   "code": "FBX24",
+   "name": "北歐→南美東",
+   "chg": 2.74
+  },
+  {
+   "code": "FBX26",
+   "name": "北歐→南美西",
+   "chg": -0.45
+  }
+ ],
  "storms": [],
  "ports": [
   {
@@ -502,10 +568,7 @@
   }
  ],
  "threat": [],
- "errs": [
-  "FBX：頁面格式變了，沒抓到數字",
-  "GDACS: HTTPError: 503 Server Error: Service Unavailable for url: https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=TC&alertlevel=Green%3BOrange%3BRed"
- ],
+ "errs": [],
  "src": "Drewry World Container Index（分航線）、Freightos FBX（只顯示變動，不顯示報價）、GDACS 全球熱帶氣旋（歐盟 JRC）、FreightWaves／Supply Chain Dive／The Loadstar",
- "updatedAt": "2026-11-28T05:40:42Z"
+ "updatedAt": "2026-11-28T06:43:09Z"
 }
