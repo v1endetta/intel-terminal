@@ -649,7 +649,7 @@
    ],
    "daily7": [
     17,
-    22,
+    23,
     13,
     21,
     21,
@@ -669,10 +669,8 @@
  ],
  "signals": {
   "gdelt": {
-   "vol": 1.789,
-   "vol_ratio": 0.61,
-   "tone": 0.46,
-   "tone_at": "2026-11-27T23:18:09Z",
+   "vol": 1.977,
+   "vol_ratio": 0.69,
    "spark": [
     3.018,
     3.438,
@@ -687,9 +685,9 @@
     2.39,
     3.688,
     2.251,
-    1.789
+    1.977
    ],
-   "at": "2026-11-28T04:37:26Z"
+   "at": "2026-11-28T07:42:24Z"
   },
   "wiki": {
    "zh": [
@@ -852,7 +850,7 @@
     "hot": false
    },
    {
-    "term": "全面崩跌",
+    "term": "策略師警",
     "n": 2,
     "src": 2,
     "sources": [
@@ -895,8 +893,6 @@
    }
   ]
  },
- "errs": [
-  "gdelt: HTTPError: 429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=Taiwan&mode=timelinevol&timespan=3d&format=json"
- ],
- "updatedAt": "2026-11-28T07:21:35Z"
+ "errs": [],
+ "updatedAt": "2026-11-28T07:42:24Z"
 }
