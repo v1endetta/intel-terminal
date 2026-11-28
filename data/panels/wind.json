@@ -1,56 +1,29 @@
 {
  "label": "排行（做）× 討論（說）",
- "line": "這幾天台灣消費者的注意力集中在熱門電影票房、串流影音話題、AI應用軟體以及旅遊與3C產品的討論上。",
+ "line": "這幾天台灣消費者的注意力主要集中在熱門電影票房、串流影視排行榜、科技新品與品牌聯名話題上。",
  "topics": [
   {
-   "name": "名偵探柯南",
-   "q": "名偵探柯南 電影",
-   "cat": "影視",
+   "name": "Google Gemini",
+   "q": "Google Gemini",
+   "cat": "App",
    "do": [
     {
-     "src": "電影票房",
-     "name": "名偵探柯南 第30號殺人事件",
-     "how": "本週票房第 2（763 萬）"
+     "src": "App 營收",
+     "name": "Google Gemini",
+     "how": "爬升 30 名到第 7"
     }
    ],
    "talk": [],
-   "y": 0.87,
-   "news7": 36,
-   "news_p7": 10,
-   "news_capped": false,
+   "y": 0.75,
+   "news7": 64,
+   "news_p7": 36,
+   "news_capped": true,
    "social": {
-    "Threads": 149.9,
-    "Dcard": 3
+    "Threads": 264,
+    "Dcard": 9
    },
    "mentions": {},
    "x": 1.0,
-   "talk_trend": "up",
-   "days": 2,
-   "first": "2026-11-27",
-   "quad": "hit"
-  },
-  {
-   "name": "BIGBANG",
-   "q": "BIGBANG GiiiRIP",
-   "cat": "音樂",
-   "do": [
-    {
-     "src": "Spotify",
-     "name": "BIGBANG - GiiiRIP",
-     "how": "上榜 6 天、第 4 名"
-    }
-   ],
-   "talk": [],
-   "y": 0.9,
-   "news7": 27,
-   "news_p7": 9,
-   "news_capped": false,
-   "social": {
-    "Threads": 3.3,
-    "Dcard": 3
-   },
-   "mentions": {},
-   "x": 0.91,
    "talk_trend": "up",
    "days": 4,
    "first": "2026-11-25",
@@ -58,7 +31,7 @@
   },
   {
    "name": "哥吉拉-0.0",
-   "q": "哥吉拉-0.0 票房",
+   "q": "哥吉拉 0.0 票房",
    "cat": "影視",
    "do": [
     {
@@ -69,42 +42,42 @@
    ],
    "talk": [],
    "y": 0.95,
-   "news7": 9,
-   "news_p7": 12,
+   "news7": 6,
+   "news_p7": 15,
    "news_capped": false,
    "social": {
     "Threads": 120,
     "Dcard": 0
    },
    "mentions": {},
-   "x": 0.81,
-   "talk_trend": "flat",
+   "x": 0.73,
+   "talk_trend": "down",
    "days": 7,
    "first": "2026-11-17",
    "quad": "hit"
   },
   {
-   "name": "Google Gemini",
-   "q": "Google Gemini App",
-   "cat": "App",
+   "name": "BIGBANG",
+   "q": "BIGBANG GiiiRIP",
+   "cat": "音樂",
    "do": [
     {
-     "src": "App 營收",
-     "name": "Google Gemini",
-     "how": "爬升 31 名到第 6"
+     "src": "Spotify",
+     "name": "BIGBANG - GiiiRIP",
+     "how": "上榜 7 天、第 4 名"
     }
    ],
    "talk": [],
-   "y": 0.76,
-   "news7": 25,
-   "news_p7": 28,
+   "y": 0.9,
+   "news7": 11,
+   "news_p7": 8,
    "news_capped": false,
    "social": {
-    "Threads": 264,
-    "Dcard": 9
+    "Threads": 3.3,
+    "Dcard": 3
    },
    "mentions": {},
-   "x": 1.0,
+   "x": 0.72,
    "talk_trend": "flat",
    "days": 4,
    "first": "2026-11-25",
@@ -124,7 +97,7 @@
    "talk": [],
    "y": 0.75,
    "news7": 7,
-   "news_p7": 9,
+   "news_p7": 8,
    "news_capped": false,
    "social": {
     "Threads": 456,
@@ -138,27 +111,170 @@
    "quad": "hit"
   },
   {
-   "name": "魔鬼的計謀",
-   "q": "魔鬼的計謀 Netflix",
+   "name": "Netflix",
+   "q": "Netflix 排行",
    "cat": "影視",
    "do": [
     {
      "src": "Netflix 影集",
+     "name": "Miracles of the ER",
+     "how": "上榜第 2 週、第 1 名"
+    },
+    {
+     "src": "Netflix 影集",
      "name": "The Devil's Plan",
      "how": "上榜第 2 週、第 5 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "The Blue Road",
+     "how": "上榜第 1 週、第 6 名"
+    },
+    {
+     "src": "Netflix 影集",
+     "name": "Tomb Raider King",
+     "how": "上榜第 1 週、第 10 名"
+    },
+    {
+     "src": "Netflix 電影",
+     "name": "Guarding Stars",
+     "how": "上榜第 1 週、第 4 名"
     }
    ],
    "talk": [],
-   "y": 0.8,
-   "news7": 22,
-   "news_p7": 20,
+   "y": 1.0,
+   "news7": 3,
+   "news_p7": 10,
+   "news_capped": false,
+   "social": {
+    "Threads": 46.2
+   },
+   "mentions": {},
+   "x": 0.55,
+   "talk_trend": "down",
+   "days": 4,
+   "first": "2026-11-09",
+   "quad": "hit"
+  },
+  {
+   "name": "五月天",
+   "q": "五月天",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "KKBOX",
+     "name": "五月天 阿信 (Ashin) 棠棣賦 - 電視劇《兩京十五日》主題曲/片頭曲",
+     "how": "在榜上第 6 名（沒有在爬）"
+    }
+   ],
+   "talk": [],
+   "y": 0.5,
+   "static": true,
+   "news7": 56,
+   "news_p7": 44,
+   "news_capped": true,
+   "mentions": {},
+   "x": 0.88,
+   "talk_trend": "flat",
+   "days": 4,
+   "first": "2026-11-20",
+   "quad": "hit"
+  },
+  {
+   "name": "DIOR 大穎",
+   "q": "大穎 我以為我們會結婚",
+   "cat": "音樂",
+   "do": [
+    {
+     "src": "KKBOX",
+     "name": "DIOR 大穎 - 我以為我們會結婚",
+     "how": "第 2 名"
+    }
+   ],
+   "talk": [],
+   "y": 0.7,
+   "news7": 20,
+   "news_p7": 0,
+   "news_capped": false,
+   "social": {
+    "Threads": 0
+   },
+   "mentions": {},
+   "x": 0.66,
+   "talk_trend": "up",
+   "days": 4,
+   "first": "2026-11-25",
+   "quad": "hit"
+  },
+  {
+   "name": "MapleStory Worlds",
+   "q": "MapleStory Worlds",
+   "cat": "遊戲",
+   "do": [
+    {
+     "src": "App 營收",
+     "name": "MapleStory Worlds - 楓之谷世界",
+     "how": "爬升 47 名到第 12"
+    }
+   ],
+   "talk": [],
+   "y": 0.92,
+   "news7": 5,
+   "news_p7": 3,
+   "news_capped": false,
+   "social": {
+    "Threads": 0
+   },
+   "mentions": {},
+   "x": 0.39,
+   "talk_trend": "up",
+   "days": 4,
+   "first": "2026-11-25",
+   "quad": "new"
+  },
+  {
+   "name": "Disney+",
+   "q": "歡迎光臨魔法秘境",
+   "cat": "影視",
+   "do": [],
+   "talk": [
+    {
+     "src": "時尚媒體",
+     "title": "到處都是滿滿的Disney魔法彩蛋！《歡迎光臨魔法秘境》的19個有趣Q&A"
+    }
+   ],
+   "y": 0.0,
+   "news7": 19,
+   "news_p7": 11,
+   "news_capped": false,
+   "social": {
+    "Threads": 0.1
+   },
+   "mentions": {
+    "時尚媒體": 1
+   },
+   "x": 0.76,
+   "talk_trend": "up",
+   "days": 4,
+   "first": "2026-11-13",
+   "quad": "hype"
+  },
+  {
+   "name": "Coupang 酷澎購物-隔日到貨天天低",
+   "q": "Coupang 酷澎",
+   "cat": "App",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 16,
+   "news_p7": 10,
    "news_capped": false,
    "mentions": {},
-   "x": 0.68,
-   "talk_trend": "flat",
+   "x": 0.62,
+   "talk_trend": "up",
    "days": 2,
-   "first": "2026-11-12",
-   "quad": "hit"
+   "first": "2026-11-27",
+   "quad": "hype"
   },
   {
    "name": "黃仁勳",
@@ -173,27 +289,40 @@
     {
      "src": "新聞焦點",
      "title": "川普：黃仁勳有一點中國血統 若未復職恐遭北京挖角掌華為"
-    },
-    {
-     "src": "新聞焦點",
-     "title": "黃仁勳重掌輝達 命理師看面相驚吐：2027年恐陷官司"
     }
    ],
    "y": 0.0,
-   "news7": 81,
-   "news_p7": 19,
+   "news7": 70,
+   "news_p7": 30,
    "news_capped": true,
    "social": {
     "Threads": 264
    },
    "mentions": {
     "PTT": 1,
-    "新聞焦點": 2
+    "新聞焦點": 1
    },
    "x": 1.0,
    "talk_trend": "up",
    "days": 6,
    "first": "2026-11-12",
+   "quad": "talk"
+  },
+  {
+   "name": "Tesla",
+   "q": "Tesla",
+   "cat": "品牌商品",
+   "do": [],
+   "talk": [],
+   "y": 0.0,
+   "news7": 81,
+   "news_p7": 19,
+   "news_capped": true,
+   "mentions": {},
+   "x": 0.96,
+   "talk_trend": "up",
+   "days": 4,
+   "first": "2026-11-18",
    "quad": "talk"
   },
   {
@@ -205,68 +334,70 @@
     {
      "src": "PTT",
      "title": "[閒聊] Rav4 旗艦版 or PHEV？"
+    },
+    {
+     "src": "Mobile01",
+     "title": "Toyota連賣車也開始走尊榮路線了?"
+    },
+    {
+     "src": "Mobile01",
+     "title": "我今年要買兩台Toyota CC 豪華油車 + 油電車"
     }
    ],
    "y": 0.0,
-   "news7": 13,
-   "news_p7": 25,
+   "news7": 12,
+   "news_p7": 20,
    "news_capped": false,
    "mentions": {
-    "PTT": 1
+    "PTT": 1,
+    "Mobile01": 2
    },
-   "x": 0.67,
+   "x": 0.86,
    "talk_trend": "down",
    "days": 4,
    "first": "2026-11-03",
    "quad": "talk"
   },
   {
-   "name": "Panasonic",
-   "q": "Panasonic 電子鍋",
-   "cat": "品牌商品",
+   "name": "蔡依林",
+   "q": "蔡依林",
+   "cat": "人物",
    "do": [],
-   "talk": [
-    {
-     "src": "Mobile01",
-     "title": "Panasonic 可變壓力 IH 電子鍋 SR-S10ND｜4 種米飯口感隨心選，從日常白飯到炊飯都能輕鬆料理"
-    }
-   ],
+   "talk": [],
    "y": 0.0,
-   "news7": 1,
-   "news_p7": 0,
-   "news_capped": false,
-   "mentions": {
-    "Mobile01": 1
-   },
-   "x": 0.25,
-   "talk_trend": "flat",
-   "days": 4,
+   "news7": 40,
+   "news_p7": 60,
+   "news_capped": true,
+   "mentions": {},
+   "x": 0.81,
+   "talk_trend": "down",
+   "days": 3,
    "first": "2026-11-20",
-   "quad": "low"
+   "quad": "talk"
   },
   {
-   "name": "樂天旅遊",
-   "q": "樂天旅遊 日本訂房",
+   "name": "CASETiFY",
+   "q": "CASETiFY 寶可夢",
    "cat": "品牌商品",
    "do": [],
    "talk": [
     {
-     "src": "PTT",
-     "title": "Re: [情報] 樂天旅遊 日本訂房 每單都折1200元"
+     "src": "時尚媒體",
+     "title": "CASETiFY聯名寶可夢12/1開賣！30週年搖搖手機殼、皮卡丘發光吊飾必收"
     }
    ],
    "y": 0.0,
-   "news7": 0,
+   "news7": 20,
    "news_p7": 0,
    "news_capped": false,
    "mentions": {
-    "PTT": 1
+    "時尚媒體": 1
    },
-   "x": 0.1,
-   "talk_trend": "flat",
+   "x": 0.76,
+   "talk_trend": "up",
    "days": 3,
    "first": "2026-11-24",
-   "quad": "low"
+   "quad": "talk"
   },
   {
    "name": "小米",
@@ -295,11 +426,11 @@
  ],
  "quads": {
   "quiet": 0,
-  "hit": 6,
-  "new": 0,
-  "hype": 0,
-  "talk": 2,
-  "low": 3
+  "hit": 7,
+  "new": 1,
+  "hype": 2,
+  "talk": 5,
+  "low": 1
  },
  "src_do": [
   "App 下載",
@@ -324,5 +455,5 @@
  "hist_days": 26,
  "model": "gemini-3.5-flash-lite",
  "errs": [],
- "updatedAt": "2026-11-27T22:18:44Z"
+ "updatedAt": "2026-11-28T04:37:26Z"
 }
